@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/1.0/" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<topic id="topic604">
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/variant-name-version"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/variant-name-version"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Wandora variant name version</baseNameString>
+		</baseName>
+	</topic>
+	<topic id="topic639">
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/wandora-class"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/wandoraclass"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Wandora class</baseNameString>
+		</baseName>
+	</topic>
+	<topic id="topic600">
+		<instanceOf>
+			<topicRef xlink:href="#topic604"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#display"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Scope Display</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic593"/>
+					<topicRef xlink:href="#topic600"/>
+				</parameters>
+				<variantName>
+					<resourceData>Display name</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="topic602">
+		<instanceOf>
+			<topicRef xlink:href="#topic604"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#sort"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Scope Sort</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic593"/>
+					<topicRef xlink:href="#topic600"/>
+				</parameters>
+				<variantName>
+					<resourceData>Sort name</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="topic630">
+		<instanceOf>
+			<topicRef xlink:href="#topic589"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#sv"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Swedish language</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic593"/>
+					<topicRef xlink:href="#topic600"/>
+				</parameters>
+				<variantName>
+					<resourceData>Swedish</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic600"/>
+					<topicRef xlink:href="#topic622"/>
+				</parameters>
+				<variantName>
+					<resourceData>Swedish</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="topic622">
+		<instanceOf>
+			<topicRef xlink:href="#topic589"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#en"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>English language</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic593"/>
+					<topicRef xlink:href="#topic600"/>
+				</parameters>
+				<variantName>
+					<resourceData>English</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic600"/>
+					<topicRef xlink:href="#topic622"/>
+				</parameters>
+				<variantName>
+					<resourceData>English</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="topic589">
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/language"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/language"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Wandora language</baseNameString>
+		</baseName>
+	</topic>
+	<topic id="topic643">
+		<instanceOf>
+			<topicRef xlink:href="#topic589"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#fi"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Finnish language</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic593"/>
+					<topicRef xlink:href="#topic600"/>
+				</parameters>
+				<variantName>
+					<resourceData>Finnish</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic600"/>
+					<topicRef xlink:href="#topic622"/>
+				</parameters>
+				<variantName>
+					<resourceData>Finnish</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="topic585">
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/edittime"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/edittime"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Topic edit time</baseNameString>
+		</baseName>
+	</topic>
+	<topic id="topic593">
+		<instanceOf>
+			<topicRef xlink:href="#topic589"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/lang-independent"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/langindependent"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Language independent</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#topic593"/>
+					<topicRef xlink:href="#topic600"/>
+				</parameters>
+				<variantName>
+					<resourceData>Language independent</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+</topicMap>

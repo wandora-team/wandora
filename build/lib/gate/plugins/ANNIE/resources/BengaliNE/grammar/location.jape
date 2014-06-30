@@ -1,0 +1,12 @@
+
+Phase:	location
+//Input: Token SpaceToken Lookup
+Options: control = appelt
+
+Rule:	City
+Priority: 50
+(
+ {Lookup.majorType == "location", Lookup.minorType == "city"}
+)
+:city -->
+  :city.Location = {kind = "city", rule = "City"}

@@ -1,0 +1,613 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+##set( $lang = "en" )##
+##
+##
+##
+##
+#macro( linkTopic $linkedTopic )##
+#set( $tid = $linkedTopic.getID() )##
+#set( $thash = $tid.hashCode() )##
+${thash}.html##
+#end##
+##
+##
+##
+##
+##
+<html>
+<!-- *********************************************************************** -->
+<!-- ****                  WANDORA SITE EXPORT TEMPLATE                 **** -->
+<!-- ****             (c) 2009 by Grip Studios Interactive Oy           **** -->
+<!-- *********************************************************************** -->
+
+<head>
+ <title>Wandora - $topic.getBaseName()</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <style type="text/css" media="screen">
+
+body {
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 0px;
+	background-color: #ffffff;
+	color: #000000;
+	font-family: Arial,Helvetica,sans-serif;
+}
+
+a:link 			{
+	color:#000000;
+	text-decoration:none;
+}
+
+a:visited 		{
+	color:#000000;
+	text-decoration:none;
+}
+
+a:hover 		{ 	
+	color:#000000;
+	text-decoration:underline;
+}
+
+a:active 		{
+	color:#000000;
+	text-decoration:none;
+}
+
+
+
+
+
+.menu {
+	font-size: 11pt;
+}
+
+.title {
+	font-size: 14pt;
+}
+
+.caption {
+	font-size: 11pt;
+}
+
+.topmenu {
+	font-size: 9pt;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.si, .sl {
+	font-size: 8pt;
+}
+
+
+
+.occurrence	{
+	font-size: 11pt;
+}
+
+
+
+.imageoccurrence {
+	font-size: 10pt;
+}
+
+.association	{
+	font-size: 11pt;
+}
+
+.associationrole {
+	font-size: 7pt;
+}
+
+.thetopic {
+	font-size: 20pt;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: right;
+	background-color: #9bbee7;
+}
+.thetypes {
+	font-size: 11pt;
+	text-align: right;
+	background-color: #c8ddf2;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.slbox {
+	border: 1px solid #E9E8E8;
+	horizontal-align: center;
+	vertical-align: middle;
+	width: 100%;
+}
+
+
+.slframe {
+	border: 1px solid #999999;
+	width: 750px;
+	height: 250px;
+}
+
+.topiccurrent {
+	font-size: 9pt;
+	font-weight: bold;
+}
+.topicnormal {
+	font-size: 10pt;
+}
+.topicsmall {
+	font-size: 8pt;
+}
+.topicverysmall {
+	font-size: 12pt;
+}
+
+
+.countnumber {
+	font-size: 7pt;
+}
+
+
+.topiccell {
+	border: 1px solid #E9E8E8;
+	vertical-aling: top;
+}
+
+.titlecell {
+	border:1px solid #E9E8E8;
+	background-color: #c8ddf2;
+	vertical-align: top;
+}
+
+
+.ruler {
+	border: 0px solid #e7e7e7;
+	color: #e7e7e7;
+	background-color: #e7e7e7;
+	height: 5px;
+	margin-top: 10;
+	margin-bottom: 0;
+}
+
+.footer {
+	font-size: 8pt;
+	text-align: right;
+}
+ </style>
+</head>
+
+
+
+<body>
+<!-- *********************************************************************** -->
+<!-- ********* TOP STRIP WITH WANDORA CLASS INSTANCES & SUBCLASSES ********* -->
+<!-- *********************************************************************** -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+ <tr>
+  <td valign="middle" align="right" class="topmenu">
+   #set( $wc = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+   #set( $wcs = $helper.getPlayers($wc,"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass", "http://wandora.org/si/core/wandora-class") )##
+   #if( $wcs && $wcs.size() > 0)##
+    #set( $dummy = $wcs.addAll( $topic.getTopicMap().getTopicsOfType($wc) ) )##
+   #else##
+    #set( $wcs = $topic.getTopicMap().getTopicsOfType($wc) )##
+   #end##
+   #set( $wcs = $tmbox.sortTopics($wcs,$lang) )##
+   #set( $count = 0 )##
+   #foreach( $instancetopic in $wcs )##
+    #if( $count > 0)&nbsp;&nbsp;-&nbsp;&nbsp;#end##
+    <a href="#linkTopic( $instancetopic )">$instancetopic.getDisplayName($lang)</a>##
+    #set( $count = $count + 1 )##
+   #end##
+  </td>
+ </tr>
+</table>
+
+
+
+<!-- *************************************************** -->
+<!-- ********** TOPIC'S DISPLAY NAME & SI ************** -->
+<!-- *************************************************** -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="thetopic">
+      $topic.getDisplayName($lang)<br>
+      <span class="si">
+#*     *##foreach( $si in $topic.getSubjectIdentifiers() )##
+#*      *#<a href="$si" target="_blank">$si</a><br>##
+#*     *##end##
+      </span>
+    </td>
+    <td width="15" class="thetopic">
+     <br>
+    </td>
+  </tr>
+</table>
+
+
+
+
+
+
+#set($types = $tmbox.sortTopics($topic.getTypes(), $lang))
+#if( $types.size() > 0 )
+ <!-- *************************************************** -->
+ <!-- ***************    TOPIC TYPES   ****************** -->
+ <!-- *************************************************** -->
+ <table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="thetypes">
+#*    *##if($types.size() > 0)##
+#*      *##set($typecounter = 0)##
+#*      *##foreach( $type in $types )##
+#*       *##if( $type!=$topic)##
+#*        *##if($typecounter>0), #end##
+#*        *#<a href="#linkTopic($type)">$type.getDisplayName($lang)</a>##
+#*        *##set($typecounter=$typecounter+1)##
+#*       *##end##
+#*      *##end##
+#*     *##end##
+    </td>
+    <td width="15" class="thetypes">
+     <br>
+    </td>
+  </tr>
+ </table>
+#end
+
+
+
+
+
+#if($topic.getSubjectLocator())##
+ <!-- **************************************************** -->
+ <!-- *****              SUBJECT LOCATOR             ***** -->
+ <!-- **************************************************** -->
+ <table width="100%" border="0" cellpadding="10" cellspacing="0" width="100%" >
+  <tr>
+   <td class="slbox">
+    <table border="0" cellpadding="10" cellspacing="0" width="100%">
+     <tr>
+      <td align="center" width="100%">
+       #set($sl = $topic.getSubjectLocator().toExternalForm().toLowerCase())##
+       #set($sloc = $topic.getSubjectLocator().toExternalForm())##
+       #if($sl.endsWith(".jpg") || $sl.endsWith(".jpeg") || $sl.endsWith(".png") || $sl.endsWith(".gif"))##
+        <a href="$sloc" target="_blank"><img src="$sloc" border="0" alt="subject locator image of $topic.getDisplayName()"></a>
+       #elseif($sl.endsWith(".mov") || $sl.endsWith(".mpeg") || $sl.endsWith(".mpg") || $sl.endsWith(".mp3") || $sl.endsWith(".avi"))##
+        <a href="$sloc" target="_blank">
+         <embed src="$sloc" border="0" width="200">
+        </a>
+       #else##
+        <iframe src="$sloc" frameborder="1" class="slframe">
+        </iframe>
+       #end##
+      </td>
+     </tr>
+     <tr>
+      <td align="center">
+       <span class="sl">
+        <a href="$sloc" target="_blank">$sloc</a>
+       </span>
+      </td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+
+#end##
+
+
+
+
+
+
+#set( $asdatatype = $tmbox.sortTopicsByData($topic.getTopicsWithDataType(),$topic,$lang) )##
+#if( $asdatatype.size() > 0 )
+ <!-- **************************************************** -->
+ <!-- *****            OCCURRENCES OF TYPE           ***** -->
+ <!-- **************************************************** -->
+ <p class="title">
+  Occurrences of type $topic.getDisplayName($lang) <span class="countnumber">($asdatatype.size())</span>
+ </p>
+ <table border="0" cellspacing="0" style="border-collapse: collapse;" cellpadding="5">
+  #foreach( $t in $asdatatype )
+   #set( $occurrencetext = $t.getData($topic,$lang) )##
+   #set( $occurrencetext = $occurrencetext.replaceAll( "\n", "<br>" ) )##
+   <tr>
+    <td class="topiccell">
+     <span class="topicnormal">$occurrencetext</span>
+    </td>
+    <td class="titlecell">
+     <span class="topicsmall">
+      $topic.getDisplayName($lang) of <a href="#linkTopic($t)">$t.getDisplayName($lang)</a>
+     </span>
+    </td>
+   </tr>
+  #end
+ </table>
+#end
+
+
+
+
+#set( $datatypes = $tmbox.sortTopics($topic.getDataTypes(),$lang) )##
+#if( $datatypes.size() > 0 )
+ <!-- **************************************************** -->
+ <!-- *****                OCCURRENCES               ***** -->
+ <!-- **************************************************** -->
+ <p class="title">
+  Occurrences <span class="countnumber">($datatypes.size())</span>
+ </p>
+ <table border="0" width="100%" style="border-collapse: collapse;" cellpadding="5">
+  #set($vdcount=0)
+  #foreach( $type in $datatypes )
+   #set( $occurrencetext = $topic.getData($type,$lang) )##
+   #set( $occurrencetext = $occurrencetext.replaceAll( "\n", "<br>" ) )##
+   <tr>
+    <td class="titlecell">
+      <a href="#linkTopic($type)" class="topicsmall">
+       <nobr>$type.getDisplayName($lang)</nobr>
+      </a>
+    </td>
+    <td class="topiccell">
+     <span class="topicnormal">
+      $occurrencetext
+     </span>
+    </td>
+   </tr>
+  #end
+ </table>
+#end
+
+
+
+
+
+
+
+
+#set( $subcategoriesall = $tmbox.getSubCategoriesRecursive($topic) )##
+#set( $temp = $subcategoriesall.add($topic) )##
+#set( $associations = $collectionmaker.make() )##
+#foreach( $category in $subcategoriesall )##
+#* *##set( $temp = $associations.addAll($category.getAssociations()) )##
+#end##
+#set( $associations = $tmbox.sortAssociations($associations,$subcategoriesall,$lang) )##
+#set( $associations = $tmbox.removeDuplicateAssociations($associations,$subcategoriesall) )##
+
+
+#if( $associations.size() > 0 )##
+ <!-- **************************************************** -->
+ <!-- *****                ASSOCIATIONS              ***** -->
+ <!-- **************************************************** -->
+#set($currentAssociationType = "")##
+#set($associationPool = $listmaker.make())##
+#set($totalAssociationPool = $listmaker.make())##
+#* *##foreach( $association in $associations )##
+#*  *##if($currentAssociationType == "" || $association.getType() != $currentAssociationType)##
+#*   *##set($temp = $totalAssociationPool.add($associationPool))##
+#*   *##set($associationPool = $listmaker.make())##
+#*   *##set($currentAssociationType = $association.getType())##
+#*  *##end##
+#*  *##set($temp = $associationPool.add($association))##
+#* *##end##
+#set($temp = $totalAssociationPool.add($associationPool))##
+
+
+ <p class="title" style="padding-bottom: 0px; margin-bottom: 0px;">
+  Associations <span class="countnumber">($associations.size())</span>
+ </p>
+
+ #set($associationRolePool = $listmaker.make())##
+#* *##foreach( $associationPool in $totalAssociationPool )##
+#*  *##set($associationRolePool = $listmaker.make())##
+#*  *##foreach($association in $associationPool)##
+#*   *##foreach($tempRole in $association.getRoles())##
+#*    *##if(!$associationRolePool.contains($tempRole))##
+#*     *##set( $temp = $associationRolePool.add($tempRole) )##
+#*    *##end##
+#*   *##end##
+#*  *##end##
+#* *##set( $roles = $tmbox.sortTopics($associationRolePool ,$lang) )##
+
+  #set($associationTableTitles = 0)
+  <table cellspacing="0" cellpadding="5" width="100%" style="border-collapse: collapse;">
+   #foreach($association in $associationPool)##
+    #set($associationType = $association.getType())##
+    #if($associationTableTitles == 0)##
+     <tr>##
+      <td colspan="$roles.size()" class="titlecell">##
+       <span class="topicsmall">##
+        <a href="#linkTopic($associationType)">##
+         $associationType.getDisplayName($lang)##
+        </a>##
+       </span>##
+      </td>##
+     </tr>##
+     <tr>##
+      #foreach( $role in $roles )
+       <td class="topiccell">
+        <span class="topicsmall">
+         <a href="#linkTopic($role)">
+          $role.getDisplayName($lang)
+         </a>
+        </span>
+       </td>
+      #end
+     </tr>
+     #set($associationTableTitles = 1)
+    #end
+
+    <tr>
+     #foreach( $role in $roles )
+      #set( $player = $association.getPlayer($role) )
+      <td class="topiccell">
+       <span class="topicnormal">
+        #if( $association.getPlayer($role) )
+          <a href="#linkTopic($player)">
+          #if( $player!=$topic )
+           $player.getDisplayName($lang)&nbsp;
+          #else
+           <span class="topiccurrent">$player.getDisplayName($lang)</span>
+          #end
+         </a>
+        #else
+         <br>
+        #end
+       </span>
+      </td>
+     #end
+    </tr>
+   #end
+  </table>
+  <br>
+ #end
+#end
+
+
+
+
+
+
+
+
+#set( $associations = $topic.getTopicMap().getAssociationsOfType( $topic ) )##
+
+
+#if( $associations.size() > 0 )##
+ <!-- **************************************************** -->
+ <!-- *****            ASSOCIATIONS OF TYPE          ***** -->
+ <!-- **************************************************** -->
+#set($currentAssociationType = "")##
+#set($associationPool = $listmaker.make())##
+#set($totalAssociationPool = $listmaker.make())##
+#* *##foreach( $association in $associations )##
+#*  *##if($currentAssociationType == "" || $association.getType() != $currentAssociationType)##
+#*   *##set($temp = $totalAssociationPool.add($associationPool))##
+#*   *##set($associationPool = $listmaker.make())##
+#*   *##set($currentAssociationType = $association.getType())##
+#*  *##end##
+#*  *##set($temp = $associationPool.add($association))##
+#* *##end##
+#set($temp = $totalAssociationPool.add($associationPool))##
+
+
+ <p class="title" style="padding-bottom: 0px; margin-bottom: 0px;">
+  Associations of type <span class="countnumber">($associations.size())</span>
+ </p>
+
+ #set($associationRolePool = $listmaker.make())##
+#* *##foreach( $associationPool in $totalAssociationPool )##
+#*  *##set($associationRolePool = $listmaker.make())##
+#*  *##foreach($association in $associationPool)##
+#*   *##foreach($tempRole in $association.getRoles())##
+#*    *##if(!$associationRolePool.contains($tempRole))##
+#*     *##set( $temp = $associationRolePool.add($tempRole) )##
+#*    *##end##
+#*   *##end##
+#*  *##end##
+#* *##set( $roles = $tmbox.sortTopics($associationRolePool ,$lang) )##
+
+  #set($associationTableTitles = 0)
+  <table cellspacing="0" cellpadding="5" width="100%" style="border-collapse: collapse;">
+   #foreach($association in $associationPool)##
+    #set($associationType = $association.getType())##
+    #if($associationTableTitles == 0)##
+     <tr>##
+      <td colspan="$roles.size()" class="titlecell">##
+       <span class="topicsmall">##
+        <a href="#linkTopic($associationType)">##
+         $associationType.getDisplayName($lang)##
+        </a>##
+       </span>##
+      </td>##
+     </tr>##
+     <tr>##
+      #foreach( $role in $roles )
+       <td class="topiccell">
+        <span class="topicsmall">
+         <a href="#linkTopic($role)">
+          $role.getDisplayName($lang)
+         </a>
+        </span>
+       </td>
+      #end
+     </tr>
+     #set($associationTableTitles = 1)
+    #end
+
+    <tr>
+     #foreach( $role in $roles )
+      #set( $player = $association.getPlayer($role) )
+      <td class="topiccell">
+       <span class="topicnormal">
+        #if( $association.getPlayer($role) )
+          <a href="#linkTopic($player)">
+          #if( $player!=$topic )
+           $player.getDisplayName($lang)&nbsp;
+          #else
+           <span class="topiccurrent">$player.getDisplayName($lang)</span>
+          #end
+         </a>
+        #else
+         <br>
+        #end
+       </span>
+      </td>
+     #end
+    </tr>
+   #end
+  </table>
+  <br>
+ #end
+#end
+
+
+
+
+
+
+#set( $instances = $topic.getTopicMap().getTopicsOfType($topic) )##
+#set( $instances = $tmbox.sortTopics($instances,$lang) )##
+#if( $instances.size() > 0 )
+ <!-- **************************************************** -->
+ <!-- *****                 INSTANCES                ***** -->
+ <!-- **************************************************** -->
+ <p class="title">
+  Instances <span class="countnumber">($instances.size())</span>
+ </p>
+ <table>
+  #foreach( $instancetopic in $instances )
+   <tr>
+    <td valing="bottom" align="left" valign="bottom">  
+     <span class="topicnormal">
+      <a href="#linkTopic($instancetopic)">$instancetopic.getDisplayName($lang)</a>
+     </span>
+    </td>
+   </tr>
+  #end
+ </table>
+#end
+
+
+
+<!-- **************************************************** -->
+<!-- *****                  FOOTER                  ***** -->
+<!-- **************************************************** -->
+<hr class="ruler">
+<table width="100%">
+ <tr>
+  <td class="footer">
+    www.wandora.org
+  </td>
+ </tr>
+</table>
+
+
+
+
+
+</body>
+</html>

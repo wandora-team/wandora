@@ -1,0 +1,56 @@
+body {
+  background-color: #1b1b1b;
+}
+.navbar .nav {
+  float: right;
+}
+.tree {
+  overflow: hidden;
+}
+.nav-list li a {
+  margin-left: 0;
+  padding-left: 0;
+}
+.container {
+  background-color: #ffffff;
+  padding: 25px;
+}
+.container .loader-container {
+  height: 100%;
+}
+.container .loader {
+  background-image: url("ajax_loader_gray_48.gif");
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+}
+.container ul.tree a {
+  display: inline;
+}
+.container ul.tree a:focus {
+  display: inline;
+}
+.container .topic h2 {
+  display: inline;
+}
+.container .topic .table {
+  margin-top: 10px;
+}
+.container .topic .assoc-container > .right {
+  padding-top: 12px;
+}
+.container .topic .right {
+  float: right;
+}
+.container .topic .right input {
+  margin: 0;
+}
+.container .topic .head {
+  text-transform: capitalize;
+  font-weight: bold;
+  font-size: 1.5em;
+  line-height: 2em;
+}
+.container .topic .spec .right {
+  padding-top: 11px;
+}

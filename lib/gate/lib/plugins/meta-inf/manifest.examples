@@ -1,0 +1,27 @@
+Slot plugin (simple)
+--------------------
+Name: edu.stanford.smi.protegex.imagemap.ImageMapToSymbolWidget.class
+Slot-Widget: True
+
+
+Slot plugin automatically assigned to a class
+----------------------------------------------------------
+Name: edu.stanford.smi.protegex.widget.uri.URIWidget.class
+Slot-Widget: True
+Default-Widget: True
+Default-Widget-For-Cardinality: Single
+Default-Widget-For-Type: Instance
+Default-Widget-For-Allowed-Class: URI
+
+
+Tab plugin
+----------
+Name: edu.stanford.smi.protege.ui.ClsesTab
+Tab-Widget: True
+
+
+KnowledgeBaseFactory plugin
+---------------------------
+Name: edu.stanford.db.protegex.storage.rdf.RDFKnowledgeBaseFactory.class
+Storage-Factory: True
+

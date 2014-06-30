@@ -1,0 +1,72 @@
+<!doctype html>
+<html xmlns:ng="http://angularjs.org" lang="en" id="ng-app" ng-app="Wandora">
+<head>
+	<title>Wandora</title>
+	<link rel="shortcut icon" href="img/favicon.ico" type="image/vnd.microsoft.icon">
+
+	<!--[if lte IE 8]>
+		<script src="js/json3.js"></script>
+		<script>
+			// needed to make ng-include parse properly
+			document.createElement('ng-include');
+
+			// needed to enable CSS reference
+			document.createElement('ng:view');
+		</script>
+    <![endif]-->
+    <!--[if IE 7]>
+		<link rel="stylesheet" href="css/font-awesome-ie7.min.css">
+	<![endif]-->
+
+	
+	<!--(if target dev)><!-->
+
+	<script src="lib/angular.js" type="text/javascript"></script>
+	<script src="lib/angular-resource.js" type="text/javascript"></script>
+
+	<script src="js/services/topicmap.js" type="text/javascript"></script>
+	<script src="js/controllers.js" type="text/javascript"></script>
+	<script src="js/directives.js" type="text/javascript"></script>
+	<script src="js/app.js" type="text/javascript"></script>
+
+	<!--<!(endif)-->
+
+	<!--(if target dist)>
+	  <script src="js/angular-wandora.js"></script>
+	<!(endif)-->
+
+ 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+ 	<link rel="stylesheet" href="css/font-awesome.min.css">	
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body ng-controller="mainControl">
+
+	<div class="navbar navbar-static-top">
+	  <div class="navbar-inner">
+	    <a class="brand" href="#">Wandora</a>
+	    <ul class="nav" ng-controller="langControl" ng-hide="!langs">
+			<li ng-repeat="lang in langs" ng-class="{active: lang.isActive}" >
+				<a ng-click="setLang(lang)">{{lang.disp}}</a>
+			</li>
+	    </ul>
+	   
+	  </div>
+	</div>
+	<div class="container">
+		<div class="row" ng-hide="!message.length">
+			<div class="span12 loader-container">
+				<div class="loader"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span4">
+				<div class="well" ng-include="'partials/treeNode.html'">
+				</div>
+			</div>
+			<div class="span8" ng-view></div>
+		</div>
+	</div>
+	
+</body>	
+</html>
+

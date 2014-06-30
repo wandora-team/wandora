@@ -1,0 +1,47 @@
+
+#set( $topicMap = $topic.getTopicMap() )
+#set( $topics = $topicMap.getTopics() )
+#set( $typeFields = $mapmaker.make() )
+#set( $valid = 1 )
+#foreach( $topic in $topics )
+#**##set( $dataTypes = $topic.getDataTypes() )
+#**##foreach( $type in $dataTypes )
+#* *##foreach( $scopeTopic in $topic.getData($type).keySet() )
+#*  *##if( $typeFields.containsKey( $scopeTopic ) )
+#*   *##set( $value = $typeFields.get( $scopeTopic ) + 1 )
+#*   *##set( $update = $typeFields.put( $scopeTopic, $value ) )
+#*  *##else
+#*   *##set( $put = $typeFields.put( $scopeTopic, 1 ) )
+#*  *##end
+#* *##end
+#**##end
+#end
+#if( !$typeFields || $typeFields.isEmpty() )
+#set( $valid = 0 )
+#end
+#macro( iterateTypes $types )
+#set( $counter = 1 )
+#**#{
+#* *#"name": "bubbles",
+#* *#"children": [
+#* *##foreach( $type in $types.entrySet() )
+#*  *#{
+#*   *#"className": "$type.key.getBaseName()",
+#*   *#"packagename": "$urlencoder.encode( $topic.getBaseName() )",
+#*   *#"value": "$type.value"
+#*  *#}
+#*  *##set( $counter = $counter + 1 )
+#*  *##if( $types.size() >= $counter )
+#*   *#,
+#*  *##end
+#* *##end
+#**#]}
+#end
+    <script>
+    console.log(#iterateTypes( $typeFields ));
+#if( $valid == 0 )
+      alert("Invalid topicmap structure or empty result set!");
+#else
+      draw(#iterateTypes( $typeFields ));
+#end
+    </script>

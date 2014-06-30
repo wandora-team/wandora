@@ -1,0 +1,105 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+#set( $lang = "en" )##
+##
+##
+##
+##
+#macro( linkTopic $t )##
+${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
+#end##
+##
+##
+##
+<html>
+<!-- *********************************************************************** -->
+<!-- ****      GOOGLE MAPS - WANDORA EMBEDDED HTTP SERVER TEMPLATE      **** -->
+<!-- ****                    (c) 2012 WANDORA TEAM                      **** -->
+<!-- *********************************************************************** -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>Wandora - Google Maps</title>
+        <style type="text/css">
+            html { height: 100% }
+            body { height: 100%; margin: 0; padding: 0 }
+            #map_canvas { height: 100% }
+        </style>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false">
+        </script>
+        <script type="text/javascript">
+            var map;
+            var infowindow;
+            var coordinates;
+
+            function initialize() {
+                var gmapOptions = {
+                        center: new google.maps.LatLng(62.63, 25.18),
+                        zoom: 6,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById("map_canvas"), gmapOptions);
+
+                coordinates = new Array();
+                infowindow = new google.maps.InfoWindow();
+
+                ## All next parse directives generate javascript for GoogleMaps.
+                ## Parsed javascripts contain also Velocity code that transforms
+                ## Wandora topics and associations (and occurrences) to javascript
+                ## structures. Each parsed code assumes the Wandora content is
+                ## generated using specific extractors in Wandora. These specific
+                ## extractors are GeoNames extractor, Oma kaupunki extractor 
+                ## (events or services) and (Helsinki region) Service Map extractor.
+                
+                #parse( "${templatesdir}data_geonames.js" )
+                #parse( "${templatesdir}data_palvelukartta.js" )
+                #parse( "${templatesdir}data_oma_kaupunki_events.js" )
+                #parse( "${templatesdir}data_oma_kaupunki_services.js" )
+                #parse( "${templatesdir}data_nyt_events.js" )
+
+                centerMap();
+
+                if(geo_loc_data.length == 0 && ok_event_locations.length == 0 && ok_service_locations.length == 0 && unit_locations.length == 0) {
+                    alert("Wandora doesn't contain any GeoNames locations nor Oma Kaupunki events nor Oma Kaupunki services nor Service Map units. "+
+                          "Use Wandora's extractors to generate content and try again.");
+                }
+            }
+	
+            // Centers the Google Map by using the created markers latitude and longitude
+            function centerMap() {
+                var north = -100;
+                var south = 100;
+                var west = 100;	
+                var east = -100;
+
+                for(var i=0;i<coordinates.length;i++) {
+                    var latlng = coordinates[i];
+
+                    if(latlng.lat() > north) north = latlng.lat();
+                    if(latlng.lat() < south) south = latlng.lat();
+                    if(latlng.lng() > east) east = latlng.lng();
+                    if(latlng.lng() < west) west = latlng.lng();
+                }
+
+                var sw = new google.maps.LatLng(south, west);
+                var ne = new google.maps.LatLng(north, east);
+                var bounds = new google.maps.LatLngBounds(sw, ne);
+                map.fitBounds(bounds);
+            }
+	
+	
+            function makeMarker(options) {
+                var marker = new google.maps.Marker(options);
+                google.maps.event.addListener(marker, 'click', function(evt) {
+                        infowindow.setOptions(options);
+                        infowindow.open(map,marker);
+                });
+            }
+	  
+        </script>
+    </head>
+
+    <body onload="initialize()">
+        <div id="map_canvas" style="width:100%; height:100%"></div>
+    </body>
+</html>

@@ -1,0 +1,9 @@
+Phase:	organisation
+//Input: Token SpaceToken Lookup
+Options: control = appelt
+
+Rule:	City
+Priority: 50
+({Lookup.majorType == "organisation"})
+:org -->
+  :org.Organisation = {}

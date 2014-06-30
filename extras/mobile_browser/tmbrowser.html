@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<!--
+﻿ WANDORA - Mobile browser
+ 
+ Knowledge Extraction, Management, and Publishing Application
+ http://wandora.org/
+  
+ Copyright (C) 2004-2011 Grip Studios Interactive, Inc.
+  
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- Use this if to cache the entire application. -->
+<!-- <html manifest="tmbrowser.manifest"> -->
+<html>
+<head>
+    <script type="text/javascript">
+        var tmurl="ArtOfNoise.jtm"; // This is also in the manifest file
+        var startpage="wandora:core/wandoraclass"; // ID of the start page
+        var lang="en"; // language (doesn't do anything currently)
+            
+        // Prefixes for subject identifiers. IDs are formed by replacing the prefix
+        // with the namespace.
+        var prefixes={  "http://wandora.org/":"wandora:",
+                        "http://www.topicmaps.org/xtm/1.0/core.xtm#":"xtm:",
+                        "http://psi.topicmaps.org/iso13250/model/":"iso13250:",
+                        "http://www.last.fm/":"lastfm:",
+                        "http://ws.audioscrobbler.com/1.0/":"audioscrobbler:",
+                        "http://en.wikipedia.org/wiki/":"wikipedia:",
+                        };
+    </script>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="jquery.mobile-1.0.1/jquery.mobile-1.0.1.min.css" /> 
+    <style type="text/css">
+        .linkGroup {
+            margin: 0px;
+            width: 100%;
+        }
+        .associationTypeGroup, .occurrenceTypeGroup {
+            margin-top: 1em;
+        }
+        .associationRolesGroup {}
+        .associationPlayersGroup {}
+        .occurrenceText {
+            margin-top: 1em;
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript" src="jquery-1.7.1min.js"></script> 
+    <script type="text/javascript" src="tm.js"></script> 
+    <script type="text/javascript">
+        var tm=new TopicMap();
+        
+        var typeInstanceT=tm.getOrCreateTopic(SI_TYPE_INSTANCE);
+        typeInstanceT.bns.push("Type-Instance");
+        var typeT=tm.getOrCreateTopic(SI_TYPE);
+        typeT.bns.push("Type");
+        var instanceT=tm.getOrCreateTopic(SI_INSTANCE);
+        instanceT.bns.push("Instance");
+        
+        tm.loadJTM(tmurl);
+        
+        function collapsePrefix(si){
+            for(var p in prefixes){
+                var ns=prefixes[p]
+                if(si.substring(0,p.length)==p){
+                    return ns+si.substring(p.length);
+                }
+            }
+            return si;
+        }
+        
+        function makeId(si){
+            si=collapsePrefix(si);
+            for(var i=0;i<si.length;i++){
+                if(si[i].match(/[^a-zA-Z0-9-]/)){
+                    var e=si[i].charCodeAt(0).toString(16);
+                    if(e.length<2) e="0"+e;
+                    si=si.substring(0,i)+"_"+e+si.substring(i+1);
+                    i+=2;
+                }
+            }
+            return si;
+        }
+        
+        function copyTemplate(page,template){
+            page.html(template.html());
+            page.attr("class",template.attr("class"));
+        }
+        
+        function topicLinkListener(){
+            var t=$(this).data('topic');
+            openTopic(t);
+            return false;
+        }
+        
+        function makeSLElement(sl){
+            var ind=sl.lastIndexOf(".");
+            if(ind>=0) {
+                var suffix=sl.substring(ind+1).toLowerCase();
+                if(suffix=="jpg" || suffix=="jpeg" || suffix=="png" || suffix=="gif"){
+                    var imgE=$(document.createElement('img'));
+                    imgE.attr('src',sl);
+                    return imgE;
+                }
+            }
+            
+            var pE=$(document.createElement("p"));
+            pE.append(sl);
+            return pE;
+        }
+                
+        function makeTopicLink(topic,noSL){
+            var aE=$(document.createElement('a'));
+            aE.attr('href',base+'#'+makeId(topic.sis[0]));
+            aE.attr('data-role','button');
+            if(topic==null){
+                aE.click(function(){return false;});
+                return aE;
+            }
+            
+            aE.data('topic',topic);
+            aE.click(topicLinkListener);
+            
+            if(!noSL && topic.sls && topic.sls.length>0){
+                var sl=topic.sls[0];
+                var ind=sl.lastIndexOf(".");
+                if(ind>=0) {
+                    var suffix=sl.substring(ind+1).toLowerCase();
+                    if(suffix=="jpg" || suffix=="jpeg" || suffix=="png" || suffix=="gif"){
+                        var imgE=$(document.createElement('img'));
+                        imgE.attr('height','100');
+                        imgE.attr('src',sl);
+                        aE.append(imgE);
+                    }
+                }
+            }
+            
+            var bn="[unnamed]";
+            if(topic.bns && topic.bns.length>0) bn=topic.bns[0];
+            
+            aE.append(bn);
+            
+            return aE;
+        }
+        
+        function makeLinkGroup(){
+            var e=$(document.createElement("div"));
+            e.addClass("linkGroup");
+            e.attr("data-role","controlgroup");
+            e.attr("data-type","horizontal");
+            return e;
+        }
+        
+        function layoutLinkGroup(gE){
+            var aEs=gE.find("a");
+            var screenPos=0;
+            var realPos=0;
+            var d=100.0/aEs.length;
+            for(var i=0;i<aEs.length;i++){
+                realPos+=d;
+                var w=Math.round(realPos-screenPos);
+                screenPos+=w;
+                $(aEs[i]).css('width',w+"%");
+            }
+
+        }
+        
+        function fillPageContent(page,topic){
+            
+            if(topic==null){
+                copyTemplate(page,$('#notFound'));
+            }
+            else{
+                copyTemplate(page,$('#topicPageTemplate'));
+                var hE=page.find('div[data-role="header"] > h1');
+                var bn="[unnamed]";
+                if(topic.bns && topic.bns.length>0) bn=topic.bns[0];
+                hE.html(bn);
+                
+                var as=topic.getAssociations();
+                as.sort(associationComparator);
+                
+                var asE=page.find('.associations');
+                if(as.length==0) asE.detach();
+                
+                var typeE;
+                var lastType=null;
+                var roles=null;
+                var i,j,k;
+                var gE;
+                for(i=0;i<as.length;i++){
+                    var a=as[i];
+                    if(a.type!=lastType){
+                        lastType=a.type;
+                        roles=[];
+                        for(j=i;j<as.length;j++){
+                            var a2=as[j];
+                            if(a2.type!=a.type) break;
+                            for(k=0;k<a2.players.length;k++){
+                                var r=a2.players[k].role;
+                                if(roles.indexOf(r)<0) roles.push(r);
+                            }
+                        }
+                        
+                        typeE=makeTopicLink(a.type);
+                        typeE.attr("data-theme","a");
+                        gE=makeLinkGroup();
+                        gE.append(typeE);
+                        gE.addClass("associationTypeGroup");
+                        layoutLinkGroup(gE);
+                        asE.append(gE);
+                        
+                        gE=makeLinkGroup();
+                        gE.addClass("associationRolesGroup");
+                        for(j=0;j<roles.length;j++){
+                            var roleE=makeTopicLink(roles[j]);
+                            roleE.attr("data-theme","b");
+                            gE.append(roleE);
+                        }
+                        layoutLinkGroup(gE);
+                        asE.append(gE);
+                    }
+
+                    gE=makeLinkGroup();
+                    gE.addClass("associationPlayersGroup");
+                    for(j=0;j<roles.length;j++){
+                        var p=a.getPlayer(roles[j])
+                        gE.append(makeTopicLink(p,p==topic));
+                    }
+                    layoutLinkGroup(gE);
+                    asE.append(gE);
+                    
+                }
+                                
+                var osE=page.find('.occurrences');                
+                var ots=topic.getOccurrenceTypes();
+                if(ots.length==0) osE.detach();
+                
+                for(i=0;i<ots.length;i++){
+                    var ot=ots[i];
+                    gE=makeLinkGroup();
+                    typeE=makeTopicLink(ot);
+                    typeE.attr("data-theme","a");
+                    gE.append(typeE);
+                    gE.addClass("occurrenceTypeGroup");
+                    layoutLinkGroup(gE);
+                    osE.append(gE);
+                    
+                    var divE=$(document.createElement("div"));
+                    divE.addClass("occurrenceText");
+                    divE.append(topic.getOccurrence(ot,lang));
+                    osE.append(divE);
+                }
+                
+                var slE=page.find('.subjectLocator');
+                var sls=topic.sls;
+                if(sls.length==0) slE.detach();
+                else {
+                    var e=makeSLElement(sls[0]);
+                    if(e) slE.append(e);
+                }
+            }
+            
+            page.page();
+        }
+                
+        function openTopic(topic){
+            var si=topic.sis[0];
+            var id=makeId(si);
+            var page=$("#"+id);
+            if(page.length>0){
+                $.mobile.changePage("#"+id);
+            }
+            else {
+                page=$(document.createElement('div'));
+                page.attr('id',id);
+                page.attr('data-role','page');
+                page.attr('data-url',id);
+                $('body').append(page);
+                fillPageContent(page,topic);
+                $.mobile.changePage("#"+id);
+            }
+        }
+        
+        $('#frontpage').live('pagebeforecreate',function(event){
+            var si='http://wandora.org/lappset/frontpage';
+            var t=tm.getTopic(si);
+            fillPageContent($(this),t);
+        });
+        
+        /*
+        // enables swiping back and forward but causes some strange issues with scrolling etc.
+        $(function() {
+            $('body').bind('swipeleft',function(e){
+                window.history.forward();
+            });
+            $('body').bind('swiperight',function(e){
+                window.history.back();
+            });
+        });
+        */
+        
+        // this works arounda bug that causes button graphics to get stuck
+        $('div[data-role="page"]').live("pagebeforehide",function(event){
+            $(this).find('a, li').removeClass("ui-btn-active");
+        });
+        
+    </script>
+    <script type="text/javascript" src="jquery.mobile-1.0.1/jquery.mobile-1.0.1.min.js"></script>
+<!--    <script type="text/javascript" src="jquery.mobile-1.0.1/jquery.mobile-1.0.1.js"></script> -->
+    
+    <title>Topic map browser</title>
+</head>
+<body>
+
+    <div id="notFound" data-role="page">
+        <div data-role="header"><h1>[not found]</h1></div>
+        <div data-role="content">
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var base=location.href;
+        var id=makeId(startpage);
+        var ind=location.href.indexOf("#");
+        if(ind>=0) {
+            base=location.href.substring(0,ind);
+            id=location.href.substring(ind+1);
+        }
+            
+        for(var si in tm.siIndex){
+            if(makeId(si)==id){
+                var page=$(document.createElement('div'));
+                page.attr('id',id);
+                page.attr('data-url',id);
+                page.attr('data-role','page');
+                page.data('si',si);
+                page.bind('pagebeforecreate',function(event){
+                    var si=$(this).data('si');
+                    var t=tm.getTopic(si);
+                    fillPageContent($(this),t);
+                });
+                $('#notFound').before(page);
+                break;
+            }
+        }
+    </script>
+    
+    <div id="topicPageTemplate" data-role="page">
+        <div data-role="header"><h1></h1></div>
+        <div data-role="content">
+            <div class="subjectLocator">
+                <h2>Subject locator</h2>
+            </div>
+            <div class="occurrences">
+                <h2>Occurrences</h2>
+            </div>
+            <div class="associations">
+                <h2>Associations</h2>
+            </div>
+        </div>
+    </div>
+        
+</body>
+</html>

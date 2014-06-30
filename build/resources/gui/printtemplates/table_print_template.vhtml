@@ -1,0 +1,221 @@
+##TEMPLATE-NAME: Table Template
+#set( $basename = $topic.get('basename') )##
+#set( $sl = $topic.get('sl') )##
+#set( $si = $topic.get('si') )##
+#set( $names = $topic.get('names') )##
+#set( $classes = $topic.get('classes') )##
+#set( $data = $topic.get('data') )##
+#set( $associationsbytype = $topic.get('associationsbytype') )##
+#set( $associationrolesbytype = $topic.get('associationrolesbytype') )##
+#set( $allassociations = $topic.get('allassociations') )##
+#set( $instances = $topic.get('instances') )##
+
+<html>
+ <head>
+  <style type="text/css">
+   <!--
+     body  {
+       color: black;
+       font-family: sans-serif;
+       font-size: 10;
+     }
+   -->
+  </style>
+ </head>
+ <body>
+  <font size="+2">#if( $basename ) $basename #else <i>No base name</i> #end</font>
+  <br>
+  <br>
+  <table border="0">
+
+  ## ************** SUBJECT LOCATOR TABLE **************
+  #if( $sl )
+   <tr>
+    <td valign="top">Subject Locator</td>
+    <td>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td bgcolor="#000000">
+        <table class="occurrences" cellspacing="1" cellpadding="4" border="0" width="330">
+         <tr><td bgcolor="#ffffff">$sl</td></tr>
+        </table>
+       </td>
+      </tr>
+     </table>
+    </td>
+   </tr>
+  #end
+
+  ## ************** SUBJECT IDENTIFIER TABLE **************
+  #if( $si && $si.size() > 0 )
+   <tr>
+    <td valign="top">Subject Identifiers <font size="-5">($si.size())</font></td>
+    <td>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td bgcolor="#000000">
+        <table class="occurrences" cellspacing="1" cellpadding="4" border="0" width="330">
+         <tr><td bgcolor="#ffffff">
+          #foreach( $s in $si )
+           $s<br>
+          #end
+         </td></tr>
+        </table>
+       </td>
+      </tr>
+     </table>
+     <br>
+    </td>
+   </tr>
+  #end
+
+  ## ************** VARIANT NAMES TABLE **************
+  #if( $names && $names.size() > 0 )
+   <tr>
+    <td valign="top">Variant names <font size="-5">($names.size())</font></td>
+    <td>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td bgcolor="#000000">
+        <table class="occurrences" cellspacing="1" cellpadding="4" border="0" width="330">
+         <tr><td bgcolor="#ffffff" valign="top">
+          #foreach( $namescope in $names.keySet() )
+           #set($name = $names.get($namescope))
+           $name <i>$namescope</i><br>
+          #end
+         </td></tr>
+        </table>
+       </td>
+      </tr>
+     </table>
+     <br>
+    </td>
+   </tr>
+  #end
+
+  ## ************** CLASSES TABLE **************
+  #if( $classes && $classes.size() > 0 )
+   <tr>
+    <td valign="top">Classes <font size="-5">($classes.size())</td>
+    <td>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td bgcolor="#000000">
+        <table class="occurrences" cellspacing="1" cellpadding="4" border="0" width="330">
+         <tr><td bgcolor="#ffffff">
+          #foreach( $class in $classes ) 
+           $class<br>
+          #end
+         </td></tr>
+        </table>
+       </td>
+      </tr>
+     </table>
+     <br>
+    </td>
+   </tr>
+  #end
+
+
+  ## ************** OCCURRENCE TABLES **************
+  #if( $data && $data.size() > 0 )##
+   #set( $occurrencetitles = 0 )##
+   <tr>
+    <td valign="top">Occurrences <font size="-5">($data.size())</font></td>
+    <td>
+     #foreach( $occurrencename in $data.keySet() )##
+      <table border="0" cellpadding="0" cellspacing="0">
+       <tr>
+        <td bgcolor="#000000">
+         <table class="occurrences" cellspacing="1" cellpadding="4" border="0">
+          #set($occurrence = $data.get($occurrencename) )##
+          <tr>
+           <td bgcolor="#ffffff" colspan="2"><b>$occurrencename</b></td>
+          </tr>
+          #foreach( $key in $occurrence.keySet() )##
+           <tr> 
+            <td bgcolor="#ffffff" width="97" valign="top"><i>$key</i></td>
+            <td bgcolor="#ffffff" width="230" valign="top">$occurrence.get($key)</td>
+           </tr>
+          #end##
+         </table>
+        </td>
+       </tr>
+      </table>
+      <br>
+      <br>
+     #end##
+    </td>
+   </tr>
+  #end##
+
+
+  ## ************** ASSOCIATIONS TABLES ************** 
+  #if( $associationsbytype && $associationsbytype.size() > 0 )##
+   <tr>
+    <td valign="top">Associations <font size="-5">($allassociations.size())</font></td>
+    <td>
+     #foreach( $associationtype in $associationsbytype.keySet() )##
+      #set( $typedassociations = $associationsbytype.get($associationtype) )##
+      <table border="0" cellpadding="0" cellspacing="0"><tr><td bgcolor="#000000">
+       <table class="associations" cellspacing="1" width="330" cellpadding="4" border="0">
+        #set( $columnCount = 0 )##
+        #foreach( $role in $associationrolesbytype.get($associationtype) )##
+         #set( $columnCount = $columnCount+1 )##
+        #end##
+        <tr>
+         <td bgcolor="#ffffff" colspan="$columnCount"><b>$associationtype</b></td>
+        </tr>
+        <tr>
+         #foreach( $role in $associationrolesbytype.get($associationtype) )
+          <td bgcolor="#ffffff" valign="top"><i>$role</i></td>
+         #end
+        </tr>
+        #foreach( $association in $typedassociations )
+         <tr>
+          #foreach( $role in $associationrolesbytype.get($associationtype) )
+           <td bgcolor="#ffffff" valign="top">$association.get($role)</td>
+          #end
+         </tr>
+        #end
+       </table>
+      </td></tr></table>
+      <br>
+      <br>
+     #end
+    </td>
+   </tr>
+  #end
+
+
+  ## ************** INSTANCES TABLE ************** 
+  #if( $instances && $instances.size() > 0 )
+   <tr>
+    <td valign="top">Instances <font size="-5">($instances.size())</font></td>
+    <td>
+     <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+       <td bgcolor="#000000">
+        <table class="occurrences" cellspacing="1" cellpadding="4" border="0" width="330">
+         <tr><td bgcolor="#ffffff">
+          #foreach( $instance in $instances )
+           $instance<br>
+          #end
+         </td></tr>
+        </table>
+       </td>
+      </tr>
+     </table>
+     <br>
+    </td>
+   </tr>
+  #end
+
+   <tr>
+    <td valign="top" colspan="2" align="right">printed from wandora $date</td>
+   </tr>
+
+
+  </table>
+ </body>
+</html>

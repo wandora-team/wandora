@@ -1,0 +1,1095 @@
+
+/*
+ * ProcessingPanel.java
+ *
+ * Created on 2.9.2011, 14:11:43
+ */
+
+package org.wandora.application.gui.topicpanels;
+
+
+import org.wandora.application.gui.WandoraOptionPane;
+
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Window;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.Writer;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
+import org.wandora.application.CancelledException;
+import org.wandora.application.RefreshListener;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.GuiBox;
+import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.topicpanels.processingpanel.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
+import org.wandora.topicmap.TopicMap;
+import processing.core.*;
+
+import jsyntaxpane.DefaultSyntaxKit;
+import org.apache.commons.lang.ArrayUtils;
+import org.eclipse.jdt.core.compiler.CompilationProgress;
+import org.eclipse.jdt.core.compiler.batch.BatchCompiler;
+import org.wandora.utils.Options;
+import org.wandora.utils.Tuples.T2;
+
+import org.wandora.application.gui.topicpanels.processingpanel.*;
+
+
+/**
+ *
+ * @author ookami
+ */
+
+
+public class ProcessingTopicPanel extends JPanel implements TopicMapListener, RefreshListener, TopicPanel, ActionListener, ComponentListener {
+    
+    
+    private String tempReplaceStart = "/*<--||";
+    private String tempReplaceEnd = "-->||*/";
+    
+    private TopicMap tm;
+    private Topic rootTopic;
+    
+    private String currentUserGivenSource = "";
+    private boolean isSourceCompiled = false;
+    private SketchTemplate runningTemplate = null;
+    
+    private boolean isGuiInitialized = false;
+    
+    private int charactersBefore = 0;
+    
+    
+    private ArrayList<T2<String,String>> sketches = new ArrayList<T2<String,String>>();
+    
+    public static final String optionsPrefix = "options.processingpanel";
+    public static final String processingClassName = "ProcessingSketch";
+    
+    
+    public static final String PROCESSING_OCCURRENCETYPE_SI="http://processing.org";
+    
+    private boolean isSketchStarted = false;
+    
+    
+    
+    /** Creates new form ProcessingPanel */
+    public ProcessingTopicPanel() {
+    }
+    
+    public void initialize(Topic topic, Wandora manager) throws TopicMapException {
+	rootTopic = topic;
+	if(!isGuiInitialized) {
+	    
+	    tm = manager.getTopicMap();
+	    
+	    isGuiInitialized = true;
+	    initComponents();
+	    this.addComponentListener(this);
+	   
+	    DefaultSyntaxKit.initKit();
+	    codeEditor.setContentType("text/java");
+	    
+	    processingListBox.setEditable(false);
+	    
+	    readOptions();
+	    
+	    if(useOccurencesCheckBox.isSelected()) {
+		
+		loadTopicProcessingCode();
+		
+	    }
+	    
+	    
+	    checkAutoRun();
+	    
+	    //System.out.println(System.getProperty("java.class.path"));
+	    
+	    invalidate();
+	    
+	}
+	
+    }
+    
+    private void checkAutoRun() {
+	
+	if(autoRunCheckBox.isSelected()) {
+
+	    parseUserSource();
+	    buildProcessingGraph();
+	    if(isSourceCompiled) {
+		tabPanel.setSelectedComponent(graphHolder);
+	    }
+
+	} else {
+	    stopAndRemoveGraph();
+	    tabPanel.setSelectedComponent(editorPanel);
+	}
+	
+	
+    }
+    
+    private void readOptions () {
+	
+	loadStoredSketches();
+	Options options = Wandora.getWandora().getOptions();
+	
+	boolean isSelected = options.getBoolean(optionsPrefix+".use_occurence_processing_code", false);
+	useOccurencesCheckBox.setSelected(isSelected);
+	
+	boolean isSelectedAutoRun = options.getBoolean(optionsPrefix+".autorun", false);
+	autoRunCheckBox.setSelected(isSelectedAutoRun);
+	
+	
+    }
+    
+    public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+        String c = actionEvent.getActionCommand();
+        System.out.println("Processing panel catched action command '" + c + "'.");
+        toggleVisibility(c);       
+    }
+    
+    private void parseUserSource() {
+	
+	try {
+	    
+	    
+	    String temp = "";
+	    
+	    FileInputStream stream = new FileInputStream(
+		    new File("resources/processing/SketchTemplate.java"));
+	    
+	    try {
+		FileChannel fc = stream.getChannel();
+		MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+		/* Instead of using default, pass in a decoder. */
+		temp = Charset.defaultCharset().decode(bb).toString();
+	    }
+	    finally {
+		stream.close();
+	    }
+	    
+	    
+	    charactersBefore = temp.indexOf(tempReplaceStart);
+	    
+	    
+	   temp = temp.substring(temp.indexOf("\n"));
+	    
+	    
+	    String fullSource = temp.substring(0, temp.indexOf(tempReplaceStart)) +
+		codeEditor.getText() +
+		temp.substring(temp.indexOf(tempReplaceEnd)+tempReplaceEnd.length(), temp.length());
+	    
+	    
+	    fullSource = fullSource.replaceAll("(?:SketchTemplate)", processingClassName);
+	    fullSource = fullSource.replaceFirst("(?:PApplet)", "SketchTemplate");
+	    
+	    currentUserGivenSource = fullSource;
+	    
+	    
+	} catch (Exception ex) {
+	    Logger.getLogger(ProcessingTopicPanel.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	
+	
+    }
+    
+    
+    private void stopAndRemoveGraph() {
+	
+	Component[] components = innerPanel.getComponents();
+	
+	for (int i = 0; i < components.length; i++) {
+	    PApplet proComponent = (SketchTemplate) components[i];
+	    proComponent.stop();
+	    innerPanel.remove(proComponent);
+	    //proComponent.destroy();
+	}
+	
+    }
+    
+    private void buildProcessingGraph() {
+	
+	
+	
+	stopAndRemoveGraph();
+	
+	try {
+	    
+	    compileProcessing(currentUserGivenSource);
+	    
+	    runningTemplate.wandoraInit(rootTopic);
+	    //runningTemplate.addComponentListener(this);
+	    
+	    innerPanel.add(runningTemplate);
+	    runningTemplate.init();
+	    //runningTemplate.registerPost(this);
+	    //runningTemplate.registerPre(this);
+	    
+	    isSketchStarted = false;
+	    
+	    int timeElapsed = 0;
+	    
+	    while (runningTemplate.defaultSize&&!runningTemplate.finished && timeElapsed < 5000)
+	    try {timeElapsed += 50;Thread.sleep(50);} catch (Exception e) {}
+	    
+	    Dimension size = new Dimension(runningTemplate.width, runningTemplate.height);
+	    innerPanel.setPreferredSize(size);
+	    innerPanel.setMinimumSize(size);
+	   
+	    invalidate();
+	    //revalidate();
+	    //repaint();
+	    
+	    isSourceCompiled = true;
+	    
+	    //compile;
+	} catch (Exception ex) {
+	    Logger.getLogger(ProcessingTopicPanel.class.getName()).log(Level.SEVERE, null, ex);
+	    isSourceCompiled = false;
+	}
+	
+	
+    }
+    
+    private boolean compileProcessing(String source) {
+	return compileProcessing(source, true);
+    }
+    
+    
+    // With ECJ compiler. Hmm... bit process should probably be broken to smaller functions.
+    private boolean compileProcessing(String source, boolean replaceApplet) {
+	
+	boolean success = false;
+
+
+	File temp = null;
+	try {
+	    temp = File.createTempFile(processingClassName, ".java");
+	    temp.deleteOnExit();
+
+	    BufferedWriter out = new BufferedWriter(new FileWriter(temp));
+	    out.write(source);
+	    out.close();
+
+	} catch (IOException ex) {
+            ex.printStackTrace();
+	    Logger.getLogger(ProcessingTopicPanel.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	
+	
+	// TODO: Here a chance to optimize the compilation process greatly. 
+	// Compilation includes in all the classpaths used by Wandora, which
+	// increase the compilation time greatly. So only the necessary
+	// classpaths should included here. The ones that the SketchTemplate needs.
+	String baseCommand[] = new String[] {
+	  "-Xemacs",
+	  "-source", "1.6",
+	  "-target", "1.6",
+	  "-classpath", System.getProperty("java.class.path"), 
+	  "-nowarn", "-noExit",
+	  "-d", "resources/processing/compilations" // output the classes in the buildPath
+	};
+    
+	String oldname = temp.getName();
+	
+	// Rename the temporary file to the real classname
+	File temp2 = new File(temp.getParent()+"\\"+processingClassName+".java");
+	temp2.delete();
+	temp2.deleteOnExit();
+	temp.renameTo(temp2);
+	
+	
+	String[] sourceFiles = new String[1];
+	sourceFiles[0] = temp2.getAbsolutePath(); 
+	
+	String[] command = (String[]) ArrayUtils.addAll(baseCommand, sourceFiles);
+	
+	ArrayList<String> errors = new ArrayList<String>();
+	
+	try {
+	  // Load errors into a local StringBuffer
+	  final StringBuffer errorBuffer = new StringBuffer();
+
+	  // Create single method dummy writer class to slurp errors from ecj
+	  Writer internalWriter = new Writer() {
+	      public void write(char[] buf, int off, int len) {
+		errorBuffer.append(buf, off, len);
+	      }
+
+	      public void flush() { }
+
+	      public void close() { }
+	  };
+	  // Wrap as a PrintWriter since that's what compile() wants
+	  PrintWriter writer = new PrintWriter(internalWriter);
+
+	  //result = com.sun.tools.javac.Main.compile(command, writer);
+
+	  CompilationProgress progress = null;
+	  PrintWriter outWriter = new PrintWriter(System.out);
+	  success = BatchCompiler.compile(command, outWriter, writer, progress);
+
+	  // Close out the stream for good measure
+	  writer.flush();
+	  writer.close();
+
+	  BufferedReader reader = new BufferedReader(new StringReader(errorBuffer.toString()));
+	  //System.err.println(errorBuffer.toString());
+
+	  String line = null;
+	  while ((line = reader.readLine()) != null) {
+	    //System.out.println("got line " + line);  // debug
+
+	    // get first line, which contains file name, line number,
+	    // and at least the first line of the error message
+	    String errorFormat = "([\\w\\d_]+.java):(\\d+):\\s*(.*):\\s*(.*)\\s*";
+	    String[] pieces = PApplet.match(line, errorFormat);
+
+	    // if it's something unexpected, die and print the mess to the console
+	    if (pieces == null) {
+		// Send out the rest of the error message to the console.
+		
+		if(!line.startsWith("invalid Class-Path header") && line.length() > 3) {
+		    errors.add(line);
+		}
+		
+		
+		while ((line = reader.readLine()) != null) {
+		    
+		    if(!line.startsWith("invalid Class-Path header") && line.length() > 3) {
+			errors.add(line);
+		    }
+		    
+		    
+		}
+	    }
+
+	  }
+	} catch (IOException e) {
+	    e.printStackTrace();
+	    String bigSigh = "Error while compiling. (" + e.getMessage() + ")";
+	    //e.printStackTrace();
+	    errors.add(bigSigh);
+	    success = false;
+	}
+    
+	if(success) {
+
+	    if(runningTemplate != null) {
+		/*if(graphHolder.getComponentCount() > 0) {
+		    graphHolder.remove(runningTemplate);
+		}*/
+		runningTemplate.stop();
+	    }
+	    try {
+
+
+		File sketchFile = new File("resources/processing/compilations");
+		ClassLoader loader = new URLClassLoader(new URL[] { sketchFile.toURI().toURL() });
+
+		runningTemplate = (SketchTemplate) loader.loadClass(processingClassName).newInstance();
+	    } catch (Exception ex) {
+                ex.printStackTrace();
+		Logger.getLogger(ProcessingTopicPanel.class.getName()).log(Level.SEVERE, null, ex);
+		showRichErrorDialog(ex.getMessage());
+	    }
+
+	}
+	
+	if(errors.size() > 0) {
+	    StringBuilder erromsg = new StringBuilder();
+	    for (int i = 0; i < errors.size(); i++) {
+		erromsg.append(errors.get(i));
+		if(i<errors.size()-1) erromsg.append("\n");
+	    }
+	    showRichErrorDialog(erromsg.toString());
+	}
+
+	return success;
+    }
+    
+    
+    /*
+    // Done with javax compiler
+    private boolean compileProcessing(String source, boolean replaceApplet) {
+	
+	// Full name of the class that will be compiled.
+	// If class should be in some package,
+	// fullName should contain it too
+	// (ex. "testpackage.DynaClass")
+	
+	String fullName = "org.wandora.application.gui.topicpanels.processingpanel.Sketchy";
+	// We get an instance of JavaCompiler. Then
+	// we create a file manager
+	// (our custom implementation of it)
+	JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+	
+	DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+	
+
+	//success = BatchCompiler.compile(command, outWriter, writer, progress);
+	
+	JavaFileManager fileManager = new ClassFileManager(compiler.getStandardFileManager(diagnostics, null, null));
+
+	// Dynamic compiling requires specifying
+	// a list of "files" to compile. In our case
+	// this is a list containing one "file" which is in our case
+	// our own implementation (see details below)
+	List<JavaFileObject> jfiles = new ArrayList<JavaFileObject>();
+	jfiles.add(new CharSequenceJavaFileObject(fullName, source));
+
+
+	// We specify a task to the compiler. Compiler should use our file
+	// manager and our list of "files".
+	// Then we run the compilation with call()
+	compiler.getTask(null, fileManager, diagnostics, null, null, jfiles).call();
+	
+	StringBuilder msg = new StringBuilder("");
+	
+	
+	boolean hasErrors = false;
+	
+	
+	
+	for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
+	    //msg.append(source);
+	    
+	    if(diagnostic.getKind() == Diagnostic.Kind.ERROR) {
+		msg.append("ERROR: ");
+		hasErrors = true;
+		
+		System.out.println((diagnostic.getPosition()-charactersBefore)+" "+(diagnostic.getEndPosition()-charactersBefore+1));
+		
+		Markers.markText(codeEditor, 
+			(int)diagnostic.getPosition()-charactersBefore, 
+			(int) diagnostic.getEndPosition()-charactersBefore,
+			new Markers.SimpleMarker(new Color(255, 200, 200)));
+		
+	    }
+	    if(diagnostic.getKind() == Diagnostic.Kind.WARNING) msg.append("WARNING: ");
+	    
+	    msg.append(String.format("Error on line %d in %s", diagnostic.getLineNumber(), diagnostic));
+	    msg.append("\n");
+	}
+	//WandoraOptionPane.showMessageDialog(this, msg.toString(), "Errors", WandoraOptionPane.ERROR_MESSAGE);
+	
+	if(hasErrors) {
+	    showRichErrorDialog(msg.toString());
+	}
+	// Creating an instance of our compiled class and
+	// running its toString() method
+
+	// Needs to be stopped first
+	
+	if(!hasErrors && replaceApplet) {
+	
+	    if(runningTemplate != null) {
+		if(graphHolder.getComponentCount() > 0) {
+		    graphHolder.remove(runningTemplate);
+		}
+		runningTemplate.stop();
+	    }
+	    try {
+		runningTemplate = (SketchTemplate) fileManager.getClassLoader(null).loadClass(fullName).newInstance();
+	    } catch (Exception ex) {
+		//Logger.getLogger(ProcessingTopicPanel.class.getName()).log(Level.SEVERE, null, ex);
+		hasErrors = true;
+		showRichErrorDialog(ex.getMessage());
+	    }
+	}
+	
+	if(hasErrors) {
+	    return false;
+	} else {
+	    return true;
+	}
+	
+	
+	
+	
+    }
+    */
+    
+    
+    private void showRichErrorDialog(String msg) {
+	
+	final JTextArea area = new JTextArea();
+	area.setFont(new Font("Courier New", Font.BOLD, 13));
+	//area.setPreferredSize(new Dimension(520, 180));
+	area.setEditable(false);
+	area.setText(msg);
+	
+	
+	
+	// TIP: Make the JOptionPane resizable using the HierarchyListener
+        area.addHierarchyListener(new HierarchyListener() {
+            public void hierarchyChanged(HierarchyEvent e) {
+                Window window = SwingUtilities.getWindowAncestor(area);
+                if (window instanceof Dialog) {
+                    Dialog dialog = (Dialog)window;
+                    if (!dialog.isResizable()) {
+                        dialog.setResizable(true);
+                    }
+                }
+            }
+        });
+	
+	JScrollPane scroller = new JScrollPane(area);
+	scroller.setPreferredSize(new Dimension(520, 180));
+       
+	//WandoraOptionPane.showMessageDialog(null, "", "Errors", JOptionPane.PLAIN_MESSAGE);
+	
+	JOptionPane.showMessageDialog(Wandora.getWandora(), scroller, "Errors", JOptionPane.PLAIN_MESSAGE);
+	
+    }
+    
+
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        tabPanel = new SimpleTabbedPane();
+        editorPanel = new javax.swing.JPanel();
+        editorScroller = new SimpleScrollPane();
+        codeEditor = new javax.swing.JEditorPane();
+        codeBottomBar = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        checkBtn = new SimpleButton();
+        executeBtn = new SimpleButton();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        autoRunCheckBox = new SimpleCheckBox();
+        useOccurencesCheckBox = new SimpleCheckBox();
+        processingListBox = new SimpleComboBox();
+        newBtn = new SimpleButton();
+        saveBtn = new SimpleButton();
+        graphHolder = new javax.swing.JPanel();
+        innerPanel = new javax.swing.JPanel();
+
+        setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        setLayout(new java.awt.BorderLayout());
+
+        editorPanel.setLayout(new java.awt.GridBagLayout());
+
+        editorScroller.setMinimumSize(new java.awt.Dimension(300, 300));
+        editorScroller.setPreferredSize(new java.awt.Dimension(300, 300));
+        editorScroller.setViewportView(codeEditor);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        editorPanel.add(editorScroller, gridBagConstraints);
+
+        codeBottomBar.setLayout(new java.awt.GridBagLayout());
+
+        jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        checkBtn.setText("Check");
+        checkBtn.setPreferredSize(new java.awt.Dimension(75, 21));
+        checkBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                checkBtnMouseReleased(evt);
+            }
+        });
+        jPanel3.add(checkBtn);
+
+        executeBtn.setText("Run");
+        executeBtn.setPreferredSize(new java.awt.Dimension(75, 21));
+        executeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                executeOnMouseRelease(evt);
+            }
+        });
+        jPanel3.add(executeBtn);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        codeBottomBar.add(jPanel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        codeBottomBar.add(jPanel2, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        autoRunCheckBox.setText("Autorun");
+        autoRunCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoRunCheckBoxActionPerformed(evt);
+            }
+        });
+        jPanel1.add(autoRunCheckBox, new java.awt.GridBagConstraints());
+
+        useOccurencesCheckBox.setText("Use occurence instead of");
+        useOccurencesCheckBox.setToolTipText("Use processing code from occurence if available.");
+        useOccurencesCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                useOccurencesCheckBoxActionPerformed(evt);
+            }
+        });
+        jPanel1.add(useOccurencesCheckBox, new java.awt.GridBagConstraints());
+
+        processingListBox.setPreferredSize(new java.awt.Dimension(150, 20));
+        processingListBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                processingListBoxActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel1.add(processingListBox, gridBagConstraints);
+
+        newBtn.setText("New");
+        newBtn.setPreferredSize(new java.awt.Dimension(65, 21));
+        newBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                newBtnMouseReleased(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 5);
+        jPanel1.add(newBtn, gridBagConstraints);
+
+        saveBtn.setText("Save");
+        saveBtn.setMaximumSize(new java.awt.Dimension(53, 23));
+        saveBtn.setMinimumSize(new java.awt.Dimension(53, 23));
+        saveBtn.setPreferredSize(new java.awt.Dimension(65, 21));
+        saveBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                saveBtnMouseReleased(evt);
+            }
+        });
+        jPanel1.add(saveBtn, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(1, 0, 1, 0);
+        codeBottomBar.add(jPanel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        editorPanel.add(codeBottomBar, gridBagConstraints);
+
+        tabPanel.addTab("Code", editorPanel);
+
+        graphHolder.setBackground(new java.awt.Color(255, 255, 255));
+        graphHolder.setMinimumSize(new java.awt.Dimension(640, 480));
+        graphHolder.setPreferredSize(new java.awt.Dimension(640, 480));
+        graphHolder.setLayout(new java.awt.GridBagLayout());
+
+        innerPanel.setLayout(new java.awt.BorderLayout());
+        graphHolder.add(innerPanel, new java.awt.GridBagConstraints());
+
+        tabPanel.addTab("Visualization", graphHolder);
+
+        add(tabPanel, java.awt.BorderLayout.CENTER);
+    }// </editor-fold>//GEN-END:initComponents
+
+private void executeOnMouseRelease(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_executeOnMouseRelease
+    parseUserSource();
+    buildProcessingGraph();
+    if(isSourceCompiled) {
+	tabPanel.setSelectedComponent(graphHolder);
+    }
+}//GEN-LAST:event_executeOnMouseRelease
+
+private void checkBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkBtnMouseReleased
+    parseUserSource();
+    if(compileProcessing(currentUserGivenSource, false)) {
+	WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "No errors found.", "Syntax check", WandoraOptionPane.PLAIN_MESSAGE);
+    }
+}//GEN-LAST:event_checkBtnMouseReleased
+
+private void newBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newBtnMouseReleased
+    createNewProcessingSketch();
+    invalidate();
+}//GEN-LAST:event_newBtnMouseReleased
+
+private void processingListBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingListBoxActionPerformed
+    if((evt.getModifiers() | java.awt.event.ActionEvent.ACTION_PERFORMED) != 0) {
+        loadSketch();
+    }
+}//GEN-LAST:event_processingListBoxActionPerformed
+
+private void useOccurencesCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useOccurencesCheckBoxActionPerformed
+    
+    boolean isSelected = useOccurencesCheckBox.isSelected();
+    Wandora.getWandora().getOptions().put(optionsPrefix+".use_occurence_processing_code", ""+isSelected);
+    
+}//GEN-LAST:event_useOccurencesCheckBoxActionPerformed
+
+private void autoRunCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoRunCheckBoxActionPerformed
+    
+    boolean isSelected = autoRunCheckBox.isSelected();
+    Wandora.getWandora().getOptions().put(optionsPrefix+".autorun", ""+isSelected);
+    
+}//GEN-LAST:event_autoRunCheckBoxActionPerformed
+
+private void saveBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseReleased
+    saveCurrentProcessingSketch();
+}//GEN-LAST:event_saveBtnMouseReleased
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox autoRunCheckBox;
+    private javax.swing.JButton checkBtn;
+    private javax.swing.JPanel codeBottomBar;
+    private javax.swing.JEditorPane codeEditor;
+    private javax.swing.JPanel editorPanel;
+    private javax.swing.JScrollPane editorScroller;
+    private javax.swing.JButton executeBtn;
+    private javax.swing.JPanel graphHolder;
+    private javax.swing.JPanel innerPanel;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JButton newBtn;
+    private javax.swing.JComboBox processingListBox;
+    private javax.swing.JButton saveBtn;
+    private javax.swing.JTabbedPane tabPanel;
+    private javax.swing.JCheckBox useOccurencesCheckBox;
+    // End of variables declaration//GEN-END:variables
+
+    
+    
+    public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void topicRemoved(Topic t) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void topicChanged(Topic t) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void associationRemoved(Association a) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void associationChanged(Association a) throws TopicMapException {
+	doRefresh();
+    }
+
+    public void doRefresh() throws TopicMapException {
+	System.out.println("Refresh everything... which it is not doing...");
+	if(useOccurencesCheckBox.isSelected()) {
+
+	    loadTopicProcessingCode();
+
+	}
+	
+	checkAutoRun();
+	
+	
+    }
+
+    public void stop() {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean reusePanel(){return true;}
+
+    public void refresh() throws TopicMapException {
+	//throw new UnsupportedOperationException("Not supported yet.");
+	doRefresh();
+    }
+
+    public boolean applyChanges() throws CancelledException, TopicMapException {
+        return true;
+    }
+
+    public JPanel getGui() {
+	return this;
+    }
+
+    public Topic getTopic() throws TopicMapException {
+	return rootTopic;
+    }
+
+    public Icon getIcon() {
+        return GuiBox.getIcon("gui/icons/topic_panel_processing.png");
+    }
+
+    public JMenu getViewMenu() {
+	return null;
+    }
+
+    public JMenu getViewMenu(JMenu baseMenu) {
+        Object[] menuStructure = new Object[] {
+            "---"
+        };
+        return GuiBox.makeMenu(baseMenu, menuStructure, this);
+    }
+
+    public void toggleVisibility(String componentName) {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    
+    @Override
+    public String getName(){
+        return "Processing topic panel";
+    }
+
+    public void componentShown(ComponentEvent e) {}
+
+    public void componentResized(ComponentEvent e) {
+        Dimension size = this.getParent().getParent().getSize();
+	//Container parentti = this.getParent();
+	size.height -= 30;
+	//System.out.println(e.getComponent().toString());
+	//Dimension size = tabPanel.getSize();
+	//tabPanel.setSize(size);
+	graphHolder.setPreferredSize(size);
+	editorPanel.setPreferredSize(size);
+	//repaint();
+	revalidate();
+    }
+
+    public void componentHidden(ComponentEvent e) {}
+
+    public void componentMoved(ComponentEvent e) {}
+   
+    
+    
+    public void createNewProcessingSketch() {
+        try {
+            String sketchCode = codeEditor.getText();
+            String sketchName = WandoraOptionPane.showInputDialog(Wandora.getWandora(), "Name of the processing sketch?", "", "Name of the processing sketch?");
+            String curName = null;
+	    String curCode = null;
+	    
+	    if(sketchName != null && sketchName.length()>0) {
+                processingListBox.addItem(sketchName);
+                sketches.add(new T2(sketchName, sketchCode));
+                processingListBox.setSelectedIndex(processingListBox.getItemCount()-1);
+                if(Wandora.getWandora() != null && Wandora.getWandora().getOptions() != null) {
+                    Options options = Wandora.getWandora().getOptions();
+                    int i=0;
+                    do {
+                        i++;
+                        curName = options.get(optionsPrefix + ".sketches[" + i +"].name");
+                        curCode = options.get(optionsPrefix + ".sketches[" + i +"].code");
+                    }
+                    while(curName != null && curCode != null && i<1000);
+                    options.put(optionsPrefix + ".sketches[" + i +"].name", sketchName);
+                    options.put(optionsPrefix + ".sketches[" + i +"].code", sketchCode);
+                }
+                else {
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Unable to store processing sketch to application options!", WandoraOptionPane.WARNING_MESSAGE);
+                }
+            }
+            else {
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "No name given. Processing sketch was not stored!", WandoraOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch(Exception e) {
+            Wandora.getWandora().handleError(e);
+        }
+    }
+    
+    public void saveCurrentProcessingSketch() {
+	
+	try {
+            String sketchCode = codeEditor.getText();
+            String sketchName = processingListBox.getSelectedItem().toString();
+	    
+	    int itemIndex = processingListBox.getSelectedIndex();
+	    
+	    sketches.set(itemIndex, new T2<String, String>(sketchName, sketchCode));
+	    
+            Options options = Wandora.getWandora().getOptions();
+            options.put(optionsPrefix + ".sketches[" + itemIndex +"].name", sketchName);
+            options.put(optionsPrefix + ".sketches[" + itemIndex +"].code", sketchCode);
+        }
+        catch(Exception e) {
+            Wandora.getWandora().handleError(e);
+        }
+	
+    }
+    
+    
+    public void loadStoredSketches() {
+        if(Wandora.getWandora() == null) return;
+        Options options = Wandora.getWandora().getOptions();
+        if(options == null) return;
+        int i=0;
+        String sketchName = null;
+        String sketchCode = null;
+        do {
+            sketchName = options.get(optionsPrefix + ".sketches[" + i +"].name");
+            sketchCode = options.get(optionsPrefix + ".sketches[" + i +"].code");
+            if(sketchName != null && sketchCode != null) {
+                sketches.add(new T2(sketchName, sketchCode));
+                processingListBox.addItem(sketchName);
+            }
+            i++;
+        }
+        while(sketchName != null && sketchCode != null && i<1000);
+    }
+    
+    
+    public void loadSketch() {
+        try {
+            int sketchIndex =  processingListBox.getSelectedIndex();
+            if(sketches.size() > sketchIndex) {
+                T2 namedSketch = (T2) sketches.get(sketchIndex);
+                if(namedSketch != null) {
+                    String code = (String) namedSketch.e2;
+                    if(code != null) {
+                        codeEditor.setText(code);
+                    }
+                }
+            }
+        }
+        catch(Exception e) {
+            Wandora.getWandora().handleError(e);
+        }
+    }
+
+    private void loadTopicProcessingCode() {
+	
+	try {
+	    
+	    
+	    Topic processing_type = tm.getTopic(PROCESSING_OCCURRENCETYPE_SI);
+	    String data = rootTopic.getData(processing_type, Wandora.getWandora().getLang());
+	    
+	    if(data != null) {
+		codeEditor.setText(data);
+	    }
+	    
+	    
+	} catch (TopicMapException ex) {
+	    Logger.getLogger(ProcessingTopicPanel.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	
+    }
+    
+    // This is called when the first frame of the papplet has been drawn
+    /*public void post() {
+	
+	System.out.println("embedDefaultSize "+runningTemplate.defaultSize+" ja finished: "+runningTemplate.finished);
+	
+	if(!isSketchStarted) {
+	    
+	    
+	    
+	    Dimension size = new Dimension(runningTemplate.width, runningTemplate.height);
+	    innerPanel.setPreferredSize(size);
+	    
+	    isSketchStarted = true;
+	}
+	
+    }*/
+    
+    
+    /*class SelectListItem {
+	
+	private String name = "";
+	private int index = 0;
+
+	public SelectListItem(String name, int index) {
+	    this.name = name;
+	    this.index = index;
+	}
+
+	public String getName() {
+	    return name;
+	}
+
+	public int getIndex() {
+	    return index;
+	}
+	
+	@Override
+	public String toString() {
+	    return name;
+	}
+	
+	
+	
+    }*/
+    
+    
+}

@@ -1,0 +1,54 @@
+{
+	"dataUrl" : "ArtOfNoise.jtm",
+	"sis": {
+		"typeInstance": "http://psi.topicmaps.org/iso13250/model/type-instance",
+		"type": "http://psi.topicmaps.org/iso13250/model/type",
+		"instance": "http://psi.topicmaps.org/iso13250/model/instance",
+		"superSub": "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass",
+		"superr": "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass",
+		"sub": "http://www.topicmaps.org/xtm/1.0/core.xtm#subclass",
+		"root": "http://wandora.org/si/core/wandora-class"
+	},
+	"langs" : {
+		"en": "http://www.topicmaps.org/xtm/1.0/language.xtm#en",
+		"fi": "http://www.topicmaps.org/xtm/1.0/language.xtm#fi",
+		"se": "http://www.topicmaps.org/xtm/1.0/language.xtm#sv",
+		"independent" : "http://wandora.org/si/core/lang-independent"
+
+	},
+	"templates" : {
+		"default" : {
+			"controller" : "topicDetailControl",
+			"view"		 : "topicDetail"
+		},
+		"types" : {
+
+		},
+		"topics" : {
+			"http://wandora.org/si/core/wandora-class" : {
+				"controller" : "topicDetailControl",
+				"view"		 : "topicDetail"
+			}
+		}
+
+	},
+	"defaultLang" : "http://www.topicmaps.org/xtm/1.0/language.xtm#en",
+	"translation" : [
+		{
+			"en" : "classes",
+			"fi" : "tyypit"
+		},
+		{
+			"en" : "instances",
+			"fi" : "instanssit"
+		},
+		{
+			"en" : "subclasses",
+			"fi" : "aliluokat"
+		},
+		{
+			"en" : "superclasses",
+			"fi" : "yliluokat"
+		}
+	]
+}

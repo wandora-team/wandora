@@ -1,0 +1,179 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+#set( $lang = "en" )##
+##
+## ***********************************************************************
+## ****                   WANDORA ATOM FEED TEMPLATE                  ****
+## ****             (c) 2009 by Grip Studios Interactive Oy           ****
+## ***********************************************************************
+##
+## Velocity template used to generate a bit modidied vesion of atom feed
+## for displaying topic.
+##
+#set( $currentTime = "2009-12-13:T18:30:02Z")##
+#macro( linkTopic $t )##
+$t.getOneSubjectIdentifier().toExternalForm().replaceAll( "&", "&amp;" )##
+#end##
+##
+#macro( generateEntryContent $t)##
+	<title>$t.getBaseName().replaceAll( "&", "&amp;" )</title>
+	<id>#linkTopic($t)</id>
+	<updated>$currentTime</updated>
+	<link rel="alternate" href="#linkTopic($t)"/>##
+#end##
+##
+##
+## Atom xml out put begins from here
+##
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+  xmlns:xml="http://www.w3.org/XML/1998/namespace"
+  xmlns:wandora="http://wandora.org">
+#set( $br = "&lt;br&gt;")
+##
+##
+## First lets generate the atom main feed elements
+##
+
+<title>$topic.getBaseName().replaceAll( "&", "&amp;" )</title>
+	<id>#linkTopic($topic)</id>
+	<link href="#linkTopic($topic)"/>
+	<updated>$currentTime</updated>
+	<author>
+	<name>Wandora</name>
+</author>
+
+
+##
+## Secondly we generate the atom entry elements
+##
+##
+## Variant names
+##
+<!-- Variant names starts here -->
+#set( $variantScopes = $topic.getVariantScopes())
+#foreach( $scope in  $variantScopes )##
+#* *#<entry>
+#* *##set( $varTitle = "$topic.getVariant($scope)")
+#* *#	<title>$varTitle.replaceAll( "&", "&amp;" )</title>
+#* *#	<updated>$currentTime</updated>
+#* *#	<category term="name"/>
+#* *#	<id>#linkTopic($topic)</id>
+#* *##foreach($scopetopic in $scope)
+#*  *#	<wandora:link wandora:rel="scope" wandora:name="$scopetopic" wandora:href="#linkTopic($scopetopic)"/>
+#*  *##set( $varTitle = "$varTitle $scopetopic ")
+#* *##end##
+#* *##set( $varTitle = "$varTitle)")##
+#* *#</entry>
+#end##
+
+
+##
+##
+## Classes
+##
+<!-- Classes starts here -->
+#set($types = $tmbox.sortTopics($topic.getTypes(), $lang))##
+#* *##if($types.size() > 0)##
+#*  *##set($typecounter = 0)##
+#*  *##foreach( $type in $types )##
+#*   *##if( $type!=$topic)##
+#*    *##if($typecounter>0) #end##
+#*    *#<entry>
+#*    *##generateEntryContent( $type )
+#*    *#<category term="class"/>
+#*    *#<content type="html" ><![CDATA[<p>Typed as $type.getBaseName()</p>]]></content>
+#*    *#</entry>
+#*    *##set($typecounter=$typecounter+1)##
+#*   *##end##
+#*  *##end##
+#* *##end##
+
+
+##
+## Occurences
+##
+<!-- Occurences start here -->
+#set( $datatypes = $tmbox.sortTopics($topic.getDataTypes(),$lang) )##
+#if( $datatypes.size() > 0 )
+#* *##set($vdcount=0)
+#* *##foreach( $type in $datatypes )##
+#*  *#<entry>
+#*  *##generateEntryContent( $type )##
+#*  *##set( $langSIs = $tmbox.getLanguageSIs($topic.getTopicMap()) )##
+#*  *##foreach( $curLang in  $langSIs )##
+#*   *##set( $langT = $topic.getTopicMap().getTopic($curLang))##
+#*   *##set( $langStartIndex = $langT.getBaseName().length() - 2)##
+#*   *##set( $langStr = $langT.getBaseName().substring($langStartIndex))##
+#*   *##if($langStartIndex > 12)##
+#*    *##set( $langStr = "Lang.indep.")##
+#*   *##end##
+#*    *##set( $occurrencetext = $topic.getData($type,$langStr) )##
+#*    *#	<content xml:lang="$langT.getBaseName().replaceAll( "Language ", "")"##
+#*	  *# type="text">$occurrencetext.replaceAll( "&", "&amp;" )</content>
+#*   *##end##
+#*  *#	<category term="occurence"/>
+#*  *#</entry>
+#* *##end##
+#end##
+
+
+## Assocications
+##
+<!-- Assocications start here -->
+##
+#set( $subcategoriesall = $tmbox.getSubCategoriesRecursive($topic) )##
+#set( $temp = $subcategoriesall.add($topic) )##
+#set( $associations = $collectionmaker.make() )##
+#foreach( $category in $subcategoriesall )##
+#* *##set( $temp = $associations.addAll($category.getAssociations()) )##
+#end##
+#set( $associations = $tmbox.sortAssociations($associations,$subcategoriesall,$lang) )##
+#set( $associations = $tmbox.removeDuplicateAssociations($associations,$subcategoriesall) )##
+##
+#if( $associations.size() > 0 )##
+#foreach($association in $associations)##
+<entry>
+	<category term="assocication"/>
+	<wandora:type>$association.getType().getBaseName()</wandora:type>
+#set( $roles = $association.getRoles() )##
+#set( $asTitle = "" )##
+#foreach($role in $roles)##
+	<wandora:member>
+		<wandora:link wandora:rel="type" wandora:name="$role.getBaseName().replaceAll( "&", "&amp;" )" wandora:href="#linkTopic($role)" />
+#*		*##set($player = $association.getPlayer($role))##
+		<wandora:link wandora:rel="player" wandora:name="$player.getBaseName().replaceAll( "&", "&amp;" )" wandora:href="#linkTopic($player)" />
+#*		*##if($roles.lastElement() == $role)##
+#*			*##set( $asTitle = "$asTitle$player.getBaseName()" )##
+#*		*##else##
+#*			*##set( $asTitle = "$asTitle$player.getBaseName() - " )##
+#*		*##end##
+	</wandora:member>
+#end##
+	<title>$asTitle.replaceAll( "&", "&amp;" )</title>
+	<id>#linkTopic($association.getType())</id>
+	<updated>$currentTime</updated>
+	<link rel="alternate" href="#linkTopic($association.getType())"/>
+	<content type="html" ><![CDATA[<p>Assosication between $asTitle</p>]]></content>
+</entry>
+#end##
+#end##
+
+
+##
+##
+## Instances
+##
+<!--Instances start here-->
+#set( $instanceList = $topic.getTopicMap().getTopicsOfType($topic) )##
+#set( $insCount = 0)
+#foreach( $instance in $instanceList )##
+<entry>
+#generateEntryContent($instance)
+	<category term="instance"/>
+#set($insCount = $insCount + 1)##
+	<content type="html" ><![CDATA[<p>Instance $insCount/$instanceList.size() of $topic.getBaseName()</p>]]></content>
+</entry>
+#end##
+
+</feed>

@@ -1,0 +1,168 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+##set( $lang = "en" )##
+##
+##
+##
+##
+#macro( linkTopic $t )##
+${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
+#end##
+##
+##
+##
+##
+##
+<!DOCTYPE html>
+<html>
+<!-- *********************************************************************** -->
+<!-- ****         TIMELINE - WANDORA EMBEDDED HTTP SERVER TEMPLATE      **** -->
+<!-- ****                     (c) 2012-2013 by Wandora Team             **** -->
+<!-- ****                                                               **** -->
+<!-- ****  TIMELINE uses Simile Timeline project and content generated  **** -->
+<!-- ****  by file, Wandora's RSS, Atom, Email, Twitter and             **** -->
+<!-- ****  NYT extractors.                                              **** -->
+<!-- *********************************************************************** -->
+<head>
+    <title>Wandora - Timeline</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!-- ############################################################################ -->
+    <!-- To use this file on your own system, replace ../../api/timeline-api.js with  -->
+    <!--     http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js          -->
+    <!-- (Where 2.3.0 is the current release number.)                                 -->
+    
+    <script>
+      Timeline_ajax_url="${staticbase}api/timeline_ajax/simile-ajax-api.js";
+      Timeline_urlPrefix='${staticbase}api/timeline_js/';       
+      Timeline_parameters='bundle=true';
+    </script>
+    <script src="${staticbase}api/timeline_js/timeline-api.js" type="text/javascript"></script>
+    <link rel="StyleSheet" href="${staticbase}style.css" type="text/css" media="screen">
+
+    <script>
+
+        ## Next parse directives generate JSON for Simile Timeline. Directives
+        ## contain Velocity code used to pull information from Wandora's topic map.
+        ## Directives assume the content in Wandora is createThumd with specific
+        ## extractors. At the moment Twitter, RSS 2.0, Atom, Email, Calender and
+        ## Directory, New York Times Event and Article Search extractors are supported.
+
+        var data_twitter = #parse( "${templatesdir}data_twitter.js" )
+        var data_rss = #parse( "${templatesdir}data_rss.js" )
+        var data_atom = #parse( "${templatesdir}data_atom.js" )
+        var data_nyt = #parse( "${templatesdir}data_nyt.js" )
+        var data_omakaupunki = #parse( "${templatesdir}data_omakaupunki.js" )
+        var data_nyt_article = #parse( "${templatesdir}data_nyt_article.js" )
+        var data_guardian = #parse( "${templatesdir}data_guardian.js" )
+        var data_youtube = #parse( "${templatesdir}data_youtube.js" )
+        var data_email = #parse( "${templatesdir}data_email.js" )
+        var data_calendar = #parse( "${templatesdir}data_calendar.js" )
+        var data_directory = #parse( "${templatesdir}data_directory.js" )
+
+        var tl;
+        var bandInfos;
+        function onLoad() {
+            var combinedEventSource = new Timeline.DefaultEventSource(0);
+            		
+            var theme = Timeline.ClassicTheme.create();
+            theme.ether.backgroundColors.unshift("white");
+            theme.mouseWheel = "scroll";
+
+            var overviewTheme = Timeline.ClassicTheme.create();
+            overviewTheme.event.track.height = 4;
+			
+            var d = new Date();
+            bandInfos = [
+              Timeline.createBandInfo({
+                width:          "20%", 
+                intervalUnit:   Timeline.DateTime.MONTH, 
+                intervalPixels: 200,
+                zoomIndex: 5,
+                zoomSteps:      new Array(
+                  {pixelsPerInterval: 224,  unit: Timeline.DateTime.DAY},
+                  {pixelsPerInterval: 112,  unit: Timeline.DateTime.DAY},
+                  {pixelsPerInterval:  56,  unit: Timeline.DateTime.DAY},
+                  {pixelsPerInterval:  28,  unit: Timeline.DateTime.DAY},
+                  {pixelsPerInterval: 400,  unit: Timeline.DateTime.MONTH},
+                  {pixelsPerInterval: 200,  unit: Timeline.DateTime.MONTH}, // DEFAULT zoomIndex
+                  {pixelsPerInterval: 100,  unit: Timeline.DateTime.MONTH},
+                  {pixelsPerInterval:  50,  unit: Timeline.DateTime.MONTH},
+                  {pixelsPerInterval: 160,  unit: Timeline.DateTime.YEAR},
+                  {pixelsPerInterval: 80,  unit: Timeline.DateTime.YEAR},
+                  {pixelsPerInterval: 40,  unit: Timeline.DateTime.YEAR}
+                ),
+                eventSource:    combinedEventSource,
+                date:           d,
+                showEventText:  false,
+                theme:          theme,
+                layout:         'overview'  // original, overview, detailed
+              }),
+              Timeline.createBandInfo({
+                width:          "80%", 
+                intervalUnit:   Timeline.DateTime.DAY, 
+                intervalPixels: 200,
+                zoomIndex: 5,
+                zoomSteps:      new Array(
+                  {pixelsPerInterval: 280,  unit: Timeline.DateTime.HOUR},
+                  {pixelsPerInterval: 140,  unit: Timeline.DateTime.HOUR},
+                  {pixelsPerInterval:  70,  unit: Timeline.DateTime.HOUR},
+                  {pixelsPerInterval:  35,  unit: Timeline.DateTime.HOUR},
+                  {pixelsPerInterval: 400,  unit: Timeline.DateTime.DAY},
+                  {pixelsPerInterval: 200,  unit: Timeline.DateTime.DAY}, // DEFAULT zoomIndex
+                  {pixelsPerInterval: 100,  unit: Timeline.DateTime.DAY},
+                  {pixelsPerInterval:  50,  unit: Timeline.DateTime.DAY},
+                  {pixelsPerInterval: 400,  unit: Timeline.DateTime.MONTH},
+                  {pixelsPerInterval: 200,  unit: Timeline.DateTime.MONTH},
+                  {pixelsPerInterval: 100,  unit: Timeline.DateTime.MONTH}
+                ),
+                eventSource:    combinedEventSource,
+                date:           d,
+                theme:          theme,
+                layout:         'original'
+              })
+            ];
+            
+            
+            bandInfos[0].syncWith = 1;
+            bandInfos[0].highlight = true;
+
+            tl = Timeline.create(document.getElementById("tl"), bandInfos, Timeline.HORIZONTAL);
+            tl.showLoadingMessage();
+            combinedEventSource.loadJSON(data_twitter, document.location.href);
+            combinedEventSource.loadJSON(data_rss, document.location.href);
+            combinedEventSource.loadJSON(data_atom, document.location.href);
+            combinedEventSource.loadJSON(data_nyt, document.location.href);
+            combinedEventSource.loadJSON(data_omakaupunki, document.location.href);
+            combinedEventSource.loadJSON(data_nyt_article, document.location.href);
+            combinedEventSource.loadJSON(data_youtube, document.location.href);
+            combinedEventSource.loadJSON(data_email, document.location.href);
+            combinedEventSource.loadJSON(data_calendar, document.location.href);
+            combinedEventSource.loadJSON(data_guardian, document.location.href);
+            combinedEventSource.loadJSON(data_directory, document.location.href);
+            tl.layout();
+            tl.hideLoadingMessage();
+
+            if(combinedEventSource.getCount() == 0) {
+                alert("Wandora does not contain any applicable content! "+
+                      "Use Wandora's extractors to generate content and try again.");
+            }
+        }
+        var resizeTimerID = null;
+        function onResize() {
+            if (resizeTimerID == null) {
+                resizeTimerID = window.setTimeout(function() {
+                    resizeTimerID = null;
+                    tl.layout();
+                }, 500);
+            }
+        }
+    </script>
+</head>
+<body onload="onLoad();" onresize="onResize();">
+    <div id="body">
+        <div id="tl" class="timeline-default" style="height: 800px;width:100%">
+        </div>
+    </div>
+</body>
+</html>

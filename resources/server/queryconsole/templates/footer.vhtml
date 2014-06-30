@@ -1,0 +1,13 @@
+<!-- **************************************************** -->
+<!-- *****                  FOOTER                  ***** -->
+<!-- **************************************************** -->
+<hr class="ruler">
+<table width="100%">
+ <tr>
+  <td class="footer">
+   <a href="http://wandora.org" target="_blank">
+    <img src="${staticbase}wandora_logo.gif" border="0" alt="wandora.org">
+   </a>
+  </td>
+ </tr>
+</table>

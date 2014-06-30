@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.0">
+	<topic id="topic604">
+		<subjectIdentifier href="http://wandora.org/si/core/variant-name-version"/>
+		<subjectIdentifier href="http://www.wandora.org/core/variant-name-version"/>
+		<name>
+			<value>Wandora variant name version</value>
+		</name>
+	</topic>
+	<topic id="topic639">
+		<subjectIdentifier href="http://wandora.org/si/core/wandora-class"/>
+		<subjectIdentifier href="http://www.wandora.org/core/wandoraclass"/>
+		<name>
+			<value>Wandora class</value>
+		</name>
+	</topic>
+	<topic id="topic600">
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#display"/>
+		<instanceOf>
+			<topicRef href="#topic604"/>
+		</instanceOf>
+		<name>
+			<value>Scope Display</value>
+			<variant>
+				<scope>
+					<topicRef href="#topic593"/>
+					<topicRef href="#topic600"/>
+				</scope>
+				<resourceData>Display name</resourceData>
+			</variant>
+		</name>
+	</topic>
+	<topic id="topic602">
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#sort"/>
+		<instanceOf>
+			<topicRef href="#topic604"/>
+		</instanceOf>
+		<name>
+			<value>Scope Sort</value>
+			<variant>
+				<scope>
+					<topicRef href="#topic593"/>
+					<topicRef href="#topic600"/>
+				</scope>
+				<resourceData>Sort name</resourceData>
+			</variant>
+		</name>
+	</topic>
+	<topic id="topic630">
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#sv"/>
+		<instanceOf>
+			<topicRef href="#topic589"/>
+		</instanceOf>
+		<name>
+			<value>Swedish language</value>
+			<variant>
+				<scope>
+					<topicRef href="#topic593"/>
+					<topicRef href="#topic600"/>
+				</scope>
+				<resourceData>Swedish</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic600"/>
+					<topicRef href="#topic622"/>
+				</scope>
+				<resourceData>Swedish</resourceData>
+			</variant>
+		</name>
+	</topic>
+	<topic id="topic622">
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#en"/>
+		<instanceOf>
+			<topicRef href="#topic589"/>
+		</instanceOf>
+		<name>
+			<value>English language</value>
+			<variant>
+				<scope>
+					<topicRef href="#topic593"/>
+					<topicRef href="#topic600"/>
+				</scope>
+				<resourceData>English</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic600"/>
+					<topicRef href="#topic622"/>
+				</scope>
+				<resourceData>English</resourceData>
+			</variant>
+		</name>
+	</topic>
+	<topic id="topic589">
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
+		<subjectIdentifier href="http://wandora.org/si/core/language"/>
+		<subjectIdentifier href="http://www.wandora.org/core/language"/>
+		<name>
+			<value>Wandora language</value>
+		</name>
+	</topic>
+	<topic id="topic643">
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#fi"/>
+		<instanceOf>
+			<topicRef href="#topic589"/>
+		</instanceOf>
+		<name>
+			<value>Finnish language</value>
+			<variant>
+				<scope>
+					<topicRef href="#topic593"/>
+					<topicRef href="#topic600"/>
+				</scope>
+				<resourceData>Finnish</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic600"/>
+					<topicRef href="#topic622"/>
+				</scope>
+				<resourceData>Finnish</resourceData>
+			</variant>
+		</name>
+	</topic>
+	<topic id="topic585">
+		<subjectIdentifier href="http://wandora.org/si/core/edittime"/>
+		<subjectIdentifier href="http://www.wandora.org/core/edittime"/>
+		<name>
+			<value>Topic edit time</value>
+		</name>
+	</topic>
+	<topic id="topic593">
+		<subjectIdentifier href="http://wandora.org/si/core/lang-independent"/>
+		<subjectIdentifier href="http://www.wandora.org/core/langindependent"/>
+		<instanceOf>
+			<topicRef href="#topic589"/>
+		</instanceOf>
+		<name>
+			<value>Language independent</value>
+			<variant>
+				<scope>
+					<topicRef href="#topic593"/>
+					<topicRef href="#topic600"/>
+				</scope>
+				<resourceData>Language independent</resourceData>
+			</variant>
+		</name>
+	</topic>
+</topicMap>

@@ -1,0 +1,43 @@
+#set( $topicMap = $topic.getTopicMap() )
+#set( $wandoraClass = $topicMap.getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+##set( $lang = "en" )##
+##
+#macro( linkTopic $t )##
+${urlbase}?lang=$lang&action=querydemo&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
+#end##
+##
+#macro( typesQuery )
+importPackage(org.wandora.query2);
+new Types();
+#end
+##
+#macro( instancesTmqlQuery )
+${topic.getOneSubjectIdentifier()} >> instances
+#end
+##
+<html>
+<head>
+ <title>Wandora - $topic.getBaseName()</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+    <h1>$topic.getDisplayName($lang)</h1>
+    <h2>Types</h2>
+    <ul>
+        #set( $result = $queryrunner.runQuery( "#typesQuery", $topic ) )
+        #foreach( $row in $result )
+            #set( $resultTopic = $row.getActiveValue() )
+            <li><a href="#linkTopic($resultTopic)">$resultTopic.getDisplayName($lang)</a></li>
+        #end
+    </ul>
+    <h2>Instances TMQL</h2>
+    <ul>
+        #set( $tmqlResult = $tmqlrunner.runTMQL( $topicMap, "#instancesTmqlQuery" ).getData() )
+        #foreach( $row in $tmqlResult )
+            #set( $resultTopic = $row[0] )
+            <li><a href="#linkTopic($resultTopic)">$resultTopic.getDisplayName($lang)</a></li>
+        #end
+    </ul>
+</body>
+</html>

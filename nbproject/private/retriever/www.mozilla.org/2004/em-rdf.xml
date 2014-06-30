@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Mozilla XML Namespace</title>
+
+	<style type="text/css">
+		body {
+			font-family: sans-serif;
+			font-size: 16px;
+		}
+
+		h1 {
+			margin: 0em;
+			padding: 0em;
+			font-size: 2em;
+			line-height: 150%;
+		}
+
+		h2 {
+			margin: 0em;
+			padding: 0em;
+			font-size: 1.5em;
+			line-height: 150%;
+			font-style: italic;
+		}
+
+		dt {
+			font-weight: bolder;
+		}
+
+		dd + dt {
+			margin-top: 0.75em;
+		}
+	</style>
+</head>
+<body>
+	<section>
+		<h1>Mozilla XML Namespace</h1>
+		<h2>Extension Manifest</h2>
+		<dl>
+			<dt>Namespace</dt>
+			<dd><code>http://www.mozilla.org/2004/em-rdf</code></dd>
+			<dt>Documentation</dt>
+			<dd><a href="https://developer.mozilla.org/en/Install_Manifests">https://developer.mozilla.org/en/Install_Manifests</a></dd>
+		</dl>
+	</section>
+</body>
+</html>

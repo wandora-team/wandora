@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+    <!-- *********************************************************************** -->
+    <!-- ****              WANDORA EMBEDDED HTTP SERVER TEMPLATE            **** -->
+    <!-- ****             (c) 2013 by Niko Laitinen/Wandora Team            **** -->
+    <!-- *********************************************************************** -->
+    <head>
+        <title>Wandora D3 Association Type Bubbles</title>
+        <script src="${staticbase}js/d3/d3.min.js"></script>
+        <script src="${staticbase}js/render.js"></script>
+        <link rel="StyleSheet" href="${staticbase}style.css" type="text/css" media="screen">
+    </head>
+    <body>
+        <div id="mainContent">
+            <div id="chart"></div>
+#if( $request.getParameter("data") == "association-types" )##
+ #parse( "${templatesdir}data_association_types.vhtml" )
+ #set( $atitle = "Association Type Topics" )
+ #set( $adescription = "Association Type Topics visualization shows a bubble for each association type topic. The size of the bubble is proportional to the number of associations of that type i.e. how many associations the topic map contains with given type." )
+#elseif( $request.getParameter("data") == "association-roles" )##
+ #parse( "${templatesdir}data_association_roles.vhtml" )
+ #set( $atitle = "Association Role Topics" )
+ #set( $adescription = "Association Role Topics visualization shows a bubble for each association role topic. The size of the bubble is proportional to the number of association players sharing the role i.e. how many times the role is used in different associations." )
+#elseif( $request.getParameter("data") == "occurrence-types" )##
+ #parse( "${templatesdir}data_occurrence_types.vhtml" )
+ #set( $atitle = "Occurrence Type Topics" )
+ #set( $adescription = "Occurrence Type Topics visualization shows a bubble for each occurrence type topic. The size of the bubble is proportional to the number of occurrences of that type i.e. how many occurrences the topic map contains with given type." )
+#elseif( $request.getParameter("data") == "occurrence-scopes" )##
+ #parse( "${templatesdir}data_occurrence_scopes.vhtml" )
+ #set( $atitle = "Occurrence Scope Topics" )
+ #set( $adescription = "Occurrence Scope Topics visualization shows a bubble for each occurrence scope topic. The size of the bubble is proportional to the number of usages of occurrence scope topic i.e. how many occurrences the topic map contains with given scope topic." )
+#else
+ #parse( "${templatesdir}data_variant_scopes.vhtml" )
+ #set( $atitle = "Variant Name Scope Topics" )
+ #set( $adescription = "Variant Name Scope Topics visualization shows a bubble for each variant scope topic. The size of the bubble is proportional to the number of usages of the variant scope topic i.e. how many variant names the topic map contains with given scope topic." )
+#end
+            <div class="footer">
+                <div class="header">
+                    <h1 class="heading">D3 Bubbles - $!atitle</h1>
+                    <button class="info-toggle"></button>
+                </div>
+                <div class="description">
+                    <p>
+                        D3 Bubble visualizes number of certain elements in the topic map. 
+                        Element is chosen with the URL parameter <i>data</i>. Possible data values are
+                        <i>association-types</i>,
+                        <i>association-roles</i>,
+                        <i>occurrence-types</i>,
+                        <i>occurrence-scopes</i>,
+                        <i>variant-scopes</i>. Default data value is <i>variant-scopes</i>. Direct links are
+                    </p>
+                    <ul>
+                        <li><a href="?data=association-types">Association Type Topics</a>
+                        <li><a href="?data=association-roles">Association Role Topics</a>
+                        <li><a href="?data=occurrence-types">Occurrence Type Topics</a>
+                        <li><a href="?data=occurrence-scopes">Occurrence Scope Topics</a>
+                        <li><a href="?data=variant-scopes">Variant Scope Topics</a>
+                    </ul>
+                    <p>
+                        $!adescription
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

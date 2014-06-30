@@ -1,0 +1,85 @@
+/*
+*  firstname.jape
+*
+* Copyright (c) 1998-2004, The University of Sheffield.
+*
+*  This file is part of GATE (see http://gate.ac.uk/), and is free
+*  software, licenced under the GNU Library General Public License,
+*  Version 2, June 1991 (in the distribution as file licence.html,
+*  and also available at http://gate.ac.uk/gate/licence.html).
+*
+*  Diana Maynard, 02 Aug 2001
+*
+*  $Id: firstname.jape,v 1.1 2011-03-09 07:31:54 cvs Exp $
+*/
+
+Phase:	FirstName
+Input: Token Lookup
+Options: control = appelt
+
+Rule: FirstName
+// Fred
+
+(
+ {Lookup.majorType == person_first}
+):person
+-->
+{
+gate.AnnotationSet person = (gate.AnnotationSet)bindings.get("person");
+gate.Annotation personAnn = (gate.Annotation)person.iterator().next();
+gate.FeatureMap features = Factory.newFeatureMap();
+
+//find out if the gender is unambiguous
+String gender = (String)personAnn.getFeatures().get("minorType");
+boolean ambig = false;
+gate.FeatureMap constraints = Factory.newFeatureMap();
+constraints.put("majorType", "person_first");
+Iterator lookupsIter =  inputAS.get(personAnn.getStartNode().getOffset()).get("Lookup", constraints).iterator();
+while(!ambig && lookupsIter.hasNext()){
+  gate.Annotation anAnnot = (gate.Annotation)lookupsIter.next();
+  //we're only interested in annots of the same length
+  if(anAnnot.getEndNode().getOffset().equals(personAnn.getEndNode().getOffset())){
+    ambig = !gender.equals(anAnnot.getFeatures().get("minorType"));
+  }
+}
+if(!ambig) features.put("gender", gender);
+
+features.put("rule", "FirstName");
+outputAS.add(person.firstNode(), person.lastNode(), "FirstPerson",
+features);
+}
+
+Rule: TitleGender
+Priority: 50
+// Mr
+
+(
+ {Lookup.majorType == title, Lookup.minorType == male}|
+ {Lookup.majorType == title, Lookup.minorType == female}
+):person
+-->
+{
+gate.AnnotationSet person = (gate.AnnotationSet)bindings.get("person");
+gate.Annotation personAnn = (gate.Annotation)person.iterator().next();
+gate.FeatureMap features = Factory.newFeatureMap();
+features.put("gender", personAnn.getFeatures().get("minorType"));
+features.put("rule", "TitleGender");
+outputAS.add(person.firstNode(), person.lastNode(), "Title",
+features);
+}
+
+Rule: Title
+// Dr
+
+(
+ {Lookup.majorType == title}
+):person
+-->
+ :person.Title = {rule = "Title"}
+
+
+
+
+
+
+

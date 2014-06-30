@@ -1,0 +1,59 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+##set( $lang = "en" )##
+##
+## ***********************************************************************
+## ****                   WANDORA ATOM FEED TEMPLATE                  ****
+## ****             (c) 2009 by Grip Studios Interactive Oy           ****
+## ***********************************************************************
+##
+## Velocity template used to generate simple rss 2.0 document out of
+## currently open topic in Wandora.
+##
+##
+#macro( linkTopic $t )##
+${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
+#end##
+##
+##
+##
+##
+##
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+#macro( cleanXML $str )
+$str.replace( "&", "&amp;" )##
+#end
+#set( $br = "&lt;br&gt;")
+	<channel>
+		<title>#cleanXML($topic.getDisplayName($lang))</title>
+		<link>#cleanXML($topic.getOneSubjectIdentifier().toExternalForm())</link>
+		<description>
+		#set( $datatypes = $tmbox.sortTopics($topic.getDataTypes(),$lang) )##
+		#if( $datatypes.size() > 0 )
+			#foreach( $type in $datatypes )
+				#set( $occurrencetext = $topic.getData($type,$lang) )##
+				&lt;p&gt;&lt;b&gt;$type.getDisplayName($lang):&lt;/b&gt; #cleanXML($occurrencetext)&lt;/p&gt;
+			#end
+		#end
+		</description>
+		
+		#set( $instanceList = $topic.getTopicMap().getTopicsOfType($topic) )
+		#foreach( $instance in $instanceList )
+			<item>
+				<title>#cleanXML($instance.getDisplayName($lang))</title>
+				<link>#cleanXML($instance.getOneSubjectIdentifier().toExternalForm())</link>
+				<description>
+				#set( $datatypes = $tmbox.sortTopics($instance.getDataTypes(),$lang) )##
+				#if( $datatypes.size() > 0 )
+					#foreach( $type in $datatypes )
+						#set( $occurrencetext = $instance.getData($type,$lang) )##
+						&lt;p&gt;&lt;b&gt;$type.getDisplayName($lang):&lt;/b&gt; #cleanXML($occurrencetext)&lt;/p&gt;
+					#end
+				#end
+				</description>
+			</item>
+		#end
+	</channel>
+</rss>
+

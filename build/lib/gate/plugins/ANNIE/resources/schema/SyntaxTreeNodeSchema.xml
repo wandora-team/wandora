@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<schema xmlns="http://www.w3.org/2000/10/XMLSchema">
+	<!-- XSchema deffinition for syntaxTreeNode-->
+	<element name="SyntaxTreeNode">
+		<complexType>
+			<attribute name="text"  type="string"  use ="optional"/>
+			<attribute name="cat" use="required">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="N"/>
+						<enumeration value="PropN"/>
+						<enumeration value="ADJ"/>
+						<enumeration value="DET"/>
+						<enumeration value="PREP"/>
+						<enumeration value="VTRANS"/>
+						<enumeration value="V"/>
+						<enumeration value="ADV"/>
+						<enumeration value="NP"/>
+						<enumeration value="VP"/>
+						<enumeration value="PP"/>
+						<enumeration value="S"/>
+						<enumeration value="AUX"/>
+
+					</restriction>
+				</simpleType>
+			</attribute>
+			<attribute name="consists" type="list" use="optional"/>
+		</complexType>
+	</element>
+</schema>

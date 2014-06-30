@@ -1,0 +1,125 @@
+/*
+ * WANDORA
+ * Knowledge Extraction, Management, and Publishing Application
+ * http://wandora.org
+ *
+ * Copyright (C) 2004-2014 Wandora Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ */
+
+
+package org.wandora.application.tools.occurrences.refine;
+
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.alchemy.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
+/**
+ *
+ * @author akivela
+ */
+public class AlchemySentimentOccurrenceExtractor extends AbstractOccurrenceExtractor {
+
+
+
+
+    public AlchemySentimentOccurrenceExtractor() {
+    }
+    public AlchemySentimentOccurrenceExtractor(Context preferredContext) {
+        super(preferredContext);
+    }
+
+
+
+
+    @Override
+    public String getName() {
+        return "Alchemy sentiment occurrence extractor";
+    }
+
+    @Override
+    public String getDescription(){
+        return "Extracts sentiment out of given occurrences using Orchestr8's AlchemyAPI service. Read more at http://www.alchemyapi.com/.";
+    }
+
+
+
+
+    public boolean _extractTopicsFrom(String occurrenceData, Topic masterTopic, TopicMap topicMap, Wandora wandora) throws Exception {
+        AlchemySentimentExtractor extractor = new AlchemySentimentExtractor();
+        extractor.setToolLogger(this.getDefaultLogger());
+        extractor.setMasterSubject(masterTopic);
+        String apikey = extractor.solveAPIKey(wandora);
+        String masterTerm = null;
+        if(masterTopic != null) masterTerm = masterTopic.getOneSubjectIdentifier().toExternalForm();
+        if(occurrenceData != null && occurrenceData.length() > 0) {
+            if(apikey != null) apikey = apikey.trim();
+            if(apikey.length() > 0) {
+                String content = null;
+                content = occurrenceData;
+
+                String alchemyURL = AlchemySentimentExtractor.ALCHEMY_URL+"calls/text/TextGetTextSentiment"; // ?apikey="+apikey+"&maxRetrieve=100&outputMode=xml&text="+URLEncoder.encode(content, "utf-8");
+                String alchemyData = "apikey="+URLEncoder.encode(apikey, "utf-8")+"&outputMode=xml&text="+URLEncoder.encode(content, "utf-8");
+                String result = AlchemyKeywordExtractor.sendRequest(new URL(alchemyURL), alchemyData, "application/x-www-form-urlencoded", "POST");
+
+
+                System.out.println("----------------------------------------");
+                System.out.println("Occurrence == "+content);
+                System.out.println("Alchemy returned == "+result);
+
+                javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
+                factory.setNamespaceAware(true);
+                factory.setValidating(false);
+                javax.xml.parsers.SAXParser parser=factory.newSAXParser();
+                XMLReader reader=parser.getXMLReader();
+                AlchemySentimentExtractor.AlchemySentimentParser parserHandler = extractor.new AlchemySentimentParser(masterTerm, content, topicMap, extractor);
+                reader.setContentHandler(parserHandler);
+                reader.setErrorHandler(parserHandler);
+                try {
+                    reader.parse(new InputSource(new StringReader(result)));
+                }
+                catch(Exception e){
+                    if(!(e instanceof SAXException) || !e.getMessage().equals("User interrupt")) log(e);
+                }
+            }
+            else {
+                log("No valid API key given! Aborting!");
+            }
+        }
+        else {
+            log("No valid data given! Aborting!");
+        }
+        return true;
+    }
+
+
+
+
+}

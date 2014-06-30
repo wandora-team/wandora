@@ -1,0 +1,184 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+<!DOCTYPE HTML>
+<html>
+<!-- *********************************************************************** -->
+<!-- ****              WANDORA EMBEDDED HTTP SERVER TEMPLATE            **** -->
+<!-- ****             (c) 2012 by Eero Lehtonen/Wandora Team            **** -->
+<!-- *********************************************************************** -->
+    <head>
+        <title>Wandora D3 Word Cloud</title>
+        <link rel="StyleSheet" href="${staticbase}style.css" type="text/css" media="screen">
+    </head>
+    <body>
+        <div id="mainContent">
+            <div id="chart">
+                <svg id="svg">
+                    <filter id="dropshadow" height="130%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/> <!-- stdDeviation is how much to blur -->
+                        <feOffset dx="4" dy="4" result="offsetblur"/> <!-- how much to offset -->
+                        <feMerge> 
+                            <feMergeNode/> <!-- this contains the offset blurred image -->
+                            <feMergeNode in="SourceGraphic"/> <!-- this contains the element that the filter is applied to -->
+                        </feMerge>
+                    </filter>
+                </svg>
+            </div>
+            <div class="footer">
+                <div class="header">
+                    <h1 class="heading">D3 Word Cloud</h1>
+                    <button class="info-toggle"></button>
+                </div>
+                <div class="description">
+                    <p> The word cloud visualization shows a "main" topic and all topics
+                        directly associated with it. Clicking on a topic will open the topic
+                        as the main topic and in turn show topics associated with it.
+                        The visualization has nine optional query string parameters described below.
+                    </p>
+                    <p>
+                        <ul>  
+                            <li>si: The subject identifier for the main topic, default: the current
+                            open topic in Wandora.</li>
+                            <li>font: The font used to render the topics, default: impact</li>
+                            <li>spiral = ( archimedean [default] | rectangular ): The form of spiral along which the
+                            words are placed.
+                            <li>scale = ( log [default] | sqrt | linear ): The function according to which the font
+                            sizes are calculated from the amount of associations that particular topic has.</li>
+                            <li>n: the maximum amount of topics retrieved from wandora, default: 250.</li>
+                            <li>from, to and or: the parameters for random rotation. "from" and "to"
+                            specify the range in degrees in relation to the vertical axis and "or" 
+                            specifies the amount of steps within the range. For example
+                            from=-90&to=90&or=5 would result in each text's rotation to be randomly
+                            -90, -45, 0, 45 or 90 degrees.</li>
+                           <li>lang: If specified, tries to find a variant name for the topic in lang.</li>
+                        </ul>
+                    </p>
+                </div>
+	    </div>
+        </div>
+
+        <script src="${staticbase}js/d3/d3.min.js"></script>
+        <script src="${staticbase}js/d3-cloud/d3.layout.cloud.js"></script>
+        <script src="${staticbase}js/render.js"></script>
+        <script >
+            function hide() {
+                document.getElementById("textbox").style.visibility="hidden";
+                document.getElementById("restore").style.visibility="visible";
+            }
+            function restore() {
+                document.getElementById("textbox").style.visibility="visible";
+                document.getElementById("restore").style.visibility="hidden";
+            }
+        </script>
+#if(! $request.getParameter("si") )
+#* *##set( $SI = "$topic.getOneSubjectIdentifier().toString()" )
+#else
+#* *##set( $SI = $request.getParameter("si"))
+#end
+#if(! $request.getParameter("font") )
+#* *##set( $font = "impact" )
+#else
+#* *##set( $font = $request.getParameter("font"))
+#end
+#if(! $request.getParameter("spiral") )
+#* *##set( $spiral = "archimedean" )
+#else
+#* *##set( $spiral = $request.getParameter("spiral"))
+#end
+#if(! $request.getParameter("scale") )
+#* *##set( $scale = "log" )
+#else
+#* *##set( $scale = $request.getParameter("scale"))
+#end
+#if(! $request.getParameter("n") )
+#* *##set( $n = 250 )
+#else
+#* *##set( $n = $request.getParameter("n"))
+#end
+#if(! $request.getParameter("or") )
+#* *##set( $or = 0 )
+#else
+#* *##set( $or = $request.getParameter("or"))
+#end
+#if(! $request.getParameter("from") )
+#* *##set( $from = 0 )
+#else
+#* *##set( $from = $request.getParameter("from"))
+#end
+#if(! $request.getParameter("to") )
+#* *##set( $to = 0 )
+#else
+#* *##set( $to = $request.getParameter("to"))
+#end
+#if(! $request.getParameter("lang") )
+#* *##set( $paramLang = "" )
+#else
+#* *##set( $paramLang = $request.getParameter("lang"))
+#end
+
+#set($topic = $topic.getTopicMap().getTopic($SI) )
+#set($assocTopics = $listmaker.make() )
+#set($temp = $assocTopics.add($topic))
+#set($assocs = $topic.getAssociations())
+#foreach($assoc in $assocs)
+#**##set($roles = $assoc.getRoles())
+#**##foreach($role in $roles)
+#*  *##if($assoc.getPlayer($role) != $topic)
+#*    *##set($temp = $assocTopics.add($assoc.getPlayer($role)))
+#*  *##end
+#**##end	
+#end
+
+#if($paramLang != "")
+#**##set($topicMap = $topic.getTopicMap() )
+#**##set($displayNameTopic = $topicMap.getTopic( "http://www.topicmaps.org/xtm/1.0/core.xtm#display" ) )
+#**##set($langString = "http://www.topicmaps.org/xtm/1.0/language.xtm#" + ${paramLang})
+#**##set($langTopic = $topicMap.getTopic( $langString ) )
+#**##set($scope = $collectionmaker.make() )
+#**##set($temp = $scope.add($displayNameTopic))
+#**##set($temp = $scope.add($langTopic))
+#end
+      <script>
+            init(
+              [
+#set($i = 0 )
+#foreach($t in $assocTopics)
+#**##if($scope)
+#*  *##if($t.getVariant($scope))
+#*    *##set($name = $t.getVariant($scope))
+#*  *##elseif($t.getBaseName())
+#*    *##set($name = $t.getBaseName())
+#*  *##else
+#*    *##set($name = $t.getOneSubjectIdentifier().toString())
+#*  *##end
+#**##else
+#*  *##if($t.getBaseName())
+#*    *##set($name = $t.getBaseName())
+#*  *##else
+#*    *##set($name = $t.getOneSubjectIdentifier().toString())
+#*  *##end
+#**##end
+#**##if($i > 0)
+                ,
+#**##end
+                {
+                  "name" : "$urlencoder.encode($name)",
+                  "si" : "$t.getOneSubjectIdentifier().toString()",
+                  "size" : $t.getAssociations().size()
+                }
+#**##set($i = $i + 1 )
+#**##if($i == $n)
+#*  *##break
+#**##end
+#end
+              ],
+              "$font",
+              "$spiral",
+              "$scale",
+              "$or",
+              "$from",
+              "$to"
+            )
+      </script>
+  </body>
+</html>

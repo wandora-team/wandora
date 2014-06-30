@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options>
+    <!--
+        This file is meant to be imported by the Wandora Modules Servlet. In general
+        this file is like all other configuration files of the Wandora modules 
+        framework, described at http://wandora.org/wiki/Wandora_modules_framework .
+        There are a few additions however. Wandora automatically adds some modules
+        and variables when it loads bundle configurations like this.
+    -->
+
+    <!-- Some imports for this bundle, these are defined in the Modules Servlet
+         base configration. -->
+    <import class="org.wandora.modules.LoggingModule"></import>
+    <import class="org.wandora.modules.servlet.VelocityEngineModule"></import>
+    <import class="org.wandora.modules.topicmap.TopicMapManager"></import>
+    <import class="org.wandora.modules.servlet.TemplateContextProvider"></import>
+    <!-- ServletModule is added automatically by Wandora, we don't need to import that -->
+
+    <!-- The server automatically sets variables, home, relativeHome, urlbase and port-->
+    <variable key="defaultSI">http://wandora.org/si/core/schema-type</variable>
+
+    <module class="org.wandora.modules.servlet.TemplateManager">
+        <param key="templatePath">${home}</param> <!-- note that velocity has its own template path which ignores this one, so this is largely useless at the moment -->
+        <!-- A default context is defined in the base config using a template context provider
+             which is imported to this bundle config. More context objects can be added
+             here if needed. -->
+        <param key="context.urlbase">${urlbase}</param>
+        <param key="context.staticbase">${urlbase}static/</param>
+        <param key="context.templatesdir">${relativeHome}/templates/</param>
+    </module>
+
+    <!-- The template for the view topic action -->
+    <module class="org.wandora.modules.servlet.VelocityTemplate">
+        <param key="templateKey">layer</param> <!-- actions refer to this template by this value -->
+        <param key="templateFile">${relativeHome}/templates/layer.vhtml</param> <!-- the file where this template is located, under the templates path specified in the engine -->
+        <param key="templateEncoding">UTF-8</param> <!-- character encoding of the template -->
+    </module>
+
+    <!-- This action serves static files like css and javascripts. It is important to
+         define this before the ViewTopic action as they will both be marked defaultAction,
+         (this action by default) but this one should get the chance to handle the action
+         first. -->
+    <module class="org.wandora.modules.servlet.StaticContentAction"></module>
+    
+    <!-- The action that displays a topic -->
+    <module class="org.wandora.application.modulesserver.ViewTopicWebApp">
+        <param key="webAppName">layer</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="action">layer</param> <!-- this is the action identifier -->
+        <param key="templateKey">layer</param> <!-- the template to use for this action -->
+        <param key="defaultTopic">${defaultSI}</param> <!-- default topic -->
+        <param key="defaultLang">en</param> <!-- default language -->
+        <param key="defaultAction">true</param> <!-- this is the default action and will be used even if no action is specified in the request -->
+    </module>
+    
+</options>

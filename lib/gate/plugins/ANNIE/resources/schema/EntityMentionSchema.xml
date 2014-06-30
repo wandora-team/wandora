@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<schema xmlns="http://www.w3.org/2000/10/XMLSchema">
+	<!-- XSchema definition for token-->
+	<element name="EntityMention">
+	  <complexType>
+          <attribute name="type"  use="required">
+		  <simpleType>
+		    <restriction base="string">
+			  <enumeration value="name"/>
+			  <enumeration value="nom"/>
+			  <enumeration value="pro"/>
+		    </restriction>
+		</simpleType>	 
+	  </attribute>
+	  <attribute name="role"  use="required">
+		  <simpleType>
+		    <restriction base="string">
+			  <enumeration value="gsp"/>
+			  <enumeration value="per"/>
+			  <enumeration value="org"/>
+                          <enumeration value="loc"/>
+		    </restriction>
+		</simpleType>	 
+	</attribute>
+  </complexType>
+</element>
+</schema>

@@ -1,0 +1,395 @@
+/*
+ * WANDORA
+ * http://wandora.org
+ * 
+ * Copyright (C) 2004-2014 Wandora Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * AssociationArches.sketch
+ */
+
+package processing;
+
+import org.wandora.application.gui.topicpanels.processing.*;
+import org.wandora.topicmap.*;
+import processing.core.*;
+import java.util.*;
+
+public class AssociationArches extends SketchTemplate {
+
+	ArrayList<PTopic> topics = new ArrayList();
+	ArrayList<PAssociation> associations = new ArrayList();
+	HashMap<PTopic,Integer> associationTypes = new HashMap();
+	String currentTopicName = null;
+	
+	PTopic mouseOverTopic = null;
+	PTopic currentTopic = null;
+	
+	
+	int topicBoxWidth = 150;
+	int AHIDE = 0;
+	int ALEFT = 1;
+	int ARIGHT = 2;
+	int stageWidth = 920;
+	int stageHeight = 640;
+	int topicColumnX = stageWidth/2 - topicBoxWidth/2;
+	
+	public void setup() {
+	  size(stageWidth, stageHeight);
+	  frameRate(10);
+	  smooth();
+	  PFont topicFont = createFont("Arial", 10);
+	  textFont(topicFont);
+	  currentTopicName = TopicTools.getTopicName(getCurrentTopic());
+	  Iterator<Association> as = null;
+	  try {
+	      as = getTopicMap().getAssociations();
+	  }
+	  catch(Exception e) {}
+	  while(as != null && as.hasNext()) {
+	    Association association = as.next();
+	    String[] triplet = TopicTools.getAsTriplet(association);
+	    String s1 = triplet[1];
+	    String s2 = triplet[2];
+	    PTopic p1 = findTopic(s1);
+	    if(p1 == null) {
+	      p1 = new PTopic(s1);
+	      topics.add(p1);
+	    }
+	    PTopic p2 = findTopic(s2);
+	    if(p2 == null) {
+	      p2 = new PTopic(s2);
+	      topics.add(p2);
+	    }
+	    String ats = triplet[0];
+	    PTopic at = findTopic(ats);
+	    if(at == null) {
+	      at = new PTopic(ats);
+	      topics.add(at);
+	    }
+	    if(associationTypes.get(at) == null) {
+	      associationTypes.put(at, Math.random() > 0.5 ? ALEFT : ARIGHT);
+	    }
+	    PAssociation a = new PAssociation(p1,p2,at);
+	    associations.add( a );
+	    p1.addAssociation( a, p2 );
+	    p2.addAssociation( a, p1 );
+	  }
+	  Collections.sort(topics);
+	  
+	  float h = (stageHeight-40f)/topics.size();
+	  int i = 0;
+	  for(PTopic t : topics) {
+	    t.x = topicColumnX;
+	    t.y = i*h+20;
+	    t.w = topicBoxWidth;
+	    t.h = h;
+	    i++;
+	  }
+	  for(PAssociation a : associations) {
+	    a.prepareDraw();
+	  }
+	}
+	
+	
+	// ------------------------------------------------------------
+	
+	
+	public void draw() {
+	  background(255);
+	  
+	  drawAssociationTypeBoxes();
+	
+	  textAlign(CENTER, CENTER);
+	  mouseOverTopic = null;
+	  currentTopic = null;
+	  for(PTopic t : topics) {
+	    t.draw();
+	    if(t.mouseOver()) {
+	      mouseOverTopic = t;
+	    }
+	    if(t.isCurrent()) {
+	      currentTopic = t;
+	    }
+	  }
+	  for(PAssociation a : associations) {
+	    a.draw();
+	  }
+	  // **** CURRENT TOPIC ****
+	  if(mouseOverTopic == null && currentTopic != null) {
+	    currentTopic.drawAsCurrent();
+		for(PAssociation a : currentTopic.myAssociations) {
+	      a.drawAsCurrent();
+	    }
+	  }
+	  // **** MOUSE OVER TOPIC ****
+	  if(mouseOverTopic != null) {
+	    mouseOverTopic.drawAsStrong();
+	    for(PAssociation a : mouseOverTopic.myAssociations) {
+	      a.drawAsStrong();
+	    }
+	    for(PTopic t : mouseOverTopic.linkedTopics) {
+	      t.drawAsStrong();
+	    }
+	  }
+	}
+	
+	
+	
+	void drawAssociationTypeBoxes() {
+	  if(associationTypes != null && !associationTypes.isEmpty()) {
+	    textAlign(LEFT, CENTER);
+	    int i=0;
+	    stroke(0,100);
+	    for(PTopic at : associationTypes.keySet()) {
+	      float tw = textWidth(at.name);
+	      int m = associationTypes.get(at);
+	      if(ALEFT == m) {
+	        fill(0xFF333333);
+	        rect(10,10+i*12,10,10);
+	        fill(0xFFFFFF);
+	        rect(stageWidth-20,10+i*12,10,10);
+	      }
+	      else if(ARIGHT == m) {
+	        fill(0xFFFFFFFF);
+	        rect(10,10+i*12,10,10);
+	        fill(0xFF333333);
+	        rect(stageWidth-20,10+i*12,10,10);
+	      }
+	      else {
+	        fill(0xFFFFFFFF);
+	        rect(10,10+i*12,10,10);
+	        rect(stageWidth-20,10+i*12,10,10);
+	      }
+	      fill(0xFF333333);
+	      text(at.name, 25, 13+i*12);
+	      text(at.name, stageWidth-tw-25, 13+i*12);
+	      i++;
+	    }
+	  }
+	}
+	
+	
+	
+	public void mouseReleased() {
+	  PTopic typePressed = null;
+	  int d = 0;
+	  int i = 0;
+	  for(PTopic at : associationTypes.keySet()) {
+	    int od = associationTypes.get(at);
+	    if(mouseX > 10 && mouseX < 20 && mouseY > 10+i*12 && mouseY < 20+i*12) {
+	      typePressed = at;
+	      if(od == ALEFT) d = AHIDE;
+	      else d = ALEFT;
+	      break;
+	    }
+	    else if(mouseX > stageWidth-20 && mouseX < stageWidth-10 && mouseY > 10+i*12 && mouseY < 20+i*12) {
+	      typePressed = at;
+	      if(od == ARIGHT) d = AHIDE;
+	      else d = ARIGHT;
+	    }
+	    i++;
+	  }
+	  if(typePressed != null) {
+	    associationTypes.put(typePressed, d);
+	  }
+	}
+	
+	
+	
+	PTopic findTopic(String name) {
+	  for(PTopic topic : topics) {
+	    if(name.equals(topic.name)) return topic;
+	  }
+	  return null;
+	}
+	
+	
+	// ----------------------------------------------------------------
+	
+	int boxCurrentColor = 0xFFAAAAAA;
+	int boxCurrentStrokeColor = 0xFF000000;
+	int arcCurrentStrokeColor = 0xFF000000;
+	int arcCurrentStrokeAlpha = 100;
+	
+	int boxColor = 0xFFFFFFFF;
+	int boxStrongColor = 0xFFBBBBBB;
+	int boxStrokeColor = 0xFF666666;
+	int boxStrongStrokeColor = 0xFF000000;
+	int boxLabelColor = 0xFF000000;
+	int arcStrokeColor = 0xFF000000;
+	int arcStrokeAlpha = 40;
+	int arcStrongStrokeColor = 0xFF000000;
+	int arcStrongStrokeAlpha = 100;
+	int strokeWidth = 3;
+	
+	
+	  
+	
+	class PTopic implements Comparable {
+	  ArrayList<PAssociation> myAssociations = new ArrayList();
+	  ArrayList<PTopic> linkedTopics = new ArrayList();
+	  float x, y;
+	  float w, h;
+	  String name;
+	  String type;
+	
+	  PTopic(String n) {
+	    this(n, null);
+	  }
+	  PTopic(String n, String t) {
+	    name = n;
+	    type = t;
+	    w = 90;
+	    h = 15;
+	  }
+	  
+	  
+	  void addAssociation(PAssociation a, PTopic lt) {
+	    myAssociations.add(a);
+	    linkedTopics.add(lt);
+	  }
+	 
+	 
+	 
+	 void draw() {
+	   stroke(boxStrokeColor, 90);
+	   fill(boxColor);
+	   rect(x, y, w, h);
+	   fill(boxLabelColor);
+	   text(name, x, y, w, h);
+	 }
+	 
+	 void drawAsStrong() {
+	   stroke(boxStrongStrokeColor, 100);
+	   fill(boxStrongColor);
+	   rect(x, y, w, Math.max(16,h));
+	   fill(boxLabelColor);
+	   textAlign(CENTER, CENTER);
+	   text(name, x, y, w, Math.max(16,h));
+	 }
+	 
+	 void drawAsCurrent() {
+	   stroke(boxCurrentStrokeColor, 100);
+	   fill(boxCurrentColor);
+	   rect(x, y, w, Math.max(16,h));
+	   fill(boxLabelColor);
+	   textAlign(CENTER, CENTER);
+	   text(name, x, y, w, Math.max(16,h));
+	 }
+	 
+	 
+	 public int compareTo(Object o) {
+	   return name.compareTo(((PTopic) o).name);
+	 }
+	 
+	 boolean mouseOver() {
+	    if(mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) {
+	      return true;
+	    }
+	    return false;
+	 }
+	 
+	 boolean isCurrent() {
+	    if(currentTopicName != null && currentTopicName.equals(name)) return true;
+	    return false;
+	 }
+	}
+	
+	
+	// ----------------------------------------------------------------
+	
+	
+	class PAssociation {
+	  PTopic p1;
+	  PTopic p2;
+	  PTopic t;
+	  float w = 1;
+	  float h = 1;
+	  float h2 = 2*h;
+	  float x = 1;
+	  float y = 1;
+	
+	
+	  PAssociation(PTopic t1, PTopic t2, PTopic t) {
+	    this.p1 = t1;
+	    this.p2 = t2;
+	    this.t = t;
+	  }
+	
+	  void prepareDraw() {
+	    w = (p1.x - p2.x) / 2f;
+	    h = (p1.y - p2.y) / 2f;
+	    x = p1.x - w;
+	    y = p1.y - h + (p1.h/2f);
+	    w = Math.abs(w);
+	    h = Math.abs(h);
+	    h2 = 2*h;
+	  }
+	 
+	 
+	 void draw() {
+	   int m = associationTypes.get(t);
+	   if(m != AHIDE) {
+	     noFill();
+	     stroke(arcStrokeColor, arcStrokeAlpha);
+	     if(ALEFT == m) {
+	       arc(x, y, h2, h2, PI/2, TWO_PI-PI/2);
+	     }
+	     else {
+	       arc(x+topicBoxWidth, y, h2, h2, -PI/2, PI/2);
+	     }
+	   }
+	 }
+	 
+	 
+	 void drawAsStrong() {
+	   int m = associationTypes.get(t);
+	   if(m != AHIDE) {
+	     noFill();
+	     stroke(arcStrongStrokeColor, arcStrongStrokeAlpha);
+	     if(ALEFT == m) {
+	       for(float i=0; i<strokeWidth; i=i+0.5f) {
+	         arc(x, y, h2-i, h2-i, PI/2, TWO_PI-PI/2);
+	       }
+	     }
+	     else {
+	       for(float i=0; i<strokeWidth; i=i+0.5f) {
+	         arc(x+topicBoxWidth, y, h2-i, h2-i, -PI/2, PI/2);
+	       }
+	     }
+	   }
+	 }
+	 
+	void drawAsCurrent() {
+	   int m = associationTypes.get(t);
+	   if(m != AHIDE) {
+	     noFill();
+	     stroke(arcCurrentStrokeColor, arcCurrentStrokeAlpha);
+	     if(ALEFT == m) {
+	       for(float i=0; i<strokeWidth; i=i+0.5f) {
+	         arc(x, y, h2-i, h2-i, PI/2, TWO_PI-PI/2);
+	       }
+	     }
+	     else {
+	       for(float i=0; i<strokeWidth; i=i+0.5f) {
+	         arc(x+topicBoxWidth, y, h2-i, h2-i, -PI/2, PI/2);
+	       }
+	     }
+	   }
+	 }
+    }
+}

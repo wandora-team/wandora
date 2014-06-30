@@ -1,0 +1,11 @@
+// main-eml.jape
+// diana 13 Sep 00
+// last modified 5 Jan 01
+// new version to combine grammars into fewer files
+
+MultiPhase:	TestTheGrammars
+Phases: 
+
+location
+person
+organisation

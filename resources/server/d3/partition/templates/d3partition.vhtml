@@ -1,0 +1,186 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+<!DOCTYPE HTML>
+<html>
+<!-- *********************************************************************** -->
+<!-- ****              WANDORA EMBEDDED HTTP SERVER TEMPLATE            **** -->
+<!-- ****             (c) 2012 by Eero Lehtonen/Wandora Team            **** -->
+<!-- *********************************************************************** -->
+    <head>
+        <title>Wandora D3 Partition</title>
+        <script src="${staticbase}js/d3/d3.min.js"></script>
+        <script src="${staticbase}js/render.js"></script>
+        <link rel="StyleSheet" href="${staticbase}style.css" type="text/css" media="screen">
+          
+        <script>
+            function hide() {
+              document.getElementById("textbox").style.visibility="hidden";
+              document.getElementById("restore").style.visibility="visible";
+            }
+
+            function restore() {
+              document.getElementById("textbox").style.visibility="visible";
+              document.getElementById("restore").style.visibility="hidden";
+            }
+      </script>   
+    </head>
+    <body onresize="refresh();">
+      <div id="mainContent">
+        <div id="chart">
+        </div>
+        <div class="footer">
+          <div class="header">
+           <h1 class="heading">D3 Partition</h1>
+           <button class="info-toggle"></button>
+          </div>
+          <div class="description">
+            <p>
+              The partition visualization is similar to the tree visualization as it uses
+              a tree of topics defined by the root topic and the association used to construct
+              the parent-child relation. User zooms on a topic and it's children by clicking on
+              the topic and returns to the starting position by clicking a topic with no children.
+              There are six optional parameters the partition
+              visualization takes:
+              <ul>
+                <li>depth: The maximum depth from the root topic. Default: 5</li>
+ * http://wandora.orgcore/wandoraclass</li>
+                <li>assocTypeSI: The subject identifier of the association type used to construct the parent-child relation. Default: http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass</li>
+                <li>parentRoleSI: The subject identifier of the parent role. default: http://www.topicmaps.org/xtm/1.0/core.xtm#superclass</li>
+                <li>childRoleSI: The subject identifier of the child role. default: http://www.topicmaps.org/xtm/1.0/core.xtm#subclass</li>
+                <li>colorScheme: The color scheme used to color the topics.
+                  <ul>
+                    <li>0: Color indicates whether the topic has any children</li>
+                    <li>1: Color indicates the topic type (class)</li>
+                    <li>2: Color indicates the topic's depth in the tree </li>
+                    <li>3: Color indicates the amount of children the topic has</li>
+                    <li>4: Color indicates whether the topic has a subject locator</li>
+                    <li>5: Color indicates whether the topic has any occurrences</li>
+                    <li>6: Color indicates whether the topic has any variant names</li>
+                  </ul>
+                </li>
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+#set( $topicMap = $topic.getTopicMap() )
+#if(! $request.getParameter("depth") )
+#* *##set( $depth = 5 )
+#else
+#* *##set( $depth = $request.getParameter("depth"))
+#end
+#if(! $request.getParameter("rootSI") )
+#* *##set( $rootSI = "http://wandora.org/si/core/wandora-class" )
+#else
+#* *##set( $rootSI = $request.getParameter("rootSI"))
+#end
+#if(! $request.getParameter("assocTypeSI") )
+#* *##set( $assocTypeSI = "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass" )
+#else
+#* *##set( $assocTypeSI = $request.getParameter("assocTypeSI"))
+#end
+#if(! $request.getParameter("parentRoleSI") )
+#* *##set( $parentTypeSI = "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass" )
+#else
+#* *##set( $parentTypeSI = $request.getParameter("parentRoleSI"))
+#end
+#if(! $request.getParameter("childRoleSI") )
+#* *##set( $childTypeSI = "http://www.topicmaps.org/xtm/1.0/core.xtm#subclass" )
+#else
+#* *##set( $childTypeSI = $request.getParameter("childRoleSI"))
+#end
+#if(! $request.getParameter("colorScheme") )
+#* *##set( $colorScheme = 0 )
+#else
+#* *##set( $colorScheme = $request.getParameter("colorScheme"))
+#end
+#set( $root = $topicMap.getTopic( $topicMap.createLocator( $rootSI ) ) )
+#set( $assocType = $topicMap.getTopic( $topicMap.createLocator( $assocTypeSI ) ) )
+#set( $parentRole = $topicMap.getTopic( $topicMap.createLocator( $parentTypeSI ) ) )
+#set( $childRole = $topicMap.getTopic( $topicMap.createLocator( $childTypeSI ) ) )
+#set( $valid = 1 )
+#if( !$root || !$assocType || !$parentRole || !$childRole || !$root.getAssociations() )
+#* *##set( $valid = 0 )
+#end
+#set($rootAssocs = $root.getAssociations($assocType) )
+#set($assocPlayerCheck = 0)
+#foreach($assoc in $rootAssocs)
+#* *##if($assoc.getRoles().contains($childRole) && $assoc.getRoles().contains($parentRole) )
+#*   *##set($assocPlayerCheck = 1)
+#* *##end
+#end
+#if($assocPlayerCheck == 0 && $valid == 1)
+#* *##set($valid = 0)
+#end
+#set( $finalChildCount = 0 )
+#set( $finalDepth = 0 )
+#set( $curDepth = 0 )
+#set( $topicCount = 0 )
+#set( $singleChildCount = 0 )
+#macro( iterateTopic $topic )
+#* *##set($topicAssocs = $listmaker.make())
+#* *##set( $allTopicAssocs = $topic.getAssociations($assocType))
+#* *##foreach($oompa in $allTopicAssocs)
+#*   *##if($oompa.getPlayer($parentRole) == $topic)
+#*     *##set($temp = $topicAssocs.add($oompa))
+#*   *##end
+#* *##end
+#* *###set( $topicAssocs = $topic.getAssociations($assocType, $parentRole) )
+#* *##set( $topicChildren = $listmaker.make() )
+#* *##foreach ( $assoc in $topicAssocs )
+#*   *##set( $temp = $topicChildren.add( $assoc.getPlayer( $childRole ) ) )
+#* *##end
+#* *##set($topicCount = $topicCount + 1 )
+#* *#{
+#*   *#"name" : "$urlencoder.encode($topic.getBaseName())",
+#*   *#"size" : "10",
+#*   *#"depth" : "$curDepth",
+#*   *##if($topic.getTypes().size() != 0)
+#*     *#"type" : "$topic.getTypes()",
+#*   *##else
+#*     *#"type" : "undefined",
+#*   *##end
+#*   *##if($topic.getSubjectLocator())
+#*     *#"hasSL" : "true",
+#*   *##else
+#*     *#"hasSL" : "false",
+#*   *##end
+#*   *##if($topic.getDataTypes().size() != 0)
+#*     *#"hasOcc" : "true",
+#*   *##else
+#*     *#"hasOcc" : "false",
+#*   *##end
+#*   *##if($topic.getVariantScopes().size() != 0)
+#*     *#"hasVS" : "true"
+#*   *##else
+#*     *#"hasVS" : "false"
+#*   *##end
+#*   *##if( $topicChildren.size() > 0 && !($curDepth == $depth))
+#*     *#,
+#*     *#"children" : [
+#*     *##set( $i = 0 )
+#*     *##foreach( $child in $topicChildren )
+#*       *##if( $i == 1 )
+#*         *#,
+#*       *##end
+#*       *##set( $curDepth = $curDepth + 1 )
+#*       *##if( $curDepth >= $finalDepth )
+#*         *##set($finalDepth = $curDepth)
+#*       *##end
+#*       *##iterateTopic( $child )
+#*       *##set( $curDepth = $curDepth - 1 )
+#*       *##set ( $i = 1 )
+#*     *##end
+#*     *#] 
+#*   *##end
+#* *#}
+#end
+    <script>
+#if( $valid == 0 )
+      alert("invalid topicmap structure or empty result set!");
+#else
+      draw(#iterateTopic( $root ),$colorScheme)
+#end
+    </script>
+  </body>
+</html>

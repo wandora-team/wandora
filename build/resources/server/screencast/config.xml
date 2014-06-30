@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options>
+    <!--
+        This file is meant to be imported by the Wandora Modules Servlet. In general
+        this file is like all other configuration files of the Wandora modules 
+        framework, described at http://wandora.org/wiki/Wandora_modules_framework .
+        There are a few additions however. Wandora automatically adds some modules
+        and variables when it loads bundle configurations like this.
+    -->
+
+    <!-- Some imports for this bundle, these are defined in the Modules Servlet
+         base configration. -->
+    <import class="org.wandora.modules.LoggingModule"></import>
+    <!-- ServletModule is added automatically by Wandora, we don't need to import that -->
+
+    <!-- The action that outputs jtm -->
+    <module class="org.wandora.application.modulesserver.ScreenCastWebApp">
+        <param key="webAppName">Screencast</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="defaultAction">true</param>
+    </module>
+    
+</options>

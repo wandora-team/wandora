@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+##set( $lang = "en" )##
+##
+##
+##
+##
+#macro( linkTopic $t )##
+${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
+#end##
+##
+##
+##
+##
+##
+<html>
+<!-- *********************************************************************** -->
+<!-- ****          WANDORA EMBEDDED HTTP SERVER MOBILE TEMPLATE         **** -->
+<!-- ****                 Copyright 2012 Wandora Team                   **** -->
+<!-- *********************************************************************** -->
+
+<head>
+ <title>Wandora - $topic.getBaseName()</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <meta name="apple-mobile-web-app-capable" content="yes" />
+ <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+ <!--<link rel="stylesheet" href="${staticbase}jquery.mobile-1.0.1/jquery.mobile-1.0.1.min.css" />-->
+ <link rel="stylesheet" href="${staticbase}jquery.mobile-1.1.1/jquery.mobile-1.1.1.min.css" />
+ <link rel="StyleSheet" href="${staticbase}style.css" type="text/css" media="screen">
+ <script type="text/javascript" src="${staticbase}jquery-1.7.1min.js"></script> 
+ <script type="text/javascript" src="${staticbase}jquery.mobile-1.1.1/jquery.mobile-1.1.1.min.js"></script>
+ <!--<script type="text/javascript" src="${staticbase}jquery.mobile-1.0.1/jquery.mobile-1.0.1.min.js"></script>-->
+<!-- <script type="text/javascript" src="${staticbase}jquery.mobile-1.0.1/jquery.mobile-1.0.1.js"></script> --> 
+</head>
+
+
+
+<body>
+<div data-role="page">
+  <div data-role="header">
+    <a href="#" data-icon="arrow-l" data-rel="back">Back</a>
+    <h1>$topic.getDisplayName($lang)</h1>
+#*
+    <div data-role="navbar"><ul>
+       #set( $wc = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+       #set( $wcs = $helper.getPlayers($wc,"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass", "http://wandora.org/si/core/wandora-class") )##
+       #if( $wcs && $wcs.size() > 0)##
+        #set( $dummy = $wcs.addAll( $topic.getTopicMap().getTopicsOfType($wc) ) )##
+       #else##
+        #set( $wcs = $topic.getTopicMap().getTopicsOfType($wc) )##
+       #end##
+       #set( $wcs = $tmbox.sortTopics($wcs,$lang) )##
+       #set( $count = 0 )##
+       #foreach( $instancetopic in $wcs )##
+        #if( $count > 0)#end##
+        <li><a href="#linkTopic( $instancetopic )">$instancetopic.getDisplayName($lang)</a></li>##
+        #set( $count = $count + 1 )##
+       #end##
+     </ul></div>
+*#
+  </div>
+  <div data-role="content">
+    <div class="si">
+      <h2>Subject identifiers</h2>
+#*     *##foreach( $si in $topic.getSubjectIdentifiers() )##
+#*      *#<a href="$si" target="_blank">$si</a><br>##
+#*     *##end##    
+    </div>
+    
+
+#if($topic.getSubjectLocator())##
+    <div class="subjectLocator">
+        <h2>Subject locator</h2>
+       #set($sl = $topic.getSubjectLocator().toExternalForm().toLowerCase())##
+       #set($sloc = $topic.getSubjectLocator().toExternalForm())##
+       #if($sl.endsWith(".jpg") || $sl.endsWith(".jpeg") || $sl.endsWith(".png") || $sl.endsWith(".gif"))##
+        <a href="$sloc"><img src="$sloc" border="0" alt="subject locator image of $topic.getDisplayName()"></a>
+       #elseif($sl.endsWith(".mov") || $sl.endsWith(".mpeg") || $sl.endsWith(".mpg") || $sl.endsWith(".mp3") || $sl.endsWith(".avi"))##
+        <a href="$sloc" target="_blank">
+         <embed src="$sloc" border="0" width="200">
+        </a>
+       #else##
+        <a href="$sloc">$sloc</a>
+       #end##
+    </div>
+#end##    
+    
+    
+#set($types = $tmbox.sortTopics($topic.getTypes(), $lang))
+#if( $types.size() > 0 )
+    <div class="types">
+        <h2>Types</h2>
+        <div data-role="controlgroup" data-type="horizontal">
+            #foreach( $type in $types )
+                #if( $type!=$topic)
+                    <a href="#linkTopic($type)" data-role="button">$type.getDisplayName($lang)</a>##
+                #end
+            #end
+        </div>
+    </div>
+#end
+
+
+
+
+#set( $datatypes = $tmbox.sortTopics($topic.getDataTypes(),$lang) )##
+#if( $datatypes.size() > 0 )
+    <div class="occurrences">
+        <h2>Occurrences</h2>
+          #foreach( $type in $datatypes )
+           #set( $occurrencetext = $topic.getData($type,$lang) )##
+           #set( $occurrencetext = $occurrencetext.replaceAll( "\n", "<br>" ) )##
+           <div class="linkGroup occurrenceTypeGroup" data-role="controlgroup" data-type="horizontal">
+            <a style="width: 100%" data-role="button" data-theme="a" href="#linkTopic($type)">$type.getDisplayName($lang)</a>
+           </div>
+           <div class="occurrenceText">$occurrencetext</div>
+          #end        
+    </div>
+#end
+
+
+
+
+#set( $associations = $topic.getAssociations() )##
+#set( $associations = $tmbox.sortAssociations($associations,$lang) )##
+
+
+#if( $associations.size() > 0 )##
+    <div class="associations">
+        <h2>Associations <span class="countnumber">($associations.size())</span></h2>
+
+#set($currentAssociationType = "")##
+#set($associationPool = $listmaker.make())##
+#set($totalAssociationPool = $listmaker.make())##
+#* *##foreach( $association in $associations )##
+#*  *##if($currentAssociationType == "" || $association.getType() != $currentAssociationType)##
+#*   *##set($temp = $totalAssociationPool.add($associationPool))##
+#*   *##set($associationPool = $listmaker.make())##
+#*   *##set($currentAssociationType = $association.getType())##
+#*  *##end##
+#*  *##set($temp = $associationPool.add($association))##
+#* *##end##
+#set($temp = $totalAssociationPool.add($associationPool))##
+
+ #set($associationRolePool = $listmaker.make())##
+#* *##foreach( $associationPool in $totalAssociationPool )##
+#*  *##set($associationRolePool = $listmaker.make())##
+#*  *##foreach($association in $associationPool)##
+#*   *##foreach($tempRole in $association.getRoles())##
+#*    *##if(!$associationRolePool.contains($tempRole))##
+#*     *##set( $temp = $associationRolePool.add($tempRole) )##
+#*    *##end##
+#*   *##end##
+#*  *##end##
+#* *##set( $roles = $tmbox.sortTopics($associationRolePool ,$lang) )##
+
+  #set($associationTableTitles = 0)
+   #foreach($association in $associationPool)##
+    #set($associationType = $association.getType())##
+    #if($associationTableTitles == 0)##
+       <div class="linkGroup associationTypeGroup" data-role="controlgroup" data-type="horizontal">
+        <a style="width: 100%" data-role="button" data-theme="a" href="#linkTopic($associationType)">$associationType.getDisplayName($lang)</a>
+       </div>
+      #set($roleWidth = 99.5/$roles.size())
+       <div class="linkGroup associationRolesGroup" data-role="controlgroup" data-type="horizontal">
+          #foreach( $role in $roles )
+           <a style="width: $roleWidth%" data-role="button" data-theme="b" href="#linkTopic($role)">$role.getDisplayName($lang)</a>
+          #end
+       </div>       
+     </tr>
+     #set($associationTableTitles = 1)
+    #end
+    
+   <div class="linkGroup associationPlayersGroup" data-role="controlgroup" data-type="horizontal">
+     #foreach( $role in $roles )
+      #set( $player = $association.getPlayer($role) )
+      <a style="width: $roleWidth%" data-role="button" href="#linkTopic($player)">$player.getDisplayName($lang)</a>
+     #end
+    </div>
+   #end
+ #end
+    </div> 
+#end
+
+
+#set( $instances = $topic.getTopicMap().getTopicsOfType($topic) )##
+#set( $instances = $tmbox.sortTopics($instances,$lang) )##
+#if( $instances.size() > 0 )
+    <div class="instances">
+        <h2>Instances <span class="countnumber">($instances.size())</span></h2>
+      #foreach( $instancetopic in $instances )
+       <div class="linkGroup instancesGroup" data-role="controlgroup" data-type="horizontal">
+          <a style="width: 100%" data-role="button" href="#linkTopic($instancetopic)">$instancetopic.getDisplayName($lang)</a>
+       </div>
+      #end
+    </div>
+
+#end
+</div> ## page
+<div data-role="footer" data-theme="c">
+   <a class="wandoraButton" data-theme="c" data-role="button" href="http://wandora.org" target="_blank">
+    <img src="${staticbase}wandora_logo.png" border="0" alt="wandora.org">
+   </a>
+</div>
+
+
+</div>
+</body>
+</html>

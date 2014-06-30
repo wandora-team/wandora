@@ -1,0 +1,89 @@
+body {
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #ffffff;
+	color: #000000;
+	font-family: Arial,Helvetica,sans-serif;
+	overflow:hidden;
+}
+
+a:link 			{
+	color:#000000;
+	text-decoration:none;
+}
+
+a:visited 		{
+	color:#000000;
+	text-decoration:none;
+}
+
+a:hover 		{ 	
+	color:#000000;
+	text-decoration:underline;
+}
+
+a:active 		{
+	color:#000000;
+	text-decoration:none;
+}
+
+.timeline-default {
+    font-family: Trebuchet MS, Helvetica, Arial, sans serif;
+    font-size: 8pt;
+    border: 1px solid #aaa;
+}
+
+.timeline-event-bubble-body {
+}
+
+.timeline-event-tape {
+    border-radius:3px;
+}
+
+.timeline-band-layer-inner {
+    display: block !important;
+    position: absolute !important;
+}
+
+.timeline-event-icon {
+    display: block !important;
+    position: relative !important;
+    width: 32px;
+    height: 12px !important;
+}
+
+.timeline-event-label {
+    position: relative !important;
+    display: inline-block !important;
+    height: 15px !important;
+    margin: 0 0 0 25px !important;
+}
+
+.zoomBox {
+	position: relative;
+	top: 50%;
+	left:15px;
+	height: 74px;
+	width:36px;
+	z-index:1000;
+	background-color: #eeeeee;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #cccccc));
+  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: linear-gradient(top, #eeeeee, #cccccc);
+  border: 1px solid #ccc;
+  border-bottom: 1px solid #bbb;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  color: #333;
+  line-height: 1;
+}
+
+.zoomButton {
+	padding: 2px 2px 2px 2px;
+}

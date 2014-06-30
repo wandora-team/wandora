@@ -1,0 +1,200 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $ctopic = $topic )##
+<!DOCTYPE HTML>
+<html>
+    <!-- *********************************************************************** -->
+    <!-- ****              WANDORA EMBEDDED HTTP SERVER TEMPLATE            **** -->
+    <!-- ****             (c) 2012 by Eero Lehtonen/Wandora Team            **** -->
+    <!-- *********************************************************************** -->
+    <head>
+        <title>Wandora D3 Matrix</title>
+        <script src="${staticbase}js/d3/d3.min.js"></script>
+        <script src="${staticbase}js/render.js"></script>
+        <link rel="StyleSheet" href="${staticbase}style.css" type="text/css" media="screen">
+    </head>
+    <body>
+        <div id="mainContent">
+              <div id="chart"></div>
+              <div class="footer">
+                  <div class="header">
+                      <h1 class="heading">D3 Matrix</h1>
+                      <button class="info-toggle"></button>
+                  </div>
+                  <div class="description">
+                      <p>
+                          Only the first 1000 topics and those associations with both players available are displayed.
+                          You can adjust the amount of topics loaded with the URL parameter "n".
+                          the view may be panned and zoomed using the mouse. Mousing over an association or role highlights the players.
+                      </p>
+                      <div id="info">
+                          <table class="legend">
+                                <tr class="title">
+                                    <td colspan="2">Edge colors</td>
+                                </tr>
+                                <tr>
+                                    <th align="left">Association type</th>
+                                    <th align="left">color</th>
+                                </tr>
+                          </table>
+                      </div>
+                </div>
+          </div>
+      </div>
+      <script>
+
+#*    *##set( $topicMap = $topic.getTopicMap() )
+#*    *##if($request.getParameter("SIs") )
+#*      *##set($SIText = $request.getParameter("SIs"))
+#*      *##set($SIArray = $SIText.split(","))
+#*      *##set($topics = $listmaker.make() )
+#*      *##foreach($SI in $SIArray)
+#*        *#$topics.add($topicMap.getTopic("$SI") )
+#*      *##end
+#*    *##else
+#*      *##set( $topics = $topicMap.getTopics() )
+#*    *##end
+#*    *##set( $ntopics = $listmaker.make() )
+#*    *##set( $i = 0 )
+#*    *##set( $topicSize = $topics.toArray().size() )
+#*    *##set( $topicHashMap = $mapmaker.make() )
+#*    *##set( $typeList = $listmaker.make() )
+#*    *##if(! $request.getParameter("n") )
+#*      *##set( $n = 1000 )
+#*    *##else
+#*      *##set( $n = $request.getParameter("n"))
+#*    *##end
+
+#*    *##set ($associations = $topicMap.getAssociations() )
+#*    *##set( $assocTypeList = $listmaker.make() )
+#*    *##foreach($association in $associations )
+#*      *##set($assocType = $association.getType() )
+#*      *##if(!$assocTypeList.contains($assocType))
+#*        *##set($temp = $assocTypeList.add($assocType))
+#*      *##end
+#*    *##end
+#*    *##set( $colorMap = $mapmaker.make() )
+#set($colors = ["DarkGray","DarkGoldenrod","RoyalBlue","IndianRed","Violet","MediumAquamarine","YellowGreen",
+"DarkSlateGray","SlateGray","LightSeaGreen","CadetBlue","PaleGoldenrod","PeachPuff","BlueViolet","LightBlue","Magenta","Brown","SeaGreen","SandyBrown",
+"DarkMagenta","LightSlateGray","MediumSlateBlue","Orchid","NavajoWhite","Teal","LightGrey","LimeGreen","LemonChiffon","SlateBlue","PowderBlue","White",
+"SaddleBrown","LightSteelBlue","Turquoise","DarkViolet","DarkKhaki","MediumVioletRed","Yellow","Black","DarkBlue","MidnightBlue","Tomato","GreenYellow",
+"Gold","MediumPurple","Silver","Lime","DarkOrange","LightPink","Wheat","Green","MediumSpringGreen","WhiteSmoke","Purple","LightSalmon","Salmon","MediumOrchid",
+"Moccasin","DarkSalmon","Coral","LightYellow","DarkOrchid","Beige","OrangeRed","MintCream","Orange","Cornsilk","SpringGreen","Maroon","White colors","LightCyan",
+"RosyBrown","Azure","LightGreen","MistyRose","SkyBlue","AntiqueWhite","PaleVioletRed","Lavender","DarkGreen","LightSkyBlue","DodgerBlue","DarkOliveGreen",
+"DarkRed","Crimson","LightCoral","MediumSeaGreen","Seashell","Gray","Blue","Bisque","Peru","Pink","DarkTurquoise","SteelBlue","Olive","DarkCyan","DarkSlateBlue",
+"Sienna","Navy","LightGoldenrodYellow","Honeydew","Indigo","Chartreuse","CornflowerBlue","DarkSeaGreen","OldLace","DeepSkyBlue","LightSalmon","PaleGreen",
+"MediumTurquoise","PaleTurquoise","Goldenrod","FireBrick","Ivory","LawnGreen","FloralWhite","Thistle","MediumBlue","LavenderBlush","BurlyWood","Fuchsia",
+"Gainsboro","Aquamarine","BlanchedAlmond","AliceBlue","Linen","HotPink","Tan","OliveDrab","DimGray","DeepPink","Chocolate","ForestGreen","Khaki","Plum"])
+
+#*    *##foreach($assocType in $assocTypeList)
+#*      *##set($j = $i % 136)
+#*      *##set($temp = $colorMap.put($assocType,$colors.get($j)))
+#*      *##set($i = $i + 1)
+#*    *##end
+#*    *##set($i = 0)
+
+setupChart(
+{
+"nodes" : [
+#* *##foreach ( $topic in $topics )
+#*   *##set( $topicName = "$topic.getOneSubjectIdentifier().toExternalForm()" )##
+#*   *##set( $topicName = $topic.getBaseName() )##
+#*   *##if($i != 0)
+#*     *#,
+#*   *##end
+#*   *##set($temp = $topicHashMap.put( $topic.getID(), $i ) )
+#*   *#{
+#*     *#"name" : "$urlencoder.encode($topic.getBaseName())",
+#*     *##if($topic.getTypes().size() > 0)
+#*     *##set($tempencoder = $urlencoder)
+#*       *#"type" : "$urlencoder.encode($topic.getTypes().get(0).getBaseName())",
+#*     *##else
+#*       *#"type" : "",
+#*     *##end
+#*     *#"id" : "node$i"
+#*   *#}
+#*   *##set($i = $i + 1)
+#*   *##set($temp = $ntopics.add($topic))
+#*   *##if($i == $n)
+#*     *##break  
+#*   *##end
+#* *##end
+]
+,"links":[
+#* *##set( $i = 0 )
+#* *##set( $topics = $topicMap.getTopics() )
+#* *##set( $doneAssocs = $listmaker.make() )
+#* *##foreach( $topic in $ntopics )
+#*   *##set( $assocs = $topic.getAssociations() )
+#*   *##foreach( $assoc in $assocs )
+#*     *##set($roles = $assoc.getRoles())
+
+#*     *##if(!$doneAssocs.contains($assoc) && $roles.toArray().size() >= 2)
+#*       *##if($topicHashMap.get($assoc.getPlayer($roles.toArray().get(0)).getID()) && $topicHashMap.get($assoc.getPlayer($roles.toArray().get(1)).getID()))
+#*         *##if( $i != 0)
+#*           *#,
+#*         *##end
+#*         *#{
+#*           *#"source" : $topicHashMap.get($assoc.getPlayer($roles.toArray().get(0)).getID()),
+#*           *#"target" : $topicHashMap.get($assoc.getPlayer($roles.toArray().get(1)).getID()),
+#*           *#"class" : "assoc",
+#*           *#"type" : "$assoc.getType()",
+#*           *#"player1" : "$urlencoder.encode($assoc.getPlayer($roles.toArray().get(0)).getBaseName())",
+#*           *#"player2" : "$urlencoder.encode($assoc.getPlayer($roles.toArray().get(1)).getBaseName())",
+#*           *#"player1role" : "$urlencoder.encode($roles.toArray().get(0).getBaseName())",
+#*           *#"player2role" : "$urlencoder.encode($roles.toArray().get(1).getBaseName())",
+#*           *#"color" : "$colorMap.get($assoc.getType())",
+#*           *#"id" : "link$i"
+#*         *#}
+#*         *##set($i = $i + 1)
+#*         *##set( $temp = $doneAssocs.add( $assoc ) )
+#*       *##end
+#*     *##end
+#*   *##end
+#* *##end
+#* *##if($topicMap.getTopics().size > 0 && $doneAssocs.size() > 0)
+#*   *#,
+#* *##end
+#* *##set( $ntopics = $listmaker.make() )
+#* *##set( $j = 0)
+#* *##foreach ( $topic in $topics )
+#*   *##set($temp = $ntopics.add($topic))
+#*   *##set( $j = $j + 1)
+#*   *##if($j == $n)  
+#*     *##break
+#*   *##end
+#* *##end
+#* *##foreach( $topic in $ntopics )
+#*   *##set( $types = $topic.getTypes() )
+#*   *##foreach( $type in $types )
+#*     *##if($topicHashMap.get($type.getID()) && $topicHashMap.get($topic.getID()))
+#*       *##if($i > 0)
+#*         *#,
+#*       *##end
+#*       *#{
+#*         *#"source" : $topicHashMap.get($type.getID()),
+#*         *#"target" : $topicHashMap.get($topic.getID()),
+#*         *#"player1" : "$urlencoder.encode($type.getBaseName())",
+#*         *#"player2" : "$urlencoder.encode($topic.getBaseName())",
+#*         *#"player1role" : "Instance",
+#*         *#"player2role" : "Class",
+#*         *#"class" : "type", 
+#*         *#"type" : "Class - Instance",
+#*         *#"id" : "link$i"
+#*       *#}
+#*       *##set($i = $i + 1)
+#*     *##end
+#*   *##end
+#* *##end
+]
+}
+);
+
+#foreach($type in $assocTypeList)
+  #set($color = $colorMap.get($type))
+  var row = d3.select(".legend tbody").append("tr");
+  row.append("td").text("$type.getBaseName()");
+  row.append("td").text("$color");
+#end
+      </script>
+  </body>
+</html>

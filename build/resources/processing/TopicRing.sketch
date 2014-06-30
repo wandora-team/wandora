@@ -1,0 +1,312 @@
+/*
+ * WANDORA
+ * http://wandora.org
+ * 
+ * Copyright (C) 2004-2014 Wandora Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * TopicRing.sketch
+ */
+
+package processing;
+
+import org.wandora.application.gui.topicpanels.processing.*;
+import org.wandora.topicmap.*;
+import processing.core.*;
+import java.util.*;
+
+public class TopicRing extends SketchTemplate {
+
+	
+	ArrayList<PTopic> topics = new ArrayList();
+	ArrayList<PAssociation> associations = new ArrayList();
+	HashMap<PTopic,Integer> associationTypes = new HashMap();
+	
+	
+	PTopic mouseOverTopic = null;
+	int topicBoxHeight = 10;
+	int topicBoxWidth = 10;
+	int AHIDE = 0;
+	int AVIEW = 1;
+	int stageWidth = 920;
+	int stageHeight = 640;
+	int topicColumnX = stageWidth/2 - topicBoxWidth/2;
+	
+	public void setup() {
+	  size(stageWidth, stageHeight);
+	  frameRate(10);
+	  smooth();
+	  PFont topicFont = createFont("Arial", 10);
+	  Iterator<Association> as = null;
+	  try {
+	      as = getTopicMap().getAssociations();
+	  }
+	  catch(Exception e) {}
+	  while(as != null && as.hasNext()) {
+	    Association association = as.next();
+	    String[] triplet = TopicTools.getAsTriplet(association);
+	    String s1 = triplet[1];
+	    String s2 = triplet[2];
+	    PTopic p1 = findTopic(s1);
+	    if(p1 == null) {
+	      p1 = new PTopic(s1);
+	      topics.add(p1);
+	    }
+	    PTopic p2 = findTopic(s2);
+	    if(p2 == null) {
+	      p2 = new PTopic(s2);
+	      topics.add(p2);
+	    }
+	    String ats = triplet[0];
+	    PTopic at = findTopic(ats);
+	    if(at == null) {
+	      at = new PTopic(ats);
+	      topics.add(at);
+	    }
+	    if(associationTypes.get(at) == null) {
+	      associationTypes.put(at, AVIEW);
+	    }
+	    PAssociation a = new PAssociation(p1,p2,at);
+	    associations.add( a );
+	    p1.addAssociation( a, p2 );
+	    p2.addAssociation( a, p1 );
+	  }
+	  Collections.sort(topics);
+	  
+	  float amp = 280;
+	  double r = 2*Math.PI/topics.size();
+	  int i = 0;
+	  for(PTopic t : topics) {
+	    t.x = Math.round(stageWidth/2 + Math.sin(r*i) * amp);
+	    t.y = Math.round(stageHeight/2 + Math.cos(r*i) * amp);
+	    t.w = topicBoxWidth;
+	    t.h = topicBoxHeight;
+	    i++;
+	  }
+	  for(PAssociation a : associations) {
+	    a.prepareDraw();
+	  }
+	}
+	
+	
+	// ------------------------------------------------------------
+	
+	
+	public void draw() {
+	  background(255);
+	  
+	  drawAssociationTypeBoxes();
+	
+	  textAlign(CENTER, CENTER);
+	  for(PAssociation a : associations) {
+	    a.draw();
+	  }
+	  mouseOverTopic = null;
+	  for(PTopic t : topics) {
+	    t.draw();
+	    if(t.mouseOver()) {
+	      mouseOverTopic = t;
+	    }
+	  }
+	  // **** MOUSE OVER TOPIC ****
+	  if(mouseOverTopic != null) {
+	    for(PAssociation a : mouseOverTopic.myAssociations) {
+	      a.drawStrong();
+	    }
+	    for(PTopic t : mouseOverTopic.linkedTopics) {
+	      t.drawStrong();
+	    }
+	    mouseOverTopic.drawStrong();
+	  }
+	}
+	
+	
+	
+	void drawAssociationTypeBoxes() {
+	  textAlign(LEFT, CENTER);
+	  int i=0;
+	  stroke(0,100);
+	  for(PTopic at : associationTypes.keySet()) {
+	    float tw = textWidth(at.name);
+	    int m = associationTypes.get(at);
+	    if(AVIEW == m) {
+	      fill(0xFF333333);
+	      rect(stageWidth-20,10+i*12,10,10);
+	    }
+	    else {
+	      fill(0xFFFFFFFF);
+	      rect(stageWidth-20,10+i*12,10,10);
+	    }
+	    fill(0xFF333333);
+	    text(at.name, stageWidth-tw-25, 13+i*12);
+	    i++;
+	  }
+	}
+	
+	
+	
+	public void mouseReleased() {
+	  PTopic typePressed = null;
+	  int d = 0;
+	  int i = 0;
+	  for(PTopic at : associationTypes.keySet()) {
+	    int od = associationTypes.get(at);
+	    if(mouseX > stageWidth-20 && mouseX < stageWidth-10 && mouseY > 10+i*12 && mouseY < 20+i*12) {
+	      typePressed = at;
+	      if(od == AVIEW) d = AHIDE;
+	      else d = AVIEW;
+	    }
+	    i++;
+	  }
+	  if(typePressed != null) {
+	    associationTypes.put(typePressed, d);
+	  }
+	}
+	
+	
+	
+	PTopic findTopic(String name) {
+	  for(PTopic topic : topics) {
+	    if(name.equals(topic.name)) return topic;
+	  }
+	  return null;
+	}
+	
+	
+	// ----------------------------------------------------------------
+	
+	
+	int boxColor = 0xFFFFFFFF;
+	int boxStrongColor = 0xFFBBBBBB;
+	int boxStrongStrokeColor = 0xFF000000;
+	int boxStrokeColor = 0xFF666666;
+	int boxLabelColor = 0xFF000000;
+	int arcStrokeColor = 0xFF000000;
+	int arcStrongStrokeColor = 0xFF000000;
+	int arcStrokeAlpha = 60;
+	int arcStrongStrokeAlpha = 100;
+	int strokeWidth = 2;
+	
+	
+	  
+	
+	class PTopic implements Comparable {
+	  ArrayList<PAssociation> myAssociations = new ArrayList();
+	  ArrayList<PTopic> linkedTopics = new ArrayList();
+	  float x, y;
+	  float w, h;
+	  String name;
+	  String type;
+	
+	  PTopic(String n) {
+	    this(n, null);
+	  }
+	  PTopic(String n, String t) {
+	    name = n;
+	    type = t;
+	    w = 90;
+	    h = 15;
+	  }
+	  
+	  
+	  void addAssociation(PAssociation a, PTopic lt) {
+	    myAssociations.add(a);
+	    linkedTopics.add(lt);
+	  }
+	 
+	 
+	 
+	 void draw() {
+	   stroke(boxStrokeColor, 90);
+	   fill(boxColor);
+	   rect(x, y, w, h);
+	   fill(boxLabelColor);
+	   text(name, x, y, w, h);
+	 }
+	 
+	 void drawStrong() {
+	   stroke(boxStrongStrokeColor, 100);
+	   fill(boxStrongColor);
+	   rect(x, y, textWidth(name)+8, 16);
+	   fill(boxLabelColor);
+	   textAlign(CENTER, CENTER);
+	   text(name, x, y, textWidth(name)+8, 16);
+	 }
+	 
+	 
+	 
+	 public int compareTo(Object o) {
+	   return name.compareTo(((PTopic) o).name);
+	 }
+	 
+	 boolean mouseOver() {
+	    if(mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) {
+	      return true;
+	    }
+	    return false;
+	 }
+	}
+	
+	
+	// ----------------------------------------------------------------
+	
+	
+	class PAssociation {
+	  PTopic p1;
+	  PTopic p2;
+	  PTopic t;
+	  float x1 = 1;
+	  float y1 = 1;
+	  float x2 = 1;
+	  float y2 = 1;
+	
+	
+	  PAssociation(PTopic t1, PTopic t2, PTopic t) {
+	    this.p1 = t1;
+	    this.p2 = t2;
+	    this.t = t;
+	  }
+	
+	  void prepareDraw() {
+	    x1 = p1.x;
+	    y1 = p1.y;
+	    x2 = p2.x;
+	    y2 = p2.y;
+	  }
+	 
+	 
+	 void draw() {
+	   int m = associationTypes.get(t);
+	   if(m != AHIDE) {
+	     noFill();
+	     stroke(arcStrokeColor, arcStrokeAlpha);
+	     line(x1, y1, x2, y2);
+	   }
+	 }
+	 
+	 
+	 void drawStrong() {
+	   int m = associationTypes.get(t);
+	   if(m != AHIDE) {
+	     noFill();
+	     stroke(arcStrongStrokeColor, arcStrongStrokeAlpha);
+	     for(float i=0; i<strokeWidth; i=i+0.2f) {
+	       line(x1+i, y1+i, x2+i, y2+i);
+	     }
+	   }
+	 }
+	}
+}

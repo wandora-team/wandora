@@ -1,0 +1,139 @@
+#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $topicMap = $topic.getTopicMap() )
+#macro( linkTopic $t )##
+${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
+#end##
+<html>
+<!-- *********************************************************************** -->
+<!-- ****              WANDORA EMBEDDED HTTP SERVER TEMPLATE            **** -->
+<!-- ****             (c) 2014 by Grip Studios Interactive Oy           **** -->
+<!-- *********************************************************************** -->
+
+<head>
+ <title>Wandora query console</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link rel="StyleSheet" href="${staticbase}style.css" type="text/css" media="screen">
+</head>
+<body>
+#parse( "${templatesdir}header.vhtml" )
+
+<!-- *************************************************** -->
+<!-- ********** TOPIC'S DISPLAY NAME & SI ************** -->
+<!-- *************************************************** -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="thetopic">
+      Query console<br>
+    </td>
+    <td width="15" class="thetopic">
+     <br>
+    </td>
+  </tr>
+</table>
+
+#if(!$!qtype) #set($qtype="query") #end
+<form method="POST">
+    <input type="hidden" name="action" value="query"></input>
+    <input type="hidden" name="lang" value="${lang}"></input>
+    
+    <h3>Query type</h3>
+    <label for="qtypequery">Wandora query</label>
+    <input style="margin-right: 30px" type="radio" name="qtype" value="query" id="qtypequery" #if($qtype=="query")checked="true"#end></input>
+    <label for="qtypetmql">TMQL</label>
+    <input type="radio" name="qtype" value="tmql" id="qtypetmql" #if($qtype=="tmql")checked="true"#end></input><br></br>
+    
+    <h3>Query</h3>
+    <textarea name="query" style="width: 100%; height:300px">$!query</textarea><br></br>
+    
+    <input type="submit" value="Execute query"></input>
+</form>
+
+#if( $!query )
+    #if($qtype=="query")
+        #set( $res = $queryrunner.runQueryCatchException( $query , $wandoraClass ) )
+        #if( !$res.isException() )
+            #set( $rows = $res.getRows() )
+            #if( ! $rows.isEmpty() )
+                <table cellspacing="0" cellpadding="5" width="100%" style="border-collapse: collapse;">
+                    <tr>
+                        #set( $firstRow = $rows.get(0) )
+                        #foreach( $role in $firstRow.getRoles() )
+                            <th>$role</th>
+                        #end
+                    </tr>
+                    #foreach( $row in $rows )
+                        <tr>
+                            #foreach( $value in $row.getValues() )
+                                <td class="topiccell">
+                                    #if(!$value)
+                                    #elseif( $!value.getOneSubjectIdentifier() )
+                                        $value.getDisplayName($lang)
+                                    #else
+                                        $value.toString()
+                                    #end
+                                </td>
+                            #end
+                        </tr>
+                    #end
+                </table>
+            #end
+        #else
+            #set($emessage="")
+            #set($eclass="")
+            #if($res.getException())
+                #if($res.getException().getMessage())
+                    #set($emessage=$res.getException().getMessage())
+                #end
+                #set($eclass=$res.getException().getClass().getName())
+            #end
+            
+            #if($eclass=="javax.script.ScriptException")
+                <p>$emessage</p>
+            #elseif($emessage.startsWith("Couldn't get directive from script"))
+                <p>
+                    Query script didn't return a directive object.
+                </p>
+            #else
+                <pre>$res.getStackTrace();</pre>
+            #end
+        #end
+    #elseif($qtype=="tmql")
+        #set( $result = $tmqlrunner.runTMQLCatchException($topicMap, $query) )
+        #if( !$result.isException() )
+            <table cellspacing="0" cellpadding="5" width="100%" style="border-collapse: collapse;">
+                <tr>
+                    #foreach( $role in $result.getColumns() )
+                        <th>$role</th>
+                    #end
+                </tr>
+                #foreach( $row in $result.getData() )
+                    <tr>
+                        #foreach( $value in $row )
+                            <td class="topiccell">
+                                #if(!$value)
+                                #elseif( $!value.getOneSubjectIdentifier() )
+                                    $value.getDisplayName($lang)
+                                #else
+                                    $value.toString()
+                                #end
+                            </td>
+                        #end
+                    </tr>
+                #end
+            </table>
+        #else
+            <pre>$result.getStackTrace();</pre>
+        #end    
+    #end
+#end
+
+<h3>Documentation</h3>
+<ul>
+<li><a href="http://wandora.org/wiki/Query_language">Wandora query language</a></li>
+<li><a href="http://wandora.org/wiki/TMQL">TMQL at Wandora Wiki</a></li>
+<li><a href="http://tmql4j.topicmapslab.de/">TMQL4J documentation</a></li>
+</ul>
+
+#parse( "${templatesdir}footer.vhtml" )
+</body>
+</html>

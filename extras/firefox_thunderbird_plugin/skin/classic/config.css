@@ -1,0 +1,11 @@
+#wandora-info {
+	border-top: 1px solid black !important ;
+	border-bottom: 1px solid black !important ;
+	border-left: 1px solid black !important ;
+	border-right: 1px solid black !important ;
+	background-color: #acc4de !important ;
+	-moz-border-top-colors: black ;
+	-moz-border-bottom-colors: black ;
+	-moz-border-left-colors: black ;
+	-moz-border-right-colors: black ;
+}

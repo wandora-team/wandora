@@ -1,0 +1,13 @@
+Phase:	person
+//Input: Token SpaceToken Lookup
+Options: control = appelt
+
+Rule:	City
+Priority: 50
+(
+ {Lookup.majorType == "name", Lookup.minorType == "forename"} 
+ ({SpaceToken})+
+ {Lookup.majorType == "name", Lookup.minorType == "surname"}
+)
+:person -->
+  :person.Person = {kind = "fullname"}

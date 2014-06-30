@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options>
+    <!--
+ * http://wandora.orgwiki/Wandora_modules_framework for documentation
+        on this file.
+    -->
+    <!-- Logging to stdout -->
+    <module class="org.wandora.modules.LoggingModule">
+    </module>
+    
+    <!-- Uses Wandora as the source for the topic map -->
+    <module class="org.wandora.modules.topicmap.WandoraTopicMapManager"></module>
+    
+    <!-- This module defines a default context for template managers. The
+         Template managers are defined in bundle configs if they use templates. -->
+    <module class="org.wandora.modules.servlet.StaticTemplateContextProvider">
+        <param key="context.urlencoder" instance="org.wandora.modules.velocityhelpers.URLEncoder"></param>
+        <param key="context.helper" instance="org.wandora.utils.velocity.GenericVelocityHelper"/>
+        <param key="context.tmbox" instance="org.wandora.topicmap.TMBox"></param>
+        <param key="context.listmaker" instance="org.wandora.modules.velocityhelpers.InstanceMaker">
+            <param key="1">java.util.ArrayList</param></param>
+        <param key="context.collectionmaker" instance="org.wandora.modules.velocityhelpers.InstanceMaker">
+            <param key="1">java.util.HashSet</param></param>
+        <param key="context.mapmaker" instance="org.wandora.modules.velocityhelpers.InstanceMaker">
+            <param key="1">java.util.HashMap</param></param>
+    </module>
+    
+    <!-- Apache Velocity template engine is needed as a separate module. No reason to have
+         every bundle make its own engine (although they still can if they really do need to)
+         so they just import this one. -->
+    <module class="org.wandora.modules.servlet.VelocityEngineModule">
+        <!-- these parameters are all passed as is to the engine, refer to Apache Velocity
+             documentation for more information -->
+        <param key="resource.loader">file</param>
+        <param key="file.resource.loader.class">org.apache.velocity.runtime.resource.loader.FileResourceLoader</param>
+        <!-- Bundles have to locate their templates relative to this, not relative to the
+             bundle directory. The relativeHome variable is set with this in mind. -->
+        <param key="file.resource.loader.path">${home}</param>
+        <param key="file.resource.loader.cache">false</param>
+        <param key="file.resource.loader.modificationCheckInterval">0</param>
+        <param key="runtime.log.error.stacktrace">true</param>
+        <param key="runtime.log.warn.stacktrace">false</param>
+        <param key="velocimacro.permissions.allow.inline.local.scope">false</param>
+        <param key="velocimacro.permissions.allow.inline.to.replace.global">true</param>
+        <param key="velocimacro.library.autoreload">true</param>
+    </module>
+
+</options>

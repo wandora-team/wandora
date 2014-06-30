@@ -1,0 +1,146 @@
+
+body {
+    font-family:sans-serif;
+    overflow:hidden;
+    margin: 0;
+    color:#353857;
+}
+
+h1{
+    font-size: 18px;
+    letter-spacing: -1px;
+    font-family: Arial,sans-serif;
+    font-weight: normal;
+    margin: 0px;
+}
+
+.footer{
+    border-top: 1px solid #cccccc;
+    position: fixed;
+    width:98%;
+    background-color: #eeeeee;
+    bottom: 0;
+    padding: 5px 1% 5px 1%;
+}
+
+.header .heading {
+    display: inline;
+}
+
+.info-toggle{
+    color:#353857;
+    background-color:transparent;
+    border: none;
+    padding: 0px;
+    cursor: pointer;
+    float: right;
+    width: 14px;
+    height: 14px;
+    overflow: hidden;
+    background-image: url("images/icon_info.png");
+    margin-top: 3px;
+}
+
+.info-toggle.on{
+    background-image: url("images/icon_close.png");
+}
+
+.description{
+    display: none;
+    font-size: 12px;
+}
+
+.visible{
+    display: block;
+}
+
+.legend{
+    border: 1px solid black;
+    border-spacing: 0;
+}
+
+.legend .title{
+    border-bottom: 1px solid black;
+}
+
+.legend .title td{
+    padding: 5px 10px;
+    font-size: 14px;
+    border-bottom: 1px solid black;
+}
+
+.legend td{
+    font-size: 10px;
+    padding: 2px;
+}
+
+.legend th {
+    padding-top: 5px;
+    font-size: 10px;
+    font-style: italic;
+    font-weight: normal;
+    margin: 0;
+}
+
+.legend td:first-child,
+.legend th:first-child{
+    padding-left:10px;
+    padding-right:5em;
+}
+
+.legend td:last-child,
+.legend th:first-child{
+    padding-right:10px;
+}
+
+.legend tr:last-child td{
+    padding-bottom: 5px;
+}
+
+#chart {
+    position:absolute;
+    top: 0px;
+    left: 0px;
+    z-index:0;
+    width:100%;
+    height:100%;
+}
+
+circle.node {
+    cursor: pointer;
+    stroke: #3182bd;
+    stroke-width: 1.5px;
+}
+
+.circle{
+    fill :#3182bd;
+}
+
+line.link {
+    fill: none;
+    stroke: #9ecae1;
+    stroke-width: 1.5px;
+  
+}
+
+line.assoc {
+    fill: none;
+    stroke: #FF0000;
+    stroke-width: 1.5px;
+    z-index:0;
+}
+
+line.type {
+    fill: none;
+    stroke: #0000FF;
+    stroke-width: 1.5px;
+}
+
+.nodetext { 
+    pointer-events: none;
+    font: 10px sans-serif;
+}
+
+.mouseover {
+    fill: #FF0000;
+}

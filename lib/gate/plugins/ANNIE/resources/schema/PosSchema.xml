@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<schema xmlns="http://www.w3.org/2000/10/XMLSchema">
+	<!-- XSchema deffinition for pos-->
+	<element name="pos">
+		<complexType>
+			<attribute name="time" type="integer" use="required"/>
+			<attribute name="text"  type="string"   use="required" />
+			<attribute name="cat"   use="required">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="N"/>
+						<enumeration value="PropN"/>
+						<enumeration value="ADJ"/>
+						<enumeration value="DET"/>
+						<enumeration value="VTRANS"/>
+						<enumeration value="PREP"/>
+						<enumeration value="V"/>
+						<enumeration value="ADV"/>
+					</restriction>
+				</simpleType>
+			</attribute>
+			<attribute name="gender"   use="required">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="M"/>
+						<enumeration value="F"/>
+						<enumeration value="N"/>
+					</restriction>
+				</simpleType>
+			</attribute>
+			<attribute name="number"   use="required">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="Sg"/>
+						<enumeration value="Pl"/>
+					</restriction>
+				</simpleType>
+			</attribute>
+			
+		</complexType>
+	</element>
+</schema>

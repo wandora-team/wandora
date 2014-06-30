@@ -1,0 +1,134 @@
+body{
+    font-family:sans-serif;
+    overflow:hidden;
+    margin: 0;
+    color:#353857;
+
+	
+    h1{
+        font-size: 18px;
+        letter-spacing: -1px;
+        font-family: Arial,sans-serif;
+        font-weight: normal;
+        margin: 0px;
+    }
+
+    .footer{
+        border-top: 1px solid #cccccc;
+        position: fixed;
+        width:98%;
+        background-color: #eeeeee;
+        bottom: 0;
+        padding: 5px 1% 5px 1%;
+    }
+
+    .header .heading{
+        display: inline;
+    }
+
+    .info-toggle{
+        color:#353857;
+        background-color:transparent;
+        border: none;
+        padding: 0px;
+        cursor: pointer;
+        float: right;
+        width: 14px;
+        height: 14px;
+        overflow: hidden;
+        background-image: url("images/icon_info.png");
+        margin-top: 3px;
+    }
+
+    .info-toggle.on{
+        background-image: url("images/icon_close.png");
+    }
+
+    .description{
+        display: none;
+        font-size: 12px;
+    }
+
+    .visible{
+        display: block;
+    }
+
+    .legend{
+        border: 1px solid black;
+        border-spacing: 0;
+    }
+
+    .legend .title{
+        border-bottom: 1px solid black;
+    }
+
+    .legend .title td{
+        padding: 5px 10px;
+        font-size: 16px;
+        border-bottom: 1px solid black;
+    }
+
+    .legend td{
+        font-size: 10px;
+        padding: 2px;
+    }
+
+    .legend th {
+        padding-top: 5px;
+        font-size: 10px;
+        font-style: italic;
+        font-weight: normal;
+        margin: 0;
+    }
+
+    .legend td:first-child,
+    .legend th:first-child{
+        padding-left:10px;
+        padding-right:5em;
+    }
+
+    .legend td:last-child,
+    .legend th:first-child{
+        padding-right:10px;
+    }
+
+    .legend tr:last-child td{
+        padding-bottom: 5px;
+    }
+
+    #chart {
+        width:100%;
+        height:100%;
+	
+        #svg{
+            .link{
+                stroke-width: 1px;
+            }
+
+            .pseudo{
+                circle{
+                }
+            }
+
+            .node {
+                &.hover{
+                    rect{
+                        fill:green;
+                    }
+                }
+
+                cursor: pointer;
+
+                rect{
+                    //fill:red;
+                    stroke:black;
+                }
+
+                text{
+                    font-family: monospace;
+                    text-anchor:middle;
+                }
+            }
+        }
+    }
+}
