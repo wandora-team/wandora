@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="http://www.w3.org/1999/02/22-rdf-syntax-ns" uri="www.w3.org/1999/02/22-rdf-syntax-ns"/>
-    <system systemId="http://www.mozilla.org/2004/em-rdf" uri="www.mozilla.org/2004/em-rdf.xml"/>
-</catalog>
