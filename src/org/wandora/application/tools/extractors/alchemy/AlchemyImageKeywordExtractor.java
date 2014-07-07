@@ -42,6 +42,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.IObox;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -124,7 +125,7 @@ public class AlchemyImageKeywordExtractor extends AbstractAlchemyExtractor {
                 String tempFileName = "temp/temp"+(tempCounter % 10)+".jpg";
                 ImageIO.write(image, "jpg", new File(tempFileName));
                 byte[] imageData = readFile(new File(tempFileName));
-                //IObox.deleteFile(tempFileName);
+                IObox.deleteFile(tempFileName);
                 
                 // Build url for the request
                 String alchemyURL = ALCHEMY_URL+"calls/image/ImageGetRankedImageKeywords";

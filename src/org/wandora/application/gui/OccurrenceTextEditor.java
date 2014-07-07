@@ -125,6 +125,7 @@ public class OccurrenceTextEditor extends TextEditor {
                 "Alchemy category extractor", new AlchemyCategoryExtractor(), UIBox.getIcon("gui/icons/extract_alchemy.png"),
                 "Alchemy language extractor", new AlchemyLanguageExtractor(), UIBox.getIcon("gui/icons/extract_alchemy.png"),
                 "Alchemy sentiment extractor", new AlchemySentimentExtractor(), UIBox.getIcon("gui/icons/extract_alchemy.png"),
+                "Alchemy relation extractor", new AlchemyRelationExtractor(), UIBox.getIcon("gui/icons/extract_alchemy.png"),
             },
             "Translate", new Object[] {
                 "Translate with Google...", UIBox.getIcon("gui/icons/google_translate.png"),

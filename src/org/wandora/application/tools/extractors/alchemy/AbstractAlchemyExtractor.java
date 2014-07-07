@@ -105,7 +105,14 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
     public static final String ALCHEMY_SCORE_SI = "http://wandora.org/si/alchemyapi/score";
     public static final String ALCHEMY_SCORE_TYPE_SI = "http://wandora.org/si/alchemyapi/score/type";
 
-
+    public static final String ALCHEMY_SUBJECT_SI = "http://wandora.org/si/alchemyapi/subject";
+    public static final String ALCHEMY_ACTION_SI = "http://wandora.org/si/alchemyapi/action";
+    public static final String ALCHEMY_OBJECT_SI = "http://wandora.org/si/alchemyapi/object";
+    public static final String ALCHEMY_RELATION_SI = "http://wandora.org/si/alchemyapi/relation";
+    
+    public static final String ALCHEMY_VERB_SI = "http://wandora.org/si/alchemyapi/verb";
+    public static final String ALCHEMY_TENSE_SI = "http://wandora.org/si/alchemyapi/tense";
+    
     
 
     @Override
@@ -445,6 +452,71 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
         return null;
     }
 
+    // --- Relations ---
+    
+    public Topic getSubjectTopic(String subject, TopicMap tm) throws TopicMapException {
+        if(subject != null) {
+            subject = subject.trim();
+            if(subject.length() > 0) {
+                Topic subjectTopic=getOrCreateTopic(tm, ALCHEMY_SUBJECT_SI+"/"+urlEncode(subject), subject);
+                Topic subjectTypeTopic = getSubjectType(tm);
+                subjectTopic.addType(subjectTypeTopic);
+                return subjectTopic;
+            }
+        }
+        return null;
+    }
+    public Topic getActionTopic(String action, TopicMap tm) throws TopicMapException {
+        if(action != null) {
+            action = action.trim();
+            if(action.length() > 0) {
+                Topic actionTopic=getOrCreateTopic(tm, ALCHEMY_ACTION_SI+"/"+urlEncode(action), action);
+                Topic actionTypeTopic = getActionType(tm);
+                actionTopic.addType(actionTypeTopic);
+                return actionTopic;
+            }
+        }
+        return null;
+    }
+    public Topic getObjectTopic(String object, TopicMap tm) throws TopicMapException {
+        if(object != null) {
+            object = object.trim();
+            if(object.length() > 0) {
+                Topic objectTopic=getOrCreateTopic(tm, ALCHEMY_OBJECT_SI+"/"+urlEncode(object), object);
+                Topic objectTypeTopic = getObjectType(tm);
+                objectTopic.addType(objectTypeTopic);
+                return objectTopic;
+            }
+        }
+        return null;
+    }
+    public Topic getVerbTopic(String verb, TopicMap tm) throws TopicMapException {
+        if(verb != null) {
+            verb = verb.trim();
+            if(verb.length() > 0) {
+                Topic verbTopic=getOrCreateTopic(tm, ALCHEMY_VERB_SI+"/"+urlEncode(verb), verb);
+                Topic verbTypeTopic = getVerbType(tm);
+                verbTopic.addType(verbTypeTopic);
+                return verbTopic;
+            }
+        }
+        return null;
+    }
+    public Topic getTenseTopic(String tense, TopicMap tm) throws TopicMapException {
+        if(tense != null) {
+            tense = tense.trim();
+            if(tense.length() > 0) {
+                Topic tenseTopic=getOrCreateTopic(tm, ALCHEMY_TENSE_SI+"/"+urlEncode(tense), tense);
+                Topic tenseTypeTopic = getTenseType(tm);
+                tenseTopic.addType(tenseTypeTopic);
+                return tenseTopic;
+            }
+        }
+        return null;
+    }
+    
+    // --- Types ---
+    
     public Topic getRelevanceType(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, ALCHEMY_ENTITY_RELEVANCE_SI, "Alchemy Entity Relevance", getAlchemyType(tm));
     }
@@ -456,8 +528,26 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
     public Topic getEntityType(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, ALCHEMY_ENTITY_SI, "Alchemy Entity", getAlchemyType(tm));
     }
-
-
+    
+    public Topic getSubjectType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_SUBJECT_SI, "Alchemy Subject", getAlchemyType(tm));
+    }
+    public Topic getActionType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_ACTION_SI, "Alchemy Action", getAlchemyType(tm));
+    }
+    public Topic getObjectType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_OBJECT_SI, "Alchemy Object", getAlchemyType(tm));
+    }
+    public Topic getRelationType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_RELATION_SI, "Alchemy Relation", getAlchemyType(tm));
+    }
+    public Topic getVerbType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_VERB_SI, "Alchemy Verb", getAlchemyType(tm));
+    }
+    public Topic getTenseType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_TENSE_SI, "Alchemy Tense", getAlchemyType(tm));
+    }
+    
     public Topic getKeywordType(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, ALCHEMY_KEYWORD_SI, "Alchemy Keyword", getAlchemyType(tm));
     }

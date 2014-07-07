@@ -67,6 +67,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
 
 
 
+    @Override
     public void execute(Wandora admin, Context context) {
         Iterator topics = null;
         if(preferredContext != null) topics = preferredContext.getContextObjects();

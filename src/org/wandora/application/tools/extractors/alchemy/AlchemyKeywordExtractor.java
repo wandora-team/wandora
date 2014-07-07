@@ -52,27 +52,31 @@ public class AlchemyKeywordExtractor extends AbstractAlchemyExtractor {
 
     @Override
     public String getDescription(){
-        return "Extracts keywords out of given text using Orchestr8's AlchemyAPI service. Read more at http://www.alchemyapi.com/.";
+        return "Extracts keywords out of text using AlchemyAPI. Read more at http://www.alchemyapi.com/";
     }
 
 
 
+    @Override
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         return _extractTopicsFrom(ExtractHelper.getContent(url),topicMap);
     }
 
 
+    @Override
     public boolean _extractTopicsFrom(File file, TopicMap topicMap) throws Exception {
         return _extractTopicsFrom(new FileInputStream(file),topicMap);
     }
 
 
+    @Override
     public boolean _extractTopicsFrom(InputStream in, TopicMap topicMap) throws Exception {
         String data = IObox.loadFile(in, defaultEncoding);
         return _extractTopicsFrom(data, topicMap);
     }
 
 
+    @Override
     public boolean _extractTopicsFrom(String data, TopicMap topicMap) throws Exception {
         String apikey = solveAPIKey();
         if(data != null && data.length() > 0) {
@@ -206,11 +210,15 @@ public class AlchemyKeywordExtractor extends AbstractAlchemyExtractor {
         
 
 
+        @Override
         public void startDocument() throws SAXException {
         }
+        
+        @Override
         public void endDocument() throws SAXException {
         }
 
+        @Override
         public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
             if(parent.forceStop()){
                 throw new SAXException("User interrupt");
@@ -261,6 +269,7 @@ public class AlchemyKeywordExtractor extends AbstractAlchemyExtractor {
 
 
 
+        @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
             // System.out.println("   "+state);
             switch(state) {
@@ -336,6 +345,7 @@ public class AlchemyKeywordExtractor extends AbstractAlchemyExtractor {
 
 
 
+        @Override
         public void characters(char[] ch, int start, int length) throws SAXException {
             switch(state){
                 case STATE_RESULTS_STATUS:
@@ -357,23 +367,32 @@ public class AlchemyKeywordExtractor extends AbstractAlchemyExtractor {
             }
         }
 
+        @Override
         public void warning(SAXParseException exception) throws SAXException {
         }
 
+        @Override
         public void error(SAXParseException exception) throws SAXException {
             parent.log("Error parsing XML document at "+exception.getLineNumber()+","+exception.getColumnNumber(),exception);
         }
 
+        @Override
         public void fatalError(SAXParseException exception) throws SAXException {
             parent.log("Fatal error parsing XML document at "+exception.getLineNumber()+","+exception.getColumnNumber(),exception);
         }
 
 
+        @Override
         public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {}
+        @Override
         public void processingInstruction(String target, String data) throws SAXException {}
+        @Override
         public void startPrefixMapping(String prefix, String uri) throws SAXException {}
+        @Override
         public void endPrefixMapping(String prefix) throws SAXException {}
+        @Override
         public void setDocumentLocator(org.xml.sax.Locator locator) {}
+        @Override
         public void skippedEntity(String name) throws SAXException {}
 
     }

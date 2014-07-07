@@ -28,7 +28,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.alchemy.AlchemyEntityExtractor;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -61,12 +60,13 @@ public class AlchemyEntityOccurrenceExtractor extends AbstractOccurrenceExtracto
 
     @Override
     public String getDescription(){
-        return "Extracts entities out of given occurrences using Orchestr8's AlchemyAPI service. Read more at http://www.alchemyapi.com/.";
+        return "Extracts entities out of given occurrences using AlchemyAPI. Read more at http://www.alchemyapi.com/.";
     }
 
 
 
 
+    @Override
     public boolean _extractTopicsFrom(String occurrenceData, Topic masterTopic, TopicMap topicMap, Wandora wandora) throws Exception {
         AlchemyEntityExtractor extractor = new AlchemyEntityExtractor();
         extractor.setToolLogger(this.getDefaultLogger());
@@ -76,7 +76,7 @@ public class AlchemyEntityOccurrenceExtractor extends AbstractOccurrenceExtracto
         if(masterTopic != null) masterTerm = masterTopic.getOneSubjectIdentifier().toExternalForm();
         if(occurrenceData != null && occurrenceData.length() > 0) {
             if(apikey != null) apikey = apikey.trim();
-            if(apikey.length() > 0) {
+            if(apikey != null && apikey.length() > 0) {
                 String content = null;
                 content = occurrenceData;
 
@@ -84,9 +84,9 @@ public class AlchemyEntityOccurrenceExtractor extends AbstractOccurrenceExtracto
                 String alchemyData = "apikey="+URLEncoder.encode(apikey, "utf-8")+"&linkedData=1&disambiguate=1&outputMode=xml&text="+URLEncoder.encode(content, "utf-8");
                 String result = AlchemyEntityExtractor.sendRequest(new URL(alchemyURL), alchemyData, "application/x-www-form-urlencoded", "POST");
 
-                System.out.println("----------------------------------------");
-                System.out.println("Occurrence == "+content);
-                System.out.println("Alchemy returned == "+result);
+                // System.out.println("----------------------------------------");
+                // System.out.println("Occurrence == "+content);
+                // System.out.println("Alchemy returned == "+result);
 
                 javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
                 factory.setNamespaceAware(true);

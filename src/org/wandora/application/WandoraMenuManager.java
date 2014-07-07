@@ -1363,6 +1363,7 @@ public class WandoraMenuManager {
                             "With Alchemy keyword extractor...", new AlchemyKeywordOccurrenceExtractor(), UIBox.getIcon("gui/icons/extract_alchemy.png"),
                             "With Alchemy category extractor...", new AlchemyCategoryOccurrenceExtractor(), UIBox.getIcon("gui/icons/extract_alchemy.png"),
                             "With Alchemy sentiment extractor...", new AlchemySentimentOccurrenceExtractor(), UIBox.getIcon("gui/icons/extract_alchemy.png"),
+                            "With Alchemy relation extractor...", new AlchemyRelationOccurrenceExtractor(), UIBox.getIcon("gui/icons/extract_alchemy.png"),
                             "---",
                             "With OpenCalais classifier...", new OpenCalaisOccurrenceExtractor(), UIBox.getIcon("gui/icons/extract_opencalais.png"),
                             "With Yahoo! YQL term extractor...", new YahooTermOccurrenceExtractor(), UIBox.getIcon("gui/icons/extract_yahoo.png"),
