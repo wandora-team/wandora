@@ -73,22 +73,24 @@ public class RekognitionExtractor extends AbstractRekognitionExtractor{
     @Override
     public void execute(Wandora wandora, Context context) {
         
+        String[] forceUrls = this.getForceUrls();
+                
         try {
             if(ui == null){
-                ui = new RekognitionExtractorUI();
+                ui = new RekognitionExtractorUI(forceUrls);
             }
-            
+
             ui.open(wandora,context);
-            
+
             if(ui.wasAccepted()) handleUI(wandora, context);
-            
-            
+
+
         } catch (TopicMapException e) {
         } finally {
             setState(WAIT);
         }
-
     }
+    
     
     private void handleUI(Wandora wandora, Context context) throws TopicMapException {
         WandoraTool[] extractors;

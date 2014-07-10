@@ -201,8 +201,9 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
      * The key-value-pairs are represented as a hash where JSON.KEY corresponds to
      * a flattened key and JSON.VALUE to the corresponding value. For JSON
      * primitives (Integer, Double, String) we simply create corresponding hashes.
-     * For JSON objects we create a dotted key based on the JSON structure. For
-     * arrays we use the array index as a key.
+     * For JSON objects we create a flattened key based on the JSON structure. For
+     * arrays we use the array index as a key. The flattened keys are concatenation
+     * of the original key structure separated by FLATTENING_DELIMITER.
      * 
      * Example:
      * {

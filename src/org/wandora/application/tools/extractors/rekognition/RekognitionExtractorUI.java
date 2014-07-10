@@ -22,9 +22,6 @@
 package org.wandora.application.tools.extractors.rekognition;
 
 import java.awt.Component;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JCheckBox;
@@ -51,14 +48,28 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
     private JDialog dialog = null;
     private Context context = null;
     
+    private String[] forceUrls = null;
+    
     private HashMap<String,JCheckBox> faceJobs;
     
     private static final String API_ROOT = AbstractRekognitionExtractor.API_ROOT;
     
     /**
-     * Creates new form RekognitionExtractorUI
+     * No URLs given - get them from the URL field.
      */
     public RekognitionExtractorUI() {
+
+        this(null);
+        
+    }
+    
+    /**
+     * 
+     * The default constructor for the UI.
+     * 
+     * @param urls the URLs to use for extraction
+     */
+    public RekognitionExtractorUI(String[] urls) {
         initComponents();
         
         //Hook up checkboxes
@@ -75,6 +86,20 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         faceJobs.put("part_detail",faceJobCheckPartDetail);
         faceJobs.put("race",faceJobCheckRace);
         faceJobs.put("celebrity",faceJobCheckCelebrity);
+        
+        
+        if(urls != null){
+            this.forceUrls = urls;
+            this.urlField.setVisible(false);
+            this.getContextButton.setVisible(false);
+        } else {
+            this.urlField.setVisible(true);
+            this.getContextButton.setVisible(true);
+        }
+        
+        if(auth == null){
+            this.forgetButton.setEnabled(false);
+        }
         
         
     }
@@ -94,7 +119,7 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         dialog = new JDialog(w, true);
         dialog.setSize(800, 500);
         dialog.add(this);
-        dialog.setTitle("Rekognition API extractor");
+        dialog.setTitle("ReKognition API extractor");
         UIBox.centerWindow(dialog, w);
 
         faceCelebrityDetails.setVisible(faceJobCheckCelebrity.isSelected());
@@ -102,7 +127,7 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         dialog.setVisible(true); 
     }
     
-    public WandoraTool[] getExtractors(RekognitionExtractor tool) throws TopicMapException{
+    public WandoraTool[] getExtractors(RekognitionExtractor tool) throws TopicMapException, NumberFormatException{
         
         ArrayList<WandoraTool> wts = new ArrayList();
         
@@ -112,11 +137,25 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         
         Component selectedTab = rekognitionTabs.getSelectedComponent();
         
+        String apiKey = RekognitionExtractorUI.auth.get(RekognitionAuthenticationDialog.KEY_KEY);
+        String apiSecret = RekognitionExtractorUI.auth.get(RekognitionAuthenticationDialog.SECRET_KEY);
+        
         if (selectedTab.equals(faceDetectorTab)){
-            RekognitionFaceDetector faceDetector = getFaceDetector();
-            if(faceDetector != null){
-                wts.add(faceDetector);
+            
+            String[] imageUrls;
+            if(forceUrls == null){
+                imageUrls = new String[]{urlField.getText()};
+            } else {
+                imageUrls = forceUrls;
             }
+            
+                
+            for (String imageUrl : imageUrls) {
+                RekognitionFaceDetector faceDetector = getFaceDetector(imageUrl, apiKey, apiSecret);
+                if(faceDetector != null) wts.add(faceDetector);
+                
+            }
+            
         }
         
         return wts.toArray(new WandoraTool[]{});
@@ -124,46 +163,27 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         
     }
     
-    private RekognitionFaceDetector getFaceDetector() throws TopicMapException{
-        RekognitionFaceDetector faceDetector = null;
-        String imageUrl = urlField.getText();
-        String apiKey = RekognitionExtractorUI.auth.get(RekognitionAuthenticationDialog.KEY_KEY);
-        String apiSecret = RekognitionExtractorUI.auth.get(RekognitionAuthenticationDialog.SECRET_KEY);
+    private RekognitionFaceDetector getFaceDetector(String imageUrl, String apiKey, String apiSecret) throws NumberFormatException{
         
-        if(validateURL(imageUrl)){
-            
-            String jobs = "face" + getFaceJobs();
-            
-            faceDetector = new RekognitionFaceDetector();
-            String extractUrl = API_ROOT + 
-                    "?api_key="    + apiKey +
-                    "&api_secret=" + apiSecret +
-                    "&jobs="       + jobs +
-                    "&urls="       + imageUrl;
+        String jobs = "face" + getFaceJobs();
 
-            faceDetector.setForceUrls(new String[]{extractUrl});
-            try {
-                Object treshold = faceCelebrityTreshold.getValue();
-                faceDetector.setCelebrityNaming(faceAssociateCelebrity.isSelected(), (double)treshold);
+        RekognitionFaceDetector faceDetector = new RekognitionFaceDetector();
+        String extractUrl = API_ROOT + 
+                "?api_key="    + apiKey +
+                "&api_secret=" + apiSecret +
+                "&jobs="       + jobs +
+                "&urls="       + imageUrl;
 
-            } catch (Exception e) {
-                throw new TopicMapException("Invalid celebrity association treshold");
-            }
-        } else {
-            String cause = (imageUrl.length() == 0) ? "Absent Image URL" : "Invalid Image URL";
-            throw new TopicMapException(cause);
-        }
-        return faceDetector;
-    }
-    
-    private boolean validateURL(String urlString){
+        faceDetector.setForceUrls(new String[]{extractUrl});
         try {
-                URL u = new URL(urlString);
-                u.toURI();
-        } catch (MalformedURLException | URISyntaxException e) {
-            return false;
+            String treshold = faceCelebrityTreshold.getText();
+            faceDetector.setCelebrityNaming(faceAssociateCelebrity.isSelected(), Double.parseDouble(treshold));
+
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Invalid celebrity association treshold");
         }
-        return true;
+        
+        return faceDetector;
     }
     
     private String getFaceJobs() {

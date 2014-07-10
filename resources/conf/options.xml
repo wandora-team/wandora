@@ -767,7 +767,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.ocr.OCRExtractor</class>
             </item>
             <item>
-               <name>Rekognition extractor...</name>
+               <name>ReKognition extractor...</name>
                <class>org.wandora.application.tools.extractors.rekognition.RekognitionExtractor</class>
             </item>
          </item>
