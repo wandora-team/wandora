@@ -42,7 +42,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
-public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
+abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     
     protected static final String API_ROOT = "http://rekognition.com/func/api/";
     
@@ -74,6 +74,14 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap t) throws Exception {
         throw new UnsupportedOperationException("This extractor is a frontend for other ReKognition extractors. It doesn't perform extraction itself.");
+    }
+    
+    private static RekognitionConfiguration conf = new RekognitionConfiguration();
+    protected static void setConfiguration(RekognitionConfiguration c){
+        conf = c;
+    }
+    protected static RekognitionConfiguration getConfiguration(){
+        return conf;
     }
     
     // -------------------------------------------------------------------------
