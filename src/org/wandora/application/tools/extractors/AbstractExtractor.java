@@ -197,7 +197,17 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         this.forceContent = fcontent;
     }
     
+    public File[] getForceFiles() {
+        return this.forceFiles;
+    }
     
+    public String[] getForceUrls() {
+        return this.forceUrls;
+    }
+    
+    public Object getForceContent() {
+        return this.forceContent;
+    }
     
     
     public int getExtractorType() {

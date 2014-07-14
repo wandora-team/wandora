@@ -1,1 +1,0 @@
-version 1.4.4 15-Nov-2001 13:12  4.1M  Latest stable binaries

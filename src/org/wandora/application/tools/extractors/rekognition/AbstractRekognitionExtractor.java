@@ -42,7 +42,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
-public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
+abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     
     protected static final String API_ROOT = "http://rekognition.com/func/api/";
     
@@ -60,6 +60,27 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     private static final String DETECTION_SI = FACE_SI_ROOT + "detection/";
     private static final String FEATURE_SI = FACE_SI_ROOT + "feature/";
     
+    private static final String[][] KEY_MAP = {
+        {"b_ll", "brow_left_left"},
+        {"b_lm", "brow_left_middle"},
+        {"b_lr", "brow_left_right"},
+        {"b_rl", "brow_right_left"},
+        {"b_rm", "brow_right_middle"},
+        {"b_rr", "brow_right_right"},
+        {"e_ld", "eye_left_down"},
+        {"e_ll", "eye_left_left"},
+        {"e_lu", "eye_left_up"},
+        {"e_lr", "eye_left_right"},
+        {"e_rd", "eye_right_down"},
+        {"e_rl", "eye_right_left"},
+        {"e_ru", "eye_right_up"},
+        {"e_rr", "eye_right_right"},
+        {"m_d",  "mouth_down"},
+        {"m_u",  "mouth_up"},
+        {"n_l",  "nose_left"},
+        {"n_r",  "nose_right"}
+    };
+    
     
     @Override
     public boolean _extractTopicsFrom(File f, TopicMap t) throws Exception {
@@ -74,6 +95,14 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap t) throws Exception {
         throw new UnsupportedOperationException("This extractor is a frontend for other ReKognition extractors. It doesn't perform extraction itself.");
+    }
+    
+    private static RekognitionConfiguration conf = new RekognitionConfiguration();
+    protected static void setConfiguration(RekognitionConfiguration c){
+        conf = c;
+    }
+    protected static RekognitionConfiguration getConfiguration(){
+        return conf;
     }
     
     // -------------------------------------------------------------------------
@@ -201,8 +230,9 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
      * The key-value-pairs are represented as a hash where JSON.KEY corresponds to
      * a flattened key and JSON.VALUE to the corresponding value. For JSON
      * primitives (Integer, Double, String) we simply create corresponding hashes.
-     * For JSON objects we create a dotted key based on the JSON structure. For
-     * arrays we use the array index as a key.
+     * For JSON objects we create a flattened key based on the JSON structure. For
+     * arrays we use the array index as a key. The flattened keys are concatenation
+     * of the original key structure separated by FLATTENING_DELIMITER.
      * 
      * Example:
      * {
@@ -248,7 +278,7 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
                     
                     for(HashMap<JSON,String> subObjectProperty: flattenedSubObj){
                         
-                        flattenedArray.add(prefixKey(key, subObjectProperty));
+                        flattenedArray.add(prefixKey(translateKey(key), subObjectProperty));
                         
                     }
                 
@@ -259,7 +289,7 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
                     ArrayList<HashMap<JSON,String>> flattenedSubArray = flattenJSONArray(array);
                     for(HashMap<JSON,String> subArrayElement: flattenedSubArray){
                         
-                        flattenedArray.add(prefixKey(key, subArrayElement));
+                        flattenedArray.add(prefixKey(translateKey(key), subArrayElement));
                         
                     }
                     
@@ -273,7 +303,7 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
                 
             } catch (JSONException e) {
                 HashMap<JSON,String> flattenedItem = new HashMap<>();
-                flattenedItem.put(JSON.KEY, key);
+                flattenedItem.put(JSON.KEY, translateKey(key));
                 flattenedItem.put(JSON.ERROR, e.getMessage());
                 flattenedArray.add(flattenedItem);
             }
@@ -321,7 +351,7 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     
     private static HashMap<JSON,String> flattenPrimitive(String key, Object primitive) throws JSONException{
         HashMap<JSON,String> flattenedItem = new HashMap<>();
-        flattenedItem.put(JSON.KEY, key);
+        flattenedItem.put(JSON.KEY, translateKey(key));
 
         if(primitive instanceof Integer){
 
@@ -362,6 +392,16 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         
     }
     
+    private static String translateKey(String key){
+        String translated = key;
+        for (String[] KEY_MAPPING : KEY_MAP) {
+            if (KEY_MAPPING[0].equals(key)) {
+                translated = KEY_MAPPING[1];
+            }
+        }
+        return translated;
+    }
+    
     protected String getBestMatch(JSONObject obj, double treshold) throws JSONException{
         JSONArray matches = obj.getJSONArray("matches");
         
@@ -385,5 +425,5 @@ public abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         return matchedName;
         
     }
-    
+     
 }
