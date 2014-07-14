@@ -60,6 +60,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         super(admin, modal);
         this.wandora = admin;
         initComponents();
+        setSize(600,400);
         //initialize(null);
     }
     
