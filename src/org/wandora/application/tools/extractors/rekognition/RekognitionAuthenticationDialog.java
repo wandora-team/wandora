@@ -51,7 +51,7 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
 
     public void open(Wandora w){
         dialog = new JDialog(w, true);
-        dialog.setSize(500, 120);
+        dialog.setSize(400, 180);
         dialog.setResizable(false);
         dialog.add(this);
         dialog.setTitle("Rekognition API key and secret");
