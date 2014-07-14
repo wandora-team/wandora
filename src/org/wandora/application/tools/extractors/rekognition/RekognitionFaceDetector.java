@@ -109,7 +109,6 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         
         WandoraToolLogger logger = getCurrentLogger();
         
-        
         if(imageUrl == null)
             throw new Exception("No valid Image URL found.");
 
@@ -129,7 +128,6 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
             setConfiguration(conf);
         }
         
-        
         /**
          * Construct the extraction URL based on the configuration and image URL
          */
@@ -141,12 +139,15 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         
         logger.log("GETting \"" + extractUrl + "\"");
         
-        
         HttpResponse<JsonNode> resp = Unirest.get(extractUrl).asJson();
         JSONObject respNode = resp.getBody().getObject();
+        
+        HashMap<String,ValueHandler> handlerMap = createHandlerMap();
         try {
             
             logUsage(respNode);
+            
+            
             
             String imageURL = respNode.getString("url");
             Topic imageTopic = getImageTopic(tm, imageURL);
@@ -173,20 +174,12 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
                 
                 associateImageWithDetection(tm, imageTopic, detectionTopic);
                 
-                ArrayList<HashMap<JSON,String>> featuresArray = flattenJSONObject(detectionJSON);
-                
-                for(HashMap<JSON,String> featureData: featuresArray){
+                for(String featureKey: handlerMap.keySet()){
                     
-                    if(featureData.containsKey(JSON.ERROR) || !featureData.containsKey(JSON.VALUE)){
-                        logger.log("Failed to parse detection data for attribute \"" + featureData.get(JSON.KEY) + "\"");
-                        continue;
+                    if (detectionJSON.has(featureKey)) {
+                        Object feature = detectionJSON.get(featureKey);
+                        handlerMap.get(featureKey).handleValue(tm, detectionTopic, feature);
                     }
-                    
-                    String featureKey = featureData.get(JSON.KEY);
-                    String featureValue = featureData.get(JSON.VALUE);
-                    
-                    addFeatureToDetection(tm, detectionTopic, featureKey, featureValue);
-                    
                 }
                 
             }

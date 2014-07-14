@@ -23,7 +23,6 @@ package org.wandora.application.tools.extractors.rekognition;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
@@ -58,7 +57,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     private static final String IMAGE_SI = SI_ROOT + "image/";
     private static final String FACE_SI_ROOT = SI_ROOT + "face/";
     private static final String DETECTION_SI = FACE_SI_ROOT + "detection/";
-    private static final String FEATURE_SI = FACE_SI_ROOT + "feature/";
+    private static final String FEATURE_SI_ROOT = FACE_SI_ROOT + "feature/";
     
     private static final String[][] KEY_MAP = {
         {"b_ll", "brow_left_left"},
@@ -75,26 +74,67 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         {"e_rl", "eye_right_left"},
         {"e_ru", "eye_right_up"},
         {"e_rr", "eye_right_right"},
-        {"m_d", "mouth_down"},
-        {"m_u", "mouth_up"},
-        {"n_l", "nose_left"},
-        {"n_r", "nose_right"}
+        {"m_d",  "mouth_down"},
+        {"m_u",  "mouth_up"},
+        {"n_l",  "nose_left"},
+        {"n_r",  "nose_right"},
+        {"tl",   "top_left"}
     };
+        
+    protected HashMap<String,ValueHandler> createHandlerMap(){
+        
+        HashMap<String,ValueHandler> handlerMap = new HashMap<>();
+        
+        handlerMap.put("boundingbox", new BoundingBoxHandler());
+        handlerMap.put("confidence",  new NumericValueHandler(FEATURE_SI_ROOT + "confidence/", "Confidence"));
+        handlerMap.put("emotion",     new NumericValuesHandler(FEATURE_SI_ROOT + "emotion/",   "Emotion"));
+        handlerMap.put("eye_left",    new CoordinateHandler(FEATURE_SI_ROOT + "eye_left/",     "Left Eye"));
+        handlerMap.put("eye_right",   new CoordinateHandler(FEATURE_SI_ROOT + "eye_right/",    "Right Eye"));
+        handlerMap.put("nose",        new CoordinateHandler(FEATURE_SI_ROOT + "nose/",         "Nose"));
+        handlerMap.put("mouth_l",     new CoordinateHandler(FEATURE_SI_ROOT + "mouth_left",    "Mouth (left)"));
+        handlerMap.put("mouth_r",     new CoordinateHandler(FEATURE_SI_ROOT + "mouth_right",   "Mouth (right)"));
+        
+        handlerMap.put("b_ll", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_left/",   "Left Brow (left)"));
+        handlerMap.put("b_lm", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_middle/", "Left Brow (middle)"));
+        handlerMap.put("b_lr", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_right/",  "Left Bro (right)"));
+        handlerMap.put("b_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_left/",  "Right Brow (left)"));
+        handlerMap.put("b_rm", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_middle/","Right Brow (middle)"));
+        handlerMap.put("b_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_right/", "Right Bro (right)"));
+        handlerMap.put("e_ld", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_down/",    "Left eye (down)"));
+        handlerMap.put("e_ll", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_left/",    "Left eye (left)"));
+        handlerMap.put("e_lu", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_up/",      "Left eye (up)"));
+        handlerMap.put("e_lr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_right/",   "Left eye (right)"));
+        handlerMap.put("e_rd", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_down/",   "Right eye (down)"));
+        handlerMap.put("e_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_left/",   "Right eye (left)"));
+        handlerMap.put("e_ru", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_up/",     "Right eye (up)"));
+        handlerMap.put("e_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_right/",  "Right eye (right)"));
+        handlerMap.put("m_d",  new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_down/",       "mouth (down)"));
+        handlerMap.put("m_u",  new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_up/",         "mouth (up)"));
+        handlerMap.put("n_l",  new CoordinateHandler(FEATURE_SI_ROOT+ "nose_left/",        "nose (left)"));
+        handlerMap.put("n_r",  new CoordinateHandler(FEATURE_SI_ROOT+ "nose_right/",       "nose (right)"));
+        handlerMap.put("tl",   new CoordinateHandler(FEATURE_SI_ROOT+ "top_left/",         "nose (left)"));
+        
+        return handlerMap;
+        
+    }
     
+    private static final String EXTRACT_ERROR = 
+            "This extractor is a frontend for other ReKognition extractors. "
+            + "It doesn't perform extraction itself.";
     
     @Override
     public boolean _extractTopicsFrom(File f, TopicMap t) throws Exception {
-        throw new UnsupportedOperationException("This extractor is a frontend for other ReKognition extractors. It doesn't perform extraction itself.");
+        throw new UnsupportedOperationException(EXTRACT_ERROR);
     }
 
     @Override
     public boolean _extractTopicsFrom(URL u, TopicMap t) throws Exception {
-        throw new UnsupportedOperationException("This extractor is a frontend for other ReKognition extractors. It doesn't perform extraction itself.");
+        throw new UnsupportedOperationException(EXTRACT_ERROR);
     }
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap t) throws Exception {
-        throw new UnsupportedOperationException("This extractor is a frontend for other ReKognition extractors. It doesn't perform extraction itself.");
+        throw new UnsupportedOperationException(EXTRACT_ERROR);
     }
     
     private static RekognitionConfiguration conf = new RekognitionConfiguration();
@@ -156,7 +196,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     
     protected static Topic getFeatureTypeTopic(TopicMap tm, String featureType) throws TopicMapException {
         
-        Topic featureTypeTopic = getOrCreateTopic(tm, FEATURE_SI + featureType, featureType);
+        Topic featureTypeTopic = getOrCreateTopic(tm, FEATURE_SI_ROOT + featureType, featureType);
         Topic featureClass = getFeatureClass(tm);
         
         makeSubclassOf(tm, featureTypeTopic, featureClass);
@@ -184,7 +224,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     
     protected static Topic getFeatureClass(TopicMap tm) throws TopicMapException{
         
-        Topic featureClass = getOrCreateTopic(tm, FEATURE_SI, "Face Detection Feature");
+        Topic featureClass = getOrCreateTopic(tm, FEATURE_SI_ROOT, "Face Detection Feature");
         makeSubclassOf(tm, featureClass, getRekognitionClass(tm));
         
         return featureClass;
@@ -225,183 +265,9 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     
     // -------------------------------------------------------------------------
     
-    /**
-* Recursively flatten a JSON object structure to an array of key-value-pairs.
-* The key-value-pairs are represented as a hash where JSON.KEY corresponds to
-* a flattened key and JSON.VALUE to the corresponding value. For JSON
-* primitives (Integer, Double, String) we simply create corresponding hashes.
-* For JSON objects we create a flattened key based on the JSON structure. For
-* arrays we use the array index as a key. The flattened keys are concatenation
-* of the original key structure separated by FLATTENING_DELIMITER.
-*
-* Example:
-* {
-* "foo":42,
-* "bar":{
-* "baz":43
-* },
-* "foos":[1,4,9]
-* }
-*
-* translates to
-*
-* [
-* "foo":42,
-* "bar.baz":43,
-* "foos.0":1,
-* "foos.1":4,
-* "foos.2":9
-* ]
-*
-* @param obj A JSONObject to flatten
-* @return A flattened list of key-value-pairs represented by an
-* ArrayList of Hashes
-*/
-    protected static ArrayList<HashMap<JSON,String>> flattenJSONObject(JSONObject obj){
-        
-        ArrayList<HashMap<JSON,String>> flattenedArray = new ArrayList<>();
-        Iterator keys = obj.keys();
-        
-        while(keys.hasNext()){
-            
-            String key = (String)keys.next();
-            
-            try {
-                
-                Object element = obj.get(key);
-                
-                //JSONObjects require further flattening. Branch into recursion
-                if(element instanceof JSONObject){
-                    
-                    JSONObject subObj = (JSONObject)element;
-                    ArrayList<HashMap<JSON,String>> flattenedSubObj = flattenJSONObject(subObj);
-                    
-                    for(HashMap<JSON,String> subObjectProperty: flattenedSubObj){
-                        
-                        flattenedArray.add(prefixKey(translateKey(key), subObjectProperty));
-                        
-                    }
-                
-                //As do JSONArrays
-                } else if(element instanceof JSONArray){
-                    
-                    JSONArray array = (JSONArray)element;
-                    ArrayList<HashMap<JSON,String>> flattenedSubArray = flattenJSONArray(array);
-                    for(HashMap<JSON,String> subArrayElement: flattenedSubArray){
-                        
-                        flattenedArray.add(prefixKey(translateKey(key), subArrayElement));
-                        
-                    }
-                    
-                //Simple case: We should have an element that's representable as a primitive
-                } else {
-                    
-                    
-                    flattenedArray.add(flattenPrimitive(key,element));
-
-                }
-                
-            } catch (JSONException e) {
-                HashMap<JSON,String> flattenedItem = new HashMap<>();
-                flattenedItem.put(JSON.KEY, translateKey(key));
-                flattenedItem.put(JSON.ERROR, e.getMessage());
-                flattenedArray.add(flattenedItem);
-            }
-            
-            
-        }
-        
-        return flattenedArray;
-        
-    }
     
-    private static ArrayList<HashMap<JSON,String>> flattenJSONArray(JSONArray array) throws JSONException{
     
-        ArrayList<HashMap<JSON,String>> flattenedArray = new ArrayList<>();
-        
-        for (int i = 0; i < array.length(); i++) {
-            
-            Object subObj = array.get(i);
-            if(subObj instanceof JSONObject){
-                ArrayList<HashMap<JSON,String>> flattenedSubObject = flattenJSONObject((JSONObject)subObj);
-                for(HashMap<JSON,String> subObjectProperty: flattenedSubObject){
-                    
-                    HashMap<JSON,String> flattenedProperty = prefixKey(Integer.toString(i), subObjectProperty);
-                    
-                    flattenedArray.add(flattenedProperty);
-                }
-                
-            } else if(subObj instanceof JSONArray){
-                ArrayList<HashMap<JSON,String>> flattenedSubObjects = flattenJSONArray((JSONArray)subObj);
-                for(HashMap<JSON,String> subObject: flattenedSubObjects){
-                    
-                    HashMap<JSON,String> flattenedProperty = prefixKey(Integer.toString(i), subObject);
-                    
-                    flattenedArray.add(flattenedProperty);
-                }
-            } else {
-                HashMap<JSON,String> flattenedPrimitive = flattenPrimitive(Integer.toString(i), subObj);
-                flattenedArray.add(prefixKey(Integer.toString(i), flattenedPrimitive));
-            }
-        }
-        
-        return flattenedArray;
-        
-    }
-    
-    private static HashMap<JSON,String> flattenPrimitive(String key, Object primitive) throws JSONException{
-        HashMap<JSON,String> flattenedItem = new HashMap<>();
-        flattenedItem.put(JSON.KEY, translateKey(key));
 
-        if(primitive instanceof Integer){
-
-            int value = (int)primitive;
-            flattenedItem.put(JSON.VALUE,Integer.toString(value));
-
-        } else if(primitive instanceof Double){
-
-            double value = (double)primitive;
-            flattenedItem.put(JSON.VALUE, Double.toString(value));
-
-        } else if(primitive instanceof String) {
-
-            String value = (String)primitive;
-            flattenedItem.put(JSON.VALUE, value);
-
-        } else {
-            throw new JSONException("Invalid JSON element for key " + key);
-        }
-        
-        return flattenedItem;
-    }
-    
-    private static HashMap<JSON,String> prefixKey(String key, HashMap<JSON,String> hash){
-        HashMap<JSON,String> prefixed = new HashMap<>();
-        
-        String hashKey = hash.get(JSON.KEY);
-        
-        prefixed.put(JSON.KEY, key + FLATTENING_DELIMETER + hashKey);
-        
-        if(hash.containsKey(JSON.ERROR)){
-            prefixed.put(JSON.ERROR, hash.get(JSON.ERROR));
-        } else {
-            prefixed.put(JSON.VALUE, hash.get(JSON.VALUE));
-        }
-        
-        return prefixed;
-        
-    }
-    
-    private static String translateKey(String key){
-        String translated = key;
-        for (String[] KEY_MAPPING : KEY_MAP) {
-            if (KEY_MAPPING[0].equals(key)) {
-                translated = KEY_MAPPING[1];
-            }
-        }
-        return translated;
-    }
-    
     protected String getBestMatch(JSONObject obj, double treshold) throws JSONException{
         JSONArray matches = obj.getJSONArray("matches");
         
@@ -425,5 +291,211 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         return matchedName;
         
     }
-     
+    
+    
+    /**
+     * A value handler is used to create and associate topics from face detection
+     * data return as JSON. Implementations use constructors to initialize 
+     * feature types etc. handleValue is used to create the individual feature
+     * Topics.
+     */
+    interface ValueHandler{
+        public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception;
+    }
+    
+    /**
+     * NumericValueHandler creates simple occurrence data representing numeric 
+     * (double) values. siBase and name are used to differentiate numeric values.
+     * Valid value for handleValue should be able to be casted to integer or double
+     */
+    class NumericValueHandler implements ValueHandler{
+
+        private final String TYPE_SI;
+        private final String TYPE_NAME;
+        
+        public NumericValueHandler(String si, String name){
+            this.TYPE_SI = si;
+            this.TYPE_NAME = name;
+        }
+        
+        private Topic getTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, TYPE_SI, TYPE_NAME);
+            return typeTopic;
+        }
+        
+        @Override
+        public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception {
+            Topic typeTopic = getTypeTopic(tm);
+            Topic langTopic = getLangTopic(tm);
+            detection.setData(typeTopic, langTopic, String.valueOf(value));
+
+        }
+    }
+    
+    /**
+     * NumericValuesHandler creates a series of Topics from a JSONObject where
+     * the keys are used as Topics to be associated with the detection and
+     * a numeric value describing the confidence of the association. For example
+     * the JSONObject with a key "emotion"
+     * 
+     * {
+     *     "happy" : 0.98,
+     *     "surprised" : 0.05,
+     *     "calm" : 0.02
+     * }
+     * 
+     * will create three associations with the detection, emotion and respective
+     * confidence as players.
+     */
+    class NumericValuesHandler implements ValueHandler{
+
+        private static final String CONFIDENCE_SI   = FEATURE_SI_ROOT + "confidence/";
+        private static final String CONFIDENCE_NAME = "Confidence";
+        
+        private Topic getConfidenceTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, CONFIDENCE_SI, CONFIDENCE_NAME);
+            return typeTopic;
+        }
+        
+        private final String TYPE_SI;
+        private final String TYPE_NAME;
+        
+        NumericValuesHandler(String si, String name){
+            this.TYPE_SI = si;
+            this.TYPE_NAME = name;
+        }
+        
+        private Topic getTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, TYPE_SI, TYPE_NAME);
+            return typeTopic;
+        }
+        
+        @Override
+        public void handleValue(TopicMap tm, Topic detection, Object values) throws Exception {
+            
+            if(!(values instanceof JSONObject)){
+                throw new IllegalArgumentException("Argument supplied to NumericValuesHandler is not a JSONObject");
+            }
+            
+            Topic typeTopic = getTypeTopic(tm);
+            Topic confidenceTypeTopic = getConfidenceTypeTopic(tm);
+            Topic detectionTypeTopic = getDetectionClass(tm);
+            
+            JSONObject numericValues = (JSONObject)values;
+            Iterator keys = numericValues.keys();
+            while(keys.hasNext()){
+                String key = (String)keys.next();
+                
+                Topic keyTopic = getOrCreateTopic(tm, TYPE_SI + "/" + key, key);
+                keyTopic.addType(typeTopic);
+                
+                Object value = numericValues.get(key);
+                
+                String confidenceID = UUID.randomUUID().toString();
+                Topic confidenceTopic = getOrCreateTopic(tm, CONFIDENCE_SI + confidenceID);
+                
+                confidenceTopic.setData(confidenceTypeTopic, getLangTopic(tm), String.valueOf(value));
+                confidenceTopic.addType(confidenceTypeTopic);
+                
+                Association a = tm.createAssociation(typeTopic);
+                a.addPlayer(keyTopic, typeTopic);
+                a.addPlayer(confidenceTopic,confidenceTypeTopic);
+                a.addPlayer(detection,detectionTypeTopic);
+                
+            }
+            
+        }
+
+    }
+    
+    /**
+     * CoordinateHandler creates a coordinate topic with simple occurrences of
+     * x and y from a JSONObject in the form
+     * 
+     * {
+     *     "x":<double>
+     *     "y":<double>
+     * }
+     */
+    class CoordinateHandler implements ValueHandler{
+
+        private static final String COORDINATE_SI   = SI_ROOT + "coordinate/";
+        private static final String COORDINATE_NAME = "coordinate";
+        
+        private final String TYPE_SI;
+        private final String TYPE_NAME;
+        
+        CoordinateHandler(String si, String name){
+            this.TYPE_SI = si;
+            this.TYPE_NAME = name;
+        }
+        
+        private Topic getTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, TYPE_SI, TYPE_NAME);
+            return typeTopic;
+        }
+        
+        private Topic getCoordinateTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, COORDINATE_SI, COORDINATE_NAME);
+            return typeTopic;
+        }
+        
+        private Topic[] getCoordinateTypeTopics(TopicMap tm) throws TopicMapException{
+            Topic coordinateType = getCoordinateTypeTopic(tm);
+            Topic x = getOrCreateTopic(tm, COORDINATE_SI + "x", "x");
+            Topic y = getOrCreateTopic(tm, COORDINATE_SI + "y", "y");
+            x.addType(coordinateType);
+            y.addType(coordinateType);
+            
+            return new Topic[]{x,y};
+        }
+        
+        @Override
+        public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception {
+            
+            if(!(value instanceof JSONObject)){
+                throw new IllegalArgumentException("Argument supplied to CoordinateHandler is not a JSONObject");
+            }
+            
+            JSONObject coordinates = (JSONObject)value;
+
+            if(!(coordinates.has("x") && coordinates.has("y"))){
+                throw new IllegalArgumentException("Argument supplied to CoordinateHandler doesn't have required keys");
+            }
+            
+            Topic[] coordinateTypes = getCoordinateTypeTopics(tm);
+            Topic typeTopic = getTypeTopic(tm);
+            Topic langTopic = getLangTopic(tm);
+            Topic detectionTypeTopic = getDetectionClass(tm);
+            
+            String coordinatesSI = UUID.randomUUID().toString();
+
+            Topic coordinatesTopic = getOrCreateTopic(tm, TYPE_SI + coordinatesSI);
+            coordinatesTopic.addType(typeTopic);
+            coordinatesTopic.setData(coordinateTypes[0], langTopic, String.valueOf(coordinates.get("x")));
+            coordinatesTopic.setData(coordinateTypes[1], langTopic, String.valueOf(coordinates.get("y")));
+            
+            Association a = tm.createAssociation(typeTopic);
+            a.addPlayer(detection, detectionTypeTopic);
+            a.addPlayer(coordinatesTopic, typeTopic);
+            
+        }
+        
+    }
+    
+    class BoundingBoxHandler implements ValueHandler{
+        //TODO: handle boundingbox
+        @Override
+        public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception {
+        }
+        
+    }
+    
+    class PoseHandler implements ValueHandler{
+        //TODO: handle pose
+        @Override
+        public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception {
+        }
+
+    }
 }
