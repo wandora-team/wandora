@@ -22,79 +22,67 @@
 package org.wandora.application.tools.extractors.rekognition;
 
 import java.awt.Component;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
-import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
-import org.wandora.application.gui.simple.SimpleField;
-import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMapException;
+import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
 
 /**
  *
  * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
-public class RekognitionExtractorUI extends javax.swing.JPanel {
+class RekognitionConfigurationUI extends javax.swing.JPanel {
 
     private Wandora wandora = null;
-    private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
     
-    private HashMap<String,JCheckBox> faceJobs;
+    private RekognitionFaceDetector detector;
+    private RekognitionConfiguration configuration;
     
-    private static final String API_ROOT = AbstractRekognitionExtractor.API_ROOT;
-    
-    /**
-     * Creates new form RekognitionExtractorUI
-     */
-    public RekognitionExtractorUI() {
+    private final HashMap<String,JCheckBox> faceJobs;
+
+    public RekognitionConfigurationUI(RekognitionFaceDetector detector){
         initComponents();
+        
+        this.detector = detector;
         
         //Hook up checkboxes
         faceJobs = new HashMap<>();
-        faceJobs.put("age", faceJobCheckAge);
-        faceJobs.put("aggressive",faceJobCheckAggressive);
-        faceJobs.put("beauty",faceJobCheckBeauty);
-        faceJobs.put("emotion",faceJobCheckEmotion);
-        faceJobs.put("eye_closed",faceJobCheckEyeClosed);
-        faceJobs.put("gender",faceJobCheckGender);
-        faceJobs.put("glass",faceJobCheckGlass);
+        faceJobs.put("age",            faceJobCheckAge);
+        faceJobs.put("aggressive",     faceJobCheckAggressive);
+        faceJobs.put("beauty",         faceJobCheckBeauty);
+        faceJobs.put("emotion",        faceJobCheckEmotion);
+        faceJobs.put("eye_closed",     faceJobCheckEyeClosed);
+        faceJobs.put("gender",         faceJobCheckGender);
+        faceJobs.put("glass",          faceJobCheckGlass);
         faceJobs.put("mouth_open_wide",faceJobCheckMouthOpenWide);
-        faceJobs.put("part",faceJobCheckPart);
-        faceJobs.put("part_detail",faceJobCheckPartDetail);
-        faceJobs.put("race",faceJobCheckRace);
-        faceJobs.put("celebrity",faceJobCheckCelebrity);
+        faceJobs.put("part",           faceJobCheckPart);
+        faceJobs.put("part_detail",    faceJobCheckPartDetail);
+        faceJobs.put("race",           faceJobCheckRace);
+        faceJobs.put("celebrity",      faceJobCheckCelebrity);
         
+        configuration = AbstractRekognitionExtractor.getConfiguration();
         
+        if(configuration.auth == null){
+            this.forgetButton.setEnabled(false);
+        }
+        
+        for(String job: configuration.jobs){
+            faceJobs.get(job).setSelected(true);
+        }
     }
     
-    public boolean wasAccepted(){
-        return this.accepted;
-    }
-    
-    public void setAccpeted(boolean b){
-        this.accepted = b;
-    }
-    
-    public void open(Wandora w, Context c){
-        context = c;
+    public void open(Wandora w){
         wandora = w;
-        accepted = false;
         dialog = new JDialog(w, true);
         dialog.setSize(800, 500);
         dialog.add(this);
-        dialog.setTitle("Rekognition API extractor");
+        dialog.setTitle("ReKognition API extractor configuration");
         UIBox.centerWindow(dialog, w);
 
         faceCelebrityDetails.setVisible(faceJobCheckCelebrity.isSelected());
@@ -102,124 +90,68 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         dialog.setVisible(true); 
     }
     
-    public WandoraTool[] getExtractors(RekognitionExtractor tool) throws TopicMapException{
+    private void writeConfiguration(){
         
-        ArrayList<WandoraTool> wts = new ArrayList();
-        
-        //TODO: Handle user input and return an extractor to execute
-        
-        this.solveAPIKeys();
+        RekognitionConfiguration c = null;
+
+        HashMap<AUTH_KEY,String> auth = (configuration.auth == null) ?
+                this.getAPIKeys() : configuration.auth;
         
         Component selectedTab = rekognitionTabs.getSelectedComponent();
-        
         if (selectedTab.equals(faceDetectorTab)){
-            RekognitionFaceDetector faceDetector = getFaceDetector();
-            if(faceDetector != null){
-                wts.add(faceDetector);
-            }
-        }
-        
-        return wts.toArray(new WandoraTool[]{});
-
-        
-    }
-    
-    private RekognitionFaceDetector getFaceDetector() throws TopicMapException{
-        RekognitionFaceDetector faceDetector = null;
-        String imageUrl = urlField.getText();
-        String apiKey = RekognitionExtractorUI.auth.get(RekognitionAuthenticationDialog.KEY_KEY);
-        String apiSecret = RekognitionExtractorUI.auth.get(RekognitionAuthenticationDialog.SECRET_KEY);
-        
-        if(validateURL(imageUrl)){
             
-            String jobs = "face" + getFaceJobs();
+            ArrayList<String> jobs = this.getFaceJobs();
+            boolean celebrityNaming;
+            double celebrityTreshold;
             
-            faceDetector = new RekognitionFaceDetector();
-            String extractUrl = API_ROOT + 
-                    "?api_key="    + apiKey +
-                    "&api_secret=" + apiSecret +
-                    "&jobs="       + jobs +
-                    "&urls="       + imageUrl;
-
-            faceDetector.setForceUrls(new String[]{extractUrl});
             try {
-                Object treshold = faceCelebrityTreshold.getValue();
-                faceDetector.setCelebrityNaming(faceAssociateCelebrity.isSelected(), (double)treshold);
-
-            } catch (Exception e) {
-                throw new TopicMapException("Invalid celebrity association treshold");
+                celebrityNaming = faceAssociateCelebrity.isSelected();
+                String tresholdFieldValue = faceCelebrityTreshold.getText();
+                celebrityTreshold = Double.parseDouble(tresholdFieldValue);
+            } catch (NumberFormatException e) {
+                celebrityNaming = false;
+                celebrityTreshold = 0;
             }
-        } else {
-            String cause = (imageUrl.length() == 0) ? "Absent Image URL" : "Invalid Image URL";
-            throw new TopicMapException(cause);
+            
+            c = new RekognitionConfiguration(jobs, celebrityNaming, celebrityTreshold, auth);
+            
         }
-        return faceDetector;
+        
+        AbstractRekognitionExtractor.setConfiguration(c);
+        
     }
     
-    private boolean validateURL(String urlString){
-        try {
-                URL u = new URL(urlString);
-                u.toURI();
-        } catch (MalformedURLException | URISyntaxException e) {
-            return false;
-        }
-        return true;
-    }
-    
-    private String getFaceJobs() {
-        StringBuilder sb = new StringBuilder();
+    private ArrayList<String> getFaceJobs() {
+        
+        ArrayList<String> jobs = new ArrayList<>();
         
         for (String jobName : faceJobs.keySet()) {
             if (faceJobs.get(jobName).isSelected()) {
-                sb.append("_");
-                sb.append(jobName);
+                jobs.add(jobName);
             }
         }
         
-        return sb.toString();
+        return jobs;
         
     }
     
-    private static HashMap<String,String> auth = null;
+    private HashMap<AUTH_KEY,String> getAPIKeys() {
 
-    private void solveAPIKeys() {
-
-        if(auth == null){
             
-            RekognitionAuthenticationDialog authDialog = new RekognitionAuthenticationDialog();
-            authDialog.open(wandora);
-            
-            RekognitionExtractorUI.auth = authDialog.getAuth();
-            
-            
-        }
+        RekognitionAuthenticationDialog authDialog = new RekognitionAuthenticationDialog();
+        authDialog.open(wandora);
         forgetButton.setEnabled(true);
+
+        return authDialog.getAuth();
+                
     }
     
     public void forgetAuthorization() {
-        auth = null;
-        forgetButton.setEnabled(false);
-    }
-
-    private void getContext() {
-        Topic openedTopic = this.wandora.getOpenTopic();
-
-        Locator l;
-        //Prefer SL over SI
-        try {
-            l = openedTopic.getSubjectLocator();    
-            l = (l != null) ? l : openedTopic.getOneSubjectIdentifier();
-        } catch (TopicMapException tme) {
-            l = null;
-        }
         
-        if(l != null){
-            setImageURL(l.toString());
-        }        
-    }
-    
-    private void setImageURL(String url){
-        this.urlField.setText(url);
+        configuration.auth = null;
+        AbstractRekognitionExtractor.setConfiguration(configuration);
+        
+        forgetButton.setEnabled(false);
     }
     
     /**
@@ -233,8 +165,6 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
 
         rekognitionTabs = new javax.swing.JTabbedPane();
         faceDetectorTab = new javax.swing.JPanel();
-        urlField = new SimpleField();
-        getContextButton = new SimpleButton();
         faceDetectorJobsPanel = new javax.swing.JPanel();
         faceJobCheckAggressive = new SimpleCheckBox();
         faceJobCheckPart = new SimpleCheckBox();
@@ -261,21 +191,6 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         faceDetectorTab.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        gridBagConstraints.weightx = 0.1;
-        faceDetectorTab.add(urlField, gridBagConstraints);
-
-        getContextButton.setText("Get Context Locator");
-        getContextButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                getContextButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        faceDetectorTab.add(getContextButton, gridBagConstraints);
 
         faceDetectorJobsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Jobs"));
         faceDetectorJobsPanel.setLayout(new java.awt.GridBagLayout());
@@ -415,6 +330,7 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         faceDetectorTab.add(faceDetectorJobsPanel, gridBagConstraints);
 
@@ -422,6 +338,7 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         add(rekognitionTabs, gridBagConstraints);
 
@@ -433,7 +350,7 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         buttonPanel.add(buttonFillerPanel, gridBagConstraints);
 
-        okButton.setText("Extract");
+        okButton.setText("Save");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -451,7 +368,7 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         });
         buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
 
-        forgetButton.setText("Forget api-key");
+        forgetButton.setText("Forget API credentials");
         forgetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 forgetButtonActionPerformed(evt);
@@ -473,29 +390,16 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
         add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        accepted = true;
-        if (this.dialog != null) {
-            this.dialog.setVisible(false);
-        }
-    }//GEN-LAST:event_okButtonActionPerformed
-
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        accepted = false;
         if (this.dialog != null) {
             this.dialog.setVisible(false);
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void forgetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forgetButtonActionPerformed
-        auth = null;
-        forgetButton.setEnabled(false);
-        
+        forgetAuthorization();
+        forgetButton.setEnabled(false);        
     }//GEN-LAST:event_forgetButtonActionPerformed
-
-    private void getContextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getContextButtonActionPerformed
-        getContext();
-    }//GEN-LAST:event_getContextButtonActionPerformed
 
     private void faceJobCheckCelebrityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_faceJobCheckCelebrityActionPerformed
         boolean b = faceJobCheckCelebrity.isSelected();
@@ -508,6 +412,14 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
     private void faceCelebrityTresholdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_faceCelebrityTresholdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_faceCelebrityTresholdActionPerformed
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+
+        this.writeConfiguration();
+        if (this.dialog != null) {
+            this.dialog.setVisible(false);
+        }
+    }//GEN-LAST:event_okButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -533,10 +445,8 @@ public class RekognitionExtractorUI extends javax.swing.JPanel {
     private javax.swing.JCheckBox faceJobCheckPartDetail;
     private javax.swing.JCheckBox faceJobCheckRace;
     private javax.swing.JButton forgetButton;
-    private javax.swing.JButton getContextButton;
     private javax.swing.JButton okButton;
     private javax.swing.JTabbedPane rekognitionTabs;
-    private javax.swing.JTextField urlField;
     // End of variables declaration//GEN-END:variables
 
     

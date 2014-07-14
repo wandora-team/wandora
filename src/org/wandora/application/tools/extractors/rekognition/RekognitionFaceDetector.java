@@ -24,13 +24,14 @@ package org.wandora.application.tools.extractors.rekognition;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.apache.commons.io.IOUtils;
+import javax.swing.Icon;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraToolLogger;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
 import org.wandora.dep.json.JSONArray;
 import org.wandora.dep.json.JSONException;
 import org.wandora.dep.json.JSONObject;
@@ -38,61 +39,110 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
+
 /**
  *
  * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
 public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
     
-    private boolean celebrityNaming = false;
-    private double  celebrityTreshold = 0;
-    protected void setCelebrityNaming(boolean b){
-    
-        setCelebrityNaming(b, 0);
-    
-    }
-    
-    protected void setCelebrityNaming(boolean b, double treshold){
-        
-        this.celebrityNaming = b;
-        this.celebrityTreshold = treshold;
+    @Override
+    public int getExtractorType() {
+        return URL_EXTRACTOR | RAW_EXTRACTOR;
     }
     
     private static final String[] contentTypes=new String[] { 
         "text/plain", "text/json", "application/json" 
     };
-        
+    
     @Override
     public String[] getContentTypes() {
         return contentTypes;
     }
     
     @Override
-    public boolean _extractTopicsFrom(File f, TopicMap tm) throws Exception {
-        FileInputStream is = new FileInputStream(f);
-        String query = IOUtils.toString(is);
-        _extractTopicsFrom(query, tm);
-        return true;
+    public boolean useURLCrawler() {
+        return false;
     }
     
+    @Override
+    public String getName() {
+        return "ReKognition API Extractor";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Extracts topics and associations from the ReKognition API. ";
+    }
+
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon("gui/icons/extract_rekognition.png");
+    }
+    
+    /**
+     * Parse the URL as a string and pass it to _extractTopicsFrom(String ...)
+     * @param u the image URL to extract
+     * @param tm the current TopicMap
+     * @return whether the extraction was a success.
+     * @throws Exception propagated from _extracTopicsFrom(String ...)
+     */
     @Override
     public boolean _extractTopicsFrom(URL u, TopicMap tm) throws Exception {
         String currentURL = u.toExternalForm();
-        extractTopicsFromText(currentURL, tm);
-        return true;
+        return _extractTopicsFrom(currentURL, tm);
     }
     
+    /**
+     * 
+     * The method used for actual extraction.
+     * 
+     * @param imageUrl the image URL for extraction
+     * @param tm the current TopicMap
+     * @return ???
+     * @throws Exception if the supplied URL is invalid or Topic Map
+     * manipulation fails
+     */
+    
     @Override
-    public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
+    public boolean _extractTopicsFrom(String imageUrl, TopicMap tm) throws Exception {
+        
+        WandoraToolLogger logger = getCurrentLogger();
         
         
-        HttpResponse<JsonNode> resp = Unirest.get(str).asJson();
+        if(imageUrl == null)
+            throw new Exception("No valid Image URL found.");
 
-        //DEBUG
-        StringWriter sw = new StringWriter();
-        IOUtils.copy(resp.getRawBody(), sw);
-        System.out.println(sw.toString());
         
+        /**
+         * Fetch the configuration.
+         */
+        RekognitionConfiguration conf = getConfiguration();
+        
+        /**
+         * Prompt for authentication if we're still lacking it.
+         */
+        if(conf.auth == null){
+            RekognitionAuthenticationDialog authDialog = new RekognitionAuthenticationDialog();
+            authDialog.open(getWandora());
+            conf.auth = authDialog.getAuth();
+            setConfiguration(conf);
+        }
+        
+        
+        /**
+         * Construct the extraction URL based on the configuration and image URL
+         */
+        String extractUrl = API_ROOT +
+                "?api_key=" + conf.auth.get(AUTH_KEY.KEY) + 
+                "&api_secret=" + conf.auth.get(AUTH_KEY.SECRET) + 
+                "&jobs=" + "face_" + getJobsString(conf.jobs) +
+                "&urls=" + imageUrl;
+        
+        logger.log("GETting \"" + extractUrl + "\"");
+        
+        
+        HttpResponse<JsonNode> resp = Unirest.get(extractUrl).asJson();
         JSONObject respNode = resp.getBody().getObject();
         try {
             
@@ -103,21 +153,21 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
             
             JSONArray detections = respNode.getJSONArray("face_detection");
             
-            log("Detected " + detections.length() + " faces");
+            logger.log("Detected " + detections.length() + " faces");
             
             for(int i = 0; i < detections.length(); i++){
                 
-                log("Parsing detection #" + (i+1));
+                logger.log("Parsing detection #" + (i+1));
                 
                 JSONObject detectionJSON = detections.getJSONObject(i);
                 Topic detectionTopic = getDetectionTopic(tm);
                 
-                if(celebrityNaming){
+                if(conf.celebrityNaming){
                     try {
-                        String bestMatch = getBestMatch(detectionJSON,this.celebrityTreshold);
+                        String bestMatch = getBestMatch(detectionJSON,conf.celebrityTreshold);
                         detectionTopic.setBaseName(bestMatch);
                     } catch (JSONException | TopicMapException e) {
-                        log("Failed to match name for detection");
+                        logger.log("Failed to match name for detection");
                     }
                 }
                 
@@ -128,7 +178,7 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
                 for(HashMap<JSON,String> featureData: featuresArray){
                     
                     if(featureData.containsKey(JSON.ERROR) || !featureData.containsKey(JSON.VALUE)){
-                        log("Failed to parse detection data for attribute \"" + featureData.get(JSON.KEY) + "\"");
+                        logger.log("Failed to parse detection data for attribute \"" + featureData.get(JSON.KEY) + "\"");
                         continue;
                     }
                     
@@ -143,12 +193,25 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
             
         } catch (JSONException e) {
         
-            log("Failed to parse response. (" + e.getMessage() + ")");
+            logger.log("Failed to parse response. (" + e.getMessage() + ")");
         
         }
 
         
         return true;
+    }
+    
+    private String getJobsString(ArrayList<String> jobs){
+        if(jobs == null) return "";
+
+        StringBuilder sb = new StringBuilder();
+        
+        for(String job: jobs){
+            sb.append('_');
+            sb.append(job);
+        }
+        
+        return sb.toString();
     }
 
     private void logUsage(JSONObject respNode) throws JSONException{
@@ -159,6 +222,22 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         log("Quota status: " + Integer.toString(usage.getInt("quota")));
         
     }
+    
+    @Override
+    public boolean isConfigurable(){
+        return true;
+    }
+    @Override
+    public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
+        RekognitionConfigurationUI configurationUI = new RekognitionConfigurationUI(this);
+        configurationUI.open(wandora);
+        configurationUI.setVisible(true);
+    }
+    @Override
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
+    }
+    
+    
 
     
 }

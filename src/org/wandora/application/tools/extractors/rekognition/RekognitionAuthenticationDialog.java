@@ -30,6 +30,7 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
 
 /**
  *
@@ -37,12 +38,9 @@ import org.wandora.application.gui.simple.SimpleLabel;
  */
 public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
 
-    protected static final String KEY_KEY = "key";
-    protected static final String SECRET_KEY = "secret";
-    
     private JDialog dialog;
     
-    private HashMap<String,String> auth;
+    private HashMap<AUTH_KEY,String> auth;
     
     /**
      * Creates new form RekognitionAuthenticationDialog
@@ -53,7 +51,7 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
 
     public void open(Wandora w){
         dialog = new JDialog(w, true);
-        dialog.setSize(500, 120);
+        dialog.setSize(400, 180);
         dialog.setResizable(false);
         dialog.add(this);
         dialog.setTitle("Rekognition API key and secret");
@@ -65,15 +63,15 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
     //Populate auth params and hide dialog on submit
     private void submit(){
         this.auth = new HashMap<>();
-        this.auth.put(KEY_KEY,this.keyField.getText());
-        this.auth.put(SECRET_KEY,this.secretField.getText());
+        this.auth.put(AUTH_KEY.KEY,this.keyField.getText());
+        this.auth.put(AUTH_KEY.SECRET,this.secretField.getText());
         
         this.dialog.setVisible(false);
         
     }
     
     //Let the main UI get the auth params
-    protected HashMap<String,String> getAuth(){        
+    protected HashMap<AUTH_KEY,String> getAuth(){        
         return this.auth;
     }
     
