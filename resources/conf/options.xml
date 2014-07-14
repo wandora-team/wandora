@@ -580,6 +580,14 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>Alchemy sentiment extractor...</name>
                <class>org.wandora.application.tools.extractors.alchemy.AlchemySentimentExtractor</class>
             </item>
+            <item>
+               <name>Alchemy relation extractor...</name>
+               <class>org.wandora.application.tools.extractors.alchemy.AlchemyRelationExtractor</class>
+            </item>
+            <item>
+               <name>Alchemy image keyword extractor...</name>
+               <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
+            </item>
          </item>
          <item>
             <name>Language</name>

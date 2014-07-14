@@ -32,27 +32,27 @@ package org.wandora.application.tools.extractors.alchemy;
 
 
 
-import org.w3c.dom.Document;
-
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import javax.swing.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.wandora.topicmap.*;
+import org.w3c.dom.Document;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.utils.*;
 import org.wandora.application.gui.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
+import org.wandora.application.tools.extractors.*;
+import org.wandora.topicmap.*;
+import org.wandora.utils.*;
 
 
 
@@ -79,32 +79,41 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
 
     public static final String SOURCE_SI = "http://wandora.org/si/source";
     public static final String DOCUMENT_SI = "http://wandora.org/si/document";
+    public static final String IMAGE_SI = "http://wandora.org/si/image";
     public static final String TOPIC_SI = "http://wandora.org/si/topic";
 
     public static final String ALCHEMY_SI = "http://www.alchemyapi.com";
 
-    public static final String ALCHEMY_ENTITY_SI = "http://www.alchemyapi.com/api/entity";
-    public static final String ALCHEMY_ENTITY_TYPE_SI = "http://www.alchemyapi.com/api/entity/type";
-    public static final String ALCHEMY_ENTITY_RELEVANCE_SI = "http://www.alchemyapi.com/api/entity/relevance";
+    public static final String ALCHEMY_ENTITY_SI = "http://wandora.org/si/alchemyapi/entity";
+    public static final String ALCHEMY_ENTITY_TYPE_SI = "http://wandora.org/si/alchemyapi/entity/type";
+    public static final String ALCHEMY_ENTITY_RELEVANCE_SI = "http://wandora.org/si/alchemyapi/entity/relevance";
 
-    public static final String ALCHEMY_KEYWORD_SI = "http://www.alchemyapi.com/api/keyword";
-    public static final String ALCHEMY_CATEGORY_SI = "http://www.alchemyapi.com/api/category";
-    public static final String ALCHEMY_CATEGORY_SCORE_SI = "http://www.alchemyapi.com/api/category-score";
-    public static final String ALCHEMY_LANGUAGE_SI = "http://www.alchemyapi.com/api/language";
+    public static final String ALCHEMY_IMAGE_KEYWORD_SI = "http://wandora.org/si/alchemyapi/image-keyword";
+    public static final String ALCHEMY_KEYWORD_SI = "http://wandora.org/si/alchemyapi/keyword";
+    public static final String ALCHEMY_CATEGORY_SI = "http://wandora.org/si/alchemyapi/category";
+    public static final String ALCHEMY_CATEGORY_SCORE_SI = "http://wandora.org/si/alchemyapi/category-score";
+    public static final String ALCHEMY_LANGUAGE_SI = "http://wandora.org/si/alchemyapi/language";
 
-    public static final String ALCHEMY_SENTIMENT_TYPE_SI = "http://www.alchemyapi.com/api/sentiment-type";
-    public static final String ALCHEMY_SENTIMENT_SCORE_SI = "http://www.alchemyapi.com/api/sentiment-score";
+    public static final String ALCHEMY_SENTIMENT_TYPE_SI = "http://wandora.org/si/alchemyapi/sentiment-type";
+    public static final String ALCHEMY_SENTIMENT_SCORE_SI = "http://wandora.org/si/alchemyapi/sentiment-score";
 
     public static final String AAPI_SCHEMA_BASE = "http://rdf.alchemyapi.com/rdf/v1/s/aapi-schema.rdf";
     public static final String SUBTYPE_SI = AAPI_SCHEMA_BASE+"#SubType";
     public static final String GEO_SI = AAPI_SCHEMA_BASE+"#Geo";
-    public static final String SAME_AS_SI = "http://wandora.org/si/alchemy/sameAs";
+    public static final String SAME_AS_SI = "http://wandora.org/si/alchemyapi/sameAs";
 
+    public static final String ALCHEMY_SCORE_SI = "http://wandora.org/si/alchemyapi/score";
+    public static final String ALCHEMY_SCORE_TYPE_SI = "http://wandora.org/si/alchemyapi/score/type";
 
-
-
-
-
+    public static final String ALCHEMY_SUBJECT_SI = "http://wandora.org/si/alchemyapi/subject";
+    public static final String ALCHEMY_ACTION_SI = "http://wandora.org/si/alchemyapi/action";
+    public static final String ALCHEMY_OBJECT_SI = "http://wandora.org/si/alchemyapi/object";
+    public static final String ALCHEMY_RELATION_SI = "http://wandora.org/si/alchemyapi/relation";
+    
+    public static final String ALCHEMY_VERB_SI = "http://wandora.org/si/alchemyapi/verb";
+    public static final String ALCHEMY_TENSE_SI = "http://wandora.org/si/alchemyapi/tense";
+    
+    
 
     @Override
     public Icon getIcon() {
@@ -269,7 +278,26 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
             log(e);
         }
     }
-
+    
+    
+    public void fillImageTopic(Topic imageTopic, TopicMap topicMap, BufferedImage image) {
+        try {
+            /*
+            byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+            String content = Base64.encodeBytes(pixels);
+            if(content != null && content.length() > 0) {
+                Topic contentType = createTopic(topicMap, "document-text");
+                setData(textTopic, contentType, "en", content);
+            }
+            */
+            // imageTopic.setBaseName("Image-"+System.currentTimeMillis());
+            Topic imageType = getImageType(topicMap);
+            imageTopic.addType(imageType);
+        }
+        catch(Exception e) {
+            log(e);
+        }
+    }
 
 
     // ******** TOPIC MAPS *********
@@ -410,7 +438,85 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
         }
         return null;
     }
+    
+    public Topic getScoreTopic(String str, TopicMap tm) throws TopicMapException {
+        if(str != null) {
+            str = str.trim(); 
+            if(str.length() > 0) {
+                Topic t=getOrCreateTopic(tm, ALCHEMY_SCORE_SI+"/"+urlEncode(str), str);
+                Topic ty = getScoreType(tm);
+                t.addType(ty);
+                return t;
+            }
+        }
+        return null;
+    }
 
+    // --- Relations ---
+    
+    public Topic getSubjectTopic(String subject, TopicMap tm) throws TopicMapException {
+        if(subject != null) {
+            subject = subject.trim();
+            if(subject.length() > 0) {
+                Topic subjectTopic=getOrCreateTopic(tm, ALCHEMY_SUBJECT_SI+"/"+urlEncode(subject), subject);
+                Topic subjectTypeTopic = getSubjectType(tm);
+                subjectTopic.addType(subjectTypeTopic);
+                return subjectTopic;
+            }
+        }
+        return null;
+    }
+    public Topic getActionTopic(String action, TopicMap tm) throws TopicMapException {
+        if(action != null) {
+            action = action.trim();
+            if(action.length() > 0) {
+                Topic actionTopic=getOrCreateTopic(tm, ALCHEMY_ACTION_SI+"/"+urlEncode(action), action);
+                Topic actionTypeTopic = getActionType(tm);
+                actionTopic.addType(actionTypeTopic);
+                return actionTopic;
+            }
+        }
+        return null;
+    }
+    public Topic getObjectTopic(String object, TopicMap tm) throws TopicMapException {
+        if(object != null) {
+            object = object.trim();
+            if(object.length() > 0) {
+                Topic objectTopic=getOrCreateTopic(tm, ALCHEMY_OBJECT_SI+"/"+urlEncode(object), object);
+                Topic objectTypeTopic = getObjectType(tm);
+                objectTopic.addType(objectTypeTopic);
+                return objectTopic;
+            }
+        }
+        return null;
+    }
+    public Topic getVerbTopic(String verb, TopicMap tm) throws TopicMapException {
+        if(verb != null) {
+            verb = verb.trim();
+            if(verb.length() > 0) {
+                Topic verbTopic=getOrCreateTopic(tm, ALCHEMY_VERB_SI+"/"+urlEncode(verb), verb);
+                Topic verbTypeTopic = getVerbType(tm);
+                verbTopic.addType(verbTypeTopic);
+                return verbTopic;
+            }
+        }
+        return null;
+    }
+    public Topic getTenseTopic(String tense, TopicMap tm) throws TopicMapException {
+        if(tense != null) {
+            tense = tense.trim();
+            if(tense.length() > 0) {
+                Topic tenseTopic=getOrCreateTopic(tm, ALCHEMY_TENSE_SI+"/"+urlEncode(tense), tense);
+                Topic tenseTypeTopic = getTenseType(tm);
+                tenseTopic.addType(tenseTypeTopic);
+                return tenseTopic;
+            }
+        }
+        return null;
+    }
+    
+    // --- Types ---
+    
     public Topic getRelevanceType(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, ALCHEMY_ENTITY_RELEVANCE_SI, "Alchemy Entity Relevance", getAlchemyType(tm));
     }
@@ -422,13 +528,38 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
     public Topic getEntityType(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, ALCHEMY_ENTITY_SI, "Alchemy Entity", getAlchemyType(tm));
     }
-
-
+    
+    public Topic getSubjectType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_SUBJECT_SI, "Alchemy Subject", getAlchemyType(tm));
+    }
+    public Topic getActionType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_ACTION_SI, "Alchemy Action", getAlchemyType(tm));
+    }
+    public Topic getObjectType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_OBJECT_SI, "Alchemy Object", getAlchemyType(tm));
+    }
+    public Topic getRelationType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_RELATION_SI, "Alchemy Relation", getAlchemyType(tm));
+    }
+    public Topic getVerbType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_VERB_SI, "Alchemy Verb", getAlchemyType(tm));
+    }
+    public Topic getTenseType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_TENSE_SI, "Alchemy Tense", getAlchemyType(tm));
+    }
+    
     public Topic getKeywordType(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, ALCHEMY_KEYWORD_SI, "Alchemy Keyword", getAlchemyType(tm));
     }
+    
+    public Topic getImageKeywordType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_IMAGE_KEYWORD_SI, "Alchemy Image Keyword", getAlchemyType(tm));
+    }
 
-
+    public Topic getScoreType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, ALCHEMY_SCORE_SI, "Alchemy Score", getAlchemyType(tm));
+    }
+    
     public Topic getCategoryType(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, ALCHEMY_CATEGORY_SI, "Alchemy Category", getAlchemyType(tm));
     }
@@ -474,6 +605,13 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
 
     public Topic getDocumentType(TopicMap tm) throws TopicMapException {
         Topic type = getOrCreateTopic(tm, DOCUMENT_SI, "Document");
+        Topic wandoraClass = getWandoraClass(tm);
+        makeSubclassOf(tm, type, wandoraClass);
+        return type;
+    }
+    
+    public Topic getImageType(TopicMap tm) throws TopicMapException {
+        Topic type = getOrCreateTopic(tm, IMAGE_SI, "Image");
         Topic wandoraClass = getWandoraClass(tm);
         makeSubclassOf(tm, type, wandoraClass);
         return type;

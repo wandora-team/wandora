@@ -70,6 +70,7 @@ public class BingExtractor extends AbstractWandoraTool {
 
 
 
+    @Override
     public void execute(Wandora wandora, Context context) {
         try {
             if(selector == null) {

@@ -97,6 +97,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         throw new UnsupportedOperationException("This extractor is a frontend for other ReKognition extractors. It doesn't perform extraction itself.");
     }
     
+
     private static RekognitionConfiguration conf = new RekognitionConfiguration();
     protected static void setConfiguration(RekognitionConfiguration c){
         conf = c;
@@ -105,11 +106,11 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         return conf;
     }
     
+    
     // -------------------------------------------------------------------------
+
     
     protected static Topic getImageTopic(TopicMap tm, String url) throws TopicMapException{
-        
-        
         Topic image = getOrCreateTopic(tm, url);
         Topic imageClass = getImageClass(tm);
         

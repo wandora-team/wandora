@@ -19,6 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+
 package org.wandora.application.tools.extractors.rekognition;
 
 import java.util.HashMap;
@@ -83,25 +85,16 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        descriptionLabel = new javax.swing.JLabel();
         keyLabel = new SimpleLabel();
         secretLabel = new SimpleLabel();
+        descriptionLabel = new SimpleLabel();
         keyField = new SimpleField();
         secretField = new SimpleField();
         submitButton = new SimpleButton();
 
         setLayout(new java.awt.GridBagLayout());
 
-        descriptionLabel.setText("<html><body><centering>Please input the API key and API secret associated with your Rekognition account.</centering>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.weightx = 0.3;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        add(descriptionLabel, gridBagConstraints);
-
-        keyLabel.setText("API Key:");
+        keyLabel.setText("API key");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -109,13 +102,22 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(keyLabel, gridBagConstraints);
 
-        secretLabel.setText("API Secret:");
+        secretLabel.setText("API secret");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(secretLabel, gridBagConstraints);
+
+        descriptionLabel.setText("<html>Please input the API key and API secret associated with your Rekognition account.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 4, 8, 4);
+        add(descriptionLabel, gridBagConstraints);
 
         keyField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,7 +149,7 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         add(submitButton, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 

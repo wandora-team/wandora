@@ -27,13 +27,8 @@ package org.wandora.application.tools.occurrences.refine;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.alchemy.*;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -66,12 +61,13 @@ public class AlchemyKeywordOccurrenceExtractor extends AbstractOccurrenceExtract
 
     @Override
     public String getDescription(){
-        return "Extracts keyword out of given occurrences using Orchestr8's AlchemyAPI service. Read more at http://www.alchemyapi.com/.";
+        return "Extracts keyword out of given occurrences using AlchemyAPI. Read more at http://www.alchemyapi.com/.";
     }
 
 
 
 
+    @Override
     public boolean _extractTopicsFrom(String occurrenceData, Topic masterTopic, TopicMap topicMap, Wandora wandora) throws Exception {
         AlchemyKeywordExtractor extractor = new AlchemyKeywordExtractor();
         extractor.setToolLogger(this.getDefaultLogger());
@@ -81,7 +77,7 @@ public class AlchemyKeywordOccurrenceExtractor extends AbstractOccurrenceExtract
         if(masterTopic != null) masterTerm = masterTopic.getOneSubjectIdentifier().toExternalForm();
         if(occurrenceData != null && occurrenceData.length() > 0) {
             if(apikey != null) apikey = apikey.trim();
-            if(apikey.length() > 0) {
+            if(apikey != null && apikey.length() > 0) {
                 String content = null;
                 content = occurrenceData;
 
@@ -89,10 +85,9 @@ public class AlchemyKeywordOccurrenceExtractor extends AbstractOccurrenceExtract
                 String alchemyData = "apikey="+URLEncoder.encode(apikey, "utf-8")+"&maxRetrieve=100&outputMode=xml&text="+URLEncoder.encode(content, "utf-8");
                 String result = AlchemyKeywordExtractor.sendRequest(new URL(alchemyURL), alchemyData, "application/x-www-form-urlencoded", "POST");
 
-
-                System.out.println("----------------------------------------");
-                System.out.println("Occurrence == "+content);
-                System.out.println("Alchemy returned == "+result);
+                // System.out.println("----------------------------------------");
+                // System.out.println("Occurrence == "+content);
+                // System.out.println("Alchemy returned == "+result);
 
                 javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
                 factory.setNamespaceAware(true);
