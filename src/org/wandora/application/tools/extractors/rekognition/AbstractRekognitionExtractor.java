@@ -58,34 +58,13 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     private static final String FACE_SI_ROOT = SI_ROOT + "face/";
     private static final String DETECTION_SI = FACE_SI_ROOT + "detection/";
     private static final String FEATURE_SI_ROOT = FACE_SI_ROOT + "feature/";
-    
-    private static final String[][] KEY_MAP = {
-        {"b_ll", "brow_left_left"},
-        {"b_lm", "brow_left_middle"},
-        {"b_lr", "brow_left_right"},
-        {"b_rl", "brow_right_left"},
-        {"b_rm", "brow_right_middle"},
-        {"b_rr", "brow_right_right"},
-        {"e_ld", "eye_left_down"},
-        {"e_ll", "eye_left_left"},
-        {"e_lu", "eye_left_up"},
-        {"e_lr", "eye_left_right"},
-        {"e_rd", "eye_right_down"},
-        {"e_rl", "eye_right_left"},
-        {"e_ru", "eye_right_up"},
-        {"e_rr", "eye_right_right"},
-        {"m_d",  "mouth_down"},
-        {"m_u",  "mouth_up"},
-        {"n_l",  "nose_left"},
-        {"n_r",  "nose_right"},
-        {"tl",   "top_left"}
-    };
         
     protected HashMap<String,ValueHandler> createHandlerMap(){
         
         HashMap<String,ValueHandler> handlerMap = new HashMap<>();
         
-        handlerMap.put("boundingbox", new BoundingBoxHandler());
+        handlerMap.put("boundingbox", new BoundingBoxHandler(FEATURE_SI_ROOT + "boundingbox/", "Boundingbox"));
+        handlerMap.put("pose",        new PoseHandler(FEATURE_SI_ROOT + "pose/",               "Pose"));
         handlerMap.put("confidence",  new NumericValueHandler(FEATURE_SI_ROOT + "confidence/", "Confidence"));
         handlerMap.put("emotion",     new NumericValuesHandler(FEATURE_SI_ROOT + "emotion/",   "Emotion"));
         handlerMap.put("eye_left",    new CoordinateHandler(FEATURE_SI_ROOT + "eye_left/",     "Left Eye"));
@@ -100,19 +79,19 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         handlerMap.put("b_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_left/",  "Right Brow (left)"));
         handlerMap.put("b_rm", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_middle/","Right Brow (middle)"));
         handlerMap.put("b_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_right/", "Right Bro (right)"));
-        handlerMap.put("e_ld", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_down/",    "Left eye (down)"));
-        handlerMap.put("e_ll", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_left/",    "Left eye (left)"));
-        handlerMap.put("e_lu", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_up/",      "Left eye (up)"));
-        handlerMap.put("e_lr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_right/",   "Left eye (right)"));
-        handlerMap.put("e_rd", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_down/",   "Right eye (down)"));
-        handlerMap.put("e_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_left/",   "Right eye (left)"));
-        handlerMap.put("e_ru", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_up/",     "Right eye (up)"));
-        handlerMap.put("e_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_right/",  "Right eye (right)"));
-        handlerMap.put("m_d",  new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_down/",       "mouth (down)"));
-        handlerMap.put("m_u",  new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_up/",         "mouth (up)"));
-        handlerMap.put("n_l",  new CoordinateHandler(FEATURE_SI_ROOT+ "nose_left/",        "nose (left)"));
-        handlerMap.put("n_r",  new CoordinateHandler(FEATURE_SI_ROOT+ "nose_right/",       "nose (right)"));
-        handlerMap.put("tl",   new CoordinateHandler(FEATURE_SI_ROOT+ "top_left/",         "nose (left)"));
+        handlerMap.put("e_ld", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_down/",    "Left Eye (down)"));
+        handlerMap.put("e_ll", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_left/",    "Left Eye (left)"));
+        handlerMap.put("e_lu", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_up/",      "Left Eye (up)"));
+        handlerMap.put("e_lr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_right/",   "Left Eye (right)"));
+        handlerMap.put("e_rd", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_down/",   "Right Eye (down)"));
+        handlerMap.put("e_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_left/",   "Right Eye (left)"));
+        handlerMap.put("e_ru", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_up/",     "Right Eye (up)"));
+        handlerMap.put("e_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_right/",  "Right Eye (right)"));
+        handlerMap.put("m_d",  new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_down/",       "Mouth (down)"));
+        handlerMap.put("m_u",  new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_up/",         "Mouth (up)"));
+        handlerMap.put("n_l",  new CoordinateHandler(FEATURE_SI_ROOT+ "nose_left/",        "Nose (left)"));
+        handlerMap.put("n_r",  new CoordinateHandler(FEATURE_SI_ROOT+ "nose_right/",       "Nose (right)"));
+        handlerMap.put("tl",   new CoordinateHandler(FEATURE_SI_ROOT+ "top_left/",         "Nose (left)"));
         
         return handlerMap;
         
@@ -148,7 +127,6 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     // -------------------------------------------------------------------------
     
     protected static Topic getImageTopic(TopicMap tm, String url) throws TopicMapException{
-        
         
         Topic image = getOrCreateTopic(tm, url);
         Topic imageClass = getImageClass(tm);
@@ -292,7 +270,6 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         
     }
     
-    
     /**
      * A value handler is used to create and associate topics from face detection
      * data return as JSON. Implementations use constructors to initialize 
@@ -304,28 +281,62 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     }
     
     /**
-     * NumericValueHandler creates simple occurrence data representing numeric 
-     * (double) values. siBase and name are used to differentiate numeric values.
-     * Valid value for handleValue should be able to be casted to integer or double
+     * AbstractValueHandler implements common functionality for extending
+     * ValueHandlers.
      */
-    class NumericValueHandler implements ValueHandler{
+    abstract class AbstractValueHandler{
+        
+        protected static final String COORDINATE_SI   = SI_ROOT + "coordinate/";
+        protected static final String COORDINATE_NAME = "Coordinate";
 
-        private final String TYPE_SI;
-        private final String TYPE_NAME;
+        protected static final String CONFIDENCE_SI   = FEATURE_SI_ROOT + "confidence/";
+        protected static final String CONFIDENCE_NAME = "Confidence";
         
-        public NumericValueHandler(String si, String name){
-            this.TYPE_SI = si;
-            this.TYPE_NAME = name;
-        }
+        protected String TYPE_SI;
+        protected String TYPE_NAME;
         
-        private Topic getTypeTopic(TopicMap tm) throws TopicMapException{
+        protected Topic getTypeTopic(TopicMap tm) throws TopicMapException{
             Topic typeTopic = getOrCreateTopic(tm, TYPE_SI, TYPE_NAME);
             return typeTopic;
         }
         
+        protected Topic getCoordinateTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, COORDINATE_SI, COORDINATE_NAME);
+            return typeTopic;
+        }
+        
+        protected Topic getConfidenceTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, CONFIDENCE_SI, CONFIDENCE_NAME);
+            return typeTopic;
+        }
+        
+        protected Topic[] getCoordinateTypeTopics(TopicMap tm) throws TopicMapException{
+            Topic coordinateType = getCoordinateTypeTopic(tm);
+            Topic x = getOrCreateTopic(tm, COORDINATE_SI + "x", "x");
+            Topic y = getOrCreateTopic(tm, COORDINATE_SI + "y", "y");
+            x.addType(coordinateType);
+            y.addType(coordinateType);
+            
+            return new Topic[]{x,y};
+        }
+        
+    }
+    
+    /**
+     * NumericValueHandler creates simple occurrence data representing numeric 
+     * (double) values. siBase and name are used to differentiate numeric values.
+     * Valid value for handleValue should be able to be casted to integer or double.
+     */
+    class NumericValueHandler extends AbstractValueHandler implements ValueHandler{
+
+        private NumericValueHandler(String si, String name){
+            this.TYPE_SI = si;
+            this.TYPE_NAME = name;
+        }
+        
         @Override
         public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception {
-            Topic typeTopic = getTypeTopic(tm);
+            Topic typeTopic = this.getTypeTopic(tm);
             Topic langTopic = getLangTopic(tm);
             detection.setData(typeTopic, langTopic, String.valueOf(value));
 
@@ -347,37 +358,22 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
      * will create three associations with the detection, emotion and respective
      * confidence as players.
      */
-    class NumericValuesHandler implements ValueHandler{
+    class NumericValuesHandler extends AbstractValueHandler implements ValueHandler{
 
-        private static final String CONFIDENCE_SI   = FEATURE_SI_ROOT + "confidence/";
-        private static final String CONFIDENCE_NAME = "Confidence";
-        
-        private Topic getConfidenceTypeTopic(TopicMap tm) throws TopicMapException{
-            Topic typeTopic = getOrCreateTopic(tm, CONFIDENCE_SI, CONFIDENCE_NAME);
-            return typeTopic;
-        }
-        
-        private final String TYPE_SI;
-        private final String TYPE_NAME;
-        
-        NumericValuesHandler(String si, String name){
+        private NumericValuesHandler(String si, String name){
             this.TYPE_SI = si;
             this.TYPE_NAME = name;
-        }
-        
-        private Topic getTypeTopic(TopicMap tm) throws TopicMapException{
-            Topic typeTopic = getOrCreateTopic(tm, TYPE_SI, TYPE_NAME);
-            return typeTopic;
         }
         
         @Override
         public void handleValue(TopicMap tm, Topic detection, Object values) throws Exception {
             
             if(!(values instanceof JSONObject)){
-                throw new IllegalArgumentException("Argument supplied to NumericValuesHandler is not a JSONObject");
+                throw new IllegalArgumentException("Argument supplied to "
+                        + "NumericValuesHandler is not a JSONObject.");
             }
             
-            Topic typeTopic = getTypeTopic(tm);
+            Topic typeTopic = this.getTypeTopic(tm);
             Topic confidenceTypeTopic = getConfidenceTypeTopic(tm);
             Topic detectionTypeTopic = getDetectionClass(tm);
             
@@ -410,67 +406,43 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     
     /**
      * CoordinateHandler creates a coordinate topic with simple occurrences of
-     * x and y from a JSONObject in the form
+     * x and y from a JSONObject looking like:
      * 
      * {
      *     "x":<double>
      *     "y":<double>
      * }
      */
-    class CoordinateHandler implements ValueHandler{
+    class CoordinateHandler extends AbstractValueHandler implements ValueHandler{
 
-        private static final String COORDINATE_SI   = SI_ROOT + "coordinate/";
-        private static final String COORDINATE_NAME = "coordinate";
-        
-        private final String TYPE_SI;
-        private final String TYPE_NAME;
-        
-        CoordinateHandler(String si, String name){
+        private CoordinateHandler(String si, String name){
             this.TYPE_SI = si;
             this.TYPE_NAME = name;
-        }
-        
-        private Topic getTypeTopic(TopicMap tm) throws TopicMapException{
-            Topic typeTopic = getOrCreateTopic(tm, TYPE_SI, TYPE_NAME);
-            return typeTopic;
-        }
-        
-        private Topic getCoordinateTypeTopic(TopicMap tm) throws TopicMapException{
-            Topic typeTopic = getOrCreateTopic(tm, COORDINATE_SI, COORDINATE_NAME);
-            return typeTopic;
-        }
-        
-        private Topic[] getCoordinateTypeTopics(TopicMap tm) throws TopicMapException{
-            Topic coordinateType = getCoordinateTypeTopic(tm);
-            Topic x = getOrCreateTopic(tm, COORDINATE_SI + "x", "x");
-            Topic y = getOrCreateTopic(tm, COORDINATE_SI + "y", "y");
-            x.addType(coordinateType);
-            y.addType(coordinateType);
-            
-            return new Topic[]{x,y};
         }
         
         @Override
         public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception {
             
             if(!(value instanceof JSONObject)){
-                throw new IllegalArgumentException("Argument supplied to CoordinateHandler is not a JSONObject");
+                throw new IllegalArgumentException("Argument supplied to "
+                        + "CoordinateHandler is not a JSONObject.");
             }
             
             JSONObject coordinates = (JSONObject)value;
 
             if(!(coordinates.has("x") && coordinates.has("y"))){
-                throw new IllegalArgumentException("Argument supplied to CoordinateHandler doesn't have required keys");
+                throw new IllegalArgumentException("Argument supplied to "
+                        + "CoordinateHandler doesn't have required keys.");
             }
             
             Topic[] coordinateTypes = getCoordinateTypeTopics(tm);
-            Topic typeTopic = getTypeTopic(tm);
+            Topic typeTopic = this.getTypeTopic(tm);
             Topic langTopic = getLangTopic(tm);
             Topic detectionTypeTopic = getDetectionClass(tm);
             
-            String coordinatesSI = UUID.randomUUID().toString();
+            String coordinatesID = UUID.randomUUID().toString();
 
-            Topic coordinatesTopic = getOrCreateTopic(tm, TYPE_SI + coordinatesSI);
+            Topic coordinatesTopic = getOrCreateTopic(tm, TYPE_SI + coordinatesID);
             coordinatesTopic.addType(typeTopic);
             coordinatesTopic.setData(coordinateTypes[0], langTopic, String.valueOf(coordinates.get("x")));
             coordinatesTopic.setData(coordinateTypes[1], langTopic, String.valueOf(coordinates.get("y")));
@@ -483,18 +455,206 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         
     }
     
-    class BoundingBoxHandler implements ValueHandler{
-        //TODO: handle boundingbox
+    /**
+     * BoundingBoxHandler creates a Topic structure representing a "boundingbox"
+     * structure from the response data. The expected response structure is like:
+     * 
+     * {
+     *     "tl":{
+     *         "x":<double>,
+     *         "y":<double>
+     *     },
+     *     "size":{
+     *         "width":<double>,
+     *         "height":<double>
+     *     }
+     * }
+     * 
+     * Here "tl" is interpreted as a coordinate Topic and "size" as a size
+     * Topic.
+     */
+    class BoundingBoxHandler extends AbstractValueHandler implements ValueHandler{
+        
+        
+        private static final String SIZE_SI   = SI_ROOT + "size/";
+        private static final String SIZE_NAME = "Size";
+        
+        private static final String TL_SI   = SI_ROOT + "tl/";
+        private static final String TL_NAME = "Top Left";
+
+        private Topic getSizeTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, SIZE_SI, SIZE_NAME);
+            return typeTopic;
+        }
+        
+        private Topic getTLTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, TL_SI, TL_NAME);
+            return typeTopic;
+        }
+        
+        protected Topic[] getSizeTypeTopics(TopicMap tm) throws TopicMapException{
+            Topic sizeType = getSizeTypeTopic(tm);
+            Topic width = getOrCreateTopic(tm, SIZE_SI + "width", "Width");
+            Topic height = getOrCreateTopic(tm, SIZE_SI + "height", "Height");
+            width.addType(sizeType);
+            height.addType(sizeType);
+            
+            return new Topic[]{width,height};
+        }
+        
+        private BoundingBoxHandler(String si, String name){
+            this.TYPE_SI = si;
+            this.TYPE_NAME = name;
+        }
+        
+        private void handleCoordinates(TopicMap tm, Topic boundingBox, JSONObject tl) throws Exception{
+            Topic[] coordinateTypes = getCoordinateTypeTopics(tm);
+            Topic typeTopic = this.getCoordinateTypeTopic(tm);
+            Topic tlTypeTopic = this.getTLTypeTopic(tm);
+            Topic langTopic = getLangTopic(tm);
+            Topic boundingboxTypeTopic = this.getTypeTopic(tm);
+            
+            String coordinatesID = UUID.randomUUID().toString();
+
+            Topic coordinatesTopic = getOrCreateTopic(tm, COORDINATE_SI + coordinatesID);
+            coordinatesTopic.addType(typeTopic);
+            coordinatesTopic.setData(coordinateTypes[0], langTopic, String.valueOf(tl.get("x")));
+            coordinatesTopic.setData(coordinateTypes[1], langTopic, String.valueOf(tl.get("y")));
+            
+            Association a = tm.createAssociation(tlTypeTopic);
+            a.addPlayer(boundingBox, boundingboxTypeTopic);
+            a.addPlayer(coordinatesTopic, typeTopic);
+        }
+        
+        private void handleSize(TopicMap tm, Topic boundingBox, JSONObject size) throws Exception{
+            Topic[] sizeTypes = getSizeTypeTopics(tm);
+            Topic typeTopic = this.getSizeTypeTopic(tm);
+            Topic langTopic = getLangTopic(tm);
+            Topic boundingboxTypeTopic = this.getTypeTopic(tm);
+            
+            String sizeID = UUID.randomUUID().toString();
+
+            Topic sizeTopic = getOrCreateTopic(tm, SIZE_SI + sizeID);
+            sizeTopic.addType(typeTopic);
+            sizeTopic.setData(sizeTypes[0], langTopic, String.valueOf(size.get("width")));
+            sizeTopic.setData(sizeTypes[1], langTopic, String.valueOf(size.get("height")));
+            
+            Association a = tm.createAssociation(typeTopic);
+            a.addPlayer(boundingBox, boundingboxTypeTopic);
+            a.addPlayer(sizeTopic, typeTopic);
+        }
+        
         @Override
         public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception {
+            
+            if(!(value instanceof JSONObject)){
+                throw new IllegalArgumentException("Argument supplied to "
+                        + "BoundingBoxHandler is not a JSONObject.");
+            }
+            
+            JSONObject boundingbox = (JSONObject)value;
+            
+            if(!(boundingbox.has("tl") && boundingbox.has("size"))){
+                throw new IllegalArgumentException("Argument supplied to "
+                        + "BoundingBoxHandler doesn't have required keys.");
+            }
+            
+            JSONObject tl = boundingbox.getJSONObject("tl");
+            JSONObject size = boundingbox.getJSONObject("size");
+            
+            Topic typeTopic = this.getTypeTopic(tm);
+            
+            String boundingboxID = UUID.randomUUID().toString();
+            Topic boundingboxTopic = getOrCreateTopic(tm, TYPE_SI + boundingboxID);
+            
+            boundingboxTopic.addType(typeTopic);
+            
+            this.handleCoordinates(tm, boundingboxTopic, tl);
+            this.handleSize(tm, boundingboxTopic, size);
+            
+            Association a = tm.createAssociation(typeTopic);
+            a.addPlayer(boundingboxTopic, typeTopic);
+            a.addPlayer(detection, getDetectionClass(tm));
+            
         }
         
     }
     
-    class PoseHandler implements ValueHandler{
-        //TODO: handle pose
+    /**
+     * PoseHandler creates a Topic representing a "pose" structure from the
+     * response data. The expected response structure is like:
+     * 
+     * {
+     *     "roll":<double>,
+     *     "pitch":<double>,
+     *     "yaw":<double>
+     * }
+     * 
+     * Here "tl" is interpreted as a coordinate Topic and "size" as a size
+     * Topic.
+     */
+    class PoseHandler extends AbstractValueHandler implements ValueHandler{
+        
+        private static final String ROLL_SI   = FEATURE_SI_ROOT + "roll/";
+        private static final String ROLL_NAME = "Roll";
+        
+        private static final String YAW_SI   = FEATURE_SI_ROOT + "yaw/";
+        private static final String YAW_NAME = "Yaw";
+        
+        private static final String PITCH_SI   = FEATURE_SI_ROOT + "pitch/";
+        private static final String PITCH_NAME = "Pitch";
+        
+        private Topic getRollTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, ROLL_SI, ROLL_NAME);
+            return typeTopic;
+        }
+        
+        private Topic getYawTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, YAW_SI, YAW_NAME);
+            return typeTopic;
+        }
+        
+        private Topic getPitchTypeTopic(TopicMap tm) throws TopicMapException{
+            Topic typeTopic = getOrCreateTopic(tm, PITCH_SI, PITCH_NAME);
+            return typeTopic;
+        }
+        
+        private PoseHandler(String si, String name){
+            this.TYPE_SI = si;
+            this.TYPE_NAME = name;
+        }
+        
         @Override
         public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception {
+            
+            if(!(value instanceof JSONObject)){
+                throw new IllegalArgumentException("Argument supplied to "
+                        + "PoseHandler is not a JSONObject.");
+            }
+            
+            JSONObject pose = (JSONObject)value;
+            
+            if(!(pose.has("roll") && pose.has("yaw") && pose.has("pitch"))){
+                throw new IllegalArgumentException("Argument supplied to "
+                        + "PoseHandler doesn't have required keys.");
+            }
+            
+            String poseID = UUID.randomUUID().toString();
+            Topic typeTopic = this.getTypeTopic(tm);
+            Topic poseTopic = getOrCreateTopic(tm, TYPE_SI + poseID);
+            poseTopic.addType(typeTopic);
+            
+            Topic langTopic = getLangTopic(tm);
+            
+            poseTopic.setData(getRollTypeTopic(tm),  langTopic, String.valueOf(pose.get("roll")));
+            poseTopic.setData(getYawTypeTopic(tm),   langTopic, String.valueOf(pose.get("yaw")));
+            poseTopic.setData(getPitchTypeTopic(tm), langTopic, String.valueOf(pose.get("pitch")));
+            
+            Topic detectionTypeTopic = getDetectionClass(tm);
+            Association a = tm.createAssociation(typeTopic);
+            a.addPlayer(poseTopic, typeTopic);
+            a.addPlayer(detection,detectionTypeTopic);
+
         }
 
     }
