@@ -29,57 +29,53 @@
 package org.wandora.application;
 
 
-import org.wandora.application.tools.associations.ModifySchemalessAssociation;
-import org.wandora.application.tools.associations.AddSchemalessAssociation;
-import org.wandora.application.tools.occurrences.AddSchemalessOccurrence;
-import org.wandora.application.tools.subjects.AddSubjectIdentifier;
 import bibliothek.gui.Dockable;
-import org.wandora.application.tools.undoredo.Undo;
-import org.wandora.application.tools.undoredo.Redo;
-import org.wandora.application.gui.topicstringify.TopicStringifierToVariant;
-import org.wandora.application.gui.topicstringify.DefaultTopicStringifier;
-import org.wandora.application.tools.occurrences.clipboards.*;
-import org.wandora.application.gui.table.TopicTable;
-import org.wandora.application.tools.occurrences.refine.*;
-import org.wandora.application.tools.maiana.MaianaExport;
-import org.wandora.application.tools.statistics.TopicMapStatistics;
-import org.wandora.application.tools.*;
+import java.awt.*;
+import static java.awt.event.InputEvent.*;
+import static java.awt.event.KeyEvent.*;
+import java.util.*;
+import javax.swing.*;
 import org.wandora.application.contexts.*;
-import org.wandora.application.tools.exporters.*;
-import org.wandora.application.tools.layers.*;
-import org.wandora.application.tools.server.*;
-import org.wandora.application.tools.layers.ClearTopicMap;
-import org.wandora.application.tools.navigate.*;
-import org.wandora.application.tools.project.*;
-import org.wandora.application.tools.selections.*;
-import org.wandora.application.tools.subjects.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.subjects.PasteSIs;
-import org.wandora.application.tools.topicnames.*;
-import org.wandora.application.tools.associations.*;
-import org.wandora.application.tools.statistics.*;
-import org.wandora.application.tools.occurrences.*;
-import org.wandora.application.tools.som.*;
-import org.wandora.topicmap.TopicMapException;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
-import org.wandora.application.gui.topicpanels.*;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-
-import static java.awt.event.KeyEvent.*;
-import static java.awt.event.InputEvent.*;
 import org.wandora.application.gui.table.TopicGrid;
+import org.wandora.application.gui.table.TopicTable;
+import org.wandora.application.gui.topicpanels.*;
 import static org.wandora.application.gui.topicpanels.AbstractTopicPanel.OPTIONS_PREFIX;
 import static org.wandora.application.gui.topicpanels.AbstractTopicPanel.VARIANT_GUITYPE_ALL;
 import static org.wandora.application.gui.topicpanels.AbstractTopicPanel.VARIANT_GUITYPE_SCHEMA;
+import org.wandora.application.gui.topicstringify.DefaultTopicStringifier;
+import org.wandora.application.gui.topicstringify.TopicStringifierToVariant;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.modulesserver.ModulesWebApp;
 import org.wandora.application.modulesserver.WandoraModulesServer;
-import org.wandora.application.tools.mediawiki.MediawikiSubjectLocatorUploader;
+import org.wandora.application.tools.*;
+import org.wandora.application.tools.associations.*;
+import org.wandora.application.tools.associations.AddSchemalessAssociation;
+import org.wandora.application.tools.associations.ModifySchemalessAssociation;
+import org.wandora.application.tools.exporters.*;
+import org.wandora.application.tools.extractors.*;
+import org.wandora.application.tools.layers.*;
+import org.wandora.application.tools.layers.ClearTopicMap;
+import org.wandora.application.tools.maiana.MaianaExport;
 import org.wandora.application.tools.mediawiki.MediawikiOccurrenceUploader;
+import org.wandora.application.tools.mediawiki.MediawikiSubjectLocatorUploader;
 import org.wandora.application.tools.mediawikiapi.MediaWikiAPIUploader;
+import org.wandora.application.tools.navigate.*;
+import org.wandora.application.tools.occurrences.*;
+import org.wandora.application.tools.occurrences.clipboards.*;
+import org.wandora.application.tools.occurrences.refine.*;
+import org.wandora.application.tools.project.*;
+import org.wandora.application.tools.selections.*;
+import org.wandora.application.tools.server.*;
+import org.wandora.application.tools.som.*;
+import org.wandora.application.tools.statistics.*;
+import org.wandora.application.tools.subjects.*;
+import org.wandora.application.tools.subjects.expand.*;
+import org.wandora.application.tools.topicnames.*;
+import org.wandora.application.tools.undoredo.Redo;
+import org.wandora.application.tools.undoredo.Undo;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
 
 
@@ -1208,6 +1204,9 @@ public class WandoraMenuManager {
                     // "Fix SIs", new SIFixer(),
                     "Fix subject identifiers...", new SIFixer2(),
                     "Flatten identity...", new FlattenSIs(),
+                    "Expand identity", new Object[] {
+                        "Expand with sameAs.org", new SameAsSubjectExpander(),
+                    },
                 };
             }
             catch(Exception e) {
@@ -1966,6 +1965,9 @@ public class WandoraMenuManager {
             "Remove selected subject identifiers", new DeleteSIs(new SIContext()),
             "Remove subject identifier with regex...", new DeleteSIsWithRegex(new SIContext()),
             "Flatten identity...", new FlattenSIs(),
+            "Expand identity", new Object[] {
+                "Expand with sameAs.org", new SameAsSubjectExpander(new SIContext()),
+            },
             "---",
             "Copy subject identifier to subject locator", new MakeSLWithSI(new SIContext()),
         };
@@ -1978,7 +1980,11 @@ public class WandoraMenuManager {
             "Add subject identifier...", new AddSubjectIdentifier(new ApplicationContext()),
             "Copy subject identifiers", new CopySIs(new ApplicationContext()),
             "Paste subject identifiers", new PasteSIs(new ApplicationContext()),
+            "---",
             "Flatten identity...", new FlattenSIs(new ApplicationContext()),
+            "Expand identity", new Object[] {
+                "Expand with sameAs.org", new SameAsSubjectExpander(new ApplicationContext()),
+            }  
         };
     }
     
