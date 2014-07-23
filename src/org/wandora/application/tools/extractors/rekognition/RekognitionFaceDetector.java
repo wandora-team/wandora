@@ -142,6 +142,8 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         HttpResponse<JsonNode> resp = Unirest.get(extractUrl).asJson();
         JSONObject respNode = resp.getBody().getObject();
         
+        System.out.println(respNode.toString());
+        
         HashMap<String,ValueHandler> handlerMap = createHandlerMap();
         try {
             

@@ -63,6 +63,8 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         
         HashMap<String,ValueHandler> handlerMap = new HashMap<>();
         
+        handlerMap.put("matches", new CelebHandler(SI_ROOT + "match", "Celebrity Match"));
+
         handlerMap.put("boundingbox", new BoundingBoxHandler(FEATURE_SI_ROOT + "boundingbox/", "Boundingbox"));
         handlerMap.put("pose", new PoseHandler(FEATURE_SI_ROOT + "pose/", "Pose"));
         handlerMap.put("confidence", new NumericValueHandler(FEATURE_SI_ROOT + "confidence/", "Confidence"));
@@ -271,19 +273,19 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     }
     
     /**
-* A value handler is used to create and associate topics from face detection
-* data return as JSON. Implementations use constructors to initialize
-* feature types etc. handleValue is used to create the individual feature
-* Topics.
-*/
+    * A value handler is used to create and associate topics from face detection
+    * data return as JSON. Implementations use constructors to initialize
+    * feature types etc. handleValue is used to create the individual feature
+    * Topics.
+    */
     interface ValueHandler{
         public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception;
     }
     
     /**
-* AbstractValueHandler implements common functionality for extending
-* ValueHandlers.
-*/
+    * AbstractValueHandler implements common functionality for extending
+    * ValueHandlers.
+    */
     abstract class AbstractValueHandler{
         
         protected static final String COORDINATE_SI = SI_ROOT + "coordinate/";
@@ -323,10 +325,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     }
     
     /**
-* NumericValueHandler creates simple occurrence data representing numeric
-* (double) values. siBase and name are used to differentiate numeric values.
-* Valid value for handleValue should be able to be casted to integer or double.
-*/
+    * NumericValueHandler creates simple occurrence data representing numeric
+    * (double) values. siBase and name are used to differentiate numeric values.
+    * Valid value for handleValue should be able to be casted to integer or double.
+    */
     class NumericValueHandler extends AbstractValueHandler implements ValueHandler{
 
         private NumericValueHandler(String si, String name){
@@ -344,20 +346,20 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     }
     
     /**
-* NumericValuesHandler creates a series of Topics from a JSONObject where
-* the keys are used as Topics to be associated with the detection and
-* a numeric value describing the confidence of the association. For example
-* the JSONObject with a key "emotion"
-*
-* {
-* "happy" : 0.98,
-* "surprised" : 0.05,
-* "calm" : 0.02
-* }
-*
-* will create three associations with the detection, emotion and respective
-* confidence as players.
-*/
+    * NumericValuesHandler creates a series of Topics from a JSONObject where
+    * the keys are used as Topics to be associated with the detection and
+    * a numeric value describing the confidence of the association. For example
+    * the JSONObject with a key "emotion"
+    *
+    * {
+    * "happy" : 0.98,
+    * "surprised" : 0.05,
+    * "calm" : 0.02
+    * }
+    *
+    * will create three associations with the detection, emotion and respective
+    * confidence as players.
+    */
     class NumericValuesHandler extends AbstractValueHandler implements ValueHandler{
 
         private NumericValuesHandler(String si, String name){
@@ -405,14 +407,14 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     }
     
     /**
-* CoordinateHandler creates a coordinate topic with simple occurrences of
-* x and y from a JSONObject looking like:
-*
-* {
-* "x":<double>
-* "y":<double>
-* }
-*/
+    * CoordinateHandler creates a coordinate topic with simple occurrences of
+    * x and y from a JSONObject looking like:
+    *
+    * {
+    * "x":<double>
+    * "y":<double>
+    * }
+    */
     class CoordinateHandler extends AbstractValueHandler implements ValueHandler{
 
         private CoordinateHandler(String si, String name){
@@ -456,23 +458,23 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     }
     
     /**
-* BoundingBoxHandler creates a Topic structure representing a "boundingbox"
-* structure from the response data. The expected response structure is like:
-*
-* {
-* "tl":{
-* "x":<double>,
-* "y":<double>
-* },
-* "size":{
-* "width":<double>,
-* "height":<double>
-* }
-* }
-*
-* Here "tl" is interpreted as a coordinate Topic and "size" as a size
-* Topic.
-*/
+    * BoundingBoxHandler creates a Topic structure representing a "boundingbox"
+    * structure from the response data. The expected response structure is like:
+    *
+    * {
+    * "tl":{
+    * "x":<double>,
+    * "y":<double>
+    * },
+    * "size":{
+    * "width":<double>,
+    * "height":<double>
+    * }
+    * }
+    *
+    * Here "tl" is interpreted as a coordinate Topic and "size" as a size
+    * Topic.
+    */
     class BoundingBoxHandler extends AbstractValueHandler implements ValueHandler{
         
         
@@ -581,18 +583,16 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     }
     
     /**
-* PoseHandler creates a Topic representing a "pose" structure from the
-* response data. The expected response structure is like:
-*
-* {
-* "roll":<double>,
-* "pitch":<double>,
-* "yaw":<double>
-* }
-*
-* Here "tl" is interpreted as a coordinate Topic and "size" as a size
-* Topic.
-*/
+    * PoseHandler creates a Topic representing a "pose" structure from the
+    * response data. The expected response structure is like:
+    *
+    * {
+    * "roll":<double>,
+    * "pitch":<double>,
+    * "yaw":<double>
+    * }
+    *
+    */
     class PoseHandler extends AbstractValueHandler implements ValueHandler{
         
         private static final String ROLL_SI = FEATURE_SI_ROOT + "roll/";
@@ -658,4 +658,58 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         }
 
     }
+    /**
+    * CelebHandler creates a Topic representing a celebrity match from the
+    * response data. The expected response structure is like:
+    *
+    * [{
+    * "tag":<String>,
+    * "score":<double>
+    * },...]
+    *
+    * Here tag has snake case and is converted to a nicer format.
+    * Example: "Gwyneth_Paltrow" -> "Gwyneth Paltrow"
+    */
+    
+    class CelebHandler extends AbstractValueHandler implements ValueHandler{
+
+        private CelebHandler(String si, String name){
+            this.TYPE_SI = si;
+            this.TYPE_NAME = name;
+        }
+        
+        @Override
+        public void handleValue(TopicMap tm, Topic detection, Object values) throws Exception {
+            if(!(values instanceof JSONArray)){
+                throw new IllegalArgumentException("Argument supplied to "
+                        + "CelebHandler is not a JSONArray.");
+            }
+            
+            Topic typeTopic = this.getTypeTopic(tm);
+            Topic confidenceTypeTopic = getConfidenceTypeTopic(tm);
+            Topic detectionTypeTopic = getDetectionClass(tm);
+            
+            JSONArray matches = (JSONArray)values;
+            
+            for(int i=0;i<matches.length();i++){
+                JSONObject match = matches.getJSONObject(i);
+                String matchName = match.getString("tag");
+                Topic matchTopic = getOrCreateTopic(tm, TYPE_SI + "/" + matchName, matchName.replace("_", " "));
+                
+                Double confidenceValue = match.getDouble("score");
+                String confidenceID = UUID.randomUUID().toString();
+                Topic confidenceTopic = getOrCreateTopic(tm, CONFIDENCE_SI + confidenceID);
+                
+                confidenceTopic.setData(confidenceTypeTopic, getLangTopic(tm), String.valueOf(confidenceValue));
+                confidenceTopic.addType(confidenceTypeTopic);
+                
+                Association a = tm.createAssociation(typeTopic);
+                a.addPlayer(matchTopic, typeTopic);
+                a.addPlayer(confidenceTopic,confidenceTypeTopic);
+                a.addPlayer(detection,detectionTypeTopic);
+                
+            }
+        }
+    }
+    
 }
