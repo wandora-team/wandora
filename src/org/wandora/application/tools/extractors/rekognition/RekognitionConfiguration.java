@@ -53,6 +53,8 @@ class RekognitionConfiguration {
     //Defaults
     protected RekognitionConfiguration(){
         this.jobs = new ArrayList<>();
+        jobs.add("celebrity");
+        jobs.add("emotion");
         this.celebrityNaming = false;
         this.celebrityTreshold = 0;
         this.auth = null;

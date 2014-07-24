@@ -79,8 +79,11 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
             this.forgetButton.setEnabled(false);
         }
         
-        for(String job: configuration.jobs){
-            faceJobs.get(job).setSelected(true);
+        for(String key: faceJobs.keySet()){
+            if(faceJobs.containsKey(key))
+                faceJobs.get(key).setSelected(true);
+            else
+                faceJobs.get(key).setSelected(false);
         }
     }
     
@@ -227,6 +230,11 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
 
         faceJobCheckEmotion.setSelected(true);
         faceJobCheckEmotion.setText("Emotion");
+        faceJobCheckEmotion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                faceJobCheckEmotionActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -411,6 +419,10 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
             this.dialog.setVisible(false);
         }
     }//GEN-LAST:event_okButtonActionPerformed
+
+    private void faceJobCheckEmotionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_faceJobCheckEmotionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_faceJobCheckEmotionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
