@@ -588,6 +588,14 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>Alchemy image keyword extractor...</name>
                <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
             </item>
+            <item>
+               <name>--- REKOGNITION ---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>ReKognition face detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.rekognition.RekognitionFaceDetector</class>
+            </item>
          </item>
          <item>
             <name>Language</name>
@@ -775,9 +783,18 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.ocr.OCRExtractor</class>
             </item>
             <item>
-               <name>ReKognition Face Detection extractor...</name>
+               <name>--- IMAGE RECOGNITION ---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>Alchemy image keyword extractor...</name>
+               <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
+            </item>
+            <item>
+               <name>ReKognition face detection extractor...</name>
                <class>org.wandora.application.tools.extractors.rekognition.RekognitionFaceDetector</class>
             </item>
+            
          </item>
          <item>
             <name>Simple files</name>

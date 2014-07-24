@@ -666,7 +666,7 @@ public class OpenCycExtractorSelector extends JDialog {
 
         swConceptInnerPanel.setLayout(new java.awt.GridBagLayout());
 
-        swConceptLabel.setText("<html>Extract information about CYC concepts. Please write concept names below or get context names. Use comma (,) character to separate names.</html>");
+        swConceptLabel.setText("<html>Extract information about CYC concepts. Please write concept names below or get context names. Use comma (,) character to separate names. Notice, a name of CYC concept is in camel case, for example 'Cat', 'IsaacNewton'.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

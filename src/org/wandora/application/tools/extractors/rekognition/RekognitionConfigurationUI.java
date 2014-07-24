@@ -28,8 +28,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
 
 /**
@@ -48,6 +52,9 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
 
     public RekognitionConfigurationUI(RekognitionFaceDetector detector){
         initComponents();
+        
+        faceCelebrityTresholdLabel.setFont(UIConstants.buttonLabelFont);
+        UIConstants.setFancyFont(faceCelebrityTresholdLabel);
         
         this.detector = detector;
         
@@ -80,7 +87,7 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
     public void open(Wandora w){
         wandora = w;
         dialog = new JDialog(w, true);
-        dialog.setSize(800, 500);
+        dialog.setSize(400, 500);
         dialog.add(this);
         dialog.setTitle("ReKognition API extractor configuration");
         UIBox.centerWindow(dialog, w);
@@ -163,7 +170,7 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        rekognitionTabs = new javax.swing.JTabbedPane();
+        rekognitionTabs = new SimpleTabbedPane();
         faceDetectorTab = new javax.swing.JPanel();
         faceDetectorJobsPanel = new javax.swing.JPanel();
         faceJobCheckAggressive = new SimpleCheckBox();
@@ -181,7 +188,7 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
         faceCelebrityDetails = new javax.swing.JPanel();
         faceAssociateCelebrity = new SimpleCheckBox();
         faceCelebrityTreshold = new javax.swing.JFormattedTextField();
-        faceCelebrityTresholdLabel = new javax.swing.JLabel();
+        faceCelebrityTresholdLabel = new SimpleLabel();
         buttonPanel = new javax.swing.JPanel();
         buttonFillerPanel = new javax.swing.JPanel();
         okButton = new SimpleButton();
@@ -192,86 +199,76 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
 
         faceDetectorTab.setLayout(new java.awt.GridBagLayout());
 
-        faceDetectorJobsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Jobs"));
         faceDetectorJobsPanel.setLayout(new java.awt.GridBagLayout());
 
         faceJobCheckAggressive.setText("Aggressive");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckAggressive, gridBagConstraints);
 
         faceJobCheckPart.setText("Part Positions");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckPart, gridBagConstraints);
 
         faceJobCheckPartDetail.setText("Part Details");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckPartDetail, gridBagConstraints);
 
         faceJobCheckGender.setText("Gender");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckGender, gridBagConstraints);
 
+        faceJobCheckEmotion.setSelected(true);
         faceJobCheckEmotion.setText("Emotion");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckEmotion, gridBagConstraints);
 
         faceJobCheckRace.setText("Race");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckRace, gridBagConstraints);
 
         faceJobCheckAge.setText("Age");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckAge, gridBagConstraints);
 
         faceJobCheckGlass.setText("Glasses");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckGlass, gridBagConstraints);
 
         faceJobCheckMouthOpenWide.setText("Mouth Open");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckMouthOpenWide, gridBagConstraints);
 
         faceJobCheckEyeClosed.setText("Eyes Closed");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckEyeClosed, gridBagConstraints);
 
         faceJobCheckBeauty.setText("Beauty");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckBeauty, gridBagConstraints);
 
+        faceJobCheckCelebrity.setSelected(true);
         faceJobCheckCelebrity.setText("Celebrity");
         faceJobCheckCelebrity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -279,59 +276,53 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceDetectorJobsPanel.add(faceJobCheckCelebrity, gridBagConstraints);
 
         faceCelebrityDetails.setLayout(new java.awt.GridBagLayout());
 
+        faceAssociateCelebrity.setSelected(true);
         faceAssociateCelebrity.setText("Attempt Celebrity Naming");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         faceCelebrityDetails.add(faceAssociateCelebrity, gridBagConstraints);
 
         faceCelebrityTreshold.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("##0.##"))));
+        faceCelebrityTreshold.setText("0.5");
         faceCelebrityTreshold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 faceCelebrityTresholdActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         faceCelebrityDetails.add(faceCelebrityTreshold, gridBagConstraints);
 
         faceCelebrityTresholdLabel.setText("Treshold");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(4, 3, 0, 3);
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
         faceCelebrityDetails.add(faceCelebrityTresholdLabel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 24, 0, 0);
         faceDetectorJobsPanel.add(faceCelebrityDetails, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         faceDetectorTab.add(faceDetectorJobsPanel, gridBagConstraints);
 
         rekognitionTabs.addTab("Face Detector", faceDetectorTab);

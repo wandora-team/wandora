@@ -67,12 +67,12 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
     
     @Override
     public String getName() {
-        return "ReKognition API Extractor";
+        return "ReKognition face detector";
     }
 
     @Override
     public String getDescription() {
-        return "Extracts topics and associations from the ReKognition API. ";
+        return "Detects face out of given image using ReKognition API.";
     }
 
     @Override
