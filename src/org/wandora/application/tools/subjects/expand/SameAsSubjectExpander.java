@@ -22,6 +22,7 @@
  */
 package org.wandora.application.tools.subjects.expand;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Collection;
@@ -146,19 +147,33 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
     // -------------------------------------------------------------------------
     
     
-    private static String REQUEST_BASE = "http://sameas.org/json";
     
-    private Collection<URL> getExpandingSubjects(String subject) {
-        HashSet<URL> additionalSubjects = new HashSet();
-        String expanderRequestString = REQUEST_BASE + "?uri=" + subject;
+    protected String getExpandingRequestBase() {
+        return "http://sameas.org/json";
+    }
+    
+    
+    
+
+    protected URL getExpandingRequestURL(String subject) throws MalformedURLException {
+        String expanderRequestString = getExpandingRequestBase() + "?uri=" + subject;
         try {
-            expanderRequestString = REQUEST_BASE + "?uri=" + URLEncoder.encode(subject, "UTF-8");
+            expanderRequestString = getExpandingRequestBase() + "?uri=" + URLEncoder.encode(subject, "UTF-8");
         }
         catch(Exception e) {
-            // Nothing. Continue. We already have expanderRequestString.
+            // Nothing. Continue. We already have the expanderRequestString.
         }
+        return new URL(expanderRequestString);
+    }
+
+
+    
+    
+    protected Collection<URL> getExpandingSubjects(String subject) {
+        HashSet<URL> additionalSubjects = new HashSet();
+        
         try {
-            String responseString = IObox.doUrl(new URL(expanderRequestString));
+            String responseString = IObox.doUrl(getExpandingRequestURL(subject));
             JSONArray response = new JSONArray(responseString);
             for(int i=0; i<response.length(); i++) {
                 JSONObject json = response.getJSONObject(i);
