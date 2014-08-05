@@ -27,7 +27,8 @@ If you run into any trouble or have questions consult our [forum](http://wandora
 
 ## Developer Introduction
 
-We develop Wandora with the [Netbeans IDE](https://netbeans.org/). 
+We develop Wandora with the [Netbeans IDE](https://netbeans.org/). To start
+working with Wandora's source code, download and install Netbeans IDE.
 Wandora's source code package and the GitHub repository contain both all 
 required project files for the Netbeans IDE. To open the Wandora in Netbeans,
 select menu option File &gt; Open Project... in Netbeans and select Wandora's installation
@@ -35,3 +36,5 @@ folder. Once you have successfully opened Wandora project, you can compile Wando
 to test whether or not you have everything in order.
 
 To compile Wandora, a Java JDK 7 is required.
+
+
