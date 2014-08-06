@@ -28,6 +28,7 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
@@ -35,7 +36,9 @@ import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.application.tools.subjects.AddSubjectIdentifierPanel;
+import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
@@ -50,6 +53,8 @@ import org.wandora.utils.IObox;
 
 
 public class SameAsSubjectExpander extends AbstractWandoraTool implements WandoraTool {
+    
+    private static boolean makeAssociationsInstead = false; 
     
     private boolean shouldRefresh = false;
     
@@ -84,7 +89,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
                     if(!topic.isRemoved()) {
                         String topicName = ( topic.getBaseName() == null ? topic.getOneSubjectIdentifier().toExternalForm() :  topic.getBaseName());
                         for(Locator subject : topic.getSubjectIdentifiers()) {
-                            expandSubject(topic, subject);
+                            expandSubject(topic, subject, tm);
                         }
                     }
                 }
@@ -95,7 +100,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
                         topic = tm.getTopicBySubjectLocator(subjectLocator);
                     }
                     if(topic != null) {
-                        expandSubject(topic, subjectLocator);
+                        expandSubject(topic, subjectLocator, tm);
                     }
                 }
                 else if(contextObject instanceof String) {
@@ -108,7 +113,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
                         topic = tm.getTopicWithBaseName(subjectLocatorString);
                     }
                     if(topic != null) {
-                        expandSubject(topic, new Locator(subjectLocatorString));
+                        expandSubject(topic, new Locator(subjectLocatorString), tm);
                     }
                 }
             }
@@ -122,16 +127,36 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
     }
     
     
-    public void expandSubject(Topic topic, Locator subject) {
+    public void expandSubject(Topic topic, Locator subject, TopicMap tm) {
         if(topic != null && subject != null) {
             Collection<URL> additionalSubjects = getExpandingSubjects(subject.toString());
             for(URL aSubject : additionalSubjects) {
                 if(aSubject != null) {
                     try {
-                        Locator l = topic.getTopicMap().createLocator(aSubject.toExternalForm());
-                        if(TMBox.checkSubjectIdentifierChange(Wandora.getWandora(),topic,l,true) == ConfirmResult.yes) {
-                            shouldRefresh = true;
-                            topic.addSubjectIdentifier(l);
+                        Locator l = tm.createLocator(aSubject.toExternalForm());
+                        if(makeAssociationsInstead) {
+                            Topic subjectTopic = tm.getTopic(l);
+                            if(subjectTopic == null) {
+                                subjectTopic = tm.createTopic();
+                                subjectTopic.addSubjectIdentifier(l);
+                            }
+                            if(subjectTopic != null && !subjectTopic.mergesWithTopic(topic)) {
+                                Topic sameAsType = getOrCreateTopic("http://sameas.org/", "sameas.org", tm);
+                                Topic sourceRole = getOrCreateTopic("http://wandora.org/si/core/rdf-source", "rdf-source", tm);
+                                Topic targetRole = getOrCreateTopic("http://wandora.org/si/core/rdf-target", "rdf-target", tm);
+                                if(sameAsType != null && sourceRole != null && targetRole != null) {
+                                    Association sameAsAssociation = topic.getTopicMap().createAssociation(sameAsType);
+                                    sameAsAssociation.addPlayer(topic, sourceRole);
+                                    sameAsAssociation.addPlayer(subjectTopic, targetRole);
+                                    shouldRefresh = true;
+                                }
+                            }
+                        }
+                        else {
+                            if(TMBox.checkSubjectIdentifierChange(Wandora.getWandora(),topic,l,true) == ConfirmResult.yes) {
+                                shouldRefresh = true;
+                                topic.addSubjectIdentifier(l);
+                            }
                         }
                     }
                     catch(Exception mue) {
@@ -142,6 +167,18 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
         }
     }
     
+    
+    
+    private Topic getOrCreateTopic(String si, String bn, TopicMap tm) throws TopicMapException {
+        Topic t = tm.getTopic(si);
+        if(t == null) t = tm.getTopicWithBaseName(bn);
+        if(t == null) {
+            t = tm.createTopic();
+            t.addSubjectIdentifier(new Locator(si));
+            t.setBaseName(bn);
+        }
+        return t;
+    }
     
     
     // -------------------------------------------------------------------------
@@ -205,5 +242,40 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
         }
         return additionalSubjects;
     }
+    
+    
+    // ---------------------------------------------------------- CONFIGURE ----
+    
+    
+    @Override
+    public boolean isConfigurable(){
+        return true;
+    }
+    
+    @Override
+    public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
+        GenericOptionsDialog god = new GenericOptionsDialog(
+            wandora, 
+            "SameAs.org subject expander options", 
+            "SameAs.org subject expander options", 
+            true, 
+            new String[][] {
+                new String[] { "Make associations instead", "boolean", makeAssociationsInstead ? "true" : "false" },
+            },
+            wandora
+        );
+        god.setVisible(true);
+        if(god.wasCancelled()) return;
+
+        Map<String,String> values = god.getValues();
+        
+        makeAssociationsInstead = Boolean.parseBoolean(values.get("Make associations instead"));
+    }
+    
+    @Override
+    public void writeOptions(Wandora w, org.wandora.utils.Options options, String prefix){
+    }
+    
+    
     
 }
