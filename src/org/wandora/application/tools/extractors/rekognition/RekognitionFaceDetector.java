@@ -72,7 +72,9 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
 
     @Override
     public String getDescription() {
-        return "Detects face out of given image using ReKognition API.";
+        return "Detects face out of given image using ReKognition API. "+
+               "Creates topics and associations out of ReKognition face detection. "+
+               "Read more about ReKognition at http://rekognition.com/";
     }
 
     @Override
@@ -99,7 +101,7 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
      * 
      * @param imageUrl the image URL for extraction
      * @param tm the current TopicMap
-     * @return ???
+     * @return true if the extraction was successful, false otherwise
      * @throws Exception if the supplied URL is invalid or Topic Map
      * manipulation fails
      */
@@ -124,8 +126,10 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         if(conf.auth == null){
             RekognitionAuthenticationDialog authDialog = new RekognitionAuthenticationDialog();
             authDialog.open(getWandora());
-            conf.auth = authDialog.getAuth();
-            setConfiguration(conf);
+            if(authDialog.wasAccepted()) {
+                conf.auth = authDialog.getAuth();
+                setConfiguration(conf);
+            }
         }
         
         /**
@@ -145,11 +149,9 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         System.out.println(respNode.toString());
         
         HashMap<String,ValueHandler> handlerMap = createHandlerMap();
+        
         try {
-            
             logUsage(respNode);
-            
-            
             
             String imageURL = respNode.getString("url");
             Topic imageTopic = getImageTopic(tm, imageURL);
@@ -159,42 +161,39 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
             logger.log("Detected " + detections.length() + " faces");
             
             for(int i = 0; i < detections.length(); i++){
-                
                 logger.log("Parsing detection #" + (i+1));
-                
                 JSONObject detectionJSON = detections.getJSONObject(i);
                 Topic detectionTopic = getDetectionTopic(tm);
                 
-                if(conf.celebrityNaming){
+                if(conf.celebrityNaming) {
                     try {
-                        String bestMatch = getBestMatch(detectionJSON,conf.celebrityTreshold);
+                        String bestMatch = getBestMatch(detectionJSON, conf.celebrityTreshold);
                         detectionTopic.setBaseName(bestMatch);
-                    } catch (JSONException | TopicMapException e) {
+                    } 
+                    catch (JSONException | TopicMapException e) {
                         logger.log("Failed to match name for detection");
                     }
                 }
                 
                 associateImageWithDetection(tm, imageTopic, detectionTopic);
                 
-                for(String featureKey: handlerMap.keySet()){
-                    
+                for(String featureKey : handlerMap.keySet()) {
                     if (detectionJSON.has(featureKey)) {
                         Object feature = detectionJSON.get(featureKey);
                         handlerMap.get(featureKey).handleValue(tm, detectionTopic, feature);
                     }
                 }
-                
             }
-            
-        } catch (JSONException e) {
-        
-            logger.log("Failed to parse response. (" + e.getMessage() + ")");
-        
         }
-
-        
+        catch (JSONException e) {
+            logger.log("Failed to parse response. (" + e.getMessage() + ")");
+            return false;
+        }
         return true;
     }
+    
+    
+    
     
     private String getJobsString(ArrayList<String> jobs){
         if(jobs == null) return "";
@@ -208,6 +207,9 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         
         return sb.toString();
     }
+    
+    
+    
 
     private void logUsage(JSONObject respNode) throws JSONException{
         
@@ -217,6 +219,10 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         log("Quota status: " + Integer.toString(usage.getInt("quota")));
         
     }
+    
+    
+    // ----------------------------------------------------------- CONFIGURE ---
+    
     
     @Override
     public boolean isConfigurable(){

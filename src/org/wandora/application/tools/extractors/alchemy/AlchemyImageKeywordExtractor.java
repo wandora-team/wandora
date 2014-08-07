@@ -66,6 +66,11 @@ public class AlchemyImageKeywordExtractor extends AbstractAlchemyExtractor {
     
     
     @Override
+    public int getExtractorType() {
+        return FILE_EXTRACTOR | URL_EXTRACTOR;
+    }
+    
+    @Override
     public String getName() {
         return "Alchemy image keywords extractor";
     }
@@ -76,7 +81,11 @@ public class AlchemyImageKeywordExtractor extends AbstractAlchemyExtractor {
     }
 
 
+    
+    
+    // -------------------------------------------------------------------------
 
+    
     @Override
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         if(url == null || topicMap == null) return false;
@@ -155,7 +164,7 @@ public class AlchemyImageKeywordExtractor extends AbstractAlchemyExtractor {
                 in.close();
                 String response = responseBuilder.toString();
 
-                System.out.println("AlchemyAPI says: "+response);
+                // System.out.println("AlchemyAPI says: "+response);
 
                 // Parse the response
                 javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();

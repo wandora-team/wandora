@@ -19,6 +19,9 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 */
+
+
+
 package org.wandora.application.tools.extractors.rekognition;
 
 import java.io.File;
@@ -41,7 +44,9 @@ import org.wandora.topicmap.TopicMapException;
 *
 * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
 */
-abstract class AbstractRekognitionExtractor extends AbstractExtractor{
+abstract class AbstractRekognitionExtractor extends AbstractExtractor {
+    
+    private static boolean MAKE_DISTINCT_CONFIDENCE_TOPICS = false;
     
     protected static final String API_ROOT = "http://rekognition.com/func/api/";
     
@@ -58,8 +63,8 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     private static final String FACE_SI_ROOT = SI_ROOT + "face/";
     private static final String DETECTION_SI = FACE_SI_ROOT + "detection/";
     private static final String FEATURE_SI_ROOT = FACE_SI_ROOT + "feature/";
-        
-    protected HashMap<String,ValueHandler> createHandlerMap(){
+
+    protected HashMap<String,ValueHandler> createHandlerMap() {
         
         HashMap<String,ValueHandler> handlerMap = new HashMap<>();
         
@@ -99,6 +104,8 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         
     }
     
+    // -------------------------------------------------------------------------
+    
     private static final String EXTRACT_ERROR =
             "This extractor is a frontend for other ReKognition extractors. "
             + "It doesn't perform extraction itself.";
@@ -117,6 +124,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
     public boolean _extractTopicsFrom(String str, TopicMap t) throws Exception {
         throw new UnsupportedOperationException(EXTRACT_ERROR);
     }
+    
+    
+    // -------------------------------------------------------------------------
+    
     
     private static RekognitionConfiguration conf = new RekognitionConfiguration();
     protected static void setConfiguration(RekognitionConfiguration c){
@@ -139,8 +150,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         
     }
     
-    protected static Topic getDetectionTopic(TopicMap tm) throws TopicMapException{
-        
+    protected static Topic getDetectionTopic(TopicMap tm) throws TopicMapException {
         String id = UUID.randomUUID().toString();
         
         Topic detection = getOrCreateTopic(tm, DETECTION_SI + id);
@@ -149,11 +159,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         detection.addType(detectionClass);
         
         return detection;
-        
     }
     
-    protected static void associateImageWithDetection(TopicMap tm, Topic image, Topic detection) throws TopicMapException{
-        
+    
+    protected static void associateImageWithDetection(TopicMap tm, Topic image, Topic detection) throws TopicMapException {
         Topic imageClass = getImageClass(tm);
         Topic detectionClass = getDetectionClass(tm);
         
@@ -161,21 +170,20 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         
         a.addPlayer(image, imageClass);
         a.addPlayer(detection, detectionClass);
-        
     }
     
+    
+    
     protected static void addFeatureToDetection(TopicMap tm, Topic Detection, String featureType, String featureData) throws TopicMapException{
-        
         Topic langTopic = getLangTopic(tm);
         Topic featureTypeTopic = getFeatureTypeTopic(tm, featureType);
         
         Detection.setData(featureTypeTopic, langTopic, featureData);
-        
-        
     }
     
+    
+    
     protected static Topic getFeatureTypeTopic(TopicMap tm, String featureType) throws TopicMapException {
-        
         Topic featureTypeTopic = getOrCreateTopic(tm, FEATURE_SI_ROOT + featureType, featureType);
         Topic featureClass = getFeatureClass(tm);
         
@@ -184,34 +192,40 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         return featureTypeTopic;
     }
     
-    protected static Topic getImageClass(TopicMap tm) throws TopicMapException{
-        
+    
+    
+    protected static Topic getImageClass(TopicMap tm) throws TopicMapException {
         Topic imageClass = getOrCreateTopic(tm, IMAGE_SI, "Image");
         makeSubclassOf(tm, imageClass, getRekognitionClass(tm));
         
         return imageClass;
-        
     }
     
-    protected static Topic getDetectionClass(TopicMap tm) throws TopicMapException{
-        
+    
+    
+    protected static Topic getDetectionClass(TopicMap tm) throws TopicMapException {
         Topic detectionClass = getOrCreateTopic(tm, DETECTION_SI, "Face Detection");
         makeSubclassOf(tm, detectionClass, getRekognitionClass(tm));
         
         return detectionClass;
-        
     }
     
+    
+    
     protected static Topic getFeatureClass(TopicMap tm) throws TopicMapException{
-        
         Topic featureClass = getOrCreateTopic(tm, FEATURE_SI_ROOT, "Face Detection Feature");
         makeSubclassOf(tm, featureClass, getRekognitionClass(tm));
         
         return featureClass;
-        
     }
     
+    
+    
     // ------------------------------------------------------ HELPERS ----------
+    
+    
+    
+    
     protected static Topic getRekognitionClass(TopicMap tm) throws TopicMapException {
         Topic rekognition = getOrCreateTopic(tm, SI_ROOT, "ReKognition");
         makeSubclassOf(tm, rekognition, getWandoraClassTopic(tm));
@@ -243,6 +257,8 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         return getOrCreateTopic(tm, LANG_SI);
     }
     
+    
+    
     // -------------------------------------------------------------------------
     
     
@@ -269,8 +285,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         
         if(matchedName == null) throw new JSONException("Failed to match name");
         return matchedName;
-        
     }
+    
+    
+    
     
     /**
     * A value handler is used to create and associate topics from face detection
@@ -282,12 +300,13 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
         public void handleValue(TopicMap tm, Topic detection, Object value) throws Exception;
     }
     
+    
+    
     /**
     * AbstractValueHandler implements common functionality for extending
     * ValueHandlers.
     */
     abstract class AbstractValueHandler{
-        
         protected static final String COORDINATE_SI = SI_ROOT + "coordinate/";
         protected static final String COORDINATE_NAME = "Coordinate";
 
@@ -321,8 +340,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
             
             return new Topic[]{x,y};
         }
-        
     }
+    
+    
+    
     
     /**
     * NumericValueHandler creates simple occurrence data representing numeric
@@ -381,30 +402,38 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
             
             JSONObject numericValues = (JSONObject)values;
             Iterator keys = numericValues.keys();
-            while(keys.hasNext()){
+            
+            while(keys.hasNext()) {
                 String key = (String)keys.next();
-                
                 Topic keyTopic = getOrCreateTopic(tm, TYPE_SI + "/" + key, key);
                 keyTopic.addType(typeTopic);
                 
                 Object value = numericValues.get(key);
                 
-                String confidenceID = UUID.randomUUID().toString();
-                Topic confidenceTopic = getOrCreateTopic(tm, CONFIDENCE_SI + confidenceID);
-                
-                confidenceTopic.setData(confidenceTypeTopic, getLangTopic(tm), String.valueOf(value));
+                Topic confidenceTopic = null;
+                if(MAKE_DISTINCT_CONFIDENCE_TOPICS) {
+                    String confidenceID = UUID.randomUUID().toString();
+                    confidenceTopic = getOrCreateTopic(tm, CONFIDENCE_SI + confidenceID);
+                    confidenceTopic.setData(confidenceTypeTopic, getLangTopic(tm), String.valueOf(value));
+                }
+                else {
+                    confidenceTopic = getOrCreateTopic(tm, CONFIDENCE_SI + String.valueOf(value));
+                    confidenceTopic.setBaseName(String.valueOf(value));
+                }
                 confidenceTopic.addType(confidenceTypeTopic);
                 
                 Association a = tm.createAssociation(typeTopic);
                 a.addPlayer(keyTopic, typeTopic);
-                a.addPlayer(confidenceTopic,confidenceTypeTopic);
-                a.addPlayer(detection,detectionTypeTopic);
-                
+                a.addPlayer(confidenceTopic, confidenceTypeTopic);
+                a.addPlayer(detection, detectionTypeTopic);
             }
-            
         }
-
     }
+    
+    
+    
+    
+    
     
     /**
     * CoordinateHandler creates a coordinate topic with simple occurrences of
@@ -452,10 +481,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
             Association a = tm.createAssociation(typeTopic);
             a.addPlayer(detection, detectionTypeTopic);
             a.addPlayer(coordinatesTopic, typeTopic);
-            
         }
-        
     }
+    
+    
     
     /**
     * BoundingBoxHandler creates a Topic structure representing a "boundingbox"
@@ -577,10 +606,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
             Association a = tm.createAssociation(typeTopic);
             a.addPlayer(boundingboxTopic, typeTopic);
             a.addPlayer(detection, getDetectionClass(tm));
-            
         }
-        
     }
+    
+    
     
     /**
     * PoseHandler creates a Topic representing a "pose" structure from the
@@ -654,10 +683,12 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
             Association a = tm.createAssociation(typeTopic);
             a.addPlayer(poseTopic, typeTopic);
             a.addPlayer(detection,detectionTypeTopic);
-
         }
-
     }
+    
+    
+    
+    
     /**
     * CelebHandler creates a Topic representing a celebrity match from the
     * response data. The expected response structure is like:
@@ -707,7 +738,6 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor{
                 a.addPlayer(matchTopic, typeTopic);
                 a.addPlayer(confidenceTopic,confidenceTypeTopic);
                 a.addPlayer(detection,detectionTypeTopic);
-                
             }
         }
     }

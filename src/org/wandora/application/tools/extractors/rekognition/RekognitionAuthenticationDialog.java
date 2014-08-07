@@ -42,6 +42,8 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
     
     private HashMap<AUTH_KEY,String> auth;
     
+    private boolean wasAccepted = false;
+    
     /**
      * Creates new form RekognitionAuthenticationDialog
      */
@@ -56,19 +58,31 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
         dialog.add(this);
         dialog.setTitle("Rekognition API key and secret");
         UIBox.centerWindow(dialog, w);
+        wasAccepted = false;
 
         dialog.setVisible(true); 
     }
     
     //Populate auth params and hide dialog on submit
-    private void submit(){
+    private void submit() {
+        wasAccepted = true;
         this.auth = new HashMap<>();
         this.auth.put(AUTH_KEY.KEY,this.keyField.getText());
         this.auth.put(AUTH_KEY.SECRET,this.secretField.getText());
         
         this.dialog.setVisible(false);
-        
     }
+    
+    private void cancel() {
+        wasAccepted = false;
+        this.dialog.setVisible(false);
+    }
+    
+    
+    public boolean wasAccepted() {
+        return wasAccepted;
+    }
+    
     
     //Let the main UI get the auth params
     protected HashMap<AUTH_KEY,String> getAuth(){        
@@ -90,6 +104,8 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
         descriptionLabel = new SimpleLabel();
         keyField = new SimpleField();
         secretField = new SimpleField();
+        buttonPanel = new javax.swing.JPanel();
+        cancelButton = new SimpleButton();
         submitButton = new SimpleButton();
 
         setLayout(new java.awt.GridBagLayout());
@@ -139,6 +155,16 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         add(secretField, gridBagConstraints);
 
+        buttonPanel.setLayout(new java.awt.GridBagLayout());
+
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
+
         submitButton.setText("Submit");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,11 +172,16 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        buttonPanel.add(submitButton, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        add(submitButton, gridBagConstraints);
+        add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void keyFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keyFieldActionPerformed
@@ -161,8 +192,14 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
         this.submit();
     }//GEN-LAST:event_submitButtonActionPerformed
 
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        this.cancel();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JTextField keyField;
     private javax.swing.JLabel keyLabel;

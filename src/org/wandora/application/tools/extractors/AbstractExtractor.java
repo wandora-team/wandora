@@ -417,13 +417,13 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
                 }
             }
             if(counter > 1) {
-                log("Total "+ counter + " URLs extracted. Ok.");
+                log("Total "+ counter + " URLs extracted.");
             }
             if(counter == 0) {
-                log("No URLs extracted. Ok.");
+                log("No URLs extracted.");
             }
             else {
-                log("Ok.");
+                //log("Ok.");
             }
         }
      }
@@ -800,7 +800,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     
     
     // =========================================================================
-    // ================== SUBCLASS SHOULD OVERWRITE THIS METHOD! ===============
+    // ================ SUBCLASS SHOULD OVERWRITE THESE METHODS! ===============
     // =========================================================================
     
     public abstract boolean _extractTopicsFrom(File f, TopicMap t) throws Exception;
