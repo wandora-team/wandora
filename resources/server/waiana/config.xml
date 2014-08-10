@@ -14,7 +14,7 @@
     <import class="org.wandora.modules.topicmap.TopicMapManager"></import>
     <!-- ServletModule is added automatically by Wandora, we don't need to import that -->
 
-    <!-- The action that outputs jtm -->
+    <!-- The action that implements a Waiana storage -->
     <module class="org.wandora.application.modulesserver.WaianaService">
         <param key="webAppName">waiana</param> <!-- the name used for this webapp in Wandora menus -->
         <param key="defaultAction">true</param>
