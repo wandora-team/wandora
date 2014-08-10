@@ -24,11 +24,13 @@ package org.wandora.application.modulesserver;
 
 import java.util.Collection;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
 import org.wandora.modules.topicmap.TopicMapManager;
 import org.wandora.modules.topicmap.ViewTopicAction;
+import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
@@ -44,15 +46,24 @@ public abstract class AbstractTopicWebApp extends AbstractWebApp {
     protected TopicMapManager tmManager;
     
     public Topic resolveTopic(String query){
-        TopicMap tm=tmManager.getTopicMap();
+        TopicMap tm = tmManager.getTopicMap();
         if(tm==null) return null;
         try{
             Topic t=null;
             if(query!=null) t=ViewTopicAction.getTopic(query, tm);
             else {
                 Wandora wandora=Wandora.getWandora();
-                if(wandora!=null){
-                    t=wandora.getOpenTopic();
+                if(wandora != null) {
+                    t = wandora.getOpenTopic();
+                    if(t == null) {
+                        TopicTree tree = wandora.getCurrentTopicTree();
+                        if(tree != null) {
+                            t = tree.getSelection();
+                        }
+                        if(t == null) {
+                            t = tm.getTopic(TMBox.WANDORACLASS_SI);
+                        }
+                    }
                 }
             }
             return t;

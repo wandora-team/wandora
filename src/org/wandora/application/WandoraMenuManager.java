@@ -1225,6 +1225,7 @@ public class WandoraMenuManager {
                             "Expand with VIAF store", new SameAsVIAFStoreSubjectExpander(),
                             "Expand with Web Index store", new SameAsWebIndexStoreSubjectExpander(),
                         },
+                        "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(),
                     },
                 };
             }
@@ -2005,6 +2006,7 @@ public class WandoraMenuManager {
                     "Expand with VIAF store", new SameAsVIAFStoreSubjectExpander(new SIContext()),
                     "Expand with Web Index store", new SameAsWebIndexStoreSubjectExpander(new SIContext()),
                 },
+                "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(new SIContext()),
             },
             "---",
             "Copy subject identifier to subject locator", new MakeSLWithSI(new SIContext()),
@@ -2041,6 +2043,7 @@ public class WandoraMenuManager {
                     "Expand with VIAF store", new SameAsVIAFStoreSubjectExpander(new ApplicationContext()),
                     "Expand with Web Index store", new SameAsWebIndexStoreSubjectExpander(new ApplicationContext()),
                 },
+                "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(new ApplicationContext()),
             }  
         };
     }

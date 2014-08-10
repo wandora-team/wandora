@@ -193,14 +193,23 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
     
 
     protected URL getExpandingRequestURL(String subject) throws MalformedURLException {
-        String expanderRequestString = getExpandingRequestBase() + "?uri=" + subject;
-        try {
-            expanderRequestString = getExpandingRequestBase() + "?uri=" + URLEncoder.encode(subject, "UTF-8");
+        String base = getExpandingRequestBase();
+        URL url = null;
+        if(base != null) {
+            String expanderRequestString = base + "?uri=" + subject;
+            try {
+                expanderRequestString = base + "?uri=" + URLEncoder.encode(subject, "UTF-8");
+            }
+            catch(Exception e) {}
+            
+            try {
+                url = new URL(expanderRequestString);
+            }
+            catch(Exception e) {
+                log("Exception '"+e.getMessage()+"' occurred while building sameas request URL with base '"+base+"'.");
+            }
         }
-        catch(Exception e) {
-            // Nothing. Continue. We already have the expanderRequestString.
-        }
-        return new URL(expanderRequestString);
+        return url;
     }
 
 
@@ -210,30 +219,33 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
         HashSet<URL> additionalSubjects = new HashSet();
         
         try {
-            String responseString = IObox.doUrl(getExpandingRequestURL(subject));
-            JSONArray response = new JSONArray(responseString);
-            for(int i=0; i<response.length(); i++) {
-                JSONObject json = response.getJSONObject(i);
-                if(json.has("uri")) {
-                    String uri = json.getString("uri");
-                    if(!subject.equals(uri)) {
-                        additionalSubjects.add(new URL(uri));
-                    }
-                }
-                if(json.has("duplicates")) {
-                    JSONArray duplicates = json.getJSONArray("duplicates");
-                    for(int j=0; j<duplicates.length(); j++) {
-                        String duplicate = duplicates.getString(j);
-                        if(duplicate != null) {
-                            additionalSubjects.add(new URL(duplicate));
+            URL requestURL = getExpandingRequestURL(subject);
+            if(requestURL != null) {
+                String responseString = IObox.doUrl(requestURL);
+                JSONArray response = new JSONArray(responseString);
+                for(int i=0; i<response.length(); i++) {
+                    JSONObject json = response.getJSONObject(i);
+                    if(json.has("uri")) {
+                        String uri = json.getString("uri");
+                        if(!subject.equals(uri)) {
+                            additionalSubjects.add(new URL(uri));
                         }
                     }
-                }
-                if(!additionalSubjects.isEmpty()) {
-                    
-                }
-                else {
-                    log("Sameas.org didn't found additional subjects for '"+subject+"'.");
+                    if(json.has("duplicates")) {
+                        JSONArray duplicates = json.getJSONArray("duplicates");
+                        for(int j=0; j<duplicates.length(); j++) {
+                            String duplicate = duplicates.getString(j);
+                            if(duplicate != null) {
+                                additionalSubjects.add(new URL(duplicate));
+                            }
+                        }
+                    }
+                    if(!additionalSubjects.isEmpty()) {
+
+                    }
+                    else {
+                        log("Sameas.org didn't found additional subjects for '"+subject+"'.");
+                    }
                 }
             }
         }

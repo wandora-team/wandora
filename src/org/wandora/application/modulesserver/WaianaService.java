@@ -57,7 +57,19 @@ import org.wandora.utils.IObox;
 
 
 /**
- *
+ * <p>
+ * WaianaService implements an API used to store and retrieve topic maps via
+ * JSON fragments submitted over HTTP. The service stores topic maps as XTM 
+ * files into the directory of service. The API mimics Maiana API
+ * (http://projects.topicmapslab.de/projects/maiana/wiki/API_Controller)
+ * created in Topic Maps Labs (http://www.topicmapslab.de/).
+ * </p>
+ * <p>
+ * Wandora features separate import and export tools that use original Maiana API,
+ * that can be used to import and export topic maps into Waiana too. These import
+ * and export tools locate in the <b>org.wandora.application.tools.maiana</b> package.
+ * </p>
+ * 
  * @author akivela
  */
 
@@ -65,7 +77,7 @@ import org.wandora.utils.IObox;
 public class WaianaService extends AbstractTopicWebApp {
 
     
-    private MaianaStorage storage = null;
+    private WaianaStorage storage = null;
     private boolean allowURLParameterUsage = true;
 
     
@@ -79,7 +91,7 @@ public class WaianaService extends AbstractTopicWebApp {
         */
         actionParamKey=null;
 
-        storage = new MaianaStorage();
+        storage = new WaianaStorage();
         
         try {
             Object basePath = settings.get("basePath");
@@ -146,29 +158,29 @@ public class WaianaService extends AbstractTopicWebApp {
                 JSONObject requestJSON = getRequestJSON(request);
                 if(requestJSON != null) {
 
-                    String api_key = MaianaAPIRequestUtils.getAPIKey(requestJSON);
-                    String command = MaianaAPIRequestUtils.getCommand(requestJSON);
+                    String api_key = WaianaAPIRequestUtils.getAPIKey(requestJSON);
+                    String command = WaianaAPIRequestUtils.getCommand(requestJSON);
 
                     if("show_local_file_list".equalsIgnoreCase(command) || "show_topic_map_list".equalsIgnoreCase(command) || "show_local_topic_map_list".equalsIgnoreCase(command)) {
                         responseJSON = storage.getIndex();
                     }
                     else if("download_topic_map".equalsIgnoreCase(command) || "download_local_file".equalsIgnoreCase(command)) {
-                        responseJSON = storage.getTopicMap(user, MaianaAPIRequestUtils.getShortName(requestJSON));
+                        responseJSON = storage.getTopicMap(user, WaianaAPIRequestUtils.getShortName(requestJSON));
 
                     }
                     else if("create_local_file".equalsIgnoreCase(command) || "create_topic_map".equalsIgnoreCase(command) || "update_local_file".equalsIgnoreCase(command) || "update_topic_map".equalsIgnoreCase(command)) {
-                        String data = MaianaAPIRequestUtils.getData(requestJSON);
-                        String shortName = MaianaAPIRequestUtils.getShortName(requestJSON);
-                        String name = MaianaAPIRequestUtils.getName(requestJSON);
-                        boolean isPublic = MaianaAPIRequestUtils.getIsPublic(requestJSON);
-                        boolean isDownloadable = MaianaAPIRequestUtils.getIsDownloadable(requestJSON);
-                        boolean isEditable = MaianaAPIRequestUtils.getIsEditable(requestJSON);
-                        boolean isSchema = MaianaAPIRequestUtils.getIsSchema(requestJSON);
+                        String data = WaianaAPIRequestUtils.getData(requestJSON);
+                        String shortName = WaianaAPIRequestUtils.getShortName(requestJSON);
+                        String name = WaianaAPIRequestUtils.getName(requestJSON);
+                        boolean isPublic = WaianaAPIRequestUtils.getIsPublic(requestJSON);
+                        boolean isDownloadable = WaianaAPIRequestUtils.getIsDownloadable(requestJSON);
+                        boolean isEditable = WaianaAPIRequestUtils.getIsEditable(requestJSON);
+                        boolean isSchema = WaianaAPIRequestUtils.getIsSchema(requestJSON);
 
                         responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, request.getRequestURL());
                     }
                     else if("delete_local_file".equalsIgnoreCase(command) || "delete_topic_map".equalsIgnoreCase(command)) {
-                        responseJSON = storage.deleteTopicMap(user, MaianaAPIRequestUtils.getShortName(requestJSON));
+                        responseJSON = storage.deleteTopicMap(user, WaianaAPIRequestUtils.getShortName(requestJSON));
                     }
                     else {
                         responseJSON = createReply(1, "Illegal command value '"+command+"' given in request JSON.");
@@ -286,7 +298,7 @@ public class WaianaService extends AbstractTopicWebApp {
     
     
     
-    protected static class MaianaAPIRequestUtils {
+    protected static class WaianaAPIRequestUtils {
         
         public static String getAPIKey(JSONObject json) {
             return getStringSafely(json, "api_key");
@@ -374,12 +386,12 @@ public class WaianaService extends AbstractTopicWebApp {
     
     
     // -------------------------------------------------------------------------
-    // ------------------------------------------------------- MaianaStorage ---
+    // ------------------------------------------------------- WaianaStorage ---
     // -------------------------------------------------------------------------
     
     
     
-    public class MaianaStorage {
+    public class WaianaStorage {
         private boolean blockAllWrites = false;
         private boolean skipRightsManagement = false;
         private boolean saveAlwaysAfterChange = true;
@@ -393,7 +405,7 @@ public class WaianaService extends AbstractTopicWebApp {
         
         
         
-        public MaianaStorage() {
+        public WaianaStorage() {
             data = new LinkedHashMap();
         }
         
