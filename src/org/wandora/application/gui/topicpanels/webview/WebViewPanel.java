@@ -25,6 +25,7 @@
 package org.wandora.application.gui.topicpanels.webview;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -83,6 +84,7 @@ import javax.xml.transform.stream.StreamResult;
 import netscape.javascript.JSObject;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
+import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
@@ -141,6 +143,11 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     private static final String failedToOpenMessage = "<h1>Failed to open URL</h1>";
     
     private ModulesWebApp selectedWebApp=null;
+    private static final Color WEBAPP_ACTIVE_COLOR = new Color(243,243,243);
+    private static final Color WEBAPP_PASSIVE_COLOR = Color.WHITE;
+    
+    
+    
     
     public class WandoraJFXPanel extends JFXPanel {
 
@@ -309,6 +316,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+                    urlTextField.setBackground(Color.WHITE);
                     webEngine.load(u);
                 }
             });
@@ -361,6 +369,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     }//GEN-LAST:event_reloadButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+        selectedWebApp = null;
         browse((String) null);
     }//GEN-LAST:event_stopButtonActionPerformed
 
@@ -704,10 +713,11 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             String u = null;
             if(topic != null) {
                 u = topic.getFirstSubjectIdentifier().toExternalForm();
-                if(selectedWebApp!=null){
+                if(selectedWebApp != null) {
                     String url=selectedWebApp.getAppTopicPage(u);
                     if(url!=null) {
-                        browse(url,false);
+                        urlTextField.setBackground(WEBAPP_ACTIVE_COLOR);
+                        browse(url, false);
                         return;
                     }
                 }
@@ -722,19 +732,25 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     
     
     public void browse(final String url) {
-        browse(url,true);
+        browse(url, true);
     }
+    
+    
     
     public void browse(final String url, boolean resetWebApp) {
         if(resetWebApp && url != null) {
-            selectedWebApp=null;
+            selectedWebApp = null;
             WandoraModulesServer s=Wandora.getWandora().getHTTPServer();
             for(ModulesWebApp webApp : s.getWebApps()){
                 if(url.equals(webApp.getAppStartPage())) {
-                    selectedWebApp=webApp;
+                    urlTextField.setBackground(WEBAPP_ACTIVE_COLOR);
+                    selectedWebApp = webApp;
                     break;
                 }
             }
+        }
+        if(selectedWebApp == null) {
+            urlTextField.setBackground(WEBAPP_PASSIVE_COLOR);
         }
         
         Platform.runLater(new Runnable() {
@@ -966,7 +982,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     
 
     public void stop() {
-        System.out.println("---- Stopping Webview topic panel!");
+        //System.out.println("---- Stopping Webview topic panel!");
         browse((String) null);
     }
     
@@ -1078,14 +1094,14 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
                     end = (Integer) d.getMember("selectionEnd");
                 } catch(Exception e) {}
             }
-            System.out.println("--------");
+            //System.out.println("--------");
             //System.out.println(content);
-            if(start != -1 && end != -1) System.out.println(content.substring(start, end));
-            else System.out.println("ALL");
-            System.out.println("--------");
-            System.out.println("start: "+start);
-            System.out.println("end: "+end);
-            System.out.println("--------");
+            //if(start != -1 && end != -1) System.out.println(content.substring(start, end));
+            //else System.out.println("ALL");
+            //System.out.println("--------");
+            //System.out.println("start: "+start);
+            //System.out.println("end: "+end);
+            //System.out.println("--------");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -1169,8 +1185,21 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
 
     // -------------------------------------------------------------------------
     
+    /*
+    public void setSelectedWebApp(ModulesWebApp webapp) {
+        if(webapp == null) {
+            selectedWebApp = null;
+            urlTextField.setBackground(Color.WHITE);
+        }
+        else {
+            selectedWebApp = webapp;
+            urlTextField.setBackground(new Color(243,243,243));
+        }
+    }
     
-    
-
+    public ModulesWebApp getSelectedWebApp() {
+        return selectedWebApp;
+    }
+    */
 
 }
