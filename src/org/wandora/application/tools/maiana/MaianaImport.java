@@ -71,6 +71,10 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
     @Override
     public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         /*
+        
+        THESE ARE HERE FOR A REFERENCE. HOW TO SET UP CONFIGURABLE OPTIONS.
+        COPIED FROM GML EXPORT.
+        
         GenericOptionsDialog god=new GenericOptionsDialog(admin,"GML export options","GML export options",true,new String[][]{
             new String[]{"Export classes","boolean",(EXPORT_CLASSES ? "true" : "false"),"Should Wandora export also topic types (class-instance relations)?"},
             new String[]{"Export occurrences","boolean",(EXPORT_OCCURRENCES ? "true" : "false"),"Should topic occurrences also export?"},
@@ -142,7 +146,7 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
                     String apiEndPoint = maianaPanel.getApiEndPoint();
                     MaianaUtils.checkForLocalService(apiEndPoint);
                         
-                    String reply = IObox.doUrl(new URL(apiEndPoint), request, "application/json");
+                    String reply = MaianaUtils.doUrl(new URL(apiEndPoint), request, "application/json");
 
                     //System.out.println("reply:\n"+reply);
 
@@ -164,7 +168,7 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
 
                         log("Parsing topic map '"+n+"'...");
 
-                        ByteArrayInputStream topicMapStream = new ByteArrayInputStream(serializedTopicMap.getBytes("utf-8"));
+                        ByteArrayInputStream topicMapStream = new ByteArrayInputStream(serializedTopicMap.getBytes("UTF-8"));
                         TopicMap map = new org.wandora.topicmap.memory.TopicMapImpl();
                         map.importXTM(topicMapStream, getCurrentLogger());
 

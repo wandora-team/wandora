@@ -26,8 +26,15 @@
 
 package org.wandora.application.tools.maiana;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
@@ -199,21 +206,58 @@ public class MaianaUtils {
         return nsn.toString();
     }
 
+    
 
-    public static String makeJSON(String json) {
-        if(json == null) {
+    public static String makeJSON(String string) {
+        if (string == null || string.length() == 0) {
             return "";
         }
-        else {
-            json = json.replace("\\", "\\\\");
-            json = json.replace("\"", "\\\"");
-            json = json.replace("\b", "\\b");
-            json = json.replace("\f", "\\f");
-            json = json.replace("\n", "\\n");
-            json = json.replace("\r", "\\r");
-            json = json.replace("\t", "\\t");
+
+        char         c = 0;
+        int          i;
+        int          len = string.length();
+        StringBuilder sb = new StringBuilder(len + 4);
+        String       t;
+
+        for (i=0; i<len; i=i+1) {
+            c = string.charAt(i);
+            switch (c) {
+            case '\\':
+            case '"':
+                sb.append('\\');
+                sb.append(c);
+                break;
+            case '/':
+//                if (b == '<') {
+                    sb.append('\\');
+//                }
+                sb.append(c);
+                break;
+            case '\b':
+                sb.append("\\b");
+                break;
+            case '\t':
+                sb.append("\\t");
+                break;
+            case '\n':
+                sb.append("\\n");
+                break;
+            case '\f':
+                sb.append("\\f");
+                break;
+            case '\r':
+               sb.append("\\r");
+               break;
+            default:
+                if (c < ' ') {
+                    t = "000" + Integer.toHexString(c);
+                    sb.append("\\u" + t.substring(t.length() - 4));
+                } else {
+                    sb.append(c);
+                }
+            }
         }
-        return json;
+        return sb.toString();
     }
 
 
@@ -242,5 +286,40 @@ public class MaianaUtils {
             e.printStackTrace();
         }
     }
+ 
     
+    
+    
+   public static String doUrl(URL url, String data, String ctype) throws IOException {
+        StringBuilder sb = new StringBuilder(5000);
+        if (url != null) {
+            URLConnection con = url.openConnection();
+            Wandora.initUrlConnection(con);
+            con.setDoInput(true);
+            con.setUseCaches(false);
+
+
+            if(ctype != null) {
+                con.setRequestProperty("Content-type", ctype);
+            }
+            
+            if(data != null && data.length() > 0) {
+                con.setRequestProperty("Content-length", data.length() + "");
+                con.setDoOutput(true);
+                PrintWriter out = new PrintWriter(new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8));
+                out.print(data);
+                out.flush();
+                out.close();
+            }
+            //DataInputStream in = new DataInputStream(con.getInputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+     
+            String s;
+            while ((s = in.readLine()) != null) {
+                sb.append(s);
+            }
+            in.close();
+        }
+        return sb.toString();
+    }
 }

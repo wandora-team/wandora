@@ -22,14 +22,18 @@
 package org.wandora.application.modulesserver;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -189,6 +193,7 @@ public class WaianaService extends AbstractTopicWebApp {
 
                 // The request has no JSON data or the JSON has no command.
                 else if(allowURLParameterUsage) {
+                    String apiKey = request.getParameter("apiKey");
                     String command = request.getParameter("command");
                     if(command != null && command.length() > 0) {
                         if("show_local_file_list".equalsIgnoreCase(command) || "show_topic_map_list".equalsIgnoreCase(command) || "show_local_topic_map_list".equalsIgnoreCase(command)) {
@@ -266,12 +271,12 @@ public class WaianaService extends AbstractTopicWebApp {
     
     
     protected JSONObject getRequestJSON(HttpServletRequest request) throws IOException {
-        InputStreamReader in = new InputStreamReader(request.getInputStream());
+        BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
         StringBuilder sb = new StringBuilder();
         
-        int c;
-        while ((c = in.read()) != -1) {
-            sb.append((char) c);
+        String str;
+        while ((str = in.readLine()) != null) {
+            sb.append(str);
         }
         in.close();
         
@@ -448,7 +453,7 @@ public class WaianaService extends AbstractTopicWebApp {
         
         public void loadData() {
             try {
-                String inStr = IObox.loadFile(basePath+"/"+storageFilename, "UTF-8");
+                String inStr = readFile(basePath+"/"+storageFilename, "UTF-8");
                 if(inStr != null) {
                     JSONArray dataArray = new JSONArray(inStr);
                     for(int i=0; i<dataArray.length(); i++) {
@@ -505,7 +510,7 @@ public class WaianaService extends AbstractTopicWebApp {
                     dataEntry.put("edit_date", getDateString());
                     if(user != null) dataEntry.put("owner", user.getUserName());
 
-                    IObox.saveFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm", topicMapData);
+                    writeFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm", topicMapData);
                 } 
                 catch (IOException ex) {
                     return createReply(1, "Exception '"+ex.getMessage()+"' occurred while saving topic map '"+shortName+"' data.");
@@ -565,7 +570,10 @@ public class WaianaService extends AbstractTopicWebApp {
                     try {
                         reply.put("code", 0);
                         try {
-                            String topicMapData = IObox.loadFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm");
+                            String topicMapData = readFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm", "UTF-8");
+                            
+                            // System.out.println(topicMapData);
+                            
                             reply.put("data", topicMapData);
                             return reply;
                         } 
@@ -807,12 +815,37 @@ public class WaianaService extends AbstractTopicWebApp {
         try {
             response.setContentType("application/text");
             response.setCharacterEncoding("UTF-8");
-            OutputStream out = response.getOutputStream();
-            out.write(str.getBytes("UTF-8"));
+            OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
+            out.write(str);
+            out.flush();
             out.close();
         }
         catch(Exception e) {
             e.printStackTrace();
         }
     }
+    
+    
+    protected static void writeFile(String fname, String data) throws IOException {
+        File pf = new File(fname);
+        if (pf.exists()) {
+            pf.delete();
+            System.out.println("Deleting previously existing file '" + fname + "' before save file operation!");
+        }
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fname));
+        writer.write(data);
+        writer.flush();
+        writer.close();
+        System.out.println("Saving a file '" + fname + "'");
+    }
+    
+    
+    
+    static String readFile(String path, String encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
+    }
+    
+    
 }
