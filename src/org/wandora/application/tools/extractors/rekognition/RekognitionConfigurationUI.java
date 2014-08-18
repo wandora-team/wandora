@@ -80,11 +80,14 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
         }
         
         for(String key: faceJobs.keySet()){
-            if(faceJobs.containsKey(key))
+            if(configuration.jobs.contains(key))
                 faceJobs.get(key).setSelected(true);
             else
                 faceJobs.get(key).setSelected(false);
         }
+        
+        faceAssociateCelebrity.setSelected(configuration.celebrityNaming);
+        faceCelebrityTreshold.setValue(configuration.celebrityTreshold);
     }
     
     public void open(Wandora w){
