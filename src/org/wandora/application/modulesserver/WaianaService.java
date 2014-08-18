@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -453,7 +454,7 @@ public class WaianaService extends AbstractTopicWebApp {
         
         public void loadData() {
             try {
-                String inStr = readFile(basePath+"/"+storageFilename, "UTF-8");
+                String inStr = readFile(basePath+"/"+storageFilename);
                 if(inStr != null) {
                     JSONArray dataArray = new JSONArray(inStr);
                     for(int i=0; i<dataArray.length(); i++) {
@@ -570,7 +571,7 @@ public class WaianaService extends AbstractTopicWebApp {
                     try {
                         reply.put("code", 0);
                         try {
-                            String topicMapData = readFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm", "UTF-8");
+                            String topicMapData = readFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm");
                             
                             // System.out.println(topicMapData);
                             
@@ -833,7 +834,7 @@ public class WaianaService extends AbstractTopicWebApp {
             System.out.println("Deleting previously existing file '" + fname + "' before save file operation!");
         }
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fname));
+        PrintWriter writer=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fname), "UTF-8"));
         writer.write(data);
         writer.flush();
         writer.close();
@@ -842,9 +843,9 @@ public class WaianaService extends AbstractTopicWebApp {
     
     
     
-    static String readFile(String path, String encoding) throws IOException {
+    static String readFile(String path) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, encoding);
+        return new String(encoded, "UTF-8");
     }
     
     

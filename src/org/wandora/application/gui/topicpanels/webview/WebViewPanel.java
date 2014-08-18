@@ -1185,21 +1185,6 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
 
     // -------------------------------------------------------------------------
     
-    /*
-    public void setSelectedWebApp(ModulesWebApp webapp) {
-        if(webapp == null) {
-            selectedWebApp = null;
-            urlTextField.setBackground(Color.WHITE);
-        }
-        else {
-            selectedWebApp = webapp;
-            urlTextField.setBackground(new Color(243,243,243));
-        }
-    }
-    
-    public ModulesWebApp getSelectedWebApp() {
-        return selectedWebApp;
-    }
-    */
+
 
 }

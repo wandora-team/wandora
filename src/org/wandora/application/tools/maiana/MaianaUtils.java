@@ -45,6 +45,7 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
+
 public class MaianaUtils {
 
     private static String apiKey = "";
@@ -213,7 +214,7 @@ public class MaianaUtils {
             return "";
         }
 
-        char         c = 0;
+        int         c = 0;
         int          i;
         int          len = string.length();
         StringBuilder sb = new StringBuilder(len + 4);
@@ -225,13 +226,13 @@ public class MaianaUtils {
             case '\\':
             case '"':
                 sb.append('\\');
-                sb.append(c);
+                sb.append((char) c);
                 break;
             case '/':
 //                if (b == '<') {
                     sb.append('\\');
 //                }
-                sb.append(c);
+                sb.append((char) c);
                 break;
             case '\b':
                 sb.append("\\b");
@@ -252,8 +253,9 @@ public class MaianaUtils {
                 if (c < ' ') {
                     t = "000" + Integer.toHexString(c);
                     sb.append("\\u" + t.substring(t.length() - 4));
-                } else {
-                    sb.append(c);
+                }
+                else {
+                    sb.append((char) c);
                 }
             }
         }
@@ -298,15 +300,16 @@ public class MaianaUtils {
             con.setDoInput(true);
             con.setUseCaches(false);
 
-
             if(ctype != null) {
                 con.setRequestProperty("Content-type", ctype);
             }
             
             if(data != null && data.length() > 0) {
                 con.setRequestProperty("Content-length", data.length() + "");
+                // con.setRequestProperty("Accept-Charset", "UTF-8");
                 con.setDoOutput(true);
-                PrintWriter out = new PrintWriter(new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8));
+                //PrintWriter out = new PrintWriter(new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8));
+                PrintWriter out = new PrintWriter(new OutputStreamWriter(con.getOutputStream()));
                 out.print(data);
                 out.flush();
                 out.close();
