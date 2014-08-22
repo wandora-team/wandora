@@ -155,22 +155,12 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         if(imageUrl == null)
             throw new Exception("No valid Image URL found.");
 
-        
         /**
-         * Fetch the configuration.
+         * Prompt for authentication if we're still lacking it. Return if we still
+         * didn't get it
          */
-        RekognitionConfiguration conf = getConfiguration();
-        
-        /**
-         * Prompt for authentication if we're still lacking it.
-         */
-        if(conf.auth == null){
-            RekognitionAuthenticationDialog authDialog = new RekognitionAuthenticationDialog();
-            authDialog.open(getWandora());
-            if(authDialog.wasAccepted()) {
-                conf.auth = authDialog.getAuth();
-                setConfiguration(conf);
-            }
+        if(!conf.hasAuth()){
+            if(!conf.askForAuth()) return false;
         }
         
         /**
@@ -266,8 +256,8 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
     }
     @Override
     public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
-        RekognitionConfigurationUI configurationUI = new RekognitionConfigurationUI(this);
-        configurationUI.open(wandora);
+        RekognitionConfigurationUI configurationUI = new RekognitionConfigurationUI("face");
+        configurationUI.open(wandora,600);
         configurationUI.setVisible(true);
     }
     @Override

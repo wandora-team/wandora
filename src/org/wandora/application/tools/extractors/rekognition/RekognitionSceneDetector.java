@@ -28,11 +28,13 @@ import com.mashape.unirest.http.Unirest;
 import java.net.URL;
 import java.util.HashMap;
 import javax.swing.Icon;
+import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.UIBox;
 import static org.wandora.application.tools.extractors.AbstractExtractor.RAW_EXTRACTOR;
 import static org.wandora.application.tools.extractors.AbstractExtractor.URL_EXTRACTOR;
 import static org.wandora.application.tools.extractors.rekognition.AbstractRekognitionExtractor.API_ROOT;
+import static org.wandora.application.tools.extractors.rekognition.AbstractRekognitionExtractor.conf;
 import static org.wandora.application.tools.extractors.rekognition.AbstractRekognitionExtractor.getConfiguration;
 import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
 import org.wandora.dep.json.JSONArray;
@@ -88,7 +90,14 @@ public class RekognitionSceneDetector  extends AbstractRekognitionExtractor{
     
     @Override
     public boolean isConfigurable(){
-        return false;
+        return true;
+    }
+    
+    @Override
+    public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
+        RekognitionConfigurationUI configurationUI = new RekognitionConfigurationUI(null);
+        configurationUI.open(wandora,100);
+        configurationUI.setVisible(true);
     }
     
     @Override
@@ -138,18 +147,12 @@ public class RekognitionSceneDetector  extends AbstractRekognitionExtractor{
         RekognitionConfiguration conf = getConfiguration();
         
         /**
-         * Prompt for authentication if we're still lacking it.
+         * Prompt for authentication if we're still lacking it. Return if we still
+         * didn't get it
          */
-        if(conf.auth == null){
-            RekognitionAuthenticationDialog authDialog = new RekognitionAuthenticationDialog();
-            authDialog.open(getWandora());
-            if(authDialog.wasAccepted()) {
-                conf.auth = authDialog.getAuth();
-                setConfiguration(conf);
-            }
+        if(!conf.hasAuth()){
+            if(!conf.askForAuth()) return false;
         }
-        
-        if(conf.auth == null) return false;
         
         String extractUrl = API_ROOT +
                 "?api_key=" + conf.auth.get(AUTH_KEY.KEY) + 

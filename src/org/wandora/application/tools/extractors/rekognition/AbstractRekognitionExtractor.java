@@ -93,7 +93,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     // -------------------------------------------------------------------------
     
     
-    private static RekognitionConfiguration conf = new RekognitionConfiguration();
+    protected static RekognitionConfiguration conf = new RekognitionConfiguration();
     protected static void setConfiguration(RekognitionConfiguration c){
         conf = c;
     }

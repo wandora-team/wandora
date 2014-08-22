@@ -23,6 +23,7 @@ package org.wandora.application.tools.extractors.rekognition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.wandora.application.Wandora;
 
 /**
  *
@@ -58,6 +59,23 @@ class RekognitionConfiguration {
         this.celebrityNaming = false;
         this.celebrityTreshold = 0;
         this.auth = null;
+    }
+    
+    protected boolean hasAuth(){
+        return this.auth != null;
+    }
+    
+    /**
+     * Prompt for credentials if we don't have any
+     */
+    protected boolean askForAuth(){
+        RekognitionAuthenticationDialog d = new RekognitionAuthenticationDialog();
+        d.open(Wandora.getWandora());
+        if(d.wasAccepted()){
+            this.auth = d.getAuth();
+            return true;
+        }
+        return false;
     }
     
 }
