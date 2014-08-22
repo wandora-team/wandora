@@ -141,7 +141,7 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
                 "&jobs=" + "face_" + getJobsString(conf.jobs) +
                 "&urls=" + imageUrl;
         
-        logger.log("GETting \"" + extractUrl + "\"");
+        logger.log("Getting \"" + extractUrl + "\"");
         
         HttpResponse<JsonNode> resp = Unirest.get(extractUrl).asJson();
         JSONObject respNode = resp.getBody().getObject();
