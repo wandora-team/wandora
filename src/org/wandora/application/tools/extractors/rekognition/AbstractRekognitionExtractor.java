@@ -57,52 +57,16 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     //Face detection data is language independent
     private static final String LANG_SI = "http://wandora.org/si/core/lang-independent";
     
-    private static final String SI_ROOT = "http://wandora.org/si/rekognition/";
+    protected static final String SI_ROOT = "http://wandora.org/si/rekognition/";
     
-    private static final String IMAGE_SI = SI_ROOT + "image/";
-    private static final String FACE_SI_ROOT = SI_ROOT + "face/";
-    private static final String DETECTION_SI = FACE_SI_ROOT + "detection/";
-    private static final String FEATURE_SI_ROOT = FACE_SI_ROOT + "feature/";
+    protected static final String IMAGE_SI = SI_ROOT + "image/";
+    protected static final String DETECTION_SI = SI_ROOT + "detection/";
+    
+    protected static final String FACE_SI_ROOT = SI_ROOT + "face/";
+    protected static final String SCENE_SI_ROOT = SI_ROOT + "scene/";
+    protected static final String FEATURE_SI_ROOT = FACE_SI_ROOT + "feature/";
 
-    protected HashMap<String,ValueHandler> createHandlerMap() {
-        
-        HashMap<String,ValueHandler> handlerMap = new HashMap<>();
-        
-        handlerMap.put("matches", new CelebHandler(SI_ROOT + "match", "Celebrity Match"));
-
-        handlerMap.put("boundingbox", new BoundingBoxHandler(FEATURE_SI_ROOT + "boundingbox/", "Boundingbox"));
-        handlerMap.put("pose", new PoseHandler(FEATURE_SI_ROOT + "pose/", "Pose"));
-        handlerMap.put("confidence", new NumericValueHandler(FEATURE_SI_ROOT + "confidence/", "Confidence"));
-        handlerMap.put("emotion", new NumericValuesHandler(FEATURE_SI_ROOT + "emotion/", "Emotion"));
-        handlerMap.put("eye_left", new CoordinateHandler(FEATURE_SI_ROOT + "eye_left/", "Left Eye"));
-        handlerMap.put("eye_right", new CoordinateHandler(FEATURE_SI_ROOT + "eye_right/", "Right Eye"));
-        handlerMap.put("nose", new CoordinateHandler(FEATURE_SI_ROOT + "nose/", "Nose"));
-        handlerMap.put("mouth_l", new CoordinateHandler(FEATURE_SI_ROOT + "mouth_left", "Mouth (left)"));
-        handlerMap.put("mouth_r", new CoordinateHandler(FEATURE_SI_ROOT + "mouth_right", "Mouth (right)"));
-        
-        handlerMap.put("b_ll", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_left/", "Left Brow (left)"));
-        handlerMap.put("b_lm", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_middle/", "Left Brow (middle)"));
-        handlerMap.put("b_lr", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_right/", "Left Bro (right)"));
-        handlerMap.put("b_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_left/", "Right Brow (left)"));
-        handlerMap.put("b_rm", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_middle/","Right Brow (middle)"));
-        handlerMap.put("b_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_right/", "Right Bro (right)"));
-        handlerMap.put("e_ld", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_down/", "Left Eye (down)"));
-        handlerMap.put("e_ll", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_left/", "Left Eye (left)"));
-        handlerMap.put("e_lu", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_up/", "Left Eye (up)"));
-        handlerMap.put("e_lr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_right/", "Left Eye (right)"));
-        handlerMap.put("e_rd", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_down/", "Right Eye (down)"));
-        handlerMap.put("e_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_left/", "Right Eye (left)"));
-        handlerMap.put("e_ru", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_up/", "Right Eye (up)"));
-        handlerMap.put("e_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_right/", "Right Eye (right)"));
-        handlerMap.put("m_d", new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_down/", "Mouth (down)"));
-        handlerMap.put("m_u", new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_up/", "Mouth (up)"));
-        handlerMap.put("n_l", new CoordinateHandler(FEATURE_SI_ROOT+ "nose_left/", "Nose (left)"));
-        handlerMap.put("n_r", new CoordinateHandler(FEATURE_SI_ROOT+ "nose_right/", "Nose (right)"));
-        handlerMap.put("tl", new CoordinateHandler(FEATURE_SI_ROOT+ "top_left/", "Nose (left)"));
-        
-        return handlerMap;
-        
-    }
+    protected abstract HashMap<String,ValueHandler> createHandlerMap();
     
     // -------------------------------------------------------------------------
     
@@ -204,14 +168,12 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     
     
     protected static Topic getDetectionClass(TopicMap tm) throws TopicMapException {
-        Topic detectionClass = getOrCreateTopic(tm, DETECTION_SI, "Face Detection");
+        Topic detectionClass = getOrCreateTopic(tm, DETECTION_SI, "Rekognition Detection");
         makeSubclassOf(tm, detectionClass, getRekognitionClass(tm));
         
         return detectionClass;
     }
-    
-    
-    
+        
     protected static Topic getFeatureClass(TopicMap tm) throws TopicMapException{
         Topic featureClass = getOrCreateTopic(tm, FEATURE_SI_ROOT, "Face Detection Feature");
         makeSubclassOf(tm, featureClass, getRekognitionClass(tm));
@@ -288,8 +250,6 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     }
     
     
-    
-    
     /**
     * A value handler is used to create and associate topics from face detection
     * data return as JSON. Implementations use constructors to initialize
@@ -352,7 +312,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     */
     class NumericValueHandler extends AbstractValueHandler implements ValueHandler{
 
-        private NumericValueHandler(String si, String name){
+        NumericValueHandler(String si, String name){
             this.TYPE_SI = si;
             this.TYPE_NAME = name;
         }
@@ -383,7 +343,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     */
     class NumericValuesHandler extends AbstractValueHandler implements ValueHandler{
 
-        private NumericValuesHandler(String si, String name){
+        NumericValuesHandler(String si, String name){
             this.TYPE_SI = si;
             this.TYPE_NAME = name;
         }
@@ -446,7 +406,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     */
     class CoordinateHandler extends AbstractValueHandler implements ValueHandler{
 
-        private CoordinateHandler(String si, String name){
+        CoordinateHandler(String si, String name){
             this.TYPE_SI = si;
             this.TYPE_NAME = name;
         }
@@ -533,7 +493,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
             return new Topic[]{width,height};
         }
         
-        private BoundingBoxHandler(String si, String name){
+        BoundingBoxHandler(String si, String name){
             this.TYPE_SI = si;
             this.TYPE_NAME = name;
         }
@@ -648,7 +608,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
             return typeTopic;
         }
         
-        private PoseHandler(String si, String name){
+        PoseHandler(String si, String name){
             this.TYPE_SI = si;
             this.TYPE_NAME = name;
         }
@@ -690,7 +650,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     
     
     /**
-    * CelebHandler creates a Topic representing a celebrity match from the
+    * MatchHandler creates a Topic representing a celebrity match from the
     * response data. The expected response structure is like:
     *
     * [{
@@ -702,9 +662,9 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     * Example: "Gwyneth_Paltrow" -> "Gwyneth Paltrow"
     */
     
-    class CelebHandler extends AbstractValueHandler implements ValueHandler{
+    protected class MatchHandler extends AbstractValueHandler implements ValueHandler{
 
-        private CelebHandler(String si, String name){
+        MatchHandler(String si, String name){
             this.TYPE_SI = si;
             this.TYPE_NAME = name;
         }
@@ -713,7 +673,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
         public void handleValue(TopicMap tm, Topic detection, Object values) throws Exception {
             if(!(values instanceof JSONArray)){
                 throw new IllegalArgumentException("Argument supplied to "
-                        + "CelebHandler is not a JSONArray.");
+                        + "MatchHandler is not a JSONArray.");
             }
             
             Topic typeTopic = this.getTypeTopic(tm);
@@ -729,7 +689,7 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
                 
                 Double confidenceValue = match.getDouble("score");
                 String confidenceID = UUID.randomUUID().toString();
-                Topic confidenceTopic = getOrCreateTopic(tm, CONFIDENCE_SI + confidenceID);
+                Topic confidenceTopic = getOrCreateTopic(tm, CONFIDENCE_SI + confidenceID, confidenceValue.toString());
                 
                 confidenceTopic.setData(confidenceTypeTopic, getLangTopic(tm), String.valueOf(confidenceValue));
                 confidenceTopic.addType(confidenceTypeTopic);
