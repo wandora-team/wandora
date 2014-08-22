@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JTabbedPane;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -45,19 +46,30 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
     private Wandora wandora = null;
     private JDialog dialog = null;
     
-    private RekognitionFaceDetector detector;
     private RekognitionConfiguration configuration;
     
     private final HashMap<String,JCheckBox> faceJobs;
 
-    public RekognitionConfigurationUI(RekognitionFaceDetector detector){
+    /**
+     * Constructs a configuration UI, with the active tab identified by tab. A 
+     * null value hides the tab pane.
+     * @param tab 
+     */
+    public RekognitionConfigurationUI(String tab){
         initComponents();
+        
+        if(tab == null){
+            rekognitionTabs.setVisible(false);
+        } else {
+            switch(tab){
+                case "face":
+                    rekognitionTabs.setSelectedComponent(faceDetectorTab);
+            }
+        }
         
         faceCelebrityTresholdLabel.setFont(UIConstants.buttonLabelFont);
         UIConstants.setFancyFont(faceCelebrityTresholdLabel);
-        
-        this.detector = detector;
-        
+                
         //Hook up checkboxes
         faceJobs = new HashMap<>();
         faceJobs.put("age",            faceJobCheckAge);
@@ -90,10 +102,10 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
         faceCelebrityTreshold.setValue(configuration.celebrityTreshold);
     }
     
-    public void open(Wandora w){
+    public void open(Wandora w, int height){
         wandora = w;
         dialog = new JDialog(w, true);
-        dialog.setSize(400, 500);
+        dialog.setSize(400, height);
         dialog.add(this);
         dialog.setTitle("ReKognition API extractor configuration");
         UIBox.centerWindow(dialog, w);
@@ -165,6 +177,11 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
         AbstractRekognitionExtractor.setConfiguration(configuration);
         
         forgetButton.setEnabled(false);
+    }
+    
+    void hideTabs() {
+        rekognitionTabs.setVisible(false);
+        dialog.setSize(400, 100);
     }
     
     /**
@@ -455,6 +472,5 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
     private javax.swing.JTabbedPane rekognitionTabs;
     // End of variables declaration//GEN-END:variables
 
-    
 
 }

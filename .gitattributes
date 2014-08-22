@@ -1,0 +1,12 @@
+*.sh     eol=lf
+*.wpr    -text
+*.gif    -text
+*.png    -text
+*.jpg    -text
+*.jar    -text
+*.vhtml  text
+*.r      text
+*.blend  -text
+*.ico    -text
+*.zip    -text
+*.ttf    -text

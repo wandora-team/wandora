@@ -596,6 +596,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>ReKognition face detection extractor...</name>
                <class>org.wandora.application.tools.extractors.rekognition.RekognitionFaceDetector</class>
             </item>
+            <item>
+               <name>ReKognition scene detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.rekognition.RekognitionSceneDetector</class>
+            </item>
          </item>
          <item>
             <name>Language</name>
@@ -793,6 +797,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>ReKognition face detection extractor...</name>
                <class>org.wandora.application.tools.extractors.rekognition.RekognitionFaceDetector</class>
+            </item>
+            <item>
+               <name>ReKognition scene detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.rekognition.RekognitionSceneDetector</class>
             </item>
             
          </item>

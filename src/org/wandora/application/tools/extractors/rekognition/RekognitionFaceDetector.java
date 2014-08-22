@@ -82,6 +82,47 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         return UIBox.getIcon("gui/icons/extract_rekognition.png");
     }
     
+    @Override
+    protected HashMap<String,ValueHandler> createHandlerMap() {
+        
+        HashMap<String,ValueHandler> handlerMap = new HashMap<>();
+        
+        handlerMap.put("matches", new MatchHandler(SI_ROOT + "celeb_match", "Celebrity Match"));
+
+        handlerMap.put("boundingbox", new BoundingBoxHandler(FEATURE_SI_ROOT + "boundingbox/", "Boundingbox"));
+        handlerMap.put("pose",        new PoseHandler(FEATURE_SI_ROOT + "pose/", "Pose"));
+        handlerMap.put("confidence",  new NumericValueHandler(FEATURE_SI_ROOT + "confidence/", "Confidence"));
+        handlerMap.put("emotion",     new NumericValuesHandler(FEATURE_SI_ROOT + "emotion/", "Emotion"));
+        handlerMap.put("eye_left",    new CoordinateHandler(FEATURE_SI_ROOT + "eye_left/", "Left Eye"));
+        handlerMap.put("eye_right",   new CoordinateHandler(FEATURE_SI_ROOT + "eye_right/", "Right Eye"));
+        handlerMap.put("nose",        new CoordinateHandler(FEATURE_SI_ROOT + "nose/", "Nose"));
+        handlerMap.put("mouth_l",     new CoordinateHandler(FEATURE_SI_ROOT + "mouth_left", "Mouth (left)"));
+        handlerMap.put("mouth_r",     new CoordinateHandler(FEATURE_SI_ROOT + "mouth_right", "Mouth (right)"));
+        
+        handlerMap.put("b_ll", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_left/", "Left Brow (left)"));
+        handlerMap.put("b_lm", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_middle/", "Left Brow (middle)"));
+        handlerMap.put("b_lr", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_left_right/", "Left Bro (right)"));
+        handlerMap.put("b_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_left/", "Right Brow (left)"));
+        handlerMap.put("b_rm", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_middle/","Right Brow (middle)"));
+        handlerMap.put("b_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "brow_right_right/", "Right Bro (right)"));
+        handlerMap.put("e_ld", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_down/", "Left Eye (down)"));
+        handlerMap.put("e_ll", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_left/", "Left Eye (left)"));
+        handlerMap.put("e_lu", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_up/", "Left Eye (up)"));
+        handlerMap.put("e_lr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_left_right/", "Left Eye (right)"));
+        handlerMap.put("e_rd", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_down/", "Right Eye (down)"));
+        handlerMap.put("e_rl", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_left/", "Right Eye (left)"));
+        handlerMap.put("e_ru", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_up/", "Right Eye (up)"));
+        handlerMap.put("e_rr", new CoordinateHandler(FEATURE_SI_ROOT+ "eye_right_right/", "Right Eye (right)"));
+        handlerMap.put("m_d",  new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_down/", "Mouth (down)"));
+        handlerMap.put("m_u",  new CoordinateHandler(FEATURE_SI_ROOT+ "mouth_up/", "Mouth (up)"));
+        handlerMap.put("n_l",  new CoordinateHandler(FEATURE_SI_ROOT+ "nose_left/", "Nose (left)"));
+        handlerMap.put("n_r",  new CoordinateHandler(FEATURE_SI_ROOT+ "nose_right/", "Nose (right)"));
+        handlerMap.put("tl",   new CoordinateHandler(FEATURE_SI_ROOT+ "top_left/", "Nose (left)"));
+        
+        return handlerMap;
+        
+    }
+    
     /**
      * Parse the URL as a string and pass it to _extractTopicsFrom(String ...)
      * @param u the image URL to extract
@@ -114,22 +155,12 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         if(imageUrl == null)
             throw new Exception("No valid Image URL found.");
 
-        
         /**
-         * Fetch the configuration.
+         * Prompt for authentication if we're still lacking it. Return if we still
+         * didn't get it
          */
-        RekognitionConfiguration conf = getConfiguration();
-        
-        /**
-         * Prompt for authentication if we're still lacking it.
-         */
-        if(conf.auth == null){
-            RekognitionAuthenticationDialog authDialog = new RekognitionAuthenticationDialog();
-            authDialog.open(getWandora());
-            if(authDialog.wasAccepted()) {
-                conf.auth = authDialog.getAuth();
-                setConfiguration(conf);
-            }
+        if(!conf.hasAuth()){
+            if(!conf.askForAuth()) return false;
         }
         
         /**
@@ -145,8 +176,6 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         
         HttpResponse<JsonNode> resp = Unirest.get(extractUrl).asJson();
         JSONObject respNode = resp.getBody().getObject();
-        
-        System.out.println(respNode.toString());
         
         HashMap<String,ValueHandler> handlerMap = createHandlerMap();
         
@@ -208,9 +237,6 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         return sb.toString();
     }
     
-    
-    
-
     private void logUsage(JSONObject respNode) throws JSONException{
         
         JSONObject usage = respNode.getJSONObject("usage");
@@ -230,8 +256,8 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
     }
     @Override
     public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
-        RekognitionConfigurationUI configurationUI = new RekognitionConfigurationUI(this);
-        configurationUI.open(wandora);
+        RekognitionConfigurationUI configurationUI = new RekognitionConfigurationUI("face");
+        configurationUI.open(wandora,600);
         configurationUI.setVisible(true);
     }
     @Override
