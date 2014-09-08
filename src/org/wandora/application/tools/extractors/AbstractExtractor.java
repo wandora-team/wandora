@@ -111,11 +111,11 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     }
     @Override
     public String getName(){
-        return "Abstract Extractor";
+        return "Abstract Umbel Extractor";
     }
     @Override
     public String getDescription(){
-        return "AbstractExtractor is a base implementation for extractors.";
+        return "AbstractUmbelExtractor is a base implementation for Umbel extractors.";
     }
     @Override
     public Icon getIcon() {

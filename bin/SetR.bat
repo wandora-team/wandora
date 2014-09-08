@@ -1,7 +1,7 @@
 REM This bat script is executed automatically by Wandora.bat.
 REM You don't need to execute it manually.
 
-set R_HOME=%ProgramFiles%\R\R-3.0.0
+set R_HOME=%ProgramFiles%\R\R-3.1.1
 set R_SHARE=%R_HOME%
 
 REM - This must be same as your Java installation

@@ -339,6 +339,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/extractors/mediawikiapi</path>
       <path>org/wandora/application/tools/extractors/britishlibrary</path>
       <path>org/wandora/application/tools/extractors/rekognition</path>
+      <path>org/wandora/application/tools/extractors/umbel</path>
       <path>org/wandora/application/tools/server</path>
       <path>org/wandora/application/tools/webview</path>
       <path>org/wandora/application/tools/r</path>
@@ -478,6 +479,30 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>Freebase extractor...</name>
                <class>org.wandora.application.tools.extractors.freebase.FreebaseExtractor</class>
+            </item>
+            <item>
+               <name>--- UMBEL ---</name>
+               <class>org.wandora.application.tools.DummyTool</class>
+            </item>
+            <item>
+               <name>Get Umbel concept...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetConceptExtractor</class>
+            </item>
+            <item>
+               <name>Get broader Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetBroaderExtractor</class>
+            </item>
+            <item>
+               <name>Get narrower Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetNarrowerExtractor</class>
+            </item>
+            <item>
+               <name>Get subclass Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSubclassesExtractor</class>
+            </item>
+            <item>
+               <name>Get superclass Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperclassesExtractor</class>
             </item>
          </item>
          <item>
