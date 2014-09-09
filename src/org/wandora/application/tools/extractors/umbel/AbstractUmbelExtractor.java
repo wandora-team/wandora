@@ -155,7 +155,14 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
     
     
     
-    
+    @Override
+    public String getName(){
+        return "Abstract Umbel Extractor";
+    }
+    @Override
+    public String getDescription(){
+        return "AbstractUmbelExtractor is a base implementation for Umbel extractors.";
+    }
     
     @Override
     public Icon getIcon() {
