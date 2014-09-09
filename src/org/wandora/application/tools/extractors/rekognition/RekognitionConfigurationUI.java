@@ -22,11 +22,15 @@
 package org.wandora.application.tools.extractors.rekognition;
 
 import java.awt.Component;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JTabbedPane;
+import javax.swing.text.NumberFormatter;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -99,7 +103,7 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
         }
         
         faceAssociateCelebrity.setSelected(configuration.celebrityNaming);
-        faceCelebrityTreshold.setValue(configuration.celebrityTreshold);
+        faceCelebrityTreshold.setValue(new Double(configuration.celebrityTreshold));
     }
     
     public void open(Wandora w, int height){
@@ -131,8 +135,7 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
             
             try {
                 celebrityNaming = faceAssociateCelebrity.isSelected();
-                String tresholdFieldValue = faceCelebrityTreshold.getText();
-                celebrityTreshold = Double.parseDouble(tresholdFieldValue);
+                celebrityTreshold = ((Number)faceCelebrityTreshold.getValue()).floatValue();
             } catch (NumberFormatException e) {
                 celebrityNaming = false;
                 celebrityTreshold = 0;
@@ -319,8 +322,8 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         faceCelebrityDetails.add(faceAssociateCelebrity, gridBagConstraints);
 
-        faceCelebrityTreshold.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("##0.##"))));
-        faceCelebrityTreshold.setText("0.5");
+        faceCelebrityTreshold.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        faceCelebrityTreshold.setText("0.50");
         faceCelebrityTreshold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 faceCelebrityTresholdActionPerformed(evt);
