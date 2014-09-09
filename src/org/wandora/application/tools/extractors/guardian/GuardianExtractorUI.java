@@ -144,12 +144,12 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
             }
             String endDate = endDateTextField.getText().trim();
             if (endDate != null && endDate.length() > 0) {
-                extractUrl += "&end-date=" + urlEncode(endDate);
+                extractUrl += "&to-date=" + urlEncode(endDate);
             }
 
             String tags = tagQueryTextField.getText().trim();
             if( tags != null && tags.length() > 0) {
-                extractUrl += "&tag=" + urlEncode(tags);
+                extractUrl += "&tags=" + urlEncode(tags);
             }
 
             String sections = sectionQueryTextField.getText().trim();
