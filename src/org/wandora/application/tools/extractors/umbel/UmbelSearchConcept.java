@@ -151,7 +151,7 @@ public class UmbelSearchConcept extends UmbelGetConcept {
                                     boolean firstLabel = true;
                                     for(String label : labels) {
                                         if(label != null) {
-                                            if(!firstLabel) labelsBuilder.append(", ");
+                                            if(!firstLabel) labelsBuilder.append(" ; ");
                                             labelsBuilder.append(label);
                                             firstLabel = false;
                                         }
