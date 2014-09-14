@@ -485,6 +485,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.DummyTool</class>
             </item>
             <item>
+               <name>Search Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelSearchConcept</class>
+            </item>
+            <item>
                <name>Get Umbel concept...</name>
                <class>org.wandora.application.tools.extractors.umbel.UmbelGetConceptExtractor</class>
             </item>
