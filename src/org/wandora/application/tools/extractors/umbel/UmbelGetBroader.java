@@ -21,7 +21,13 @@
  * 
  */
 
+
 package org.wandora.application.tools.extractors.umbel;
+
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *
@@ -29,25 +35,50 @@ package org.wandora.application.tools.extractors.umbel;
  */
 
 
-public class UmbelGetSuperTypeExtractor extends UmbelGetConceptExtractor {
-    
-    
-    public static final String API_URL = "http://umbel.org/ws/super-type/";
+public class UmbelGetBroader extends AbstractUmbelRelationExtractor {
+
+    public static final String API_URL = "http://umbel.org/ws/broader-concepts/ext/";
 
     
+
     @Override
     public String getName(){
-        return "Umbel super type extractor";
+        return "Broader Umbel concept extractor";
     }
     
     @Override
     public String getDescription(){
-        return "Extract super types from Umbel knowledge graph.";
+        return "Extract broader concepts from Umbel.";
     }
     
     @Override
     public String getApiRequestUrlFor(String str) {
         return API_URL + urlEncode(str);
     }
+
+    
+    @Override
+    public void logApiRequest(String str) {
+        log("Getting broader concepts of '"+str+"'.");
+    }
+    
+
+    @Override
+    public Topic getAssociationType(TopicMap topicMap) throws TopicMapException {
+        return getBroaderNarrowerTypeTopic(topicMap);
+    }
+    
+    @Override
+    public Topic getRoleTopicForConcept(TopicMap topicMap) throws TopicMapException {
+        return getBroaderTypeTopic(topicMap);
+    }
+    
+    @Override
+    public Topic getRoleTopicForBaseConcept(TopicMap topicMap) throws TopicMapException {
+        return getNarrowerTypeTopic(topicMap);
+    }
+    
+    
+
     
 }

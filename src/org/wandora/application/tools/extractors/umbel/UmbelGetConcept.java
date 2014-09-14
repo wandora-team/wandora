@@ -40,7 +40,7 @@ import org.wandora.utils.Tuples;
  */
 
 
-public class UmbelGetConceptExtractor extends AbstractUmbelExtractor {
+public class UmbelGetConcept extends AbstractUmbelExtractor {
     
     public static final String API_URL = "http://umbel.org/ws/concept/";
 

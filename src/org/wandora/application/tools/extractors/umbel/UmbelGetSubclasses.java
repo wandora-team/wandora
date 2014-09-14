@@ -35,21 +35,20 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class UmbelGetSuperclassesExtractor extends AbstractUmbelRelationExtractor {
+public class UmbelGetSubclasses extends AbstractUmbelRelationExtractor {
 
-    public static final String API_URL = "http://umbel.org/ws/super-classes/ext/";
+    public static final String API_URL = "http://umbel.org/ws/sub-classes/ext/";
 
     
     
-
     @Override
     public String getName(){
-        return "Superclass Umbel concept extractor";
+        return "Subclasses Umbel concept extractor";
     }
     
     @Override
     public String getDescription(){
-        return "Extract superclass concepts from Umbel.";
+        return "Extract subclass concepts from Umbel.";
     }
     
     
@@ -61,7 +60,7 @@ public class UmbelGetSuperclassesExtractor extends AbstractUmbelRelationExtracto
     
     @Override
     public void logApiRequest(String str) {
-        log("Getting superclass concepts of '"+str+"'.");
+        log("Getting subclass concepts of '"+str+"'.");
     }
     
 

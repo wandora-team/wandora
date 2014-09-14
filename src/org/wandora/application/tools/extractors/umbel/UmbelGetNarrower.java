@@ -25,6 +25,7 @@
 package org.wandora.application.tools.extractors.umbel;
 
 
+
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
@@ -35,22 +36,20 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class UmbelGetSubclassesExtractor extends AbstractUmbelRelationExtractor {
+public class UmbelGetNarrower extends AbstractUmbelRelationExtractor {
 
-    public static final String API_URL = "http://umbel.org/ws/sub-classes/ext/";
+    public static final String API_URL = "http://umbel.org/ws/narrower-concepts/ext/";
 
-    
-    
+
     @Override
     public String getName(){
-        return "Subclasses Umbel concept extractor";
+        return "Narrower Umbel concept extractor";
     }
     
     @Override
     public String getDescription(){
-        return "Extract subclass concepts from Umbel.";
+        return "Extract narrower concepts from Umbel.";
     }
-    
     
     @Override
     public String getApiRequestUrlFor(String str) {
@@ -60,25 +59,23 @@ public class UmbelGetSubclassesExtractor extends AbstractUmbelRelationExtractor 
     
     @Override
     public void logApiRequest(String str) {
-        log("Getting subclass concepts of '"+str+"'.");
+        log("Getting narrower concepts of '"+str+"'.");
     }
     
 
     @Override
     public Topic getAssociationType(TopicMap topicMap) throws TopicMapException {
-        return getSuperclassSubclassTypeTopic(topicMap);
+        return getBroaderNarrowerTypeTopic(topicMap);
     }
     
     @Override
     public Topic getRoleTopicForConcept(TopicMap topicMap) throws TopicMapException {
-        return getSuperclassTypeTopic(topicMap);
+        return getNarrowerTypeTopic(topicMap);
     }
     
     @Override
     public Topic getRoleTopicForBaseConcept(TopicMap topicMap) throws TopicMapException {
-        return getSubclassTypeTopic(topicMap);
+        return getBroaderTypeTopic(topicMap);
     }
-
-
     
 }
