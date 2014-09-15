@@ -44,16 +44,20 @@ import org.wandora.topicmap.XTMPSI;
  * @author anttirt
  */
 public class FlickrUtils {
+    
     public static Locator buildSI(String siend) {
         if(siend == null) siend = "" + System.currentTimeMillis() + Math.random();
-        return new Locator("http://wandora.org/si/default/" + siend);
+        return new Locator("http://wandora.org/si/flickr/" + siend);
     }
+    
     public static Topic createTopic(TopicMap topicMap, String baseString) throws TopicMapException {
         return createTopic(topicMap, baseString, "", baseString, new Topic[] { });
     }
+    
     public static <T> Iterable<T> each(final Iterator<T> iter) {
         return new Iterable<T>() { public Iterator<T> iterator() { return iter; } };
     }
+    
     public static class EnumToIter<T> implements Iterator<T> {
         private Enumeration<T> data;
 
@@ -74,6 +78,7 @@ public class FlickrUtils {
             data = e;
         }
     }
+    
     public static <T> Iterable<T> each(final Enumeration<T> e) {
         return new Iterable<T>() { public Iterator<T> iterator() { return new EnumToIter<T>(e); } };
     }
@@ -128,6 +133,8 @@ public class FlickrUtils {
         }
         return t;
     }
+    
+    
     public static Topic createRaw(TopicMap topicMap, String siString, String baseNameString, String baseString, Topic[] types)  throws TopicMapException {
         if(baseString == null)
             throw new java.lang.IllegalArgumentException("Null baseString passed to createRaw (siString=\"" + siString + "\", baseNameString=\"" + baseNameString + "\"");
@@ -154,6 +161,8 @@ public class FlickrUtils {
         }
         return t;
     }
+    
+    
     public static void setDisplayName(Topic t, String lang, String name)  throws TopicMapException {
         if(t != null & lang != null && name != null) {
             String langsi=XTMPSI.getLang(lang);
@@ -201,6 +210,7 @@ public class FlickrUtils {
         }
     }
 
+    
     public static Association createAssociation(TopicMap topicMap, Topic aType, Topic[] players)  throws TopicMapException {
         Association a = topicMap.createAssociation(aType);
         Topic player;
@@ -228,26 +238,23 @@ public class FlickrUtils {
             a.addPlayer(player, role);
         }
         return a;
-    }    
+    }
+    
     private static Pattern objOrArray = Pattern.compile("[^\\.\\[]+");
     private static Pattern arrayIndex = Pattern.compile("[0-9]+");
     private static enum curEnum { obj, arr }
     private static class SearchResult { public curEnum type; public JSONObject obj; public JSONArray arr; public String subName; public int subIdx; }
-    private static SearchResult jsonSearch(JSONObject obj, String path) throws JSONException
-    {
+    private static SearchResult jsonSearch(JSONObject obj, String path) throws JSONException {
         Matcher m = objOrArray.matcher(path);
         SearchResult ret = new SearchResult();
         //ret.type = curEnum.obj;
         //ret.obj = obj;
         
-        while(m.find())
-        {
-            if(ret.obj == null)
-            {
+        while(m.find()) {
+            if(ret.obj == null) {
                 ret.obj = obj;
             }
-            else
-            {
+            else {
                 if(ret.type == curEnum.obj)
                     ret.obj = ret.obj.getJSONObject(ret.subName);
                 else
@@ -257,17 +264,14 @@ public class FlickrUtils {
             ret.subName = m.group();
             ret.type = curEnum.obj;
             
-            if(m.hitEnd())
-            {
+            if(m.hitEnd()) {
                 break;
             }
             
-            if(path.charAt(m.end()) == '.')
-            {
+            if(path.charAt(m.end()) == '.') {
                 continue;
             }
-            else
-            {
+            else {
                 Matcher n = arrayIndex.matcher(path.subSequence(m.end() + 1, path.length()));
                 if(!n.find())
                     throw new JSONException(path);
@@ -283,51 +287,57 @@ public class FlickrUtils {
                 m.region(m.end() + 1 + n.end() + 1, path.length());
             }
         }
-        
         return ret;
     }
-    public static int searchInt(JSONObject obj, String path) throws JSONException
-    {
+    
+    
+    public static int searchInt(JSONObject obj, String path) throws JSONException {
         SearchResult res = jsonSearch(obj, path);
         if(res.type == curEnum.arr)
             return res.arr.getInt(res.subIdx);
         else
             return res.obj.getInt(res.subName);
     }
-    public static long searchLong(JSONObject obj, String path) throws JSONException
-    {
+    
+    
+    public static long searchLong(JSONObject obj, String path) throws JSONException {
         SearchResult res = jsonSearch(obj, path);
         if(res.type == curEnum.arr)
             return res.arr.getLong(res.subIdx);
         else
             return res.obj.getLong(res.subName);
     }
-    public static double searchDouble(JSONObject obj, String path) throws JSONException
-    {
+    
+    
+    public static double searchDouble(JSONObject obj, String path) throws JSONException {
         SearchResult res = jsonSearch(obj, path);
         if(res.type == curEnum.arr)
             return res.arr.getDouble(res.subIdx);
         else
             return res.obj.getDouble(res.subName);
     }
-    public static String searchString(JSONObject obj, String path) throws JSONException
-    {
+    
+    
+    
+    public static String searchString(JSONObject obj, String path) throws JSONException {
         SearchResult res = jsonSearch(obj, path);
         if(res.type == curEnum.arr)
             return res.arr.getString(res.subIdx);
         else
             return res.obj.getString(res.subName);
     }
-    public static JSONObject searchJSONObject(JSONObject obj, String path) throws JSONException
-    {
+    
+    
+    public static JSONObject searchJSONObject(JSONObject obj, String path) throws JSONException {
         SearchResult res = jsonSearch(obj, path);
         if(res.type == curEnum.arr)
             return res.arr.getJSONObject(res.subIdx);
         else
             return res.obj.getJSONObject(res.subName);
     }
-    public static JSONArray searchJSONArray(JSONObject obj, String path) throws JSONException
-    {
+    
+    
+    public static JSONArray searchJSONArray(JSONObject obj, String path) throws JSONException {
         SearchResult res = jsonSearch(obj, path);
         if(res.type == curEnum.arr)
             return res.arr.getJSONArray(res.subIdx);

@@ -61,7 +61,7 @@ public class AuthConfigDialog extends javax.swing.JDialog {
         fldFrob.setText(state.Frob);
         fldToken.setText(state.Token);
         
-        this.setSize(450, 280);
+        this.setSize(650, 280);
         
         
         if(parent instanceof Wandora)
@@ -98,16 +98,16 @@ public class AuthConfigDialog extends javax.swing.JDialog {
         wandoraLabel4 = new org.wandora.application.gui.simple.SimpleLabel();
         wandoraLabel7 = new org.wandora.application.gui.simple.SimpleLabel();
         jPanel1 = new javax.swing.JPanel();
-        gotNone = new SimpleLabel();
-        gotRead = new SimpleLabel();
-        gotDelete = new SimpleLabel();
-        gotWrite = new SimpleLabel();
+        gotNone = new org.wandora.application.gui.simple.SimpleLabel();
+        gotRead = new org.wandora.application.gui.simple.SimpleLabel();
+        gotDelete = new org.wandora.application.gui.simple.SimpleLabel();
+        gotWrite = new org.wandora.application.gui.simple.SimpleLabel();
         jPanel4 = new javax.swing.JPanel();
-        btnClearInfo = new SimpleButton();
-        btnValidate = new SimpleButton();
+        btnClearInfo = new org.wandora.application.gui.simple.SimpleButton();
+        btnValidate = new org.wandora.application.gui.simple.SimpleButton();
         buttonPanel = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        btnClose = new SimpleButton();
+        btnClose = new org.wandora.application.gui.simple.SimpleButton();
 
         wandoraLabel2.setText("wandoraLabel2");
 

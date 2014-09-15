@@ -29,9 +29,9 @@ public class FlickrState {
             PermRead = "read",
             PermWrite = "write",
             PermDelete = "delete",
-            ApiKey = "1eab422260e1c488c998231f290330eb",
-            ApiSecret = "d2094033862921ac",
-            RESTbase = "http://api.flickr.com/services/rest/";
+            ApiKey = "1eab422260e1c488c998231f290330eb", // "38e1943f013d3625295b7549d3d2898a", //"1eab422260e1c488c998231f290330eb",
+            ApiSecret = "d2094033862921ac", // "e50f5106e5684bad", //"d2094033862921ac",
+            RESTbase = "https://api.flickr.com/services/rest/";
     public static int getAuthLevel(String authLevel) {
         if(authLevel.equals(FlickrState.PermNone))
             return 0;
@@ -206,6 +206,6 @@ public class FlickrState {
         args.put("frob", Frob);
         args.put("api_sig", FlickrExtractor.createSignature(args));
 
-        return makeRESTURL(args, "http://www.flickr.com/services/auth/");
+        return makeRESTURL(args, "https://www.flickr.com/services/auth/");
     }
 }

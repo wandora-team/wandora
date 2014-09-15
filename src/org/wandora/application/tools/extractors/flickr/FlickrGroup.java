@@ -47,23 +47,19 @@ public class FlickrGroup {
     public FlickrGroup() {}
     
     public Topic makeTopic(FlickrExtractor extractor) throws TopicMapException {
-        
         Topic ret = FlickrUtils.createRaw(extractor.getCurrentMap(), "http://www.flickr.com/groups/" + ID + "/", " (flickr group)", Name, extractor.getTopic(FlickrTopic.Group));
         ret.setData(extractor.getOccurrence(FlickrOccur.NSID), extractor.getLanguage(null), ID);
         TreeMap<String, String> args = new TreeMap();
         args.put("group_id", ID);
-        try
-        {
+        try {
             JSONObject obj = extractor.getFlickrState().unauthorizedCall("flickr.urls.getGroup", args);
             ret.addSubjectIdentifier(new Locator(FlickrUtils.searchString(obj, "group.url")));
         }
-        catch(JSONException e)
-        {
-            
+        catch(JSONException e) {
+            e.printStackTrace();
         }
-        catch(FlickrExtractor.RequestFailure e)
-        {
-            
+        catch(FlickrExtractor.RequestFailure e) {
+            e.printStackTrace();
         }
         return ret;
     }

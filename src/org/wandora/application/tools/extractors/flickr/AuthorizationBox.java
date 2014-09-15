@@ -37,6 +37,7 @@ public class AuthorizationBox extends javax.swing.JPanel {
     private FlickrState flickrState;
     private String authRequirements;
     
+    
     /** Creates new form AuthorizationBox */
     public AuthorizationBox(java.awt.Frame parent, FlickrState state, String authReq) {
         dlgParent = parent;
@@ -149,17 +150,14 @@ public class AuthorizationBox extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void authBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_authBtnActionPerformed
-        try
-        {
+        try {
             flickrState.authenticate((String)cmbAuthRequest.getSelectedItem(), dlgParent);
             authDisplay.setRequiredLevel(FlickrState.getAuthLevel(authDisplay.requiredAuthLevel));
         }
-        catch(FlickrExtractor.RequestFailure e)
-        {
+        catch(FlickrExtractor.RequestFailure e) {
             
         }
-        catch(FlickrExtractor.UserCancellation e)
-        {
+        catch(FlickrExtractor.UserCancellation e) {
             
         }
 }//GEN-LAST:event_authBtnActionPerformed

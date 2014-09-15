@@ -44,6 +44,7 @@ public class TokenRequestDialog extends javax.swing.JDialog {
     private String requiredAuth;
     private FlickrState flickrState;
     
+    
     /** Creates new form TokenRequestDialog */
     public TokenRequestDialog(java.awt.Frame parent, boolean modal, String authURL, String reqAuth, FlickrState state) {
         super(parent, modal);
@@ -52,15 +53,18 @@ public class TokenRequestDialog extends javax.swing.JDialog {
         initComponents();
         urlField.setText(authURL);
         mCancelled = false;
-        this.setSize(400,280);
-        if(parent instanceof Wandora)
-        {
+        this.setSize(600,280);
+        if(parent instanceof Wandora) {
             Wandora w = (Wandora)parent;
             w.centerWindow(this);
         }
     }
     
-    public boolean cancelled() { return mCancelled; }
+    
+    public boolean cancelled() { 
+        return mCancelled; 
+    }
+    
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -208,25 +212,29 @@ public class TokenRequestDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         setVisible(false);
 }//GEN-LAST:event_okButtonActionPerformed
 
+    
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         mCancelled = true;
         setVisible(false);
 }//GEN-LAST:event_cancelButtonActionPerformed
 
+    
     private void clipboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clipboardBtnActionPerformed
         StringSelection sel = new StringSelection(urlField.getText());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(sel, new ClipboardOwner() {
-
+            @Override
             public void lostOwnership(Clipboard clipboard, Transferable contents) {
                 
             }
         });
     }//GEN-LAST:event_clipboardBtnActionPerformed
+    
     
     /**
      * @param args the command line arguments
@@ -246,6 +254,7 @@ public class TokenRequestDialog extends javax.swing.JDialog {
         });
         */
     }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.wandora.application.tools.extractors.flickr.AuthDisplay authDisplay1;

@@ -152,8 +152,7 @@ public class FlickrPhoto {
         Topic photoTopic = FlickrUtils.createRaw(extractor.getCurrentMap(), baseStr, " (flickr photo " + ID + ")", Title, extractor.getTopic(FlickrTopic.Photo));
         photoTopic.setData(extractor.getOccurrence(FlickrOccur.PhotoID), extractor.getLanguage(null), ID);
         
-        if(FarmID != null && ServerID != null && Secret != null)
-        {
+        if(FarmID != null && ServerID != null && Secret != null) {
             StringBuilder bldr = new StringBuilder("http://farm");
             bldr.append(FarmID);
             bldr.append(".static.flickr.com/");
@@ -167,20 +166,17 @@ public class FlickrPhoto {
             photoTopic.setSubjectLocator(new Locator(bldr.toString()));
         }
         
-        if(Description != null)
-        {
+        if(Description != null) {
             photoTopic.setData(extractor.getOccurrence(FlickrOccur.Description), extractor.getLanguage(null), Description);
         }
         
-        if(License != null)
-        {
+        if(License != null) {
             Topic licenseT = extractor.getLicenseTopic(License);
             if(licenseT != null)
                 FlickrUtils.createAssociation(extractor.getCurrentMap(), extractor.getAssociation(FlickrAssoc.License), new Topic[] { licenseT, photoTopic });
         }
         
-        for(String tag : Tags)
-        {
+        for(String tag : Tags) {
             if("".equals(tag))
                 continue;
 
@@ -192,8 +188,8 @@ public class FlickrPhoto {
                 throw new TopicMapException("Null tagTopic");
             FlickrUtils.createAssociation(extractor.getCurrentMap(), extractor.getAssociation(FlickrAssoc.Description), new Topic[] { photoTopic, tagTopic });
         }
-        if(OwnerID != null)
-        {
+        
+        if(OwnerID != null) {
             FlickrPerson p = new FlickrPerson();
             p.UserName = OwnerName;
             p.ID = OwnerID;
@@ -205,9 +201,7 @@ public class FlickrPhoto {
                 throw new TopicMapException("Null personTopic");
             
             FlickrUtils.createAssociation(extractor.getCurrentMap(), extractor.getAssociation(FlickrAssoc.Ownership), new Topic[] {photoTopic, personTopic});
-            
         }
-        
         return photoTopic;
     }
 }

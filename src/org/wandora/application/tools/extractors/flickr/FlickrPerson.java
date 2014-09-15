@@ -33,8 +33,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author anttirt
  */
-public class FlickrPerson
-{
+public class FlickrPerson {
         String ID;
         String UserName;
         String RealName;
@@ -45,8 +44,7 @@ public class FlickrPerson
 
         public FlickrPerson() { }
 
-        public FlickrPerson(JSONObject obj) throws JSONException
-        {
+        public FlickrPerson(JSONObject obj) throws JSONException {
             ID = FlickrUtils.searchString(obj, "nsid");
             UserName = FlickrUtils.searchString(obj, "username._content");
             RealName = FlickrUtils.searchString(obj, "realname._content");
@@ -56,10 +54,8 @@ public class FlickrPerson
             PhotoCount = FlickrUtils.searchInt(obj, "photos.count._content");
         }
 
-        public Topic makeTopic(FlickrExtractor extractor) throws TopicMapException
-        {
-            if(ProfileURL == null || ProfileURL.equals(""))
-            {
+        public Topic makeTopic(FlickrExtractor extractor) throws TopicMapException {
+            if(ProfileURL == null || ProfileURL.equals("")) {
                 ProfileURL = "http://www.flickr.com/people/" + ID + "/";
             }
             

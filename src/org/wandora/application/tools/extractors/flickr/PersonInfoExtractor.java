@@ -60,10 +60,8 @@ public class PersonInfoExtractor extends FlickrExtractor {
         }
         setState(VISIBLE);
 
-        for(String username : dlg.getUserList())
-        {
-            try
-            {
+        for(String username : dlg.getUserList()) {
+            try {
                 SortedMap<String, String> userInfoArgs = new TreeMap();
                 userInfoArgs.put("username", username);
                 JSONObject obj = getFlickrState().unauthorizedCall("flickr.people.findByUsername", userInfoArgs);
@@ -76,16 +74,13 @@ public class PersonInfoExtractor extends FlickrExtractor {
                 p.ID = FlickrUtils.searchString(obj, "user.nsid");
                 people.add(new T2<FlickrPerson, Topic>(p, p.makeTopic(this)));
             }
-            catch(JSONException e)
-            {
+            catch(JSONException e) {
                 throw new ExtractionFailure(e);
             }
-            catch(RequestFailure e)
-            {
+            catch(RequestFailure e) {
                 throw new ExtractionFailure(e);
             }
-            catch(TopicMapException e)
-            {
+            catch(TopicMapException e) {
                 throw new ExtractionFailure(e);
             }
         }
@@ -113,19 +108,15 @@ public class PersonInfoExtractor extends FlickrExtractor {
         
         Collection<Topic> contextUserTopics = getWithType(context, profileT);
         
-        if(contextUserTopics.size() == 0)
-        {
+        if(contextUserTopics.isEmpty()) {
             people = promptForUsers(admin);
             if(people == null) return false; // user cancelled
         }
-        else
-        {
+        else {
             people = new ArrayList<T2<FlickrPerson, Topic>>();
             
-            for(Topic t : contextUserTopics)
-            {
-                try
-                {
+            for(Topic t : contextUserTopics) {
+                try {
                     FlickrPerson p = new FlickrPerson();
                     p.UserName = t.getDisplayName();
                     p.ID = t.getData(nsidT, langT);
@@ -137,17 +128,15 @@ public class PersonInfoExtractor extends FlickrExtractor {
                 }
             }
         }
-        if(people.size() == 0) {
+        if(people.isEmpty()) {
             log("Found no profiles to look up!");
         }
         else {
             log("Found a total of " + people.size() + " profiles to look up");
         }
         
-        for(T2<FlickrPerson, Topic> p : people)
-        {
-            try
-            {
+        for(T2<FlickrPerson, Topic> p : people) {
+            try {
                 curPerson = p.e1;
                 curPersonTopic = p.e2;
                 
@@ -164,20 +153,16 @@ public class PersonInfoExtractor extends FlickrExtractor {
                 people_getPublicGroups(admin);
                 if(forceStop()) return true;
             }
-            catch(TopicMapException e)
-            {
+            catch(TopicMapException e) {
                 log(e);
             }
-            catch(RequestFailure e)
-            {
+            catch(RequestFailure e) {
                 log(e);
             }
-            catch(JSONException e)
-            {
+            catch(JSONException e) {
                 log(e);
             }
-            catch(UserCancellation e)
-            {
+            catch(UserCancellation e) {
                 log("User cancelled");
             }
         }
@@ -185,6 +170,8 @@ public class PersonInfoExtractor extends FlickrExtractor {
         log("Ok.");
         return people.size() > 0;
     }
+    
+    
     
     private void getPhotoList(Wandora currentAdmin, String jsonAPI, FlickrAssoc association, String relationship) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure, UserCancellation {
         int totalPhotos = 0;
@@ -202,23 +189,20 @@ public class PersonInfoExtractor extends FlickrExtractor {
         
         getCurrentLogger().setProgressMax(totalPhotos);
         log("-- Getting info for " + totalPhotos + " photos " + relationship + " by " + curPerson.UserName + ".");
-        for(int nextPageIndex = 2; nextPageIndex <= (pageCount + 1); ++nextPageIndex)
-        {
+        for(int nextPageIndex = 2; nextPageIndex <= (pageCount + 1); ++nextPageIndex) {
             getCurrentLogger().setProgress(photosReceived);
             JSONArray photosArray = FlickrUtils.searchJSONArray(result, "photos.photo");
             int received = photosArray.length();
             log("-- -- Getting info for photos " + (photosReceived + 1) + " - " + (photosReceived + received) + " out of " + totalPhotos);
             photosReceived += received;
 
-            for(int i = 0; i < received; ++i)
-            {
+            for(int i = 0; i < received; ++i) {
                 FlickrPhoto p = FlickrPhoto.makeFromPublicPhotoList(photosArray.getJSONObject(i));
                 Topic photoTopic = p.makeTopic(this);
                 FlickrUtils.createAssociation(currentMap, getAssociation(association), new Topic[] { photoTopic, curPersonTopic });
             }
             
-            if(forceStop())
-            {
+            if(forceStop()) {
                 log("-- -- Cancellation requested; finished getting info for " + photosReceived + " out of " + totalPhotos + " photos.");
                 break;
             }
@@ -231,8 +215,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
             result = getFlickrState().authorizedCall(jsonAPI, args, FlickrState.PermRead, currentAdmin);
 
         }
-        if(photosReceived < totalPhotos)
-        {
+        if(photosReceived < totalPhotos) {
             log("" + (totalPhotos - photosReceived) + " photos not sent by flickr");
         }
     }
@@ -258,6 +241,8 @@ public class PersonInfoExtractor extends FlickrExtractor {
             getCurrentLogger().setProgress(groupArray.length());
         }
     }
+    
+    
     private void people_getInfo(Wandora currentAdmin) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure {
         TreeMap<String, String> args = new TreeMap();
         args.put("user_id", curPerson.ID);
@@ -273,11 +258,14 @@ public class PersonInfoExtractor extends FlickrExtractor {
         catch(JSONException e) { }
     }
     
+    
+    
     @Override
-    public String getDescription()
-    {
-        return "Flickr person info extractor reads Flickr user profile and converts it to a Topic Map.";
+    public String getDescription() {
+        return "Flickr person info extractor reads Flickr user profile and converts it to a topic map.";
     }
+    
+    
     @Override
     public String getName() {
         return "Flickr person info extractor";
