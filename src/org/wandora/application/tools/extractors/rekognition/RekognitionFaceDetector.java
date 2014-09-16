@@ -24,10 +24,12 @@ package org.wandora.application.tools.extractors.rekognition;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.Icon;
+import org.apache.commons.io.IOUtils;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.UIBox;
@@ -174,12 +176,12 @@ public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
         
         logger.log("Getting \"" + extractUrl + "\"");
         
-        HttpResponse<JsonNode> resp = Unirest.get(extractUrl).asJson();
-        JSONObject respNode = resp.getBody().getObject();
-        
-        HashMap<String,ValueHandler> handlerMap = createHandlerMap();
-        
         try {
+            HttpResponse<JsonNode> resp = Unirest.get(extractUrl).asJson();
+            JSONObject respNode = resp.getBody().getObject();
+
+            HashMap<String,ValueHandler> handlerMap = createHandlerMap();
+        
             logUsage(respNode);
             
             String imageURL = respNode.getString("url");

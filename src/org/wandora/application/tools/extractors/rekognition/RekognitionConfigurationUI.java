@@ -22,21 +22,15 @@
 package org.wandora.application.tools.extractors.rekognition;
 
 import java.awt.Component;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTabbedPane;
-import javax.swing.text.NumberFormatter;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
-import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
