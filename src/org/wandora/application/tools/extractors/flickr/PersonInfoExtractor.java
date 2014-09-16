@@ -122,8 +122,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
                     p.ID = t.getData(nsidT, langT);
                     people.add(new T2<FlickrPerson, Topic>(p, t));
                 }
-                catch(TopicMapException e)
-                {
+                catch(TopicMapException e) {
                     log(e);
                 }
             }
@@ -221,7 +220,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
     }
     
     
-    private void people_getPublicGroups(Wandora currentAdmin) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure {
+    private void people_getPublicGroups(Wandora wandora) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure {
         TreeMap<String, String> args = new TreeMap();
         args.put("user_id", curPerson.ID);
 
@@ -231,8 +230,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
             JSONArray groupArray = FlickrUtils.searchJSONArray(result, "groups.group");
             log("-- Getting info for " + groupArray.length() + " groups.");
             getCurrentLogger().setProgressMax(groupArray.length());
-            for(int i = 0; i < groupArray.length() && !forceStop(); ++i)
-            {
+            for(int i = 0; i < groupArray.length() && !forceStop(); ++i) {
                 getCurrentLogger().setProgress(i);
                 FlickrGroup g = new FlickrGroup(groupArray.getJSONObject(i));
                 Topic groupTopic = g.makeTopic(this);
@@ -243,7 +241,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
     }
     
     
-    private void people_getInfo(Wandora currentAdmin) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure {
+    private void people_getInfo(Wandora wandora) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure {
         TreeMap<String, String> args = new TreeMap();
         args.put("user_id", curPerson.ID);
         JSONObject response = getFlickrState().unauthorizedCall("flickr.people.getInfo", args);

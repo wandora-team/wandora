@@ -60,27 +60,33 @@ import org.wandora.application.gui.UIBox;
  * @author anttirt
  */
 public abstract class FlickrExtractor extends AbstractWandoraTool {
+    
     @Override
     public WandoraToolType getType() {
         return WandoraToolType.createExtractType();
     }
+    
     
     @Override
     public String getName() {
         return "Flickr api extractor (" + getDescription() + ")";
     }
     
+    
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/extract_flickr.png");
     }
     
+    
     protected TopicMap currentMap;
+    
     
     @Override
     public boolean isConfigurable() {
         return true;
     }
+    
     
     @Override
     public void configure(Wandora admin, org.wandora.utils.Options options, String prefix) {
@@ -90,6 +96,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
         AuthConfigDialog dlg = new AuthConfigDialog(admin, true, getFlickrState());
         dlg.setVisible(true);
     }
+    
     
     @Override
     public void execute(Wandora admin, Context context) {
@@ -109,11 +116,13 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
         setState(WAIT);
     }
     
+    
     protected static class ExtractionFailure extends Exception {
         public ExtractionFailure(String message) { super(message); }
         public ExtractionFailure(Throwable cause) { super(cause); }
         public ExtractionFailure(String message, Throwable cause) { super(message, cause); }
     }
+    
     
     protected static class RequestFailure extends Exception {
         public RequestFailure(String message) { super(message); }
@@ -121,11 +130,13 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
         public RequestFailure(String message, Throwable cause) { super(message, cause); }
     }
 
+    
     public static class UserCancellation extends Exception {
         public UserCancellation(String message) { super(message); }
         public UserCancellation(Throwable cause) { super(cause); }
         public UserCancellation(String message, Throwable cause) { super(message, cause); }
     }
+    
 
     public static void main(String[] args) {
         try {
@@ -143,6 +154,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
         }
     }
    
+    
     protected static String url(String str) {
         if(str == null)
             return str;
@@ -157,6 +169,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
     public TopicMap getCurrentMap() {
         return currentMap;
     }
+    
     
     protected static String createSignature(SortedMap<String, String> arguments) throws RequestFailure {
         StringBuilder builder = new StringBuilder(FlickrState.ApiSecret);

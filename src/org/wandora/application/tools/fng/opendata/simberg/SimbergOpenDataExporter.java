@@ -32,8 +32,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,14 +39,12 @@ import org.json.simple.parser.JSONParser;
 import org.w3c.dom.Document;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import org.wandora.application.WandoraToolLogger;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.exporters.AbstractExportTool;
-import org.wandora.application.tools.exporters.DOTExport;
 import org.wandora.topicmap.TopicMap;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -224,13 +220,6 @@ public class SimbergOpenDataExporter extends AbstractExportTool implements Wando
         return "Export FNG Simberg open data file.";
     }
     
-    
-    
-    // -------------------------------------------------------------------------
-    
-    
-    
-    // -------------------------------------------------------------------------
     
 
 }

@@ -32,6 +32,8 @@ public class FlickrState {
             ApiKey = "1eab422260e1c488c998231f290330eb", // "38e1943f013d3625295b7549d3d2898a", //"1eab422260e1c488c998231f290330eb",
             ApiSecret = "d2094033862921ac", // "e50f5106e5684bad", //"d2094033862921ac",
             RESTbase = "https://api.flickr.com/services/rest/";
+    
+    
     public static int getAuthLevel(String authLevel) {
         if(authLevel.equals(FlickrState.PermNone))
             return 0;
@@ -44,6 +46,8 @@ public class FlickrState {
         
         return -1;
     }
+    
+    
     public static String getAuthLevel(int authLevel) {
         switch(authLevel)
         {
@@ -60,6 +64,7 @@ public class FlickrState {
         }
     }
 
+    
     public FlickrState() {
         super();
         Users = new TreeMap<String, String>();
@@ -67,19 +72,21 @@ public class FlickrState {
 
         PermissionLevel = PermNone;
     }
+    
+    
     public static String makeRESTURL(Map<String, String> params) {
         return makeRESTURL(params, FlickrState.RESTbase);
     }
+    
+    
     public static String makeRESTURL(Map<String, String> params, String baseUrl) {
         char introducer = '?';
         StringBuilder bldr = new StringBuilder(baseUrl);
         
-        for(Map.Entry<String, String> e : params.entrySet())
-        {
+        for(Map.Entry<String, String> e : params.entrySet()) {
             bldr.append(introducer + e.getKey() + '=' + e.getValue());
             introducer = '&';
         }
-        
         return bldr.toString();
     }   
 
@@ -99,6 +106,7 @@ public class FlickrState {
         }
     }
 
+    
     public void authenticate(String perms, Frame dlgParent) throws RequestFailure, UserCancellation {
         if (Frob == null) {
             Frob = FlickrExtractor.getFrob();
@@ -113,6 +121,7 @@ public class FlickrState {
             Token = requestToken();
         }
     }
+    
 
     public JSONObject authorizedCall(String method, SortedMap<String, String> args, String perms, Frame dlgParent) throws RequestFailure, UserCancellation {
         authenticate(perms, dlgParent);
@@ -135,6 +144,7 @@ public class FlickrState {
         }
     }
 
+    
     public boolean validToken(String neededPerms) throws RequestFailure {
         if (Token == null) {
             return false;
@@ -171,6 +181,7 @@ public class FlickrState {
         }
     }
 
+    
     public String requestToken() throws RequestFailure {
         TreeMap<String, String> args = new TreeMap<String, String>();
         args.put("method", "flickr.auth.getToken");
@@ -198,6 +209,7 @@ public class FlickrState {
         }
     }
 
+    
     public String getLoginURL(String perms) throws RequestFailure {
         TreeMap<String, String> args = new TreeMap<String, String>();
 

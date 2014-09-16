@@ -22,25 +22,19 @@
  */
 package org.wandora.application.tools.fng.opendata.simberg;
 
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.XTMPSI;
-import org.wandora.utils.Options;
 import org.wandora.utils.velocity.GenericVelocityHelper;
 
 /**
@@ -349,7 +343,8 @@ public class SimbergOpenDataHandler {
                 s.append(makeXMLElement("dc:type", type, tabs));
                 s.append(makeXMLElement("dc:date", date, tabs));
                 s.append(makeXMLElement("dc:language", "fin", tabs));
-                s.append(makeXMLElement("dc:source", "fng", tabs));
+                s.append(makeXMLElement("dc:rights", "http://creativecommons.org/licenses/by/4.0/", tabs));
+                s.append(makeXMLElement("dc:source", "Finnish National Gallery", tabs));
                 s.append(makeXMLElement("dc:source", keeper, tabs));
                 //s.append(makeXMLElement("material", material, tabs));
                 
@@ -647,11 +642,6 @@ public class SimbergOpenDataHandler {
     
     // -------------------------------------------------------------------------
 
-
-    
-    
-    // -------------------------------------------------------------------------
-    
     
     
 

@@ -66,11 +66,9 @@ public class FlickrPhoto {
     public FlickrPhoto() {}
 
 
-    static FlickrPhoto makeFromPhotoInfo(JSONObject obj) throws JSONException
-    {
+    static FlickrPhoto makeFromPhotoInfo(JSONObject obj) throws JSONException {
         FlickrPhoto ret = new FlickrPhoto();
-        if(ISO8601Format == null)
-        {
+        if(ISO8601Format == null) {
             ISO8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         }
         
@@ -80,8 +78,7 @@ public class FlickrPhoto {
         ret.OwnerID = FlickrUtils.searchString(obj, "owner.nsid");
         ret.Tags = new ArrayList();
         JSONArray tagsArray = FlickrUtils.searchJSONArray(obj, "tags.tag");
-        for(int i = 0; i < tagsArray.length(); ++i)
-        {
+        for(int i = 0; i < tagsArray.length(); ++i) {
             JSONObject tagObj = tagsArray.getJSONObject(i);
             ret.Tags.add(tagObj.getString("_content"));
         }
@@ -98,8 +95,7 @@ public class FlickrPhoto {
         ret.License = obj.getInt("license");
         
         JSONObject descObj = obj.optJSONObject("description");
-        if(descObj != null)
-        {
+        if(descObj != null) {
             ret.Description = descObj.getString("_content");
         }
         
@@ -108,11 +104,9 @@ public class FlickrPhoto {
 
 
 
-    static FlickrPhoto makeFromPublicPhotoList(JSONObject obj) throws JSONException
-    {
+    static FlickrPhoto makeFromPublicPhotoList(JSONObject obj) throws JSONException {
         FlickrPhoto ret = new FlickrPhoto();
-        if(ISO8601Format == null)
-        {
+        if(ISO8601Format == null) {
             ISO8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         }
         
@@ -143,8 +137,7 @@ public class FlickrPhoto {
 
 
 
-    Topic makeTopic(FlickrExtractor extractor) throws TopicMapException
-    {
+    Topic makeTopic(FlickrExtractor extractor) throws TopicMapException {
         if("".equals(Title))
             Title = "(unnamed)";
         

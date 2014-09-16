@@ -107,6 +107,7 @@ public class FlickrUtils {
     public static Topic createRaw(TopicMap topicMap, String siString, String baseNameString, String baseString, Topic type) throws TopicMapException {
         return createRaw(topicMap, siString, baseNameString, baseString, new Topic[] { type });
     }
+    
     public static Topic createTopic(TopicMap topicMap, String siString, String baseNameString, String baseString, Topic[] types)  throws TopicMapException {
         if(baseString == null)
             throw new java.lang.IllegalArgumentException("Null baseString passed to createTopic (siString=\"" + siString + "\", baseNameString=\"" + baseNameString + "\"");
