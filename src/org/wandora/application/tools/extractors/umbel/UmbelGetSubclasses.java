@@ -35,7 +35,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class UmbelGetSubclassesExtractor extends AbstractUmbelRelationExtractor {
+public class UmbelGetSubclasses extends AbstractUmbelRelationExtractor {
 
     public static final String API_URL = "http://umbel.org/ws/sub-classes/ext/";
 

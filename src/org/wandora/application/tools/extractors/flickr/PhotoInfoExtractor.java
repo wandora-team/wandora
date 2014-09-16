@@ -53,10 +53,14 @@ public class PhotoInfoExtractor extends FlickrExtractor {
     private Topic photoTopic;
     private Wandora currentAdmin;
     
+    
+    
     @Override
     public String getDescription() {
-        return "Reads Flickr photo info and converts it to a Topic Map.";
+        return "Reads Flickr photo info and converts it to a topic map.";
     }
+    
+    
     @Override
     public String getName() {
         return "Flickr photo info extractor";
@@ -68,18 +72,16 @@ public class PhotoInfoExtractor extends FlickrExtractor {
         currentAdmin = admin;
         Collection<Topic> photoTopics = null;
         Topic photoT = null;
-        try
-        {
+        try {
             photoT = getTopic(FlickrTopic.Photo);
         }
-        catch(TopicMapException e)
-        {
+        catch(TopicMapException e) {
             throw new ExtractionFailure(e);
         }
         
         photoTopics = getWithType(context, photoT);
         
-        if(photoTopics.size() == 0) {
+        if(photoTopics.isEmpty()) {
             log("Found no photo topics to look up!");
             log("To extract information about photos you need to select Flickr photo topics first!");
             log("Flickr photo topic has an occurrence with Flickr photo id.");
@@ -88,10 +90,8 @@ public class PhotoInfoExtractor extends FlickrExtractor {
             log("Found a total of " + photoTopics.size() + " photo topics to look up!");
         }
         
-        for(Topic t : photoTopics)
-        {
-            try
-            {
+        for(Topic t : photoTopics) {
+            try {
                 photoTopic = t;
                 String photoID = photoTopic.getData(getOccurrence(FlickrOccur.PhotoID), getLanguage(null));
                 log("Extracting information for photo " + photoTopic.getDisplayName());
@@ -104,22 +104,17 @@ public class PhotoInfoExtractor extends FlickrExtractor {
                 try { photos_getExif(); } catch(RequestFailure e) { log(e); } catch(JSONException e) { log(e); } catch(TopicMapException e) { log(e); }
                 try { photos_geo_getLocation(); } catch(RequestFailure e) { log(e); } catch(JSONException e) { log(e); } catch(TopicMapException e) { log(e); }
                 photo.makeTopic(this);
-
             }
-            catch(RequestFailure e)
-            {
+            catch(RequestFailure e) {
                 log(e);
             }
-            catch(JSONException e)
-            {
+            catch(JSONException e) {
                 log(e);
             }
-            catch(TopicMapException e)
-            {
+            catch(TopicMapException e) {
                 log(e);
             }
-            catch(UserCancellation e)
-            {
+            catch(UserCancellation e) {
                 log("User cancelled");
             }
         }
@@ -128,12 +123,13 @@ public class PhotoInfoExtractor extends FlickrExtractor {
         return photoTopics.size() > 0;
     }
     
+    
+    
     private void photos_geo_getLocation() throws RequestFailure, JSONException, TopicMapException {
         TreeMap<String, String> args = new TreeMap();
         args.put("photo_id", photo.ID);
         JSONObject response = getFlickrState().unauthorizedCall("flickr.photos.geo.getLocation", args);
-        if(response.getString("stat").equals("ok"))
-        {
+        if(response.getString("stat").equals("ok")) {
             photo.Latitude = FlickrUtils.searchDouble(response, "photo.location.latitude");
             photo.Longitude = FlickrUtils.searchDouble(response, "photo.location.longitude");
 
@@ -151,8 +147,8 @@ public class PhotoInfoExtractor extends FlickrExtractor {
         }
     }
     
-    private void photos_getExif() throws RequestFailure, JSONException, TopicMapException, UserCancellation
-    {
+    
+    private void photos_getExif() throws RequestFailure, JSONException, TopicMapException, UserCancellation {
         TreeMap<String, String> args = new TreeMap();
         args.put("photo_id", photo.ID);
         JSONObject exifResponse = getFlickrState().authorizedCall("flickr.photos.getExif", args, FlickrState.PermRead, currentAdmin);
@@ -178,24 +174,19 @@ public class PhotoInfoExtractor extends FlickrExtractor {
         
         HashMap<String, JSONObject> exifTable = new HashMap<String, JSONObject>();
         
-        for(int i = 0; i < exifArray.length(); ++i)
-        {
-            try
-            {
+        for(int i = 0; i < exifArray.length(); ++i) {
+            try {
                 JSONObject exifObj = exifArray.getJSONObject(i);
                 exifTable.put(exifObj.getString("label"), exifObj);
             }
-            catch(JSONException e)
-            {
+            catch(JSONException e) {
                 log(e);
                 continue;
             }
         }
 
-        try
-        {
-            if(exifTable.get("Make") != null && exifTable.get("Model") != null)
-            {
+        try {
+            if(exifTable.get("Make") != null && exifTable.get("Model") != null) {
                 Topic makeT = FlickrUtils.createTopic(currentMap, "cameraMaker", flickrTopic);
                 Topic cameraT = FlickrUtils.createTopic(currentMap, "camera", flickrTopic);
                 Topic makerAssoc = FlickrUtils.createTopic(currentMap, "madeBy", flickrTopic);
@@ -209,8 +200,7 @@ public class PhotoInfoExtractor extends FlickrExtractor {
                 FlickrUtils.createAssociation(currentMap, takenWithAssoc, new Topic[] { curCameraTopic, photoTopic });
             }
         }
-        catch(JSONException e)
-        {
+        catch(JSONException e) {
             log(e);
         }
         
@@ -226,34 +216,29 @@ public class PhotoInfoExtractor extends FlickrExtractor {
         setDataIfNotNull(exifTable.get("Focal Length"), "raw._content", focalLenT);
         
         JSONObject colorSpaceObj = exifTable.get("Color Space");
-        if(colorSpaceObj != null)
-        {
-            try
-            {
+        if(colorSpaceObj != null) {
+            try {
                 String colorSpaceName = FlickrUtils.searchString(colorSpaceObj, "clean._content");
                 Topic spaceT = FlickrUtils.createTopic(currentMap, url(colorSpaceName), " (color space)", colorSpaceName, colorSpaceT);
                 FlickrUtils.createAssociation(currentMap, spaceAssocT, new Topic[] { spaceT, photoTopic });
             }
-            catch(JSONException e)
-            {
+            catch(JSONException e) {
             }
         }
     }
     
-    private void setDataIfNotNull(JSONObject exifObj, String path, Topic type)
-    {
+    
+    
+    private void setDataIfNotNull(JSONObject exifObj, String path, Topic type) {
         if(exifObj == null) return;
         
-        try
-        {
+        try {
             photoTopic.setData(type, getLanguage(null), FlickrUtils.searchString(exifObj, path));
         }
-        catch(TopicMapException e)
-        {
+        catch(TopicMapException e) {
             log(e);
         }
-        catch(JSONException e)
-        {
+        catch(JSONException e) {
             log(e);
         }
     }

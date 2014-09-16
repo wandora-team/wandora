@@ -109,7 +109,7 @@ public abstract class AbstractUmbelRelationExtractor extends AbstractUmbelExtrac
     }
     
     
-    public abstract String getApiRequestUrlFor(String str);
+    
     public abstract void logApiRequest(String str);
     public abstract Topic getAssociationType(TopicMap topicMap) throws TopicMapException;
     public abstract Topic getRoleTopicForConcept(TopicMap topicMap) throws TopicMapException;

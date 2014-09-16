@@ -43,8 +43,7 @@ public class ChooseUserDialog extends javax.swing.JDialog {
         cancelled = false;
         this.pack();
         this.setSize(450,200);
-        if(parent instanceof Wandora)
-        {
+        if(parent instanceof Wandora) {
             Wandora w = (Wandora)parent;
             w.centerWindow(this);
         }
@@ -52,15 +51,17 @@ public class ChooseUserDialog extends javax.swing.JDialog {
             wandoraLabel1.setText(text);
     }
     
+    
     private boolean cancelled;
     
-    public boolean wasCancelled()
-    {
+    
+    public boolean wasCancelled() {
         return cancelled;
     }
     
-    public String[] getUserList()
-    {
+    
+    
+    public String[] getUserList() {
         String users = this.userNameTextField.getText();
         ArrayList processedUserList = new ArrayList();
         if(users != null) {
@@ -79,6 +80,8 @@ public class ChooseUserDialog extends javax.swing.JDialog {
         }            
         return (String[]) processedUserList.toArray(new String[] {});
     }
+    
+    
     
     /** This method is called from within the constructor to
      * initialize the form.

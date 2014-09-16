@@ -84,6 +84,7 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
     public static String LANG = "en";
     
     public static final String UMBEL_CONCEPT_URI_BASE = "http://umbel.org/umbel/rc/";
+    public static final String UMBEL_SUPER_TYPE_URI_BASE = "http://umbel.org/umbel#";
     
     public static final String UMBEL_TYPE_SI = "http://umbel.org";
     public static final String UMBEL_TYPE_NAME = "Umbel";
@@ -117,6 +118,8 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
     public static final String UMBEL_DISTANCE_TYPE_SI = "http://wandora.org/si/umbel/distance";
     public static final String UMBEL_DISTANCE_TYPE_NAME = "distance (umbel)";
     
+    public static final String UMBEL_DISJOINT_TYPE_SI = "http://wandora.org/si/umbel/disjoint";
+    public static final String UMBEL_DISJOINT_TYPE_NAME = "disjoint (umbel)";
     
     
     // -------------------------------------------------------------------------
@@ -153,9 +156,19 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
         "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
     };
     
+    public static final String[] UMBEL_DISJOINT_URI = {
+        "http://www.w3.org/2002/07/owl#disjointWith"
+    };
     
     
-    
+    @Override
+    public String getName(){
+        return "Abstract Umbel Extractor";
+    }
+    @Override
+    public String getDescription(){
+        return "AbstractUmbelExtractor is a base implementation for Umbel extractors.";
+    }
     
     @Override
     public Icon getIcon() {
@@ -183,12 +196,18 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
     }
     
     
+    public abstract String getApiRequestUrlFor(String str);
+    
+    
     @Override
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         if(url != null) {
             String str = url.toExternalForm();
             if(str.startsWith(UMBEL_CONCEPT_URI_BASE) && str.length() > UMBEL_CONCEPT_URI_BASE.length()) {
                 str = str.substring(UMBEL_CONCEPT_URI_BASE.length());
+            }
+            if(str.startsWith(UMBEL_SUPER_TYPE_URI_BASE) && str.length() > UMBEL_SUPER_TYPE_URI_BASE.length()) {
+                str = str.substring(UMBEL_SUPER_TYPE_URI_BASE.length());
             }
             return _extractTopicsFrom(str, topicMap);
         }
@@ -401,6 +420,11 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
         ExtractHelper.makeSubclassOf(t, getUmbelTypeTopic(topicMap), topicMap);
         return t;
     }
+    protected Topic getDisjointTypeTopic(TopicMap topicMap) throws TopicMapException {
+        Topic t = getTopic(UMBEL_DISJOINT_TYPE_SI, UMBEL_DISJOINT_TYPE_NAME, topicMap);
+        ExtractHelper.makeSubclassOf(t, getUmbelTypeTopic(topicMap), topicMap);
+        return t;
+    }
     
     protected Topic getTypeTypeTopic(TopicMap topicMap) throws TopicMapException {
         Topic t = getTopic(UMBEL_TYPE_TYPE_SI, UMBEL_TYPE_TYPE_NAME, topicMap);
@@ -480,7 +504,7 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
                 if(t == null) {
                     t = topicMap.createTopic();
                     t.addSubjectIdentifier(new Locator(si));
-                    t.setBaseName(name);
+                    if(name != null) t.setBaseName(name);
                 }
             }
             catch(Exception e) {}
@@ -523,6 +547,9 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
             }
             else if(equalsAny(predicate, UMBEL_TYPE_URI)) {
                 return new T3( getTypeTypeTopic(tm), getTypeTypeTopic(tm), getConceptTypeTopic(tm) );
+            }
+            else if(equalsAny(predicate, UMBEL_DISJOINT_URI)) {
+                return new T3( getDisjointTypeTopic(tm), getDisjointTypeTopic(tm), getConceptTypeTopic(tm) );
             }
             else {
                 return new T3( getTopic(predicate, tm), getTopic(predicate, tm), getConceptTypeTopic(tm) );

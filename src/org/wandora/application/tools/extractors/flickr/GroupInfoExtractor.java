@@ -52,24 +52,25 @@ public class GroupInfoExtractor extends FlickrExtractor {
         return "Flickr group info extractor";
     }
     
+    
+    
+    
+    
     @Override
     protected boolean extract(Wandora admin, Context context) throws ExtractionFailure {
         Collection<Topic> groupTopics = null;
         Topic groupT = null;
         
-        try
-        {
+        try {
             groupT = getTopic(FlickrTopic.Group);
         }
-        catch(TopicMapException e)
-        {
+        catch(TopicMapException e) {
             throw new ExtractionFailure(e);
         }
         
         groupTopics = getWithType(context, groupT);
 
-        if(groupTopics.size() == 0)
-        {
+        if(groupTopics.isEmpty()) {
             log("Unable to find any groups in context.");
             GroupSearchDialog dlg = new GroupSearchDialog(admin, true, getFlickrState(), this);
             setState(INVISIBLE);
@@ -82,15 +83,12 @@ public class GroupInfoExtractor extends FlickrExtractor {
             
             groupTopics = dlg.selection();
         }
-        else
-        {
+        else {
             log("Looking up info for " + groupTopics.size() + " groups.");
         }
         
-        for(Topic t : groupTopics)
-        {
-            try
-            {
+        for(Topic t : groupTopics) {
+            try {
                 curGroup = new FlickrGroup();
                 curGroup.ID = t.getData(getOccurrence(FlickrOccur.NSID), getLanguage(null));
                 curGroup.Name = t.getDisplayName();
@@ -98,34 +96,30 @@ public class GroupInfoExtractor extends FlickrExtractor {
                 log("Getting info for group " + curGroup.Name);
                 getPhotoList(admin, "flickr.groups.pools.getPhotos", FlickrAssoc.InGroupPool, "in the photo pool of ");
             }
-            catch(JSONException e)
-            {
+            catch(JSONException e) {
                 log(e);
             }
-            catch(RequestFailure e)
-            {
+            catch(RequestFailure e) {
                 log(e);
             }
-            catch(TopicMapException e)
-            {
+            catch(TopicMapException e) {
                 log(e);
             }
-            catch(UserCancellation e)
-            {
+            catch(UserCancellation e) {
                 log("User cancelled.");
             }
         }
-        
-        return groupTopics.size() > 0;
+        return !groupTopics.isEmpty();
     }
+    
+    
     
     private static final int photosPerPage = 250;
     
     private void getPhotoList(Wandora currentAdmin, String jsonAPI, FlickrAssoc association, String relationship) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure, UserCancellation {
         int totalPhotos = 0;
         int photosReceived = 0;
-
-        
+  
         TreeMap<String, String> args = new TreeMap();
         args.put("group_id", curGroup.ID);
         args.put("extras", "date_taken,date_upload,o_dims,geo,last_update,license,media,owner_name,tags,views");
@@ -137,15 +131,13 @@ public class GroupInfoExtractor extends FlickrExtractor {
         final int pageCount = 1 + totalPhotos / photosPerPage;
         getCurrentLogger().setProgressMax(totalPhotos);
         log("-- Getting info for " + totalPhotos + " photos in " + curGroup.Name + "'s pool.");
-        for(int nextPageIndex = 2; nextPageIndex <= (pageCount + 1); ++nextPageIndex)
-        {
+        for(int nextPageIndex = 2; nextPageIndex <= (pageCount + 1); ++nextPageIndex) {
             getCurrentLogger().setProgress(photosReceived);
             JSONArray photosArray = FlickrUtils.searchJSONArray(result, "photos.photo");
             int received = photosArray.length();
             log("-- -- Getting info for photos " + (photosReceived + 1) + " - " + (photosReceived + received) + " out of " + totalPhotos);
 
-            for(int i = 0; i < received; ++i)
-            {
+            for(int i = 0; i < received; ++i) {
                 FlickrPhoto p = FlickrPhoto.makeFromPublicPhotoList(photosArray.getJSONObject(i));
                 Topic photoTopic = p.makeTopic(this);
                 FlickrUtils.createAssociation(currentMap, getAssociation(association), new Topic[] { photoTopic, curGroupTopic });
@@ -158,8 +150,7 @@ public class GroupInfoExtractor extends FlickrExtractor {
                 break;
             }
             */
-            if(forceStop())
-            {
+            if(forceStop()) {
                 log("-- -- Cancellation requested; finished getting info for " + photosReceived + " out of " + totalPhotos + " photos.");
                 break;
             }
@@ -170,11 +161,9 @@ public class GroupInfoExtractor extends FlickrExtractor {
             args.put("per_page", "" + photosPerPage);
             args.put("page", "" + nextPageIndex);
             result = getFlickrState().authorizedCall(jsonAPI, args, FlickrState.PermRead, currentAdmin);
-
         }
         
-        if(photosReceived < totalPhotos)
-        {
+        if(photosReceived < totalPhotos) {
             log("" + (totalPhotos - photosReceived) + " photos not sent by flickr");
         }
     }

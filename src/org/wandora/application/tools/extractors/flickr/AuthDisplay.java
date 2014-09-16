@@ -39,18 +39,22 @@ public class AuthDisplay extends javax.swing.JPanel {
     private JLabel[] curLabels, reqLabels;
     public int requiredAuthLevel, currentAuthLevel;
     private FlickrState flickrState;
-    public AuthDisplay() 
-    {
+    
+    
+    public AuthDisplay() {
         initComponents();
     }
+    
+    
     /** Creates new form AuthDisplay */
     public AuthDisplay(FlickrState state, String reqAuth) {
         initComponents();
         flickrState = state;
         setRequiredLevel(reqAuth);
     }
-    public void setRequiredLevel(String requiredAuth)
-    {
+    
+    
+    public void setRequiredLevel(String requiredAuth) {
         curLabels = new JLabel[] { gotNone, gotRead, gotWrite, gotDelete };
         reqLabels = new JLabel[] { reqNone, reqRead, reqWrite, reqDelete };
         
@@ -60,18 +64,19 @@ public class AuthDisplay extends javax.swing.JPanel {
         Color validGreen = new Color(30, 220, 30);
         Color invalidRed = new Color(220, 30, 30);
         
-        for(int i = 0; i <= currentAuthLevel; ++i)
-        {
+        for(int i = 0; i <= currentAuthLevel; ++i) {
            curLabels[i].setForeground(validGreen);
         }
-        for(int i = 0; i <= requiredAuthLevel; ++i)
-        {
+        for(int i = 0; i <= requiredAuthLevel; ++i) {
             if(i <= currentAuthLevel)
                 reqLabels[i].setForeground(validGreen);
             else
                 reqLabels[i].setForeground(invalidRed);
         }
     }
+    
+    
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

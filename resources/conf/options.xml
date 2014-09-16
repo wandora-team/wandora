@@ -485,24 +485,32 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.DummyTool</class>
             </item>
             <item>
+               <name>Search Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelSearchConcept</class>
+            </item>
+            <item>
                <name>Get Umbel concept...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetConceptExtractor</class>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetConcept</class>
+            </item>
+            <item>
+               <name>Get Umbel super type...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperType</class>
             </item>
             <item>
                <name>Get broader Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetBroaderExtractor</class>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetBroader</class>
             </item>
             <item>
                <name>Get narrower Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetNarrowerExtractor</class>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetNarrower</class>
             </item>
             <item>
                <name>Get subclass Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSubclassesExtractor</class>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSubclasses</class>
             </item>
             <item>
                <name>Get superclass Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperclassesExtractor</class>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperclasses</class>
             </item>
          </item>
          <item>

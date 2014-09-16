@@ -35,7 +35,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class UmbelGetBroaderExtractor extends AbstractUmbelRelationExtractor {
+public class UmbelGetBroader extends AbstractUmbelRelationExtractor {
 
     public static final String API_URL = "http://umbel.org/ws/broader-concepts/ext/";
 

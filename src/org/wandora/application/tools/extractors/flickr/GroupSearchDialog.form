@@ -7,6 +7,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="onWindowClosing"/>
@@ -14,6 +15,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -30,10 +32,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="searchText" alignment="0" pref="309" max="32767" attributes="1"/>
-                          <Component id="wandoraLabel1" alignment="0" pref="309" max="32767" attributes="1"/>
+                          <Component id="searchText" alignment="0" pref="489" max="32767" attributes="1"/>
+                          <Component id="wandoraLabel1" alignment="0" pref="489" max="32767" attributes="1"/>
                           <Component id="btnSearch" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="wandoraLabel2" alignment="0" pref="309" max="32767" attributes="0"/>
+                          <Component id="wandoraLabel2" alignment="0" pref="489" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -45,8 +47,8 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jScrollPane1" alignment="0" pref="309" max="32767" attributes="1"/>
-                          <Component id="warningLabel" alignment="1" pref="309" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" pref="489" max="32767" attributes="1"/>
+                          <Component id="warningLabel" alignment="1" pref="489" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -66,7 +68,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="wandoraLabel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="207" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="237" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="warningLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -144,7 +146,7 @@
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleLabel();"/>
-        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="warningLabel.setFont(Wandora.wandoraSmallButtonLabelFont);"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="warningLabel.setFont(UIConstants.smallButtonLabelFont);"/>
       </AuxValues>
     </Component>
   </SubComponents>
