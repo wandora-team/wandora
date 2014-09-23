@@ -105,8 +105,8 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
         keyField = new SimpleField();
         secretField = new SimpleField();
         buttonPanel = new javax.swing.JPanel();
-        cancelButton = new SimpleButton();
         submitButton = new SimpleButton();
+        cancelButton = new SimpleButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -157,14 +157,6 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
-        cancelButton.setText("Cancel");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
-            }
-        });
-        buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
-
         submitButton.setText("Submit");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,6 +167,14 @@ public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         buttonPanel.add(submitButton, gridBagConstraints);
+
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
