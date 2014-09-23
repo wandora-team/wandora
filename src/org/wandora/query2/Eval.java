@@ -40,6 +40,7 @@ public class Eval extends Directive {
     protected CompiledScript compiled;
     protected HashMap<String,Object> objects;
     protected Object constructorParam;
+    protected boolean clearHashMapBetweenJoins=true;
 
     public Eval(){
     }
@@ -91,9 +92,9 @@ public class Eval extends Directive {
 
     @Override
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
+        if(clearHashMapBetweenJoins) objects.clear();
         Object o=null;
         if(script!=null){
-
             Bindings bindings=scriptEngine.createBindings();
             bindings.put("input", input);
             bindings.put("context", context);
