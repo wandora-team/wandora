@@ -246,7 +246,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                   Topic recurDayTopic = getRecurringDayTopic(tm, abbr);
                   Topic eventTypeTopic = getEventTypeTopic(tm);
                   Topic recurDayTypeTopic = getRecurringDayTypeTopic(tm);
-                  Topic dayTypeTopic = getWeekdayTypeTopic(tm);
+                  Topic dayTypeTopic = getDayOfWeekTypeTopic(tm);
                   if (recurDayTopic != null && eventTypeTopic != null && recurDayTypeTopic != null) {
                       Association a = tm.createAssociation(recurDayTypeTopic);
                       a.addPlayer(recurDayTopic, dayTypeTopic);
