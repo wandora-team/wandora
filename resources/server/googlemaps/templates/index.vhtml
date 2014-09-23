@@ -59,9 +59,14 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
 
                 centerMap();
 
-                if(geo_loc_data.length == 0 && ok_event_locations.length == 0 && ok_service_locations.length == 0 && unit_locations.length == 0) {
-                    alert("Wandora doesn't contain any GeoNames locations nor Oma Kaupunki events nor Oma Kaupunki services nor Service Map units. "+
-                          "Use Wandora's extractors to generate content and try again.");
+                if(geo_loc_data.length + ok_event_locations.length + ok_service_locations.length 
+                    + unit_locations.length + nyt_event_locations.length == 0) {
+
+                    alert(["Wandora doesn't contain any GeoNames locations nor",
+                           "Oma Kaupunki events nor Oma Kaupunki services nor",
+                           "Service Map units nor New York Times events.",
+                           "Use Wandora's extractors to generate content and",
+                           "try again."].join(" "));
                 }
             }
 	
