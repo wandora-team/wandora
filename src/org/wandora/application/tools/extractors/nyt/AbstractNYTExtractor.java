@@ -23,6 +23,8 @@
 
 package org.wandora.application.tools.extractors.nyt;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
@@ -320,7 +322,8 @@ public abstract class AbstractNYTExtractor extends AbstractExtractor {
     public static final String EVENT_DATE_SI = "http://wandora.org/si/nytimes/eventDate";
     public static final String START_DATE_SI = "http://wandora.org/si/nytimes/startDate";
     public static final String END_DATE_SI = "http://wandora.org/si/nytimes/endDate";
-
+    public static final String WEEKDAY_SI = "http://wandora.org/si/nytimes/weekday/";
+    public static final String RECURRING_DAY_SI = "http://wandora.org/si/nytimes/recurring_day/";
     
     public static Topic getEventTypeTopic(TopicMap tm) throws TopicMapException {
         Topic type=getOrCreateTopic(tm, EVENT_SI, "Event (New York Times API)");
@@ -395,6 +398,55 @@ public abstract class AbstractNYTExtractor extends AbstractExtractor {
         Topic nytTopic = getNYTTypeTopic(tm);
         makeSubclassOf(tm, type, nytTopic);
         return type;
+    }
+    
+    public static Topic getWeekdayTypeTopic(TopicMap tm) throws TopicMapException {
+      Topic type = getOrCreateTopic(tm, WEEKDAY_SI, "Weekday (New York Times API)");
+      Topic nytTopic = getNYTTypeTopic(tm);
+      makeSubclassOf(tm, type, nytTopic);
+      return type;
+    }
+    
+    public static Topic getRecurringDayTypeTopic(TopicMap tm) throws TopicMapException{
+      return getOrCreateTopic(tm, RECURRING_DAY_SI, "Recurring Day (New York Times API)");
+    }
+    
+    private enum Weekday{
+      MONDAY    ("monday",    "Monday"),
+      TUESDAY   ("tuesday",   "Tuesday"),
+      WEDNESDAY ("wednesday", "Wednesday"),
+      THURSDAY  ("thursday",  "Thursday"),
+      FRIDAY    ("friday",    "Friday"),
+      SATURDAY  ("saturday",  "Saturday"),
+      SUNDAY    ("sunday",    "Sunday");
+      
+      public final String urlStub;
+      public final String display;
+      
+      Weekday(String urlStub, String display){
+        this.urlStub = urlStub;
+        this.display = display;
+      }
+
+    }
+    
+    static final Map<String, Weekday> abbrToWeekday = new HashMap<String, Weekday>(){{
+      put("mon", Weekday.MONDAY);
+      put("tue", Weekday.TUESDAY);
+      put("wed", Weekday.WEDNESDAY);
+      put("thu", Weekday.THURSDAY);
+      put("fri", Weekday.FRIDAY);
+      put("sat", Weekday.SATURDAY);
+      put("sun", Weekday.SUNDAY);
+    }};
+    
+    public static Topic getRecurringDayTopic(TopicMap tm, String abbr) throws TopicMapException{
+      
+      Weekday wd = abbrToWeekday.get(abbr);
+      
+      String si = WEEKDAY_SI + wd.urlStub;
+      String baseName = wd.display + " (New York Times API)";
+      return getOrCreateTopic(tm, si, baseName);
     }
     
 }

@@ -21,21 +21,14 @@
  */
 package org.wandora.application.tools.extractors.nyt;
 
-import com.google.gdata.data.dublincore.Title;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.eclipse.jdt.internal.compiler.ast.TryStatement;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.wandora.application.Wandora;
-import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -227,17 +220,14 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                 Topic langTopic = getLangTopic(tm);
                 eventTopic.setData(dateTypeTopic, langTopic, dates);
               }
-            } else if (result.has("recurring_start_date") && result.has("recurring_end_date")) {
+            } else if (result.has("recurring_start_date")) {
               Locale locale = new Locale("ENGLISH");
               SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",locale);
               SimpleDateFormat output = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss '-0500'",locale);
               String startDateString = result.getString("recurring_start_date");
-              String endDateString = result.getString("recurring_end_date");
               try{
                 Date startDate = input.parse(startDateString);
-                Date endDate = input.parse(endDateString);
                 startDateString = output.format(startDate);
-                endDateString = output.format(endDate);
               } catch (Exception e){
                 System.out.println("dateparseerror");
               }
@@ -247,11 +237,39 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                   Topic langTopic = getLangTopic(tm);
                   eventTopic.setData(dateStartTypeTopic, langTopic, startDateString);
               }
-              if(endDateString != null && endDateString.length() > 0) {
+              
+              if (result.has("recur_days")){
+                JSONArray recurDays = result.getJSONArray("recur_days");
+                for (int i = 0; i < recurDays.length(); i++) {
+                  String abbr = recurDays.getString(i);
+                  
+                  Topic recurDayTopic = getRecurringDayTopic(tm, abbr);
+                  Topic eventTypeTopic = getEventTypeTopic(tm);
+                  Topic recurDayTypeTopic = getRecurringDayTypeTopic(tm);
+                  Topic dayTypeTopic = getWeekdayTypeTopic(tm);
+                  if (recurDayTopic != null && eventTypeTopic != null && recurDayTypeTopic != null) {
+                      Association a = tm.createAssociation(recurDayTypeTopic);
+                      a.addPlayer(recurDayTopic, dayTypeTopic);
+                      a.addPlayer(eventTopic, eventTypeTopic);
+                  }
+                }
+                
+              }
+              
+              if (result.has("recurring_end_date")) {
+                String endDateString = result.getString("recurring_end_date");
+                try {
+                   Date endDate = input.parse(endDateString);
+                   endDateString = output.format(endDate);
+                } catch (Exception e){
+                  System.out.println("dateparseerror");
+                }
+                if(endDateString != null && endDateString.length() > 0) {
                   Topic dateEndTypeTopic = getEndDateTypeTopic(tm);
                   Topic langTopic = getLangTopic(tm);
                   eventTopic.setData(dateEndTypeTopic, langTopic, endDateString);
-              }
+                }
+              }    
             }
         }
     }
