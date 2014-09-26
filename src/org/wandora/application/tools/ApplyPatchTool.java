@@ -128,19 +128,19 @@ public class ApplyPatchTool extends AbstractWandoraTool implements WandoraTool {
             tmDiff.applyDiff(diff, tm,new PatchExceptionHandler(){
                 public boolean handleException(PatchException e){
                     pes.add(e);
-                    if(yesToAll[0]) return true;
+                    if(yesToAll[0]) return false;
                     int c=WandoraOptionPane.showConfirmDialog(admin, 
                             "Exception applying patch, do you want to continue?<br>"+
                             e.level+": "+e.message, "Exception applying patch",
                             WandoraOptionPane.YES_TO_ALL_NO_OPTION);
                     if(c==WandoraOptionPane.YES_TO_ALL_OPTION){
                         yesToAll[0]=true;
-                        return true;
+                        return false;
                     }
                     else if(c==WandoraOptionPane.YES_OPTION) return true;
                     else {
                         aborted[0]=true;
-                        return false;
+                        return true;
                     }
                 }
             });
