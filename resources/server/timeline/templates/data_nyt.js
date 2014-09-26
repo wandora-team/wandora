@@ -1,4 +1,4 @@
-{     
+{
       "dateTimeFormat": "Gregorian",
 			"events":[
 ##
@@ -28,36 +28,41 @@
   #if($eventDateType && $event.getData( $eventDateType,"en" ) )##
     #set( $startDate = $event.getData( $eventDateType,"en" ) )##
     #set( $endDate = "" )##
-  #elseif($event.getData( $eventStartDateType,"en" ) && $event.getData( $eventEndDateType,"en" ) )##
+  #elseif($eventStartDateType && $eventEndDateType && $event.getData( $eventStartDateType,"en" ) && $event.getData( $eventEndDateType,"en" ) )##
     #set( $startDate = $event.getData( $eventStartDateType,"en" ) )##
     #set( $endDate = $event.getData( $eventEndDateType,"en" ) )##
   #end
-  #set( $eventVenue = $helper.getFirstPlayer( $event, $eventVenueTypeSI, $eventVenueTypeSI ) )##
-  #set( $eventLink = $event.getOneSubjectIdentifier() )##
-  #set( $eventTitle = $event.getDisplayName( $lang ) )##
-  #if($event.getData( $eventDescriptionType,"en"))##
-    #set ($eventDescription = $event.getData( $eventDescriptionType,"en"))##
-    #set( $eventDescription = $eventDescription.replaceAll('\"', '\\\"' ) )##
-    #set( $eventDescription = $eventDescription.replaceAll('[\p{Cntrl}\p{Space}]', ' ') )##
-    #set ($eventDescription = $eventDescription.trim())##
-  #end
-  #set( $eventTitle = $eventTitle.replaceAll('\"', '\\\"' ) )##
-  #set( $eventTitle = $eventTitle.replaceAll('[\p{Cntrl}\p{Space}]', ' ') )##
-  #if( $count>0 ),
+
+  #if($startDate)##
+
+    #set( $eventVenue = $helper.getFirstPlayer( $event, $eventVenueTypeSI, $eventVenueTypeSI ) )##
+    #set( $eventLink = $event.getOneSubjectIdentifier() )##
+    #set( $eventTitle = $event.getDisplayName( $lang ) )##
+    #if($event.getData( $eventDescriptionType,"en"))##
+      #set ($eventDescription = $event.getData( $eventDescriptionType,"en"))##
+      #set( $eventDescription = $eventDescription.replaceAll('\"', '\\\"' ) )##
+      #set( $eventDescription = $eventDescription.replaceAll('[\p{Cntrl}\p{Space}]', ' ') )##
+      #set ($eventDescription = $eventDescription.trim())##
+    #end
+    #set( $eventTitle = $eventTitle.replaceAll('\"', '\\\"' ) )##
+    #set( $eventTitle = $eventTitle.replaceAll('[\p{Cntrl}\p{Space}]', ' ') )##
+    #if( $count>0 ),
+    #end##
+                                {
+                                        "start": "$startDate",
+    #if(!$endDate.isEmpty())##
+                                        "end": "$endDate",
+    #end##
+                                        "title": "$eventTitle @ $eventVenue",
+                                        "textColor": "#000000",
+                                        "classname": "nyt-event",
+                                        "description": "$eventDescription",
+                                        "icon" : "${staticbase}api/images/nyt-icon.png",
+                                        "link" : "$eventLink"
+                                }
+    #set( $count = $count + 1 )##
+
   #end##
-                              {
-                                      "start": "$startDate",
-  #if(!$endDate.isEmpty())##
-                                      "end": "$endDate",
-  #end##
-                                      "title": "$eventTitle @ $eventVenue",
-                                      "textColor": "#000000",
-                                      "classname": "nyt-event",
-                                      "description": "$eventDescription",
-                                      "icon" : "${staticbase}api/images/nyt-icon.png",
-                                      "link" : "$eventLink"
-                              }
-  #set( $count = $count + 1 )##
 #end##
        ]
 };
