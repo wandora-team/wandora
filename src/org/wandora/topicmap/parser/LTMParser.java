@@ -33,13 +33,14 @@ package org.wandora.topicmap.parser;
 
 
 
-import org.wandora.topicmap.*;
-
-import java.util.regex.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import org.wandora.application.Wandora;
+import org.wandora.topicmap.*;
 import org.wandora.utils.Options;
+import org.wandora.utils.UnicodeBOMInputStream;
+import org.wandora.utils.UnicodeBOMInputStream.BOM;
 
 
 
@@ -77,8 +78,8 @@ public class LTMParser {
     public static boolean OVERWRITE_BASENAME = true;
     public static boolean OVERWRITE_SUBJECT_LOCATORS = false;
 
-    public static int MAX_SI_LEN = 1999;
-    public static int MAX_NAME_LEN = 1999;
+    public static int MAX_SI_LEN = 9999;
+    public static int MAX_NAME_LEN = 9999;
     public static int MAX_STRING_LEN = 99999;
 
     public static String DEFAULT_ROLE_IDENTIFIER = "role";
@@ -189,8 +190,8 @@ public class LTMParser {
                     String previousLtmuri = ltmuri;
                     // ltmuri = "file:/" + file.getAbsolutePath();
                     ltmuri = file.toURI().toString();
-                    InputStream inStream=new FileInputStream(file);
-                    parse(inStream);
+                    InputStream is=new FileInputStream(file);
+                    parse(is);
                     if(previousIn != null) in = previousIn;
                     if(ltmuri != null) ltmuri = previousLtmuri;
                     if(baseuri != null) baseuri = previousBaseuri;
@@ -211,19 +212,40 @@ public class LTMParser {
 
 
 
-    public void parse(InputStream ins) throws IOException {
-        parse(ins, "UTF-8");
+    public void parse(InputStream is) throws IOException {
+        parse(is, "UTF-8");
     }
-    public void parse(InputStream ins, String enc) throws IOException {
+    
+    
+    public void parse(InputStream is, String enc) throws IOException {
         if(enc == null || enc.equals("")) enc = "UTF-8";
         prepare();
-        InputStreamReader insr = new InputStreamReader(ins, enc);
+        UnicodeBOMInputStream ubis = new UnicodeBOMInputStream(is);
+        InputStreamReader insr = new InputStreamReader(ubis, enc);
         in = new BufferedReader(insr);
+        
+        if(ubis.getBOM() == BOM.UTF_8) {
+            if(debug) logger.log("Detected BOM for " + ubis.getBOM() + ". OK.");
+        }
+        else if(ubis.getBOM() == BOM.UTF_16_BE) {
+            logger.log("Warning. Detected BOM for " + ubis.getBOM() + ". Wandora reads UTF-8 encoded LTM topic maps only.");
+        }
+        else if(ubis.getBOM() == BOM.UTF_16_LE) {
+            logger.log("Warning. Detected BOM for " + ubis.getBOM() + ". Wandora reads UTF-8 encoded LTM topic maps only.");
+        }
+        else if(ubis.getBOM() == BOM.UTF_32_BE) {
+            logger.log("Warning. Detected BOM for " + ubis.getBOM() + ". Wandora reads UTF-8 encoded LTM topic maps only.");
+        }
+        else if(ubis.getBOM() == BOM.UTF_32_LE) {
+            logger.log("Warning. Detected BOM for " + ubis.getBOM() + ". Wandora reads UTF-8 encoded LTM topic maps only.");
+        }
+        
+        ubis.skipBOM();
         parseEncodind();
 
         if(encoding != null) {
             if(!"utf-8".equalsIgnoreCase(encoding)) {
-                logger.log("Warning: Wandora's LTM import supports only UTF-8 encoding! Imported LTM document has '"+encoding+"' as encoding.");
+                logger.log("Warning: Wandora's LTM import supports UTF-8 encoding only! Imported LTM document has '"+encoding+"' as encoding.");
             }
         }
 
@@ -254,8 +276,8 @@ public class LTMParser {
         }
     }
 
-
-
+    
+    
     private void parseEncodind() throws IOException {
         eatMeaningless();
         if(eat('@')) {
@@ -1387,6 +1409,29 @@ public class LTMParser {
     }
 
 
+    
+    private boolean eat(int [] str) throws IOException {
+        if(!proceed) return false;
+        eatMeaningless();
+        in.mark(str.length);
+        char[] chars = new char[str.length];
+        int c = in.read(chars);
+        if(c <= 0) {
+            in.reset();
+            proceed = false;
+            return false;
+        }
+        int i=0;
+        while(i < str.length) {
+            if(str[i] != chars[i]) {
+                in.reset();
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+    
 
     private boolean eat(int ch) throws IOException {
         eatMeaningless();
