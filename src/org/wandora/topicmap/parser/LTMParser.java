@@ -220,27 +220,11 @@ public class LTMParser {
     public void parse(InputStream is, String enc) throws IOException {
         if(enc == null || enc.equals("")) enc = "UTF-8";
         prepare();
-        UnicodeBOMInputStream ubis = new UnicodeBOMInputStream(is);
-        InputStreamReader insr = new InputStreamReader(ubis, enc);
-        in = new BufferedReader(insr);
+
+        InputStreamReader isr = new InputStreamReader(is, enc);
+        in = new BufferedReader(isr);
         
-        if(ubis.getBOM() == BOM.UTF_8) {
-            if(debug) logger.log("Detected BOM for " + ubis.getBOM() + ". OK.");
-        }
-        else if(ubis.getBOM() == BOM.UTF_16_BE) {
-            logger.log("Warning. Detected BOM for " + ubis.getBOM() + ". Wandora reads UTF-8 encoded LTM topic maps only.");
-        }
-        else if(ubis.getBOM() == BOM.UTF_16_LE) {
-            logger.log("Warning. Detected BOM for " + ubis.getBOM() + ". Wandora reads UTF-8 encoded LTM topic maps only.");
-        }
-        else if(ubis.getBOM() == BOM.UTF_32_BE) {
-            logger.log("Warning. Detected BOM for " + ubis.getBOM() + ". Wandora reads UTF-8 encoded LTM topic maps only.");
-        }
-        else if(ubis.getBOM() == BOM.UTF_32_LE) {
-            logger.log("Warning. Detected BOM for " + ubis.getBOM() + ". Wandora reads UTF-8 encoded LTM topic maps only.");
-        }
-        
-        ubis.skipBOM();
+        eat('\ufeff'); // skip BOM
         parseEncodind();
 
         if(encoding != null) {
