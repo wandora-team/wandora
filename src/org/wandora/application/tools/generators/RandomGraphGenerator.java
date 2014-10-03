@@ -64,7 +64,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             "Random graph generator creates a topic map with numbered topics (nodes) "+
               "and random associations (edges). If 'number of associations' is a valid number "+
               "it overrides 'association probality'. Number is a positive integer. "+
-              "Probability is a floating point number between 0 and 1.",
+              "Probability is a floating point number between 0.1 and 1.0.",
             true,new String[][]{
             new String[]{"Number of topics","string"},
             new String[]{"Number of random associations","string"},
@@ -89,6 +89,12 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
                 ap = Double.parseDouble(values.get("Random associations probability"));
                 useAssociationNumber = false;
             }
+        }
+        catch(NumberFormatException nfe) {
+            singleLog("Parse error.\n"+
+                      "Number of topics and number of associations should be integers.\n"+
+                      "Association probability should be floating point number between 0.0 and 1.0.");
+            return;
         }
         catch(Exception e) {
             singleLog(e);

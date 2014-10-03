@@ -1,67 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <topicMap xmlns="http://www.topicmaps.org/xtm/1.0/" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<topic id="ID2063089-topic110">
+	<topic id="ID2063089-topic84230">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic87"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://processing.org"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/role-class"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/roleclass"/>
 		</subjectIdentity>
 		<baseName>
-			<baseNameString>Processing type</baseNameString>
-		</baseName>
-	</topic>
-	<topic id="ID2063089-topic86">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic87"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-occurrence"/>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/default-occurrence"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Default occurrence</baseNameString>
-		</baseName>
-	</topic>
-	<topic id="ID2063089-topic97">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic106"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic103"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/schema-type"/>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/schema-type"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Schema type</baseNameString>
+			<baseNameString>Role class</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
 				</parameters>
 				<variantName>
-					<resourceData>Schema type</resourceData>
+					<resourceData>Role class</resourceData>
 				</variantName>
 			</variant>
 		</baseName>
 		<occurrence>
 			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
 			</instanceOf>
 			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="ID2063089-topic102">
+	<topic id="ID2063089-topic84229">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/content-type"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/contenttype"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Content type</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>Content type</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+		<occurrence>
+			<instanceOf>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
+			</instanceOf>
+			<scope>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
+			</scope>
+			<resourceData>1</resourceData>
+		</occurrence>
+	</topic>
+	<topic id="ID2063089-topic84232">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84240"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#display"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Scope Display</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>Display name</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84235">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
 			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/wandoraclass"/>
@@ -71,8 +104,8 @@
 			<baseNameString>Wandora class</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
 				</parameters>
 				<variantName>
 					<resourceData>Wandora class</resourceData>
@@ -81,190 +114,234 @@
 		</baseName>
 		<occurrence>
 			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
 			</instanceOf>
 			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="ID2063089-topic101">
+	<topic id="ID2063089-topic84259">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84242"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-role-1"/>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/default-role-1"/>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#sp"/>
 		</subjectIdentity>
 		<baseName>
-			<baseNameString>Default role 1</baseNameString>
-		</baseName>
-	</topic>
-	<topic id="ID2063089-topic92">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Subclass</baseNameString>
-		</baseName>
-		<occurrence>
-			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
-			</instanceOf>
-			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
-			</scope>
-			<resourceData>1</resourceData>
-		</occurrence>
-	</topic>
-	<topic id="ID2063089-topic98">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic87"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.r-project.org"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>R language type</baseNameString>
-		</baseName>
-	</topic>
-	<topic id="ID2063089-topic96">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/variant-name-version"/>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/variant-name-version"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Wandora variant name version</baseNameString>
+			<baseNameString>Spanish language</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84260"/>
 				</parameters>
 				<variantName>
-					<resourceData>Wandora variant name version</resourceData>
+					<resourceData>Spanisch</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>Spanish</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84249"/>
+				</parameters>
+				<variantName>
+					<resourceData>spanska</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84254"/>
+				</parameters>
+				<variantName>
+					<resourceData>espagnol</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84259"/>
+				</parameters>
+				<variantName>
+					<resourceData>español</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84241"/>
+				</parameters>
+				<variantName>
+					<resourceData>espanja</resourceData>
 				</variantName>
 			</variant>
 		</baseName>
 	</topic>
-	<topic id="ID2063089-topic111">
+	<topic id="ID2063089-topic84244">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic89"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#fi"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/associationtype"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/association-type"/>
 		</subjectIdentity>
 		<baseName>
-			<baseNameString>Finnish language</baseNameString>
+			<baseNameString>Association type</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
 				</parameters>
 				<variantName>
-					<resourceData>Finnish</resourceData>
-				</variantName>
-			</variant>
-		</baseName>
-	</topic>
-	<topic id="ID2063089-topic99">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-role-2"/>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/default-role-2"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Default role 2</baseNameString>
-		</baseName>
-	</topic>
-	<topic id="ID2063089-topic93">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic106"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/role"/>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/role"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Role</baseNameString>
-			<variant>
-				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
-				</parameters>
-				<variantName>
-					<resourceData>Role</resourceData>
+					<resourceData>Association type</resourceData>
 				</variantName>
 			</variant>
 		</baseName>
 		<occurrence>
 			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
 			</instanceOf>
 			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="ID2063089-topic90">
+	<topic id="ID2063089-topic84228">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic96"/>
+			<topicRef xlink:href="#ID2063089-topic84230"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#display"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/schema-type"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/schema-type"/>
 		</subjectIdentity>
 		<baseName>
-			<baseNameString>Scope Display</baseNameString>
+			<baseNameString>Schema type</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
 				</parameters>
 				<variantName>
-					<resourceData>Display name</resourceData>
+					<resourceData>Schema type</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+		<occurrence>
+			<instanceOf>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
+			</instanceOf>
+			<scope>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
+			</scope>
+			<resourceData>1</resourceData>
+		</occurrence>
+	</topic>
+	<topic id="ID2063089-topic84249">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84242"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#sv"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Swedish language</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84260"/>
+				</parameters>
+				<variantName>
+					<resourceData>Schwedisch</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>Swedish</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84249"/>
+				</parameters>
+				<variantName>
+					<resourceData>svenska</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84254"/>
+				</parameters>
+				<variantName>
+					<resourceData>suédois</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84259"/>
+				</parameters>
+				<variantName>
+					<resourceData>sueco</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84241"/>
+				</parameters>
+				<variantName>
+					<resourceData>ruotsi</resourceData>
 				</variantName>
 			</variant>
 		</baseName>
 	</topic>
-	<topic id="ID2063089-topic108">
+	<topic id="ID2063089-topic84227">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
+		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/edittime"/>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/edittime"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-occurrence"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/default-occurrence"/>
 		</subjectIdentity>
 		<baseName>
-			<baseNameString>Topic edit time</baseNameString>
+			<baseNameString>Default occurrence</baseNameString>
 		</baseName>
-		<occurrence>
-			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
-			</instanceOf>
-			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
-			</scope>
-			<resourceData>1</resourceData>
-		</occurrence>
 	</topic>
-	<topic id="ID2063089-topic94">
+	<topic id="ID2063089-topic84233">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic89"/>
+			<topicRef xlink:href="#ID2063089-topic84242"/>
 		</instanceOf>
 		<subjectIdentity>
 			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/langindependent"/>
@@ -274,8 +351,8 @@
 			<baseNameString>Language independent</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
 				</parameters>
 				<variantName>
 					<resourceData>Language independent</resourceData>
@@ -283,9 +360,29 @@
 			</variant>
 		</baseName>
 	</topic>
-	<topic id="ID2063089-topic95">
+	<topic id="ID2063089-topic84250">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic87"/>
+			<topicRef xlink:href="#ID2063089-topic84240"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#sort"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Scope Sort</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>Sort name</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84234">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
 		</instanceOf>
 		<subjectIdentity>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/hidelevel"/>
@@ -295,8 +392,8 @@
 			<baseNameString>Hide level</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
 				</parameters>
 				<variantName>
 					<resourceData>Hide level</resourceData>
@@ -305,76 +402,17 @@
 		</baseName>
 		<occurrence>
 			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
 			</instanceOf>
 			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="ID2063089-topic107">
+	<topic id="ID2063089-topic84242">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Superclass</baseNameString>
-		</baseName>
-		<occurrence>
-			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
-			</instanceOf>
-			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
-			</scope>
-			<resourceData>1</resourceData>
-		</occurrence>
-	</topic>
-	<topic id="ID2063089-topic87">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic106"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/occurrencetype"/>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/occurrence-type"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Occurrence type</baseNameString>
-			<variant>
-				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
-				</parameters>
-				<variantName>
-					<resourceData>Occurrence type</resourceData>
-				</variantName>
-			</variant>
-		</baseName>
-		<occurrence>
-			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
-			</instanceOf>
-			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
-			</scope>
-			<resourceData>1</resourceData>
-		</occurrence>
-	</topic>
-	<topic id="ID2063089-topic89">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
 			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/language"/>
@@ -385,8 +423,8 @@
 			<baseNameString>Wandora language</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
 				</parameters>
 				<variantName>
 					<resourceData>Wandora language</resourceData>
@@ -394,9 +432,356 @@
 			</variant>
 		</baseName>
 	</topic>
-	<topic id="ID2063089-topic109">
+	<topic id="ID2063089-topic84260">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84242"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#de"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>German language</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84260"/>
+				</parameters>
+				<variantName>
+					<resourceData>Deutsche</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>German</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84249"/>
+				</parameters>
+				<variantName>
+					<resourceData>tysk</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84254"/>
+				</parameters>
+				<variantName>
+					<resourceData>allemand</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84259"/>
+				</parameters>
+				<variantName>
+					<resourceData>alemán</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84241"/>
+				</parameters>
+				<variantName>
+					<resourceData>saksa</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84239">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.r-project.org"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>R language type</baseNameString>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84246">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Superclass</baseNameString>
+		</baseName>
+		<occurrence>
+			<instanceOf>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
+			</instanceOf>
+			<scope>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
+			</scope>
+			<resourceData>1</resourceData>
+		</occurrence>
+	</topic>
+	<topic id="ID2063089-topic84238">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Subclass</baseNameString>
+		</baseName>
+		<occurrence>
+			<instanceOf>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
+			</instanceOf>
+			<scope>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
+			</scope>
+			<resourceData>1</resourceData>
+		</occurrence>
+	</topic>
+	<topic id="ID2063089-topic84240">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/variant-name-version"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/variant-name-version"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Wandora variant name version</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>Wandora variant name version</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84243">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-role-2"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/default-role-2"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Default role 2</baseNameString>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84237">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/role"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/role"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Role</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>Role</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+		<occurrence>
+			<instanceOf>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
+			</instanceOf>
+			<scope>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
+			</scope>
+			<resourceData>1</resourceData>
+		</occurrence>
+	</topic>
+	<topic id="ID2063089-topic84245">
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/edittime"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/edittime"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Topic edit time</baseNameString>
+		</baseName>
+		<occurrence>
+			<instanceOf>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
+			</instanceOf>
+			<scope>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
+			</scope>
+			<resourceData>1</resourceData>
+		</occurrence>
+	</topic>
+	<topic id="ID2063089-topic84231">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84242"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#en"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>English language</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84260"/>
+				</parameters>
+				<variantName>
+					<resourceData>Englisch</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>English</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84249"/>
+				</parameters>
+				<variantName>
+					<resourceData>engelska</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84254"/>
+				</parameters>
+				<variantName>
+					<resourceData>anglais</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84259"/>
+				</parameters>
+				<variantName>
+					<resourceData>inglés</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84241"/>
+				</parameters>
+				<variantName>
+					<resourceData>englanti</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84254">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84242"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#fr"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>French language</baseNameString>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84260"/>
+				</parameters>
+				<variantName>
+					<resourceData>Französisch</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>French</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84249"/>
+				</parameters>
+				<variantName>
+					<resourceData>franska</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84254"/>
+				</parameters>
+				<variantName>
+					<resourceData>français</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84259"/>
+				</parameters>
+				<variantName>
+					<resourceData>francés</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84241"/>
+				</parameters>
+				<variantName>
+					<resourceData>ranska</resourceData>
+				</variantName>
+			</variant>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84225">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
+		</instanceOf>
+		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://processing.org"/>
+		</subjectIdentity>
+		<baseName>
+			<baseNameString>Processing type</baseNameString>
+		</baseName>
+	</topic>
+	<topic id="ID2063089-topic84247">
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</instanceOf>
 		<subjectIdentity>
 			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-association"/>
@@ -406,140 +791,125 @@
 			<baseNameString>Default association</baseNameString>
 		</baseName>
 	</topic>
-	<topic id="ID2063089-topic88">
+	<topic id="ID2063089-topic84236">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic89"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#en"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-role-1"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/default-role-1"/>
 		</subjectIdentity>
 		<baseName>
-			<baseNameString>English language</baseNameString>
-			<variant>
-				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
-				</parameters>
-				<variantName>
-					<resourceData>English</resourceData>
-				</variantName>
-			</variant>
+			<baseNameString>Default role 1</baseNameString>
 		</baseName>
 	</topic>
-	<topic id="ID2063089-topic106">
+	<topic id="ID2063089-topic84226">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic106"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</instanceOf>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
+		</instanceOf>
+		<instanceOf>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/content-type"/>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/contenttype"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/occurrencetype"/>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/occurrence-type"/>
 		</subjectIdentity>
 		<baseName>
-			<baseNameString>Content type</baseNameString>
+			<baseNameString>Occurrence type</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
 				</parameters>
 				<variantName>
-					<resourceData>Content type</resourceData>
+					<resourceData>Occurrence type</resourceData>
 				</variantName>
 			</variant>
 		</baseName>
 		<occurrence>
 			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
 			</instanceOf>
 			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="ID2063089-topic104">
+	<topic id="ID2063089-topic84241">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic106"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84242"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/associationtype"/>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/association-type"/>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#fi"/>
 		</subjectIdentity>
 		<baseName>
-			<baseNameString>Association type</baseNameString>
+			<baseNameString>Finnish language</baseNameString>
 			<variant>
 				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84260"/>
 				</parameters>
 				<variantName>
-					<resourceData>Association type</resourceData>
+					<resourceData>Finnisch</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84231"/>
+				</parameters>
+				<variantName>
+					<resourceData>Finnish</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84249"/>
+				</parameters>
+				<variantName>
+					<resourceData>finska</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84254"/>
+				</parameters>
+				<variantName>
+					<resourceData>finnois</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84259"/>
+				</parameters>
+				<variantName>
+					<resourceData>finlandés</resourceData>
+				</variantName>
+			</variant>
+			<variant>
+				<parameters>
+					<topicRef xlink:href="#ID2063089-topic84232"/>
+					<topicRef xlink:href="#ID2063089-topic84241"/>
+				</parameters>
+				<variantName>
+					<resourceData>suomi</resourceData>
 				</variantName>
 			</variant>
 		</baseName>
-		<occurrence>
-			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
-			</instanceOf>
-			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
-			</scope>
-			<resourceData>1</resourceData>
-		</occurrence>
 	</topic>
-	<topic id="ID2063089-topic103">
+	<topic id="ID2063089-topic84248">
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic97"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
-		</instanceOf>
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/role-class"/>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/roleclass"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Role class</baseNameString>
-			<variant>
-				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
-				</parameters>
-				<variantName>
-					<resourceData>Role class</resourceData>
-				</variantName>
-			</variant>
-		</baseName>
-		<occurrence>
-			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
-			</instanceOf>
-			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
-			</scope>
-			<resourceData>1</resourceData>
-		</occurrence>
-	</topic>
-	<topic id="ID2063089-topic105">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</instanceOf>
 		<subjectIdentity>
 			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"/>
@@ -549,375 +919,335 @@
 		</baseName>
 		<occurrence>
 			<instanceOf>
-				<topicRef xlink:href="#ID2063089-topic95"/>
+				<topicRef xlink:href="#ID2063089-topic84234"/>
 			</instanceOf>
 			<scope>
-				<topicRef xlink:href="#ID2063089-topic94"/>
+				<topicRef xlink:href="#ID2063089-topic84233"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="ID2063089-topic91">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic89"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#sv"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Swedish language</baseNameString>
-			<variant>
-				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
-				</parameters>
-				<variantName>
-					<resourceData>Swedish</resourceData>
-				</variantName>
-			</variant>
-		</baseName>
-	</topic>
-	<topic id="ID2063089-topic100">
-		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic96"/>
-		</instanceOf>
-		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/core.xtm#sort"/>
-		</subjectIdentity>
-		<baseName>
-			<baseNameString>Scope Sort</baseNameString>
-			<variant>
-				<parameters>
-					<topicRef xlink:href="#ID2063089-topic88"/>
-					<topicRef xlink:href="#ID2063089-topic90"/>
-				</parameters>
-				<variantName>
-					<resourceData>Sort name</resourceData>
-				</variantName>
-			</variant>
-		</baseName>
-	</topic>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic105"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic92"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic97"/>
+			<topicRef xlink:href="#ID2063089-topic84230"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic107"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic102"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic103"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic103"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic97"/>
+			<topicRef xlink:href="#ID2063089-topic84230"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84229"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic92"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic87"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic87"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic95"/>
+			<topicRef xlink:href="#ID2063089-topic84230"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic106"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic97"/>
+			<topicRef xlink:href="#ID2063089-topic84230"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic103"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic103"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic97"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic107"/>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic105"/>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic106"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic97"/>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic92"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84229"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic105"/>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84229"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic103"/>
+			<topicRef xlink:href="#ID2063089-topic84229"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84248"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84238"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84246"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84235"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic106"/>
+				<topicRef xlink:href="#ID2063089-topic84229"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic103"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic106"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84230"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84230"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic107"/>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic105"/>
+			<topicRef xlink:href="#ID2063089-topic84238"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84226"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic87"/>
+			<topicRef xlink:href="#ID2063089-topic84234"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic106"/>
+				<topicRef xlink:href="#ID2063089-topic84229"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic106"/>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84244"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic106"/>
+			<topicRef xlink:href="#ID2063089-topic84248"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84229"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic87"/>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84230"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84230"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic87"/>
+			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic87"/>
+			<topicRef xlink:href="#ID2063089-topic84246"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84248"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic106"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic106"/>
+			<topicRef xlink:href="#ID2063089-topic84246"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic106"/>
+			<topicRef xlink:href="#ID2063089-topic84248"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84238"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic104"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</member>
 	</association>
 	<association>
 		<instanceOf>
-			<topicRef xlink:href="#ID2063089-topic93"/>
+			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic93"/>
+				<topicRef xlink:href="#ID2063089-topic84244"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic103"/>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
 		</member>
 		<member>
 			<roleSpec>
-				<topicRef xlink:href="#ID2063089-topic104"/>
+				<topicRef xlink:href="#ID2063089-topic84237"/>
 			</roleSpec>
-			<topicRef xlink:href="#ID2063089-topic103"/>
+			<topicRef xlink:href="#ID2063089-topic84226"/>
 		</member>
 	</association>
 </topicMap>
