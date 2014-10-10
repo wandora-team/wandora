@@ -40,7 +40,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="headerLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;Select which Umbel concepts you would like to import to Wandora. After selection press import button.&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Select which Umbel concepts you would like to import to Wandora. Keep SHIFT or CTRL key pressed to select multiple concepts. After selection press import button.&lt;/html&gt;"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleLabel();"/>
