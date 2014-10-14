@@ -42,7 +42,7 @@ public class JSONBox {
         
     }
     
-    public JSONObject load(String urlStr) {
+    public static JSONObject load(String urlStr) {
         JSONObject json = null;
         try {
             if(urlStr != null) {

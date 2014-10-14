@@ -50,46 +50,46 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     
     
     
-    private String ARTWORK_SI = "http://www.wandora.net/artwork";
-    private String ARTWORK_CLASS_SI = "http://www.wandora.net/generic_type";
-    private String ARTWORK_CLASS_TYPE_SI = "http://www.wandora.net/generic_type";
+    protected String ARTWORK_SI = "http://www.wandora.net/artwork";
+    protected String ARTWORK_CLASS_SI = "http://www.wandora.net/generic_type";
+    protected String ARTWORK_CLASS_TYPE_SI = "http://www.wandora.net/generic_type";
     
-    private String AUTHOR_SI = "http://www.wandora.net/author";
-    private String AUTHOR_ROLE_SI = "http://www.muusa.net/P14.Production_carried_out_by_role_3";
-    private String ARTIST_SI = "http://www.wandora.org/artists";
+    protected String AUTHOR_SI = "http://www.wandora.net/author";
+    protected String AUTHOR_ROLE_SI = "http://www.muusa.net/P14.Production_carried_out_by_role_3";
+    protected String ARTIST_SI = "http://www.wandora.org/artists";
     
-    private String TECHNIQUE_SI = "http://www.wandora.net/technique";
-    private String MATERIAL_SI = "http://www.wandora.net/material";
+    protected String TECHNIQUE_SI = "http://www.wandora.net/technique";
+    protected String MATERIAL_SI = "http://www.wandora.net/material";
     
-    private String KEEPER_SI = "http://www.wandora.net/keeper";
-    private String AQUISITION_SI = "http://www.wandora.net/aqcuisition";
+    protected String KEEPER_SI = "http://www.wandora.net/keeper";
+    protected String AQUISITION_SI = "http://www.wandora.net/aqcuisition";
     
-    private String DIMENSION_SI = "http://www.wandora.net/dimension";
-    private String DIMENSION_TYPE_SI = "http://www.wandora.net/dimension_type";
-    private String DIMENSION_VALUE_SI = "http://www.wandora.net/dimension_value";
-    private String DIMENSION_UNIT_SI = "http://www.wandora.net/dimension_unit";
+    protected String DIMENSION_SI = "http://www.wandora.net/dimension";
+    protected String DIMENSION_TYPE_SI = "http://www.wandora.net/dimension_type";
+    protected String DIMENSION_VALUE_SI = "http://www.wandora.net/dimension_value";
+    protected String DIMENSION_UNIT_SI = "http://www.wandora.net/dimension_unit";
     
-    private String IMAGE_SI = "http://www.wandora.net/imageoccurrence";
-    private String COLLECTION_SI = "http://www.wandora.net/collection";
-    
-    
-    private String KEYWORD_SI = "http://www.wandora.net/keyword";
-    private String KEYWORD_TYPE_SI = "http://www.wandora.org/keyword-type";
-    
-    private String TIME_SI = "http://www.wandora.net/time";
-    
-    private String MUSEUM_SI = "http://www.wandora.net/museum";
-    
-    private String USAGE_SI = "http://www.wandora.net/usages";
-    private String DOCUMENTS_SI = "http://www.wandora.net/documents";
-    
-    private String ENRICHMENT_SI = "http://www.wandora.org/rikasteet/teosviite";
-    private String TEXT_DOCUMENT_ROLE_SI = "http://www.wandora.net/text";
-    private String TEXT_OCCURRENCE_TYPE_SI = "http://www.wandora.org/rikasteet/teksti";
+    protected String IMAGE_SI = "http://www.wandora.net/imageoccurrence";
+    protected String COLLECTION_SI = "http://www.wandora.net/collection";
     
     
+    protected String KEYWORD_SI = "http://www.wandora.net/keyword";
+    protected String KEYWORD_TYPE_SI = "http://www.wandora.org/keyword-type";
     
-    private String[] languages = new String[] {
+    protected String TIME_SI = "http://www.wandora.net/time";
+    
+    protected String MUSEUM_SI = "http://www.wandora.net/museum";
+    
+    protected String USAGE_SI = "http://www.wandora.net/usages";
+    protected String DOCUMENTS_SI = "http://www.wandora.net/documents";
+    
+    protected String ENRICHMENT_SI = "http://www.wandora.org/rikasteet/teosviite";
+    protected String TEXT_DOCUMENT_ROLE_SI = "http://www.wandora.net/text";
+    protected String TEXT_OCCURRENCE_TYPE_SI = "http://www.wandora.org/rikasteet/teksti";
+    
+    
+    
+    protected String[] languages = new String[] {
         "http://www.muusa.net/E55.Type_teosnimi_tanska",                "dn",
         "http://www.muusa.net/E55.Type_teosnimi__ru",                   "ru",
         "http://www.muusa.net/E55.Type_teosnimi_ru",                    "ru",
@@ -119,7 +119,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     
     
     
-    public String[] subjectMapping = new String[] {
+    protected String[] subjectMapping = new String[] {
         "http://www.muusa.net/P71_lists_aihe",              "subject",
         "http://www.muusa.net/P71_lists_Kuvauksen_kohde",   "subject-person",
         "http://www.muusa.net/P71_lists_kohdehenkilo",      "subject-person",
@@ -140,11 +140,11 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     @Override
     public void populate(Topic t, TopicMap tm) throws TopicMapException {
         if(t != null) {
-            setResourceURI( "http://kokoelmat.fng.fi/app?si="+urlEncode(t.getBaseName()));
+            setResourceURI( getResourceURIBase()+urlEncode(t.getBaseName()));
 
             // **** IDENTIFIERS ****
             addIdentifier(t.getBaseName(), "id");
-            addIdentifier("http://kokoelmat.fng.fi/app?si="+urlEncode(t.getBaseName()), "uri");
+            addIdentifier(getResourceURIBase()+urlEncode(t.getBaseName()), "uri");
             for( Locator si : t.getSubjectIdentifiers() ) {
                 String sis = si.toExternalForm();
                 if(!sis.startsWith("http://www.wandora.net/defaultSI")) {
@@ -211,7 +211,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
                         break;
                     }
                 }
-                properties.put("uri", "http://kokoelmat.fng.fi/app?si="+urlEncode(author.getBaseName()));
+                properties.put("uri", getResourceURIBase()+urlEncode(author.getBaseName()));
                 addCreator(getNameFor(author), properties);
             }
 
@@ -272,7 +272,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
             for( Topic museum : museums ) {
                 addPublisher(getNameFor(museum), "unit");
             }
-            addPublisher("Finnish National Gallery");
+            addPublisher(getDefaultPublisher());
             
             
             
@@ -320,7 +320,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     
     
     
-    private String getNameForDimensionType(Topic t) throws TopicMapException {
+    protected String getNameForDimensionType(Topic t) throws TopicMapException {
         String s = t.getDisplayName("fi");
         s = s.replaceAll("http://www.muusa.net/", "");
         s = s.replaceAll("E55.Type_", "");
@@ -330,7 +330,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     }
     
     
-    private String getNameForDimensionValue(Topic t) throws TopicMapException {
+    protected String getNameForDimensionValue(Topic t) throws TopicMapException {
         String s = t.getDisplayName("fi");
         s = s.replaceAll("http://www.muusa.net/", "");
         s = s.replaceAll("Number_", "");
@@ -341,7 +341,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     
     
     
-    private String getNameForSubjectType(Topic t) throws TopicMapException {
+    protected String getNameForSubjectType(Topic t) throws TopicMapException {
         if(t != null) {
             for(Locator l : t.getSubjectIdentifiers()) {
                 String si = l.toExternalForm();
@@ -360,7 +360,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     
     
     
-    private String getNameForArtworkClass(Topic t) throws TopicMapException {
+    protected String getNameForArtworkClass(Topic t) throws TopicMapException {
         String s = t.getDisplayName("fi");
         if(s != null) s = s.toLowerCase();
         return s;

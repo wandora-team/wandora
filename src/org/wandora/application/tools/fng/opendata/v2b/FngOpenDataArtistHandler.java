@@ -59,14 +59,18 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
     
     
     
+
+    
+    
+    
     @Override
     public void populate(Topic t, TopicMap tm) throws TopicMapException {
         if(t != null) {
 
-            setResourceURI( "http://kokoelmat.fng.fi/app?si="+urlEncode(t.getBaseName()));
+            setResourceURI( getResourceURIBase()+urlEncode(t.getBaseName()));
 
             // **** IDENTIFIERS ****
-            addIdentifier("http://kokoelmat.fng.fi/app?si="+urlEncode(t.getBaseName()), "uri");
+            addIdentifier(getResourceURIBase()+urlEncode(t.getBaseName()), "uri");
             for( Locator si : t.getSubjectIdentifiers() ) {
                 String sis = si.toExternalForm();
                 if(sis.indexOf("http://www.muusa.net/E39.Actor") != -1) {
@@ -137,7 +141,7 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
             for( Topic artwork : artworks ) {
                 HashMap properties = new HashMap();
                 properties.put("id", artwork.getBaseName());
-                properties.put("uri", "http://kokoelmat.fng.fi/app?si="+urlEncode(artwork.getBaseName()));
+                properties.put("uri", getResourceURIBase()+urlEncode(artwork.getBaseName()));
                 for( Locator si : artwork.getSubjectIdentifiers() ) {
                     String sis = si.toExternalForm();
                     if(!sis.startsWith("http://www.wandora.net/defaultSI")) {
@@ -149,7 +153,7 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
             }
             
             // **** PUBLISHER ****
-            addPublisher("Finnish National Gallery");
+            addPublisher(getDefaultPublisher());
             
             
             // **** GROUP ****

@@ -40,11 +40,12 @@ public class FngOpenDataStruct implements FngOpenDataHandlerInterface {
 
     
     
-    private static String[] handlers = new String[] {
-        "http://www.muusa.net/Teos", "org.wandora.application.tools.fng.opendata.v2b.FngOpenDataArtworkHandler",
-        "http://www.muusa.net/taiteilija", "org.wandora.application.tools.fng.opendata.v2b.FngOpenDataArtistHandler",
-    };
-    
+    protected String[] getHandlers() {
+        return new String[] {
+            "http://www.muusa.net/Teos", "org.wandora.application.tools.fng.opendata.v2b.FngOpenDataArtworkHandler",
+            "http://www.muusa.net/taiteilija", "org.wandora.application.tools.fng.opendata.v2b.FngOpenDataArtistHandler",
+        };
+    }
     
     
     
@@ -54,6 +55,7 @@ public class FngOpenDataStruct implements FngOpenDataHandlerInterface {
     @Override
     public void populate(Topic t, TopicMap tm) throws TopicMapException {
         if(t != null) {
+            String[] handlers = getHandlers();
             for(int i=0; i<handlers.length; i=i+2) {
                 Topic type = tm.getTopic(handlers[i]);
                 if(type != null) {
@@ -63,11 +65,11 @@ public class FngOpenDataStruct implements FngOpenDataHandlerInterface {
                             handler = (FngOpenDataHandlerInterface) handlerClass.newInstance();
                             handler.populate(t, tm);
                         } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(FngOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(VttkOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (InstantiationException ex) {
-                            Logger.getLogger(FngOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(VttkOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (IllegalAccessException ex) {
-                            Logger.getLogger(FngOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(VttkOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
@@ -102,9 +104,10 @@ public class FngOpenDataStruct implements FngOpenDataHandlerInterface {
     
     
     
-    public static String toString(Topic t, TopicMap tm, String outputFormat) {
+    public String toString(Topic t, TopicMap tm, String outputFormat) {
         try {
             if(t != null) {
+                String[] handlers = getHandlers();
                 for(int i=0; i<handlers.length; i=i+2) {
                     Topic type = tm.getTopic(handlers[i]);
                     if(type != null) {
@@ -115,11 +118,11 @@ public class FngOpenDataStruct implements FngOpenDataHandlerInterface {
                                 handler.populate(t, tm);
                                 return handler.toString(outputFormat);
                             } catch (ClassNotFoundException ex) {
-                                Logger.getLogger(FngOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(VttkOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (InstantiationException ex) {
-                                Logger.getLogger(FngOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(VttkOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IllegalAccessException ex) {
-                                Logger.getLogger(FngOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(VttkOpenDataStruct.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     }

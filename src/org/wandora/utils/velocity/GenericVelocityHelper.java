@@ -1170,7 +1170,7 @@ public class GenericVelocityHelper {
     
     
     
-    public String trimNonAlphaNums(String word) {
+    public static String trimNonAlphaNums(String word) {
         if(word == null || word.length() < 1) return "";
         
         int i=0;
@@ -1182,25 +1182,25 @@ public class GenericVelocityHelper {
     }
     
     
-    public String encodeURL(String s) {
+    public static String encodeURL(String s) {
         return encodeURL(s, "UTF-8");
     }
-    public String encodeURL(String s, String enc) {
+    public static String encodeURL(String s, String enc) {
         try { if(s != null && enc != null) { return java.net.URLEncoder.encode(s, enc); } }
         catch (Exception e) { e.printStackTrace(); return s; }
         return "";
     }
-    public String decodeURL(String s) {
+    public static String decodeURL(String s) {
         return decodeURL(s, "UTF-8");
     }
-    public String decodeURL(String s, String enc) {
+    public static String decodeURL(String s, String enc) {
         try { if(s != null) { return java.net.URLDecoder.decode(s); } }
         catch (Exception e) { e.printStackTrace(); return s; }
         return "";
     }
     
     
-    public String populateLinks(String text, String linkTemplate) {
+    public static String populateLinks(String text, String linkTemplate) {
         if(text != null && text.length()>0) {
             String DELIMITERS = " \n\t',.\"";
             StringBuffer newText = new StringBuffer(1000);

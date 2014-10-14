@@ -32,7 +32,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.wandora.application.Wandora;
-// import org.wandora.application.tools.fng.opendata.v2.FngOpenDataStruct;
+import org.wandora.application.tools.fng.opendata.v2b.FngOpenDataHandlerInterface;
 import org.wandora.application.tools.fng.opendata.v2b.FngOpenDataStruct;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
@@ -88,6 +88,9 @@ public class FNGAPIAction extends CachedAction {
 
     protected int maxTopics=100;
     
+    protected String dataHandlerClassName=null;
+            
+    
     @Override
     public Collection<Module> getDependencies(ModuleManager manager) throws ModuleException {
         Collection<Module> deps=super.getDependencies(manager);
@@ -125,9 +128,13 @@ public class FNGAPIAction extends CachedAction {
         o=settings.get("maxTopics");
         if(o!=null) maxTopics=Integer.parseInt(o.toString());
         
+        o=settings.get("dataHandlerClass");
+        if(o!=null) dataHandlerClassName=o.toString();
+        
         super.init(manager, settings);
     }
 
+    
     @Override
     protected void returnOutput(InputStream cacheIn, HttpServletResponse resp) throws IOException {
         try{
@@ -460,10 +467,25 @@ public class FNGAPIAction extends CachedAction {
         StringBuilder sb=new StringBuilder("");
         if(!outputTopics.isEmpty()) {
             for(Topic t : outputTopics) {
-                FngOpenDataStruct struct=new FngOpenDataStruct();            
-                struct.populate(t, tm);
+                FngOpenDataHandlerInterface dataHandler = null;
+                if(dataHandlerClassName != null) {
+                    try {
+                        Class handlerClass = Class.forName(dataHandlerClassName);
+                        if(handlerClass != null) {
+                            dataHandler = (FngOpenDataHandlerInterface) handlerClass.newInstance();
+                        }
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(dataHandler == null) {
+                    dataHandler = new FngOpenDataStruct();
+                }
+                
+                dataHandler.populate(t, tm);
                 // System.out.println("Populating...");
-                String topicOutput = struct.toString(outputMode);
+                String topicOutput = dataHandler.toString(outputMode);
                 if(topicOutput != null && topicOutput.length()>0) {
                     // System.out.println("Appending...");
                     sb.append(topicOutput);

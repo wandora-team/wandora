@@ -22,9 +22,7 @@
  */
 package org.wandora.application.tools.fng.opendata.v2b;
 
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
+
 
 /**
  *
@@ -32,9 +30,21 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public interface FngOpenDataHandlerInterface {
-    
-    public void populate(Topic t, TopicMap tm) throws TopicMapException;
-    public String toString(String outputFormat);
+public class VttkOpenDataArtistHandler extends FngOpenDataArtistHandler implements FngOpenDataHandlerInterface {
 
+    
+    
+    @Override
+    public String getResourceURIBase() {
+        return "http://kokoelmat.fng.fi/vttk/app?si=";
+    }
+    
+    
+    @Override
+    public String getDefaultPublisher() {
+        return "Finnish State Art Commission, Finnish National Gallery";
+    }
+    
+    
+    
 }

@@ -22,9 +22,13 @@
  */
 package org.wandora.application.tools.fng.opendata.v2b;
 
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+
 
 /**
  *
@@ -32,9 +36,16 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public interface FngOpenDataHandlerInterface {
-    
-    public void populate(Topic t, TopicMap tm) throws TopicMapException;
-    public String toString(String outputFormat);
+public class VttkOpenDataStruct extends FngOpenDataStruct implements FngOpenDataHandlerInterface {
 
+    
+    
+    protected String[] getHandlers() {
+        return new String[] {
+            "http://www.muusa.net/Teos", "org.wandora.application.tools.fng.opendata.v2b.VttkOpenDataArtworkHandler",
+            "http://www.muusa.net/taiteilija", "org.wandora.application.tools.fng.opendata.v2b.VttkOpenDataArtistHandler",
+        };
+    }
+    
+    
 }
