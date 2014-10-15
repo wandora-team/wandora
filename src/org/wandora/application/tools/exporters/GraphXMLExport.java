@@ -379,7 +379,10 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
         return ""+t.getID();
     }
     protected String makeID(String s) {
-        return ""+Math.abs(s.hashCode());
+        int id = s.hashCode();
+        if(id < 0) id = 2*Math.abs(id)+1;
+        else id = 2*Math.abs(id);
+        return ""+id;
     }
     
     

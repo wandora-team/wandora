@@ -203,6 +203,14 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
+    public void addDate(String str, String type, String description) {
+        if(str != null) {
+            HashMap map = makeTypeMap(str, type);
+            map.put("description", description);
+            dates.add(map);
+        }
+    }
+    
     public void addDate(String str, String type, HashMap additionalProperties) {
         if(str != null) {
             HashMap map = makeTypeMap(str, type);

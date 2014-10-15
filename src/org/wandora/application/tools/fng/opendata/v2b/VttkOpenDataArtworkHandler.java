@@ -210,10 +210,17 @@ public class VttkOpenDataArtworkHandler extends FngOpenDataArtworkHandler implem
             for( Topic time : times ) {
                 addDate(getNameFor(time), "creation");
             }
-            Collection<Topic> acquisitionTimes = GenericVelocityHelper.getPlayers(t, AQUISITION_SI, TIME_SI);
-            for( Topic aquisitionTime : acquisitionTimes ) {
-                addDate(getNameFor(aquisitionTime), "acquisition");
+            
+            Collection<Association> acquisitionAssociations = t.getAssociations(tm.getTopic(ACQUISITION_SI));
+            for( Association acquisitionAssociation : acquisitionAssociations ) {
+                Topic acquisitionDate = acquisitionAssociation.getPlayer(tm.getTopic(TIME_SI));
+                Topic acquisitionType = acquisitionAssociation.getPlayer(tm.getTopic(ACQUISITION_SI));
+                if(acquisitionDate != null) {
+                    addDate(getNameFor(acquisitionDate), "acquisition", getNameFor(acquisitionType));
+                    
+                }
             }
+
             
             // **** PUBLISHER ****
             /*
@@ -293,8 +300,8 @@ public class VttkOpenDataArtworkHandler extends FngOpenDataArtworkHandler implem
     
     
     public void getRemoteData() {
-        // String url = "http://www.lahteilla.fi/extras/api/data/all";
-        // remoteData = JSONBox.load(url);
+        String url = "http://www.lahteilla.fi/extras/api/data/all";
+        remoteData = JSONBox.load(url);
     }
     
     

@@ -351,10 +351,14 @@ public class GMLExport extends AbstractExportTool implements WandoraTool {
     
     
     protected int makeID(Topic t) {
-        return Math.abs(t.hashCode());
+        int id = t.hashCode();
+        if(id < 0) return 2*Math.abs(id)+1;
+        else return 2*Math.abs(id);
     }
     protected int makeID(String s) {
-        return Math.abs(s.hashCode());
+        int id = s.hashCode();
+        if(id < 0) return 2*Math.abs(id)+1;
+        else return 2*Math.abs(id);
     }
     protected String makeString(String s) {
         if(s == null) return null;

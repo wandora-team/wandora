@@ -62,8 +62,8 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     protected String MATERIAL_SI = "http://www.wandora.net/material";
     
     protected String KEEPER_SI = "http://www.wandora.net/keeper";
-    protected String AQUISITION_SI = "http://www.wandora.net/aqcuisition";
-    
+    protected String ACQUISITION_SI = "http://www.wandora.net/aqcuisition";
+
     protected String DIMENSION_SI = "http://www.wandora.net/dimension";
     protected String DIMENSION_TYPE_SI = "http://www.wandora.net/dimension_type";
     protected String DIMENSION_VALUE_SI = "http://www.wandora.net/dimension_value";
@@ -262,7 +262,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
             for( Topic time : times ) {
                 addDate(getNameFor(time), "creation");
             }
-            Collection<Topic> acquisitionTimes = GenericVelocityHelper.getPlayers(t, AQUISITION_SI, TIME_SI);
+            Collection<Topic> acquisitionTimes = GenericVelocityHelper.getPlayers(t, ACQUISITION_SI, TIME_SI);
             for( Topic aquisitionTime : acquisitionTimes ) {
                 addDate(getNameFor(aquisitionTime), "acquisition");
             }
