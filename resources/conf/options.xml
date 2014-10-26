@@ -514,14 +514,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>Get superclass Umbel concepts...</name>
                <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperclasses</class>
             </item>
-            <item>
-               <name>--- WATSON ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Watson translate...</name>
-               <class>org.wandora.application.tools.extractors.watson.WatsonTranslate</class>
-            </item>
          </item>
          <item>
             <name>Search engines</name>
