@@ -24,7 +24,7 @@
 
 
 
-package org.wandora.utils;
+package org.wandora.utils.language;
 
 
 import java.util.HashMap;

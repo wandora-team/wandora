@@ -70,7 +70,7 @@ public abstract class AbstractTopicPanel extends JPanel implements Printable, Mo
 
     public static final String OPTIONS_PREFIX = "gui.traditionalTopicPanel.";
     public static final String OPTIONS_VIEW_PREFIX = OPTIONS_PREFIX + "view.";
-    public static final String VARIANT_GUITYPE_OPTIONS_KEY = OPTIONS_PREFIX + "variant_gui";
+    public static final String VARIANT_GUITYPE_OPTIONS_KEY = OPTIONS_PREFIX + "nameUI";
 
 
     public int ASSOCIATIONS_WHERE_PLAYER = 1;

@@ -611,6 +611,7 @@ public class WandoraMenuManager {
                 "---",
                 "Translate with Google...", new OccurrenceGoogleTranslate(new ApplicationContext()),
                 "Translate with Microsoft...", new OccurrenceMicrosoftTranslate(new ApplicationContext()),
+                "Translate with Watson...", new OccurrenceWatsonTranslate(new ApplicationContext()),
                 "---",
                 "Check URL occurrences...", new URLOccurrenceChecker(new ApplicationContext()),
                 "Download URL occurrences...", new DownloadOccurrence(new ApplicationContext()),
@@ -1366,6 +1367,7 @@ public class WandoraMenuManager {
                     "---",
                     "Translate with Google...", new OccurrenceGoogleTranslate(),
                     "Translate with Microsoft...", new OccurrenceMicrosoftTranslate(),
+                    "Translate with Watson...", new OccurrenceWatsonTranslate(),
                     "---",
                     "Refine occurrences",
                         new Object[] {
@@ -1751,6 +1753,7 @@ public class WandoraMenuManager {
                         "---",
                         "Translate occurrences with Google...", new OccurrenceGoogleTranslate(),
                         "Translate occurrences with Microsoft...", new OccurrenceMicrosoftTranslate(),
+                        "Translate occurrences with Watson...", new OccurrenceWatsonTranslate(),
                         "---",
                         "Check URL occurrences...", new URLOccurrenceChecker(),
                         "Download URL occurrences...", new DownloadOccurrence(),
@@ -1847,6 +1850,7 @@ public class WandoraMenuManager {
             "---",
             "Translate occurrence with Google...", new OccurrenceGoogleTranslate(),
             "Translate occurrence with Microsoft...", new OccurrenceMicrosoftTranslate(),
+            "Translate occurrence with Watson...", new OccurrenceWatsonTranslate(),
             "---",
             "View", new Object[] {
                 "View schema scopes", new ChangeOccurrenceView(OccurrenceTable.TYPE_SCHEMA), (OccurrenceTable.TYPE_SCHEMA.equals(tableType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),

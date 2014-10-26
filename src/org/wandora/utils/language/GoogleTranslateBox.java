@@ -23,7 +23,7 @@
 
 
 
-package org.wandora.utils;
+package org.wandora.utils.language;
 
 import com.google.api.GoogleAPI;
 import com.google.api.translate.Language;
@@ -87,7 +87,7 @@ public class GoogleTranslateBox {
         if(text != null && sourceLang != null && targetLang != null) {
             try {
                 System.out.println("Google Translating '"+text+"' from '"+sourceLang+"' to '"+targetLang+"'");
-                GoogleAPI.setHttpReferrer("http://www.wandora.org");
+                GoogleAPI.setHttpReferrer("http://wandora.org");
                 if(apikey == null || apikey.length() == 0) {
                     apikey = WandoraOptionPane.showInputDialog(Wandora.getWandora(), "Give your Google Translate API key?", "", "Give your Google Translate API key?");
                     if(apikey != null) apikey = apikey.trim();

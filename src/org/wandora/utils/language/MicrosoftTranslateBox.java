@@ -23,7 +23,7 @@
 
 
 
-package org.wandora.utils;
+package org.wandora.utils.language;
 
 
 

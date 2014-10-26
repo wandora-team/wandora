@@ -25,6 +25,7 @@
 package org.wandora.application.tools.occurrences;
 
 
+import org.wandora.utils.language.SelectGoogleTranslationLanguagesPanel;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
@@ -33,7 +34,7 @@ import org.wandora.application.gui.*;
 import java.util.*;
 
 import com.google.api.translate.Language;
-import org.wandora.utils.GoogleTranslateBox;
+import org.wandora.utils.language.GoogleTranslateBox;
 import org.wandora.utils.Tuples.T2;
 
 
@@ -68,6 +69,7 @@ public class OccurrenceGoogleTranslate extends AbstractWandoraTool implements Wa
     }
 
 
+    @Override
     public void execute(Wandora wandora, Context context) {
         Object contextSource = context.getContextSource();
 

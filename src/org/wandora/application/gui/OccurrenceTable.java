@@ -28,30 +28,29 @@ package org.wandora.application.gui;
 
 
 
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.table.*;
 import java.awt.datatransfer.*;
-
-
+import java.awt.event.*;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
-import org.wandora.utils.*;
-import org.wandora.utils.swing.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.tools.occurrences.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.tools.occurrences.DeleteOccurrence;
-import org.wandora.application.contexts.ApplicationContext;
-
-
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
+import org.wandora.application.*;
+import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.tools.occurrences.*;
+import org.wandora.application.tools.occurrences.DeleteOccurrence;
+import org.wandora.topicmap.*;
+import org.wandora.utils.*;
+import org.wandora.utils.language.GoogleTranslateBox;
+import org.wandora.utils.language.MicrosoftTranslateBox;
+import org.wandora.utils.language.WatsonTranslateBox;
+import org.wandora.utils.swing.*;
 
 
 /**
@@ -680,6 +679,46 @@ public class OccurrenceTable extends SimpleTable implements MouseListener, Clipb
     
     
     
+
+    public void watsonTranslate() {
+        try {
+            Point p = getTablePoint(mouseEvent);
+            boolean markTranslation = true;
+            boolean overrideAll = false;
+            if(mouseEvent != null && mouseEvent.isShiftDown()) markTranslation = false;
+            if(mouseEvent != null && mouseEvent.isAltDown()) overrideAll = true;
+            int realCol=convertColumnIndexToModel(p.y);
+            int realRow=sorter.modelIndex(p.x);
+            if(realRow >= 0 && realCol > 0 && realRow < types.length && realCol < langs.length+1) {
+                Topic sourceLangTopic = langs[realCol-1];
+                String occurrenceText = topic.getData(types[realRow], sourceLangTopic);
+                Topic type = types[realRow];
+                for(int i=0; i<langs.length; i++) {
+                    if(i != realCol-1) {
+                        Topic targetLangTopic = langs[i];
+                        String translatedOccurrenceText = WatsonTranslateBox.translate(occurrenceText, sourceLangTopic, targetLangTopic, markTranslation);
+                        if(translatedOccurrenceText != null) {
+                            int override = WandoraOptionPane.YES_OPTION;
+                            if(!overrideAll && topic.getData(type, targetLangTopic) != null) {
+                                override = WandoraOptionPane.showConfirmDialog(wandora, "Override existing "+targetLangTopic.getDisplayName()+" occurrence?", "Override existing occurrence?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                                if(override == WandoraOptionPane.YES_TO_ALL_OPTION) overrideAll = true;
+                                if(override == WandoraOptionPane.CANCEL_OPTION) return;
+                            }
+                            if(override == WandoraOptionPane.YES_OPTION || override == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                                topic.setData(type, targetLangTopic, translatedOccurrenceText);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            if(wandora != null) wandora.handleError(e);
+        }
+    }
+    
+    
     
     // -------------------------------------------------------------------------
     
@@ -719,22 +758,27 @@ public class OccurrenceTable extends SimpleTable implements MouseListener, Clipb
     
     
         
+    @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
         //System.out.println("Mouse clicked!");
     }
     
+    @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
 
     }
     
+    @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
     
+    @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }

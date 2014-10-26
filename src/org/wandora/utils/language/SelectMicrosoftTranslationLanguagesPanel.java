@@ -20,15 +20,12 @@
  *
  * 
  *
- * SelectTranslationLanguagesPanel.java
- *
- * Created on 6.2.2011, 21:19:12
  */
 
 
 
 
-package org.wandora.application.gui;
+package org.wandora.utils.language;
 
 import com.memetix.mst.language.Language;
 import java.util.ArrayList;
@@ -40,10 +37,8 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleLabel;
-import org.wandora.topicmap.TMBox;
-import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.XTMPSI;
+
 
 /**
  *
@@ -200,20 +195,24 @@ public class SelectMicrosoftTranslationLanguagesPanel extends javax.swing.JPanel
         }
 
 
+        @Override
         public int getSize() {
             return model.length;
         }
 
+        @Override
         public Object getElementAt(int index) {
             String lan = model[index].name();
             lan = lan.substring(0,1)+lan.substring(1).toLowerCase();
             return lan;
         }
 
+        @Override
         public void addListDataListener(ListDataListener l) {
 
         }
 
+        @Override
         public void removeListDataListener(ListDataListener l) {
 
         }
