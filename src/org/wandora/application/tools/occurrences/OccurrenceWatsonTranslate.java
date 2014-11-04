@@ -76,7 +76,7 @@ public class OccurrenceWatsonTranslate extends AbstractWandoraTool implements Wa
 
         if(contextSource instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) contextSource;
-            ot.watsonTranslate();
+            ot.translate(OccurrenceTable.WATSON_TRANSLATE);
         }
         else {
             Iterator topics = context.getContextObjects();

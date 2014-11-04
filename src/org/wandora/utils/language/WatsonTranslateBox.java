@@ -186,7 +186,7 @@ public class WatsonTranslateBox {
         if(languages != null) {
             for(int i=0; i<translationCodeMapping.length; i=i+4) {
                 if(languages.equalsIgnoreCase(translationCodeMapping[i+3])) {
-                    return translationCodeMapping[i+1];
+                    return translationCodeMapping[i+2];
                 }
             }
         }

@@ -217,7 +217,7 @@
               </Border>
             </Property>
             <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="getTextDataMenu()" type="code"/>
+              <Connection code="getOccurrencesMenu()" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="occurrencesRootPanel" noResource="true"/>
           </Properties>

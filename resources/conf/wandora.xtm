@@ -99,7 +99,7 @@
 		</occurrence>
 	</topic>
 	<topic id="topic84259">
-		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#sp"/>
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#es"/>
 		<instanceOf>
 			<topicRef href="#topic84242"/>
 		</instanceOf>

@@ -30,10 +30,10 @@ package org.wandora.application.gui.topicpanels;
 
 
 
+import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.previews.*;
-import org.wandora.application.tools.topicnames.*;
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
 
@@ -42,31 +42,19 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import org.wandora.application.gui.UIBox;
-import java.awt.datatransfer.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.Reader;
-import java.io.StringReader;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.util.PDFTextStripper;
-import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleURIField;
-import org.wandora.application.gui.simple.TopicLink;
 import org.wandora.application.gui.topicstringify.TopicToString;
 
 
 /**
  *
- * @author  olli, ak
+ * @author  olli, akivela
  */
 
 
-public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionListener, TopicPanel {
+public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
 
     public static final boolean MAKE_LOCAL_SETTINGS_GLOBAL = false;
 
@@ -80,20 +68,18 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
     private String originalBN;
     private String originalSL;
     
-    protected final TraditionalTopicPanel finalThis;
-    
     
     
     /** Creates new form TraditionalTopicPanel */
     public TraditionalTopicPanel(Topic topic, Wandora wandora) {
-        finalThis = this;
         open(topic);
-        this.setTransferHandler(new TopicPanelTransferHandler());
+        this.setTransferHandler(new TopicPanelTransferHandler(this));
     }
+    
+    
     public TraditionalTopicPanel() {
-        finalThis = this;
         this.options = new Options(Wandora.getWandora().getOptions());
-        this.setTransferHandler(new TopicPanelTransferHandler());
+        this.setTransferHandler(new TopicPanelTransferHandler(this));
     }
     
     
@@ -140,10 +126,10 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
             { previewPanel,                 "View subject locators", "previewPanel" },
         };
         
-        associationRootPanel.setTransferHandler(new AssociationRootTableTransferHandler());
-        instancesRootPanel.setTransferHandler(new InstancesPanelTransferHandler());
-        classesRootPanel.setTransferHandler(new ClassesPanelTransferHandler());
-        occurrencesRootPanel.setTransferHandler(new OccurrencesPanelTransferHandler());
+        associationRootPanel.setTransferHandler(new AssociationTableTransferHandler(this));
+        instancesRootPanel.setTransferHandler(new InstancesPanelTransferHandler(this));
+        classesRootPanel.setTransferHandler(new ClassesPanelTransferHandler(this));
+        occurrencesRootPanel.setTransferHandler(new OccurrencesPanelTransferHandler(this));
 
         refresh();
     }
@@ -396,33 +382,32 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         }
 
         updatePreview();
-        if(associationRootPanel.isVisible())        buildAssociationsPanel(associationPanel, wandora, topic, ASSOCIATIONS_WHERE_PLAYER);
-        if(typedAssociationsRootPanel.isVisible())  buildAssociationsPanel(typedAssociationsPanel, wandora, topic, ASSOCIATIONS_WHERE_TYPE);
-        if(classesRootPanel.isVisible())            buildClassesPanel(classesPanel, wandora, topic);
-        if(subjectIdentifierRootPanel.isVisible())  buildSubjectIdentifierPanel(subjectIdentifierPanel, wandora, topic);
-        if(instancesRootPanel.isVisible())              buildInstancesPanel(instancesRootPanel, wandora, topic);
+        if(associationRootPanel.isVisible())        buildAssociationsPanel(associationPanel, topic, ASSOCIATIONS_WHERE_PLAYER, options, wandora);
+        if(typedAssociationsRootPanel.isVisible())  buildAssociationsPanel(typedAssociationsPanel, topic, ASSOCIATIONS_WHERE_TYPE, options, wandora);
+        if(classesRootPanel.isVisible())            buildClassesPanel(classesPanel, topic, options, wandora);
+        if(subjectIdentifierRootPanel.isVisible())  buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
+        if(instancesRootPanel.isVisible())          buildInstancesPanel(instancesRootPanel, topic, options, wandora);
          
 
         variantGUIType = options.get(VARIANT_GUITYPE_OPTIONS_KEY);
         if(variantGUIType == null || variantGUIType.length() == 0) variantGUIType = VARIANT_GUITYPE_SCHEMA;
         if(VARIANT_GUITYPE_SCHEMA.equalsIgnoreCase(variantGUIType)) {
             if("vertical".equals(options.get(OPTIONS_PREFIX + "namePanelOrientation"))) {
-                buildVerticalNamePanel(variantRootPanel, wandora, topic);
+                buildVerticalNamePanel(variantRootPanel, topic, this, options, wandora);
             }
             else {
-                buildHorizontalNamePanel(variantRootPanel, wandora, topic);
+                buildHorizontalNamePanel(variantRootPanel, topic, this, options, wandora);
             }
         }
         else {
-            buildAllNamesPanel(variantRootPanel, wandora, topic);
+            buildAllNamesPanel(variantRootPanel, topic, this, options, wandora);
         }
         
         
         // Always create occurrences panel as data in the panel is updated to topic map
         // in apply changes. See applyChanges below.
-        buildOccurrencesPanel(dataPanel, wandora, topic);
-       
-      
+        buildOccurrencesPanel(dataPanel, topic, options, wandora);
+
         try {
             if(topic.getBaseName()!=null) {
                 baseNameField.setText(topic.getBaseName());
@@ -456,6 +441,7 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         }
         this.setComponentPopupMenu(getViewPopupMenu());
         variantRootPanel.setComponentPopupMenu(getNamesMenu());
+        occurrencesRootPanel.setComponentPopupMenu(getOccurrencesMenu());
         
         this.revalidate();
         this.repaint();
@@ -685,7 +671,7 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         gridBagConstraints.insets = new java.awt.Insets(7, 15, 7, 15);
         containerPanel.add(idPanel, gridBagConstraints);
 
-        variantRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Variant names", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
+        variantRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Variant names", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         variantRootPanel.setComponentPopupMenu(getNamesMenu());
         variantRootPanel.setName("variantRootPanel"); // NOI18N
         variantRootPanel.addMouseListener(wandora);
@@ -697,8 +683,8 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(variantRootPanel, gridBagConstraints);
 
-        occurrencesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Occurrences", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
-        occurrencesRootPanel.setComponentPopupMenu(getTextDataMenu());
+        occurrencesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Occurrences", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
+        occurrencesRootPanel.setComponentPopupMenu(getOccurrencesMenu());
         occurrencesRootPanel.setName("occurrencesRootPanel"); // NOI18N
         occurrencesRootPanel.addMouseListener(wandora);
         occurrencesRootPanel.setLayout(new java.awt.BorderLayout(0, 3));
@@ -711,7 +697,7 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(occurrencesRootPanel, gridBagConstraints);
 
-        classesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Classes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
+        classesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Classes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         classesRootPanel.setComponentPopupMenu(getClassesMenu());
         classesRootPanel.setName("classesRootPanel"); // NOI18N
         classesRootPanel.addMouseListener(wandora);
@@ -725,7 +711,7 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(classesRootPanel, gridBagConstraints);
 
-        associationRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
+        associationRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         associationRootPanel.setComponentPopupMenu(getAssociationsMenu());
         associationRootPanel.setName("associationRootPanel"); // NOI18N
         associationRootPanel.addMouseListener(wandora);
@@ -739,7 +725,7 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(associationRootPanel, gridBagConstraints);
 
-        typedAssociationsRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations where type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
+        typedAssociationsRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations where type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         typedAssociationsRootPanel.setName("typedAssociationsRootPanel"); // NOI18N
         typedAssociationsRootPanel.setLayout(new java.awt.BorderLayout());
         typedAssociationsRootPanel.add(typedAssociationsPanel, java.awt.BorderLayout.CENTER);
@@ -751,7 +737,7 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(typedAssociationsRootPanel, gridBagConstraints);
 
-        instancesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Instances", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
+        instancesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Instances", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         instancesRootPanel.setComponentPopupMenu(getInstancesMenu());
         instancesRootPanel.setName("instancesRootPanel"); // NOI18N
         instancesRootPanel.addMouseListener(wandora);
@@ -804,15 +790,6 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
 
     
     
-    
-    protected void variantNameFieldKeyReleased(java.awt.event.KeyEvent evt) {                                                
-        try {
-            if(evt.getKeyCode()==KeyEvent.VK_ENTER) {
-                applyChanges();
-            }
-        }
-        catch(Exception e) {}
-    }                                               
 
     
     
@@ -822,7 +799,8 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
     public int print(java.awt.Graphics graphics, java.awt.print.PageFormat pageFormat, int param) throws java.awt.print.PrinterException {
         if (param > 0) {
             return(NO_SUCH_PAGE);
-        } else {
+        } 
+        else {
             Graphics2D g2d = (Graphics2D)graphics;
             g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
             // Turn off double buffering
@@ -839,11 +817,10 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
     
     @Override
     public JPopupMenu getNamesMenu() {
-        return UIBox.makePopupMenu(WandoraMenuManager.getVariantsLabelPopupStruct(options, variantGUIType), wandora);
+        return UIBox.makePopupMenu(WandoraMenuManager.getVariantsLabelPopupStruct(options), wandora);
     }
     
-    
-    
+
     @Override
     public JPopupMenu getClassesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getClassesTablePopupStruct(), wandora);
@@ -863,8 +840,14 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
 
     
     @Override
-    public JPopupMenu getTextDataMenu() {
-        return UIBox.makePopupMenu(WandoraMenuManager.getOccurrencesLabelPopupStruct(), wandora);
+    public JPopupMenu getOccurrencesMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getOccurrencesLabelPopupStruct(options), wandora);
+    }
+    
+    
+    @Override
+    public JPopupMenu getOccurrenceTypeMenu(Topic occurrenceType) {
+         return UIBox.makePopupMenu(WandoraMenuManager.getOccurrenceTypeLabelPopupStruct(occurrenceType, topic), wandora);
     }
     
     
@@ -884,6 +867,11 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
         return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTypeLabelPopupStruct(), wandora);
     }
 
+    
+    @Override
+    public JPopupMenu getSubjectMenu() {
+        return null;
+    }
     
     
     
@@ -924,777 +912,6 @@ public class TraditionalTopicPanel extends AbstractTopicPanel implements ActionL
     // End of variables declaration//GEN-END:variables
 
 
-
-
-
-
-    private class AssociationRootTableTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            //System.out.println("Dropped "+support);
-            if(!support.isDrop()) return false;
-            try {
-                TopicMap tm = wandora.getTopicMap();
-                ArrayList<Topic> sourceTopics=DnDHelper.getTopicList(support, tm, true);
-                if(sourceTopics==null || sourceTopics.isEmpty()) return false;
-
-                Topic schemaContentTypeTopic = tm.getTopic(SchemaBox.CONTENTTYPE_SI);
-                Topic schemaAssociationTypeTopic = tm.getTopic(SchemaBox.ASSOCIATIONTYPE_SI);
-                Topic schemaRoleTypeTopic = tm.getTopic(SchemaBox.ROLE_SI);
-
-                if(schemaContentTypeTopic == null ||
-                        schemaAssociationTypeTopic == null ||
-                        schemaRoleTypeTopic == null) {
-                            return false;
-                }
-                
-                Topic targetTopic = topic;
-                if(targetTopic != null && !targetTopic.isRemoved()) {
-                    boolean associationAdded = false;
-                    Collection<Topic> targetTopicTypes = topic.getTypes();
-                    for(Topic targetTopicType : targetTopicTypes) {
-                        if(targetTopicType.isOfType(schemaContentTypeTopic)) {
-                            Collection<Association> associationTypes = targetTopicType.getAssociations(schemaAssociationTypeTopic);
-                            for(Association associationTypeAssociation : associationTypes) {
-                                Topic associationType = associationTypeAssociation.getPlayer(schemaAssociationTypeTopic);
-                                if(associationType != null) {
-                                    Collection<Association> roleAssociations = associationType.getAssociations(schemaRoleTypeTopic);
-                                    Collection<Association> roleAssociations2 = associationType.getAssociations(schemaRoleTypeTopic);
-                                    if(roleAssociations.size() == 2) {
-                                        Topic sourceRole = null;
-                                        Topic targetRole = null;
-                                        Topic proposedSourceRole = null;
-                                        Topic proposedTargetRole = null;
-                                        Topic selectedSourceTopic = null;
-
-                                        for(Association roleAssociation : roleAssociations) {
-                                            proposedTargetRole = roleAssociation.getPlayer(schemaRoleTypeTopic);
-                                            if(proposedTargetRole != null && proposedTargetRole.mergesWithTopic(targetTopicType)) {
-                                                targetRole = proposedTargetRole;
-
-                                                for(Association roleAssociation2 : roleAssociations2) {
-                                                    proposedSourceRole = roleAssociation2.getPlayer(schemaRoleTypeTopic);
-                                                    for(Topic sourceTopic : sourceTopics) {
-                                                        if(sourceTopic != null && !sourceTopic.isRemoved()) {
-                                                            Collection<Topic> sourceTopicTypes = sourceTopic.getTypes();
-                                                            for(Topic sourceTopicType : sourceTopicTypes) {
-                                                                if(sourceTopicType != null && !sourceTopicType.isRemoved()) {
-                                                                    if(proposedSourceRole.mergesWithTopic(sourceTopicType)) {
-                                                                        sourceRole = proposedSourceRole;
-                                                                        selectedSourceTopic = sourceTopic;
-
-                                                                        if(targetRole != null && sourceRole != null && selectedSourceTopic != null) {
-                                                                            Association a=tm.createAssociation(associationType);
-                                                                            a.addPlayer(selectedSourceTopic, sourceRole);
-                                                                            a.addPlayer(targetTopic, targetRole);
-                                                                            associationAdded = true;
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if(!associationAdded) {
-                        Topic associationType = tm.getTopic(SchemaBox.DEFAULT_ASSOCIATION_SI);
-                        Topic role1 = tm.getTopic(SchemaBox.DEFAULT_ROLE_1_SI);
-                        Topic role2 = tm.getTopic(SchemaBox.DEFAULT_ROLE_2_SI);
-                        if(associationType != null && role1 != null && role2 != null) {
-                            for(Topic sourceTopic : sourceTopics) {
-                                if(sourceTopic != null && !sourceTopic.isRemoved()) {
-                                    Association a=tm.createAssociation(associationType);
-                                    a.addPlayer(sourceTopic, role1);
-                                    a.addPlayer(targetTopic, role2);
-                                    associationAdded = true;
-                                }
-                            }
-                        }
-                    }
-                }
-                wandora.doRefresh();
-                return true;
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-
-    
-    
-    
-    
-    private class InstancesPanelTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-//            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try{
-                TopicMap tm=wandora.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                if(topics==null) return false;
-                Topic base=topic;
-                if(base==null) return false;
-
-                for(Topic t : topics) {
-                    if(t != null && !t.isRemoved()) {
-                        t.addType(base);
-                    }
-                }
-                wandora.doRefresh();
-                return true;
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-    
-    
-
-    
-    private class ClassesPanelTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-//            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try{
-                TopicMap tm=wandora.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                if(topics==null) return false;
-                Topic base=topic;
-                if(base==null) return false;
-
-                for(Topic t : topics) {
-                    if(t != null && !t.isRemoved()) {
-                        base.addType(t);
-                    }
-                }
-                wandora.doRefresh();
-                return true;
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-    
-
-    
-    
-    private class OccurrencesPanelTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-//            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try {
-                Transferable transferable = support.getTransferable();
-                boolean ready = false;
-                String data = null;
-                
-                if(support.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                    data = transferable.getTransferData(DataFlavor.stringFlavor).toString();
-                }
-
-                if(transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                    try {
-                        java.util.List<File> fileList = (java.util.List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                        if(fileList != null && fileList.size() > 0) {
-                            for( File occurrenceFile : fileList ) {
-
-                                Reader inputReader = null;
-                                String content = "";
-
-                                String filename = occurrenceFile.getPath().toLowerCase();
-                                String extension = filename.substring(Math.max(filename.lastIndexOf(".")+1, 0));
-
-                                // --- handle rtf files ---
-                                if("rtf".equals(extension)) {
-                                    content=Textbox.RTF2PlainText(new FileInputStream(occurrenceFile));
-                                    inputReader = new StringReader(content);
-                                }
-
-                                // --- handle pdf files ---
-                                if("pdf".equals(extension)) {
-                                    try {
-                                        PDDocument doc = PDDocument.load(occurrenceFile);
-                                        PDFTextStripper stripper = new PDFTextStripper();
-                                        content = stripper.getText(doc);
-                                        doc.close();
-                                        inputReader = new StringReader(content);
-                                    }
-                                    catch(Exception e) {
-                                        System.out.println("No PDF support!");
-                                    }
-                                }
-
-                                // --- handle MS office files ---
-                                if("doc".equals(extension) ||
-                                   "docx".equals(extension) ||
-                                   "ppt".equals(extension) ||
-                                   "xsl".equals(extension) ||
-                                   "vsd".equals(extension) 
-                                   ) {
-                                        content = MSOfficeBox.getText(occurrenceFile);
-                                        if(content != null) {
-                                            inputReader = new StringReader(content);
-                                        }
-                                }
-
-
-                                // --- handle everything else ---
-                                if(inputReader == null) {
-                                    inputReader = new FileReader(occurrenceFile);
-                                }
-
-                                data = IObox.loadFile(inputReader);
-                            }
-                        }
-                    }
-                    catch(Exception ce){
-                        Wandora.getWandora().handleError(ce);
-                    }
-                }
-                
-                // IF THE OCCURRENCE TEXT (=DATA) IS AVAILABLE, THEN...
-                if(data != null) {
-                    Topic base=topic;
-                    if(base==null) return false;
-                    TopicMap tm=wandora.getTopicMap();
-                    Topic type = tm.getTopic(SchemaBox.DEFAULT_OCCURRENCE_SI);
-                    if(type != null) {
-                        Collection<Topic> langs = tm.getTopicsOfType(XTMPSI.LANGUAGE);
-                        langs = TMBox.sortTopics(langs, "en");
-                        for(Topic lang : langs) {
-                            if(ready) break;
-                            if(lang != null && !lang.isRemoved()) {
-                                if(base.getData(type, lang) == null) {
-                                    base.setData(type, lang, data);
-                                    ready = true;
-                                }
-                            }
-                        }
-                    }
-                }
-                if(ready) {
-                    wandora.doRefresh();
-                }
-                return true;
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-
-    
-    
-    
-    private class TopicPanelTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            return false;
-            //if(!support.isDrop()) return false;
-            //return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-            //       support.isDataFlavorSupported(DataFlavor.stringFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-//            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try {
-                /*
-                TopicMap tm=parent.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                if(topics==null) return false;
-                Topic base=topic;
-                if(base==null) return false;
-
-                for(Topic t : topics) {
-                    if(t != null && !t.isRemoved()) {
-                        base.addType(t);
-                    }
-                }
-                */ 
-                wandora.doRefresh();
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-    
-    
-    // -------------------------------------------------------------------------
-    
-    
-
-
-    @Override
-    public void buildHorizontalNamePanel(JPanel variantPanel, Wandora parent, Topic topic) {
-        try {
-            GridBagConstraints gbc;
-            nameTable=new HashMap<Set<Topic>,SimpleField>();
-            invNameTable=new HashMap<SimpleField,Set<Topic>>();
-            originalNameTable=new IteratedMap<Collection<Topic>,String>();
-            variantPanel.removeAll();
-
-            Topic[] langTopics = null;
-            Topic[] verTopics = null;
-
-            String[] langs=TMBox.getLanguageSIs(parent.getTopicMap());
-            String[] vers=TMBox.getNameVersionSIs(parent.getTopicMap());
-            langTopics=parent.getTopicMap().getTopics(langs);
-            verTopics=parent.getTopicMap().getTopics(vers);
-
-            // variantPanel.setLayout(new java.awt.GridLayout(vers.length+1,langs.length+1));
-            variantPanel.setLayout(new java.awt.GridBagLayout());
-            // variantPanel.add(new javax.swing.JLabel(""));
-            int x = 1;
-            for(int i=0; i<langTopics.length; i++) {
-                if(langTopics[i] != null) {
-                    // variantPanel.add(new javax.swing.JLabel(langTopics[i].getName(nameScope)));
-                    gbc=new java.awt.GridBagConstraints();
-                    gbc.gridx=x;
-                    gbc.gridy=0;
-                    gbc.fill=GridBagConstraints.HORIZONTAL;
-                    gbc.weightx=1.0;
-                    variantPanel.add(new TopicLink(langTopics[i],parent),gbc);
-                    x++;
-                }
-            }
-            int y = 1;
-            for(int i=0;i<verTopics.length;i++) {
-                if(verTopics[i] != null) {
-                    // variantPanel.add(new javax.swing.JLabel(verTopics[i].getName(nameScope)));
-                    gbc=new java.awt.GridBagConstraints();
-                    gbc.gridx=0;
-                    gbc.gridy=y;
-                    gbc.fill=GridBagConstraints.HORIZONTAL;
-                    gbc.weightx=0.0;
-                    gbc.insets = new Insets(0,0,0,10);
-                    variantPanel.add(new TopicLink(verTopics[i],parent),gbc);
-                    x = 1;
-                    for(int j=0;j<langTopics.length;j++) {
-                        if(langTopics[j] != null) {
-                            HashSet s=new HashSet(); s.add(verTopics[i]); s.add(langTopics[j]);
-                            String name=topic.getVariant(s);
-                            SimpleField field = new SimpleField(name==null?"":name);
-                            field.addKeyListener( new KeyAdapter() {
-                                @Override
-                                public void keyReleased(java.awt.event.KeyEvent evt) {
-                                    finalThis.variantNameFieldKeyReleased(evt);
-                                }
-                            });
-                            field.setCaretPosition(0);
-                            // field.addKeyListener(this);
-                            field.setPreferredSize(new java.awt.Dimension(130,19));
-
-                            Color c=parent.topicHilights.getVariantColor(topic,s);
-                            if(c!=null) field.setForeground(c);
-
-                            nameTable.put(s,field);
-                            invNameTable.put(field,s);
-                            originalNameTable.put(s,field.getText());
-                            gbc=new java.awt.GridBagConstraints();
-                            gbc.gridx=x;
-                            gbc.gridy=y;
-                            gbc.fill=GridBagConstraints.HORIZONTAL;
-                            gbc.weightx=1.0;
-                            gbc.insets=new Insets(0,0,0,0);
-                            variantPanel.add(field,gbc);
-                            x++;
-                        }
-                    }
-                    y++;
-                }
-            }
-            int n = topic.getVariantScopes().size();
-            setPanelTitle(variantPanel, "Variant names ("+n+")");
-        }
-        catch(Exception e) {
-            System.out.println("Failed to initialize names!");
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-    @Override
-    public void buildVerticalNamePanel(JPanel variantPanel, Wandora parent, Topic topic) {
-        try {
-            GridBagConstraints gbc;
-            nameTable=new HashMap<Set<Topic>,SimpleField>();
-            invNameTable=new HashMap<SimpleField,Set<Topic>>();
-            originalNameTable=new IteratedMap<Collection<Topic>,String>();
-            variantPanel.removeAll();
-
-            Topic[] langTopics = null;
-            Topic[] verTopics = null;
-
-            String[] langs=TMBox.getLanguageSIs(parent.getTopicMap());
-            String[] vers=TMBox.getNameVersionSIs(parent.getTopicMap());
-            langTopics=parent.getTopicMap().getTopics(langs);
-            verTopics=parent.getTopicMap().getTopics(vers);
-
-            // variantPanel.setLayout(new java.awt.GridLayout(vers.length+1,langs.length+1));
-            variantPanel.setLayout(new java.awt.GridBagLayout());
-            // variantPanel.add(new javax.swing.JLabel(""));
-
-            int x = 1;
-            for(int i=0;i<verTopics.length;i++) {
-                if(verTopics[i] != null) {
-                    // for(int i=0;i<langs.length;i++){
-                    //   variantPanel.add(new javax.swing.JLabel(langTopics[i].getName(nameScope)));
-                    gbc=new java.awt.GridBagConstraints();
-                    gbc.gridx=x;
-                    gbc.gridy=0;
-                    gbc.fill=GridBagConstraints.HORIZONTAL;
-                    gbc.weightx=0.0;
-                    variantPanel.add(new TopicLink(verTopics[i],parent),gbc);
-                    x++;
-                }
-            }
-            int y = 1;
-            for(int j=0;j<langTopics.length;j++) {
-                if(langTopics[j] != null) {
-                    //for(int i=0;i<vers.length;i++) {
-                    // variantPanel.add(new javax.swing.JLabel(verTopics[i].getName(nameScope)));
-                    gbc=new java.awt.GridBagConstraints();
-                    gbc.gridx=0;
-                    gbc.gridy=y;
-                    gbc.anchor=GridBagConstraints.WEST;
-                    gbc.insets = new Insets(0,0,0,10);
-                    //gbc.fill=gbc.HORIZONTAL;
-                    //gbc.weightx=1.0;
-                    variantPanel.add(new TopicLink(langTopics[j],parent),gbc);
-                    x = 1;
-                    for(int i=0;i<verTopics.length;i++) {
-                        if(verTopics[i]!=null) {
-                            //for(int j=0;j<langs.length;j++) {
-                            HashSet s=new HashSet(); s.add(verTopics[i]); s.add(langTopics[j]);
-                            String name=topic.getVariant(s);
-                            SimpleField field = new SimpleField(name==null?"":name);
-                            field.addKeyListener( new KeyAdapter() {
-                                @Override
-                                public void keyReleased(java.awt.event.KeyEvent evt) {
-                                    finalThis.variantNameFieldKeyReleased(evt);
-                                }
-                            });
-                            field.setCaretPosition(0);
-                            // field.addKeyListener(this);
-                            field.setPreferredSize(new java.awt.Dimension(130,19));
-
-                            Color c=parent.topicHilights.getVariantColor(topic,s);
-                            if(c!=null) field.setForeground(c);
-
-                            nameTable.put(s,field);
-                            invNameTable.put(field,s);
-                            originalNameTable.put(s,field.getText());
-                            gbc=new java.awt.GridBagConstraints();
-                            gbc.gridx=x;
-                            gbc.gridy=y;
-                            gbc.fill=GridBagConstraints.HORIZONTAL;
-                            gbc.weightx=1.0;
-                            gbc.insets = new Insets(0,0,0,0);
-                            variantPanel.add(field,gbc);
-                            x++;
-                        }
-                    }
-                    y++;
-                }
-            }
-
-            int n = topic.getVariantScopes().size();
-            setPanelTitle(variantPanel, "Variant names ("+n+")");
-        }
-        catch(Exception e) {
-            System.out.println("Failed to initialize names!");
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-
-    @Override
-    public void buildAllNamesPanel(JPanel variantPanel, final Wandora parent, final Topic topic) {
-        if(topic != null) {
-            try {
-                nameTable=new HashMap<Set<Topic>,SimpleField>();
-                invNameTable=new HashMap<SimpleField,Set<Topic>>();
-                originalNameTable=new IteratedMap<Collection<Topic>,String>();
-                variantPanel.removeAll();
-
-                JPanel myVariantPanel = variantPanel;
-                myVariantPanel.setLayout(new GridBagLayout());
-                Set<Set<Topic>> scopes = topic.getVariantScopes();
-                int i = 0;
-                for(Set<Topic> scope : scopes) {
-                    JPanel scopeNamePanel = new JPanel();
-                    scopeNamePanel.setLayout(new GridBagLayout());
-                    java.awt.GridBagConstraints gbcs=new java.awt.GridBagConstraints();
-                    gbcs.gridx=0;
-                    gbcs.gridy=0;
-                    gbcs.fill=GridBagConstraints.HORIZONTAL;
-                    gbcs.weightx=1.0;
-                    gbcs.insets = new Insets(0,10,0,0);
-                    SimpleField nf = new SimpleField();
-                    nf.addKeyListener( new KeyAdapter() {
-                        @Override
-                        public void keyReleased(java.awt.event.KeyEvent evt) {
-                            finalThis.variantNameFieldKeyReleased(evt);
-                        }
-                    });
-                    nf.setPreferredSize(new Dimension(100,23));
-                    nf.setMinimumSize(new Dimension(100,23));
-                    String variant = topic.getVariant(scope);
-                    nf.setText(variant);
-                    scopeNamePanel.add(nf, gbcs);
-
-                    JPanel buttonPanel = new JPanel();
-                    buttonPanel.setPreferredSize(new Dimension(30, 23));
-                    buttonPanel.setMinimumSize(new Dimension(30, 23));
-                    buttonPanel.setMaximumSize(new Dimension(30, 23));
-                    buttonPanel.setLayout(new FlowLayout(0));
-                    SimpleButton deleteVariantButton = new SimpleButton(UIBox.getIcon("resources/gui/icons/delete_variant.png"));
-                    deleteVariantButton.setPreferredSize(new Dimension(16, 16));
-                    deleteVariantButton.setBackground(UIConstants.buttonBarBackgroundColor);
-                    deleteVariantButton.setForeground(UIConstants.buttonBarLabelColor);
-                    deleteVariantButton.setOpaque(true);
-                    deleteVariantButton.setBorderPainted(false);
-                    deleteVariantButton.setToolTipText("Delete variant name.");
-
-                    final DeleteVariantName tool=new DeleteVariantName(topic, scope);
-                    deleteVariantButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent e) {
-                            try {
-                                tool.execute(parent);
-                            }
-                            catch(TopicMapException tme) {
-                                tme.printStackTrace();
-                            } // TODO EXCEPTION
-                        }
-                    }
-                    );
-                    buttonPanel.add(deleteVariantButton);
-                    buttonPanel.setSize(16, 16);
-
-                    gbcs.gridx=1;
-                    gbcs.fill=GridBagConstraints.NONE;
-                    gbcs.weightx=0.0;
-                    gbcs.insets = new Insets(0,0,0,0);
-                    scopeNamePanel.add(buttonPanel, gbcs);
-
-
-                    originalNameTable.put(scope, variant);
-                    nameTable.put(scope, nf);
-                    invNameTable.put(nf, scope);
-
-                    JPanel scopePanel = new JPanel();
-                    scopePanel.setLayout(new GridBagLayout());
-                    java.awt.GridBagConstraints gbcst=new java.awt.GridBagConstraints();
-                    int j=1;
-                    for(Topic scopeTopic : scope) {
-                        visibleTopics.addAll(scopeTopic.getSubjectIdentifiers());
-
-                        gbcst.gridx=0;
-                        gbcst.gridy=j;
-                        gbcst.fill=GridBagConstraints.HORIZONTAL;
-                        gbcst.anchor=GridBagConstraints.EAST;
-                        gbcst.weightx=1.0;
-                        //gbcst.insets = new Insets(0,20,0,0);
-
-                        JPanel fillerPanel = new JPanel();
-                        fillerPanel.setPreferredSize(new Dimension(30, 16));
-                        fillerPanel.setMinimumSize(new Dimension(30, 16));
-                        fillerPanel.setMaximumSize(new Dimension(30, 16));
-                        scopePanel.add(fillerPanel, gbcst);
-
-                        TopicLink scopeTopicLabel = new TopicLink(scopeTopic, parent);
-                        scopeTopicLabel.setLimitLength(false);
-                        scopeTopicLabel.setText(scopeTopic);
-                        scopeTopicLabel.setToolTipText(scopeTopic.getOneSubjectIdentifier().toExternalForm());
-
-                        ArrayList addScopeSubmenu = new ArrayList();
-                        addScopeSubmenu.add("Add scope topic...");
-                        addScopeSubmenu.add(new AddScopeTopicToVariantName(topic, scope));
-                        addScopeSubmenu.add("---");
-                        String[] vers=TMBox.getNameVersionSIs(parent.getTopicMap());
-                        for(int k=0; k<vers.length; k++) {
-                            Topic lt = parent.getTopicMap().getTopic(vers[k]);
-                            String ltName = parent.getTopicGUIName(lt);
-                            addScopeSubmenu.add("Add scope topic '"+ltName+"'");
-                            addScopeSubmenu.add(new AddScopeTopicToVariantName(topic, scope, lt));
-                        }
-                        addScopeSubmenu.add("---");
-                        String[] langs=TMBox.getLanguageSIs(parent.getTopicMap());
-                        for(int k=0; k<langs.length; k++) {
-                            Topic lt = parent.getTopicMap().getTopic(langs[k]);
-                            String ltName = parent.getTopicGUIName(lt);
-                            addScopeSubmenu.add("Add scope topic '"+ltName+"'");
-                            addScopeSubmenu.add(new AddScopeTopicToVariantName(topic, scope, lt));
-                        }
-
-                        JPopupMenu scopeTopicPopup = UIBox.makePopupMenu(
-                                new Object[] {
-                                    "Add scope topic", addScopeSubmenu.toArray( new Object[] {} ),
-                                    "Remove scope topic", new DeleteScopeTopicInVariantName(topic, scope, scopeTopic),
-                                    "---",
-                                    "Remove variant name", new DeleteVariantName(topic, scope)
-                                },
-                                parent
-                        );
-                        scopeTopicLabel.setComponentPopupMenu(scopeTopicPopup);
-
-                        gbcst.gridx=1;
-                        gbcst.gridy=j;
-                        gbcst.fill=GridBagConstraints.NONE;
-                        gbcst.anchor=GridBagConstraints.EAST;
-                        //gbcst.weightx=1.0;
-                        //gbcst.insets = new Insets(0,0,0,20);
-                        scopePanel.add(scopeTopicLabel, gbcst);
-                        j++;
-                    }
-                    gbcs.gridx=0;
-                    gbcs.gridy=1;
-                    gbcs.gridwidth=1;
-                    gbcs.fill=GridBagConstraints.HORIZONTAL;
-                    gbcs.weightx=1.0;
-                    scopeNamePanel.add(scopePanel, gbcs);
-
-                    java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
-                    gbc.gridx=0;
-                    gbc.gridy=i;
-                    gbc.fill=GridBagConstraints.HORIZONTAL;
-                    gbc.weightx=1.0;
-                    gbc.insets = new Insets(5,0,7,0);
-                    myVariantPanel.add(scopeNamePanel, gbc);
-                    i++;
-                }
-                GridBagConstraints pgbc = new java.awt.GridBagConstraints();
-                pgbc.fill=GridBagConstraints.HORIZONTAL;
-                pgbc.weightx=1.0;
-                //variantPanel.add(myVariantPanel, pgbc);
-
-
-                int n = topic.getVariantScopes().size();
-                setPanelTitle(variantPanel, "Variant names ("+n+")");
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    }
-    
-    
-    
 
     
 }

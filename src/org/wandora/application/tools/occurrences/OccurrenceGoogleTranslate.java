@@ -75,7 +75,7 @@ public class OccurrenceGoogleTranslate extends AbstractWandoraTool implements Wa
 
         if(contextSource instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) contextSource;
-            ot.googleTranslate();
+            ot.translate(OccurrenceTable.GOOGLE_TRANSLATE);
         }
         else {
             Iterator topics = context.getContextObjects();

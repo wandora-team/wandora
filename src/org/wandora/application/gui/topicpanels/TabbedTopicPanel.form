@@ -279,7 +279,7 @@
     <Container class="javax.swing.JPanel" name="dataScrollPanel">
       <Properties>
         <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="getTextDataMenu()" type="code"/>
+          <Connection code="getOccurrencesMenu()" type="code"/>
         </Property>
         <Property name="name" type="java.lang.String" value="dataScrollPanel" noResource="true"/>
       </Properties>
@@ -289,7 +289,7 @@
         <Container class="javax.swing.JPanel" name="dataPanelContainer">
           <Properties>
             <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="getTextDataMenu()" type="code"/>
+              <Connection code="getOccurrencesMenu()" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="dataPanelContainer" noResource="true"/>
           </Properties>
@@ -304,7 +304,7 @@
             <Container class="javax.swing.JPanel" name="dataRootPanel">
               <Properties>
                 <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="getTextDataMenu()" type="code"/>
+                  <Connection code="getOccurrencesMenu()" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="dataRootPanel" noResource="true"/>
               </Properties>

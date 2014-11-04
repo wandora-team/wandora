@@ -25,9 +25,10 @@
 
 package org.wandora.application.gui.simple;
 
+import org.wandora.application.*;
+import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.gui.table.AssociationTable;
 import org.wandora.topicmap.*;
-import org.wandora.application.*;
 
 
 
@@ -35,20 +36,20 @@ import org.wandora.application.*;
  *
  * @author akivela
  */
-public class AssociationTypeLink extends TopicLink {
+public class OccurrenceTypeLink extends TopicLink {
     
-    private AssociationTable associationTable = null;
+    private OccurrenceTable occurrenceTable = null;
     
     
     /** Creates a new instance of AssociationTypeLink */
-    public AssociationTypeLink(AssociationTable at, Topic t, Wandora wandora) {
+    public OccurrenceTypeLink(OccurrenceTable ot, Topic t, Wandora wandora) {
         super(t, wandora);
-        associationTable = at;
+        occurrenceTable = ot;
     }
     
     
-    public AssociationTable getAssociationTable() {
-        return associationTable;
+    public OccurrenceTable getOccurrenceTable() {
+        return occurrenceTable;
     }
     
 }

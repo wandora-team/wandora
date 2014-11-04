@@ -50,7 +50,7 @@ public class AddSchemalessOccurrence extends AbstractWandoraTool {
 
     @Override
     public String getName() {
-        return "Add occurrence";
+        return "Add occurrences";
     }
 
     @Override

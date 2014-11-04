@@ -41,9 +41,10 @@ import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.table.TopicGrid;
 import org.wandora.application.gui.table.TopicTable;
 import org.wandora.application.gui.topicpanels.*;
-import static org.wandora.application.gui.topicpanels.AbstractTopicPanel.OPTIONS_PREFIX;
-import static org.wandora.application.gui.topicpanels.AbstractTopicPanel.VARIANT_GUITYPE_ALL;
-import static org.wandora.application.gui.topicpanels.AbstractTopicPanel.VARIANT_GUITYPE_SCHEMA;
+import static org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel.OPTIONS_PREFIX;
+import static org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel.VARIANT_GUITYPE_OPTIONS_KEY;
+import static org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel.VARIANT_GUITYPE_SCHEMA;
+import static org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel.VARIANT_GUITYPE_USED;
 import org.wandora.application.gui.topicstringify.DefaultTopicStringifier;
 import org.wandora.application.gui.topicstringify.TopicStringifierToVariant;
 import org.wandora.application.gui.tree.TopicTree;
@@ -75,6 +76,7 @@ import org.wandora.application.tools.subjects.expand.*;
 import org.wandora.application.tools.topicnames.*;
 import org.wandora.application.tools.undoredo.Redo;
 import org.wandora.application.tools.undoredo.Undo;
+import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
 
@@ -577,8 +579,11 @@ public class WandoraMenuManager {
                 "Copy variant names to other scope...", new VariantScopeCopier(new ApplicationContext()),
                 "Move variant names to other scope...", new VariantScopeCopier(true, new ApplicationContext()),
                 "---",
+                "Transform variants to topics...", new VariantsToTopicsAndAssociations(new ApplicationContext()),
+                "---",
                 "Translate with Google...", new VariantGoogleTranslate(new ApplicationContext()),
                 "Translate with Microsoft...", new VariantMicrosoftTranslate(new ApplicationContext()),
+                "Translate with Watson...", new VariantWatsonTranslate(new ApplicationContext()),
                 "---",
                 "Modify variant names with a regex...", new VariantRegexReplacer(new ApplicationContext()),
                 "Remove new line characters", new VariantNewlineRemover(new ApplicationContext()),
@@ -587,12 +592,13 @@ public class WandoraMenuManager {
                 "Add missing display scope", new AddImplicitDisplayScopeToVariants(new ApplicationContext()),
                 "Add missing sort scope", new AddImplicitSortScopeToVariants(new ApplicationContext()),
                 "Add missing language...", new AddMissingLanguageScope(new ApplicationContext()),
+
                 "---",
                 "Remove variant names...", new VariantRemover(new ApplicationContext()),
                 "Remove all empty variant names...", new AllEmptyVariantRemover(new ApplicationContext()),
                 "Remove all variant names...", new AllVariantRemover(new ApplicationContext()),
-                "---",
-                "Transform variants to topics...", new VariantsToTopicsAndAssociations(new ApplicationContext()),
+
+
             },
             "Occurrences", new Object[] {
                 "Make occurrence with a subject locator...", new MakeOccurrenceFromSubjectLocator(new ApplicationContext()),
@@ -1284,6 +1290,7 @@ public class WandoraMenuManager {
                     "---",
                     "Translate with Google...", new VariantGoogleTranslate(),
                     "Translate with Microsoft...", new VariantMicrosoftTranslate(),
+                    "Translate with Watson...", new VariantWatsonTranslate(),
                     "---",
                     "Modify variant names with a regex...", new VariantRegexReplacer(),
                     "Remove new line characters", new VariantNewlineRemover(),
@@ -1723,6 +1730,7 @@ public class WandoraMenuManager {
                         "---",
                         "Translate variant names with Google...", new VariantGoogleTranslate(),
                         "Translate variant names with Microsoft...", new VariantMicrosoftTranslate(),
+                        "Translate variant names with Watson...", new VariantWatsonTranslate(),
                         "---",
                         "Remove variant name...", new VariantRemover(),
                         "Remove all empty variant names...", new AllEmptyVariantRemover(),
@@ -1823,9 +1831,17 @@ public class WandoraMenuManager {
     
     
     
-    public static Object[] getOccurrenceTableMenu(OccurrenceTable ot) {
-        int rowHeight = ot.getRowHeightOption();
-        Object tableType = ot.getOccurrenceTableType();
+    public static Object[] getOccurrenceTableMenu(OccurrenceTable ot, Options options) {
+        String viewType = OccurrenceTable.VIEW_SCHEMA;
+        int rowHeight = 1;
+        try {
+            if(options != null) {
+                viewType = options.get(OccurrenceTable.VIEW_OPTIONS_KEY, OccurrenceTable.VIEW_SCHEMA);
+                rowHeight = options.getInt(OccurrenceTable.ROW_HEIGHT_OPTIONS_KEY, rowHeight);
+            }
+        }
+        catch(Exception e) {}
+        
         return new Object[] {
             "Cut occurrence", new CutOccurrence(),
             "Copy occurrence", new CopyOccurrence(), 
@@ -1853,18 +1869,30 @@ public class WandoraMenuManager {
             "Translate occurrence with Watson...", new OccurrenceWatsonTranslate(),
             "---",
             "View", new Object[] {
-                "View schema scopes", new ChangeOccurrenceView(OccurrenceTable.TYPE_SCHEMA), (OccurrenceTable.TYPE_SCHEMA.equals(tableType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
-                "View used scopes", new ChangeOccurrenceView(OccurrenceTable.TYPE_USED), (OccurrenceTable.TYPE_USED.equals(tableType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
-                "View schema+used scopes", new ChangeOccurrenceView(OccurrenceTable.TYPE_USED_SCHEMA), (OccurrenceTable.TYPE_USED_SCHEMA.equals(tableType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View schema scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_SCHEMA, options), (OccurrenceTable.VIEW_SCHEMA.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View used scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_USED, options), (OccurrenceTable.VIEW_USED.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View schema and used scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_USED_AND_SCHEMA, options), (OccurrenceTable.VIEW_USED_AND_SCHEMA.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "---",
-                "View single row", new ChangeOccurrenceTableRowHeight(1), (rowHeight == 1 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
-                "View 5 rows", new ChangeOccurrenceTableRowHeight(5), (rowHeight == 5 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
-                "View 10 rows", new ChangeOccurrenceTableRowHeight(10), (rowHeight == 10 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
-                "View 20 rows", new ChangeOccurrenceTableRowHeight(20), (rowHeight == 20 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View single row", new ChangeOccurrenceTableRowHeight(1, options), (rowHeight == 1 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View 5 rows", new ChangeOccurrenceTableRowHeight(5, options), (rowHeight == 5 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View 10 rows", new ChangeOccurrenceTableRowHeight(10, options), (rowHeight == 10 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View 20 rows", new ChangeOccurrenceTableRowHeight(20, options), (rowHeight == 20 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
             },
         };
     }
     
+
+    public static Object[] getOccurrenceTypeLabelPopupStruct(Topic occurrenceType, Topic topic) {
+        return new Object[] {
+            "Open topic", new OpenTopic(),
+            // "Open topic in", getOpenInMenu(),
+            "---",
+            "Edit occurrences", new EditOccurrences(occurrenceType, topic),
+            "Duplicate occurrences...", new DuplicateOccurrence(occurrenceType, topic),
+            "Change occurrence type...", new ChangeOccurrenceType(occurrenceType, topic),
+            "Delete occurrences...", new DeleteOccurrence(occurrenceType, topic),
+        };
+    }
     
     
     
@@ -2117,7 +2145,12 @@ public class WandoraMenuManager {
     }
     
     
-    public static Object[] getVariantsLabelPopupStruct(Options options, String variantGUIType) {
+    public static Object[] getVariantsLabelPopupStruct(Options options) {
+        String variantGUIType = VARIANT_GUITYPE_SCHEMA;
+        try {
+            variantGUIType = options.get(VARIANT_GUITYPE_OPTIONS_KEY, variantGUIType);
+        }
+        catch(Exception e) {}
         return new Object[] {
             "Add variant name...", new AddVariantName(new ApplicationContext()),
             "---",
@@ -2132,7 +2165,7 @@ public class WandoraMenuManager {
             "---",
             "View", new Object[] {
                 "View schema scopes", new ChangeVariantView(VARIANT_GUITYPE_SCHEMA, options), (VARIANT_GUITYPE_SCHEMA.equals(variantGUIType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
-                "View all scopes", new ChangeVariantView(VARIANT_GUITYPE_ALL, options), (VARIANT_GUITYPE_ALL.equals(variantGUIType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View used scopes", new ChangeVariantView(VARIANT_GUITYPE_USED, options), (VARIANT_GUITYPE_USED.equals(variantGUIType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "---",
                 "Flip name matrix", new FlipNameMatrix(OPTIONS_PREFIX, options),
             }
@@ -2140,10 +2173,31 @@ public class WandoraMenuManager {
     }
     
     
-    public static Object[] getOccurrencesLabelPopupStruct() {
+    public static Object[] getOccurrencesLabelPopupStruct(Options options) {
+        String viewType = OccurrenceTable.VIEW_SCHEMA;
+        int rowHeight = 1;
+        try {
+            if(options != null) {
+                viewType = options.get(OccurrenceTable.VIEW_OPTIONS_KEY, OccurrenceTable.VIEW_SCHEMA);
+                rowHeight = options.getInt(OccurrenceTable.ROW_HEIGHT_OPTIONS_KEY, rowHeight);
+            }
+        }
+        catch(Exception e) {}
+        
         return new Object[] {
-//            "Add occurrence...", new AddOccurrences(new ApplicationContext()),
-            "Add occurrence...", new AddSchemalessOccurrence(new ApplicationContext())
+            "Add occurrence...", new AddSchemalessOccurrence(new ApplicationContext()),
+            "Delete all occurrences...", new DeleteAllOccurrences(new ApplicationContext()),
+            "---",
+            "View", new Object[] {
+                "View schema scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_SCHEMA, options), (OccurrenceTable.VIEW_SCHEMA.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View used scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_USED, options), (OccurrenceTable.VIEW_USED.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View schema and used scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_USED_AND_SCHEMA, options), (OccurrenceTable.VIEW_USED_AND_SCHEMA.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "---",
+                "View single row", new ChangeOccurrenceTableRowHeight(1, options), (rowHeight == 1 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View 5 rows", new ChangeOccurrenceTableRowHeight(5, options), (rowHeight == 5 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View 10 rows", new ChangeOccurrenceTableRowHeight(10, options), (rowHeight == 10 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+                "View 20 rows", new ChangeOccurrenceTableRowHeight(20, options), (rowHeight == 20 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
+            },
         };
     }
     
@@ -2208,6 +2262,7 @@ public class WandoraMenuManager {
             //"Make players instance of role...", //new AddInstanceToPlayers(),
         };
     }
+    
     
     
 }

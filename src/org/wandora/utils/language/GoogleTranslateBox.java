@@ -92,13 +92,15 @@ public class GoogleTranslateBox {
                     apikey = WandoraOptionPane.showInputDialog(Wandora.getWandora(), "Give your Google Translate API key?", "", "Give your Google Translate API key?");
                     if(apikey != null) apikey = apikey.trim();
                 }
-                GoogleAPI.setKey(apikey);
-                translatedText = Translate.DEFAULT.execute(text, sourceLang, targetLang);
-                if(translatedText != null && translatedText.length() == 0) {
-                    translatedText = null;
-                }
-                if(translatedText != null && markTranslation) {
-                    translatedText += " [GOOGLE TRANSLATION]";
+                if(apikey != null) {
+                    GoogleAPI.setKey(apikey);
+                    translatedText = Translate.DEFAULT.execute(text, sourceLang, targetLang);
+                    if(translatedText != null && translatedText.length() == 0) {
+                        translatedText = null;
+                    }
+                    if(translatedText != null && markTranslation) {
+                        translatedText += " [GOOGLE TRANSLATION]";
+                    }
                 }
             }
             catch(Exception e) {

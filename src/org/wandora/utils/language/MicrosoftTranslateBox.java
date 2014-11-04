@@ -91,20 +91,22 @@ public class MicrosoftTranslateBox {
         if(text != null && sourceLang != null && targetLang != null) {
             try {
                 System.out.println("Microsoft Translating '"+text+"' from '"+sourceLang+"' to '"+targetLang+"'");
-                Translate.setHttpReferrer("http://www.wandora.org");
+                Translate.setHttpReferrer("http://wandora.org");
 
                 if(apikey == null || apikey.length() == 0) {
                     apikey = WandoraOptionPane.showInputDialog(Wandora.getWandora(), "Give your Bing API key?", "", "Give your Bing API key?");
                     if(apikey != null) apikey = apikey.trim();
                 }
 
-                Translate.setKey(apikey);
-                translatedText = Translate.execute(text, sourceLang, targetLang);
-                if(translatedText != null && translatedText.length() == 0) {
-                    translatedText = null;
-                }
-                if(translatedText != null && markTranslation) {
-                    translatedText += " [MICROSOFT TRANSLATION]";
+                if(apikey != null) {
+                    Translate.setKey(apikey);
+                    translatedText = Translate.execute(text, sourceLang, targetLang);
+                    if(translatedText != null && translatedText.length() == 0) {
+                        translatedText = null;
+                    }
+                    if(translatedText != null && markTranslation) {
+                        translatedText += " [MICROSOFT TRANSLATION]";
+                    }
                 }
             }
             catch(Exception e) {

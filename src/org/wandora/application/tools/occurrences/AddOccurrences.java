@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * AddTextDatas.java
+ * AddOccurrences.java
  *
  * Created on 24. lokakuuta 2005, 19:57
  *

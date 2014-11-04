@@ -136,7 +136,7 @@ public class OccurrenceTextEditor extends TextEditor {
             "Translate", new Object[] {
                 "Translate with Google...", UIBox.getIcon("gui/icons/google_translate.png"),
                 "Translate with Microsoft...", UIBox.getIcon("gui/icons/microsoft_translate.png"),
-                "Translate with Watson...", UIBox.getIcon("gui/icons/microsoft_watson.png"),
+                "Translate with Watson...", UIBox.getIcon("gui/icons/watson_translate.png"),
             },
             "Insert", new Object[] {
                 "Insert base name", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK),

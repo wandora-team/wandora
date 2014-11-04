@@ -80,6 +80,7 @@ public class UIConstants {
     public static final Color defaultActiveBackground = new Color(200,221,242);
     
     public static final Color editableBackgroundColor = new Color(255,255,255);
+    public static final Color noContentBackgroundColor = new Color(245,245,245);
     
     public static final Color defaultBorderHighlight = new Color(255,255,255);
     public static final Color defaultBorderShadow = new Color(200,221,242);

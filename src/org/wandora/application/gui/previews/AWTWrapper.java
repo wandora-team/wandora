@@ -34,7 +34,7 @@ import javax.swing.JViewport;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.topicpanels.AbstractTopicPanel;
+import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
 
 /**
  *
@@ -106,7 +106,7 @@ public class AWTWrapper extends JPanel implements PreviewPanel {
     private Point getTopDistance() throws Exception {
         Component c = this;
         Point ret = new Point();
-        while(!AbstractTopicPanel.class.isInstance(c)) {
+        while(!AbstractTraditionalTopicPanel.class.isInstance(c)) {
             ret.x += c.getX();
             ret.y += c.getY();
             c = c.getParent();

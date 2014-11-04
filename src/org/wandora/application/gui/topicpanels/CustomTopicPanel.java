@@ -26,6 +26,7 @@
 
 package org.wandora.application.gui.topicpanels;
 
+import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
 import org.wandora.application.gui.table.TopicTable;
 import org.wandora.utils.Options;
 import java.util.*;
@@ -54,13 +55,13 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  *
  * @author  olli
  */
-public class CustomTopicPanel extends AbstractTopicPanel implements ActionListener, TopicPanel {
+public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
     public static boolean USE_GLOBAL_OPTIONS = true;
     
     protected Topic topic;
     protected String topicSI;
     
-    protected Wandora parent;
+    protected Wandora wandora;
     protected String originalBN;
     protected String originalSL;
     protected Options options;
@@ -170,9 +171,9 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
             e.printStackTrace();
         }
         
-        this.parent = Wandora.getWandora();
+        this.wandora = Wandora.getWandora();
         if(globalOptions == null) {
-            globalOptions = parent.getOptions();
+            globalOptions = wandora.getOptions();
         }
         if(options == null) {
             if(USE_GLOBAL_OPTIONS) {
@@ -221,7 +222,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
                 boolean old=options.isFalse(getGroupOptionsKey(command));
                 options.put(getGroupOptionsKey(command), old ? "true" : "false");
                 refresh();
-                parent.topicPanelsChanged();
+                wandora.topicPanelsChanged();
             }
         }
     }
@@ -302,7 +303,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
             info.evalException=se;
         }
         catch(Exception e){
-            parent.handleError(e);
+            wandora.handleError(e);
         }
 //        if(info.directive==null){
 //            WandoraOptionPane.showMessageDialog(parent, "Error evaluating custom topic panel script.<br>Use Configure panel in view menu for details.", "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);        
@@ -326,7 +327,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
             groupPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(groupInfo.name));
 //            groupPanel.setComponentPopupMenu(getAssociationsMenu());
             groupPanel.setName(groupInfo.name+"GroupPanel");
-            groupPanel.addMouseListener(parent);
+            groupPanel.addMouseListener(wandora);
             
             GridBagConstraints gbc=new GridBagConstraints();
             int acounter=0;
@@ -337,9 +338,9 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
                     evalQuery(info);
                     if(info.directive==null) {
                         if(info.evalException!=null)
-                            WandoraOptionPane.showMessageDialog(parent, "Error evaluating custom topic panel script "+groupInfo.name+"/"+info.name+"<br>"+info.evalException.getMessage(), "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);        
+                            WandoraOptionPane.showMessageDialog(wandora, "Error evaluating custom topic panel script "+groupInfo.name+"/"+info.name+"<br>"+info.evalException.getMessage(), "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);        
                         else
-                            WandoraOptionPane.showMessageDialog(parent, "Error evaluating custom topic panel script "+groupInfo.name+"/"+info.name+"<br>Script did not return a Directive object.", "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);        
+                            WandoraOptionPane.showMessageDialog(wandora, "Error evaluating custom topic panel script "+groupInfo.name+"/"+info.name+"<br>Script did not return a Directive object.", "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);        
                         continue;
                     }
                 }
@@ -389,8 +390,8 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
     public MixedTopicTable buildCustomQuery(Directive query, Topic context){
         
         try {
-            TopicMap tm=parent.getTopicMap();
-            ArrayList<ResultRow> res=query.doQuery(new QueryContext(tm,parent.getLang()),new ResultRow(context));
+            TopicMap tm=wandora.getTopicMap();
+            ArrayList<ResultRow> res=query.doQuery(new QueryContext(tm,wandora.getLang()),new ResultRow(context));
             ArrayList<String> columns=new ArrayList<String>();
             for(ResultRow row : res){
                 for(int i=0;i<row.getNumValues();i++){
@@ -457,7 +458,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
                     }
                 }
                 
-                MixedTopicTable table=new MixedTopicTable(parent);
+                MixedTopicTable table=new MixedTopicTable(wandora);
                 table.initialize(data, columnLabels);
                 
                 return table;
@@ -482,7 +483,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
     public void refresh() {
         
         try {
-            topic=parent.getTopicMap().getTopic(topicSI);
+            topic=wandora.getTopicMap().getTopic(topicSI);
             if(topic==null || topic.isRemoved()) {
                 System.out.println("Topic is null or removed!");
                 panelContainer.setVisible(false);
@@ -505,7 +506,9 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
         super.refresh();
 
         updatePreview();
-        if(subjectIdentifierRootPanel.isVisible())  buildSubjectIdentifierPanel(subjectIdentifierPanel, parent, topic);
+        if(subjectIdentifierRootPanel.isVisible()) {
+            buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
+        }
         
         if(customPanel!=null) panelContainer.remove(customPanel);
         customPanel=buildCustomPanel();
@@ -521,7 +524,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
             if(topic.getBaseName()!=null) {
                 baseNameField.setText(topic.getBaseName());
                 baseNameField.setCaretPosition(0);
-                Color c=parent.topicHilights.getBaseNameColor(topic);
+                Color c=wandora.topicHilights.getBaseNameColor(topic);
                 if(c!=null) baseNameField.setForeground(c);
                 else baseNameField.setForeground(Color.BLACK);
             }
@@ -533,7 +536,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
             if(topic.getSubjectLocator()!=null) {
                 subjectLocatorField.setText(topic.getSubjectLocator().toString());
                 subjectLocatorField.setCaretPosition(0);
-                Color c=parent.topicHilights.getSubjectLocatorColor(topic);
+                Color c=wandora.topicHilights.getSubjectLocatorColor(topic);
                 if(c!=null) subjectLocatorField.setForeground(c);
                 else subjectLocatorField.setForeground(Color.BLACK);
                 originalSL=topic.getSubjectLocator().toString();
@@ -602,6 +605,72 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
     
     
     
+    // -------------------------------------------------------------------------
+    
+    
+
+    @Override
+    public JPopupMenu getNamesMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getVariantsLabelPopupStruct(options), wandora);
+    }
+    
+
+    @Override
+    public JPopupMenu getClassesMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getClassesTablePopupStruct(), wandora);
+    }
+    
+    
+    @Override
+    public JPopupMenu getInstancesMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getInstancesTablePopupStruct(), wandora);
+    }
+    
+    
+    @Override
+    public JPopupMenu getSIMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getSubjectIdentifierLabelPopupStruct(), wandora);
+    }
+
+    
+    @Override
+    public JPopupMenu getOccurrencesMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getOccurrencesLabelPopupStruct(options), wandora);
+    }
+    
+    
+    @Override
+    public JPopupMenu getOccurrenceTypeMenu(Topic occurrenceType) {
+         return UIBox.makePopupMenu(WandoraMenuManager.getOccurrenceTypeLabelPopupStruct(occurrenceType, topic), wandora);
+    }
+    
+    
+    public JPopupMenu getSLMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getSubjectLocatorLabelPopupStruct(), wandora);
+    }
+    
+    
+    @Override
+    public JPopupMenu getAssociationsMenu() {
+         return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTableLabelPopupStruct(), wandora);
+    }
+
+    
+    @Override
+    public JPopupMenu getAssociationTypeMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTypeLabelPopupStruct(), wandora);
+    }
+
+    
+    @Override
+    public JPopupMenu getSubjectMenu() {
+        return null;
+    }
+    
+    
+    
+    
+    // -------------------------------------------------------------------------
     
     
     /** This method is called from within the constructor to
@@ -614,14 +683,14 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
         java.awt.GridBagConstraints gridBagConstraints;
 
         configureButton = new org.wandora.application.gui.simple.SimpleButton();
-        configDialog = new JDialog(parent);
-        configurationPanel = new CustomTopicPanelConfiguration(parent);
+        configDialog = new JDialog(wandora);
+        configurationPanel = new CustomTopicPanelConfiguration(wandora);
         jPanel4 = new javax.swing.JPanel();
         configCancelButton = new org.wandora.application.gui.simple.SimpleButton();
         configOkButton = new org.wandora.application.gui.simple.SimpleButton();
         panelContainer = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        previewPanel = PreviewWrapper.getPreviewWrapper(parent);
+        previewPanel = PreviewWrapper.getPreviewWrapper(wandora);
         jPanel1 = new javax.swing.JPanel();
         idPanel = new javax.swing.JPanel();
         baseNameLabel = new org.wandora.application.gui.simple.SimpleLabel();
@@ -740,7 +809,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
 
         subjectLocatorLabel.setText("Subject locator");
         subjectLocatorLabel.setComponentPopupMenu(getSLMenu());
-        subjectLocatorLabel.addMouseListener(parent);
+        subjectLocatorLabel.addMouseListener(wandora);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -762,7 +831,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
 
         subjectIdentifierLabel.setText("Subject identifiers");
         subjectIdentifierLabel.setComponentPopupMenu(getSIMenu());
-        subjectLocatorLabel.addMouseListener(parent);
+        subjectLocatorLabel.addMouseListener(wandora);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -880,9 +949,9 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
     protected void showConfigureDialog(){
         ((CustomTopicPanelConfiguration)configurationPanel).readQueryGroups(queryGroups);
         configDialog.setSize(400,500);
-        parent.centerWindow(configDialog);
+        wandora.centerWindow(configDialog);
         configDialog.setVisible(true);        
-        parent.topicPanelsChanged();
+        wandora.topicPanelsChanged();
     }
     
     private void configureButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureButtonActionPerformed
@@ -906,9 +975,6 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
     }//GEN-LAST:event_baseNameFieldKeyReleased
     
     
-    public JPopupMenu getSLMenu() {
-        return UIBox.makePopupMenu(WandoraMenuManager.getSubjectLocatorLabelPopupStruct(), parent);
-    }
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1031,7 +1097,7 @@ public class CustomTopicPanel extends AbstractTopicPanel implements ActionListen
                     }
                 }
                 */ 
-                parent.doRefresh();
+                wandora.doRefresh();
             }
             catch(Exception ce){
                 Wandora.getWandora().handleError(ce);

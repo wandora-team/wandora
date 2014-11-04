@@ -82,12 +82,13 @@ public class OccurrenceMicrosoftTranslate extends AbstractWandoraTool implements
 
 
 
+    @Override
     public void execute(Wandora wandora, Context context) {
         Object contextSource = context.getContextSource();
 
         if(contextSource instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) contextSource;
-            ot.microsoftTranslate();
+            ot.translate(OccurrenceTable.MICROSOFT_TRANSLATE);
         }
         else {
             Iterator topics = context.getContextObjects();
