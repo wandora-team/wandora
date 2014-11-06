@@ -81,6 +81,7 @@ public class TopicMapImpl extends TopicMap {
     
     private boolean topicMapChanged;
     
+    
     /** Creates a new instance of TopicMapImpl */
     public TopicMapImpl(String topicmapFile) {
         this();
@@ -91,6 +92,7 @@ public class TopicMapImpl extends TopicMap {
             e.printStackTrace();
         }
     }
+    
     public TopicMapImpl() {
         topicMapID=topicMapCounter++;
         typeIndex=new Hashtable<Topic,Collection<Topic>>();
@@ -98,8 +100,8 @@ public class TopicMapImpl extends TopicMap {
         subjectLocatorIndex=new Hashtable<Locator,Topic>();
         nameIndex=new Hashtable<String,Topic>();
         associationTypeIndex=new Hashtable<Topic,Collection<Association>>();
-        topics=new HashSet<Topic>();
-        associations=new HashSet<Association>();
+        topics=new LinkedHashSet<Topic>();
+        associations=new LinkedHashSet<Association>();
         trackDependent=false;
         topicMapChanged=false;
         topicMapListeners=new ArrayList<TopicMapListener>();
@@ -112,10 +114,11 @@ public class TopicMapImpl extends TopicMap {
         subjectLocatorIndex=new Hashtable<Locator,Topic>();
         nameIndex=new Hashtable<String,Topic>();
         associationTypeIndex=new Hashtable<Topic,Collection<Association>>();
-        topics=new HashSet<Topic>();
-        associations=new HashSet<Association>();
+        topics=new LinkedHashSet<Topic>();
+        associations=new LinkedHashSet<Association>();
         topicMapChanged=true;
     }
+    
     @Override
     public void clearTopicMapIndexes() throws TopicMapException {
         /* Do nothing!
@@ -153,18 +156,22 @@ public class TopicMapImpl extends TopicMap {
             }
         }
     }
+    
     @Override
     public List<TopicMapListener> getTopicMapListeners(){
         return topicMapListeners;
     }
+    
     @Override
     public void addTopicMapListener(TopicMapListener listener){
         topicMapListeners.add(listener);
     }
+    
     @Override
     public void removeTopicMapListener(TopicMapListener listener){
         topicMapListeners.remove(listener);
     }
+    
     @Override
     public void disableAllListeners(){
         if(disabledListeners==null){
@@ -172,6 +179,7 @@ public class TopicMapImpl extends TopicMap {
             topicMapListeners=new ArrayList<TopicMapListener>();
         }
     }
+    
     @Override
     public void enableAllListeners(){
         if(disabledListeners!=null){
@@ -353,7 +361,7 @@ public class TopicMapImpl extends TopicMap {
             nt.setBaseName(t.getBaseName());
         }
         
-        if( (!stub) || deep){
+        if( (!stub) || deep) {
 
             iter=t.getTypes().iterator();
             while(iter.hasNext()){
@@ -365,7 +373,7 @@ public class TopicMapImpl extends TopicMap {
             iter=t.getVariantScopes().iterator();
             while(iter.hasNext()){
                 Set scope=(Set)iter.next();
-                Set nscope=new HashSet();
+                Set nscope=new LinkedHashSet();
                 Iterator iter2=scope.iterator();
                 while(iter2.hasNext()){
                     Topic st=(Topic)iter2.next();
@@ -441,6 +449,7 @@ public class TopicMapImpl extends TopicMap {
 
     
     
+    @Override
     public Association copyAssociationIn(Association a) throws TopicMapException{
         Association n=_copyAssociationIn(a);
         Topic minTopic=null;
@@ -458,6 +467,7 @@ public class TopicMapImpl extends TopicMap {
         return n;
     }
     
+    @Override
     public Topic copyTopicIn(Topic t, boolean deep)  throws TopicMapException{
         return _copyTopicIn(t,deep,false,new Hashtable());
     }
@@ -515,6 +525,7 @@ public class TopicMapImpl extends TopicMap {
         
     }
     
+    @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
         Topic nt=getTopic((Locator)t.getSubjectIdentifiers().iterator().next());
         if(nt==null) nt=copyTopicIn(t,false);
@@ -528,33 +539,40 @@ public class TopicMapImpl extends TopicMap {
     public void addTopicSubjectIdentifier(Topic t,Locator l) throws TopicMapException {
         subjectIdentifierIndex.put(l,t);
     }
+    
     public void removeTopicSubjectIdentifier(Topic t,Locator l) throws TopicMapException {
         subjectIdentifierIndex.remove(l);
     }
+    
     public void setTopicSubjectLocator(Topic t,Locator l,Locator oldLocator) throws TopicMapException {
         if(oldLocator!=null) subjectLocatorIndex.remove(oldLocator);
         if(l!=null) subjectLocatorIndex.put(l,t);
     }
+    
     public void removeTopicSubjectLocator(Topic t,Locator l) throws TopicMapException {
         subjectLocatorIndex.remove(l);
     }
+    
     public void addTopicType(Topic t,Topic type) throws TopicMapException {
         Collection s=typeIndex.get(type);
         if(s==null) {
-            s=new HashSet();
+            s=new LinkedHashSet();
             typeIndex.put(type,s);
         }
         s.add(t);
     }
+    
     public void removeTopicType(Topic t,Topic type) throws TopicMapException {
         Collection s=typeIndex.get(type);
         if(s==null) return;
         s.remove(t);
     }
+    
     public void setTopicName(Topic t,String name,String oldname) throws TopicMapException {
         if(oldname!=null) nameIndex.remove(oldname);
         if(name!=null) nameIndex.put(name,t);
     }
+    
     public void setAssociationType(Association a,Topic type,Topic oldtype) throws TopicMapException {
         if(oldtype!=null) { // note: old type can be null only when setting the initial type
             Collection s=associationTypeIndex.get(oldtype);
@@ -565,12 +583,13 @@ public class TopicMapImpl extends TopicMap {
         if(type!=null){ // note: type can be null only when destroying association
             Collection s=associationTypeIndex.get(type);
             if(s==null) {
-                s=new HashSet();
+                s=new LinkedHashSet();
                 associationTypeIndex.put(type,s);
             }
             s.add(a);
         }
     }
+    
     public void topicRemoved(Topic t) throws TopicMapException {
         topicMapChanged=true;
         topics.remove(t);
@@ -578,6 +597,7 @@ public class TopicMapImpl extends TopicMap {
             listener.topicRemoved(t);        
         }
     }
+    
     public void associationRemoved(Association a) throws TopicMapException {
         topicMapChanged=true;
         associations.remove(a);
@@ -585,8 +605,10 @@ public class TopicMapImpl extends TopicMap {
             listener.associationRemoved(a);        
         }
     }
+    
     public void topicsMerged(Topic newtopic,Topic deletedtopic){
     }
+    
     public void duplicateAssociationRemoved(Association a,Association removeda){
     }
     
@@ -816,7 +838,7 @@ public class TopicMapImpl extends TopicMap {
                 // TODO: WHY typeIndex IS NOT GOOD HERE.
                 // UNDO/REDO CAUSES THE typeIndex LEAK.
                 
-                HashSet typeTopics = new HashSet();
+                HashSet typeTopics = new LinkedHashSet();
                 for(Topic t : topics) {
                     if(t != null && !t.isRemoved()) {
                         Collection<Topic> cts = t.getTypes();
@@ -833,7 +855,7 @@ public class TopicMapImpl extends TopicMap {
                 return new TopicMapStatData(associations.size());
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_PLAYERS: {
-                HashSet associationPlayers = new HashSet();
+                HashSet associationPlayers = new LinkedHashSet();
                 Iterator topicIter=this.topics.iterator();
                 Topic t = null;
                 Collection associations = null;
@@ -869,7 +891,7 @@ public class TopicMapImpl extends TopicMap {
                 return new TopicMapStatData(associationPlayers.size());
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_ROLES: {
-                HashSet associationRoles = new HashSet();
+                HashSet associationRoles = new LinkedHashSet();
                 Iterator topicIter=this.topics.iterator();
                 Topic t = null;
                 Collection associations = null;
@@ -897,7 +919,7 @@ public class TopicMapImpl extends TopicMap {
                 // TODO: WHY associationTypeIndex IS NOT GOOD HERE.
                 // UNDO/REDO CAUSES THE associationTypeIndex LEAK.
                 
-                HashSet associationTypes = new HashSet();
+                HashSet associationTypes = new LinkedHashSet();
                 Topic typeTopic = null;
                 for(Association a : associations) {
                     if(a != null && !a.isRemoved()) {

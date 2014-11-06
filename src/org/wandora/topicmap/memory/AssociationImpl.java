@@ -26,6 +26,7 @@
  * Created on June 10, 2004, 11:30 AM
  */
 
+
 package org.wandora.topicmap.memory;
 import org.wandora.topicmap.*;
 import java.util.*;
@@ -40,6 +41,8 @@ public class AssociationImpl implements Association {
     private Topic type;
     private Hashtable players;
     private boolean removed;
+    
+    
     /** Creates a new instance of AssociationImpl */
     public AssociationImpl(TopicMapImpl topicMap,Topic type)  throws TopicMapException {
         this.topicMap=topicMap;
@@ -48,22 +51,27 @@ public class AssociationImpl implements Association {
         removed=false;
     }
     
+    @Override
     public Topic getPlayer(Topic role) {
         return (Topic)players.get(role);
     }
     
+    @Override
     public Collection getRoles() {
         return players.keySet();
     }
     
+    @Override
     public TopicMap getTopicMap() {
         return topicMap;
     }
     
+    @Override
     public Topic getType() {
         return type;
     }
     
+    @Override
     public void setType(Topic t)  throws TopicMapException {
         topicMap.setAssociationType(this,t,type);
         Topic oldType=type;
@@ -83,6 +91,7 @@ public class AssociationImpl implements Association {
         }
     }
     
+    @Override
     public void addPlayer(Topic player, Topic role)  throws TopicMapException {
         if(role == null || player == null) return;
         
@@ -109,6 +118,8 @@ public class AssociationImpl implements Association {
             if(topicMap.getConsistencyCheck()) checkRedundancy();
         }
     }
+    
+    @Override
     public void addPlayers(Map<Topic,Topic> newPlayers) throws TopicMapException {
         boolean changed=false;
         for(Map.Entry<Topic,Topic> e : newPlayers.entrySet()){
@@ -141,6 +152,7 @@ public class AssociationImpl implements Association {
         if(topicMap.getConsistencyCheck()) checkRedundancy();
     }
     
+    @Override
     public void removePlayer(Topic role)  throws TopicMapException {
         TopicImpl t=(TopicImpl)players.get(role);
         if(t!=null){
@@ -152,6 +164,7 @@ public class AssociationImpl implements Association {
         }
     }
     
+    @Override
     public void remove()  throws TopicMapException {
         removed=true;
         topicMap.associationRemoved(this);
@@ -168,6 +181,7 @@ public class AssociationImpl implements Association {
         setType(null);
     }
     
+    @Override
     public boolean isRemoved(){
         return removed;
     }

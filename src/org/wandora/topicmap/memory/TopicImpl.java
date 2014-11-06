@@ -76,23 +76,23 @@ public class TopicImpl extends Topic {
         this.topicMap=topicMap;
         id=getUniqueID();
         data=new Hashtable();
-        types=new HashSet();
-        associations=new HashSet();
+        types=new LinkedHashSet();
+        associations=new LinkedHashSet();
         associationIndex=new Hashtable();
         baseName=null;
         subjectLocator=null;
-        subjectIdentifiers=new HashSet();
+        subjectIdentifiers=new LinkedHashSet();
         variants=new Hashtable();
         
         dispNameCache=new Hashtable();
         sortNameCache=new Hashtable();
         
-        dataTypeIndex=new HashSet();
-        dataVersionIndex=new HashSet();
-        topicTypeIndex=new HashSet();
-        associationTypeIndex=new HashSet();
-        roleTypeIndex=new HashSet();
-        variantScopeIndex=new HashSet();
+        dataTypeIndex=new LinkedHashSet();
+        dataVersionIndex=new LinkedHashSet();
+        topicTypeIndex=new LinkedHashSet();
+        associationTypeIndex=new LinkedHashSet();
+        roleTypeIndex=new LinkedHashSet();
+        variantScopeIndex=new LinkedHashSet();
         
         removed=false;
     }
@@ -218,7 +218,7 @@ public class TopicImpl extends Topic {
         if(s==null) return new HashSet();
 //        else return s.values();
         else{
-            HashSet as=new HashSet();
+            HashSet as=new LinkedHashSet();
             Iterator iter=s.entrySet().iterator();
             while(iter.hasNext()){
                 Map.Entry e=(Map.Entry)iter.next();
@@ -814,7 +814,7 @@ public class TopicImpl extends Topic {
         iter=ti.variantScopeIndex.iterator();
         while(iter.hasNext()){
             Topic topic=(Topic)iter.next();
-            Collection scopes=new HashSet();
+            Collection scopes=new LinkedHashSet();
             scopes.addAll(topic.getVariantScopes());
             Iterator iter2=scopes.iterator();
             while(iter2.hasNext()){
@@ -840,7 +840,7 @@ public class TopicImpl extends Topic {
             Set c=(Set)t2.e2;
 //            Topic topic=(Topic)tobeMapped.get(i);
 //            Set c=(Set)tobeMapped.get(i+1);
-            HashSet newscope=new HashSet();
+            HashSet newscope=new LinkedHashSet();
             newscope.addAll(c);
             newscope.remove(t);
             newscope.add(this);
@@ -851,7 +851,7 @@ public class TopicImpl extends Topic {
         
         // set subject identifiers, do this last as some other things rely
         // on topics still having subject identifiers
-        HashSet copied=new HashSet();
+        HashSet copied=new LinkedHashSet();
         copied.addAll(ti.getSubjectIdentifiers());
         iter=copied.iterator();
         while(iter.hasNext()){
@@ -925,7 +925,7 @@ public class TopicImpl extends Topic {
         }
         HashSet s=(HashSet)t.get(role);
         if(s==null){
-            s=new HashSet();
+            s=new LinkedHashSet();
             t.put(role,s);
         }
         s.add(a);
@@ -962,7 +962,7 @@ public class TopicImpl extends Topic {
             }
             s=(HashSet)t.get(role);
             if(s==null){
-                s=new HashSet();
+                s=new LinkedHashSet();
                 t.put(role,s);
             }
             s.add(a);

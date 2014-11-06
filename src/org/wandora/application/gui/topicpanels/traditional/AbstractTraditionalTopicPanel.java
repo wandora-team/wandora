@@ -456,30 +456,32 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             int y=0;
             gbc=new java.awt.GridBagConstraints();
             for(Topic occurrenceType : topic.getDataTypes()) {
-                OccurrenceTableSingleType occurrenceTableSingle=new OccurrenceTableSingleType(topic, occurrenceType, options, wandora);
-                OccurrenceTypeLink label=new OccurrenceTypeLink(occurrenceTableSingle, occurrenceType, wandora);
-                label.setLimitLength(false);
-                JPopupMenu popup = this.getOccurrenceTypeMenu(occurrenceType);
-                label.setComponentPopupMenu(popup);
+                OccurrenceTableSingleType occurrenceTableSingle = new OccurrenceTableSingleType(topic, occurrenceType, options, wandora);
+                if(occurrenceTableSingle.getRowCount() > 0) {
+                    OccurrenceTypeLink label = new OccurrenceTypeLink(occurrenceTableSingle, occurrenceType, wandora);
+                    label.setLimitLength(false);
+                    JPopupMenu popup = this.getOccurrenceTypeMenu(occurrenceType);
+                    label.setComponentPopupMenu(popup);
 
-                gbc.gridx=0;
-                gbc.gridy=y++;
-                gbc.fill=GridBagConstraints.HORIZONTAL;
-                gbc.weightx=1.0;
-                
-                if(y > 1) {
-                    gbc.insets=new java.awt.Insets(10,0,0,0);
-                }
-                else {
+                    gbc.gridx=0;
+                    gbc.gridy=y++;
+                    gbc.fill=GridBagConstraints.HORIZONTAL;
+                    gbc.weightx=1.0;
+
+                    if(y > 1) {
+                        gbc.insets=new java.awt.Insets(10,0,0,0);
+                    }
+                    else {
+                        gbc.insets=new java.awt.Insets(0,0,0,0);
+                    }
+
+                    dataPanel.add(label,gbc);
+                    gbc.gridy=y++;
                     gbc.insets=new java.awt.Insets(0,0,0,0);
+                    dataPanel.add(occurrenceTableSingle.getTableHeader(),gbc);
+                    gbc.gridy=y++;
+                    dataPanel.add(occurrenceTableSingle,gbc);
                 }
-                
-                dataPanel.add(label,gbc);
-                gbc.gridy=y++;
-                gbc.insets=new java.awt.Insets(0,0,0,0);
-                dataPanel.add(occurrenceTableSingle.getTableHeader(),gbc);
-                gbc.gridy=y++;
-                dataPanel.add(occurrenceTableSingle,gbc);
                 {
                     visibleTopics.addAll(occurrenceType.getSubjectIdentifiers());
                     for(Topic version : topic.getData(occurrenceType).keySet()) {
@@ -804,8 +806,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
     public void buildAllNamesPanel(JPanel variantPanel, final Topic topic, final TopicPanel topicPanel, Options options, final Wandora wandora) {
         if(topic != null) {
             try {
-                nameTable=new HashMap<Set<Topic>,SimpleField>();
-                invNameTable=new HashMap<SimpleField,Set<Topic>>();
+                nameTable=new LinkedHashMap<Set<Topic>,SimpleField>();
+                invNameTable=new LinkedHashMap<SimpleField,Set<Topic>>();
                 originalNameTable=new IteratedMap<Collection<Topic>,String>();
                 variantPanel.removeAll();
 
@@ -853,7 +855,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     deleteVariantButton.setBorderPainted(false);
                     deleteVariantButton.setToolTipText("Delete variant name.");
 
-                    final DeleteVariantName tool=new DeleteVariantName(topic, scope);
+                    final DeleteVariantName tool = new DeleteVariantName(topic, scope);
                     deleteVariantButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(java.awt.event.ActionEvent e) {

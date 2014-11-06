@@ -46,6 +46,7 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.occurrences.*;
 import org.wandora.application.tools.occurrences.DeleteOccurrence;
 import org.wandora.topicmap.*;
+import static org.wandora.topicmap.TMBox.LANGUAGE_SI;
 import org.wandora.utils.*;
 import org.wandora.utils.language.GoogleTranslateBox;
 import org.wandora.utils.language.MicrosoftTranslateBox;
@@ -80,6 +81,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     public OccurrenceTableSingleType(Topic topic, Topic type, Options options, Wandora wandora) throws TopicMapException {
         this.wandora=wandora;
         this.topic=topic;
+        TopicMap tm = wandora.getTopicMap();
         
         try {
             Options opts = options;
@@ -98,30 +100,22 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         
         this.type = type;
 
-        ArrayList<Topic> langArray = new ArrayList<Topic>();
+        HashSet<Topic> langSet = new LinkedHashSet();
         if(VIEW_USED.equalsIgnoreCase(tableType) || VIEW_USED_AND_SCHEMA.equalsIgnoreCase(tableType)) {
             Hashtable<Topic,String> occs = null;
             Topic langTopic = null;
             occs = topic.getData(type);
             for(Enumeration<Topic> keys = occs.keys(); keys.hasMoreElements(); ) {
                 langTopic = keys.nextElement();
-                if(!langArray.contains(langTopic)) {
-                    langArray.add(langTopic);
-                }
+                langSet.add(langTopic);
             }
         }
         if(VIEW_SCHEMA.equalsIgnoreCase(tableType) || VIEW_USED_AND_SCHEMA.equalsIgnoreCase(tableType)) {
-            String[] langSIs=TMBox.getLanguageSIs(wandora.getTopicMap());
-            Topic langTopic = null;
-            for(int i=0;i<langSIs.length;i++){
-                langTopic = wandora.getTopicMap().getTopic(langSIs[i]);
-                if(langTopic != null && !langArray.contains(langTopic)) {
-                    langArray.add( langTopic );
-                }
-            }
+            Collection<Topic> langTopics = tm.getTopicsOfType(LANGUAGE_SI);
+            langSet.addAll( langTopics );
         }
-        langs=langArray.toArray( new Topic[langArray.size()] );
-
+        
+        langs=langSet.toArray( new Topic[langSet.size()] );
         data=new String[langs.length];
         originalData=new String[langs.length];
         colors=new Color[langs.length];

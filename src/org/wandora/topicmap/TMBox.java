@@ -43,18 +43,18 @@ import org.wandora.application.gui.*;
  */
 public class TMBox {
     
-    public static final String WANDORACLASS_SI="http://wandora.org/si/core/wandora-class";
-    public static final String ASSOCIATIONTYPE_SI="http://wandora.org/si/core/association-type";
-    public static final String ASSOCIATIONROLE_SI="http://wandora.org/si/core/associationrole";
-    public static final String ROLE_SI="http://wandora.org/si/core/role";
-    public static final String LANGINDEPENDENT_SI="http://wandora.org/si/core/lang-independent";
-    public static final String ASSOCIATIONROLECATEGORIES_SI="http://wandora.org/si/core/associationrolecategories";
-    public static final String OCCURRENCETYPE_SI="http://wandora.org/si/core/occurrence-type";
-    public static final String HIDELEVEL_SI="http://wandora.org/si/core/hidelevel";
-    public static final String CATEGORYHIERARCHY_SI="http://wandora.org/si/common/categoryhierarchy";
-    public static final String SUPERCATEGORY_SI="http://wandora.org/si/common/supercategory";
-    public static final String SUBCATEGORY_SI="http://wandora.org/si/common/subcategory";
-    public static final String ENTRYTIME_SI="http://wandora.org/si/common/entrytime";
+    public static final String WANDORACLASS_SI = "http://wandora.org/si/core/wandora-class";
+    public static final String ASSOCIATIONTYPE_SI = "http://wandora.org/si/core/association-type";
+    public static final String ASSOCIATIONROLE_SI = "http://wandora.org/si/core/associationrole";
+    public static final String ROLE_SI = "http://wandora.org/si/core/role";
+    public static final String LANGINDEPENDENT_SI = "http://wandora.org/si/core/lang-independent";
+    public static final String ASSOCIATIONROLECATEGORIES_SI = "http://wandora.org/si/core/associationrolecategories";
+    public static final String OCCURRENCETYPE_SI = "http://wandora.org/si/core/occurrence-type";
+    public static final String HIDELEVEL_SI = "http://wandora.org/si/core/hidelevel";
+    public static final String CATEGORYHIERARCHY_SI = "http://wandora.org/si/common/categoryhierarchy";
+    public static final String SUPERCATEGORY_SI = "http://wandora.org/si/common/supercategory";
+    public static final String SUBCATEGORY_SI = "http://wandora.org/si/common/subcategory";
+    public static final String ENTRYTIME_SI = "http://wandora.org/si/common/entrytime";
 
     public static final String VARIANT_NAME_VERSION_SI = "http://wandora.org/si/core/variant-name-version";
     public static final String LANGUAGE_SI = "http://wandora.org/si/core/language";
@@ -67,12 +67,12 @@ public class TMBox {
      * The language topic is assumed to have a subject identifier LANGUAGE_SI.
      */
     public static String[] getLanguageSIs(TopicMap tm) throws TopicMapException {
-        Collection languageTopics = TMBox.sortTopics(tm.getTopicsOfType(LANGUAGE_SI), "en");       
+        Collection<Topic> languageTopics = TMBox.sortTopics(tm.getTopicsOfType(LANGUAGE_SI), "en");       
         if(languageTopics != null && languageTopics.size() > 0) {
             ArrayList languageSIs = new ArrayList();
-            for(Iterator i=languageTopics.iterator(); i.hasNext(); ) {
+            for(Topic languageTopic : languageTopics) {
                 try {
-                    languageSIs.add( ((Topic) i.next()).getOneSubjectIdentifier().toExternalForm() );
+                    languageSIs.add( languageTopic.getOneSubjectIdentifier().toExternalForm() );
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -87,6 +87,17 @@ public class TMBox {
     }
     
     
+    public static Topic[] getLanguageTopics(TopicMap tm) throws TopicMapException {
+        Collection<Topic> languageTopics = TMBox.sortTopics(tm.getTopicsOfType(LANGUAGE_SI), "en");       
+        if(languageTopics != null && languageTopics.size() > 0) {
+            return (Topic []) languageTopics.toArray( new Topic[] { } );
+        }
+        else {
+            return new Topic[] {};
+        }
+    }
+    
+    
     
     /**
      * Gets a subject identifier for each topic that represents some variant name version in
@@ -94,12 +105,12 @@ public class TMBox {
      * The name version topic is assumed to have a subject identifier VARIANT_NAME_VERSION_SI.
      */
     public static String[] getNameVersionSIs(TopicMap tm) throws TopicMapException {
-        Collection variantNameVersionTopics = TMBox.sortTopics(tm.getTopicsOfType(VARIANT_NAME_VERSION_SI), "en");       
+        Collection<Topic> variantNameVersionTopics = TMBox.sortTopics(tm.getTopicsOfType(VARIANT_NAME_VERSION_SI), "en");       
         if(variantNameVersionTopics != null && variantNameVersionTopics.size() > 0) {
             ArrayList variantNameVersionSIs = new ArrayList();
-            for(Iterator i=variantNameVersionTopics.iterator(); i.hasNext(); ) {
+            for( Topic variantNameVersionTopic : variantNameVersionTopics ) {
                 try {
-                    variantNameVersionSIs.add( ((Topic) i.next()).getOneSubjectIdentifier().toExternalForm() );
+                    variantNameVersionSIs.add( variantNameVersionTopic.getOneSubjectIdentifier().toExternalForm() );
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -115,13 +126,27 @@ public class TMBox {
         }
     }
     
+    
+    
+    public static Topic[] getNameVersionTopics(TopicMap tm) throws TopicMapException {
+        Collection<Topic> variantNameVersionTopics = TMBox.sortTopics(tm.getTopicsOfType(VARIANT_NAME_VERSION_SI), "en");       
+        if(variantNameVersionTopics != null && variantNameVersionTopics.size() > 0) {
+            return (Topic []) variantNameVersionTopics.toArray( new Topic[] { } );
+        }
+        else {
+            return new Topic[] { };
+        }
+    }
+    
+    
+    
     /**
      * Gets display name scope for English language. This scope will contain
      * the English language topic and display name topic, if they exist in
      * the topic map.
      */
     public static HashSet<Topic> getGUINameScope(TopicMap tm) throws TopicMapException {
-        HashSet<Topic> nameScope=new HashSet<Topic>();
+        HashSet<Topic> nameScope = new LinkedHashSet<Topic>();
         Topic t = tm.getTopic(XTMPSI.getLang("en"));
         if(t != null && !t.isRemoved()) nameScope.add(t);
         t = tm.getTopic(XTMPSI.DISPLAY);
@@ -584,7 +609,7 @@ public class TMBox {
      * exists, makes one. If a new topic is created, it will only contain the
      * subject identifier, no base name or anything else.
      */
-    public static Topic getOrCreateTopic(TopicMap tm,String si) throws TopicMapException {
+    public static Topic getOrCreateTopic(TopicMap tm, String si) throws TopicMapException {
         Topic t=tm.getTopic(si);
         if(t==null) {
             t=tm.createTopic();
@@ -599,7 +624,7 @@ public class TMBox {
      * the name parameter is ignored. That is, the existing topic will not be changed
      * in any way.
      */
-    public static Topic getOrCreateTopic(TopicMap tm,String si,String name) throws TopicMapException {
+    public static Topic getOrCreateTopic(TopicMap tm, String si, String name) throws TopicMapException {
         Topic t=tm.getTopic(si);
         if(t==null) {
             t=tm.createTopic();
@@ -628,7 +653,7 @@ public class TMBox {
      * Merges in a topic map using base names and subject locators from the source
      * topic map instead of destination topic map whenever topics merge.
      */
-    public static void mergeTopicMapInOverwriting(TopicMap dest,TopicMap src) throws TopicMapException {
+    public static void mergeTopicMapInOverwriting(TopicMap dest, TopicMap src) throws TopicMapException {
         Iterator iter=src.getTopics();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
@@ -653,7 +678,7 @@ public class TMBox {
      * LANGINDEPENDENT_SI and the integer it contains is
      * smaller than the given visibility level.
      */
-    public static boolean topicVisible(Topic t,int level) throws TopicMapException {
+    public static boolean topicVisible(Topic t, int level) throws TopicMapException {
         Topic hidelevel=t.getTopicMap().getTopic(HIDELEVEL_SI);
         Topic langI=t.getTopicMap().getTopic(LANGINDEPENDENT_SI);
         if(hidelevel==null || langI==null) return true;
@@ -675,7 +700,7 @@ public class TMBox {
      * its type, all roles and all players must be visible at that level.
      * @see #topicVisible(Topic,int)
      */
-    public static boolean associationVisible(Association a,int level) throws TopicMapException {
+    public static boolean associationVisible(Association a, int level) throws TopicMapException {
         if(!topicVisible(a.getType(),level)) return false;
         Iterator roles=a.getRoles().iterator();
         while(roles.hasNext()){
