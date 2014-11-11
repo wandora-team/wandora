@@ -265,7 +265,7 @@ public class WatsonTranslateBox {
         String username = null;
         String password = null;
     
-        GenericOptionsDialog god=new GenericOptionsDialog(
+        GenericOptionsDialog god = new GenericOptionsDialog(
                 wandora,
                 "Watson connection options",
                 "Watson connection url, username and password. You must register the IBM Bluemix service to get required credentials. Read more at https://ace.ng.bluemix.net/ .",
