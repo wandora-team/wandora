@@ -178,11 +178,16 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 if(orig==null) orig="";
                 if(!orig.equals(text)) {
                     changed=true;
-                    if(text.length()==0) {
-                        topic.removeData(type,langs[j]);
+                    try {
+                        if(text.length()==0) {
+                            topic.removeData(type,langs[j]);
+                        }
+                        else {
+                            topic.setData(type, langs[j], text );
+                        }
                     }
-                    else {
-                        topic.setData(type, langs[j], text );
+                    catch(Exception e) {
+                        wandora.handleError(e);
                     }
                 }
             }
@@ -843,6 +848,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             Font f=label.getFont();
             label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
         }
+        
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             int realRow = sorter.modelIndex(row);
@@ -877,15 +883,22 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         public Object getCellEditorValue() {
             return TopicToString.toString(topic);
         }
-        
-        
+
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
             int realRow = sorter.modelIndex(row);
             scope = langs[realRow];
             label.setText(TopicToString.toString(scope));
+            Color c=wandora.topicHilights.get(scope);
+            if(c==null) c=wandora.topicHilights.getLayerColor(scope);
+            if(c!=null) label.setForeground(c);
+            else label.setForeground(Color.BLACK);
+            if(column > 0) {
+                label.setBackground(Color.WHITE);
+            }
             return label;
         }
+        
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
             fireEditingStopped();

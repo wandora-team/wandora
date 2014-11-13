@@ -35,6 +35,7 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import org.wandora.application.ErrorMessages;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleLabel;
@@ -111,14 +112,14 @@ public class ErrorDialog extends javax.swing.JDialog {
     public void setError(Exception ex) {
         stacktraceTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         stacktraceTextPane.setText(getStacktTace(ex));
-        String msg = "An exception has occurred in Wandora. Exception message follows:\n\n"+ex.getMessage();
+        String msg = ErrorMessages.getMessage(ex);
         messageLabel.setText("<html>"+msg+"</html>");
     }
     
     public void setError(Error er) {
         stacktraceTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         stacktraceTextPane.setText(getStacktTace(er));
-        String msg = "An error has occurred in Wandora. Exception message follows:\n\n"+er.getMessage();
+        String msg = ErrorMessages.getMessage(er);
         messageLabel.setText("<html>"+msg+"</html>");
     }
     
