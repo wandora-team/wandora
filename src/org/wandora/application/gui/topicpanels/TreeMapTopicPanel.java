@@ -139,7 +139,7 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements TopicMapLis
     
     public void clearCaches() {
         if(treeMapComponent != null) {
-            treeMapComponent.clearAssociationTopicsCache();
+            treeMapComponent.clearCaches();
         }
     }
     

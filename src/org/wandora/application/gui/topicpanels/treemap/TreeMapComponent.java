@@ -47,10 +47,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
+import org.wandora.application.Wandora;
 import org.wandora.application.contexts.PreContext;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.TreeMapTopicPanel;
@@ -58,6 +61,8 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 
 
@@ -93,23 +98,44 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
 
     private TopicInfo[] viewedTopics = null;
 
-    private Font sansFont;
+    private static Font sansFont;
 
-    private String TYPE_INSTANCE = "instance-of";
-    private String TYPE_CLASS = "class-of";
+    private static final String TYPE_INSTANCE = "instance-of";
+    private static final String TYPE_CLASS = "class-of";
 
+    private static final Color colorOfInstances = new Color(0x2ca02c);
+    private static final Color colorOfClasses = new Color(0xd62728);
     private static final Color[] colorList = new Color[] {
-        Color.YELLOW, Color.RED, Color.PINK, 
-        Color.ORANGE, Color.MAGENTA, Color.CYAN,
-        Color.YELLOW.darker().darker(), Color.RED.darker().darker(), Color.PINK.darker().darker(), 
-        Color.ORANGE.darker().darker(), Color.MAGENTA.darker().darker(), Color.CYAN.darker().darker(),
-        Color.YELLOW.brighter(), Color.RED.brighter(), Color.PINK.brighter(), 
-        Color.ORANGE.brighter(), Color.MAGENTA.brighter(), Color.CYAN.brighter(),
+        new Color(0x393b79),
+        new Color(0x393b79),
+        new Color(0x5254a3),
+        new Color(0x6b6ecf),
+        new Color(0x9c9ede),
+        new Color(0x637939),
+        new Color(0x8ca252),
+        new Color(0xb5cf6b),
+        new Color(0xcedb9c),
+        new Color(0x8c6d31),
+        new Color(0xbd9e39),
+        new Color(0xe7ba52),
+        new Color(0xe7cb94),
+        new Color(0x843c39),
+        new Color(0xad494a),
+        new Color(0xd6616b),
+        new Color(0xe7969c),
+        new Color(0x7b4173),
+        new Color(0xa55194),
+        new Color(0xce6dbd),
+        new Color(0xde9ed6),
     };
     private static HashMap<String,Color> topicColors = new HashMap();
     private static HashMap<Topic, HashMap<Topic, Collection<Topic>>> associationTopicsCache = new HashMap();
     private static HashMap<Topic, Integer> associationTopicsSizeCache = new HashMap();
 
+    private HashSet<Topic> knownAssociationTypes = new LinkedHashSet();
+    private HashSet<Topic> filteredAssociationTypes = new LinkedHashSet();
+    private boolean filterClasses = false;
+    private boolean filterInstances = false;
     
     private Graphics g = null;
 
@@ -161,12 +187,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
         repaint();
     }
     
-    
-    public void resetZoom() {
-        zoom = 1;
-        prepareDraw();
-        repaint();
-    }
     
 
     public void updateZoom(int steps) {
@@ -221,6 +241,15 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
          * 
          */
     }
+
+    
+    
+    public void resetZoom() {
+        zoom = 1;
+        prepareDraw();
+        repaint();
+    }
+    
 
     
     RenderingHints qualityHints = new RenderingHints(
@@ -376,10 +405,9 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     private void drawMouseOverCanvas() {
         if(isMouseOver) {
             if(g != null) {
-                g.setClip(0,0,width+2, height+2);
+                //g.setClip(0,0,width+2, height+2);
             }
-            for(int i=0;i<viewedTopics.length;i++) {
-                TopicInfo t = viewedTopics[i];
+            for(TopicInfo t : viewedTopics) {
                 Rect rect = t.rectArea;
                 setColor(Color.WHITE);
                 drawRect(rect.x, rect.y, rect.w, rect.h);
@@ -392,7 +420,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
 
     private void drawInfoWindow() {
         if(g != null) {
-            g.setClip(0,0,width,height);
+            //g.setClip(0,0,width,height);
         }
         int currentX = width-10;
         if(isMouseOver) {
@@ -441,12 +469,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     
 
     public boolean overTopic(int x, int y, int width, int height) {
-        if(mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+height) {
-            return true;
-        } 
-        else {
-            return false;
-        }
+        return mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+height;
     }
 
     
@@ -545,18 +568,20 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
 
 
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
     
+    @Override
     public void mousePressed(MouseEvent e) {
     }
     
 
+    @Override
     public void mouseReleased(MouseEvent evt) {
         if(isMouseOver) {
-            for(int i=0; i<viewedTopics.length; i++) {
-                TopicInfo t = viewedTopics[i];
+            for(TopicInfo t : viewedTopics) {
                 if(overTopic((int)t.rectArea.x, (int)t.rectArea.y, (int)t.rectArea.w, (int)t.rectArea.h)) {
                     Object [] struct = new Object[viewedTopics.length*2];
                     for(int j=0;j<viewedTopics.length;j++) {
@@ -572,8 +597,12 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                     popup = UIBox.makePopupMenu(struct, this);
                     
                     Object[] optionsStruct = new Object[] {
+                        "---", 
+                        "Add filter", getAddFiltersMenuStruct(),
+                        "Remove filter", getRemoveFiltersMenuStruct(),
+                        "Remove all filters", this,
                         "---",
-                        "Options", treeMapTopicPanel.getViewMenuStruct()
+                        "Options", treeMapTopicPanel.getViewMenuStruct(),
                     };
                     popup = UIBox.attachPopup(popup, optionsStruct, treeMapTopicPanel);
                     
@@ -584,28 +613,33 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
         }
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 
-    
-    
 
     // -------------------------------------------------------------------------
     
+    
+    @Override
     public void componentResized(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+    @Override
     public void componentMoved(ComponentEvent e) {
     }
 
+    @Override
     public void componentShown(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+    @Override
     public void componentHidden(ComponentEvent e) {
     }
     
@@ -619,7 +653,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                     size = c.getSize();
                 }
                 if(!size.equals(getSize())) {
-                    System.out.println("new size treemapcomponent: "+size);
+                    //System.out.println("new size treemapcomponent: "+size);
                     setPreferredSize(size);
                     setMinimumSize(size);
                     setSize(size);
@@ -628,7 +662,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
             revalidate();
             prepareDraw();
             repaint();
-
         }
         catch(Exception ex) {
             // SKIP
@@ -640,11 +673,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     
     
     
-    
-
-    
-    
-    public void clearAssociationTopicsCache() {
+    public void clearCaches() {
         associationTopicsCache = new HashMap();
         associationTopicsSizeCache = new HashMap();
         //topicColors = new HashMap();
@@ -654,8 +683,20 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     
     private DefaultMutableTreeNode createNode(Topic curTopic, int curOrder, int curDepth, String type) {
         try {
-            Collection<Topic> instances = curTopic.getTopicMap().getTopicsOfType(curTopic);
-            Collection<Topic> classes = curTopic.getTypes();
+            Collection<Topic> instances = null;
+            if(filterInstances) {
+                instances = new ArrayList();
+            }
+            else {
+                instances = curTopic.getTopicMap().getTopicsOfType(curTopic);
+            }
+            Collection<Topic> classes = null;
+            if(filterClasses) {
+                classes = new ArrayList();
+            }
+            else {
+                classes = curTopic.getTypes();
+            }
             HashMap<Topic, Collection<Topic>> associationTopics = associationTopicsCache.get(curTopic);
             int associationTopicsSize = 0;
             
@@ -665,21 +706,24 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                 associationTopicsSize = 0;
                 for(Association a : associations) {
                     Topic at = a.getType();
-                    Collection<Topic> linkedTopics = associationTopics.get(at);
-                    if(linkedTopics == null) {
-                        linkedTopics = new ArrayList<Topic>();
-                        associationTopics.put(at, linkedTopics);
-                    }
-                    Topic player = null;
-                    boolean skipCurrentTopic = true;
-                    for(Topic role : a.getRoles()) {
-                        player = a.getPlayer(role);
-                        if(skipCurrentTopic && player.mergesWithTopic(curTopic)) {
-                            skipCurrentTopic = false;
-                            continue;
+                    knownAssociationTypes.add(at);
+                    if(!filteredAssociationTypes.contains(at)) {
+                        Collection<Topic> linkedTopics = associationTopics.get(at);
+                        if(linkedTopics == null) {
+                            linkedTopics = new ArrayList();
+                            associationTopics.put(at, linkedTopics);
                         }
-                        linkedTopics.add(player);
-                        associationTopicsSize++;
+                        Topic player = null;
+                        boolean skipCurrentTopic = true;
+                        for(Topic role : a.getRoles()) {
+                            player = a.getPlayer(role);
+                            if(skipCurrentTopic && player.mergesWithTopic(curTopic)) {
+                                skipCurrentTopic = false;
+                                continue;
+                            }
+                            linkedTopics.add(player);
+                            associationTopicsSize++;
+                        }
                     }
                 }
                 associationTopicsSizeCache.put(curTopic, new Integer(associationTopicsSize));
@@ -696,7 +740,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                 // *** Instances ***
                 int counter = 0;
                 if(!topicColors.containsKey(TYPE_INSTANCE))
-                    topicColors.put(TYPE_INSTANCE, Color.BLUE);
+                    topicColors.put(TYPE_INSTANCE, colorOfInstances);
                 for(Topic t : instances) {
                     DefaultMutableTreeNode leaf = createNode(t, counter, curDepth+1, TYPE_INSTANCE);
                     node.add(leaf);
@@ -706,7 +750,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                 // *** Types aka classes ***
                 counter = 0;
                 if(!topicColors.containsKey(TYPE_CLASS))
-                    topicColors.put(TYPE_CLASS, Color.GREEN);
+                    topicColors.put(TYPE_CLASS, colorOfClasses);
                 for(Topic t : classes) {
                     DefaultMutableTreeNode leaf = createNode(t, counter, curDepth+1, TYPE_CLASS);
                     node.add(leaf);
@@ -730,7 +774,10 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
             }
             return node;
         }
-        catch (Exception ex) {
+        catch(TopicMapException tme) {
+            
+        }
+        catch(Exception ex) {
             //Logger.getLogger(SketchTemplate.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -741,6 +788,8 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
 
+    
+    @Override
     public void mouseDragged(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
@@ -748,6 +797,8 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
         repaint();
     }
 
+    
+    @Override
     public void mouseMoved(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
@@ -761,22 +812,163 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
         repaint();
     }
 
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
+    @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         int steps = e.getWheelRotation();
         updateZoom(steps);
         repaint();
     }
     
+
+    // -------------------------------------------------------------------------
     
     
+    public void addAssociationTypeFilter(Topic typeTopic) {
+        filteredAssociationTypes.add(typeTopic);
+    }
+    
+    
+    public void removeAssociationTypeFilter(Topic typeTopic) {
+        filteredAssociationTypes.remove(typeTopic);
+    }
+    
+    
+    public void removeAllAssociationTypeFilters() {
+        filteredAssociationTypes = new LinkedHashSet();
+        filterClasses = false;
+        filterInstances = false;
+    }
+    
+    
+    public void setFilterClasses(boolean f) {
+        filterClasses = f;
+    }
+    
+    
+    public void setFilterInstances(boolean f) {
+        filterInstances = f;
+    }
 
 
+    private Object[] getRemoveFiltersMenuStruct() {
+        ArrayList struct = new ArrayList();
+        for(Topic filteredAssociationType : filteredAssociationTypes) {
+            try {
+                if(filteredAssociationType != null && !filteredAssociationType.isRemoved()) {
+                    struct.add("Remove filter for '"+TopicToString.toString(filteredAssociationType)+"'");
+                    struct.add(new TreeMapFilterActionListener(filteredAssociationType, false));
+                }
+            }
+            catch(Exception e) {}
+        }
+        if(filterClasses || filterInstances) {
+            if(!struct.isEmpty()) {
+                struct.add("---");
+            }
+            if(filterClasses) {
+                struct.add("Remove filter for classes");
+                struct.add(this);
+            }
+            if(filterInstances) {
+                struct.add("Remove filter for instances");
+                struct.add(this);
+            }
+        }
+        if(struct.isEmpty()) {
+            struct.add("[No filters to remove]");
+        }
+        return struct.toArray();
+    }
+    
+    
+    private Object[] getAddFiltersMenuStruct() {
+        ArrayList struct = new ArrayList();
+        for(Topic knownAssociationType : knownAssociationTypes) {
+            try {
+                if(knownAssociationType != null && !knownAssociationType.isRemoved()) {
+                    if(!filteredAssociationTypes.contains(knownAssociationType)) {
+                        struct.add("Add filter for '"+TopicToString.toString(knownAssociationType)+"'");
+                        struct.add(new TreeMapFilterActionListener(knownAssociationType, true));
+                    }
+                }
+            }
+            catch(Exception e) {}
+        }
+        if(!filterClasses || !filterInstances) {
+            if(!struct.isEmpty()) {
+                struct.add("---");
+            }
+            if(!filterClasses) {
+                struct.add("Add filter for classes");
+                struct.add(this);
+            }
+            if(!filterInstances) {
+                struct.add("Add filter for instances");
+                struct.add(this);
+            }
+        }
+        if(struct.isEmpty()) {
+            struct.add("[No filters to add]");
+        }
+        return struct.toArray();
+    }
 
     
     
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        //System.out.println("TreeMapComponent captured action event '"+event+"'");
+        if(event != null) {
+            String eventName = event.getActionCommand();
+            if("Add filter for classes".equalsIgnoreCase(eventName)) {
+                setFilterClasses(true);
+            }
+            else if("Add filter for instances".equalsIgnoreCase(eventName)) {
+                setFilterInstances(true);
+            }
+            else if("Remove filter for classes".equalsIgnoreCase(eventName)) {
+                setFilterClasses(false);
+            }
+            else if("Remove filter for instances".equalsIgnoreCase(eventName)) {
+                setFilterInstances(false);
+            }
+            else if("Remove all filters".equalsIgnoreCase(eventName)) {
+                removeAllAssociationTypeFilters();
+            }
+
+            initialize(topic);
+        }
+    }
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    private class TreeMapFilterActionListener implements ActionListener {
+        private Topic associationType = null;
+        private boolean addFilter = false;
+        
+        public TreeMapFilterActionListener(Topic t, boolean f) {
+            addFilter = f;
+            associationType = t;
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(associationType != null) {
+                if(addFilter) {
+                    filteredAssociationTypes.add(associationType);
+                }
+                else {
+                    filteredAssociationTypes.remove(associationType);
+                }
+
+                clearCaches();
+                initialize(topic);
+            }
+        }
+        
+    }
 
 }
