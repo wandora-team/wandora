@@ -43,6 +43,11 @@ public class ErrorMessages {
                       "Check if the current topic map layer is locked and unlock the layer "+
                       "or discard changes. Topic map layer is unlocked by clicking the lock icon beside the layer name.";
             }
+            else if(e instanceof org.wandora.topicmap.TopicMapException) {
+                msg = "Can't perform topic map operations because of the TopicMapException. "+
+                      "Look at the stacktrace for details. "+
+                      "If this message appears again, we suggest you save your project project and restart Wandora application.";
+            }
             else {
                 msg = "An exception has occurred in Wandora. Exception message follows:\n\n"+e.getMessage();
             }
@@ -64,6 +69,15 @@ public class ErrorMessages {
                 msg = "Wandora is running out of memory. "+
                       "Save your project and restart Wandora application. "+
                       "If possible, use startup script with larger memory.";
+            }
+            else if(e instanceof java.lang.StackOverflowError) {
+                msg = "Wandora is running out of stack memory (StackOverflowError). "+
+                      "Save your project and restart Wandora application.";
+            }
+            else if(e instanceof java.lang.VirtualMachineError) {
+                msg = "Wandora uses Java Virtual Machine for execution and the Java Virtual Machine is broken or has run out of resources necessary for it to continue operating. "+
+                      "Save your project and restart Wandora application. "+
+                      "If this message appears again, try to reinstall Java Virtual Machine (JRE).";
             }
             else {
                 msg = "An error has occurred in Wandora. Error message follows:\n\n"+e.getMessage();
