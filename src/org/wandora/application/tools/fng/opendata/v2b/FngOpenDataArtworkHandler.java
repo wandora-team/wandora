@@ -47,45 +47,45 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     
     // -------------------------------------------------------------------------
     
+    protected String BASE_SI = "http://wandora.org/si/fng/";
     
     
+    protected String ARTWORK_SI = BASE_SI+"artwork";
+    protected String ARTWORK_CLASS_SI = BASE_SI+"generic_type";
+    protected String ARTWORK_CLASS_TYPE_SI = BASE_SI+"generic_type_carrier";
     
-    protected String ARTWORK_SI = "http://www.wandora.net/artwork";
-    protected String ARTWORK_CLASS_SI = "http://www.wandora.net/generic_type";
-    protected String ARTWORK_CLASS_TYPE_SI = "http://www.wandora.net/generic_type";
+    protected String AUTHOR_SI = BASE_SI+"author";
+    protected String AUTHOR_ROLE_SI = BASE_SI+"author-role";
+    protected String ARTIST_SI = BASE_SI+"artists";
     
-    protected String AUTHOR_SI = "http://www.wandora.net/author";
-    protected String AUTHOR_ROLE_SI = "http://www.muusa.net/P14.Production_carried_out_by_role_3";
-    protected String ARTIST_SI = "http://www.wandora.org/artists";
+    protected String TECHNIQUE_SI = BASE_SI+"technique";
+    protected String MATERIAL_SI = BASE_SI+"material";
     
-    protected String TECHNIQUE_SI = "http://www.wandora.net/technique";
-    protected String MATERIAL_SI = "http://www.wandora.net/material";
-    
-    protected String KEEPER_SI = "http://www.wandora.net/keeper";
-    protected String ACQUISITION_SI = "http://www.wandora.net/aqcuisition";
+    protected String KEEPER_SI = BASE_SI+"keeper";
+    protected String ACQUISITION_SI = BASE_SI+"aqcuisition";
 
-    protected String DIMENSION_SI = "http://www.wandora.net/dimension";
-    protected String DIMENSION_TYPE_SI = "http://www.wandora.net/dimension_type";
-    protected String DIMENSION_VALUE_SI = "http://www.wandora.net/dimension_value";
-    protected String DIMENSION_UNIT_SI = "http://www.wandora.net/dimension_unit";
+    protected String DIMENSION_SI = BASE_SI+"dimension";
+    protected String DIMENSION_TYPE_SI = BASE_SI+"dimension_type";
+    protected String DIMENSION_VALUE_SI = BASE_SI+"dimension_value";
+    protected String DIMENSION_UNIT_SI = BASE_SI+"dimension_unit";
     
-    protected String IMAGE_SI = "http://www.wandora.net/imageoccurrence";
-    protected String COLLECTION_SI = "http://www.wandora.net/collection";
+    protected String IMAGE_SI = BASE_SI+"imageoccurrence";
+    protected String COLLECTION_SI = BASE_SI+"collection";
     
     
-    protected String KEYWORD_SI = "http://www.wandora.net/keyword";
-    protected String KEYWORD_TYPE_SI = "http://www.wandora.org/keyword-type";
+    protected String KEYWORD_SI = BASE_SI+"keyword";
+    protected String KEYWORD_TYPE_SI = BASE_SI+"keyword-type";
     
-    protected String TIME_SI = "http://www.wandora.net/time";
+    protected String TIME_SI = BASE_SI+"time";
     
-    protected String MUSEUM_SI = "http://www.wandora.net/museum";
+    protected String MUSEUM_SI = BASE_SI+"museum";
     
-    protected String USAGE_SI = "http://www.wandora.net/usages";
-    protected String DOCUMENTS_SI = "http://www.wandora.net/documents";
+    protected String USAGE_SI = BASE_SI+"usages";
+    protected String DOCUMENTS_SI = BASE_SI+"documents";
     
-    protected String ENRICHMENT_SI = "http://www.wandora.org/rikasteet/teosviite";
-    protected String TEXT_DOCUMENT_ROLE_SI = "http://www.wandora.net/text";
-    protected String TEXT_OCCURRENCE_TYPE_SI = "http://www.wandora.org/rikasteet/teksti";
+    protected String ENRICHMENT_SI = BASE_SI+"rikasteet/teosviite";
+    protected String TEXT_DOCUMENT_ROLE_SI = BASE_SI+"text";
+    protected String TEXT_OCCURRENCE_TYPE_SI = BASE_SI+"rikasteet/teksti";
     
     
     
@@ -147,7 +147,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
             addIdentifier(getResourceURIBase()+urlEncode(t.getBaseName()), "uri");
             for( Locator si : t.getSubjectIdentifiers() ) {
                 String sis = si.toExternalForm();
-                if(!sis.startsWith("http://www.wandora.net/defaultSI")) {
+                if(sis.startsWith("http://www.muusa.net/")) {
                     addIdentifier(si.toExternalForm(), "si");
                 }
             }
@@ -206,10 +206,13 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
                 HashMap properties = new HashMap();
                 for( Locator si : author.getSubjectIdentifiers() ) {
                     String sis = si.toExternalForm();
-                    if(!sis.startsWith("http://www.wandora.net/defaultSI")) {
+                    if(sis.startsWith("http://www.muusa.net/E39.Actor")) {
                         properties.put("si", si.toExternalForm());
                         break;
                     }
+                }
+                if(!properties.containsKey("si")) {
+                    properties.put("si", author.getOneSubjectIdentifier().toExternalForm());
                 }
                 properties.put("uri", getResourceURIBase()+urlEncode(author.getBaseName()));
                 addCreator(getNameFor(author), properties);

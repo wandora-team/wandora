@@ -42,19 +42,21 @@ import org.wandora.utils.velocity.GenericVelocityHelper;
 public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler implements FngOpenDataHandlerInterface {
 
     
-    private String PERSON_BIRTH_SI = "http://www.wandora.org/person_birth"; // A-TYPE
-    private String PERSON_DEATH_SI = "http://www.wandora.org/person_death"; // A-TYPE
-    private String TIME_SI = "http://www.muusa.net/E52.Time-Span"; // ROLE
-    private String PLACE_SI = "http://www.wandora.org/place"; // ROLE
+    protected String BASE_SI = "http://wandora.org/si/fng/";
     
-    private String GROUP_SI = "http://www.wandora.org/group"; // A-TYPE
-    private String ARTIST_GROUP_SI = "http://www.wandora.org/artist_group"; // ROLE
+    private String PERSON_BIRTH_SI = BASE_SI+"person_birth"; // A-TYPE
+    private String PERSON_DEATH_SI = BASE_SI+"person_death"; // A-TYPE
+    private String TIME_SI = BASE_SI+"time"; // ROLE
+    private String PLACE_SI = BASE_SI+"place"; // ROLE
+    
+    private String GROUP_SI = BASE_SI+"group"; // A-TYPE
+    private String ARTIST_GROUP_SI = BASE_SI+"artist_group"; // ROLE
     
     private String IDENTIFIED_SI = "http://www.muusa.net/P131.is_identified_by"; // A-TYPE
     private String IDENTIFIED_ROLE_SI = "http://www.muusa.net/P131.is_identified_by_role_1"; // ROLE
     
-    private String AUTHOR_SI = "http://www.wandora.org/author"; // A-TYPE
-    private String ARTWORK_SI = "http://www.wandora.org/artwork"; // ROLE
+    private String AUTHOR_SI = BASE_SI+"author"; // A-TYPE
+    private String ARTWORK_SI = BASE_SI+"artwork"; // ROLE
     
     
     
