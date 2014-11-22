@@ -57,9 +57,9 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, Exception e) {
         super(w, true);
         initComponents();
-        this.setSize(600,400);
+        this.setSize(700,400);
         w.centerWindow(this);
-        setTitle("Exception occurred");
+        setTitle("Exception");
         setError(e);
         okButton.setVisible(false);
         setVisible(true);
@@ -68,9 +68,9 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, Error e) {
         super(w, true);
         initComponents();
-        this.setSize(600,400);
+        this.setSize(700,400);
         w.centerWindow(this);
-        setTitle("Error occurred");
+        setTitle("Error");
         setError(e);
         okButton.setVisible(false);
         setVisible(true);
@@ -79,8 +79,8 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, boolean modal, Throwable e, String message) {
         super(w, modal);
         initComponents();
-        this.setSize(600,400);
-        setTitle("Wandora failed to perform");
+        this.setSize(700,400);
+        setTitle("Failure");
         w.centerWindow(this);
         okButton.setVisible(false);
         stacktraceTextPane.setText(getStacktTace(e));
@@ -90,8 +90,8 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, boolean modal, Throwable e, String message, String no, String yes) {
         super(w, modal);
         initComponents();
-        setTitle("Wandora failed to perform");
-        this.setSize(600,400);
+        setTitle("Failure");
+        this.setSize(700,400);
         w.centerWindow(this);
         closeButton.setText(no);
         if(yes!=null) okButton.setText(yes);

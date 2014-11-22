@@ -23,6 +23,8 @@
 
 package org.wandora.application;
 
+import org.wandora.exceptions.OpenTopicNotSupportedException;
+
 /**
  * This class contains static methods to transform some common Java exceptions and errors to
  * error messages. Messages can be viewed to the user using the ErrorHandler, for example.
@@ -48,8 +50,22 @@ public class ErrorMessages {
                       "Look at the stacktrace for details. "+
                       "If this message appears again, we suggest you save your project project and restart Wandora application.";
             }
+            else if(e instanceof java.util.regex.PatternSyntaxException) {
+                msg = "Wandora uses regular expressions for search and replace. " +
+                      "The given regular expression pattern contains an error: <br><br>"+
+                      "<pre>"+
+                      e.getMessage()+
+                      "</pre><br><br>"+
+                      "For more information see Java's Pattern API documentation at "+
+                      "https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html";
+            }
+            else if(e instanceof OpenTopicNotSupportedException) {
+                msg = "The topic panel can't open a topic. "+
+                      "In other words, the open topic operation is not supported by the topic panel. "+
+                      "You can select or create another topic panel and try again.";
+            }
             else {
-                msg = "An exception has occurred in Wandora. Exception message follows:\n\n"+e.getMessage();
+                msg = "An exception has occurred in Wandora: "+e.getMessage()+"";
             }
         }
         return msg;

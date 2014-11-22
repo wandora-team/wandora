@@ -54,9 +54,11 @@ import java.io.*;
 import java.net.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.Level;
 import javax.swing.*;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.modulesserver.WandoraModulesServer;
+import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.piccolo.*;
 import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.topicmap.undowrapper.UndoException;
@@ -1462,6 +1464,10 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         catch(TopicMapException tme) { 
             handleError(tme); 
             return false;
+        } 
+        catch (OpenTopicNotSupportedException otnse) {
+           handleError(otnse); 
+           return false;
         }
     }
     

@@ -40,6 +40,7 @@ import org.wandora.application.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleMenuItem;
+import org.wandora.exceptions.OpenTopicNotSupportedException;
 
 
 
@@ -376,7 +377,7 @@ public class TopicPanelManager implements ActionListener {
 
 
     
-    public void reopenTopic() throws TopicMapException {
+    public void reopenTopic() throws TopicMapException, OpenTopicNotSupportedException {
         if(currentTopicPanel != null) {
             openTopic(currentTopicPanel.getTopic());
         }
@@ -427,7 +428,7 @@ public class TopicPanelManager implements ActionListener {
      * Opens an argument topic in current TopicPanel. Notice, DockingFramePanel
      * opens topic in current dockable.
      */
-    public void openTopic(Topic topic) throws TopicMapException {
+    public void openTopic(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
         if(topic == null || topic.isRemoved()) return;
         
         if(topic.getSubjectIdentifiers().isEmpty()) {

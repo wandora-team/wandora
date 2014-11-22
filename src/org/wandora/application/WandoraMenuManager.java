@@ -1964,7 +1964,7 @@ public class WandoraMenuManager {
             if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
                 for(Dockable dockable : dockedTopicPanels.keySet()) {
                     TopicPanel tp = dockedTopicPanels.get(dockable);
-                    if(tp != null) {
+                    if(tp != null && tp.supportsOpenTopic()) {
                         String withTitle = dockable.getTitleText();
                         if(withTitle.length() > 30) withTitle = withTitle.substring(0, 27)+"...";
                         struct.add(tp.getName()+" w "+withTitle);

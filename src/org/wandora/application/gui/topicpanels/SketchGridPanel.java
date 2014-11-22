@@ -98,6 +98,11 @@ public class SketchGridPanel extends javax.swing.JPanel implements TopicMapListe
     }
 
     
+    @Override
+    public boolean supportsOpenTopic() {
+        return true;
+    }
+    
     
 
     @Override

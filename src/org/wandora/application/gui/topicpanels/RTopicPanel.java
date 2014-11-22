@@ -623,6 +623,13 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
     
     
     @Override
+    public boolean supportsOpenTopic() {
+        return true;
+    }
+    
+    
+    
+    @Override
     public void open(Topic topic) throws TopicMapException {
 	rootTopic = topic;
         Wandora wandora = Wandora.getWandora();

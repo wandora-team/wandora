@@ -115,6 +115,10 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
     public void toggleVisibility(String componentName) {}
 
 
+    public boolean supportsOpenTopic() {
+        return true;
+    }
+    
 
 
     // -------------------------------------------------------------------------
