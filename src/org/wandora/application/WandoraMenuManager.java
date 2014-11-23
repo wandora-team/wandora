@@ -482,7 +482,7 @@ public class WandoraMenuManager {
         // ---- THE STRUCTURE ----
         Object[] menuStructure = new Object[] {
             "Open topic", UIBox.getIcon("gui/icons/topic_open.png"), KeyStroke.getKeyStroke(VK_O, CTRL_MASK), new OpenTopic(OpenTopic.ASK_USER),
-            "Close topic panel", UIBox.getIcon("gui/icons/topic_close.png"), KeyStroke.getKeyStroke(VK_W, CTRL_MASK), new CloseCurrentTopicPanel(),
+            "Close panel", UIBox.getIcon("gui/icons/topic_close.png"), KeyStroke.getKeyStroke(VK_W, CTRL_MASK), new CloseCurrentTopicPanel(),
             "---",
             "New topic...", UIBox.getIcon("gui/icons/new_topic.png"), KeyStroke.getKeyStroke(VK_N, CTRL_MASK), new NewTopicExtended(),
             "Delete topic...", UIBox.getIcon("gui/icons/topic_delete.png"), KeyStroke.getKeyStroke(VK_DELETE, CTRL_MASK), new DeleteTopics(new ApplicationContext()),

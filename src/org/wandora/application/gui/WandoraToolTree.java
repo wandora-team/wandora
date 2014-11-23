@@ -28,22 +28,16 @@
 package org.wandora.application.gui;
 
 import java.io.*;
-import org.wandora.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.*;
-import org.wandora.application.tools.navigate.OpenTopic;
-import org.wandora.topicmap.*;
 import org.wandora.utils.*;
-import static org.wandora.utils.Tuples.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.border.*;
-import java.awt.dnd.*;
 import java.awt.datatransfer.*;
 
 
@@ -57,7 +51,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
     private Wandora wandora;
     private MouseEvent mouseEvent;
     private WandoraToolSet toolSet = null;
-    protected TreeModel treeModel = null;
+    protected TreeModel toolTreeModel = null;
     
     private Object[] toolTreeMenuStruct = new Object[] {
         "Add tool...",
@@ -98,9 +92,9 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         
         ToolTreeNode top = new ToolTreeNode(toolSet);
         createNodes(top, toolSet);
-        treeModel = new DefaultTreeModel(top);
-        treeModel.addTreeModelListener(this);
-        this.setModel(treeModel);
+        toolTreeModel = new DefaultTreeModel(top);
+        toolTreeModel.addTreeModelListener(this);
+        this.setModel(toolTreeModel);
     }
     
     
@@ -166,7 +160,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         }
         if(childNode != null) {
             childNode.setParentNode(parentNode);
-            ((DefaultTreeModel) treeModel).insertNodeInto(
+            ((DefaultTreeModel) toolTreeModel).insertNodeInto(
                     childNode,
                     parentNode,
                     parentNode.getChildCount()
@@ -205,7 +199,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         if(selectionPath != null) {
             ToolTreeNode currentNode = (ToolTreeNode) (selectionPath.getLastPathComponent());
             if(currentNode != null) {
-                ((DefaultTreeModel) treeModel).removeNodeFromParent(currentNode);
+                ((DefaultTreeModel) toolTreeModel).removeNodeFromParent(currentNode);
                 
                 ToolTreeNode parentNode = currentNode.getParentNode();
                 WandoraToolSet set = (WandoraToolSet) parentNode.getUserObject();
@@ -239,10 +233,10 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
             
     
     public void refresh() {
-        this.setModel(treeModel);
+        this.setModel(toolTreeModel);
         this.validate();
         this.repaint();
-        System.out.println("refresh acquired");
+        // System.out.println("refresh acquired");
     }
     
     public WandoraToolSet getToolSet() {
@@ -635,8 +629,10 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
     
     
     // -------------------------------------------------------------------------
+    
+    
     public static class ToolTreeTransferable extends DnDHelper.WandoraTransferable {
-        public static final DataFlavor toolTreeNodeFlavor=new DataFlavor(ToolTreeNode.class,"ToolTreeNode");
+        public static final DataFlavor toolTreeNodeFlavor = new DataFlavor(ToolTreeNode.class,"ToolTreeNode");
         
         protected Object transferable;
         
@@ -674,7 +670,6 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
 
         @Override
         protected Transferable createTransferable(JComponent c) {
-
             TreePath path=getSelectionPath();
             if(path==null) return new ToolTreeTransferable(null);
             else {
@@ -704,6 +699,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                         //WandoraOptionPane.showMessageDialog(TopicTree.this.parent,"Invalid drop location, drop cancelled.");
                         return false;
                     }
+
                     ToolTreeNode targetNode = (ToolTreeNode)dropPath.getLastPathComponent();
                     ToolTreeNode targetSetNode = targetNode;
                     while(!targetSetNode.isSet()) {
@@ -712,12 +708,17 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                     int index = targetSetNode.getIndex(targetNode);
                     index = Math.max(0, Math.min(index, targetSetNode.getChildCount()-1));
                     
+                    if(targetSetNode.isNodeAncestor(movedNode)) {
+                        WandoraOptionPane.showMessageDialog(wandora, "Can't move the item in itself.", "Illegal drop path");
+                        return false;
+                    }
+                    
                     try {
-                        ((DefaultTreeModel) treeModel).removeNodeFromParent(movedNode);
+                        ((DefaultTreeModel) toolTreeModel).removeNodeFromParent(movedNode);
                         WandoraToolSet sourceSet = (WandoraToolSet) movedNode.getParentNode().getUserObject();
                         sourceSet.remove(movedNode.getUserObject());
                         
-                        ((DefaultTreeModel) treeModel).insertNodeInto(movedNode, targetSetNode, index);
+                        ((DefaultTreeModel) toolTreeModel).insertNodeInto(movedNode, targetSetNode, index);
                         WandoraToolSet targetSet = (WandoraToolSet) targetSetNode.getUserObject();
                         Object o = movedNode.getUserObject();
                         targetSet.add(o, index);

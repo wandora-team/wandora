@@ -282,7 +282,7 @@ public class TopicPanelManager implements ActionListener {
     public JComponent getTopicPanelMenu(JComponent topicPanelMenu) {
         SimpleMenuItem topicPanelMenuItem = null;
         if(topicPanelMenu==null) {
-            topicPanelMenu = new SimpleMenu("Add topic panel");
+            topicPanelMenu = new SimpleMenu("Add panel");
             ((SimpleMenu)topicPanelMenu).setIcon(UIBox.getIcon("gui/icons/topic_panels.png"));
         }
         

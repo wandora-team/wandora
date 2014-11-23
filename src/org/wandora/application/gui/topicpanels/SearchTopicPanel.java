@@ -152,17 +152,19 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
 
     @Override
     public Object[] getViewMenuStruct() {
-        return null;
+        return new Object[] {
+            "[Nothing to configure]"
+        };
     }
 
     @Override
     public JMenu getViewMenu() {
-        return null;
+        return UIBox.makeMenu(getViewMenuStruct(), this);
     }
 
     @Override
     public JPopupMenu getViewPopupMenu() {
-        return null;
+        return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
 
     @Override

@@ -838,7 +838,6 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
     @Override
     public Object[] getViewMenuStruct() {
         Object[] menuStructure = new Object[] {
-            "---",
             "New script", this,
             "Open script", this,
             new Object[] {

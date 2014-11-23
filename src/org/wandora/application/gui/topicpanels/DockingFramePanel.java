@@ -443,7 +443,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
     @Override
     public Object[] getViewMenuStruct() {
-        JMenu addMenu =  new SimpleMenu("Add topic panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
+        JMenu addMenu =  new SimpleMenu("Add panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
         ArrayList<ArrayList> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
         ArrayList addTopicPanelMenuStruct = new ArrayList();
         for(ArrayList panelData : availableTopicPanels) {
