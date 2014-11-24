@@ -39,10 +39,16 @@ import org.wandora.utils.Options;
 
 public class ChangeOccurrenceTableRowHeight extends AbstractWandoraTool implements WandoraTool {
     private int rowHeight = 1;
+    private Options localOptions = null;
 
+    
     /** Creates a new instance of ChangeOccurrenceTableRowHeight */
     public ChangeOccurrenceTableRowHeight(int newRowHeight) {
-        rowHeight = newRowHeight;
+        this.rowHeight = newRowHeight;
+    }
+    public ChangeOccurrenceTableRowHeight(int newRowHeight, Options options) {
+        this.rowHeight = newRowHeight;
+        this.localOptions = options;
     }
 
     
@@ -59,6 +65,9 @@ public class ChangeOccurrenceTableRowHeight extends AbstractWandoraTool implemen
     
     @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
+        if(localOptions != null) {
+            localOptions.put(OccurrenceTable.ROW_HEIGHT_OPTIONS_KEY, ""+rowHeight);
+        }
         if(wandora != null) {
             Options ops = wandora.getOptions();
             ops.put(OccurrenceTable.ROW_HEIGHT_OPTIONS_KEY, ""+rowHeight);

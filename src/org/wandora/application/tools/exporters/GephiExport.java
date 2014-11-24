@@ -794,7 +794,7 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
     }
     protected String makeID(String s) {
         if(s != null && s.length() > 0) {
-            StringBuffer sb = new StringBuffer("");
+            StringBuilder sb = new StringBuilder("");
             for(int i=0; i<s.length(); i++) {
                 if(Character.isJavaIdentifierPart(s.charAt(i))) {
                     sb.append(s.charAt(i));

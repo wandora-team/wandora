@@ -43,9 +43,11 @@ import java.util.*;
  *
  * @author olli
  */
-public class DeleteOccurrence  extends AbstractWandoraTool implements WandoraTool {
+public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool {
     
-    private Topic occurrenceType;
+    private Topic masterTopic = null;
+    private Topic occurrenceType = null;
+    
     private boolean deleteAll = false;
     private boolean forceStop = false;
     
@@ -65,6 +67,15 @@ public class DeleteOccurrence  extends AbstractWandoraTool implements WandoraToo
     public DeleteOccurrence(Topic occurrenceType) {
         this.occurrenceType=occurrenceType;
     }
+    public DeleteOccurrence(Context proposedContext, Topic occurrenceType, Topic masterTopic) {
+        this.setContext(proposedContext);
+        this.occurrenceType=occurrenceType;
+        this.masterTopic=masterTopic;
+    }
+    public DeleteOccurrence(Topic occurrenceType, Topic masterTopic) {
+        this.occurrenceType=occurrenceType;
+        this.masterTopic=masterTopic;
+    }
 
     @Override
     public String getName() {
@@ -81,18 +92,28 @@ public class DeleteOccurrence  extends AbstractWandoraTool implements WandoraToo
     @Override
     public void execute(Wandora admin, Context context)  throws TopicMapException {
         Object contextSource = context.getContextSource();
+        deleteAll = false;
+        forceStop = false;
         
         if(contextSource instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) contextSource;
             ot.delete();
         }
         else {
-            Iterator topics = getContext().getContextObjects();
+            Iterator topics = null;
+            if(masterTopic != null && !masterTopic.isRemoved()) {
+                ArrayList<Topic> topicArray = new ArrayList();
+                topicArray.add(masterTopic);
+                topics = topicArray.iterator();
+                deleteAll = true;
+            }
+            else {
+                topics = getContext().getContextObjects();
+            }
+            
             Topic topic = null;
             int count = 0;
-            Topic type=occurrenceType;
-            deleteAll = false;
-            forceStop = false;
+            Topic type = occurrenceType;
             
             ArrayList<Topic> allOccurrenceTypes = new ArrayList<Topic>();
             

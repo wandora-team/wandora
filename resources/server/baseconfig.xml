@@ -23,6 +23,7 @@
             <param key="1">java.util.HashSet</param></param>
         <param key="context.mapmaker" instance="org.wandora.modules.velocityhelpers.InstanceMaker">
             <param key="1">java.util.HashMap</param></param>
+        <param key="context.esc" instance="org.apache.commons.lang.StringEscapeUtils"></param>
     </module>
     
     <!-- Apache Velocity template engine is needed as a separate module. No reason to have

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * DockingFramesPanel.java
+ * DockingFramePanel.java
  *
  *
  */
@@ -32,7 +32,6 @@ import bibliothek.gui.dock.dockable.AbstractDockable;
 import bibliothek.gui.dock.event.DockableFocusEvent;
 import bibliothek.gui.dock.event.DockableFocusListener;
 import bibliothek.gui.dock.event.DockableListener;
-
 import bibliothek.gui.dock.title.DockTitle;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -71,6 +70,7 @@ import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleScrollPane;
+import org.wandora.application.gui.topicpanels.dockingpanel.SelectTopicPanelPanel;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraBackgroundPaint;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockActionSource;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockController;
@@ -86,6 +86,7 @@ import org.wandora.application.tools.docking.DeleteDockable;
 import org.wandora.application.tools.docking.SelectDockable;
 import org.wandora.application.tools.navigate.CloseCurrentTopicPanel;
 import org.wandora.application.tools.navigate.OpenTopicIn;
+import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
@@ -122,7 +123,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     private DropTarget dropTarget = null;
     
-    
+    private HashMap<TopicPanel,TopicPanel> chainedTopicPanels = null;
     
     
     
@@ -132,7 +133,8 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         backgroundImageHeight = backgroundImage.getHeight();
 
         wandora = Wandora.getWandora();
-        dockedTopicPanels = new HashMap<Dockable,TopicPanel>();
+        dockedTopicPanels = new HashMap();
+        chainedTopicPanels = new HashMap(); 
         control = new WandoraDockController();
         control.addDockableFocusListener(this);
         station = new WandoraSplitDockStation();
@@ -172,10 +174,57 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     // -------------------------------------------------------------------------
     
     
+    public Dockable getDockableFor(TopicPanel topicPanel) {
+        if(topicPanel != null) {
+            for(Dockable dockable : dockedTopicPanels.keySet()) {
+                TopicPanel dockedTopicPanel = dockedTopicPanels.get(dockable);
+                if(dockedTopicPanel.equals(topicPanel)) {
+                    return dockable;
+                }
+            }
+        }
+        return null;
+    }
+    
+    
+    public void updateDockableTitle(TopicPanel topicPanel) {
+        if(topicPanel != null) {
+            Dockable dockable = getDockableFor(topicPanel);
+            if(dockable != null) {
+                if(dockable instanceof AbstractDockable) {
+                    AbstractDockable abstractDockable = (AbstractDockable) dockable;
+                    abstractDockable.setTitleText(topicPanel.getTitle());
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    public void openTo(Topic topic, TopicPanel topicPanel) throws TopicMapException, OpenTopicNotSupportedException {
+        for(Dockable dockable : dockedTopicPanels.keySet()) {
+            TopicPanel dockedTopicPanel = dockedTopicPanels.get(dockable);
+            if(dockedTopicPanel.equals(topicPanel)) {
+                currentDockable = dockable;
+                open(topic);
+            }
+        }
+    }
+    
+    
     @Override
-    public void open(Topic topic) throws TopicMapException {
+    public boolean supportsOpenTopic() {
+        return true;
+    }
+    
+    
+    
+    
+    @Override
+    public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
         //System.out.println("initialize Docking Frame Panel");
-        String name = TopicToString.toString(topic);
+        //String name = TopicToString.toString(topic);
 
         if(currentDockable == null) {
             if(!dockedTopicPanels.isEmpty()) {
@@ -188,12 +237,62 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         }
         else {
             control.setFocusedDockable(currentDockable, true);
-            TopicPanel tp = dockedTopicPanels.get(currentDockable);
-            if(tp != null) {
-                tp.open(topic);
-                if(currentDockable instanceof AbstractDockable) {
-                    AbstractDockable currentAbstractDockable = (AbstractDockable) currentDockable;
-                    currentAbstractDockable.setTitleText(tp.getTitle());
+            TopicPanel currentTopicPanel = dockedTopicPanels.get(currentDockable);
+            if(currentTopicPanel != null) {
+                try {
+                    currentTopicPanel.open(topic);
+                    updateDockableTitle(currentTopicPanel);
+                }
+                catch(OpenTopicNotSupportedException otnse) {
+                    // We are going to ask the user where the topic will be opened.
+                    ArrayList<TopicPanel> availableTopicPanels = new ArrayList();
+                    for(Dockable dockable : dockedTopicPanels.keySet()) {
+                        TopicPanel availableTopicPanel = dockedTopicPanels.get(dockable);
+                        if(availableTopicPanel != null && availableTopicPanel.supportsOpenTopic()) {
+                            availableTopicPanels.add( availableTopicPanel );
+                        }
+                    }
+                    // Easy. No suitable topic panels available. Create one.
+                    if(availableTopicPanels.isEmpty()) {
+                        addDockable((TopicPanel) new TraditionalTopicPanel(), topic);
+                    }
+                    // Easy. Only one suitable topic panel available. Use it.
+                    else if(availableTopicPanels.size() == 1) {
+                        TopicPanel alternativeTopicPanel = availableTopicPanels.get(0);
+                        alternativeTopicPanel.open(topic);
+                        updateDockableTitle(alternativeTopicPanel);
+                    }
+                    // Ask the user if we don't remember any earlier topic panel. 
+                    else {
+                        boolean askForATopicPanel = true;
+                        TopicPanel rememberedTargetTopicPanel = chainedTopicPanels.get(currentTopicPanel);
+                        if(rememberedTargetTopicPanel != null) {
+                            Dockable dockable = this.getDockableFor(rememberedTargetTopicPanel);
+                            if(dockable != null) {
+                                rememberedTargetTopicPanel.open(topic);
+                                updateDockableTitle(rememberedTargetTopicPanel);
+                                askForATopicPanel = false;
+                            }
+                            else {
+                                chainedTopicPanels.remove(currentTopicPanel);
+                            }
+                        }
+                        if(askForATopicPanel) {
+                            SelectTopicPanelPanel topicPanelSelector = new SelectTopicPanelPanel();
+                            topicPanelSelector.openInDialog(availableTopicPanels, wandora);
+                            // WAIT TILL CLOSED
+                            if(topicPanelSelector.wasAccepted()) {
+                                TopicPanel userSelectedTopicPanel = topicPanelSelector.getSelectedTopicPanel();
+                                if(userSelectedTopicPanel != null) {
+                                    userSelectedTopicPanel.open(topic);
+                                    updateDockableTitle(userSelectedTopicPanel);
+                                    if(topicPanelSelector.getRememberSelection()) {
+                                        chainedTopicPanels.put(currentTopicPanel, userSelectedTopicPanel);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -225,14 +324,11 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     public void refresh() throws TopicMapException {
         if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
             for(Dockable dockable : dockedTopicPanels.keySet()) {
-                TopicPanel tp = dockedTopicPanels.get(dockable);
-                if(tp != null) {
+                TopicPanel topicPanel = dockedTopicPanels.get(dockable);
+                if(topicPanel != null) {
                     //System.out.println("refresh topic panel at docking frame panel");
-                    tp.refresh();
-                    if(dockable instanceof AbstractDockable) {
-                        AbstractDockable abstractDockable = (AbstractDockable) dockable;
-                        abstractDockable.setTitleText(tp.getTitle());
-                    }
+                    topicPanel.refresh();
+                    updateDockableTitle(topicPanel);
                 }
             }
         }
@@ -347,7 +443,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
     @Override
     public Object[] getViewMenuStruct() {
-        JMenu addMenu =  new SimpleMenu("Add topic panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
+        JMenu addMenu =  new SimpleMenu("Add panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
         ArrayList<ArrayList> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
         ArrayList addTopicPanelMenuStruct = new ArrayList();
         for(ArrayList panelData : availableTopicPanels) {
@@ -489,7 +585,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         Icon icon = tp.getIcon();
 
         try {
-            tp.open(topic);
+            if(tp.supportsOpenTopic()) {
+                tp.open(topic);
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -612,8 +710,14 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
         try {
             if(currentDockable instanceof WandoraDockable) {
-                try { tp.open(topic); }
-                catch(Exception e) { e.printStackTrace(); }
+                try { 
+                    if(tp.supportsOpenTopic()) {
+                        tp.open(topic); 
+                    }
+                }
+                catch(Exception e) { 
+                    e.printStackTrace(); 
+                }
                 WandoraDockable currentWandoraDockable = (WandoraDockable) currentDockable;
                 TopicPanel oldTopicPanel = currentWandoraDockable.getInnerTopicPanel();
                 oldTopicPanel.applyChanges();
@@ -647,6 +751,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     // ----------------------------------------------- DockableFocusListener ---
     
     
+    @Override
     public void dockableFocused(DockableFocusEvent dfe) {
         if(!dockedTopicPanels.isEmpty()) {
             if(dfe.getNewFocusOwner() != null) {
@@ -843,26 +948,32 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     // --------------------------------------------------- DockableListener ----
     
     
+    @Override
     public void titleBound(Dockable dckbl, DockTitle dt) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public void titleUnbound(Dockable dckbl, DockTitle dt) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public void titleTextChanged(Dockable dckbl, String string, String string1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public void titleIconChanged(Dockable dckbl, Icon icon, Icon icon1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public void titleToolTipChanged(Dockable dckbl, String string, String string1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public void titleExchanged(Dockable dckbl, DockTitle dt) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

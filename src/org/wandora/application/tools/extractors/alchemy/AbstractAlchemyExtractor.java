@@ -113,6 +113,17 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
     public static final String ALCHEMY_VERB_SI = "http://wandora.org/si/alchemyapi/verb";
     public static final String ALCHEMY_TENSE_SI = "http://wandora.org/si/alchemyapi/tense";
     
+    public static final String FACE_DETECTION_SI = "http://wandora.org/si/alchemyapi/face-detection";
+    public static final String FACE_DETECTION_POSITION_SI = "http://wandora.org/si/alchemyapi/face-detection-position";
+    public static final String FACE_DETECTION_SIZE_SI = "http://wandora.org/si/alchemyapi/face-detection-size";
+    public static final String FACE_DETECTION_GENDER_SI = "http://wandora.org/si/alchemyapi/face-detection-gender";
+    public static final String FACE_DETECTION_AGE_SI = "http://wandora.org/si/alchemyapi/face-detection-age";
+    public static final String FACE_DETECTION_IDENTITY_SI = "http://wandora.org/si/alchemyapi/face-detection-identity";
+    public static final String FACE_DETECTION_TYPE_HIERARCHY_SI = "http://wandora.org/si/alchemyapi/face-detection-type-hierarchy";
+    public static final String FACE_DETECTION_IDENTITY_SUBTYPE_SI = "http://wandora.org/si/alchemyapi/face-detection-identity-subtype";
+    public static final String FACE_DETECTION_TYPE_HIERARCHY_PARENT_SI = "http://wandora.org/si/alchemyapi/face-detection-type-hierarchy-parent";
+    public static final String FACE_DETECTION_TYPE_HIERARCHY_CHILD_SI = "http://wandora.org/si/alchemyapi/face-detection-type-hierarchy-child";
+
     
 
     @Override
@@ -426,6 +437,7 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
         }
         return null;
     }
+    
     public Topic getSentimentScoreTopic(String str, TopicMap tm) throws TopicMapException {
         if(str != null) {
             str = str.trim(); 
@@ -506,7 +518,7 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
         if(tense != null) {
             tense = tense.trim();
             if(tense.length() > 0) {
-                Topic tenseTopic=getOrCreateTopic(tm, ALCHEMY_TENSE_SI+"/"+urlEncode(tense), tense);
+                Topic tenseTopic = getOrCreateTopic(tm, ALCHEMY_TENSE_SI+"/"+urlEncode(tense), tense);
                 Topic tenseTypeTopic = getTenseType(tm);
                 tenseTopic.addType(tenseTypeTopic);
                 return tenseTopic;
@@ -515,7 +527,128 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
         return null;
     }
     
+    
+    // --- Face detection ---
+    
+    
+    public Topic getFaceDetectionTopic(TopicMap tm, Topic imageTopic) throws TopicMapException {
+        String faceDetectionIdentifier = ""+System.currentTimeMillis()+"-"+Math.round(Math.random()*999);
+        Topic faceDetectionTopic = getOrCreateTopic(tm, FACE_DETECTION_SI+"/"+urlEncode(faceDetectionIdentifier), "Face detection ("+faceDetectionIdentifier+")");
+        Topic faceDetectionType = getFaceDetectionType(tm);
+        faceDetectionTopic.addType(faceDetectionType);
+        
+        if(imageTopic != null) {
+            Topic imageTypeTopic = getImageType(tm);
+            Association a = tm.createAssociation(faceDetectionType);
+            a.addPlayer(imageTopic, imageTypeTopic);
+            a.addPlayer(faceDetectionTopic, faceDetectionType);
+        }
+        
+        return faceDetectionTopic;
+    }
+    
+    public Topic getFaceDetectionGenderTopic(String gender, TopicMap tm) throws TopicMapException {
+        if(gender != null) {
+            gender = gender.trim();
+            if(gender.length() > 0) {
+                Topic genderTopic = getOrCreateTopic(tm, FACE_DETECTION_GENDER_SI+"/"+urlEncode(gender), gender);
+                Topic genderTypeTopic = getFaceDetectionGenderType(tm);
+                genderTopic.addType(genderTypeTopic);
+                return genderTopic;
+            }
+        }
+        return null;
+    }
+    
+    
+    public Topic getFaceDetectionAgeTopic(String age, TopicMap tm) throws TopicMapException {
+        if(age != null) {
+            age = age.trim();
+            if(age.length() > 0) {
+                Topic ageTopic = getOrCreateTopic(tm, FACE_DETECTION_AGE_SI+"/"+urlEncode(age), age);
+                Topic ageTypeTopic = getFaceDetectionAgeType(tm);
+                ageTopic.addType(ageTypeTopic);
+                return ageTopic;
+            }
+        }
+        return null;
+    }
+    
+    public Topic getFaceDetectionIdentityTopic(String name, TopicMap tm) throws TopicMapException {
+        if(name != null) {
+            name = name.trim();
+            if(name.length() > 0) {
+                Topic nameTopic = getOrCreateTopic(tm, FACE_DETECTION_IDENTITY_SI+"/"+urlEncode(name), name);
+                Topic nameTypeTopic = getFaceDetectionIdentityType(tm);
+                nameTopic.addType(nameTypeTopic);
+                return nameTopic;
+            }
+        }
+        return null;
+    }
+    
+    public Topic getFaceDetectionIdentitySubtypeTopic(String subtype, TopicMap tm) throws TopicMapException {
+        if(subtype != null) {
+            subtype = subtype.trim();
+            if(subtype.length() > 0) {
+                Topic subtypeTopic = getOrCreateTopic(tm, FACE_DETECTION_IDENTITY_SUBTYPE_SI+"/"+urlEncode(subtype), subtype);
+                Topic subtypeTypeTopic = getFaceDetectionIdentitySubtypeType(tm);
+                subtypeTopic.addType(subtypeTypeTopic);
+                return subtypeTopic;
+            }
+        }
+        return null;
+    }
+    
+    public Topic getFaceDetectionTypeHierarchyTopic(String type, TopicMap tm) throws TopicMapException {
+        if(type != null) {
+            type = type.trim();
+            if(type.length() > 0) {
+                Topic typeTopic = getOrCreateTopic(tm, FACE_DETECTION_TYPE_HIERARCHY_SI+"/"+urlEncode(type), type);
+                Topic typeTypeTopic = getFaceDetectionTypeHierarchyType(tm);
+                typeTopic.addType(typeTypeTopic);
+                return typeTopic;
+            }
+        }
+        return null;
+    }
+    
     // --- Types ---
+    
+    public Topic getFaceDetectionTypeHierarchyParent(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_TYPE_HIERARCHY_PARENT_SI, "Face detection type hierarchy parent", getAlchemyType(tm));
+    }
+    public Topic getFaceDetectionTypeHierarchyChild(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_TYPE_HIERARCHY_CHILD_SI, "Face detection type hierarchy child", getAlchemyType(tm));
+    }
+    
+    public Topic getFaceDetectionType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_SI, "Face detection", getAlchemyType(tm));
+    }
+    public Topic getFaceDetectionPositionType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_POSITION_SI, "Face detection position", getAlchemyType(tm));
+    }
+    public Topic getFaceDetectionSizeType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_SIZE_SI, "Face detection size", getAlchemyType(tm));
+    }
+    public Topic getFaceDetectionGenderType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_GENDER_SI, "Face detection gender", getAlchemyType(tm));
+    }
+    public Topic getFaceDetectionAgeType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_AGE_SI, "Face detection age", getAlchemyType(tm));
+    }
+    public Topic getFaceDetectionIdentityType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_IDENTITY_SI, "Face detection identity", getAlchemyType(tm));
+    }
+    public Topic getFaceDetectionTypeHierarchyType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_TYPE_HIERARCHY_SI, "Face detection type hierarchy", getAlchemyType(tm));
+    }
+    public Topic getFaceDetectionIdentitySubtypeType(TopicMap tm) throws TopicMapException {
+        return getOrCreateTopic(tm, FACE_DETECTION_IDENTITY_SUBTYPE_SI, "Face detection identity subtype", getAlchemyType(tm));
+    }
+    
+    
+
     
     public Topic getRelevanceType(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, ALCHEMY_ENTITY_RELEVANCE_SI, "Alchemy Entity Relevance", getAlchemyType(tm));
@@ -709,4 +842,13 @@ public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
         return contents.toString();
     }
 
+    
+    
+    protected boolean isValid(String str) {
+        if(str == null) return false;
+        if(str.length() == 0) return false;
+        return true;
+    }
+    
+    
 }

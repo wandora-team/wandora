@@ -25,6 +25,7 @@
 package org.wandora.application.tools.occurrences;
 
 
+import org.wandora.utils.language.SelectMicrosoftTranslationLanguagesPanel;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
@@ -33,8 +34,8 @@ import org.wandora.application.gui.*;
 import java.util.*;
 
 import com.memetix.mst.language.Language;
-import org.wandora.utils.MicrosoftTranslateBox;
-import org.wandora.utils.MicrosoftTranslateConfiguration;
+import org.wandora.utils.language.MicrosoftTranslateBox;
+import org.wandora.utils.language.MicrosoftTranslateConfiguration;
 import org.wandora.utils.Tuples.T2;
 
 
@@ -81,12 +82,13 @@ public class OccurrenceMicrosoftTranslate extends AbstractWandoraTool implements
 
 
 
+    @Override
     public void execute(Wandora wandora, Context context) {
         Object contextSource = context.getContextSource();
 
         if(contextSource instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) contextSource;
-            ot.microsoftTranslate();
+            ot.translate(OccurrenceTable.MICROSOFT_TRANSLATE);
         }
         else {
             Iterator topics = context.getContextObjects();

@@ -78,6 +78,8 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
     
     public static boolean CHECK_EXPORTED_FILE = true;
     
+    public static boolean EXPORT_VTTK = false;
+    
     
     @Override
     public Icon getIcon() {
@@ -100,6 +102,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
             new String[]{"Export artists","boolean",(EXPORT_ARTISTS ? "true" : "false"),"Should artists topics export?"},
             new String[]{"Export artworks","boolean",(EXPORT_ARTWORKS ? "true" : "false"),"Should artworks topics export?"},
             new String[]{"Check exported file","boolean",(CHECK_EXPORTED_FILE ? "true" : "false"),"Should check the exported file?"},
+            new String[]{"Export VTTK instead","boolean",(EXPORT_VTTK ? "true" : "false"),"Export VTTK flavour?"},
         },admin);
         god.setVisible(true);
         if(god.wasCancelled()) return;
@@ -109,6 +112,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
         EXPORT_ARTISTS = ("true".equals(values.get("Export artists")) ? true : false );
         EXPORT_ARTWORKS = ("true".equals(values.get("Export artworks")) ? true : false );
         CHECK_EXPORTED_FILE = ("true".equals(values.get("Check exported file")) ? true : false );
+        EXPORT_VTTK = ("true".equals(values.get("Export VTTK instead")) ? true : false );
     }
     
     
@@ -312,7 +316,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
         for( Topic topic : data ) {
             if(forceStop()) break;
             if(topic != null && !topic.isRemoved()) {
-                print(writer, FngOpenDataStruct.toString(topic, tm, "dc-xml"));
+                print(writer, topicToString(topic, tm, "dc-xml"));
             }
             logger.setProgress(p++);
         }
@@ -344,7 +348,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
         for( Topic topic : data ) {
             if(forceStop()) break;
             if(topic != null && !topic.isRemoved()) {
-                print(writer, FngOpenDataStruct.toString(topic, tm, "dc-ds-xml"));
+                print(writer, topicToString(topic, tm, "dc-ds-xml"));
             }
             logger.setProgress(p++);
         }
@@ -377,7 +381,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
         for( Topic topic : data ) {
             if(forceStop()) break;
             if(topic != null && !topic.isRemoved()) {
-                print(writer, FngOpenDataStruct.toString(topic, tm, "dc-json"));
+                print(writer, topicToString(topic, tm, "dc-json"));
             }
             logger.setProgress(p++);
             if(p < n) println(writer, ",");
@@ -415,7 +419,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
         for( Topic topic : data ) {
             if(forceStop()) break;
             if(topic != null && !topic.isRemoved()) {
-                print(writer, FngOpenDataStruct.toString(topic, tm, "dc-text"));
+                print(writer, topicToString(topic, tm, "dc-text"));
             }
             logger.setProgress(p++);
         }
@@ -424,6 +428,14 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
         writer.close();
     }
     
+    
+    
+    
+    
+    public String topicToString(Topic topic, TopicMap tm, String format) {
+        if(EXPORT_VTTK) return (new VttkOpenDataStruct()).toString(topic, tm, format);
+        else return (new FngOpenDataStruct()).toString(topic, tm, format);
+    }
     
     
     

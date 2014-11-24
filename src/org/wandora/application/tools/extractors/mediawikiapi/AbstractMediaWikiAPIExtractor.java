@@ -30,7 +30,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 
-import org.wandora.utils.LanguageBox;
+import org.wandora.utils.language.LanguageBox;
 
 /**
  *

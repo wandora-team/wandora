@@ -34,6 +34,7 @@ import org.wandora.application.*;
 import org.wandora.utils.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -45,7 +46,7 @@ import javax.swing.table.DefaultTableModel;
 public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
        
     
-    public static int HISTORYMAXSIZE = 40;
+    public static final int HISTORYMAXSIZE = 40;
     
     private Wandora wandora;
     private TopicTable foundTable = null;
@@ -64,7 +65,7 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
             new java.awt.event.KeyAdapter() {
                 @Override
                 public void keyReleased(java.awt.event.KeyEvent evt){
-                    if(evt.getKeyChar()==evt.VK_ENTER) doSearch();
+                    if(evt.getKeyChar()==KeyEvent.VK_ENTER) doSearch();
                 }
             }
         );
@@ -120,7 +121,7 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
                 if(foundTopics != null && foundTopicsArray.length > 0) {
                     foundTable = new TopicTable(wandora);
                     foundTable.initialize(foundTopicsArray, null);
-                    foundTable.setSort(0);
+                    foundTable.toggleSortOrder(0);
                     if(!allowMultiSelection) {
                         foundTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                     }
@@ -142,6 +143,8 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
             refresh();
         }
         catch (Exception e) {
+            messageField.setText("Error!");
+            messageField.setIcon(UIBox.getIcon("gui/icons/warn.png"));
             wandora.handleError(e);
         }
     }
@@ -163,6 +166,8 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
     // -------------------------------------------------------------------------
 
 
+    
+    
     @Override
     public Topic getSelectedTopic() {
         if(foundTable != null) {

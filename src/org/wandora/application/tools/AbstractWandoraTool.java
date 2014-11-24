@@ -210,13 +210,13 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         }
         catch(Exception e) {
             if(runAdmin != null) {
-                runAdmin.displayException("An exception '"+e.toString()+"' occurred while running tool "+this.getClass().getName(),e);
+                runAdmin.displayException(ErrorMessages.getMessage(e, this), e);
             }
             toolException = e;
         }
         catch(Error er) {
             if(runAdmin != null) {
-                runAdmin.displayException("An error '"+er.toString()+"' occurred while running tool "+this.getClass().getName(),er);
+                runAdmin.displayException(ErrorMessages.getMessage(er, this), er);
             }
         }
         if(!allowMultipleInvocations()) {

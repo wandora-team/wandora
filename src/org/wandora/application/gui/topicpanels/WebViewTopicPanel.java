@@ -61,7 +61,10 @@ public class WebViewTopicPanel implements TopicPanel {
     }
     
     
-    
+    @Override
+    public boolean supportsOpenTopic() {
+        return true;
+    }
     
     @Override
     public void open(Topic topic) throws TopicMapException {

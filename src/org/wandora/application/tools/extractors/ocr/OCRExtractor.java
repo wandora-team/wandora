@@ -38,7 +38,7 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.topicmap.*;
-import org.wandora.utils.LanguageBox;
+import org.wandora.utils.language.LanguageBox;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 

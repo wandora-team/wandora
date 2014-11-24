@@ -32,13 +32,11 @@ import org.wandora.topicmap.layered.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.utils.swing.GuiTools;
 
 import java.io.*;
-import java.util.*;
 import javax.swing.*;
-import java.awt.*;
+
 
 /**
  *
@@ -103,6 +101,8 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
         }
     }
     
+    
+    
     @Override
     public void execute(Wandora admin, Context context) throws TopicMapException  {
         
@@ -118,7 +118,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
         if(configPanel.wasCancelled()) return;
         
         setDefaultLogger();
-        setProgressMax(1000);
+        setProgressMax(10000);
         
         String filename=null;
         try{

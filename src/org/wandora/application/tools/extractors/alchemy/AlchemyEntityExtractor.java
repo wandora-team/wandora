@@ -474,7 +474,7 @@ public class AlchemyEntityExtractor extends AbstractAlchemyExtractor {
                         //parent.log("Found entity '"+data_entity_text+"'");
 
                         parent.setProgress( progress++ );
-                        if(data_entity_text != null && data_entity_text.length() > 0) {
+                        if(isValid(data_entity_text)) {
                             try {
                                 if(parent.getCurrentLogger() != null) parent.log("Alchemy found named entity '"+data_entity_text+"'.");
                                 Topic entityTopic = parent.getEntityTopic(data_entity_text, tm);
@@ -490,38 +490,44 @@ public class AlchemyEntityExtractor extends AbstractAlchemyExtractor {
                                             a.addPlayer(relevance, relevanceType);
                                         }
                                     }
-                                    if(data_entity_type != null && data_entity_type.length() > 0) {
+                                    if(isValid(data_entity_type)) {
                                         Topic entityTypeTopic = getEntityTypeTopic(data_entity_type, tm);
                                         if(entityTypeTopic != null) {
                                             entityTopic.addType(entityTypeTopic);
                                         }
                                     }
-                                    if(data_entity_disambiguated_dbpedia != null && data_entity_disambiguated_dbpedia.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_dbpedia)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_dbpedia, entityTopic, entityType, tm);
                                     }
-                                    if(data_entity_disambiguated_yago != null && data_entity_disambiguated_yago.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_yago)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_yago, entityTopic, entityType, tm);
                                     }
-                                    if(data_entity_disambiguated_opencyc != null && data_entity_disambiguated_opencyc.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_opencyc)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_opencyc, entityTopic, entityType, tm);
                                     }
-                                    if(data_entity_disambiguated_umbel != null && data_entity_disambiguated_umbel.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_umbel)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_umbel, entityTopic, entityType, tm);
                                     }
-                                    if(data_entity_disambiguated_freebase != null && data_entity_disambiguated_freebase.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_freebase)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_freebase, entityTopic, entityType, tm);
                                     }
-                                    if(data_entity_disambiguated_ciafactbook != null && data_entity_disambiguated_ciafactbook.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_ciafactbook)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_ciafactbook, entityTopic, entityType, tm);
                                     }
-                                    if(data_entity_disambiguated_census != null && data_entity_disambiguated_census.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_census)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_census, entityTopic, entityType, tm);
                                     }
-                                    if(data_entity_disambiguated_geonames != null && data_entity_disambiguated_geonames.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_geonames)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_geonames, entityTopic, entityType, tm);
                                     }
-                                    if(data_entity_disambiguated_musicbrainz != null && data_entity_disambiguated_musicbrainz.length() > 0) {
+                                    if(isValid(data_entity_disambiguated_musicbrainz)) {
                                         createSameAsAssociationWith(data_entity_disambiguated_musicbrainz, entityTopic, entityType, tm);
+                                    }
+                                    if(isValid(data_entity_disambiguated_geo)) {
+                                        createSameAsAssociationWith(data_entity_disambiguated_geo, entityTopic, entityType, tm);
+                                    }
+                                    if(isValid(data_entity_disambiguated_website)) {
+                                        createSameAsAssociationWith(data_entity_disambiguated_website, entityTopic, entityType, tm);
                                     }
                                 }
                             }

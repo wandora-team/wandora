@@ -27,34 +27,40 @@
 
 package org.wandora.application.gui;
 
-import org.wandora.application.tools.extractors.textwise.TextWiseClassifier;
 import com.google.api.translate.Language;
-import org.wandora.application.tools.associations.FindAssociationsInOccurrenceSimple;
 
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.text.*;
 
-import org.wandora.topicmap.*;
 import org.wandora.application.*;
+import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.*;
-import org.wandora.application.tools.extractors.opencalais.*;
+import org.wandora.application.tools.associations.FindAssociationsInOccurrenceSimple;
 import org.wandora.application.tools.extractors.alchemy.*;
 import org.wandora.application.tools.extractors.bing.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.extractors.gate.AnnieExtractor;
+import org.wandora.application.tools.extractors.opencalais.*;
 import org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier;
 import org.wandora.application.tools.extractors.tagthe.TagtheExtractor;
+import org.wandora.application.tools.extractors.textwise.TextWiseClassifier;
 import org.wandora.application.tools.extractors.uclassify.SentimentUClassifier;
 import org.wandora.application.tools.extractors.uclassify.TextLanguageUClassifier;
 import org.wandora.application.tools.extractors.uclassify.TopicsUClassifier;
 import org.wandora.application.tools.extractors.uclassify.UClassifier;
 import org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract;
 import org.wandora.application.tools.extractors.zemanta.ZemantaExtractor;
-import org.wandora.utils.*;
 
 import org.wandora.application.tools.occurrences.*;
+import org.wandora.topicmap.*;
+import org.wandora.utils.*;
+import org.wandora.utils.language.GoogleTranslateBox;
+import org.wandora.utils.language.MicrosoftTranslateBox;
+import org.wandora.utils.language.SelectGoogleTranslationLanguagesPanel;
+import org.wandora.utils.language.SelectMicrosoftTranslationLanguagesPanel;
+import org.wandora.utils.language.SelectWatsonTranslationLanguagesPanel;
+import org.wandora.utils.language.WatsonTranslateBox;
 
 
 /**
@@ -130,6 +136,7 @@ public class OccurrenceTextEditor extends TextEditor {
             "Translate", new Object[] {
                 "Translate with Google...", UIBox.getIcon("gui/icons/google_translate.png"),
                 "Translate with Microsoft...", UIBox.getIcon("gui/icons/microsoft_translate.png"),
+                "Translate with Watson...", UIBox.getIcon("gui/icons/watson_translate.png"),
             },
             "Insert", new Object[] {
                 "Insert base name", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK),
@@ -297,6 +304,34 @@ public class OccurrenceTextEditor extends TextEditor {
                             doc.remove(selectionStartLoc, d);
                             doc.insertString(selectionStartLoc, translated, ca);
                             break;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            
+            else if(c.startsWith("Translate with Watson")) {
+                try {
+                    Document doc = textPane.getDocument();
+                    int selectionStartLoc = 0;
+                    int selectionEndLoc = doc.getLength();
+                    int d = selectionEndLoc-selectionStartLoc;
+                    String translateThis = doc.getText(selectionStartLoc, d);
+                    AttributeSet ca = textPane.getCharacterAttributes();
+
+                    SelectWatsonTranslationLanguagesPanel selectLanguages = new SelectWatsonTranslationLanguagesPanel();
+                    selectLanguages.notInTopicMapsContext();
+                    if(admin == null) admin = Wandora.getWandora(this);
+                    selectLanguages.openInDialog(admin);
+                    if(selectLanguages.wasAccepted()) {
+                        boolean markTranslation = selectLanguages.markTranslatedText();
+                        String languages = WatsonTranslateBox.getLanguagesCodeFor(selectLanguages.getSelectedLanguages());
+                        String translated = WatsonTranslateBox.translate(translateThis, languages, markTranslation);
+                        if(translated != null) {
+                            doc.remove(selectionStartLoc, d);
+                            doc.insertString(selectionStartLoc, translated, ca);
                         }
                     }
                 }

@@ -179,7 +179,9 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
                                     if(player != null && role != null) {
                                         if(a == null) {
                                             requiresRefresh = true;
-                                            a = topicMap.createAssociation(getTopic(admin, topicMap, aType));
+                                            Topic at = getTopic(admin, topicMap, aType);
+                                            if(at == null) break;
+                                            a = topicMap.createAssociation(at);
                                             count++;
                                         }
                                         a.addPlayer(player, role);
@@ -234,29 +236,48 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
     
     private boolean yesToAllNewTopics = false;
     
-    public Topic getTopic(Wandora admin, TopicMap topicMap, String topicName)  throws TopicMapException {
+    public Topic getTopic(Wandora wandora, TopicMap topicMap, String topicName)  throws TopicMapException {
         if(topicName != null) {
             topicName = Textbox.trimExtraSpaces(topicName);
             if(topicName.length() > 0) {
                 Topic t = topicMap.getTopicWithBaseName(topicName);
                 if(t == null) {
+                    // Testing if topicName matches any subject identifiers.
+                    t = topicMap.getTopic(topicName);
+                }
+                if(t == null) {
+                    // Testing if topicName matches any subject locators.
+                    t = topicMap.getTopicBySubjectLocator(topicName);
+                }
+                if(t == null) {
                     // Looks like there is no acquired topic available!
                     // Checking if user allows topic creation.
                     if(!yesToAllNewTopics) {
-                        int a = WandoraOptionPane.showConfirmDialog(admin, "Topic '"+topicName+"' does not exists! Would you like to create new topic with base name '" + topicName + "'.", "Create topic?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                        String tempTopicName = topicName;
+                        if(tempTopicName.length() > 256) tempTopicName = tempTopicName.substring(0,256) + "...";
+                        int a = WandoraOptionPane.showConfirmDialog(
+                                wandora, 
+                                "Topic '"+tempTopicName+"' does not exists! Would you like to create new topic for '"+tempTopicName+"'.", 
+                                "Create topic?", 
+                                WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
                         if( a == WandoraOptionPane.NO_OPTION ) { userInterrupt = a; return null; }
                         if( a == WandoraOptionPane.CANCEL_OPTION ) { userInterrupt = a; return null; }
                         if( a == WandoraOptionPane.YES_TO_ALL_OPTION ) { yesToAllNewTopics = true; }
                     }
                     requiresRefresh = true;
                     t = topicMap.createTopic();
-                    t.setBaseName(topicName);
-                    String si = "http://wandora.org/si/" + System.currentTimeMillis();
-                    int counter = 1000;
-                    while(topicMap.getTopic(si) != null && --counter > 0) {
-                        si = "http://wandora.org/si/" + System.currentTimeMillis() + counter;
+                    if(topicName.startsWith("http://") || topicName.startsWith("https://")) {
+                        t.addSubjectIdentifier(new Locator(topicName));
                     }
-                    t.addSubjectIdentifier(new Locator(si));
+                    else {
+                        t.setBaseName(topicName);
+                        String si = "http://wandora.org/si/" + System.currentTimeMillis();
+                        int counter = 1000;
+                        while(topicMap.getTopic(si) != null && --counter > 0) {
+                            si = "http://wandora.org/si/" + System.currentTimeMillis() + counter;
+                        }
+                        t.addSubjectIdentifier(new Locator(si));
+                    }
                 }
                 return t;
             }
@@ -266,12 +287,10 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
    
     
     
-    public ArrayList getTopics(Wandora admin, TopicMap topicMap, ArrayList topicNames, Topic defaultTopic)  throws TopicMapException {
+    public ArrayList getTopics(Wandora admin, TopicMap topicMap, ArrayList<String> topicNames, Topic defaultTopic)  throws TopicMapException {
         ArrayList topics = new ArrayList();
-        String topicName = null;
         Topic t = null;
-        for(int i=0; i<topicNames.size(); i++) {
-            topicName = (String) topicNames.get(i);
+        for (String topicName : topicNames) {
             if("__CURRENT_TOPIC__".equals(topicName)) {
                 t = defaultTopic;
             }

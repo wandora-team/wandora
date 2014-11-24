@@ -28,6 +28,7 @@ package org.wandora.application.gui.topicpanels;
 
 
 
+import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
 import org.wandora.application.tools.subjects.AddSubjectIdentifier;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -47,7 +48,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import org.wandora.application.gui.UIBox;
 
-import java.awt.datatransfer.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
 
 
@@ -59,7 +59,7 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  */
 
 
-public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListener, ChangeListener, TopicPanel, ComponentListener {
+public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, ChangeListener, TopicPanel, ComponentListener {
     
     public static final boolean MAKE_LOCAL_SETTINGS_GLOBAL = false;
     
@@ -80,7 +80,7 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
     
     
     
-    /** Creates new form ResourcePanel */
+    /** Creates new TabbedTopicPanel */
     public TabbedTopicPanel(Topic topic, Wandora wandora) {
         open(topic);
     }
@@ -114,10 +114,10 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
             { associationScrollPanel,  "Associations",     "View associations tab",  "associationScrollPanel" },
         };
         
-        associationPanelContainer.setTransferHandler(new AssociationTableTransferHandler());
-        instancesPanelContainer.setTransferHandler(new InstancesPanelTransferHandler());
-        classesPanelContainer.setTransferHandler(new ClassesPanelTransferHandler());
-        this.setTransferHandler(new TopicPanelTransferHandler());
+        associationPanelContainer.setTransferHandler(new AssociationTableTransferHandler(this));
+        instancesPanelContainer.setTransferHandler(new InstancesPanelTransferHandler(this));
+        classesPanelContainer.setTransferHandler(new ClassesPanelTransferHandler(this));
+        this.setTransferHandler(new TopicPanelTransferHandler(this));
         
         this.addComponentListener(this);
         topicTabbedPane.addChangeListener(this);
@@ -248,6 +248,7 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
+    
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
@@ -358,22 +359,13 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
         }
     }
     
-    
-    
-    
-    
-    
-    
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    
-    
-    
-    
 
     
     
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+
       
     
     public void updatePreview() {
@@ -461,12 +453,12 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
             e.printStackTrace();
         }
 
-        buildAssociationsPanel(associationPanel, wandora, topic);
-        buildClassesPanel(classesPanel, wandora, topic);
-        buildSubjectIdentifierPanel(subjectIdentifierPanel, wandora, topic);
-        buildInstancesPanel(instancesPanel, wandora, topic);
-        buildAllNamesPanel(variantPanel, wandora, topic);
-        buildOccurrencesPanel(dataPanel, wandora, topic);
+        buildAssociationsPanel(associationPanel, topic, options, wandora);
+        buildClassesPanel(classesPanel, topic, options, wandora);
+        buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
+        buildInstancesPanel(instancesPanel, topic, options, wandora);
+        buildAllNamesPanel(variantPanel, topic, this, options, wandora);
+        buildOccurrencesPanel(dataPanel, topic, options, wandora);
 
         refreshTabs();
         
@@ -511,15 +503,15 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
         String origSL=originalSL;
         
         // ------- basenames -------
-        String fieldTextBN=baseNameField.getText().trim();
+        String baseNameFieldText = baseNameField.getText().trim();
 //        String origBN=topic.getBaseName();
         String origBN=originalBN;
-        if((origBN==null && fieldTextBN.length()>0) || (origBN!=null && !origBN.equals(fieldTextBN))){
-            if(TMBox.checkBaseNameChange(wandora,topic,fieldTextBN)!=ConfirmResult.yes) {
+        if((origBN==null && baseNameFieldText.length()>0) || (origBN!=null && !origBN.equals(baseNameFieldText))){
+            if(TMBox.checkBaseNameChange(wandora,topic,baseNameFieldText)!=ConfirmResult.yes) {
                 baseNameField.setText(origBN);
                 throw new CancelledException();
             }
-            if(fieldTextBN.length()>0) topic.setBaseName(fieldTextBN);
+            if(baseNameFieldText.length()>0) topic.setBaseName(baseNameFieldText);
             else topic.setBaseName(null);
             changed=true;
         }
@@ -758,15 +750,15 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
 
         variantScrollPanel.add(variantPanelContainer, java.awt.BorderLayout.CENTER);
 
-        dataScrollPanel.setComponentPopupMenu(getTextDataMenu());
+        dataScrollPanel.setComponentPopupMenu(getOccurrencesMenu());
         dataScrollPanel.setName("dataScrollPanel"); // NOI18N
         dataScrollPanel.setLayout(new java.awt.BorderLayout());
 
-        dataPanelContainer.setComponentPopupMenu(getTextDataMenu());
+        dataPanelContainer.setComponentPopupMenu(getOccurrencesMenu());
         dataPanelContainer.setName("dataPanelContainer"); // NOI18N
         dataPanelContainer.setLayout(new java.awt.GridBagLayout());
 
-        dataRootPanel.setComponentPopupMenu(getTextDataMenu());
+        dataRootPanel.setComponentPopupMenu(getOccurrencesMenu());
         dataRootPanel.setName("dataRootPanel"); // NOI18N
         dataRootPanel.addMouseListener(wandora);
         dataRootPanel.setLayout(new java.awt.BorderLayout(5, 3));
@@ -945,7 +937,7 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
                 tabPopupMenu = getClassesMenu();
             }
             else if(tabComponent.equals(dataScrollPanel)) {
-                tabPopupMenu = getTextDataMenu();
+                tabPopupMenu = getOccurrencesMenu();
             }
             else if(tabComponent.equals(associationScrollPanel)) {
                 tabPopupMenu = getAssociationsMenu();
@@ -1034,8 +1026,14 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
 
     
     @Override
-    public JPopupMenu getTextDataMenu() {
-        return UIBox.makePopupMenu(WandoraMenuManager.getOccurrencesLabelPopupStruct(), wandora);
+    public JPopupMenu getOccurrencesMenu() {
+        return UIBox.makePopupMenu(WandoraMenuManager.getOccurrencesLabelPopupStruct(options), wandora);
+    }
+    
+    
+    @Override
+    public JPopupMenu getOccurrenceTypeMenu(Topic occurrenceType) {
+         return UIBox.makePopupMenu(WandoraMenuManager.getOccurrenceTypeLabelPopupStruct(occurrenceType, topic), wandora);
     }
     
     
@@ -1156,298 +1154,12 @@ public class TabbedTopicPanel extends AbstractTopicPanel implements ActionListen
     private void handleComponentEvent(ComponentEvent e) {
         revalidate();
         repaint();
-        /*
-        try {
-            Dimension size = this.getParent().getParent().getSize();
-            //size.height -= 45;
-            topicTabbedPane.setMinimumSize(size);
-            topicTabbedPane.setPreferredSize(size);
-            //System.out.println("size=="+size);
-            revalidate();
-        }
-        catch(Exception ex) {
-            ex.printStackTrace();
-        }
-         * 
-         */
     }
     
     
     
     // -------------------------------------------------------------------------
-    
-    
-    
-    
 
-
-    private class AssociationTableTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            //System.out.println("Dropped "+support);
-            if(!support.isDrop()) return false;
-            try {
-                TopicMap tm=wandora.getTopicMap();
-                ArrayList<Topic> sourceTopics=DnDHelper.getTopicList(support, tm, true);
-                if(sourceTopics==null || sourceTopics.isEmpty()) return false;
-
-                Topic schemaContentTypeTopic = tm.getTopic(SchemaBox.CONTENTTYPE_SI);
-                Topic schemaAssociationTypeTopic = tm.getTopic(SchemaBox.ASSOCIATIONTYPE_SI);
-                Topic schemaRoleTypeTopic = tm.getTopic(SchemaBox.ROLE_SI);
-
-                if(schemaContentTypeTopic == null ||
-                        schemaAssociationTypeTopic == null ||
-                        schemaRoleTypeTopic == null) {
-                            return false;
-                }
-                
-                Topic targetTopic = topic;
-                if(targetTopic != null && !targetTopic.isRemoved()) {
-                    boolean associationAdded = false;
-                    Collection<Topic> targetTopicTypes = topic.getTypes();
-                    for(Topic targetTopicType : targetTopicTypes) {
-                        if(targetTopicType.isOfType(schemaContentTypeTopic)) {
-                            Collection<Association> associationTypes = targetTopicType.getAssociations(schemaAssociationTypeTopic);
-                            for(Association associationTypeAssociation : associationTypes) {
-                                Topic associationType = associationTypeAssociation.getPlayer(schemaAssociationTypeTopic);
-                                if(associationType != null) {
-                                    Collection<Association> roleAssociations = associationType.getAssociations(schemaRoleTypeTopic);
-                                    Collection<Association> roleAssociations2 = associationType.getAssociations(schemaRoleTypeTopic);
-                                    if(roleAssociations.size() == 2) {
-                                        Topic sourceRole = null;
-                                        Topic targetRole = null;
-                                        Topic proposedSourceRole = null;
-                                        Topic proposedTargetRole = null;
-                                        Topic selectedSourceTopic = null;
-
-                                        for(Association roleAssociation : roleAssociations) {
-                                            proposedTargetRole = roleAssociation.getPlayer(schemaRoleTypeTopic);
-                                            if(proposedTargetRole != null && proposedTargetRole.mergesWithTopic(targetTopicType)) {
-                                                targetRole = proposedTargetRole;
-
-                                                for(Association roleAssociation2 : roleAssociations2) {
-                                                    proposedSourceRole = roleAssociation2.getPlayer(schemaRoleTypeTopic);
-                                                    for(Topic sourceTopic : sourceTopics) {
-                                                        if(sourceTopic != null && !sourceTopic.isRemoved()) {
-                                                            Collection<Topic> sourceTopicTypes = sourceTopic.getTypes();
-                                                            for(Topic sourceTopicType : sourceTopicTypes) {
-                                                                if(sourceTopicType != null && !sourceTopicType.isRemoved()) {
-                                                                    if(proposedSourceRole.mergesWithTopic(sourceTopicType)) {
-                                                                        sourceRole = proposedSourceRole;
-                                                                        selectedSourceTopic = sourceTopic;
-
-                                                                        if(targetRole != null && sourceRole != null && selectedSourceTopic != null) {
-                                                                            Association a=tm.createAssociation(associationType);
-                                                                            a.addPlayer(selectedSourceTopic, sourceRole);
-                                                                            a.addPlayer(targetTopic, targetRole);
-                                                                            associationAdded = true;
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if(!associationAdded) {
-                        Topic associationType = tm.getTopic(SchemaBox.DEFAULT_ASSOCIATION_SI);
-                        Topic role1 = tm.getTopic(SchemaBox.DEFAULT_ROLE_1_SI);
-                        Topic role2 = tm.getTopic(SchemaBox.DEFAULT_ROLE_2_SI);
-                        if(associationType != null && role1 != null && role2 != null) {
-                            for(Topic sourceTopic : sourceTopics) {
-                                if(sourceTopic != null && !sourceTopic.isRemoved()) {
-                                    Association a=tm.createAssociation(associationType);
-                                    a.addPlayer(sourceTopic, role1);
-                                    a.addPlayer(targetTopic, role2);
-                                    associationAdded = true;
-                                }
-                            }
-                        }
-                    }
-                }
-                wandora.doRefresh();
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-
-    
-    // -------------------------------------------------------------------------
-    
-
-    private class InstancesPanelTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-//            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try{
-                TopicMap tm=wandora.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                if(topics==null) return false;
-                Topic base=topic;
-                if(base==null) return false;
-
-                for(Topic t : topics) {
-                    if(t != null && !t.isRemoved()) {
-                        t.addType(base);
-                    }
-                }
-                wandora.doRefresh();
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-    
-    
-    // -------------------------------------------------------------------------
-    
-    private class ClassesPanelTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-//            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try{
-                TopicMap tm=wandora.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                if(topics==null) return false;
-                Topic base=topic;
-                if(base==null) return false;
-
-                for(Topic t : topics) {
-                    if(t != null && !t.isRemoved()) {
-                        base.addType(t);
-                    }
-                }
-                wandora.doRefresh();
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-    
-    
-    // -------------------------------------------------------------------------
-
-    
-    private class TopicPanelTransferHandler extends TransferHandler {
-
-        @Override
-        public boolean canImport(TransferSupport support) {
-            return false;
-            //if(!support.isDrop()) return false;
-            //return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-            //       support.isDataFlavorSupported(DataFlavor.stringFlavor);
-        }
-
-        @Override
-        protected Transferable createTransferable(JComponent c) {
-//            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
-            return null;
-        }
-
-        @Override
-        public int getSourceActions(JComponent c) {
-            return TransferHandler.COPY_OR_MOVE;
-        }
-
-        @Override
-        public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try {
-                /*
-                TopicMap tm=parent.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                if(topics==null) return false;
-                Topic base=topic;
-                if(base==null) return false;
-
-                for(Topic t : topics) {
-                    if(t != null && !t.isRemoved()) {
-                        base.addType(t);
-                    }
-                }
-                */ 
-                wandora.doRefresh();
-            }
-            catch(Exception ce){
-                Wandora.getWandora().handleError(ce);
-            }
-            return false;
-        }
-
-    }
-    
     
 }
 

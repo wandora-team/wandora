@@ -74,6 +74,9 @@ public class FngOpenDataAbstractHandler {
     
     
     
+    
+    
+    
     // -------------------------------------------------------------------------
     
     
@@ -87,6 +90,13 @@ public class FngOpenDataAbstractHandler {
     public String getResourceURI() {
         return resourceURI;
     }
+    
+    
+    public String getResourceURIBase() {
+        return "http://kokoelmat.fng.fi/app?si=";
+    }
+    
+
     
     // -------------------------------------------------------------------------
     
@@ -193,6 +203,14 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
+    public void addDate(String str, String type, String description) {
+        if(str != null) {
+            HashMap map = makeTypeMap(str, type);
+            map.put("description", description);
+            dates.add(map);
+        }
+    }
+    
     public void addDate(String str, String type, HashMap additionalProperties) {
         if(str != null) {
             HashMap map = makeTypeMap(str, type);
@@ -273,6 +291,11 @@ public class FngOpenDataAbstractHandler {
         return publishers;
     }
     
+    
+    public String getDefaultPublisher() {
+        return "Finnish National Gallery";
+    }
+    
     // -------------------------------------------------------------------------
     
     public void addRelation(String str) {
@@ -301,12 +324,18 @@ public class FngOpenDataAbstractHandler {
     // -------------------------------------------------------------------------
     
     public void addDescription(String str) {
-        addRelation(str, null);
+        addDescription(str, null);
     }
     
     public void addDescription(String str, String lang) {
         if(str != null) {
             descriptions.add(makeLangMap(str, lang));
+        }
+    }
+    
+    public void addTypedDescription(String str, String type) {
+        if(str != null) {
+            descriptions.add(makeTypeMap(str, type));
         }
     }
     
@@ -629,14 +658,14 @@ public class FngOpenDataAbstractHandler {
       protected HashMap makeTypeMap(String value, String type) {
         HashMap map = new HashMap();
         map.put(VALUE_KEY, value);
-        map.put("type", type);
+        if(type != null) map.put("type", type);
         return map;
     }  
     
     protected HashMap makeLangMap(String value, String lang) {
         HashMap map = new HashMap();
         map.put(VALUE_KEY, value);
-        map.put("lang", lang);
+        if(lang != null) map.put("lang", lang);
         return map;
     }
     
@@ -644,7 +673,7 @@ public class FngOpenDataAbstractHandler {
     protected HashMap makeMap(String value, String key, String val) {
         HashMap map = new HashMap();
         map.put(VALUE_KEY, value);
-        map.put(key, val);
+        if(key != null && val != null) map.put(key, val);
         return map;
     }
     
@@ -652,8 +681,8 @@ public class FngOpenDataAbstractHandler {
     protected HashMap makeMap(String value, String key1, String val1, String key2, String val2) {
         HashMap map = new HashMap();
         map.put(VALUE_KEY, value);
-        map.put(key1, val1);
-        map.put(key2, val2);
+        if(key1 != null && val1 != null) map.put(key1, val1);
+        if(key2 != null && val2 != null) map.put(key2, val2);
         return map;
     }
     
@@ -661,9 +690,9 @@ public class FngOpenDataAbstractHandler {
     protected HashMap makeMap(String value, String key1, String val1, String key2, String val2, String key3, String val3) {
         HashMap map = new HashMap();
         map.put(VALUE_KEY, value);
-        map.put(key1, val1);
-        map.put(key2, val2);
-        map.put(key3, val3);
+        if(key1 != null && val1 != null) map.put(key1, val1);
+        if(key2 != null && val2 != null) map.put(key2, val2);
+        if(key3 != null && val3 != null) map.put(key3, val3);
         return map;
     }
     

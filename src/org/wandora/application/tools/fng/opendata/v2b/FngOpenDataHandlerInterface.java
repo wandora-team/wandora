@@ -36,5 +36,5 @@ public interface FngOpenDataHandlerInterface {
     
     public void populate(Topic t, TopicMap tm) throws TopicMapException;
     public String toString(String outputFormat);
-    
+
 }

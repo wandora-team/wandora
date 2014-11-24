@@ -43,7 +43,7 @@ import org.wandora.application.gui.simple.*;
  */
 public class OccurrencePanel extends ResourceEditor {
     
-    private Wandora parent;
+    private Wandora wandora;
     private Topic topic;
     private Topic occurrenceType;
     
@@ -70,18 +70,19 @@ public class OccurrencePanel extends ResourceEditor {
     }
     // </editor-fold>//GEN-END:initComponents
 
-    public boolean applyChanges(org.wandora.topicmap.Topic t, Wandora parent)  throws TopicMapException {
+    @Override
+    public boolean applyChanges(Topic t, Wandora wandora)  throws TopicMapException {
         boolean changed=false;
-        if(!deleted){
+        if(!deleted) {
             Iterator iter=dataTable.entrySet().iterator();
-            while(iter.hasNext()){
+            while(iter.hasNext()) {
                 Map.Entry e=(Map.Entry)iter.next();
                 Topic version=(Topic)e.getKey();
                 SimpleTextPane comp=(SimpleTextPane)e.getValue();
                 String newText = comp.getText();
                 String orig=topic.getData(occurrenceType,version);
                 if(orig==null) orig="";
-                if(!orig.equals(newText)){
+                if(!orig.equals(newText)) {
                     changed=true;
                     topic.removeData(occurrenceType,version);
                     if(newText.length()>0) {
@@ -91,13 +92,18 @@ public class OccurrencePanel extends ResourceEditor {
             }
         }
         return changed;
-    }    
+    }
+    
+    
     public void setOccurrenceType(org.wandora.topicmap.Topic t){
         occurrenceType=t;
     }
+    
+    
+    @Override
     public boolean hasChanged() throws TopicMapException {
         Iterator iter=dataTable.entrySet().iterator();
-        while(iter.hasNext()){
+        while(iter.hasNext()) {
             Map.Entry e=(Map.Entry)iter.next();
             Topic version=(Topic)e.getKey();
             SimpleTextPane comp=(SimpleTextPane)e.getValue();
@@ -108,12 +114,16 @@ public class OccurrencePanel extends ResourceEditor {
         return false;
     }    
     
+    
+    @Override
     public void initializeAssociation(org.wandora.topicmap.Topic t, org.wandora.topicmap.Association a, Wandora parent) {
         throw new RuntimeException("Association editing not supported");
     }
     
+    
+    @Override
     public void initializeOccurrence(Topic t, Topic otype, Wandora w)  throws TopicMapException {
-        this.parent=w;
+        this.wandora=w;
         topic=t;
         occurrenceType=otype;
         
@@ -127,13 +137,14 @@ public class OccurrencePanel extends ResourceEditor {
         String[] vers=null;
         Topic[] langTopics=null;
         Topic[] verTopics=null;
-        try{
-            langs=TMBox.getLanguageSIs(parent.getTopicMap());
-            vers=TMBox.getNameVersionSIs(parent.getTopicMap());
+        try {
+            langs=TMBox.getLanguageSIs(wandora.getTopicMap());
+            vers=TMBox.getNameVersionSIs(wandora.getTopicMap());
             langTopics=tm.getTopics(langs);
             verTopics=tm.getTopics(vers);
-        }catch(TopicMapException tme){
-            parent.handleError(tme);
+        }
+        catch(TopicMapException tme){
+            wandora.handleError(tme);
             return;
         }
         this.setLayout(new java.awt.GridBagLayout());
@@ -142,7 +153,7 @@ public class OccurrencePanel extends ResourceEditor {
             gbc=new java.awt.GridBagConstraints();
             gbc.gridx=i+1;
             gbc.gridy=0;
-            javax.swing.JLabel label=new SimpleLabel(parent.getTopicGUIName(langTopics[i]));
+            javax.swing.JLabel label=new SimpleLabel(wandora.getTopicGUIName(langTopics[i]));
             this.add(label,gbc);
         }
         
@@ -152,15 +163,17 @@ public class OccurrencePanel extends ResourceEditor {
 //        this.add(new TopicLink(occurrenceType,parent),gbc);
 //        this.add(new javax.swing.JLabel(occurrenceType.getBaseName()),gbc);
         int j;
-        for(j=0;j<langs.length;j++){
+        for(j=0;j<langs.length;j++) {
             String data="";
-            if(occurrenceType!=null) data=topic.getData(occurrenceType,langTopics[j]);
+            if(occurrenceType!=null) {
+                data=topic.getData(occurrenceType,langTopics[j]);
+            }
             final SimpleTextPane field=new SimpleTextPane();
             field.setText(data==null ? "" : data);
             javax.swing.JScrollPane sp=new javax.swing.JScrollPane();
-            field.addKeyListener(new java.awt.event.KeyAdapter(){
+            field.addKeyListener(new java.awt.event.KeyAdapter() {
                 @Override
-                public void keyPressed(java.awt.event.KeyEvent e){
+                public void keyPressed(java.awt.event.KeyEvent e) {
                     if(e.getKeyCode()==KeyEvent.VK_TAB){
                         e.consume();
                         field.transferFocus();
@@ -197,21 +210,22 @@ public class OccurrencePanel extends ResourceEditor {
         
     }
 
+    
     public void delete() throws TopicMapException {
         try {
-            parent.applyChanges();
+            wandora.applyChanges();
         }
         catch(CancelledException ce){return;}
         HashSet versions=new HashSet(); // avoid concurrent modification
         versions.addAll(topic.getData(occurrenceType).keySet());
         Iterator iter=versions.iterator();
-        while(iter.hasNext()){
+        while(iter.hasNext()) {
             Topic version=(Topic)iter.next();
             topic.removeData(occurrenceType,version);
         }
         deleted=true;
         try {
-            parent.doRefresh();
+            wandora.doRefresh();
         } catch(Exception ce){return;}
     }
     

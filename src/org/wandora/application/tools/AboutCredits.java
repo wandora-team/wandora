@@ -72,13 +72,13 @@ public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
 
             String text =
                     "Copyright (C) 2004-2014 Wandora Team\n"+
-                    "Wandora Team members are Aki Kivelä, Olli Lyytinen, \n"+
-                    "Elias Tertsunen, Eero Lehtonen and Niko Laitinen.\n"+
+                    "Wandora Team members are Aki Kivelä, Olli Lyytinen \n"+
+                    "and Eero Lehtonen.\n"+
                     " \n"+
-                    "Wandora Team would like to thank Antti Tuppurainen, \n"+
-                    "Pasi Hytönen, Marko Wallgren, Jaakko Lyytinen \n"+
-                    "and Jarno Wallgren for their contribution \n"+
-                    "to the Wandora project.\n"+
+                    "Wandora Team would like to thank Elias Tertsunen, \n"+
+                    "Niko Laitinen, Antti Tuppurainen, Pasi Hytönen, \n"+
+                    "Marko Wallgren, Jaakko Lyytinen and Jarno Wallgren \n"+
+                    "for their contribution to the Wandora project.\n"+
                     " \n"+
                     "Wandora uses numerous third party libraries made by \n"+
                     "talented people around the world. Wandora Team would like to\n"+

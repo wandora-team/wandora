@@ -25,6 +25,7 @@
 package org.wandora.application.tools.topicnames;
 
 
+import org.wandora.utils.language.SelectMicrosoftTranslationLanguagesPanel;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
@@ -33,8 +34,8 @@ import org.wandora.application.gui.*;
 import java.util.*;
 
 import com.memetix.mst.language.Language;
-import org.wandora.utils.MicrosoftTranslateBox;
-import org.wandora.utils.MicrosoftTranslateConfiguration;
+import org.wandora.utils.language.MicrosoftTranslateBox;
+import org.wandora.utils.language.MicrosoftTranslateConfiguration;
 import org.wandora.utils.Tuples.T2;
 
 

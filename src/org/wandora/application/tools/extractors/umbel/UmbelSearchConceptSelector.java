@@ -141,7 +141,7 @@ public class UmbelSearchConceptSelector extends javax.swing.JDialog {
 
         headerPanel.setLayout(new java.awt.GridBagLayout());
 
-        headerLabel.setText("<html>Select which Umbel concepts you would like to import to Wandora. After selection press import button.</html>");
+        headerLabel.setText("<html>Select which Umbel concepts you would like to import to Wandora. Keep SHIFT or CTRL key pressed to select multiple concepts. After selection press import button.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;

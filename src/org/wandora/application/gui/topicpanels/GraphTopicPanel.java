@@ -286,6 +286,13 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
     
     
     @Override
+    public boolean supportsOpenTopic() {
+        return true;
+    }
+    
+    
+    
+    @Override
     public void open(Topic topic) throws TopicMapException {
         this.wandora = Wandora.getWandora();
         if(!guiInitialized) initializeGui(wandora);

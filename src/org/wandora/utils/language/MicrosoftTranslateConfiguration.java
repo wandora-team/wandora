@@ -25,7 +25,7 @@
  */
 
 
-package org.wandora.utils;
+package org.wandora.utils.language;
 
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;

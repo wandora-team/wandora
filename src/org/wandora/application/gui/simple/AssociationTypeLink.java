@@ -41,8 +41,8 @@ public class AssociationTypeLink extends TopicLink {
     
     
     /** Creates a new instance of AssociationTypeLink */
-    public AssociationTypeLink(AssociationTable at, Topic t, Wandora parent) {
-        super(t, parent);
+    public AssociationTypeLink(AssociationTable at, Topic t, Wandora wandora) {
+        super(t, wandora);
         associationTable = at;
     }
     

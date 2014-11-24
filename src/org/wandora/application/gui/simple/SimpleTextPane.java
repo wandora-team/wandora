@@ -29,32 +29,37 @@ package org.wandora.application.gui.simple;
 
 
 import com.google.api.translate.Language;
-import org.wandora.utils.EasyVector;
-import org.wandora.utils.Textbox;
-import org.wandora.utils.MSOfficeBox;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.undo.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.print.*;
-import java.awt.image.*;
-import java.util.*;
-import javax.imageio.*;
-import java.io.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
-import javax.swing.text.rtf.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import java.awt.print.*;
+import java.io.*;
 import java.net.*;
+import java.util.*;
+import javax.imageio.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
+import javax.swing.text.rtf.*;
+import javax.swing.undo.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
-
-import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.*;
 import org.wandora.application.*;
+import org.wandora.application.gui.*;
+import org.wandora.application.gui.UIBox;
 import org.wandora.utils.*;
+import org.wandora.utils.EasyVector;
+import org.wandora.utils.MSOfficeBox;
+import org.wandora.utils.Textbox;
+import org.wandora.utils.language.GoogleTranslateBox;
+import org.wandora.utils.language.MicrosoftTranslateBox;
+import org.wandora.utils.language.SelectGoogleTranslationLanguagesPanel;
+import org.wandora.utils.language.SelectMicrosoftTranslationLanguagesPanel;
+import org.wandora.utils.language.SelectWatsonTranslationLanguagesPanel;
+import org.wandora.utils.language.WatsonTranslateBox;
 
 /**
  *
@@ -91,6 +96,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         "---",
         "Translate with Google...", UIBox.getIcon("gui/icons/google_translate.png"),
         "Translate with Microsoft...", UIBox.getIcon("gui/icons/microsoft_translate.png"),
+        "Translate with Watson...", UIBox.getIcon("gui/icons/watson_translate.png"),
         "---",
         "Print...", UIBox.getIcon("gui/icons/print.png"),
     };
@@ -436,6 +442,38 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                             doc.insertString(selectionStartLoc, translated, ca);
                         }
                         break;
+                    }
+                }
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if(c.startsWith("Translate with Watson")) {
+            try {
+                Document doc = this.getDocument();
+                int selectionStartLoc = this.getSelectionStart();
+                int selectionEndLoc = this.getSelectionEnd();
+
+                if(selectionStartLoc == selectionEndLoc) {
+                    selectionStartLoc = 0;
+                    selectionEndLoc = doc.getLength();
+                }
+                int d = selectionEndLoc-selectionStartLoc;
+                String translateThis = doc.getText(selectionStartLoc, d);
+                AttributeSet ca = this.getCharacterAttributes();
+
+                SelectWatsonTranslationLanguagesPanel selectLanguages = new SelectWatsonTranslationLanguagesPanel();
+                selectLanguages.notInTopicMapsContext();
+                if(admin == null) admin = Wandora.getWandora(this);
+                selectLanguages.openInDialog(admin);
+                if(selectLanguages.wasAccepted()) {
+                    boolean markTranslation = selectLanguages.markTranslatedText();
+                    String languages = selectLanguages.getSelectedLanguages();
+                    String translated = WatsonTranslateBox.translate(translateThis, WatsonTranslateBox.getLanguagesCodeFor(languages), markTranslation);
+                    if(translated != null) {
+                        doc.remove(selectionStartLoc, d);
+                        doc.insertString(selectionStartLoc, translated, ca);
                     }
                 }
             }

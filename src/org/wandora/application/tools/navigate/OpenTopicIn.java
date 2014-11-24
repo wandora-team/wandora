@@ -30,8 +30,11 @@ import org.wandora.application.gui.*;
 import org.wandora.topicmap.*;
 import org.wandora.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import org.wandora.application.gui.topicpanels.TopicPanel;
+import org.wandora.exceptions.OpenTopicNotSupportedException;
 
 /**
  *
@@ -69,8 +72,13 @@ public class OpenTopicIn extends AbstractWandoraTool implements WandoraTool {
             Topic t = (Topic) contextTopics.next();
             if(t != null) {
                 if(topicPanel != null) {
-                    wandora.addToHistory(t);
-                    topicPanel.open(t);
+                    try {
+                        topicPanel.open(t);
+                        wandora.addToHistory(t);
+                    } 
+                    catch(OpenTopicNotSupportedException ex) {
+                        wandora.handleError(ex);
+                    }
                 }
                 else {
                     wandora.openTopic(t);
@@ -84,8 +92,13 @@ public class OpenTopicIn extends AbstractWandoraTool implements WandoraTool {
             if(topicPanel != null) {
                 Topic t = wandora.showTopicFinder();
                 if(t != null) {
-                    wandora.addToHistory(t);
-                    topicPanel.open(t);
+                    try {
+                        topicPanel.open(t);
+                        wandora.addToHistory(t);
+                    }
+                    catch (OpenTopicNotSupportedException ex) {
+                        wandora.handleError(ex);
+                    }
                 }
             }
             else {

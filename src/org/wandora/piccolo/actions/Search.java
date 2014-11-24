@@ -117,7 +117,7 @@ public class Search implements Action,XMLParamAware {
         while(st.hasMoreTokens()) {
             try {
                 queryWord = st.nextToken().trim();
-                if(queryWord != null && queryWord.length() > maxlen) {
+                if(queryWord != null && queryWord.length() >= maxlen) {
                     queryWords.add(queryWord);
                 }
             }

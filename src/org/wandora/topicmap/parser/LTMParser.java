@@ -33,13 +33,14 @@ package org.wandora.topicmap.parser;
 
 
 
-import org.wandora.topicmap.*;
-
-import java.util.regex.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import org.wandora.application.Wandora;
+import org.wandora.topicmap.*;
 import org.wandora.utils.Options;
+import org.wandora.utils.UnicodeBOMInputStream;
+import org.wandora.utils.UnicodeBOMInputStream.BOM;
 
 
 
@@ -63,8 +64,6 @@ public class LTMParser {
     public static final String OPTIONS_KEY_MAKE_SUBJECT_IDENTIFIER_FROM_ID = OPTIONS_BASE_KEY+"makeSIfromID";
     
     public static boolean ALLOW_SPECIAL_CHARS_IN_QNAMES = false;
-    public static boolean USE_LOCATOR_MAPPING = false;
-    public static boolean USE_ID_MAPPING = true;
     public static boolean NEW_OCCURRENCE_FOR_EACH_SCOPE = true;
     public static boolean REJECT_ROLELESS_MEMBERS = false;
     public static boolean PREFER_CLASS_AS_ROLE = false; // true;
@@ -77,8 +76,8 @@ public class LTMParser {
     public static boolean OVERWRITE_BASENAME = true;
     public static boolean OVERWRITE_SUBJECT_LOCATORS = false;
 
-    public static int MAX_SI_LEN = 1999;
-    public static int MAX_NAME_LEN = 1999;
+    public static int MAX_SI_LEN = 9999;
+    public static int MAX_NAME_LEN = 9999;
     public static int MAX_STRING_LEN = 99999;
 
     public static String DEFAULT_ROLE_IDENTIFIER = "role";
@@ -86,6 +85,9 @@ public class LTMParser {
     public static String DEFAULT_SCOPE_FOR_VARIANTS = TMBox.LANGINDEPENDENT_SI;
     public static String DEFAULT_TYPE_FOR_VARIANTS = "http://www.topicmaps.org/xtm/1.0/core.xtm#display";
 
+    public static String DEFAULT_BASE_URI = "http://wandora.org/si/ltm-import/";
+    public static String TEMP_SI_PREFIX = "http://wandora.org/si/temp/ltm-import/";
+    
     private Topic defaultRoleForAssociations = null;
     private Topic defaultScopeForOccurrences = null;
     private Topic defaultScopeForVariants = null;
@@ -96,10 +98,8 @@ public class LTMParser {
     private String baseuri = null;
     private String encoding = null;
     private String version = null;
-    private HashMap indicatorPrefixes = new HashMap();
-    private HashMap locatorPrefixes = new HashMap();
-    private HashMap idmapping = new HashMap();
-    private HashMap<String,Locator> locatormapping = new HashMap<String,Locator>();
+    private HashMap<String,String> indicatorPrefixes = new HashMap();
+    private HashMap<String,String> locatorPrefixes = new HashMap();
 
     private ArrayList includes = new ArrayList();
     private Pattern prefixPattern = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*\\:.+");
@@ -165,8 +165,6 @@ public class LTMParser {
     public void init() {
         indicatorPrefixes = new HashMap();
         locatorPrefixes = new HashMap();
-        idmapping = new HashMap();
-        locatormapping = new HashMap();
         lineCounter = 1;
     }
 
@@ -189,8 +187,8 @@ public class LTMParser {
                     String previousLtmuri = ltmuri;
                     // ltmuri = "file:/" + file.getAbsolutePath();
                     ltmuri = file.toURI().toString();
-                    InputStream inStream=new FileInputStream(file);
-                    parse(inStream);
+                    InputStream is=new FileInputStream(file);
+                    parse(is);
                     if(previousIn != null) in = previousIn;
                     if(ltmuri != null) ltmuri = previousLtmuri;
                     if(baseuri != null) baseuri = previousBaseuri;
@@ -211,51 +209,40 @@ public class LTMParser {
 
 
 
-    public void parse(InputStream ins) throws IOException {
-        parse(ins, "UTF-8");
+    public void parse(InputStream is) throws IOException {
+        parse(is, "UTF-8");
     }
-    public void parse(InputStream ins, String enc) throws IOException {
+    
+    
+    public void parse(InputStream is, String enc) throws IOException {
         if(enc == null || enc.equals("")) enc = "UTF-8";
         prepare();
-        InputStreamReader insr = new InputStreamReader(ins, enc);
-        in = new BufferedReader(insr);
+
+        InputStreamReader isr = new InputStreamReader(is, enc);
+        in = new BufferedReader(isr);
+        
+        eat('\ufeff'); // skip BOM
         parseEncodind();
 
         if(encoding != null) {
             if(!"utf-8".equalsIgnoreCase(encoding)) {
-                logger.log("Warning: Wandora's LTM import supports only UTF-8 encoding! Imported LTM document has '"+encoding+"' as encoding.");
+                logger.log("Warning: Wandora's LTM import supports UTF-8 encoding only! Imported LTM document has '"+encoding+"' as encoding.");
             }
         }
-
-        /*
-        if(encoding != null) {
-            try {
-                logger.log("Encoding set to " + encoding);
-                insr = new InputStreamReader(ins, encoding);
-                in = new BufferedReader(insr);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                try {
-                    in = new BufferedReader(new InputStreamReader(ins, "UTF-8"));
-                }
-                catch(Exception e2) {
-                    e2.printStackTrace();
-                }
-            }
-        }
-        */
 
         parseVersion();
         parseDirectives();
         parseTopicElements();
+        
+        postProcess();
+        
         if(logger.forceStop()) {
             logger.log("User has stopped LTM import!");
         }
     }
 
-
-
+    
+    
     private void parseEncodind() throws IOException {
         eatMeaningless();
         if(eat('@')) {
@@ -324,7 +311,7 @@ public class LTMParser {
             }
         }
         if(baseuri == null) {
-            baseuri = "http://wandora.org/si/ltm-import/";
+            baseuri = DEFAULT_BASE_URI;
             logger.log("Found no base URI for topic map. Using default base '"+baseuri+"'.");
         }
     }
@@ -418,6 +405,33 @@ public class LTMParser {
         }
     }
 
+    
+    private void postProcess() {
+        if(debug) logger.log("Post processing topics. Removing temporary subject identifiers.");
+        if(topicMap != null) {
+            try {
+                Iterator<Topic> topics = topicMap.getTopics();
+                Topic t = null;
+                while(topics.hasNext()) {
+                    t = topics.next();
+                    if(t != null && !t.isRemoved()) {
+                        ArrayList<Locator> subjects = new ArrayList();
+                        subjects.addAll(t.getSubjectIdentifiers());
+                        for(Locator si : subjects) {
+                            if(si != null) {
+                                if(si.toExternalForm().startsWith(TEMP_SI_PREFIX)) {
+                                    t.removeSubjectIdentifier(si);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception e) {
+                logger.log(e);
+            }
+        }
+    }
 
 
     // ---------------------------------------------------------------------
@@ -440,7 +454,7 @@ public class LTMParser {
             ArrayList<Topic> topicTypes = null;
             ArrayList<Locator> topicTypeSIs = null;
             if(eat(':')) { 
-                topicTypes = parseMappedQTopics();
+                topicTypes = parseQTopics();
                 topicTypeSIs = new ArrayList();
                 for(Topic topicType : topicTypes) {
                     topicTypeSIs.add(topicType.getOneSubjectIdentifier());
@@ -451,10 +465,8 @@ public class LTMParser {
             Locator subjectLocator = parseSubjectLocator();
             ArrayList subjectIdentifiers = parseSubjectIdentifiers();
 
-            if(topic == null) {
-                topic = getOrCreateTopic(topicQName.qname);
-                if(topic != null) foundWithQName = true;
-            }
+            topic = getOrCreateTopic(topicQName.qname);
+            if(topic != null) foundWithQName = true;
 
             if(topic == null && baseNames != null) {
                 Basename basename = null;
@@ -473,11 +485,11 @@ public class LTMParser {
             }
 
             if(topic == null && subjectIdentifiers != null) {
-                Locator indicator = null;
-                Iterator indicators = subjectIdentifiers.iterator();
-                while(topic == null && indicators.hasNext()) {
-                    indicator = (Locator) indicators.next();
-                    if(indicator != null) topic = topicMap.getTopic(indicator);
+                Locator identifier = null;
+                Iterator identifiers = subjectIdentifiers.iterator();
+                while(topic == null && identifiers.hasNext()) {
+                    identifier = (Locator) identifiers.next();
+                    if(identifier != null) topic = topicMap.getTopic(identifier);
                 }
                 if(topic != null) foundWithSI = true;
             }
@@ -491,15 +503,11 @@ public class LTMParser {
             // ----- TOPIC SOLVED HERE | PROCESS NOW -----
 
             if(!foundWithQName && MAKE_SUBJECT_IDENTIFIER_FROM_ID) {
-                addSIToTopic(topicQName.qname, topic);
+                topic.addSubjectIdentifier(buildLocator(topicQName.qname));
             }
             
             if(!foundWithSL && subjectLocator != null) {
                 if(topic.getSubjectLocator() == null || OVERWRITE_SUBJECT_LOCATORS) {
-                    Topic subjectLocatorTopic = topicMap.getTopicBySubjectLocator(subjectLocator);
-                    if(subjectLocatorTopic != null && !subjectLocatorTopic.mergesWithTopic(topic)) {
-                        updateQNameTopic(subjectLocatorTopic, topic);
-                    }
                     topic.setSubjectLocator(subjectLocator);
                 }
             }
@@ -508,30 +516,19 @@ public class LTMParser {
             Locator newSI = null;
             if(subjectIdentifiers != null && subjectIdentifiers.size() > 0) {
                 Iterator indicators = subjectIdentifiers.iterator();
-                Topic subjectIdentifierTopic = null;
                 while(indicators.hasNext()) {
                     newSI = (Locator) indicators.next();
                     if(newSI!=null) {
-                        subjectIdentifierTopic = topicMap.getTopic(newSI);
-                        if(subjectIdentifierTopic != null && !subjectIdentifierTopic.mergesWithTopic(topic)) {
-                            updateQNameTopic(subjectIdentifierTopic, topic);
-                        }
                         topic.addSubjectIdentifier(newSI);
                     }
                 }
             }
             else {
-                if(topic.getOneSubjectIdentifier() == null) {
+                if(topic != null && topic.getOneSubjectIdentifier() == null) {
                     topic.addSubjectIdentifier(TopicTools.createDefaultLocator());
                 }
             }
-            if(USE_LOCATOR_MAPPING && newSI != null) {
-                Locator oldSI = locatormapping.get(topicQName.qname);
-                if(oldSI != null && !newSI.equals(oldSI)) {
-                    topic.removeSubjectIdentifier(oldSI);
-                }
-                locatormapping.put(topicQName.qname, newSI);
-            }
+
 
             // PROCESS BASENAMES AND IT'S VARIANTS...
             if(baseNames != null && baseNames.size() > 0) {
@@ -541,9 +538,6 @@ public class LTMParser {
                 if(basename != null) {
                     if(basename.basename != null) {
                         Topic baseNameTopic = topicMap.getTopicWithBaseName(basename.basename);
-                        if(baseNameTopic != null && !baseNameTopic.mergesWithTopic(topic)) {
-                            updateQNameTopic(baseNameTopic, topic);
-                        }
                         if(topic.getBaseName() != null || OVERWRITE_BASENAME) {
                             if(!foundWithBasename && basename.basename != null) {
                                 topic.setBaseName(basename.basename);
@@ -659,7 +653,7 @@ public class LTMParser {
                 }
             }
 
-            ArrayList scopes = parseMappedScope();
+            ArrayList scopes = parseScope();
             //if(scopes != null) logger.log("    Found scope for base name "+scopes);
 
             if(eat('~')) {
@@ -698,7 +692,7 @@ public class LTMParser {
 
     private VariantName parseVariantName() throws IOException, TopicMapException {
         String variantName = parseString();
-        ArrayList scope = parseMappedScope();
+        ArrayList scope = parseScope();
         LTMQName reifyId = parseQName();
 
         if(scope == null) { scope = new ArrayList(); }
@@ -754,14 +748,14 @@ public class LTMParser {
                 // System.out.println("found "+memberCounter+" members.");
                 eat(')');
             }
-            ArrayList scopes = parseMappedScope();
+            ArrayList scopes = parseScope();
             if(eat('~')) {
                 reifyId = parseQName();
                 // TODO: Handler for reifiers!
             }
 
             if(members.size() > 0) {
-                associationType = getOrCreateMappedTopic(associationTypeName);
+                associationType = getOrCreateTopic(associationTypeName);
                 if(associationType != null) {
                     //logger.log("Association type is: "+associationType+ " ---- "+associationTypeName.qname);
                     association = topicMap.createAssociation(associationType);
@@ -811,7 +805,7 @@ public class LTMParser {
 
         if(player != null) {
 
-            if(eat(':')) role = parseMappedQTopic();
+            if(eat(':')) role = parseQTopic();
 
             if(role == null && !REJECT_ROLELESS_MEMBERS) {
                 //logger.log("role == "+role);
@@ -826,7 +820,7 @@ public class LTMParser {
                         associationTypeName = associationTypeQName.qname;
                     }
                     String roleID = associationTypeName + "_" + DEFAULT_ROLE_IDENTIFIER + "_" + memberNumber;
-                    role = getOrCreateMappedTopic(roleID);
+                    role = getOrCreateTopic(roleID);
                 }
             }
             if(eat('~')) {
@@ -863,11 +857,11 @@ public class LTMParser {
 
         occurrenceTopic = parseQTopic();
         eat(',');
-        occurrenceType = parseMappedQTopic();
+        occurrenceType = parseQTopic();
         eat(',');
         String resource = parseResource();
         eat('}');
-        scope = parseMappedScope();
+        scope = parseScope();
         if(eat('~')) {
             reifyId = parseQName();
             // TODO: Handler for reifiers!
@@ -875,7 +869,7 @@ public class LTMParser {
 
         if(scope == null) scope = new ArrayList();
         if(scope.isEmpty()) {
-            defaultScopeForOccurrences = getOrCreateMappedTopic(DEFAULT_SCOPE_FOR_OCCURRENCES);
+            defaultScopeForOccurrences = getOrCreateTopic(DEFAULT_SCOPE_FOR_OCCURRENCES);
             if(defaultScopeForOccurrences != null) {
                 scope.add(defaultScopeForOccurrences);
             }
@@ -961,12 +955,6 @@ public class LTMParser {
 
 
 
-    private ArrayList parseMappedScope() throws IOException, TopicMapException {
-        if(eat('/')) {
-            return parseMappedQTopics();
-        }
-        return null;
-    }
 
 
     private ArrayList parseScope() throws IOException, TopicMapException {
@@ -981,25 +969,7 @@ public class LTMParser {
         return getOrCreateTopic(parseQName());
     }
 
-    private Topic parseMappedQTopic() throws IOException, TopicMapException {
-        LTMQName qname = parseQName();
-        //logger.log("found mapped qname: "+(qname == null ? "null" : qname.qname));
-        return getOrCreateMappedTopic(qname);
-    }
 
-    private ArrayList parseMappedQTopics() throws IOException, TopicMapException {
-        ArrayList qtopics = new ArrayList();
-        Topic qtopic = null;
-        boolean ready = false;
-
-        do {
-            qtopic = parseMappedQTopic();
-            if(qtopic != null) qtopics.add(qtopic);
-            else ready = true;
-        }
-        while(!ready);
-        return qtopics;
-    }
 
     private ArrayList parseQTopics() throws IOException, TopicMapException {
         ArrayList qtopics = new ArrayList();
@@ -1033,43 +1003,6 @@ public class LTMParser {
     }
 
 
-    /*
-    private Topic solveTopicForQName(LTMQName qname) throws IOException {
-        Topic topic = null;
-        Locator locator = null;
-        if(qname != null) {
-            if(qname.locatorPrefix != null) locator = buildLocator(qname.locatorPrefix + qname.qname);
-            if(qname.indicatorPrefix != null) indicator = buildLocator(qname.indicatorPrefix + qname.qname);
-            topic = idmapping.get(qname.qname);
-            if(topic == null && qname.locatorPrefix != null) {
-                topic = idmapping.get(locator.toExternalForm());
-                if(topic == null && qname.indicatorPrefix != null) {
-                    topic = idmapping.get(indicator.toExternalForm());
-
-                }
-            }
-        String locatorPrefix = null;
-        String indicatorPrefix = null;
-        if(qname != null && qname.length() > 0) {
-            if(eatOnly(':')) {
-                locatorPrefix = (String) locatorPrefixes.get(qname);
-                indicatorPrefix = (String) indicatorPrefixes.get(qname);
-                qname = parseName();
-            }
-            topic = getOrCreateTopic(qname);
-            if(topic != null) {
-                if(indicatorPrefix != null) {
-                    topic.addSubjectIdentifier(buildLocator(c + qname));
-                }
-                if(locatorPrefix != null) {
-                    topic.setSubjectLocator(buildLocator(locatorPrefix + qname));
-                }
-            }
-        }
-        return topic;
-    }
-    */
-
 
     private LTMQName parseQName() throws IOException {
         String qname = parseName();
@@ -1077,8 +1010,8 @@ public class LTMParser {
         String indicatorPrefix = null;
         if(qname != null && qname.length() > 0) {
             if(false && eatOnly(':')) {
-                locatorPrefix = (String) locatorPrefixes.get(qname);
-                indicatorPrefix = (String) indicatorPrefixes.get(qname);
+                locatorPrefix = locatorPrefixes.get(qname);
+                indicatorPrefix = indicatorPrefixes.get(qname);
                 qname = parseName();
             }
             return new LTMQName(qname, locatorPrefix, indicatorPrefix);
@@ -1250,48 +1183,6 @@ public class LTMParser {
         return sb.toString();
     }
 
-    /*
-    private String parseUntil(String str) throws IOException {
-        if(!proceed) return null;
-        StringBuffer sb = new StringBuffer(""); 
-        boolean ready = false;
-        int c = -1;
-        int len = str.length();
-        char[] buffer = new char[len];
-        char[] end = new char[len];
-
-        for(int i=0; i<len; i++) {
-            buffer[i] = 0;
-            end[i] = str.charAt(i);
-        }
-
-        do {
-            c = in.read();
-            for(int i=len-2; i>=0; i--) {
-                buffer[i+1] = buffer[i];
-            }
-            buffer[0] = (char) c;
-
-            ready = true;
-            for(int i=0; i<len; i++) {
-                if(buffer[i] != end[i]) {
-                    ready = false;
-                    break;
-                }
-            }
-            if(!ready) {
-                sb.append((char) c);
-            }
-        }
-        while(!ready && c != -1);
-        if(c == -1) {
-            if(debug) logger.log("Warning: Unexpected end of occurrence data!");
-            proceed = false;
-        }
-        return sb.toString();
-    }
-    */
-
 
     private String parseUntil(String str) throws IOException {
         if(!proceed) return null;
@@ -1387,6 +1278,29 @@ public class LTMParser {
     }
 
 
+    
+    private boolean eat(int [] str) throws IOException {
+        if(!proceed) return false;
+        eatMeaningless();
+        in.mark(str.length);
+        char[] chars = new char[str.length];
+        int c = in.read(chars);
+        if(c <= 0) {
+            in.reset();
+            proceed = false;
+            return false;
+        }
+        int i=0;
+        while(i < str.length) {
+            if(str[i] != chars[i]) {
+                in.reset();
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+    
 
     private boolean eat(int ch) throws IOException {
         eatMeaningless();
@@ -1522,15 +1436,18 @@ public class LTMParser {
     }
 
 
+    
+    public Locator buildTempLocator(String id) {
+        if(id == null) id = "null";
+        return new Locator(TEMP_SI_PREFIX + id);
+    }
+    
+    
 
     public Locator buildLocator(String id) {
         if(id == null) return null;
         String locatorString = id;
         Locator locator = null;
-        if(USE_LOCATOR_MAPPING) {
-            locator = (Locator) locatormapping.get(id);
-            if(locator != null) return locator;
-        }
 
         if(locatorString.charAt(0) == '#' && ltmuri != null) {
             locatorString = ltmuri + locatorString;
@@ -1557,48 +1474,12 @@ public class LTMParser {
             locator = new Locator(locator.toExternalForm().substring(0, MAX_SI_LEN));
         }
         if(debug) logger.log("New locator: "+locator.toExternalForm());
-        if(USE_LOCATOR_MAPPING) locatormapping.put(id, locator);
         return locator;
     }
 
 
 
-    public Topic getOrCreateMappedTopicForSI(String si) {
-        Topic t = null;
-        try {
-            t = getOrCreateMappedTopic(si);
-            addSIToTopic(si, t);
-        }
-        catch(Exception e) { e.printStackTrace(); }
-        return t;
-    }
 
-    public Topic getOrCreateTopicForSI(String si) {
-        Topic t = null;
-        try {
-            t = getOrCreateTopic(si);
-            addSIToTopic(si, t);
-        }
-        catch(Exception e) { e.printStackTrace(); }
-        return t;
-    }
-
-
-
-    public Topic getOrCreateMappedTopic(LTMQName qname) throws TopicMapException  {
-        if(qname == null) return null;
-        return getOrCreateMappedTopic(qname.qname);
-    }
-
-
-
-    public Topic getOrCreateMappedTopic(String qname) throws TopicMapException {
-        boolean USE_ID_MAPPING_OLD = USE_ID_MAPPING;
-        USE_ID_MAPPING = true;
-        Topic t = getOrCreateTopic(qname);
-        USE_ID_MAPPING = USE_ID_MAPPING_OLD;
-        return t;
-    }
 
 
 
@@ -1610,65 +1491,24 @@ public class LTMParser {
 
     public Topic getOrCreateTopic(String qname) throws TopicMapException  {
         if(qname == null) return null;
-        Topic t = null;
-        if(USE_ID_MAPPING) {
-            t = (Topic)idmapping.get(qname);
-        }
+        Topic t = topicMap.getTopic(buildTempLocator(qname));
 
-        if(t==null || t.isRemoved()) {
+        if(t==null) {
             t = topicMap.getTopic(buildLocator(qname));
-            if(USE_ID_MAPPING) idmapping.put(qname,t);
         }
 
         if(t==null) {
             t=topicMap.createTopic();
-            if(!USE_ID_MAPPING || MAKE_SUBJECT_IDENTIFIER_FROM_ID) addSIToTopic(qname, t);
+            t.addSubjectIdentifier(buildTempLocator(qname));
+            if(MAKE_SUBJECT_IDENTIFIER_FROM_ID) t.addSubjectIdentifier(buildLocator(qname));
             if(MAKE_BASENAME_FROM_ID && t.getBaseName() == null) t.setBaseName(qname);
-            if(USE_ID_MAPPING) idmapping.put(qname,t);
             if(debug) logger.log("New topic created: " +t);
         }
         return t;
     }
 
 
-    public void updateQNameTopic(Topic told, Topic tnew) {
-        if(USE_ID_MAPPING) {
-            String qname = getQNameForTopic(told);
-            if(qname != null) {
-                idmapping.put(qname,tnew);
-            }
-        }
-    }
 
-
-
-    public String getQNameForTopic(Topic t) {
-        if(t == null || idmapping == null) return null;
-        Topic t2 = null;
-        for( Object o : idmapping.keySet() ) {
-            try {
-                t2 = (Topic) idmapping.get(o);
-                if(t.mergesWithTopic(t2)) {
-                    return (String) o;
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-
-
-    public void addSIToTopic(String si, Topic t)  throws TopicMapException {
-        Locator siLocator = null;
-        if( t != null && si != null ) {
-            siLocator = buildLocator(si);
-            t.addSubjectIdentifier(siLocator);
-        }
-    }
 
 
 

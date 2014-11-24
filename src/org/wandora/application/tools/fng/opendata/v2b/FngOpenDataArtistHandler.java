@@ -42,20 +42,26 @@ import org.wandora.utils.velocity.GenericVelocityHelper;
 public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler implements FngOpenDataHandlerInterface {
 
     
-    private String PERSON_BIRTH_SI = "http://www.wandora.org/person_birth"; // A-TYPE
-    private String PERSON_DEATH_SI = "http://www.wandora.org/person_death"; // A-TYPE
-    private String TIME_SI = "http://www.muusa.net/E52.Time-Span"; // ROLE
-    private String PLACE_SI = "http://www.wandora.org/place"; // ROLE
+    protected String BASE_SI = "http://wandora.org/si/fng/";
     
-    private String GROUP_SI = "http://www.wandora.org/group"; // A-TYPE
-    private String ARTIST_GROUP_SI = "http://www.wandora.org/artist_group"; // ROLE
+    private String PERSON_BIRTH_SI = BASE_SI+"person_birth"; // A-TYPE
+    private String PERSON_DEATH_SI = BASE_SI+"person_death"; // A-TYPE
+    private String TIME_SI = BASE_SI+"time"; // ROLE
+    private String PLACE_SI = BASE_SI+"place"; // ROLE
+    
+    private String GROUP_SI = BASE_SI+"group"; // A-TYPE
+    private String ARTIST_GROUP_SI = BASE_SI+"artist_group"; // ROLE
     
     private String IDENTIFIED_SI = "http://www.muusa.net/P131.is_identified_by"; // A-TYPE
     private String IDENTIFIED_ROLE_SI = "http://www.muusa.net/P131.is_identified_by_role_1"; // ROLE
     
-    private String AUTHOR_SI = "http://www.wandora.org/author"; // A-TYPE
-    private String ARTWORK_SI = "http://www.wandora.org/artwork"; // ROLE
+    private String AUTHOR_SI = BASE_SI+"author"; // A-TYPE
+    private String ARTWORK_SI = BASE_SI+"artwork"; // ROLE
     
+    
+    
+    
+
     
     
     
@@ -63,10 +69,10 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
     public void populate(Topic t, TopicMap tm) throws TopicMapException {
         if(t != null) {
 
-            setResourceURI( "http://kokoelmat.fng.fi/app?si="+urlEncode(t.getBaseName()));
+            setResourceURI( getResourceURIBase()+urlEncode(t.getBaseName()));
 
             // **** IDENTIFIERS ****
-            addIdentifier("http://kokoelmat.fng.fi/app?si="+urlEncode(t.getBaseName()), "uri");
+            addIdentifier(getResourceURIBase()+urlEncode(t.getBaseName()), "uri");
             for( Locator si : t.getSubjectIdentifiers() ) {
                 String sis = si.toExternalForm();
                 if(sis.indexOf("http://www.muusa.net/E39.Actor") != -1) {
@@ -137,7 +143,7 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
             for( Topic artwork : artworks ) {
                 HashMap properties = new HashMap();
                 properties.put("id", artwork.getBaseName());
-                properties.put("uri", "http://kokoelmat.fng.fi/app?si="+urlEncode(artwork.getBaseName()));
+                properties.put("uri", getResourceURIBase()+urlEncode(artwork.getBaseName()));
                 for( Locator si : artwork.getSubjectIdentifiers() ) {
                     String sis = si.toExternalForm();
                     if(!sis.startsWith("http://www.wandora.net/defaultSI")) {
@@ -149,7 +155,7 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
             }
             
             // **** PUBLISHER ****
-            addPublisher("Finnish National Gallery");
+            addPublisher(getDefaultPublisher());
             
             
             // **** GROUP ****

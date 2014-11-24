@@ -25,6 +25,7 @@
 package org.wandora.application.tools.topicnames;
 
 
+import org.wandora.utils.language.SelectGoogleTranslationLanguagesPanel;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
@@ -33,7 +34,7 @@ import org.wandora.application.gui.*;
 import java.util.*;
 
 import com.google.api.translate.Language;
-import org.wandora.utils.GoogleTranslateBox;
+import org.wandora.utils.language.GoogleTranslateBox;
 import org.wandora.utils.Tuples.T2;
 
 
@@ -70,6 +71,7 @@ public class VariantGoogleTranslate extends AbstractWandoraTool implements Wando
     }
 
 
+    @Override
     public void execute(Wandora wandora, Context context) {
         Iterator topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
@@ -121,7 +123,7 @@ public class VariantGoogleTranslate extends AbstractWandoraTool implements Wando
                                     targetScopes.add(new T2(targetLang, targetScope));
                                 }
                                 else {
-                                    log("Found no topic for target language '"+targetLang+"'.");
+                                    log("Warning. Found no topic for target language '"+targetLang+"'.");
                                 }
                             }
 

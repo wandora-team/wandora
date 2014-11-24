@@ -126,8 +126,9 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     mouseEvent = e;
                     if(e.isPopupTrigger()) {
-                        Object o=getColumnAt(e.getX());
-                        if(o instanceof Topic) {
+                        Point loc = getTablePoint(mouseEvent);
+                        Object o = getColumnAt(loc.x);
+                        if(o != null && o instanceof Topic) {
                             JPopupMenu rolePopup = UIBox.makePopupMenu(getHeaderPopupStruct(), wandora);
                             rolePopup.show(e.getComponent(),e.getX(),e.getY());
                         }
@@ -319,9 +320,17 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
    
     
     
-    public void setSort(int s) {
-        
+    public void toggleSortOrder(int s) {
+        RowSorter sorter = getRowSorter();
+        if(sorter != null) {
+            sorter.toggleSortOrder(s);
+        }
     }
+    
+    
+    
+    
+    
     
     
     @Override
@@ -443,13 +452,26 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
         ArrayList<Topic> topics = new ArrayList<Topic>();
         ArrayList<int[]> selectedCells = getSelectedCells();
         for(int[] cell : selectedCells) {
-            topics.add( getTopicAt(cell[0], cell[1]) );
+            Topic t = getTopicAt(cell[0], cell[1]);
+            try {
+                if( t != null && !t.isRemoved() ) {
+                    topics.add( t );
+                }
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
         }
         if(topics.isEmpty()) {
             Point loc = getTablePoint();
             Topic t = getTopicAt(loc);
-            if(t != null) {
-                topics.add( t );
+            try {
+                if(t != null && !t.isRemoved() ) {
+                    topics.add( t );
+                }
+            }
+            catch(Exception e) {
+                e.printStackTrace();
             }
         }
         return topics.toArray( new Topic[] {} );

@@ -125,6 +125,12 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements TopicMapLis
     
     
     @Override
+    public boolean supportsOpenTopic() {
+        return true;
+    }
+    
+    
+    @Override
     public void open(Topic topic) throws TopicMapException {
         try {
             this.topic = topic;
@@ -139,7 +145,7 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements TopicMapLis
     
     public void clearCaches() {
         if(treeMapComponent != null) {
-            treeMapComponent.clearAssociationTopicsCache();
+            treeMapComponent.clearCaches();
         }
     }
     

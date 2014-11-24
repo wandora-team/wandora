@@ -29,7 +29,7 @@ var nyt_event_locations = [
         #set( $lat = $event.getData( $nytLatitudeItem, $lang ) )##
         #set( $long = $event.getData( $nytLongitudeItem, $lang ) )
         #set ( $title = $event.getDisplayName($lang) )##
-        title: #nyt_service_plain_text($title),
+        title: "$esc.escapeJavaScript($title)",
         location: "$lat,$long",
         #set( $as_map = $mapmaker.make() )## Hashmap for associations
         #set( $associations = $event.getAssociations() )##
@@ -56,18 +56,18 @@ var nyt_event_locations = [
             #foreach( $type in $data_types )##
                 #if($type.getOneSubjectIdentifier().toExternalForm() != $nytLocationSi)##
                 {
-                name:#nyt_service_plain_text($type.getDisplayName($lang) ),
-                values:[#nyt_service_plain_text( $event.getData($type, $lang) )]
+                name:"$esc.escapeJavaScript($type.getDisplayName($lang) )",
+                values:["$esc.escapeJavaScript( $event.getData($type, $lang) )"]
                 },
                 #end##
             #end##
         #end##
         #foreach ($entry in $as_map.entrySet())
         {
-            name: #nyt_service_plain_text($entry.key),
+            name: "$esc.escapeJavaScript($entry.key)",
             values: [
             #foreach($value in $entry.value)##
-            #nyt_service_plain_text($value),
+            "$esc.escapeJavaScript($value)",
             #end##
             ]
         },

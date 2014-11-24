@@ -31,6 +31,7 @@ package org.wandora.application.gui.topicpanels;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import javax.swing.*;
+import org.wandora.exceptions.OpenTopicNotSupportedException;
 
 
 /**
@@ -43,11 +44,19 @@ import javax.swing.*;
  */
 public interface TopicPanel extends TopicMapListener {
    
+    
+    /*
+     * Does the topic panel support topic open? In other words can one call the
+     * open method with a topic.
+     */
+    public boolean supportsOpenTopic();
+    
+    
     /*
      * Open a topic in the topic panel. Usually opening means that
      * the topic is being visualized in some way.
      */
-    public void open(Topic topic)  throws TopicMapException;
+    public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException;
     
     
     /*

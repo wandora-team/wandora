@@ -242,6 +242,12 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
     }
     
     
+    @Override
+    public boolean supportsOpenTopic() {
+        return true;
+    }
+    
+    
     
     @Override
     public void open(Topic topic) throws TopicMapException {

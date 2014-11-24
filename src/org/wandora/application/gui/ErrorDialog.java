@@ -35,6 +35,7 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import org.wandora.application.ErrorMessages;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleLabel;
@@ -56,9 +57,9 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, Exception e) {
         super(w, true);
         initComponents();
-        this.setSize(600,400);
+        this.setSize(700,400);
         w.centerWindow(this);
-        setTitle("Exception occurred");
+        setTitle("Exception");
         setError(e);
         okButton.setVisible(false);
         setVisible(true);
@@ -67,9 +68,9 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, Error e) {
         super(w, true);
         initComponents();
-        this.setSize(600,400);
+        this.setSize(700,400);
         w.centerWindow(this);
-        setTitle("Error occurred");
+        setTitle("Error");
         setError(e);
         okButton.setVisible(false);
         setVisible(true);
@@ -78,8 +79,8 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, boolean modal, Throwable e, String message) {
         super(w, modal);
         initComponents();
-        this.setSize(600,400);
-        setTitle("Wandora failed to perform");
+        this.setSize(700,400);
+        setTitle("Failure");
         w.centerWindow(this);
         okButton.setVisible(false);
         stacktraceTextPane.setText(getStacktTace(e));
@@ -89,8 +90,8 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, boolean modal, Throwable e, String message, String no, String yes) {
         super(w, modal);
         initComponents();
-        setTitle("Wandora failed to perform");
-        this.setSize(600,400);
+        setTitle("Failure");
+        this.setSize(700,400);
         w.centerWindow(this);
         closeButton.setText(no);
         if(yes!=null) okButton.setText(yes);
@@ -111,14 +112,14 @@ public class ErrorDialog extends javax.swing.JDialog {
     public void setError(Exception ex) {
         stacktraceTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         stacktraceTextPane.setText(getStacktTace(ex));
-        String msg = "An exception has occurred in Wandora. Exception message follows:\n\n"+ex.getMessage();
+        String msg = ErrorMessages.getMessage(ex);
         messageLabel.setText("<html>"+msg+"</html>");
     }
     
     public void setError(Error er) {
         stacktraceTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         stacktraceTextPane.setText(getStacktTace(er));
-        String msg = "An error has occurred in Wandora. Exception message follows:\n\n"+er.getMessage();
+        String msg = ErrorMessages.getMessage(er);
         messageLabel.setText("<html>"+msg+"</html>");
     }
     

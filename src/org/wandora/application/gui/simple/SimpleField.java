@@ -29,25 +29,31 @@ package org.wandora.application.gui.simple;
 
 
 import com.google.api.translate.Language;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
-import java.awt.KeyboardFocusManager;
 import java.awt.AWTKeyStroke;
-import java.awt.event.*;
-import java.util.regex.*;
+import java.awt.KeyboardFocusManager;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
+import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.text.Document;
 
 
-import org.wandora.utils.*;
 import org.wandora.application.*;
-import org.wandora.utils.EasyVector;
-import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.*;
+import org.wandora.application.gui.UIBox;
+import org.wandora.utils.*;
+import org.wandora.utils.EasyVector;
+import org.wandora.utils.language.GoogleTranslateBox;
+import org.wandora.utils.language.MicrosoftTranslateBox;
+import org.wandora.utils.language.SelectGoogleTranslationLanguagesPanel;
+import org.wandora.utils.language.SelectMicrosoftTranslationLanguagesPanel;
+import org.wandora.utils.language.SelectWatsonTranslationLanguagesPanel;
+import org.wandora.utils.language.WatsonTranslateBox;
 
 /**
  *
@@ -70,6 +76,7 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
         "---",
         "Translate with Google...", UIBox.getIcon("gui/icons/google_translate.png"),
         "Translate with Microsoft...", UIBox.getIcon("gui/icons/microsoft_translate.png"),
+        "Translate with Watson...", UIBox.getIcon("gui/icons/watson_translate.png"),
     };
     
     
@@ -297,6 +304,26 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
                         if(translated != null)
                             this.setText(translated);
                         break;
+                    }
+                }
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if(c.startsWith("Translate with Watson")) {
+            try {
+                SelectWatsonTranslationLanguagesPanel selectLanguages = new SelectWatsonTranslationLanguagesPanel();
+                selectLanguages.notInTopicMapsContext();
+                if(wandora == null) wandora = Wandora.getWandora(this);
+                selectLanguages.openInDialog(wandora);
+                if(selectLanguages.wasAccepted()) {
+                    boolean markTranslation = selectLanguages.markTranslatedText();
+                    String languages = selectLanguages.getSelectedLanguages();
+                    String text = this.getText();
+                    String translated = WatsonTranslateBox.translate(text, WatsonTranslateBox.getLanguagesCodeFor(languages), markTranslation);
+                    if(translated != null) {
+                        this.setText(translated);
                     }
                 }
             }

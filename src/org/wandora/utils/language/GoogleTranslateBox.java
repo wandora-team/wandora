@@ -23,26 +23,23 @@
 
 
 
-package org.wandora.utils;
+package org.wandora.utils.language;
 
-
-
-import com.memetix.mst.language.Language;
-import com.memetix.mst.translate.Translate;
+import com.google.api.GoogleAPI;
+import com.google.api.translate.Language;
+import com.google.api.translate.Translate;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 
 
-
 /**
- * See: https://github.com/boatmeme/microsoft-translator-java-api
- * See: http://www.microsofttranslator.com/dev/
  *
  * @author akivela
  */
-public class MicrosoftTranslateBox {
+public class GoogleTranslateBox {
+
 
     private static String apikey = null;
 
@@ -55,8 +52,7 @@ public class MicrosoftTranslateBox {
     public static void setAPIKey(String newkey) {
         apikey = newkey;
     }
-
-
+    
     public static String translate(String text, Topic sourceLangTopic, Topic targetLangTopic) {
         return translate(text, sourceLangTopic, targetLangTopic, false);
     }
@@ -90,26 +86,26 @@ public class MicrosoftTranslateBox {
         String translatedText = null;
         if(text != null && sourceLang != null && targetLang != null) {
             try {
-                System.out.println("Microsoft Translating '"+text+"' from '"+sourceLang+"' to '"+targetLang+"'");
-                Translate.setHttpReferrer("http://www.wandora.org");
-
+                System.out.println("Google Translating '"+text+"' from '"+sourceLang+"' to '"+targetLang+"'");
+                GoogleAPI.setHttpReferrer("http://wandora.org");
                 if(apikey == null || apikey.length() == 0) {
-                    apikey = WandoraOptionPane.showInputDialog(Wandora.getWandora(), "Give your Bing API key?", "", "Give your Bing API key?");
+                    apikey = WandoraOptionPane.showInputDialog(Wandora.getWandora(), "Give your Google Translate API key?", "", "Give your Google Translate API key?");
                     if(apikey != null) apikey = apikey.trim();
                 }
-
-                Translate.setKey(apikey);
-                translatedText = Translate.execute(text, sourceLang, targetLang);
-                if(translatedText != null && translatedText.length() == 0) {
-                    translatedText = null;
-                }
-                if(translatedText != null && markTranslation) {
-                    translatedText += " [MICROSOFT TRANSLATION]";
+                if(apikey != null) {
+                    GoogleAPI.setKey(apikey);
+                    translatedText = Translate.DEFAULT.execute(text, sourceLang, targetLang);
+                    if(translatedText != null && translatedText.length() == 0) {
+                        translatedText = null;
+                    }
+                    if(translatedText != null && markTranslation) {
+                        translatedText += " [GOOGLE TRANSLATION]";
+                    }
                 }
             }
             catch(Exception e) {
                 Wandora.getWandora().handleError(e);
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return translatedText;
@@ -140,6 +136,10 @@ public class MicrosoftTranslateBox {
     public static Topic createTopicForLanguage(Language language, TopicMap tm) {
         return LanguageBox.createTopicForLanguageName(language.name(), tm);
     }
+
+
+
+    
 
 
 

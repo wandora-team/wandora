@@ -45,14 +45,20 @@ import org.wandora.utils.*;
  */
 public class ChangeOccurrenceView extends AbstractWandoraTool implements WandoraTool {
     
-    public String viewType = OccurrenceTable.TYPE_SCHEMA;
+    private String newView = OccurrenceTable.VIEW_SCHEMA;
+    private Options localOptions = null;
+    
     
     
     /** Creates a new instance of ChangeOccurrenceView */
-    public ChangeOccurrenceView(String type) {
-        viewType = type;
+    public ChangeOccurrenceView(String view) {
+        this.newView = view;
     }
-
+    public ChangeOccurrenceView(String view, Options options) {
+        this.newView = view;
+        this.localOptions = options;
+    }
+    
     
     @Override
     public String getName() {
@@ -64,13 +70,20 @@ public class ChangeOccurrenceView extends AbstractWandoraTool implements Wandora
         return "Change occurrence table view.";
     }
 
+    @Override
+    public boolean requiresRefresh() {
+        return true;
+    }
+    
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        if(localOptions != null) {
+            localOptions.put(OccurrenceTable.VIEW_OPTIONS_KEY, newView);
+        }
         if(wandora != null) {
             Options ops = wandora.getOptions();
-            ops.put(OccurrenceTable.TYPE_OPTIONS_KEY, viewType);
-            //System.out.println("ops == " + ops.get(OccurrenceTable.TYPE_OPTIONS_KEY));
+            ops.put(OccurrenceTable.VIEW_OPTIONS_KEY, newView);
         }
     }
     

@@ -44,6 +44,8 @@ import org.wandora.utils.velocity.GenericVelocityHelper;
 
 
 public class SimbergOpenDataHandler {
+    private static final boolean SPLIT_KEYWORDS = false;
+    
     
     ArrayList<SimbergPhotograph> data = new ArrayList();
 
@@ -116,13 +118,21 @@ public class SimbergOpenDataHandler {
             Collection<Topic> keywords = GenericVelocityHelper.getPlayers(t, IS_ABOUT_SI, IS_ABOUT_ROLE_SI);
             for( Topic keyword : keywords ) {
                 String keywordString = keyword.getBaseName();
-                String[] keywordStrs = keywordString.split(",");
-                for(String keywordStr : keywordStrs) {
-                    keywordStr = keywordStr.trim();
-                    if(keywordStr.length() > 0) {
-                        SimbergKeyword simKeyword = new SimbergKeyword();
-                        simKeyword.key = keywordStr;
-                        d.keywords.add(simKeyword);
+                
+                SimbergKeyword originalKeyword = new SimbergKeyword();
+                originalKeyword.key = keywordString;
+                originalKeyword.type = "original";
+                d.keywords.add(originalKeyword);
+                
+                if(SPLIT_KEYWORDS) {
+                    String[] keywordStrs = keywordString.split(",");
+                    for(String keywordStr : keywordStrs) {
+                        keywordStr = keywordStr.trim();
+                        if(keywordStr.length() > 0) {
+                            SimbergKeyword simKeyword = new SimbergKeyword();
+                            simKeyword.key = keywordStr;
+                            d.keywords.add(simKeyword);
+                        }
                     }
                 }
             }
@@ -397,9 +407,9 @@ public class SimbergOpenDataHandler {
                                 s.append("<repositorySet>");
                                     s.append("<repositoryName>");
                                         s.append("<legalBodyName>");
-                                            s.append("<appellationValue label=\"Museo/Osasto/Haltija\">Suomen Kansallisgalleria</appellationValue>");
+                                            s.append("<appellationValue label=\"Museo/Osasto/Haltija\">Kansallisgalleria/Finnish National Gallery</appellationValue>");
                                         s.append("</legalBodyName>");
-                                        s.append("<legalBodyWeblink label=\"Www-osoite\">http://www.fng.fi</legalBodyWeblink>");
+                                        s.append("<legalBodyWeblink label=\"Www-osoite\">http://www.kansallisgalleria.fi</legalBodyWeblink>");
                                     s.append("</repositoryName>");
                                 s.append("</repositorySet>");
                             s.append("</repositoryWrap>");
@@ -477,7 +487,7 @@ public class SimbergOpenDataHandler {
                             s.append("</recordType>");
 
                             s.append("<recordSource>");
-                                s.append("<legalBodyWeblink label=\"Www-osoite\">http://www.fng.fi</legalBodyWeblink>");
+                                s.append("<legalBodyWeblink label=\"Www-osoite\">http://www.kansallisgalleria.fi</legalBodyWeblink>");
                             s.append("</recordSource>");
                         s.append("</recordWrap>");
 
@@ -615,16 +625,20 @@ public class SimbergOpenDataHandler {
             }
             else if("lido".equals(t)) {
                 k.append("<classification>");
-                    k.append("<term lang=\"fi\">");
+                    if(type == null) k.append("<term lang=\"fi\">"); else k.append("<term lang=\"fi\" label=\""+type+"\">");
                         k.append(encodeXMLValue(key));
                     k.append("</term>");
                 k.append("</classification>");
             }
             else if("json".equals(t)) {
-                k.append("   ").append(encodeCSVString(key));
+                k.append(encodeCSVString(key));
                 // k.append("   {\n");
-                // k.append("    \"keyword\":").append(encodeCSVString(key)).append(",\n");
-                // k.append("    \"type\":").append(encodeCSVString(type)).append("\n");
+                // k.append("    \"keyword\":").append(encodeCSVString(key));
+                // if(type != null) {
+                //     k.append(",\n");
+                //     k.append("    \"type\":").append(encodeCSVString(type));
+                // }
+                // k.append("\n");
                 // k.append("   }");
             }
             else {
