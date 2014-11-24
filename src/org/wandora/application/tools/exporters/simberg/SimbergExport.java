@@ -552,7 +552,9 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                     String keywordString=null;
                     T2<ArrayList<String>,String> keywords=null;
                     if(keywordStringTopic!=null) keywordString=keywordStringTopic.getBaseName();
-                    if(keywordString!=null) keywords=matchKeywords(keywordString, keywordList);
+                    if(keywordString==null || keywordString.trim().length()==0) keywordString="valokuvat";
+                    else keywordString="valokuvat, "+keywordString;
+                    keywords=matchKeywords(keywordString, keywordList);
                     if(keywords!=null){
                         ArrayList<ModelTopic> keywordsM=getOrMakeTopics(keywords.e1, keywordCls, "name", modelTopics,lang);
                         photoM.setField("keywords",keywordsM);
@@ -679,7 +681,10 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                 
                 ArrayList<String> keywords=null;
                 File keywordFile=new File(parentDir+"keywords.txt");
-                if(keywordFile.exists()) keywords=readKeywords(keywordFile);
+                if(keywordFile.exists()) {
+                    keywords=readKeywords(keywordFile);
+                    if(keywords.indexOf("valokuvat")==-1) keywords.add("valokuvat");    
+                }
                 
                 out=new FileOutputStream(file);
                 OutputStreamWriter writer=new OutputStreamWriter(out,"UTF-8");

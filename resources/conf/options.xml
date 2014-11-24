@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>13</x>
-      <y>8</y>
+      <x>1699</x>
+      <y>104</y>
       <width>1200</width>
       <height>700</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>500</verticalsplitter>
+      <verticalsplitter>532</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -259,6 +259,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <tool>
       <path>org/wandora/application/tools</path>
       <path>org/wandora/application/tools/exporters</path>
+      <path>org/wandora/application/tools/exporters/simberg</path>
       <path>org/wandora/application/tools/extractors</path>
       <path>org/wandora/application/tools/importers</path>
       <path>org/wandora/application/tools/importers/graphs</path>
@@ -835,7 +836,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>ReKognition scene detection extractor...</name>
                <class>org.wandora.application.tools.extractors.rekognition.RekognitionSceneDetector</class>
             </item>
-            
          </item>
          <item>
             <name>Simple files</name>
@@ -1192,6 +1192,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergLIDOExporter</class>
             </item>
          </item>
+         <item>
+            <name>Simberg export</name>
+            <class>org.wandora.application.tools.exporters.simberg.SimbergExport</class>
+         </item>
       </set>
       <set>
          <name>Browser extractors</name>
@@ -1431,7 +1435,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </shortcuts>
    <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
    <current>
-      <directory>/home/olli/grip/kokoelmat/webapp/WEB-INF</directory>
+      <directory>/home/olli/grip/simberg/html</directory>
       <port></port>
       <user></user>
       <host></host>
