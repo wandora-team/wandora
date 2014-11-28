@@ -24,6 +24,7 @@
  */
 package org.wandora.query2;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import org.wandora.application.Wandora;
@@ -34,7 +35,7 @@ import org.wandora.application.Wandora;
  */
 
 
-public class DirectiveUIHints {
+public class DirectiveUIHints implements Serializable {
     
     protected String label;
     protected Constructor[] constructors;
@@ -62,10 +63,10 @@ public class DirectiveUIHints {
     
     
     
-    protected Constructor[] getConstructors(){
+    public Constructor[] getConstructors(){
         return constructors;
     }
-    protected Addon[] getAddons(){
+    public Addon[] getAddons(){
         return addons;
     }
     
@@ -91,7 +92,11 @@ public class DirectiveUIHints {
                         continue Outer;
                     }
                 }
-                Parameter p=new Parameter(param, multiple, param.getName());
+                
+                String label=param.getSimpleName();
+                if(multiple) label+="[]";
+                
+                Parameter p=new Parameter(param, multiple, label);
                 ps.add(p);
             }
             
@@ -119,7 +124,7 @@ public class DirectiveUIHints {
         return guessHints(cls);
     }
     
-    public static class Parameter {
+    public static class Parameter implements Serializable {
         /**
          * Type of the parameter. Use Directive, Operand, String, Integer or
          * whatever else is suitable. Do not make this an array type though,
@@ -176,7 +181,7 @@ public class DirectiveUIHints {
         }
     }
     
-    public static class Constructor {
+    public static class Constructor implements Serializable {
         protected Parameter[] parameters;
         protected String label;
         
@@ -212,7 +217,7 @@ public class DirectiveUIHints {
         }
     }
     
-    public static class Addon {
+    public static class Addon implements Serializable {
         protected Parameter[] parameters;
         protected String method;
         protected String label;

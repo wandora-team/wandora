@@ -19,7 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- */package org.wandora.application.gui.topicpanels.queryeditorpanel;
+ */
+package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 /**
  *

@@ -23,7 +23,14 @@
 
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import java.awt.Container;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import org.wandora.query2.DirectiveUIHints;
+import org.wandora.query2.DirectiveUIHints.Constructor;
+import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**
  *
@@ -33,20 +40,99 @@ import org.wandora.query2.DirectiveUIHints;
 
 public class DirectivePanel extends javax.swing.JPanel {
 
+    protected DirectiveUIHints hints;
+    
     /**
      * Creates new form DirectivePanel
      */
     public DirectivePanel() {
         initComponents();
     }
+    
+    protected boolean dragging=false;
+    protected int dragStartX=-1;
+    protected int dragStartY=-1;
+    
 
     public DirectivePanel(DirectiveUIHints hints){
         this();
         setDirective(hints);
+        
+        directiveLabel.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                dragging=false;
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                dragging=true;
+                dragStartX=e.getX();
+                dragStartY=e.getY();
+            }
+        });
+        directiveLabel.addMouseMotionListener(new MouseMotionAdapter(){
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                QueryEditorComponent editor=getEditor();
+                if(editor!=null) {
+                    Rectangle rect=getBounds();
+                    setBounds(  Math.max(rect.x+e.getX()-dragStartX,0),
+                                Math.max(rect.y+e.getY()-dragStartY,0),
+                                rect.width,rect.height);
+                    editor.panelMoved(DirectivePanel.this);
+                }
+            }            
+        });
+        
+        
+    }
+    
+    protected QueryEditorComponent getEditor(){
+        Container parent=getParent();
+        while(parent!=null && !(parent instanceof QueryEditorComponent)){
+            parent=parent.getParent();
+        }
+        if(parent!=null) return (QueryEditorComponent)parent;
+        else return null;
+    }
+    
+    private class ConstructorComboItem {
+        public Constructor c;
+        public String label;
+        public ConstructorComboItem(Constructor c,String label){
+            this.c=c;
+            this.label=label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
     }
     
     public void setDirective(DirectiveUIHints hints){
+        this.hints=hints;
+        
         this.directiveLabel.setText(hints.getLabel());
+        for(Constructor c : hints.getConstructors()){
+            String label="(";
+            boolean first=true;
+            for(Parameter p : c.getParameters()){
+                if(!first) label+=",";
+                else first=false;
+                label+=p.getLabel();
+            }
+            label+=")";
+            constructorComboBox.addItem(new ConstructorComboItem(c,label));
+        }
+    }
+    
+    protected void populateParametersPanel(Constructor c){
+        constructorParameters.removeAll();
+        for(Parameter p : c.getParameters()){
+            
+        }
     }
     
     /**
