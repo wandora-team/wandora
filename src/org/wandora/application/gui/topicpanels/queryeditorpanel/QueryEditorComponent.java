@@ -20,18 +20,19 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveManager;
@@ -45,6 +46,8 @@ import org.wandora.query2.DirectiveUIHints;
 
 public class QueryEditorComponent extends javax.swing.JPanel {
 
+    protected final ArrayList<Connector> connectors=new ArrayList<Connector>();
+    
     /**
      * Creates new form QueryEditorComponent
      */
@@ -79,6 +82,20 @@ public class QueryEditorComponent extends javax.swing.JPanel {
             
             
         });
+    }
+    
+    public void addConnector(Connector c){
+        synchronized(connectors){
+            connectors.add(c);
+        }
+        queryGraphPanel.repaint();
+    }
+    
+    public void removeConnector(Connector c){
+        synchronized(connectors){
+            connectors.remove(c);
+        }
+        queryGraphPanel.repaint();
     }
     
     protected void populateDirectiveList(){
@@ -154,7 +171,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         directiveListPanel = new javax.swing.JPanel();
         queryScrollPane = new javax.swing.JScrollPane();
-        queryGraphPanel = new javax.swing.JPanel();
+        queryGraphPanel = new GraphPanel();
 
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -181,4 +198,23 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     private javax.swing.JPanel queryGraphPanel;
     private javax.swing.JScrollPane queryScrollPane;
     // End of variables declaration//GEN-END:variables
+
+    private class GraphPanel extends JPanel {
+        public GraphPanel(){
+            super();
+            this.setOpaque(false);
+        }
+        
+        @Override
+        public void paint(Graphics g) {
+            g.setColor(this.getBackground());
+            g.drawRect(0, 0, this.getWidth(), this.getHeight());
+            synchronized(connectors){
+                for(Connector c : connectors){
+                    c.repaint(this);
+                }
+            }
+            super.paint(g);
+        }        
+    }
 }
