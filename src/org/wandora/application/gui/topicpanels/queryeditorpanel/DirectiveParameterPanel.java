@@ -26,6 +26,7 @@ import java.awt.Rectangle;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 import org.wandora.query2.DirectiveUIHints;
 
@@ -43,40 +44,26 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
     public DirectiveParameterPanel() {
         initComponents();
         
-        
-        directiveAnchor.setTransferHandler(new TransferHandler(){
-            @Override
-            public boolean canImport(TransferHandler.TransferSupport support) {
-                return support.isDataFlavorSupported(DirectiveListLine.directiveDataFlavor);
-            }
+        DnDTools.addDropTargetHandler(directiveAnchor, DnDTools.directiveHintsDataFlavor, 
+                new DnDTools.DropTargetCallback<DirectiveUIHints>() {
 
             @Override
-            public boolean importData(TransferHandler.TransferSupport support) {
-                if(!canImport(support)) return false;
-                
-                Transferable t=support.getTransferable();
-                try{
-                    Object o=t.getTransferData(DirectiveListLine.directiveDataFlavor);
-                    DirectiveUIHints hints=(DirectiveUIHints)o;
-                    
-                    DirectivePanel directivePanel=getDirectivePanel();
-                    QueryEditorComponent editor=directivePanel.getEditor();
-                    
-                    DirectivePanel panel=editor.addDirective(hints);
-                    Point point=support.getDropLocation().getDropPoint();
-                    Rectangle rect=directivePanel.getBounds();
-                    panel.setBounds(rect.x+rect.width+10,rect.y,panel.getWidth(),panel.getHeight());
-                    
-                    Connector connector=new Connector(editor,panel,directiveAnchor);
-                    editor.addConnector(connector);
+            public boolean callback(JComponent component, DirectiveUIHints hints, TransferHandler.TransferSupport support) {
+                DirectivePanel directivePanel=getDirectivePanel();
+                QueryEditorComponent editor=directivePanel.getEditor();
 
-                    return true;
-                }
-                catch(UnsupportedFlavorException | IOException e){return false;}
+                DirectivePanel panel=editor.addDirective(hints);
+                Point point=support.getDropLocation().getDropPoint();
+                Rectangle rect=directivePanel.getBounds();
+                panel.setBounds(rect.x+rect.width+10,rect.y,panel.getWidth(),panel.getHeight());
+
+                Connector connector=new Connector(editor.getGraphPanel(),panel,directiveAnchor);
+                editor.addConnector(connector);
+
+                return true;                
             }
-            
-            
         });
+      
         
     }
 
@@ -102,7 +89,11 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
         parameterLabel.setText("Label");
         add(parameterLabel, new java.awt.GridBagConstraints());
 
+        directiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         directiveAnchor.setText("*");
+        directiveAnchor.setMaximumSize(new java.awt.Dimension(20, 20));
+        directiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
+        directiveAnchor.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;

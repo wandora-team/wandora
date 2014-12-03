@@ -24,6 +24,7 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -41,6 +42,7 @@ public class Connector {
     protected JComponent root;
     
     public Connector(JComponent root,JComponent from,JComponent to){
+        this.root=root;
         this.from=from;
         this.to=to;
     }
@@ -71,14 +73,14 @@ public class Connector {
         return new Rectangle(x, y, w, h);
     }
     
-    public void repaint(JComponent container){
-        Graphics2D g=(Graphics2D)container.getGraphics();
+    public void repaint(Graphics g){
+        Graphics2D g2=(Graphics2D)g;
         
-        g.setStroke(new BasicStroke(2));
-        g.setColor(Color.BLACK);
+        g2.setStroke(new BasicStroke(2));
+        g2.setColor(Color.BLACK);
         
         Point f=getAnchorCoordinates(from);
         Point t=getAnchorCoordinates(to);
-        g.drawLine(f.x, f.y, t.x, t.y);
+        g2.drawLine(f.x, f.y, t.x, t.y);
     }
 }

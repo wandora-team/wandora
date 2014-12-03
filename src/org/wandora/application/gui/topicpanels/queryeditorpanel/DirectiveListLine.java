@@ -80,27 +80,16 @@ public class DirectiveListLine extends javax.swing.JPanel {
      */
     public DirectiveListLine() {
         initComponents();
-        this.setTransferHandler(new TransferHandler("directive"){
+        
+        DnDTools.setDragSourceHandler(this, "directive", DnDTools.directiveHintsDataFlavor, 
+                new DnDTools.DragSourceCallback<DirectiveUIHints>() {
             @Override
-            protected Transferable createTransferable(JComponent c) {
-                if(hints==null) return null;
-                else return new DirectiveTransferable(hints);
+            public DirectiveUIHints callback(JComponent component) {
+                return hints;
             }
+        });
 
-            @Override
-            public int getSourceActions(JComponent c) {
-                return TransferHandler.COPY;
-            }
-            
-        });
-        this.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JComponent comp=(JComponent)e.getSource();
-                TransferHandler th = comp.getTransferHandler();
-                th.exportAsDrag(comp, e, TransferHandler.COPY);
-            }
-        });
+        
     }
     
     public DirectiveListLine(DirectiveUIHints hints) {

@@ -203,13 +203,14 @@ public class DirectivePanel extends javax.swing.JPanel {
         addonComboBox = new javax.swing.JComboBox();
         addonPanel = new javax.swing.JPanel();
         resizeWidget = new javax.swing.JLabel();
+        directiveAnchor = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         setLayout(new java.awt.GridBagLayout());
 
         directiveLabel.setText("Directive label");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -224,7 +225,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         add(constructorComboBox, gridBagConstraints);
@@ -235,7 +236,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -244,7 +245,7 @@ public class DirectivePanel extends javax.swing.JPanel {
 
         addAddonButton.setText("Add addon");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -258,6 +259,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -287,10 +289,21 @@ public class DirectivePanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         add(resizeWidget, gridBagConstraints);
+
+        directiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        directiveAnchor.setText("*");
+        directiveAnchor.setMaximumSize(new java.awt.Dimension(20, 20));
+        directiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
+        directiveAnchor.setPreferredSize(new java.awt.Dimension(20, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        add(directiveAnchor, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void constructorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_constructorComboBoxActionPerformed
@@ -340,6 +353,7 @@ public class DirectivePanel extends javax.swing.JPanel {
     private javax.swing.JComboBox constructorComboBox;
     private javax.swing.JPanel constructorParameters;
     private javax.swing.JScrollPane constructorParametersScroll;
+    private javax.swing.JLabel directiveAnchor;
     private javax.swing.JLabel directiveLabel;
     private javax.swing.JLabel resizeWidget;
     // End of variables declaration//GEN-END:variables

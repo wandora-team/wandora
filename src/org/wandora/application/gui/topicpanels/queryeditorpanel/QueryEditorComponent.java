@@ -25,13 +25,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 import org.wandora.query2.Directive;
@@ -55,33 +53,19 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         initComponents();
         populateDirectiveList();
         
-        this.setTransferHandler(new TransferHandler(){
-            @Override
-            public boolean canImport(TransferHandler.TransferSupport support) {
-                return support.isDataFlavorSupported(DirectiveListLine.directiveDataFlavor);
-            }
+        DnDTools.addDropTargetHandler(this, DnDTools.directiveHintsDataFlavor, 
+                new DnDTools.DropTargetCallback<DirectiveUIHints>(){
+                    @Override
+                    public boolean callback(JComponent component, DirectiveUIHints hints, TransferHandler.TransferSupport support) {
+                        DirectivePanel panel=addDirective(hints);
 
-            @Override
-            public boolean importData(TransferHandler.TransferSupport support) {
-                if(!canImport(support)) return false;
-                
-                Transferable t=support.getTransferable();
-                try{
-                    Object o=t.getTransferData(DirectiveListLine.directiveDataFlavor);
-                    DirectiveUIHints hints=(DirectiveUIHints)o;
+                        Point point=support.getDropLocation().getDropPoint();
+                        panel.setBounds(point.x,point.y,panel.getWidth(),panel.getHeight());
 
-                    DirectivePanel panel=addDirective(hints);
-                    
-                    Point point=support.getDropLocation().getDropPoint();
-                    panel.setBounds(point.x,point.y,panel.getWidth(),panel.getHeight());
-
-                    return true;
-                }
-                catch(UnsupportedFlavorException | IOException e){return false;}
-            }
-            
-            
-        });
+                        return true;                        
+                    }
+                });
+        
     }
     
     public void addConnector(Connector c){
@@ -147,14 +131,20 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         return panel;
     }
     
+    public JPanel getGraphPanel(){
+        return queryGraphPanel;
+    }
+    
     public void panelMoved(DirectivePanel panel){
         Rectangle rect=panel.getBounds();
-        int width=Math.max(rect.x+rect.width,this.getWidth());
-        int height=Math.max(rect.y+rect.height,this.getHeight());
+        int width=Math.max(rect.x+rect.width,queryGraphPanel.getWidth());
+        int height=Math.max(rect.y+rect.height,queryGraphPanel.getHeight());
         if(width!=this.getWidth() || height!=this.getHeight()){
-            this.setSize(width,height);
+            queryGraphPanel.setSize(width,height);
         }
         
+        queryGraphPanel.invalidate();
+        queryGraphPanel.repaint();
     }
     
 
@@ -202,19 +192,17 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     private class GraphPanel extends JPanel {
         public GraphPanel(){
             super();
-            this.setOpaque(false);
         }
-        
+
         @Override
-        public void paint(Graphics g) {
-            g.setColor(this.getBackground());
-            g.drawRect(0, 0, this.getWidth(), this.getHeight());
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
             synchronized(connectors){
                 for(Connector c : connectors){
-                    c.repaint(this);
+                    c.repaint(g);
                 }
             }
-            super.paint(g);
-        }        
+        }
+        
     }
 }
