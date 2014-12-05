@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.zip.ZipOutputStream;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -87,6 +88,8 @@ public class SimbergLIDOExporter extends AbstractExportTool implements WandoraTo
             topicMapName = "no_name_topic_map";
         }
 
+        
+
         // --- Then solve target file (and format)
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle(exportInfo+"...");
@@ -100,11 +103,11 @@ public class SimbergLIDOExporter extends AbstractExportTool implements WandoraTo
             try {
                 fileName = file.getName(); // Updating filename if file has changed!
                 out=new FileOutputStream(file);
-                PrintWriter writer = null;
+                ZipOutputStream zipStream = null;
                 try {
-                    writer = new PrintWriter(new OutputStreamWriter(out, "UTF-8"));
+                    zipStream = new ZipOutputStream(out);
                 } 
-                catch (UnsupportedEncodingException ex) {
+                catch (Exception ex) {
                     log(ex);
                 }
                 
@@ -117,11 +120,11 @@ public class SimbergLIDOExporter extends AbstractExportTool implements WandoraTo
                     return;
                 }
 
-                data.exportLIDO(writer, getCurrentLogger());
+                data.exportLIDO(zipStream, getCurrentLogger());
 
-                if(writer != null){
-                    writer.flush();
-                    writer.close();
+                if(zipStream != null){
+                    zipStream.flush();
+                    zipStream.close();
                 }
                 
                 log("Done");
@@ -132,6 +135,7 @@ public class SimbergLIDOExporter extends AbstractExportTool implements WandoraTo
                 try { if(out != null) out.close(); }
                 catch(Exception e2) { log(e2); }
             }
+        
         }
         setState(WAIT);
     }
