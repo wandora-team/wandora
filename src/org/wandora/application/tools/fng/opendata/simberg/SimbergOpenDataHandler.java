@@ -376,132 +376,157 @@ public class SimbergOpenDataHandler {
             // ===== LIDO =====
             else if("lido".equals(t)) {
                 if(title == null || title.length() == 0) title = ""+System.currentTimeMillis()+"-"+Math.floor(Math.random()*9999);
+                s.append("<lido:lidoWrap xmlns:lido=\"http://www.lido-schema.org\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.lido-schema.org http://www.lido-schema.org/schema/v1.0/lido-v1.0.xsd\">\n");
                 
-                s.append("<lido>\n");
+                s.append("<lido:lido>\n");
                                
-                    s.append("<lidoRecID type=\"NDL\">");
+                    s.append("<lido:lidoRecID lido:type=\"picture\">");
                         s.append(title);
-                    s.append("</lidoRecID>\n");
+                    s.append("</lido:lidoRecID>\n");
 
-                    s.append("<category>");
-                        s.append("<conceptID type=\"URI\">http://www.cidoc-crm.org/crm-concepts/E22</conceptID>");
-                        s.append("<term>Man-Made Object</term>");
-                    s.append("</category>\n");
+                    //s.append("<category>");
+                    //    s.append("<conceptID type=\"URI\">http://www.cidoc-crm.org/crm-concepts/E22</conceptID>");
+                    //    s.append("<term>Man-Made Object</term>");
+                    //s.append("</category>\n");
 
                     // --- description
-                    s.append("<descriptiveMetadata lang=\"fi\">");
-
-                        // --- identification
-                        s.append("<objectIdentificationWrap>");
-
-                            s.append("<titleWrap>");
-                                s.append("<titleSet>");
-                                    s.append("<appellationValue>");
-                                        s.append(title);
-                                    s.append("</appellationValue>");
-                                s.append("</titleSet>");
-                            s.append("</titleWrap>");
-
-
-                            s.append("<repositoryWrap>");
-                                s.append("<repositorySet>");
-                                    s.append("<repositoryName>");
-                                        s.append("<legalBodyName>");
-                                            s.append("<appellationValue label=\"Museo/Osasto/Haltija\">Kansallisgalleria/Finnish National Gallery</appellationValue>");
-                                        s.append("</legalBodyName>");
-                                        s.append("<legalBodyWeblink label=\"Www-osoite\">http://www.kansallisgalleria.fi</legalBodyWeblink>");
-                                    s.append("</repositoryName>");
-                                s.append("</repositorySet>");
-                            s.append("</repositoryWrap>");
-
-                        s.append("</objectIdentificationWrap>");
-
-
+                    s.append("<lido:descriptiveMetadata xml:lang=\"fi\">");
+                    
 
                         // --- classification
-                        s.append("<objectClassificationWrap>");
+                        s.append("<lido:objectClassificationWrap>");
+                            s.append("<lido:objectWorkType>");
+                                s.append("<lido:term xml:lang=\"fi\">kuva</lido:term>");
+                            s.append("</lido:objectWorkType>");
                             if(type != null && type.length() > 0) {
-                                s.append("<objectWorkType>");
-                                    s.append("<term>");
+                                s.append("<lido:objectWorkType>");
+                                    s.append("<lido:term>");
                                         s.append(type);
-                                    s.append("</term>");
-                                s.append("</objectWorkType>");
+                                    s.append("</lido:term>");
+                                s.append("</lido:objectWorkType>");
                             }
                             
+                            s.append("<lido:classificationWrap>");
+                                s.append("<lido:classification>");
+                                    s.append("<lido:term lido:label=\"kuvatyyppi\" xml:lang=\"fi\">valokuva</lido:term>");
+                                s.append("</lido:classification>");
+                            s.append("</lido:classificationWrap>");
+
+                        s.append("</lido:objectClassificationWrap>");
+
+                        
+                        
+                        // --- relations
+                        s.append("<lido:objectRelationWrap>");
+                            
                             if(keywords != null && keywords.size() > 0) {
-                                s.append("<classificationWrap>");
+                                s.append("<lido:subjectWrap>");
+                                    s.append("<lido:subjectSet>");
+                                        s.append("<lido:subject>");
+                                            s.append("<lido:subjectConcept>");
+                                                s.append("<lido:conceptID lido:type=\"term\" xml:lang=\"fi\">valokuva</lido:conceptID>");
+                                            s.append("</lido:subjectConcept>");
+                                        s.append("</lido:subject>");
+                                    s.append("</lido:subjectSet>");
+                                
                                     StringBuilder ke = new StringBuilder("");
                                     for(int i=0; i<keywords.size(); i++) {
                                         ke.append(keywords.get(i).toString(t));
                                     }
                                     s.append((ke.toString()));
-                                s.append("</classificationWrap>");
+                                s.append("</lido:subjectWrap>");
                             }
-                        s.append("</objectClassificationWrap>");
+                        s.append("</lido:objectRelationWrap>");
+                    
+                        
+                        // --- identification
+                        s.append("<lido:objectIdentificationWrap>");
 
+                            s.append("<lido:titleWrap>");
+                                s.append("<lido:titleSet>");
+                                    s.append("<lido:appellationValue>");
+                                        s.append(title);
+                                    s.append("</lido:appellationValue>");
+                                s.append("</lido:titleSet>");
+                            s.append("</lido:titleWrap>");
+
+
+                            s.append("<lido:repositoryWrap>");
+                                s.append("<lido:repositorySet>");
+                                    s.append("<lido:repositoryName>");
+                                        s.append("<lido:legalBodyName>");
+                                            s.append("<lido:appellationValue lido:label=\"Museo/Arkisto\">Kansallisgalleria/Hugo Simbergin arkisto</lido:appellationValue>");
+                                        s.append("</lido:legalBodyName>");
+                                        s.append("<lido:legalBodyWeblink lido:label=\"Www-osoite\">http://www.kansallisgalleria.fi</lido:legalBodyWeblink>");
+                                    s.append("</lido:repositoryName>");
+                                s.append("</lido:repositorySet>");
+                            s.append("</lido:repositoryWrap>");
+
+                        s.append("</lido:objectIdentificationWrap>");
 
                         // --- events
-                        s.append("<eventWrap>");
-                            s.append("<eventSet>");
-                                s.append("<event>");
-                                    s.append("<eventType>");
-                                        s.append("<term>valokuvaus</term>");
-                                    s.append("</eventType>");
+                        s.append("<lido:eventWrap>");
+                            s.append("<lido:eventSet>");
+                                s.append("<lido:event>");
+                                    s.append("<lido:eventType>");
+                                        s.append("<lido:term>valokuvaus</lido:term>");
+                                    s.append("</lido:eventType>");
                                     if(author != null && author.length() > 0) {
-                                        s.append("<eventActor>");
-                                            s.append("<actorInRole>");
-                                                s.append("<actor>");
-                                                    s.append("<nameActorSet>");
-                                                        s.append("<appellationValue label=\"Valokuvaaja\">"+author+"</appellationValue>");
-                                                    s.append("</nameActorSet>");
-                                                s.append("</actor>");
-                                                s.append("<roleActor><term>valokuvaaja</term></roleActor>");
-                                            s.append("</actorInRole>");
-                                        s.append("</eventActor>");
+                                        s.append("<lido:eventActor>");
+                                            s.append("<lido:actorInRole>");
+                                                s.append("<lido:actor>");
+                                                    s.append("<lido:nameActorSet>");
+                                                        s.append("<lido:appellationValue lido:label=\"Valokuvaaja\">"+author+"</lido:appellationValue>");
+                                                    s.append("</lido:nameActorSet>");
+                                                s.append("</lido:actor>");
+                                                s.append("<lido:roleActor><lido:term>valokuvaaja</lido:term></lido:roleActor>");
+                                            s.append("</lido:actorInRole>");
+                                        s.append("</lido:eventActor>");
                                     }
                                     if(date != null && date.length() > 0) {
-                                        s.append("<eventDate>");
-                                            s.append("<displayDate label=\"Valmistusaika\">"+date+"</displayDate>");
-                                        s.append("</eventDate>");
+                                        s.append("<lido:eventDate>");
+                                            s.append("<lido:displayDate lido:label=\"Valmistusaika\">"+date+"</lido:displayDate>");
+                                        s.append("</lido:eventDate>");
                                     }
                                     if(material != null && material.length() > 0) {
-                                        s.append("<eventMaterialsTech>");
-                                            s.append("<displayMaterialsTech label=\"Materiaali\">"+material+"</displayMaterialsTech>");
-                                        s.append("</eventMaterialsTech>");
+                                        s.append("<lido:eventMaterialsTech>");
+                                            s.append("<lido:displayMaterialsTech lido:label=\"Materiaali\">"+material+"</lido:displayMaterialsTech>");
+                                        s.append("</lido:eventMaterialsTech>");
                                     }
-                                 s.append("</event>");
-                            s.append("</eventSet>");
-                        s.append("</eventWrap>");
+                                 s.append("</lido:event>");
+                            s.append("</lido:eventSet>");
+                        s.append("</lido:eventWrap>");
 
-                    s.append("</descriptiveMetadata>\n");
+                    s.append("</lido:descriptiveMetadata>\n");
                 
                     // ----- administrative
-                    s.append("<administrativeMetadata lang=\"fi\">");
-                        s.append("<recordWrap>");
-                            s.append("<recordID type=\"local\" label=\"Sis&#xE4;inen ID-numero\">");
+                    s.append("<lido:administrativeMetadata xml:lang=\"fi\">");
+                        s.append("<lido:recordWrap>");
+                            s.append("<lido:recordID lido:type=\"local\" lido:label=\"Sis&#xE4;inen ID-numero\">");
                                 s.append(title);
-                            s.append("</recordID>");
+                            s.append("</lido:recordID>");
 
-                            s.append("<recordType>");
-                                s.append("<term>valokuva</term>");
-                            s.append("</recordType>");
+                            s.append("<lido:recordType>");
+                                s.append("<lido:term>valokuva</lido:term>");
+                            s.append("</lido:recordType>");
 
-                            s.append("<recordSource>");
-                                s.append("<legalBodyWeblink label=\"Www-osoite\">http://www.kansallisgalleria.fi</legalBodyWeblink>");
-                            s.append("</recordSource>");
-                        s.append("</recordWrap>");
+                            s.append("<lido:recordSource>");
+                                s.append("<lido:legalBodyWeblink lido:label=\"Www-osoite\">http://www.kansallisgalleria.fi</lido:legalBodyWeblink>");
+                            s.append("</lido:recordSource>");
+                        s.append("</lido:recordWrap>");
 
-                        s.append("<resourceWrap>");
+                        s.append("<lido:resourceWrap>");
                             StringBuilder im = new StringBuilder("");
                             for(int i=0; i<images.size(); i++) {
                                 im.append(images.get(i).toString(t));
                             }
                             s.append(im.toString());
-                        s.append("</resourceWrap>");
+                        s.append("</lido:resourceWrap>");
 
-                    s.append("</administrativeMetadata>\n");
+                    s.append("</lido:administrativeMetadata>\n");
                
-                s.append("</lido>\n");
+                s.append("</lido:lido>\n");
+                s.append("</lido:lidoWrap>\n");
             }
             
             
@@ -574,14 +599,14 @@ public class SimbergOpenDataHandler {
                 k.append("</identifier>\n");
             }
             else if("lido".equals(t)) {
-                k.append("<resourceSet>");
-                    k.append("<resourceRepresentation>");
-                        if(type != null) k.append("<linkResource label=\"").append(type).append("\">");
-                        else k.append("<linkResource>");
+                k.append("<lido:resourceSet>");
+                    k.append("<lido:resourceRepresentation>");
+                        if(type != null) k.append("<lido:linkResource lido:label=\"").append(type).append("\">");
+                        else k.append("<lido:linkResource>");
                             k.append(IMAGE_BASE_URL+encodeXMLValue(key)+".jpg");
-                        k.append("</linkResource>");
-                    k.append("</resourceRepresentation>");
-                k.append("</resourceSet>");
+                        k.append("</lido:linkResource>");
+                    k.append("</lido:resourceRepresentation>");
+                k.append("</lido:resourceSet>");
             }
             else if("json".equals(t)) {
                 k.append("   {\n");
@@ -624,11 +649,13 @@ public class SimbergOpenDataHandler {
                 k.append("</dc:subject>\n");
             }
             else if("lido".equals(t)) {
-                k.append("<classification>");
-                    if(type == null) k.append("<term lang=\"fi\">"); else k.append("<term lang=\"fi\" label=\""+type+"\">");
-                        k.append(encodeXMLValue(key));
-                    k.append("</term>");
-                k.append("</classification>");
+                k.append("<lido:subjectSet>");
+                    k.append("<lido:subject>");
+                        if(type == null) k.append("<lido:term xml:lang=\"fi\">"); else k.append("<lido:term xml:lang=\"fi\" lido:label=\""+type+"\">");
+                            k.append(encodeXMLValue(key));
+                    k.append("</lido:term>");
+                    k.append("</lido:subject>");
+                k.append("</lido:subjectSet>");
             }
             else if("json".equals(t)) {
                 k.append(encodeCSVString(key));
@@ -659,11 +686,10 @@ public class SimbergOpenDataHandler {
     
     
 
-    public void exportLIDO(PrintWriter writer, WandoraToolLogger logger) throws TopicMapException, IOException {
+    public void exportLIDO(ZipOutputStream zipStream, WandoraToolLogger logger) throws TopicMapException, IOException {
         logger.log("Saving LIDO data.");
 
-        writer.print("<?xml version=\"1.0\"?>\n");
-        writer.print("<lidoWrap schemaLocation=\"http://www.lido-schema.org http://www.lido-schema.org/schema/v1.0/lido-v1.0.xsd\">\n");
+        PrintWriter writer = new PrintWriter(new OutputStreamWriter(zipStream, "UTF-8"));
 
         logger.setProgressMax(data.size());
         logger.setProgress(0);
@@ -671,14 +697,31 @@ public class SimbergOpenDataHandler {
         for( SimbergPhotograph d : data ) {
             if(logger.forceStop()) break;
             if(d != null) {
+                String filename = d.title;
+                StringBuilder sanitizedFilename = new StringBuilder("");
+                for(int i=0; i<filename.length(); i++) {
+                    char c = filename.charAt(i);
+                    if("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0987654321_".indexOf(c) >= 0) {
+                        sanitizedFilename.append(c);
+                    }
+                    else {
+                        sanitizedFilename.append('_');
+                    }
+                }
+
+                ZipEntry e = new ZipEntry("simberg_opendata_"+sanitizedFilename);
+                zipStream.putNextEntry(e);
+                writer.print("<?xml version=\"1.0\"?>\n");
                 print(writer, d.toString("lido"));
+                writer.flush();
+                zipStream.closeEntry();
             }
             logger.setProgress(p++);
         }
 
-        writer.print("</lidoWrap>\n");
         writer.flush();
         writer.close();
+        zipStream.close();
     }
     
     
