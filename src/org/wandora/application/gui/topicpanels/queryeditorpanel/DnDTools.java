@@ -39,22 +39,61 @@ import org.wandora.query2.DirectiveUIHints;
 
 
 public class DnDTools {
+    public static class ChainedTransferHandler extends TransferHandler {
+        protected ChainedTransferHandler next;
+        public ChainedTransferHandler(){
+        }
+        public ChainedTransferHandler(ChainedTransferHandler next){
+            this.next=next;
+        }
+        public ChainedTransferHandler(ChainedTransferHandler next,String property){
+            super(property);
+            this.next=next;
+        }
+
+        @Override
+        public boolean canImport(TransferHandler.TransferSupport support) {
+            if(next!=null) return next.canImport(support);
+            else return super.canImport(support);
+        }
+
+        @Override
+        public boolean importData(TransferHandler.TransferSupport support) {
+            if(next!=null) return next.importData(support);
+            else return super.importData(support);
+        }
+        
+        @Override
+        protected Transferable createTransferable(JComponent c) {
+            if(next!=null) return next.createTransferable(c);
+            else return super.createTransferable(c);
+        }            
+        @Override
+        public int getSourceActions(JComponent c) {
+            if(next!=null) return next.getSourceActions(c);
+            else return super.getSourceActions(c);
+        }        
+    }
+    
+    
     public static <K> void addDropTargetHandler(final JComponent component,final DataFlavor flavor,final DropTargetCallback<K> callback){
         
         final TransferHandler old=component.getTransferHandler();
+        if(old!=null && !(old instanceof ChainedTransferHandler)){
+            throw new RuntimeException("Tried to chain transfer handlers but existing handler is not a chained version.");
+        }
         
-        component.setTransferHandler(new TransferHandler(){
+        component.setTransferHandler(new ChainedTransferHandler((ChainedTransferHandler)old){
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
                 return support.isDataFlavorSupported(flavor) ||
-                        (old!=null && old.canImport(support));
+                        super.canImport(support);
             }
 
             @Override
             public boolean importData(TransferHandler.TransferSupport support) {
                 if(!canImport(support)) {
-                    if(old!=null) return old.importData(support);
-                    else return false;
+                    return super.importData(component, null);
                 }
                 
                 Transferable t=support.getTransferable();
@@ -69,25 +108,28 @@ public class DnDTools {
                 }
                 catch(UnsupportedFlavorException | IOException e){return false;}
             }
-            
         });
     }
     
     public static <K> void setDragSourceHandler(final JComponent component,final String property, final WrapperDataFlavor<K> dataFlavor,final DragSourceCallback<K> callback){
+
+        final TransferHandler old=component.getTransferHandler();
+        if(old!=null && !(old instanceof ChainedTransferHandler)){
+            throw new RuntimeException("Tried to chain transfer handlers but existing handler is not a chained version.");
+        }
         
-        component.setTransferHandler(new TransferHandler(property){
+        component.setTransferHandler(new ChainedTransferHandler((ChainedTransferHandler)old,property){
             @Override
             protected Transferable createTransferable(JComponent c) {
                 K wrapped=callback.callback(component);
                 if(wrapped!=null) return makeTransferable(dataFlavor, wrapped);
-                else return null;
+                else return super.createTransferable(c);
             }
 
             @Override
             public int getSourceActions(JComponent c) {
-                return TransferHandler.COPY;
+                return TransferHandler.COPY|super.getSourceActions(c);
             }
-            
         });
         component.addMouseListener(new MouseAdapter(){
             @Override
@@ -126,7 +168,7 @@ public class DnDTools {
     }
     
     public static final WrapperDataFlavor<DirectiveUIHints> directiveHintsDataFlavor=makeDataFlavor(DirectiveUIHints.class);
-    public static final WrapperDataFlavor<Directive> directiveDataFlavor=makeDataFlavor(Directive.class);
+    public static final WrapperDataFlavor<DirectivePanel> directivePanelDataFlavor=makeDataFlavor(DirectivePanel.class);
 
     public static class WrapperTransferable<K> implements Transferable {
         private final K wrapped;
@@ -162,8 +204,8 @@ public class DnDTools {
         return makeTransferable(directiveHintsDataFlavor,hints);
     }
     
-    public static WrapperTransferable<Directive> makeDirectiveTransferable(Directive directive){
-        return makeTransferable(directiveDataFlavor,directive);
+    public static WrapperTransferable<DirectivePanel> makeDirectivePanelTransferable(DirectivePanel directivePanel){
+        return makeTransferable(directivePanelDataFlavor,directivePanel);
     }
 
 }

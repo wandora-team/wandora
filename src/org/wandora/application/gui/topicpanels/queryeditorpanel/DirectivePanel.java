@@ -29,7 +29,9 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.TransferHandler;
 import org.wandora.application.Wandora;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
@@ -45,12 +47,18 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 public class DirectivePanel extends javax.swing.JPanel {
 
     protected DirectiveUIHints hints;
+    protected DirectivePanel to;
+    protected DirectivePanel from;
+    protected Connector toConnector;
+    protected Connector fromConnector;
+    protected ConnectorAnchor connectorAnchor;
     
     /**
      * Creates new form DirectivePanel
      */
     public DirectivePanel() {
         initComponents();
+        this.connectorAnchor=new ComponentConnectorAnchor(directiveAnchor,ConnectorAnchor.Direction.LEFT,true,true);
     }
     
     protected boolean dragging=false;
@@ -90,8 +98,71 @@ public class DirectivePanel extends javax.swing.JPanel {
         });
         
         
+        DnDTools.setDragSourceHandler(directiveAnchor, "directivePanel", DnDTools.directivePanelDataFlavor, new DnDTools.DragSourceCallback<DirectivePanel>() {
+            @Override
+            public DirectivePanel callback(JComponent component) {
+                return DirectivePanel.this;
+            }
+        });
+        
+        DnDTools.addDropTargetHandler(directiveAnchor, DnDTools.directivePanelDataFlavor, new DnDTools.DropTargetCallback<DirectivePanel>(){
+            @Override
+            public boolean callback(JComponent component, DirectivePanel o, TransferHandler.TransferSupport support) {
+                if(o==DirectivePanel.this) return false;
+                connectorAnchor.setFrom(o.getConnectorAnchor());
+                return true;
+            }
+        });
     }
     
+    public ConnectorAnchor getConnectorAnchor(){
+        return connectorAnchor;
+    }
+/*    
+    public static void setLink(QueryEditorComponent editor,DirectivePanel from,DirectivePanel to){
+        // Things are nulled seemingly unnecessarily because the recursive calls
+        // would otherwise cause infinite recursion. Nulling them acts as a
+        // marker that we've done that panel already.
+        
+        if(from==null || from.to!=to){
+            if(from!=null){
+                if(from.toConnector!=null){
+                    editor.removeConnector(from.toConnector);
+                    from.toConnector=null;
+                }
+                DirectivePanel old=from.to;
+                from.to=null;
+                if(old!=null) old.setFrom(null);
+                from.to=to;
+            }
+            
+            if(to!=null){
+                if(to.fromConnector!=null){
+                    editor.removeConnector(to.fromConnector);
+                    to.fromConnector=null;
+                }
+                DirectivePanel old=to.from;
+                to.from=null;
+                if(old!=null) old.setTo(null);
+                to.from=from;
+                
+                if(from!=null){
+                    from.toConnector=new Connector((JComponent)from.getParent(), from.directiveAnchor, to.directiveAnchor);
+                    to.fromConnector=from.toConnector;
+                    editor.addConnector(from.toConnector);
+                }
+            }
+        }        
+    }
+    
+    public void setFrom(DirectivePanel panel){
+        setLink(getEditor(),panel,this);
+    }
+    
+    public void setTo(DirectivePanel panel){
+        setLink(getEditor(),this,panel);
+    }
+    */
     protected QueryEditorComponent getEditor(){
         Container parent=getParent();
         while(parent!=null && !(parent instanceof QueryEditorComponent)){

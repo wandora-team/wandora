@@ -37,11 +37,11 @@ import javax.swing.JComponent;
 
 
 public class Connector {
-    protected JComponent from;
-    protected JComponent to;
+    protected ConnectorAnchor from;
+    protected ConnectorAnchor to;
     protected JComponent root;
     
-    public Connector(JComponent root,JComponent from,JComponent to){
+    public Connector(JComponent root,ConnectorAnchor from,ConnectorAnchor to){
         this.root=root;
         this.from=from;
         this.to=to;
@@ -58,9 +58,9 @@ public class Connector {
         return d;
     }
     
-    protected Point getAnchorCoordinates(JComponent anchor){
-        Rectangle rect=anchor.getBounds();
-        return getRootCoordinates(anchor,rect.width/2,rect.height/2);
+    protected Point getAnchorCoordinates(ConnectorAnchor anchor){
+        Point p=anchor.getAnchorPoint();
+        return getRootCoordinates(anchor.getComponent(),p.x,p.y);
     }
     
     public Rectangle getBoundingBox(){
@@ -83,4 +83,5 @@ public class Connector {
         Point t=getAnchorCoordinates(to);
         g2.drawLine(f.x, f.y, t.x, t.y);
     }
+    
 }

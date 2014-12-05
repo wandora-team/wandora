@@ -40,39 +40,6 @@ import org.wandora.query2.DirectiveUIHints;
 
 public class DirectiveListLine extends javax.swing.JPanel {
 
-    public static DataFlavor directiveDataFlavor;
-    static{
-        try{
-            directiveDataFlavor=new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +";class="+(DirectiveUIHints.class.getName()));
-        }catch(ClassNotFoundException cnfe){
-            throw new RuntimeException(cnfe);
-        }
-    }
-    public static class DirectiveTransferable implements Transferable {
-        private final DirectiveUIHints hints;
-        public DirectiveTransferable(DirectiveUIHints hints){
-            this.hints=hints;
-        }
-        
-        @Override
-        public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[]{directiveDataFlavor};
-        }
-
-        @Override
-        public boolean isDataFlavorSupported(DataFlavor flavor) {
-            return flavor.equals(directiveDataFlavor);
-        }
-
-        @Override
-        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-            if(flavor.equals(directiveDataFlavor)) return hints;
-            else throw new UnsupportedFlavorException(flavor);
-        }
-        
-    }
-    
-    
     protected DirectiveUIHints hints;
     
     /**
@@ -81,7 +48,7 @@ public class DirectiveListLine extends javax.swing.JPanel {
     public DirectiveListLine() {
         initComponents();
         
-        DnDTools.setDragSourceHandler(this, "directive", DnDTools.directiveHintsDataFlavor, 
+        DnDTools.setDragSourceHandler(this, "directiveHints", DnDTools.directiveHintsDataFlavor, 
                 new DnDTools.DragSourceCallback<DirectiveUIHints>() {
             @Override
             public DirectiveUIHints callback(JComponent component) {

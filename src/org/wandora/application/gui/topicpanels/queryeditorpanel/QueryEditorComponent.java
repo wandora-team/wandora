@@ -61,7 +61,6 @@ public class QueryEditorComponent extends javax.swing.JPanel {
 
                         Point point=support.getDropLocation().getDropPoint();
                         panel.setBounds(point.x,point.y,panel.getWidth(),panel.getHeight());
-
                         return true;                        
                     }
                 });
@@ -117,6 +116,8 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     
     public void addDirectivePanel(DirectivePanel panel){
         this.queryGraphPanel.add(panel);
+        this.queryGraphPanel.invalidate();
+        this.queryGraphPanel.repaint();
     }
     
     public DirectivePanel addDirective(Class<? extends Directive> dir){

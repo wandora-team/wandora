@@ -23,11 +23,9 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.ConnectorAnchor.Direction;
 import org.wandora.query2.DirectiveUIHints;
 
 /**
@@ -38,11 +36,15 @@ import org.wandora.query2.DirectiveUIHints;
 
 public class DirectiveParameterPanel extends AbstractTypePanel {
 
+    protected ConnectorAnchor connectorAnchor;
+    
     /**
      * Creates new form DirectiveParameterPanel
      */
     public DirectiveParameterPanel() {
         initComponents();
+        
+        connectorAnchor=new ComponentConnectorAnchor(directiveAnchor,Direction.RIGHT,true,false);
         
         DnDTools.addDropTargetHandler(directiveAnchor, DnDTools.directiveHintsDataFlavor, 
                 new DnDTools.DropTargetCallback<DirectiveUIHints>() {
@@ -57,8 +59,7 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
                 Rectangle rect=directivePanel.getBounds();
                 panel.setBounds(rect.x+rect.width+10,rect.y,panel.getWidth(),panel.getHeight());
 
-                Connector connector=new Connector(editor.getGraphPanel(),panel,directiveAnchor);
-                editor.addConnector(connector);
+                connectorAnchor.setFrom(panel.getConnectorAnchor());
 
                 return true;                
             }
