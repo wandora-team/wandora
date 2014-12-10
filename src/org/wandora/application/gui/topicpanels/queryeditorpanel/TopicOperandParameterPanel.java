@@ -21,38 +21,36 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
-import java.awt.Container;
-import javax.swing.JPanel;
-
 /**
  *
  * @author olli
  */
 
 
-public abstract class AbstractTypePanel extends JPanel {
-    
-    public abstract void setLabel(String label);
-    
-    public void disconnect(){
-        
+public class TopicOperandParameterPanel extends OperandParameterPanel {
+
+    @Override
+    protected void setOperandTypes() {
+        super.setOperandTypes();
+        operandTypeComboBox.removeItem("String");
+        operandTypeComboBox.addItem("Topic");
     }
     
-    protected QueryEditorComponent getEditor(){
-        Container parent=getParent();
-        while(parent!=null && !(parent instanceof QueryEditorComponent)){
-            parent=parent.getParent();
+    @Override
+    protected boolean operandTypeChanged(){
+        if(super.operandTypeChanged()) return true;
+        Object o=operandTypeComboBox.getSelectedItem();
+        if(o==null) return false; // shouldn't happen as super takes care of this
+        String type=o.toString();
+        if(type.equalsIgnoreCase("Topic")){
+            operandPanel.removeAll();
+            TopicParameterPanel p=new TopicParameterPanel();
+            p.setLabel("");
+            operandPanel.add(p);
+            this.revalidate();
+            operandPanel.repaint();
+            return true;
         }
-        if(parent!=null) return (QueryEditorComponent)parent;
-        else return null;
-    }    
-    
-    protected DirectivePanel getDirectivePanel(){
-        Container parent=getParent();
-        while(parent!=null && !(parent instanceof DirectivePanel)){
-            parent=parent.getParent();
-        }
-        if(parent!=null) return (DirectivePanel)parent;
-        else return null;
-    }    
+        else return false;
+    }
 }

@@ -255,6 +255,10 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
         return true;
     }
 
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
 
     
     

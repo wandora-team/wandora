@@ -26,6 +26,7 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.ConnectorAnchor.Direction;
+import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
 
 /**
@@ -37,6 +38,7 @@ import org.wandora.query2.DirectiveUIHints;
 public class DirectiveParameterPanel extends AbstractTypePanel {
 
     protected ConnectorAnchor connectorAnchor;
+    protected Class<? extends Directive> directiveType;
     
     /**
      * Creates new form DirectiveParameterPanel
@@ -51,6 +53,8 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
 
             @Override
             public boolean callback(JComponent component, DirectiveUIHints hints, TransferHandler.TransferSupport support) {
+                if(directiveType!=null && !directiveType.isAssignableFrom(hints.getClass())) return false;
+                
                 DirectivePanel directivePanel=getDirectivePanel();
                 QueryEditorComponent editor=directivePanel.getEditor();
 
@@ -64,8 +68,30 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
                 return true;                
             }
         });
-      
         
+        DnDTools.addDropTargetHandler(directiveAnchor, DnDTools.directivePanelDataFlavor, 
+                new DnDTools.DropTargetCallback<DirectivePanel>() {
+
+            @Override
+            public boolean callback(JComponent component, DirectivePanel o, TransferHandler.TransferSupport support) {
+                if(o==getDirectivePanel()) return false;
+                connectorAnchor.setFrom(o.getConnectorAnchor());
+                return true;
+            }
+        });        
+        
+    }
+
+    @Override
+    public void disconnect() {
+        super.disconnect(); 
+        connectorAnchor.setFrom(null);
+    }
+
+
+    
+    public void setDirectiveType(Class<? extends Directive> cls){
+        directiveType=cls;
     }
 
     public void setLabel(String label){

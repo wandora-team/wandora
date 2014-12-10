@@ -171,6 +171,11 @@ public class SketchGridPanel extends javax.swing.JPanel implements TopicMapListe
     }
 
     @Override
+    public boolean noScroll(){
+        return false;
+    }
+    
+    @Override
     public Object[] getViewMenuStruct() {
         return new Object[] {};
     }

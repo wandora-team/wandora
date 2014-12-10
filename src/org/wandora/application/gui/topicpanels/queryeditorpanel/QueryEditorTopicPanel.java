@@ -109,6 +109,11 @@ public class QueryEditorTopicPanel implements TopicPanel {
     }
 
     @Override
+    public boolean noScroll(){
+        return true;
+    }
+    
+    @Override
     public Object[] getViewMenuStruct() {
         return new Object[0];
     }

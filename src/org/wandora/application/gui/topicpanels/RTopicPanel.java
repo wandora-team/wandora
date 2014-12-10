@@ -858,6 +858,10 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
     
 
 
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
   
     
     @Override

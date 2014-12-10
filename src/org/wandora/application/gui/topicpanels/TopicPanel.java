@@ -120,6 +120,12 @@ public interface TopicPanel extends TopicMapListener {
     public Object[] getViewMenuStruct();
     public JMenu getViewMenu();
     public JPopupMenu getViewPopupMenu();
+   
+    /*
+     * If this returns true, then the topic panel will not be wrapped inside
+     * a scroll pane. Useful if the panel provides its own scrolling.
+     */
+    public boolean noScroll();
     
     /*
      * A topic panel can store it's own topic history. Topic history is used

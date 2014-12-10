@@ -20,6 +20,7 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -141,7 +142,11 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         int width=Math.max(rect.x+rect.width,queryGraphPanel.getWidth());
         int height=Math.max(rect.y+rect.height,queryGraphPanel.getHeight());
         if(width!=this.getWidth() || height!=this.getHeight()){
-            queryGraphPanel.setSize(width,height);
+            Dimension d=new Dimension(width,height);
+            queryGraphPanel.setMaximumSize(d);
+            queryGraphPanel.setPreferredSize(d);
+            queryGraphPanel.setMinimumSize(d);
+            queryGraphPanel.setSize(d);
         }
         
         queryGraphPanel.invalidate();

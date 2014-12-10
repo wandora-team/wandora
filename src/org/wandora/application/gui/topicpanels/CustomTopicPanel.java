@@ -667,7 +667,10 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         return null;
     }
     
-    
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
     
     
     // -------------------------------------------------------------------------
