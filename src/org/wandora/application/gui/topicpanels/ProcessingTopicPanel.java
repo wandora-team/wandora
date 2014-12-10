@@ -1538,6 +1538,10 @@ private void saveBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
         return UIBox.getIcon("gui/icons/topic_panel_processing.png");
     }
 
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
 
     
     

@@ -304,6 +304,10 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements TopicMapLis
         return UIBox.getIcon("gui/icons/topic_panel_treemap.png");
     }
 
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
 
     
     

@@ -424,6 +424,10 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         return 1;
     }
 
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
     
     // -------------------------------------------------------------------------
     
@@ -595,8 +599,13 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
         JPanel wrapper = new JPanel();
         wrapper.setLayout(new BorderLayout());
-        JScrollPane wrapperScroll = new SimpleScrollPane(tp.getGui());
-        wrapper.add(wrapperScroll, BorderLayout.CENTER);
+        if(tp.noScroll()) {
+            wrapper.add(tp.getGui(), BorderLayout.CENTER);            
+        }
+        else {
+            JScrollPane wrapperScroll = new SimpleScrollPane(tp.getGui());
+            wrapper.add(wrapperScroll, BorderLayout.CENTER);
+        }
 
         WandoraDockable d = new WandoraDockable(wrapper, tp, tp.getTitle(), icon);
         d.setActionOffers(new WandoraDockActionSource(tp, this, control));

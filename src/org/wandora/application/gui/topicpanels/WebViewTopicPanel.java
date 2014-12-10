@@ -178,6 +178,10 @@ public class WebViewTopicPanel implements TopicPanel {
         return null;
     }
     
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
     
     // -------------------------------------------------------------------------
     

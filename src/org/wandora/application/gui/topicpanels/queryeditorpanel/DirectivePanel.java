@@ -37,6 +37,8 @@ import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
 import org.wandora.query2.DirectiveUIHints.Constructor;
 import org.wandora.query2.DirectiveUIHints.Parameter;
+import org.wandora.query2.Operand;
+import org.wandora.query2.TopicOperand;
 
 /**
  *
@@ -215,6 +217,11 @@ public class DirectivePanel extends javax.swing.JPanel {
         if(Directive.class.isAssignableFrom(cls)) return DirectiveParameterPanel.class;
         else if(cls.equals(Integer.class) || cls.equals(Integer.TYPE)) return IntegerParameterPanel.class;
         else if(cls.equals(String.class)) return StringParameterPanel.class;
+        else if(cls.equals(TopicOperand.class)) return TopicOperandParameterPanel.class;
+        else if(cls.equals(Operand.class)) return OperandParameterPanel.class;
+        // this is a guess really
+        else if(cls.equals(Object.class)) return TopicOperandParameterPanel.class;
+
         else return UnknownParameterTypePanel.class;
     }
     
@@ -242,6 +249,13 @@ public class DirectivePanel extends javax.swing.JPanel {
                 try{
                     panel=panelCls.newInstance();
                     ((AbstractTypePanel)panel).setLabel(p.getLabel());
+                    
+                    if(panel instanceof DirectiveParameterPanel){
+                        if(!p.getType().equals(Directive.class)){
+                            Class<? extends Directive> cls=(Class<? extends Directive>)p.getType();
+                            ((DirectiveParameterPanel)panel).setDirectiveType(cls);
+                        }
+                    }
                 }catch(IllegalAccessException | InstantiationException e){
                     Wandora.getWandora().handleError(e);
                     return;

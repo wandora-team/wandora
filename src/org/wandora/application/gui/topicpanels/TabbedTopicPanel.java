@@ -210,6 +210,10 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         return UIBox.getIcon("gui/icons/topic_panel_tabbed.png");
     }
     
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
     
   
    

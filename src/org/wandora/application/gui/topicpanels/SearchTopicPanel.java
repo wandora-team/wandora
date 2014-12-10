@@ -177,6 +177,11 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     }
 
     @Override
+    public boolean noScroll(){
+        return false;
+    }
+    
+    @Override
     public int getOrder() {
         return 9999;
     }

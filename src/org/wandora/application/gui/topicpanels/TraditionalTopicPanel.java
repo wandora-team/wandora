@@ -186,6 +186,10 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         return this;
     }
 
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
     
     // -------------------------------------------------------------------------
     // ----------------------------------------------------------- VIEW MENU ---
