@@ -27,6 +27,7 @@
 package org.wandora.application.gui.search;
 
 import java.awt.Desktop;
+import java.awt.event.ActionEvent;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
+import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.SchemaTreeTopicChooser;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -62,7 +64,6 @@ public class QueryPanel extends javax.swing.JPanel {
     private Wandora wandora = null;
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
     private ArrayList<Tuples.T3<String,String,String>> storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();
-
 
     
     /**
@@ -196,14 +197,15 @@ public class QueryPanel extends javax.swing.JPanel {
                 query = (Directive)o;
             }
 
-            ArrayList<ResultRow> res = new ArrayList<ResultRow>();
+            ArrayList<ResultRow> res = new ArrayList<>();
             Topic contextTopic = null;
+            if(contextTopics == null) contextTopics = (new ArrayList()).iterator();
             if(!contextTopics.hasNext()){
                 // if context is empty just add some (root of a tree chooser) topic
                 HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTopicTreeManager().getTrees();
                 SchemaTreeTopicChooser tree=trees.values().iterator().next();
                 Topic t=tm.getTopic(tree.getRootSI());
-                ArrayList<Topic> al=new ArrayList<Topic>();
+                ArrayList<Topic> al=new ArrayList<>();
                 al.add(t);
                 contextTopics=al.iterator();
             }
@@ -218,7 +220,7 @@ public class QueryPanel extends javax.swing.JPanel {
 
             System.out.println("Query: "+query.debugString());
 
-            if(res.size()==0){}
+            if(res.isEmpty()){}
             else if(res.size()==1){
                 res=query.doQuery(context, res.get(0));
             }
@@ -226,17 +228,17 @@ public class QueryPanel extends javax.swing.JPanel {
                 res=query.from(new Static(res)).doQuery(context, res.get(0));
             }
 
-            ArrayList<String> columns=new ArrayList<String>();
+            ArrayList<String> columns=new ArrayList<>();
             for(ResultRow row : res){
                 for(int i=0;i<row.getNumValues();i++){
                     String l=row.getRole(i);
                     if(!columns.contains(l)) columns.add(l);
                 }
             }
-            ArrayList<Object> columnTopicsA=new ArrayList<Object>();
+            ArrayList<Object> columnTopicsA=new ArrayList<>();
             for(int i=0;i<columns.size();i++){
                 String l=columns.get(i);
-                if(l.toString().startsWith("~")){
+                if(l.startsWith("~")){
                     columns.remove(i);
                     i--;
                 }
@@ -457,19 +459,19 @@ public class QueryPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void queryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryComboBoxActionPerformed
-        if((evt.getModifiers() | evt.MOUSE_EVENT_MASK) != 0) {
+        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             selectScriptQuery();
         }
     }//GEN-LAST:event_queryComboBoxActionPerformed
 
     private void addQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addQueryButtonActionPerformed
-        if((evt.getModifiers() | evt.MOUSE_EVENT_MASK) != 0) {
+        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             addScriptQuery();
         }
     }//GEN-LAST:event_addQueryButtonActionPerformed
 
     private void delQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delQueryButtonActionPerformed
-        if((evt.getModifiers() | evt.MOUSE_EVENT_MASK) != 0) {
+        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             deleteScriptQuery();
         }
     }//GEN-LAST:event_delQueryButtonActionPerformed
@@ -487,7 +489,12 @@ public class QueryPanel extends javax.swing.JPanel {
     
     
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
-        MixedTopicTable resultsTable = getTopicsByQuery(context.getContextObjects());
+        Iterator contextObjects = (new ArrayList()).iterator();
+        
+        // TODO: Get global context objects and pass them into the getTopicsByQuery.
+        // if(context != null) contextObjects = context.getContextObjects();
+        
+        MixedTopicTable resultsTable = getTopicsByQuery(contextObjects);
         if(resultsTable != null) {
             resultPanel.removeAll();
             resultPanel.add(resultsTable);

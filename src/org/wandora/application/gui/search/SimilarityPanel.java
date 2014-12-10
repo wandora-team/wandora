@@ -140,9 +140,9 @@ public class SimilarityPanel extends javax.swing.JPanel {
         Object type = similarityTypeComboBox.getSelectedItem();
         if(type != null) {
             Object t = null;
-            for(int i=0; i<similarityTypes.length; i++) {
-                if(type.equals(similarityTypes[i].e1)) {
-                    t = similarityTypes[i].e2;
+            for(Tuples.T2 similarityType : similarityTypes) {
+                if(type.equals(similarityType.e1)) {
+                    t = similarityType.e2;
                     if(t instanceof Integer) {
                         return ((Integer) t).intValue();
                     }
@@ -158,9 +158,9 @@ public class SimilarityPanel extends javax.swing.JPanel {
         Object tokenizer = similarityTokenizerComboBox.getSelectedItem();
         if(tokenizer != null) {
             Object t = null;
-            for(int i=0; i<similarityTokenizers.length; i++) {
-                if(tokenizer.equals(similarityTokenizers[i].e1)) {
-                    t = similarityTokenizers[i].e2;
+            for(Tuples.T2 similarityTokenizer : similarityTokenizers) {
+                if(tokenizer.equals(similarityTokenizer.e1)) {
+                    t = similarityTokenizer.e2;
                     if(t instanceof InterfaceTokeniser) {
                         return (InterfaceTokeniser) t;
                     }

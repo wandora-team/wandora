@@ -44,15 +44,15 @@ public class SearchTable extends JTable {
     
     private Object[][] data;
     private TableSorter sorter;
-    private Wandora parent;
+    private Wandora wandora;
     private String[] res;
     private JDialog dialog;
     
     
     
     /** Creates a new instance of SearchTable */
-    public SearchTable(String[] res,Wandora parent,JDialog dialog) {
-        this.parent=parent;
+    public SearchTable(String[] res, Wandora parent, JDialog dialog) {
+        this.wandora=parent;
         this.res=res;
         this.dialog=dialog;
         data=new Object[res.length/3][2];
@@ -111,11 +111,12 @@ public class SearchTable extends JTable {
         public void mouseReleased(java.awt.event.MouseEvent e) {
             fireEditingStopped();
             if(label.contains(e.getPoint())){
-                try{
-                    Topic t=parent.getTopicMap().getTopic(res[topic*3+1]);
+                try {
+                    Topic t=wandora.getTopicMap().getTopic(res[topic*3+1]);
                     dialog.setVisible(false);
-                    if(t!=null) parent.openTopic(t);
-                }catch(TopicMapException tme){
+                    if(t!=null) wandora.openTopic(t);
+                } 
+                catch(TopicMapException tme){
                     tme.printStackTrace(); // TODO EXCEPTION
                     dialog.setVisible(false);
                 }

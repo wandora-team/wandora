@@ -23,6 +23,7 @@
 
 package org.wandora.application.gui.search;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.wandora.application.Wandora;
@@ -253,19 +254,19 @@ public class TMQLPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tmqlComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tmqlComboBoxActionPerformed
-        if((evt.getModifiers() | evt.MOUSE_EVENT_MASK) != 0) {
+        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             selectTmqlQuery();
         }
     }//GEN-LAST:event_tmqlComboBoxActionPerformed
 
     private void addTmqlButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTmqlButtonActionPerformed
-        if((evt.getModifiers() | evt.MOUSE_EVENT_MASK) != 0) {
+        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             addTmqlQuery();
         }
     }//GEN-LAST:event_addTmqlButtonActionPerformed
 
     private void delTmqlButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delTmqlButtonActionPerformed
-        if((evt.getModifiers() | evt.MOUSE_EVENT_MASK) != 0) {
+        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             deleteTmqlQuery();
         }
     }//GEN-LAST:event_delTmqlButtonActionPerformed

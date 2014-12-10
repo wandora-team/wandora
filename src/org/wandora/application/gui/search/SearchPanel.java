@@ -60,8 +60,8 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
 
     
     /** Creates new form SearchPanel */
-    public SearchPanel(Wandora wandora) {
-        this.wandora = wandora;
+    public SearchPanel() {
+        this.wandora = Wandora.getWandora();
         initComponents();
         searchWords.getEditor().getEditorComponent().addKeyListener(
             new java.awt.event.KeyAdapter() {
@@ -74,8 +74,8 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         toggleSearchOptionsVisibility(null);
     }
     
-    public SearchPanel(Wandora wandora, boolean allowMultiSelection) {
-        this(wandora);
+    public SearchPanel(boolean allowMultiSelection) {
+        this();
         this.allowMultiSelection = allowMultiSelection;
     }
 

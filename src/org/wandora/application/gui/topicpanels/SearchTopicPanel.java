@@ -35,8 +35,11 @@ import javax.swing.JPopupMenu;
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.search.SearchPanel;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.search.QueryPanel;
+import org.wandora.application.gui.search.SearchPanel;
+import org.wandora.application.gui.search.SimilarityPanel;
+import org.wandora.application.gui.search.TMQLPanel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.topicmap.Association;
@@ -65,7 +68,15 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         Wandora wandora = Wandora.getWandora();
         this.options = new Options(wandora.getOptions());
         initComponents();
-        finderPanel.add(new SearchPanel(wandora), BorderLayout.CENTER);
+        try {
+            finderPanel.add(new SearchPanel(), BorderLayout.CENTER);
+            similarityPanel.add(new SimilarityPanel(), BorderLayout.CENTER);
+            queryPanel.add(new QueryPanel(), BorderLayout.CENTER);
+            tmqlPanel.add(new TMQLPanel(), BorderLayout.CENTER);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     
     
@@ -85,7 +96,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         finderPanel = new javax.swing.JPanel();
         similarityPanel = new javax.swing.JPanel();
         queryPanel = new javax.swing.JPanel();
-        TMQLPanel = new javax.swing.JPanel();
+        tmqlPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -95,11 +106,11 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         similarityPanel.setLayout(new java.awt.BorderLayout());
         searchTabbedPane.addTab("Similarity", similarityPanel);
 
-        queryPanel.setLayout(new java.awt.GridBagLayout());
+        queryPanel.setLayout(new java.awt.BorderLayout());
         searchTabbedPane.addTab("Query", queryPanel);
 
-        TMQLPanel.setLayout(new java.awt.GridBagLayout());
-        searchTabbedPane.addTab("TMQL", TMQLPanel);
+        tmqlPanel.setLayout(new java.awt.BorderLayout());
+        searchTabbedPane.addTab("TMQL", tmqlPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -110,11 +121,11 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel TMQLPanel;
     private javax.swing.JPanel finderPanel;
     private javax.swing.JPanel queryPanel;
     private javax.swing.JTabbedPane searchTabbedPane;
     private javax.swing.JPanel similarityPanel;
+    private javax.swing.JPanel tmqlPanel;
     // End of variables declaration//GEN-END:variables
 
     @Override
