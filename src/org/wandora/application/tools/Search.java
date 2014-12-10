@@ -28,6 +28,8 @@
 package org.wandora.application.tools;
 
 
+import org.wandora.application.gui.search.SearchTopicsResults;
+import org.wandora.application.gui.search.SearchTopicsDialog;
 import de.topicmapslab.tmql4j.components.processor.results.model.ResultType;
 import de.topicmapslab.tmql4j.components.processor.runtime.ITMQLRuntime;
 import de.topicmapslab.tmql4j.components.processor.runtime.TMQLRuntimeFactory;

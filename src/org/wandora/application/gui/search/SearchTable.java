@@ -25,7 +25,7 @@
  *
  */
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.search;
 
 
 import org.wandora.utils.swing.*;

@@ -24,7 +24,7 @@
  * Created on 29. joulukuuta 2005, 16:34
  */
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.search;
 
 
 import org.wandora.application.gui.table.TopicTable;
@@ -37,6 +37,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import javax.swing.table.DefaultTableModel;
+import org.wandora.application.gui.TopicSelector;
+import org.wandora.application.gui.UIBox;
 
 
 /**

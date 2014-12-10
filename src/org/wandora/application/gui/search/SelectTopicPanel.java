@@ -24,7 +24,7 @@
  * Created on 17. helmikuuta 2006, 11:33
  */
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.search;
 
 
 
@@ -34,6 +34,7 @@ import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import org.wandora.application.gui.TopicSelector;
 
 
 

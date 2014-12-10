@@ -24,7 +24,7 @@
  * Created on 30. joulukuuta 2008, 12:42
  */
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.search;
 
 import de.topicmapslab.tmql4j.components.processor.results.model.IResult;
 import de.topicmapslab.tmql4j.components.processor.results.model.IResultSet;
@@ -48,6 +48,8 @@ import javax.script.*;
 import java.net.*;
 import org.tmapi.core.DatatypeAware;
 import org.tmapi.core.Name;
+import org.wandora.application.gui.SchemaTreeTopicChooser;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.wandora2tmapi.W2TRole;
 import org.wandora.topicmap.wandora2tmapi.W2TTopic;
 

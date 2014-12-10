@@ -24,7 +24,7 @@
  * Created on 30. joulukuuta 2008, 22:23
  */
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.search;
 
 
 import org.wandora.application.gui.table.MixedTopicTable;
@@ -34,6 +34,7 @@ import java.util.*;
 import org.wandora.application.*;
 import java.awt.*;
 import javax.swing.*;
+import org.wandora.application.gui.UIBox;
 
 
 /**

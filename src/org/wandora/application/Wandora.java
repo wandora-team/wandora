@@ -34,6 +34,8 @@ package org.wandora.application;
 
 
 
+import org.wandora.application.gui.search.SelectTopicPanel;
+import org.wandora.application.gui.search.SearchPanel;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.gui.tree.TopicTreeManager;
 import org.wandora.application.tools.navigate.Back;
