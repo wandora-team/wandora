@@ -47,6 +47,10 @@ public class QueryEditorComponent extends javax.swing.JPanel {
 
     protected final ArrayList<Connector> connectors=new ArrayList<Connector>();
     
+    protected DirectivePanel selectedPanel;
+    
+    protected ConnectorAnchor finalResultAnchor;
+    
     /**
      * Creates new form QueryEditorComponent
      */
@@ -54,7 +58,9 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         initComponents();
         populateDirectiveList();
         
-        DnDTools.addDropTargetHandler(this, DnDTools.directiveHintsDataFlavor, 
+        finalResultAnchor=new ComponentConnectorAnchor(finalResultLabel, ConnectorAnchor.Direction.RIGHT, true, false);
+        
+        DnDTools.addDropTargetHandler(queryGraphPanel, DnDTools.directiveHintsDataFlavor, 
                 new DnDTools.DropTargetCallback<DirectiveUIHints>(){
                     @Override
                     public boolean callback(JComponent component, DirectiveUIHints hints, TransferHandler.TransferSupport support) {
@@ -65,7 +71,24 @@ public class QueryEditorComponent extends javax.swing.JPanel {
                         return true;                        
                     }
                 });
+
+        DnDTools.addDropTargetHandler(finalResultLabel, DnDTools.directivePanelDataFlavor, 
+                new DnDTools.DropTargetCallback<DirectivePanel>(){
+                    @Override
+                    public boolean callback(JComponent component, DirectivePanel panel, TransferHandler.TransferSupport support) {
+                        finalResultAnchor.setFrom(panel.getFromConnectorAnchor());
+                        return true;                        
+                    }
+                });
         
+    }
+    
+    public void selectPanel(DirectivePanel panel){
+        DirectivePanel old=this.selectedPanel;
+        this.selectedPanel=panel;
+        if(old!=null) old.setSelected(false);
+        if(panel!=null) panel.setSelected(true);
+        this.repaint();
     }
     
     public void addConnector(Connector c){
@@ -168,8 +191,12 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         directiveListPanel = new javax.swing.JPanel();
         queryScrollPane = new javax.swing.JScrollPane();
         queryGraphPanel = new GraphPanel();
+        finalResultLabel = new javax.swing.JLabel();
+        toolBar = new javax.swing.JToolBar();
+        buildButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
 
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+        setLayout(new java.awt.BorderLayout());
 
         jSplitPane1.setDividerLocation(600);
 
@@ -179,20 +206,68 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         jSplitPane1.setRightComponent(jScrollPane1);
 
         queryGraphPanel.setLayout(null);
+
+        finalResultLabel.setText("FInal result <-");
+        queryGraphPanel.add(finalResultLabel);
+        finalResultLabel.setBounds(10, 10, 100, 17);
+
         queryScrollPane.setViewportView(queryGraphPanel);
 
         jSplitPane1.setLeftComponent(queryScrollPane);
 
-        add(jSplitPane1);
+        add(jSplitPane1, java.awt.BorderLayout.CENTER);
+
+        toolBar.setRollover(true);
+
+        buildButton.setText("Build");
+        buildButton.setFocusable(false);
+        buildButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        buildButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        buildButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buildButtonActionPerformed(evt);
+            }
+        });
+        toolBar.add(buildButton);
+
+        deleteButton.setText("Delete");
+        deleteButton.setFocusable(false);
+        deleteButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        deleteButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+        toolBar.add(deleteButton);
+
+        add(toolBar, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buildButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buildButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        if(selectedPanel!=null){
+            selectedPanel.disconnectConnectors();
+            queryGraphPanel.remove(selectedPanel);
+            selectedPanel=null;
+            queryGraphPanel.repaint();
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buildButton;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JPanel directiveListPanel;
+    private javax.swing.JLabel finalResultLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel queryGraphPanel;
     private javax.swing.JScrollPane queryScrollPane;
+    private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 
     private class GraphPanel extends JPanel {

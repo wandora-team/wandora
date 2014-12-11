@@ -53,14 +53,16 @@ public class DirectivePanel extends javax.swing.JPanel {
     protected DirectivePanel from;
     protected Connector toConnector;
     protected Connector fromConnector;
-    protected ConnectorAnchor connectorAnchor;
+    protected ConnectorAnchor toConnectorAnchor;
+    protected ConnectorAnchor fromConnectorAnchor;
     
     /**
      * Creates new form DirectivePanel
      */
     public DirectivePanel() {
         initComponents();
-        this.connectorAnchor=new ComponentConnectorAnchor(directiveAnchor,ConnectorAnchor.Direction.LEFT,true,true);
+        this.toConnectorAnchor=new ComponentConnectorAnchor(toDirectiveAnchor,ConnectorAnchor.Direction.RIGHT,true,false);
+        this.fromConnectorAnchor=new ComponentConnectorAnchor(fromDirectiveAnchor,ConnectorAnchor.Direction.LEFT,false,true);
     }
     
     protected boolean dragging=false;
@@ -83,6 +85,8 @@ public class DirectivePanel extends javax.swing.JPanel {
                 dragging=true;
                 dragStartX=e.getX();
                 dragStartY=e.getY();
+                QueryEditorComponent editor=getEditor();
+                if(editor!=null) editor.selectPanel(DirectivePanel.this);
             }
         });
         directiveLabel.addMouseMotionListener(new MouseMotionAdapter(){
@@ -100,71 +104,44 @@ public class DirectivePanel extends javax.swing.JPanel {
         });
         
         
-        DnDTools.setDragSourceHandler(directiveAnchor, "directivePanel", DnDTools.directivePanelDataFlavor, new DnDTools.DragSourceCallback<DirectivePanel>() {
+        DnDTools.setDragSourceHandler(fromDirectiveAnchor, "directivePanel", DnDTools.directivePanelDataFlavor, new DnDTools.DragSourceCallback<DirectivePanel>() {
             @Override
             public DirectivePanel callback(JComponent component) {
                 return DirectivePanel.this;
             }
         });
         
-        DnDTools.addDropTargetHandler(directiveAnchor, DnDTools.directivePanelDataFlavor, new DnDTools.DropTargetCallback<DirectivePanel>(){
+        DnDTools.addDropTargetHandler(toDirectiveAnchor, DnDTools.directivePanelDataFlavor, new DnDTools.DropTargetCallback<DirectivePanel>(){
             @Override
             public boolean callback(JComponent component, DirectivePanel o, TransferHandler.TransferSupport support) {
                 if(o==DirectivePanel.this) return false;
-                connectorAnchor.setFrom(o.getConnectorAnchor());
+                toConnectorAnchor.setFrom(o.getFromConnectorAnchor());
                 return true;
             }
         });
     }
     
-    public ConnectorAnchor getConnectorAnchor(){
-        return connectorAnchor;
-    }
-/*    
-    public static void setLink(QueryEditorComponent editor,DirectivePanel from,DirectivePanel to){
-        // Things are nulled seemingly unnecessarily because the recursive calls
-        // would otherwise cause infinite recursion. Nulling them acts as a
-        // marker that we've done that panel already.
-        
-        if(from==null || from.to!=to){
-            if(from!=null){
-                if(from.toConnector!=null){
-                    editor.removeConnector(from.toConnector);
-                    from.toConnector=null;
-                }
-                DirectivePanel old=from.to;
-                from.to=null;
-                if(old!=null) old.setFrom(null);
-                from.to=to;
-            }
-            
-            if(to!=null){
-                if(to.fromConnector!=null){
-                    editor.removeConnector(to.fromConnector);
-                    to.fromConnector=null;
-                }
-                DirectivePanel old=to.from;
-                to.from=null;
-                if(old!=null) old.setTo(null);
-                to.from=from;
-                
-                if(from!=null){
-                    from.toConnector=new Connector((JComponent)from.getParent(), from.directiveAnchor, to.directiveAnchor);
-                    to.fromConnector=from.toConnector;
-                    editor.addConnector(from.toConnector);
-                }
-            }
-        }        
+    public void setSelected(boolean b){
+        if(b){
+            setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 2));
+        }
+        else {
+            setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));            
+        }
     }
     
-    public void setFrom(DirectivePanel panel){
-        setLink(getEditor(),panel,this);
+    public ConnectorAnchor getToConnectorAnchor(){
+        return toConnectorAnchor;
+    }
+    public ConnectorAnchor getFromConnectorAnchor(){
+        return fromConnectorAnchor;
     }
     
-    public void setTo(DirectivePanel panel){
-        setLink(getEditor(),this,panel);
+    public void disconnectConnectors(){
+        toConnectorAnchor.setFrom(null);
+        fromConnectorAnchor.setTo(null);
     }
-    */
+
     protected QueryEditorComponent getEditor(){
         Container parent=getParent();
         while(parent!=null && !(parent instanceof QueryEditorComponent)){
@@ -288,7 +265,8 @@ public class DirectivePanel extends javax.swing.JPanel {
         addonComboBox = new javax.swing.JComboBox();
         addonPanel = new javax.swing.JPanel();
         resizeWidget = new javax.swing.JLabel();
-        directiveAnchor = new javax.swing.JLabel();
+        toDirectiveAnchor = new javax.swing.JLabel();
+        fromDirectiveAnchor = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         setLayout(new java.awt.GridBagLayout());
@@ -297,7 +275,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         add(directiveLabel, gridBagConstraints);
@@ -379,16 +357,27 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         add(resizeWidget, gridBagConstraints);
 
-        directiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        directiveAnchor.setText("*");
-        directiveAnchor.setMaximumSize(new java.awt.Dimension(20, 20));
-        directiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
-        directiveAnchor.setPreferredSize(new java.awt.Dimension(20, 20));
+        toDirectiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        toDirectiveAnchor.setText("<-");
+        toDirectiveAnchor.setMaximumSize(new java.awt.Dimension(20, 20));
+        toDirectiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
+        toDirectiveAnchor.setPreferredSize(new java.awt.Dimension(20, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        add(toDirectiveAnchor, gridBagConstraints);
+
+        fromDirectiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        fromDirectiveAnchor.setText("<-");
+        fromDirectiveAnchor.setMaximumSize(new java.awt.Dimension(20, 20));
+        fromDirectiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
+        fromDirectiveAnchor.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        add(directiveAnchor, gridBagConstraints);
+        add(fromDirectiveAnchor, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void constructorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_constructorComboBoxActionPerformed
@@ -438,8 +427,9 @@ public class DirectivePanel extends javax.swing.JPanel {
     private javax.swing.JComboBox constructorComboBox;
     private javax.swing.JPanel constructorParameters;
     private javax.swing.JScrollPane constructorParametersScroll;
-    private javax.swing.JLabel directiveAnchor;
     private javax.swing.JLabel directiveLabel;
+    private javax.swing.JLabel fromDirectiveAnchor;
     private javax.swing.JLabel resizeWidget;
+    private javax.swing.JLabel toDirectiveAnchor;
     // End of variables declaration//GEN-END:variables
 }

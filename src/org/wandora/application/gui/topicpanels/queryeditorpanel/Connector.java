@@ -112,6 +112,7 @@ public class Connector {
     protected Point paintExit(Graphics2D g2,ConnectorAnchor anchor,boolean in){
         Point p=getAnchorCoordinates(anchor);
         Point exitPoint=null;
+        
         switch(anchor.getExitDirection()){
             case LEFT:
                 exitPoint=new Point(p.x-20,p.y);
@@ -149,11 +150,21 @@ public class Connector {
         Point f0=getAnchorCoordinates(from);
         Point t0=getAnchorCoordinates(to);
         
+        double b=5;
+        int dx=t.x-f.x;
+        int dy=t.y-f.y;
+        int l2=dx*dx+dy*dy;
+        
+        if(l2<40000){
+            double l=Math.sqrt(l2);
+            b=l/2.0/20.0;
+        }
+        
         
         Path2D.Double curve=new Path2D.Double();
         curve.moveTo(f.x, f.y);
-        curve.curveTo(f.x+(f.x-f0.x)*5, f.y+(f.y-f0.y)*5,
-                      t.x+(t.x-t0.x)*5, t.y+(t.y-t0.y)*5,
+        curve.curveTo(f.x+(f.x-f0.x)*b, f.y+(f.y-f0.y)*b,
+                      t.x+(t.x-t0.x)*b, t.y+(t.y-t0.y)*b,
                       t.x, t.y);
         g2.draw(curve);
         

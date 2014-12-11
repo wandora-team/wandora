@@ -63,7 +63,7 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
                 Rectangle rect=directivePanel.getBounds();
                 panel.setBounds(rect.x+rect.width+10,rect.y,panel.getWidth(),panel.getHeight());
 
-                connectorAnchor.setFrom(panel.getConnectorAnchor());
+                connectorAnchor.setFrom(panel.getFromConnectorAnchor());
 
                 return true;                
             }
@@ -75,7 +75,7 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
             @Override
             public boolean callback(JComponent component, DirectivePanel o, TransferHandler.TransferSupport support) {
                 if(o==getDirectivePanel()) return false;
-                connectorAnchor.setFrom(o.getConnectorAnchor());
+                connectorAnchor.setFrom(o.getFromConnectorAnchor());
                 return true;
             }
         });        
