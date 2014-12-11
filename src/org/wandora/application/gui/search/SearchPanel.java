@@ -24,7 +24,7 @@
  * Created on 29. joulukuuta 2005, 16:34
  */
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.search;
 
 
 import org.wandora.application.gui.table.TopicTable;
@@ -37,6 +37,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import javax.swing.table.DefaultTableModel;
+import org.wandora.application.gui.TopicSelector;
+import org.wandora.application.gui.UIBox;
 
 
 /**
@@ -58,8 +60,8 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
 
     
     /** Creates new form SearchPanel */
-    public SearchPanel(Wandora wandora) {
-        this.wandora = wandora;
+    public SearchPanel() {
+        this.wandora = Wandora.getWandora();
         initComponents();
         searchWords.getEditor().getEditorComponent().addKeyListener(
             new java.awt.event.KeyAdapter() {
@@ -72,8 +74,8 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         toggleSearchOptionsVisibility(null);
     }
     
-    public SearchPanel(Wandora wandora, boolean allowMultiSelection) {
-        this(wandora);
+    public SearchPanel(boolean allowMultiSelection) {
+        this();
         this.allowMultiSelection = allowMultiSelection;
     }
 

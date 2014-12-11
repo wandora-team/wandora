@@ -34,6 +34,8 @@ package org.wandora.application;
 
 
 
+import org.wandora.application.gui.search.SelectTopicPanel;
+import org.wandora.application.gui.search.SearchPanel;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.gui.tree.TopicTreeManager;
 import org.wandora.application.tools.navigate.Back;
@@ -422,7 +424,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         topicTreeManager.initializeTopicTrees();
         tabbedPane.addTab("Finder", finderPanel);
 
-        searchPanel = new SearchPanel(this);
+        searchPanel = new SearchPanel();
         finderPanel.removeAll();
         finderPanel.add(searchPanel, BorderLayout.CENTER);
     }
@@ -629,7 +631,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         for(SchemaTreeTopicChooser c : cs){
             finder.addTab(c);
         }
-        finder.addTab(new SearchPanel(this, false));
+        finder.addTab(new SearchPanel(false));
         finder.addTab(new SelectTopicPanel(this));
         return finder;
     }
