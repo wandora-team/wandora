@@ -21,6 +21,8 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import org.wandora.query2.DirectiveUIHints.Parameter;
+
 /**
  *
  * @author olli
@@ -32,14 +34,25 @@ public class UnknownParameterTypePanel extends AbstractTypePanel {
     /**
      * Creates new form UnknownParameterTypePanel
      */
-    public UnknownParameterTypePanel() {
+    public UnknownParameterTypePanel(Parameter parameter) {
+        super(parameter);
         initComponents();
     }
     
+    @Override
     public void setLabel(String label){
         parameterLabel.setText(label);
     }
     
+    
+    @Override
+    public Object getValue(){
+        return null;
+    }
+    @Override
+    public String getValueScript(){
+        return "null";
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

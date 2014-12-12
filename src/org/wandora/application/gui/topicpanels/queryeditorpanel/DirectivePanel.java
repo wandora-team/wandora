@@ -23,18 +23,21 @@
 
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.lang.reflect.InvocationTargetException;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 import org.wandora.application.Wandora;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
+import org.wandora.query2.DirectiveUIHints.BoundParameter;
 import org.wandora.query2.DirectiveUIHints.Constructor;
 import org.wandora.query2.DirectiveUIHints.Parameter;
 import org.wandora.query2.Operand;
@@ -55,6 +58,9 @@ public class DirectivePanel extends javax.swing.JPanel {
     protected Connector fromConnector;
     protected ConnectorAnchor toConnectorAnchor;
     protected ConnectorAnchor fromConnectorAnchor;
+    
+    protected Constructor selectedConstructor;
+    protected AbstractTypePanel[] constructorParamPanels;
     
     /**
      * Creates new form DirectivePanel
@@ -121,6 +127,49 @@ public class DirectivePanel extends javax.swing.JPanel {
         });
     }
     
+    protected Object build(boolean script){
+        Object o=constructorComboBox.getSelectedItem();
+        if(o==null) return null;
+        
+        ConstructorComboItem cci=(ConstructorComboItem)o;
+        Constructor c=cci.c;
+        
+        BoundParameter[] parameters=getParameters(false);
+        try{
+            if(script) return c.newScript(parameters, hints.getDirectiveClass());
+            else return c.newInstance(parameters, hints.getDirectiveClass());
+        }
+        catch(IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException | NoSuchMethodException e){
+            Wandora.getWandora().handleError(e);
+            return null;
+        }        
+    }
+    
+    public String buildScript(){
+        return (String)build(true);
+    }
+    
+    public Directive buildDirective(){
+        return (Directive)build(false);
+    }
+    
+    public BoundParameter[] getParameters(boolean script){
+        BoundParameter[] ret=new BoundParameter[constructorParamPanels.length];
+        for(int i=0;i<constructorParamPanels.length;i++){
+            AbstractTypePanel paramPanel=constructorParamPanels[i];
+            if(script) {
+                String s=paramPanel.getValueScript();
+                ret[i]=paramPanel.getParameter().bindSerial(s);
+            }
+            else {
+                Object val=paramPanel.getValue();
+                ret[i]=paramPanel.getParameter().bind(val);
+            }
+        }
+        return ret;
+    }
+    
+    
     public void setSelected(boolean b){
         if(b){
             setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 2));
@@ -183,8 +232,8 @@ public class DirectivePanel extends javax.swing.JPanel {
         
     }
     
-    protected JPanel makeMultiplePanel(Class<? extends AbstractTypePanel> typePanel,String label){
-        MultipleParameterPanel p=new MultipleParameterPanel(typePanel);
+    protected AbstractTypePanel makeMultiplePanel(Parameter param,Class<? extends AbstractTypePanel> typePanel,String label){
+        MultipleParameterPanel p=new MultipleParameterPanel(param,typePanel);
         p.setLabel(label);
         return p;
     }
@@ -213,19 +262,23 @@ public class DirectivePanel extends javax.swing.JPanel {
         gbc.weightx=1.0;
         gbc.fill=GridBagConstraints.HORIZONTAL;
         
+        Parameter[] parameters=c.getParameters();
+        this.constructorParamPanels=new AbstractTypePanel[parameters.length];
         constructorParameters.removeAll();
-        for(Parameter p : c.getParameters()){
+        
+        for(int i=0;i<parameters.length;i++){
+            Parameter p=parameters[i];
             Class<? extends AbstractTypePanel> panelCls=getTypePanelClass(p);
             if(panelCls==null) continue;
             
-            JPanel panel;
+            AbstractTypePanel panel;
             if(p.isMultiple()){
-                panel=makeMultiplePanel(panelCls, p.getLabel());
+                panel=makeMultiplePanel(p, panelCls, p.getLabel());
             }
             else {
                 try{
                     panel=panelCls.newInstance();
-                    ((AbstractTypePanel)panel).setLabel(p.getLabel());
+                    panel.setLabel(p.getLabel());
                     
                     if(panel instanceof DirectiveParameterPanel){
                         if(!p.getType().equals(Directive.class)){
@@ -238,6 +291,8 @@ public class DirectivePanel extends javax.swing.JPanel {
                     return;
                 }
             }
+            
+            constructorParamPanels[i]=panel;
             
             constructorParameters.add(panel,gbc);
             gbc.gridy++;
@@ -383,6 +438,7 @@ public class DirectivePanel extends javax.swing.JPanel {
     private void constructorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_constructorComboBoxActionPerformed
         Object o=constructorComboBox.getSelectedItem();
         ConstructorComboItem c=(ConstructorComboItem)o;
+        this.selectedConstructor=c.c;
         populateParametersPanel(c.c);
     }//GEN-LAST:event_constructorComboBoxActionPerformed
 

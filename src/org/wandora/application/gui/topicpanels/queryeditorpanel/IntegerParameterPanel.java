@@ -35,13 +35,23 @@ public class IntegerParameterPanel extends AbstractTypePanel {
     /**
      * Creates new form StringParameterPanel
      */
-    public IntegerParameterPanel() {
+    public IntegerParameterPanel(Parameter parameter) {
+        super(parameter);
         initComponents();
     }
 
-
+    @Override
     public void setLabel(String label){
         parameterLabel.setText(label);
+    }
+    
+    @Override
+    public Object getValue(){
+        return valueSpinner.getValue();
+    }
+    @Override
+    public String getValueScript(){
+        return getValue().toString();
     }
     
     /**

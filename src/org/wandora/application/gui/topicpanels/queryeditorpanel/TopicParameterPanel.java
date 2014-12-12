@@ -23,6 +23,8 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.GetTopicButton;
+import org.wandora.query2.DirectiveUIHints.Parameter;
+import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
 /**
@@ -31,17 +33,36 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class TopicParameterPanel extends javax.swing.JPanel {
+public class TopicParameterPanel extends AbstractTypePanel {
 
     /**
      * Creates new form TopicParameterPanel
      */
-    public TopicParameterPanel() {
+    public TopicParameterPanel(Parameter parameter) {
+        super(parameter);
         initComponents();
     }
 
+    @Override
     public void setLabel(String label){
         parameterLabel.setText(label);
+    }
+    
+    @Override
+    public Object getValue(){
+        return ((GetTopicButton)getTopicButton).getTopic();
+    }
+    @Override
+    public String getValueScript(){
+        Object o=getValue();
+        if(o==null) return "null";
+        if(!(o instanceof Topic)) throw new RuntimeException("Topic value is not a topic");
+        try{
+            return "\""+((Topic)o).getOneSubjectIdentifier().toExternalForm()+"\"";
+        }catch(TopicMapException tme){
+            Wandora.getWandora().handleError(tme);
+            return null;
+        }
     }
     
     /**

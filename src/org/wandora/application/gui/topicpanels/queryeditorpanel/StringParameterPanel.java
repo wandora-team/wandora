@@ -35,10 +35,21 @@ public class StringParameterPanel extends AbstractTypePanel {
     /**
      * Creates new form StringParameterPanel
      */
-    public StringParameterPanel() {
+    public StringParameterPanel(Parameter parameter) {
+        super(parameter);
         initComponents();
     }
 
+    @Override
+    public Object getValue(){
+        return valueTextField.getText();
+    }
+    @Override
+    public String getValueScript(){
+        String s=valueTextField.getText().trim();
+        return s.replace("\\","\\\\").replace("\"","\\\"");
+    }
+    
 
     public void setLabel(String label){
         parameterLabel.setText(label);

@@ -26,8 +26,12 @@ package org.wandora.query2;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectivePanel;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *
@@ -40,17 +44,26 @@ public class DirectiveUIHints implements Serializable {
     protected String label;
     protected Constructor[] constructors;
     protected Addon[] addons;
+    
+    protected Class<? extends Directive> cls;
 
-    public DirectiveUIHints() {
+    public DirectiveUIHints(Class<? extends Directive> cls) {
+        this.cls=cls;
     }
 
-    public DirectiveUIHints(Constructor[] constructors) {
+    public DirectiveUIHints(Class<? extends Directive> cls,Constructor[] constructors) {
+        this(cls);
         this.constructors = constructors;
     }
 
-    public DirectiveUIHints(Constructor[] constructors, Addon[] addons) {
+    public DirectiveUIHints(Class<? extends Directive> cls,Constructor[] constructors, Addon[] addons) {
+        this(cls);
         this.constructors = constructors;
         this.addons = addons;
+    }
+    
+    public Class<? extends Directive> getDirectiveClass(){
+        return cls;
     }
 
     public String getLabel() {
@@ -106,7 +119,7 @@ public class DirectiveUIHints implements Serializable {
         }
         
         cleanConstructorArray(constructors);
-        DirectiveUIHints ret=new DirectiveUIHints(constructors.toArray(new Constructor[constructors.size()]));
+        DirectiveUIHints ret=new DirectiveUIHints(cls,constructors.toArray(new Constructor[constructors.size()]));
         ret.setLabel(cls.getSimpleName());
         return ret;
     }
@@ -122,6 +135,17 @@ public class DirectiveUIHints implements Serializable {
         }
         
         return guessHints(cls);
+    }
+    
+    public static class BoundParameter {
+        protected Parameter parameter;
+        protected Object value;
+        public BoundParameter(Parameter parameter,Object value){
+            this.parameter=parameter;
+            this.value=value;
+        }
+        public Parameter getParameter(){return parameter;}
+        public Object getValue(){return value;}
     }
     
     public static class Parameter implements Serializable {
@@ -179,8 +203,29 @@ public class DirectiveUIHints implements Serializable {
             if(multiple) ret=Array.newInstance(ret, 0).getClass();
             return ret;
         }
+        
+        
+        public BoundParameter bind(Object value){
+            return new BoundParameter(this,value);
+        }
+        
+        public BoundParameter bindSerial(String s){
+            return new BoundParameter(this,s);
+        }
     }
     
+    
+    public static String indent(String s,int amount){
+        StringBuilder sb=new StringBuilder();
+        String[] ss=s.split("\n");
+        for(int i=0;i<ss.length;i++){
+            for(int j=0;j<amount;j++) sb.append(" ");
+            sb.append(ss[i]);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+        
     public static class Constructor implements Serializable {
         protected Parameter[] parameters;
         protected String label;
@@ -207,6 +252,10 @@ public class DirectiveUIHints implements Serializable {
             this.label = label;
         }
         
+        public <D> java.lang.reflect.Constructor<D> getReflectConstructor(Class<D> cls) throws NoSuchMethodException {
+            return resolveConstructor(cls);
+        }
+        
         public <D> java.lang.reflect.Constructor<D> resolveConstructor(Class<D> cls) throws NoSuchMethodException {
             Class[] params=new Class[parameters.length];
             for(int i=0;i<params.length;i++){
@@ -214,6 +263,39 @@ public class DirectiveUIHints implements Serializable {
             }
             java.lang.reflect.Constructor<D> c=cls.getConstructor(params);
             return c;
+        }
+        
+        public <D> D newInstance(BoundParameter[] values,Class<D> cls) throws NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            java.lang.reflect.Constructor<D> con=getReflectConstructor(cls);
+            Object[] params=new Object[values.length];
+            for(int i=0;i<values.length;i++) params[i]=values[i].getValue();
+            return con.newInstance(params);
+        }
+        
+        /*
+         BoundParameters need to be bound to the already serialised
+         values with this one. Use the bindSerial methods in Parameter.
+        */
+        public String newScript(BoundParameter[] values,Class<?> cls){
+            StringBuilder sb=new StringBuilder();
+            sb.append("new ");
+            sb.append(cls.getSimpleName());
+            sb.append("(");
+            for(int i=0;i<values.length;i++){
+                if(i!=0) sb.append(", ");
+                Object o=values[i].getValue();
+                if(o==null) sb.append("null");
+                else {
+                    String s=o.toString();
+                    if(s.startsWith("\n")){
+                        sb.append(indent(s,2));
+                        if(!s.endsWith("\n")) sb.append("\n");
+                    }
+                    else sb.append(s);
+                }                
+            }
+            sb.append(")");
+            return sb.toString();
         }
     }
     
@@ -269,6 +351,37 @@ public class DirectiveUIHints implements Serializable {
             return m;
         }
         
+        public Directive applyAddon(BoundParameter[] values,Directive d) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+            java.lang.reflect.Method m=resolveMethod(d.getClass());
+            Object[] params=new Object[values.length];
+            for(int i=0;i<values.length;i++) params[i]=values[i].getValue();
+            Object ret=m.invoke(d, params);
+            return (Directive)ret;
+        }
+        
+        /*
+         BoundParameters need to be bound to the already serialised
+         values with this one. Use the bindSerial methods in Parameter.
+        */
+        public String applyAddonScript(BoundParameter[] values){
+            StringBuilder sb=new StringBuilder();
+            sb.append("."); sb.append(method); sb.append("(");
+            for(int i=0;i<values.length;i++){
+                if(i!=0) sb.append(", ");
+                Object o=values[i].getValue();
+                if(o==null) sb.append("null");
+                else {
+                    String s=o.toString();
+                    if(s.startsWith("\n")){
+                        sb.append(indent(s,2));
+                        if(!s.endsWith("\n")) sb.append("\n");
+                    }
+                    else sb.append(s);
+                }                
+            }
+            sb.append(")");
+            return sb.toString();
+        }
     }
     
     public static interface Provider {

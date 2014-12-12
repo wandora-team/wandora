@@ -23,6 +23,7 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Container;
 import javax.swing.JPanel;
+import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**
  *
@@ -31,6 +32,12 @@ import javax.swing.JPanel;
 
 
 public abstract class AbstractTypePanel extends JPanel {
+    
+    protected Parameter parameter;
+    
+    public AbstractTypePanel(Parameter parameter){
+        this.parameter=parameter;
+    }
     
     public abstract void setLabel(String label);
     
@@ -55,4 +62,10 @@ public abstract class AbstractTypePanel extends JPanel {
         if(parent!=null) return (DirectivePanel)parent;
         else return null;
     }    
+    
+    public abstract Object getValue();
+    public abstract String getValueScript();
+    public Parameter getParameter(){
+        return parameter;
+    }
 }

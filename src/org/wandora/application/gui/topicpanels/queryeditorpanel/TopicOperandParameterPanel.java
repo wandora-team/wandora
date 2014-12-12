@@ -21,6 +21,8 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import org.wandora.query2.DirectiveUIHints.Parameter;
+
 /**
  *
  * @author olli
@@ -29,6 +31,10 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 public class TopicOperandParameterPanel extends OperandParameterPanel {
 
+    public TopicOperandParameterPanel(Parameter parameter){
+        super(parameter);
+    }
+    
     @Override
     protected void setOperandTypes() {
         super.setOperandTypes();
@@ -44,11 +50,12 @@ public class TopicOperandParameterPanel extends OperandParameterPanel {
         String type=o.toString();
         if(type.equalsIgnoreCase("Topic")){
             operandPanel.removeAll();
-            TopicParameterPanel p=new TopicParameterPanel();
+            TopicParameterPanel p=new TopicParameterPanel(parameter);
             p.setLabel("");
             operandPanel.add(p);
             this.revalidate();
             operandPanel.repaint();
+            parameterPanel=p;
             return true;
         }
         else return false;

@@ -22,6 +22,7 @@
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Component;
+import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**
  *
@@ -31,10 +32,13 @@ import java.awt.Component;
 
 public class OperandParameterPanel extends AbstractTypePanel {
 
+    protected AbstractTypePanel parameterPanel;
+    
     /**
      * Creates new form OperandParameterPanel
      */
-    public OperandParameterPanel() {
+    public OperandParameterPanel(Parameter parameter) {
+        super(parameter);
         initComponents();
         setOperandTypes();
     }
@@ -47,7 +51,16 @@ public class OperandParameterPanel extends AbstractTypePanel {
         }
     }
 
-    
+    @Override
+    public Object getValue(){
+        if(parameterPanel==null) return null;
+        return parameterPanel.getValue();
+    }    
+    @Override
+    public String getValueScript(){
+        if(parameterPanel==null) return "null";
+        return parameterPanel.getValueScript();        
+    }
     
     @Override
     public void setLabel(String label){
@@ -94,6 +107,7 @@ public class OperandParameterPanel extends AbstractTypePanel {
     }// </editor-fold>//GEN-END:initComponents
 
     protected boolean operandTypeChanged(){
+        parameterPanel=null;
         Object o=operandTypeComboBox.getSelectedItem();
         if(o==null){
             operandPanel.removeAll();
@@ -104,20 +118,22 @@ public class OperandParameterPanel extends AbstractTypePanel {
         String type=o.toString();
         if(type.equalsIgnoreCase("String")){
             operandPanel.removeAll();
-            StringParameterPanel p=new StringParameterPanel();
+            StringParameterPanel p=new StringParameterPanel(parameter);
             p.setLabel("");
             operandPanel.add(p);
             this.revalidate();
             operandPanel.repaint();
+            parameterPanel=p;
             return true;
         }
         else if(type.equalsIgnoreCase("Directive")){
             operandPanel.removeAll();
-            DirectiveParameterPanel p=new DirectiveParameterPanel();
+            DirectiveParameterPanel p=new DirectiveParameterPanel(parameter);
             p.setLabel("");
             operandPanel.add(p);
             this.revalidate();
             operandPanel.repaint();
+            parameterPanel=p;
             return true;
         }
         else return false;

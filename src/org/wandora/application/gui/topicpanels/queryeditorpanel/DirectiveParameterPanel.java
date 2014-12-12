@@ -28,6 +28,7 @@ import javax.swing.TransferHandler;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.ConnectorAnchor.Direction;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
+import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**
  *
@@ -43,7 +44,8 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
     /**
      * Creates new form DirectiveParameterPanel
      */
-    public DirectiveParameterPanel() {
+    public DirectiveParameterPanel(Parameter parameter) {
+        super(parameter);
         initComponents();
         
         connectorAnchor=new ComponentConnectorAnchor(directiveAnchor,Direction.RIGHT,true,false);
@@ -94,8 +96,32 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
         directiveType=cls;
     }
 
+    @Override
     public void setLabel(String label){
         parameterLabel.setText(label);
+    }
+    
+    @Override
+    public Object getValue(){
+        ConnectorAnchor from=connectorAnchor.getFrom();
+        if(from==null) return null;
+        JComponent jc=from.getComponent();
+        if(jc==null) return null;
+        if(jc instanceof DirectivePanel){
+            return ((DirectivePanel)jc).buildDirective();
+        }
+        else throw new RuntimeException("Unknown component connected to a connector");
+    }
+    @Override
+    public String getValueScript(){
+        ConnectorAnchor from=connectorAnchor.getFrom();
+        if(from==null) return null;
+        JComponent jc=from.getComponent();
+        if(jc==null) return null;
+        if(jc instanceof DirectivePanel){
+            return ((DirectivePanel)jc).buildScript();
+        }
+        else throw new RuntimeException("Unknown component connected to a connector");        
     }
     
     /**

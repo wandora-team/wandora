@@ -83,6 +83,10 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
     }
     
+    public String buildScript(){
+        return null;
+    }
+    
     public void selectPanel(DirectivePanel panel){
         DirectivePanel old=this.selectedPanel;
         this.selectedPanel=panel;

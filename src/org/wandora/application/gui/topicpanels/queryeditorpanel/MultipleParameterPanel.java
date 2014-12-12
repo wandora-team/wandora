@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import org.wandora.application.Wandora;
+import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**
  *
@@ -33,7 +34,7 @@ import org.wandora.application.Wandora;
  */
 
 
-public class MultipleParameterPanel extends javax.swing.JPanel {
+public class MultipleParameterPanel extends AbstractTypePanel {
 
     protected Class<? extends AbstractTypePanel> typeCls;
     protected int numParameters=0;
@@ -41,11 +42,24 @@ public class MultipleParameterPanel extends javax.swing.JPanel {
     /**
      * Creates new form MultipleParameterPanel
      */
-    public MultipleParameterPanel(Class<? extends AbstractTypePanel> typeCls) {
+    public MultipleParameterPanel(Parameter parameter,Class<? extends AbstractTypePanel> typeCls) {
+        super(parameter);
         initComponents();
         this.typeCls=typeCls;
     }
 
+    @Override
+    public Object getValue() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getValueScript() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
