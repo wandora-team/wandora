@@ -28,27 +28,28 @@ package org.wandora.application.gui.table;
 
 
 
-import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.navigate.OpenTopic;
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
 import java.awt.datatransfer.*;
+import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import javax.swing.*;
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
+import javax.swing.table.*;
 import org.wandora.application.*;
 import static org.wandora.application.WandoraMenuManager.getOpenInMenu;
 import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.simple.SimpleTable;
+import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.tools.*;
+import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
-import org.wandora.application.gui.simple.SimpleTable;
-import org.wandora.application.tools.*;
 import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 
@@ -79,23 +80,29 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
     
     // -------------------------------------------------------------------------
 
+    public void initialize(Collection<Topic> tableTopics) {
+        initialize(tableTopics.toArray( new Topic[] {} ), "");
+    }
     
     
-    public void initialize(Topic[] tableTopics, Topic columnTopic) {
+    
+    public void initialize(Collection<Topic> tableTopics, Object columnTopic) {
+        initialize(tableTopics.toArray( new Topic[] {} ), columnTopic);
+    }
+    
+    
+    
+    public void initialize(Topic[] tableTopics, Object columnTopic) {
         Topic[][] extendedTableTopics = new Topic[tableTopics.length][1];
         for(int i=0; i<tableTopics.length; i++) {
             extendedTableTopics[i][0] = tableTopics[i];
         }
-        initialize(extendedTableTopics, new Topic[] { columnTopic } );
+        initialize(extendedTableTopics, new Object[] { columnTopic } );
     }
     
     
     
-    public void initialize(Topic[][] tableTopics, Topic[] columnTopics) {
-        initialize(tableTopics,(Object[])columnTopics);
-    }
-    
-    
+
     
     
     public void initialize(Topic[][] tableTopics, Object[] columnObjects) {

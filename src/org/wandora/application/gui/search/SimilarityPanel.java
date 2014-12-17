@@ -25,6 +25,8 @@
 
 package org.wandora.application.gui.search;
 
+import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +36,9 @@ import java.util.Iterator;
 import java.util.Set;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.table.TopicTable;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -128,6 +133,19 @@ public class SimilarityPanel extends javax.swing.JPanel {
      */
     public SimilarityPanel() {
         initComponents();
+        
+        similarityThresholdSlider.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        similarityTypeComboBox.removeAllItems();
+        similarityTypeComboBox.setEditable(false);
+        for(int i=0; i<similarityTypes.length; i++) {
+            similarityTypeComboBox.addItem(similarityTypes[i].e1);
+        }
+        similarityTokenizerComboBox.removeAllItems();
+        similarityTokenizerComboBox.setEditable(false);
+        for(int i=0; i<similarityTokenizers.length; i++) {
+            similarityTokenizerComboBox.addItem(similarityTokenizers[i].e1);
+        }
+        updateSimilarityOptions();
     }
 
     
@@ -209,7 +227,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
     
     
     
-    public Collection<Topic> getSimilarTopics(TopicMap tm, WandoraTool tool) {
+    public Collection<Topic> getSimilarTopics(TopicMap tm) {
         if(tm != null) {
             try {
                 int similarityType = getSimilarityType();
@@ -218,7 +236,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
                 String query = getSimilarityQuery();
                 TopicMapSearchOptions options = getSimilarityOptions();
                 boolean differenceInsteadOfSimilarity = similarityDifferenceCheckBox.isSelected();
-                return getSimilarTopics(query, options, iterator, similarityType, threshold, differenceInsteadOfSimilarity, tool);
+                return getSimilarTopics(query, options, iterator, similarityType, threshold, differenceInsteadOfSimilarity);
             }
             catch(Exception e) {
                 Wandora wandora = Wandora.getWandora();
@@ -307,10 +325,10 @@ public class SimilarityPanel extends javax.swing.JPanel {
     
     
     
-    public Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options, Iterator<Topic> topicIterator, int similarityType, float threshold, boolean differenceInsteadOfSimilarity, WandoraTool tool) {
+    public Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options, Iterator<Topic> topicIterator, int similarityType, float threshold, boolean differenceInsteadOfSimilarity) {
         InterfaceStringMetric stringMetric = getStringMetric(similarityType);
         if(stringMetric != null) {
-            return getSimilarTopics(query, options, topicIterator, stringMetric, threshold, differenceInsteadOfSimilarity, tool);
+            return getSimilarTopics(query, options, topicIterator, stringMetric, threshold, differenceInsteadOfSimilarity);
         }
         return new ArrayList<Topic>();
     }
@@ -320,15 +338,14 @@ public class SimilarityPanel extends javax.swing.JPanel {
     
     
     
-    public Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options, Iterator<Topic> topicIterator, InterfaceStringMetric stringMetric, float threshold, boolean differenceInsteadOfSimilarity, WandoraTool tool) {
+    public Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options, Iterator<Topic> topicIterator, InterfaceStringMetric stringMetric, float threshold, boolean differenceInsteadOfSimilarity) {
         ArrayList<Topic> selection = new ArrayList<Topic>();
         int count = 0;
         Topic t = null;
         boolean isSimilar = false;
         float similarity = 0.0f;
         try {
-            while(topicIterator.hasNext() && (tool != null && !tool.forceStop())) {
-                if(tool != null) tool.setProgress(++count / 100);
+            while(topicIterator.hasNext()) {
                 similarity = 0.0f;
                 isSimilar = false;
                 t = topicIterator.next();
@@ -407,9 +424,6 @@ public class SimilarityPanel extends javax.swing.JPanel {
                     // ***** IF TOPIC IS SIMILAR ****
                     if(isSimilar) {
                         selection.add(t);
-                        if(tool != null) {
-                            //tool.log("Found similar topic '"+t.getBaseName()+"'");
-                        }
                     }
                 }
             }
@@ -444,7 +458,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
     
     
     
-    public void updateSimilarityOptions() {
+    private void updateSimilarityOptions() {
         int t = getSimilarityType();
         if(t == SIMILARITY_SMITH_WATERMAN_DISTANCE ||
            t == SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE) {
@@ -500,6 +514,8 @@ public class SimilarityPanel extends javax.swing.JPanel {
 
     
     
+
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -511,6 +527,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        containerPanel = new javax.swing.JPanel();
         similarityPanel = new javax.swing.JPanel();
         similarityPanelInner = new javax.swing.JPanel();
         similarityTypePanel = new javax.swing.JPanel();
@@ -538,8 +555,13 @@ public class SimilarityPanel extends javax.swing.JPanel {
         similaritySICheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
         similaritySLCheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
         jPanel1 = new javax.swing.JPanel();
+        runButtonPanel = new javax.swing.JPanel();
+        searchButton = new SimpleButton();
+        resultPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
+
+        containerPanel.setLayout(new java.awt.GridBagLayout());
 
         similarityPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -677,6 +699,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         similarityTextPanel.add(similarityTextLabel, gridBagConstraints);
 
+        similarityScrollPane.setPreferredSize(new java.awt.Dimension(8, 50));
         similarityScrollPane.setViewportView(similarityTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -689,9 +712,8 @@ public class SimilarityPanel extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 2, 0);
         similarityPanelInner.add(similarityTextPanel, gridBagConstraints);
 
@@ -735,7 +757,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 4, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -751,17 +773,52 @@ public class SimilarityPanel extends javax.swing.JPanel {
         similarityPanelInner.add(similarityTargetPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        similarityPanel.add(similarityPanelInner, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        containerPanel.add(similarityPanel, gridBagConstraints);
+
+        runButtonPanel.setPreferredSize(new java.awt.Dimension(100, 50));
+        runButtonPanel.setLayout(new java.awt.GridBagLayout());
+
+        searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(38, 13, 39, 14);
+        runButtonPanel.add(searchButton, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        containerPanel.add(runButtonPanel, gridBagConstraints);
+
+        resultPanel.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        similarityPanel.add(similarityPanelInner, gridBagConstraints);
+        containerPanel.add(resultPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(similarityPanel, gridBagConstraints);
+        add(containerPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void similarityTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_similarityTypeComboBoxActionPerformed
@@ -788,12 +845,40 @@ public class SimilarityPanel extends javax.swing.JPanel {
         updateSimilarityThreshold();
     }//GEN-LAST:event_similarityThresholdSliderMouseDragged
 
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        try {
+            Wandora wandora = Wandora.getWandora();
+            TopicMap topicMap = wandora.getTopicMap();
+            Collection<Topic> results = getSimilarTopics(topicMap);
+            resultPanel.removeAll();
+            if(results != null && !results.isEmpty()) {
+                TopicTable resultsTable = new TopicTable(wandora);
+                resultsTable.initialize(results);
+                resultPanel.add(resultsTable, BorderLayout.NORTH);
+            }
+            else {
+                SimpleLabel message = new SimpleLabel();
+                message.setText("No search results.");
+                resultPanel.add(message, BorderLayout.NORTH);
+            }
+            revalidate();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return;
+        }
+    }//GEN-LAST:event_searchButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel containerPanel;
     private javax.swing.JLabel gapCostLabel;
     private javax.swing.JPanel gapCostPanel;
     private javax.swing.JTextField gapCostTextField;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel resultPanel;
+    private javax.swing.JPanel runButtonPanel;
+    private javax.swing.JButton searchButton;
     private javax.swing.JCheckBox similarityBasenameCheckBox;
     private javax.swing.JLabel similarityChecksLabel;
     private javax.swing.JCheckBox similarityDifferenceCheckBox;

@@ -26,7 +26,9 @@
 
 package org.wandora.application.gui.search;
 
+import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.net.URI;
 import java.util.ArrayList;
@@ -72,6 +74,17 @@ public class QueryPanel extends javax.swing.JPanel {
     public QueryPanel() {
         wandora = Wandora.getWandora();
         initComponents();
+        scriptTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        engineComboBox.setEditable(false);
+        ArrayList<String> engines=WandoraScriptManager.getAvailableEngines();
+        engineComboBox.removeAllItems();
+        for(int i=0;i<engines.size();i++){
+            String e=engines.get(i);
+            if(e != null && e.length() > 0) {
+                engineComboBox.addItem(e);
+            }
+        }
+        queryComboBox.setEditable(false);
         readStoredScriptQueries();
     }
 
@@ -303,8 +316,7 @@ public class QueryPanel extends javax.swing.JPanel {
         scriptScrollPane = new javax.swing.JScrollPane();
         scriptTextPane = new SimpleTextPane();
         scripButtonPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        runButton = new javax.swing.JButton();
+        runButton = new SimpleButton();
         resultPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
@@ -397,6 +409,7 @@ public class QueryPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 2, 4);
         scriptQueryPanel.add(scriptLabel, gridBagConstraints);
 
+        scriptScrollPane.setPreferredSize(new java.awt.Dimension(8, 100));
         scriptScrollPane.setViewportView(scriptTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -414,13 +427,13 @@ public class QueryPanel extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         queryPanelInner.add(scriptQueryPanel, gridBagConstraints);
 
-        scripButtonPanel.setLayout(new java.awt.GridBagLayout());
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        scripButtonPanel.add(jPanel1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        queryPanel.add(queryPanelInner, gridBagConstraints);
+
+        scripButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         runButton.setText("Run script");
         runButton.addActionListener(new java.awt.event.ActionListener() {
@@ -434,22 +447,15 @@ public class QueryPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        queryPanelInner.add(scripButtonPanel, gridBagConstraints);
+        queryPanel.add(scripButtonPanel, gridBagConstraints);
 
-        resultPanel.setLayout(new java.awt.GridBagLayout());
+        resultPanel.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        queryPanelInner.add(resultPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        queryPanel.add(queryPanelInner, gridBagConstraints);
+        queryPanel.add(resultPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -497,11 +503,12 @@ public class QueryPanel extends javax.swing.JPanel {
         MixedTopicTable resultsTable = getTopicsByQuery(contextObjects);
         if(resultsTable != null) {
             resultPanel.removeAll();
-            resultPanel.add(resultsTable);
+            resultPanel.add(resultsTable, BorderLayout.NORTH);
         }
         else {
             WandoraOptionPane.showMessageDialog(wandora, "No search results.");
-        }  
+        }
+        revalidate();
     }//GEN-LAST:event_runButtonActionPerformed
 
 
@@ -510,7 +517,6 @@ public class QueryPanel extends javax.swing.JPanel {
     private javax.swing.JButton delQueryButton;
     private javax.swing.JComboBox engineComboBox;
     private javax.swing.JLabel engineLabel;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JComboBox queryComboBox;
     private javax.swing.JPanel queryPanel;
     private javax.swing.JPanel queryPanelInner;
