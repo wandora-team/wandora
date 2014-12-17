@@ -134,7 +134,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         ConstructorComboItem cci=(ConstructorComboItem)o;
         Constructor c=cci.c;
         
-        BoundParameter[] parameters=getParameters(false);
+        BoundParameter[] parameters=getParameters(script);
         try{
             if(script) return c.newScript(parameters, hints.getDirectiveClass());
             else return c.newInstance(parameters, hints.getDirectiveClass());
@@ -146,7 +146,19 @@ public class DirectivePanel extends javax.swing.JPanel {
     }
     
     public String buildScript(){
-        return (String)build(true);
+        String s=(String)build(true);
+        ConnectorAnchor fromA=toConnectorAnchor.getFrom();
+        if(fromA!=null){
+            JComponent component=fromA.getComponent();
+            if(component==null) return null;
+            DirectivePanel p=QueryEditorComponent.resolveDirectivePanel(component);
+            if(p==null) return null;
+            
+            String s2=p.buildScript();
+            s2=DirectiveUIHints.indent(s2, 2);
+            return s+".from(\n"+s2+"\n)";
+        }
+        else return s;
     }
     
     public Directive buildDirective(){
@@ -277,7 +289,8 @@ public class DirectivePanel extends javax.swing.JPanel {
             }
             else {
                 try{
-                    panel=panelCls.newInstance();
+                    java.lang.reflect.Constructor<? extends AbstractTypePanel> panelConstructor=panelCls.getConstructor(Parameter.class);
+                    panel=panelConstructor.newInstance(p);
                     panel.setLabel(p.getLabel());
                     
                     if(panel instanceof DirectiveParameterPanel){
@@ -286,7 +299,7 @@ public class DirectivePanel extends javax.swing.JPanel {
                             ((DirectiveParameterPanel)panel).setDirectiveType(cls);
                         }
                     }
-                }catch(IllegalAccessException | InstantiationException e){
+                }catch(IllegalAccessException | InstantiationException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e){
                     Wandora.getWandora().handleError(e);
                     return;
                 }

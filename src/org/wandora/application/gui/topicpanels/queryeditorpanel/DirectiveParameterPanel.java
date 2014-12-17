@@ -118,10 +118,9 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
         if(from==null) return null;
         JComponent jc=from.getComponent();
         if(jc==null) return null;
-        if(jc instanceof DirectivePanel){
-            return ((DirectivePanel)jc).buildScript();
-        }
-        else throw new RuntimeException("Unknown component connected to a connector");        
+        DirectivePanel p=QueryEditorComponent.resolveDirectivePanel(jc);
+        if(p==null) throw new RuntimeException("Unknown component connected to a connector");        
+        return p.buildScript();
     }
     
     /**

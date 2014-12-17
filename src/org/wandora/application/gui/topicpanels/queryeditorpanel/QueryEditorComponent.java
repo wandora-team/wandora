@@ -20,6 +20,7 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -33,6 +34,8 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.TextEditor;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveManager;
 import org.wandora.query2.DirectiveUIHints;
@@ -83,8 +86,22 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
     }
     
+    public static DirectivePanel resolveDirectivePanel(Component component){
+        while(component!=null && !(component instanceof DirectivePanel)){
+            component=component.getParent();
+        }
+        return (DirectivePanel)component; // this could be null but the cast will work
+    }    
+    
+    
     public String buildScript(){
-        return null;
+        ConnectorAnchor from=finalResultAnchor.getFrom();
+        if(from==null) return null;
+        JComponent component=from.getComponent();
+        if(component==null) return null;
+        DirectivePanel p=resolveDirectivePanel(component);
+        if(p==null) return null;
+        else return p.buildScript();
     }
     
     public void selectPanel(DirectivePanel panel){
@@ -249,7 +266,15 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buildButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildButtonActionPerformed
-        // TODO add your handling code here:
+        try{
+            String s=buildScript();
+            
+            TextEditor editor=new TextEditor(Wandora.getWandora(), true, s);
+            editor.setVisible(true);
+            
+        }catch(Exception e){
+            Wandora.getWandora().handleError(e);
+        }
     }//GEN-LAST:event_buildButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
