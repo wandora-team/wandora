@@ -23,6 +23,8 @@
 
 package org.wandora.application.gui.search;
 
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +32,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
+import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.topicmap.TMQLRunner;
@@ -58,6 +61,7 @@ public class TMQLPanel extends javax.swing.JPanel {
     public TMQLPanel() {
         wandora = Wandora.getWandora();
         initComponents();
+        tmqlTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         readStoredTmqlQueries();
     }
 
@@ -184,6 +188,9 @@ public class TMQLPanel extends javax.swing.JPanel {
         delTmqlButton = new SimpleButton();
         tmqlScrollPane = new javax.swing.JScrollPane();
         tmqlTextPane = new SimpleTextPane();
+        tmqlButtonPanel = new javax.swing.JPanel();
+        runButton = new SimpleButton();
+        tmqlResultPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -235,6 +242,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         tmqlPanel.add(selectQueryPanel1, gridBagConstraints);
 
+        tmqlTextPane.setPreferredSize(new java.awt.Dimension(6, 100));
         tmqlScrollPane.setViewportView(tmqlTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -247,10 +255,33 @@ public class TMQLPanel extends javax.swing.JPanel {
         tmqlPanel.add(tmqlScrollPane, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        add(tmqlPanel, gridBagConstraints);
+
+        tmqlButtonPanel.setLayout(new java.awt.GridBagLayout());
+
+        runButton.setText("Run script");
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runButtonActionPerformed(evt);
+            }
+        });
+        tmqlButtonPanel.add(runButton, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        add(tmqlButtonPanel, gridBagConstraints);
+
+        tmqlResultPanel.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(tmqlPanel, gridBagConstraints);
+        add(tmqlResultPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tmqlComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tmqlComboBoxActionPerformed
@@ -271,13 +302,37 @@ public class TMQLPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_delTmqlButtonActionPerformed
 
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
+        try {
+            tmqlResultPanel.removeAll();
+            MixedTopicTable resultsTable = getTopicsByTMQL();
+            if(resultsTable != null) {
+                tmqlResultPanel.add(resultsTable, BorderLayout.NORTH);
+            }
+            else {
+                SimpleLabel message = new SimpleLabel();
+                message.setText("No search results.");
+                tmqlResultPanel.add(message, BorderLayout.NORTH);
+            }
+            tmqlComboBox.setEditable(false);
+            revalidate();
+        }
+        catch(Exception e){
+            wandora.handleError(e);
+            return;
+        }
+    }//GEN-LAST:event_runButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addTmqlButton;
     private javax.swing.JButton delTmqlButton;
+    private javax.swing.JButton runButton;
     private javax.swing.JPanel selectQueryPanel1;
+    private javax.swing.JPanel tmqlButtonPanel;
     private javax.swing.JComboBox tmqlComboBox;
     private javax.swing.JPanel tmqlPanel;
+    private javax.swing.JPanel tmqlResultPanel;
     private javax.swing.JScrollPane tmqlScrollPane;
     private javax.swing.JTextPane tmqlTextPane;
     // End of variables declaration//GEN-END:variables

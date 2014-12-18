@@ -120,21 +120,16 @@ public class MixedTopicTable extends TopicTable implements MouseListener, Action
 
     
     
-    public void initialize(Object[] tableTopics, Topic columnTopic) {
+    public void initialize(Object[] tableTopics, Object columnTopic) {
         Object[][] extendedTableTopics = new Topic[tableTopics.length][1];
         for(int i=0; i<tableTopics.length; i++) {
             extendedTableTopics[i][0] = tableTopics[i];
         }
-        initialize(extendedTableTopics, new Topic[] { columnTopic } );
+        initialize(extendedTableTopics, new Object[] { columnTopic } );
     }
 
 
 
-    public void initialize(Object[][] data, Topic[] columnTopics) {
-        initialize(data,(Object[])columnTopics);
-    }
-
-    
     
     
     public void initialize(Object[][] rawData, Object[] columnObjects) {
