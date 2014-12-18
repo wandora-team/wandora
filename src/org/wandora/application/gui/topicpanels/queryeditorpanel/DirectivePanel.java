@@ -25,14 +25,16 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.TransferHandler;
 import org.wandora.application.Wandora;
 import org.wandora.query2.Directive;
@@ -61,6 +63,8 @@ public class DirectivePanel extends javax.swing.JPanel {
     
     protected Constructor selectedConstructor;
     protected AbstractTypePanel[] constructorParamPanels;
+    
+    protected Dimension normalDimensions;
     
     /**
      * Creates new form DirectivePanel
@@ -181,6 +185,71 @@ public class DirectivePanel extends javax.swing.JPanel {
         return ret;
     }
     
+    protected static class MinimizedComponent {
+        public Component component;
+        public Dimension minSize,prefSize,maxSize,size;
+        public ArrayList<MinimizedComponent> children=new ArrayList<>();
+        public MinimizedComponent(Component component){
+            this.component=component;
+            minSize=component.getMinimumSize();
+            prefSize=component.getPreferredSize();
+            maxSize=component.getMaximumSize();
+            size=component.getSize();
+            component.setMinimumSize(new Dimension(0,0));
+            component.setPreferredSize(new Dimension(0,0));
+            component.setMaximumSize(new Dimension(0,0));
+            component.setSize(new Dimension(0,0));
+            component.setVisible(false);
+            
+            if(component instanceof Container){
+                for(Component c : ((Container)component).getComponents()) {
+                    children.add(new MinimizedComponent(c));
+                }
+            }
+            component.invalidate();
+        }
+        public void restore(){
+            component.setMaximumSize(maxSize);
+            component.setPreferredSize(prefSize);
+            component.setMinimumSize(minSize);            
+            component.setSize(size);
+            component.setVisible(true);
+            
+            for(MinimizedComponent mc : children) mc.restore();
+            component.invalidate();
+        }
+    }
+    protected final ArrayList<MinimizedComponent> minimizedComponents=new ArrayList<>();
+    
+    public synchronized void setMinimized(boolean b){
+        if(b){
+            if(this.normalDimensions!=null) return;
+            this.normalDimensions=new Dimension(this.getSize());
+            minimizedComponents.add(new MinimizedComponent(constructorComboBox));
+            minimizedComponents.add(new MinimizedComponent(constructorParametersScroll));
+            minimizedComponents.add(new MinimizedComponent(addonComboBox));
+            minimizedComponents.add(new MinimizedComponent(addAddonButton));
+            minimizedComponents.add(new MinimizedComponent(addonPanel));
+            minimizedComponents.add(new MinimizedComponent(resizeWidget));
+            
+            this.setSize(new Dimension(normalDimensions.width,20));
+        }
+        else {
+            if(this.normalDimensions==null) return;
+            this.setSize(this.normalDimensions);
+            this.normalDimensions=null;
+            for(MinimizedComponent mc : minimizedComponents){
+                mc.restore();
+            }
+            minimizedComponents.clear();
+        }
+        this.validate();
+        
+    }
+    
+    public void toggleMinimized(){
+        setMinimized(this.normalDimensions==null);
+    }
     
     public void setSelected(boolean b){
         if(b){
@@ -335,6 +404,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         resizeWidget = new javax.swing.JLabel();
         toDirectiveAnchor = new javax.swing.JLabel();
         fromDirectiveAnchor = new javax.swing.JLabel();
+        minimizeButton = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         setLayout(new java.awt.GridBagLayout());
@@ -345,7 +415,8 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         add(directiveLabel, gridBagConstraints);
 
         constructorComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -356,7 +427,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         add(constructorComboBox, gridBagConstraints);
@@ -367,7 +438,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -378,6 +449,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         add(addAddonButton, gridBagConstraints);
@@ -420,7 +492,7 @@ public class DirectivePanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         add(resizeWidget, gridBagConstraints);
@@ -431,7 +503,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         toDirectiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
         toDirectiveAnchor.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         add(toDirectiveAnchor, gridBagConstraints);
@@ -446,6 +518,20 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         add(fromDirectiveAnchor, gridBagConstraints);
+
+        minimizeButton.setText("_");
+        minimizeButton.setBorderPainted(false);
+        minimizeButton.setContentAreaFilled(false);
+        minimizeButton.setFocusPainted(false);
+        minimizeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minimizeButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        add(minimizeButton, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void constructorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_constructorComboBoxActionPerformed
@@ -488,6 +574,10 @@ public class DirectivePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_resizeWidgetMouseDragged
 
+    private void minimizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimizeButtonActionPerformed
+        toggleMinimized();
+    }//GEN-LAST:event_minimizeButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAddonButton;
@@ -498,6 +588,7 @@ public class DirectivePanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane constructorParametersScroll;
     private javax.swing.JLabel directiveLabel;
     private javax.swing.JLabel fromDirectiveAnchor;
+    private javax.swing.JButton minimizeButton;
     private javax.swing.JLabel resizeWidget;
     private javax.swing.JLabel toDirectiveAnchor;
     // End of variables declaration//GEN-END:variables
