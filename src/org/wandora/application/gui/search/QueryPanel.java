@@ -430,12 +430,15 @@ public class QueryPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
         queryPanel.add(queryPanelInner, gridBagConstraints);
 
+        scripButtonPanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        scripButtonPanel.setMinimumSize(new java.awt.Dimension(83, 40));
+        scripButtonPanel.setPreferredSize(new java.awt.Dimension(83, 40));
         scripButtonPanel.setLayout(new java.awt.GridBagLayout());
 
-        runButton.setText("Run script");
+        runButton.setText("Run query");
         runButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runButtonActionPerformed(evt);

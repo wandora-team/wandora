@@ -32,6 +32,8 @@ import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
 import org.wandora.application.Wandora;
@@ -40,6 +42,7 @@ import org.wandora.application.gui.search.QueryPanel;
 import org.wandora.application.gui.search.SearchPanel;
 import org.wandora.application.gui.search.SimilarityPanel;
 import org.wandora.application.gui.search.TMQLPanel;
+import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.topicmap.Association;
@@ -57,7 +60,14 @@ import org.wandora.utils.Options;
 public class SearchTopicPanel extends javax.swing.JPanel implements ActionListener, TopicPanel {
 
     private Options options = null;
-    private SearchPanel searchPanel = null;
+    
+    private SearchPanel searchPanel = new SearchPanel();
+    private SimilarityPanel similarityPanel = new SimilarityPanel();
+    private QueryPanel queryPanel = new QueryPanel();
+    private TMQLPanel tmqlPanel = new TMQLPanel();
+    
+    private Component currentContainerPanel = null;
+    
     
     
     
@@ -69,16 +79,56 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         this.options = new Options(wandora.getOptions());
         initComponents();
         try {
-            finderPanel.add(new SearchPanel(), BorderLayout.CENTER);
-            similarityPanel.add(new SimilarityPanel(), BorderLayout.CENTER);
-            queryPanel.add(new QueryPanel(), BorderLayout.CENTER);
-            tmqlPanel.add(new TMQLPanel(), BorderLayout.CENTER);
+            tabbedPane.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    // System.out.println("Tab: " + tabbedPane.getSelectedIndex());
+                    setCurrentPanel(tabbedPane.getSelectedComponent());
+                }
+            });
+            setCurrentPanel(searchContainerPanel);
         }
         catch(Exception e) {
             e.printStackTrace();
         }
     }
     
+    
+    
+    
+    
+    private void setCurrentPanel(Component p) {
+        if(p != null) {
+            if(!p.equals(currentContainerPanel)) {
+                if(p.equals(searchContainerPanel)) {
+                    searchContainerPanel.add(searchPanel, BorderLayout.CENTER);
+                    similarityContainerPanel.removeAll();
+                    queryContainerPanel.removeAll();
+                    tmqlContainerPanel.removeAll();
+                }
+                else if(p.equals(similarityContainerPanel)) {
+                    similarityContainerPanel.add(similarityPanel, BorderLayout.CENTER);
+                    searchContainerPanel.removeAll();
+                    queryContainerPanel.removeAll();
+                    tmqlContainerPanel.removeAll();
+                }
+                else if(p.equals(queryContainerPanel)) {
+                    queryContainerPanel.add(queryPanel, BorderLayout.CENTER);
+                    searchContainerPanel.removeAll();
+                    similarityContainerPanel.removeAll();
+                    tmqlContainerPanel.removeAll();
+                }
+                else if(p.equals(tmqlContainerPanel)) {
+                    tmqlContainerPanel.add(tmqlPanel, BorderLayout.CENTER);
+                    searchContainerPanel.removeAll();
+                    queryContainerPanel.removeAll();
+                    similarityContainerPanel.removeAll();
+                }
+                currentContainerPanel = p;
+                this.revalidate();
+            }
+        }
+    }
     
     
 
@@ -92,42 +142,46 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        searchTabbedPane = new SimpleTabbedPane();
-        finderPanel = new javax.swing.JPanel();
-        similarityPanel = new javax.swing.JPanel();
-        queryPanel = new javax.swing.JPanel();
-        tmqlPanel = new javax.swing.JPanel();
+        tabbedPane = new SimpleTabbedPane();
+        searchContainerPanel = new javax.swing.JPanel();
+        similarityContainerPanel = new javax.swing.JPanel();
+        queryContainerPanel = new javax.swing.JPanel();
+        tmqlContainerPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
 
-        finderPanel.setLayout(new java.awt.BorderLayout());
-        searchTabbedPane.addTab("Finder", finderPanel);
+        searchContainerPanel.setLayout(new java.awt.BorderLayout());
+        tabbedPane.addTab("Search", searchContainerPanel);
 
-        similarityPanel.setLayout(new java.awt.BorderLayout());
-        searchTabbedPane.addTab("Similarity", similarityPanel);
+        similarityContainerPanel.setLayout(new java.awt.BorderLayout());
+        tabbedPane.addTab("Similar", similarityContainerPanel);
 
-        queryPanel.setLayout(new java.awt.BorderLayout());
-        searchTabbedPane.addTab("Query", queryPanel);
+        queryContainerPanel.setLayout(new java.awt.BorderLayout());
+        tabbedPane.addTab("Query", queryContainerPanel);
 
-        tmqlPanel.setLayout(new java.awt.BorderLayout());
-        searchTabbedPane.addTab("TMQL", tmqlPanel);
+        tmqlContainerPanel.setLayout(new java.awt.BorderLayout());
+        tabbedPane.addTab("TMQL", tmqlContainerPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(searchTabbedPane, gridBagConstraints);
+        add(tabbedPane, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel finderPanel;
-    private javax.swing.JPanel queryPanel;
-    private javax.swing.JTabbedPane searchTabbedPane;
-    private javax.swing.JPanel similarityPanel;
-    private javax.swing.JPanel tmqlPanel;
+    private javax.swing.JPanel queryContainerPanel;
+    private javax.swing.JPanel searchContainerPanel;
+    private javax.swing.JPanel similarityContainerPanel;
+    private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JPanel tmqlContainerPanel;
     // End of variables declaration//GEN-END:variables
 
+    
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         
@@ -179,7 +233,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     
     @Override
     public String getTitle() {
-        return "Search";
+        return "Search and query";
     }
 
     @Override
@@ -194,7 +248,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     
     @Override
     public int getOrder() {
-        return 9999;
+        return 9995;
     }
 
     @Override

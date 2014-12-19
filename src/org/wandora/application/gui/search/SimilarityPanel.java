@@ -38,6 +38,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.gui.table.TopicTable;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -531,30 +532,30 @@ public class SimilarityPanel extends javax.swing.JPanel {
         similarityPanel = new javax.swing.JPanel();
         similarityPanelInner = new javax.swing.JPanel();
         similarityTypePanel = new javax.swing.JPanel();
-        similarityTypeLabel = new org.wandora.application.gui.simple.SimpleLabel();
         similarityTypeComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
-        similarityTokenizerLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        similarityTokenizerComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
-        similarityThresholdPanel = new javax.swing.JPanel();
-        similarityThresholdLabel = new org.wandora.application.gui.simple.SimpleLabel();
+        similarityTextPanel = new javax.swing.JPanel();
+        similarityScrollPane = new javax.swing.JScrollPane();
+        similarityTextPane = new org.wandora.application.gui.simple.SimpleTextPane();
+        optionsTabbedPane = new SimpleTabbedPane();
+        thresholdPanel = new javax.swing.JPanel();
+        thresholdInnerPanel = new javax.swing.JPanel();
         similarityThresholdSlider = new javax.swing.JSlider();
         similarityThresholdTextField = new org.wandora.application.gui.simple.SimpleField();
         similarityDifferenceCheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
-        gapCostPanel = new javax.swing.JPanel();
+        similarityTokenizerPanel = new javax.swing.JPanel();
+        similarityTokenizerLabel = new org.wandora.application.gui.simple.SimpleLabel();
+        similarityTokenizerComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        similaritygapCostPanel = new javax.swing.JPanel();
         gapCostLabel = new org.wandora.application.gui.simple.SimpleLabel();
         gapCostTextField = new org.wandora.application.gui.simple.SimpleField();
-        similarityTextPanel = new javax.swing.JPanel();
-        similarityTextLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        similarityScrollPane = new javax.swing.JScrollPane();
-        similarityTextPane = new org.wandora.application.gui.simple.SimpleTextPane();
         similarityTargetPanel = new javax.swing.JPanel();
-        similarityChecksLabel = new org.wandora.application.gui.simple.SimpleLabel();
+        jPanel1 = new javax.swing.JPanel();
         similarityBasenameCheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
         similarityVariantCheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
         similarityOccurrenceCheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
+        jPanel2 = new javax.swing.JPanel();
         similaritySICheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
         similaritySLCheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
-        jPanel1 = new javax.swing.JPanel();
         runButtonPanel = new javax.swing.JPanel();
         searchButton = new SimpleButton();
         resultPanel = new javax.swing.JPanel();
@@ -567,19 +568,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
 
         similarityPanelInner.setLayout(new java.awt.GridBagLayout());
 
-        similarityTypePanel.setMinimumSize(new java.awt.Dimension(125, 24));
-        similarityTypePanel.setPreferredSize(new java.awt.Dimension(100, 24));
         similarityTypePanel.setLayout(new java.awt.GridBagLayout());
-
-        similarityTypeLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
-        similarityTypeLabel.setText("Similarity type");
-        similarityTypeLabel.setMaximumSize(new java.awt.Dimension(120, 14));
-        similarityTypeLabel.setMinimumSize(new java.awt.Dimension(120, 14));
-        similarityTypeLabel.setPreferredSize(new java.awt.Dimension(120, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        similarityTypePanel.add(similarityTypeLabel, gridBagConstraints);
 
         similarityTypeComboBox.setPreferredSize(new java.awt.Dimension(29, 20));
         similarityTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -592,112 +581,13 @@ public class SimilarityPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         similarityTypePanel.add(similarityTypeComboBox, gridBagConstraints);
 
-        similarityTokenizerLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
-        similarityTokenizerLabel.setText("Tokenizer");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 3);
-        similarityTypePanel.add(similarityTokenizerLabel, gridBagConstraints);
-
-        similarityTokenizerComboBox.setMinimumSize(new java.awt.Dimension(130, 20));
-        similarityTokenizerComboBox.setPreferredSize(new java.awt.Dimension(130, 20));
-        similarityTokenizerComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                similarityTokenizerComboBoxActionPerformed(evt);
-            }
-        });
-        similarityTypePanel.add(similarityTokenizerComboBox, new java.awt.GridBagConstraints());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         similarityPanelInner.add(similarityTypePanel, gridBagConstraints);
 
-        similarityThresholdPanel.setPreferredSize(new java.awt.Dimension(100, 24));
-        similarityThresholdPanel.setLayout(new java.awt.GridBagLayout());
-
-        similarityThresholdLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
-        similarityThresholdLabel.setText("Similarity threshold");
-        similarityThresholdLabel.setMaximumSize(new java.awt.Dimension(120, 14));
-        similarityThresholdLabel.setMinimumSize(new java.awt.Dimension(120, 14));
-        similarityThresholdLabel.setPreferredSize(new java.awt.Dimension(120, 14));
-        similarityThresholdPanel.add(similarityThresholdLabel, new java.awt.GridBagConstraints());
-
-        similarityThresholdSlider.setToolTipText(Textbox.makeHTMLParagraph("Similarity threshold specifies allowed difference between similar strings. When threshold is near 100, only minimal differences are allowed. When threshold is near 0, strings may be very different and they are still similar.", 40));
-        similarityThresholdSlider.setMinimumSize(new java.awt.Dimension(100, 24));
-        similarityThresholdSlider.setPreferredSize(new java.awt.Dimension(100, 24));
-        similarityThresholdSlider.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                similarityThresholdSliderMousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                similarityThresholdSliderMouseReleased(evt);
-            }
-        });
-        similarityThresholdSlider.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                similarityThresholdSliderMouseDragged(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        similarityThresholdPanel.add(similarityThresholdSlider, gridBagConstraints);
-
-        similarityThresholdTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        similarityThresholdTextField.setText("50");
-        similarityThresholdTextField.setPreferredSize(new java.awt.Dimension(40, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
-        similarityThresholdPanel.add(similarityThresholdTextField, gridBagConstraints);
-
-        similarityDifferenceCheckBox.setFont(org.wandora.application.gui.UIConstants.tabFont);
-        similarityDifferenceCheckBox.setText("Difference instead similarity");
-        similarityDifferenceCheckBox.setToolTipText("Results different topics instead of similar topics, if checked.");
-        similarityDifferenceCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        similarityDifferenceCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        similarityThresholdPanel.add(similarityDifferenceCheckBox, new java.awt.GridBagConstraints());
-
-        gapCostPanel.setLayout(new java.awt.GridBagLayout());
-
-        gapCostLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
-        gapCostLabel.setText("Gap cost");
-        gapCostLabel.setToolTipText("Some similarity metrics require gap cost in similarity calculations.");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
-        gapCostPanel.add(gapCostLabel, gridBagConstraints);
-
-        gapCostTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        gapCostTextField.setText("0.5");
-        gapCostTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        gapCostTextField.setPreferredSize(new java.awt.Dimension(40, 20));
-        gapCostPanel.add(gapCostTextField, new java.awt.GridBagConstraints());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        similarityThresholdPanel.add(gapCostPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
-        similarityPanelInner.add(similarityThresholdPanel, gridBagConstraints);
-
         similarityTextPanel.setLayout(new java.awt.GridBagLayout());
-
-        similarityTextLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
-        similarityTextLabel.setText("Similarity text");
-        similarityTextLabel.setMaximumSize(new java.awt.Dimension(120, 14));
-        similarityTextLabel.setMinimumSize(new java.awt.Dimension(120, 14));
-        similarityTextLabel.setPreferredSize(new java.awt.Dimension(120, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        similarityTextPanel.add(similarityTextLabel, gridBagConstraints);
 
         similarityScrollPane.setPreferredSize(new java.awt.Dimension(8, 50));
         similarityScrollPane.setViewportView(similarityTextPane);
@@ -717,60 +607,141 @@ public class SimilarityPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 2, 0);
         similarityPanelInner.add(similarityTextPanel, gridBagConstraints);
 
+        thresholdPanel.setLayout(new java.awt.GridBagLayout());
+
+        thresholdInnerPanel.setLayout(new java.awt.GridBagLayout());
+
+        similarityThresholdSlider.setToolTipText(Textbox.makeHTMLParagraph("Similarity threshold specifies allowed difference between similar strings. When threshold is near 100, only minimal differences are allowed. When threshold is near 0, strings may be very different and they are still similar.", 40));
+        similarityThresholdSlider.setMinimumSize(new java.awt.Dimension(100, 24));
+        similarityThresholdSlider.setPreferredSize(new java.awt.Dimension(200, 24));
+        similarityThresholdSlider.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                similarityThresholdSliderMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                similarityThresholdSliderMouseReleased(evt);
+            }
+        });
+        similarityThresholdSlider.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                similarityThresholdSliderMouseDragged(evt);
+            }
+        });
+        thresholdInnerPanel.add(similarityThresholdSlider, new java.awt.GridBagConstraints());
+
+        similarityThresholdTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        similarityThresholdTextField.setText("50");
+        similarityThresholdTextField.setMinimumSize(new java.awt.Dimension(40, 20));
+        similarityThresholdTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
+        thresholdInnerPanel.add(similarityThresholdTextField, gridBagConstraints);
+
+        similarityDifferenceCheckBox.setFont(org.wandora.application.gui.UIConstants.tabFont);
+        similarityDifferenceCheckBox.setText("Difference instead similarity");
+        similarityDifferenceCheckBox.setToolTipText("Results different topics instead of similar topics, if checked.");
+        similarityDifferenceCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        similarityDifferenceCheckBox.setMargin(new java.awt.Insets(2, 0, 2, 2));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        thresholdInnerPanel.add(similarityDifferenceCheckBox, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 5, 0);
+        thresholdPanel.add(thresholdInnerPanel, gridBagConstraints);
+
+        optionsTabbedPane.addTab("Threshold", thresholdPanel);
+
+        similarityTokenizerPanel.setLayout(new java.awt.GridBagLayout());
+
+        similarityTokenizerLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
+        similarityTokenizerLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        similarityTokenizerLabel.setText("Tokenizer");
+        similarityTokenizerLabel.setMaximumSize(new java.awt.Dimension(80, 14));
+        similarityTokenizerLabel.setMinimumSize(new java.awt.Dimension(80, 14));
+        similarityTokenizerLabel.setPreferredSize(new java.awt.Dimension(80, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
+        similarityTokenizerPanel.add(similarityTokenizerLabel, gridBagConstraints);
+
+        similarityTokenizerComboBox.setMinimumSize(new java.awt.Dimension(130, 20));
+        similarityTokenizerComboBox.setPreferredSize(new java.awt.Dimension(130, 20));
+        similarityTokenizerComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                similarityTokenizerComboBoxActionPerformed(evt);
+            }
+        });
+        similarityTokenizerPanel.add(similarityTokenizerComboBox, new java.awt.GridBagConstraints());
+
+        similaritygapCostPanel.setLayout(new java.awt.GridBagLayout());
+
+        gapCostLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
+        gapCostLabel.setText("Gap cost");
+        gapCostLabel.setToolTipText("Some similarity metrics require gap cost in similarity calculations.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
+        similaritygapCostPanel.add(gapCostLabel, gridBagConstraints);
+
+        gapCostTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        gapCostTextField.setText("0.5");
+        gapCostTextField.setMinimumSize(new java.awt.Dimension(40, 20));
+        gapCostTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        similaritygapCostPanel.add(gapCostTextField, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        similarityTokenizerPanel.add(similaritygapCostPanel, gridBagConstraints);
+
+        optionsTabbedPane.addTab("Tokenizer", similarityTokenizerPanel);
+
         similarityTargetPanel.setMinimumSize(new java.awt.Dimension(571, 24));
         similarityTargetPanel.setPreferredSize(new java.awt.Dimension(100, 24));
         similarityTargetPanel.setLayout(new java.awt.GridBagLayout());
 
-        similarityChecksLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
-        similarityChecksLabel.setText("Compare to");
-        similarityChecksLabel.setMaximumSize(new java.awt.Dimension(120, 14));
-        similarityChecksLabel.setMinimumSize(new java.awt.Dimension(120, 14));
-        similarityChecksLabel.setPreferredSize(new java.awt.Dimension(120, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        similarityTargetPanel.add(similarityChecksLabel, gridBagConstraints);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         similarityBasenameCheckBox.setSelected(true);
         similarityBasenameCheckBox.setText("base names");
-        similarityTargetPanel.add(similarityBasenameCheckBox, new java.awt.GridBagConstraints());
+        jPanel1.add(similarityBasenameCheckBox, new java.awt.GridBagConstraints());
 
         similarityVariantCheckBox.setSelected(true);
         similarityVariantCheckBox.setText("variant names");
-        similarityTargetPanel.add(similarityVariantCheckBox, new java.awt.GridBagConstraints());
+        jPanel1.add(similarityVariantCheckBox, new java.awt.GridBagConstraints());
 
         similarityOccurrenceCheckBox.setText("occurrences");
-        similarityTargetPanel.add(similarityOccurrenceCheckBox, new java.awt.GridBagConstraints());
+        jPanel1.add(similarityOccurrenceCheckBox, new java.awt.GridBagConstraints());
+
+        similarityTargetPanel.add(jPanel1, new java.awt.GridBagConstraints());
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
         similaritySICheckBox.setText("subject identifiers");
-        similarityTargetPanel.add(similaritySICheckBox, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        jPanel2.add(similaritySICheckBox, gridBagConstraints);
 
         similaritySLCheckBox.setText("subject locators");
-        similarityTargetPanel.add(similaritySLCheckBox, new java.awt.GridBagConstraints());
-
-        jPanel1.setPreferredSize(new java.awt.Dimension(4, 4));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 4, Short.MAX_VALUE)
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        jPanel2.add(similaritySLCheckBox, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        similarityTargetPanel.add(jPanel1, gridBagConstraints);
+        gridBagConstraints.gridy = 1;
+        similarityTargetPanel.add(jPanel2, gridBagConstraints);
+
+        optionsTabbedPane.addTab("Compare to", similarityTargetPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        similarityPanelInner.add(similarityTargetPanel, gridBagConstraints);
+        similarityPanelInner.add(optionsTabbedPane, gridBagConstraints);
+        optionsTabbedPane.getAccessibleContext().setAccessibleName("tab2");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -784,7 +755,9 @@ public class SimilarityPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         containerPanel.add(similarityPanel, gridBagConstraints);
 
-        runButtonPanel.setPreferredSize(new java.awt.Dimension(100, 50));
+        runButtonPanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        runButtonPanel.setMinimumSize(new java.awt.Dimension(92, 40));
+        runButtonPanel.setPreferredSize(new java.awt.Dimension(10, 40));
         runButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         searchButton.setText("Search");
@@ -873,14 +846,14 @@ public class SimilarityPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel containerPanel;
     private javax.swing.JLabel gapCostLabel;
-    private javax.swing.JPanel gapCostPanel;
     private javax.swing.JTextField gapCostTextField;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTabbedPane optionsTabbedPane;
     private javax.swing.JPanel resultPanel;
     private javax.swing.JPanel runButtonPanel;
     private javax.swing.JButton searchButton;
     private javax.swing.JCheckBox similarityBasenameCheckBox;
-    private javax.swing.JLabel similarityChecksLabel;
     private javax.swing.JCheckBox similarityDifferenceCheckBox;
     private javax.swing.JCheckBox similarityOccurrenceCheckBox;
     private javax.swing.JPanel similarityPanel;
@@ -889,18 +862,18 @@ public class SimilarityPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox similaritySLCheckBox;
     private javax.swing.JScrollPane similarityScrollPane;
     private javax.swing.JPanel similarityTargetPanel;
-    private javax.swing.JLabel similarityTextLabel;
     private javax.swing.JTextPane similarityTextPane;
     private javax.swing.JPanel similarityTextPanel;
-    private javax.swing.JLabel similarityThresholdLabel;
-    private javax.swing.JPanel similarityThresholdPanel;
     private javax.swing.JSlider similarityThresholdSlider;
     private javax.swing.JTextField similarityThresholdTextField;
     private javax.swing.JComboBox similarityTokenizerComboBox;
     private javax.swing.JLabel similarityTokenizerLabel;
+    private javax.swing.JPanel similarityTokenizerPanel;
     private javax.swing.JComboBox similarityTypeComboBox;
-    private javax.swing.JLabel similarityTypeLabel;
     private javax.swing.JPanel similarityTypePanel;
     private javax.swing.JCheckBox similarityVariantCheckBox;
+    private javax.swing.JPanel similaritygapCostPanel;
+    private javax.swing.JPanel thresholdInnerPanel;
+    private javax.swing.JPanel thresholdPanel;
     // End of variables declaration//GEN-END:variables
 }

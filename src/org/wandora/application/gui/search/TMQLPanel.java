@@ -239,7 +239,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         tmqlPanel.add(selectQueryPanel1, gridBagConstraints);
 
         tmqlTextPane.setPreferredSize(new java.awt.Dimension(6, 100));
@@ -251,7 +251,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         tmqlPanel.add(tmqlScrollPane, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -259,15 +259,20 @@ public class TMQLPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         add(tmqlPanel, gridBagConstraints);
 
+        tmqlButtonPanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        tmqlButtonPanel.setMinimumSize(new java.awt.Dimension(91, 40));
+        tmqlButtonPanel.setPreferredSize(new java.awt.Dimension(91, 40));
         tmqlButtonPanel.setLayout(new java.awt.GridBagLayout());
 
-        runButton.setText("Run script");
+        runButton.setText("Run query");
         runButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runButtonActionPerformed(evt);
             }
         });
-        tmqlButtonPanel.add(runButton, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        tmqlButtonPanel.add(runButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
