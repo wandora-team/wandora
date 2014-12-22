@@ -100,6 +100,15 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     private void setCurrentPanel(Component p) {
         if(p != null) {
             if(!p.equals(currentContainerPanel)) {
+                
+                /*
+                    Why remove content from other container panels?
+                    Tabbed pane's height is inherited from the heighest
+                    component within. Removing content from other container
+                    panels ensures the tabbed pane inherits it's height from
+                    the active tab.
+                */
+                
                 if(p.equals(searchContainerPanel)) {
                     searchContainerPanel.add(searchPanel, BorderLayout.CENTER);
                     similarityContainerPanel.removeAll();
@@ -208,7 +217,12 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
 
     @Override
     public void refresh() throws TopicMapException {
+        searchPanel.refresh();
+        similarityPanel.refresh();
+        queryPanel.refresh();
+        tmqlPanel.refresh();
         
+        revalidate();
     }
 
     @Override
@@ -279,64 +293,65 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     // -------------------------------------------------------------------------
     
     
+
     
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
-        
+        refresh();
     }
 
     @Override
     public void associationChanged(Association a) throws TopicMapException {
-        
+        refresh();
     }
 }

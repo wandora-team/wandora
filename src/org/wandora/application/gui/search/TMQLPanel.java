@@ -28,6 +28,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -52,7 +53,7 @@ public class TMQLPanel extends javax.swing.JPanel {
     private Wandora wandora = null;
     private String TMQL_QUERY_OPTION_KEY = "tmqlQueries";
     private ArrayList<Tuples.T2<String,String>> storedTmqlQueries = new ArrayList<Tuples.T2<String,String>>();
-    
+    private MixedTopicTable resultsTable = null;
     
     
     /**
@@ -168,6 +169,14 @@ public class TMQLPanel extends javax.swing.JPanel {
         
     }
 
+    
+    public void refresh() {
+        if(resultsTable != null) {
+            ((DefaultTableModel) resultsTable.getModel()).fireTableDataChanged();
+        }
+        tmqlResultPanel.revalidate();
+        revalidate();
+    }
     
     
     
@@ -310,7 +319,7 @@ public class TMQLPanel extends javax.swing.JPanel {
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
         try {
             tmqlResultPanel.removeAll();
-            MixedTopicTable resultsTable = getTopicsByTMQL();
+            resultsTable = getTopicsByTMQL();
             if(resultsTable != null) {
                 tmqlResultPanel.add(resultsTable, BorderLayout.NORTH);
             }

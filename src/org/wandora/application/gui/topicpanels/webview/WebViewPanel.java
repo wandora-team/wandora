@@ -442,9 +442,9 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             WandoraModulesServer httpServer = wandora.httpServer;
             
             ArrayList<ModulesWebApp> webApps=httpServer.getWebApps();
-            HashMap<String,ModulesWebApp> webAppsMap=new HashMap<String,ModulesWebApp>();
+            HashMap<String,ModulesWebApp> webAppsMap=new HashMap<>();
             for(ModulesWebApp wa : webApps) webAppsMap.put(wa.getAppName(), wa);
-            ArrayList<String> sorted = new ArrayList<String>(webAppsMap.keySet());
+            ArrayList<String> sorted = new ArrayList<>(webAppsMap.keySet());
             Collections.sort(sorted);
 
             for(String appName : sorted) {

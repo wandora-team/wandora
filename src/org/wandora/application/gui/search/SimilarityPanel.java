@@ -34,6 +34,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -126,6 +127,9 @@ public class SimilarityPanel extends javax.swing.JPanel {
         new Tuples.T2("QGram3", new TokeniserQGram3()),
         new Tuples.T2("QGram3 extended", new TokeniserQGram3Extended())
     };
+    
+    
+    private TopicTable resultsTable = null;
     
     
     
@@ -515,6 +519,14 @@ public class SimilarityPanel extends javax.swing.JPanel {
 
     
     
+    
+    public void refresh() {
+        if(resultsTable != null) {
+            ((DefaultTableModel) resultsTable.getModel()).fireTableDataChanged();
+        }
+        resultPanel.revalidate();
+        revalidate();
+    }
 
     
     
@@ -825,11 +837,12 @@ public class SimilarityPanel extends javax.swing.JPanel {
             Collection<Topic> results = getSimilarTopics(topicMap);
             resultPanel.removeAll();
             if(results != null && !results.isEmpty()) {
-                TopicTable resultsTable = new TopicTable(wandora);
+                resultsTable = new TopicTable(wandora);
                 resultsTable.initialize(results);
                 resultPanel.add(resultsTable, BorderLayout.NORTH);
             }
             else {
+                resultsTable = null;
                 SimpleLabel message = new SimpleLabel();
                 message.setText("No search results.");
                 resultPanel.add(message, BorderLayout.NORTH);

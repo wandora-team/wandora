@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
 import org.wandora.application.contexts.Context;
@@ -66,7 +67,10 @@ public class QueryPanel extends javax.swing.JPanel {
     private Wandora wandora = null;
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
     private ArrayList<Tuples.T3<String,String,String>> storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();
-
+    private MixedTopicTable resultsTable = null;
+    
+    
+    
     
     /**
      * Creates new form QueryPanel
@@ -292,6 +296,15 @@ public class QueryPanel extends javax.swing.JPanel {
     
     
     
+    public void refresh() {
+        if(resultsTable != null) {
+            ((DefaultTableModel) resultsTable.getModel()).fireTableDataChanged();
+        }
+        resultPanel.revalidate();
+        revalidate();
+    }
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -503,7 +516,7 @@ public class QueryPanel extends javax.swing.JPanel {
         // TODO: Get global context objects and pass them into the getTopicsByQuery.
         // if(context != null) contextObjects = context.getContextObjects();
         
-        MixedTopicTable resultsTable = getTopicsByQuery(contextObjects);
+        resultsTable = getTopicsByQuery(contextObjects);
         if(resultsTable != null) {
             resultPanel.removeAll();
             resultPanel.add(resultsTable, BorderLayout.NORTH);

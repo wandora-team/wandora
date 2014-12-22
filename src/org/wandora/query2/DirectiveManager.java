@@ -69,12 +69,11 @@ public class DirectiveManager {
         try {
             String pkg="org.wandora.query2";
             
-            String path = pkg.replace('.', '/');
+            String path = pkg.replace('.', File.separatorChar);
             Enumeration<URL> toolResources = ClassLoader.getSystemResources(path);
-            
+
             while(toolResources.hasMoreElements()) {
                 URL url=toolResources.nextElement();
-                
                 if(!url.getProtocol().equals("file")) continue;
                 
                 try{
@@ -90,23 +89,29 @@ public class DirectiveManager {
                         if(ind<0) continue;
 
                         String cls=file.substring(ind,file.length()-6);
-                        if(cls.startsWith("/")) cls=cls.substring(1);
+                        if(cls.startsWith(""+File.separatorChar)) cls=cls.substring(1);
 
-                        cls=cls.replace('/', '.');
+                        cls=cls.replace(File.separatorChar, '.');
+
                         try {
                             Class<?> c=Class.forName(cls);
                             if(Directive.class.isAssignableFrom(c)){
                                 scannedDirectives.add((Class<? extends Directive>)c);
                             }
-                        } catch (ClassNotFoundException ex) {
+                        } 
+                        catch (ClassNotFoundException ex) {
+                            // Wandora.getWandora().handleError(ex);
                             // ignore
                         }
                     }
-                } catch(URISyntaxException use){
+                } 
+                catch(URISyntaxException use){
+                    // Wandora.getWandora().handleError(use);
                     // ignore
                 }
             }
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) {
             Wandora.getWandora().handleError(ex);
         }
     }
