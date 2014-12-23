@@ -28,6 +28,7 @@ package org.wandora.application.gui.search;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.net.URI;
@@ -41,6 +42,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.SchemaTreeTopicChooser;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
@@ -53,6 +55,7 @@ import org.wandora.query2.ResultRow;
 import org.wandora.query2.Static;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples;
 
@@ -68,7 +71,7 @@ public class QueryPanel extends javax.swing.JPanel {
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
     private ArrayList<Tuples.T3<String,String,String>> storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();
     private MixedTopicTable resultsTable = null;
-    
+    private SimpleLabel message = null;
     
     
     
@@ -78,6 +81,9 @@ public class QueryPanel extends javax.swing.JPanel {
     public QueryPanel() {
         wandora = Wandora.getWandora();
         initComponents();
+        message = new SimpleLabel();
+        message.setHorizontalAlignment(SimpleLabel.CENTER);
+        message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
         scriptTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         engineComboBox.setEditable(false);
         ArrayList<String> engines=WandoraScriptManager.getAvailableEngines();
@@ -89,6 +95,7 @@ public class QueryPanel extends javax.swing.JPanel {
             }
         }
         queryComboBox.setEditable(false);
+        clearResultsButton.setEnabled(false);
         readStoredScriptQueries();
     }
 
@@ -193,103 +200,94 @@ public class QueryPanel extends javax.swing.JPanel {
     }
     
 
-    public MixedTopicTable getTopicsByQuery(Iterator<Topic> contextTopics) {
-        try {
-            TopicMap tm = wandora.getTopicMap();
-            WandoraScriptManager sm = new WandoraScriptManager();
-            String engineName = engineComboBox.getSelectedItem().toString();
-            ScriptEngine engine = sm.getScriptEngine(engineName);
-            String scriptStr =  scriptTextPane.getText();
-            Directive query = null;
-            if(engine != null && engineName.toLowerCase().contains("nashorn")) {
-                try {
-                    // https://bugs.openjdk.java.net/browse/JDK-8025132
-                    engine.eval("load('nashorn:mozilla_compat.js');");
-                }
-                catch(Exception e) {}
+    public MixedTopicTable getTopicsByQuery(Iterator<Topic> contextTopics) throws ScriptException, TopicMapException, Exception {
+        TopicMap tm = wandora.getTopicMap();
+        WandoraScriptManager sm = new WandoraScriptManager();
+        String engineName = engineComboBox.getSelectedItem().toString();
+        ScriptEngine engine = sm.getScriptEngine(engineName);
+        String scriptStr =  scriptTextPane.getText();
+        Directive query = null;
+        if(engine != null && engineName.toLowerCase().contains("nashorn")) {
+            try {
+                // https://bugs.openjdk.java.net/browse/JDK-8025132
+                engine.eval("load('nashorn:mozilla_compat.js');");
             }
-            Object o=engine.eval(scriptStr);
-            if(o==null) o=engine.get("query");
-            if(o!=null && o instanceof Directive) {
-                query = (Directive)o;
+            catch(Exception e) {}
+        }
+        Object o=engine.eval(scriptStr);
+        if(o==null) o=engine.get("query");
+        if(o!=null && o instanceof Directive) {
+            query = (Directive)o;
+        }
+
+        ArrayList<ResultRow> res = new ArrayList<>();
+        Topic contextTopic = null;
+        if(contextTopics == null) contextTopics = (new ArrayList()).iterator();
+        if(!contextTopics.hasNext()){
+            // if context is empty just add some (root of a tree chooser) topic
+            HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTopicTreeManager().getTrees();
+            SchemaTreeTopicChooser tree=trees.values().iterator().next();
+            Topic t=tm.getTopic(tree.getRootSI());
+            ArrayList<Topic> al=new ArrayList<>();
+            al.add(t);
+            contextTopics=al.iterator();
+        }
+        while(contextTopics.hasNext()) {
+            contextTopic = contextTopics.next();
+            if(contextTopic != null && !contextTopic.isRemoved()) {
+                res.add( new ResultRow(contextTopic) );
             }
+        }
 
-            ArrayList<ResultRow> res = new ArrayList<>();
-            Topic contextTopic = null;
-            if(contextTopics == null) contextTopics = (new ArrayList()).iterator();
-            if(!contextTopics.hasNext()){
-                // if context is empty just add some (root of a tree chooser) topic
-                HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTopicTreeManager().getTrees();
-                SchemaTreeTopicChooser tree=trees.values().iterator().next();
-                Topic t=tm.getTopic(tree.getRootSI());
-                ArrayList<Topic> al=new ArrayList<>();
-                al.add(t);
-                contextTopics=al.iterator();
+        QueryContext context=new QueryContext(tm, "en");
+
+        System.out.println("Query: "+query.debugString());
+
+        if(res.isEmpty()){}
+        else if(res.size()==1){
+            res=query.doQuery(context, res.get(0));
+        }
+        else{
+            res=query.from(new Static(res)).doQuery(context, res.get(0));
+        }
+
+        ArrayList<String> columns=new ArrayList<>();
+        for(ResultRow row : res){
+            for(int i=0;i<row.getNumValues();i++){
+                String l=row.getRole(i);
+                if(!columns.contains(l)) columns.add(l);
             }
-            while(contextTopics.hasNext()) {
-                contextTopic = contextTopics.next();
-                if(contextTopic != null && !contextTopic.isRemoved()) {
-                    res.add( new ResultRow(contextTopic) );
-                }
-            }
-
-            QueryContext context=new QueryContext(tm, "en");
-
-            System.out.println("Query: "+query.debugString());
-
-            if(res.isEmpty()){}
-            else if(res.size()==1){
-                res=query.doQuery(context, res.get(0));
+        }
+        ArrayList<Object> columnTopicsA=new ArrayList<>();
+        for(int i=0;i<columns.size();i++){
+            String l=columns.get(i);
+            if(l.startsWith("~")){
+                columns.remove(i);
+                i--;
             }
             else{
-                res=query.from(new Static(res)).doQuery(context, res.get(0));
-            }
-
-            ArrayList<String> columns=new ArrayList<>();
-            for(ResultRow row : res){
-                for(int i=0;i<row.getNumValues();i++){
-                    String l=row.getRole(i);
-                    if(!columns.contains(l)) columns.add(l);
-                }
-            }
-            ArrayList<Object> columnTopicsA=new ArrayList<>();
-            for(int i=0;i<columns.size();i++){
-                String l=columns.get(i);
-                if(l.startsWith("~")){
-                    columns.remove(i);
-                    i--;
-                }
-                else{
-                    Topic t=tm.getTopic(l);
-                    if(t!=null) columnTopicsA.add(t);
-                    else columnTopicsA.add(l);
-                }
-            }
-            Object[] columnTopics=columnTopicsA.toArray(new Object[columnTopicsA.size()]);
-            if(res.size() > 0) {
-                Object[][] data=new Object[res.size()][columns.size()];
-                for(int i=0;i<res.size();i++){
-                    ResultRow row=res.get(i);
-                    ArrayList<String> roles=row.getRoles();
-                    for(int j=0;j<columns.size();j++){
-                        String r=columns.get(j);
-                        int ind=roles.indexOf(r);
-                        if(ind!=-1) data[i][j]=row.getValue(ind);
-                        else data[i][j]=null;
-                    }
-                }
-
-                MixedTopicTable table=new MixedTopicTable(wandora);
-                table.initialize(data,columnTopics);
-                return table;
+                Topic t=tm.getTopic(l);
+                if(t!=null) columnTopicsA.add(t);
+                else columnTopicsA.add(l);
             }
         }
-        catch(ScriptException se) {
-            wandora.handleError(se);
-        }
-        catch(Exception e) {
-            //e.printStackTrace();
-            wandora.handleError(e);
+        Object[] columnTopics=columnTopicsA.toArray(new Object[columnTopicsA.size()]);
+        if(res.size() > 0) {
+            Object[][] data=new Object[res.size()][columns.size()];
+            for(int i=0;i<res.size();i++){
+                ResultRow row=res.get(i);
+                ArrayList<String> roles=row.getRoles();
+                for(int j=0;j<columns.size();j++){
+                    String r=columns.get(j);
+                    int ind=roles.indexOf(r);
+                    if(ind!=-1) data[i][j]=row.getValue(ind);
+                    else data[i][j]=null;
+                }
+            }
+
+            MixedTopicTable table=new MixedTopicTable(wandora);
+            table.initialize(data,columnTopics);
+            return table;
         }
         return null;
     }
@@ -330,6 +328,7 @@ public class QueryPanel extends javax.swing.JPanel {
         scriptTextPane = new SimpleTextPane();
         scripButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
+        clearResultsButton = new SimpleButton();
         resultPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
@@ -459,6 +458,16 @@ public class QueryPanel extends javax.swing.JPanel {
         });
         scripButtonPanel.add(runButton, new java.awt.GridBagConstraints());
 
+        clearResultsButton.setText("Clear results");
+        clearResultsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearResultsButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
+        scripButtonPanel.add(clearResultsButton, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -516,20 +525,53 @@ public class QueryPanel extends javax.swing.JPanel {
         // TODO: Get global context objects and pass them into the getTopicsByQuery.
         // if(context != null) contextObjects = context.getContextObjects();
         
-        resultsTable = getTopicsByQuery(contextObjects);
-        if(resultsTable != null) {
+        try {
             resultPanel.removeAll();
-            resultPanel.add(resultsTable, BorderLayout.NORTH);
+            clearResultsButton.setEnabled(false);
+            resultsTable = getTopicsByQuery(contextObjects);
+            if(resultsTable != null) {
+                resultPanel.add(resultsTable, BorderLayout.NORTH);
+                clearResultsButton.setEnabled(true);
+            }
+            else {
+                message.setText("No search results!");
+                resultPanel.add(message, BorderLayout.CENTER);
+            }
         }
-        else {
-            WandoraOptionPane.showMessageDialog(wandora, "No search results.");
+        catch(ScriptException se) {
+            message.setText("Script error!");
+            resultPanel.add(message, BorderLayout.CENTER);
+            revalidate();
+            repaint();
+            wandora.handleError(se);
+        }
+        catch(TopicMapException tme) {
+            message.setText("Topic map exception!");
+            resultPanel.add(message, BorderLayout.CENTER);
+            tme.printStackTrace();
+            //wandora.handleError(tme);
+        }
+        catch(Exception e) {
+            message.setText("Error!");
+            resultPanel.add(message, BorderLayout.CENTER);
+            wandora.handleError(e);
         }
         revalidate();
+        repaint();
     }//GEN-LAST:event_runButtonActionPerformed
+
+    private void clearResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearResultsButtonActionPerformed
+        resultPanel.removeAll();
+        resultsTable = null;
+        clearResultsButton.setEnabled(false);
+        revalidate();
+        repaint();
+    }//GEN-LAST:event_clearResultsButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addQueryButton;
+    private javax.swing.JButton clearResultsButton;
     private javax.swing.JButton delQueryButton;
     private javax.swing.JComboBox engineComboBox;
     private javax.swing.JLabel engineLabel;

@@ -37,8 +37,11 @@ import org.wandora.application.*;
 import static org.wandora.utils.Tuples.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.util.*;
+import org.wandora.application.gui.table.ClassTable;
 import org.wandora.application.gui.topicstringify.TopicToString;
 
 
@@ -52,7 +55,7 @@ public class GetTopicButton extends SimpleButton {
 
     protected Topic selectedTopic = null;
     protected String originalSubjectIdentifier = null;
-    protected Wandora admin = null;
+    protected Wandora wandora = null;
     protected java.awt.Window parent = null;
     protected boolean showNone;
     protected ButtonHandler buttonHandler;
@@ -86,7 +89,7 @@ public class GetTopicButton extends SimpleButton {
     }
     public GetTopicButton(Topic t,Wandora wandora,java.awt.Window parent,boolean showNone,ButtonHandler buttonHandler) throws TopicMapException{
         this.selectedTopic=t;
-        this.admin=wandora;
+        this.wandora=wandora;
         this.parent=parent;
         this.showNone=showNone;
         this.buttonHandler=buttonHandler;
@@ -95,10 +98,13 @@ public class GetTopicButton extends SimpleButton {
                 
         updateText();
         this.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt){
                 pressed();
             }
         });
+        
+        this.setTransferHandler(new TopicButtonTransferHandler());
     }
     
 
@@ -129,30 +135,42 @@ public class GetTopicButton extends SimpleButton {
     public void setButtonListener(ButtonListener listener){
         this.listener=listener;
     }
+    
+    
     public void setButtonHandler(ButtonHandler buttonHandler){
         this.buttonHandler=buttonHandler;
     }
+    
+    
     public void setShowNone(boolean b){
         showNone=b;
     }
+    
+    
     public Topic getTopic(){
         return selectedTopic;
     }
+    
+    
     public String getTopicSI() throws TopicMapException {
         if(selectedTopic==null) return originalSubjectIdentifier;
         else return selectedTopic.getOneSubjectIdentifier().toExternalForm();
     }
+    
     
     public void setTopic(Topic t) throws TopicMapException {
         selectedTopic=t;
         updateText();
         if(listener!=null) listener.topicChanged(this);
     }
+    
+    
     public void setTopic(String si) throws TopicMapException {
         originalSubjectIdentifier = si;
         if(si==null) setTopic((Topic)null);
-        else setTopic(admin.getTopicMap().getTopic(si));
+        else setTopic(wandora.getTopicMap().getTopic(si));
     }
+    
     
     public void updateText() throws TopicMapException {
         if(selectedTopic==null) this.setText("<No topic>");
@@ -163,13 +181,20 @@ public class GetTopicButton extends SimpleButton {
         this.setToolTipText(this.getText());
     }
     
+    
+    public String getCopyString() {
+        return this.getText();
+    }
+    
+    
     @Override
     public java.awt.Dimension getMinimumSize(){
         java.awt.Dimension d=super.getPreferredSize();
         if(d==null) return null;
         return new java.awt.Dimension(30,d.height);
     }
-        
+
+    
     protected void pressed() {
         try{
             T2<Topic,Boolean> t=null;
@@ -186,17 +211,18 @@ public class GetTopicButton extends SimpleButton {
         }
     }
     
+    
     public T2<Topic,Boolean> defaultPressHandler() throws TopicMapException {
         if(!showNone){
             Topic t=null;
             if(parent!=null && parent instanceof java.awt.Frame) {
-                t=admin.showTopicFinder((java.awt.Frame)parent);
+                t=wandora.showTopicFinder((java.awt.Frame)parent);
             }
             else if(parent!=null && parent instanceof java.awt.Dialog) {
-                t=admin.showTopicFinder((java.awt.Dialog)parent);
+                t=wandora.showTopicFinder((java.awt.Dialog)parent);
             }
             else {
-                t=admin.showTopicFinder();
+                t=wandora.showTopicFinder();
             }
             if(t!=null) return t2(t,false);
             else return t2(null,true);
@@ -204,20 +230,22 @@ public class GetTopicButton extends SimpleButton {
         else {
             T2<Topic,Boolean> t=null;
             if(parent!=null && parent instanceof java.awt.Frame) {
-                t=admin.showTopicFinderWithNone((java.awt.Frame)parent);
+                t=wandora.showTopicFinderWithNone((java.awt.Frame)parent);
             }
             else if(parent!=null && parent instanceof java.awt.Dialog) {
-                t=admin.showTopicFinderWithNone((java.awt.Dialog)parent);
+                t=wandora.showTopicFinderWithNone((java.awt.Dialog)parent);
             }
             else {
-                t=admin.showTopicFinderWithNone();
+                t=wandora.showTopicFinderWithNone();
             }
             return t;
         }
     }
     
+    
     public void addPopupList(final Collection<Topic> topics){
         this.addMouseListener(new PopupMouseListener(new PopupListHandler(){
+            @Override
             public Collection<Topic> getListTopics() {
                 return topics;
             }
@@ -231,13 +259,18 @@ public class GetTopicButton extends SimpleButton {
     public static interface ButtonHandler {
         public T2<Topic,Boolean> pressed(GetTopicButton button) throws TopicMapException ;
     }
+    
+    
     public static interface PopupListHandler {
         public Collection<Topic> getListTopics() throws TopicMapException;
     }
+    
+    
     public static abstract class CachedPopupListHandler implements PopupListHandler {
         protected Collection<Topic> topics;
         protected boolean handlerCalled=false;
         public abstract Collection<Topic> getUncachedTopics() throws TopicMapException ;
+        @Override
         public Collection<Topic> getListTopics() throws TopicMapException {
             if(!handlerCalled){
                 handlerCalled=true;
@@ -246,6 +279,8 @@ public class GetTopicButton extends SimpleButton {
             return topics;
         }
     }
+    
+    
     public class PopupMouseListener extends MouseAdapter {
         protected Collection<Topic> topics;
         protected PopupListHandler handler;
@@ -256,7 +291,7 @@ public class GetTopicButton extends SimpleButton {
             try {
                 setTopic(t);
             }catch(TopicMapException tme){
-                admin.handleError(tme);
+                wandora.handleError(tme);
             }
         }
         @Override
@@ -272,6 +307,7 @@ public class GetTopicButton extends SimpleButton {
                     if(counter>10) {
                         SimpleMenuItem item=new SimpleMenuItem("More...");
                         item.addActionListener(new ActionListener(){
+                            @Override
                             public void actionPerformed(ActionEvent evt){
                                 GetTopicButton.this.pressed();
                             }
@@ -282,6 +318,7 @@ public class GetTopicButton extends SimpleButton {
                     }
                     SimpleMenuItem item=new SimpleMenuItem(t.getDisplayName());
                     item.addActionListener(new ActionListener(){
+                        @Override
                         public void actionPerformed(ActionEvent evt){
                             PopupMouseListener.this.topicSelected(t);
                         }
@@ -291,12 +328,65 @@ public class GetTopicButton extends SimpleButton {
                 menu.show(evt.getComponent(),evt.getX(),evt.getY());
             }
             catch(TopicMapException tme){
-                admin.handleError(tme);
+                wandora.handleError(tme);
             }
         }        
     }
+    
+    
     public static interface ButtonListener {
         public void topicChanged(GetTopicButton button);
     }
     
+    
+    
+    // -------------------------------------------------------------------------
+    // ------------------------------------------------------ Drag and Drop ----
+    // -------------------------------------------------------------------------
+    
+    
+    
+    
+    
+    private class TopicButtonTransferHandler extends TransferHandler {
+
+        @Override
+        public boolean canImport(TransferHandler.TransferSupport support) {
+            if(!support.isDrop()) return false;
+            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
+                   support.isDataFlavorSupported(DataFlavor.stringFlavor);
+        }
+
+        @Override
+        protected Transferable createTransferable(JComponent c) {
+            return DnDHelper.makeTopicTransferable(GetTopicButton.this);
+        }
+
+        @Override
+        public int getSourceActions(JComponent c) {
+            return TransferHandler.COPY_OR_MOVE;
+        }
+
+        @Override
+        public boolean importData(TransferHandler.TransferSupport support) {
+            
+            System.out.println("DROP ON GETTOPICBUTTON");
+            
+            if(!support.isDrop()) return false;
+            try {
+                TopicMap tm=Wandora.getWandora().getTopicMap();
+                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
+                if(topics==null || topics.isEmpty()) return false;
+                setTopic(topics.get(0));
+                
+                revalidate();
+                return true;
+            }
+            catch(TopicMapException tme) { tme.printStackTrace(); }
+            catch(Exception ce){}
+            return false;
+        }
+
+    }
+
 }

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
@@ -38,6 +39,7 @@ import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.topicmap.TMQLRunner;
 import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples;
 
@@ -54,7 +56,7 @@ public class TMQLPanel extends javax.swing.JPanel {
     private String TMQL_QUERY_OPTION_KEY = "tmqlQueries";
     private ArrayList<Tuples.T2<String,String>> storedTmqlQueries = new ArrayList<Tuples.T2<String,String>>();
     private MixedTopicTable resultsTable = null;
-    
+    private SimpleLabel message = null;
     
     /**
      * Creates new form TMQLPanel
@@ -62,6 +64,9 @@ public class TMQLPanel extends javax.swing.JPanel {
     public TMQLPanel() {
         wandora = Wandora.getWandora();
         initComponents();
+        message = new SimpleLabel();
+        message.setHorizontalAlignment(SimpleLabel.CENTER);
+        message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
         tmqlTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         readStoredTmqlQueries();
     }
@@ -150,23 +155,18 @@ public class TMQLPanel extends javax.swing.JPanel {
         }        
     }
     
-    public MixedTopicTable getTopicsByTMQL(){
-        TopicMap topicMap=wandora.getTopicMap();
-        String query=tmqlTextPane.getText();
-        try{
-            TMQLRunner.TMQLResult res=TMQLRunner.runTMQL(topicMap,query);
-            Object[][] data=res.getData();
-            Object[] columns=Arrays.copyOf(res.getColumns(), res.getNumColumns(), Object[].class);
+    
+    public MixedTopicTable getTopicsByTMQL() throws TopicMapException {
+        TopicMap topicMap = wandora.getTopicMap();
+        String query = tmqlTextPane.getText();
 
-            MixedTopicTable table=new MixedTopicTable(wandora);
-            table.initialize(data,columns);
-            return table;        
-        }
-        catch(Exception e){
-            wandora.handleError(e);
-            return null;
-        }
-        
+        TMQLRunner.TMQLResult res = TMQLRunner.runTMQL(topicMap,query);
+        Object[][] data = res.getData();
+        Object[] columns = Arrays.copyOf(res.getColumns(), res.getNumColumns(), Object[].class);
+
+        MixedTopicTable table = new MixedTopicTable(wandora);
+        table.initialize(data,columns);
+        return table;        
     }
 
     
@@ -176,6 +176,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         }
         tmqlResultPanel.revalidate();
         revalidate();
+        repaint();
     }
     
     
@@ -199,6 +200,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         tmqlTextPane = new SimpleTextPane();
         tmqlButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
+        clearResultsButton = new SimpleButton();
         tmqlResultPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
@@ -283,6 +285,14 @@ public class TMQLPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         tmqlButtonPanel.add(runButton, gridBagConstraints);
 
+        clearResultsButton.setText("Clear results");
+        clearResultsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearResultsButtonActionPerformed(evt);
+            }
+        });
+        tmqlButtonPanel.add(clearResultsButton, new java.awt.GridBagConstraints());
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -319,27 +329,41 @@ public class TMQLPanel extends javax.swing.JPanel {
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
         try {
             tmqlResultPanel.removeAll();
+            clearResultsButton.setEnabled(false);
             resultsTable = getTopicsByTMQL();
             if(resultsTable != null) {
                 tmqlResultPanel.add(resultsTable, BorderLayout.NORTH);
             }
             else {
-                SimpleLabel message = new SimpleLabel();
-                message.setText("No search results.");
-                tmqlResultPanel.add(message, BorderLayout.NORTH);
+                message.setText("No search results!");
+                tmqlResultPanel.add(message, BorderLayout.CENTER);
             }
             tmqlComboBox.setEditable(false);
             revalidate();
+            repaint();
         }
         catch(Exception e){
+            message.setText("Error!");
+            tmqlResultPanel.add(message, BorderLayout.CENTER);
+            revalidate();
+            repaint();
             wandora.handleError(e);
             return;
         }
     }//GEN-LAST:event_runButtonActionPerformed
 
+    private void clearResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearResultsButtonActionPerformed
+        clearResultsButton.setEnabled(false);
+        tmqlResultPanel.removeAll();
+        resultsTable = null;
+        revalidate();
+        repaint();
+    }//GEN-LAST:event_clearResultsButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addTmqlButton;
+    private javax.swing.JButton clearResultsButton;
     private javax.swing.JButton delTmqlButton;
     private javax.swing.JButton runButton;
     private javax.swing.JPanel selectQueryPanel1;

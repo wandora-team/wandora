@@ -42,7 +42,7 @@ public interface TopicSelector {
      */
     public Topic getSelectedTopic();
     /**
-     * Returns an array of selected topics. If no topics are selected retuns an
+     * Returns an array of selected topics. If no topics are selected returns an
      * array of 0 length;
      */
     public Topic[] getSelectedTopics();

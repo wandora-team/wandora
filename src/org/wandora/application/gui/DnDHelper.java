@@ -73,31 +73,41 @@ public class DnDHelper {
         topicGridDataFlavor=tg;
     }
 
-    public static WandoraTransferable makeTopicTableTransferable(MixedTopicTable table){
-        DnDHelper.WandoraTransferable ret = makeTopicTableTransferable(table.getSelectedValues(), table.getCopyString());
+    public static WandoraTransferable makeTopicTransferable(GetTopicButton button){
+        DnDHelper.WandoraTransferable ret = makeTopicTransferable(button.getTopic(), button.getCopyString());
+        return ret;
+    }
+    
+    public static WandoraTransferable makeTopicTransferable(MixedTopicTable table){
+        DnDHelper.WandoraTransferable ret = makeTopicTransferable(table.getSelectedValues(), table.getCopyString());
         return ret;
     }
     
     public static WandoraTransferable makeTopicTableTransferable(TopicTable table){
-        DnDHelper.WandoraTransferable ret = makeTopicTableTransferable(table.getSelectedTopics(), table.getCopyString());
+        DnDHelper.WandoraTransferable ret = makeTopicTransferable(table.getSelectedTopics(), table.getCopyString());
         return ret;
     }
     
-    public static WandoraTransferable makeTopicTableTransferable(TopicGrid grid){
+    public static WandoraTransferable makeTopicTransferable(TopicGrid grid){
         DnDHelper.WandoraTransferable ret=new DnDHelper.WandoraTransferable(grid.getSelectedTopicsNormalized());
         ret.setStringData(grid.getCopyString());
         return ret;
     }
     
-    public static WandoraTransferable makeTopicTableTransferable(Topic[] topics, String str) {
+    public static WandoraTransferable makeTopicTransferable(Topic[] topics, String str) {
         DnDHelper.WandoraTransferable ret=new DnDHelper.WandoraTransferable(topics);
         ret.setStringData(str);
         return ret;
     }
     
+    public static WandoraTransferable makeTopicTransferable(Topic topic, String str) {
+        DnDHelper.WandoraTransferable ret=new DnDHelper.WandoraTransferable(topic);
+        ret.setStringData(str);
+        return ret;
+    }
     
 
-    public static WandoraTransferable makeTopicTableTransferable(Object[][] objects, String str) {
+    public static WandoraTransferable makeTopicTransferable(Object[][] objects, String str) {
         ArrayList<Topic> selected=new ArrayList<Topic>();
         Object o = null;
         try {
@@ -120,7 +130,7 @@ public class DnDHelper {
 
     
 
-    public static WandoraTransferable makeTopicTableTransferable(TopicTable table, int[] rows, int[] columns){
+    public static WandoraTransferable makeTopicTransferable(TopicTable table, int[] rows, int[] columns){
         ArrayList<Topic> selected=new ArrayList<Topic>();
         StringBuilder sb=new StringBuilder();
         Topic t = null;

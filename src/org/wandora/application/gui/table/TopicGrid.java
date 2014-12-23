@@ -1913,7 +1913,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
         @Override
         protected Transferable createTransferable(JComponent c) {
             dragSourceComponent = TopicGrid.this;
-            Transferable trans = DnDHelper.makeTopicTableTransferable(TopicGrid.this);
+            Transferable trans = DnDHelper.makeTopicTransferable(TopicGrid.this);
             return trans;
         }
 
