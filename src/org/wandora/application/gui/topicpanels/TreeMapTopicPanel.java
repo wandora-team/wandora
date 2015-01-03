@@ -73,12 +73,19 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements TopicMapLis
     
     /** Creates new form TreeMapTopicPanel */
     public TreeMapTopicPanel() {
+    }
+    
+    
+    @Override
+    public void init() {
         initComponents();
         treeMapComponent = new TreeMapComponent(this);
         contentPanel.add(treeMapComponent, BorderLayout.CENTER);
         //contentPanel.addComponentListener(this);
     }
-
+    
+    
+    
     
     /** This method is called from within the constructor to
      * initialize the form.

@@ -83,11 +83,8 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     }
     
     
-    
-    
-    
     @Override
-    public void open(Topic topic) {
+    public void init() {
         this.wandora = Wandora.getWandora();
         if(this.options == null) {
             // Notice, a copy of global options is created for local use.
@@ -105,7 +102,11 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         catch(Exception e) {
             e.printStackTrace();
         }
-
+    }
+    
+    
+    @Override
+    public void open(Topic topic) {
         try {
             this.topic = topic;
             this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
@@ -125,7 +126,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             { instancesRootPanel,           "View instances",       "instancesRootPanel"  },
             { previewPanel,                 "View subject locators", "previewPanel" },
         };
-        
+
         associationRootPanel.setTransferHandler(new AssociationTableTransferHandler(this));
         instancesRootPanel.setTransferHandler(new InstancesPanelTransferHandler(this));
         classesRootPanel.setTransferHandler(new ClassesPanelTransferHandler(this));

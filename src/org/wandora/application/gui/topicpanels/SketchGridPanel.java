@@ -65,20 +65,19 @@ public class SketchGridPanel extends javax.swing.JPanel implements TopicMapListe
     private int gridHeight = 200;
     private TopicGrid topicGrid;
     private boolean needsRefresh = false;
-    private boolean uiInitialized = false;
-    
-    
-    
+
+
 
     /**
      * Creates new form SketchGridPanel
      */
     public SketchGridPanel() {
-        uiInitialized = false;
     }
     
     
-    private void initializeUI() {
+    
+    @Override
+    public void init() {
         initComponents();
         this.addComponentListener(this);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -107,10 +106,6 @@ public class SketchGridPanel extends javax.swing.JPanel implements TopicMapListe
 
     @Override
     public void open(Topic topic) throws TopicMapException {
-        if(!uiInitialized) {
-            initializeUI();
-            uiInitialized = true;
-        }
         ArrayList<int[]> cells = topicGrid.getSelectedCells();
         if(cells != null && !cells.isEmpty()) {
             topicGrid.setCurrentTopic(topic);

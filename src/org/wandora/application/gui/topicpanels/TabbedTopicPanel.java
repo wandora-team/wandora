@@ -89,12 +89,8 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     
     
     
-    
-    
-    
-    
     @Override
-    public void open(Topic topic) {
+    public void init() {
         this.wandora = Wandora.getWandora();
         
         if(this.options == null) {
@@ -102,10 +98,20 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
             // Thus, local adjustments have no global effect.
             this.options = new Options(wandora.getOptions());
         }
-        this.removeAll();
-        initComponents();
+ 
+    }
+    
+    
+    
+    
+    
+    @Override
+    public void open(Topic topic) {
         
-        tabStruct = new Object[][] {
+       this.removeAll();
+       initComponents();
+        
+       tabStruct = new Object[][] {
             { subjectScrollPanel,      "Subject",          "View subject tab",       "subjectScrollPanel" },
             { variantScrollPanel,      "Names",            "View names tab",         "variantScrollPanel" },
             { dataScrollPanel,         "Occurrences",      "View occurrences tab",   "dataScrollPanel" },

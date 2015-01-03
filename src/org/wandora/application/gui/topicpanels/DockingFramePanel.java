@@ -128,6 +128,12 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     
     public DockingFramePanel() {
+    }
+    
+    
+    
+    @Override
+    public void init() {
         backgroundImage = UIBox.getImage("gui/startup_image.gif");
         backgroundImageWidth = backgroundImage.getWidth();
         backgroundImageHeight = backgroundImage.getHeight();
@@ -146,8 +152,6 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         
         dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
     }
-    
-    
     
     // -------------------------------------------------------------------------
     
@@ -505,7 +509,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             for(Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
                 if(tp != null) {
-                    struct.add("Close "+tp.getName()+" w "+dockable.getTitleText());
+                    String label = "Close "+tp.getName();
+                    label = label + getAdditionalLabel(tp);
+                    struct.add(label);
                     struct.add( tp.getIcon() );
                     struct.add( new DeleteDockable(dockable) );
                 }
@@ -524,7 +530,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             for(Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
                 if(tp != null) {
-                    struct.add("Select "+tp.getName()+" w "+dockable.getTitleText());
+                    String label = "Select "+tp.getName();
+                    label = label + getAdditionalLabel(tp);
+                    struct.add(label);
                     struct.add( tp.getIcon() );
                     struct.add( new SelectDockable(dockable) );
                 }
@@ -545,7 +553,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             for(Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
                 if(tp != null) {
-                    SimpleMenu confMenu = new SimpleMenu("Configure "+tp.getName()+" w "+dockable.getTitleText());
+                    String label = "Configure "+tp.getName();
+                    label = label + getAdditionalLabel(tp);
+                    SimpleMenu confMenu = new SimpleMenu(label);
                     confMenu.setIcon(tp.getIcon());
                     UIBox.attachMenu(confMenu, tp.getViewMenuStruct(), wandora);
                     struct.add( confMenu );
@@ -559,7 +569,27 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     }
     
 
+    
+    public static String getAdditionalLabel(TopicPanel tp) {
+        String additionalLabel = "";
+        try {
+            Topic t = tp.getTopic();
+            if(t != null) {
+                additionalLabel = TopicToString.toString(t);
+                if(additionalLabel.length() > 30) {
+                    additionalLabel = additionalLabel.substring(0,27) + "...";
+                }
+                additionalLabel = " w " + additionalLabel;
+            }
+        }
+        catch(Exception e) {
+            // IGNORE
+        }
+        return additionalLabel;
+    }
 
+    
+    
 
     // -------------------------------------------------------------------------
 
@@ -589,6 +619,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         Icon icon = tp.getIcon();
 
         try {
+            tp.init();
             if(tp.supportsOpenTopic()) {
                 tp.open(topic);
             }

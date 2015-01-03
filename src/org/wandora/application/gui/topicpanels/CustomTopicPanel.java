@@ -81,6 +81,12 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     public CustomTopicPanel() {
     }
 
+    
+    @Override
+    public void init() {
+    }
+    
+    
     @Override
     public Topic getTopic() throws TopicMapException {
         return topic;

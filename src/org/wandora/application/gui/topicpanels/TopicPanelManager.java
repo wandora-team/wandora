@@ -49,7 +49,7 @@ import org.wandora.exceptions.OpenTopicNotSupportedException;
  */
 public class TopicPanelManager implements ActionListener {
 
-    
+    private HashSet<String> topicPanelsSupportingOpenTopic = new HashSet();
     private HashMap<String,String> topicPanelMap = new HashMap();
     private HashMap<String,Integer> topicPanelOrder = new HashMap();
     private HashMap<String,Icon> topicPanelIcon = new HashMap();
@@ -135,9 +135,11 @@ public class TopicPanelManager implements ActionListener {
                     currentTopicPanel.stop();
                 }
                 currentTopicPanel = getTopicPanel(currentTopicPanelName);
+                currentTopicPanel.init();
             }
             if(currentTopicPanel == null) {
                 currentTopicPanel = new DockingFramePanel();
+                currentTopicPanel.init();
             }
         }
         catch (Exception e) {
@@ -224,6 +226,9 @@ public class TopicPanelManager implements ActionListener {
                                     topicPanelMap.put(panelName, className);
                                     topicPanelOrder.put(panelName, topicPanel.getOrder());
                                     topicPanelIcon.put(panelName, topicPanel.getIcon());
+                                    if(topicPanel.supportsOpenTopic()) {
+                                        topicPanelsSupportingOpenTopic.add(className);
+                                    }
                                 }
                                 else {
                                      //System.out.println("NOT A TopicPanel!!! " + className);
@@ -257,6 +262,26 @@ public class TopicPanelManager implements ActionListener {
         
         return availablePanels;
     }
+    
+    
+    
+    public ArrayList<ArrayList> getAvailableTopicPanelsSupportingOpenTopic() {
+        ArrayList availablePanels = new ArrayList<ArrayList>();
+        for(String panelName : sortedTopicPanels()) {
+            ArrayList panelData = new ArrayList();
+            String panelClass = topicPanelMap.get(panelName);
+            if(topicPanelsSupportingOpenTopic.contains(panelClass)) {
+                panelData.add(panelClass);
+                panelData.add(panelName);
+                panelData.add(topicPanelIcon.get(panelName));
+
+                availablePanels.add(panelData);
+            }
+        }
+        
+        return availablePanels;
+    }
+    
     
     
     

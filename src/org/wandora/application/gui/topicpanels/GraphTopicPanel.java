@@ -55,17 +55,17 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
 
     protected Wandora wandora = null;
     private TopicMapGraphPanel graphPanel;
-    private boolean guiInitialized = false;
     private HashMap<Integer,SimpleToggleButton> toolButtons;
     private Options localOptions = null;
     
     
     public GraphTopicPanel() {
-        guiInitialized = false;
     }
     
-    public void initializeGui(Wandora w) {
-        this.wandora = w;
+    
+    @Override
+    public void init() {
+        this.wandora = Wandora.getWandora();
         JPanel leftPane=new JPanel();
         leftPane.setLayout(new BorderLayout());
         
@@ -94,8 +94,6 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
         
         FilterManagerPanel filterManager=new FilterManagerPanel(wandora);
         graphPanel.setFilterManagerPanel(filterManager);
-        
-        guiInitialized = true;
     }
     
     
@@ -298,8 +296,6 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
     
     @Override
     public void open(Topic topic) throws TopicMapException {
-        this.wandora = Wandora.getWandora();
-        if(!guiInitialized) initializeGui(wandora);
         graphPanel.setRootTopic(topic);
     }
 

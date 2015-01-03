@@ -75,6 +75,11 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
      * Creates new form SearchTopicPanel
      */
     public SearchTopicPanel() {
+    }
+    
+    
+    @Override
+    public void init() {
         Wandora wandora = Wandora.getWandora();
         this.options = new Options(wandora.getOptions());
         initComponents();
@@ -92,9 +97,6 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
             e.printStackTrace();
         }
     }
-    
-    
-    
     
     
     private void setCurrentPanel(Component p) {

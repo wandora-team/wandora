@@ -161,9 +161,7 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
     private JFrame proWin = null;
     private int lastLocX, lastLocY;
     private boolean isCurrentBuildInWindow = false;
-    
-    private boolean isUIInitialized = false;
-    
+
     private int charactersBefore = 0;
     private int linesBeforeCode = 0;
     
@@ -242,6 +240,88 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
     }
     
     
+    
+    @Override
+    public void init() {
+        Wandora wandora = Wandora.getWandora();
+        if(options == null) {
+            if(USE_LOCAL_OPTIONS) {
+                options = new Options(wandora.getOptions());
+            }
+            else {
+                options = wandora.getOptions();
+            }
+        }
+        tm = wandora.getTopicMap();
+        initComponents();
+        this.addComponentListener(this);
+        DefaultSyntaxKit.initKit();
+        processingEditor.setContentType("text/java");
+        
+        /*
+        EditorKit ek=processingEditor.getEditorKit();
+        if(ek instanceof DefaultSyntaxKit){
+            DefaultSyntaxKit sk=(DefaultSyntaxKit)ek;
+            sk.setProperty("Action.parenthesis", null); 
+            sk.setProperty("Action.brackets", null);
+            sk.setProperty("Action.quotes", null);
+            sk.setProperty("Action.double-quotes", null);
+            sk.setProperty("Action.close-curly", null);
+        }*/
+
+        readOptions();
+
+        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
+        processingEditor.getInputMap().put(key, "saveOperation");
+        Action saveOperation = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveCurrentSketch();
+            }
+        };
+
+        processingEditor.getActionMap().put("saveOperation", saveOperation);
+        innerPanel.addComponentListener(
+            new ComponentListener() {
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    revalidate();
+                    Wandora.getWandora().validate();
+                }
+
+                @Override
+                public void componentMoved(ComponentEvent e) {
+                    revalidate();
+                    Wandora.getWandora().validate();
+                }
+
+                @Override
+                public void componentShown(ComponentEvent e) {
+                    revalidate();
+                    Wandora.getWandora().validate();
+                }
+
+                @Override
+                public void componentHidden(ComponentEvent e) {
+                    revalidate();
+                    Wandora.getWandora().validate();
+                }
+            }
+        );
+        if(currentSketch != null) {
+            processingEditor.setText(currentSketch);
+        }
+        else {
+            processingEditor.setText(defaultMessage);
+        }
+
+        FileNameExtensionFilter sketchFilter = new FileNameExtensionFilter("Processing sketch files", "sketch");
+        fc = new JFileChooser();
+        fc.setFileFilter(sketchFilter);
+        fc.setCurrentDirectory(new File(sketchPath));
+    }
+    
+    
     @Override
     public boolean supportsOpenTopic() {
         return true;
@@ -252,84 +332,7 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
     @Override
     public void open(Topic topic) throws TopicMapException {
 	rootTopic = topic;
-	if(!isUIInitialized) {
-            isUIInitialized = true;
-            Wandora wandora = Wandora.getWandora();
-            if(options == null) {
-                if(USE_LOCAL_OPTIONS) {
-                    options = new Options(wandora.getOptions());
-                }
-                else {
-                    options = wandora.getOptions();
-                }
-            }
-	    tm = wandora.getTopicMap();
-	    initComponents();
-	    this.addComponentListener(this);
-	    DefaultSyntaxKit.initKit();
-	    processingEditor.setContentType("text/java");
-/*
-            EditorKit ek=processingEditor.getEditorKit();
-            if(ek instanceof DefaultSyntaxKit){
-                DefaultSyntaxKit sk=(DefaultSyntaxKit)ek;
-                sk.setProperty("Action.parenthesis", null); 
-                sk.setProperty("Action.brackets", null);
-                sk.setProperty("Action.quotes", null);
-                sk.setProperty("Action.double-quotes", null);
-                sk.setProperty("Action.close-curly", null);
-            }*/
 
-	    readOptions();
-	    
-	    KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
-	    processingEditor.getInputMap().put(key, "saveOperation");
-	    Action saveOperation = new AbstractAction() {
-                @Override
-		public void actionPerformed(ActionEvent e) {
-		    saveCurrentSketch();
-		}
-	    };
-            
-	    processingEditor.getActionMap().put("saveOperation", saveOperation);
-            innerPanel.addComponentListener(
-                new ComponentListener() {
-                    @Override
-                    public void componentResized(ComponentEvent e) {
-                        revalidate();
-                        Wandora.getWandora().validate();
-                    }
-
-                    @Override
-                    public void componentMoved(ComponentEvent e) {
-                        revalidate();
-                        Wandora.getWandora().validate();
-                    }
-
-                    @Override
-                    public void componentShown(ComponentEvent e) {
-                        revalidate();
-                        Wandora.getWandora().validate();
-                    }
-
-                    @Override
-                    public void componentHidden(ComponentEvent e) {
-                        revalidate();
-                        Wandora.getWandora().validate();
-                    }
-                }
-            );
-            if(currentSketch != null) {
-                processingEditor.setText(currentSketch);
-            }
-            else {
-                processingEditor.setText(defaultMessage);
-            }
-            
-            FileNameExtensionFilter sketchFilter = new FileNameExtensionFilter("Processing sketch files", "sketch");
-            fc = new JFileChooser();
-            fc.setFileFilter(sketchFilter);
-            fc.setCurrentDirectory(new File(sketchPath));
-	}
         if(autoloadOccurrenceCheckBox.isSelected()) {
             String sketch = getProcessingSketchOccurrence();
             if(sketch != null) {

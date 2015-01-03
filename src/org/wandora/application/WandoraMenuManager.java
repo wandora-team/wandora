@@ -1965,9 +1965,7 @@ public class WandoraMenuManager {
                 for(Dockable dockable : dockedTopicPanels.keySet()) {
                     TopicPanel tp = dockedTopicPanels.get(dockable);
                     if(tp != null && tp.supportsOpenTopic()) {
-                        String withTitle = dockable.getTitleText();
-                        if(withTitle.length() > 30) withTitle = withTitle.substring(0, 27)+"...";
-                        struct.add(tp.getName()+" w "+withTitle);
+                        struct.add( tp.getName() + DockingFramePanel.getAdditionalLabel(tp) );
                         struct.add( tp.getIcon() );
                         struct.add( new OpenTopicIn(tp) );
                     }
@@ -1977,7 +1975,7 @@ public class WandoraMenuManager {
                 struct.add("[No panels open]");
             }
             struct.add("---");
-            ArrayList<ArrayList> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
+            ArrayList<ArrayList> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanelsSupportingOpenTopic();
             for(ArrayList panelData : availableTopicPanels) {
                 try {
                     Class panelClass = Class.forName((String) panelData.get(0));

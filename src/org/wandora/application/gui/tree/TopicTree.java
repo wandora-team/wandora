@@ -106,8 +106,8 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     }
     public TopicTree(String rootTopicSI, Wandora parent,SchemaTreeTopicChooser chooser) throws TopicMapException {
         this(rootTopicSI,parent,GripCollections.newHashSet("Instances","Subclasses"),new TreeAssociation[]{
-                new TreeAssociation("Instances","","","","gui/icons/topictree/document01.png"),
-                new TreeAssociation("Subclasses",XTMPSI.SUBCLASS,XTMPSI.SUPERCLASS_SUBCLASS,XTMPSI.SUPERCLASS,"gui/icons/topictree/folder01.png")
+                new TreeAssociation("Instances","","","","gui/icons/topictree/instanceof.png"),
+                new TreeAssociation("Subclasses",XTMPSI.SUBCLASS,XTMPSI.SUPERCLASS_SUBCLASS,XTMPSI.SUPERCLASS,"gui/icons/topictree/supersubclass.png")
         },chooser);
     }
     public TopicTree(String rootTopicSI, Wandora parent, Set<String> selectedAssociations, TreeAssociation[] associations) throws TopicMapException {

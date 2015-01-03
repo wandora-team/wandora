@@ -53,6 +53,12 @@ public class QueryEditorTopicPanel implements TopicPanel {
         panel=new QueryEditorComponent();
     }
     
+    
+    @Override
+    public void init() {
+    }
+    
+    
     @Override
     public boolean supportsOpenTopic() {
         return true;

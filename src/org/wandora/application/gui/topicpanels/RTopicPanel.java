@@ -157,7 +157,48 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
     }
 
     
-    
+    @Override
+    public void init() {
+        Wandora wandora = Wandora.getWandora();
+        tm = wandora.getTopicMap();
+
+        if(options == null) {
+            if(USE_LOCAL_OPTIONS) {
+                options = new Options(wandora.getOptions());
+            }
+            else {
+                options = wandora.getOptions();
+            }
+        }
+
+        initComponents();
+        this.addComponentListener(this);
+        //DefaultSyntaxKit.initKit();
+        //rEditor.setContentType("text/java");
+        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
+        rEditor.getInputMap().put(key, "saveOperation");
+        Action saveOperation = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveScript();
+            }
+        };
+        rEditor.getActionMap().put("saveOperation", saveOperation);
+
+        rBridge = RBridge.getRBridge();
+        rBridge.addRBridgeListener(this);
+
+        fc = new JFileChooser();
+        fc.setCurrentDirectory(new File(scriptPath));
+
+        readOptions();
+        if(currentScript != null) {
+            rEditor.setText(currentScript);
+        }
+        else {
+            rEditor.setText(defaultMessage);
+        }
+    }
     
     
     
@@ -632,49 +673,7 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
     @Override
     public void open(Topic topic) throws TopicMapException {
 	rootTopic = topic;
-        Wandora wandora = Wandora.getWandora();
-        tm = wandora.getTopicMap();
-
-	if(!isGuiInitialized) {
-	    isGuiInitialized = true;
-            
-            if(options == null) {
-                if(USE_LOCAL_OPTIONS) {
-                    options = new Options(wandora.getOptions());
-                }
-                else {
-                    options = wandora.getOptions();
-                }
-            }
-            
-	    initComponents();
-	    this.addComponentListener(this);
-	    //DefaultSyntaxKit.initKit();
-	    //rEditor.setContentType("text/java");
-            KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
-	    rEditor.getInputMap().put(key, "saveOperation");
-	    Action saveOperation = new AbstractAction() {
-                @Override
-		public void actionPerformed(ActionEvent e) {
-		    saveScript();
-		}
-	    };
-	    rEditor.getActionMap().put("saveOperation", saveOperation);
-            
-            rBridge = RBridge.getRBridge();
-            rBridge.addRBridgeListener(this);
-            
-            fc = new JFileChooser();
-            fc.setCurrentDirectory(new File(scriptPath));
-            
-            readOptions();
-            if(currentScript != null) {
-                rEditor.setText(currentScript);
-            }
-            else {
-                rEditor.setText(defaultMessage);
-            }
-	}
+        
         if(autoloadFromOccurrence) {
             rEditor.setText(getROccurrence());
         }

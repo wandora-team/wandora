@@ -263,7 +263,7 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         searchFieldPanel.setLayout(new java.awt.GridBagLayout());
 
         searchWords.setEditable(true);
-        searchWords.setPreferredSize(new java.awt.Dimension(29, 21));
+        searchWords.setPreferredSize(new java.awt.Dimension(29, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -275,9 +275,9 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         startSearchButton.setFont(org.wandora.application.gui.UIConstants.smallButtonLabelFont);
         startSearchButton.setText("Search");
         startSearchButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        startSearchButton.setMaximumSize(new java.awt.Dimension(60, 21));
-        startSearchButton.setMinimumSize(new java.awt.Dimension(60, 21));
-        startSearchButton.setPreferredSize(new java.awt.Dimension(60, 21));
+        startSearchButton.setMaximumSize(new java.awt.Dimension(60, 23));
+        startSearchButton.setMinimumSize(new java.awt.Dimension(60, 23));
+        startSearchButton.setPreferredSize(new java.awt.Dimension(60, 23));
         startSearchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 doSearch(evt);

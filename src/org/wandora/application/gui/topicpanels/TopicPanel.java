@@ -46,6 +46,13 @@ public interface TopicPanel extends TopicMapListener {
    
     
     /*
+     * Initialize the TopicPanel. Called always before the topic panel is used
+     */
+    public void init();
+    
+    
+    
+    /*
      * Does the topic panel support topic open? In other words can one call the
      * open method with a topic.
      */
