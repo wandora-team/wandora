@@ -649,7 +649,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
 
         useNGrams.setSelected(true);
         useNGrams.setText("Compare n-grams instead of complete strings");
-        useNGrams.setToolTipText("<html>If the target string is longer than user specified similarity text,<br>split target string into n-grams and choose biggest n-gram similarity value.</html>");
+        useNGrams.setToolTipText("<html>If the target string is longer than user specified similarity text,<br>split the target string into n-grams and choose biggest n-gram similarity value.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         jPanel3.add(useNGrams, gridBagConstraints);

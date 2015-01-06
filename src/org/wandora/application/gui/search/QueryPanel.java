@@ -30,13 +30,16 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
@@ -48,6 +51,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.query2.Directive;
 import org.wandora.query2.QueryContext;
@@ -325,7 +329,7 @@ public class QueryPanel extends javax.swing.JPanel {
         engineComboBox = new SimpleComboBox();
         scriptLabel = new SimpleLabel();
         scriptScrollPane = new javax.swing.JScrollPane();
-        scriptTextPane = new SimpleTextPane();
+        scriptTextPane = new QueryTextPane();
         scripButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
         clearResultsButton = new SimpleButton();
@@ -587,4 +591,56 @@ public class QueryPanel extends javax.swing.JPanel {
     private javax.swing.JTextPane scriptTextPane;
     private javax.swing.JPanel selectQueryPanel;
     // End of variables declaration//GEN-END:variables
+
+
+
+    
+    
+    
+    
+    private class QueryTextPane extends SimpleTextPaneResizeable {
+    
+        private int scriptQueryPanelWidth = 100;
+        private int scriptQueryPanelHeight = scriptQueryPanel.getHeight();
+        
+        
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            Point p = e.getPoint();
+            if(mousePressedInTriangle) {
+                inTheTriangleZone = true;
+                int yDiff = (mousePressedPoint.y - p.y);
+                newSize = new Dimension(100, sizeAtPress.height - yDiff);
+
+                JScrollPane sp = getScrollPane();
+
+                if(scrollPane != null) {
+                    sp.getViewport().setSize(newSize);
+                    sp.getViewport().setPreferredSize(newSize);
+                    sp.getViewport().setMinimumSize(newSize);
+
+                    sp.setSize(newSize);
+                    sp.setPreferredSize(newSize);
+                    sp.setMinimumSize(newSize);
+                }
+
+                scriptQueryPanel.setSize(scriptQueryPanelWidth, scriptQueryPanelHeight - yDiff);
+                scriptQueryPanel.revalidate();
+                scriptQueryPanel.repaint();
+            }
+        }
+        
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            if(mousePressedInTriangle) {
+                scriptQueryPanelHeight = scriptQueryPanel.getHeight();
+            }
+        }
+        
+    }
+
+
+
 }

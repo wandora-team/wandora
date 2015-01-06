@@ -24,10 +24,14 @@
 package org.wandora.application.gui.search;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
@@ -36,6 +40,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.topicmap.TMQLRunner;
 import org.wandora.topicmap.TopicMap;
@@ -68,6 +73,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         message.setHorizontalAlignment(SimpleLabel.CENTER);
         message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
         tmqlTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        ((TMQLTextPane) tmqlTextPane).setHorizontallyResizeable(false);
         readStoredTmqlQueries();
     }
 
@@ -197,7 +203,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         addTmqlButton = new SimpleButton();
         delTmqlButton = new SimpleButton();
         tmqlScrollPane = new javax.swing.JScrollPane();
-        tmqlTextPane = new SimpleTextPane();
+        tmqlTextPane = new TMQLTextPane();
         tmqlButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
         clearResultsButton = new SimpleButton();
@@ -253,7 +259,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         tmqlPanel.add(selectQueryPanel1, gridBagConstraints);
 
-        tmqlTextPane.setPreferredSize(new java.awt.Dimension(6, 100));
+        tmqlScrollPane.setPreferredSize(new java.awt.Dimension(2, 100));
         tmqlScrollPane.setViewportView(tmqlTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -374,4 +380,54 @@ public class TMQLPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane tmqlScrollPane;
     private javax.swing.JTextPane tmqlTextPane;
     // End of variables declaration//GEN-END:variables
+
+
+    
+
+    
+    private class TMQLTextPane extends SimpleTextPaneResizeable {
+    
+        private int tmqlPanelWidth = 100;
+        private int tmqlPanelHeight = tmqlPanel.getHeight();
+        
+        
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            Point p = e.getPoint();
+            if(mousePressedInTriangle) {
+                inTheTriangleZone = true;
+                int yDiff = (mousePressedPoint.y - p.y);
+                newSize = new Dimension(100, sizeAtPress.height - yDiff);
+
+                JScrollPane sp = getScrollPane();
+
+                if(scrollPane != null) {
+                    sp.getViewport().setSize(newSize);
+                    sp.getViewport().setPreferredSize(newSize);
+                    sp.getViewport().setMinimumSize(newSize);
+
+                    sp.setSize(newSize);
+                    sp.setPreferredSize(newSize);
+                    sp.setMinimumSize(newSize);
+                }
+
+                tmqlPanel.setSize(tmqlPanelWidth, tmqlPanelHeight - yDiff);
+                tmqlPanel.revalidate();
+                tmqlPanel.repaint();
+            }
+        }
+        
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            if(mousePressedInTriangle) {
+                Point p = e.getPoint();
+                tmqlPanelHeight = tmqlPanel.getHeight();
+            }
+        }
+        
+    }
+
+
 }
