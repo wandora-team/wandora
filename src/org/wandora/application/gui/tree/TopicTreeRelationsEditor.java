@@ -19,39 +19,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * TreeAssociationTypesEditor.java
+ * TopicTreeRelationsEditor.java
  *
  * Created on 13. helmikuuta 2006, 13:13
  */
 
-package org.wandora.application.gui;
-import org.wandora.application.gui.tree.TopicTree;
+package org.wandora.application.gui.tree;
 import org.wandora.utils.Options;
 import org.wandora.utils.GripCollections;
 import javax.swing.*;
 import java.util.*;
 import java.awt.*;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.XTMPSI;
-import org.wandora.*;
 import org.wandora.application.*;
-import org.wandora.utils.*;
-import org.wandora.application.gui.simple.*;
+
+
+
 /**
  *
  * @author  olli
  */
-public class TreeAssociationTypesEditor extends javax.swing.JPanel {
+public class TopicTreeRelationsEditor extends javax.swing.JPanel {
     
-    private TopicTree.TreeAssociation[] associations;
+    private TopicTreeRelation[] relations;
     private boolean cancelled=true;
     
     private Component parent;
     private Wandora admin;
     
+    
+    
     /** Creates new form TreeAssociationTypesEditor */
-    public TreeAssociationTypesEditor(TopicTree.TreeAssociation[] allAssociations,Component parent,Wandora admin)  throws TopicMapException {
-        this.associations=allAssociations;
+    public TopicTreeRelationsEditor(TopicTreeRelation[] allRelations,Component parent,Wandora admin) throws TopicMapException {
+        this.relations=allRelations;
         this.parent=parent;
         this.admin=admin;
         initComponents();
@@ -61,26 +61,26 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
 
 
 
-    public static TopicTree.TreeAssociation[] readAssociationTypes(Options options){
-        int counter=0;
-        Vector<TopicTree.TreeAssociation> v=new Vector<TopicTree.TreeAssociation>();
-        while(true){
+    public static TopicTreeRelation[] readRelationTypes(Options options) {
+        int counter = 0;
+        ArrayList<TopicTreeRelation> v = new ArrayList<TopicTreeRelation>();
+        while(true) {
             String name=options.get("topictreetypes.type["+counter+"].name");
             if(name==null) break;
             String subSI=options.get("topictreetypes.type["+counter+"].subsi");
             String assocSI=options.get("topictreetypes.type["+counter+"].assocsi");
             String superSI=options.get("topictreetypes.type["+counter+"].supersi");
             String icon=options.get("topictreetypes.type["+counter+"].icon");
-            v.add(new TopicTree.TreeAssociation(name,subSI,assocSI,superSI,icon));
+            v.add(new TopicTreeRelation(name,subSI,assocSI,superSI,icon));
             counter++;
         }
-        return GripCollections.collectionToArray(v,TopicTree.TreeAssociation.class);
+        return GripCollections.collectionToArray(v,TopicTreeRelation.class);
     }
 
 
 
 
-    public static void writeAssociationTypes(Options options, TopicTree.TreeAssociation[] associations){
+    public static void writeAssociationTypes(Options options, TopicTreeRelation[] associations) {
         for(int i=0;i<associations.length;i++){
             options.put("topictreetypes.type["+i+"].name",associations[i].name);
             options.put("topictreetypes.type["+i+"].subsi",associations[i].subSI);
@@ -105,16 +105,24 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
 
     
     private void updateAssociationsPanel() throws TopicMapException {
-        associationsPanel.removeAll();
-        for(int i=0;i<associations.length;i++){
+        relationsPanel.removeAll();
+        for(int i=0; i<relations.length; i++){
             GridBagConstraints gbc=new GridBagConstraints();
             gbc.gridx=0;
             gbc.gridy=i;
             gbc.weightx=1.0;
             gbc.fill=GridBagConstraints.HORIZONTAL;
-            TreeAssociationTypeEditorPanel tatep=new TreeAssociationTypeEditorPanel(associations[i].name,
-                    associations[i].subSI,associations[i].assocSI,associations[i].superSI,associations[i].icon,this,admin);
-            associationsPanel.add(tatep,gbc);
+            TopicTreeRelationEditorPanel tatep = 
+                new TopicTreeRelationEditorPanel(
+                    relations[i].name,
+                    relations[i].subSI,
+                    relations[i].assocSI,
+                    relations[i].superSI,
+                    relations[i].icon,
+                    this,
+                    admin
+                );
+            relationsPanel.add(tatep,gbc);
         }        
         addFillerPanel();
     }
@@ -124,33 +132,33 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
     private void addFillerPanel(){
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridx=0;
-        gbc.gridy=associationsPanel.getComponentCount();
+        gbc.gridy=relationsPanel.getComponentCount();
         gbc.fill=GridBagConstraints.VERTICAL;
         gbc.weighty=1.0;
         JPanel panel=new JPanel();
-        associationsPanel.add(panel,gbc);        
+        relationsPanel.add(panel,gbc);        
     }
 
 
 
 
-    public void deleted(TreeAssociationTypeEditorPanel editor){
-        TreeAssociationTypeEditorPanel[] panels=new TreeAssociationTypeEditorPanel[associationsPanel.getComponentCount()-2];
+    public void deleted(TopicTreeRelationEditorPanel editor){
+        TopicTreeRelationEditorPanel[] panels=new TopicTreeRelationEditorPanel[relationsPanel.getComponentCount()-2];
         int counter=0;
-        TreeAssociationTypeEditorPanel panel = null;
+        TopicTreeRelationEditorPanel panel = null;
         GridBagConstraints gbc = null;
-        for(int i=0;i<associationsPanel.getComponentCount()-1;i++){
-            panel=(TreeAssociationTypeEditorPanel)associationsPanel.getComponent(i);
+        for(int i=0; i<relationsPanel.getComponentCount()-1; i++){
+            panel=(TopicTreeRelationEditorPanel)relationsPanel.getComponent(i);
             if(panel!=editor) panels[counter++]=panel;
         }
-        associationsPanel.removeAll();
-        for(int i=0;i<panels.length;i++){
+        relationsPanel.removeAll();
+        for(int i=0; i<panels.length; i++){
             gbc=new GridBagConstraints();
             gbc.gridx=0;
             gbc.gridy=i;
             gbc.weightx=1.0;
             gbc.fill=GridBagConstraints.HORIZONTAL;
-            associationsPanel.add(panels[i],gbc);
+            relationsPanel.add(panels[i],gbc);
         }
         addFillerPanel();
         this.revalidate();
@@ -159,13 +167,13 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
 
 
 
-    public TopicTree.TreeAssociation[] getAssociationTypes() throws TopicMapException {
-        Vector<TopicTree.TreeAssociation> v=new Vector<TopicTree.TreeAssociation>();
-        for(int i=0;i<associationsPanel.getComponentCount()-1;i++){
-            TreeAssociationTypeEditorPanel panel=(TreeAssociationTypeEditorPanel)associationsPanel.getComponent(i);
-            v.add(panel.getAssociation());
+    public TopicTreeRelation[] getRelationTypes() throws TopicMapException {
+        ArrayList<TopicTreeRelation> v = new ArrayList<TopicTreeRelation>();
+        for(int i=0; i<relationsPanel.getComponentCount()-1; i++){
+            TopicTreeRelationEditorPanel panel = (TopicTreeRelationEditorPanel)relationsPanel.getComponent(i);
+            v.add(panel.getRelation());
         }
-        return GripCollections.collectionToArray(v,TopicTree.TreeAssociation.class);
+        return GripCollections.collectionToArray(v, TopicTreeRelation.class);
     }
 
 
@@ -176,22 +184,22 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
      */
-    // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        associationsPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        addButton = new SimpleButton();
-        okButton = new SimpleButton();
-        cancelButton = new SimpleButton();
+        relationsScrollPane = new javax.swing.JScrollPane();
+        relationsPanel = new javax.swing.JPanel();
+        buttonPanel = new javax.swing.JPanel();
+        addButton = new org.wandora.application.gui.simple.SimpleButton();
+        fillerPanel = new javax.swing.JPanel();
+        okButton = new org.wandora.application.gui.simple.SimpleButton();
+        cancelButton = new org.wandora.application.gui.simple.SimpleButton();
 
         setLayout(new java.awt.GridBagLayout());
 
-        associationsPanel.setLayout(new java.awt.GridBagLayout());
-
-        jScrollPane1.setViewportView(associationsPanel);
+        relationsPanel.setLayout(new java.awt.GridBagLayout());
+        relationsScrollPane.setViewportView(relationsPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -199,9 +207,9 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(jScrollPane1, gridBagConstraints);
+        add(relationsScrollPane, gridBagConstraints);
 
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        buttonPanel.setLayout(new java.awt.GridBagLayout());
 
         addButton.setText("Add");
         addButton.setMaximumSize(new java.awt.Dimension(70, 23));
@@ -212,12 +220,16 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
                 addButtonActionPerformed(evt);
             }
         });
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 26);
-        jPanel1.add(addButton, gridBagConstraints);
+        buttonPanel.add(addButton, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        buttonPanel.add(fillerPanel, gridBagConstraints);
 
         okButton.setText("OK");
         okButton.setMaximumSize(new java.awt.Dimension(70, 23));
@@ -228,11 +240,10 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
                 okButtonActionPerformed(evt);
             }
         });
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 3, 5, 3);
-        jPanel1.add(okButton, gridBagConstraints);
+        buttonPanel.add(okButton, gridBagConstraints);
 
         cancelButton.setText("Cancel");
         cancelButton.setMaximumSize(new java.awt.Dimension(70, 23));
@@ -243,19 +254,18 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
                 cancelButtonActionPerformed(evt);
             }
         });
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 3, 5, 3);
-        jPanel1.add(cancelButton, gridBagConstraints);
+        buttonPanel.add(cancelButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        add(jPanel1, gridBagConstraints);
-
+        add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -275,16 +285,17 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
     }
     
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        associationsPanel.remove(associationsPanel.getComponentCount()-1);
+        relationsPanel.remove(relationsPanel.getComponentCount()-1);
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridx=0;
-        gbc.gridy=associationsPanel.getComponentCount();
+        gbc.gridy=relationsPanel.getComponentCount();
         gbc.weightx=1.0;
         gbc.fill=GridBagConstraints.HORIZONTAL;
-        try{
-            TreeAssociationTypeEditorPanel tatep=new TreeAssociationTypeEditorPanel("","","","","",this,admin);
-            associationsPanel.add(tatep,gbc);
-        }catch(TopicMapException tme){
+        try {
+            TopicTreeRelationEditorPanel tatep=new TopicTreeRelationEditorPanel("","","","","",this,admin);
+            relationsPanel.add(tatep,gbc);
+        }
+        catch(TopicMapException tme) {
             tme.printStackTrace(); // TODO EXCEPTION
         }
         addFillerPanel();
@@ -295,11 +306,12 @@ public class TreeAssociationTypesEditor extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
-    private javax.swing.JPanel associationsPanel;
+    private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel fillerPanel;
     private javax.swing.JButton okButton;
+    private javax.swing.JPanel relationsPanel;
+    private javax.swing.JScrollPane relationsScrollPane;
     // End of variables declaration//GEN-END:variables
     
 }

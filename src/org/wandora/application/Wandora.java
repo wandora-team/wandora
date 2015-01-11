@@ -34,10 +34,11 @@ package org.wandora.application;
 
 
 
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.search.SelectTopicPanel;
 import org.wandora.application.gui.search.SearchPanel;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.gui.tree.TopicTreeManager;
+import org.wandora.application.gui.tree.TopicTreeTabManager;
 import org.wandora.application.tools.navigate.Back;
 import org.wandora.application.tools.navigate.Forward;
 import org.wandora.application.tools.navigate.OpenTopic;
@@ -199,7 +200,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
 
 
-    private TopicTreeManager topicTreeManager = null;
+    private TopicTreeTabManager topicTreeManager = null;
 
             
 
@@ -288,7 +289,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     public WandoraModulesServer getHTTPServer(){
         if(httpServer==null) {
             // httpServer=new WandoraHttpServer(this);
-//            httpServer=new WandoraWebAppServer(this);
+            // httpServer=new WandoraWebAppServer(this);
             httpServer=new WandoraModulesServer(this);
             httpServer.setStatusComponent(serverButton,"gui/icons/server_start.png","gui/icons/server_stop.png","gui/icons/server_hit.png");
         }
@@ -373,7 +374,8 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         topicMap=new LayerStack();
         try{
             topicMap.setUseUndo(true);
-        }catch(UndoException ue){handleError(ue);}
+        }
+        catch(UndoException ue){handleError(ue);}
         TopicMap initialTopicMap = new org.wandora.topicmap.memory.TopicMapImpl();
         try {
             initialTopicMap.importTopicMap(options.get("basemap"));
@@ -392,6 +394,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     private void topicMapObjectChanged(){
         layerTree=new LayerTree(topicMap,this);
         layerTree.setChangingListener(new Delegate<Boolean,Object>() {
+            @Override
             public Boolean invoke(Object o) {
                 TopicPanel topicPanel = topicPanelManager.getCurrentTopicPanel();
                 if(topicPanel!=null){
@@ -409,6 +412,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             }
         });
         layerTree.setChangedListener(new Delegate<Object,Object>(){
+            @Override
             public Object invoke(Object o){
                 //System.out.println("Changed");
                 reopenTopic();
@@ -420,7 +424,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         layersPanel.add(layerTree,BorderLayout.CENTER);
         topicMap.addTopicMapListener(this);
 
-        topicTreeManager = new TopicTreeManager(this, tabbedPane);
+        topicTreeManager = new TopicTreeTabManager(this, tabbedPane);
         topicTreeManager.initializeTopicTrees();
         tabbedPane.addTab("Finder", finderPanel);
 
@@ -431,8 +435,8 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     private void removeButtonActionListeners(JButton b){
         ActionListener[] listeners=b.getActionListeners();
-        for(int i=0;i<listeners.length;i++) {
-            b.removeActionListener(listeners[i]);
+        for (ActionListener listener : listeners) {
+            b.removeActionListener(listener);
         }
     }
 
@@ -530,6 +534,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             this.shortcuts = new Shortcuts(this);
             this.menuManager = new WandoraMenuManager(this);
             this.setJMenuBar(menuManager.getWandoraMenuBar());
+            
             this.dropExtractPanel = new DropExtractPanel(this);
             this.dropExtractContainer.removeAll();
             this.dropExtractContainer.add(dropExtractPanel);
@@ -579,13 +584,13 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     
     /**
-     * Refreshes all topic trees.
+     * Refreshes all topic trees. This method doesn't refresh TreeTopicPanels.
      */
     public void refreshTopicTrees() {
         try {
-            HashMap<String,SchemaTreeTopicChooser> trees = topicTreeManager.getTrees();
+            HashMap<String,TopicTreePanel> trees = topicTreeManager.getTrees();
             if(trees != null) {
-                for(SchemaTreeTopicChooser tree : trees.values()){
+                for(TopicTreePanel tree : trees.values()){
                     tree.refresh();
                     tree.repaint();
                 }
@@ -626,9 +631,9 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     * selector will be a tabbed selector with one tab for each tree and the SelectTopicPanel.
     */
     public TabbedTopicSelector getTopicFinder() throws TopicMapException {
-        Collection<SchemaTreeTopicChooser> cs=topicTreeManager.getTreeChoosers();
+        Collection<TopicTreePanel> cs=topicTreeManager.getTreeChoosers();
         TabbedTopicSelector finder=new TabbedTopicSelector();
-        for(SchemaTreeTopicChooser c : cs){
+        for(TopicTreePanel c : cs){
             finder.addTab(c);
         }
         finder.addTab(new SearchPanel(false));
@@ -760,7 +765,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     }
 
 
-    public TopicTreeManager getTopicTreeManager() {
+    public TopicTreeTabManager getTopicTreeManager() {
         return topicTreeManager;
     }
     
@@ -768,7 +773,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         if(tabbedPane != null) {
             Component selectedTab = tabbedPane.getSelectedComponent();
             if(selectedTab != null && !selectedTab.equals(finderPanel)) {
-                SchemaTreeTopicChooser treeTopicChooser = (SchemaTreeTopicChooser) selectedTab;
+                TopicTreePanel treeTopicChooser = (TopicTreePanel) selectedTab;
                 return treeTopicChooser.getTopicTree();
             }
         }
@@ -1176,7 +1181,8 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      * of the application.
      */
     public void resetWandora() {
-        // DO NOT ADD A USER CONFIRMATION MECHANISM HERE. TOOL HANDLES USER CONFIRMATION!
+        // DO NOT ADD A USER CONFIRMATION MECHANISM HERE. 
+        // CALLER HANDLES USER CONFIRMATION!
         stopHTTPServer();
         resetTopicPanels();
         clearHistory();
@@ -1312,18 +1318,18 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     /**
      * @deprecated
      */
-    public WandoraAdminManager getManager(){
+    public WandoraAdminManager getManager() {
         return manager;
     }
     
     /**
      * Returns the currently open layered topic map that.
      */
-    public LayerStack getTopicMap(){
+    public LayerStack getTopicMap() {
         return topicMap;
     }
     
-    public void setTopicMap(LayerStack topicMap){
+    public void setTopicMap(LayerStack topicMap) {
         if(this.topicMap!=null) {
             this.topicMap.removeTopicMapListener(this);
         }
@@ -1739,15 +1745,18 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     
     
     
+    
+    private Color selectedLayerReadOnlyColor = new Color(0x990000);
+    private Color selectedLayerColor = new Color(0x333333);
     public void refreshLayerInfo() {
         try {
             String layerInfo = getNumberOfTopicsAndAssociationsInCurrentLayer(); // :" + (layerControlPanel.layerStack.getSelectedIndex()+1) + "/" + layerControlPanel.layerStack.getLayers().size();
             
             if(layerTree.isSelectedReadOnly()) {
-                layerLabel.setForeground(new Color(0x990000));
+                layerLabel.setForeground(selectedLayerReadOnlyColor);
             }
             else {
-                layerLabel.setForeground(new Color(0x333333));
+                layerLabel.setForeground(selectedLayerColor);
             }
             if(layerInfo != null && layerInfo.length() > 0) {
                 layerLabel.setText("" + layerTree.getSelectedName() + " (" + layerInfo + ")");
@@ -1932,18 +1941,23 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     
     // ---- mouse -----
     
+    @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
     }    
     
+    @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }    
     
+    @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
     
@@ -1982,7 +1996,9 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
                 w = (Wandora) c;
             }
         }
-        catch (Exception e) { System.out.println("Couldn't solve Wandora with component '"+c+"'. Exception '"+e.toString()+"' occurred."); }
+        catch (Exception e) { 
+            System.out.println("Couldn't solve Wandora with component '"+c+"'. Exception '"+e.toString()+"' occurred."); 
+        }
         return w;
     }
 
@@ -2044,12 +2060,15 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     
     
     
+    @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
             c.topicRemoved(t);
         }
     }
+    
+    @Override
     public void associationRemoved(Association a) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
@@ -2057,24 +2076,31 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }
     }
     
+    @Override
     public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
             c.topicSubjectIdentifierChanged(t,added,removed);
         }
     }
+    
+    @Override
     public void topicBaseNameChanged(Topic t,String newName,String oldName) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
             c.topicBaseNameChanged(t,newName,oldName);
         }
     }
+    
+    @Override
     public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
             c.topicTypeChanged(t,added,removed);
         }
     }
+    
+    @Override
     public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
@@ -2082,6 +2108,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }
     }
     
+    @Override
     public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
@@ -2089,6 +2116,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }
     }
     
+    @Override
     public void topicSubjectLocatorChanged(Topic t,Locator newLocator,Locator oldLocator) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
@@ -2096,6 +2124,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }
     }
     
+    @Override
     public void topicChanged(Topic t) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
@@ -2103,6 +2132,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }        
     }
     
+    @Override
     public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
@@ -2110,6 +2140,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }
     }
     
+    @Override
     public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){
@@ -2117,6 +2148,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }
     }
     
+    @Override
     public void associationChanged(Association a) throws TopicMapException {
         if(skipTopicMapListenerEvents) return;
         for(TopicMapListener c : topicMapListeners){

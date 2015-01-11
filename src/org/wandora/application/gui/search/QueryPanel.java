@@ -44,7 +44,7 @@ import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.SchemaTreeTopicChooser;
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -229,8 +229,8 @@ public class QueryPanel extends javax.swing.JPanel {
         if(contextTopics == null) contextTopics = (new ArrayList()).iterator();
         if(!contextTopics.hasNext()){
             // if context is empty just add some (root of a tree chooser) topic
-            HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTopicTreeManager().getTrees();
-            SchemaTreeTopicChooser tree=trees.values().iterator().next();
+            HashMap<String,TopicTreePanel> trees=wandora.getTopicTreeManager().getTrees();
+            TopicTreePanel tree=trees.values().iterator().next();
             Topic t=tm.getTopic(tree.getRootSI());
             ArrayList<Topic> al=new ArrayList<>();
             al.add(t);

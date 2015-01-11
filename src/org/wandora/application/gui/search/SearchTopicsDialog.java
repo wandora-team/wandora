@@ -48,7 +48,7 @@ import javax.script.*;
 import java.net.*;
 import org.tmapi.core.DatatypeAware;
 import org.tmapi.core.Name;
-import org.wandora.application.gui.SchemaTreeTopicChooser;
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.wandora2tmapi.W2TRole;
 import org.wandora.topicmap.wandora2tmapi.W2TTopic;
@@ -832,8 +832,8 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
             Topic contextTopic = null;
             if(!contextTopics.hasNext()){
                 // if context is empty just add some (root of a tree chooser) topic
-                HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTopicTreeManager().getTrees();
-                SchemaTreeTopicChooser tree=trees.values().iterator().next();
+                HashMap<String,TopicTreePanel> trees=wandora.getTopicTreeManager().getTrees();
+                TopicTreePanel tree=trees.values().iterator().next();
                 Topic t=tm.getTopic(tree.getRootSI());
                 ArrayList<Topic> al=new ArrayList<Topic>();
                 al.add(t);
@@ -926,8 +926,8 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
             Topic contextTopic = null;
             if(!contextTopics.hasNext()){
                 // if context is empty just add some (root of a tree chooser) topic
-                HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTrees();
-                SchemaTreeTopicChooser tree=trees.values().iterator().next();
+                HashMap<String,TopicTreePanel> trees=wandora.getTrees();
+                TopicTreePanel tree=trees.values().iterator().next();
                 Topic t=tm.getTopic(tree.getRootSI());
                 ArrayList<Topic> al=new ArrayList<Topic>();
                 al.add(t);

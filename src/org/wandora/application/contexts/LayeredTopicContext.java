@@ -27,6 +27,7 @@
 
 package org.wandora.application.contexts;
 
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.application.gui.table.SITable;
@@ -196,9 +197,9 @@ public class LayeredTopicContext implements Context {
             }
         }
         
-        // ***** SchemaTreeTopicChooser *****
-        else if(contextSource instanceof SchemaTreeTopicChooser) {
-            contextTopics.add( ((SchemaTreeTopicChooser) contextSource).getSelection() );
+        // ***** TopicTreePanel *****
+        else if(contextSource instanceof TopicTreePanel) {
+            contextTopics.add(((TopicTreePanel) contextSource).getSelection() );
         }
         
         // ***** TopicTree *****
@@ -361,7 +362,7 @@ public class LayeredTopicContext implements Context {
                 contextSource instanceof MixedTopicTable ||
                 contextSource instanceof OccurrenceTable ||
                 contextSource instanceof OccurrenceTextEditor ||
-                contextSource instanceof SchemaTreeTopicChooser ||
+                contextSource instanceof TopicTreePanel ||
                 contextSource instanceof TopicTree ||
                 contextSource instanceof LayerStatusPanel ||
                 contextSource instanceof SITable ||

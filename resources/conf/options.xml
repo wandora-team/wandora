@@ -1496,8 +1496,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <tree>
          <root>http://wandora.org/si/core/wandora-class</root>
          <name>Topics</name>
-         <association>Instances</association>
-         <association>Subclasses</association>
+         <relation>Instances</relation>
+         <relation>Subclasses</relation>
       </tree>
    </trees>
    <lsystems>

@@ -43,7 +43,6 @@ import java.awt.datatransfer.*;
 import java.net.URL;
 import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
-import org.wandora.application.gui.SchemaTreeTopicChooser;
 import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -62,64 +61,56 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  */
 
 
-public class TopicTree extends SimpleTree implements Clipboardable, MouseListener /*, DragSourceListener, DragGestureListener*/ {
+public class TopicTree extends SimpleTree implements Clipboardable, MouseListener, TopicMapListener /*, DragSourceListener, DragGestureListener*/ {
    
     
     
-    public static class TreeAssociation {
-        public String name;
-        public String subSI,assocSI,superSI;
-        public String icon;
-        public TreeAssociation(){}
-        public TreeAssociation(String name,String subSI,String assocSI,String superSI,String icon){
-            this.name=name;this.subSI=subSI; this.assocSI=assocSI; this.superSI=superSI; this.icon=icon;
-        }
-        public TreeAssociation(String subSI,String assocSI,String superSI,String icon){
-            this(null,subSI,assocSI,superSI,icon);
-        }
-    }
+
     
     
     
     
     private boolean needsRefresh;
-    private Vector<TreeAssociation> selectedAs;
+    private ArrayList<TopicTreeRelation> selectedAs;
     private HashSet<Locator> selectedAsLocators;
     protected String rootTopicSI;
     protected Topic rootTopic;
     protected TopicTreeModel model;
-    protected Wandora parent;
+    protected Wandora wandora;
     private MouseEvent mouseEvent;
     
-    private TreeAssociation[] associations;
+    private TopicTreeRelation[] associations;
         
     private boolean openWithDoubleClick;
     
-    private SchemaTreeTopicChooser chooser;
+    private TopicTreePanel chooser;
     
     
     
     
     /** Creates a new instance of TopicTree */
-    public TopicTree(String rootTopicSI, Wandora parent) throws TopicMapException {
-        this(rootTopicSI,parent,null);
+    public TopicTree(String rootTopicSI, Wandora wandora) throws TopicMapException {
+        this(rootTopicSI, wandora, null);
     }
-    public TopicTree(String rootTopicSI, Wandora parent,SchemaTreeTopicChooser chooser) throws TopicMapException {
-        this(rootTopicSI,parent,GripCollections.newHashSet("Instances","Subclasses"),new TreeAssociation[]{
-                new TreeAssociation("Instances","","","","gui/icons/topictree/instanceof.png"),
-                new TreeAssociation("Subclasses",XTMPSI.SUBCLASS,XTMPSI.SUPERCLASS_SUBCLASS,XTMPSI.SUPERCLASS,"gui/icons/topictree/supersubclass.png")
+    
+    public TopicTree(String rootTopicSI, Wandora wandora, TopicTreePanel chooser) throws TopicMapException {
+        this(rootTopicSI,wandora,GripCollections.newHashSet("Instances","Subclasses"),new TopicTreeRelation[]{
+                new TopicTreeRelation("Instances","","","","gui/icons/topictree/instanceof.png"),
+                new TopicTreeRelation("Subclasses",XTMPSI.SUBCLASS,XTMPSI.SUPERCLASS_SUBCLASS,XTMPSI.SUPERCLASS,"gui/icons/topictree/supersubclass.png")
         },chooser);
     }
-    public TopicTree(String rootTopicSI, Wandora parent, Set<String> selectedAssociations, TreeAssociation[] associations) throws TopicMapException {
-        this(rootTopicSI,parent,selectedAssociations,associations,null);
+    
+    public TopicTree(String rootTopicSI, Wandora wandora, Set<String> selectedAssociations, TopicTreeRelation[] associations) throws TopicMapException {
+        this(rootTopicSI,wandora,selectedAssociations,associations,null);
     }
-    public TopicTree(String rootTopicSI, Wandora parent, Set<String> selectedAssociations, TreeAssociation[] associations,SchemaTreeTopicChooser chooser) throws TopicMapException {
+    
+    public TopicTree(String rootTopicSI, Wandora wandora, Set<String> selectedAssociations, TopicTreeRelation[] associations,TopicTreePanel chooser) throws TopicMapException {
         this.rootTopicSI = rootTopicSI;
-        this.parent = parent;
-        this.associations=associations;
-        this.chooser=chooser;
+        this.wandora = wandora;
+        this.associations = associations;
+        this.chooser = chooser;
         
-        this.openWithDoubleClick=true;
+        this.openWithDoubleClick = true;
         setToggleClickCount(4); 
         
         //initMenuStructure();
@@ -132,7 +123,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
         TopicTreeTopicRenderer topicTreeCellRenderer = new TopicTreeTopicRenderer(this);
         setCellRenderer(topicTreeCellRenderer);
         
-        TopicTreeTopicEditor topicEditor = new TopicTreeTopicEditor(parent, this, new SimpleField(), topicTreeCellRenderer);
+        TopicTreeTopicEditor topicEditor = new TopicTreeTopicEditor(wandora, this, new SimpleField(), topicTreeCellRenderer);
         setCellEditor(topicEditor);  
         
         this.setDragEnabled(true);
@@ -169,16 +160,26 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
         }
         return false;
     }
+    
     public boolean isBroken(){
         return model==null;
     }
+    
     public void setNeedsRefresh(boolean value){
         needsRefresh=value;
     }
+    
     public boolean getNeedsRefresh(){
         return needsRefresh;
     }
-    public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException{
+    
+    
+    
+    // ---------------------------------------------------- TopicMapListener ---
+    
+    
+    @Override
+    public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
         if(needsRefresh) return;
         if( (added!=null && rootTopicSI != null && rootTopicSI.equals(added.toExternalForm())) ||
             (removed!=null && rootTopicSI.equals(removed.toExternalForm())) ){
@@ -190,35 +191,51 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
            (added!=null && model.getVisibleTopics().contains(added)) ||
            (removed!=null && model.getVisibleTopics().contains(removed)) ) setNeedsRefresh(true);        
     }
-    public void topicBaseNameChanged(Topic t,String newName,String oldName) throws TopicMapException {
+    
+    @Override
+    public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
         if(needsRefresh || model==null) return;
         if(t == null) return;
         if(collectionsOverlap(t.getSubjectIdentifiers(),model.getVisibleTopics())) setNeedsRefresh(true);
     }
-    public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
+    
+    @Override
+    public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
         if(needsRefresh || model==null) return;
         if(added!=null && collectionsOverlap(added.getSubjectIdentifiers(),model.getVisibleTopics())) setNeedsRefresh(true);
         else if(removed!=null && collectionsOverlap(removed.getSubjectIdentifiers(),model.getVisibleTopics())) setNeedsRefresh(true);
     }
-    public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
+    
+    @Override
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
         if(needsRefresh || model==null) return;
         if(t == null) return;
         if(collectionsOverlap(t.getSubjectIdentifiers(),model.getVisibleTopics())) setNeedsRefresh(true);
     }
+    
+    @Override
     public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
     }
+    
+    @Override
     public void topicSubjectLocatorChanged(Topic t,Locator newLocator,Locator oldLocator) throws TopicMapException {
     }
+    
+    @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         if(needsRefresh || model==null) return;
         if(t == null) return;
         if(collectionsOverlap(t.getSubjectIdentifiers(),model.getVisibleTopics())) setNeedsRefresh(true);
     }
+    
+    @Override
     public void topicChanged(Topic t) throws TopicMapException {
         if(needsRefresh || model==null) return;
         if(t == null) return;
         if(collectionsOverlap(t.getSubjectIdentifiers(),model.getVisibleTopics())) setNeedsRefresh(true);        
     }
+    
+    @Override
     public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
         if(needsRefresh || model==null) return;
         if( (oldType!=null && collectionsOverlap(oldType.getSubjectIdentifiers(),model.getVisibleTopics())) || 
@@ -231,11 +248,13 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
             }
         }
     }
+    
+    @Override
     public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
         if(needsRefresh || model==null) return;
         if(a == null) return;
         boolean cont=false;
-        for(int i=0;i<associations.length;i++){
+        for(int i=0;i<associations.length;i++) {
             if(associations[i].assocSI != null) {
                 Locator l=a.getTopicMap().createLocator(associations[i].assocSI);
                 if(a.getType().getSubjectIdentifiers().contains(l)){
@@ -248,6 +267,8 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
         if(newPlayer!=null && collectionsOverlap(newPlayer.getSubjectIdentifiers(),model.getVisibleTopics())) setNeedsRefresh(true);
         else if(newPlayer!=null && collectionsOverlap(newPlayer.getSubjectIdentifiers(),model.getVisibleTopics())) setNeedsRefresh(true);
     }
+    
+    @Override
     public void associationRemoved(Association a) throws TopicMapException {
         if(needsRefresh || model==null) return;
         if(a == null) return;
@@ -262,16 +283,22 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
             }
         }
         if(!cont) return;
-        for(Topic r : a.getRoles()){
-            if(collectionsOverlap(a.getPlayer(r).getSubjectIdentifiers(),model.getVisibleTopics())){
+        for(Topic r : a.getRoles()) {
+            if(collectionsOverlap(a.getPlayer(r).getSubjectIdentifiers(),model.getVisibleTopics())) {
                 setNeedsRefresh(true);
                 break;
             }
         }
     }
+    
+    @Override
     public void associationChanged(Association a) throws TopicMapException {
         needsRefresh=true;
     }
+    
+    
+    // --------------------------------------------------- /TopicMapListener ---
+    
     
     public void setOpenWithDoubleClick(boolean value){
         openWithDoubleClick=value;
@@ -294,7 +321,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     }
     
     private void recreateModel() throws TopicMapException {
-        TopicMap topicMap = parent.getTopicMap();
+        TopicMap topicMap = wandora.getTopicMap();
         if(rootTopicSI != null) {
             rootTopic=topicMap.getTopic(rootTopicSI);
             if(rootTopic==null){
@@ -335,9 +362,9 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
      *        necessarily used in this topic tree chooser. selectedAssociations
      *        contains the names of the used association types.
      */
-    public void updateModel(String rootSI, Set<String> selectedAssociations, TreeAssociation[] associations ) throws TopicMapException{
+    public void updateModel(String rootSI, Set<String> selectedAssociations, TopicTreeRelation[] associations ) throws TopicMapException{
         
-        selectedAs=new Vector<TreeAssociation>();
+        selectedAs=new ArrayList<TopicTreeRelation>();
         selectedAsLocators=new HashSet<Locator>();
         
         for(String selected : selectedAssociations) {
@@ -362,7 +389,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     public boolean selectTopic(Topic t) {
         TreePath path = model.getPathFor(t);
         if(path != null) {  
-            System.out.println(path.toString());    // Able to get the exact node here    
+            // System.out.println(path.toString());    // Able to get the exact node here    
             setExpandsSelectedPaths(true);                  
             setSelectionPath(path);
             scrollPathToVisible(path);
@@ -388,9 +415,9 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     
     
     public void update() {
-
     }
 
+    
     public ArrayList<T2<Locator,String>> getLocatorPath(TreePath tp) throws TopicMapException {
         Object[] path=tp.getPath();
         ArrayList<T2<Locator,String>> lpath=new ArrayList<T2<Locator,String>>();
@@ -575,6 +602,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     public void copy() {
         ClipboardBox.setClipboard(getCopyString());
     }
+    
     public String getCopyString() {
         StringBuilder sb = new StringBuilder("");
         Topic selectedTopic = getSelection();
@@ -589,7 +617,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     
 
     protected Topic getTopicForIdentifier(String id) {
-        TopicMap tm = parent.getTopicMap();
+        TopicMap tm = wandora.getTopicMap();
         Topic t = null;
         try {
             t = tm.getTopicWithBaseName(id);
@@ -611,16 +639,12 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     // -------------------------------------------------------------------------
     
  
-    
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    
 
 
     protected void handlePopupMouseEvent(java.awt.event.MouseEvent e) {
         try {
             if(e.isPopupTrigger()) {
-                JPopupMenu popupMenu = UIBox.makePopupMenu(WandoraMenuManager.getTreeMenu(parent, this), parent);
+                JPopupMenu popupMenu = UIBox.makePopupMenu(WandoraMenuManager.getTreeMenu(wandora, this), wandora);
                 setSelectionRow(getClosestRowForLocation(e.getX(),e.getY()));
                 popupMenu.show(e.getComponent(),e.getX(),e.getY());
             }
@@ -638,8 +662,8 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
             try {
                 this.mouseEvent = mouseEvent;
                 if(openWithDoubleClick && mouseEvent.getClickCount() == 2) {
-                    if(getSelection() != null && parent != null) {
-                        parent.applyChangesAndOpen(getSelection());
+                    if(getSelection() != null && wandora != null) {
+                        wandora.applyChangesAndOpen(getSelection());
                     }
                 }
             }
@@ -672,9 +696,11 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
      public Object getValueAt(MouseEvent e) {
         return getTopicAt(e.getX(), e.getY());
     }
-     public Object getValueAt(Point p) {
+     
+    public Object getValueAt(Point p) {
         return getValueAt(p.x, p.y);
     }
+    
     public Object getValueAt(int x, int y) {
         try {
             int selRow = getRowForLocation(x, y);
@@ -684,7 +710,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
             }
         }
         catch(Exception e) {
-            parent.handleError(e);
+            wandora.handleError(e);
         }
         return null;
     }
@@ -694,9 +720,11 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     public Topic getTopicAt(MouseEvent e) {
         return getTopicAt(e.getX(), e.getY());
     }
+    
     public Topic getTopicAt(Point point) {
         return getTopicAt(point.x, point.y);
     }
+    
     public Topic getTopicAt(int x, int y) {
         Object object = getValueAt(x, y);
         if(object instanceof TopicGuiWrapper) {
@@ -772,14 +800,14 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                 if(support.isDataFlavorSupported(TopicTreeTransferable.treeDataFlavor)) {
                     TopicGuiWrapper node=(TopicGuiWrapper)support.getTransferable().getTransferData(TopicTreeTransferable.treeDataFlavor);
                     if(node.path.getPathCount()<2) {
-                        WandoraOptionPane.showMessageDialog(TopicTree.this.parent,"Can't move root, drop cancelled.", "Drop cancelled");
+                        WandoraOptionPane.showMessageDialog(TopicTree.this.wandora,"Can't move root, drop cancelled.", "Drop cancelled");
                         return false;
                     }
                     TopicGuiWrapper parent=(TopicGuiWrapper)node.path.getParentPath().getLastPathComponent();
                     int action=support.getDropAction();
 
                     String typeName=node.associationType;
-                    TreeAssociation type=null; 
+                    TopicTreeRelation type=null; 
                     for(int i=0;i<associations.length;i++){
                         if(associations[i].name.equals(typeName)){
                             type=associations[i];
@@ -787,25 +815,25 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                         }
                     }
                     if(type==null){
-                        WandoraOptionPane.showMessageDialog(TopicTree.this.parent,"Couldn't find tree association type, drop cancelled.", "Drop cancelled");
+                        WandoraOptionPane.showMessageDialog(TopicTree.this.wandora,"Couldn't find tree association type, drop cancelled.", "Drop cancelled");
                         return false;
                     }
 
                     JTree.DropLocation location=(JTree.DropLocation)support.getDropLocation();
                     TreePath dropPath=location.getPath();
                     if(dropPath==null){
-                        WandoraOptionPane.showMessageDialog(TopicTree.this.parent,"Invalid drop location, drop cancelled.", "Drop cancelled");
+                        WandoraOptionPane.showMessageDialog(TopicTree.this.wandora,"Invalid drop location, drop cancelled.", "Drop cancelled");
                         return false;
                     }
                     TopicGuiWrapper locationNode=(TopicGuiWrapper)dropPath.getLastPathComponent();
                     try{
                         if(parent.topic.mergesWithTopic(locationNode.topic)){
-                            WandoraOptionPane.showMessageDialog(TopicTree.this.parent,
+                            WandoraOptionPane.showMessageDialog(TopicTree.this.wandora,
                                     "Drop location is same as current parent, drop cancelled.", "Drop cancelled");
                             return false;
                         }
                         if(action==TransferHandler.MOVE && locationNode.topic.mergesWithTopic(node.topic)){
-                            int c=WandoraOptionPane.showConfirmDialog(TopicTree.this.parent,
+                            int c=WandoraOptionPane.showConfirmDialog(TopicTree.this.wandora,
                                     "Are you sure you want to move the item on itself?");
                             if(c!=WandoraOptionPane.YES_OPTION) return false;
                         }
@@ -816,12 +844,12 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                             node.topic.addType(locationNode.topic);
                         }
                         else{
-                            TopicMap tm=TopicTree.this.parent.getTopicMap();
+                            TopicMap tm=TopicTree.this.wandora.getTopicMap();
                             Topic atype=tm.getTopic(type.assocSI);
                             Topic superTopic=tm.getTopic(type.superSI);
                             Topic subTopic=tm.getTopic(type.subSI);
                             if(atype==null || superTopic==null || subTopic==null){
-                                WandoraOptionPane.showMessageDialog(TopicTree.this.parent,"Couldn't find tree association topics, drop cancelled.");
+                                WandoraOptionPane.showMessageDialog(TopicTree.this.wandora,"Couldn't find tree association topics, drop cancelled.");
                                 return false;
                             }
                             if(action==TransferHandler.MOVE){
@@ -849,14 +877,14 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                 }
                 else {
                     try{
-                        TopicMap tm=TopicTree.this.parent.getTopicMap();
+                        TopicMap tm=TopicTree.this.wandora.getTopicMap();
                         ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                         if(topics==null) return false;
                         
                         JTree.DropLocation location=(JTree.DropLocation)support.getDropLocation();
                         TreePath dropPath=location.getPath();
                         if(dropPath==null){
-                            WandoraOptionPane.showMessageDialog(TopicTree.this.parent,"Invalid drop location, drop cancelled.");
+                            WandoraOptionPane.showMessageDialog(TopicTree.this.wandora,"Invalid drop location, drop cancelled.");
                             return false;
                         }
                         TopicGuiWrapper locationNode=(TopicGuiWrapper)dropPath.getLastPathComponent();
@@ -878,7 +906,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
         }
 
         public void doRefresh(){
-            TopicTree.this.parent.doRefresh();
+            TopicTree.this.wandora.doRefresh();
         }
     }
 }

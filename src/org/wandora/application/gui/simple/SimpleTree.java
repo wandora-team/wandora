@@ -54,6 +54,7 @@ public class SimpleTree extends JTree implements SimpleComponent {
     
     
     
+    @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
         Wandora w = Wandora.getWandora(this);
         if(w != null) {
@@ -61,12 +62,14 @@ public class SimpleTree extends JTree implements SimpleComponent {
         }
     }
     
+    @Override
     public void focusLost(java.awt.event.FocusEvent focusEvent) {
     }
     
     
     
     
+    @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);

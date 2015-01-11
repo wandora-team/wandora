@@ -1,3 +1,25 @@
+/*
+ * WANDORA
+ * Knowledge Extraction, Management, and Publishing Application
+ * http://wandora.org
+ * 
+ * Copyright (C) 2004-2014 Wandora Team
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 
 package org.wandora.application.gui.topicpanels;
 
@@ -53,6 +75,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     @Override
     public void init() {
         try {
+            treeContainerPanel.removeAll();
             Wandora wandora = Wandora.getWandora();
             topicTree = new TopicTree(rootSubject, wandora);
             treeContainerPanel.add(topicTree, BorderLayout.CENTER);
@@ -98,7 +121,24 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+        String cmd = e.getActionCommand();
+        if(cmd != null) {
+            if("Set root topic...".equalsIgnoreCase(cmd)) {
+                try {
+                    Wandora wandora = Wandora.getWandora();
+                    Topic t = wandora.showTopicFinder();                
+                    if(t != null) {
+                        setRootTopic(t);
+                    }
+                }
+                catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            else {
+                System.out.println("Unprosessed action captured '"+cmd+"' in TreeTopicPanel.");
+            }
+        }
     }
 
     
@@ -179,8 +219,9 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     @Override
     public Object[] getViewMenuStruct() {
         return new Object[] {
-            "Set root topic",
-            "Change relations"
+            // If you change these, update method actionPerformed too
+            "Set root topic...", this /* as an ActionListener */,
+            "Change relations...", this /* as an ActionListener */,
         };
     }
 
@@ -199,14 +240,23 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
         return null;
     }
 
-    
-    
-    
-    // -------------------------------------------------------------------------
-    
+    public void setRootTopic(Topic newRoot) {
+        try {
+            if(newRoot != null && !newRoot.isRemoved()) {
+                rootSubject = newRoot.getOneSubjectIdentifier().toExternalForm();
+                init();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
     
 
     
+    // ---------------------------------------------------- TopicMapListener ---
+    
+
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
         refresh();

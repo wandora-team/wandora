@@ -34,7 +34,6 @@ import java.util.*;
 import org.wandora.topicmap.*;
 import javax.swing.tree.*;
 import org.wandora.application.gui.TopicGuiWrapper;
-import static org.wandora.application.gui.tree.TopicTree.TreeAssociation;
 import org.wandora.utils.GripCollections;
 
 
@@ -53,12 +52,12 @@ public class TopicTreeModel implements TreeModel {
     private HashSet<Locator> visibleTopics;
     private int visibleTopicCount = 0;
 
-    private Vector<TreeAssociation> associations;
+    private ArrayList<TopicTreeRelation> associations;
     private TopicTree tree;
     
     
     
-    public TopicTreeModel(Topic rootTopic, Vector<TreeAssociation> associations, TopicTree tree) {
+    public TopicTreeModel(Topic rootTopic, ArrayList<TopicTreeRelation> associations, TopicTree tree) {
         this.associations=associations;
         this.tree=tree;
         children=new HashMap();
@@ -153,7 +152,7 @@ public class TopicTreeModel implements TreeModel {
                 int i=0;
                 ArrayList<TopicGuiWrapper> ts=new ArrayList<TopicGuiWrapper>();
                 String instancesIcon=null;
-                for(TreeAssociation a : associations){
+                for(TopicTreeRelation a : associations){
                     if("Instances".equalsIgnoreCase(a.name)){
                         instancesIcon=a.icon;
                         continue;
