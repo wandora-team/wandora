@@ -243,7 +243,7 @@ public class TopicTreeTabManager {
             while(true) {
                 jd.setVisible(true);
                 if(tap.wasCancelled()) return;
-                String name=tap.getTabName();
+                String name=tap.getTreeName();
                 String rootSI = tap.getRoot();
                 if(selectedTreeRelations.get(name) != null) {
                     WandoraOptionPane.showMessageDialog(wandora,"Tab '"+name+"' already exists! Please use another name for the tab.", null, WandoraOptionPane.WARNING_MESSAGE);
@@ -256,7 +256,7 @@ public class TopicTreeTabManager {
                 }
                 else break;
             }
-            String name=tap.getTabName();
+            String name=tap.getTreeName();
             selectedTreeRelations.put(name, tap.getSelectedRelations());
             treeRoots.put(name, tap.getRoot());
             tabTrees.add(name);
@@ -302,13 +302,13 @@ public class TopicTreeTabManager {
             String tab = tabbedPane.getTitleAt(tabIndex);
             Set<String> selected = selectedTreeRelations.get(tab);
             if(selected == null) selected = new LinkedHashSet<String>();
-            JDialog jd=new JDialog(wandora,true);
+            JDialog jd=new JDialog(wandora, true);
             jd.setTitle("Configure topic tree");
 
             TopicTreeRelation[] associations = TopicTreeRelationsEditor.readRelationTypes();
             TopicTreeConfigPanel tap = new TopicTreeConfigPanel(associations,selected,treeRoots.get(tab),tab,jd,wandora);
             jd.add(tap);
-            jd.setSize(400,300);
+            jd.setSize(400,400);
             wandora.centerWindow(jd);
 
             jd.setVisible(true);
@@ -316,8 +316,8 @@ public class TopicTreeTabManager {
 
             selectedTreeRelations.put(tab, tap.getSelectedRelations());
             treeRoots.put(tab, tap.getRoot());
-            if(!tap.getTabName().equals(tab)){
-                String newname = tap.getTabName();
+            if(!tap.getTreeName().equals(tab)){
+                String newname = tap.getTreeName();
                 String rootSI = tap.getRoot();
                 if(selectedTreeRelations.get(newname) != null){
                     WandoraOptionPane.showMessageDialog(wandora,"Tab '"+newname+"' already exists! Please use another name for the tab.", null, WandoraOptionPane.WARNING_MESSAGE);

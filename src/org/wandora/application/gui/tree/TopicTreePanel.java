@@ -52,12 +52,12 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
     
     private String name;
     
-    private Set<String> initialSelected;
-    private TopicTreeRelation[] initialAssociations;
+    private Set<String> initialSelectedRelations;
+    private TopicTreeRelation[] initialAllRelations;
     private boolean treeEnabled;
     
     
-    /** Creates new form SchemaTreeTopicChooser */
+    /** Creates new form TopicTreePanel */
     public TopicTreePanel(String rootTopic, Wandora parent) throws TopicMapException {
         this(rootTopic,parent,null,null);
     }
@@ -68,24 +68,24 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
 
     /**
      * @param rootTopic Subject identifier of the topic that is used as root for the tree
-     * @param selectedAssociations Names of the associations in associations array that
+     * @param selectedRelations Names of the associations in associations array that
      *        are used in this topic tree chooser.
-     * @param associations A list of tree association types. Not all of them are
+     * @param allRelations A list of tree association types. Not all of them are
      *        necessarily used in this topic tree chooser. selectedAssociations
      *        contains the names of the used association types.
      */
-    public TopicTreePanel(String rootTopic, Wandora wandora, Set<String> selectedAssociations, TopicTreeRelation[] associations,String name) throws TopicMapException {
+    public TopicTreePanel(String rootTopic, Wandora wandora, Set<String> selectedRelations, TopicTreeRelation[] allRelations,String name) throws TopicMapException {
         this.rootTopic=rootTopic;
         this.wandora=wandora;
-        this.initialSelected=selectedAssociations;
-        this.initialAssociations=associations;
+        this.initialSelectedRelations=selectedRelations;
+        this.initialAllRelations=allRelations;
         this.name=name;
 
         treeEnabled=true;
         
-        jTree = initialSelected==null ?
+        jTree = initialSelectedRelations==null ?
             new TopicTree(rootTopic, wandora, this) :
-            new TopicTree(rootTopic, wandora, initialSelected, initialAssociations, this);
+            new TopicTree(rootTopic, wandora, initialSelectedRelations, initialAllRelations, this);
         
         initComponents();
 
@@ -97,14 +97,14 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
 
     /**
      * @param rootSI Subject identifier of the topic that is used as root for the tree
-     * @param selectedAssociations Names of the associations in associations array that
+     * @param selectedRelations Names of the associations in associations array that
      *        are used in this topic tree chooser.
-     * @param associations A list of tree association types. Not all of them are
+     * @param allRelations A list of tree association types. Not all of them are
      *        necessarily used in this topic tree chooser. selectedAssociations
      *        contains the names of the used association types.
      */
-    public void setModel(String rootSI,Set<String> selectedAssociations, TopicTreeRelation[] associations ) throws TopicMapException {
-        ((TopicTree)jTree).updateModel(rootSI,selectedAssociations,associations);
+    public void setModel(String rootSI,Set<String> selectedRelations, TopicTreeRelation[] allRelations ) throws TopicMapException {
+        ((TopicTree)jTree).updateModel(rootSI, selectedRelations, allRelations);
     }
     
     @Override
@@ -135,10 +135,10 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
 
 
     
-    public void updateSelectedAssociation(String oldAssociation, String newAssociation) {
-        if(initialSelected.contains(oldAssociation)) {
-            initialSelected.remove(oldAssociation);
-            initialSelected.add(newAssociation);
+    public void updateSelectedAssociation(String oldRelation, String newRelation) {
+        if(initialSelectedRelations.contains(oldRelation)) {
+            initialSelectedRelations.remove(oldRelation);
+            initialSelectedRelations.add(newRelation);
         }
     }
 
@@ -240,7 +240,7 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
 
     private void newRootButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newRootButtonActionPerformed
         if(rootTopic == null) {
-            WandoraOptionPane.showMessageDialog(wandora, "No SI found for root topic! You should set the root topic in tab configuration panel before root topic creation is possible.");
+            WandoraOptionPane.showMessageDialog(wandora, "Can't find root topic. Update the root topic in configuration panel.");
             return;
         }
         String bn=WandoraOptionPane.showInputDialog(wandora,"Enter topic base name","Wandora class","Create root topic");

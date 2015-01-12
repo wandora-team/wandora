@@ -27,7 +27,10 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.Icon;
+import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -37,6 +40,9 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.gui.tree.TopicTree;
+import org.wandora.application.gui.tree.TopicTreeConfigPanel;
+import org.wandora.application.gui.tree.TopicTreeRelation;
+import org.wandora.application.gui.tree.TopicTreeRelationsEditor;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -54,9 +60,12 @@ import org.wandora.utils.Options;
 public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener, TopicPanel {
     
     
+    private String title = "Tree";
     private Options options = null;
     private TopicTree topicTree = null;
     private String rootSubject = TMBox.WANDORACLASS_SI;
+    private Set<String> selectedRelations = null;
+    private TopicTreeRelation[] allRelations = TopicTreeRelationsEditor.readRelationTypes();
             
     
     /**
@@ -64,10 +73,8 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
      */
     public TreeTopicPanel() {
         Wandora wandora = Wandora.getWandora();
-        this.options = new Options(wandora.getOptions());
+        this.options = wandora.getOptions();
         initComponents();
-        
-
     }
     
     
@@ -75,9 +82,15 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     @Override
     public void init() {
         try {
+            allRelations = TopicTreeRelationsEditor.readRelationTypes();
+            selectedRelations = new HashSet();
+            for(TopicTreeRelation allRelation : allRelations) {
+                selectedRelations.add(allRelation.name);
+            }
+            
             treeContainerPanel.removeAll();
             Wandora wandora = Wandora.getWandora();
-            topicTree = new TopicTree(rootSubject, wandora);
+            topicTree = new TopicTree(rootSubject, wandora, selectedRelations, allRelations);
             treeContainerPanel.add(topicTree, BorderLayout.CENTER);
             revalidate();
         }
@@ -135,12 +148,43 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
                     ex.printStackTrace();
                 }
             }
+            else if("Configure...".equalsIgnoreCase(cmd)) {
+                configure();
+            }
             else {
                 System.out.println("Unprosessed action captured '"+cmd+"' in TreeTopicPanel.");
             }
         }
     }
 
+    
+    public void configure() {
+        try {
+            Wandora wandora = Wandora.getWandora();
+            JDialog jd=new JDialog(wandora, true);
+            jd.setTitle("Configure topic tree");
+
+            TopicTreeConfigPanel configurationPanel = new TopicTreeConfigPanel(allRelations, selectedRelations, rootSubject, getTitle(), jd, wandora);
+            jd.add(configurationPanel);
+            jd.setSize(500,400);
+            wandora.centerWindow(jd);
+
+            jd.setVisible(true);
+            
+            if(configurationPanel.wasCancelled()) return;
+
+            title = configurationPanel.getTreeName();
+            rootSubject = configurationPanel.getRoot();
+            selectedRelations = configurationPanel.getSelectedRelations();
+            topicTree.updateModel(rootSubject, selectedRelations, allRelations);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
     
     @Override
     public boolean supportsOpenTopic() {
@@ -191,13 +235,11 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     
     @Override
     public String getName(){
-        String title = "Tree";
         return title;
     }
     
     @Override
     public String getTitle() {
-        String title = "Tree";
         return title;
     }
 
@@ -221,7 +263,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
         return new Object[] {
             // If you change these, update method actionPerformed too
             "Set root topic...", this /* as an ActionListener */,
-            "Change relations...", this /* as an ActionListener */,
+            "Configure...", this /* as an ActionListener */,
         };
     }
 

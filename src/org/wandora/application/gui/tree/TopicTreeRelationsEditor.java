@@ -64,7 +64,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
         JDialog jd=new JDialog(wandora,true);
         jd.setTitle("Configure topic tree relations");
         jd.add(this);
-        jd.setSize(750,300);
+        jd.setSize(800,400);
         parent = jd;
         wandora.centerWindow(jd);
         jd.setVisible(true);

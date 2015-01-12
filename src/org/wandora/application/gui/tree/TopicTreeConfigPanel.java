@@ -112,7 +112,7 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         return ((GetTopicButton)rootButton).getTopicSI();
     }
     
-    public String getTabName() {
+    public String getTreeName() {
         return nameTextField.getText();
     }
     
