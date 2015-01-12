@@ -63,7 +63,7 @@ public class TopicTreeTabManager {
         JMenuItem configTypesMenuItem = new SimpleMenuItem();
 
         createTabMenuItem.setFont(UIConstants.menuFont);
-        createTabMenuItem.setText("Create new tab");
+        createTabMenuItem.setText("Create new tab...");
         createTabMenuItem.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -73,7 +73,7 @@ public class TopicTreeTabManager {
         tabPopupMenu.add(createTabMenuItem);
 
         deleteTabMenuItem.setFont(UIConstants.menuFont);
-        deleteTabMenuItem.setText("Delete tab");
+        deleteTabMenuItem.setText("Delete tab...");
         deleteTabMenuItem.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,7 +126,7 @@ public class TopicTreeTabManager {
                 tabbedPane.removeTabAt(0);
             }
             readTopicTreeRelations();
-            TopicTreeRelation[] associations=TopicTreeRelationsEditor.readRelationTypes(options);
+            TopicTreeRelation[] associations=TopicTreeRelationsEditor.readRelationTypes();
             treeTopicChoosers=new LinkedHashMap<String,TopicTreePanel>();
 
             // tabbedPane.addTab("Layers", layersPanel);
@@ -162,7 +162,7 @@ public class TopicTreeTabManager {
      */
     public Collection<TopicTreePanel> getTreeChoosers() throws TopicMapException {
         ArrayList<TopicTreePanel> v=new ArrayList<TopicTreePanel>();
-        TopicTreeRelation[] associations=TopicTreeRelationsEditor.readRelationTypes(options);
+        TopicTreeRelation[] associations=TopicTreeRelationsEditor.readRelationTypes();
         for(String tab : selectedTreeRelations.keySet()){
             TopicTreePanel treeTopicChooser = new TopicTreePanel(treeRoots.get(tab),wandora,selectedTreeRelations.get(tab),associations,tab);
             v.add(treeTopicChooser);
@@ -231,7 +231,7 @@ public class TopicTreeTabManager {
 
     public void createTabMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
         try {
-            TopicTreeRelation[] associations=TopicTreeRelationsEditor.readRelationTypes(options);
+            TopicTreeRelation[] associations=TopicTreeRelationsEditor.readRelationTypes();
             JDialog jd=new JDialog(wandora,true);
             jd.setTitle("New topic tree tab");
 
@@ -240,7 +240,7 @@ public class TopicTreeTabManager {
             jd.setSize(400,300);
             wandora.centerWindow(jd);
 
-            while(true){
+            while(true) {
                 jd.setVisible(true);
                 if(tap.wasCancelled()) return;
                 String name=tap.getTabName();
@@ -257,8 +257,8 @@ public class TopicTreeTabManager {
                 else break;
             }
             String name=tap.getTabName();
-            selectedTreeRelations.put(name,tap.getSelected());
-            treeRoots.put(name,tap.getRoot());
+            selectedTreeRelations.put(name, tap.getSelectedRelations());
+            treeRoots.put(name, tap.getRoot());
             tabTrees.add(name);
 
             TopicTreePanel treeTopicChooser = new TopicTreePanel(treeRoots.get(name),wandora,selectedTreeRelations.get(name),associations,name);
@@ -305,7 +305,7 @@ public class TopicTreeTabManager {
             JDialog jd=new JDialog(wandora,true);
             jd.setTitle("Configure topic tree");
 
-            TopicTreeRelation[] associations = TopicTreeRelationsEditor.readRelationTypes(options);
+            TopicTreeRelation[] associations = TopicTreeRelationsEditor.readRelationTypes();
             TopicTreeConfigPanel tap = new TopicTreeConfigPanel(associations,selected,treeRoots.get(tab),tab,jd,wandora);
             jd.add(tap);
             jd.setSize(400,300);
@@ -314,8 +314,8 @@ public class TopicTreeTabManager {
             jd.setVisible(true);
             if(tap.wasCancelled()) return;
 
-            selectedTreeRelations.put(tab,tap.getSelected());
-            treeRoots.put(tab,tap.getRoot());
+            selectedTreeRelations.put(tab, tap.getSelectedRelations());
+            treeRoots.put(tab, tap.getRoot());
             if(!tap.getTabName().equals(tab)){
                 String newname = tap.getTabName();
                 String rootSI = tap.getRoot();
@@ -366,19 +366,11 @@ public class TopicTreeTabManager {
 
     public void configTopicTreeRelationsActionPerformed(java.awt.event.ActionEvent evt) {
         try {
-            JDialog jd=new JDialog(wandora,true);
-            jd.setTitle("Configure topic tree relations");
-
-            TopicTreeRelationsEditor editor=new TopicTreeRelationsEditor(TopicTreeRelationsEditor.readRelationTypes(options),jd,wandora);
-            jd.add(editor);
-            jd.setSize(750,300);
-            wandora.centerWindow(jd);
-            jd.setVisible(true);
+            TopicTreeRelationsEditor editor = new TopicTreeRelationsEditor();
+            editor.open(Wandora.getWandora());
             if(editor.wasCancelled()) return;
 
-            TopicTreeRelationsEditor.writeAssociationTypes(options,editor.getRelationTypes());
-
-            TopicTreeRelation[] associations=TopicTreeRelationsEditor.readRelationTypes(options);
+            TopicTreeRelation[] associations = editor.readRelationTypes();
             for(Map.Entry<String,TopicTreePanel> e : treeTopicChoosers.entrySet()){
                 e.getValue().setModel(treeRoots.get(e.getKey()),selectedTreeRelations.get(e.getKey()),associations);
             }
@@ -386,8 +378,8 @@ public class TopicTreeTabManager {
         catch(TopicMapException tme) {
             wandora.handleError(tme); // TODO EXCEPTION
         }
-
     }
+    
 
     public void tabbedPaneMouseClicked(java.awt.event.MouseEvent evt) {
         try {

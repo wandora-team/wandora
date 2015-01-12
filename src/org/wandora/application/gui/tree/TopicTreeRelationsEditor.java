@@ -50,29 +50,46 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
     
     
     /** Creates new form TreeAssociationTypesEditor */
-    public TopicTreeRelationsEditor(TopicTreeRelation[] allRelations,Component parent,Wandora admin) throws TopicMapException {
-        this.relations=allRelations;
-        this.parent=parent;
-        this.admin=admin;
+    public TopicTreeRelationsEditor() {
         initComponents();
-        updateAssociationsPanel();
     }
 
 
 
+    public void open(Wandora wandora) {
+        admin = wandora;
+        relations = readRelationTypes();
+        updateRelationsPanel();
+        
+        JDialog jd=new JDialog(wandora,true);
+        jd.setTitle("Configure topic tree relations");
+        jd.add(this);
+        jd.setSize(750,300);
+        parent = jd;
+        wandora.centerWindow(jd);
+        jd.setVisible(true);
+        
+        // Blocks till closed.
+    }
+    
+    
+    
 
-    public static TopicTreeRelation[] readRelationTypes(Options options) {
+    public static TopicTreeRelation[] readRelationTypes() {
         int counter = 0;
-        ArrayList<TopicTreeRelation> v = new ArrayList<TopicTreeRelation>();
-        while(true) {
-            String name=options.get("topictreetypes.type["+counter+"].name");
-            if(name==null) break;
-            String subSI=options.get("topictreetypes.type["+counter+"].subsi");
-            String assocSI=options.get("topictreetypes.type["+counter+"].assocsi");
-            String superSI=options.get("topictreetypes.type["+counter+"].supersi");
-            String icon=options.get("topictreetypes.type["+counter+"].icon");
-            v.add(new TopicTreeRelation(name,subSI,assocSI,superSI,icon));
-            counter++;
+        Options options = Wandora.getWandora().getOptions();
+        ArrayList<TopicTreeRelation> v = new ArrayList<>();
+        if(options != null) {
+            while(true) {
+                String name=options.get("trees.type["+counter+"].name");
+                if(name==null) break;
+                String subSI=options.get("trees.type["+counter+"].subsi");
+                String assocSI=options.get("trees.type["+counter+"].assocsi");
+                String superSI=options.get("trees.type["+counter+"].supersi");
+                String icon=options.get("trees.type["+counter+"].icon");
+                v.add(new TopicTreeRelation(name,subSI,assocSI,superSI,icon));
+                counter++;
+            }
         }
         return GripCollections.collectionToArray(v,TopicTreeRelation.class);
     }
@@ -80,51 +97,63 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
 
 
 
-    public static void writeAssociationTypes(Options options, TopicTreeRelation[] associations) {
-        for(int i=0;i<associations.length;i++){
-            options.put("topictreetypes.type["+i+"].name",associations[i].name);
-            options.put("topictreetypes.type["+i+"].subsi",associations[i].subSI);
-            options.put("topictreetypes.type["+i+"].assocsi",associations[i].assocSI);
-            options.put("topictreetypes.type["+i+"].supersi",associations[i].superSI);
-            options.put("topictreetypes.type["+i+"].icon",associations[i].icon);
-        }
-        int counter=associations.length;
-        while(true){
-            String name=options.get("topictreetypes.type["+counter+"].name");
-            if(name==null) break;
-            options.put("topictreetypes.type["+counter+"].name",null);
-            options.put("topictreetypes.type["+counter+"].subsi",null);
-            options.put("topictreetypes.type["+counter+"].assocsi",null);
-            options.put("topictreetypes.type["+counter+"].supersi",null);
-            options.put("topictreetypes.type["+counter+"].icon",null);
-            counter++;
+    public static void writeAssociationTypes(TopicTreeRelation[] associations) {
+        Options options = Wandora.getWandora().getOptions();
+        if(options != null) {
+            for(int i=0;i<associations.length;i++){
+                options.put("trees.type["+i+"].name",associations[i].name);
+                options.put("trees.type["+i+"].subsi",associations[i].subSI);
+                options.put("trees.type["+i+"].assocsi",associations[i].assocSI);
+                options.put("trees.type["+i+"].supersi",associations[i].superSI);
+                options.put("trees.type["+i+"].icon",associations[i].icon);
+            }
+            int counter=associations.length;
+            while(true){
+                String name=options.get("trees.type["+counter+"].name");
+                if(name==null) break;
+                options.put("trees.type["+counter+"].name",null);
+                options.put("trees.type["+counter+"].subsi",null);
+                options.put("trees.type["+counter+"].assocsi",null);
+                options.put("trees.type["+counter+"].supersi",null);
+                options.put("trees.type["+counter+"].icon",null);
+                counter++;
+            }
         }
     }
 
 
 
     
-    private void updateAssociationsPanel() throws TopicMapException {
+    private void updateRelationsPanel() {
         relationsPanel.removeAll();
-        for(int i=0; i<relations.length; i++){
-            GridBagConstraints gbc=new GridBagConstraints();
-            gbc.gridx=0;
-            gbc.gridy=i;
-            gbc.weightx=1.0;
-            gbc.fill=GridBagConstraints.HORIZONTAL;
-            TopicTreeRelationEditorPanel tatep = 
-                new TopicTreeRelationEditorPanel(
-                    relations[i].name,
-                    relations[i].subSI,
-                    relations[i].assocSI,
-                    relations[i].superSI,
-                    relations[i].icon,
-                    this,
-                    admin
-                );
-            relationsPanel.add(tatep,gbc);
-        }        
+        for(int i=0; i<relations.length; i++) {
+            try {
+                GridBagConstraints gbc=new GridBagConstraints();
+                gbc.gridx=0;
+                gbc.gridy=i;
+                gbc.weightx=1.0;
+                gbc.weighty=0.0;
+                gbc.fill=GridBagConstraints.HORIZONTAL;
+                TopicTreeRelationEditorPanel tatep = 
+                    new TopicTreeRelationEditorPanel(
+                        relations[i].name,
+                        relations[i].subSI,
+                        relations[i].assocSI,
+                        relations[i].superSI,
+                        relations[i].icon,
+                        this,
+                        admin
+                    );
+                relationsPanel.add(tatep,gbc);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
         addFillerPanel();
+        
+        relationsPanel.revalidate();
+        relationsPanel.repaint();
     }
 
 
@@ -167,11 +196,16 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
 
 
 
-    public TopicTreeRelation[] getRelationTypes() throws TopicMapException {
-        ArrayList<TopicTreeRelation> v = new ArrayList<TopicTreeRelation>();
+    public TopicTreeRelation[] getRelationTypes() {
+        ArrayList<TopicTreeRelation> v = new ArrayList<>();
         for(int i=0; i<relationsPanel.getComponentCount()-1; i++){
-            TopicTreeRelationEditorPanel panel = (TopicTreeRelationEditorPanel)relationsPanel.getComponent(i);
-            v.add(panel.getRelation());
+            try {
+                TopicTreeRelationEditorPanel panel = (TopicTreeRelationEditorPanel)relationsPanel.getComponent(i);
+                v.add(panel.getRelation());
+            }
+            catch(TopicMapException e) {
+                e.printStackTrace();
+            }
         }
         return GripCollections.collectionToArray(v, TopicTreeRelation.class);
     }
@@ -276,8 +310,8 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         cancelled=false;
+        writeAssociationTypes(getRelationTypes());
         parent.setVisible(false);
-
     }//GEN-LAST:event_okButtonActionPerformed
 
     public boolean wasCancelled(){

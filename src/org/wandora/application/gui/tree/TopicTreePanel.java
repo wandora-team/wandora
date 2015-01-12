@@ -48,7 +48,7 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
 
     private String rootTopic;
     // private TopicTreeModel model;
-    private Wandora parent;
+    private Wandora wandora;
     
     private String name;
     
@@ -56,13 +56,16 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
     private TopicTreeRelation[] initialAssociations;
     private boolean treeEnabled;
     
+    
     /** Creates new form SchemaTreeTopicChooser */
-    public TopicTreePanel(String rootTopic, Wandora parent)  throws TopicMapException {
+    public TopicTreePanel(String rootTopic, Wandora parent) throws TopicMapException {
         this(rootTopic,parent,null,null);
     }
+
     public TopicTreePanel(String rootTopic, Wandora parent,Set<String> selectedAssociations, TopicTreeRelation[] associations)  throws TopicMapException {
         this(rootTopic,parent,selectedAssociations,associations,"Topic tree");
     }
+
     /**
      * @param rootTopic Subject identifier of the topic that is used as root for the tree
      * @param selectedAssociations Names of the associations in associations array that
@@ -71,18 +74,18 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
      *        necessarily used in this topic tree chooser. selectedAssociations
      *        contains the names of the used association types.
      */
-    public TopicTreePanel(String rootTopic, Wandora parent, Set<String> selectedAssociations, TopicTreeRelation[] associations,String name) throws TopicMapException {
+    public TopicTreePanel(String rootTopic, Wandora wandora, Set<String> selectedAssociations, TopicTreeRelation[] associations,String name) throws TopicMapException {
         this.rootTopic=rootTopic;
-        this.parent=parent;
+        this.wandora=wandora;
         this.initialSelected=selectedAssociations;
         this.initialAssociations=associations;
         this.name=name;
 
         treeEnabled=true;
         
-        jTree = initialSelected==null?
-        new TopicTree(rootTopic, parent,this):
-        new TopicTree(rootTopic, parent, initialSelected, initialAssociations,this);
+        jTree = initialSelected==null ?
+            new TopicTree(rootTopic, wandora, this) :
+            new TopicTree(rootTopic, wandora, initialSelected, initialAssociations, this);
         
         initComponents();
 
@@ -109,15 +112,15 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
         return name;
     }
     
-    public void setTreeEnabled(boolean b){
+    public void setTreeEnabled(boolean b) {
         treeEnabled=b;
         if(jTree!=null){
-            if(b==true && this.getComponent(0)!=scrollPane){
+            if(b==true && this.getComponent(0)!=scrollPane) {
                 this.removeAll();
                 this.add(scrollPane);
                 this.revalidate();
             }
-            else if(b==false && this.getComponent(0)!=newRootPanel){
+            else if(b==false && this.getComponent(0)!=newRootPanel) {
                 this.removeAll();
                 this.add(newRootPanel);
                 this.revalidate();
@@ -237,25 +240,25 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
 
     private void newRootButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newRootButtonActionPerformed
         if(rootTopic == null) {
-            WandoraOptionPane.showMessageDialog(parent, "No SI found for root topic! You should set the root topic in tab configuration panel before root topic creation is possible.");
+            WandoraOptionPane.showMessageDialog(wandora, "No SI found for root topic! You should set the root topic in tab configuration panel before root topic creation is possible.");
             return;
         }
-        String bn=WandoraOptionPane.showInputDialog(parent,"Enter topic base name","Wandora class","Create root topic");
+        String bn=WandoraOptionPane.showInputDialog(wandora,"Enter topic base name","Wandora class","Create root topic");
         if(bn==null) return;
         try {
-            Topic t=parent.getTopicMap().createTopic();
-            if(TMBox.checkBaseNameChange(parent,t,bn)!=ConfirmResult.yes){
+            Topic t=wandora.getTopicMap().createTopic();
+            if(TMBox.checkBaseNameChange(wandora,t,bn)!=ConfirmResult.yes){
                 t.remove();
                 return;
             }
             t.setBaseName(bn);
             t.addSubjectIdentifier(t.getTopicMap().createLocator(rootTopic));
-            parent.doRefresh();
-            parent.refreshTopicTrees();
+            wandora.doRefresh();
+            wandora.refreshTopicTrees();
         }
         catch(TopicMapException tme) {
             tme.printStackTrace();
-            parent.displayException("Unable to create root topic.", tme);
+            wandora.displayException("Unable to create root topic.", tme);
         }
     }//GEN-LAST:event_newRootButtonActionPerformed
 
@@ -284,11 +287,11 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
         return ((TopicGuiWrapper)path.getLastPathComponent()).topic;
     }
 
-    public boolean needsRefresh(){
+    public boolean needsRefresh() {
         return ((TopicTree)jTree).getNeedsRefresh();
     }
     
-    public void refresh()  throws TopicMapException {
+    public void refresh() throws TopicMapException {
         ((TopicTree) jTree).refresh();
     }
 
@@ -304,14 +307,16 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
         return getSelection();
     }
     
-    public void init(){
-        parent.addTopicMapListener(this);
-        parent.addRefreshListener(this);
-    }
     @Override
-    public void cleanup(){
-        parent.removeTopicMapListener(this);
-        parent.removeRefreshListener(this);
+    public void init() {
+        wandora.addTopicMapListener(this);
+        wandora.addRefreshListener(this);
+    }
+    
+    @Override
+    public void cleanup() {
+        wandora.removeTopicMapListener(this);
+        wandora.removeRefreshListener(this);
     }
 
     @Override
@@ -320,8 +325,11 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
         return this;
     }
     
+    
+    // ---------------------------------------------------- TopicMapListener ---
+    
     @Override
-    public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException{
+    public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException {
         ((TopicTree)jTree).topicSubjectIdentifierChanged(t,added,removed);
     }
     @Override
@@ -365,10 +373,14 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
         ((TopicTree)jTree).associationRemoved(a);
     }
     @Override
-    public void associationChanged(Association a) throws TopicMapException{
+    public void associationChanged(Association a) throws TopicMapException {
         ((TopicTree)jTree).associationChanged(a);
     }
 
+    // --------------------------------------------------- /TopicMapListener ---
+    
+    
+    
     @Override
     public void doRefresh() throws TopicMapException {
         //if(needsRefresh()){

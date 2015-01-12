@@ -45,14 +45,16 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
     
     private boolean cancelled=true;
     
-    private TopicTreeRelation[] allAssociations;
+    private TopicTreeRelation[] allRelations;
     private ArrayList<JCheckBox> checkboxes;
     
     private Component parent;
     private Wandora wandora;
     
+    
+    
     /** Creates new form TopicTreeConfigPanel */
-    public TopicTreeConfigPanel(TopicTreeRelation[] allAssociations, Set<String> selected, String root, String name, Component parent, Wandora wandora) throws TopicMapException {
+    public TopicTreeConfigPanel(TopicTreeRelation[] allRelations, Set<String> selectedRelations, String root, String name, Component parent, Wandora wandora) throws TopicMapException {
         this.wandora = wandora;
         rootButton = new GetTopicButton(wandora);
         initComponents();
@@ -60,34 +62,47 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         nameTextField.setText(name);
 //        rootTextField.setText(root);
         ((GetTopicButton)rootButton).setTopic(root);
-        checkboxes=new ArrayList<JCheckBox>();
-        this.allAssociations=allAssociations;
-        for(int i=0; i<allAssociations.length; i++){
+        
+        updateRelationsUI(allRelations, selectedRelations);
+        
+        GridBagConstraints gbc=new GridBagConstraints();
+        gbc.gridx=0;
+        gbc.gridy=allRelations.length+1;
+        gbc.weighty=1.0;
+        gbc.fill=GridBagConstraints.VERTICAL;
+        relationsPanel.add(new JPanel(),gbc);
+    }
+    
+    
+    
+    
+    private void updateRelationsUI(TopicTreeRelation[] allRelations, Set<String> selectedRelations) {
+        //relationsPanel.removeAll();
+        
+        checkboxes = new ArrayList<JCheckBox>();
+        this.allRelations = allRelations;
+        for(int i=0; i<allRelations.length; i++) {
             GridBagConstraints gbc=new GridBagConstraints();
             gbc.gridx=0;
             gbc.gridy=1+i;
             gbc.anchor=GridBagConstraints.WEST;
             gbc.fill=GridBagConstraints.HORIZONTAL;
             gbc.weightx=1.0;
-            String aname=allAssociations[i].name;
+            String aname=allRelations[i].name;
             JCheckBox checkbox=new SimpleCheckBox();
             checkbox.setText(aname);
-            if(selected.contains(aname)) checkbox.setSelected(true);
+            if(selectedRelations.contains(aname)) checkbox.setSelected(true);
             else checkbox.setSelected(false);
             checkboxes.add(checkbox);
-            associationsPanel.add(checkbox,gbc);
+            relationsPanel.add(checkbox,gbc);
         }
-        GridBagConstraints gbc=new GridBagConstraints();
-        gbc.gridx=0;
-        gbc.gridy=allAssociations.length+1;
-        gbc.weighty=1.0;
-        gbc.fill=GridBagConstraints.VERTICAL;
-        associationsPanel.add(new JPanel(),gbc);
     }
     
-    public Set<String> getSelected(){
+    
+    
+    public Set<String> getSelectedRelations() {
         HashSet<String> selected=new HashSet<String>();
-        for(JCheckBox cb : checkboxes){
+        for(JCheckBox cb : checkboxes) {
             if(cb.isSelected()) selected.add(cb.getText());
         }
         return selected;
@@ -97,7 +112,7 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         return ((GetTopicButton)rootButton).getTopicSI();
     }
     
-    public String getTabName(){
+    public String getTabName() {
         return nameTextField.getText();
     }
     
@@ -113,7 +128,7 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         rootTextField = new org.wandora.application.gui.simple.SimpleField();
         jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        associationsPanel = new javax.swing.JPanel();
+        relationsPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         editRelationsButton = new SimpleButton();
         jPanel2 = new javax.swing.JPanel();
@@ -133,8 +148,8 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
         add(jLabel1, gridBagConstraints);
 
-        associationsPanel.setLayout(new java.awt.GridBagLayout());
-        jScrollPane1.setViewportView(associationsPanel);
+        relationsPanel.setLayout(new java.awt.GridBagLayout());
+        jScrollPane1.setViewportView(relationsPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -208,7 +223,7 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
         add(rootButton, gridBagConstraints);
 
-        jLabel2.setText("Tab name");
+        jLabel2.setText("Name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 3, 5);
@@ -231,17 +246,22 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void editRelationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editRelationsButtonActionPerformed
-        
-        
-        
+        TopicTreeRelationsEditor editor = new TopicTreeRelationsEditor();
+        editor.open(Wandora.getWandora());
+        if(editor.wasCancelled()) return;
+
+        updateRelationsUI(editor.readRelationTypes(), getSelectedRelations());
+        if(parent != null) {
+            parent.revalidate();
+            parent.repaint();
+        }
     }//GEN-LAST:event_editRelationsButtonActionPerformed
     
-    public boolean wasCancelled(){
+    public boolean wasCancelled() {
         return cancelled;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel associationsPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton editRelationsButton;
     private javax.swing.JLabel jLabel1;
@@ -251,6 +271,7 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JButton okButton;
+    private javax.swing.JPanel relationsPanel;
     private javax.swing.JButton rootButton;
     private javax.swing.JTextField rootTextField;
     // End of variables declaration//GEN-END:variables

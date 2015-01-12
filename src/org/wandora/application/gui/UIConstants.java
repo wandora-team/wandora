@@ -86,6 +86,8 @@ public class UIConstants {
     public static final Color defaultBorderShadow = new Color(200,221,242);
     
     
+    public static final Color wandoraBlueColor = new Color(53,56,87);
+    
     
     
     public static WPRFileChooser getWandoraProjectFileChooser() {

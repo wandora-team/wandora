@@ -239,22 +239,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <map>remote-wandora</map>
       </connection>
    </remoteconnections>
-   <topictreetypes>
-      <type>
-         <name>Instances</name>
-         <assocsi></assocsi>
-         <icon>gui/icons/topictree/instanceof.png</icon>
-         <subsi></subsi>
-         <supersi></supersi>
-      </type>
-      <type>
-         <name>Subclasses</name>
-         <assocsi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass</assocsi>
-         <subsi>http://www.topicmaps.org/xtm/1.0/core.xtm#subclass</subsi>
-         <icon>gui/icons/topictree/supersubclass.png</icon>
-         <supersi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass</supersi>
-      </type>
-   </topictreetypes>
    <helpviewer>http://wandora.org/wiki/__HELP__</helpviewer>
    <copycommand></copycommand>
    <tool>
@@ -1493,6 +1477,27 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </bsh>
    <httpuseragent>Wandora</httpuseragent>
    <trees>
+      <type>
+         <name>Instances</name>
+         <assocsi></assocsi>
+         <icon>gui/icons/topictree/instanceof.png</icon>
+         <subsi></subsi>
+         <supersi></supersi>
+      </type>
+      <type>
+         <name>Subclasses</name>
+         <assocsi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass</assocsi>
+         <subsi>http://www.topicmaps.org/xtm/1.0/core.xtm#subclass</subsi>
+         <icon>gui/icons/topictree/supersubclass.png</icon>
+         <supersi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass</supersi>
+      </type>
+      <type>
+         <name>Default association</name>
+         <assocsi>http://wandora.org/si/core/default-association</assocsi>
+         <subsi>http://wandora.org/si/core/default-role-2</subsi>
+         <icon>gui/icons/topictree/box.png</icon>
+         <supersi>http://wandora.org/si/core/default-role-1</supersi>
+      </type>
       <tree>
          <root>http://wandora.org/si/core/wandora-class</root>
          <name>Topics</name>

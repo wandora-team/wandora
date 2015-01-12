@@ -954,7 +954,40 @@ public class UIBox {
     
     // -------------------------------------------------------------------------
     
+    
+    
     private static HashMap iconCache = null;
+    private static Font iconFont = null;
+    
+    
+    
+    public static Icon getIcon(int iconCharacter) {
+        if(iconCache != null) {
+            try {
+                Icon icon = (Icon) iconCache.get(iconCharacter);
+                if(icon != null) return icon;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            iconCache = new HashMap();
+        }
+        Image image = getImage(iconCharacter);
+        if(image != null) {
+            try {
+                Icon icon = new ImageIcon(image);
+                iconCache.put(iconCharacter, icon);
+                return icon;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
     
     
     public static Icon getIcon(String iconName) {
@@ -986,6 +1019,42 @@ public class UIBox {
         
     
     
+    /**
+     * Create image with a character in font-awesome. Font-awesome is a widely 
+     * used icon collection created by Dave Gandy. The font is described in
+     * http://fortawesome.github.io/Font-Awesome/ .
+     * 
+     * Use character code arguments between 0x7000 - 0x720C.
+     *  
+     **/
+    public static BufferedImage getImage(int character) {
+        try {
+            if(iconFont == null) {
+                InputStream is = ClassLoader.getSystemResourceAsStream("gui/fonts/fontawesome/fontawesome-webfont.ttf");
+                iconFont = Font.createFont(Font.TRUETYPE_FONT, is);
+            }
+            if(iconFont != null) {
+                BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = (Graphics2D) image.getGraphics();
+                g.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+                g.setRenderingHint(
+                    RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                Font iconFont16 = iconFont.deriveFont(14f);
+                g.setFont(iconFont16);
+                g.setColor(UIConstants.wandoraBlueColor);
+                String iconText = Character.toString((char)character);
+                g.drawChars(iconText.toCharArray(), 0, 1, 0, 14);
+                return image;
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
     
     
     public static BufferedImage getImage(String imageName) {
