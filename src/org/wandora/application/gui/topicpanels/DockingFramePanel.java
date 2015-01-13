@@ -83,6 +83,7 @@ import org.wandora.application.tools.docking.AddDockable;
 import org.wandora.application.tools.docking.DeleteAllDockables;
 import org.wandora.application.tools.docking.DeleteCurrentDockable;
 import org.wandora.application.tools.docking.DeleteDockable;
+import org.wandora.application.tools.docking.MaximizeDockable;
 import org.wandora.application.tools.docking.SelectDockable;
 import org.wandora.application.tools.navigate.CloseCurrentTopicPanel;
 import org.wandora.application.tools.navigate.OpenTopicIn;
@@ -451,7 +452,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
     @Override
     public Object[] getViewMenuStruct() {
-        JMenu addMenu =  new SimpleMenu("Add panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
+        JMenu addMenu =  new SimpleMenu("New panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
         ArrayList<ArrayList> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
         ArrayList addTopicPanelMenuStruct = new ArrayList();
         for(ArrayList panelData : availableTopicPanels) {
@@ -472,24 +473,71 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         //JMenu selectMenu =  new SimpleMenu("Select", UIBox.getIcon("gui/icons/topic_panel_select.png"));
         //UIBox.attachMenu(selectMenu, getSelectMenuStruct(), wandora);
         
-        JMenu closeMenu =  new SimpleMenu("Close", UIBox.getIcon("gui/icons/topic_panel_close.png"));
-        UIBox.attachMenu(closeMenu, getCloseMenuStruct(), wandora);
+        //JMenu closeMenu =  new SimpleMenu("Close", UIBox.getIcon("gui/icons/topic_panel_close.png"));
+        //UIBox.attachMenu(closeMenu, getCloseMenuStruct(), wandora);
+
+        //JMenu optionsMenu =  new SimpleMenu("Options", UIBox.getIcon("gui/icons/topic_panel_options.png"));
+        //UIBox.attachMenu(optionsMenu, getOptionsMenuStruct(), wandora);
         
-        JMenu optionsMenu =  new SimpleMenu("Options", UIBox.getIcon("gui/icons/topic_panel_options.png"));
-        UIBox.attachMenu(optionsMenu, getOptionsMenuStruct(), wandora);
         
-        Object[] menuStruct = new Object[] {
-            // "---",
-            addMenu,
-            // selectMenu,
-            "---",
-            closeMenu,
-            "Close current", new DeleteCurrentDockable(),
-            "Close all", new DeleteAllDockables(),
-            "---",
-            optionsMenu,
-        };
-        return menuStruct;
+        
+        ArrayList struct = new ArrayList();
+        
+        struct.add(addMenu);
+               
+        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            struct.add("---");
+            for(Dockable dockable : dockedTopicPanels.keySet()) {
+                TopicPanel tp = dockedTopicPanels.get(dockable);
+                if(tp != null) {
+                    String label = tp.getName();
+                    label = label + getAdditionalLabel(tp);
+                    JMenu topicPanelMenu =  new SimpleMenu(label, tp.getIcon());
+                    
+                    ArrayList subStruct = new ArrayList();
+                    
+                    subStruct.add( "Select" );
+                    subStruct.add( UIBox.getIcon( "gui/icons/select_dockable.png" ) );
+                    subStruct.add( new SelectDockable(dockable) );
+                    
+                    if(dockable.equals(station.getFullScreen())) {
+                        subStruct.add( "Demaximize" );
+                        subStruct.add( UIBox.getIcon( "gui/icons/demaximize_dockable.png" ) );
+                    }
+                    else {
+                        subStruct.add( "Maximize" );
+                        subStruct.add( UIBox.getIcon( "gui/icons/maximize_dockable.png" ) );
+                    }
+                    subStruct.add( new MaximizeDockable(dockable) );
+                    
+                    subStruct.add( "---" );
+                    
+                    Object[] subMenuStruct = tp.getViewMenuStruct();
+                    if(subMenuStruct != null) {
+                        if(subMenuStruct.length > 0) {
+                            for( Object subMenuItem : subMenuStruct ) {
+                                subStruct.add(subMenuItem);
+                            }
+                            subStruct.add("---");
+                        }
+                    }
+                    subStruct.add( "Close" );
+                    subStruct.add( UIBox.getIcon("gui/icons/close_dockable.png") );
+                    subStruct.add( new DeleteDockable(dockable) );
+                    
+                    UIBox.attachMenu(topicPanelMenu, subStruct.toArray(), wandora);
+                    
+                    struct.add( topicPanelMenu );
+                }
+            }
+            struct.add("---");
+            struct.add("Close current");
+            struct.add(new DeleteCurrentDockable());
+            struct.add("Close all");
+            struct.add(new DeleteAllDockables());
+        }
+        
+        return struct.toArray();
     }
     
     
@@ -714,8 +762,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     
     public void selectDockable(Dockable dockable) {
-        station.setFullScreen(dockable);
+        control.setFocusedDockable(dockable, true);
     }
+    
     
     
     

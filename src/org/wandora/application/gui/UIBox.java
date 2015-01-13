@@ -1042,11 +1042,11 @@ public class UIBox {
                 g.setRenderingHint(
                     RenderingHints.KEY_TEXT_ANTIALIASING,
                     RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-                Font iconFont16 = iconFont.deriveFont(14f);
+                Font iconFont16 = iconFont.deriveFont(12f);
                 g.setFont(iconFont16);
                 g.setColor(UIConstants.wandoraBlueColor);
                 String iconText = Character.toString((char)character);
-                g.drawChars(iconText.toCharArray(), 0, 1, 0, 14);
+                g.drawChars(iconText.toCharArray(), 0, 1, 2, 13);
                 return image;
             }
         }

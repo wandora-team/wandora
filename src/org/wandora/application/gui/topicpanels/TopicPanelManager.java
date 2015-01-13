@@ -292,6 +292,8 @@ public class TopicPanelManager implements ActionListener {
     public Object[] getViewMenuStruct() {
         if(currentTopicPanel != null) {
             return currentTopicPanel.getViewMenuStruct();
+            // Current configuration of Wandora sets currentTopicPanel to 
+            // DockingFramePanel. See getViewMenuStruct method in DockingFramePanel.
         }
         else {
             return new Object[] { };
