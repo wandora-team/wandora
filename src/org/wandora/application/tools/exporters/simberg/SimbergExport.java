@@ -8,9 +8,11 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.exporters.AbstractExportTool;
@@ -40,6 +42,12 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
     public String getDescription() {
         return "Exports topic map for Simberg.";
     }
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon("gui/icons/fng.png");
+    }
+    
     
     public static Topic getAssociatedTopic(Topic t,Topic atype,Topic role,HashMap<Topic,Topic> constraints,Topic orderT) throws TopicMapException {
         ArrayList<Topic> ret=getAssociatedTopics(t, atype, role, constraints, orderT);
@@ -653,19 +661,19 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                 
                 modelTopics.put(Tuples.t2(digiCls,(Object)digi),digiM);
             }
-            
-
         }
         
         return modelTopics.values();
     }
+    
+    
     
     @Override
     public void execute(Wandora admin, Context context) throws TopicMapException {
         TopicMap tm=Wandora.getWandora().getTopicMap();
         
         SimpleFileChooser chooser=UIConstants.getFileChooser();
-        chooser.setDialogTitle("Export nyblin data");
+        chooser.setDialogTitle("Export nyblin data as JSON");
 
         if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();

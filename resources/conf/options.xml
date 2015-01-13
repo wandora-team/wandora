@@ -1174,21 +1174,25 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.fng.opendata.v2b.FngOpenDataDublinCoreExporter</class>
             </item>
             <item>
-               <name>FNG open data Simberg exporter...</name>
+                <name>--- SIMBERG ---</name>
+                <class>org.wandora.application.tools.DummyTool</class>
+             </item>
+            <item>
+               <name>Simberg open data exporter...</name>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOpenDataExporter</class>
             </item>
             <item>
-               <name>FNG OAI DC Simberg exporter...</name>
+               <name>Simberg OAI DC exporter...</name>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOAIDCExporter</class>
             </item>
             <item>
-               <name>FNG LIDO Simberg exporter...</name>
+               <name>Simberg LIDO exporter...</name>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergLIDOExporter</class>
             </item>
-         </item>
-         <item>
-            <name>Simberg export</name>
-            <class>org.wandora.application.tools.exporters.simberg.SimbergExport</class>
+            <item>
+               <name>Simberg JSON exporter....</name>
+               <class>org.wandora.application.tools.exporters.simberg.SimbergExport</class>
+            </item>
          </item>
       </set>
       <set>

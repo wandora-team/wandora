@@ -395,9 +395,11 @@ public class SimbergOpenDataHandler {
                         // --- classification
                         s.append("<lido:objectClassificationWrap>");
 
-                            s.append("<lido:objectWorkType>");
-                                s.append("<lido:term>kuva</lido:term>");
-                            s.append("</lido:objectWorkType>");
+                            s.append("<lido:objectWorkTypeWrap>");
+                                s.append("<lido:objectWorkType>");
+                                    s.append("<lido:term>valokuva</lido:term>");
+                                s.append("</lido:objectWorkType>");
+                            s.append("</lido:objectWorkTypeWrap>");
                             
                             s.append("<lido:classificationWrap>");
                                 s.append("<lido:classification>");
@@ -411,17 +413,20 @@ public class SimbergOpenDataHandler {
                         // --- relations
                         s.append("<lido:objectRelationWrap>");
                             
-                            if(keywords != null && keywords.size() > 0) {
-                                s.append("<lido:subjectWrap>");
-                                    s.append("<lido:subjectSet>");
-                                        s.append("<lido:subject>");
-                                            s.append("<lido:subjectConcept>");
-                                                s.append("<lido:conceptID lido:type=\"term\">valokuva</lido:conceptID>");
-                                            s.append("</lido:subjectConcept>");
-                                        s.append("</lido:subject>");
-                                    s.append("</lido:subjectSet>");                               
-                                s.append("</lido:subjectWrap>");
-                            }
+                            s.append("<lido:subjectWrap>");
+                                s.append("<lido:subjectSet>");
+                                    s.append("<lido:subject>");
+                                        s.append("<lido:subjectConcept>");
+                                            s.append("<lido:term lido:label=\"asiasana\">valokuva</lido:term>");
+                                        s.append("</lido:subjectConcept>");
+                                    s.append("</lido:subject>");
+                                    s.append("<lido:subject>");
+                                        s.append("<lido:subjectConcept>");
+                                            s.append("<lido:term lido:label=\"asiasana\">Hugo Simberg</lido:term>");
+                                        s.append("</lido:subjectConcept>");
+                                    s.append("</lido:subject>");
+                                s.append("</lido:subjectSet>");                               
+                            s.append("</lido:subjectWrap>");
                             
                             s.append("<lido:relatedWorksWrap>");
                                 s.append("<lido:relatedWorkSet>");
@@ -466,25 +471,26 @@ public class SimbergOpenDataHandler {
                                 s.append("<lido:repositorySet>");
                                     s.append("<lido:repositoryName>");
                                         s.append("<lido:legalBodyName>");
-                                            s.append("<lido:appellationValue lido:label=\"Museo/Arkisto\">Kansallisgalleria/Hugo Simbergin arkisto</lido:appellationValue>");
+                                            s.append("<lido:appellationValue lido:label=\"Museo/Arkisto\">Kansallisgalleria/Arkisto ja kirjasto</lido:appellationValue>");
                                         s.append("</lido:legalBodyName>");
                                         s.append("<lido:legalBodyWeblink lido:label=\"Www-osoite\">http://www.kansallisgalleria.fi</lido:legalBodyWeblink>");
                                     s.append("</lido:repositoryName>");
                                 s.append("</lido:repositorySet>");
                             s.append("</lido:repositoryWrap>");
 
-
-                            s.append("<lido:objectDescriptionWrap>");
-                                s.append("<lido:objectDescriptionSet>");
-                                    s.append("<lido:descriptiveNoteValue>");
-                                        StringBuilder ke = new StringBuilder("");
-                                        for(int i=0; i<keywords.size(); i++) {
-                                            ke.append(keywords.get(i).toString(t));
-                                        }
-                                        s.append((ke.toString()));
-                                    s.append("</lido:descriptiveNoteValue>");
-                                s.append("</lido:objectDescriptionSet>");
-                            s.append("</lido:objectDescriptionWrap>");
+                            if(keywords != null && keywords.size() > 0) {
+                                s.append("<lido:objectDescriptionWrap>");
+                                    s.append("<lido:objectDescriptionSet>");
+                                        s.append("<lido:descriptiveNoteValue>");
+                                            StringBuilder ke = new StringBuilder("");
+                                            for(int i=0; i<keywords.size(); i++) {
+                                                ke.append(keywords.get(i).toString(t));
+                                            }
+                                            s.append((ke.toString()));
+                                        s.append("</lido:descriptiveNoteValue>");
+                                    s.append("</lido:objectDescriptionSet>");
+                                s.append("</lido:objectDescriptionWrap>");
+                            }
 
                         s.append("</lido:objectIdentificationWrap>");
 
@@ -569,7 +575,14 @@ public class SimbergOpenDataHandler {
                         s.append("<lido:resourceWrap>");
                             StringBuilder im = new StringBuilder("");
                             for(int i=0; i<images.size(); i++) {
-                                im.append(images.get(i).toString(t));
+                                if("positive".equalsIgnoreCase(images.get(i).type)) {
+                                    im.append(images.get(i).toString(t));
+                                }
+                            }
+                            for(int i=0; i<images.size(); i++) {
+                                if(!"positive".equalsIgnoreCase(images.get(i).type)) {
+                                    im.append(images.get(i).toString(t));
+                                }
                             }
                             s.append(im.toString());
                         s.append("</lido:resourceWrap>");
