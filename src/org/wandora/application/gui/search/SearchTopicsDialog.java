@@ -56,7 +56,9 @@ import org.wandora.topicmap.wandora2tmapi.W2TTopic;
 
 
 /**
- *
+ * Use SearchTopicsFrame instead.
+ * 
+ * @deprecated 
  * @author  akivela
  */
 public class SearchTopicsDialog extends javax.swing.JDialog {
@@ -1352,7 +1354,7 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         similarityPanel.add(similarityPanelInner, gridBagConstraints);
 
-        searchTabbedPane.addTab("String similarity", similarityPanel);
+        searchTabbedPane.addTab("Similarity", similarityPanel);
 
         queryPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -1466,7 +1468,7 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         queryPanel.add(queryPanelInner, gridBagConstraints);
 
-        searchTabbedPane.addTab("Query script", queryPanel);
+        searchTabbedPane.addTab("Query", queryPanel);
 
         tmqlPanel.setName(""); // NOI18N
         tmqlPanel.setLayout(new java.awt.GridBagLayout());
@@ -1527,7 +1529,7 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         tmqlPanel.add(tmqlScrollPane, gridBagConstraints);
 
-        searchTabbedPane.addTab("TMQL query", tmqlPanel);
+        searchTabbedPane.addTab("TMQL", tmqlPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

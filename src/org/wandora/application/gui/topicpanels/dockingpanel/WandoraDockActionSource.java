@@ -37,6 +37,7 @@ import org.wandora.application.gui.topicpanels.dockingpanel.actions.CloseDockabl
 import org.wandora.application.gui.topicpanels.dockingpanel.actions.MaximizeDockableAction;
 import org.wandora.application.gui.topicpanels.dockingpanel.actions.TopicPanelMenuAction;
 import org.wandora.application.gui.topicpanels.dockingpanel.actions.WandoraToolWrapperAction;
+import org.wandora.application.tools.AboutWandora;
 import org.wandora.application.tools.navigate.OpenTopic;
 
 /**
@@ -48,10 +49,12 @@ import org.wandora.application.tools.navigate.OpenTopic;
 public class WandoraDockActionSource extends MultiDockActionSource {
     private TopicPanel topicPanel = null;
     
+    
+    
     public WandoraDockActionSource(TopicPanel tp, DockingFramePanel dfp, DockController control) {
         topicPanel = tp;
-        
-        
+
+        //this.add(new WandoraToolWrapperAction(new OpenTopic(OpenTopic.ASK_USER)));
         //this.add(new TopicPanelMenuAction(tp));
         this.add(new MaximizeDockableAction(dfp));
         this.add(new CloseDockableAction(dfp));

@@ -43,7 +43,7 @@ public class DeleteCurrentDockable extends AbstractDockingTool {
     
     @Override
     public String getName() {
-        return "Delete current dockable";
+        return "Close current dockable";
     }
     
     

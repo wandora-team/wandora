@@ -318,7 +318,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 }
             }
         }
-        //if(control != null) control.destroy();
+        if(control != null) {
+            control.kill();
+        }
     }
 
     

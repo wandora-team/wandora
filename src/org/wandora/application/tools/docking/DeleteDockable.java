@@ -45,10 +45,10 @@ public class DeleteDockable extends AbstractDockingTool {
     @Override
     public String getName() {
         if(dockable != null) {
-            return "Delete dockable "+dockable.getTitleText();
+            return "Close dockable "+dockable.getTitleText();
         }
         else {
-            return "Delete dockable";
+            return "Close dockable";
         }
     }
     

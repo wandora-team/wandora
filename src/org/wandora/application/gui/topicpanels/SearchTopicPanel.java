@@ -61,10 +61,10 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
 
     private Options options = null;
     
-    private SearchPanel searchPanel = new SearchPanel();
-    private SimilarityPanel similarityPanel = new SimilarityPanel();
-    private QueryPanel queryPanel = new QueryPanel();
-    private TMQLPanel tmqlPanel = new TMQLPanel();
+    private SearchPanel searchPanel = null;
+    private SimilarityPanel similarityPanel = null;
+    private QueryPanel queryPanel = null;
+    private TMQLPanel tmqlPanel = null;
     
     private Component currentContainerPanel = null;
     
@@ -80,6 +80,11 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     
     @Override
     public void init() {
+        searchPanel = new SearchPanel();
+        similarityPanel = new SimilarityPanel();
+        queryPanel = new QueryPanel();
+        tmqlPanel = new TMQLPanel();
+        
         Wandora wandora = Wandora.getWandora();
         this.options = new Options(wandora.getOptions());
         initComponents();
@@ -162,7 +167,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         setLayout(new java.awt.GridBagLayout());
 
         searchContainerPanel.setLayout(new java.awt.BorderLayout());
-        tabbedPane.addTab("Search", searchContainerPanel);
+        tabbedPane.addTab("Finder", searchContainerPanel);
 
         similarityContainerPanel.setLayout(new java.awt.BorderLayout());
         tabbedPane.addTab("Similar", similarityContainerPanel);

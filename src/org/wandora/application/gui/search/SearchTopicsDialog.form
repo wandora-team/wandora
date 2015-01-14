@@ -190,8 +190,8 @@
         <Container class="javax.swing.JPanel" name="similarityPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="String similarity">
-                <Property name="tabTitle" type="java.lang.String" value="String similarity"/>
+              <JTabbedPaneConstraints tabName="Similarity">
+                <Property name="tabTitle" type="java.lang.String" value="Similarity"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -656,8 +656,8 @@
         <Container class="javax.swing.JPanel" name="queryPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Query script">
-                <Property name="tabTitle" type="java.lang.String" value="Query script"/>
+              <JTabbedPaneConstraints tabName="Query">
+                <Property name="tabTitle" type="java.lang.String" value="Query"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -872,8 +872,8 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="TMQL query">
-                <Property name="tabTitle" type="java.lang.String" value="TMQL query"/>
+              <JTabbedPaneConstraints tabName="TMQL">
+                <Property name="tabTitle" type="java.lang.String" value="TMQL"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

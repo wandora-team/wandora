@@ -43,7 +43,7 @@ public class DeleteAllDockables extends AbstractDockingTool {
     
     @Override
     public String getName() {
-        return "Delete all dockables";
+        return "Close all dockables";
     }
     
     

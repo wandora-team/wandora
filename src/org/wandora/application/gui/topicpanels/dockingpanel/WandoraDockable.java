@@ -101,30 +101,37 @@ public class WandoraDockable extends DefaultDockable {
     
     public class WandoraDockableMouseListener implements MouseInputListener {
 
+        @Override
         public void mouseClicked(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mousePressed(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseReleased(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseEntered(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseExited(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseDragged(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseMoved(MouseEvent e) {
             lastMouseEvent = e;
         }
