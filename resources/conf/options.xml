@@ -330,6 +330,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/webview</path>
       <path>org/wandora/application/tools/r</path>
       <path>org/wandora/application/tools/extractors/watson</path>
+      <path>org/wandora/application/tools/docking/add</path>
+      <path>org/wandora/application/tools/docking</path>
       <set>
          <name>generator</name>
          <item>
@@ -1422,6 +1424,33 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Flickr</name>
             <class>org.wandora.application.tools.extractors.flickr.GroupInfoExtractor</class>
+         </item>
+      </set>
+      <set>
+         <name>Panel buttons</name>
+         <item>
+            <name>Add traditional</name>
+            <class>org.wandora.application.tools.docking.add.AddTraditional</class>
+         </item>
+         <item>
+            <name>Add tree</name>
+            <class>org.wandora.application.tools.docking.add.AddTree</class>
+         </item>
+         <item>
+            <name>Add search</name>
+            <class>org.wandora.application.tools.docking.add.AddSearch</class>
+         </item>
+         <item>
+            <name>Add graph</name>
+            <class>org.wandora.application.tools.docking.add.AddGraph</class>
+         </item>
+         <item>
+            <name>Add sketch grid</name>
+            <class>org.wandora.application.tools.docking.add.AddSketchGrid</class>
+         </item>
+         <item>
+            <name>Add web view</name>
+            <class>org.wandora.application.tools.docking.add.AddWebView</class>
          </item>
       </set>
    </tool>

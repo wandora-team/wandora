@@ -25,9 +25,12 @@ package org.wandora.application.tools.docking;
 
 import java.awt.Component;
 import java.util.Iterator;
+import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 
@@ -47,8 +50,10 @@ import org.wandora.topicmap.Topic;
 
 public class AddDockable extends AbstractDockingTool {
     
-    private Class<Component> dockableClass = null;
-
+    private Class dockableClass = null;
+    private Icon dockableIcon = null;
+    
+    
     
     /** Creates a new instance of AddDockable */
     public AddDockable(Class dc) {
@@ -56,13 +61,58 @@ public class AddDockable extends AbstractDockingTool {
     }
     
     
+    
+    public AddDockable(String className) {
+        try {
+            if(className != null) {
+                dockableClass = Class.forName(className);
+            }
+            else {
+                System.out.println("AddDockable can't use given class name 'null'.");
+            }
+        }
+        catch(Exception e) {
+            System.out.println("AddDockable can't use given class name '"+className+"'.");
+        }
+    }
+    
+    
+    
     @Override
     public String getName() {
         if(dockableClass != null) {
-            return "Add dockable "+dockableClass.getName();
+            return "New dockable "+dockableClass.getName();
         }
         else {
-            return "Add dockable";
+            return "New dockable";
+        }
+    }
+    
+    
+    @Override
+    public Icon getIcon() {
+        if(dockableClass == null) {
+            return UIBox.getIcon("gui/icons/topic_panel_add.png");
+        }
+        else {
+            if(dockableIcon == null) {
+                try {
+                    Object o = dockableClass.newInstance();
+                    if(o instanceof TopicPanel) {
+                        TopicPanel tp = (TopicPanel) o;
+                        dockableIcon = tp.getIcon();
+                    }
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(dockableIcon == null) {
+                return UIBox.getIcon("gui/icons/topic_panel_add.png");
+            }
+            else {
+                return dockableIcon;
+            }
         }
     }
     
@@ -91,6 +141,9 @@ public class AddDockable extends AbstractDockingTool {
             catch(Exception e) {
                 e.printStackTrace();
             }
+        }
+        else {
+            System.out.println("No valid dockable class registered in AddDockable. Can't create new dockable.");
         }
     }    
     

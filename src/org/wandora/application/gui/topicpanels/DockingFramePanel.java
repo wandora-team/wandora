@@ -478,9 +478,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
         //JMenu optionsMenu =  new SimpleMenu("Options", UIBox.getIcon("gui/icons/topic_panel_options.png"));
         //UIBox.attachMenu(optionsMenu, getOptionsMenuStruct(), wandora);
-        
-        
-        
+
         ArrayList struct = new ArrayList();
         
         struct.add(addMenu);
