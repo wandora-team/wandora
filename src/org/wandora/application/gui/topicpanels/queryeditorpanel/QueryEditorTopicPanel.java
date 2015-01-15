@@ -106,12 +106,12 @@ public class QueryEditorTopicPanel implements TopicPanel {
 
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/topic_panel_custom.png");
+        return UIBox.getIcon("gui/icons/topic_panel_query_editor.png");
     }
 
     @Override
     public int getOrder() {
-        return 0;
+        return 10000;
     }
 
     @Override

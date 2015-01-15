@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.TextEditor;
+import org.wandora.application.gui.UIBox;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveManager;
 import org.wandora.query2.DirectiveUIHints;
@@ -83,6 +84,26 @@ public class QueryEditorComponent extends javax.swing.JPanel {
                         return true;                        
                     }
                 });
+        
+        
+        Object[] buttonStruct = {
+            "Build",
+            UIBox.getIcon(0xF085), // See resources/gui/fonts/FontAwesome.ttf for alternative icons.
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buildButtonActionPerformed(evt);
+                }
+            },
+            "Delete",
+            UIBox.getIcon(0xF014),
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    deleteButtonActionPerformed(evt);
+                }
+            },
+        };
+        JComponent buttonContainer = UIBox.makeButtonContainer(buttonStruct, Wandora.getWandora());
+        buttonPanel.add(buttonContainer);
         
     }
     
@@ -206,6 +227,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -214,8 +236,9 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         queryGraphPanel = new GraphPanel();
         finalResultLabel = new javax.swing.JLabel();
         toolBar = new javax.swing.JToolBar();
-        buildButton = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
+        buttonPanel = new javax.swing.JPanel();
+        fillerPanel = new javax.swing.JPanel();
+        innerFillerPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -226,11 +249,12 @@ public class QueryEditorComponent extends javax.swing.JPanel {
 
         jSplitPane1.setRightComponent(jScrollPane1);
 
+        queryGraphPanel.setBackground(new java.awt.Color(255, 255, 255));
         queryGraphPanel.setLayout(null);
 
-        finalResultLabel.setText("FInal result <-");
+        finalResultLabel.setText("Final result <-");
         queryGraphPanel.add(finalResultLabel);
-        finalResultLabel.setBounds(10, 10, 100, 17);
+        finalResultLabel.setBounds(10, 10, 100, 14);
 
         queryScrollPane.setViewportView(queryGraphPanel);
 
@@ -238,60 +262,30 @@ public class QueryEditorComponent extends javax.swing.JPanel {
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
 
+        toolBar.setFloatable(false);
         toolBar.setRollover(true);
 
-        buildButton.setText("Build");
-        buildButton.setFocusable(false);
-        buildButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        buildButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        buildButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buildButtonActionPerformed(evt);
-            }
-        });
-        toolBar.add(buildButton);
+        buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        toolBar.add(buttonPanel);
 
-        deleteButton.setText("Delete");
-        deleteButton.setFocusable(false);
-        deleteButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        deleteButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
-            }
-        });
-        toolBar.add(deleteButton);
+        fillerPanel.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        fillerPanel.add(innerFillerPanel, gridBagConstraints);
+
+        toolBar.add(fillerPanel);
 
         add(toolBar, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buildButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildButtonActionPerformed
-        try{
-            String s=buildScript();
-            
-            TextEditor editor=new TextEditor(Wandora.getWandora(), true, s);
-            editor.setVisible(true);
-            
-        }catch(Exception e){
-            Wandora.getWandora().handleError(e);
-        }
-    }//GEN-LAST:event_buildButtonActionPerformed
-
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        if(selectedPanel!=null){
-            selectedPanel.disconnectConnectors();
-            queryGraphPanel.remove(selectedPanel);
-            selectedPanel=null;
-            queryGraphPanel.repaint();
-        }
-    }//GEN-LAST:event_deleteButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buildButton;
-    private javax.swing.JButton deleteButton;
+    private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel directiveListPanel;
+    private javax.swing.JPanel fillerPanel;
     private javax.swing.JLabel finalResultLabel;
+    private javax.swing.JPanel innerFillerPanel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel queryGraphPanel;
@@ -299,6 +293,35 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 
+    
+    
+    
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        if(selectedPanel!=null){
+            selectedPanel.disconnectConnectors();
+            queryGraphPanel.remove(selectedPanel);
+            selectedPanel=null;
+            queryGraphPanel.repaint();
+        }
+    }                                            
+
+    
+    private void buildButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        try{
+            String s=buildScript();
+            TextEditor editor=new TextEditor(Wandora.getWandora(), true, s);
+            editor.setVisible(true);
+        }
+        catch(Exception e){
+            Wandora.getWandora().handleError(e);
+        }
+    }     
+    
+    
+    
+    
+    
     private class GraphPanel extends JPanel {
         public GraphPanel(){
             super();

@@ -635,73 +635,58 @@ public class UIBox {
         if(struct != null) {
             if(struct.length > 0) {
                 JButton button = null;
-                String buttonLabel = null;
                 for(int i=0; i<struct.length; i++) {
                     if(struct[i] == null) continue;
                     // System.out.println("BUTTON: "+struct[i]);
                     // System.out.println();
-                    if(struct[i] instanceof WandoraTool) {
+                    if(struct[i] instanceof String) {
+                        String str = (String) struct[i];
+                        if("---".equals(str)) {
+                            button = null;
+                            JPanel separatorPanel = new JPanel();
+                            separatorPanel.setPreferredSize(new Dimension(10,42));
+                            container.add(separatorPanel);
+                        }
+                        else {
+                            button = makeDefaultButton();
+                            if(str.startsWith("[") && str.endsWith("]")) {
+                                button.setEnabled(false);
+                                str = str.substring(1, str.length()-1);
+                            }
+                            button.setText(str);
+                            button.setActionCommand(str);
+                            container.add(button);
+                        }
+                    }
+                    else if(struct[i] instanceof WandoraTool) {
                         try {
                             WandoraTool tool = (WandoraTool) struct[i];
-                            button = new SimpleButton();
-                            button.setOpaque(true);
-                            button.setFocusPainted(false);
-                            button.setPreferredSize(new Dimension(60,42));
-                            button.setBackground(UIConstants.buttonBarBackgroundColor);
-                            button.setForeground(UIConstants.buttonBarLabelColor);
-                            button.setVerticalTextPosition(SwingConstants.BOTTOM);
-                            button.setHorizontalTextPosition(SwingConstants.CENTER);
-                            button.setFont(UIConstants.miniButtonLabel);
-                            button.setIcon(tool.getIcon());
-                            button.addMouseListener(
-                                new MouseAdapter() {
-                                    @Override
-                                    public void mouseEntered(java.awt.event.MouseEvent evt) {
-                                        evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
-                                    }
-                                    @Override
-                                    public void mouseExited(java.awt.event.MouseEvent evt) {
-                                        evt.getComponent().setBackground(UIConstants.buttonBarBackgroundColor);
-                                    }
-                                }
-                            );
-                            //button.setIcon(resizeIconCanvas(tool.getIcon(), 42, 42));
-                            if(buttonLabel == null) {
-                                button.setActionCommand(tool.getName());
-                                button.setText(tool.getName());
-                            }
-                            else {
-                                if(buttonLabel.startsWith("[") && buttonLabel.endsWith("]")) {
+                            if(button == null) {
+                                button = makeDefaultButton();
+                                String str = tool.getName();
+                                if(str.startsWith("[") && str.endsWith("]")) {
                                     button.setEnabled(false);
-                                    buttonLabel = buttonLabel.substring(1, buttonLabel.length()-1);
+                                    str = str.substring(1, str.length()-1);
                                 }
-                                button.setActionCommand(buttonLabel);
-                                button.setText(buttonLabel);
-                                buttonLabel = null;
+                                button.setText(str);
+                                button.setActionCommand(str);
+                                container.add(button);
                             }
-                            button.setBorder(new EtchedBorder( Color.WHITE, Color.GRAY ));
-                            button.setToolTipText(Textbox.makeHTMLParagraph(((WandoraTool) struct[i]).getDescription(), 30));
-
-                            Wandora app = null;
-                            if(defaultListener instanceof Wandora) {
-                                app = (Wandora) defaultListener;
+                            if(button != null) {
+                                if(button.getIcon() == null) button.setIcon(tool.getIcon());                               
+                                button.setToolTipText(Textbox.makeHTMLParagraph(((WandoraTool) struct[i]).getDescription(), 30));
+                                button.addActionListener(new WandoraToolActionListener(Wandora.getWandora(), tool));
+                                container.add(button);
                             }
-                            else if(defaultListener instanceof Component) {
-                                app = Wandora.getWandora((Component) defaultListener);
-                            }
-                            button.addActionListener(new WandoraToolActionListener(app, tool));
-                            container.add(button);
                         }
                         catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    
-                    
+
                     else if(struct[i] instanceof Icon) {
                         if(button != null) {
                             Icon icon = (Icon) struct[i];
-                            //Icon icon = resizeIconCanvas((Icon) struct[i], 32, 32);
                             button.setIcon(icon);
                         }
                     }
@@ -712,8 +697,8 @@ public class UIBox {
                     }
                     else if(struct[i] instanceof JButton[]) {
                         JButton[] buttonArray = (JButton[]) struct[i];
-                        for(int j=0; j<buttonArray.length; j++) {
-                            container.add(buttonArray[j]); 
+                        for(JButton b : buttonArray) {
+                            container.add(b); 
                         }
                         button = null;
                     }
@@ -739,26 +724,37 @@ public class UIBox {
                             button.setComponentPopupMenu(menu);
                         }
                     }
-                    else if(struct[i] instanceof String) {
-                        String str = (String) struct[i];
-                        if("---".equals(str)) {
-                            button = null;
-                            JPanel separatorPanel = new JPanel();
-                            separatorPanel.setPreferredSize(new Dimension(10,42));
-                            //JSeparator s = new JSeparator();
-                            //s.setOrientation(JSeparator.VERTICAL);
-                            //separatorPanel.add(s);
-                            container.add(separatorPanel);
-                        }
-                        else {
-                            buttonLabel = str;
-                            //menuItem.setIcon(UIBox.getIcon("gui/icons/empty.png"));
-                        }
-                    }
                 }
             }
         }
         return container;
+    }
+    
+    
+    private static SimpleButton makeDefaultButton() {
+        SimpleButton button = new SimpleButton();
+        button.setOpaque(true);
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(60,42));
+        button.setBackground(UIConstants.buttonBarBackgroundColor);
+        button.setForeground(UIConstants.buttonBarLabelColor);
+        button.setVerticalTextPosition(SwingConstants.BOTTOM);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setFont(UIConstants.miniButtonLabel);
+        button.setBorder(new EtchedBorder( Color.WHITE, Color.GRAY ));
+        button.addMouseListener(
+            new MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
+                }
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    evt.getComponent().setBackground(UIConstants.buttonBarBackgroundColor);
+                }
+            }
+        );
+        return button;
     }
     
     
