@@ -397,26 +397,32 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             @Override
             public Boolean invoke(Object o) {
                 TopicPanel topicPanel = topicPanelManager.getCurrentTopicPanel();
-                if(topicPanel!=null){
-                    try{
+                boolean reponse = true;
+                if(topicPanel!=null) {
+                    try {
                         topicPanel.applyChanges();
                     }
                     catch(CancelledException ce) {
-                        return false;}
+                        reponse = false;
+                    }
                     catch(TopicMapException tme) {
                         handleError(tme);
-                        return false;
+                        reponse = false;
                     }
                 }
-                return true;
+                return reponse;
             }
         });
         layerTree.setChangedListener(new Delegate<Object,Object>(){
             @Override
             public Object invoke(Object o){
-                //System.out.println("Changed");
-                reopenTopic();
-                refreshTopicTrees();
+                try {
+                    refreshTopicTrees();
+                    doRefresh();
+                }
+                catch(Exception e) {
+                    handleError(e);
+                }
                 return null;
             }
         });

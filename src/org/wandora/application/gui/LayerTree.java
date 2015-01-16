@@ -119,16 +119,20 @@ public class LayerTree extends DragJTree {
         
         
         this.addTreeWillExpandListener(new TreeWillExpandListener(){
+            @Override
             public void treeWillCollapse(TreeExpansionEvent event) throws ExpandVetoException {
                 throw new ExpandVetoException(event);                
             }
+            @Override
             public void treeWillExpand(TreeExpansionEvent event) throws ExpandVetoException {}
         });
         
         
         
         this.addTreeExpansionListener(new TreeExpansionListener(){
+            @Override
             public void treeCollapsed(TreeExpansionEvent event) {}
+            @Override
             public void treeExpanded(TreeExpansionEvent event) {
                 refreshTree();
             }
@@ -171,6 +175,7 @@ public class LayerTree extends DragJTree {
 
         
         this.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener(){
+            @Override
             public void valueChanged(TreeSelectionEvent e) {
                 TreePath path=LayerTree.this.getSelectionPath();
                 Object newSelected=null;
@@ -191,8 +196,7 @@ public class LayerTree extends DragJTree {
                 }
             }
         });
-        
-        
+
         expandAll();
         try {
             this.setSelectionRow(rootStack.getSelectedIndex());
@@ -438,6 +442,7 @@ public class LayerTree extends DragJTree {
         final LayerStack rootMap=wandora.getTopicMap();
         
         NewTopicMapPanel p = new NewTopicMapPanel(wandora, new Delegate<Object,NewTopicMapPanel>() {
+            @Override
             public Object invoke(NewTopicMapPanel p) {
                 Layer layer = null;
                 TopicMap tm = null;
@@ -564,12 +569,16 @@ public class LayerTree extends DragJTree {
     }
     
     protected boolean notifyChanging(){
-        if(!disableNotifications && listenerChanging!=null) return listenerChanging.invoke(null);
+        if(!disableNotifications && listenerChanging!=null) {
+            return listenerChanging.invoke(null);
+        }
         else return true;
     }
     
     protected void notifyChanged(){
-        if(!disableNotifications && listenerChanged!=null) listenerChanged.invoke(null);
+        if(!disableNotifications && listenerChanged!=null) {
+            listenerChanged.invoke(null);
+        }
     }
     
     
@@ -1049,6 +1058,7 @@ public class LayerTree extends DragJTree {
             for(TreeModelListener l : listeners) l.treeStructureChanged(e);
         }
 
+        @Override
         public Object getChild(Object parent, int index) {
             if(parent==rootStack){
                 List<Layer> layers=rootStack.getLayers();
@@ -1069,6 +1079,7 @@ public class LayerTree extends DragJTree {
             }
         }
 
+        @Override
         public int getChildCount(Object parent) {
             if(parent==rootStack) return rootStack.getLayers().size();
             else{
@@ -1079,6 +1090,7 @@ public class LayerTree extends DragJTree {
             }
         }
 
+        @Override
         public int getIndexOfChild(Object parent, Object child) {
             if(parent==null || child==null) 
                 return -1;
@@ -1109,10 +1121,12 @@ public class LayerTree extends DragJTree {
             }
         }
 
+        @Override
         public Object getRoot() {
             return rootStack;
         }
 
+        @Override
         public boolean isLeaf(Object node) {
             if(node==rootStack){
                 return rootStack.getLayers().isEmpty();
@@ -1125,6 +1139,7 @@ public class LayerTree extends DragJTree {
             }
         }
 
+        @Override
         public void valueForPathChanged(TreePath path, Object newValue) {
         }
         
@@ -1240,12 +1255,14 @@ public class LayerTree extends DragJTree {
             else return null;            
         }
         
+        @Override
         public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row) {
             initCellRenderer(c,value,row);
             c.layer=value;
             return c;
         }
 
+        @Override
         public Object getCellEditorValue() {
             return c.layer;
         }
@@ -1271,6 +1288,7 @@ public class LayerTree extends DragJTree {
             c=new CellRenderComponent();
         }
         
+        @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
             initCellRenderer(c,value,row);
             return c;
@@ -1313,7 +1331,10 @@ public class LayerTree extends DragJTree {
             boolean changed=false;
             try {
                 changed=topicMap.isTopicMapChanged();
-            } catch(TopicMapException tme){tme.printStackTrace();} // TODO EXCEPTION
+            } 
+            catch(TopicMapException tme) {
+                tme.printStackTrace(); // TODO EXCEPTION
+            }
 
             if(changed) {
                 iconLabel = new JLabel(UIBox.getIcon(TOPICMAP_CHANGED));
@@ -1373,6 +1394,7 @@ public class LayerTree extends DragJTree {
             dragPanel.add(visibleToggle, gridBagConstraints);
             
             visibleToggle.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     if(layer!=null && layer instanceof LayerWrapper){
                         if(!notifyChanging()){
@@ -1396,6 +1418,7 @@ public class LayerTree extends DragJTree {
             gridBagConstraints.insets = new java.awt.Insets(1, 4, 1, 1);
             dragPanel.add(lockToggle, gridBagConstraints);
             lockToggle.addActionListener(new ActionListener(){
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     if(layer!=null && layer instanceof LayerWrapper){
                         if(!notifyChanging()){

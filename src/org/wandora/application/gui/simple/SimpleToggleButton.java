@@ -48,6 +48,11 @@ public class SimpleToggleButton extends JToggleButton {
     
     
     
+    public SimpleToggleButton(String label) {
+        this();
+        this.setText(label);
+    }
+    
     public SimpleToggleButton() {
         this.setFocusPainted(false);
         this.setFont(UIConstants.buttonLabelFont);
