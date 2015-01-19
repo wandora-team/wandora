@@ -72,6 +72,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     private StringBuilder stats = null;
     private HashMap originalValues = null;
     private boolean trackChanges = false;
+    private JPanel buttonPanel = null;
     
     
     public LayerInfoPanel() {
@@ -128,6 +129,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
         SimpleLabel statValue = null;
         String statDescriptionString = null;
         String statString = "n.a.";
+        String originalStatString = "n.a.";
         gbc=new GridBagConstraints();
         Insets rowInsets = new Insets(0, 9, 0, 9);
         gbc.insets = new Insets(9, 9, 0, 9);
@@ -142,6 +144,12 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
         layerNameLabel.setFont(UIConstants.largeLabelFont);
         infoPanel.add(layerNameLabel, gbc);
         stats.append(layerName).append("\n");
+        
+        boolean fillOriginalValues = false;
+        if(originalValues == null) {
+            originalValues = new HashMap();
+            fillOriginalValues = true;
+        }
         
         for(int i=0; i<statOptions.length; i++) {
             try {
@@ -161,20 +169,51 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
                 try {
                     if(map != null) {
                         statString = map.getStatistics(new TopicMapStatOptions(statOptions[i])).toString();
+                        if(fillOriginalValues) {
+                            originalValues.put(statOptions[i], statString);
+                        }
                     }
                 }
                 catch(Exception e) {
                     e.printStackTrace();
                 }
-                stats.append("\t").append(statString).append("\n");
+                
+                if(trackChanges) {
+                    originalStatString = originalValues.get(statOptions[i]).toString();
+                    stats.append("\t").append(originalStatString);
+                    SimpleLabel originalValue = new SimpleLabel(originalStatString);
+                    originalValue.setHorizontalAlignment(SimpleLabel.RIGHT);
+                    infoPanel.add(originalValue, gbc);
+                    gbc.gridx=2;
+                }
+                
+                
+                if(trackChanges) {
+                    if(statString.equals(originalStatString)) {
+                        statString = "";
+                    }
+                    else {
+                        try {
+                            int statInt = Integer.parseInt(statString);
+                            int originalInt = Integer.parseInt(originalStatString);
+                            
+                            int delta = statInt - originalInt;
+                            statString = (delta > 0 ? "+"+delta : ""+delta);
+                        }
+                        catch(Exception e) {}
+                    }
+                }
+                
+                stats.append("\t").append(statString);
                 statValue = new SimpleLabel(statString);
                 statValue.setHorizontalAlignment(SimpleLabel.RIGHT);
                 infoPanel.add(statValue, gbc);
                 
+                stats.append("\n");
                 gbc.gridy=bagCount++;
                 gbc.gridx=0;
                 gbc.weightx=1;
-                gbc.gridwidth=2;
+                gbc.gridwidth=trackChanges ? 3 : 2;
                 gbc.insets = rowInsets;
                 JSeparator js = new JSeparator(JSeparator.HORIZONTAL);
                 js.setForeground(new Color(0x909090));
@@ -205,36 +244,43 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     
     
     private JPanel getButtonPanel() {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
-        
-        SimpleButton copyButton = new SimpleButton("Copy");
-        copyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(stats != null) {
-                    ClipboardBox.setClipboard(stats.toString());
+        if(buttonPanel != null) {
+            return buttonPanel;
+        }
+        else {
+            buttonPanel = new JPanel();
+            buttonPanel.setLayout(new FlowLayout());
+
+            SimpleButton copyButton = new SimpleButton("Copy");
+            copyButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(stats != null) {
+                        ClipboardBox.setClipboard(stats.toString());
+                    }
+                    else {
+                        ClipboardBox.setClipboard("n.a.");
+                    }
                 }
-                else {
-                    ClipboardBox.setClipboard("n.a.");
+            });
+            buttonPanel.add(copyButton);
+
+            SimpleToggleButton trackChangesButton = new SimpleToggleButton("Track changes");
+            trackChangesButton.setSelected(trackChanges);
+            trackChangesButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    trackChanges = !trackChanges;
+                    if(trackChanges) {
+                        originalValues = null;
+                    }
+                    refreshInfo();
                 }
-            }
-        });
-        buttonPanel.add(copyButton);
-        
-        SimpleToggleButton trackChangesButton = new SimpleToggleButton("Track changes");
-        trackChangesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                trackChanges = !trackChanges;
-                if(trackChanges) {
-                    originalValues = null;
-                }
-            }
-        });
-        buttonPanel.add(trackChangesButton);
-        
-        return buttonPanel;
+            });
+            buttonPanel.add(trackChangesButton);
+
+            return buttonPanel;
+        }
     }
     
     
