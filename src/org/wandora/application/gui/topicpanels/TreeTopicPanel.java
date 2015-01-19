@@ -41,6 +41,7 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.tree.TopicTreeConfigPanel;
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.tree.TopicTreeRelation;
 import org.wandora.application.gui.tree.TopicTreeRelationsEditor;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
@@ -62,7 +63,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     
     private String title = "Tree";
     private Options options = null;
-    private TopicTree topicTree = null;
+    private TopicTreePanel topicTreePanel = null;
     private String rootSubject = TMBox.WANDORACLASS_SI;
     private Set<String> selectedRelations = null;
     private TopicTreeRelation[] allRelations = TopicTreeRelationsEditor.readRelationTypes();
@@ -90,8 +91,8 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
             
             treeContainerPanel.removeAll();
             Wandora wandora = Wandora.getWandora();
-            topicTree = new TopicTree(rootSubject, wandora, selectedRelations, allRelations);
-            treeContainerPanel.add(topicTree, BorderLayout.CENTER);
+            topicTreePanel = new TopicTreePanel(rootSubject, wandora, selectedRelations, allRelations);
+            treeContainerPanel.add(topicTreePanel, BorderLayout.CENTER);
             revalidate();
         }
         catch(Exception e) {
@@ -176,7 +177,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
             title = configurationPanel.getTreeName();
             rootSubject = configurationPanel.getRoot();
             selectedRelations = configurationPanel.getSelectedRelations();
-            topicTree.updateModel(rootSubject, selectedRelations, allRelations);
+            topicTreePanel.setModel(rootSubject, selectedRelations, allRelations);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -202,16 +203,16 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     @Override
     public void stop() {
         treeContainerPanel.removeAll();
-        topicTree = null;
+        topicTreePanel = null;
     }
 
     
     
     @Override
     public void refresh() throws TopicMapException {
-        if(topicTree != null) {
-            topicTree.refresh();
-            topicTree.repaint();
+        if(topicTreePanel != null) {
+            topicTreePanel.refresh();
+            topicTreePanel.repaint();
         }
         revalidate();
     }
@@ -298,66 +299,69 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     
     // ---------------------------------------------------- TopicMapListener ---
     
-
+    
     @Override
-    public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
-        refresh();
+    public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException {
+        topicTreePanel.topicSubjectIdentifierChanged(t,added,removed);
     }
-
+    
     @Override
-    public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
-        refresh();
+    public void topicBaseNameChanged(Topic t,String newName,String oldName) throws TopicMapException {
+        topicTreePanel.topicBaseNameChanged(t,newName,oldName);
     }
-
+    
     @Override
-    public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
-        refresh();
+    public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
+        topicTreePanel.topicTypeChanged(t,added,removed);
     }
-
+    
     @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
-        refresh();
+    public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
+        topicTreePanel.topicVariantChanged(t,scope,newName,oldName);
     }
-
+    
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
-        refresh();
+    public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
+        topicTreePanel.topicDataChanged(t,type,version,newValue,oldValue);
     }
-
+    
     @Override
-    public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
-        refresh();
+    public void topicSubjectLocatorChanged(Topic t,Locator newLocator,Locator oldLocator) throws TopicMapException {
+        topicTreePanel.topicSubjectLocatorChanged(t,newLocator,oldLocator);
     }
-
+    
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
-        refresh();
+        topicTreePanel.topicRemoved(t);
     }
-
+    
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
-        refresh();
+        topicTreePanel.topicChanged(t);
     }
-
+    
     @Override
-    public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
-        refresh();
+    public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
+        topicTreePanel.associationTypeChanged(a,newType,oldType);
     }
-
+    
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
-        refresh();
+    public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
+        topicTreePanel.associationPlayerChanged(a,role,newPlayer,oldPlayer);
     }
-
+    
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
-        refresh();
+        topicTreePanel.associationRemoved(a);
     }
-
+    
     @Override
     public void associationChanged(Association a) throws TopicMapException {
-        refresh();
+        topicTreePanel.associationChanged(a);
     }
+    
+    
 
+    // --------------------------------------------------- /TopicMapListener ---
 
 }

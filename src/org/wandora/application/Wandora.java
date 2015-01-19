@@ -34,39 +34,43 @@ package org.wandora.application;
 
 
 
-import org.wandora.application.gui.tree.TopicTreePanel;
-import org.wandora.application.gui.search.SelectTopicPanel;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.logging.Level;
+import javax.swing.*;
+import org.wandora.application.gui.*;
+import org.wandora.application.gui.search.QueryPanel;
 import org.wandora.application.gui.search.SearchPanel;
+import org.wandora.application.gui.search.SelectTopicPanel;
+import org.wandora.application.gui.search.SimilarityPanel;
+import org.wandora.application.gui.search.TMQLPanel;
+import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.topicpanels.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.gui.tree.TopicTree;
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.tree.TopicTreeTabManager;
+import org.wandora.application.modulesserver.WandoraModulesServer;
+import org.wandora.application.server.*;
+import org.wandora.application.tools.importers.*;
 import org.wandora.application.tools.navigate.Back;
 import org.wandora.application.tools.navigate.Forward;
 import org.wandora.application.tools.navigate.OpenTopic;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.topicpanels.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.project.*;
-import org.wandora.application.tools.importers.*;
-import org.wandora.application.server.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.utils.*;
-import org.wandora.utils.swing.ImagePanel;
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.logging.Level;
-import javax.swing.*;
-import org.wandora.application.gui.tree.TopicTree;
-import org.wandora.application.modulesserver.WandoraModulesServer;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.piccolo.*;
+import org.wandora.topicmap.*;
+import org.wandora.topicmap.layered.*;
 import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.topicmap.undowrapper.UndoException;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
+import org.wandora.utils.*;
 import static org.wandora.utils.Tuples.*;
+import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.swing.ImagePanel;
 
 
 
@@ -242,6 +246,10 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     private boolean skipTopicMapListenerEvents = false;
 
 
+    
+    
+    private TabbedTopicSelector topicSelector = null;
+    
     
     
     
@@ -637,14 +645,20 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     * selector will be a tabbed selector with one tab for each tree and the SelectTopicPanel.
     */
     public TabbedTopicSelector getTopicFinder() throws TopicMapException {
-        Collection<TopicTreePanel> cs=topicTreeManager.getTreeChoosers();
-        TabbedTopicSelector finder=new TabbedTopicSelector();
-        for(TopicTreePanel c : cs){
-            finder.addTab(c);
+        if(topicSelector == null || !topicSelector.remember()) {
+            topicSelector=new TabbedTopicSelector();
+
+            Collection<TopicTreePanel> cs=topicTreeManager.getTreeChoosers();
+            for(TopicTreePanel c : cs){
+                topicSelector.addTab(c);
+            }
+            topicSelector.addTab(new SearchPanel(false));
+            topicSelector.addTab(new SimilarityPanel());
+            // topicSelector.addTab(new SelectTopicPanel(this));
+            topicSelector.addTab(new QueryPanel());
+            topicSelector.addTab(new TMQLPanel());
         }
-        finder.addTab(new SearchPanel(false));
-        finder.addTab(new SelectTopicPanel(this));
-        return finder;
+        return topicSelector;
     }
 
 
@@ -1838,7 +1852,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             d.setTitle(title);
         }
         d.add(finder);
-        d.setSize(500,400);
+        d.setSize(500,600);
         org.wandora.utils.swing.GuiTools.centerWindow(d,parent);
         finder.init();
         if(clearButton) {

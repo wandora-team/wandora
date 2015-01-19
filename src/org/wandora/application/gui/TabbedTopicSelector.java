@@ -37,25 +37,28 @@ import org.wandora.utils.swing.GuiTools;
 import java.awt.*;
 import java.util.*;
 
+
+
 /**
  *
  * @author  olli
  */
 public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSelector {
     
-    private Vector<TopicSelector> selectors;
+    private ArrayList<TopicSelector> selectors;
     private boolean wasCancelled=true;
     private boolean cleared=false;
     
+    
     /** Creates new form TabbedTopicSelector */
     public TabbedTopicSelector() {
-        selectors=new Vector<TopicSelector>();
+        selectors=new ArrayList<TopicSelector>();
         initComponents();
         clearButton.setVisible(false);
     }
     
     public void insertTab(TopicSelector selector,int index){
-        selectors.insertElementAt(selector,index);
+        selectors.set(index, selector);
         tabbedPane.insertTab(selector.getSelectorName(),null,selector.getPanel(),null,index);
     }
     
@@ -85,7 +88,7 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
     
     @Override
     public String getSelectorName(){
-        return "Tabbed Selector";
+        return "Tabbed selector";
     }
     
     public void setClearVisible(boolean b){
@@ -103,8 +106,10 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
 
         tabbedPane = new SimpleTabbedPane();
         buttonPanel = new javax.swing.JPanel();
-        selectButton = new SimpleButton();
+        rememberCheckBox = new SimpleCheckBox();
+        jPanel1 = new javax.swing.JPanel();
         clearButton = new SimpleButton();
+        selectButton = new SimpleButton();
         cancelButton = new SimpleButton();
 
         setLayout(new java.awt.GridBagLayout());
@@ -122,21 +127,12 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
-        selectButton.setText("Select");
-        selectButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        selectButton.setMaximumSize(new java.awt.Dimension(70, 23));
-        selectButton.setMinimumSize(new java.awt.Dimension(70, 23));
-        selectButton.setPreferredSize(new java.awt.Dimension(70, 23));
-        selectButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectButtonActionPerformed(evt);
-            }
-        });
+        rememberCheckBox.setText("Remember");
+        buttonPanel.add(rememberCheckBox, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
-        buttonPanel.add(selectButton, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        buttonPanel.add(jPanel1, gridBagConstraints);
 
         clearButton.setLabel("Select none");
         clearButton.setMargin(new java.awt.Insets(2, 1, 2, 1));
@@ -149,10 +145,22 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
         buttonPanel.add(clearButton, gridBagConstraints);
+
+        selectButton.setText("Select");
+        selectButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        selectButton.setMaximumSize(new java.awt.Dimension(70, 23));
+        selectButton.setMinimumSize(new java.awt.Dimension(70, 23));
+        selectButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        selectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
+        buttonPanel.add(selectButton, gridBagConstraints);
 
         cancelButton.setText("Cancel");
         cancelButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -164,15 +172,13 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
                 cancelButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        buttonPanel.add(cancelButton, gridBagConstraints);
+        buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
@@ -215,7 +221,7 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
     
     @Override
     public void init(){
-        tabbedPane.setSelectedIndex(0);
+        // tabbedPane.setSelectedIndex(0);
         for(TopicSelector s : selectors) s.init();
     }
     
@@ -224,10 +230,17 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
         for(TopicSelector s : selectors) s.cleanup();        
     }
     
+    
+    public boolean remember() {
+        return rememberCheckBox.isSelected();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton clearButton;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JCheckBox rememberCheckBox;
     private javax.swing.JButton selectButton;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables

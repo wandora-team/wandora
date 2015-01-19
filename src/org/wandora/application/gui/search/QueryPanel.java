@@ -44,7 +44,7 @@ import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.tree.TopicTreePanel;
+import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -53,6 +53,7 @@ import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.query2.Directive;
 import org.wandora.query2.QueryContext;
 import org.wandora.query2.ResultRow;
@@ -69,7 +70,7 @@ import org.wandora.utils.Tuples;
  */
 
 
-public class QueryPanel extends javax.swing.JPanel {
+public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
     private Wandora wandora = null;
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
@@ -425,7 +426,7 @@ public class QueryPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 2, 4);
         scriptQueryPanel.add(scriptLabel, gridBagConstraints);
 
-        scriptScrollPane.setPreferredSize(new java.awt.Dimension(8, 100));
+        scriptScrollPane.setPreferredSize(new java.awt.Dimension(8, 150));
         scriptScrollPane.setViewportView(scriptTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -643,4 +644,52 @@ public class QueryPanel extends javax.swing.JPanel {
 
 
 
+    
+    
+    // ------------------------------------------------------- TopicSelector ---
+    
+    @Override
+    public Topic getSelectedTopic() {
+        if(resultsTable != null) {
+            Topic[] topics = resultsTable.getSelectedTopics();
+            if(topics != null && topics.length > 0) {
+                return topics[0];
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public Topic[] getSelectedTopics() {
+        if(resultsTable != null) {
+            resultsTable.getSelectedTopics();
+        }
+        return null;
+    }
+    
+
+    @Override
+    public java.awt.Component getPanel() {
+        return this;
+    }
+    
+    
+    @Override
+    public String getSelectorName() {
+        return "Query";
+    }
+    
+    @Override
+    public void init() {
+        
+    }
+    
+    @Override
+    public void cleanup() {
+        
+    }
+    
+    
+    
 }

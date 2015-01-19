@@ -73,6 +73,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     private HashMap originalValues = null;
     private boolean trackChanges = false;
     private JPanel buttonPanel = null;
+    private HashMap<Object, SimpleLabel> fieldLabels = null;
     
     
     public LayerInfoPanel() {
@@ -85,7 +86,8 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
         wandora = Wandora.getWandora();
         infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
-        refreshInfo();
+        fieldLabels = new HashMap();
+        initInfo();
     }
     
     
@@ -118,7 +120,10 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     }
 
     
-    public void refreshInfo() {
+    
+    
+    public void initInfo() {
+
         map = getCurrentTopicMap();
         
         int[] statOptions = TopicMapStatOptions.getAvailableOptions();
@@ -142,6 +147,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
         String layerName = getCurrentLayerName();
         SimpleLabel layerNameLabel = new SimpleLabel(layerName);
         layerNameLabel.setFont(UIConstants.largeLabelFont);
+        fieldLabels.put("title", layerNameLabel);
         infoPanel.add(layerNameLabel, gbc);
         stats.append(layerName).append("\n");
         
@@ -183,30 +189,31 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
                     stats.append("\t").append(originalStatString);
                     SimpleLabel originalValue = new SimpleLabel(originalStatString);
                     originalValue.setHorizontalAlignment(SimpleLabel.RIGHT);
+                    fieldLabels.put("o"+statOptions[i], originalValue);
                     infoPanel.add(originalValue, gbc);
                     gbc.gridx=2;
                 }
                 
-                
+                Color statValueColor = Color.BLACK;
                 if(trackChanges) {
-                    if(statString.equals(originalStatString)) {
-                        statString = "";
+                    try {
+                        int statInt = Integer.parseInt(statString);
+                        int originalInt = Integer.parseInt(originalStatString);
+
+                        int delta = statInt - originalInt;
+                        statString = (delta > 0 ? "+"+delta : ""+delta);
+                        
+                        if(delta > 0) statValueColor = Color.green.darker();
+                        else if(delta < 0) statValueColor = Color.red.darker();
                     }
-                    else {
-                        try {
-                            int statInt = Integer.parseInt(statString);
-                            int originalInt = Integer.parseInt(originalStatString);
-                            
-                            int delta = statInt - originalInt;
-                            statString = (delta > 0 ? "+"+delta : ""+delta);
-                        }
-                        catch(Exception e) {}
-                    }
+                    catch(Exception e) {}
                 }
                 
                 stats.append("\t").append(statString);
                 statValue = new SimpleLabel(statString);
+                statValue.setForeground(statValueColor);
                 statValue.setHorizontalAlignment(SimpleLabel.RIGHT);
+                fieldLabels.put(statOptions[i], statValue);
                 infoPanel.add(statValue, gbc);
                 
                 stats.append("\n");
@@ -243,6 +250,86 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     }
     
     
+    
+    public void refreshInfo() {
+        map = getCurrentTopicMap();
+        
+        int[] statOptions = TopicMapStatOptions.getAvailableOptions();
+        stats = new StringBuilder();
+        SimpleLabel statValue = null;
+        String statString = "n.a.";
+        String originalStatString = "n.a.";
+        
+        String layerName = getCurrentLayerName();
+        SimpleLabel layerNameLabel = fieldLabels.get("title");
+        if(layerNameLabel != null) {
+            layerNameLabel.setText(layerName);
+        }
+
+        stats.append(layerName).append("\n");
+        
+        boolean fillOriginalValues = false;
+        if(originalValues == null) {
+            originalValues = new HashMap();
+            fillOriginalValues = true;
+        }
+        
+        for(int i=0; i<statOptions.length; i++) {
+            try {
+
+                statString = "n.a.";
+                try {
+                    if(map != null) {
+                        statString = map.getStatistics(new TopicMapStatOptions(statOptions[i])).toString();
+                        if(fillOriginalValues) {
+                            originalValues.put(statOptions[i], statString);
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+                
+                if(trackChanges) {
+                    originalStatString = originalValues.get(statOptions[i]).toString();
+                    stats.append("\t").append(originalStatString);
+                    SimpleLabel originalValue = fieldLabels.get("o"+statOptions[i]);
+                    if(originalValue != null) {
+                        originalValue.setText(originalStatString);
+                    }
+                }
+                
+                Color statValueColor = Color.BLACK;
+                if(trackChanges) {
+                    try {
+                        int statInt = Integer.parseInt(statString);
+                        int originalInt = Integer.parseInt(originalStatString);
+
+                        int delta = statInt - originalInt;
+                        statString = (delta > 0 ? "+"+delta : ""+delta);
+                        
+                        if(delta > 0) statValueColor = Color.green.darker();
+                        else if(delta < 0) statValueColor = Color.red.darker();
+                    }
+                    catch(Exception e) {}
+                }
+                
+                stats.append("\t").append(statString);
+                statValue = fieldLabels.get(statOptions[i]);
+                if(statValue != null) {
+                    statValue.setForeground(statValueColor);
+                    statValue.setText(statString);
+                }
+
+                stats.append("\n");
+             }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    
     private JPanel getButtonPanel() {
         if(buttonPanel != null) {
             return buttonPanel;
@@ -266,6 +353,10 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
             buttonPanel.add(copyButton);
 
             SimpleToggleButton trackChangesButton = new SimpleToggleButton("Track changes");
+            Insets margin = trackChangesButton.getMargin();
+            margin.left = 4;
+            margin.right = 4;
+            trackChangesButton.setMargin(margin);
             trackChangesButton.setSelected(trackChanges);
             trackChangesButton.addActionListener(new ActionListener() {
                 @Override
@@ -274,7 +365,11 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
                     if(trackChanges) {
                         originalValues = null;
                     }
-                    refreshInfo();
+                    if(infoPanel != null) {
+                        initInfo();
+                        infoPanel.revalidate();
+                        infoPanel.repaint();
+                    }
                 }
             });
             buttonPanel.add(trackChangesButton);

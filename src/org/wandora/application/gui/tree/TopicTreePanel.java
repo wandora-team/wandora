@@ -103,7 +103,7 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
      *        necessarily used in this topic tree chooser. selectedAssociations
      *        contains the names of the used association types.
      */
-    public void setModel(String rootSI,Set<String> selectedRelations, TopicTreeRelation[] allRelations ) throws TopicMapException {
+    public void setModel(String rootSI, Set<String> selectedRelations, TopicTreeRelation[] allRelations ) throws TopicMapException {
         ((TopicTree)jTree).updateModel(rootSI, selectedRelations, allRelations);
     }
     
