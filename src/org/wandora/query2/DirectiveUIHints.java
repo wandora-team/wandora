@@ -27,11 +27,10 @@ package org.wandora.query2;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectivePanel;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMapException;
 
 /**
  *
@@ -127,9 +126,14 @@ public class DirectiveUIHints implements Serializable {
     public static DirectiveUIHints getDirectiveUIHints(Class<? extends Directive> cls){
         if(Provider.class.isAssignableFrom(cls)) {
             try{
-                DirectiveUIHints hints=((Provider)cls.newInstance()).getUIHints();
-                return hints;
-            }catch( IllegalAccessException | InstantiationException e){
+                Method m=cls.getMethod("getUIHints");
+                if(Modifier.isStatic(m.getModifiers())){
+                    return (DirectiveUIHints)m.invoke(null);
+                }
+                else {
+                    return ((Provider)cls.newInstance()).getUIHints();
+                }
+            }catch( IllegalAccessException | InstantiationException | NoSuchMethodException| InvocationTargetException e){
                 Wandora.getWandora().handleError(e);
             }
         }

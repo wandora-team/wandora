@@ -59,9 +59,35 @@ public class Connector {
         return d;
     }
     
+    protected Point clampPoint(Point p,JComponent c,int margin,ConnectorAnchor anchor){
+        Point cp=getRootCoordinates(c,0,0);
+        Rectangle rect=c.getBounds();
+        int w=rect.width;
+        int h=rect.height;
+        
+        switch(anchor.getExitDirection()){
+            case LEFT:
+                return new Point(cp.x,Math.max(cp.y+margin, Math.min(cp.y+h-margin,p.y)));
+            case RIGHT:
+                return new Point(cp.x+w,Math.max(cp.y+margin, Math.min(cp.y+h-margin,p.y)));
+            case UP:
+                return new Point(Math.max(cp.x+margin, Math.min(cp.x+w-margin,p.x)),cp.y);
+            case DOWN:
+                return new Point(Math.max(cp.x+margin, Math.min(cp.x+w-margin,p.x)),cp.y+h);
+            default:
+                throw new RuntimeException("unknown exit direction"); // shouldn't happen, case for all possible directions
+        }
+        
+    }
+    
     protected Point getAnchorCoordinates(ConnectorAnchor anchor){
         Point p=anchor.getAnchorPoint();
-        return getRootCoordinates(anchor.getComponent(),p.x,p.y);
+        Point rp=getRootCoordinates(anchor.getComponent(),p.x,p.y);
+        if(anchor instanceof ComponentConnectorAnchor){
+            DirectivePanel dp=((ComponentConnectorAnchor)anchor).findDirectivePanel();
+            if(dp!=null) rp=clampPoint(rp,dp,10,anchor);
+        }
+        return rp;
     }
     
     public Rectangle getBoundingBox(){

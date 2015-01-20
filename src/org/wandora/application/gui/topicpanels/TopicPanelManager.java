@@ -214,7 +214,7 @@ public class TopicPanelManager implements ActionListener {
                         if(!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1)!=':') 
                             baseDir="/"+baseDir;
                         //System.out.println("Basedir: " + baseDir);
-                        HashSet<String> topicPanelFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 10, 1000);
+                        HashSet<String> topicPanelFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 1000);
                         for(String classFileName : topicPanelFileNames) {
                             try {
                                 File classFile = new File(classFileName);

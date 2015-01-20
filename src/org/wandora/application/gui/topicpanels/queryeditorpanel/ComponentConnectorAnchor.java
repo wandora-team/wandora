@@ -52,15 +52,23 @@ public class ComponentConnectorAnchor extends ConnectorAnchor {
     public JComponent getRootComponent() {
         return findEditor().getGraphPanel();
     }
-
     
     @Override
     public QueryEditorComponent getEditor(){
         return findEditor();
     }
+    
+    public DirectivePanel findDirectivePanel(){
+        Container parent=getComponent().getParent();
+        while(parent!=null && !(parent instanceof DirectivePanel)){
+            parent=parent.getParent();
+        }
+        if(parent!=null) return (DirectivePanel)parent;
+        else return null;        
+    }
 
     protected QueryEditorComponent findEditor(){
-        Container parent=component.getParent();
+        Container parent=getComponent().getParent();
         while(parent!=null && !(parent instanceof QueryEditorComponent)){
             parent=parent.getParent();
         }

@@ -200,12 +200,12 @@ public class DirectivePanel extends javax.swing.JPanel {
             component.setMaximumSize(new Dimension(0,0));
             component.setSize(new Dimension(0,0));
             component.setVisible(false);
-            
+/*            
             if(component instanceof Container){
                 for(Component c : ((Container)component).getComponents()) {
                     children.add(new MinimizedComponent(c));
                 }
-            }
+            }*/
             component.invalidate();
         }
         public void restore(){
@@ -215,7 +215,7 @@ public class DirectivePanel extends javax.swing.JPanel {
             component.setSize(size);
             component.setVisible(true);
             
-            for(MinimizedComponent mc : children) mc.restore();
+//            for(MinimizedComponent mc : children) mc.restore();
             component.invalidate();
         }
     }
@@ -232,7 +232,7 @@ public class DirectivePanel extends javax.swing.JPanel {
             minimizedComponents.add(new MinimizedComponent(addonPanel));
             minimizedComponents.add(new MinimizedComponent(resizeWidget));
             
-            this.setSize(new Dimension(normalDimensions.width,20));
+            this.setSize(new Dimension(normalDimensions.width,30));
         }
         else {
             if(this.normalDimensions==null) return;
@@ -244,7 +244,7 @@ public class DirectivePanel extends javax.swing.JPanel {
             minimizedComponents.clear();
         }
         this.validate();
-        
+        getEditor().panelMoved(this);
     }
     
     public void toggleMinimized(){
@@ -571,6 +571,7 @@ public class DirectivePanel extends javax.swing.JPanel {
             Rectangle rect=this.getBounds();
             this.setBounds(rect.x,rect.y,resizeStartW+dx,resizeStartH+dy);
             this.revalidate();
+            getEditor().panelMoved(this);
         }
     }//GEN-LAST:event_resizeWidgetMouseDragged
 

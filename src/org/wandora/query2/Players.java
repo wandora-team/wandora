@@ -27,13 +27,16 @@
  */
 package org.wandora.query2;
 import java.util.*;
+import org.wandora.query2.DirectiveUIHints.Addon;
+import org.wandora.query2.DirectiveUIHints.Constructor;
+import org.wandora.query2.DirectiveUIHints.Parameter;
 import org.wandora.topicmap.*;
 import static org.wandora.utils.Tuples.*;
 /**
  *
  * @author olli
  */
-public class Players extends Directive {
+public class Players extends Directive implements DirectiveUIHints.Provider {
 
     private TopicOperand associationType;
     private TopicOperand[] roles;
@@ -64,6 +67,17 @@ public class Players extends Directive {
     public Players(Object associationType,Object r1,Object r2,Object r3,Object r4){
         this(associationType,new Object[]{r1,r2,r3,r4});}
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        return new DirectiveUIHints(Players.class,new Constructor[]{
+            new Constructor(new Parameter[]{new Parameter(TopicOperand.class, false, "association type")}, "")
+        },
+        new Addon[]{
+        });
+    }
+
+    
+    
     public Players usingColumns(Object[] cols){
         this.columns=new String[cols.length];
         for(int i=0;i<cols.length;i++) this.columns[i]=cols[i].toString();
