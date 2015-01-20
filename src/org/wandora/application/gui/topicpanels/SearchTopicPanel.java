@@ -67,7 +67,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     private TMQLPanel tmqlPanel = null;
     
     private Component currentContainerPanel = null;
-    
+    private Topic openedTopic = null;
     
     
     
@@ -212,14 +212,15 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
-        throw new OpenTopicNotSupportedException();
+        // Notice, this TopicPanel doesn't support open topic.
+        openedTopic = topic;
     }
 
     
     
     @Override
     public void stop() {
-        
+        openedTopic = null;
     }
 
     @Override
@@ -244,7 +245,22 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
 
     @Override
     public Topic getTopic() throws TopicMapException {
-        return null;
+        Component selectedTab = tabbedPane.getSelectedComponent();
+        if(selectedTab != null) {
+            if(selectedTab.equals(searchContainerPanel)) {
+                return searchPanel.getSelectedTopic();
+            }
+            else if(selectedTab.equals(similarityContainerPanel)) {
+                return similarityPanel.getSelectedTopic();
+            }
+            else if(selectedTab.equals(queryContainerPanel)) {
+                return queryPanel.getSelectedTopic();
+            }
+            else if(selectedTab.equals(tmqlContainerPanel)) {
+                return tmqlPanel.getSelectedTopic();
+            }
+        }
+        return openedTopic;
     }
     
     @Override

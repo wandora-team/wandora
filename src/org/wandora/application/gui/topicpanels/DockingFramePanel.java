@@ -126,6 +126,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     private HashMap<TopicPanel,TopicPanel> chainedTopicPanels = null;
     
+    private Topic openedTopic = null;
+    
+    
     
     
     public DockingFramePanel() {
@@ -231,6 +234,8 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         //System.out.println("initialize Docking Frame Panel");
         //String name = TopicToString.toString(topic);
 
+        openedTopic = topic;
+        
         if(currentDockable == null) {
             if(!dockedTopicPanels.isEmpty()) {
                 currentDockable = dockedTopicPanels.keySet().iterator().next();
@@ -321,6 +326,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         if(control != null) {
             control.kill();
         }
+        openedTopic = null;
+        dockedTopicPanels.clear();
+        chainedTopicPanels.clear();
     }
 
     
@@ -397,7 +405,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 return tp.getTopic();
             }
         }
-        return null;
+        return openedTopic;
     }
     
     
@@ -669,6 +677,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         try {
             tp.init();
             if(tp.supportsOpenTopic()) {
+                if(topic == null) topic = openedTopic;
                 tp.open(topic);
             }
         }
@@ -715,7 +724,6 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             else {
                 currentDockable = null;
             }
-            
             wandora.topicPanelsChanged();
         }
     }
@@ -734,6 +742,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 station.removeDockable(dockable);
             }
             dockedTopicPanels.clear();
+            chainedTopicPanels.clear();
             currentDockable = null;
             wandora.topicPanelsChanged();
         }

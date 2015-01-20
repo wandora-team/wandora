@@ -640,24 +640,66 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     
     
+    
+    
+   private SearchPanel searchTopicSelector = null;
+   private SimilarityPanel similarityTopicSelector = null;
+   private QueryPanel queryTopicSelector = null;
+   private TMQLPanel tmqlTopicSelector = null;
+   private Collection<TopicTreePanel> topicTreeSelectors = null;
+           
    /**
     * Creates a topic selector with all configured tree choosers and a SelectTopicPanel. The returned
     * selector will be a tabbed selector with one tab for each tree and the SelectTopicPanel.
     */
     public TabbedTopicSelector getTopicFinder() throws TopicMapException {
-        if(topicSelector == null || !topicSelector.remember()) {
-            topicSelector=new TabbedTopicSelector();
-
-            Collection<TopicTreePanel> cs=topicTreeManager.getTreeChoosers();
-            for(TopicTreePanel c : cs){
-                topicSelector.addTab(c);
-            }
-            topicSelector.addTab(new SearchPanel(false));
-            topicSelector.addTab(new SimilarityPanel());
-            // topicSelector.addTab(new SelectTopicPanel(this));
-            topicSelector.addTab(new QueryPanel());
-            topicSelector.addTab(new TMQLPanel());
+        boolean refreshSelectors = true;
+        Component currentSelector = null;
+        
+        if(topicSelector != null) {
+            refreshSelectors = !topicSelector.remember();
         }
+        if(!refreshSelectors) {
+            currentSelector = topicSelector.getSelectedSelector();
+        }
+        topicSelector = new TabbedTopicSelector();
+        topicSelector.setRemember(!refreshSelectors);
+        
+        if(topicTreeSelectors == null || refreshSelectors) {
+            topicTreeSelectors = topicTreeManager.getTreeChoosers();
+        }
+        for(TopicTreePanel c : topicTreeSelectors){
+            topicSelector.addTab(c);
+        }
+            
+        if(searchTopicSelector == null || refreshSelectors) {
+            searchTopicSelector = new SearchPanel(false);
+        }
+        topicSelector.addTab(searchTopicSelector);
+        
+        if(similarityTopicSelector == null || refreshSelectors) {
+            similarityTopicSelector = new SimilarityPanel();
+        }
+        topicSelector.addTab(similarityTopicSelector);
+                
+        if(queryTopicSelector == null || refreshSelectors) {
+            queryTopicSelector = new QueryPanel();
+        }
+        topicSelector.addTab(queryTopicSelector);
+        
+        if(tmqlTopicSelector == null || refreshSelectors) {
+            tmqlTopicSelector = new TMQLPanel();
+        }
+        topicSelector.addTab(tmqlTopicSelector);
+
+        // The SelectTopicPanel has been removed from TabbedTopicSelector.
+        // The code remains here for a moment!
+        // topicSelector.addTab(new SelectTopicPanel(this));
+        
+        if(currentSelector != null && !refreshSelectors) {
+            topicSelector.setSelectedSelector(currentSelector);
+        } 
+
         return topicSelector;
     }
 
@@ -1945,6 +1987,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     
     
     
+    @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
         System.out.println("Wandora catched action command '" + c + "'.");

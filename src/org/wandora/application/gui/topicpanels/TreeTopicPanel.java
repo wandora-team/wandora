@@ -67,7 +67,10 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     private String rootSubject = TMBox.WANDORACLASS_SI;
     private Set<String> selectedRelations = null;
     private TopicTreeRelation[] allRelations = TopicTreeRelationsEditor.readRelationTypes();
-            
+    private Topic openedTopic = null;
+    
+    
+    
     
     /**
      * Creates new form TreeTopicPanel
@@ -195,7 +198,8 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
-        throw new OpenTopicNotSupportedException();
+        // Notice, this TopicPanel doesn't support open topic.
+        openedTopic = topic;
     }
 
     
@@ -231,7 +235,14 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
 
     @Override
     public Topic getTopic() throws TopicMapException {
-        return null;
+        if(topicTreePanel != null) {
+            TopicTree tree = topicTreePanel.getTopicTree();
+            if(tree != null && !tree.isBroken()) {
+                Topic t = tree.getSelection();
+                return t;
+            }
+        }
+        return openedTopic;
     }
     
     @Override

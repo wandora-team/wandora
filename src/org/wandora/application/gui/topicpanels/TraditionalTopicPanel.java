@@ -46,6 +46,7 @@ import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleURIField;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.tools.navigate.OpenTopic;
 
 
 /**
@@ -68,6 +69,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     private String originalBN;
     private String originalSL;
     
+    private JComponent buttonContainer = null;
     
     
     /** Creates new form TraditionalTopicPanel */
@@ -102,20 +104,51 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         catch(Exception e) {
             e.printStackTrace();
         }
+
+        Object[] buttonStruct = {
+            "Open topic",
+            new OpenTopic(OpenTopic.ASK_USER),
+            
+            "New topic",
+            UIBox.getIcon("gui/icons/new_topic.png"),
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    NewTopicPanelExtended newTopicPanel = new NewTopicPanelExtended(null); // TODO: Should pass a context to the constructor.
+                    if(newTopicPanel.getAccepted()) {
+                        try {
+                            Topic newTopic = newTopicPanel.createTopic();
+                            if(newTopic != null) {
+                                Wandora.getWandora().openTopic(newTopic);
+                            }
+                        }
+                        catch(Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            },
+        };
+        buttonContainer = UIBox.makeButtonContainer(buttonStruct, Wandora.getWandora());
     }
     
     
     @Override
     public void open(Topic topic) {
+        this.topic = topic;
+        this.topicSI = null;
+        
         try {
-            this.topic = topic;
-            this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
+            if(topic != null && !topic.isRemoved()) {
+                this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
         }
         this.removeAll();
         initComponents();
+        buttonWrapperPanel.add(buttonContainer);
         
         panelStruct = new Object[][] {
             { variantRootPanel,             "View names",           "variantRootPanel"  },
@@ -164,7 +197,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     @Override
     public Topic getTopic() {
         try {
-            if(topic == null || topic.isRemoved()) {
+            if((topic == null || topic.isRemoved()) && topicSI != null) {
                 topic = wandora.getTopicMap().getTopic(topicSI);
             }
             return topic;
@@ -356,7 +389,9 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         //Thread.dumpStack();
 
         try {
-            topic=wandora.getTopicMap().getTopic(topicSI);
+            if(topicSI != null) {
+                topic = wandora.getTopicMap().getTopic(topicSI);
+            }
             if(topic==null || topic.isRemoved()) {
                 //System.out.println("Topic is null or removed!");
                 containerPanel.setVisible(false);
@@ -574,6 +609,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         instancesRootPanel = new org.wandora.application.gui.simple.SimplePanel();
         removedTopicMessage = new javax.swing.JPanel();
         removedTopicMessageLabel = new SimpleLabel();
+        buttonWrapperPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -676,7 +712,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 15, 7, 15);
         containerPanel.add(idPanel, gridBagConstraints);
 
-        variantRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Variant names", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
+        variantRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Variant names", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
         variantRootPanel.setComponentPopupMenu(getNamesMenu());
         variantRootPanel.setName("variantRootPanel"); // NOI18N
         variantRootPanel.addMouseListener(wandora);
@@ -688,7 +724,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(variantRootPanel, gridBagConstraints);
 
-        occurrencesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Occurrences", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
+        occurrencesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Occurrences", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
         occurrencesRootPanel.setComponentPopupMenu(getOccurrencesMenu());
         occurrencesRootPanel.setName("occurrencesRootPanel"); // NOI18N
         occurrencesRootPanel.addMouseListener(wandora);
@@ -702,7 +738,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(occurrencesRootPanel, gridBagConstraints);
 
-        classesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Classes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
+        classesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Classes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
         classesRootPanel.setComponentPopupMenu(getClassesMenu());
         classesRootPanel.setName("classesRootPanel"); // NOI18N
         classesRootPanel.addMouseListener(wandora);
@@ -716,7 +752,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(classesRootPanel, gridBagConstraints);
 
-        associationRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
+        associationRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
         associationRootPanel.setComponentPopupMenu(getAssociationsMenu());
         associationRootPanel.setName("associationRootPanel"); // NOI18N
         associationRootPanel.addMouseListener(wandora);
@@ -730,7 +766,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(associationRootPanel, gridBagConstraints);
 
-        typedAssociationsRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations where type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
+        typedAssociationsRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations where type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
         typedAssociationsRootPanel.setName("typedAssociationsRootPanel"); // NOI18N
         typedAssociationsRootPanel.setLayout(new java.awt.BorderLayout());
         typedAssociationsRootPanel.add(typedAssociationsPanel, java.awt.BorderLayout.CENTER);
@@ -742,7 +778,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(typedAssociationsRootPanel, gridBagConstraints);
 
-        instancesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Instances", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
+        instancesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Instances", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder")));
         instancesRootPanel.setComponentPopupMenu(getInstancesMenu());
         instancesRootPanel.setName("instancesRootPanel"); // NOI18N
         instancesRootPanel.addMouseListener(wandora);
@@ -764,8 +800,15 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         removedTopicMessage.setBackground(new java.awt.Color(255, 255, 255));
         removedTopicMessage.setLayout(new java.awt.GridBagLayout());
 
-        removedTopicMessageLabel.setText("<html>Topic is either merged or removed and can not be viewed!<html>");
+        removedTopicMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        removedTopicMessageLabel.setText("<html><p align=\"center\">No topic to view.<br>Maybe the topic has been merged or removed.<br>Please, open another topic.</p><html>");
         removedTopicMessage.add(removedTopicMessageLabel, new java.awt.GridBagConstraints());
+
+        buttonWrapperPanel.setBackground(new java.awt.Color(255, 255, 255));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        removedTopicMessage.add(buttonWrapperPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -895,6 +938,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     private javax.swing.JPanel associationRootPanel;
     private javax.swing.JTextField baseNameField;
     private javax.swing.JLabel baseNameLabel;
+    private javax.swing.JPanel buttonWrapperPanel;
     private javax.swing.JPanel classesPanel;
     private javax.swing.JPanel classesRootPanel;
     private javax.swing.JPanel containerPanel;

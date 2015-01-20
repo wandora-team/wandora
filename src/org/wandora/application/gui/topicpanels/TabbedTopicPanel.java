@@ -28,27 +28,29 @@ package org.wandora.application.gui.topicpanels;
 
 
 
-import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
-import org.wandora.application.tools.subjects.AddSubjectIdentifier;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.event.*;
 import org.wandora.application.*;
+import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.*;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
+import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.tools.NewTopicExtended;
+import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.application.tools.subjects.*;
+import org.wandora.application.tools.subjects.AddSubjectIdentifier;
 import org.wandora.application.tools.subjects.PasteSIs;
 import org.wandora.application.tools.topicnames.*;
-import org.wandora.application.contexts.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import org.wandora.application.gui.UIBox;
-
-import org.wandora.application.gui.topicstringify.TopicToString;
 
 
 
@@ -76,7 +78,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     // tabComponentName, tabName, menuName
     private Object[][] tabStruct;
 
-
+    private JComponent buttonContainer = null;
     
     
     
@@ -99,6 +101,31 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
             this.options = new Options(wandora.getOptions());
         }
  
+        Object[] buttonStruct = {
+            "Open topic",
+            new OpenTopic(OpenTopic.ASK_USER),
+            
+            "New topic",
+            UIBox.getIcon("gui/icons/new_topic.png"),
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    NewTopicPanelExtended newTopicPanel = new NewTopicPanelExtended(null); // TODO: Should pass a context to the constructor.
+                    if(newTopicPanel.getAccepted()) {
+                        try {
+                            Topic newTopic = newTopicPanel.createTopic();
+                            if(newTopic != null) {
+                                Wandora.getWandora().openTopic(newTopic);
+                            }
+                        }
+                        catch(Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            },
+        };
+        buttonContainer = UIBox.makeButtonContainer(buttonStruct, Wandora.getWandora());
     }
     
     
@@ -107,9 +134,10 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     
     @Override
     public void open(Topic topic) {
-        
+
        this.removeAll();
        initComponents();
+       buttonWrapperPanel.add(buttonContainer);
         
        tabStruct = new Object[][] {
             { subjectScrollPanel,      "Subject",          "View subject tab",       "subjectScrollPanel" },
@@ -128,9 +156,11 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         this.addComponentListener(this);
         topicTabbedPane.addChangeListener(this);
         
+        this.topic = topic;
         try {
-            this.topic = topic;
-            this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
+            if(topic != null && !topic.isRemoved()) {
+                this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -404,7 +434,9 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     public void refresh() {
         
         try {
-            topic=wandora.getTopicMap().getTopic(topicSI);
+            if(topicSI != null) {
+                topic = wandora.getTopicMap().getTopic(topicSI);
+            }
             if(topic==null || topic.isRemoved()) {
                 System.out.println("Topic is null or removed!");
                 topicTabbedPane.setVisible(false);
@@ -607,6 +639,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         topicTabbedPane = new org.wandora.application.gui.simple.SimpleTabbedPane();
         removedTopicMessage = new javax.swing.JPanel();
         removedTopicMessageLabel = new javax.swing.JLabel();
+        buttonWrapperPanel = new javax.swing.JPanel();
 
         subjectScrollPanel.setComponentPopupMenu(getSubjectMenu());
         subjectScrollPanel.setName("subjectScrollPanel"); // NOI18N
@@ -915,8 +948,14 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         removedTopicMessage.setBackground(new java.awt.Color(255, 255, 255));
         removedTopicMessage.setLayout(new java.awt.GridBagLayout());
 
-        removedTopicMessageLabel.setText("Topic is either merged or removed and can not be viewed!");
+        removedTopicMessageLabel.setText("<html><p align=\"center\">No topic to view.<br>Maybe the topic has been merged or removed.<br>Please, open another topic.</p><html>");
         removedTopicMessage.add(removedTopicMessageLabel, new java.awt.GridBagConstraints());
+
+        buttonWrapperPanel.setBackground(new java.awt.Color(255, 255, 255));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        removedTopicMessage.add(buttonWrapperPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1099,6 +1138,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     private javax.swing.JTextField baseNameField;
     private javax.swing.JLabel basenameLabel;
     private javax.swing.JPanel basenamePanel;
+    private javax.swing.JPanel buttonWrapperPanel;
     private javax.swing.JPanel classesPanel;
     private javax.swing.JPanel classesPanelContainer;
     private javax.swing.JPanel classesRootPanel;

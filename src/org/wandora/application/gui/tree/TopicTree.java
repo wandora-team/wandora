@@ -63,12 +63,7 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 
 public class TopicTree extends SimpleTree implements Clipboardable, MouseListener, TopicMapListener /*, DragSourceListener, DragGestureListener*/ {
    
-    
-    
 
-    
-    
-    
     
     private boolean needsRefresh;
     private ArrayList<TopicTreeRelation> selectedAs;

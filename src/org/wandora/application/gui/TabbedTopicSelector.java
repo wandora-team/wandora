@@ -57,8 +57,8 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
         clearButton.setVisible(false);
     }
     
-    public void insertTab(TopicSelector selector,int index){
-        selectors.set(index, selector);
+    public void insertTab(TopicSelector selector, int index){
+        selectors.add(index, selector);
         tabbedPane.insertTab(selector.getSelectorName(),null,selector.getPanel(),null,index);
     }
     
@@ -234,6 +234,19 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
     public boolean remember() {
         return rememberCheckBox.isSelected();
     }
+    
+    public void setRemember(boolean remember) {
+        rememberCheckBox.setSelected(remember);
+    }
+    
+    public Component getSelectedSelector() {
+        return tabbedPane.getSelectedComponent();
+    }
+    
+    public void setSelectedSelector(Component s) {
+        tabbedPane.setSelectedComponent(s);
+    }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;

@@ -309,7 +309,7 @@ public class TopicPanelManager implements ActionListener {
     public JComponent getTopicPanelMenu(JComponent topicPanelMenu) {
         SimpleMenuItem topicPanelMenuItem = null;
         if(topicPanelMenu==null) {
-            topicPanelMenu = new SimpleMenu("Add panel");
+            topicPanelMenu = new SimpleMenu("New panel");
             ((SimpleMenu)topicPanelMenu).setIcon(UIBox.getIcon("gui/icons/topic_panels.png"));
         }
         
@@ -378,7 +378,9 @@ public class TopicPanelManager implements ActionListener {
                 String dockableClassName = topicPanelMap.get(actionCommand);
                 Class dockableClass = Class.forName(dockableClassName);
                 if(dockableClass != null && dockingPanel != null) {
-                    dockingPanel.changeTopicPanelInCurrentDockable((TopicPanel) dockableClass.newInstance(), getOpenTopic());
+                    TopicPanel topicPanel = (TopicPanel) dockableClass.newInstance();
+                    topicPanel.init();
+                    dockingPanel.changeTopicPanelInCurrentDockable(topicPanel, getOpenTopic());
                 }
             }
             catch(Exception ex) {
