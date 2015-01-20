@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,25 +30,30 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.SchemaTreeTopicChooser;
+import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.query2.Directive;
 import org.wandora.query2.QueryContext;
 import org.wandora.query2.ResultRow;
@@ -65,7 +70,7 @@ import org.wandora.utils.Tuples;
  */
 
 
-public class QueryPanel extends javax.swing.JPanel {
+public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
     private Wandora wandora = null;
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
@@ -225,8 +230,8 @@ public class QueryPanel extends javax.swing.JPanel {
         if(contextTopics == null) contextTopics = (new ArrayList()).iterator();
         if(!contextTopics.hasNext()){
             // if context is empty just add some (root of a tree chooser) topic
-            HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTopicTreeManager().getTrees();
-            SchemaTreeTopicChooser tree=trees.values().iterator().next();
+            HashMap<String,TopicTreePanel> trees=wandora.getTopicTreeManager().getTrees();
+            TopicTreePanel tree=trees.values().iterator().next();
             Topic t=tm.getTopic(tree.getRootSI());
             ArrayList<Topic> al=new ArrayList<>();
             al.add(t);
@@ -325,7 +330,7 @@ public class QueryPanel extends javax.swing.JPanel {
         engineComboBox = new SimpleComboBox();
         scriptLabel = new SimpleLabel();
         scriptScrollPane = new javax.swing.JScrollPane();
-        scriptTextPane = new SimpleTextPane();
+        scriptTextPane = new QueryTextPane();
         scripButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
         clearResultsButton = new SimpleButton();
@@ -421,7 +426,7 @@ public class QueryPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 2, 4);
         scriptQueryPanel.add(scriptLabel, gridBagConstraints);
 
-        scriptScrollPane.setPreferredSize(new java.awt.Dimension(8, 100));
+        scriptScrollPane.setPreferredSize(new java.awt.Dimension(8, 150));
         scriptScrollPane.setViewportView(scriptTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -587,4 +592,104 @@ public class QueryPanel extends javax.swing.JPanel {
     private javax.swing.JTextPane scriptTextPane;
     private javax.swing.JPanel selectQueryPanel;
     // End of variables declaration//GEN-END:variables
+
+
+
+    
+    
+    
+    
+    private class QueryTextPane extends SimpleTextPaneResizeable {
+    
+        private int scriptQueryPanelWidth = 100;
+        private int scriptQueryPanelHeight = scriptQueryPanel.getHeight();
+        
+        
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            Point p = e.getPoint();
+            if(mousePressedInTriangle) {
+                inTheTriangleZone = true;
+                int yDiff = (mousePressedPoint.y - p.y);
+                newSize = new Dimension(100, sizeAtPress.height - yDiff);
+
+                JScrollPane sp = getScrollPane();
+
+                if(scrollPane != null) {
+                    sp.getViewport().setSize(newSize);
+                    sp.getViewport().setPreferredSize(newSize);
+                    sp.getViewport().setMinimumSize(newSize);
+
+                    sp.setSize(newSize);
+                    sp.setPreferredSize(newSize);
+                    sp.setMinimumSize(newSize);
+                }
+
+                scriptQueryPanel.setSize(scriptQueryPanelWidth, scriptQueryPanelHeight - yDiff);
+                scriptQueryPanel.revalidate();
+                scriptQueryPanel.repaint();
+            }
+        }
+        
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            if(mousePressedInTriangle) {
+                scriptQueryPanelHeight = scriptQueryPanel.getHeight();
+            }
+        }
+        
+    }
+
+
+
+    
+    
+    // ------------------------------------------------------- TopicSelector ---
+    
+    @Override
+    public Topic getSelectedTopic() {
+        if(resultsTable != null) {
+            Topic[] topics = resultsTable.getSelectedTopics();
+            if(topics != null && topics.length > 0) {
+                return topics[0];
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public Topic[] getSelectedTopics() {
+        if(resultsTable != null) {
+            resultsTable.getSelectedTopics();
+        }
+        return null;
+    }
+    
+
+    @Override
+    public java.awt.Component getPanel() {
+        return this;
+    }
+    
+    
+    @Override
+    public String getSelectorName() {
+        return "Query";
+    }
+    
+    @Override
+    public void init() {
+        
+    }
+    
+    @Override
+    public void cleanup() {
+        
+    }
+    
+    
+    
 }

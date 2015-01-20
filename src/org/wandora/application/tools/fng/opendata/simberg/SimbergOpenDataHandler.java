@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  *
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -381,7 +381,7 @@ public class SimbergOpenDataHandler {
                 s.append("<lido:lido>\n");
                                
                     s.append("<lido:lidoRecID lido:type=\"picture\">");
-                        s.append(title);
+                        s.append(encodeXMLValue(title));
                     s.append("</lido:lidoRecID>\n");
 
                     //s.append("<category>");
@@ -390,52 +390,68 @@ public class SimbergOpenDataHandler {
                     //s.append("</category>\n");
 
                     // --- description
-                    s.append("<lido:descriptiveMetadata xml:lang=\"fi\">");
-                    
-
+                    s.append("<lido:descriptiveMetadata>");
+                                       
                         // --- classification
                         s.append("<lido:objectClassificationWrap>");
-                            s.append("<lido:objectWorkType>");
-                                s.append("<lido:term xml:lang=\"fi\">kuva</lido:term>");
-                            s.append("</lido:objectWorkType>");
-                            if(type != null && type.length() > 0) {
+
+                            s.append("<lido:objectWorkTypeWrap>");
                                 s.append("<lido:objectWorkType>");
-                                    s.append("<lido:term>");
-                                        s.append(type);
-                                    s.append("</lido:term>");
+                                    s.append("<lido:term>valokuva</lido:term>");
                                 s.append("</lido:objectWorkType>");
-                            }
+                            s.append("</lido:objectWorkTypeWrap>");
                             
                             s.append("<lido:classificationWrap>");
                                 s.append("<lido:classification>");
-                                    s.append("<lido:term lido:label=\"kuvatyyppi\" xml:lang=\"fi\">valokuva</lido:term>");
+                                    s.append("<lido:term lido:label=\"kuvatyyppi\">valokuva</lido:term>");
                                 s.append("</lido:classification>");
                             s.append("</lido:classificationWrap>");
 
                         s.append("</lido:objectClassificationWrap>");
 
                         
-                        
                         // --- relations
                         s.append("<lido:objectRelationWrap>");
                             
-                            if(keywords != null && keywords.size() > 0) {
-                                s.append("<lido:subjectWrap>");
-                                    s.append("<lido:subjectSet>");
-                                        s.append("<lido:subject>");
-                                            s.append("<lido:subjectConcept>");
-                                                s.append("<lido:conceptID lido:type=\"term\" xml:lang=\"fi\">valokuva</lido:conceptID>");
-                                            s.append("</lido:subjectConcept>");
-                                        s.append("</lido:subject>");
-                                    s.append("</lido:subjectSet>");
+                            s.append("<lido:subjectWrap>");
+                                s.append("<lido:subjectSet>");
+                                    s.append("<lido:subject>");
+                                        s.append("<lido:subjectConcept>");
+                                            s.append("<lido:term lido:label=\"asiasana\">valokuva</lido:term>");
+                                        s.append("</lido:subjectConcept>");
+                                    s.append("</lido:subject>");
+                                    s.append("<lido:subject>");
+                                        s.append("<lido:subjectConcept>");
+                                            s.append("<lido:term lido:label=\"asiasana\">Hugo Simberg</lido:term>");
+                                        s.append("</lido:subjectConcept>");
+                                    s.append("</lido:subject>");
+                                s.append("</lido:subjectSet>");                               
+                            s.append("</lido:subjectWrap>");
+                            
+                            s.append("<lido:relatedWorksWrap>");
+                                s.append("<lido:relatedWorkSet>");
+                                    s.append("<lido:relatedWork>");
+                                        s.append("<lido:displayObject>Hugo Simbergin arkisto</lido:displayObject>");
+                                    s.append("</lido:relatedWork>");
+                                    s.append("<lido:relatedWorkRelType>");
+                                        s.append("<lido:term>Arkisto</lido:term>");
+                                    s.append("</lido:relatedWorkRelType>");
+                                s.append("</lido:relatedWorkSet>");
                                 
-                                    StringBuilder ke = new StringBuilder("");
-                                    for(int i=0; i<keywords.size(); i++) {
-                                        ke.append(keywords.get(i).toString(t));
-                                    }
-                                    s.append((ke.toString()));
-                                s.append("</lido:subjectWrap>");
-                            }
+                                s.append("<lido:relatedWorkSet>");
+                                    s.append("<lido:relatedWork>");
+                                        s.append("<lido:object>");
+                                            s.append("<lido:objectWebResource>");
+                                                String f = title;
+                                                f = f.replaceAll(" ", "%20");
+                                                s.append("http://www.lahteilla.fi/simberg/#gallery/0/"+f);
+                                            s.append("</lido:objectWebResource>");
+                                        s.append("</lido:object>");
+                                    s.append("</lido:relatedWork>");
+                                s.append("</lido:relatedWorkSet>");
+                                
+                            s.append("</lido:relatedWorksWrap>");
+
                         s.append("</lido:objectRelationWrap>");
                     
                         
@@ -445,7 +461,7 @@ public class SimbergOpenDataHandler {
                             s.append("<lido:titleWrap>");
                                 s.append("<lido:titleSet>");
                                     s.append("<lido:appellationValue>");
-                                        s.append(title);
+                                        s.append(encodeXMLValue(title));
                                     s.append("</lido:appellationValue>");
                                 s.append("</lido:titleSet>");
                             s.append("</lido:titleWrap>");
@@ -455,15 +471,31 @@ public class SimbergOpenDataHandler {
                                 s.append("<lido:repositorySet>");
                                     s.append("<lido:repositoryName>");
                                         s.append("<lido:legalBodyName>");
-                                            s.append("<lido:appellationValue lido:label=\"Museo/Arkisto\">Kansallisgalleria/Hugo Simbergin arkisto</lido:appellationValue>");
+                                            s.append("<lido:appellationValue lido:label=\"Museo/Arkisto\">Kansallisgalleria/Arkisto ja kirjasto</lido:appellationValue>");
                                         s.append("</lido:legalBodyName>");
                                         s.append("<lido:legalBodyWeblink lido:label=\"Www-osoite\">http://www.kansallisgalleria.fi</lido:legalBodyWeblink>");
                                     s.append("</lido:repositoryName>");
                                 s.append("</lido:repositorySet>");
                             s.append("</lido:repositoryWrap>");
 
+                            if(keywords != null && keywords.size() > 0) {
+                                s.append("<lido:objectDescriptionWrap>");
+                                    s.append("<lido:objectDescriptionSet>");
+                                        s.append("<lido:descriptiveNoteValue>");
+                                            StringBuilder ke = new StringBuilder("");
+                                            for(int i=0; i<keywords.size(); i++) {
+                                                ke.append(keywords.get(i).toString(t));
+                                            }
+                                            s.append((ke.toString()));
+                                        s.append("</lido:descriptiveNoteValue>");
+                                    s.append("</lido:objectDescriptionSet>");
+                                s.append("</lido:objectDescriptionWrap>");
+                            }
+
                         s.append("</lido:objectIdentificationWrap>");
 
+                        
+                        
                         // --- events
                         s.append("<lido:eventWrap>");
                             s.append("<lido:eventSet>");
@@ -476,7 +508,7 @@ public class SimbergOpenDataHandler {
                                             s.append("<lido:actorInRole>");
                                                 s.append("<lido:actor>");
                                                     s.append("<lido:nameActorSet>");
-                                                        s.append("<lido:appellationValue lido:label=\"Valokuvaaja\">"+author+"</lido:appellationValue>");
+                                                        s.append("<lido:appellationValue lido:label=\"Valokuvaaja\">"+encodeXMLValue(author)+"</lido:appellationValue>");
                                                     s.append("</lido:nameActorSet>");
                                                 s.append("</lido:actor>");
                                                 s.append("<lido:roleActor><lido:term>valokuvaaja</lido:term></lido:roleActor>");
@@ -485,12 +517,12 @@ public class SimbergOpenDataHandler {
                                     }
                                     if(date != null && date.length() > 0) {
                                         s.append("<lido:eventDate>");
-                                            s.append("<lido:displayDate lido:label=\"Valmistusaika\">"+date+"</lido:displayDate>");
+                                            s.append("<lido:displayDate lido:label=\"Valmistusaika\">"+encodeXMLValue(date)+"</lido:displayDate>");
                                         s.append("</lido:eventDate>");
                                     }
                                     if(material != null && material.length() > 0) {
                                         s.append("<lido:eventMaterialsTech>");
-                                            s.append("<lido:displayMaterialsTech lido:label=\"Materiaali\">"+material+"</lido:displayMaterialsTech>");
+                                            s.append("<lido:displayMaterialsTech lido:label=\"Materiaali\">"+encodeXMLValue(material)+"</lido:displayMaterialsTech>");
                                         s.append("</lido:eventMaterialsTech>");
                                     }
                                  s.append("</lido:event>");
@@ -500,10 +532,16 @@ public class SimbergOpenDataHandler {
                     s.append("</lido:descriptiveMetadata>\n");
                 
                     // ----- administrative
-                    s.append("<lido:administrativeMetadata xml:lang=\"fi\">");
+                    s.append("<lido:administrativeMetadata>");
+                        s.append("<lido:rightsWorkWrap>");
+                            s.append("<lido:rightsWorkSet>");
+                                s.append("<lido:creditLine>Kansallisgalleria</lido:creditLine>");
+                            s.append("</lido:rightsWorkSet>");
+                        s.append("</lido:rightsWorkWrap>");
+                            
                         s.append("<lido:recordWrap>");
                             s.append("<lido:recordID lido:type=\"local\" lido:label=\"Sis&#xE4;inen ID-numero\">");
-                                s.append(title);
+                                s.append(encodeXMLValue(title));
                             s.append("</lido:recordID>");
 
                             s.append("<lido:recordType>");
@@ -511,14 +549,40 @@ public class SimbergOpenDataHandler {
                             s.append("</lido:recordType>");
 
                             s.append("<lido:recordSource>");
+                                s.append("<lido:legalBodyName>");
+                                    s.append("<lido:appellationValue>Kansallisgalleria</lido:appellationValue>");
+                                s.append("</lido:legalBodyName>");
                                 s.append("<lido:legalBodyWeblink lido:label=\"Www-osoite\">http://www.kansallisgalleria.fi</lido:legalBodyWeblink>");
                             s.append("</lido:recordSource>");
+                            
+                            s.append("<lido:recordRights>");
+                                s.append("<lido:rightsType>");
+                                    s.append("<lido:conceptID type=\"Copyright\">CC BY 4.0</lido:conceptID>");
+                                    s.append("<lido:term>CC BY 4.0</lido:term>");
+                                s.append("</lido:rightsType>");
+                            s.append("</lido:recordRights>");
+                            
+                            s.append("<lido:recordRights>");
+                                s.append("<lido:rightsHolder>");
+                                    s.append("<lido:legalBodyName>");
+                                        s.append("<lido:appellationValue>Kansallisgalleria</lido:appellationValue>");
+                                    s.append("</lido:legalBodyName>");
+                                s.append("</lido:rightsHolder>");
+                            s.append("</lido:recordRights>");
+                            
                         s.append("</lido:recordWrap>");
 
                         s.append("<lido:resourceWrap>");
                             StringBuilder im = new StringBuilder("");
                             for(int i=0; i<images.size(); i++) {
-                                im.append(images.get(i).toString(t));
+                                if("positive".equalsIgnoreCase(images.get(i).type)) {
+                                    im.append(images.get(i).toString(t));
+                                }
+                            }
+                            for(int i=0; i<images.size(); i++) {
+                                if(!"positive".equalsIgnoreCase(images.get(i).type)) {
+                                    im.append(images.get(i).toString(t));
+                                }
                             }
                             s.append(im.toString());
                         s.append("</lido:resourceWrap>");
@@ -606,6 +670,20 @@ public class SimbergOpenDataHandler {
                             k.append(IMAGE_BASE_URL+encodeXMLValue(key)+".jpg");
                         k.append("</lido:linkResource>");
                     k.append("</lido:resourceRepresentation>");
+
+                    k.append("<lido:rightsResource>");
+                        k.append("<lido:rightsType>");
+                            k.append("<lido:conceptID type=\"Copyright\">CC BY 4.0</lido:conceptID>");
+                            k.append("<lido:term>CC BY 4.0</lido:term>");
+                        k.append("</lido:rightsType>");
+
+                        k.append("<lido:rightsHolder>");
+                            k.append("<lido:legalBodyName>");
+                                k.append("<lido:appellationValue>Kansallisgalleria</lido:appellationValue>");
+                            k.append("</lido:legalBodyName>");
+                        k.append("</lido:rightsHolder>");
+                    k.append("</lido:rightsResource>");
+                    
                 k.append("</lido:resourceSet>");
             }
             else if("json".equals(t)) {
@@ -649,13 +727,7 @@ public class SimbergOpenDataHandler {
                 k.append("</dc:subject>\n");
             }
             else if("lido".equals(t)) {
-                k.append("<lido:subjectSet>");
-                    k.append("<lido:subject>");
-                        if(type == null) k.append("<lido:term xml:lang=\"fi\">"); else k.append("<lido:term xml:lang=\"fi\" lido:label=\""+type+"\">");
-                            k.append(encodeXMLValue(key));
-                    k.append("</lido:term>");
-                    k.append("</lido:subject>");
-                k.append("</lido:subjectSet>");
+                k.append(encodeXMLValue(key));
             }
             else if("json".equals(t)) {
                 k.append(encodeCSVString(key));

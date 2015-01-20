@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,10 @@ public class DeleteDockable extends AbstractDockingTool {
     @Override
     public String getName() {
         if(dockable != null) {
-            return "Delete dockable "+dockable.getTitleText();
+            return "Close dockable "+dockable.getTitleText();
         }
         else {
-            return "Delete dockable";
+            return "Close dockable";
         }
     }
     

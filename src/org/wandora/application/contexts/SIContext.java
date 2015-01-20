@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 
 package org.wandora.application.contexts;
 
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.table.LocatorTable;
 import org.wandora.application.gui.table.TopicTable;
@@ -173,8 +174,8 @@ public class SIContext implements Context {
             }
         }
         
-        else if(contextSource instanceof SchemaTreeTopicChooser) {
-            digSIs(contextLocators, ((SchemaTreeTopicChooser) contextSource).getSelection() );
+        else if(contextSource instanceof TopicTreePanel) {
+            digSIs(contextLocators, ((TopicTreePanel) contextSource).getSelection() );
         }
         else if(contextSource instanceof TopicTree) {
             TopicTree tree = (TopicTree) contextSource;
@@ -227,7 +228,7 @@ public class SIContext implements Context {
                 contextSource instanceof Topic[] ||
                 contextSource instanceof GraphTopicPanel ||
                 contextSource instanceof TopicTable ||
-                contextSource instanceof SchemaTreeTopicChooser ||
+                contextSource instanceof TopicTreePanel ||
                 contextSource instanceof TopicTree ||
                 // contextSource instanceof LayerStatusPanel ||
                 contextSource instanceof JTableHeader && ((JTableHeader) contextSource).getTable() instanceof TopicTable)) {

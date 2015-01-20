@@ -1,3 +1,28 @@
+/*
+ * WANDORA
+ * Knowledge Extraction, Management, and Publishing Application
+ * http://wandora.org
+ * 
+ * Copyright (C) 2004-2015 Wandora Team
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 
+ *
+ */
+
+
 
 package org.wandora.application.tools.exporters.simberg;
 
@@ -8,9 +33,11 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.exporters.AbstractExportTool;
@@ -40,6 +67,12 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
     public String getDescription() {
         return "Exports topic map for Simberg.";
     }
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon("gui/icons/fng.png");
+    }
+    
     
     public static Topic getAssociatedTopic(Topic t,Topic atype,Topic role,HashMap<Topic,Topic> constraints,Topic orderT) throws TopicMapException {
         ArrayList<Topic> ret=getAssociatedTopics(t, atype, role, constraints, orderT);
@@ -653,19 +686,19 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                 
                 modelTopics.put(Tuples.t2(digiCls,(Object)digi),digiM);
             }
-            
-
         }
         
         return modelTopics.values();
     }
+    
+    
     
     @Override
     public void execute(Wandora admin, Context context) throws TopicMapException {
         TopicMap tm=Wandora.getWandora().getTopicMap();
         
         SimpleFileChooser chooser=UIConstants.getFileChooser();
-        chooser.setDialogTitle("Export nyblin data");
+        chooser.setDialogTitle("Export nyblin data as JSON");
 
         if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();

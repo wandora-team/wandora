@@ -1,7 +1,7 @@
 @echo off
 echo *****************************************************
 echo ***   WANDORA - THE KNOWLEDGE MANAGEMENT STUDIO   ***
-echo ***     Copyright (C) 2004-2014 Wandora Team      ***
+echo ***     Copyright (C) 2004-2015 Wandora Team      ***
 echo ***              http://wandora.org               *** 
 echo *****************************************************
 echo Xms750m Xmx1000m

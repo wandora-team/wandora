@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ public class UIConstants {
     public static Font smallButtonLabelFont = new Font("SansSerif", Font.PLAIN, 10);
     public static Font buttonLabelFont = new Font("SansSerif", Font.PLAIN, 11);
     public static Font labelFont = new Font("SansSerif", Font.PLAIN, 12);
+    public static Font largeLabelFont = new Font("SansSerif", Font.PLAIN, 14);
     public static Font panelTitleFont = new Font("SansSerif", Font.BOLD, 12);
     //public static Font wandoraBigLabelFont = new Font("SansSerif", Font.BOLD, 12);
     public static Font plainFont = new Font("SansSerif", Font.PLAIN, 11);
@@ -85,6 +86,8 @@ public class UIConstants {
     public static final Color defaultBorderHighlight = new Color(255,255,255);
     public static final Color defaultBorderShadow = new Color(200,221,242);
     
+    
+    public static final Color wandoraBlueColor = new Color(53,56,87);
     
     
     

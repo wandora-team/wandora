@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -292,6 +292,8 @@ public class TopicPanelManager implements ActionListener {
     public Object[] getViewMenuStruct() {
         if(currentTopicPanel != null) {
             return currentTopicPanel.getViewMenuStruct();
+            // Current configuration of Wandora sets currentTopicPanel to 
+            // DockingFramePanel. See getViewMenuStruct method in DockingFramePanel.
         }
         else {
             return new Object[] { };

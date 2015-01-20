@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ import javax.script.*;
 import java.net.*;
 import org.tmapi.core.DatatypeAware;
 import org.tmapi.core.Name;
-import org.wandora.application.gui.SchemaTreeTopicChooser;
+import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.wandora2tmapi.W2TRole;
 import org.wandora.topicmap.wandora2tmapi.W2TTopic;
@@ -56,7 +56,9 @@ import org.wandora.topicmap.wandora2tmapi.W2TTopic;
 
 
 /**
- *
+ * Use SearchTopicsFrame instead.
+ * 
+ * @deprecated 
  * @author  akivela
  */
 public class SearchTopicsDialog extends javax.swing.JDialog {
@@ -832,8 +834,8 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
             Topic contextTopic = null;
             if(!contextTopics.hasNext()){
                 // if context is empty just add some (root of a tree chooser) topic
-                HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTopicTreeManager().getTrees();
-                SchemaTreeTopicChooser tree=trees.values().iterator().next();
+                HashMap<String,TopicTreePanel> trees=wandora.getTopicTreeManager().getTrees();
+                TopicTreePanel tree=trees.values().iterator().next();
                 Topic t=tm.getTopic(tree.getRootSI());
                 ArrayList<Topic> al=new ArrayList<Topic>();
                 al.add(t);
@@ -926,8 +928,8 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
             Topic contextTopic = null;
             if(!contextTopics.hasNext()){
                 // if context is empty just add some (root of a tree chooser) topic
-                HashMap<String,SchemaTreeTopicChooser> trees=wandora.getTrees();
-                SchemaTreeTopicChooser tree=trees.values().iterator().next();
+                HashMap<String,TopicTreePanel> trees=wandora.getTrees();
+                TopicTreePanel tree=trees.values().iterator().next();
                 Topic t=tm.getTopic(tree.getRootSI());
                 ArrayList<Topic> al=new ArrayList<Topic>();
                 al.add(t);
@@ -1352,7 +1354,7 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         similarityPanel.add(similarityPanelInner, gridBagConstraints);
 
-        searchTabbedPane.addTab("String similarity", similarityPanel);
+        searchTabbedPane.addTab("Similarity", similarityPanel);
 
         queryPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -1466,7 +1468,7 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         queryPanel.add(queryPanelInner, gridBagConstraints);
 
-        searchTabbedPane.addTab("Query script", queryPanel);
+        searchTabbedPane.addTab("Query", queryPanel);
 
         tmqlPanel.setName(""); // NOI18N
         tmqlPanel.setLayout(new java.awt.GridBagLayout());
@@ -1527,7 +1529,7 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         tmqlPanel.add(tmqlScrollPane, gridBagConstraints);
 
-        searchTabbedPane.addTab("TMQL query", tmqlPanel);
+        searchTabbedPane.addTab("TMQL", tmqlPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

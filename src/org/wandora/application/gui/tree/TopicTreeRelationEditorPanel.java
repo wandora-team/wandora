@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,10 +27,11 @@
 
 
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.tree;
 
 
 
+import org.wandora.application.gui.tree.TopicTreeConfigPanel;
 import org.wandora.application.gui.tree.TopicTree;
 import javax.swing.ImageIcon;
 import java.util.*;
@@ -38,6 +39,7 @@ import java.net.*;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.GetTopicButton;
 import org.wandora.utils.IObox;
 
 
@@ -46,10 +48,10 @@ import org.wandora.utils.IObox;
  *
  * @author  olli
  */
-public class TreeAssociationTypeEditorPanel extends javax.swing.JPanel {
+public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
     
-    private TreeAssociationTypesEditor parent;
-    private static Vector<IconWrapper> icons;
+    private TopicTreeRelationsEditor parent;
+    private static ArrayList<IconWrapper> icons;
     private HashMap<String,Integer> iconIndex;
     private Wandora admin;
 
@@ -58,7 +60,7 @@ public class TreeAssociationTypeEditorPanel extends javax.swing.JPanel {
 
     private static void readIcons(){
         try{
-            icons=new Vector<IconWrapper>();
+            icons=new ArrayList<IconWrapper>();
             Enumeration<URL> toolResources = ClassLoader.getSystemResources("gui/icons/topictree");
             while(toolResources.hasMoreElements()){
                 URL baseUrl=toolResources.nextElement();
@@ -83,7 +85,7 @@ public class TreeAssociationTypeEditorPanel extends javax.swing.JPanel {
     }
     
     /** Creates new form TreeAssociationTypePanel */
-    public TreeAssociationTypeEditorPanel(String name,String subRole,String assocType,String superRole,String icon,TreeAssociationTypesEditor parent,Wandora admin) throws TopicMapException {
+    public TopicTreeRelationEditorPanel(String name,String subRole,String assocType,String superRole,String icon,TopicTreeRelationsEditor parent,Wandora admin) throws TopicMapException {
         this.admin=admin;
 
         subButton = new GetTopicButton(admin);
@@ -92,14 +94,16 @@ public class TreeAssociationTypeEditorPanel extends javax.swing.JPanel {
         
         initComponents();
         if(icons==null) readIcons();
-/*        icons=GripCollections.newVector(
+        /*
+        icons=GripCollections.newVector(
             new IconWrapper("gui/icons/testicon1.png"),
             new IconWrapper("gui/icons/testicon2.png"),
             new IconWrapper("gui/icons/testicon3.png"),
             new IconWrapper("gui/icons/testicon4.png")
-        );*/
+        );
+        */
         iconIndex=new HashMap<String,Integer>();
-        for(int i=0;i<icons.size();i++){
+        for(int i=0; i<icons.size(); i++){
             iconIndex.put(icons.get(i).resource,i);
             iconComboBox.addItem(icons.get(i));
         }
@@ -111,7 +115,9 @@ public class TreeAssociationTypeEditorPanel extends javax.swing.JPanel {
         ((GetTopicButton)subButton).setTopic(subRole);
         ((GetTopicButton)assocTypeButton).setTopic(assocType);
         ((GetTopicButton)superButton).setTopic(superRole);
-        if(icon==null) icon=icons.firstElement().resource;
+        if(!icons.isEmpty()) {
+            if(icon==null) icon=icons.get(0).resource;
+        }
         if(!iconIndex.containsKey(icon)) {
             icons.add(new IconWrapper(icon));
             iconComboBox.addItem(icons.get(icons.size()-1));
@@ -215,8 +221,8 @@ public class TreeAssociationTypeEditorPanel extends javax.swing.JPanel {
 
 
     
-    public TopicTree.TreeAssociation getAssociation() throws TopicMapException {
-        return new TopicTree.TreeAssociation(
+    public TopicTreeRelation getRelation() throws TopicMapException {
+        return new TopicTreeRelation(
                 nameTextField.getText(),
                 ((GetTopicButton)subButton).getTopicSI(),
                 ((GetTopicButton)assocTypeButton).getTopicSI(),
@@ -238,12 +244,15 @@ public class TreeAssociationTypeEditorPanel extends javax.swing.JPanel {
     private javax.swing.JTextField superRoleTextField;
     // End of variables declaration//GEN-END:variables
 
+    
+    
+    
     public static class IconWrapper extends ImageIcon {
         
         public String resource;
     
         public IconWrapper(String resource){
-            super(TreeAssociationsPanel.class.getClassLoader().getResource(resource));
+            super(TopicTreeConfigPanel.class.getClassLoader().getResource(resource));
             this.resource=resource;
         }
     }

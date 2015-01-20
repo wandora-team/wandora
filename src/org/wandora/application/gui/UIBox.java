@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -635,73 +635,58 @@ public class UIBox {
         if(struct != null) {
             if(struct.length > 0) {
                 JButton button = null;
-                String buttonLabel = null;
                 for(int i=0; i<struct.length; i++) {
                     if(struct[i] == null) continue;
                     // System.out.println("BUTTON: "+struct[i]);
                     // System.out.println();
-                    if(struct[i] instanceof WandoraTool) {
+                    if(struct[i] instanceof String) {
+                        String str = (String) struct[i];
+                        if("---".equals(str)) {
+                            button = null;
+                            JPanel separatorPanel = new JPanel();
+                            separatorPanel.setPreferredSize(new Dimension(10,42));
+                            container.add(separatorPanel);
+                        }
+                        else {
+                            button = makeDefaultButton();
+                            if(str.startsWith("[") && str.endsWith("]")) {
+                                button.setEnabled(false);
+                                str = str.substring(1, str.length()-1);
+                            }
+                            button.setText(str);
+                            button.setActionCommand(str);
+                            container.add(button);
+                        }
+                    }
+                    else if(struct[i] instanceof WandoraTool) {
                         try {
                             WandoraTool tool = (WandoraTool) struct[i];
-                            button = new SimpleButton();
-                            button.setOpaque(true);
-                            button.setFocusPainted(false);
-                            button.setPreferredSize(new Dimension(60,42));
-                            button.setBackground(UIConstants.buttonBarBackgroundColor);
-                            button.setForeground(UIConstants.buttonBarLabelColor);
-                            button.setVerticalTextPosition(SwingConstants.BOTTOM);
-                            button.setHorizontalTextPosition(SwingConstants.CENTER);
-                            button.setFont(UIConstants.miniButtonLabel);
-                            button.setIcon(tool.getIcon());
-                            button.addMouseListener(
-                                new MouseAdapter() {
-                                    @Override
-                                    public void mouseEntered(java.awt.event.MouseEvent evt) {
-                                        evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
-                                    }
-                                    @Override
-                                    public void mouseExited(java.awt.event.MouseEvent evt) {
-                                        evt.getComponent().setBackground(UIConstants.buttonBarBackgroundColor);
-                                    }
-                                }
-                            );
-                            //button.setIcon(resizeIconCanvas(tool.getIcon(), 42, 42));
-                            if(buttonLabel == null) {
-                                button.setActionCommand(tool.getName());
-                                button.setText(tool.getName());
-                            }
-                            else {
-                                if(buttonLabel.startsWith("[") && buttonLabel.endsWith("]")) {
+                            if(button == null) {
+                                button = makeDefaultButton();
+                                String str = tool.getName();
+                                if(str.startsWith("[") && str.endsWith("]")) {
                                     button.setEnabled(false);
-                                    buttonLabel = buttonLabel.substring(1, buttonLabel.length()-1);
+                                    str = str.substring(1, str.length()-1);
                                 }
-                                button.setActionCommand(buttonLabel);
-                                button.setText(buttonLabel);
-                                buttonLabel = null;
+                                button.setText(str);
+                                button.setActionCommand(str);
+                                container.add(button);
                             }
-                            button.setBorder(new EtchedBorder( Color.WHITE, Color.GRAY ));
-                            button.setToolTipText(Textbox.makeHTMLParagraph(((WandoraTool) struct[i]).getDescription(), 30));
-
-                            Wandora app = null;
-                            if(defaultListener instanceof Wandora) {
-                                app = (Wandora) defaultListener;
+                            if(button != null) {
+                                if(button.getIcon() == null) button.setIcon(tool.getIcon());                               
+                                button.setToolTipText(Textbox.makeHTMLParagraph(((WandoraTool) struct[i]).getDescription(), 30));
+                                button.addActionListener(new WandoraToolActionListener(Wandora.getWandora(), tool));
+                                container.add(button);
                             }
-                            else if(defaultListener instanceof Component) {
-                                app = Wandora.getWandora((Component) defaultListener);
-                            }
-                            button.addActionListener(new WandoraToolActionListener(app, tool));
-                            container.add(button);
                         }
                         catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    
-                    
+
                     else if(struct[i] instanceof Icon) {
                         if(button != null) {
                             Icon icon = (Icon) struct[i];
-                            //Icon icon = resizeIconCanvas((Icon) struct[i], 32, 32);
                             button.setIcon(icon);
                         }
                     }
@@ -712,8 +697,8 @@ public class UIBox {
                     }
                     else if(struct[i] instanceof JButton[]) {
                         JButton[] buttonArray = (JButton[]) struct[i];
-                        for(int j=0; j<buttonArray.length; j++) {
-                            container.add(buttonArray[j]); 
+                        for(JButton b : buttonArray) {
+                            container.add(b); 
                         }
                         button = null;
                     }
@@ -739,26 +724,37 @@ public class UIBox {
                             button.setComponentPopupMenu(menu);
                         }
                     }
-                    else if(struct[i] instanceof String) {
-                        String str = (String) struct[i];
-                        if("---".equals(str)) {
-                            button = null;
-                            JPanel separatorPanel = new JPanel();
-                            separatorPanel.setPreferredSize(new Dimension(10,42));
-                            //JSeparator s = new JSeparator();
-                            //s.setOrientation(JSeparator.VERTICAL);
-                            //separatorPanel.add(s);
-                            container.add(separatorPanel);
-                        }
-                        else {
-                            buttonLabel = str;
-                            //menuItem.setIcon(UIBox.getIcon("gui/icons/empty.png"));
-                        }
-                    }
                 }
             }
         }
         return container;
+    }
+    
+    
+    private static SimpleButton makeDefaultButton() {
+        SimpleButton button = new SimpleButton();
+        button.setOpaque(true);
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(60,42));
+        button.setBackground(UIConstants.buttonBarBackgroundColor);
+        button.setForeground(UIConstants.buttonBarLabelColor);
+        button.setVerticalTextPosition(SwingConstants.BOTTOM);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setFont(UIConstants.miniButtonLabel);
+        button.setBorder(new EtchedBorder( Color.WHITE, Color.GRAY ));
+        button.addMouseListener(
+            new MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
+                }
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    evt.getComponent().setBackground(UIConstants.buttonBarBackgroundColor);
+                }
+            }
+        );
+        return button;
     }
     
     
@@ -954,7 +950,40 @@ public class UIBox {
     
     // -------------------------------------------------------------------------
     
+    
+    
     private static HashMap iconCache = null;
+    private static Font iconFont = null;
+    
+    
+    
+    public static Icon getIcon(int iconCharacter) {
+        if(iconCache != null) {
+            try {
+                Icon icon = (Icon) iconCache.get(iconCharacter);
+                if(icon != null) return icon;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            iconCache = new HashMap();
+        }
+        Image image = getImage(iconCharacter);
+        if(image != null) {
+            try {
+                Icon icon = new ImageIcon(image);
+                iconCache.put(iconCharacter, icon);
+                return icon;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
     
     
     public static Icon getIcon(String iconName) {
@@ -986,6 +1015,42 @@ public class UIBox {
         
     
     
+    /**
+     * Create image with a character in font-awesome. Font-awesome is a widely 
+     * used icon collection created by Dave Gandy. The font is described in
+     * http://fortawesome.github.io/Font-Awesome/ .
+     * 
+     * Use character code arguments between 0x7000 - 0x720C.
+     *  
+     **/
+    public static BufferedImage getImage(int character) {
+        try {
+            if(iconFont == null) {
+                InputStream is = ClassLoader.getSystemResourceAsStream("gui/fonts/fontawesome/fontawesome-webfont.ttf");
+                iconFont = Font.createFont(Font.TRUETYPE_FONT, is);
+            }
+            if(iconFont != null) {
+                BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = (Graphics2D) image.getGraphics();
+                g.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+                g.setRenderingHint(
+                    RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                Font iconFont16 = iconFont.deriveFont(12f);
+                g.setFont(iconFont16);
+                g.setColor(UIConstants.wandoraBlueColor);
+                String iconText = Character.toString((char)character);
+                g.drawChars(iconText.toCharArray(), 0, 1, 2, 13);
+                return image;
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
     
     
     public static BufferedImage getImage(String imageName) {

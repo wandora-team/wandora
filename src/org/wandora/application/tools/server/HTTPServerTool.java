@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ public class HTTPServerTool extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
-        if((mode&CONFIGURE)!=0){
+        if((mode&CONFIGURE) != 0) {
 
             WandoraModulesServer s=wandora.getHTTPServer();
             
@@ -178,22 +178,25 @@ public class HTTPServerTool extends AbstractWandoraTool {
             if(running) s.start();
             
         }
-        if((mode&START)!=0){
+        if((mode&START) != 0) {
             wandora.startHTTPServer();
         }
-        else if((mode&STOP)!=0){
+        else if((mode&STOP) != 0) {
             wandora.stopHTTPServer();            
         }
-        if((mode&UPDATE_MENU)!=0){
+        if((mode&UPDATE_MENU) != 0) {
             wandora.menuManager.refreshServerMenu();
         }
-        if((mode&OPEN_PAGE)!=0){
+        if((mode&OPEN_PAGE) !=0) {
             try {
                 if(!wandora.getHTTPServer().isRunning()) {
                     int a = WandoraOptionPane.showConfirmDialog(wandora, "HTTP server is not running at the moment. Would you like to start the server first?", "Start HTTP server?", WandoraOptionPane.OK_CANCEL_OPTION);
                     if( a == WandoraOptionPane.OK_OPTION) {
                         wandora.startHTTPServer();
                         wandora.menuManager.refreshServerMenu();
+                    }
+                    else if( a == WandoraOptionPane.CANCEL_OPTION) {
+                        return;
                     }
                 }
                 WandoraModulesServer s=wandora.getHTTPServer();
@@ -202,7 +205,7 @@ public class HTTPServerTool extends AbstractWandoraTool {
                 else if(webApp!=null){
                     uri=webApp.getAppStartPage();
                     if(uri==null) {
-                        WandoraOptionPane.showMessageDialog(wandora, "Selected WebApp cannot be launched.");
+                        WandoraOptionPane.showMessageDialog(wandora, "Selected webapp cannot be launched.");
                         return;
                     }
                 }
@@ -234,7 +237,7 @@ public class HTTPServerTool extends AbstractWandoraTool {
                 else if(webApp!=null){
                     uri=webApp.getAppStartPage();
                     if(uri==null) {
-                        WandoraOptionPane.showMessageDialog(wandora, "Selected WebApp cannot be launched.");
+                        WandoraOptionPane.showMessageDialog(wandora, "Selected webapp cannot be launched.");
                         return;
                     }
                 }

@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,30 +101,37 @@ public class WandoraDockable extends DefaultDockable {
     
     public class WandoraDockableMouseListener implements MouseInputListener {
 
+        @Override
         public void mouseClicked(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mousePressed(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseReleased(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseEntered(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseExited(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseDragged(MouseEvent e) {
             lastMouseEvent = e;
         }
 
+        @Override
         public void mouseMoved(MouseEvent e) {
             lastMouseEvent = e;
         }

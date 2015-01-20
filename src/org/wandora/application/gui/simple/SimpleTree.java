@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@ public class SimpleTree extends JTree implements SimpleComponent {
     
     
     
+    @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
         Wandora w = Wandora.getWandora(this);
         if(w != null) {
@@ -61,12 +62,14 @@ public class SimpleTree extends JTree implements SimpleComponent {
         }
     }
     
+    @Override
     public void focusLost(java.awt.event.FocusEvent focusEvent) {
     }
     
     
     
     
+    @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);

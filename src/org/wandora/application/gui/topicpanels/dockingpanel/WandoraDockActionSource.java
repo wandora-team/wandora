@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import org.wandora.application.gui.topicpanels.dockingpanel.actions.CloseDockabl
 import org.wandora.application.gui.topicpanels.dockingpanel.actions.MaximizeDockableAction;
 import org.wandora.application.gui.topicpanels.dockingpanel.actions.TopicPanelMenuAction;
 import org.wandora.application.gui.topicpanels.dockingpanel.actions.WandoraToolWrapperAction;
+import org.wandora.application.tools.AboutWandora;
 import org.wandora.application.tools.navigate.OpenTopic;
 
 /**
@@ -48,10 +49,12 @@ import org.wandora.application.tools.navigate.OpenTopic;
 public class WandoraDockActionSource extends MultiDockActionSource {
     private TopicPanel topicPanel = null;
     
+    
+    
     public WandoraDockActionSource(TopicPanel tp, DockingFramePanel dfp, DockController control) {
         topicPanel = tp;
-        
-        
+
+        //this.add(new WandoraToolWrapperAction(new OpenTopic(OpenTopic.ASK_USER)));
         //this.add(new TopicPanelMenuAction(tp));
         this.add(new MaximizeDockableAction(dfp));
         this.add(new CloseDockableAction(dfp));

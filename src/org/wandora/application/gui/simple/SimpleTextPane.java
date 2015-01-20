@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -194,6 +194,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }*/
     
   
+    @Override
     public int print(java.awt.Graphics graphics, java.awt.print.PageFormat pageFormat, int param) throws java.awt.print.PrinterException {
         if (param > 0) {
             return(NO_SUCH_PAGE);
@@ -309,6 +310,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     // ---------------------------------------------------------------- UNDO ---
     
+    @Override
     public void undoableEditHappened(UndoableEditEvent e) {
         //Remember the edit and update the menus
         undo.addEdit(e.getEdit());
@@ -322,18 +324,23 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     
     
+    @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
     
@@ -346,6 +353,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     
     
+    @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
 
@@ -610,6 +618,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     
     
+    @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
         if(admin == null) admin = Wandora.getWandora(this);
         if(admin != null) {
@@ -617,6 +626,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         }
     }
     
+    @Override
     public void focusLost(java.awt.event.FocusEvent focusEvent) {
         // DO NOTHING...
     }
@@ -631,6 +641,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
 
     
+    @Override
     public void dragEnter(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
         if(! UIConstants.dragBorder.equals( this.getBorder())) {
             defaultBorder = this.getBorder();
@@ -639,11 +650,13 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }
     
     
+    @Override
     public void dragExit(java.awt.dnd.DropTargetEvent dropTargetEvent) {
         this.setBorder(defaultBorder);
     }
     
     
+    @Override
     public void dragOver(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
         if(! UIConstants.dragBorder.equals( this.getBorder())) {
             defaultBorder = this.getBorder();
@@ -652,6 +665,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }
     
     
+    @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
         try {
             DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
@@ -769,9 +783,11 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         this.setBorder(defaultBorder);
     }
     
+    @Override
     public void dropActionChanged(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
     }
 
+    @Override
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
     }    
     

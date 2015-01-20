@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,12 +106,12 @@ public class QueryEditorTopicPanel implements TopicPanel {
 
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/topic_panel_custom.png");
+        return UIBox.getIcon("gui/icons/topic_panel_query_editor.png");
     }
 
     @Override
     public int getOrder() {
-        return 0;
+        return 10000;
     }
 
     @Override

@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,20 +24,27 @@
 package org.wandora.application.gui.search;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.topicmap.TMQLRunner;
+import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
@@ -49,7 +56,7 @@ import org.wandora.utils.Tuples;
  */
 
 
-public class TMQLPanel extends javax.swing.JPanel {
+public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
 
     
     private Wandora wandora = null;
@@ -68,6 +75,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         message.setHorizontalAlignment(SimpleLabel.CENTER);
         message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
         tmqlTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        ((TMQLTextPane) tmqlTextPane).setHorizontallyResizeable(false);
         readStoredTmqlQueries();
     }
 
@@ -197,7 +205,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         addTmqlButton = new SimpleButton();
         delTmqlButton = new SimpleButton();
         tmqlScrollPane = new javax.swing.JScrollPane();
-        tmqlTextPane = new SimpleTextPane();
+        tmqlTextPane = new TMQLTextPane();
         tmqlButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
         clearResultsButton = new SimpleButton();
@@ -253,7 +261,7 @@ public class TMQLPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         tmqlPanel.add(selectQueryPanel1, gridBagConstraints);
 
-        tmqlTextPane.setPreferredSize(new java.awt.Dimension(6, 100));
+        tmqlScrollPane.setPreferredSize(new java.awt.Dimension(2, 150));
         tmqlScrollPane.setViewportView(tmqlTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -374,4 +382,100 @@ public class TMQLPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane tmqlScrollPane;
     private javax.swing.JTextPane tmqlTextPane;
     // End of variables declaration//GEN-END:variables
+
+
+    
+
+    
+    private class TMQLTextPane extends SimpleTextPaneResizeable {
+    
+        private int tmqlPanelWidth = 100;
+        private int tmqlPanelHeight = tmqlPanel.getHeight();
+        
+        
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            Point p = e.getPoint();
+            if(mousePressedInTriangle) {
+                inTheTriangleZone = true;
+                int yDiff = (mousePressedPoint.y - p.y);
+                newSize = new Dimension(100, sizeAtPress.height - yDiff);
+
+                JScrollPane sp = getScrollPane();
+
+                if(scrollPane != null) {
+                    sp.getViewport().setSize(newSize);
+                    sp.getViewport().setPreferredSize(newSize);
+                    sp.getViewport().setMinimumSize(newSize);
+
+                    sp.setSize(newSize);
+                    sp.setPreferredSize(newSize);
+                    sp.setMinimumSize(newSize);
+                }
+
+                tmqlPanel.setSize(tmqlPanelWidth, tmqlPanelHeight - yDiff);
+                tmqlPanel.revalidate();
+                tmqlPanel.repaint();
+            }
+        }
+        
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            if(mousePressedInTriangle) {
+                Point p = e.getPoint();
+                tmqlPanelHeight = tmqlPanel.getHeight();
+            }
+        }
+        
+    }
+
+    
+    
+
+    // ------------------------------------------------------- TopicSelector ---
+    
+    @Override
+    public Topic getSelectedTopic() {
+        if(resultsTable != null) {
+            Topic[] topics = resultsTable.getSelectedTopics();
+            if(topics != null && topics.length > 0) {
+                return topics[0];
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public Topic[] getSelectedTopics() {
+        if(resultsTable != null) {
+            resultsTable.getSelectedTopics();
+        }
+        return null;
+    }
+    
+
+    @Override
+    public java.awt.Component getPanel() {
+        return this;
+    }
+    
+    
+    @Override
+    public String getSelectorName() {
+        return "TMQL";
+    }
+    
+    @Override
+    public void init() {
+        
+    }
+    
+    @Override
+    public void cleanup() {
+        
+    }
+
 }

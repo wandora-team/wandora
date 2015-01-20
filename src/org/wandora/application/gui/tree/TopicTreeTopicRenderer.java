@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.net.URL;
 import java.util.*;
+import org.wandora.application.Wandora;
 import org.wandora.utils.GripCollections;
 import org.wandora.application.gui.TopicGuiWrapper;
 
@@ -87,7 +88,9 @@ public class TopicTreeTopicRenderer extends DefaultTreeCellRenderer {
                 try {
                     String topicName = topicWrapper.toString();
                     label.setText(topicName);
-                    Color color=topicTree.parent.topicHilights.getLayerColor(topicWrapper.topic);
+                    Wandora wandora = Wandora.getWandora();
+                    Color color = null;
+                    if(wandora != null) wandora.topicHilights.getLayerColor(topicWrapper.topic);
                     if(color!=null) label.setForeground(color);
                     else label.setForeground(Color.BLACK);
                 }

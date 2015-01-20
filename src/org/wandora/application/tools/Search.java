@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 package org.wandora.application.tools;
 
 
+import java.util.*;
 import org.wandora.application.gui.search.SearchTopicsResults;
 import org.wandora.application.gui.search.SearchTopicsDialog;
 import de.topicmapslab.tmql4j.components.processor.results.model.ResultType;
@@ -36,12 +37,14 @@ import de.topicmapslab.tmql4j.components.processor.runtime.TMQLRuntimeFactory;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.topicmap.layered.*;
 import org.wandora.topicmap.*;
+
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 
-import java.util.*;
+
 import javax.swing.*;
+import org.wandora.application.gui.search.SearchTopicsFrame;
 
 
 /**
@@ -50,14 +53,38 @@ import javax.swing.*;
  */
 public class Search extends AbstractWandoraTool implements WandoraTool {
     
-    private static SearchTopicsDialog dialog = null;
+    public static boolean useFrameSearch = true;
     
+    private static SearchTopicsDialog dialog = null;
+    private static SearchTopicsFrame searchFrame = null;
 
     
     
-    
     @Override
-    public void execute(final Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context context) {
+        if(useFrameSearch) {
+            if(searchFrame == null) {
+                searchFrame = new SearchTopicsFrame();
+            }
+            if(searchFrame != null) {
+                searchFrame.setVisible(true);
+            }
+            else {
+                System.out.println("Unable in instantiate SearchTopicsFrame.");
+            }
+        }
+        else {
+            // This is the old search dialog of Wandora application.
+            // It is here only for historical curiosity and code preservation.
+            oldExecute(wandora, context);
+        }
+    }
+    
+    
+    
+
+
+    public void oldExecute(final Wandora wandora, Context context) {
         Object contextSource = context.getContextSource();
         TopicMap topicMap = null;
         if(contextSource != null && contextSource instanceof LayerStatusPanel) {
@@ -182,7 +209,7 @@ public class Search extends AbstractWandoraTool implements WandoraTool {
 
     @Override
     public String getDescription() {
-        return "Searches for topics.";
+        return "Search for topics.";
     }
     
     public boolean useDefaultGui() {
@@ -195,38 +222,3 @@ public class Search extends AbstractWandoraTool implements WandoraTool {
     }
     
 }
-
-
-
-
-/* MOVED TO SearchTopicsResults
-
-class SearchResults extends JDialog {
-    private Collection<Topic> res;
-    public SearchResults(Wandora parent,boolean modal, Collection<Topic> res){
-        super(parent,modal);
-        this.res=res;
-        this.setTitle("Search results");
-
-        TopicTable table = new TopicTable(parent);
-        table.initialize(res.toArray(new Topic[] {} ), null);
-        this.getContentPane().setLayout(new java.awt.BorderLayout());
-        WandoraButton cancel=new WandoraButton();
-        cancel.setText("Close");
-        final SearchResults thisf=this;
-        cancel.addActionListener(new java.awt.event.ActionListener(){
-            public void actionPerformed(java.awt.event.ActionEvent e){
-                thisf.setVisible(false);
-            }
-        });
-        JScrollPane sp=new JScrollPane(table);
-        this.getContentPane().add(cancel,java.awt.BorderLayout.SOUTH);
-        this.getContentPane().add(sp,java.awt.BorderLayout.CENTER);
-        this.setSize(400,500);
-        this.setLocation(parent.getLocation().x+parent.getWidth()/2-this.getWidth()/2, 
-                         parent.getLocation().y+parent.getHeight()/2-this.getHeight()/2);
-    }
-}
- * 
- * 
-*/

@@ -239,22 +239,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <map>remote-wandora</map>
       </connection>
    </remoteconnections>
-   <topictreetypes>
-      <type>
-         <name>Instances</name>
-         <assocsi></assocsi>
-         <icon>gui/icons/topictree/instanceof.png</icon>
-         <subsi></subsi>
-         <supersi></supersi>
-      </type>
-      <type>
-         <name>Subclasses</name>
-         <assocsi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass</assocsi>
-         <subsi>http://www.topicmaps.org/xtm/1.0/core.xtm#subclass</subsi>
-         <icon>gui/icons/topictree/supersubclass.png</icon>
-         <supersi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass</supersi>
-      </type>
-   </topictreetypes>
    <helpviewer>http://wandora.org/wiki/__HELP__</helpviewer>
    <copycommand></copycommand>
    <tool>
@@ -346,6 +330,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/webview</path>
       <path>org/wandora/application/tools/r</path>
       <path>org/wandora/application/tools/extractors/watson</path>
+      <path>org/wandora/application/tools/docking/add</path>
+      <path>org/wandora/application/tools/docking</path>
       <set>
          <name>generator</name>
          <item>
@@ -1190,21 +1176,25 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.fng.opendata.v2b.FngOpenDataDublinCoreExporter</class>
             </item>
             <item>
-               <name>FNG open data Simberg exporter...</name>
+                <name>--- SIMBERG ---</name>
+                <class>org.wandora.application.tools.DummyTool</class>
+             </item>
+            <item>
+               <name>Simberg open data exporter...</name>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOpenDataExporter</class>
             </item>
             <item>
-               <name>FNG OAI DC Simberg exporter...</name>
+               <name>Simberg OAI DC exporter...</name>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOAIDCExporter</class>
             </item>
             <item>
-               <name>FNG LIDO Simberg exporter...</name>
+               <name>Simberg LIDO exporter...</name>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergLIDOExporter</class>
             </item>
-         </item>
-         <item>
-            <name>Simberg export</name>
-            <class>org.wandora.application.tools.exporters.simberg.SimbergExport</class>
+            <item>
+               <name>Simberg JSON exporter....</name>
+               <class>org.wandora.application.tools.exporters.simberg.SimbergExport</class>
+            </item>
          </item>
       </set>
       <set>
@@ -1436,6 +1426,33 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.extractors.flickr.GroupInfoExtractor</class>
          </item>
       </set>
+      <set>
+         <name>Panel buttons</name>
+         <item>
+            <name>Add traditional</name>
+            <class>org.wandora.application.tools.docking.add.AddTraditional</class>
+         </item>
+         <item>
+            <name>Add tree</name>
+            <class>org.wandora.application.tools.docking.add.AddTree</class>
+         </item>
+         <item>
+            <name>Add search</name>
+            <class>org.wandora.application.tools.docking.add.AddSearch</class>
+         </item>
+         <item>
+            <name>Add graph</name>
+            <class>org.wandora.application.tools.docking.add.AddGraph</class>
+         </item>
+         <item>
+            <name>Add sketch grid</name>
+            <class>org.wandora.application.tools.docking.add.AddSketchGrid</class>
+         </item>
+         <item>
+            <name>Add web view</name>
+            <class>org.wandora.application.tools.docking.add.AddWebView</class>
+         </item>
+      </set>
    </tool>
    <basemap>resources/conf/wandora.xtm</basemap>
    <shortcuts>
@@ -1493,11 +1510,32 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </bsh>
    <httpuseragent>Wandora</httpuseragent>
    <trees>
+      <type>
+         <name>Instances</name>
+         <assocsi></assocsi>
+         <icon>gui/icons/topictree/instanceof.png</icon>
+         <subsi></subsi>
+         <supersi></supersi>
+      </type>
+      <type>
+         <name>Subclasses</name>
+         <assocsi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass</assocsi>
+         <subsi>http://www.topicmaps.org/xtm/1.0/core.xtm#subclass</subsi>
+         <icon>gui/icons/topictree/supersubclass.png</icon>
+         <supersi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass</supersi>
+      </type>
+      <type>
+         <name>Default association</name>
+         <assocsi>http://wandora.org/si/core/default-association</assocsi>
+         <subsi>http://wandora.org/si/core/default-role-2</subsi>
+         <icon>gui/icons/topictree/box.png</icon>
+         <supersi>http://wandora.org/si/core/default-role-1</supersi>
+      </type>
       <tree>
          <root>http://wandora.org/si/core/wandora-class</root>
          <name>Topics</name>
-         <association>Instances</association>
-         <association>Subclasses</association>
+         <relation>Instances</relation>
+         <relation>Subclasses</relation>
       </tree>
    </trees>
    <lsystems>

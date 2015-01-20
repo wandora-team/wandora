@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,11 @@ public class SimpleToggleButton extends JToggleButton {
     Icon offIcon = null;
     
     
+    
+    public SimpleToggleButton(String label) {
+        this();
+        this.setText(label);
+    }
     
     public SimpleToggleButton() {
         this.setFocusPainted(false);

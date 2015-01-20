@@ -438,7 +438,7 @@
                               <Properties>
                                 <Property name="selected" type="boolean" value="true"/>
                                 <Property name="text" type="java.lang.String" value="Compare n-grams instead of complete strings"/>
-                                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;If the target string is longer than user specified similarity text,&lt;br&gt;split target string into n-grams and choose biggest n-gram similarity value.&lt;/html&gt;"/>
+                                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;If the target string is longer than user specified similarity text,&lt;br&gt;split the target string into n-grams and choose biggest n-gram similarity value.&lt;/html&gt;"/>
                               </Properties>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleCheckBox();"/>

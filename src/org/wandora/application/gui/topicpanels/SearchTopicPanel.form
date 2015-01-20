@@ -31,8 +31,8 @@
         <Container class="javax.swing.JPanel" name="searchContainerPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Search">
-                <Property name="tabTitle" type="java.lang.String" value="Search"/>
+              <JTabbedPaneConstraints tabName="Finder">
+                <Property name="tabTitle" type="java.lang.String" value="Finder"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2014 Wandora Team
+ * Copyright (C) 2004-2015 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
@@ -82,7 +83,7 @@ import uk.ac.shef.wit.simmetrics.tokenisers.TokeniserWhitespace;
  */
 
 
-public class SimilarityPanel extends javax.swing.JPanel {
+public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector {
 
     public boolean ALLOW_PARTIAL_MATCH = true;
 
@@ -649,7 +650,7 @@ public class SimilarityPanel extends javax.swing.JPanel {
 
         useNGrams.setSelected(true);
         useNGrams.setText("Compare n-grams instead of complete strings");
-        useNGrams.setToolTipText("<html>If the target string is longer than user specified similarity text,<br>split target string into n-grams and choose biggest n-gram similarity value.</html>");
+        useNGrams.setToolTipText("<html>If the target string is longer than user specified similarity text,<br>split the target string into n-grams and choose biggest n-gram similarity value.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         jPanel3.add(useNGrams, gridBagConstraints);
@@ -812,4 +813,54 @@ public class SimilarityPanel extends javax.swing.JPanel {
     private javax.swing.JPanel tokenizerPanel;
     private javax.swing.JCheckBox useNGrams;
     // End of variables declaration//GEN-END:variables
+
+
+
+
+    // ------------------------------------------------------- TopicSelector ---
+    
+    @Override
+    public Topic getSelectedTopic() {
+        if(resultsTable != null) {
+            Topic[] topics = resultsTable.getSelectedTopics();
+            if(topics != null && topics.length > 0) {
+                return topics[0];
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public Topic[] getSelectedTopics() {
+        if(resultsTable != null) {
+            resultsTable.getSelectedTopics();
+        }
+        return null;
+    }
+    
+
+    @Override
+    public java.awt.Component getPanel() {
+        return this;
+    }
+    
+    
+    @Override
+    public String getSelectorName() {
+        return "Similarity";
+    }
+    
+    @Override
+    public void init() {
+        
+    }
+    
+    @Override
+    public void cleanup() {
+        
+    }
+    
+
+
 }
