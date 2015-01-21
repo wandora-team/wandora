@@ -55,7 +55,7 @@ public class VEdge {
     
     
     /** Creates a new instance of VEdge */
-    public VEdge(Edge edge,VModel model) {
+    public VEdge(Edge edge, VModel model) {
         this.edge=edge;
         this.model=model;
         T2<Node,Node> nodes = edge.getNodes();
@@ -215,7 +215,7 @@ public class VEdge {
             double d=Math.sqrt(dx*dx+dy*dy);
             double ndx=dx/d;
             double ndy=dy/d;
-            
+
             if(label!=null) {
                 T2<Double,Double> p=proj.worldToScreen(vnodes.e1.x+dx*0.5+Math.sin(0.5*Math.PI)*curvature*ndy,
                                                        vnodes.e1.y+dy*0.5-Math.sin(0.5*Math.PI)*curvature*ndx);
@@ -241,7 +241,7 @@ public class VEdge {
             double d=Math.sqrt(dx*dx+dy*dy);
             double ndx=dx/d;
             double ndy=dy/d;
-            
+
             if(label!=null) {
                 T2<Double,Double> p=proj.worldToScreen(vnodes.e1.x+dx*0.5+Math.sin(0.5*Math.PI)*curvature*ndy,
                                                        vnodes.e1.y+dy*0.5-Math.sin(0.5*Math.PI)*curvature*ndx);

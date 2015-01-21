@@ -67,7 +67,9 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
             new java.awt.event.KeyAdapter() {
                 @Override
                 public void keyReleased(java.awt.event.KeyEvent evt){
-                    if(evt.getKeyChar()==KeyEvent.VK_ENTER) doSearch();
+                    if(evt.getKeyChar()==KeyEvent.VK_ENTER) {
+                        doSearch();
+                    }
                 }
             }
         );
