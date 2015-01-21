@@ -24,6 +24,8 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import javax.swing.JButton;
 import org.wandora.application.Wandora;
 import org.wandora.query2.DirectiveUIHints.Parameter;
@@ -92,18 +94,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         add(addButton, gridBagConstraints);
 
         parametersPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        javax.swing.GroupLayout parametersPanelLayout = new javax.swing.GroupLayout(parametersPanel);
-        parametersPanel.setLayout(parametersPanelLayout);
-        parametersPanelLayout.setHorizontalGroup(
-            parametersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        parametersPanelLayout.setVerticalGroup(
-            parametersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
+        parametersPanel.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -121,8 +112,9 @@ public class MultipleParameterPanel extends AbstractTypePanel {
     public void addParameter(){
         final AbstractTypePanel paramPanel;
         try{
-            paramPanel=typeCls.newInstance();
-        }catch(IllegalAccessException | InstantiationException e){
+            Constructor c=typeCls.getConstructor(Parameter.class);
+            paramPanel=(AbstractTypePanel)c.newInstance(this.parameter);
+        }catch(IllegalAccessException | InstantiationException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException | SecurityException e){
             Wandora.getWandora().handleError(e);
             return;
         }
@@ -148,7 +140,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         paramPanel.setLabel("-");
         parametersPanel.add(paramPanel,gbc);
         
-        this.invalidate();
+        this.revalidate();
         parametersPanel.repaint();
         
         numParameters++;
@@ -162,6 +154,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         
     }
     
+    @Override
     public void setLabel(String label){
         parameterLabel.setText(label);
     }

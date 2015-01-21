@@ -33,6 +33,7 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 import java.awt.event.*;
+import java.lang.reflect.Modifier;
 
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
@@ -175,11 +176,21 @@ public class TopicPanelManager implements ActionListener {
             if(topicPanelClassName != null) {
                 if(!topicPanelClassName.contains("$")) { // Skip inner classes!
                     Class topicPanelClass = Class.forName(topicPanelClassName);
-                    topicPanel = (TopicPanel) topicPanelClass.newInstance();
+                    if(TopicPanel.class.isAssignableFrom(topicPanelClass) &&
+                            !Modifier.isAbstract(topicPanelClass.getModifiers()) &&
+                            !Modifier.isInterface(topicPanelClass.getModifiers()) ){
+                        topicPanel = (TopicPanel) topicPanelClass.newInstance();
+                    }
                 }
             }
         }
         catch (Exception e) {
+            Wandora.getWandora().handleError(e);
+            // All kinds of exceptions are caught here, some because we try
+            // to instantiate something we shouldn't and something which we
+            // might care about. Ideally would catch a bit more specifically.
+            
+            //e.printStackTrace();
         }
         return topicPanel;
     }

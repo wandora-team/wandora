@@ -50,12 +50,12 @@ public class QueryEditorTopicPanel implements TopicPanel {
     protected QueryEditorComponent panel;
     
     public QueryEditorTopicPanel(){
-        panel=new QueryEditorComponent();
     }
     
     
     @Override
     public void init() {
+        panel=new QueryEditorComponent();
     }
     
     

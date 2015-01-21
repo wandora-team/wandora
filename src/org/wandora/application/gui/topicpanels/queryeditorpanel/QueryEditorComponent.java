@@ -169,7 +169,12 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         Collections.sort(hints,new Comparator<DirectiveUIHints>(){
             @Override
             public int compare(DirectiveUIHints o1, DirectiveUIHints o2) {
-                return o1.getLabel().compareTo(o2.getLabel());
+                String l1=o1.getLabel();
+                String l2=o2.getLabel();
+                if(l1==null && l2!=null) return -1;
+                else if(l1!=null && l2==null) return 1;
+                else if(l1==null && l2==null) return 0;
+                else return l1.compareTo(l2);
             }
         });
         for(DirectiveUIHints h: hints){
