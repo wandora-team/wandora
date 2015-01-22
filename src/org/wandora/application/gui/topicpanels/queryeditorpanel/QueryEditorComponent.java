@@ -198,7 +198,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     public DirectivePanel addDirective(DirectiveUIHints hints){
         DirectivePanel panel=new DirectivePanel(hints);
         addDirectivePanel(panel);
-        panel.setBounds(10, 10, 200, 100);
+        panel.setBounds(10, 10, 300, 200);
         panel.revalidate();
         return panel;
     }

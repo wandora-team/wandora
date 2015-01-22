@@ -21,11 +21,14 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import org.wandora.application.Wandora;
 import org.wandora.query2.DirectiveUIHints.Parameter;
@@ -39,7 +42,18 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 public class MultipleParameterPanel extends AbstractTypePanel {
 
     protected Class<? extends AbstractTypePanel> typeCls;
-    protected int numParameters=0;
+    
+    protected final ArrayList<Row> rows=new ArrayList<Row>();
+    
+    protected static class Row {
+        public AbstractTypePanel panel;
+        public JButton removeButton;
+        public Row(AbstractTypePanel panel, JButton removeButton) {
+            this.panel = panel;
+            this.removeButton = removeButton;
+        }
+        public Row(){}
+    }
     
     /**
      * Creates new form MultipleParameterPanel
@@ -109,7 +123,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         addParameter();
     }//GEN-LAST:event_addButtonActionPerformed
 
-    public void addParameter(){
+    public synchronized void addParameter(){
         final AbstractTypePanel paramPanel;
         try{
             Constructor c=typeCls.getConstructor(Parameter.class);
@@ -122,7 +136,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
 
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridx=0;
-        gbc.gridy=numParameters;
+        gbc.gridy=rows.size();
         
         JButton removeButton=new JButton();
         removeButton.setText("Remove");
@@ -143,15 +157,38 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         this.revalidate();
         parametersPanel.repaint();
         
-        numParameters++;
+        rows.add(new Row(paramPanel, removeButton));
     }
     
-    public void removeParameter(int index){
+    public synchronized void removeParameter(int index){
+        GridBagLayout layout=(GridBagLayout)parametersPanel.getLayout();
+        Row row=rows.get(index);
+        row.panel.disconnect();
         
+        parametersPanel.remove(row.panel);
+        parametersPanel.remove(row.removeButton);
+        rows.remove(index);
+        for(int i=index;i<rows.size();i++){
+            row=rows.get(i);
+            GridBagConstraints gbc=layout.getConstraints(row.panel);
+            gbc.gridy--;
+            layout.setConstraints(row.panel, gbc);
+            gbc=layout.getConstraints(row.removeButton);
+            gbc.gridy--;
+            layout.setConstraints(row.removeButton, gbc);
+        }
+        
+        this.revalidate();
+        parametersPanel.repaint();
     }
     
-    public void removeParameter(AbstractTypePanel panel){
-        
+    public synchronized void removeParameter(AbstractTypePanel panel){
+        for(int i=0;i<rows.size();i++){
+            if(rows.get(i).panel==panel) {
+                removeParameter(i);
+                break;
+            }
+        }
     }
     
     @Override

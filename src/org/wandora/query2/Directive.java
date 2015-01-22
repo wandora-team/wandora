@@ -25,6 +25,8 @@
  */
 package org.wandora.query2;
 import java.util.*;
+import org.wandora.query2.DirectiveUIHints.Addon;
+import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**
  *
@@ -40,6 +42,32 @@ public abstract class Directive {
     public static final String DEFAULT_NS="http://wandora.org/si/query/";
     public static final String DEFAULT_COL="#DEFAULT";
 
+    public static Addon[] getStandardAddonHints(){
+        return getStandardAddonHints(new Addon[0]);
+    }
+    public static Addon[] getStandardAddonHints(Addon[] extras){
+        ArrayList<Addon> addons=new ArrayList<Addon>();
+        
+        addons.add(new Addon("as", new Parameter[]{new Parameter(String.class,false,"column name")}, "as"));
+        addons.add(new Addon("as", new Parameter[]{
+            new Parameter(String.class,false,"old column name"),
+            new Parameter(String.class,false,"new column name")
+        }, "as"));
+        addons.add(new Addon("from", new Parameter[]{new Parameter(String.class,true,"literal")}, "from literals"));
+        addons.add(new Addon("of", new Parameter[]{new Parameter(String.class,false,"column")}, "of"));
+        addons.add(new Addon("where", new Parameter[]{new Parameter(Directive.class,false,"where directive")}, "where"));
+        addons.add(new Addon("where", new Parameter[]{
+            new Parameter(String.class,false,"operand 1"),
+            new Parameter(String.class,false,"operator"),
+            new Parameter(String.class,false,"operand 2")
+        }, "where"));
+        
+        if(extras!=null && extras.length>0) {
+            for(int i=0;i<extras.length;i++) { addons.add(extras[i]); }
+        }
+        return addons.toArray(new Addon[addons.size()]);
+    }
+    
     /**
      * Prepares the query for execution. Extending classes must propagate
      * the call to any contained queries.

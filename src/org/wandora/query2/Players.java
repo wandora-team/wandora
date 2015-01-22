@@ -76,9 +76,9 @@ public class Players extends Directive implements DirectiveUIHints.Provider {
                     new Parameter(TopicOperand.class, true, "players")
             }, "")
         },
-        new Addon[]{
-            new Addon("usingColumns", new Parameter[]{new Parameter(String.class, true, "column")}, "usingColumns")
-        });
+        Directive.getStandardAddonHints(
+            new Addon[]{ new Addon("usingColumns", new Parameter[]{new Parameter(String.class, true, "column")}, "usingColumns") }
+        ));
         ret.setLabel("Players");
         return ret;
     }

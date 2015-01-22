@@ -34,11 +34,11 @@ import java.awt.event.MouseMotionAdapter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javax.swing.JComponent;
-import javax.swing.JScrollPane;
 import javax.swing.TransferHandler;
 import org.wandora.application.Wandora;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
+import org.wandora.query2.DirectiveUIHints.Addon;
 import org.wandora.query2.DirectiveUIHints.BoundParameter;
 import org.wandora.query2.DirectiveUIHints.Constructor;
 import org.wandora.query2.DirectiveUIHints.Parameter;
@@ -295,6 +295,20 @@ public class DirectivePanel extends javax.swing.JPanel {
         }
     }
     
+    private class AddonComboItem {
+        public Addon a;
+        public String label;
+        public AddonComboItem(Addon a,String label){
+            this.a=a;
+            this.label=label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }        
+    }
+    
     public void setDirective(DirectiveUIHints hints){
         this.hints=hints;
         
@@ -310,7 +324,18 @@ public class DirectivePanel extends javax.swing.JPanel {
             label+=")";
             constructorComboBox.addItem(new ConstructorComboItem(c,label));
         }
-        
+     
+        for(Addon a : hints.getAddons()) {
+            String label=a.getLabel()+"(";
+            boolean first=true;
+            for(Parameter p : a.getParameters()){
+                if(!first) label+=",";
+                else first=false;
+                label+=p.getLabel();
+            }
+            label+=")";
+            addonComboBox.addItem(new AddonComboItem(a,label));            
+        }
     }
     
     protected AbstractTypePanel makeMultiplePanel(Parameter param,Class<? extends AbstractTypePanel> typePanel,String label){
@@ -334,8 +359,14 @@ public class DirectivePanel extends javax.swing.JPanel {
     
     
     protected void populateParametersPanel(Constructor c){
-        constructorParameters.removeAll();
         if(c==null) return;
+
+        if(constructorParamPanels!=null){
+            for(AbstractTypePanel panel : constructorParamPanels){
+                panel.disconnect();
+            }
+        }
+        constructorParameters.removeAll();
         
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridx=0;
@@ -345,7 +376,6 @@ public class DirectivePanel extends javax.swing.JPanel {
         
         Parameter[] parameters=c.getParameters();
         this.constructorParamPanels=new AbstractTypePanel[parameters.length];
-        constructorParameters.removeAll();
         
         for(int i=0;i<parameters.length;i++){
             Parameter p=parameters[i];
@@ -450,7 +480,6 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         add(addAddonButton, gridBagConstraints);
 
