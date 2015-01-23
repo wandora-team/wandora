@@ -126,6 +126,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     private HashMap<TopicPanel,TopicPanel> chainedTopicPanels = null;
     
+    private Topic openedTopic = null;
+    
+    
     
     
     public DockingFramePanel() {
@@ -231,6 +234,8 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         //System.out.println("initialize Docking Frame Panel");
         //String name = TopicToString.toString(topic);
 
+        openedTopic = topic;
+        
         if(currentDockable == null) {
             if(!dockedTopicPanels.isEmpty()) {
                 currentDockable = dockedTopicPanels.keySet().iterator().next();
@@ -244,11 +249,11 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             control.setFocusedDockable(currentDockable, true);
             TopicPanel currentTopicPanel = dockedTopicPanels.get(currentDockable);
             if(currentTopicPanel != null) {
-                try {
+                if(currentTopicPanel.supportsOpenTopic()) {
                     currentTopicPanel.open(topic);
                     updateDockableTitle(currentTopicPanel);
                 }
-                catch(OpenTopicNotSupportedException otnse) {
+                else {
                     // We are going to ask the user where the topic will be opened.
                     ArrayList<TopicPanel> availableTopicPanels = new ArrayList();
                     for(Dockable dockable : dockedTopicPanels.keySet()) {
@@ -321,6 +326,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         if(control != null) {
             control.kill();
         }
+        openedTopic = null;
+        dockedTopicPanels.clear();
+        chainedTopicPanels.clear();
     }
 
     
@@ -397,7 +405,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 return tp.getTopic();
             }
         }
-        return null;
+        return openedTopic;
     }
     
     
@@ -496,6 +504,16 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                     
                     ArrayList subStruct = new ArrayList();
                     
+                    Object[] subMenuStruct = tp.getViewMenuStruct();
+                    if(subMenuStruct != null) {
+                        if(subMenuStruct.length > 0) {
+                            for( Object subMenuItem : subMenuStruct ) {
+                                subStruct.add(subMenuItem);
+                            }
+                            subStruct.add("---");
+                        }
+                    }
+                    
                     subStruct.add( "Select" );
                     subStruct.add( UIBox.getIcon( "gui/icons/select_dockable.png" ) );
                     subStruct.add( new SelectDockable(dockable) );
@@ -509,18 +527,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                         subStruct.add( UIBox.getIcon( "gui/icons/maximize_dockable.png" ) );
                     }
                     subStruct.add( new MaximizeDockable(dockable) );
-                    
-                    subStruct.add( "---" );
-                    
-                    Object[] subMenuStruct = tp.getViewMenuStruct();
-                    if(subMenuStruct != null) {
-                        if(subMenuStruct.length > 0) {
-                            for( Object subMenuItem : subMenuStruct ) {
-                                subStruct.add(subMenuItem);
-                            }
-                            subStruct.add("---");
-                        }
-                    }
+
                     subStruct.add( "Close" );
                     subStruct.add( UIBox.getIcon("gui/icons/close_dockable.png") );
                     subStruct.add( new DeleteDockable(dockable) );
@@ -669,6 +676,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         try {
             tp.init();
             if(tp.supportsOpenTopic()) {
+                if(topic == null) topic = openedTopic;
                 tp.open(topic);
             }
         }
@@ -715,7 +723,6 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             else {
                 currentDockable = null;
             }
-            
             wandora.topicPanelsChanged();
         }
     }
@@ -734,6 +741,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 station.removeDockable(dockable);
             }
             dockedTopicPanels.clear();
+            chainedTopicPanels.clear();
             currentDockable = null;
             wandora.topicPanelsChanged();
         }

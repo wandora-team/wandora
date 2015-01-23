@@ -109,7 +109,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
-        throw new OpenTopicNotSupportedException();
+
     }
 
     

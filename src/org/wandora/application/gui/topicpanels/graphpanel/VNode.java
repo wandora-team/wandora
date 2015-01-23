@@ -68,7 +68,7 @@ public class VNode {
     
     
     /** Creates a new instance of VNode */
-    public VNode(Node node,VModel model,int id) {
+    public VNode(Node node, VModel model, int id) {
         this.id = id;
         this.node = node;
         this.model = model;

@@ -1648,9 +1648,14 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                         Topic carrier = on.getCarrier();
                         Topic type = on.getType();
                         Topic scope = on.getScope();
-                        String o = carrier.getData(type, scope);
-                        if(o != null) {
-                            nn=model.addNode(tmModel.getNodeFor(carrier, type, scope, o));
+                        Topic ncarrier = getNewTopicFor(carrier,tm);
+                        Topic ntype = getNewTopicFor(type,tm);
+                        Topic nscope = getNewTopicFor(scope,tm);
+                        if(ncarrier != null && ntype != null && nscope != null) {
+                            String o = ncarrier.getData(ntype, nscope);
+                            if(o != null) {
+                                nn=model.addNode(tmModel.getNodeFor(ncarrier, ntype, nscope, o));
+                            }
                         }
                     }
                     if(nn!=null) {
@@ -1696,9 +1701,14 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                         Topic carrier = oe.getCarrier();
                         Topic type = oe.getType();
                         Topic scope = oe.getScope();
-                        String o = carrier.getData(type, scope);
-                        if(o != null) {
-                            ne = model.addEdge(tmModel.getOccurrenceEdgeFor(carrier, type, scope, o));
+                        Topic ncarrier = getNewTopicFor(carrier,tm);
+                        Topic ntype = getNewTopicFor(type,tm);
+                        Topic nscope = getNewTopicFor(scope,tm);
+                        if(ntype != null && nscope != null && ncarrier != null) {
+                            String o = ncarrier.getData(ntype, nscope);
+                            if(o != null) {
+                                ne = model.addEdge(tmModel.getOccurrenceEdgeFor(ncarrier, ntype, nscope, o));
+                            }
                         }
                     }
                     

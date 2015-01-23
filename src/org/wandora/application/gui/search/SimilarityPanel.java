@@ -29,6 +29,7 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -165,6 +166,17 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
             similarityTokenizerComboBox.addItem(similarityTokenizers[i].e1);
         }
         updateSimilarityOptions();
+        
+        similarityTextField.addKeyListener(
+            new java.awt.event.KeyAdapter() {
+                @Override
+                public void keyReleased(java.awt.event.KeyEvent evt){
+                    if(evt.getKeyChar()==KeyEvent.VK_ENTER) {
+                        doSearch();
+                    }
+                }
+            }
+        );
     }
 
     
@@ -420,6 +432,39 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         revalidate();
     }
 
+    
+    
+    public void doSearch() {
+        try {
+            resultPanel.removeAll();
+            Wandora wandora = Wandora.getWandora();
+            TopicMap topicMap = wandora.getTopicMap();
+            Collection<Topic> results = getSimilarTopics(topicMap);
+            if(results != null && !results.isEmpty()) {
+                resultsTable = new TopicTable(wandora);
+                resultsTable.initialize(results);
+                resultPanel.add(resultsTable, BorderLayout.NORTH);
+            }
+            else {
+                resultsTable = null;
+                message.setText("Found no topics!");
+                resultPanel.add(message, BorderLayout.CENTER);
+            }
+        }
+        catch(TopicMapException tme) {
+            message.setText("Topic map exception!");
+            resultPanel.add(message, BorderLayout.CENTER);
+            tme.printStackTrace();
+        }
+        catch(Exception e){
+            message.setText("Error!");
+            resultPanel.add(message, BorderLayout.CENTER);
+            e.printStackTrace();
+            return;
+        }
+        revalidate();
+        repaint();
+    }
     
     
     /**
@@ -745,35 +790,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
     }//GEN-LAST:event_similarityThresholdSliderMouseDragged
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        try {
-            resultPanel.removeAll();
-            Wandora wandora = Wandora.getWandora();
-            TopicMap topicMap = wandora.getTopicMap();
-            Collection<Topic> results = getSimilarTopics(topicMap);
-            if(results != null && !results.isEmpty()) {
-                resultsTable = new TopicTable(wandora);
-                resultsTable.initialize(results);
-                resultPanel.add(resultsTable, BorderLayout.NORTH);
-            }
-            else {
-                resultsTable = null;
-                message.setText("Found no topics!");
-                resultPanel.add(message, BorderLayout.CENTER);
-            }
-        }
-        catch(TopicMapException tme) {
-            message.setText("Topic map exception!");
-            resultPanel.add(message, BorderLayout.CENTER);
-            tme.printStackTrace();
-        }
-        catch(Exception e){
-            message.setText("Error!");
-            resultPanel.add(message, BorderLayout.CENTER);
-            e.printStackTrace();
-            return;
-        }
-        revalidate();
-        repaint();
+        doSearch();
     }//GEN-LAST:event_searchButtonActionPerformed
 
 
