@@ -29,13 +29,15 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Operand extends Directive {
+public class Operand extends Directive implements DirectiveUIHints.Provider {
     protected Object operand;
     protected boolean stat;
 
     protected Object cache;
     protected boolean isCached;
 
+    public Operand(){}
+    
     public Operand(Object operand){
         this.operand=operand;
         if(operand!=null && operand instanceof Directive){
@@ -43,6 +45,19 @@ public class Operand extends Directive {
         }
         else stat=true;
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(Object.class, false, "operand"),
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Operand",
+            "Framework");
+        return ret;
+    }         
 
     public static Operand makeOperand(Object o){
         if(o!=null && o instanceof Operand) return (Operand)o;

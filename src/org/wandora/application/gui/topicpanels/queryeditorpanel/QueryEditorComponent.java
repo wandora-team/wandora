@@ -23,8 +23,6 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -33,7 +31,12 @@ import java.util.Comparator;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTree;
 import javax.swing.TransferHandler;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.TextEditor;
 import org.wandora.application.gui.UIBox;
@@ -84,6 +87,23 @@ public class QueryEditorComponent extends javax.swing.JPanel {
                         return true;                        
                     }
                 });
+        
+        directivesTree.setTransferHandler(null);
+        DnDTools.setDragSourceHandler(directivesTree, "directiveHints", DnDTools.directiveHintsDataFlavor, 
+                new DnDTools.DragSourceCallback<DirectiveUIHints>() {
+            @Override
+            public DirectiveUIHints callback(JComponent component) {
+                JTree tree=(JTree)component;
+                TreePath path=tree.getSelectionPath();
+                if(path==null) return null;
+                DefaultMutableTreeNode n=(DefaultMutableTreeNode)path.getLastPathComponent();
+                Object o=n.getUserObject();
+                if(o instanceof DirectiveUIHints){
+                    return (DirectiveUIHints)o;
+                }
+                else return null;
+            }
+        });
         
         
         Object[] buttonStruct = {
@@ -148,6 +168,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     }
     
     protected void populateDirectiveList(){
+        /*
         directiveListPanel.removeAll();
         directiveListPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc=new GridBagConstraints();
@@ -183,6 +204,72 @@ public class QueryEditorComponent extends javax.swing.JPanel {
             
             gbc.gridy++;
         }
+        */
+        
+        
+        DefaultTreeModel treeModel=(DefaultTreeModel)directivesTree.getModel();
+        DefaultMutableTreeNode root=new DefaultMutableTreeNode("Directives");
+        DefaultMutableTreeNode other=new DefaultMutableTreeNode("Other");
+        
+        DirectiveManager directiveManager=DirectiveManager.getDirectiveManager();
+        List<Class<? extends Directive>> directives=directiveManager.getDirectives();
+        List<DirectiveUIHints> hints=new ArrayList<>();
+        
+        for(Class<? extends Directive> dir : directives){
+            DirectiveUIHints h=DirectiveUIHints.getDirectiveUIHints(dir);
+            hints.add(h);
+        }
+        
+        Collections.sort(hints,new Comparator<DirectiveUIHints>(){
+            @Override
+            public int compare(DirectiveUIHints o1, DirectiveUIHints o2) {
+                String l1=o1.getLabel();
+                String l2=o2.getLabel();
+                if(l1==null && l2!=null) return -1;
+                else if(l1!=null && l2==null) return 1;
+                else if(l1==null && l2==null) return 0;
+                else return l1.compareTo(l2);
+            }
+        });
+        
+        ArrayList<DefaultMutableTreeNode> categoryNodes=new ArrayList<>();
+        categoryNodes.add(other);
+                
+        for(DirectiveUIHints h: hints){
+            DefaultMutableTreeNode parent=other;
+            String category=h.getCategory();
+            if(category!=null && category.trim().length()>0 && !category.trim().equalsIgnoreCase("Other")) {
+                category=category.trim();
+                for(DefaultMutableTreeNode n : categoryNodes ){
+                    String name=n.toString();
+                    if(name!=null && name.equalsIgnoreCase(category)) {
+                        parent=n;
+                        break;
+                    }
+                }
+                if(parent==other){
+                    parent=new DefaultMutableTreeNode(category);
+                    categoryNodes.add(parent);
+                }
+            }
+            
+            DefaultMutableTreeNode node=new DefaultMutableTreeNode(h);
+            parent.add(node);
+        }
+        
+        Collections.sort(categoryNodes,new Comparator<DefaultMutableTreeNode>(){
+            @Override
+            public int compare(DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) {
+                return o1.toString().compareTo(o2.toString());
+            }
+        });
+        
+        for(DefaultMutableTreeNode n: categoryNodes) { root.add(n); }
+        
+        treeModel.setRoot(root);
+        
+        
+        
     }
     
     public void addDirectivePanel(DirectivePanel panel){
@@ -234,36 +321,42 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         directiveListPanel = new javax.swing.JPanel();
+        jSplitPane1 = new javax.swing.JSplitPane();
         queryScrollPane = new javax.swing.JScrollPane();
         queryGraphPanel = new GraphPanel();
         finalResultLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        directivesTree = new javax.swing.JTree();
         toolBar = new javax.swing.JToolBar();
         buttonPanel = new javax.swing.JPanel();
         fillerPanel = new javax.swing.JPanel();
         innerFillerPanel = new javax.swing.JPanel();
 
-        setLayout(new java.awt.BorderLayout());
-
-        jSplitPane1.setDividerLocation(600);
-
         directiveListPanel.setLayout(new java.awt.GridBagLayout());
         jScrollPane1.setViewportView(directiveListPanel);
 
-        jSplitPane1.setRightComponent(jScrollPane1);
+        setLayout(new java.awt.BorderLayout());
+
+        jSplitPane1.setDividerLocation(600);
 
         queryGraphPanel.setBackground(new java.awt.Color(255, 255, 255));
         queryGraphPanel.setLayout(null);
 
         finalResultLabel.setText("Final result <-");
         queryGraphPanel.add(finalResultLabel);
-        finalResultLabel.setBounds(10, 10, 100, 14);
+        finalResultLabel.setBounds(10, 10, 100, 17);
 
         queryScrollPane.setViewportView(queryGraphPanel);
 
         jSplitPane1.setLeftComponent(queryScrollPane);
+
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Directives");
+        directivesTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jScrollPane2.setViewportView(directivesTree);
+
+        jSplitPane1.setRightComponent(jScrollPane2);
 
         add(jSplitPane1, java.awt.BorderLayout.CENTER);
 
@@ -288,10 +381,12 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel directiveListPanel;
+    private javax.swing.JTree directivesTree;
     private javax.swing.JPanel fillerPanel;
     private javax.swing.JLabel finalResultLabel;
     private javax.swing.JPanel innerFillerPanel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel queryGraphPanel;
     private javax.swing.JScrollPane queryScrollPane;

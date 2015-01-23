@@ -39,6 +39,7 @@ public class TopicOperandParameterPanel extends OperandParameterPanel {
     protected void setOperandTypes() {
         super.setOperandTypes();
         operandTypeComboBox.removeItem("String");
+        operandTypeComboBox.addItem("Subject Identifier");
         operandTypeComboBox.addItem("Topic");
     }
     
@@ -51,6 +52,16 @@ public class TopicOperandParameterPanel extends OperandParameterPanel {
         if(type.equalsIgnoreCase("Topic")){
             operandPanel.removeAll();
             TopicParameterPanel p=new TopicParameterPanel(parameter);
+            p.setLabel("");
+            operandPanel.add(p);
+            this.revalidate();
+            operandPanel.repaint();
+            parameterPanel=p;
+            return true;
+        }
+        else if(type.equalsIgnoreCase("Subject Identifier")){
+            operandPanel.removeAll();
+            StringParameterPanel p=new StringParameterPanel(parameter);
             p.setLabel("");
             operandPanel.add(p);
             this.revalidate();

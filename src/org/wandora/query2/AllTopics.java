@@ -32,11 +32,23 @@ import java.util.*;
  *
  * @author olli
  */
-public class AllTopics extends Directive {
+public class AllTopics extends Directive implements DirectiveUIHints.Provider {
 
     public AllTopics(){
 
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "AllTopics",
+            "Topic map");
+        return ret;
+    }         
 
     @Override
     public boolean isStatic() {

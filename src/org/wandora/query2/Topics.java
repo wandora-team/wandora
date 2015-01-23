@@ -30,7 +30,7 @@ import org.wandora.topicmap.*;
  *
  * @author olli
  */
-public class Topics extends Directive {
+public class Topics extends Directive implements DirectiveUIHints.Provider  {
     protected boolean useBN;
 
     public Topics(boolean baseName){
@@ -39,7 +39,21 @@ public class Topics extends Directive {
     public Topics(){
         this(false);
     }
-
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(Boolean.class, false, "baseName"),
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Topics",
+            "Topic map");
+        return ret;
+    }  
+    
     @Override
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
         Object o=input.getActiveValue();

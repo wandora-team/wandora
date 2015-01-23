@@ -32,11 +32,22 @@ import java.util.*;
  *
  * @author olli
  */
-public class Types extends Directive {
+public class Types extends Directive implements DirectiveUIHints.Provider {
     public Types(){
 
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Types",
+            "Topic map");
+        return ret;
+    }  
+    
     @Override
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
         Object o=input.getActiveValue();

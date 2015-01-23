@@ -29,15 +29,31 @@ import java.util.*;
  *
  * @author olli
  */
-public class From extends Directive {
+public class From extends Directive implements DirectiveUIHints.Provider  {
 
     private Directive to;
     private Directive from;
 
+    public From(){}
+    
     public From(Directive to,Directive from){
         this.to=to;
         this.from=from;
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(Directive.class, false, "to"),
+                        new DirectiveUIHints.Parameter(Directive.class, false, "from")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "From",
+            "Framework");
+        return ret;
+    }    
 
 /*    @Override
     public ArrayList<ResultRow> query(QueryContext context,ResultRow input,String as) throws QueryException {

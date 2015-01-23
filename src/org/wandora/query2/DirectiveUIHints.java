@@ -41,6 +41,7 @@ import org.wandora.application.Wandora;
 public class DirectiveUIHints implements Serializable {
     
     protected String label;
+    protected String category;
     protected Constructor[] constructors;
     protected Addon[] addons;
     
@@ -58,11 +59,23 @@ public class DirectiveUIHints implements Serializable {
     public DirectiveUIHints(Class<? extends Directive> cls,Constructor[] constructors, Addon[] addons) {
         this(cls);
         this.constructors = constructors;
+        this.addons = addons;        
+    }
+    
+    public DirectiveUIHints(Class<? extends Directive> cls,Constructor[] constructors, Addon[] addons, String label, String category) {
+        this(cls);
+        this.constructors = constructors;
         this.addons = addons;
+        this.label = label;
+        this.category = category;
     }
     
     public Class<? extends Directive> getDirectiveClass(){
         return cls;
+    }
+    
+    public String getCategory(){
+        return category;
     }
 
     public String getLabel() {
@@ -73,13 +86,20 @@ public class DirectiveUIHints implements Serializable {
         this.label = label;
     }
     
-    
+    public void setCategory(String s){
+        this.category=s;
+    }
     
     public Constructor[] getConstructors(){
         return constructors;
     }
     public Addon[] getAddons(){
         return addons;
+    }
+    
+    @Override
+    public String toString(){
+        return label;
     }
     
     public static void cleanConstructorArray(ArrayList<Constructor> constructors){

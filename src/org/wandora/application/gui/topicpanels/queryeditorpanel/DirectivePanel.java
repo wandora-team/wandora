@@ -325,16 +325,19 @@ public class DirectivePanel extends javax.swing.JPanel {
             constructorComboBox.addItem(new ConstructorComboItem(c,label));
         }
      
-        for(Addon a : hints.getAddons()) {
-            String label=a.getLabel()+"(";
-            boolean first=true;
-            for(Parameter p : a.getParameters()){
-                if(!first) label+=",";
-                else first=false;
-                label+=p.getLabel();
+        Addon[] addons=hints.getAddons();
+        if(addons!=null){
+            for(Addon a : addons) {
+                String label=a.getLabel()+"(";
+                boolean first=true;
+                for(Parameter p : a.getParameters()){
+                    if(!first) label+=",";
+                    else first=false;
+                    label+=p.getLabel();
+                }
+                label+=")";
+                addonComboBox.addItem(new AddonComboItem(a,label));            
             }
-            label+=")";
-            addonComboBox.addItem(new AddonComboItem(a,label));            
         }
     }
     
@@ -346,11 +349,11 @@ public class DirectivePanel extends javax.swing.JPanel {
     
     protected Class<? extends AbstractTypePanel> getTypePanelClass(Parameter p){
         Class<?> cls=p.getType();
-        if(Directive.class.isAssignableFrom(cls)) return DirectiveParameterPanel.class;
-        else if(cls.equals(Integer.class) || cls.equals(Integer.TYPE)) return IntegerParameterPanel.class;
+        if(cls.equals(Integer.class) || cls.equals(Integer.TYPE)) return IntegerParameterPanel.class;
         else if(cls.equals(String.class)) return StringParameterPanel.class;
         else if(cls.equals(TopicOperand.class)) return TopicOperandParameterPanel.class;
         else if(cls.equals(Operand.class)) return OperandParameterPanel.class;
+        else if(Directive.class.isAssignableFrom(cls)) return DirectiveParameterPanel.class;
         // this is a guess really
         else if(cls.equals(Object.class)) return TopicOperandParameterPanel.class;
 

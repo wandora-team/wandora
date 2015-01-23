@@ -31,10 +31,12 @@ import java.util.ArrayList;
  *
  * @author olli
  */
-public class Of extends Directive {
+public class Of extends Directive implements DirectiveUIHints.Provider {
 
     private String role;
 
+    public Of(){}
+    
     public Of(String role){
         this.role=role;
     }
@@ -42,6 +44,19 @@ public class Of extends Directive {
     public String getRole(){
         return role;
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(String.class, false, "role"),
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Of",
+            "Framework");
+        return ret;
+    }       
 
     @Override
     public ResultIterator queryIterator(QueryContext context,ResultRow input) throws QueryException {

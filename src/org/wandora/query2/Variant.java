@@ -32,7 +32,7 @@ import java.util.*;
  *
  * @author olli
  */
-public class Variant extends Directive {
+public class Variant extends Directive implements DirectiveUIHints.Provider  {
     private TopicOperand lang;
     private TopicOperand type;
 
@@ -48,6 +48,25 @@ public class Variant extends Directive {
         this.lang=(lang==null?null:new TopicOperand(lang));
     }
 
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(TopicOperand.class, false, "type"),
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(TopicOperand.class, false, "type"),
+                        new DirectiveUIHints.Parameter(TopicOperand.class, false, "lang"),
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Variant",
+            "Topic map");
+        return ret;
+    }  
+    
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {
         boolean ret=true;

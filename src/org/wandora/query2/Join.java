@@ -30,9 +30,11 @@ import java.util.*;
  *
  * @author olli
  */
-public class Join extends Directive {
+public class Join extends Directive implements DirectiveUIHints.Provider {
     private ArrayList<Directive> directives;
 
+    public Join(){}
+    
     public Join(Directive[] directives){
         this.directives=new ArrayList<Directive>();
         for(int i=0;i<directives.length;i++){
@@ -50,6 +52,18 @@ public class Join extends Directive {
         this(new Directive[]{d1,d2,d3,d4});
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(Directive.class, true, "directives"),
+                }, ""),
+            },
+            Directive.getStandardAddonHints(),
+            "Join",
+            "Framework");
+        return ret;
+    }       
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {
         boolean r=true;

@@ -33,11 +33,23 @@ import org.wandora.topicmap.*;
  *
  * @author olli
  */
-public class Instances extends Directive {
+public class Instances extends Directive implements DirectiveUIHints.Provider {
 
     public Instances(){
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Instances",
+            "Topic map");
+        return ret;
+    }      
+        
     @Override
     public ArrayList<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
         Object o=input.getActiveValue();

@@ -32,7 +32,7 @@ import java.util.*;
  *
  * @author olli
  */
-public class Occurrence extends Directive {
+public class Occurrence extends Directive implements DirectiveUIHints.Provider {
 
     private TopicOperand type;
     private TopicOperand version;
@@ -47,6 +47,24 @@ public class Occurrence extends Directive {
         this.type=(type==null?null:new TopicOperand(type));
         this.version=(version==null?null:new TopicOperand(version));
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(TopicOperand.class, false, "type"),
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(TopicOperand.class, false, "type"),
+                        new DirectiveUIHints.Parameter(TopicOperand.class, false, "version"),
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Occurrence",
+            "Topic map");
+        return ret;
+    }         
 
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {

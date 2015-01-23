@@ -34,9 +34,24 @@ public class TopicOperand extends Operand {
     public T2<Topic,String> cachedTopic;
     public boolean topicIsCached=false;
 
+    public TopicOperand(){}
+    
     public TopicOperand(Object operand){
         super(operand);
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(Object.class, false, "operand"),
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "TopicOperand",
+            "Framework");
+        return ret;
+    }        
 
     public static TopicOperand makeTopicOperand(Object o){
         if(o!=null && o instanceof TopicOperand) return (TopicOperand)o;

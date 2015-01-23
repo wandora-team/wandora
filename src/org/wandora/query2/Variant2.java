@@ -38,15 +38,29 @@ import java.util.*;
  */
 
 
-public class Variant2 extends Directive {
+public class Variant2 extends Directive implements DirectiveUIHints.Provider {
     private TopicOperand[] scope;
 
+    public Variant2(){}
 
     public Variant2(Object ... scope){
         this.scope=new TopicOperand[scope.length];
         for(int i=0;i<scope.length;i++) this.scope[i]=new TopicOperand(scope[i]);
     }
-
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(TopicOperand.class, true, "scope"),
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Variant2",
+            "Topic map");
+        return ret;
+    }  
+    
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {
         boolean ret=true;

@@ -31,11 +31,13 @@ import java.util.ArrayList;
  *
  * @author olli
  */
-public class As extends Directive {
+public class As extends Directive implements DirectiveUIHints.Provider  {
 
     private String original;
     private String newRole;
 
+    public As(){};
+    
     public As(String newRole){
         this.newRole=newRole;
     }
@@ -45,6 +47,23 @@ public class As extends Directive {
         this.newRole=newRole;
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(String.class, false, "newRole"),
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                        new DirectiveUIHints.Parameter(String.class, false, "originalRole"),
+                        new DirectiveUIHints.Parameter(String.class, false, "newRole")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "As",
+            "Framework");
+        return ret;
+    }      
+    
     public String getOriginalRole(){
         return original;
     }

@@ -94,7 +94,13 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         setLayout(new java.awt.GridBagLayout());
 
         parameterLabel.setText("Label");
-        add(parameterLabel, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        add(parameterLabel, gridBagConstraints);
 
         addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -103,8 +109,9 @@ public class MultipleParameterPanel extends AbstractTypePanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         add(addButton, gridBagConstraints);
 
         parametersPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
