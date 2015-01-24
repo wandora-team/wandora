@@ -261,6 +261,7 @@ public class LinkedTopic extends Topic{
     
     @Override
     public boolean equals(Object o){
+        if(o == null) return false;
         if(!o.getClass().equals(this.getClass())) return false;
         LinkedTopic lt=(LinkedTopic)o;
         if(lt.topicMap!=topicMap) return false;

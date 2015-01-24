@@ -136,7 +136,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public LayerStack() {
         layers=new Vector<Layer>();
         visibleLayers=new Vector<Layer>();
-        layerIndex=new HashMap<TopicMap,Layer>();
+        layerIndex=new LinkedHashMap<TopicMap,Layer>();
         topicMapListeners=new ArrayList<TopicMapListener>();
         containerListener=new ContainerTopicMapListener(){
             public void layerAdded(Layer l) {
@@ -341,7 +341,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public void clearTopicIndex(){
         if(!useTopicIndex) return;
         synchronized(indexLock){
-            topicIndex=new HashMap<Locator,LayeredTopic>();
+            topicIndex=new LinkedHashMap<Locator,LayeredTopic>();
         }
     }
     /**
@@ -383,7 +383,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public void setConsistencyCheck(boolean value) throws TopicMapException {
         consistencyCheck=value;
         Layer layer = null;
-        for(int i=layers.size()-1;i>=0; i--) {
+        for(int i=layers.size()-1; i>=0; i--) {
             layer = layers.elementAt(i);
             layer.topicMap.setConsistencyCheck(value);
         }
@@ -409,7 +409,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     /* See note beginning of the file about TopicMapListeners in LayerStack
      */
     public void topicRemoved(Topic t) throws TopicMapException {
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
             for(TopicMapListener listener : topicMapListeners){
                 listener.topicRemoved(lt);
@@ -418,7 +418,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         removeTopicFromIndex(t.getOneSubjectIdentifier());
     }
     public void associationRemoved(Association a) throws TopicMapException {
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             for(TopicMapListener listener : topicMapListeners){
                 listener.associationRemoved(makeLayeredAssociation(a));
             }
@@ -430,7 +430,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         for(Locator l : t.getSubjectIdentifiers()){
             removeTopicFromIndex(l);
         }
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
             for(TopicMapListener listener : topicMapListeners){
                 listener.topicSubjectIdentifierChanged(lt,added,removed);
@@ -442,7 +442,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             removeTopicFromIndex(l);
         }
         removeTopicFromIndex(t.getOneSubjectIdentifier());
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
             for(TopicMapListener listener : topicMapListeners){
                 listener.topicBaseNameChanged(lt,newName,oldName);
@@ -450,7 +450,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
     }
     public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
             LayeredTopic ladded=makeLayeredTopic(added);
             LayeredTopic lremoved=makeLayeredTopic(removed);
@@ -460,7 +460,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
     }
     public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
             Collection<Topic> lscope=makeLayeredTopics(scope);
             for(TopicMapListener listener : topicMapListeners){
@@ -469,7 +469,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
     }
     public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
             LayeredTopic ltype=makeLayeredTopic(type);
             LayeredTopic lversion=makeLayeredTopic(version);
@@ -482,7 +482,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         for(Locator l : t.getSubjectIdentifiers()){
             removeTopicFromIndex(l);
         }
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
             for(TopicMapListener listener : topicMapListeners){
                 listener.topicSubjectLocatorChanged(lt,newLocator,oldLocator);
@@ -493,7 +493,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         for(Locator l : t.getSubjectIdentifiers()){
             removeTopicFromIndex(l);
         }
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=null;
             if(t instanceof LayeredTopic && t.getTopicMap()==this) lt=(LayeredTopic)t;
             else lt=makeLayeredTopic(t);
@@ -503,7 +503,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
     }
     public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredAssociation la=makeLayeredAssociation(a);
             LayeredTopic lNewType=makeLayeredTopic(newType);
             LayeredTopic lOldType=makeLayeredTopic(oldType);
@@ -513,7 +513,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
     }
     public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
-        if(topicMapListeners.size()>0) {
+        if(!topicMapListeners.isEmpty()) {
             LayeredAssociation la=makeLayeredAssociation(a);
             LayeredTopic lrole=makeLayeredTopic(role);
             LayeredTopic lNewPlayer=makeLayeredTopic(newPlayer);
@@ -524,7 +524,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
     }
     public void associationChanged(Association a) throws TopicMapException {
-        if(topicMapListeners.size()>0){
+        if(!topicMapListeners.isEmpty()){
             LayeredAssociation la=null;
             if(a instanceof LayeredAssociation && a.getTopicMap()==this) la=(LayeredAssociation)a;
             else la=makeLayeredAssociation(a);
@@ -561,7 +561,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public Layer getLayer(String layerName) {
         Layer layer = null;
         if(layerName != null) {
-            for(int i=layers.size()-1;i>=0; i--) {
+            for(int i=layers.size()-1; i>=0; i--) {
                 layer = layers.elementAt(i);
                 if(layerName.equals(layer.getName())) {
                     return layer;
@@ -573,7 +573,9 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     /**
      * Gets the selected layer.
      */
-    public Layer getSelectedLayer(){return selectedLayer;}
+    public Layer getSelectedLayer(){
+        return selectedLayer;
+    }
     /**
      * Gets the selected layer position in the stack.
      */
@@ -684,7 +686,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
      */
     public void reverseLayerOrder() {
         Vector<Layer> newLayers=new Vector<Layer>();
-        for(int i=layers.size()-1;i>=0; i--) {
+        for(int i=layers.size()-1; i>=0; i--) {
             newLayers.add(layers.elementAt(i));
         }
         layers = newLayers;
@@ -824,7 +826,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
      * collection may have less items than the collection used as the parameter.
      */
     Collection<Topic> makeLayeredTopics(Collection<Topic> ts) throws TopicMapException {
-        Vector<Topic> ret=new Vector<Topic>();
+        ArrayList<Topic> ret=new ArrayList<Topic>();
         Set<Topic> processed=new KeyedHashSet<Topic>(new TopicAndLayerKeyMaker());
         for(Topic t : ts){
             if(processed.contains(t)) continue;
@@ -879,7 +881,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     }
     
     public Topic getTopicBySubjectLocator(Locator sl) throws TopicMapException {
-        HashSet<Topic> collected=new HashSet<Topic>();
+        HashSet<Topic> collected=new LinkedHashSet<Topic>();
         for(Layer l : visibleLayers){
             Topic t=l.getTopicMap().getTopicBySubjectLocator(sl);
             if(t!=null) return makeLayeredTopic(t); 
@@ -929,7 +931,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     }
     public Collection<Topic> getTopicsOfType(Topic type) throws TopicMapException {
         Set<Topic> processed=new KeyedHashSet<Topic>(new TopicAndLayerKeyMaker());
-        Vector<Topic> ret=new Vector<Topic>();
+        ArrayList<Topic> ret=new ArrayList<Topic>();
         LayeredTopic lt=(LayeredTopic)type;
         for(Layer l : visibleLayers){
             for(Topic typeIn : lt.getTopicsForLayer(l)){
@@ -947,7 +949,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return ret;
     }
     public Topic getTopicWithBaseName(String name) throws TopicMapException {
-        HashSet<Topic> collected=new HashSet<Topic>();
+        HashSet<Topic> collected=new LinkedHashSet<Topic>();
         for(Layer l : visibleLayers){
             Topic t=l.getTopicMap().getTopicWithBaseName(name);
             if(t!=null) return makeLayeredTopic(t);
@@ -1138,7 +1140,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                     return true;
                 }
             
-            }catch(TopicMapException tme){
+            }
+            catch(TopicMapException tme){
                 log(tme);
                 return false;
             }
@@ -1237,7 +1240,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public Collection<Association> getAssociationsOfType(Topic type) throws TopicMapException {
         LayeredTopic lt=(LayeredTopic)type;
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(new TopicAndLayerKeyMaker());
-        HashSet<Association> associations=new HashSet<Association>();
+        HashSet<Association> associations=new LinkedHashSet<Association>();
         for(Layer l : visibleLayers){
             for(Topic typeIn : lt.getTopicsForLayer(l)){
                 Collection<Association> c=l.getTopicMap().getAssociationsOfType(typeIn);
@@ -1392,7 +1395,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                     else if(s.compareTo(min)<0) min=s;
                 }
                 return lname+"//"+min;
-            }catch(TopicMapException tme){
+            }
+            catch(TopicMapException tme){
                 tme.printStackTrace(); // TODO EXCEPTION
                 return lname;
             }
@@ -1404,8 +1408,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         TopicMapSearchOptions options2=options.duplicate();
         options2.maxResults=-1; // we can't know yet how many results we need from individual topic maps
         
-        HashSet<Topic> searchResult = new HashSet<Topic>();
-        HashSet<Topic> searchResultLayered = new HashSet<Topic>();
+        HashSet<Topic> searchResult = new LinkedHashSet<Topic>();
+        HashSet<Topic> searchResultLayered = new LinkedHashSet<Topic>();
         Outer: for(Layer l : visibleLayers) {
             searchResult.clear();
             searchResult.addAll(l.getTopicMap().search(query, options2));

@@ -64,7 +64,7 @@ import org.wandora.utils.ClipboardBox;
  */
 
 
-public class LayerInfoPanel implements ActionListener, TopicPanel {
+public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
     
     private JPanel infoPanel = null;
     private Wandora wandora = null;
@@ -74,7 +74,8 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     private boolean trackChanges = false;
     private JPanel buttonPanel = null;
     private HashMap<Object, SimpleLabel> fieldLabels = null;
-    
+    private boolean requiresRefresh = false;
+    private Thread refresher = null;
     
     public LayerInfoPanel() {
         
@@ -88,6 +89,9 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
         infoPanel.setLayout(new GridBagLayout());
         fieldLabels = new HashMap();
         initInfo();
+        
+        refresher = new Thread(this);
+        refresher.start();
     }
     
     
@@ -116,7 +120,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     
     @Override
     public void stop() {
-
+        refresher.interrupt();
     }
 
     
@@ -276,7 +280,9 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
         
         for(int i=0; i<statOptions.length; i++) {
             try {
-
+                String statDescriptionString = TopicMapStatOptions.describeStatOption(statOptions[i]);
+                stats.append(statDescriptionString);
+                
                 statString = "n.a.";
                 try {
                     if(map != null) {
@@ -407,11 +413,34 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     @Override
     public void refresh() throws TopicMapException {
         if(infoPanel != null) {
-            refreshInfo();
-            infoPanel.revalidate();
-            infoPanel.repaint();
+            requiresRefresh = true;
         }
     }
+    
+    
+    
+    
+    @Override
+    public void run() {
+        while(!refresher.isInterrupted()) {
+            if(requiresRefresh) {
+                requiresRefresh = false;
+                System.out.println("RefreshInfo");
+                refreshInfo();
+                infoPanel.revalidate();
+                infoPanel.repaint();
+            }
+            try {
+                refresher.sleep(100);
+            }
+            catch(InterruptedException e) {}
+        }
+        try {
+            refresher.join();
+        }
+        catch(InterruptedException e) {}
+    }
+    
 
     
     

@@ -91,6 +91,11 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
     }
 
     
+    public JScrollPane getResultScrollPane() {
+        return resultPanelScroller;
+    }
+    
+    
     public void doSearch() {
         try {
             String query = (String) searchWords.getSelectedItem();
