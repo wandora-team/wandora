@@ -31,7 +31,11 @@ import org.wandora.topicmap.Topic;
  * consists of two methods. The similarity method takes two topics as arguments
  * and returns a double number. If returned double number is zero, topics are
  * identical (in the similarity model). Nonzero values suggest the topics
- * are different. Second interface method is used to return a name for the
+ * are different. The user should notice the similarity scale is reversed making
+ * it more like "difference scale": Maximum similarity is at 0 and there is no
+ * maximum difference.
+ * 
+ * Second interface method is used to return a name for the
  * similarity measure.
  * 
  * @author akivela

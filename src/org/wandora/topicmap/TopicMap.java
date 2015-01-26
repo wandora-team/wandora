@@ -368,7 +368,7 @@ public abstract class TopicMap implements TopicMapLogger {
     // TODO: Equals check used in HashSet. May cause some topics to be included
     //       several times in the returned collection.
     public Collection<Topic> getTopics(Collection sis) throws TopicMapException {
-        HashSet ret=new HashSet();
+        HashSet ret=new LinkedHashSet();
         Iterator iter=sis.iterator();
         while(iter.hasNext()){
             Object o=iter.next();
@@ -399,7 +399,7 @@ public abstract class TopicMap implements TopicMapLogger {
      * Like copyTopicIn but does it for a collection of topics.
      */ 
     public Collection<Topic> copyTopicCollectionIn(Collection topics,boolean deep) throws TopicMapException {
-        HashSet copied=new HashSet();
+        HashSet copied=new LinkedHashSet();
         Iterator iter=topics.iterator();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
@@ -416,7 +416,7 @@ public abstract class TopicMap implements TopicMapLogger {
      * containing only the topic you gave as a parameter.
      */
     public Collection<Topic> getMergingTopics(Topic t) throws TopicMapException {
-        HashSet set=new HashSet();
+        HashSet set=new LinkedHashSet();
         Collection<Locator> ls=t.getSubjectIdentifiers();
         if(ls!=null) {
             Iterator iter=ls.iterator();
@@ -1565,12 +1565,12 @@ public abstract class TopicMap implements TopicMapLogger {
                             topicID=attributes.getValue("id");
                             stateStack.push(state);
                             state=STATE_TOPIC;
-                            parsedType=new HashSet();
+                            parsedType=new LinkedHashSet();
                             parsedBaseName=null;
-                            parsedSubjectIdentifiers=new HashSet();
+                            parsedSubjectIdentifiers=new LinkedHashSet();
                             parsedSubjectLocator=null;
-                            parsedOccurrences=new HashSet();
-                            parsedVariants=new HashSet();
+                            parsedOccurrences=new LinkedHashSet();
+                            parsedVariants=new LinkedHashSet();
                             parsedEdittime=0;
                             topicCount++;
                         }
@@ -1578,8 +1578,8 @@ public abstract class TopicMap implements TopicMapLogger {
                             associationID=attributes.getValue("id");
                             stateStack.push(state);
                             state=STATE_ASSOCIATION;                        
-                            parsedType=new HashSet();
-                            parsedMembers=new HashSet();
+                            parsedType=new LinkedHashSet();
+                            parsedMembers=new LinkedHashSet();
                             associationCount++;
                         }
                         else logger.log("Parse exception: Expecting "+TAG_TOPIC+" or "+TAG_ASSOCIATION+" got "+qName);
@@ -1597,13 +1597,13 @@ public abstract class TopicMap implements TopicMapLogger {
                             stateStack.push(state);
                             state=STATE_BASENAME;
                             parsedBaseName=null;
-                            parsedScope=new HashSet();
-                            parsedBaseNameVariants=new HashSet();
+                            parsedScope=new LinkedHashSet();
+                            parsedBaseNameVariants=new LinkedHashSet();
                         }
                         else if(qName.equals(TAG_OCCURRENCE)){
                             stateStack.push(state);
                             state=STATE_OCCURRENCE;
-                            parsedScope=new HashSet();
+                            parsedScope=new LinkedHashSet();
                             parsedOccurrenceType=null;
                             parsedOccurrenceData=null;
                             parsedOccurrenceRef=null;
@@ -1648,7 +1648,7 @@ public abstract class TopicMap implements TopicMapLogger {
                         else if(qName.equals(TAG_VARIANT)){
                             stateStack.push(state);
                             state=STATE_VARIANT;
-                            parsedParameters=new HashSet();
+                            parsedParameters=new LinkedHashSet();
                             parsedVariantName=null;
                         }
                         else if(qName.equals(TAG_SCOPE)){
@@ -1768,7 +1768,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             stateStack.push(state);
                             state=STATE_MEMBER;
                             parsedRole=null;
-                            parsedPlayers=new HashSet();
+                            parsedPlayers=new LinkedHashSet();
                         }
                         else logger.log("Parse exception: Expecting "+TAG_INSTANCEOF+", "+TAG_SCOPE+" or "+TAG_MEMBER+" got "+qName);
                         break;
@@ -2184,7 +2184,7 @@ public abstract class TopicMap implements TopicMapLogger {
             public Set<Topic> scope;
             public VariantName(String name, Collection c){
                 this.name=name;
-                scope = new HashSet<Topic>();
+                scope = new LinkedHashSet<Topic>();
                 for(Iterator<Topic> i = c.iterator(); i.hasNext();) {
                     scope.add(i.next());
                 }

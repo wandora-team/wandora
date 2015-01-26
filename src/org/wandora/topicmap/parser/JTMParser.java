@@ -355,7 +355,7 @@ public class JTMParser {
 
     public void parseVariant(JSONObject variantJSON, Topic t) throws Exception {
         String variantName = null;
-        HashSet<Topic> scope = new HashSet();
+        HashSet<Topic> scope = new LinkedHashSet();
         Iterator keys = variantJSON.keys();
         Object key = null;
         Object value = null;
