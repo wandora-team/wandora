@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import org.tmapi.core.Association;
@@ -103,7 +104,7 @@ public class W2TTopicMap implements TopicMap {
     }
     
     public Set<Topic> wrapTopics(Collection<org.wandora.topicmap.Topic> topics){
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         for(org.wandora.topicmap.Topic t : topics){
             ret.add(new W2TTopic(this,t));
         }
@@ -111,7 +112,7 @@ public class W2TTopicMap implements TopicMap {
     }
     
     public Set<Locator> wrapLocators(Collection<org.wandora.topicmap.Locator> locators){
-        HashSet<Locator> ret=new HashSet<Locator>();
+        HashSet<Locator> ret=new LinkedHashSet<Locator>();
         for(org.wandora.topicmap.Locator l : locators){
             ret.add(new W2TLocator(l));
         }
@@ -119,7 +120,7 @@ public class W2TTopicMap implements TopicMap {
     }
     
     public Set<Association> wrapAssociations(Collection<org.wandora.topicmap.Association> associations){
-        HashSet<Association> ret=new HashSet<Association>();
+        HashSet<Association> ret=new LinkedHashSet<Association>();
         for(org.wandora.topicmap.Association a : associations){
             ret.add(new W2TAssociation(this,a));
         }
@@ -133,7 +134,7 @@ public class W2TTopicMap implements TopicMap {
 
     @Override
     public Set<Topic> getTopics() {
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         try{
             Iterator<org.wandora.topicmap.Topic> iter=tm.getTopics();
             while(iter.hasNext()){
@@ -158,7 +159,7 @@ public class W2TTopicMap implements TopicMap {
 
     @Override
     public Set<Association> getAssociations() {
-        HashSet<Association> ret=new HashSet<Association>();
+        HashSet<Association> ret=new LinkedHashSet<Association>();
         try{
             Iterator<org.wandora.topicmap.Association> iter=tm.getAssociations();
             while(iter.hasNext()){

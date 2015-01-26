@@ -74,7 +74,7 @@ public class WebServiceTopic extends Topic {
         associations=new ArrayList<Association>();
         WSAssociation[] wsas=wstopic.getAssociations();
         if(wsas!=null){
-            HashSet<String> preload=new HashSet<String>();
+            HashSet<String> preload=new LinkedHashSet<String>();
             for(int i=0;i<wsas.length;i++){
                 preload.add(wsas[i].getType());
                 WSPlayer[] players=wsas[i].getPlayers();
@@ -253,7 +253,7 @@ public class WebServiceTopic extends Topic {
     public String getVariant(Set<Topic> scope) throws TopicMapException {
         makeFull();
         if(scope.size()!=2) return null;
-        HashSet<Set<Topic>> ret=new HashSet<Set<Topic>>();
+        HashSet<Set<Topic>> ret=new LinkedHashSet<Set<Topic>>();
         String[] types=wstopic.getVariantTypes();
         if(types!=null){
             for(int i=0;i<types.length;i++){
@@ -274,14 +274,14 @@ public class WebServiceTopic extends Topic {
     @Override
     public Set<Set<Topic>> getVariantScopes() throws TopicMapException {
         makeFull();
-        HashSet<Set<Topic>> ret=new HashSet<Set<Topic>>();
+        HashSet<Set<Topic>> ret=new LinkedHashSet<Set<Topic>>();
         String[] types=wstopic.getVariantTypes();
         if(types!=null){
             for(int i=0;i<types.length;i++){
                 Topic typeT=tm.getTopic(types[i]);
                 String[] langs=wstopic.getVariantLanguages()[i].getArray();
                 for(int j=0;j<langs.length;j++){
-                    HashSet<Topic> scope=new HashSet<Topic>();
+                    HashSet<Topic> scope=new LinkedHashSet<Topic>();
                     scope.add(typeT);
                     scope.add(tm.getTopic(langs[j]));
                 }

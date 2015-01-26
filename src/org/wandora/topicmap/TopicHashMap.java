@@ -129,10 +129,10 @@ public class TopicHashMap<K> implements Map<Topic,K> {
     }
 
     public void clear() {
-        siMap=new HashMap<Locator,Topic>();
-        bnMap=new HashMap<String,Topic>();
-        slMap=new HashMap<Locator,Topic>();
-        valueMap=new HashMap<Topic,K>();        
+        siMap=new LinkedHashMap<Locator,Topic>();
+        bnMap=new LinkedHashMap<String,Topic>();
+        slMap=new LinkedHashMap<Locator,Topic>();
+        valueMap=new LinkedHashMap<Topic,K>();        
     }
 
     public K remove(Object key) {
