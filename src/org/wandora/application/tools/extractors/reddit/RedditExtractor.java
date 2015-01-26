@@ -39,6 +39,8 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.TopicMap;
 
+import org.wandora.application.tools.extractors.reddit.AbstractRedditExtractor;
+
 
 public class RedditExtractor extends AbstractWandoraTool{
     
@@ -78,6 +80,7 @@ public class RedditExtractor extends AbstractWandoraTool{
     @Override
     public void execute(Wandora wandora, Context context) {
         try {
+            AbstractRedditExtractor.setRequester(Wandora.USER_AGENT + " (by /u/spootze)");
             if(ui == null) {
                 ui = new RedditExtractorUI();
             }

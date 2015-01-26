@@ -1508,7 +1508,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <bsh>
       <path></path>
    </bsh>
-   <httpuseragent>Wandora</httpuseragent>
+   <httpuseragent>java:org.wandora</httpuseragent>
    <trees>
       <type>
          <name>Instances</name>

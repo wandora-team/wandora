@@ -37,6 +37,7 @@ import java.util.List;
 
 import java.util.HashMap;
 import java.util.concurrent.Future;
+import org.wandora.application.Wandora;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
@@ -78,8 +79,7 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
-        
-        
+                
         log("handling url " + str);
         
         Callback<JsonNode> callback = new Callback<JsonNode>() {
@@ -90,31 +90,15 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
             @Override
             public void completed(HttpResponse<JsonNode> response){
                 try {
-                    File f = new File("resp_" + System.currentTimeMillis() + ".json");
-                    FileOutputStream fos = new FileOutputStream(f);
-                    IOUtils.write(IOUtils.toString(response.getRawBody()), fos);
-                    fos.close();
                     parse(response);
-                } catch (Exception e) {
+                } catch (JSONException | TopicMapException e) {
                     e.printStackTrace();
                 }
             }
             
         };
         
-        //List<Future<HttpResponse<JsonNode>>> futures = 
-        //        new ArrayList<Future<HttpResponse<JsonNode>>>();
-        
-        //Future<HttpResponse<JsonNode>> f = doAsyncRequest(str, callback);
-        
-        //futures.add(f);
-        //We don't want to return before stuff's done
-        //for(Future fut : futures){
-        //    fut.get();
-        //}
-        
-        HttpResponse<JsonNode> resp = doRequest(str);
-        parse(resp);
+        requester.doRequest(Unirest.get(str), callback);
         
         return true;
     }

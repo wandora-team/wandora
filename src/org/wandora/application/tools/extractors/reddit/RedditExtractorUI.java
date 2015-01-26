@@ -40,6 +40,7 @@ import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.*;
+import static org.wandora.application.tools.extractors.reddit.AbstractRedditExtractor.statusToPhrase;
 
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Locator;
@@ -178,18 +179,23 @@ public class RedditExtractorUI extends javax.swing.JPanel {
     private void threadPopulationCallback(HttpResponse<JsonNode> response) {
         DefaultListModel model = new DefaultListModel();;
         try {
-            JSONArray resJson = response.getBody()
-                    .getObject()
+            
+            JSONObject resJson = response.getBody()
+                    .getObject();
+                    
+            if(resJson.has("error")){
+              Object error = resJson.get("error");
+              throw new JSONException("API error: " + statusToPhrase((int)error));
+            }
+            
+            threadResults = resJson
                     .getJSONObject("data")
-                    .getJSONArray("children");
-
-            threadResults = resJson;
+                    .getJSONArray("children");;
             JSONObject r;
 
             model = new DefaultListModel();
-            System.out.println("got " + resJson.length() + " results");
-            for (int i = 0; i < resJson.length(); i++) {
-                r = resJson.getJSONObject(i).getJSONObject("data");
+            for (int i = 0; i < threadResults.length(); i++) {
+                r = threadResults.getJSONObject(i).getJSONObject("data");
 
                 StringBuilder titleBuilder = new StringBuilder();
                 titleBuilder
@@ -239,19 +245,23 @@ public class RedditExtractorUI extends javax.swing.JPanel {
     private void subredditPopulationCallback(HttpResponse<JsonNode> response) {
         DefaultListModel model = new DefaultListModel();;
         try {
-            JSONArray resJson = response.getBody()
-                    .getObject()
+            JSONObject resJson = response.getBody()
+                    .getObject();
+                    
+            if(resJson.has("error")){
+              Object error = resJson.get("error");
+              throw new JSONException("API error: " + statusToPhrase((int)error));
+            }
+            
+            threadResults = resJson
                     .getJSONObject("data")
-                    .getJSONArray("children");
-
-            subredditResults = resJson;
+                    .getJSONArray("children");;
             JSONObject r;
 
             model = new DefaultListModel();
-            
-            for (int i = 0; i < resJson.length(); i++) {
+            for (int i = 0; i < threadResults.length(); i++) {
 
-                r = resJson.getJSONObject(i).getJSONObject("data");
+                r = threadResults.getJSONObject(i).getJSONObject("data");
                
                 StringBuilder titleBuilder = new StringBuilder();
                 titleBuilder
@@ -311,7 +321,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
             threadSearchDetails.setText(sb.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -323,7 +333,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             subredditDetailTextArea.setText(r.getString("public_description"));
             subredditDetailTextArea.setLineWrap(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
