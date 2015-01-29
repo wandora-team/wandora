@@ -363,10 +363,7 @@ public class OBOExport extends AbstractExportTool {
                                     exportRelations(out, tm, term, OBO.SCHEMA_TERM_REPLACED_BY, OBO.SCHEMA_TERM_REPLACED_BY, "replaced_by");
                                     exportRelations(out, tm, term, OBO.SCHEMA_TERM_CONSIDER_USING, OBO.SCHEMA_TERM_CONSIDER_USING, "consider");
                                     
-                                    exportRelations(out, tm, term, OBO.SCHEMA_TERM_CREATED_BY, OBO.SCHEMA_TERM_CREATED_BY, "created_by");
-                                    exportCreationDate(out, tm, term);
-
-
+                                    exportCreatorAndCreationDate(out, tm, term);
                                 }
                             }
                             if(forceStop()) {
@@ -963,8 +960,24 @@ public class OBOExport extends AbstractExportTool {
     }
     
     
-    protected void exportCreationDate(PrintStream out, TopicMap tm, Topic term) {
+    protected void exportCreatorAndCreationDate(PrintStream out, TopicMap tm, Topic term) {
         try {
+            Topic creatorTypeTopic = OBO.getTopicForSchemaTerm(tm, OBO.SCHEMA_TERM_CREATED_BY);
+            if(creatorTypeTopic != null) {
+                Collection<Association> creatorRelations = term.getAssociations(creatorTypeTopic);
+                if(creatorRelations != null) {
+                    for(Association creatorRelation : creatorRelations) {
+                        Topic creatorTopic = creatorRelation.getPlayer(creatorTypeTopic);
+                        if(creatorTopic != null) {
+                            String creatorName = OBO.solveOBOName(creatorTopic);
+                            if(creatorName != null && creatorName.trim().length() > 0) {
+                                out.println("created_by: "+creatorName+ " ! " +creatorName);
+                            }
+                        }
+                    }
+                }
+            }
+            
             Topic creationDateType = OBO.getTopicForSchemaTerm(tm, OBO.SCHEMA_TERM_CREATION_DATE);
             if(creationDateType != null) {
                 String creationDate = term.getData(creationDateType, OBO.LANG);
