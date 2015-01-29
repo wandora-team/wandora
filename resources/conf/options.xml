@@ -1142,6 +1142,18 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <name>Export incidence matrix...</name>
             <class>org.wandora.application.tools.exporters.IncidenceMatrixExport</class>
          </item>
+        <item>
+            <name>--- SEARCH INDEX BUILDERS ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Solr index builder...</name>
+            <class>org.wandora.application.tools.solr.SolrIndexBuilder</class>
+         </item>
+         <item>
+            <name>Lucene index builder...</name>
+            <class>org.wandora.application.tools.exporters.LuceneIndexBuilder</class>
+         </item>
          <item>
             <name>--- OTHER ---</name>
             <class>org.wandora.application.tools.DummyTool</class>
@@ -1153,14 +1165,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Export topic map as series of HTML files...</name>
             <class>org.wandora.application.tools.exporters.ExportSite</class>
-         </item>
-         <item>
-            <name>Lucene index builder...</name>
-            <class>org.wandora.application.tools.exporters.LuceneIndexBuilder</class>
-         </item>
-         <item>
-            <name>Solr index builder...</name>
-            <class>org.wandora.application.tools.solr.SolrIndexBuilder</class>
          </item>
          <item>
             <name>XTM round trip...</name>

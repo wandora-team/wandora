@@ -744,8 +744,16 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
                         else if("is_metadata_tag".equals(tag)) {
                             createAssociation(OBO.SCHEMA_TERM_IS_METADATA_TAG, stanzaTopic, OBO.SCHEMA_TERM_TYPEDEF, OBO.createTopicForSchemaTerm(tm,value), OBO.SCHEMA_TERM_IS_METADATA_TAG);
                         }
-                        
-                        
+                        else if("is_class_level".equals(tag)) {
+                            createAssociation(OBO.SCHEMA_TERM_IS_CLASS_LEVEL, stanzaTopic, OBO.SCHEMA_TERM_TYPEDEF, OBO.createTopicForSchemaTerm(tm,value), OBO.SCHEMA_TERM_IS_CLASS_LEVEL);
+                        }
+                        else if("holds_over_chain".equals(tag)) {
+                            createAssociation(OBO.SCHEMA_TERM_HOLS_CHAIN_OVER, stanzaTopic, OBO.SCHEMA_TERM_TYPEDEF, OBO.createTopicForSchemaTerm(tm,value), OBO.SCHEMA_TERM_HOLS_CHAIN_OVER);
+                        }
+                        else if("expand_assertion_to".equals(tag)) {
+                            createAssociation(OBO.SCHEMA_TERM_EXPAND_ASSERTION, stanzaTopic, OBO.SCHEMA_TERM_TYPEDEF, OBO.createTopicForAssertionExpansion(tm,value), OBO.SCHEMA_TERM_EXPAND_ASSERTION);
+                        }
+
                         
                         // ******** IS_ANONYMOUS *********
                         else if("is_anonymous".equals(tag)) {
@@ -909,7 +917,10 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
                             }
                         }
                         
-                        
+                         // ****** PROPERTY_VALUE ********
+                        else if("property_value".equals(tag)) {
+                            processProperty(stanzaTopic, OBO.createTopicForSchemaTerm(tm, OBO.SCHEMA_TERM_TERM), value);
+                        }
                         
                         // ****** INTERSECTION OF ********
                         else if("intersection_of".equals(tag)) {
@@ -1104,6 +1115,16 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
                                 stanzaTopic.addType(OBO.createObsoleteTopic(tm, namespace));
                             }
                         }
+                        
+                        // ******** CREATED *********
+                        else if("created_by".equals(tag)) {
+                            createAssociation(OBO.SCHEMA_TERM_CREATED_BY, stanzaTopic, OBO.SCHEMA_TERM_TERM, OBO.createTopicForAuthor(tm,value,namespace), OBO.SCHEMA_TERM_CREATED_BY);
+                        }
+                        else if("creation_date".equals(tag)) {
+                            Topic creationDateType = OBO.createTopicForSchemaTerm(tm,"creation_date");
+                            setData(stanzaTopic, creationDateType, OBO.LANG, OBO.OBO2Java(value));
+                        }
+                        
 
                         else {
                             parent.log("Unprocessed term tag found!\n  tag: '"+tag+"'\n  value: '"+value+"'");
@@ -1196,14 +1217,11 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
                         else if("instance_of".equals(tag)) {
                             createAssociation(OBO.SCHEMA_TERM_INSTANCE_OF, stanzaTopic, OBO.SCHEMA_TERM_INSTANCE, OBO.createTopicForTerm(tm,value), OBO.SCHEMA_TERM_TERM);
                         }
-                        
-                        
+
                         // ******* PROPERTY VALUE *******
                         else if("property_value".equals(tag)) {
-                            createAssociation(OBO.SCHEMA_TERM_PROPERTY_VALUE, stanzaTopic, OBO.SCHEMA_TERM_INSTANCE, OBO.createTopicForTerm(tm,value), OBO.SCHEMA_TERM_PROPERTY_VALUE);
+                            processProperty(stanzaTopic, OBO.createTopicForSchemaTerm(tm, OBO.SCHEMA_TERM_INSTANCE), value);
                         }
-                        
-                        
                         
                         // ***** XREFS *****
                         else if("xref_unknown".equals(tag)) {
@@ -1497,6 +1515,35 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
         
         
 
+        
+        public void processProperty(Topic base, Topic baseType, String everything) {
+            PropertyValue property = new PropertyValue(everything);
+            if(property.getRelationship() != null && property.getValue() != null) {
+                try {
+                    Topic propertyRelationshipTopic = OBO.createTopicForPropertyRelationship(tm, property.getRelationship());
+                    Topic propertyRelationshipType = OBO.createPropertyRelationshipTopic(tm);
+
+                    Topic propertyValueTopic = OBO.createTopicForPropertyValue(tm, property.getValue());
+                    Topic propertyValueType = OBO.createPropertyValueTopic(tm);
+                    
+                    Association a = tm.createAssociation(propertyRelationshipType);
+                    a.addPlayer(propertyRelationshipTopic, propertyRelationshipType);
+                    a.addPlayer(base, baseType);
+                    a.addPlayer(propertyValueTopic, propertyValueType);
+                    
+                    if(property.getDatatype() != null) {
+                        Topic propertyDatatypeTopic = OBO.createTopicForPropertyDatatype(tm, property.getDatatype());
+                        Topic propertyDatatypeType = OBO.createPropertyDatatypeTopic(tm);
+                        
+                        a.addPlayer(propertyDatatypeTopic, propertyDatatypeType);
+                    }
+                }
+                catch(Exception e) {
+                    parent.log(e);
+                }
+            }
+        }
+        
         
         
         // ---------------------------------------------------------------------
@@ -2353,6 +2400,48 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
     
     
     
+    
+    protected class PropertyValue {
+        private String relationship = null;
+        private String value = null;
+        private String datatype = null;
+        
+        
+        private Pattern propertyPattern1 = Pattern.compile("(\\w+[^\\s]+)\\s+"+OBO.QUOTE_STRING_PATTERN+"\\s*(\\w+[^\\s]+)?");
+        private Pattern propertyPattern2 = Pattern.compile("(\\w+[^\\s]+)\\s+(\\w+[^\\s]+)\\s*?");
+        
+        public PropertyValue(String everything) {
+            parse(everything);
+        }
+        
+        public void parse(String str){
+            Matcher m = propertyPattern1.matcher(str);
+            if(m.matches()) {
+                if(m.group(1) != null && m.group(1).length() > 0) relationship = m.group(1);
+                if(m.group(2) != null && m.group(2).length() > 0) value = m.group(2);
+                if(m.group(3) != null && m.group(3).length() > 0) datatype = m.group(3);
+            }
+            else {
+                m = propertyPattern2.matcher(str);
+                if(m.matches()) {
+                    if(m.group(0) != null && m.group(0).length() > 0) relationship = m.group(0);
+                    if(m.group(1) != null && m.group(1).length() > 0) value = m.group(1);
+                }
+            }
+        }
+
+        
+        public String getRelationship() {
+            return relationship;
+        }
+        public String getValue() {
+            return value;
+        }
+        public String getDatatype() {
+            return datatype;
+        }
+        
+    }
     
     
 }

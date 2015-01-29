@@ -338,9 +338,6 @@ public class OBOExport extends AbstractExportTool {
 
 
 
-
-
-
                                     // ******* REST OF RELATIONSHIPS *******
                                     Topic typedefType = OBO.getTypedefTopic(tm, namespace);
                                                                        
@@ -365,6 +362,11 @@ public class OBOExport extends AbstractExportTool {
 
                                     exportRelations(out, tm, term, OBO.SCHEMA_TERM_REPLACED_BY, OBO.SCHEMA_TERM_REPLACED_BY, "replaced_by");
                                     exportRelations(out, tm, term, OBO.SCHEMA_TERM_CONSIDER_USING, OBO.SCHEMA_TERM_CONSIDER_USING, "consider");
+                                    
+                                    exportRelations(out, tm, term, OBO.SCHEMA_TERM_CREATED_BY, OBO.SCHEMA_TERM_CREATED_BY, "created_by");
+                                    exportCreationDate(out, tm, term);
+
+
                                 }
                             }
                             if(forceStop()) {
@@ -470,6 +472,9 @@ public class OBOExport extends AbstractExportTool {
                                             }                            
                                             exportRelations(out, tm, term, OBO.SCHEMA_TERM_REPLACED_BY, "replaced_by");
                                             exportRelations(out, tm, term, OBO.SCHEMA_TERM_CONSIDER_USING, "consider");
+                                            
+                                            //******* PROPERTIES ********
+                                            exportProperties(out, tm, term);
                                         }
                                     }
                                     if(forceStop()) {
@@ -958,6 +963,23 @@ public class OBOExport extends AbstractExportTool {
     }
     
     
+    protected void exportCreationDate(PrintStream out, TopicMap tm, Topic term) {
+        try {
+            Topic creationDateType = OBO.getTopicForSchemaTerm(tm, OBO.SCHEMA_TERM_CREATION_DATE);
+            if(creationDateType != null) {
+                String creationDate = term.getData(creationDateType, OBO.LANG);
+                if(creationDate != null) {
+                    creationDate = OBO.Java2OBOLite(creationDate);
+                    out.println("creation_date: "+creationDate);
+                }
+            }
+        }
+        catch(Exception e) {
+            log(e);
+        }
+    }
+    
+    
     
     protected void exportComment(PrintStream out, TopicMap tm, Topic term) {
         try {
@@ -1052,4 +1074,18 @@ public class OBOExport extends AbstractExportTool {
             log(e);
         }
     }
+    
+    
+    
+    
+    protected void exportProperties(PrintStream out, TopicMap tm, Topic term) {
+        try {
+
+        }
+        catch(Exception e) {
+            log(e);
+        }
+    }
+    
+    
 }
