@@ -2,8 +2,10 @@ REM This bat script is executed automatically by Wandora.bat.
 REM You don't need to execute it manually.
 set WANDORACLASSES=classes
 set WANDORACLASSES=%WANDORACLASSES%;resources
+set WANDORACLASSES=%WANDORACLASSES%;lib/solr/*
+set WANDORACLASSES=%WANDORACLASSES%;lib/solr/solrj-lib/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/fmj/*
-set WANDORACLASSES=%WANDORACLASSES%;lib/arq/*
+set WANDORACLASSES=%WANDORACLASSES%;lib/jena/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/mstor/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/jmbox/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/jtidy/*

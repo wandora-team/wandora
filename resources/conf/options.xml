@@ -332,6 +332,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/extractors/watson</path>
       <path>org/wandora/application/tools/docking/add</path>
       <path>org/wandora/application/tools/docking</path>
+      <path>org/wandora/application/tools/solr</path>
       <set>
          <name>generator</name>
          <item>
@@ -1156,6 +1157,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Lucene index builder...</name>
             <class>org.wandora.application.tools.exporters.LuceneIndexBuilder</class>
+         </item>
+         <item>
+            <name>Solr index builder...</name>
+            <class>org.wandora.application.tools.solr.SolrIndexBuilder</class>
          </item>
          <item>
             <name>XTM round trip...</name>
