@@ -22,6 +22,9 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import org.wandora.query2.DirectiveUIHints.Addon;
+import org.wandora.query2.DirectiveUIHints.Parameter;
+
 /**
  *
  * @author olli
@@ -30,11 +33,59 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 public class AddonPanel extends javax.swing.JPanel {
 
+    protected Addon addon;
+    
+    protected DirectivePanel parentPanel;
+    protected AbstractTypePanel[] parameterPanels;
+    
     /**
      * Creates new form AddonPanel
      */
     public AddonPanel() {
         initComponents();
+    }
+    
+    public AddonPanel(DirectivePanel parent,Addon addon){
+        this();
+        this.parentPanel=parent;
+        setAddon(addon);
+    }
+    
+    public void populateParametersPanel(){
+        Parameter[] parameters=addon.getParameters();
+        this.parameterPanels=DirectivePanel.populateParametersPanel(parametersPanel, parameters, this.parameterPanels);
+        this.revalidate();
+        parametersPanel.repaint();        
+    }
+
+    public void setAddon(Addon addon) {
+        this.addon = addon;
+        this.addonLabel.setText(addon.getLabel());
+        populateParametersPanel();
+    }
+    
+    public void disconnect(){
+        if(this.parameterPanels!=null){
+            for(AbstractTypePanel pp : this.parameterPanels){
+                pp.disconnect();
+            }
+        }
+    }
+    
+    public String buildScript(){
+        StringBuilder sb=new StringBuilder();
+        sb.append(".");
+        sb.append(addon.getMethod());
+        sb.append("(");
+        for(int i=0;i<parameterPanels.length;i++){
+            AbstractTypePanel paramPanel=parameterPanels[i];
+            String s=paramPanel.getValueScript();
+            
+            if(i>0) sb.append(",");
+            sb.append(s);
+        }
+        sb.append(")");
+        return sb.toString();
     }
 
     /**
@@ -52,32 +103,47 @@ public class AddonPanel extends javax.swing.JPanel {
         parametersPanel = new javax.swing.JPanel();
         deleteButton = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBorder(null);
         setLayout(new java.awt.GridBagLayout());
 
         addonLabel.setText("Addon label");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         add(addonLabel, gridBagConstraints);
 
+        parametersScroll.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        parametersPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         parametersPanel.setLayout(new java.awt.GridBagLayout());
         parametersScroll.setViewportView(parametersPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
         add(parametersScroll, gridBagConstraints);
 
         deleteButton.setText("Delete addon");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         add(deleteButton, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        parentPanel.removeAddon(this);
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

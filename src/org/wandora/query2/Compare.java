@@ -30,7 +30,7 @@ import org.wandora.topicmap.*;
  *
  * @author olli
  */
-public class Compare extends WhereDirective {
+public class Compare extends WhereDirective implements DirectiveUIHints.Provider {
 
     public static final int EQ=0;
     public static final int NE=1;
@@ -48,6 +48,8 @@ public class Compare extends WhereDirective {
     private Operand operand1;
     private Operand operand2;
     private int operator;
+    
+    public Compare(){}
 
     public Compare(Object operand1,int operator,Object operand2){
         if( (operator&TYPE_MASK)==TYPE_TOPIC ) {
@@ -64,6 +66,21 @@ public class Compare extends WhereDirective {
     public Compare(Object operand1,String operator,Object operand2){
         this(operand1,parseOperator(operator),operand2);
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Compare.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Operand.class, false, "operand 1"),
+                    new DirectiveUIHints.Parameter(String.class, false, "operator"),
+                    new DirectiveUIHints.Parameter(Operand.class, false, "operand 2")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Compare",
+            "Where directive");
+        return ret;
+    }        
 
     public static int parseOperator(String operator){
         int mode=0;

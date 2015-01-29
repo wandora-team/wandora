@@ -31,13 +31,28 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Not extends WhereDirective {
+public class Not extends WhereDirective implements DirectiveUIHints.Provider  {
     private WhereDirective directive;
 
+    public Not(){}
+    
     public Not(WhereDirective directive){
         this.directive=directive;
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Not.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "whereDirective")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Not",
+            "Where directive");
+        return ret;
+    }    
+    
     @Override
     public void endQuery(QueryContext context) throws QueryException {
         directive.endQuery(context);

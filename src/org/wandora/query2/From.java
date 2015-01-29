@@ -43,7 +43,7 @@ public class From extends Directive implements DirectiveUIHints.Provider  {
     
     @Override
     public DirectiveUIHints getUIHints() {
-        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+        DirectiveUIHints ret=new DirectiveUIHints(From.class,new DirectiveUIHints.Constructor[]{
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
                         new DirectiveUIHints.Parameter(Directive.class, false, "to"),
                         new DirectiveUIHints.Parameter(Directive.class, false, "from")

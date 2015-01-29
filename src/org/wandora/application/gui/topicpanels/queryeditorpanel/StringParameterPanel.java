@@ -47,7 +47,7 @@ public class StringParameterPanel extends AbstractTypePanel {
     @Override
     public String getValueScript(){
         String s=valueTextField.getText().trim();
-        return s.replace("\\","\\\\").replace("\"","\\\"");
+        return "\""+(s.replace("\\","\\\\").replace("\"","\\\""))+"\"";
     }
     
 

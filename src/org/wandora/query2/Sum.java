@@ -28,9 +28,12 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Sum extends Directive {
+public class Sum extends Directive implements DirectiveUIHints.Provider {
     private Directive directive;
     private boolean asDouble;
+    
+    public Sum(){}
+    
     public Sum(Directive directive,boolean asDouble){
         this.directive=directive;
         this.asDouble=asDouble;
@@ -39,6 +42,24 @@ public class Sum extends Directive {
         this(directive,false);
     }
 
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Sum.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive"),
+                    new DirectiveUIHints.Parameter(Boolean.class, false, "asDouble")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Sum",
+            "Aggregate");
+        return ret;
+    }   
+    
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {
         return directive.startQuery(context);

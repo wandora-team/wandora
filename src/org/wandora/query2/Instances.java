@@ -40,7 +40,7 @@ public class Instances extends Directive implements DirectiveUIHints.Provider {
 
     @Override
     public DirectiveUIHints getUIHints() {
-        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+        DirectiveUIHints ret=new DirectiveUIHints(Instances.class,new DirectiveUIHints.Constructor[]{
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
                 }, "")
             },

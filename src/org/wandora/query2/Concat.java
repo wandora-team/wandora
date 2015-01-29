@@ -30,9 +30,10 @@ package org.wandora.query2;
  */
 
 
-public class Concat extends Directive  {
+public class Concat extends Directive implements DirectiveUIHints.Provider {
     private Directive directive;
     private String delim="; ";
+    public Concat(){}
     public Concat(Directive directive,String delim){
         this.directive=directive;
         this.delim=delim;
@@ -40,6 +41,23 @@ public class Concat extends Directive  {
     public Concat(Directive directive){
         this(directive,"; ");
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Concat.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive"),
+                    new DirectiveUIHints.Parameter(String.class, false, "delim")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Concat",
+            "Aggregate");
+        return ret;
+    }      
 
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {

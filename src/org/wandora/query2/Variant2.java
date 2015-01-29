@@ -50,7 +50,7 @@ public class Variant2 extends Directive implements DirectiveUIHints.Provider {
     
     @Override
     public DirectiveUIHints getUIHints() {
-        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+        DirectiveUIHints ret=new DirectiveUIHints(Variant2.class,new DirectiveUIHints.Constructor[]{
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
                         new DirectiveUIHints.Parameter(TopicOperand.class, true, "scope"),
                 }, "")

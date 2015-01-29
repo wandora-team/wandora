@@ -28,11 +28,27 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Average extends Directive{
+public class Average extends Directive implements DirectiveUIHints.Provider {
     private Directive directive;
+    
+    public Average(){}
+    
     public Average(Directive directive){
         this.directive=directive;
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Average.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Average",
+            "Aggregate");
+        return ret;
+    }     
 
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {

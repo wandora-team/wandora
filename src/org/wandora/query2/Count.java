@@ -31,11 +31,27 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Count extends Directive {
+public class Count extends Directive implements DirectiveUIHints.Provider {
     private Directive directive;
+    
+    public Count(){}
+    
     public Count(Directive directive){
         this.directive=directive;
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Count.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Count",
+            "Aggregate");
+        return ret;
+    }         
 
     @Override
     public void endQuery(QueryContext context) throws QueryException {

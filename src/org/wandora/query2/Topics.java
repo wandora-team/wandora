@@ -42,7 +42,7 @@ public class Topics extends Directive implements DirectiveUIHints.Provider  {
     
     @Override
     public DirectiveUIHints getUIHints() {
-        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+        DirectiveUIHints ret=new DirectiveUIHints(Topics.class,new DirectiveUIHints.Constructor[]{
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, ""),
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
                         new DirectiveUIHints.Parameter(Boolean.class, false, "baseName"),

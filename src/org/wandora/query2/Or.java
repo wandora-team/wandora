@@ -31,10 +31,12 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Or extends WhereDirective {
+public class Or extends WhereDirective implements DirectiveUIHints.Provider {
 
     private WhereDirective[] directives;
 
+    public Or(){}
+    
     public Or(WhereDirective[] directives){
         this.directives=directives;
     }
@@ -53,6 +55,19 @@ public class Or extends WhereDirective {
     public Or(WhereDirective d1,WhereDirective d2,WhereDirective d3,WhereDirective d4,WhereDirective d5,WhereDirective d6){
         this(new WhereDirective[]{d1,d2,d3,d4,d5,d6});
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Or.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, true, "whereDirective")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Or",
+            "Where directive");
+        return ret;
+    }        
 
     @Override
     public void endQuery(QueryContext context) throws QueryException {

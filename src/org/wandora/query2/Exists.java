@@ -31,12 +31,28 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Exists extends WhereDirective {
+public class Exists extends WhereDirective implements DirectiveUIHints.Provider {
     private Directive directive;
+    
+    public Exists(){}
+    
     public Exists(Directive directive){
         this.directive=directive;
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Exists.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Exists",
+            "Where directive");
+        return ret;
+    } 
+    
     @Override
     public void endQuery(QueryContext context) throws QueryException {
         directive.endQuery(context);

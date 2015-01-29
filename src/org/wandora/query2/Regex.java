@@ -33,7 +33,7 @@ import java.util.regex.*;
  *
  * @author olli
  */
-public class Regex extends WhereDirective {
+public class Regex extends WhereDirective implements DirectiveUIHints.Provider {
     public static final int MODE_MATCH=1;
     public static final int MODE_GLOBAL=2;
     public static final int MODE_ICASE=4;
@@ -45,6 +45,8 @@ public class Regex extends WhereDirective {
     private boolean icase;
     private Pattern pattern;
 
+    public Regex(){}
+    
     public Regex(Object regex,Object replace,int mode){
         this.regex=new Operand(regex);
         this.replace=(replace==null?null:new Operand(replace));
@@ -64,6 +66,18 @@ public class Regex extends WhereDirective {
         this(regex,null,MODE_MATCH|mode);
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Regex.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(String.class, false, "regex")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Regex",
+            "Where directive");
+        return ret;
+    }      
     @Override
     public void endQuery(QueryContext context) throws QueryException {
         regex.endQuery(context);

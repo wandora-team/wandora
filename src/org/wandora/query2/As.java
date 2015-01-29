@@ -49,7 +49,7 @@ public class As extends Directive implements DirectiveUIHints.Provider  {
 
     @Override
     public DirectiveUIHints getUIHints() {
-        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+        DirectiveUIHints ret=new DirectiveUIHints(As.class,new DirectiveUIHints.Constructor[]{
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
                         new DirectiveUIHints.Parameter(String.class, false, "newRole"),
                 }, ""),

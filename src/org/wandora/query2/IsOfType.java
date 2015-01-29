@@ -33,14 +33,29 @@ import java.util.*;
  *
  * @author olli
  */
-public class IsOfType extends WhereDirective {
+public class IsOfType extends WhereDirective implements DirectiveUIHints.Provider {
 
     private TopicOperand topicOp;
 
+    public IsOfType(){};
+    
     public IsOfType(Object o){
         this.topicOp=new TopicOperand(o);
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(IsOfType.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(TopicOperand.class, false, "operand")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "IsOfType",
+            "Where directive");
+        return ret;
+    }  
+    
     @Override
     public void endQuery(QueryContext context) throws QueryException {
         topicOp.endQuery(context);

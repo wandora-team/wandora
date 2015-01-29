@@ -50,7 +50,7 @@ public class Occurrence extends Directive implements DirectiveUIHints.Provider {
     
     @Override
     public DirectiveUIHints getUIHints() {
-        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+        DirectiveUIHints ret=new DirectiveUIHints(Occurrence.class,new DirectiveUIHints.Constructor[]{
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, ""),
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
                         new DirectiveUIHints.Parameter(TopicOperand.class, false, "type"),

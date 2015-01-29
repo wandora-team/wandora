@@ -39,7 +39,7 @@ public class Types extends Directive implements DirectiveUIHints.Provider {
 
     @Override
     public DirectiveUIHints getUIHints() {
-        DirectiveUIHints ret=new DirectiveUIHints(Players.class,new DirectiveUIHints.Constructor[]{
+        DirectiveUIHints ret=new DirectiveUIHints(Types.class,new DirectiveUIHints.Constructor[]{
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, "")
             },
             Directive.getStandardAddonHints(),
