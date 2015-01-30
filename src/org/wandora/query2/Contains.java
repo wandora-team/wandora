@@ -33,12 +33,14 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class Contains extends WhereDirective {
+public class Contains extends WhereDirective implements DirectiveUIHints.Provider {
  
     private Operand operand1;
     private Operand operand2;
     private boolean caseInsensitive=true;
 
+    public Contains(){}
+    
     public Contains(Object operand2){
         this(new Identity(),operand2);
     }
@@ -51,6 +53,28 @@ public class Contains extends WhereDirective {
         this.operand2=Operand.makeOperand(operand2);
         this.caseInsensitive=caseInsensitive;
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Contains.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Operand.class, false, "text"),
+                    new DirectiveUIHints.Parameter(Operand.class, false, "searchFor")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Operand.class, false, "text"),
+                    new DirectiveUIHints.Parameter(Operand.class, false, "searchFor"),
+                    new DirectiveUIHints.Parameter(Boolean.class, false, "caseInsensitive")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Operand.class, false, "searchFor")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Contains",
+            "Where directive");
+        return ret;
+    }         
     
     @Override
     public void endQuery(QueryContext context) throws QueryException {

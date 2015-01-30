@@ -30,11 +30,13 @@ import java.util.*;
  *
  * @author olli
  */
-public class Recursive extends Directive {
+public class Recursive extends Directive implements DirectiveUIHints.Provider {
     private Directive recursion;
     private int maxDepth;
     private boolean onlyLeaves;
 
+    public Recursive(){}
+    
     public Recursive(Directive recursion, int maxDepth, boolean onlyLeaves){
         this.recursion=recursion;
         this.maxDepth=maxDepth;
@@ -46,6 +48,28 @@ public class Recursive extends Directive {
     public Recursive(Directive recursion){
         this(recursion,-1,false);
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Recursive.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive"),
+                    new DirectiveUIHints.Parameter(Integer.class, false, "maxDepth")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive"),
+                    new DirectiveUIHints.Parameter(Integer.class, false, "maxDepth"),
+                    new DirectiveUIHints.Parameter(Boolean.class, false, "onlyLeaves"),
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Recursive",
+            "Structure");
+        return ret;
+    }            
 
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {

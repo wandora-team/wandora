@@ -71,7 +71,18 @@ public class MultipleParameterPanel extends AbstractTypePanel {
 
     @Override
     public String getValueScript() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder sb=new StringBuilder();
+        sb.append("new ");
+        sb.append(parameter.getType().getSimpleName());
+        sb.append("[]{");
+        boolean first=true;
+        for(Row row : rows){
+            if(!first) sb.append(", ");
+            else first=false;
+            sb.append(row.panel.getValueScript());
+        }
+        sb.append("}");
+        return sb.toString();
     }
 
     

@@ -77,7 +77,8 @@ public class Regex extends WhereDirective implements DirectiveUIHints.Provider {
             "Regex",
             "Where directive");
         return ret;
-    }      
+    }     
+    
     @Override
     public void endQuery(QueryContext context) throws QueryException {
         regex.endQuery(context);

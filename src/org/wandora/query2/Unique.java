@@ -29,11 +29,27 @@ import java.util.*;
  *
  * @author olli
  */
-public class Unique extends Directive {
+public class Unique extends Directive implements DirectiveUIHints.Provider {
     private Directive directive;
+    
+    public Unique(){}
+    
     public Unique(Directive directive){
         this.directive=directive;
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Unique.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, ""),
+            },
+            Directive.getStandardAddonHints(),
+            "Unique",
+            "Structure");
+        return ret;
+    }         
 
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {

@@ -31,12 +31,14 @@ import java.util.*;
  *
  * @author olli
  */
-public class Union extends Directive {
+public class Union extends Directive implements DirectiveUIHints.Provider {
     private Directive[] directives;
     
     private ArrayList<String> staticRoles;
     private boolean useActive=false;
             
+    public Union(){this(new Directive[0]);}
+    
     public Union(Directive[] directives){
         this.directives=directives;
     }
@@ -45,6 +47,19 @@ public class Union extends Directive {
     public Union(Directive d1,Directive d2,Directive d3){this(new Directive[]{d1,d2,d3});}
     public Union(Directive d1,Directive d2,Directive d3,Directive d4){this(new Directive[]{d1,d2,d3,d4});}
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Union.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, true, "directives")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Union",
+            "Structure");
+        return ret;
+    }            
+    
     @Override
     public void endQuery(QueryContext context) throws QueryException {
         for(Directive d : directives){

@@ -26,6 +26,7 @@ package org.wandora.query2;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -96,7 +97,9 @@ public class DirectiveManager {
                         try {
                             Class<?> c=Class.forName(cls);
                             if(Directive.class.isAssignableFrom(c)){
-                                scannedDirectives.add((Class<? extends Directive>)c);
+                                if(!Modifier.isAbstract(c.getModifiers())){
+                                    scannedDirectives.add((Class<? extends Directive>)c);
+                                }
                             }
                         } 
                         catch (ClassNotFoundException ex) {

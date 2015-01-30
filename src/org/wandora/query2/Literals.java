@@ -32,10 +32,14 @@ import java.util.*;
  *
  * @author olli
  */
-public class Literals extends Directive {
+public class Literals extends Directive implements DirectiveUIHints.Provider {
 
     private ArrayList<ResultRow> result;
 
+    public Literals(){
+        result=new ArrayList<ResultRow>();
+    }
+    
     public Literals(String[] strings) {
         result=new ArrayList<ResultRow>();
         for(int i=0;i<strings.length;i++){
@@ -49,6 +53,20 @@ public class Literals extends Directive {
     public Literals(String s1,String s2,String s3){this(new String[]{s1,s2,s3});}
     public Literals(String s1,String s2,String s3,String s4){this(new String[]{s1,s2,s3,s4});}
 
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Literals.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(String.class, true, "value")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Literals",
+            "Primitive");
+        return ret;
+    } 
+    
     @Override
     public ArrayList<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
         return result;

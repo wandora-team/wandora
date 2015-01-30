@@ -31,11 +31,21 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Null extends Directive {
+public class Null extends Directive implements DirectiveUIHints.Provider {
     public Null(){
 
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Null.class,new DirectiveUIHints.Constructor[]{
+            },
+            Directive.getStandardAddonHints(),
+            "Null",
+            "Primitive");
+        return ret;
+    } 
+    
     @Override
     public boolean isStatic() {
         return true;

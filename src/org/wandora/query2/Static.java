@@ -31,16 +31,38 @@ import java.util.*;
  *
  * @author olli
  */
-public class Static extends Directive {
+public class Static extends Directive implements DirectiveUIHints.Provider {
 
     private ArrayList<ResultRow> result;
 
+    public Static(){
+        this.result=new ArrayList<ResultRow>();
+    }
+    
     public Static(ArrayList<ResultRow> result){
         this.result=result;
     }
     public Static(ResultRow result){
         this.result=new ArrayList<ResultRow>();
         this.result.add(result);
+    }
+    public Static(ResultRow[] result){
+        this.result=new ArrayList<ResultRow>();
+        this.result.addAll(Arrays.asList(result));
+    }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Static.class,new DirectiveUIHints.Constructor[]{
+            // result row type is not yet supported
+//                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+//                    new DirectiveUIHints.Parameter(ResultRow.class, true, "row")
+//                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Static",
+            "Primitive");
+        return ret;
     }
 
     @Override

@@ -33,10 +33,13 @@ import java.util.ArrayList;
  *
  * @author olli
  */
-public class If extends Directive {
+public class If extends Directive implements DirectiveUIHints.Provider {
     private Directive cond;
     private Directive then;
     private Directive els;
+    
+    public If(){}
+    
     public If(Directive cond,Directive then,Directive els){
         this.cond=cond;
         this.then=then;
@@ -49,6 +52,28 @@ public class If extends Directive {
         this(cond,new Identity(),new Empty());
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(If.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "condition")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "condition"),
+                    new DirectiveUIHints.Parameter(Directive.class, false, "then")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "condition"),
+                    new DirectiveUIHints.Parameter(Directive.class, false, "then"),
+                    new DirectiveUIHints.Parameter(Directive.class, false, "else")
+                }, ""),
+            },
+            Directive.getStandardAddonHints(),
+            "If",
+            "Structure");
+        return ret;
+    }         
+    
     @Override
     public void endQuery(QueryContext context) throws QueryException {
         cond.endQuery(context);
@@ -95,10 +120,20 @@ public class If extends Directive {
         return debugStringInner(new Directive[]{cond,then,els},indent);
     }
 
-    public static class COND extends Directive {
+    public static class COND extends Directive implements DirectiveUIHints.Provider {
         // this class serves only as a marker, it is never actually queried
         public COND(){}
 
+        @Override
+        public DirectiveUIHints getUIHints() {
+            DirectiveUIHints ret=new DirectiveUIHints(If.COND.class,new DirectiveUIHints.Constructor[]{
+                },
+                Directive.getStandardAddonHints(),
+                "If.COND",
+                "Structure");
+            return ret;
+        }           
+        
         @Override
         public ArrayList<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
             throw new QueryException("If.COND should not be queried directly.");

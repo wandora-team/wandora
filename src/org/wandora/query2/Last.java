@@ -28,9 +28,11 @@ import java.util.*;
  *
  * @author olli
  */
-public class Last extends Directive {
+public class Last extends Directive implements DirectiveUIHints.Provider {
     private Directive directive;
     private int count;
+    
+    public Last(){}
 
     public Last(int count,Directive directive){
         this.count=count;
@@ -40,6 +42,23 @@ public class Last extends Directive {
         this(1,directive);
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Last.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Integer.class, false, "count"),
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Last",
+            "Structure");
+        return ret;
+    }            
+    
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {
         return directive.startQuery(context);

@@ -31,10 +31,20 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Identity extends Directive {
+public class Identity extends Directive implements DirectiveUIHints.Provider {
     public Identity(){
 
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Identity.class,new DirectiveUIHints.Constructor[]{
+            },
+            Directive.getStandardAddonHints(),
+            "Identity",
+            "Primitive");
+        return ret;
+    }     
 
     @Override
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {

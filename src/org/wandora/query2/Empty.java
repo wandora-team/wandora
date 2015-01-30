@@ -31,9 +31,19 @@ package org.wandora.query2;
  *
  * @author olli
  */
-public class Empty extends Directive {
+public class Empty extends Directive implements DirectiveUIHints.Provider {
     public Empty(){}
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Empty.class,new DirectiveUIHints.Constructor[]{
+            },
+            Directive.getStandardAddonHints(),
+            "Empty",
+            "Primitive");
+        return ret;
+    } 
+    
     @Override
     public boolean isStatic() {
         return true;

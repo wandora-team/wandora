@@ -34,9 +34,14 @@ import java.util.Comparator;
  */
 
 
-public class OrderBy extends Directive {
+public class OrderBy extends Directive implements DirectiveUIHints.Provider {
     private Comparator<Object> comparator;
     private Directive directive;
+    
+    public OrderBy(){
+        this(new Identity());
+    }
+    
     public OrderBy(Directive directive){
         this(directive,new Comparator<Object>(){
             public int compare(Object v1, Object v2) {
@@ -53,6 +58,28 @@ public class OrderBy extends Directive {
         this.directive=directive;
         this.comparator=comparator;
     }
+    
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(OrderBy.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, ""),
+                
+/*                
+                // comparator type not supported by ui
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive"),
+                    new DirectiveUIHints.Parameter(Comparator.class, false, "comparator")
+                }, ""),*/
+            },
+            Directive.getStandardAddonHints(),
+            "OrderBy",
+            "Structure");
+        return ret;
+    }       
 
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {

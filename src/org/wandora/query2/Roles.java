@@ -31,10 +31,12 @@ import java.util.*;
  *
  * @author olli
  */
-public class Roles extends Directive {
+public class Roles extends Directive implements DirectiveUIHints.Provider {
     private String[] roles;
     private boolean not;
 
+    public Roles(){this(new String[0]);}
+    
     public Roles(String[] roles){
         this(roles,false);
     }
@@ -52,6 +54,23 @@ public class Roles extends Directive {
     public Roles(String s1,String s2,String s3,boolean not){this(new String[]{s1,s2,s3},not);}
     public Roles(String s1,String s2,String s3,String s4,boolean not){this(new String[]{s1,s2,s3,s4},not);}
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Roles.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(String.class, true, "roles")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(String.class, true, "roles"),
+                    new DirectiveUIHints.Parameter(Boolean.class, false, "not")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "Roles",
+            "Structure");
+        return ret;
+    }            
+    
     @Override
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
         ArrayList<String> newRoles=new ArrayList<String>();

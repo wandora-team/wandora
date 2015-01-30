@@ -33,12 +33,22 @@ import org.wandora.topicmap.*;
  *
  * @author olli
  */
-public class SubjectIdentifiers extends Directive {
+public class SubjectIdentifiers extends Directive implements DirectiveUIHints.Provider {
 
     public void SubjectIdentifiers(){
 
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(Roles.class,new DirectiveUIHints.Constructor[]{
+            },
+            Directive.getStandardAddonHints(),
+            "SubjectIdentifiers",
+            "Topic map");
+        return ret;
+    }     
+    
     @Override
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
         Object o=input.getActiveValue();

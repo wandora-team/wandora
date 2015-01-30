@@ -33,9 +33,12 @@ import java.util.NoSuchElementException;
  *
  * @author olli
  */
-public class First extends Directive {
+public class First extends Directive implements DirectiveUIHints.Provider {
     private Directive directive;
     private int count;
+    
+    public First(){}
+    
     public First(int count,Directive directive){
         this.directive=directive;
         this.count=count;
@@ -44,6 +47,23 @@ public class First extends Directive {
         this(1,directive);
     }
 
+    @Override
+    public DirectiveUIHints getUIHints() {
+        DirectiveUIHints ret=new DirectiveUIHints(First.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Integer.class, false, "count"),
+                    new DirectiveUIHints.Parameter(Directive.class, false, "directive")
+                }, "")
+            },
+            Directive.getStandardAddonHints(),
+            "First",
+            "Structure");
+        return ret;
+    }        
+    
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {
         return directive.startQuery(context);
