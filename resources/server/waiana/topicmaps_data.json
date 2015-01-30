@@ -1,11 +1,1 @@
-[
-    {
-        "short_name": "test",
-        "name": "test topicmap",
-        "is_public": true,
-        "is_downloadable": true,
-        "is_editable": true,
-        "is_schema": false,
-        "owner": "anonymous"
-    }
-]
+[{"is_schema":false,"is_public":true,"is_downloadable":true,"name":"test topicmap","owner":"anonymous","is_editable":true,"short_name":"test"},{"is_schema":false,"creation_date":"2015-1-26 14:31","is_public":true,"is_downloadable":true,"name":"Topic Maps Applications","edit_date":"2015-1-26 14:31","is_editable":true,"short_name":"topic_maps_applications"}]

@@ -128,9 +128,9 @@ public class WebServiceTopicMap extends TopicMap {
 
     @Override
     public void clearTopicMapIndexes() throws TopicMapException {
-        topicSIIndex=Collections.synchronizedMap(new HashMap<String,WebServiceTopic>());
-        topicSLIndex=Collections.synchronizedMap(new HashMap<String,WebServiceTopic>());
-        topicBNIndex=Collections.synchronizedMap(new HashMap<String,WebServiceTopic>());
+        topicSIIndex=Collections.synchronizedMap(new LinkedHashMap<String,WebServiceTopic>());
+        topicSLIndex=Collections.synchronizedMap(new LinkedHashMap<String,WebServiceTopic>());
+        topicBNIndex=Collections.synchronizedMap(new LinkedHashMap<String,WebServiceTopic>());
     }
 
     @Override
@@ -442,6 +442,7 @@ public class WebServiceTopicMap extends TopicMap {
             return (si==null?0:si.hashCode())+type;
         }
         public boolean equals(Object o){
+            if(o == null) return false;
             if(o.getClass()!=Request.class) return false;
             Request r=(Request)o;
             if(r.type!=type) return false;

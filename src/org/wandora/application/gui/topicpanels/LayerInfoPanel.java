@@ -64,8 +64,10 @@ import org.wandora.utils.ClipboardBox;
  */
 
 
-public class LayerInfoPanel implements ActionListener, TopicPanel {
+public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
     
+    private SimpleButton copyButton = null;
+    private SimpleToggleButton trackChangesButton = null;
     private JPanel infoPanel = null;
     private Wandora wandora = null;
     private TopicMap map = null;
@@ -74,7 +76,8 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     private boolean trackChanges = false;
     private JPanel buttonPanel = null;
     private HashMap<Object, SimpleLabel> fieldLabels = null;
-    
+    private boolean requiresRefresh = false;
+    private Thread refresher = null;
     
     public LayerInfoPanel() {
         
@@ -88,6 +91,9 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
         infoPanel.setLayout(new GridBagLayout());
         fieldLabels = new HashMap();
         initInfo();
+        
+        refresher = new Thread(this);
+        refresher.start();
     }
     
     
@@ -96,9 +102,52 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         if(cmd != null) {
-            
+            if("Refresh".equalsIgnoreCase(cmd)) {
+                if(infoPanel != null) {
+                    infoPanel.removeAll();
+                    initInfo();
+                    infoPanel.revalidate();
+                    infoPanel.repaint();
+                }
+            }
+            else if("Copy info".equalsIgnoreCase(cmd)) {
+                copyActionPerformed();
+            }
+            else if("Track changes".equalsIgnoreCase(cmd)) {
+                trackChangesActionPerformed();
+                trackChangesButton.setSelected(trackChanges);
+                trackChangesButton.revalidate();
+                trackChangesButton.repaint();
+            }
         }
     }
+    
+    
+    
+    public void trackChangesActionPerformed() {
+        trackChanges = !trackChanges;
+        if(trackChanges) {
+            originalValues = null;
+        }
+        if(infoPanel != null) {
+            initInfo();
+            infoPanel.revalidate();
+            infoPanel.repaint();
+        }
+    }
+    
+    
+    
+    
+    public void copyActionPerformed() {
+        if(stats != null) {
+            ClipboardBox.setClipboard(stats.toString());
+        }
+        else {
+            ClipboardBox.setClipboard("n.a.");
+        }
+    }
+    
     
 
     @Override
@@ -116,7 +165,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     
     @Override
     public void stop() {
-
+        refresher.interrupt();
     }
 
     
@@ -276,7 +325,9 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
         
         for(int i=0; i<statOptions.length; i++) {
             try {
-
+                String statDescriptionString = TopicMapStatOptions.describeStatOption(statOptions[i]);
+                stats.append(statDescriptionString);
+                
                 statString = "n.a.";
                 try {
                     if(map != null) {
@@ -338,21 +389,16 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
             buttonPanel = new JPanel();
             buttonPanel.setLayout(new FlowLayout());
 
-            SimpleButton copyButton = new SimpleButton("Copy");
+            copyButton = new SimpleButton("Copy");
             copyButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(stats != null) {
-                        ClipboardBox.setClipboard(stats.toString());
-                    }
-                    else {
-                        ClipboardBox.setClipboard("n.a.");
-                    }
+                    copyActionPerformed();
                 }
             });
             buttonPanel.add(copyButton);
 
-            SimpleToggleButton trackChangesButton = new SimpleToggleButton("Track changes");
+            trackChangesButton = new SimpleToggleButton("Track changes");
             Insets margin = trackChangesButton.getMargin();
             margin.left = 4;
             margin.right = 4;
@@ -361,15 +407,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
             trackChangesButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    trackChanges = !trackChanges;
-                    if(trackChanges) {
-                        originalValues = null;
-                    }
-                    if(infoPanel != null) {
-                        initInfo();
-                        infoPanel.revalidate();
-                        infoPanel.repaint();
-                    }
+                    trackChangesActionPerformed();
                 }
             });
             buttonPanel.add(trackChangesButton);
@@ -407,11 +445,34 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
     @Override
     public void refresh() throws TopicMapException {
         if(infoPanel != null) {
-            refreshInfo();
-            infoPanel.revalidate();
-            infoPanel.repaint();
+            requiresRefresh = true;
         }
     }
+    
+    
+    
+    
+    @Override
+    public void run() {
+        while(!refresher.isInterrupted()) {
+            if(requiresRefresh) {
+                requiresRefresh = false;
+                // System.out.println("RefreshInfo");
+                refreshInfo();
+                infoPanel.revalidate();
+                infoPanel.repaint();
+            }
+            try {
+                refresher.sleep(300);
+            }
+            catch(InterruptedException e) {}
+        }
+        try {
+            refresher.join();
+        }
+        catch(InterruptedException e) {}
+    }
+    
 
     
     
@@ -457,7 +518,11 @@ public class LayerInfoPanel implements ActionListener, TopicPanel {
 
     @Override
     public Object[] getViewMenuStruct() {
-        return null;
+        return new Object[] {
+            //"Refresh", (ActionListener) this,
+            "Copy info", (ActionListener) this,
+            "Track changes", (ActionListener) this,
+        };
     }
 
     @Override

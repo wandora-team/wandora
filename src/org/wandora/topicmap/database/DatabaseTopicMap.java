@@ -133,8 +133,8 @@ public class DatabaseTopicMap extends TopicMap {
     protected boolean readOnly=false;
     
     protected Object indexLock=new Object();
-//    protected HashMap<Locator,Topic> siIndex;
-//    protected HashMap<String,Topic> bnIndex;
+//    protected LinkedHashMap<Locator,Topic> siIndex;
+//    protected LinkedHashMap<String,Topic> bnIndex;
     
     /** Creates a new instance of DatabaseTopicMap */
     public DatabaseTopicMap(String dbDriver,String dbConnectionString, String dbUser, String dbPassword) throws SQLException {
@@ -184,8 +184,8 @@ public class DatabaseTopicMap extends TopicMap {
             }
         }
 
-//        siIndex=new HashMap<Locator,Topic>();
-//        bnIndex=new HashMap<String,Topic>();
+//        siIndex=new LinkedHashMap<Locator,Topic>();
+//        bnIndex=new LinkedHashMap<String,Topic>();
         
         topicIndex=new WeakTopicIndex();
         changed=false;
@@ -313,7 +313,7 @@ public class DatabaseTopicMap extends TopicMap {
         Collection<Map<String,Object>> res=executeQuery("select distinct PLAYER from MEMBER");
         for(Map<String,Object> row : res){
             String player=row.get("PLAYER").toString();
-            HashSet<Vector<String>> associations=new HashSet<Vector<String>>(500);
+            HashSet<Vector<String>> associations=new LinkedHashSet<Vector<String>>(500);
             Collection<Map<String,Object>> res2=executeQuery(
                     "select ASSOCIATION.*,M2.* from ASSOCIATION,MEMBER as M1, MEMBER as M2 "+
                     "where M1.PLAYER='"+escapeSQL(player)+"' and M1.ASSOCIATION=ASSOCIATIONID and "+
@@ -525,7 +525,7 @@ public class DatabaseTopicMap extends TopicMap {
 
                 Vector<Map<String,Object>> rows=new Vector<Map<String,Object>>();
                 while(rs.next()){
-                    HashMap<String,Object> row=new HashMap<String,Object>();
+                    HashMap<String,Object> row=new LinkedHashMap<String,Object>();
                     for(int i=0;i<columns;i++){
                         row.put(columnNames[i],rs.getObject(i+1));
                     }
@@ -674,10 +674,10 @@ public class DatabaseTopicMap extends TopicMap {
 /*    protected void resetIndexes(){
         synchronized(indexLock){
             if(!siIndex.isEmpty()){
-                siIndex=new HashMap<Locator,Topic>();
+                siIndex=new LinkedHashMap<Locator,Topic>();
             }
             if(!bnIndex.isEmpty()){
-                bnIndex=new HashMap<String,Topic>();
+                bnIndex=new LinkedHashMap<String,Topic>();
             }
         }
     }*/
@@ -750,7 +750,7 @@ public class DatabaseTopicMap extends TopicMap {
         if(unconnected) return new Vector<Topic>();
         Collection<Topic> res=queryTopic("select TOPIC.* from TOPIC,TOPICTYPE where "+
                           "TOPIC=TOPICID and TYPE='"+escapeSQL(type.getID())+"'");
-        HashMap<String,DatabaseTopic> collected=new HashMap<String,DatabaseTopic>();
+        HashMap<String,DatabaseTopic> collected=new LinkedHashMap<String,DatabaseTopic>();
         for(Topic t : res){
             collected.put(t.getID(),(DatabaseTopic)t);
         }
@@ -838,7 +838,7 @@ public class DatabaseTopicMap extends TopicMap {
                 }
                 public Topic next(){
                     if(!hasNext()) throw new NoSuchElementException();
-                    HashMap<String,Object> row=new HashMap<String,Object>();
+                    HashMap<String,Object> row=new LinkedHashMap<String,Object>();
                     try{
                         for(int i=0;i<columns;i++){
                             row.put(columnNames[i],rs.getObject(i+1));
@@ -919,7 +919,7 @@ public class DatabaseTopicMap extends TopicMap {
                 }
                 public Association next(){
                     if(!hasNext()) throw new NoSuchElementException();
-                    HashMap<String,Object> row=new HashMap<String,Object>();
+                    HashMap<String,Object> row=new LinkedHashMap<String,Object>();
                     try{
                         for(int i=0;i<columns;i++){
                             row.put(columnNames[i],rs.getObject(i+1));
@@ -1047,7 +1047,7 @@ public class DatabaseTopicMap extends TopicMap {
             }
 
             for(Set<Topic> scope : t.getVariantScopes()){
-                Set<Topic> nscope=new HashSet();
+                Set<Topic> nscope=new LinkedHashSet();
                 for(Topic st : scope){
                     Topic nst=_copyTopicIn(st,deep,true,copied);
                     nscope.add(nst);
@@ -1275,7 +1275,7 @@ public class DatabaseTopicMap extends TopicMap {
             }
         }
         if(!tmLogger.forceStop()){
-            HashSet<Topic> endpoints=new HashSet<Topic>();
+            HashSet<Topic> endpoints=new LinkedHashSet<Topic>();
             int acount=0;
             Iterator<Association> iter=tm.getAssociations();
             while(iter.hasNext()) {

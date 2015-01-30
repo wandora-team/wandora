@@ -70,11 +70,11 @@ public class TopicMapImpl extends TopicMap {
     /**
      * All topics in this topic map.
      */
-    private HashSet<Topic> topics;
+    private Set<Topic> topics;
     /**
      * All associations in this topic map. 
      */
-    private HashSet<Association> associations;
+    private Set<Association> associations;
     
     
     private boolean trackDependent;
@@ -100,8 +100,8 @@ public class TopicMapImpl extends TopicMap {
         subjectLocatorIndex=new Hashtable<Locator,Topic>();
         nameIndex=new Hashtable<String,Topic>();
         associationTypeIndex=new Hashtable<Topic,Collection<Association>>();
-        topics=new LinkedHashSet<Topic>();
-        associations=new LinkedHashSet<Association>();
+        topics=(Set<Topic>) Collections.synchronizedSet(new LinkedHashSet<Topic>());
+        associations=(Set<Association>) Collections.synchronizedSet(new LinkedHashSet<Association>());
         trackDependent=false;
         topicMapChanged=false;
         topicMapListeners=new ArrayList<TopicMapListener>();
@@ -490,7 +490,7 @@ public class TopicMapImpl extends TopicMap {
                 e.printStackTrace();
             }
         }
-        HashSet endpoints=new HashSet();
+        HashSet endpoints=new LinkedHashSet();
         iter=tm.getAssociations();
         int acount=0;
         while(iter.hasNext()) {
@@ -839,12 +839,14 @@ public class TopicMapImpl extends TopicMap {
                 // UNDO/REDO CAUSES THE typeIndex LEAK.
                 
                 HashSet typeTopics = new LinkedHashSet();
-                for(Topic t : topics) {
-                    if(t != null && !t.isRemoved()) {
-                        Collection<Topic> cts = t.getTypes();
-                        if(cts != null && !cts.isEmpty()) {
-                            for(Topic ct : cts) {
-                                typeTopics.add(ct);
+                synchronized(topics) {
+                    for(Topic t : topics) {
+                        if(t != null && !t.isRemoved()) {
+                            Collection<Topic> cts = t.getTypes();
+                            if(cts != null && !cts.isEmpty()) {
+                                for(Topic ct : cts) {
+                                    typeTopics.add(ct);
+                                }
                             }
                         }
                     }
@@ -856,25 +858,20 @@ public class TopicMapImpl extends TopicMap {
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_PLAYERS: {
                 HashSet associationPlayers = new LinkedHashSet();
-                Iterator topicIter=this.topics.iterator();
-                Topic t = null;
-                Collection associations = null;
                 Collection associationRoles = null;
                 Iterator<Association> associationIter = null;
                 Iterator<Topic> associationRoleIter = null;
                 Association association = null;
                 Topic role = null;
-                while(topicIter.hasNext()) {
-                    t=(Topic) topicIter.next();
-                    if(t != null && !t.isRemoved()) {
-                        associations = t.getAssociations();
-                        if(associations != null && !associations.isEmpty()) {
-                            associationIter = associations.iterator();
-                            while(associationIter.hasNext()) {
-                                association = (Association) associationIter.next();
-                                if(association != null && !association.isRemoved()) {
-                                    associationRoles = association.getRoles();
-                                    if(associationRoles != null && !associationRoles.isEmpty()) {
+                synchronized(associations) {
+                    associationIter = associations.iterator();
+                    while(associationIter.hasNext()) {
+                        association = associationIter.next();
+                        if(association != null && !association.isRemoved()) {
+                            associationRoles = association.getRoles();
+                            if(associationRoles != null) {
+                                synchronized(associationRoles) {
+                                    if(!associationRoles.isEmpty()) {
                                         associationRoleIter = associationRoles.iterator();
                                         while(associationRoleIter.hasNext()) {
                                             role = associationRoleIter.next();
@@ -892,23 +889,13 @@ public class TopicMapImpl extends TopicMap {
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_ROLES: {
                 HashSet associationRoles = new LinkedHashSet();
-                Iterator topicIter=this.topics.iterator();
-                Topic t = null;
-                Collection associations = null;
-                Iterator associationIter = null;
                 Association association = null;
-                while(topicIter.hasNext()) {
-                    t=(Topic) topicIter.next();
-                    if(t != null && !t.isRemoved()) {
-                        associations = t.getAssociations();
-                        if(associations != null && !associations.isEmpty()) {
-                            associationIter = associations.iterator();
-                            while(associationIter.hasNext()) {
-                                association = (Association) associationIter.next();
-                                if(association != null && !association.isRemoved()) {
-                                    associationRoles.addAll( association.getRoles() );
-                                }
-                            }
+                synchronized(associations) {
+                    Iterator<Association> associationIter = associations.iterator();
+                    while(associationIter.hasNext()) {
+                        association = associationIter.next();
+                        if(association != null && !association.isRemoved()) {
+                            associationRoles.addAll( association.getRoles() );
                         }
                     }
                 }
@@ -921,12 +908,15 @@ public class TopicMapImpl extends TopicMap {
                 
                 HashSet associationTypes = new LinkedHashSet();
                 Topic typeTopic = null;
-                for(Association a : associations) {
-                    if(a != null && !a.isRemoved()) {
-                        typeTopic = a.getType();
-                        associationTypes.add(typeTopic);
+                synchronized(associations) {
+                    Iterator<Association> associationsIterator = associations.iterator();
+                    while(associationsIterator.hasNext()) {
+                        Association a = associationsIterator.next();
+                        if(a != null && !a.isRemoved()) {
+                            typeTopic = a.getType();
+                            associationTypes.add(typeTopic);
+                        }
                     }
-                    
                 }
                 return new TopicMapStatData(associationTypes.size());
             }
@@ -935,14 +925,21 @@ public class TopicMapImpl extends TopicMap {
             }
             case TopicMapStatOptions.NUMBER_OF_OCCURRENCES: {
                 int count=0;
-                Iterator topicIter=this.topics.iterator();
                 Topic t = null;
-                Collection dataTypes = null;
-                while(topicIter.hasNext()) {
-                    t=(Topic) topicIter.next();
-                    if(t != null) {
-                        dataTypes = t.getDataTypes();
-                        if(dataTypes != null) count += dataTypes.size();
+                Collection<Topic> dataTypes = null;
+                synchronized(topics) {
+                    Iterator topicIter=topics.iterator();
+                    while(topicIter.hasNext()) {
+                        t=(Topic) topicIter.next();
+                        if(t != null) {
+                            dataTypes = t.getDataTypes();
+                            if(dataTypes != null && !dataTypes.isEmpty()) {
+                                for(Topic dataType : dataTypes) {
+                                    Hashtable<Topic,String> scopedOccurrence = t.getData(dataType);
+                                    count += scopedOccurrence.size();
+                                }
+                            }
+                        }
                     }
                 }
                 return new TopicMapStatData(count);

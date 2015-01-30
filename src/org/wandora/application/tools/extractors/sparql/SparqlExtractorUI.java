@@ -286,6 +286,14 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        disabledPanels = new javax.swing.JPanel();
+        hriPanel = new javax.swing.JPanel();
+        hriInnerPanel = new javax.swing.JPanel();
+        hriTitle = new SimpleLabel();
+        hriQueryScrollPane = new SimpleScrollPane();
+        hriQueryTextPane = new SimpleTextPane();
+        hriButtonPanel = new javax.swing.JPanel();
+        hriCheckButton = new SimpleButton();
         tabbedPane = new SimpleTabbedPane();
         genericPanel = new javax.swing.JPanel();
         genericPanelInner = new javax.swing.JPanel();
@@ -311,13 +319,6 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         dbpediaQueryTextPane = new SimpleTextPane();
         dbpediaButtonPanel = new javax.swing.JPanel();
         dbpediaCheckButton = new SimpleButton();
-        hriPanel = new javax.swing.JPanel();
-        hriInnerPanel = new javax.swing.JPanel();
-        hriTitle = new SimpleLabel();
-        hriQueryScrollPane = new SimpleScrollPane();
-        hriQueryTextPane = new SimpleTextPane();
-        hriButtonPanel = new javax.swing.JPanel();
-        hriCheckButton = new SimpleButton();
         europeanaPanel = new javax.swing.JPanel();
         europeanaInnerPanel = new javax.swing.JPanel();
         europeanaTitle = new SimpleLabel();
@@ -350,6 +351,75 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         buttonFillerPanel = new javax.swing.JPanel();
         okButton = new SimpleButton();
         cancelButton = new SimpleButton();
+
+        hriPanel.setLayout(new java.awt.GridBagLayout());
+
+        hriInnerPanel.setLayout(new java.awt.GridBagLayout());
+
+        hriTitle.setText("<html>Write and send your SPARQL query to Helsinki Region Inforshare (HRI) SPARQL end point at http://semantic.hri.fi/sparql and transform result set to a topic map.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
+        hriInnerPanel.add(hriTitle, gridBagConstraints);
+
+        hriQueryTextPane.setText("SELECT ?area ?pred ?obj\nWHERE { \n  ?area rdf:type dimension:Alue;\n     ?pred ?obj.\n}");
+        hriQueryScrollPane.setViewportView(hriQueryTextPane);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        hriInnerPanel.add(hriQueryScrollPane, gridBagConstraints);
+
+        hriButtonPanel.setLayout(new java.awt.GridBagLayout());
+
+        hriCheckButton.setText("Check Query");
+        hriCheckButton.setMargin(new java.awt.Insets(0, 5, 0, 5));
+        hriCheckButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                hriCheckButtonMouseReleased(evt);
+            }
+        });
+        hriButtonPanel.add(hriCheckButton, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
+        hriInnerPanel.add(hriButtonPanel, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        hriPanel.add(hriInnerPanel, gridBagConstraints);
+
+        javax.swing.GroupLayout disabledPanelsLayout = new javax.swing.GroupLayout(disabledPanels);
+        disabledPanels.setLayout(disabledPanelsLayout);
+        disabledPanelsLayout.setHorizontalGroup(
+            disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+            .addGroup(disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(disabledPanelsLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(hriPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        disabledPanelsLayout.setVerticalGroup(
+            disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+            .addGroup(disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(disabledPanelsLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(hriPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -520,56 +590,6 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         dbpediaPanel.add(dbpediaInnerPanel, gridBagConstraints);
 
         tabbedPane.addTab("DBPedia", dbpediaPanel);
-
-        hriPanel.setLayout(new java.awt.GridBagLayout());
-
-        hriInnerPanel.setLayout(new java.awt.GridBagLayout());
-
-        hriTitle.setText("<html>Write and send your SPARQL query to Helsinki Region Inforshare (HRI) SPARQL end point at http://semantic.hri.fi/sparql and transform result set to a topic map.</html>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
-        hriInnerPanel.add(hriTitle, gridBagConstraints);
-
-        hriQueryTextPane.setText("SELECT ?area ?pred ?obj\nWHERE { \n  ?area rdf:type dimension:Alue;\n     ?pred ?obj.\n}");
-        hriQueryScrollPane.setViewportView(hriQueryTextPane);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        hriInnerPanel.add(hriQueryScrollPane, gridBagConstraints);
-
-        hriButtonPanel.setLayout(new java.awt.GridBagLayout());
-
-        hriCheckButton.setText("Check Query");
-        hriCheckButton.setMargin(new java.awt.Insets(0, 5, 0, 5));
-        hriCheckButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                hriCheckButtonMouseReleased(evt);
-            }
-        });
-        hriButtonPanel.add(hriCheckButton, new java.awt.GridBagConstraints());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
-        hriInnerPanel.add(hriButtonPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        hriPanel.add(hriInnerPanel, gridBagConstraints);
-
-        tabbedPane.addTab("HRI", hriPanel);
 
         europeanaPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -912,6 +932,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
     private javax.swing.JScrollPane dbpediaQueryScrollPane;
     private javax.swing.JTextPane dbpediaQueryTextPane;
     private javax.swing.JLabel dbpediaTitle;
+    private javax.swing.JPanel disabledPanels;
     private javax.swing.JLabel encodingLabel;
     private javax.swing.JPanel europeanOpenDataButtonPanel;
     private javax.swing.JButton europeanOpenDataCheckButton;

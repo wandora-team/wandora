@@ -128,10 +128,10 @@ public class DatabaseTopic extends Topic {
      * until this method is called.
      */
     void create() throws TopicMapException {
-        subjectIdentifiers=new HashSet<Locator>();
+        subjectIdentifiers=new LinkedHashSet<Locator>();
         data=new Hashtable<Topic,Hashtable<Topic,String>>();
         variants=new Hashtable<Set<Topic>,T2<String,String>>();
-        types=new HashSet<Topic>();
+        types=new LinkedHashSet<Topic>();
 //        associations=new Hashtable<Topic,Hashtable<Topic,Collection<Association>>>();
         
         full=true;
@@ -160,13 +160,13 @@ public class DatabaseTopic extends Topic {
         HashSet<Locator> oldSIs=subjectIdentifiers;
         subjectIdentifiers=sis;
         if(oldSIs!=null && oldSIs.size()>0){
-            HashSet<Locator> removed=new HashSet<Locator>();
+            HashSet<Locator> removed=new LinkedHashSet<Locator>();
             removed.addAll(oldSIs);
             removed.removeAll(subjectIdentifiers);
             for(Locator l : removed){
                 topicMap.topicSIChanged(this,l,null);
             }
-            HashSet<Locator> added=new HashSet<Locator>();
+            HashSet<Locator> added=new LinkedHashSet<Locator>();
             added.addAll(subjectIdentifiers);
             added.removeAll(oldSIs);
             for(Locator l : added){
@@ -182,7 +182,7 @@ public class DatabaseTopic extends Topic {
     
     protected void fetchSubjectIdentifiers() throws TopicMapException {
         Collection<Map<String,Object>> res=topicMap.executeQuery("select * from SUBJECTIDENTIFIER where TOPIC='"+escapeSQL(id)+"'");
-        HashSet<Locator> newSIs=new HashSet<Locator>();
+        HashSet<Locator> newSIs=new LinkedHashSet<Locator>();
         for(Map<String,Object> row : res){
             newSIs.add(topicMap.createLocator(row.get("SI").toString()));
         }
@@ -226,7 +226,7 @@ public class DatabaseTopic extends Topic {
                 if(lastVariant!=null){
                     variants.put(scope,t2(lastName,lastVariant));
                 }
-                scope=new HashSet<Topic>();
+                scope=new LinkedHashSet<Topic>();
                 lastVariant=row.get("VARIANTID").toString();
                 lastName=row.get("VALUE").toString();
             }
@@ -242,7 +242,7 @@ public class DatabaseTopic extends Topic {
         Collection<Map<String,Object>> res=topicMap.executeQuery(
                 "select TOPIC.* from TOPIC,TOPICTYPE where TYPE=TOPICID and "+
                 "TOPIC='"+escapeSQL(id)+"'");
-        types=new HashSet<Topic>();
+        types=new LinkedHashSet<Topic>();
         for(Map<String,Object> row : res){
             types.add(topicMap.buildTopic(row));
         }
@@ -251,7 +251,7 @@ public class DatabaseTopic extends Topic {
     
     static void fetchAllSubjectIdentifiers(Collection<Map<String,Object>> res,HashMap<String,DatabaseTopic> topics,DatabaseTopicMap topicMap) throws TopicMapException {
         String topicID=null;
-        HashSet<Locator> subjectIdentifiers=new HashSet<Locator>();
+        HashSet<Locator> subjectIdentifiers=new LinkedHashSet<Locator>();
         for(Map<String,Object> row : res) {
             if(topicID==null || !topicID.equals(row.get("TOPIC"))){
                 if(topicID!=null){
@@ -261,7 +261,7 @@ public class DatabaseTopic extends Topic {
                         dbt.setSubjectIdentifiers(subjectIdentifiers);
                     }
                 }
-                subjectIdentifiers=new HashSet<Locator>();
+                subjectIdentifiers=new LinkedHashSet<Locator>();
                 topicID=row.get("TOPIC").toString();
             }
             subjectIdentifiers.add(topicMap.createLocator(row.get("SI").toString()));
@@ -289,8 +289,8 @@ public class DatabaseTopic extends Topic {
                 "order by R.TOPICID"
                 );
         Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=new Hashtable<Topic,Hashtable<Topic,Collection<Association>>>();
-        HashMap<String,DatabaseTopic> collectedTopics=new HashMap<String,DatabaseTopic>();
-        HashMap<String,DatabaseAssociation> collectedAssociations=new HashMap<String,DatabaseAssociation>();
+        HashMap<String,DatabaseTopic> collectedTopics=new LinkedHashMap<String,DatabaseTopic>();
+        HashMap<String,DatabaseAssociation> collectedAssociations=new LinkedHashMap<String,DatabaseAssociation>();
         for(Map<String,Object> row : res) {
             DatabaseTopic type=topicMap.buildTopic(row.get("TYPEID"),row.get("TYPEBN"),row.get("TYPESL"));
             DatabaseTopic role=topicMap.buildTopic(row.get("ROLEID"),row.get("ROLEBN"),row.get("ROLESL"));
@@ -517,8 +517,8 @@ public class DatabaseTopic extends Topic {
                         "M1.ASSOCIATION=ASSOCIATIONID and ASSOCIATIONID=M2.ASSOCIATION and "+
                         "M2.PLAYER='"+escapeSQL(id)+"' order by M1.ASSOCIATION");
             //         type  ,associations{ role  ,player}
-            HashSet<T2<String,Collection<T2<String,String>>>> associations=new HashSet<T2<String,Collection<T2<String,String>>>>();
-            HashSet<String> delete=new HashSet<String>();
+            HashSet<T2<String,Collection<T2<String,String>>>> associations=new LinkedHashSet<T2<String,Collection<T2<String,String>>>>();
+            HashSet<String> delete=new LinkedHashSet<String>();
             String oldAssociation="dummy";
             String oldType="";
             Collection<T2<String,String>> association=null;
@@ -529,7 +529,7 @@ public class DatabaseTopic extends Topic {
                         if(associations.contains(t2(oldType,association))) delete.add(oldAssociation);
                         else associations.add(t2(oldType,association));
                     }
-                    association=new HashSet<T2<String,String>>();
+                    association=new LinkedHashSet<T2<String,String>>();
                     oldAssociation=aid;
                     oldType=(String)row.get("TYPE");
                 }
@@ -548,8 +548,8 @@ public class DatabaseTopic extends Topic {
             Collection<Map<String,Object>> res=topicMap.executeQuery(
                         "select VARIANTSCOPE.* from VARIANT,VARIANTSCOPE where "+
                         "VARIANT.TOPIC='"+escapeSQL(id)+"' and VARIANTID=VARIANT order by VARIANTID");
-            HashSet<Collection<String>> scopes=new HashSet<Collection<String>>();
-            HashSet<String> delete=new HashSet<String>();
+            HashSet<Collection<String>> scopes=new LinkedHashSet<Collection<String>>();
+            HashSet<String> delete=new LinkedHashSet<String>();
             String oldVariant="dummy";
             Collection<String> scope=null;
             for(Map<String,Object> row : res){
@@ -559,7 +559,7 @@ public class DatabaseTopic extends Topic {
                         if(scopes.contains(scope)) delete.add(oldVariant);
                         else scopes.add(scope);
                     }
-                    scope=new HashSet<String>();
+                    scope=new LinkedHashSet<String>();
                     oldVariant=vid;
                 }
                 scope.add((String)row.get("TOPIC"));
@@ -791,7 +791,7 @@ public class DatabaseTopic extends Topic {
     }
     public Collection<Association> getAssociations() throws TopicMapException {
 //        if(!full) makeFull();
-        HashSet<Association> ret=new HashSet();
+        HashSet<Association> ret=new LinkedHashSet();
         Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
         for(Map.Entry<Topic,Hashtable<Topic,Collection<Association>>> e : associations.entrySet()){
             for(Map.Entry<Topic,Collection<Association>> e2 : e.getValue().entrySet()){
@@ -805,7 +805,7 @@ public class DatabaseTopic extends Topic {
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
         if(type == null) return null;
 //        if(!full) makeFull();
-        HashSet<Association> ret=new HashSet();
+        HashSet<Association> ret=new LinkedHashSet();
         Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
         if(associations.get(type)==null) return new Vector<Association>();
         for(Map.Entry<Topic,Collection<Association>> e2 : associations.get(type).entrySet()){
@@ -878,7 +878,7 @@ public class DatabaseTopic extends Topic {
 //                "exists (select * from MEMBER where PLAYER='"+eid+"' or ROLE='"+eid+"') or "+
                 "exists (select * from MEMBER where ROLE='"+eid+"') or "+
                 "exists (select * from ASSOCIATION where TYPE='"+eid+"') )");
-        if(res.size()>0) return false;
+        if(!res.isEmpty()) return false;
         return true;
     }
     
@@ -928,7 +928,7 @@ public class DatabaseTopic extends Topic {
             }
             c=t.get(role);
             if(c==null){
-                c=new HashSet<Association>();
+                c=new LinkedHashSet<Association>();
                 t.put(role,c);
             }
             c.add(a);
@@ -937,8 +937,8 @@ public class DatabaseTopic extends Topic {
     }
     
     void removeDuplicateAssociations() throws TopicMapException {
-        HashSet<EqualAssociationWrapper> as=new HashSet<EqualAssociationWrapper>();
-        HashSet<Association> delete=new HashSet<Association>();
+        HashSet<EqualAssociationWrapper> as=new LinkedHashSet<EqualAssociationWrapper>();
+        HashSet<Association> delete=new LinkedHashSet<Association>();
         for(Association a : getAssociations()){
             if(!as.add(new EqualAssociationWrapper((DatabaseAssociation)a))){
                 delete.add(a);
@@ -965,6 +965,7 @@ public class DatabaseTopic extends Topic {
             this.a=a;
         }
         public boolean equals(Object o){
+            if(o==null) return false;
             if(hashCode()!=o.hashCode()) return false;
             return a._equals(((EqualAssociationWrapper)o).a);
         }

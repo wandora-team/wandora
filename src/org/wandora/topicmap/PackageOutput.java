@@ -50,7 +50,7 @@ public interface PackageOutput {
      */
     public void close() throws IOException;
     /**
-     * Gets the outputstream for current entry.
+     * Gets the output stream for current entry.
      */
     public OutputStream getOutputStream() throws IOException;
     

@@ -176,8 +176,9 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
                         String layerName = n;
                         int c = 2;
                         if(layerStack.getLayer(layerName) != null) {
+                            String originalLayerName = layerName;
                             do {
-                                layerName = maianaPanel.getName() + " " + c;
+                                layerName = originalLayerName + " " + c;
                                 c++;
                             }
                             while(layerStack.getLayer(layerName) != null);

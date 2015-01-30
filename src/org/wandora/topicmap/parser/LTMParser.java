@@ -549,7 +549,7 @@ public class LTMParser {
                         // logger.log("found displayname name '" + basename.sortname+"'");
                     }
                     if(basename.sortname != null) {
-                        HashSet nameScope=new HashSet();
+                        HashSet nameScope=new LinkedHashSet();
                         nameScope.add(getOrCreateTopic(XTMPSI.getLang(null)));
                         nameScope.add(getOrCreateTopic(XTMPSI.SORT)); 
                         topic.setVariant(nameScope, basename.sortname);
@@ -760,7 +760,7 @@ public class LTMParser {
                     //logger.log("Association type is: "+associationType+ " ---- "+associationTypeName.qname);
                     association = topicMap.createAssociation(associationType);
                     if(association != null) {
-                        HashMap<Topic,Topic> players=new HashMap<Topic,Topic>();
+                        HashMap<Topic,Topic> players=new LinkedHashMap<Topic,Topic>();
                         for(Iterator memberIter = members.iterator(); memberIter.hasNext(); ) {
                             member = (Member) memberIter.next();
                             //if(member != null) association.addPlayer(member.role,member.player);

@@ -43,7 +43,7 @@ public class UndoTopic extends Topic {
     }
     
     static Set<Topic> getWrappedScope(Set<Topic> s){
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         for(Topic t : s){
             ret.add(((UndoTopic)t).getWrapped());
         }
@@ -51,7 +51,7 @@ public class UndoTopic extends Topic {
     }
     
     Set<Topic> wrapScope(Set<Topic> s){
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         for(Topic t : s) {
             ret.add(topicMap.wrapTopic(t));
         }
@@ -164,7 +164,7 @@ public class UndoTopic extends Topic {
 
     @Override
     public Set<Set<Topic>> getVariantScopes() throws TopicMapException {
-        Set<Set<Topic>> ret=new HashSet<Set<Topic>>();
+        Set<Set<Topic>> ret=new LinkedHashSet<Set<Topic>>();
         for(Set<Topic> s : wrapped.getVariantScopes()){
             ret.add(wrapScope(s));
         }

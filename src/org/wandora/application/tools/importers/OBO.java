@@ -27,24 +27,12 @@ package org.wandora.application.tools.importers;
 
 import org.wandora.topicmap.TMBox;
 import org.wandora.utils.IObox;
-import org.wandora.*;
-import org.wandora.application.tools.*;
 import org.wandora.application.tools.exporters.*;
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-
-import org.wandora.application.contexts.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import javax.swing.*;
-import org.wandora.utils.*;
-import org.wandora.utils.swing.*;
-import java.util.regex.*;
 
 
 
@@ -158,8 +146,10 @@ public class OBO {
     
     // **** INSTANCE ****
     public static final String SCHEMA_TERM_INSTANCE_OF = "instance-of";
-    public static final String SCHEMA_TERM_PROPERTY_VALUE ="property-value";
     
+    // **** PROPERTY-VALUES *****
+    public static final String SCHEMA_TERM_PROPERTY_VALUE ="property-value";
+    public static final String SCHEMA_TERM_PROPERTY_VALUE_TYPE  ="property-value-type";
     
     // ***** SYNONYMS ******
     public static final String SCHEMA_TERM_SYNONYM = "synonym";
@@ -171,6 +161,17 @@ public class OBO {
     // ***** XREFS ********
     public static final String SCHEMA_TERM_XREF = "xref";
     public static final String SCHEMA_TERM_XREF_SCOPE = "xref-scope";
+    
+    // ***** CREATED ******
+    public static final String SCHEMA_TERM_CREATED_BY = "created_by";
+    public static final String SCHEMA_TERM_CREATION_DATE = "creation_date";
+    
+    
+    public static final String SCHEMA_TERM_EXPAND_ASSERTION = "expand_assertion_to";
+    public static final String SCHEMA_TERM_IS_CLASS_LEVEL = "is_class_level";
+    public static final String SCHEMA_TERM_HOLS_CHAIN_OVER = "holds_over_chain";
+    
+    
     
     
     
@@ -319,7 +320,16 @@ public class OBO {
         }
         return isaRootTopic;
     }
-
+    public static Topic createAuthorTopic(TopicMap tm, String namespace) throws TopicMapException {
+        String si = OBO.SI+namespace+"/author";
+        Topic authorTopic = tm.getTopic(si);
+        if(authorTopic == null) {
+            authorTopic = getOrCreateTopic(tm, si, "author ("+namespace+")");
+            Topic root = createRootTopic(tm, namespace);
+            makeSubclassOf(tm, authorTopic, root);
+        }
+        return authorTopic;
+    }
     
     
     
@@ -543,9 +553,43 @@ public class OBO {
 
     
     
-    
+    public static Topic createTopicForAssertionExpansion(TopicMap tm, String exp) throws TopicMapException {
+        if(tm == null) return null;
+        exp = OBO2Java(exp);
+
+        Locator si = new Locator(makeSI("assertion-expansion/",exp));
+        Topic topic = tm.getTopic(si);
+        if(topic == null) {
+            topic = tm.createTopic();
+            //topicCounter++;
+            topic.addSubjectIdentifier(si);
+            topic.setBaseName(exp + " (assertion-expansion)");
+            topic.setDisplayName(LANG, exp);
+        }
+        return topic;
+    }
     
 
+    public static Topic createTopicForAuthor(TopicMap tm, String name, String namespace) throws TopicMapException {
+        if(tm == null) return null;
+        name = OBO2Java(name);
+
+        Locator si = new Locator(makeSI("author/",name));
+        Topic topic = tm.getTopic(si);
+        if(topic == null) {
+            topic = tm.createTopic();
+            //topicCounter++;
+            topic.addSubjectIdentifier(si);
+            topic.setBaseName(name + " (author)");
+            topic.setDisplayName(LANG, name);
+            topic.addType(createAuthorTopic(tm, namespace));
+        }
+        return topic;
+    }
+    
+    
+    
+    
 
     public static Topic createTopicForSynonym(TopicMap tm, String name, String namespace) throws TopicMapException {
         if(tm == null) return null;
@@ -708,8 +752,93 @@ public class OBO {
     }
 
 
+    public static Topic createTopicForPropertyRelationship(TopicMap tm, String id) throws TopicMapException {
+        if(tm == null || id == null) return null;
+        Topic propertyTopic = null;
+        if(id.startsWith("http:")) {
+            propertyTopic = getOrCreateTopic(tm, new Locator(id), id);
+            propertyTopic.addType(createPropertyRelationshipTopic(tm));
+        }
+        else {
+            String si = makeSI(id);
+            String propertyName = id;
+            propertyTopic = getOrCreateTopic(tm, new Locator(si), propertyName);
+            propertyTopic.addType(createPropertyRelationshipTopic(tm));
+        }
+        return propertyTopic;
+    }
 
-     
+    
+    
+    
+    public static Topic createPropertyRelationshipTopic(TopicMap tm) throws TopicMapException {
+        String si = OBO.SI+"property-relationship";
+        Topic authorTopic = tm.getTopic(si);
+        if(authorTopic == null) {
+            authorTopic = getOrCreateTopic(tm, si, "property-relationship");
+        }
+        return authorTopic;
+    }
+    
+    
+
+    public static Topic createTopicForPropertyValue(TopicMap tm, String value) throws TopicMapException {
+        if(tm == null || value == null) return null;
+        Topic propertyTopic = null;
+        if(value.startsWith("http:")) {
+            propertyTopic = getOrCreateTopic(tm, new Locator(value), value);
+        }
+        else {
+            String si = makeSI(value);
+            String name = value;
+            propertyTopic = getOrCreateTopic(tm, new Locator(si), name);
+        }
+        return propertyTopic;
+    }
+
+    
+    
+    
+    public static Topic createPropertyValueTopic(TopicMap tm) throws TopicMapException {
+        String si = OBO.SI+"/property-value";
+        Topic valueTopic = tm.getTopic(si);
+        if(valueTopic == null) {
+            valueTopic = getOrCreateTopic(tm, si, "property-value");
+        }
+        return valueTopic;
+    }
+    
+    
+    
+    
+    public static Topic createTopicForPropertyDatatype(TopicMap tm, String str) throws TopicMapException {
+        if(tm == null || str == null) return null;
+        Topic t = null;
+        if(str.startsWith("http:")) {
+            t = getOrCreateTopic(tm, new Locator(str), str);
+            t.addType(createPropertyDatatypeTopic(tm));
+        }
+        else {
+            String si = makeSI(str);
+            String name = str;
+            t = getOrCreateTopic(tm, new Locator(si), name);
+            t.addType(createPropertyDatatypeTopic(tm));
+        }
+        return t;
+    }
+
+    
+    
+    
+    public static Topic createPropertyDatatypeTopic(TopicMap tm) throws TopicMapException {
+        String si = OBO.SI+"/property-datatype";
+        Topic valueTopic = tm.getTopic(si);
+        if(valueTopic == null) {
+            valueTopic = getOrCreateTopic(tm, si, "property-datatype");
+        }
+        return valueTopic;
+    }
+    
     
     // -------------------------------------------------------------------------
     
@@ -839,7 +968,9 @@ public class OBO {
         if(termIdParts.length > 1) {
             String prefix = termIdParts[0].trim();
             String id = termIdParts[1].trim();
-            if("AGI_LacusCode".equalsIgnoreCase(prefix))
+            if("Wikipedia".equalsIgnoreCase(prefix))
+                termSI = "http://en.wikipedia.org/wiki/"+id;
+            else if("AGI_LacusCode".equalsIgnoreCase(prefix))
                 termSI = "http://arabidopsis.org/servlets/TairObject?type=locus&name="+id;
             else if("AGI_LacusCode".equalsIgnoreCase(prefix))
                 termSI = "http://www.plasmodb.org/gene/"+id;
@@ -867,8 +998,9 @@ public class OBO {
                 termSI = "http://cgsc.biology.yale.edu/Site.php?ID="+id+"";
             else if("ChEBI".equalsIgnoreCase(prefix))
                 termSI = "http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:"+id+"";
-            else if("CL".equalsIgnoreCase(prefix))
+            else if("CL".equalsIgnoreCase(prefix)) {
                 ;//termSI = ""+id+"";
+            }
             else if("COG_Cluster".equalsIgnoreCase(prefix))
                 termSI = "http://www.ncbi.nlm.nih.gov/COG/new/release/cow.cgi?cog="+id+"";
             else if("COG_Function".equalsIgnoreCase(prefix))

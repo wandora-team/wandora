@@ -218,6 +218,7 @@ public class AssociationImpl implements Association {
         return players.hashCode()+type.hashCode();
     }
     boolean _equals(AssociationImpl a){
+        if(a == null) return false;
         return (players.equals(a.players)&&(type==a.type));
     }
 }

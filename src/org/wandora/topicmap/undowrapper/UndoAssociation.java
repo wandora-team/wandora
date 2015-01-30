@@ -24,6 +24,7 @@
 package org.wandora.topicmap.undowrapper;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.wandora.topicmap.*;
 
@@ -90,7 +91,7 @@ public class UndoAssociation implements Association {
 
     @Override
     public void addPlayers(Map<Topic, Topic> players) throws TopicMapException {
-        HashMap<Topic,Topic> ps=new HashMap<Topic,Topic>();
+        HashMap<Topic,Topic> ps=new LinkedHashMap<Topic,Topic>();
         for(Map.Entry<Topic,Topic> e : players.entrySet()){
             ps.put(((UndoTopic)e.getKey()).getWrapped(),((UndoTopic)e.getValue()).getWrapped());
         }

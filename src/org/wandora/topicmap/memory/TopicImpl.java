@@ -43,22 +43,22 @@ public class TopicImpl extends Topic {
     private TopicMapImpl topicMap;
     
     private Hashtable<Topic,Hashtable<Topic,String>> data;
-    private HashSet<Topic> types;
-    private HashSet<Association> associations;
+    private Set<Topic> types;
+    private Set<Association> associations;
     private Hashtable<Topic,Hashtable<Topic,String>> associationIndex;
     private String baseName;
     private Locator subjectLocator;
-    private HashSet<Locator> subjectIdentifiers;
+    private Set<Locator> subjectIdentifiers;
     private Hashtable<Set<Topic>,String> variants;
     
-    private HashSet<Topic> dataTypeIndex;
-    private HashSet<DataVersionIndexWrapper> dataVersionIndex;
-    private HashSet<Topic> topicTypeIndex;
-    private HashSet<Association> associationTypeIndex;
-    private HashSet<Association> roleTypeIndex;
-    private HashSet<Topic> variantScopeIndex;
+    private Set<Topic> dataTypeIndex;
+    private Set<DataVersionIndexWrapper> dataVersionIndex;
+    private Set<Topic> topicTypeIndex;
+    private Set<Association> associationTypeIndex;
+    private Set<Association> roleTypeIndex;
+    private Set<Topic> variantScopeIndex;
     
-    private HashSet dependentTopics;
+    private Set dependentTopics;
     
     private String id;
     
@@ -76,23 +76,23 @@ public class TopicImpl extends Topic {
         this.topicMap=topicMap;
         id=getUniqueID();
         data=new Hashtable();
-        types=new LinkedHashSet();
-        associations=new LinkedHashSet();
+        types=Collections.synchronizedSet(new LinkedHashSet());
+        associations=Collections.synchronizedSet(new LinkedHashSet());
         associationIndex=new Hashtable();
         baseName=null;
         subjectLocator=null;
-        subjectIdentifiers=new LinkedHashSet();
+        subjectIdentifiers=Collections.synchronizedSet(new LinkedHashSet());
         variants=new Hashtable();
         
         dispNameCache=new Hashtable();
         sortNameCache=new Hashtable();
         
-        dataTypeIndex=new LinkedHashSet();
-        dataVersionIndex=new LinkedHashSet();
-        topicTypeIndex=new LinkedHashSet();
-        associationTypeIndex=new LinkedHashSet();
-        roleTypeIndex=new LinkedHashSet();
-        variantScopeIndex=new LinkedHashSet();
+        dataTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
+        dataVersionIndex=Collections.synchronizedSet(new LinkedHashSet());
+        topicTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
+        associationTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
+        roleTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
+        variantScopeIndex=Collections.synchronizedSet(new LinkedHashSet());
         
         removed=false;
     }
@@ -218,7 +218,7 @@ public class TopicImpl extends Topic {
         if(s==null) return new HashSet();
 //        else return s.values();
         else{
-            HashSet as=new LinkedHashSet();
+            Set as=Collections.synchronizedSet(new LinkedHashSet());
             Iterator iter=s.entrySet().iterator();
             while(iter.hasNext()){
                 Map.Entry e=(Map.Entry)iter.next();
@@ -840,7 +840,7 @@ public class TopicImpl extends Topic {
             Set c=(Set)t2.e2;
 //            Topic topic=(Topic)tobeMapped.get(i);
 //            Set c=(Set)tobeMapped.get(i+1);
-            HashSet newscope=new LinkedHashSet();
+            Set newscope=Collections.synchronizedSet(new LinkedHashSet());
             newscope.addAll(c);
             newscope.remove(t);
             newscope.add(this);

@@ -253,12 +253,12 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                     }
                     else {
 //                        t.setVariant(new HashSet<Topic>(name.scope), name.value);
-                        t.setVariant(new HashSet<Topic>(scope), name.value);
+                        t.setVariant(new LinkedHashSet<Topic>(scope), name.value);
                     }
                 }
 
                 for(ParsedVariant v : name.variants) {
-                    HashSet<Topic> s=new HashSet<Topic>();
+                    HashSet<Topic> s=new LinkedHashSet<Topic>();
 //                    if(name.scope!=null) s.addAll(name.scope);
                     if(name.scope!=null) s.addAll(scope);
 //                    if(v.scope!=null) s.addAll(v.scope);

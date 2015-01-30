@@ -90,7 +90,7 @@ public class DatabaseAssociation implements Association {
     }
 
     static HashMap<String,DatabaseTopic> makeFullAll(Collection<Map<String,Object>> res,HashMap<String,DatabaseAssociation> associations,DatabaseTopicMap topicMap) throws TopicMapException {
-        HashMap<String,DatabaseTopic> collected=new HashMap<String,DatabaseTopic>();
+        HashMap<String,DatabaseTopic> collected=new LinkedHashMap<String,DatabaseTopic>();
         String associationID=null;
         Hashtable<Topic,Topic> players=null;
         for(Map<String,Object> row : res){
@@ -256,6 +256,7 @@ public class DatabaseAssociation implements Association {
     }
     
     boolean _equals(DatabaseAssociation a){
+        if(a == null) return false;
         return (players.equals(a.players)&&(type==a.type));
     }
     int _hashCode(){

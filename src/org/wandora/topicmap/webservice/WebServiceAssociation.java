@@ -43,7 +43,7 @@ public class WebServiceAssociation implements Association {
         this.tm=tm;
         this.wsassociation=wsassociation;
         this.type=tm.getTopic(wsassociation.getType());
-        this.players=new HashMap<Topic,Topic>();
+        this.players=new LinkedHashMap<Topic,Topic>();
         WSPlayer[] ps=wsassociation.getPlayers();
         for(int i=0;i<ps.length;i++){
             Topic rt=tm.getTopic(ps[i].getRole());
