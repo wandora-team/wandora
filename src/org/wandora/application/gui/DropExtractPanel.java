@@ -46,7 +46,7 @@ import static org.wandora.utils.Tuples.*;
  *
  * @author  akivela
  */
-public class DropExtractPanel extends JPanel implements ActionListener, MouseListener, DropTargetListener, DragGestureListener {
+public class DropExtractPanel extends JPanel implements ActionListener, MouseListener, DropTargetListener, DragGestureListener, WandoraToolLogger {
     private Wandora wandora = null;
     private WandoraTool tool = null;
     private DropTarget dt;
@@ -57,18 +57,27 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     private Color mouseOverColor = new Color(0,0,0);
     private Color mouseOutColor = new Color(102,102,102);
     
+    private String toolTipText = 
+        "<html>" +
+        "This is drop extractor. It applies selected<br>"+
+        "extractor to all dropped files. First, select<br>"+
+        "extractor by clicking the label and choose option in<br>"+
+        "the popup menu. Then, drop a file here to start<br>"+
+        "selected extractor." +
+        "</html>";
+    
     
     /** Creates new form DropExtractPanel */
-    public DropExtractPanel(Wandora w) {
-        this.wandora = w;
+    public DropExtractPanel() {
+        this.wandora = Wandora.getWandora();
         initComponents();
         this.addMouseListener(this);
+        this.setToolTipText(toolTipText);
         this.updateMenu();
         dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
         String toolName = wandora.options.get("dropExtractor.currentTool");
         if(toolName != null) setTool(toolName);
     }
-    
     
     
     public void setTool(String toolName) {
@@ -81,8 +90,6 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
             extractorNameLabel.setText("No tool available");
         }
     }
-    
-    
     
     
     public void setTool(WandoraTool tool, String toolName) {
@@ -99,14 +106,14 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
         this.setComponentPopupMenu(getPopupMenu());
     }
     
-    
-    
+
     public JPopupMenu getPopupMenu() {
         extractTools = wandora.toolManager.getToolSet("extract");
         Object[] menuItems = getPopupMenu(extractTools);
         popup = UIBox.makePopupMenu(menuItems, this);
         return popup;
     }
+    
     
     public Object[] getPopupMenu(WandoraToolSet tools) {
         final ActionListener popupListener = this;
@@ -159,6 +166,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     
     
     
+    @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String toolName = actionEvent.getActionCommand();
         System.out.println("action performed in Drop extract panel");
@@ -168,32 +176,38 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
 
     
     
-    // ---- mouse -----
+    // ------------------------------------------------------------- mouse -----
     
+    @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         if(popup != null && !popup.isVisible()) {
             popup.show(this, mouseEvent.getX(), mouseEvent.getY());
         }
     }    
     
+    @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }    
     
+    @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
         if(popup != null && !popup.isVisible()) {
             popup.show(this, mouseEvent.getX(), mouseEvent.getY());
         }
     }
     
+    @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
     
 
-    // ---- dnd -----
+    // --------------------------------------------------------------- dnd -----
     
+    @Override
     public void dragEnter(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
         extractorNameLabel.setForeground(mouseOverColor);
         iconLabel.setIcon(UIBox.getIcon("gui/drop_extract_on.gif"));
@@ -201,6 +215,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     }
     
     
+    @Override
     public void dragExit(java.awt.dnd.DropTargetEvent dropTargetEvent) {
         extractorNameLabel.setForeground(mouseOutColor);
         iconLabel.setIcon(UIBox.getIcon("gui/drop_extract.gif"));
@@ -208,13 +223,15 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     }
     
     
+    @Override
     public void dragOver(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
 
     }
     
     
     private void acceptFiles(java.util.List<File> files) throws Exception {
-        if(files != null && files.size() > 0) {
+        if(files != null && files.size() > 0 && tool != null) {
+            setLogger(tool);
             if(tool instanceof DropExtractor) {
                 try {
                     ((DropExtractor) tool).dropExtract(files.toArray(new File[files.size()]), wandora);
@@ -228,8 +245,11 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
             }
         }        
     }
+    
+    
     private void acceptUrls(java.util.List<String> urls) throws Exception {
-        if(urls != null && urls.size() > 0) {
+        if(urls != null && urls.size() > 0 && tool != null) {
+            setLogger(tool);
             if(tool instanceof DropExtractor) {
                 try {
                     ((DropExtractor) tool).dropExtract(urls.toArray(new String[urls.size()]), wandora);
@@ -243,8 +263,11 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
             }
         }        
     }
+    
+    
     private void acceptString(String content) throws Exception {
-        if(content!= null) {
+        if(content != null && tool != null) {
+            setLogger(tool);
             if(tool instanceof DropExtractor) {
                 try {
                     ((DropExtractor) tool).dropExtract(content, wandora);
@@ -256,10 +279,13 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
             else {
                 WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
             }
-        }        
+        }
     }
+    
+        
     private void acceptHTMLString(String htmlContent) throws Exception {
-        if(htmlContent != null) {
+        if(htmlContent != null && tool != null) {
+            setLogger(tool);
             if(tool instanceof DropExtractor) {
                 try {
                     System.out.println("PROCESSING HTML CONTENT!:" + htmlContent);
@@ -275,6 +301,14 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
         }        
     }
     
+    
+    private void setLogger(WandoraTool tool) {
+        tool.setToolLogger(this);
+    }
+    
+    
+    
+    @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
         try {
             //System.out.println("Drop!");
@@ -342,15 +376,16 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
                         boolean allFiles=true;
                         ArrayList<URI> uris=new ArrayList<URI>();
                         for(int i=0;i<split.length;i++){
-                            try{
+                            try {
                                 URI u=new URI(split[i].trim());
                                 if(u.getScheme()==null) continue;
                                 if(!u.getScheme().toLowerCase().equals("file")) allFiles=false;
                                 uris.add(u);
-                            } catch(java.net.URISyntaxException ue){}
+                            } 
+                            catch(java.net.URISyntaxException ue){}
                         }
-                        if(uris.size()>0){
-                            if(allFiles){
+                        if(uris.size()>0) {
+                            if(allFiles) {
                                 java.util.List<File> files=new java.util.ArrayList<File>();
                                 for(URI u : uris){
                                     try{
@@ -363,7 +398,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
                             else{
                                 java.util.List<String> urls=new java.util.ArrayList<String>();
                                 for(URI u : uris){
-                                    try{
+                                    try {
                                         urls.add(u.toString());
                                     }
                                     catch(IllegalArgumentException iae){iae.printStackTrace();}
@@ -402,12 +437,86 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
         this.revalidate();
     }
     
+    @Override
     public void dropActionChanged(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
     }
 
+    @Override
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
     }    
     
     
+    // --------------------------------------------------------- tool logger ---
+    
+    // DropExtractorPanel overrides logger in used tool as the default logger
+    // usually popups annoying messages that we don't want to show the user
+    // during drop aextraction.
+    
+
+    @Override
+    public void hlog(String message) {
+        System.out.println(message);
+    }
+
+    @Override
+    public void log(String message) {
+        System.out.println(message);
+    }
+
+    @Override
+    public void log(String message, Exception e) {
+        System.out.println(message);
+        e.printStackTrace();
+    }
+
+    @Override
+    public void log(Exception e) {
+        e.printStackTrace();
+    }
+
+    @Override
+    public void log(Error e) {
+        e.printStackTrace();
+    }
+
+    @Override
+    public void setProgress(int n) {
+        
+    }
+
+    @Override
+    public void setProgressMax(int maxn) {
+        
+    }
+
+    @Override
+    public void setLogTitle(String title) {
+        
+    }
+
+    @Override
+    public void lockLog(boolean lock) {
+        
+    }
+
+    @Override
+    public String getHistory() {
+        return "";
+    }
+
+    @Override
+    public void setState(int state) {
+        
+    }
+
+    @Override
+    public int getState() {
+       return WandoraToolLogger.EXECUTE;
+    }
+
+    @Override
+    public boolean forceStop() {
+        return false;
+    }
     
 }

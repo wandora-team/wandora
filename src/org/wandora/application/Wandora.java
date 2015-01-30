@@ -143,10 +143,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
      */
     private SearchPanel searchPanel;
     
-    
-    private DropExtractPanel dropExtractPanel;
-    
-    
+
     /*
      * <code>toolmanager</code> is a special manager that is used handle
      * all available tool classes and class paths. It has a UI of it's own
@@ -548,10 +545,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             this.shortcuts = new Shortcuts(this);
             this.menuManager = new WandoraMenuManager(this);
             this.setJMenuBar(menuManager.getWandoraMenuBar());
-            
-            this.dropExtractPanel = new DropExtractPanel(this);
-            this.dropExtractContainer.removeAll();
-            this.dropExtractContainer.add(dropExtractPanel);
 
             getHTTPServer(); // this will also create the server and initialize it if it doesn't exist yet
             if(httpServer.isAutoStart()) {
@@ -719,7 +712,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         menuManager.refreshGeneratorMenu();
         menuManager.refreshExportMenu();
         menuManager.refreshExtractMenu();
-        this.dropExtractPanel.updateMenu();
         // this.validateTree(); // TRIGGERS EXCEPTION IN JAVA 1.7
         //repaint();
         refresh();
@@ -890,7 +882,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         editorPanel = new TopicEditorPanel(this, this);
         startupPanel = new javax.swing.JPanel();
         titlePanel = new ImagePanel("gui/startup_image.gif");
-        dropExtractContainer = new javax.swing.JPanel();
         infoBar = new javax.swing.JToolBar();
         infobarPanel = new javax.swing.JPanel();
         numberOfTopicAssociationsLabel = new SimpleLabel();
@@ -1018,14 +1009,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         startupPanel.add(titlePanel, gridBagConstraints);
-
-        dropExtractContainer.setBackground(new java.awt.Color(255, 255, 255));
-        dropExtractContainer.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        startupPanel.add(dropExtractContainer, gridBagConstraints);
 
         editorPanel.add(startupPanel, java.awt.BorderLayout.CENTER);
 
@@ -1333,7 +1316,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     private javax.swing.JPanel buttonToolPanel;
     private javax.swing.JPanel contentContainerPanel;
     public javax.swing.JScrollPane contentScrollPane;
-    private javax.swing.JPanel dropExtractContainer;
     public javax.swing.JPanel editorPanel;
     private javax.swing.JPanel fillerPanel;
     private javax.swing.JPanel finderPanel;
