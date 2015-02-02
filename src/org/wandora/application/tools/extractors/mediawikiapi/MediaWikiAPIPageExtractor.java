@@ -33,6 +33,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import org.apache.commons.io.IOUtils;
 
 import java.util.ArrayList;
@@ -159,16 +160,14 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             String msg =  "Extracted " + nExtracted + " pages in total.\n"
                        +  "Should we continue the extraction?";
             
-//            if( contObject != null){ 
-//               shouldContinue = WandoraOptionPane.showConfirmDialog(null,msg,
-//                        "Continue?",WandoraOptionPane.YES_NO_OPTION);
-//            }
-//            else {
-//                shouldContinue = WandoraOptionPane.NO_OPTION;
-//            }
             
+            try {
             if(contObject != null  && !forceStop())
                 continueExtraction(contObject,t);
+            
+            } catch (Exception e) {
+              log("Nothing more to extract");
+            }
             
             
         } catch (Exception e) {
@@ -194,7 +193,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         } else if(contObject.has(typePrefix + "continue")){
             cont = "&" + typePrefix + "continue=" 
                  + contObject.getString(typePrefix + "continue");
-        }else {
+        } else {
             throw new Exception("Failed to get the continuation parameter");            
         }
         
@@ -298,7 +297,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     private String getArticleBody(String title) throws IOException{
         StringBuilder queryBuilder = new StringBuilder(this.baseURL)
             .append("/index.php?action=raw&title=")
-            .append(title);
+            .append(URLEncoder.encode(title));
 
         HttpResponse<InputStream> resp;
         try {
@@ -353,7 +352,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
                 Iterator<String> valueKeys = page.keys();
                 while(valueKeys.hasNext()){
                     String key = valueKeys.next();
-                    info.put(key, page.getString(key));
+                    info.put(key, page.get(key).toString());
                 }
                 return info;
                 
