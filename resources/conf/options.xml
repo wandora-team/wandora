@@ -10,8 +10,8 @@
    </window>
    <textEditor>
       <window>
-         <width>648</width>
-         <height>450</height>
+         <width>800</width>
+         <height>600</height>
          <x>50</x>
          <y>50</y>
       </window>
@@ -723,10 +723,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>Twitter extractor...</name>
                <class>org.wandora.application.tools.extractors.twitter.TwitterExtractor</class>
             </item>
+            <!--
             <item>
                <name>Reddit extractor...</name>
                <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
             </item>
+            -->
          </item>
          <item>
             <name>Services</name>
@@ -1475,7 +1477,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </shortcuts>
    <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
    <current>
-      <directory>/home/olli/grip/simberg/html</directory>
+      <directory>/home/</directory>
       <port></port>
       <user></user>
       <host></host>

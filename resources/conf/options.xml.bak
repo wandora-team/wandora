@@ -10,8 +10,8 @@
    </window>
    <textEditor>
       <window>
-         <width>648</width>
-         <height>450</height>
+         <width>800</width>
+         <height>600</height>
          <x>50</x>
          <y>50</y>
       </window>
@@ -723,10 +723,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>Twitter extractor...</name>
                <class>org.wandora.application.tools.extractors.twitter.TwitterExtractor</class>
             </item>
+            <!--
             <item>
                <name>Reddit extractor...</name>
                <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
             </item>
+            -->
          </item>
          <item>
             <name>Services</name>
@@ -1071,82 +1073,82 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.mashape.MashapeExtractor</class>
             </item>
          </item>
-    </set>
-    <set>
-        <name>export</name>
-        <item>
-           <name>Export topic map...</name>
-           <class>org.wandora.application.tools.exporters.ExportTopicMap</class>
-        </item>
-        <item>
-           <name>Export topic map to Waiana...</name>
-           <class>org.wandora.application.tools.maiana.MaianaExport</class>
-        </item>
-        <item>
-           <name>--- RDF FORMATS ---</name>
-           <class>org.wandora.application.tools.DummyTool</class>
-        </item>
-        <item>
-           <name>Export RDF N3...</name>
-           <class>org.wandora.application.tools.exporters.RDFExport</class>
-        </item>
-        <item>
-           <name>--- GRAPH FORMATS ---</name>
-           <class>org.wandora.application.tools.DummyTool</class>
-        </item>
-        <item>
-           <name>Export DOT graph...</name>
-           <class>org.wandora.application.tools.exporters.DOTExport</class>
-        </item>
-        <item>
-           <name>Export GML graph...</name>
-           <class>org.wandora.application.tools.exporters.GMLExport</class>
-        </item>
-        <item>
-           <name>Export GraphML...</name>
-           <class>org.wandora.application.tools.exporters.GraphMLExport</class>
-        </item>
-        <item>
-           <name>Export GraphXML...</name>
-           <class>org.wandora.application.tools.exporters.GraphXMLExport</class>
-        </item>
-        <item>
-           <name>Export GXL...</name>
-           <class>org.wandora.application.tools.exporters.GXLExport</class>
-        </item>
-        <item>
-           <name>Export Gephi...</name>
-           <class>org.wandora.application.tools.exporters.GephiExport</class>
-        </item>
-        <item>
-           <name>--- MATRIXES ---</name>
-           <class>org.wandora.application.tools.DummyTool</class>
-        </item>
-        <item>
-           <name>Export adjacency matrix...</name>
-           <class>org.wandora.application.tools.exporters.AdjacencyMatrixExport</class>
-        </item>
-        <item>
-           <name>Export similarity matrix...</name>
-           <class>org.wandora.application.tools.exporters.SimilarityMatrixExport</class>
-        </item>
-        <item>
-           <name>Export incidence matrix...</name>
-           <class>org.wandora.application.tools.exporters.IncidenceMatrixExport</class>
-        </item>
-        <item>
-           <name>--- GENE ONTOLOGY FORMATS ---</name>
-           <class>org.wandora.application.tools.DummyTool</class>
-        </item>
-        <item>
-           <name>Export OBO...</name>
-           <class>org.wandora.application.tools.exporters.OBOExport</class>
-        </item>
-        <item>
-           <name>OBO round trip...</name>
-           <class>org.wandora.application.tools.exporters.OBORoundTrip</class>
-        </item>
-        <item>
+      </set>
+      <set>
+         <name>export</name>
+         <item>
+            <name>Export topic map...</name>
+            <class>org.wandora.application.tools.exporters.ExportTopicMap</class>
+         </item>
+         <item>
+            <name>Export topic map to Waiana...</name>
+            <class>org.wandora.application.tools.maiana.MaianaExport</class>
+         </item>
+         <item>
+            <name>--- RDF FORMATS ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Export RDF N3...</name>
+            <class>org.wandora.application.tools.exporters.RDFExport</class>
+         </item>
+         <item>
+            <name>--- GRAPH FORMATS ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Export DOT graph...</name>
+            <class>org.wandora.application.tools.exporters.DOTExport</class>
+         </item>
+         <item>
+            <name>Export GML graph...</name>
+            <class>org.wandora.application.tools.exporters.GMLExport</class>
+         </item>
+         <item>
+            <name>Export GraphML...</name>
+            <class>org.wandora.application.tools.exporters.GraphMLExport</class>
+         </item>
+         <item>
+            <name>Export GraphXML...</name>
+            <class>org.wandora.application.tools.exporters.GraphXMLExport</class>
+         </item>
+         <item>
+            <name>Export GXL...</name>
+            <class>org.wandora.application.tools.exporters.GXLExport</class>
+         </item>
+         <item>
+            <name>Export Gephi...</name>
+            <class>org.wandora.application.tools.exporters.GephiExport</class>
+         </item>
+         <item>
+            <name>--- MATRIXES ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Export adjacency matrix...</name>
+            <class>org.wandora.application.tools.exporters.AdjacencyMatrixExport</class>
+         </item>
+         <item>
+            <name>Export similarity matrix...</name>
+            <class>org.wandora.application.tools.exporters.SimilarityMatrixExport</class>
+         </item>
+         <item>
+            <name>Export incidence matrix...</name>
+            <class>org.wandora.application.tools.exporters.IncidenceMatrixExport</class>
+         </item>
+         <item>
+            <name>--- GENE ONTOLOGY FORMATS ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Export OBO...</name>
+            <class>org.wandora.application.tools.exporters.OBOExport</class>
+         </item>
+         <item>
+            <name>OBO round trip...</name>
+            <class>org.wandora.application.tools.exporters.OBORoundTrip</class>
+         </item>
+         <item>
             <name>--- SEARCH INDEX BUILDERS ---</name>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
@@ -1189,9 +1191,9 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.fng.opendata.v2b.FngOpenDataDublinCoreExporter</class>
             </item>
             <item>
-                <name>--- SIMBERG ---</name>
-                <class>org.wandora.application.tools.DummyTool</class>
-             </item>
+               <name>--- SIMBERG ---</name>
+               <class>org.wandora.application.tools.DummyTool</class>
+            </item>
             <item>
                <name>Simberg open data exporter...</name>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOpenDataExporter</class>
@@ -1475,7 +1477,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </shortcuts>
    <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
    <current>
-      <directory>/home/olli/grip/simberg/html</directory>
+      <directory>/home/</directory>
       <port></port>
       <user></user>
       <host></host>
