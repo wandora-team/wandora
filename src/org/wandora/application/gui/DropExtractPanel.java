@@ -44,14 +44,15 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.tools.*;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.utils.*;
-import static org.wandora.utils.Tuples.*;
+
+
+
 
 /**
  *
  * @author  akivela
  */
-public class DropExtractPanel extends JPanel implements ActionListener, MouseListener, DropTargetListener, DragGestureListener, WandoraToolLogger {
+public class DropExtractPanel extends JPanel implements ComponentListener, ActionListener, MouseListener, DropTargetListener, DragGestureListener, WandoraToolLogger {
     private Wandora wandora = null;
     private WandoraTool tool = null;
     private DropTarget dt;
@@ -61,15 +62,9 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     
     private Color mouseOverColor = new Color(0,0,0);
     private Color mouseOutColor = new Color(102,102,102);
+
+    private boolean forceStop = false;
     
-    private String toolTipText = 
-        "<html>" +
-        "This is drop extractor. It applies selected<br>"+
-        "extractor to all dropped files. First, select<br>"+
-        "extractor by clicking the label and choose option in<br>"+
-        "the popup menu. Then, drop a file here to start<br>"+
-        "selected extractor." +
-        "</html>";
     
     
     /** Creates new form DropExtractPanel */
@@ -77,7 +72,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
         this.wandora = Wandora.getWandora();
         initComponents();
         extractorPanel.addMouseListener(this);
-        extractorPanel.setToolTipText(toolTipText);
+        addComponentListener(this);
         updateMenu();
         dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
         String toolName = wandora.options.get("dropExtractor.currentTool");
@@ -116,6 +111,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     
     
     public void setTool(String toolName) {
+        forceStop = false;
         WandoraTool t = extractTools.getToolForName(toolName);
         if(t == null) t = extractTools.getToolForRealName(toolName);
         if(t != null) {
@@ -128,6 +124,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     
     
     public void setTool(WandoraTool tool, String toolName) {
+        forceStop = false;
         this.tool = tool;
         if(tool != null) {
             extractorNameLabel.setText(toolName);
@@ -180,8 +177,11 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
 
         tabbedPane = new SimpleTabbedPane();
         extractorPanel = new javax.swing.JPanel();
+        centeringPanel = new javax.swing.JPanel();
         extractorNameLabel = new javax.swing.JLabel();
         iconLabel = new javax.swing.JLabel();
+        infoPanel = new javax.swing.JPanel();
+        infoLabel = new javax.swing.JLabel();
         loggerPanel = new javax.swing.JPanel();
         jScrollPane1 = new SimpleScrollPane();
         logTextPane = new SimpleTextPane();
@@ -191,13 +191,42 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
         extractorPanel.setBackground(new java.awt.Color(255, 255, 255));
         extractorPanel.setLayout(new java.awt.GridBagLayout());
 
-        extractorNameLabel.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 9)); // NOI18N
+        centeringPanel.setBackground(new java.awt.Color(255, 255, 255));
+        centeringPanel.setLayout(new java.awt.GridBagLayout());
+
+        extractorNameLabel.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         extractorNameLabel.setForeground(new java.awt.Color(102, 102, 102));
         extractorNameLabel.setText("No extractor selected");
-        extractorPanel.add(extractorNameLabel, new java.awt.GridBagConstraints());
+        centeringPanel.add(extractorNameLabel, new java.awt.GridBagConstraints());
 
         iconLabel.setIcon(org.wandora.application.gui.UIBox.getIcon("gui/drop_extract.gif"));
-        extractorPanel.add(iconLabel, new java.awt.GridBagConstraints());
+        centeringPanel.add(iconLabel, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        extractorPanel.add(centeringPanel, gridBagConstraints);
+
+        infoPanel.setBackground(new java.awt.Color(255, 255, 255));
+        infoPanel.setLayout(new java.awt.GridBagLayout());
+
+        infoLabel.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        infoLabel.setForeground(new java.awt.Color(102, 102, 102));
+        infoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        infoLabel.setText("<html><p align=\"center\">Drop extractor applies selected \nextractor to dropped files/text. First, select \nextractor in the popup menu. Then, drop a file/text here to start \nextraction.</p></html>\n");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        infoPanel.add(infoLabel, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        extractorPanel.add(infoPanel, gridBagConstraints);
 
         tabbedPane.addTab("Extract", extractorPanel);
 
@@ -225,9 +254,12 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel centeringPanel;
     private javax.swing.JLabel extractorNameLabel;
     private javax.swing.JPanel extractorPanel;
     private javax.swing.JLabel iconLabel;
+    private javax.swing.JLabel infoLabel;
+    private javax.swing.JPanel infoPanel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane logTextPane;
     private javax.swing.JPanel loggerPanel;
@@ -312,7 +344,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
                 }
             }
             else {
-                WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
+                WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
             }
         }        
     }
@@ -330,7 +362,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
                 }
             }
             else {
-                WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
+                WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
             }
         }        
     }
@@ -348,7 +380,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
                 }
             }
             else {
-                WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
+                WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -383,6 +415,7 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
         try {
             //System.out.println("Drop!");
+            forceStop = false;
             DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             DataFlavor uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String");
@@ -599,12 +632,63 @@ public class DropExtractPanel extends JPanel implements ActionListener, MouseLis
 
     @Override
     public boolean forceStop() {
-        return false;
+        return forceStop;
     }
     
     
     private void dolog(String str) {
+        if(str.length() > 50000) {
+            str = str.substring(str.indexOf('\n'));
+        }
         log.append("\n").append(str);
     }
+    
+    
+
+    // -------------------------------------------------------------------------
+    
+    
+    @Override
+    public void componentResized(ComponentEvent e) {
+        handleComponentEvent(e);
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+        handleComponentEvent(e);
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+    }
+    
+    
+    public void handleComponentEvent(ComponentEvent e) {
+        try {
+            Dimension size = getSize();
+            Component c = this.getParent().getParent().getParent();
+            if(c != null) {
+                if(!(c instanceof JScrollPane)) {
+                    size = c.getSize();
+                }
+                if(!size.equals(getSize())) {
+                    //System.out.println("new size treemapcomponent: "+size);
+                    setPreferredSize(size);
+                    setMinimumSize(size);
+                    setSize(size);
+                }
+            }
+            revalidate();
+            repaint();
+        }
+        catch(Exception ex) {
+            // SKIP
+        }
+    }
+    
     
 }

@@ -30,6 +30,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -45,6 +46,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.gui.table.TopicTable;
 import org.wandora.topicmap.Locator;
@@ -179,6 +181,16 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         );
     }
 
+    
+    
+    public void removeResultScrollPanesMouseListeners() {
+        MouseWheelListener[] mouseWheelListeners = resultScrollPane.getMouseWheelListeners();
+        for(MouseWheelListener listener : mouseWheelListeners) {
+            resultScrollPane.removeMouseWheelListener(listener);
+        }
+    }
+    
+    
     
 
     public String getSimilarityQuery() {
@@ -510,6 +522,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         useNGrams = new SimpleCheckBox();
         runButtonPanel = new javax.swing.JPanel();
         searchButton = new SimpleButton();
+        resultPanelContainer = new javax.swing.JPanel();
+        resultScrollPane = new SimpleScrollPane();
         resultPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
@@ -750,13 +764,22 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         gridBagConstraints.weightx = 1.0;
         containerPanel.add(runButtonPanel, gridBagConstraints);
 
+        resultPanelContainer.setLayout(new java.awt.BorderLayout());
+
+        resultScrollPane.setBorder(null);
+
         resultPanel.setLayout(new java.awt.BorderLayout());
+        resultScrollPane.setViewportView(resultPanel);
+
+        resultPanelContainer.add(resultScrollPane, java.awt.BorderLayout.CENTER);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        containerPanel.add(resultPanel, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        containerPanel.add(resultPanelContainer, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -805,6 +828,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane optionsTabbedPane;
     private javax.swing.JPanel resultPanel;
+    private javax.swing.JPanel resultPanelContainer;
+    private javax.swing.JScrollPane resultScrollPane;
     private javax.swing.JPanel runButtonPanel;
     private javax.swing.JButton searchButton;
     private javax.swing.JCheckBox similarityBasenameCheckBox;

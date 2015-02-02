@@ -29,6 +29,8 @@ package org.wandora.application.gui.topicpanels;
  */
 
 
-public class QueryEditorTopicPanel extends org.wandora.application.gui.topicpanels.queryeditorpanel.QueryEditorTopicPanel {
+public class QueryEditorTopicPanel /* extends org.wandora.application.gui.topicpanels.queryeditorpanel.QueryEditorTopicPanel */ {
+    
+    // The QueryEditorTopicPanel has been disabled for release 2015-02-03.
     
 }

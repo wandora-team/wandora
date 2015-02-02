@@ -29,6 +29,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JScrollPane;
@@ -40,6 +41,7 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
@@ -80,6 +82,15 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     }
 
 
+    
+    public void removeResultScrollPanesMouseListeners() {
+        MouseWheelListener[] mouseWheelListeners = resultScrollPane.getMouseWheelListeners();
+        for(MouseWheelListener listener : mouseWheelListeners) {
+            resultScrollPane.removeMouseWheelListener(listener);
+        }
+    }
+    
+    
     
     private void readStoredTmqlQueries() {
         storedTmqlQueries = new ArrayList<Tuples.T2<String,String>>();
@@ -209,6 +220,8 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         tmqlButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
         clearResultsButton = new SimpleButton();
+        tmqlResultContainerPanel = new javax.swing.JPanel();
+        resultScrollPane = new SimpleScrollPane();
         tmqlResultPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
@@ -261,6 +274,7 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         tmqlPanel.add(selectQueryPanel1, gridBagConstraints);
 
+        tmqlScrollPane.setMinimumSize(new java.awt.Dimension(23, 100));
         tmqlScrollPane.setPreferredSize(new java.awt.Dimension(2, 150));
         tmqlScrollPane.setViewportView(tmqlTextPane);
 
@@ -305,15 +319,24 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(tmqlButtonPanel, gridBagConstraints);
 
+        tmqlResultContainerPanel.setLayout(new java.awt.BorderLayout());
+
+        resultScrollPane.setBorder(null);
+
         tmqlResultPanel.setLayout(new java.awt.BorderLayout());
+        resultScrollPane.setViewportView(tmqlResultPanel);
+
+        tmqlResultContainerPanel.add(resultScrollPane, java.awt.BorderLayout.CENTER);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(tmqlResultPanel, gridBagConstraints);
+        add(tmqlResultContainerPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tmqlComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tmqlComboBoxActionPerformed
@@ -373,11 +396,13 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     private javax.swing.JButton addTmqlButton;
     private javax.swing.JButton clearResultsButton;
     private javax.swing.JButton delTmqlButton;
+    private javax.swing.JScrollPane resultScrollPane;
     private javax.swing.JButton runButton;
     private javax.swing.JPanel selectQueryPanel1;
     private javax.swing.JPanel tmqlButtonPanel;
     private javax.swing.JComboBox tmqlComboBox;
     private javax.swing.JPanel tmqlPanel;
+    private javax.swing.JPanel tmqlResultContainerPanel;
     private javax.swing.JPanel tmqlResultPanel;
     private javax.swing.JScrollPane tmqlScrollPane;
     private javax.swing.JTextPane tmqlTextPane;
