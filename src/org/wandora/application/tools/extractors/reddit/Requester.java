@@ -26,7 +26,6 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.request.BaseRequest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,7 +56,6 @@ class Requester {
     Unirest.setDefaultHeader("User-Agent", ua);
     this.timer = new Timer();
     this.checker = new RequestChecker();
-    System.out.println("Scheduling checker!");
     timer.schedule(this.checker, 0, INTERVAL);
   }
 
@@ -115,9 +113,7 @@ class Requester {
     
     @Override
     public void run() {
-      
-      // System.out.println("Checking requests");
-      
+            
       long currentTime = System.currentTimeMillis();
       long timeDelta = currentTime - this.lastRequest;
       

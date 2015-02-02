@@ -37,7 +37,7 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
 
 

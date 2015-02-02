@@ -24,22 +24,16 @@ package org.wandora.application.tools.extractors.reddit;
 
 /**
  *
- * @author Eero
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
-import java.io.File;
-import java.net.URL;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.CLOSE;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
-import org.wandora.application.tools.extractors.AbstractExtractor;
-import org.wandora.topicmap.TopicMap;
 
-import org.wandora.application.tools.extractors.reddit.AbstractRedditExtractor;
 
 
 public class RedditExtractor extends AbstractWandoraTool{

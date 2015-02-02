@@ -49,7 +49,7 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
 public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
@@ -558,8 +558,6 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             }
         }
 
-        System.out.println("getting more...");
-
         MultipartBody r = Unirest.post(apiRoot + "api/morechildren")
                 .header("accept", "application/json")
                 .header("User-Agent", uaString)
@@ -767,7 +765,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
         } catch (Exception e) {
 
-            System.out.println("failed to add type " + kind);
+            log("failed to add type " + kind);
         }
 
         addCommentOccurenceData(tm, commentData, commentTopic);
