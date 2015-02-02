@@ -22,7 +22,8 @@
 
 package org.wandora.application.tools.extractors.reddit;
 
-import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import java.util.HashMap;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -33,13 +34,22 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-abstract class AbstractCallback<Object> implements Callback<Object> {
+abstract class ParseCallback<Object> {
+  
+  
   
   TopicMap tm;
   HashMap<String, Topic> thingTypes;
-  protected void init(TopicMap tm, HashMap<String, Topic> thingTypes) {
+  ParseCallback(TopicMap tm, HashMap<String, Topic> thingTypes) {
     this.tm = tm;
     this.thingTypes = thingTypes;
   }
+  
+  ParseCallback() {
+    this(null ,null);
+  }
+  
+  abstract protected void run(HttpResponse<JsonNode> response);
+
   
 }

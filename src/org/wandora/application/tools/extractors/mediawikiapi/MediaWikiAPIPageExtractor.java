@@ -24,6 +24,7 @@ package org.wandora.application.tools.extractors.mediawikiapi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.wandora.dep.json.*;
 import java.net.URL;
 
@@ -39,6 +40,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.Locator;
@@ -298,10 +301,13 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             .append(title);
 
         HttpResponse<InputStream> resp;
-
-        resp = Unirest.get(queryBuilder.toString())
-                .header("accept", "text/x-wiki")
-                .asBinary();
+        try {
+          resp = Unirest.get(queryBuilder.toString())
+                  .header("accept", "text/x-wiki")
+                  .asBinary();
+        } catch (UnirestException ex) {
+          throw new IOException(ex);
+        }
 
         InputStream body = resp.getBody();
         String bodyString = IOUtils.toString(body,"UTF-8"); 
@@ -325,10 +331,13 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         try {
             
             HashMap<String,String> info = new HashMap<String, String>();
-            
+          try {            
             resp = Unirest.post(this.baseURL + "/api.php")
                     .fields(fields)
                     .asJson();
+          } catch (UnirestException ex) {
+            throw new IOException(ex);
+          }
 
             JsonNode body = resp.getBody();
             
@@ -371,10 +380,13 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         HttpResponse<JsonNode> resp;
 
         try {
-            
-            resp = Unirest.post(this.baseURL + "/api.php")
-                    .fields(fields)
-                    .asJson();
+            try {            
+              resp = Unirest.post(this.baseURL + "/api.php")
+                      .fields(fields)
+                      .asJson();
+            } catch (UnirestException ex) {
+              throw new IOException(ex);
+            }
             
             JsonNode body = resp.getBody();
             JSONObject bodyObject = body.getObject();

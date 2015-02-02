@@ -22,15 +22,16 @@
 
 package org.wandora.application.tools.extractors.reddit;
 
+import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.request.BaseRequest;
-import com.mashape.unirest.request.HttpRequest;
-import com.mashape.unirest.request.HttpRequestWithBody;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * 
@@ -48,41 +49,56 @@ class Requester {
 
   private Timer timer;
   private RequestChecker checker;
+  
+  private int nRunning;
 
-  public Requester() {
+  public Requester(String ua) {
+    Unirest.clearDefaultHeaders();
+    Unirest.setDefaultHeader("User-Agent", ua);
     this.timer = new Timer();
     this.checker = new RequestChecker();
     System.out.println("Scheduling checker!");
     timer.schedule(this.checker, 0, INTERVAL);
   }
 
-  protected void doRequest(BaseRequest hr, Callback<JsonNode> callback) {
+  protected void doRequest(BaseRequest hr, ParseCallback<JsonNode> callback) {
 
-    Request r = new Request(hr, callback);
+    Request r;
+    r = new Request(hr, callback);
+    
     this.checker.addRequest(r); // Queue up the request.
   }
   
   protected void cancel(){
     timer.cancel();
   }
-
+  
+  protected boolean hasJobs(){
+    return !this.checker.requests.isEmpty() || nRunning > 0;
+  }
 
   class Request {
 
     private BaseRequest request;
-    private Callback<JsonNode> callback;
+    private ParseCallback<JsonNode> callback;
     
-    Request(BaseRequest r, Callback<JsonNode> callback) {
+    Request(BaseRequest r, ParseCallback<JsonNode> callback) {
       this.request = r;
       this.callback = callback;
     }
     
     protected void run(){
-            this.request
-            .asJsonAsync(this.callback);
+      Future<HttpResponse<JsonNode>> f = this.request.asJsonAsync();
+      try {
+        callback.run(f.get());
+      } catch (InterruptedException | ExecutionException e) {
+      }
+      
     }
     
   }
+  
+  
   class RequestChecker extends TimerTask{
 
     private ArrayList<Request> requests;
@@ -100,7 +116,7 @@ class Requester {
     @Override
     public void run() {
       
-      System.out.println("Checking requests");
+      // System.out.println("Checking requests");
       
       long currentTime = System.currentTimeMillis();
       long timeDelta = currentTime - this.lastRequest;
@@ -108,12 +124,13 @@ class Requester {
       // Skip execution if last request was done recently
       if(this.requests.isEmpty() || timeDelta < REQUEST_DELAY) return;
       
+      nRunning++;
       Request r = this.requests.remove(0);
       
       r.run();
       this.lastRequest = System.currentTimeMillis();
       
-      
+      nRunning--;
     }
     
   }

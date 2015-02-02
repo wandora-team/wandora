@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>13</x>
-      <y>8</y>
+      <x>526</x>
+      <y>211</y>
       <width>1200</width>
       <height>700</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>500</verticalsplitter>
+      <verticalsplitter>532</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -84,7 +84,8 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
             <classesRootPanel>true</classesRootPanel>
             <previewPanel>false</previewPanel>
          </view>
-         <variant_gui>schema</variant_gui>
+         <nameUI>schema</nameUI>
+         <namePanelOrientation>vertical</namePanelOrientation>
       </traditionalTopicPanel>
       <graphTopicPanel>
          <labelEdges>1</labelEdges>
@@ -238,27 +239,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <map>remote-wandora</map>
       </connection>
    </remoteconnections>
-   <topictreetypes>
-      <type>
-         <name>Instances</name>
-         <assocsi></assocsi>
-         <icon>gui/icons/topictree/instanceof.png</icon>
-         <subsi></subsi>
-         <supersi></supersi>
-      </type>
-      <type>
-         <name>Subclasses</name>
-         <assocsi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass</assocsi>
-         <subsi>http://www.topicmaps.org/xtm/1.0/core.xtm#subclass</subsi>
-         <icon>gui/icons/topictree/supersubclass.png</icon>
-         <supersi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass</supersi>
-      </type>
-   </topictreetypes>
    <helpviewer>http://wandora.org/wiki/__HELP__</helpviewer>
    <copycommand></copycommand>
    <tool>
       <path>org/wandora/application/tools</path>
       <path>org/wandora/application/tools/exporters</path>
+      <path>org/wandora/application/tools/exporters/simberg</path>
       <path>org/wandora/application/tools/extractors</path>
       <path>org/wandora/application/tools/importers</path>
       <path>org/wandora/application/tools/importers/graphs</path>
@@ -333,13 +319,19 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/extractors/bookmark</path>
       <path>org/wandora/application/tools/fng/opendata/v2</path>
       <path>org/wandora/application/tools/fng/opendata/v2b</path>
+      <path>org/wandora/application/tools/fng/opendata/simberg</path>
       <path>org/wandora/application/tools/extractors/excel</path>
       <path>org/wandora/application/tools/extractors/duckduckgo</path>
       <path>org/wandora/application/tools/extractors/mediawikiapi</path>
       <path>org/wandora/application/tools/extractors/britishlibrary</path>
+      <path>org/wandora/application/tools/extractors/rekognition</path>
+      <path>org/wandora/application/tools/extractors/umbel</path>
       <path>org/wandora/application/tools/server</path>
       <path>org/wandora/application/tools/webview</path>
       <path>org/wandora/application/tools/r</path>
+      <path>org/wandora/application/tools/extractors/watson</path>
+      <path>org/wandora/application/tools/docking/add</path>
+      <path>org/wandora/application/tools/docking</path>
       <set>
          <name>generator</name>
          <item>
@@ -405,6 +397,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.importers.XSLImport</class>
          </item>
          <item>
+            <name>Import topic maps from Waiana...</name>
+            <class>org.wandora.application.tools.maiana.MaianaImport</class>
+         </item>
+         <item>
             <name>--- RDF FORMATS ---</name>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
@@ -453,10 +449,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
          <item>
-            <name>Import topic maps from Maiana...</name>
-            <class>org.wandora.application.tools.maiana.MaianaImport</class>
-         </item>
-         <item>
             <name>SQL topic map import...</name>
             <class>org.wandora.application.tools.importers.SQLTopicMapImport</class>
          </item>
@@ -476,6 +468,38 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>Freebase extractor...</name>
                <class>org.wandora.application.tools.extractors.freebase.FreebaseExtractor</class>
+            </item>
+            <item>
+               <name>--- UMBEL ---</name>
+               <class>org.wandora.application.tools.DummyTool</class>
+            </item>
+            <item>
+               <name>Search Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelSearchConcept</class>
+            </item>
+            <item>
+               <name>Get Umbel concept...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetConcept</class>
+            </item>
+            <item>
+               <name>Get Umbel super type...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperType</class>
+            </item>
+            <item>
+               <name>Get broader Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetBroader</class>
+            </item>
+            <item>
+               <name>Get narrower Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetNarrower</class>
+            </item>
+            <item>
+               <name>Get subclass Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSubclasses</class>
+            </item>
+            <item>
+               <name>Get superclass Umbel concepts...</name>
+               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperclasses</class>
             </item>
          </item>
          <item>
@@ -577,6 +601,30 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>Alchemy sentiment extractor...</name>
                <class>org.wandora.application.tools.extractors.alchemy.AlchemySentimentExtractor</class>
+            </item>
+            <item>
+               <name>Alchemy relation extractor...</name>
+               <class>org.wandora.application.tools.extractors.alchemy.AlchemyRelationExtractor</class>
+            </item>
+            <item>
+               <name>Alchemy image keyword extractor...</name>
+               <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
+            </item>
+            <item>
+               <name>Alchemy face detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.alchemy.AlchemyFaceDetection</class>
+            </item>
+            <item>
+               <name>--- REKOGNITION ---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>ReKognition face detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.rekognition.RekognitionFaceDetector</class>
+            </item>
+            <item>
+               <name>ReKognition scene detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.rekognition.RekognitionSceneDetector</class>
             </item>
          </item>
          <item>
@@ -764,20 +812,48 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>OCR extractor...</name>
                <class>org.wandora.application.tools.extractors.ocr.OCRExtractor</class>
             </item>
+            <item>
+               <name>--- IMAGE RECOGNITION ---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>Alchemy face detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.alchemy.AlchemyFaceDetection</class>
+            </item>
+            <item>
+               <name>Alchemy image keyword extractor...</name>
+               <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
+            </item>
+            <item>
+               <name>ReKognition face detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.rekognition.RekognitionFaceDetector</class>
+            </item>
+            <item>
+               <name>ReKognition scene detection extractor...</name>
+               <class>org.wandora.application.tools.extractors.rekognition.RekognitionSceneDetector</class>
+            </item>
          </item>
          <item>
             <name>Simple files</name>
             <item>
-               <name>Simple CSV association extractor...</name>
-               <class>org.wandora.application.tools.extractors.csv.SimpleCSVAssociationExtractor</class>
+               <name>Directory structure extractor...</name>
+               <class>org.wandora.application.tools.extractors.files.DirectoryStructureExtractor2</class>
             </item>
             <item>
-               <name>Directory structure extractor...</name>
+               <name>(Old) Directory structure extractor...</name>
                <class>org.wandora.application.tools.extractors.files.DirectoryStructureExtractor</class>
             </item>
             <item>
                <name>Simple document extractor...</name>
                <class>org.wandora.application.tools.extractors.files.SimpleDocumentExtractor</class>
+            </item>
+            <item>
+               <name>---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>Simple CSV association extractor...</name>
+               <class>org.wandora.application.tools.extractors.csv.SimpleCSVAssociationExtractor</class>
             </item>
             <item>
                <name>JPEG PS3.0 metadata extractor...</name>
@@ -804,26 +880,54 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             </item>
             <item>
                <name>HTML link extractor...</name>
-               <class>org.wandora.application.tools.extractors.JsoupHTMLLinkStructureExtractor</class>
+               <class>org.wandora.application.tools.extractors.HTMLLinkStructureExtractor</class>
             </item>
             <item>
                <name>HTML property table extractor...</name>
-               <class>org.wandora.application.tools.extractors.table.JsoupPropertyTableExtractor</class>
+               <class>org.wandora.application.tools.extractors.table.PropertyTableExtractor</class>
             </item>
             <item>
                <name>HTML association table extractor...</name>
-               <class>org.wandora.application.tools.extractors.table.JsoupAssociationRowTableExtractor</class>
+               <class>org.wandora.application.tools.extractors.table.AssociationRowTableExtractor</class>
             </item>
             <item>
                <name>HTML instance list extractor...</name>
-               <class>org.wandora.application.tools.extractors.list.JsoupInstanceListExtractor</class>
+               <class>org.wandora.application.tools.extractors.list.InstanceListExtractor</class>
             </item>
             <item>
                <name>HTML super-subclass list extractor...</name>
-               <class>org.wandora.application.tools.extractors.list.JsoupSuperSubClassListExtractor</class>
+               <class>org.wandora.application.tools.extractors.list.SuperSubClassListExtractor</class>
             </item>
             <item>
                <name>HTML definition list extractor...</name>
+               <class>org.wandora.application.tools.extractors.list.DefinitionListExtractor</class>
+            </item>
+            <item>
+               <name>--- SIMPLE ---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>JSOUP HTML link extractor...</name>
+               <class>org.wandora.application.tools.extractors.JsoupHTMLLinkStructureExtractor</class>
+            </item>
+            <item>
+               <name>JSOUP HTML property table extractor...</name>
+               <class>org.wandora.application.tools.extractors.table.JsoupPropertyTableExtractor</class>
+            </item>
+            <item>
+               <name>JSOUP HTML association table extractor...</name>
+               <class>org.wandora.application.tools.extractors.table.JsoupAssociationRowTableExtractor</class>
+            </item>
+            <item>
+               <name>JSOUP HTML instance list extractor...</name>
+               <class>org.wandora.application.tools.extractors.list.JsoupInstanceListExtractor</class>
+            </item>
+            <item>
+               <name>JSOUP HTML super-subclass list extractor...</name>
+               <class>org.wandora.application.tools.extractors.list.JsoupSuperSubClassListExtractor</class>
+            </item>
+            <item>
+               <name>JSOUP HTML definition list extractor...</name>
                <class>org.wandora.application.tools.extractors.list.JsoupDefinitionListExtractor</class>
             </item>
          </item>
@@ -970,16 +1074,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.exporters.ExportTopicMap</class>
          </item>
          <item>
-            <name>Export schema as topic map...</name>
-            <class>org.wandora.application.tools.exporters.ExportSchemaMap</class>
-         </item>
-         <item>
-            <name>Export topic map to Maiana...</name>
+            <name>Export topic map to Waiana...</name>
             <class>org.wandora.application.tools.maiana.MaianaExport</class>
-         </item>
-         <item>
-            <name>XTM round trip...</name>
-            <class>org.wandora.application.tools.exporters.XTMRoundTrip</class>
          </item>
          <item>
             <name>--- RDF FORMATS ---</name>
@@ -1062,8 +1158,43 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.exporters.LuceneIndexBuilder</class>
          </item>
          <item>
-            <name>FNG open data dublin core exporter...</name>
-            <class>org.wandora.application.tools.fng.opendata.v2b.FngOpenDataDublinCoreExporter</class>
+            <name>XTM round trip...</name>
+            <class>org.wandora.application.tools.exporters.XTMRoundTrip</class>
+         </item>
+         <item>
+            <name>Export schema as topic map...</name>
+            <class>org.wandora.application.tools.exporters.ExportSchemaMap</class>
+         </item>
+         <item>
+            <name>--- FINNISH NATIONAL GALLERY ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Finnish National Gallery</name>
+            <item>
+               <name>FNG open data dublin core exporter...</name>
+               <class>org.wandora.application.tools.fng.opendata.v2b.FngOpenDataDublinCoreExporter</class>
+            </item>
+            <item>
+               <name>--- SIMBERG ---</name>
+               <class>org.wandora.application.tools.DummyTool</class>
+            </item>
+            <item>
+               <name>Simberg open data exporter...</name>
+               <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOpenDataExporter</class>
+            </item>
+            <item>
+               <name>Simberg OAI DC exporter...</name>
+               <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOAIDCExporter</class>
+            </item>
+            <item>
+               <name>Simberg LIDO exporter...</name>
+               <class>org.wandora.application.tools.fng.opendata.simberg.SimbergLIDOExporter</class>
+            </item>
+            <item>
+               <name>Simberg JSON exporter....</name>
+               <class>org.wandora.application.tools.exporters.simberg.SimbergExport</class>
+            </item>
          </item>
       </set>
       <set>
@@ -1102,7 +1233,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
          <item>
             <name>HTML definition list extractor</name>
-            <class>org.wandora.application.tools.extractors.list.DefinitionListExtrator</class>
+            <class>org.wandora.application.tools.extractors.list.DefinitionListExtractor</class>
          </item>
          <item>
             <name>Any23 extractor</name>
@@ -1295,6 +1426,33 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.extractors.flickr.GroupInfoExtractor</class>
          </item>
       </set>
+      <set>
+         <name>Panel buttons</name>
+         <item>
+            <name>Add traditional</name>
+            <class>org.wandora.application.tools.docking.add.AddTraditional</class>
+         </item>
+         <item>
+            <name>Add tree</name>
+            <class>org.wandora.application.tools.docking.add.AddTree</class>
+         </item>
+         <item>
+            <name>Add search</name>
+            <class>org.wandora.application.tools.docking.add.AddSearch</class>
+         </item>
+         <item>
+            <name>Add graph</name>
+            <class>org.wandora.application.tools.docking.add.AddGraph</class>
+         </item>
+         <item>
+            <name>Add sketch grid</name>
+            <class>org.wandora.application.tools.docking.add.AddSketchGrid</class>
+         </item>
+         <item>
+            <name>Add web view</name>
+            <class>org.wandora.application.tools.docking.add.AddWebView</class>
+         </item>
+      </set>
    </tool>
    <basemap>resources/conf/wandora.xtm</basemap>
    <shortcuts>
@@ -1304,7 +1462,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </shortcuts>
    <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
    <current>
-      <directory>/home/olli/grip/kokoelmat/webapp/WEB-INF</directory>
+      <directory>/home/olli/grip/simberg/html</directory>
       <port></port>
       <user></user>
       <host></host>
@@ -1350,13 +1508,34 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <bsh>
       <path></path>
    </bsh>
-   <httpuseragent>Wandora</httpuseragent>
+   <httpuseragent>java:org.wandora</httpuseragent>
    <trees>
+      <type>
+         <name>Instances</name>
+         <assocsi></assocsi>
+         <icon>gui/icons/topictree/instanceof.png</icon>
+         <subsi></subsi>
+         <supersi></supersi>
+      </type>
+      <type>
+         <name>Subclasses</name>
+         <assocsi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass</assocsi>
+         <subsi>http://www.topicmaps.org/xtm/1.0/core.xtm#subclass</subsi>
+         <icon>gui/icons/topictree/supersubclass.png</icon>
+         <supersi>http://www.topicmaps.org/xtm/1.0/core.xtm#superclass</supersi>
+      </type>
+      <type>
+         <name>Default association</name>
+         <assocsi>http://wandora.org/si/core/default-association</assocsi>
+         <subsi>http://wandora.org/si/core/default-role-2</subsi>
+         <icon>gui/icons/topictree/box.png</icon>
+         <supersi>http://wandora.org/si/core/default-role-1</supersi>
+      </type>
       <tree>
          <root>http://wandora.org/si/core/wandora-class</root>
          <name>Topics</name>
-         <association>Instances</association>
-         <association>Subclasses</association>
+         <relation>Instances</relation>
+         <relation>Subclasses</relation>
       </tree>
    </trees>
    <lsystems>

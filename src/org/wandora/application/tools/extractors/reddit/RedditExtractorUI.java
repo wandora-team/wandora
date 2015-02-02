@@ -23,6 +23,7 @@ package org.wandora.application.tools.extractors.reddit;
 
 import com.mashape.unirest.http.*;
 import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
@@ -101,7 +102,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         WandoraTool wt;
         ArrayList<WandoraTool> wts = new ArrayList();
 
-        String id = null;
+        String id;
         String query = "";
         String extractUrl = null;
 
@@ -109,7 +110,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         RedditThingExtractor ex = new RedditThingExtractor();
 
-        HashMap<String, Boolean> crawling = new HashMap<String, Boolean>();
+        HashMap<String, Boolean> crawling = new HashMap<>();
         crawling.put("more", crawlToggle.isSelected());
         crawling.put("linkSubreddit", crawlLinkSR.isSelected());
         crawling.put("linkComment", crawlLinkComment.isSelected());
@@ -144,8 +145,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
             } else if (selectedTab.equals(linkSearchTab)) {
 
-                id = linkField.getText();
-                ArrayList<String> urls = new ArrayList<String>();
+                ArrayList<String> urls = new ArrayList<>();
 
                 for (int i = 0; i < linkModel.getSize(); i++) {
                     urls.add(apiRoot + "api/info?url=" + linkModel.get(i));
@@ -172,12 +172,13 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         try {
             str = URLEncoder.encode(str, "utf-8");
         } catch (Exception e) {
+          System.out.println(e.getMessage());
         }
         return str;
     }
 
     private void threadPopulationCallback(HttpResponse<JsonNode> response) {
-        DefaultListModel model = new DefaultListModel();;
+        DefaultListModel model = new DefaultListModel();
         try {
             
             JSONObject resJson = response.getBody()
@@ -190,7 +191,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             
             threadResults = resJson
                     .getJSONObject("data")
-                    .getJSONArray("children");;
+                    .getJSONArray("children");
             JSONObject r;
 
             model = new DefaultListModel();
@@ -223,17 +224,9 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         String q = threadSearchField.getText();
 
-        Callback<JsonNode> callback = new Callback<JsonNode>() {
+        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
             @Override
-            public void failed(Exception e) {
-            }
-
-            @Override
-            public void cancelled() {
-            }
-
-            @Override
-            public void completed(HttpResponse<JsonNode> response) {
+            public void run(HttpResponse<JsonNode> response) {
                 threadPopulationCallback(response);
             }
         };
@@ -243,7 +236,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
     }
 
     private void subredditPopulationCallback(HttpResponse<JsonNode> response) {
-        DefaultListModel model = new DefaultListModel();;
+        DefaultListModel model = new DefaultListModel();
         try {
             JSONObject resJson = response.getBody()
                     .getObject();
@@ -253,15 +246,15 @@ public class RedditExtractorUI extends javax.swing.JPanel {
               throw new JSONException("API error: " + statusToPhrase((int)error));
             }
             
-            threadResults = resJson
+            subredditResults = resJson
                     .getJSONObject("data")
-                    .getJSONArray("children");;
+                    .getJSONArray("children");
             JSONObject r;
 
             model = new DefaultListModel();
-            for (int i = 0; i < threadResults.length(); i++) {
+            for (int i = 0; i < subredditResults.length(); i++) {
 
-                r = threadResults.getJSONObject(i).getJSONObject("data");
+                r = subredditResults.getJSONObject(i).getJSONObject("data");
                
                 StringBuilder titleBuilder = new StringBuilder();
                 titleBuilder
@@ -278,6 +271,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             subredditSearchSubmit.setText("Search");
             subredditSearchSubmit.setEnabled(true);
         }
+        
     }
 
     private void populateSubredditSearch() {
@@ -287,17 +281,9 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         String q = subredditSearchField.getText();
 
-        Callback<JsonNode> callback = new Callback<JsonNode>() {
+        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
             @Override
-            public void failed(Exception e) {
-            }
-
-            @Override
-            public void cancelled() {
-            }
-
-            @Override
-            public void completed(HttpResponse<JsonNode> response) {
+            public void run(HttpResponse<JsonNode> response) {
                 subredditPopulationCallback(response);
             }
         };

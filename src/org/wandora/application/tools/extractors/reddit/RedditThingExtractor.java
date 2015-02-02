@@ -23,21 +23,15 @@
 package org.wandora.application.tools.extractors.reddit;
 
 import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.async.Callback;
 import org.wandora.dep.json.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import org.apache.commons.io.IOUtils;
 import org.wandora.topicmap.TopicMap;
-import java.util.List;
 
 
 import java.util.HashMap;
-import java.util.concurrent.Future;
-import org.wandora.application.Wandora;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
@@ -82,23 +76,28 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
                 
         log("handling url " + str);
         
-        Callback<JsonNode> callback = new Callback<JsonNode>() {
+        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
             @Override
-            public void failed(Exception e){}
-            @Override
-            public void cancelled(){}
-            @Override
-            public void completed(HttpResponse<JsonNode> response){
+            public void run(HttpResponse<JsonNode> response){
                 try {
                     parse(response);
                 } catch (JSONException | TopicMapException e) {
-                    e.printStackTrace();
+                    log(e.getMessage());
                 }
             }
             
         };
         
         requester.doRequest(Unirest.get(str), callback);
+        
+        boolean shouldQuit = false;
+        
+        while(!shouldQuit){
+           Thread.sleep(1000);
+           shouldQuit = forceStop() || !requester.hasJobs();
+        }
+        
+        requester.cancel();
         
         return true;
     }
