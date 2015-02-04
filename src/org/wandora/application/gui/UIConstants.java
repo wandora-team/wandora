@@ -29,9 +29,6 @@ package org.wandora.application.gui;
 
 
 import java.awt.*;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import javax.swing.border.*;
 import javax.swing.*;
 import org.wandora.application.gui.filechooser.WPRFileChooser;
@@ -40,6 +37,8 @@ import org.wandora.application.gui.simple.*;
 
 
 /**
+ * UIContants class contains static variables related to Wandora's user interface.
+ * Static variables include fonts and colors used by the application.
  *
  * @author akivela
  */

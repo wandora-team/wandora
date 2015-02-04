@@ -723,12 +723,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>Twitter extractor...</name>
                <class>org.wandora.application.tools.extractors.twitter.TwitterExtractor</class>
             </item>
-            <!--
             <item>
                <name>Reddit extractor...</name>
                <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
             </item>
-            -->
          </item>
          <item>
             <name>Services</name>
