@@ -146,7 +146,7 @@ public class MaianaExport extends AbstractExportTool implements WandoraTool {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 tm.exportXTM(out);
 
-                String json = MaianaUtils.getExportTemplate(maianaPanel.getApiKey(), maianaPanel.getShortName(), maianaPanel.getTopicMapName(), maianaPanel.isPublic(), maianaPanel.isDownloable(), maianaPanel.isEditable(), maianaPanel.isSchema(), out.toString());
+                String json = MaianaUtils.getExportTemplate(maianaPanel.getApiKey(), maianaPanel.getShortName(), maianaPanel.getTopicMapName(), maianaPanel.isPublic(), maianaPanel.isDownloable(), maianaPanel.isEditable(), maianaPanel.isSchema(), out.toString("UTF-8"));
               
                 String apiEndPoint = maianaPanel.getApiEndPoint();
                 MaianaUtils.checkForLocalService(apiEndPoint);
