@@ -74,7 +74,7 @@ public class RedditExtractor extends AbstractWandoraTool{
     @Override
     public void execute(Wandora wandora, Context context) {
         try {
-            AbstractRedditExtractor.setRequester(Wandora.USER_AGENT + " (by /u/spootze)");
+            AbstractRedditExtractor.setRequester(Wandora.USER_AGENT);
             if(ui == null) {
                 ui = new RedditExtractorUI();
             }
