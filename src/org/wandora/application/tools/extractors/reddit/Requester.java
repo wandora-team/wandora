@@ -25,6 +25,8 @@ package org.wandora.application.tools.extractors.reddit;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.BaseRequest;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -86,12 +88,29 @@ class Requester {
     }
     
     protected void run(){
-      Future<HttpResponse<JsonNode>> f = this.request.asJsonAsync();
-      try {
-        callback.run(f.get());
-      } catch (InterruptedException | ExecutionException e) {
-      }
       
+      this.request.asJsonAsync(new Callback<JsonNode>() {
+
+        @Override
+        public void completed(HttpResponse<JsonNode> response) {
+          callback.run(response);
+        }
+
+        @Override
+        public void failed(UnirestException e) {
+          try {
+            HttpResponse<String> s = request.asString();
+            callback.error(e, s.getBody());
+          } catch (Exception e2) {
+            callback.error(e2);
+          }
+        }
+
+        @Override
+        public void cancelled() {
+          callback.error(new Exception("Request was cancelled"));
+        }
+      });
     }
     
   }
@@ -112,7 +131,7 @@ class Requester {
     }
     
     @Override
-    public void run() {
+    public void run(){
             
       long currentTime = System.currentTimeMillis();
       long timeDelta = currentTime - this.lastRequest;

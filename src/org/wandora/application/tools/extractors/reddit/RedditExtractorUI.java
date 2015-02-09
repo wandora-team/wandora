@@ -200,7 +200,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
                 titleBuilder
                         .append("[r/").append(r.getString("subreddit"))
                         .append("] ").append(r.getString("title"))
-                        .append(" - ").append(r.getString("score"));
+                        .append(" - ").append(r.getInt("score"));
                 model.add(i, titleBuilder.toString());
             }
             //threadResList.setModel(model);
@@ -226,6 +226,14 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             @Override
             public void run(HttpResponse<JsonNode> response) {
                 threadPopulationCallback(response);
+            }
+            @Override
+            protected void error(Exception e, String body) {
+              DefaultListModel model = new DefaultListModel();
+              model.add(0, e.getMessage());
+              threadResList.setModel(model);
+              threadSearchSubmit.setText("Search");
+              threadSearchSubmit.setEnabled(true);
             }
         };
 
@@ -283,6 +291,14 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             @Override
             public void run(HttpResponse<JsonNode> response) {
                 subredditPopulationCallback(response);
+            }
+            @Override
+            protected void error(Exception e, String body) {
+              DefaultListModel model = new DefaultListModel();
+              model.add(0, e.getMessage());
+              subredditResList.setModel(model);
+              subredditSearchSubmit.setText("Search");
+              subredditSearchSubmit.setEnabled(true);
             }
         };
 

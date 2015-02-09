@@ -509,16 +509,14 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             if (data.has("children")) {
                 JSONArray children = data.getJSONArray("children");
                 for (int i = 0; i < children.length(); i++) {
+                    JSONObject child;
                     try {
-                        JSONObject child = children.getJSONObject(i);
-                        if (child.getString("kind").equals(THING_TYPE_MORE)) {
-                            parseMore(data, child, tm, thingTypes);
-                        } else {
-                            parseThing(child, tm, thingTypes);
-                        }
+                        child = children.getJSONObject(i);
+                        
                     } catch (JSONException jse) {
-                        // child is not an json array... 
+                      continue;
                     }
+                    parseThing(child, tm, thingTypes);
 
                 }
             }
@@ -530,6 +528,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
           } catch (JSONException jsee) {
             log("The message JSON was invalid.");
           }
+          jse.printStackTrace();
           
         } catch (TopicMapException tme){
           log(tme.getMessage());
@@ -582,6 +581,15 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
               }
             } catch (Exception e) {
               log(e.getMessage());
+            }
+
+          }
+          @Override
+          protected void error(Exception e, String body) {
+            log(e.getMessage());
+            if(body != null){
+              log("Server responed with");
+              log(body);
             }
 
           }
@@ -644,7 +652,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                       JSONObject respObject = response.getBody().getObject();
                       Topic account = null;
                       if (respObject.has("kind")
-                              && respObject.getString("kind").equals("t2")) {
+                              && respObject.getString("kind").equals(THING_TYPE_ACCOUNT)) {
 
                           extracted.add(author);
                           account = parseAccount(respObject, thingTypes, tm);
@@ -659,6 +667,15 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                     }
 
                   }
+                  @Override
+                  protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
+                  }
 
                 };
                 
@@ -670,48 +687,62 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             
         }
 
-        if (linkData.has("subreddit")) {
+        try {
+          if (linkData.has("subreddit")) {
 
-            
-            String subredditId = linkData.getString("subreddit_id");
-            Topic subredditTopic = tm.getTopic(SI_ROOT + subredditId);
-            
-            associateSubreddit(tm, link, subredditTopic, thingTypes);
-            
-            final String subreddit = linkData.getString("subreddit");
-            if (!extracted.contains(subreddit) && CRAWL_SETTINGS.get("linkSubreddit")) {
-                
-                String subredditUrl = apiRoot + "r/" + subreddit + "/about.json";
-                
-                ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-                  @Override
-                  public void run(HttpResponse<JsonNode> response){
-                    try {
-                      JSONObject respObject = response.getBody().getObject();
-                      Topic subredditTopic = null;
-                      if (respObject.has("kind")
-                              && respObject.getString("kind").equals("t2")) {
 
-                          extracted.add(subreddit);
-                          subredditTopic = parseSubreddit(respObject, thingTypes, tm);
+              String subredditId = linkData.getString("subreddit_id");
+              String subredditName = linkData.getString("subreddit");
+              Topic subredditTopic = getOrCreateTopic(tm, SI_ROOT + subredditId);
 
+              associateSubreddit(tm, link, subredditTopic, thingTypes);
+
+              final String subreddit = linkData.getString("subreddit");
+              if (!extracted.contains(subreddit) && CRAWL_SETTINGS.get("linkSubreddit")) {
+
+                  String subredditUrl = apiRoot + "r/" + subreddit + "/about.json";
+
+                  ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                    @Override
+                    public void run(HttpResponse<JsonNode> response){
+                      try {
+                        JSONObject respObject = response.getBody().getObject();
+                        Topic subredditTopic = null;
+                        if (respObject.has("kind")
+                                && respObject.getString("kind").equals(THING_TYPE_SUBREDDIT)) {
+
+                            extracted.add(subreddit);
+                            subredditTopic = parseSubreddit(respObject, thingTypes, tm);
+
+                        }
+
+                        if (subredditTopic != null) {
+                            associateSubreddit(tm, link, subredditTopic, thingTypes);
+                        }
+                      } catch (JSONException | TopicMapException e) {
+                        log(e.getMessage());
                       }
-                      
-                      if (subredditTopic != null) {
-                          associateSubreddit(tm, link, subredditTopic, thingTypes);
-                      }
-                    } catch (JSONException | TopicMapException e) {
+
+                    }
+                    @Override
+                    protected void error(Exception e, String body) {
                       log(e.getMessage());
+                      if(body != null){
+                        log("Server responed with");
+                        log(body);
+                      }
+
                     }
 
-                  }
+                  };
 
-                };
-                
-                requester.doRequest(Unirest.get(subredditUrl), callback);
+                  requester.doRequest(Unirest.get(subredditUrl), callback);
 
-            }
-            
+              }
+
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
         }
         
         if (CRAWL_SETTINGS.get("linkComment")) {
@@ -726,11 +757,22 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                         // Object #0 is the link, which we skip here
                         parseThing(respArray.getJSONObject(1),tm,thingTypes);
                     } catch (Exception e) {
+                      log(e.getMessage());
                     }
+                  }
+                  @Override
+                  protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
                   }
 
                 };
             
+            System.out.println("Requesting " + commentUrl);
             requester.doRequest(Unirest.get(commentUrl), callback);
 
             
@@ -789,7 +831,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                     try {
                       JSONObject respObject = response.getBody().getObject();
                       if (respObject.has("kind")
-                              && respObject.getString("kind").equals("t2")) {
+                              && respObject.getString("kind").equals(THING_TYPE_ACCOUNT)) {
 
                           Topic account = parseAccount(respObject, thingTypes, tm);
                           associateAccount(tm, comment, account, thingTypes);
@@ -798,6 +840,15 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                       log(e.getMessage());
                     }
 
+                  }
+                  @Override
+                  protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
                   }
 
                 };
@@ -855,6 +906,15 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                     }
 
                   }
+                  @Override
+                  protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
+                  }
 
                 };
                 
@@ -899,9 +959,19 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                   JSONObject respObj = response.getBody().getObject();
                   parseThing(respObj, tm, thingTypes);
                 } catch (Exception e) {
+                  log(e.getMessage());
                 }
 
               }
+              @Override
+              protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
+                  }
 
             };
                 
@@ -916,6 +986,15 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                 JSONObject respObj = response.getBody().getObject();
                 parseThing(respObj, tm, thingTypes);
               } catch (Exception e) {
+                log(e.getMessage());
+              }
+            }
+            @Override
+            protected void error(Exception e, String body) {
+              log(e.getMessage());
+              if(body != null){
+                log("Server responed with");
+                log(body);
               }
 
             }
@@ -943,6 +1022,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         String id = subredditData.getString("name");
         String disp = subredditData.getString("display_name");
 
+        
         log("parsing subreddit: " + disp);
         
         Topic subredditTopic = getOrCreateTopic(tm, SI_ROOT + id);
@@ -964,6 +1044,15 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                 parseThing(respObj, tm, thingTypes);
               } catch (Exception e) {
                 log(e.getMessage());
+              }
+
+            }
+            @Override
+            protected void error(Exception e, String body) {
+              log(e.getMessage());
+              if(body != null){
+                log("Server responed with");
+                log(body);
               }
 
             }

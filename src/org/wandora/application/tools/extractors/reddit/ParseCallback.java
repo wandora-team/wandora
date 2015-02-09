@@ -34,9 +34,7 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-abstract class ParseCallback<Object> {
-  
-  
+abstract class ParseCallback<Object>{
   
   TopicMap tm;
   HashMap<String, Topic> thingTypes;
@@ -51,5 +49,11 @@ abstract class ParseCallback<Object> {
   
   abstract protected void run(HttpResponse<JsonNode> response);
 
+  protected void error(Exception e){
+    this.error(e, null);
+  }
+  
+  abstract protected void error(Exception e, String body);
+  
   
 }

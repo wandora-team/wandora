@@ -73,18 +73,25 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
-                
-        log("handling url " + str);
-        
+
         ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
-            @Override
-            public void run(HttpResponse<JsonNode> response){
-                try {
-                    parse(response);
-                } catch (JSONException | TopicMapException e) {
-                    log(e.getMessage());
-                }
+          @Override
+          public void run(HttpResponse<JsonNode> response){
+              try {
+                  parse(response);
+              } catch (JSONException | TopicMapException e) {
+                  log(e.getMessage());
+              }
+          }
+          @Override
+          protected void error(Exception e, String body) {
+            log(e.getMessage());
+            if(body != null){
+              log("Server responed with");
+              log(body);
             }
+
+          }
             
         };
         
@@ -93,7 +100,7 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
         boolean shouldQuit = false;
         
         while(!shouldQuit){
-           Thread.sleep(1000);
+           Thread.sleep(2000);
            shouldQuit = forceStop() || !requester.hasJobs();
         }
         
