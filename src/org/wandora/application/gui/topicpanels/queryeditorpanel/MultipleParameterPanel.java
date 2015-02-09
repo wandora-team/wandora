@@ -58,15 +58,36 @@ public class MultipleParameterPanel extends AbstractTypePanel {
     /**
      * Creates new form MultipleParameterPanel
      */
-    public MultipleParameterPanel(Parameter parameter,Class<? extends AbstractTypePanel> typeCls) {
-        super(parameter);
+    public MultipleParameterPanel(Parameter parameter,Class<? extends AbstractTypePanel> typeCls,DirectivePanel panel) {
+        super(parameter,panel);
         initComponents();
         this.typeCls=typeCls;
     }
 
     @Override
+    public synchronized void setValue(Object o){
+        for(Row row : rows){
+            row.panel.disconnect();
+        }
+        parametersPanel.removeAll();
+        rows.clear();
+        
+        Object[] a=(Object[])o;
+        for (Object ao : a) {
+            addParameter();
+            Row row=rows.get(rows.size()-1);
+            row.panel.setValue(ao);
+        }
+    }    
+    
+    @Override
     public Object getValue() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Object[] ret=new Object[rows.size()];
+        for(int i=0;i<rows.size();i++){
+            Row row=rows.get(i);
+            ret[i]=row.panel.getValue();
+        }        
+        return ret;
     }
 
     @Override
@@ -144,8 +165,8 @@ public class MultipleParameterPanel extends AbstractTypePanel {
     public synchronized void addParameter(){
         final AbstractTypePanel paramPanel;
         try{
-            Constructor c=typeCls.getConstructor(Parameter.class);
-            paramPanel=(AbstractTypePanel)c.newInstance(this.parameter);
+            Constructor c=typeCls.getConstructor(Parameter.class,DirectivePanel.class);
+            paramPanel=(AbstractTypePanel)c.newInstance(this.parameter,this.directivePanel);
         }catch(IllegalAccessException | InstantiationException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException | SecurityException e){
             Wandora.getWandora().handleError(e);
             return;

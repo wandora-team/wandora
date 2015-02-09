@@ -34,8 +34,8 @@ public class UnknownParameterTypePanel extends AbstractTypePanel {
     /**
      * Creates new form UnknownParameterTypePanel
      */
-    public UnknownParameterTypePanel(Parameter parameter) {
-        super(parameter);
+    public UnknownParameterTypePanel(Parameter parameter,DirectivePanel panel) {
+        super(parameter,panel);
         initComponents();
     }
     
@@ -44,6 +44,9 @@ public class UnknownParameterTypePanel extends AbstractTypePanel {
         parameterLabel.setText(label);
     }
     
+    @Override
+    public void setValue(Object o){
+    }
     
     @Override
     public Object getValue(){

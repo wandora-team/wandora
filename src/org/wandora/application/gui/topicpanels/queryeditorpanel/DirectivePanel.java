@@ -23,30 +23,20 @@
 
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
-import org.wandora.application.Wandora;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
-import org.wandora.query2.DirectiveUIHints.Addon;
-import org.wandora.query2.DirectiveUIHints.BoundParameter;
-import org.wandora.query2.DirectiveUIHints.Constructor;
-import org.wandora.query2.DirectiveUIHints.Parameter;
-import org.wandora.query2.Operand;
-import org.wandora.query2.TopicOperand;
 
 /**
  *
@@ -64,10 +54,9 @@ public class DirectivePanel extends javax.swing.JPanel {
     protected ConnectorAnchor toConnectorAnchor;
     protected ConnectorAnchor fromConnectorAnchor;
     
-    protected Constructor selectedConstructor;
-    protected AbstractTypePanel[] constructorParamPanels;
+    protected final ArrayList<ConnectorAnchor> paramsConnectors=new ArrayList<>();
     
-    protected final ArrayList<AddonPanel> addonPanels;
+    protected DirectiveParameters directiveParameters;
     
     protected Dimension normalDimensions;
     
@@ -78,8 +67,6 @@ public class DirectivePanel extends javax.swing.JPanel {
         initComponents();
         this.toConnectorAnchor=new ComponentConnectorAnchor(toDirectiveAnchor,ConnectorAnchor.Direction.RIGHT,true,false);
         this.fromConnectorAnchor=new ComponentConnectorAnchor(fromDirectiveAnchor,ConnectorAnchor.Direction.LEFT,false,true);
-        
-        addonPanels=new ArrayList<AddonPanel>();
     }
     
     protected boolean dragging=false;
@@ -119,9 +106,7 @@ public class DirectivePanel extends javax.swing.JPanel {
                 }
             }            
         });
-        
-        
-        
+                
         
         DnDTools.setDragSourceHandler(fromDirectiveAnchor, "directivePanel", DnDTools.directivePanelDataFlavor, new DnDTools.DragSourceCallback<DirectivePanel>() {
             @Override
@@ -140,7 +125,53 @@ public class DirectivePanel extends javax.swing.JPanel {
         });
     }
     
+    public ConnectorAnchor connectParamAnchor(ConnectorAnchor from){
+        synchronized(paramsConnectors){
+            final JPanel anchorComp=new JPanel();
+            
+            final GridLayout layout=(GridLayout)parameterDirectiveAnchors.getLayout();
+            layout.setColumns(paramsConnectors.size()+1);
+            parameterDirectiveAnchors.add(anchorComp);
+            
+            parameterDirectiveAnchors.revalidate();
+            
+            ComponentConnectorAnchor anchor=new ComponentConnectorAnchor(anchorComp,ConnectorAnchor.Direction.DOWN, true, false){
+                @Override
+                public boolean setFrom(ConnectorAnchor from) {
+                    boolean ret=super.setFrom(from); 
+                    if(from==null){
+                        parameterDirectiveAnchors.remove(anchorComp);
+                        layout.setColumns(paramsConnectors.size()-1);
+                        synchronized(paramsConnectors){
+                            paramsConnectors.remove(this);
+                        }
+                    }
+                    return ret;
+                }
+            };
+            paramsConnectors.add(anchor);
+            from.setTo(anchor);
+            return anchor;
+        }
+    }
+    
+    
+    public void saveDirectiveParameters(DirectiveParameters params){
+        this.directiveParameters=params;
+    }
+    
+    public DirectiveParameters getDirectiveParameters(){
+        return directiveParameters;
+    }
+    
+    public JPanel getEditorPanel(){
+        DirectiveEditor editor=new DirectiveEditor(this,hints);
+        
+        return editor;
+    }
+    
     protected Object build(boolean script){
+        /*
         Object o=constructorComboBox.getSelectedItem();
         if(o==null) return null;
         
@@ -155,10 +186,12 @@ public class DirectivePanel extends javax.swing.JPanel {
         catch(IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException | NoSuchMethodException e){
             Wandora.getWandora().handleError(e);
             return null;
-        }        
+        }        */
+        return null;
     }
     
     public String buildScript(){
+        /*
         String s=(String)build(true);
         
         for(AddonPanel addonPanel : addonPanels ){
@@ -178,13 +211,15 @@ public class DirectivePanel extends javax.swing.JPanel {
             return s+".from(\n"+s2+"\n)";
         }
         else return s;
+        */
+        return null;
     }
     
     public Directive buildDirective(){
         return (Directive)build(false);
         // TODO: Doesn't add connectors as From directives yet
     }
-    
+/*    
     public BoundParameter[] getParameters(boolean script){
         BoundParameter[] ret=new BoundParameter[constructorParamPanels.length];
         for(int i=0;i<constructorParamPanels.length;i++){
@@ -200,73 +235,8 @@ public class DirectivePanel extends javax.swing.JPanel {
         }
         return ret;
     }
-    
-    protected static class MinimizedComponent {
-        public Component component;
-        public Dimension minSize,prefSize,maxSize,size;
-        public ArrayList<MinimizedComponent> children=new ArrayList<>();
-        public MinimizedComponent(Component component){
-            this.component=component;
-            minSize=component.getMinimumSize();
-            prefSize=component.getPreferredSize();
-            maxSize=component.getMaximumSize();
-            size=component.getSize();
-            component.setMinimumSize(new Dimension(0,0));
-            component.setPreferredSize(new Dimension(0,0));
-            component.setMaximumSize(new Dimension(0,0));
-            component.setSize(new Dimension(0,0));
-            component.setVisible(false);
-/*            
-            if(component instanceof Container){
-                for(Component c : ((Container)component).getComponents()) {
-                    children.add(new MinimizedComponent(c));
-                }
-            }*/
-            component.invalidate();
-        }
-        public void restore(){
-            component.setMaximumSize(maxSize);
-            component.setPreferredSize(prefSize);
-            component.setMinimumSize(minSize);            
-            component.setSize(size);
-            component.setVisible(true);
-            
-//            for(MinimizedComponent mc : children) mc.restore();
-            component.invalidate();
-        }
-    }
-    protected final ArrayList<MinimizedComponent> minimizedComponents=new ArrayList<>();
-    
-    public synchronized void setMinimized(boolean b){
-        if(b){
-            if(this.normalDimensions!=null) return;
-            this.normalDimensions=new Dimension(this.getSize());
-            minimizedComponents.add(new MinimizedComponent(constructorComboBox));
-            minimizedComponents.add(new MinimizedComponent(constructorParametersScroll));
-            minimizedComponents.add(new MinimizedComponent(addonComboBox));
-            minimizedComponents.add(new MinimizedComponent(addAddonButton));
-            minimizedComponents.add(new MinimizedComponent(addonPanelContainer));
-            minimizedComponents.add(new MinimizedComponent(resizeWidget));
-            
-            this.setSize(new Dimension(normalDimensions.width,30));
-        }
-        else {
-            if(this.normalDimensions==null) return;
-            this.setSize(this.normalDimensions);
-            this.normalDimensions=null;
-            for(MinimizedComponent mc : minimizedComponents){
-                mc.restore();
-            }
-            minimizedComponents.clear();
-        }
-        this.validate();
-        getEditor().panelMoved(this);
-    }
-    
-    public void toggleMinimized(){
-        setMinimized(this.normalDimensions==null);
-    }
-    
+  */  
+
     public void setSelected(boolean b){
         if(b){
             setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 2));
@@ -297,146 +267,15 @@ public class DirectivePanel extends javax.swing.JPanel {
         else return null;
     }
     
-    private class ConstructorComboItem {
-        public Constructor c;
-        public String label;
-        public ConstructorComboItem(Constructor c,String label){
-            this.c=c;
-            this.label=label;
-        }
 
-        @Override
-        public String toString() {
-            return label;
-        }
-    }
-    
-    private class AddonComboItem {
-        public Addon a;
-        public String label;
-        public AddonComboItem(Addon a,String label){
-            this.a=a;
-            this.label=label;
-        }
-
-        @Override
-        public String toString() {
-            return label;
-        }        
-    }
     
     public void setDirective(DirectiveUIHints hints){
         this.hints=hints;
-        
-        this.directiveLabel.setText(hints.getLabel());
-        for(Constructor c : hints.getConstructors()){
-            String label="(";
-            boolean first=true;
-            for(Parameter p : c.getParameters()){
-                if(!first) label+=",";
-                else first=false;
-                label+=p.getLabel();
-            }
-            label+=")";
-            constructorComboBox.addItem(new ConstructorComboItem(c,label));
-        }
-     
-        Addon[] addons=hints.getAddons();
-        if(addons!=null){
-            for(Addon a : addons) {
-                String label=a.getLabel()+"(";
-                boolean first=true;
-                for(Parameter p : a.getParameters()){
-                    if(!first) label+=",";
-                    else first=false;
-                    label+=p.getLabel();
-                }
-                label+=")";
-                addonComboBox.addItem(new AddonComboItem(a,label));            
-            }
-        }
+        this.directiveLabel.setText(this.hints.getLabel());
+        this.setSize(this.getPreferredSize());
     }
     
-    public static AbstractTypePanel makeMultiplePanel(Parameter param,Class<? extends AbstractTypePanel> typePanel,String label){
-        MultipleParameterPanel p=new MultipleParameterPanel(param,typePanel);
-        p.setLabel(label);
-        return p;
-    }
-    
-    public static Class<? extends AbstractTypePanel> getTypePanelClass(Parameter p){
-        Class<?> cls=p.getType();
-        if(cls.equals(Integer.class) || cls.equals(Integer.TYPE)) return IntegerParameterPanel.class;
-        else if(cls.equals(String.class)) return StringParameterPanel.class;
-        else if(cls.equals(TopicOperand.class)) return TopicOperandParameterPanel.class;
-        else if(cls.equals(Operand.class)) return OperandParameterPanel.class;
-        else if(Directive.class.isAssignableFrom(cls)) return DirectiveParameterPanel.class;
-        // this is a guess really
-        else if(cls.equals(Object.class)) return TopicOperandParameterPanel.class;
 
-        else return UnknownParameterTypePanel.class;
-    }
-    
-    public static AbstractTypePanel[] populateParametersPanel(JPanel panelContainer,Parameter[] parameters,AbstractTypePanel[] oldPanels){
-        if(oldPanels!=null){
-            for(AbstractTypePanel p : oldPanels){
-                p.disconnect();
-            }
-        }
-        panelContainer.removeAll();
-        
-        GridBagConstraints gbc=new GridBagConstraints();
-        gbc.gridx=0;
-        gbc.gridy=0;
-        gbc.weightx=1.0;
-        gbc.fill=GridBagConstraints.HORIZONTAL;
-        
-        
-        AbstractTypePanel[] panels=new AbstractTypePanel[parameters.length];
-        
-        for(int i=0;i<parameters.length;i++){
-            Parameter p=parameters[i];
-            Class<? extends AbstractTypePanel> panelCls=getTypePanelClass(p);
-            if(panelCls==null) continue;
-            
-            AbstractTypePanel panel;
-            if(p.isMultiple()){
-                panel=makeMultiplePanel(p, panelCls, p.getLabel());
-            }
-            else {
-                try{
-                    java.lang.reflect.Constructor<? extends AbstractTypePanel> panelConstructor=panelCls.getConstructor(Parameter.class);
-                    panel=panelConstructor.newInstance(p);
-                    panel.setLabel(p.getLabel());
-                    
-                    if(panel instanceof DirectiveParameterPanel){
-                        if(!p.getType().equals(Directive.class)){
-                            Class<? extends Directive> cls=(Class<? extends Directive>)p.getType();
-                            ((DirectiveParameterPanel)panel).setDirectiveType(cls);
-                        }
-                    }
-                }catch(IllegalAccessException | InstantiationException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e){
-                    Wandora.getWandora().handleError(e);
-                    return null;
-                }
-            }
-            
-            panels[i]=panel;
-            
-            panelContainer.add(panel,gbc);
-            gbc.gridy++;
-        }
-        
-        return panels;
-    }
-    
-    protected void populateParametersPanel(Constructor c){
-        if(c==null) return;
-        Parameter[] parameters=c.getParameters();
-        this.constructorParamPanels=populateParametersPanel(constructorParameters,parameters,this.constructorParamPanels);
-        this.revalidate();
-        constructorParameters.repaint();        
-
-    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -449,17 +288,9 @@ public class DirectivePanel extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         directiveLabel = new javax.swing.JLabel();
-        constructorComboBox = new javax.swing.JComboBox();
-        constructorParametersScroll = new javax.swing.JScrollPane();
-        constructorParameters = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        addAddonButton = new javax.swing.JButton();
-        addonComboBox = new javax.swing.JComboBox();
-        addonPanelContainer = new javax.swing.JPanel();
-        resizeWidget = new javax.swing.JLabel();
         toDirectiveAnchor = new javax.swing.JLabel();
         fromDirectiveAnchor = new javax.swing.JLabel();
-        minimizeButton = new javax.swing.JButton();
+        parameterDirectiveAnchors = new javax.swing.JPanel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         setLayout(new java.awt.GridBagLayout());
@@ -468,102 +299,8 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         add(directiveLabel, gridBagConstraints);
-
-        constructorComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                constructorComboBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        add(constructorComboBox, gridBagConstraints);
-
-        constructorParameters.setLayout(new java.awt.GridBagLayout());
-        constructorParametersScroll.setViewportView(constructorParameters);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        add(constructorParametersScroll, gridBagConstraints);
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        addAddonButton.setText("Add addon");
-        addAddonButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addAddonButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        jPanel1.add(addAddonButton, gridBagConstraints);
-
-        addonComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addonComboBoxActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        jPanel1.add(addonComboBox, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        add(jPanel1, gridBagConstraints);
-
-        addonPanelContainer.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        add(addonPanelContainer, gridBagConstraints);
-
-        resizeWidget.setText("//");
-        resizeWidget.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                resizeWidgetMousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                resizeWidgetMouseReleased(evt);
-            }
-        });
-        resizeWidget.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                resizeWidgetMouseDragged(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        add(resizeWidget, gridBagConstraints);
 
         toDirectiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         toDirectiveAnchor.setText("<-");
@@ -571,7 +308,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         toDirectiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
         toDirectiveAnchor.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         add(toDirectiveAnchor, gridBagConstraints);
@@ -587,33 +324,15 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         add(fromDirectiveAnchor, gridBagConstraints);
 
-        minimizeButton.setText("_");
-        minimizeButton.setBorderPainted(false);
-        minimizeButton.setContentAreaFilled(false);
-        minimizeButton.setFocusPainted(false);
-        minimizeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                minimizeButtonActionPerformed(evt);
-            }
-        });
+        parameterDirectiveAnchors.setMinimumSize(new java.awt.Dimension(1, 1));
+        parameterDirectiveAnchors.setLayout(new java.awt.GridLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        add(minimizeButton, gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        add(parameterDirectiveAnchors, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void constructorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_constructorComboBoxActionPerformed
-        Object o=constructorComboBox.getSelectedItem();
-        ConstructorComboItem c=(ConstructorComboItem)o;
-        this.selectedConstructor=c.c;
-        populateParametersPanel(c.c);
-    }//GEN-LAST:event_constructorComboBoxActionPerformed
-
-    private void addonComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addonComboBoxActionPerformed
-        
-        
-        
-    }//GEN-LAST:event_addonComboBoxActionPerformed
 
     
     private int resizeStartX;
@@ -621,91 +340,14 @@ public class DirectivePanel extends javax.swing.JPanel {
     private int resizeStartW;
     private int resizeStartH;
     private boolean resizing=false;
-    private void resizeWidgetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resizeWidgetMousePressed
-        resizing=true;
-        resizeStartX=evt.getXOnScreen();
-        resizeStartY=evt.getYOnScreen();
-        Rectangle rect=this.getBounds();
-        resizeStartW=rect.width;
-        resizeStartH=rect.height;
-    }//GEN-LAST:event_resizeWidgetMousePressed
-
-    private void resizeWidgetMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resizeWidgetMouseReleased
-        resizing=false;
-    }//GEN-LAST:event_resizeWidgetMouseReleased
-
-    private void resizeWidgetMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resizeWidgetMouseDragged
-        if(resizing){
-            int dx=evt.getXOnScreen()-resizeStartX;
-            int dy=evt.getYOnScreen()-resizeStartY;
-            Rectangle rect=this.getBounds();
-            this.setBounds(rect.x,rect.y,resizeStartW+dx,resizeStartH+dy);
-            this.revalidate();
-            getEditor().panelMoved(this);
-        }
-    }//GEN-LAST:event_resizeWidgetMouseDragged
-
-    private void minimizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimizeButtonActionPerformed
-        toggleMinimized();
-    }//GEN-LAST:event_minimizeButtonActionPerformed
-
-    private void addAddonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAddonButtonActionPerformed
-        synchronized(addonPanels){
-            Object o=addonComboBox.getSelectedItem();
-            if(o==null || !(o instanceof AddonComboItem)) return;
-
-            AddonComboItem aci=(AddonComboItem)o;
-            Addon addon=aci.a;
-
-            AddonPanel addonPanel=new AddonPanel(this,addon);
-            GridBagConstraints gbc=new GridBagConstraints();
-            gbc.fill=GridBagConstraints.HORIZONTAL;
-            gbc.weightx=1.0;
-            gbc.gridx=0;
-            gbc.gridy=addonPanels.size();
-            gbc.insets=new Insets(5, 0, 0, 0);
-            addonPanelContainer.add(addonPanel,gbc);
-
-            addonPanels.add(addonPanel);        
-
-        }
-        this.revalidate();
-        addonPanelContainer.repaint();        
-        
-    }//GEN-LAST:event_addAddonButtonActionPerformed
-
-    public void removeAddon(AddonPanel addonPanel){
-        synchronized(addonPanels){
-            int index=addonPanels.indexOf(addonPanel);
-            if(index<0) return;
-            addonPanel.disconnect();
-            GridBagLayout gbl=(GridBagLayout)addonPanelContainer.getLayout();
-            for(int i=index+1;i<addonPanels.size();i++){
-                AddonPanel p=addonPanels.get(i);
-                GridBagConstraints gbc=gbl.getConstraints(p);
-                gbc.gridy--;
-                gbl.setConstraints(p, gbc);
-            }
-            addonPanels.remove(index);
-            addonPanelContainer.remove(addonPanel);
-        }
-        this.revalidate();
-        addonPanelContainer.repaint();        
-    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addAddonButton;
-    private javax.swing.JComboBox addonComboBox;
-    private javax.swing.JPanel addonPanelContainer;
-    private javax.swing.JComboBox constructorComboBox;
-    private javax.swing.JPanel constructorParameters;
-    private javax.swing.JScrollPane constructorParametersScroll;
     private javax.swing.JLabel directiveLabel;
     private javax.swing.JLabel fromDirectiveAnchor;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JButton minimizeButton;
-    private javax.swing.JLabel resizeWidget;
+    private javax.swing.JPanel parameterDirectiveAnchors;
     private javax.swing.JLabel toDirectiveAnchor;
     // End of variables declaration//GEN-END:variables
+
+
 }

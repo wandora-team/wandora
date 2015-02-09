@@ -19,10 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
-import org.wandora.query2.DirectiveUIHints.Parameter;
+import javax.swing.JPanel;
 
 /**
  *
@@ -30,34 +29,40 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
  */
 
 
-public class StringParameterPanel extends AbstractTypePanel {
+public class QueryEditorInspectorPanel extends javax.swing.JPanel {
 
+    protected Object selectedObject;
+    protected JPanel editor;
+    
     /**
-     * Creates new form StringParameterPanel
+     * Creates new form QueryEditorInspectorPanel
      */
-    public StringParameterPanel(Parameter parameter,DirectivePanel panel) {
-        super(parameter,panel);
+    public QueryEditorInspectorPanel() {
         initComponents();
+        
+        this.add(emptyPanel);
     }
 
-    @Override
-    public void setValue(Object o){
-        valueTextField.setText(o.toString());
+    public void setSelection(Object o){
+        if(this.selectedObject!=null && this.selectedObject instanceof DirectivePanel){
+            if(editor!=null && editor instanceof DirectiveEditor) ((DirectiveEditor)editor).saveChanges();
+        }
+        
+        this.selectedObject=o;
+        this.removeAll();
+        if(o==null) this.add(emptyPanel);
+        else if(o instanceof DirectivePanel){
+            DirectivePanel panel=(DirectivePanel)o;
+            editor=panel.getEditorPanel();
+            this.add(editor);
+        }
+        
+        this.revalidate();
+        this.repaint();
     }
     
-    @Override
-    public Object getValue(){
-        return valueTextField.getText();
-    }
-    @Override
-    public String getValueScript(){
-        String s=valueTextField.getText().trim();
-        return "\""+(s.replace("\\","\\\\").replace("\"","\\\""))+"\"";
-    }
-    
-
-    public void setLabel(String label){
-        parameterLabel.setText(label);
+    public Object getSelection(){
+        return selectedObject;
     }
     
     /**
@@ -68,24 +73,23 @@ public class StringParameterPanel extends AbstractTypePanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
-        parameterLabel = new javax.swing.JLabel();
-        valueTextField = new javax.swing.JTextField();
+        emptyPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
-        setLayout(new java.awt.GridBagLayout());
+        emptyPanel.setLayout(new java.awt.BorderLayout());
 
-        parameterLabel.setText("Label");
-        add(parameterLabel, new java.awt.GridBagConstraints());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        add(valueTextField, gridBagConstraints);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Nothing selected");
+        jLabel1.setEnabled(false);
+        emptyPanel.add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel parameterLabel;
-    private javax.swing.JTextField valueTextField;
+    private javax.swing.JPanel emptyPanel;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

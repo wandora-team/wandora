@@ -41,12 +41,16 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
     protected ConnectorAnchor connectorAnchor;
     protected Class<? extends Directive> directiveType;
     
+    protected ConnectorAnchor fromAnchor;
+    protected DirectivePanel fromPanel;
+    
     /**
      * Creates new form DirectiveParameterPanel
      */
-    public DirectiveParameterPanel(Parameter parameter) {
-        super(parameter);
+    public DirectiveParameterPanel(Parameter parameter,DirectivePanel panel) {
+        super(parameter, panel);
         initComponents();
+        disconnectButton.setVisible(false);
         
         connectorAnchor=new ComponentConnectorAnchor(directiveAnchor,Direction.RIGHT,true,false);
         
@@ -64,9 +68,9 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
                 Point point=support.getDropLocation().getDropPoint();
                 Rectangle rect=directivePanel.getBounds();
                 panel.setBounds(rect.x+rect.width+10,rect.y,panel.getWidth(),panel.getHeight());
-
-                connectorAnchor.setFrom(panel.getFromConnectorAnchor());
-
+                
+                connectValue(panel);
+                
                 return true;                
             }
         });
@@ -76,20 +80,40 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
 
             @Override
             public boolean callback(JComponent component, DirectivePanel o, TransferHandler.TransferSupport support) {
-                if(o==getDirectivePanel()) return false;
-                connectorAnchor.setFrom(o.getFromConnectorAnchor());
+                DirectivePanel directivePanel=getDirectivePanel();
+                if(o==directivePanel) return false;
+                connectValue(o);
                 return true;
             }
         });        
-        
     }
-
+    
     @Override
     public void disconnect() {
         super.disconnect(); 
-        connectorAnchor.setFrom(null);
+        connectValue(null);
     }
 
+    public void connectValue(DirectivePanel p){
+        if(p==null) {
+            if(fromAnchor!=null) fromAnchor.setTo(null);
+            disconnectButton.setVisible(false);
+            directiveAnchor.setVisible(true);
+            
+            fromPanel=null;
+            fromAnchor=null;
+            
+            return;
+        }
+        
+        fromAnchor=p.getFromConnectorAnchor();
+        fromPanel=p;
+        
+        getDirectivePanel().connectParamAnchor(fromAnchor);
+        
+        disconnectButton.setVisible(true);
+        directiveAnchor.setVisible(false);        
+    }
 
     
     public void setDirectiveType(Class<? extends Directive> cls){
@@ -102,25 +126,33 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
     }
     
     @Override
-    public Object getValue(){
-        ConnectorAnchor from=connectorAnchor.getFrom();
-        if(from==null) return null;
-        JComponent jc=from.getComponent();
-        if(jc==null) return null;
-        if(jc instanceof DirectivePanel){
-            return ((DirectivePanel)jc).buildDirective();
+    public void setValue(Object o){
+        if(o==null) {
+            fromAnchor=null;
+            fromPanel=null;
+            disconnectButton.setVisible(false);
+            directiveAnchor.setVisible(true);
+            return;
         }
-        else throw new RuntimeException("Unknown component connected to a connector");
+        
+        DirectivePanel p=(DirectivePanel)o;
+        fromPanel=p;
+        fromAnchor=p.getFromConnectorAnchor();
+        
+        disconnectButton.setVisible(true);
+        directiveAnchor.setVisible(false);        
+        
+    }
+    
+    
+    @Override
+    public Object getValue(){
+        return fromPanel;
     }
     @Override
     public String getValueScript(){
-        ConnectorAnchor from=connectorAnchor.getFrom();
-        if(from==null) return null;
-        JComponent jc=from.getComponent();
-        if(jc==null) return null;
-        DirectivePanel p=QueryEditorComponent.resolveDirectivePanel(jc);
-        if(p==null) throw new RuntimeException("Unknown component connected to a connector");        
-        return p.buildScript();
+        if(fromPanel==null) return null;
+        return fromPanel.buildScript();
     }
     
     /**
@@ -135,26 +167,48 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
 
         parameterLabel = new javax.swing.JLabel();
         directiveAnchor = new javax.swing.JLabel();
+        disconnectButton = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
         parameterLabel.setText("Label");
-        add(parameterLabel, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        add(parameterLabel, gridBagConstraints);
 
-        directiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        directiveAnchor.setText("*");
-        directiveAnchor.setMaximumSize(new java.awt.Dimension(20, 20));
+        directiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        directiveAnchor.setText("Drag directive here");
+        directiveAnchor.setMaximumSize(new java.awt.Dimension(200, 20));
         directiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
-        directiveAnchor.setPreferredSize(new java.awt.Dimension(20, 20));
+        directiveAnchor.setPreferredSize(new java.awt.Dimension(150, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
         add(directiveAnchor, gridBagConstraints);
+
+        disconnectButton.setText("Disconnect directive");
+        disconnectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disconnectButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        add(disconnectButton, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void disconnectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnectButtonActionPerformed
+        connectValue(null);
+    }//GEN-LAST:event_disconnectButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel directiveAnchor;
+    private javax.swing.JButton disconnectButton;
     private javax.swing.JLabel parameterLabel;
     // End of variables declaration//GEN-END:variables
 }

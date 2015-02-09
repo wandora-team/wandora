@@ -47,7 +47,7 @@ import org.wandora.topicmap.TopicMapException;
 public class QueryEditorTopicPanel implements TopicPanel {
 
     protected Topic openedTopic;
-    protected QueryEditorComponent panel;
+    protected QueryEditorDockPanel panel;
     
     public QueryEditorTopicPanel(){
     }
@@ -55,7 +55,7 @@ public class QueryEditorTopicPanel implements TopicPanel {
     
     @Override
     public void init() {
-        panel=new QueryEditorComponent();
+        panel=new QueryEditorDockPanel();
     }
     
     

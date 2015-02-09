@@ -30,6 +30,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import org.wandora.application.Wandora;
 
 /**
@@ -170,6 +172,35 @@ public class DirectiveUIHints implements Serializable {
         }
         public Parameter getParameter(){return parameter;}
         public Object getValue(){return value;}
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 37 * hash + Objects.hashCode(this.parameter);
+            hash = 37 * hash + Objects.hashCode(this.value);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final BoundParameter other = (BoundParameter) obj;
+            if (!Objects.equals(this.parameter, other.parameter)) {
+                return false;
+            }
+            if (!Objects.equals(this.value, other.value)) {
+                return false;
+            }
+            return true;
+        }
+
+
+        
     }
     
     public static class Parameter implements Serializable {
@@ -195,6 +226,39 @@ public class DirectiveUIHints implements Serializable {
             this.multiple = multiple;
             this.label = label;
         }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 23 * hash + Objects.hashCode(this.type);
+            hash = 23 * hash + (this.multiple ? 1 : 0);
+            hash = 23 * hash + Objects.hashCode(this.label);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Parameter other = (Parameter) obj;
+            if (!Objects.equals(this.type, other.type)) {
+                return false;
+            }
+            if (this.multiple != other.multiple) {
+                return false;
+            }
+            if (!Objects.equals(this.label, other.label)) {
+                return false;
+            }
+            return true;
+        }
+
+
+        
         
         
         public Class<?> getType() {
@@ -260,6 +324,30 @@ public class DirectiveUIHints implements Serializable {
             this.label=label;
         }
 
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 53 * hash + Arrays.deepHashCode(this.parameters);
+            hash = 53 * hash + Objects.hashCode(this.label);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) return false;
+            if (getClass() != obj.getClass()) return false;
+            final Constructor other = (Constructor) obj;
+            if (!Arrays.deepEquals(this.parameters, other.parameters)) {
+                return false;
+            }
+            if (!Objects.equals(this.label, other.label)) {
+                return false;
+            }
+            return true;
+        }
+
+        
+        
         public Parameter[] getParameters() {
             return parameters;
         }
@@ -335,6 +423,38 @@ public class DirectiveUIHints implements Serializable {
             this.label=label;
         }
 
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 89 * hash + Arrays.deepHashCode(this.parameters);
+            hash = 89 * hash + Objects.hashCode(this.method);
+            hash = 89 * hash + Objects.hashCode(this.label);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Addon other = (Addon) obj;
+            if (!Arrays.deepEquals(this.parameters, other.parameters)) {
+                return false;
+            }
+            if (!Objects.equals(this.method, other.method)) {
+                return false;
+            }
+            if (!Objects.equals(this.label, other.label)) {
+                return false;
+            }
+            return true;
+        }
+
+        
+        
         public String getMethod() {
             return method;
         }

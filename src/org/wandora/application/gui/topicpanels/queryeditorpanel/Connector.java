@@ -150,11 +150,11 @@ public class Connector {
                 break;
             case UP:
                 exitPoint=new Point(p.x,p.y-20);
-                if(in) drawIcon(g2,rotateIcon(arrowIcon,-Math.PI/2),p);
+                if(in) drawIcon(g2,rotateIcon(arrowIcon,Math.PI/2),p);
                 break;
             case DOWN:
                 exitPoint=new Point(p.x,p.y+20);
-                if(in) drawIcon(g2,rotateIcon(arrowIcon,Math.PI/2),p);
+                if(in) drawIcon(g2,rotateIcon(arrowIcon,-Math.PI/2),p);
                 break;
         }
         g2.drawLine(p.x,p.y,exitPoint.x,exitPoint.y);

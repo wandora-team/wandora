@@ -22,6 +22,7 @@
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Component;
+import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**
@@ -37,8 +38,8 @@ public class OperandParameterPanel extends AbstractTypePanel {
     /**
      * Creates new form OperandParameterPanel
      */
-    public OperandParameterPanel(Parameter parameter) {
-        super(parameter);
+    public OperandParameterPanel(Parameter parameter,DirectivePanel panel) {
+        super(parameter,panel);
         initComponents();
         setOperandTypes();
     }
@@ -51,6 +52,25 @@ public class OperandParameterPanel extends AbstractTypePanel {
         }
     }
 
+    @Override
+    public void setValue(Object o){
+        /*if(o instanceof Directive){
+            operandTypeComboBox.setSelectedItem("Directive");
+            operandTypeChanged();
+            parameterPanel.setValue(o);
+        }*/
+        if(o instanceof DirectivePanel){
+            operandTypeComboBox.setSelectedItem("Directive");
+            operandTypeChanged();
+            parameterPanel.setValue(o);            
+        }
+        else if(o instanceof String){
+            operandTypeComboBox.setSelectedItem("String");
+            operandTypeChanged();
+            parameterPanel.setValue(o);            
+        }
+    }
+    
     @Override
     public Object getValue(){
         if(parameterPanel==null) return null;
@@ -107,6 +127,7 @@ public class OperandParameterPanel extends AbstractTypePanel {
     }// </editor-fold>//GEN-END:initComponents
 
     protected boolean operandTypeChanged(){
+        if(parameterPanel!=null) parameterPanel.disconnect();
         parameterPanel=null;
         Object o=operandTypeComboBox.getSelectedItem();
         if(o==null){
@@ -118,7 +139,7 @@ public class OperandParameterPanel extends AbstractTypePanel {
         String type=o.toString();
         if(type.equalsIgnoreCase("String")){
             operandPanel.removeAll();
-            StringParameterPanel p=new StringParameterPanel(parameter);
+            StringParameterPanel p=new StringParameterPanel(parameter,this.directivePanel);
             p.setLabel("");
             operandPanel.add(p);
             this.revalidate();
@@ -128,7 +149,7 @@ public class OperandParameterPanel extends AbstractTypePanel {
         }
         else if(type.equalsIgnoreCase("Directive")){
             operandPanel.removeAll();
-            DirectiveParameterPanel p=new DirectiveParameterPanel(parameter);
+            DirectiveParameterPanel p=new DirectiveParameterPanel(parameter,this.directivePanel);
             p.setLabel("");
             operandPanel.add(p);
             this.revalidate();

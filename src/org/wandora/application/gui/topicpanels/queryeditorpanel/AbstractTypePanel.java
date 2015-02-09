@@ -35,8 +35,13 @@ public abstract class AbstractTypePanel extends JPanel {
     
     protected Parameter parameter;
     
-    public AbstractTypePanel(Parameter parameter){
+    protected DirectivePanel directivePanel;
+
+    
+
+    public AbstractTypePanel(Parameter parameter,DirectivePanel directivePanel) {
         this.parameter=parameter;
+        this.directivePanel=directivePanel;
     }
     
     public abstract void setLabel(String label);
@@ -55,6 +60,8 @@ public abstract class AbstractTypePanel extends JPanel {
     }    
     
     protected DirectivePanel getDirectivePanel(){
+        if(directivePanel!=null) return directivePanel;
+        
         Container parent=getParent();
         while(parent!=null && !(parent instanceof DirectivePanel)){
             parent=parent.getParent();
@@ -62,6 +69,8 @@ public abstract class AbstractTypePanel extends JPanel {
         if(parent!=null) return (DirectivePanel)parent;
         else return null;
     }    
+    
+    public abstract void setValue(Object o);
     
     public abstract Object getValue();
     public abstract String getValueScript();

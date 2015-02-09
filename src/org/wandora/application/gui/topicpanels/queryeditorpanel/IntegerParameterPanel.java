@@ -35,14 +35,19 @@ public class IntegerParameterPanel extends AbstractTypePanel {
     /**
      * Creates new form StringParameterPanel
      */
-    public IntegerParameterPanel(Parameter parameter) {
-        super(parameter);
+    public IntegerParameterPanel(Parameter parameter,DirectivePanel panel) {
+        super(parameter,panel);
         initComponents();
     }
 
     @Override
     public void setLabel(String label){
         parameterLabel.setText(label);
+    }
+    
+    @Override
+    public void setValue(Object o){
+        valueSpinner.setValue(o);
     }
     
     @Override

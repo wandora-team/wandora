@@ -35,7 +35,7 @@ public class AddonPanel extends javax.swing.JPanel {
 
     protected Addon addon;
     
-    protected DirectivePanel parentPanel;
+    protected DirectiveEditor parentPanel;
     protected AbstractTypePanel[] parameterPanels;
     
     /**
@@ -45,15 +45,23 @@ public class AddonPanel extends javax.swing.JPanel {
         initComponents();
     }
     
-    public AddonPanel(DirectivePanel parent,Addon addon){
+    public AddonPanel(DirectiveEditor parent,Addon addon){
         this();
         this.parentPanel=parent;
         setAddon(addon);
     }
     
+    public Addon getAddon(){
+        return addon;
+    }
+    
+    public AbstractTypePanel[] getParameterPanels(){
+        return parameterPanels;
+    }
+    
     public void populateParametersPanel(){
         Parameter[] parameters=addon.getParameters();
-        this.parameterPanels=DirectivePanel.populateParametersPanel(parametersPanel, parameters, this.parameterPanels);
+        this.parameterPanels=DirectiveEditor.populateParametersPanel(parametersPanel, parameters, this.parameterPanels, parentPanel.getDirectivePanel());
         this.revalidate();
         parametersPanel.repaint();        
     }

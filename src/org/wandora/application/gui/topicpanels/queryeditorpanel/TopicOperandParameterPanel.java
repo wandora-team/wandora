@@ -22,6 +22,7 @@
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import org.wandora.query2.DirectiveUIHints.Parameter;
+import org.wandora.topicmap.Topic;
 
 /**
  *
@@ -31,10 +32,24 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public class TopicOperandParameterPanel extends OperandParameterPanel {
 
-    public TopicOperandParameterPanel(Parameter parameter){
-        super(parameter);
+    public TopicOperandParameterPanel(Parameter parameter,DirectivePanel panel){
+        super(parameter,panel);
     }
     
+    @Override
+    public void setValue(Object o){
+        if(o instanceof Topic){
+            operandTypeComboBox.setSelectedItem("Topic");
+            operandTypeChanged();
+            parameterPanel.setValue(o);
+        }
+        else if(o instanceof String){
+            operandTypeComboBox.setSelectedItem("Subject Identifier");
+            operandTypeChanged();
+            parameterPanel.setValue(o);            
+        }
+        else super.setValue(o);
+    }    
     @Override
     protected void setOperandTypes() {
         super.setOperandTypes();
@@ -51,7 +66,7 @@ public class TopicOperandParameterPanel extends OperandParameterPanel {
         String type=o.toString();
         if(type.equalsIgnoreCase("Topic")){
             operandPanel.removeAll();
-            TopicParameterPanel p=new TopicParameterPanel(parameter);
+            TopicParameterPanel p=new TopicParameterPanel(parameter,this.directivePanel);
             p.setLabel("");
             operandPanel.add(p);
             this.revalidate();
@@ -61,7 +76,7 @@ public class TopicOperandParameterPanel extends OperandParameterPanel {
         }
         else if(type.equalsIgnoreCase("Subject Identifier")){
             operandPanel.removeAll();
-            StringParameterPanel p=new StringParameterPanel(parameter);
+            StringParameterPanel p=new StringParameterPanel(parameter,this.directivePanel);
             p.setLabel("");
             operandPanel.add(p);
             this.revalidate();
