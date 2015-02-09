@@ -22,9 +22,9 @@
 package org.wandora.application.tools.extractors.reddit;
 
 import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.async.Callback;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -40,6 +40,7 @@ import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.*;
+import static org.wandora.application.tools.extractors.reddit.AbstractRedditExtractor.statusToPhrase;
 
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Locator;
@@ -51,7 +52,7 @@ import org.wandora.dep.json.JSONException;
 
 /**
  *
- * @author Eero
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
 public class RedditExtractorUI extends javax.swing.JPanel {
 
@@ -86,6 +87,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         accepted = false;
         dialog = new JDialog(w, true);
         dialog.setSize(800, 500);
+        dialog.setMinimumSize(new Dimension(600, 400));
         dialog.add(this);
         threadSearchSubmit.setText("Search");
         threadSearchSubmit.setEnabled(true);
@@ -100,7 +102,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         WandoraTool wt;
         ArrayList<WandoraTool> wts = new ArrayList();
 
-        String id = null;
+        String id;
         String query = "";
         String extractUrl = null;
 
@@ -108,7 +110,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         RedditThingExtractor ex = new RedditThingExtractor();
 
-        HashMap<String, Boolean> crawling = new HashMap<String, Boolean>();
+        HashMap<String, Boolean> crawling = new HashMap<>();
         crawling.put("more", crawlToggle.isSelected());
         crawling.put("linkSubreddit", crawlLinkSR.isSelected());
         crawling.put("linkComment", crawlLinkComment.isSelected());
@@ -143,8 +145,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
             } else if (selectedTab.equals(linkSearchTab)) {
 
-                id = linkField.getText();
-                ArrayList<String> urls = new ArrayList<String>();
+                ArrayList<String> urls = new ArrayList<>();
 
                 for (int i = 0; i < linkModel.getSize(); i++) {
                     urls.add(apiRoot + "api/info?url=" + linkModel.get(i));
@@ -155,8 +156,6 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
                 ex.setForceUrls(urlArray);
             }
-
-            System.out.println(extractUrl);
 
             wts.add(ex);
         } catch (JSONException jse) {
@@ -171,31 +170,37 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         try {
             str = URLEncoder.encode(str, "utf-8");
         } catch (Exception e) {
+          System.out.println(e.getMessage());
         }
         return str;
     }
 
     private void threadPopulationCallback(HttpResponse<JsonNode> response) {
-        DefaultListModel model = new DefaultListModel();;
+        DefaultListModel model = new DefaultListModel();
         try {
-            JSONArray resJson = response.getBody()
-                    .getObject()
+            
+            JSONObject resJson = response.getBody()
+                    .getObject();
+                    
+            if(resJson.has("error")){
+              Object error = resJson.get("error");
+              throw new JSONException("API error: " + statusToPhrase((int)error));
+            }
+            
+            threadResults = resJson
                     .getJSONObject("data")
                     .getJSONArray("children");
-
-            threadResults = resJson;
             JSONObject r;
 
             model = new DefaultListModel();
-            System.out.println("got " + resJson.length() + " results");
-            for (int i = 0; i < resJson.length(); i++) {
-                r = resJson.getJSONObject(i).getJSONObject("data");
+            for (int i = 0; i < threadResults.length(); i++) {
+                r = threadResults.getJSONObject(i).getJSONObject("data");
 
                 StringBuilder titleBuilder = new StringBuilder();
                 titleBuilder
                         .append("[r/").append(r.getString("subreddit"))
                         .append("] ").append(r.getString("title"))
-                        .append(" - ").append(r.getString("score"));
+                        .append(" - ").append(r.getInt("score"));
                 model.add(i, titleBuilder.toString());
             }
             //threadResList.setModel(model);
@@ -217,18 +222,18 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         String q = threadSearchField.getText();
 
-        Callback<JsonNode> callback = new Callback<JsonNode>() {
+        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
             @Override
-            public void failed(Exception e) {
-            }
-
-            @Override
-            public void cancelled() {
-            }
-
-            @Override
-            public void completed(HttpResponse<JsonNode> response) {
+            public void run(HttpResponse<JsonNode> response) {
                 threadPopulationCallback(response);
+            }
+            @Override
+            protected void error(Exception e, String body) {
+              DefaultListModel model = new DefaultListModel();
+              model.add(0, e.getMessage());
+              threadResList.setModel(model);
+              threadSearchSubmit.setText("Search");
+              threadSearchSubmit.setEnabled(true);
             }
         };
 
@@ -237,21 +242,25 @@ public class RedditExtractorUI extends javax.swing.JPanel {
     }
 
     private void subredditPopulationCallback(HttpResponse<JsonNode> response) {
-        DefaultListModel model = new DefaultListModel();;
+        DefaultListModel model = new DefaultListModel();
         try {
-            JSONArray resJson = response.getBody()
-                    .getObject()
+            JSONObject resJson = response.getBody()
+                    .getObject();
+                    
+            if(resJson.has("error")){
+              Object error = resJson.get("error");
+              throw new JSONException("API error: " + statusToPhrase((int)error));
+            }
+            
+            subredditResults = resJson
                     .getJSONObject("data")
                     .getJSONArray("children");
-
-            subredditResults = resJson;
             JSONObject r;
 
             model = new DefaultListModel();
-            
-            for (int i = 0; i < resJson.length(); i++) {
+            for (int i = 0; i < subredditResults.length(); i++) {
 
-                r = resJson.getJSONObject(i).getJSONObject("data");
+                r = subredditResults.getJSONObject(i).getJSONObject("data");
                
                 StringBuilder titleBuilder = new StringBuilder();
                 titleBuilder
@@ -268,6 +277,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             subredditSearchSubmit.setText("Search");
             subredditSearchSubmit.setEnabled(true);
         }
+        
     }
 
     private void populateSubredditSearch() {
@@ -277,18 +287,18 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         String q = subredditSearchField.getText();
 
-        Callback<JsonNode> callback = new Callback<JsonNode>() {
+        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
             @Override
-            public void failed(Exception e) {
-            }
-
-            @Override
-            public void cancelled() {
-            }
-
-            @Override
-            public void completed(HttpResponse<JsonNode> response) {
+            public void run(HttpResponse<JsonNode> response) {
                 subredditPopulationCallback(response);
+            }
+            @Override
+            protected void error(Exception e, String body) {
+              DefaultListModel model = new DefaultListModel();
+              model.add(0, e.getMessage());
+              subredditResList.setModel(model);
+              subredditSearchSubmit.setText("Search");
+              subredditSearchSubmit.setEnabled(true);
             }
         };
 
@@ -311,7 +321,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
             threadSearchDetails.setText(sb.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -323,7 +333,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             subredditDetailTextArea.setText(r.getString("public_description"));
             subredditDetailTextArea.setLineWrap(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -360,407 +370,408 @@ public class RedditExtractorUI extends javax.swing.JPanel {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
+  // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+  private void initComponents() {
+    java.awt.GridBagConstraints gridBagConstraints;
 
-        redditTabs = new SimpleTabbedPane();
-        commentSearchTab = new javax.swing.JPanel();
-        threadSearchField = new SimpleField();
-        threadSearchSubmit = new SimpleButton();
-        threadResScrollPane = new javax.swing.JScrollPane();
-        threadResList = new SimpleList();
-        threadSearchDetails = new javax.swing.JLabel();
-        subredditSearchTab = new javax.swing.JPanel();
-        subredditSearchField = new javax.swing.JTextField();
-        subredditSearchSubmit = new SimpleButton();
-        subredditResScrollPane = new javax.swing.JScrollPane();
-        subredditResList = new SimpleList();
-        subredditDetailTextArea = new javax.swing.JTextArea();
-        subredditTitleLabel = new javax.swing.JLabel();
-        linkSearchTab = new javax.swing.JPanel();
-        linkField = new javax.swing.JTextField();
-        linkLabel = new SimpleLabel();
-        linkScrollpane = new javax.swing.JScrollPane();
-        linkSearchList = new javax.swing.JList();
-        linkAddUrlButton = new SimpleButton();
-        linkAddSLsButton = new SimpleButton();
-        linkClearButton = new SimpleButton();
-        accountSearchTab = new javax.swing.JPanel();
-        accountSearchField = new javax.swing.JTextField();
-        jLabel3 = new SimpleLabel();
-        buttonPanel = new javax.swing.JPanel();
-        buttonFillerPanel = new javax.swing.JPanel();
-        okButton = new SimpleButton();
-        cancelButton = new SimpleButton();
-        crawlOptions = new javax.swing.JPanel();
-        crawlLinkSR = new javax.swing.JCheckBox();
-        crawlLinkUser = new javax.swing.JCheckBox();
-        crawlLinkComment = new javax.swing.JCheckBox();
-        crawlUserComment = new javax.swing.JCheckBox();
-        crawlUserLink = new javax.swing.JCheckBox();
-        crawlSRLink = new javax.swing.JCheckBox();
-        crawlCommentUser = new javax.swing.JCheckBox();
-        crawlCommentLink = new javax.swing.JCheckBox();
-        crawlToggle = new javax.swing.JCheckBox();
+    redditTabs = new SimpleTabbedPane();
+    commentSearchTab = new javax.swing.JPanel();
+    threadSearchField = new SimpleField();
+    threadSearchSubmit = new SimpleButton();
+    threadResScrollPane = new javax.swing.JScrollPane();
+    threadResList = new SimpleList();
+    threadSearchDetails = new javax.swing.JLabel();
+    subredditSearchTab = new javax.swing.JPanel();
+    subredditSearchField = new SimpleField();
+    subredditSearchSubmit = new SimpleButton();
+    subredditResScrollPane = new javax.swing.JScrollPane();
+    subredditResList = new SimpleList();
+    subredditDetailTextArea = new javax.swing.JTextArea();
+    subredditTitleLabel = new javax.swing.JLabel();
+    linkSearchTab = new javax.swing.JPanel();
+    linkField = new SimpleField();
+    linkLabel = new SimpleLabel();
+    linkScrollpane = new javax.swing.JScrollPane();
+    linkSearchList = new javax.swing.JList();
+    linkAddUrlButton = new SimpleButton();
+    linkAddSLsButton = new SimpleButton();
+    linkClearButton = new SimpleButton();
+    accountSearchTab = new javax.swing.JPanel();
+    accountSearchField = new SimpleField();
+    jLabel3 = new SimpleLabel();
+    buttonPanel = new javax.swing.JPanel();
+    buttonFillerPanel = new javax.swing.JPanel();
+    okButton = new SimpleButton();
+    cancelButton = new SimpleButton();
+    crawlOptions = new javax.swing.JPanel();
+    crawlLinkSR = new SimpleCheckBox();
+    crawlLinkUser = new SimpleCheckBox();
+    crawlLinkComment = new SimpleCheckBox();
+    crawlUserComment = new SimpleCheckBox();
+    crawlUserLink = new SimpleCheckBox();
+    crawlSRLink = new SimpleCheckBox();
+    crawlCommentUser = new SimpleCheckBox();
+    crawlCommentLink = new SimpleCheckBox();
+    crawlToggle = new SimpleCheckBox();
 
-        setLayout(new java.awt.GridBagLayout());
+    setMinimumSize(new java.awt.Dimension(1500, 376));
+    setLayout(new java.awt.GridBagLayout());
 
-        commentSearchTab.setLayout(new java.awt.GridBagLayout());
+    commentSearchTab.setLayout(new java.awt.GridBagLayout());
 
-        threadSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                threadSearchFieldKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 4, 4, 0);
-        commentSearchTab.add(threadSearchField, gridBagConstraints);
+    threadSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyPressed(java.awt.event.KeyEvent evt) {
+        threadSearchFieldKeyPressed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(5, 4, 4, 0);
+    commentSearchTab.add(threadSearchField, gridBagConstraints);
 
-        threadSearchSubmit.setText("Search");
-        threadSearchSubmit.setMaximumSize(new java.awt.Dimension(180, 23));
-        threadSearchSubmit.setMinimumSize(new java.awt.Dimension(180, 23));
-        threadSearchSubmit.setPreferredSize(new java.awt.Dimension(180, 23));
-        threadSearchSubmit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                threadSearchSubmitActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 3);
-        commentSearchTab.add(threadSearchSubmit, gridBagConstraints);
+    threadSearchSubmit.setText("Search");
+    threadSearchSubmit.setMaximumSize(new java.awt.Dimension(180, 23));
+    threadSearchSubmit.setMinimumSize(new java.awt.Dimension(180, 23));
+    threadSearchSubmit.setPreferredSize(new java.awt.Dimension(180, 23));
+    threadSearchSubmit.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        threadSearchSubmitActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+    gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 3);
+    commentSearchTab.add(threadSearchSubmit, gridBagConstraints);
 
-        threadResList.setMinimumSize(new java.awt.Dimension(200, 200));
-        threadResList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                threadResListValueChanged(evt);
-            }
-        });
-        threadResScrollPane.setViewportView(threadResList);
+    threadResList.setMinimumSize(new java.awt.Dimension(200, 200));
+    threadResList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+      public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        threadResListValueChanged(evt);
+      }
+    });
+    threadResScrollPane.setViewportView(threadResList);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 10.0;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
-        commentSearchTab.add(threadResScrollPane, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 10.0;
+    gridBagConstraints.weighty = 0.1;
+    gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
+    commentSearchTab.add(threadResScrollPane, gridBagConstraints);
 
-        threadSearchDetails.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        threadSearchDetails.setBorder(javax.swing.BorderFactory.createTitledBorder("Details"));
-        threadSearchDetails.setMaximumSize(new java.awt.Dimension(180, 23));
-        threadSearchDetails.setMinimumSize(new java.awt.Dimension(180, 23));
-        threadSearchDetails.setPreferredSize(new java.awt.Dimension(180, 23));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
-        commentSearchTab.add(threadSearchDetails, gridBagConstraints);
+    threadSearchDetails.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+    threadSearchDetails.setBorder(javax.swing.BorderFactory.createTitledBorder("Details"));
+    threadSearchDetails.setMaximumSize(new java.awt.Dimension(180, 23));
+    threadSearchDetails.setMinimumSize(new java.awt.Dimension(180, 23));
+    threadSearchDetails.setPreferredSize(new java.awt.Dimension(180, 23));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+    gridBagConstraints.weightx = 0.1;
+    gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
+    commentSearchTab.add(threadSearchDetails, gridBagConstraints);
 
-        redditTabs.addTab("Submission Search", commentSearchTab);
+    redditTabs.addTab("Submission Search", commentSearchTab);
 
-        subredditSearchTab.setLayout(new java.awt.GridBagLayout());
+    subredditSearchTab.setLayout(new java.awt.GridBagLayout());
 
-        subredditSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                subredditSearchFieldKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 4, 4, 0);
-        subredditSearchTab.add(subredditSearchField, gridBagConstraints);
+    subredditSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyPressed(java.awt.event.KeyEvent evt) {
+        subredditSearchFieldKeyPressed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(5, 4, 4, 0);
+    subredditSearchTab.add(subredditSearchField, gridBagConstraints);
 
-        subredditSearchSubmit.setText("Search");
-        subredditSearchSubmit.setMaximumSize(new java.awt.Dimension(180, 23));
-        subredditSearchSubmit.setMinimumSize(new java.awt.Dimension(180, 23));
-        subredditSearchSubmit.setPreferredSize(new java.awt.Dimension(180, 23));
-        subredditSearchSubmit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subredditSearchSubmitActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(3, 4, 3, 3);
-        subredditSearchTab.add(subredditSearchSubmit, gridBagConstraints);
+    subredditSearchSubmit.setText("Search");
+    subredditSearchSubmit.setMaximumSize(new java.awt.Dimension(180, 23));
+    subredditSearchSubmit.setMinimumSize(new java.awt.Dimension(180, 23));
+    subredditSearchSubmit.setPreferredSize(new java.awt.Dimension(180, 23));
+    subredditSearchSubmit.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        subredditSearchSubmitActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+    gridBagConstraints.insets = new java.awt.Insets(3, 4, 3, 3);
+    subredditSearchTab.add(subredditSearchSubmit, gridBagConstraints);
 
-        subredditResList.setMinimumSize(new java.awt.Dimension(200, 200));
-        subredditResList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                subredditResListValueChanged(evt);
-            }
-        });
-        subredditResScrollPane.setViewportView(subredditResList);
+    subredditResList.setMinimumSize(new java.awt.Dimension(200, 200));
+    subredditResList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+      public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        subredditResListValueChanged(evt);
+      }
+    });
+    subredditResScrollPane.setViewportView(subredditResList);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 10.0;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
-        subredditSearchTab.add(subredditResScrollPane, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    gridBagConstraints.weightx = 10.0;
+    gridBagConstraints.weighty = 0.1;
+    gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
+    subredditSearchTab.add(subredditResScrollPane, gridBagConstraints);
 
-        subredditDetailTextArea.setEditable(false);
-        subredditDetailTextArea.setColumns(2);
-        subredditDetailTextArea.setRows(5);
-        subredditDetailTextArea.setTabSize(4);
-        subredditDetailTextArea.setWrapStyleWord(true);
-        subredditDetailTextArea.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        subredditDetailTextArea.setMaximumSize(new java.awt.Dimension(180, 180));
-        subredditDetailTextArea.setMinimumSize(new java.awt.Dimension(180, 180));
-        subredditDetailTextArea.setPreferredSize(new java.awt.Dimension(180, 180));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
-        subredditSearchTab.add(subredditDetailTextArea, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        subredditSearchTab.add(subredditTitleLabel, gridBagConstraints);
+    subredditDetailTextArea.setEditable(false);
+    subredditDetailTextArea.setColumns(2);
+    subredditDetailTextArea.setRows(5);
+    subredditDetailTextArea.setTabSize(4);
+    subredditDetailTextArea.setWrapStyleWord(true);
+    subredditDetailTextArea.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+    subredditDetailTextArea.setMaximumSize(new java.awt.Dimension(180, 180));
+    subredditDetailTextArea.setMinimumSize(new java.awt.Dimension(180, 180));
+    subredditDetailTextArea.setPreferredSize(new java.awt.Dimension(180, 180));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
+    subredditSearchTab.add(subredditDetailTextArea, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    subredditSearchTab.add(subredditTitleLabel, gridBagConstraints);
 
-        redditTabs.addTab("Subreddit search", subredditSearchTab);
+    redditTabs.addTab("Subreddit search", subredditSearchTab);
 
-        linkSearchTab.setLayout(new java.awt.GridBagLayout());
+    linkSearchTab.setLayout(new java.awt.GridBagLayout());
 
-        linkField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                linkFieldKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 4, 4, 4);
-        linkSearchTab.add(linkField, gridBagConstraints);
+    linkField.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyPressed(java.awt.event.KeyEvent evt) {
+        linkFieldKeyPressed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    gridBagConstraints.weightx = 0.1;
+    gridBagConstraints.insets = new java.awt.Insets(5, 4, 4, 4);
+    linkSearchTab.add(linkField, gridBagConstraints);
 
-        linkLabel.setText("Link URL:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 0);
-        linkSearchTab.add(linkLabel, gridBagConstraints);
+    linkLabel.setText("Link URL:");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+    gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 0);
+    linkSearchTab.add(linkLabel, gridBagConstraints);
 
-        linkModel = new DefaultListModel();
-        linkSearchList.setModel(linkModel);
-        linkScrollpane.setViewportView(linkSearchList);
+    linkModel = new DefaultListModel();
+    linkSearchList.setModel(linkModel);
+    linkScrollpane.setViewportView(linkSearchList);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        linkSearchTab.add(linkScrollpane, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 5;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 0.1;
+    gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+    linkSearchTab.add(linkScrollpane, gridBagConstraints);
 
-        linkAddUrlButton.setText("Add URL");
-        linkAddUrlButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                linkAddUrlButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        linkSearchTab.add(linkAddUrlButton, gridBagConstraints);
+    linkAddUrlButton.setText("Add URL");
+    linkAddUrlButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        linkAddUrlButtonActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    linkSearchTab.add(linkAddUrlButton, gridBagConstraints);
 
-        linkAddSLsButton.setText("Add Context SLs");
-        linkAddSLsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                linkAddSLsButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        linkSearchTab.add(linkAddSLsButton, gridBagConstraints);
+    linkAddSLsButton.setText("Add Context SLs");
+    linkAddSLsButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        linkAddSLsButtonActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+    linkSearchTab.add(linkAddSLsButton, gridBagConstraints);
 
-        linkClearButton.setText("Clear All");
-        linkClearButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                linkClearButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        linkSearchTab.add(linkClearButton, gridBagConstraints);
+    linkClearButton.setText("Clear All");
+    linkClearButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        linkClearButtonActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 4;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+    linkSearchTab.add(linkClearButton, gridBagConstraints);
 
-        redditTabs.addTab("Link search", linkSearchTab);
+    redditTabs.addTab("Link search", linkSearchTab);
 
-        accountSearchTab.setLayout(new java.awt.GridBagLayout());
+    accountSearchTab.setLayout(new java.awt.GridBagLayout());
 
-        accountSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                accountSearchFieldKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 4, 4, 4);
-        accountSearchTab.add(accountSearchField, gridBagConstraints);
+    accountSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyPressed(java.awt.event.KeyEvent evt) {
+        accountSearchFieldKeyPressed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    gridBagConstraints.weightx = 0.1;
+    gridBagConstraints.weighty = 0.1;
+    gridBagConstraints.insets = new java.awt.Insets(5, 4, 4, 4);
+    accountSearchTab.add(accountSearchField, gridBagConstraints);
 
-        jLabel3.setText("Account name:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 0);
-        accountSearchTab.add(jLabel3, gridBagConstraints);
+    jLabel3.setText("Account name:");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 0);
+    accountSearchTab.add(jLabel3, gridBagConstraints);
 
-        redditTabs.addTab("Account search", accountSearchTab);
+    redditTabs.addTab("Account search", accountSearchTab);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.3;
-        add(redditTabs, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 0.1;
+    gridBagConstraints.weighty = 0.3;
+    add(redditTabs, gridBagConstraints);
 
-        buttonPanel.setLayout(new java.awt.GridBagLayout());
+    buttonPanel.setLayout(new java.awt.GridBagLayout());
 
-        buttonFillerPanel.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        buttonPanel.add(buttonFillerPanel, gridBagConstraints);
+    buttonFillerPanel.setLayout(new java.awt.GridBagLayout());
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    buttonPanel.add(buttonFillerPanel, gridBagConstraints);
 
-        okButton.setText("Extract");
-        okButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                okButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
-        buttonPanel.add(okButton, gridBagConstraints);
+    okButton.setText("Extract");
+    okButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        okButtonActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+    buttonPanel.add(okButton, gridBagConstraints);
 
-        cancelButton.setText("Cancel");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
-            }
-        });
-        buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
+    cancelButton.setText("Cancel");
+    cancelButton.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cancelButtonActionPerformed(evt);
+      }
+    });
+    buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.1;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        add(buttonPanel, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.1;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(buttonPanel, gridBagConstraints);
 
-        crawlOptions.setBorder(javax.swing.BorderFactory.createTitledBorder("Crawling options"));
-        crawlOptions.setLayout(new java.awt.GridBagLayout());
+    crawlOptions.setBorder(javax.swing.BorderFactory.createTitledBorder("Crawling options"));
+    crawlOptions.setLayout(new java.awt.GridBagLayout());
 
-        crawlLinkSR.setText("Crawl Link Subreddit");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlLinkSR, gridBagConstraints);
+    crawlLinkSR.setText("Crawl Link Subreddit");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlLinkSR, gridBagConstraints);
 
-        crawlLinkUser.setText("Crawl Link Account");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlLinkUser, gridBagConstraints);
+    crawlLinkUser.setText("Crawl Link Account");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlLinkUser, gridBagConstraints);
 
-        crawlLinkComment.setText("Crawl Link Comments");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlLinkComment, gridBagConstraints);
+    crawlLinkComment.setText("Crawl Link Comments");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlLinkComment, gridBagConstraints);
 
-        crawlUserComment.setText("Crawl Account Comments");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlUserComment, gridBagConstraints);
+    crawlUserComment.setText("Crawl Account Comments");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlUserComment, gridBagConstraints);
 
-        crawlUserLink.setText("Crawl Account Links");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlUserLink, gridBagConstraints);
+    crawlUserLink.setText("Crawl Account Links");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlUserLink, gridBagConstraints);
 
-        crawlSRLink.setText("Crawl Subreddit Links");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlSRLink, gridBagConstraints);
+    crawlSRLink.setText("Crawl Subreddit Links");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlSRLink, gridBagConstraints);
 
-        crawlCommentUser.setText("Crawl Comment Account");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlCommentUser, gridBagConstraints);
+    crawlCommentUser.setText("Crawl Comment Account");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlCommentUser, gridBagConstraints);
 
-        crawlCommentLink.setText("Crawl Comment Link");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlCommentLink, gridBagConstraints);
+    crawlCommentLink.setText("Crawl Comment Link");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlCommentLink, gridBagConstraints);
 
-        crawlToggle.setText("Crawl Comment Tree");
-        crawlToggle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                crawlToggleActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        crawlOptions.add(crawlToggle, gridBagConstraints);
+    crawlToggle.setText("Crawl Comment Tree");
+    crawlToggle.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        crawlToggleActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    crawlOptions.add(crawlToggle, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        add(crawlOptions, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 0.1;
+    add(crawlOptions, gridBagConstraints);
+  }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         accepted = true;
@@ -828,45 +839,45 @@ public class RedditExtractorUI extends javax.swing.JPanel {
     private void subredditResListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_subredditResListValueChanged
         this.focusSubreddit();
     }//GEN-LAST:event_subredditResListValueChanged
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField accountSearchField;
-    private javax.swing.JPanel accountSearchTab;
-    private javax.swing.JPanel buttonFillerPanel;
-    private javax.swing.JPanel buttonPanel;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JPanel commentSearchTab;
-    private javax.swing.JCheckBox crawlCommentLink;
-    private javax.swing.JCheckBox crawlCommentUser;
-    private javax.swing.JCheckBox crawlLinkComment;
-    private javax.swing.JCheckBox crawlLinkSR;
-    private javax.swing.JCheckBox crawlLinkUser;
-    private javax.swing.JPanel crawlOptions;
-    private javax.swing.JCheckBox crawlSRLink;
-    private javax.swing.JCheckBox crawlToggle;
-    private javax.swing.JCheckBox crawlUserComment;
-    private javax.swing.JCheckBox crawlUserLink;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JButton linkAddSLsButton;
-    private javax.swing.JButton linkAddUrlButton;
-    private javax.swing.JButton linkClearButton;
-    private javax.swing.JTextField linkField;
-    private javax.swing.JLabel linkLabel;
-    private javax.swing.JScrollPane linkScrollpane;
-    private javax.swing.JList linkSearchList;
-    private javax.swing.JPanel linkSearchTab;
-    private javax.swing.JButton okButton;
-    private javax.swing.JTabbedPane redditTabs;
-    private javax.swing.JTextArea subredditDetailTextArea;
-    private javax.swing.JList subredditResList;
-    private javax.swing.JScrollPane subredditResScrollPane;
-    private javax.swing.JTextField subredditSearchField;
-    private javax.swing.JButton subredditSearchSubmit;
-    private javax.swing.JPanel subredditSearchTab;
-    private javax.swing.JLabel subredditTitleLabel;
-    private javax.swing.JList threadResList;
-    private javax.swing.JScrollPane threadResScrollPane;
-    private javax.swing.JLabel threadSearchDetails;
-    private javax.swing.JTextField threadSearchField;
-    private javax.swing.JButton threadSearchSubmit;
-    // End of variables declaration//GEN-END:variables
+  // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JTextField accountSearchField;
+  private javax.swing.JPanel accountSearchTab;
+  private javax.swing.JPanel buttonFillerPanel;
+  private javax.swing.JPanel buttonPanel;
+  private javax.swing.JButton cancelButton;
+  private javax.swing.JPanel commentSearchTab;
+  private javax.swing.JCheckBox crawlCommentLink;
+  private javax.swing.JCheckBox crawlCommentUser;
+  private javax.swing.JCheckBox crawlLinkComment;
+  private javax.swing.JCheckBox crawlLinkSR;
+  private javax.swing.JCheckBox crawlLinkUser;
+  private javax.swing.JPanel crawlOptions;
+  private javax.swing.JCheckBox crawlSRLink;
+  private javax.swing.JCheckBox crawlToggle;
+  private javax.swing.JCheckBox crawlUserComment;
+  private javax.swing.JCheckBox crawlUserLink;
+  private javax.swing.JLabel jLabel3;
+  private javax.swing.JButton linkAddSLsButton;
+  private javax.swing.JButton linkAddUrlButton;
+  private javax.swing.JButton linkClearButton;
+  private javax.swing.JTextField linkField;
+  private javax.swing.JLabel linkLabel;
+  private javax.swing.JScrollPane linkScrollpane;
+  private javax.swing.JList linkSearchList;
+  private javax.swing.JPanel linkSearchTab;
+  private javax.swing.JButton okButton;
+  private javax.swing.JTabbedPane redditTabs;
+  private javax.swing.JTextArea subredditDetailTextArea;
+  private javax.swing.JList subredditResList;
+  private javax.swing.JScrollPane subredditResScrollPane;
+  private javax.swing.JTextField subredditSearchField;
+  private javax.swing.JButton subredditSearchSubmit;
+  private javax.swing.JPanel subredditSearchTab;
+  private javax.swing.JLabel subredditTitleLabel;
+  private javax.swing.JList threadResList;
+  private javax.swing.JScrollPane threadResScrollPane;
+  private javax.swing.JLabel threadSearchDetails;
+  private javax.swing.JTextField threadSearchField;
+  private javax.swing.JButton threadSearchSubmit;
+  // End of variables declaration//GEN-END:variables
 }

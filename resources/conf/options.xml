@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>50</x>
-      <y>50</y>
+      <x>526</x>
+      <y>211</y>
       <width>1200</width>
       <height>700</height>
       <horizontalsplitter>250</horizontalsplitter>
@@ -1521,7 +1521,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <bsh>
       <path></path>
    </bsh>
-   <httpuseragent>Wandora</httpuseragent>
+   <httpuseragent>java:org.wandora</httpuseragent>
    <trees>
       <type>
          <name>Instances</name>

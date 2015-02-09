@@ -863,6 +863,14 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.csv.SimpleCSVAssociationExtractor</class>
             </item>
             <item>
+               <name>---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>Simple CSV association extractor...</name>
+               <class>org.wandora.application.tools.extractors.csv.SimpleCSVAssociationExtractor</class>
+            </item>
+            <item>
                <name>JPEG PS3.0 metadata extractor...</name>
                <class>org.wandora.application.tools.extractors.files.SimpleJPGExtractor</class>
             </item>
@@ -1523,7 +1531,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <bsh>
       <path></path>
    </bsh>
-   <httpuseragent>Wandora</httpuseragent>
+   <httpuseragent>java:org.wandora</httpuseragent>
    <trees>
       <type>
          <name>Instances</name>
