@@ -24,6 +24,7 @@ package org.wandora.application.tools.extractors.mediawikiapi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.wandora.dep.json.*;
 import java.net.URL;
 
@@ -32,6 +33,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import org.apache.commons.io.IOUtils;
 
 import java.util.ArrayList;
@@ -39,6 +41,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.Locator;
@@ -156,16 +160,14 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             String msg =  "Extracted " + nExtracted + " pages in total.\n"
                        +  "Should we continue the extraction?";
             
-//            if( contObject != null){ 
-//               shouldContinue = WandoraOptionPane.showConfirmDialog(null,msg,
-//                        "Continue?",WandoraOptionPane.YES_NO_OPTION);
-//            }
-//            else {
-//                shouldContinue = WandoraOptionPane.NO_OPTION;
-//            }
             
+            try {
             if(contObject != null  && !forceStop())
                 continueExtraction(contObject,t);
+            
+            } catch (Exception e) {
+              log("Nothing more to extract");
+            }
             
             
         } catch (Exception e) {
@@ -191,7 +193,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         } else if(contObject.has(typePrefix + "continue")){
             cont = "&" + typePrefix + "continue=" 
                  + contObject.getString(typePrefix + "continue");
-        }else {
+        } else {
             throw new Exception("Failed to get the continuation parameter");            
         }
         
@@ -295,13 +297,16 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     private String getArticleBody(String title) throws IOException{
         StringBuilder queryBuilder = new StringBuilder(this.baseURL)
             .append("/index.php?action=raw&title=")
-            .append(title);
+            .append(URLEncoder.encode(title));
 
         HttpResponse<InputStream> resp;
-
-        resp = Unirest.get(queryBuilder.toString())
-                .header("accept", "text/x-wiki")
-                .asBinary();
+        try {
+          resp = Unirest.get(queryBuilder.toString())
+                  .header("accept", "text/x-wiki")
+                  .asBinary();
+        } catch (UnirestException ex) {
+          throw new IOException(ex);
+        }
 
         InputStream body = resp.getBody();
         String bodyString = IOUtils.toString(body,"UTF-8"); 
@@ -325,10 +330,13 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         try {
             
             HashMap<String,String> info = new HashMap<String, String>();
-            
+          try {            
             resp = Unirest.post(this.baseURL + "/api.php")
                     .fields(fields)
                     .asJson();
+          } catch (UnirestException ex) {
+            throw new IOException(ex);
+          }
 
             JsonNode body = resp.getBody();
             
@@ -344,7 +352,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
                 Iterator<String> valueKeys = page.keys();
                 while(valueKeys.hasNext()){
                     String key = valueKeys.next();
-                    info.put(key, page.getString(key));
+                    info.put(key, page.get(key).toString());
                 }
                 return info;
                 
@@ -371,10 +379,13 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         HttpResponse<JsonNode> resp;
 
         try {
-            
-            resp = Unirest.post(this.baseURL + "/api.php")
-                    .fields(fields)
-                    .asJson();
+            try {            
+              resp = Unirest.post(this.baseURL + "/api.php")
+                      .fields(fields)
+                      .asJson();
+            } catch (UnirestException ex) {
+              throw new IOException(ex);
+            }
             
             JsonNode body = resp.getBody();
             JSONObject bodyObject = body.getObject();

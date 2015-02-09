@@ -834,8 +834,8 @@ public class WaianaService extends AbstractTopicWebApp {
             System.out.println("Deleting previously existing file '" + fname + "' before save file operation!");
         }
 
-        PrintWriter writer=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fname), "UTF-8"));
-        writer.write(data);
+        PrintWriter writer=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fname),"UTF-8"));
+        writer.print(data);
         writer.flush();
         writer.close();
         System.out.println("Saving a file '" + fname + "'");
