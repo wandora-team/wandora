@@ -56,6 +56,7 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
         var data_nyt_article = #parse( "${templatesdir}data_nyt_article.js" )
         var data_guardian = #parse( "${templatesdir}data_guardian.js" )
         var data_youtube = #parse( "${templatesdir}data_youtube.js" )
+        var data_reddit = #parse( "${templatesdir}data_reddit.js" )
         var data_email = #parse( "${templatesdir}data_email.js" )
         var data_calendar = #parse( "${templatesdir}data_calendar.js" )
         var data_directory = #parse( "${templatesdir}data_directory.js" )
@@ -136,6 +137,7 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
             combinedEventSource.loadJSON(data_omakaupunki, document.location.href);
             combinedEventSource.loadJSON(data_nyt_article, document.location.href);
             combinedEventSource.loadJSON(data_youtube, document.location.href);
+            combinedEventSource.loadJSON(data_reddit, document.location.href);
             combinedEventSource.loadJSON(data_email, document.location.href);
             combinedEventSource.loadJSON(data_calendar, document.location.href);
             combinedEventSource.loadJSON(data_guardian, document.location.href);

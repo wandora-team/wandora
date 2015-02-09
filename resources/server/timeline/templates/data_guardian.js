@@ -39,7 +39,7 @@
   #end##
                               {
                                       "start": "$startDate",
-                                      "title": "$articleTitle",
+                                      "title": "$esc.escapeJavaScript($articleTitle)",
                                       "textColor": "#000000",
                                       "classname": "nyt-article",
                                       "description": "$articleContent",

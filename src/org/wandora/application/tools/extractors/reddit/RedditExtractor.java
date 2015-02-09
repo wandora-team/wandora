@@ -60,6 +60,7 @@ public class RedditExtractor extends AbstractWandoraTool{
     private final String[] contentTypes=new String[] { 
         "text/plain", "text/json", "application/json" 
     };
+    
 
 
 

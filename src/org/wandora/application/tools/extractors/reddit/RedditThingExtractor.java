@@ -101,7 +101,7 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
         
         while(!shouldQuit){
            Thread.sleep(2000);
-           shouldQuit = forceStop() || !requester.hasJobs();
+           shouldQuit = forceStop() || !requester.hasJobs() || waitingUserInput;
         }
         
         requester.cancel();

@@ -25,6 +25,7 @@ import com.mashape.unirest.http.*;
 import com.mashape.unirest.request.body.MultipartBody;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -37,6 +38,7 @@ import org.apache.commons.httpclient.HttpStatus;
 
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.dep.json.*;
@@ -96,7 +98,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     
     
     private static HashMap<String, Boolean> CRAWL_SETTINGS = null;
-    private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance();
+    private static DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
     private static ArrayList<String> extracted;
     
@@ -105,6 +107,8 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     
     protected static String uaString;
     protected static Requester requester;
+    
+    protected static boolean waitingUserInput = false;
     
     
     @Override
@@ -447,7 +451,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     protected static void getSubmissions(String q, ParseCallback<JsonNode> callback) {
 
-        String u = apiRoot + "/search?q=" + q;
+        String u = apiRoot + "search?q=" + urlEncode(q);
 
         requester.doRequest(Unirest.get(u),callback);
 
@@ -455,7 +459,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     
     protected static void getSubreddits(String q, ParseCallback<JsonNode> callback) {
 
-        String u = apiRoot + "/subreddits/search?q=" + q;
+        String u = apiRoot + "subreddits/search?q=" + urlEncode(q);
 
         requester.doRequest(Unirest.get(u),callback);
 
@@ -1020,7 +1024,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         String kind = subreddit.getString("kind");
 
         String id = subredditData.getString("name");
-        String disp = subredditData.getString("display_name");
+        final String disp = subredditData.getString("display_name");
 
         
         log("parsing subreddit: " + disp);
@@ -1036,12 +1040,27 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
         if (CRAWL_SETTINGS.get("subredditLink")) {
           
-           ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+          ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
             @Override
             public void run(HttpResponse<JsonNode> response){
               try {
                 JSONObject respObj = response.getBody().getObject();
                 parseThing(respObj, tm, thingTypes);
+                
+                waitingUserInput = true;
+                
+                if(WandoraOptionPane.showConfirmDialog(getWandora(),
+                        "Load more links?","Load more links?",
+                        WandoraOptionPane.YES_NO_OPTION) == WandoraOptionPane.YES_OPTION){
+                  
+                  waitingUserInput = false;
+                  String after = respObj.getJSONObject("data").getString("after");
+                  
+                  requester.doRequest(Unirest.get(apiRoot + "r/" + disp + "/hot.json?after=" + after), this);
+                } else {
+                  waitingUserInput = false;
+                }
+                
               } catch (Exception e) {
                 log(e.getMessage());
               }
