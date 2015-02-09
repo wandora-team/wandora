@@ -551,7 +551,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                     // --- handle MS office files ---
                     if("doc".equals(extension) ||
                        "ppt".equals(extension) ||
-                       "xsl".equals(extension) ||
+                       "xls".equals(extension) ||
                        "vsd".equals(extension) ||
                        "odt".equals(extension)
                        ) {
