@@ -205,13 +205,14 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
 
 
 
+    @Override
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
         if(str == null || str.length() == 0) return false;
 
         try {
             int hash = str.hashCode();
             Topic textType = this.getDocumentType(topicMap);
-            String locator = "http://wandora.org/simple-document-extractor/"+hash;
+            String locator = "http://wandora.org/si/simple-document-extractor/"+hash;
 
             String name = null;
             if(str.length() > 80) {
@@ -246,6 +247,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
 
 
     
+    @Override
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         if(url == null || url.toExternalForm().length() == 0) return false;
         
@@ -298,6 +300,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
     
     
     
+    @Override
     public boolean _extractTopicsFrom(File file, TopicMap topicMap) throws Exception {
         if(file == null) return false;
         
@@ -460,8 +463,9 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             // --- HANDLE OFFICE DOCUMENTS ---
             else if(lowerCaseLocator.endsWith("doc") || lowerCaseLocator.endsWith("docx") ||
                lowerCaseLocator.endsWith("ppt") ||
-               lowerCaseLocator.endsWith("xsl") ||
-               lowerCaseLocator.endsWith("vsd")
+               lowerCaseLocator.endsWith("xls") ||
+               lowerCaseLocator.endsWith("vsd") ||
+               lowerCaseLocator.endsWith("odt")
                ) {
                     String content = MSOfficeBox.getText(inputStream);
                     if(content != null) {
@@ -470,25 +474,22 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             }
 
             else if(lowerCaseLocator.endsWith("html") ||
-               lowerCaseLocator.endsWith("htm")
-               ) {
-                    String content = IObox.loadFile(new InputStreamReader(inputStream));
-                    String tidyContent = XMLbox.cleanUp( content );
-                    if(tidyContent != null && tidyContent.length() > 0) {
-                        content = content.replace("<br>", "\n");
-                        content = content.replace("</br>", "\n");
-                        content = content.replace("<br/>", "\n");
-                        content = content.replace("<p>", "\n");
-                        content = content.replace("</p>", "\n");
-                        tidyContent = XMLbox.getAsText(tidyContent, "ISO-8859-1");
-                        setTextEnrichment(textTopic, topicMap, tidyContent, name);
-                    }
+                    lowerCaseLocator.endsWith("htm")) {
+                        String content = IObox.loadFile(new InputStreamReader(inputStream));
+                        setTextEnrichment(textTopic, topicMap, content, name);
+            }
+            
+            else if(lowerCaseLocator.endsWith("txt") ||
+                    lowerCaseLocator.endsWith("text")) {
+                        String content = IObox.loadFile(new InputStreamReader(inputStream));
+                        setTextEnrichment(textTopic, topicMap, content, name);
             }
             
             // --- HANDLE ANY OTHER DOCUMENTS ---
             else {
-                String content = IObox.loadFile(new InputStreamReader(inputStream));
-                setTextEnrichment(textTopic, topicMap, content, name);
+                byte[] content = IObox.loadBFile(inputStream);
+                String mimeType = "";
+                setBinaryEnrichment(textTopic, topicMap, content, mimeType);
             }
         }
         catch(Exception e) {
@@ -503,12 +504,32 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
     
     
     
-    public void setTextEnrichment(Topic textTopic, TopicMap topicMap, String content, String title) {
+    public void setBinaryEnrichment(Topic textTopic, TopicMap topicMap, byte[] content, String mimeType) {
+        try {
+            if(content != null && content.length > 0) {
+                Topic contentType = createTopic(topicMap, "document-content");
+                StringBuilder contentData = new StringBuilder("data:");
+                contentData.append(mimeType);
+                contentData.append(";base64,");
+                contentData.append(Base64.encodeBytes(content));
+                setData(textTopic, contentType, defaultLang, contentData.toString());
+            }
+        }
+        catch(Exception e) {
+            log(e);
+        }
+    }
+    
+    
+    
+    
+    
+    public void setTextEnrichment(Topic topic, TopicMap topicMap, String content, String title) {
         try {
             String trimmedText = Textbox.trimExtraSpaces(content);
             if(trimmedText != null && trimmedText.length() > 0) {
                 Topic contentType = createTopic(topicMap, "document-content");
-                setData(textTopic, contentType, defaultLang, trimmedText);
+                setData(topic, contentType, defaultLang, trimmedText);
             }
             if(title == null || title.length() == 0) {
                 title = solveTitle(trimmedText);
@@ -522,7 +543,6 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             log(e);
         }
     }
-    
     
     
     // -------------------------------------------------------------------------
