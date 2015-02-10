@@ -280,12 +280,14 @@ public class DirectiveEditor extends javax.swing.JPanel {
             AbstractTypePanel panel;
             if(p.isMultiple()){
                 panel=makeMultiplePanel(p, panelCls, p.getLabel(),directivePanel);
+                panel.setOrderingHint("0"+(i<10?"0":"")+i);
             }
             else {
                 try{
                     java.lang.reflect.Constructor<? extends AbstractTypePanel> panelConstructor=panelCls.getConstructor(DirectiveUIHints.Parameter.class,DirectivePanel.class);
                     panel=panelConstructor.newInstance(p,directivePanel);
                     panel.setLabel(p.getLabel());
+                    panel.setOrderingHint("0"+(i<10?"0":"")+i);
                     
                     if(panel instanceof DirectiveParameterPanel){
                         if(!p.getType().equals(Directive.class)){

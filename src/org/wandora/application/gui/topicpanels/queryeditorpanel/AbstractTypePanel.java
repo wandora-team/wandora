@@ -37,6 +37,7 @@ public abstract class AbstractTypePanel extends JPanel {
     
     protected DirectivePanel directivePanel;
 
+    protected String orderingHint=null;
     
 
     public AbstractTypePanel(Parameter parameter,DirectivePanel directivePanel) {
@@ -49,6 +50,16 @@ public abstract class AbstractTypePanel extends JPanel {
     public void disconnect(){
         
     }
+
+    public String getOrderingHint() {
+        return orderingHint;
+    }
+
+    public void setOrderingHint(String orderingHint) {
+        this.orderingHint = orderingHint;
+    }
+    
+    
     
     protected QueryEditorComponent getEditor(){
         Container parent=getParent();

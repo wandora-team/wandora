@@ -192,6 +192,9 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         gbc.fill=GridBagConstraints.HORIZONTAL;
         paramPanel.setLabel("-");
         parametersPanel.add(paramPanel,gbc);
+        if(this.orderingHint!=null) {
+            paramPanel.setOrderingHint(orderingHint+rows.size());
+        }
         
         this.revalidate();
         parametersPanel.repaint();
@@ -215,11 +218,24 @@ public class MultipleParameterPanel extends AbstractTypePanel {
             gbc=layout.getConstraints(row.removeButton);
             gbc.gridy--;
             layout.setConstraints(row.removeButton, gbc);
+            if(this.orderingHint!=null) row.panel.setOrderingHint(this.orderingHint+i);
         }
         
         this.revalidate();
         parametersPanel.repaint();
     }
+
+    @Override
+    public void setOrderingHint(String orderingHint) {
+        super.setOrderingHint(orderingHint);
+        for(int i=0;i<rows.size();i++){
+            Row row=rows.get(i);
+            if(this.orderingHint!=null) row.panel.setOrderingHint(this.orderingHint+i);
+            else row.panel.setOrderingHint(null);
+        }
+    }
+
+    
     
     public synchronized void removeParameter(AbstractTypePanel panel){
         for(int i=0;i<rows.size();i++){

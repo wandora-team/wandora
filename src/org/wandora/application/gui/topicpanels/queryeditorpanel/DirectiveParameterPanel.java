@@ -109,7 +109,7 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
         fromAnchor=p.getFromConnectorAnchor();
         fromPanel=p;
         
-        getDirectivePanel().connectParamAnchor(fromAnchor);
+        getDirectivePanel().connectParamAnchor(fromAnchor,this.orderingHint);
         
         disconnectButton.setVisible(true);
         directiveAnchor.setVisible(false);        

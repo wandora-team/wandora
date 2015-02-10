@@ -141,6 +141,7 @@ public class OperandParameterPanel extends AbstractTypePanel {
             operandPanel.removeAll();
             StringParameterPanel p=new StringParameterPanel(parameter,this.directivePanel);
             p.setLabel("");
+            p.setOrderingHint(this.orderingHint);
             operandPanel.add(p);
             this.revalidate();
             operandPanel.repaint();
@@ -151,6 +152,7 @@ public class OperandParameterPanel extends AbstractTypePanel {
             operandPanel.removeAll();
             DirectiveParameterPanel p=new DirectiveParameterPanel(parameter,this.directivePanel);
             p.setLabel("");
+            p.setOrderingHint(this.orderingHint);
             operandPanel.add(p);
             this.revalidate();
             operandPanel.repaint();
@@ -159,6 +161,14 @@ public class OperandParameterPanel extends AbstractTypePanel {
         }
         else return false;
     }
+
+    @Override
+    public void setOrderingHint(String orderingHint) {
+        super.setOrderingHint(orderingHint); //To change body of generated methods, choose Tools | Templates.
+        if(this.parameterPanel!=null) this.parameterPanel.setOrderingHint(orderingHint);
+    }
+    
+    
     
     private void operandTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operandTypeComboBoxActionPerformed
         operandTypeChanged();

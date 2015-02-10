@@ -31,6 +31,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
@@ -54,9 +55,11 @@ public class DirectivePanel extends javax.swing.JPanel {
     protected ConnectorAnchor toConnectorAnchor;
     protected ConnectorAnchor fromConnectorAnchor;
     
-    protected final ArrayList<ConnectorAnchor> paramsConnectors=new ArrayList<>();
+//    protected final ArrayList<ConnectorAnchor> paramsConnectors=new ArrayList<>();
     
     protected DirectiveParameters directiveParameters;
+    
+    protected final ArrayList<ParamAnchorInfo> paramAnchors=new ArrayList<>();
     
     protected Dimension normalDimensions;
     
@@ -125,32 +128,73 @@ public class DirectivePanel extends javax.swing.JPanel {
         });
     }
     
-    public ConnectorAnchor connectParamAnchor(ConnectorAnchor from){
-        synchronized(paramsConnectors){
-            final JPanel anchorComp=new JPanel();
+    protected static class ParamAnchorInfo implements Comparable {
+        public ConnectorAnchor anchor;
+        public JPanel component;
+        public String order;
+
+        public ParamAnchorInfo(){}
+        
+        public ParamAnchorInfo(ConnectorAnchor anchor, JPanel component, String order) {
+            this.anchor = anchor;
+            this.component = component;
+            this.order = order;
+        }
+        
+        
+        
+        @Override
+        public int compareTo(Object o) {
+            if(o==null) return 1;
+            if(!o.getClass().equals(this.getClass())) return 1;
+            ParamAnchorInfo p=(ParamAnchorInfo)o;
             
+            if(this.order==null && p.order==null) return 0;
+            else if(this.order==null && p.order!=null) return -1;
+            else if(this.order!=null && p.order==null) return 1;
+            else return this.order.compareTo(p.order);
+        }
+    
+    }
+    
+    protected void updateParamAnchors(){
+        synchronized(paramAnchors){
+            Collections.sort(paramAnchors);
+            
+            parameterDirectiveAnchors.removeAll();
             final GridLayout layout=(GridLayout)parameterDirectiveAnchors.getLayout();
-            layout.setColumns(paramsConnectors.size()+1);
-            parameterDirectiveAnchors.add(anchorComp);
+            layout.setColumns(paramAnchors.size());
             
-            parameterDirectiveAnchors.revalidate();
+            for(ParamAnchorInfo p : paramAnchors){
+                parameterDirectiveAnchors.add(p.component);
+            }
+        }
+        parameterDirectiveAnchors.revalidate();
+        getEditor().repaint();
+    }
+    
+    public ConnectorAnchor connectParamAnchor(ConnectorAnchor from,String ordering){
+        synchronized(paramAnchors){
+            final JPanel anchorComp=new JPanel();
+            final ParamAnchorInfo info=new ParamAnchorInfo(null, anchorComp, ordering);
             
             ComponentConnectorAnchor anchor=new ComponentConnectorAnchor(anchorComp,ConnectorAnchor.Direction.DOWN, true, false){
                 @Override
                 public boolean setFrom(ConnectorAnchor from) {
                     boolean ret=super.setFrom(from); 
                     if(from==null){
-                        parameterDirectiveAnchors.remove(anchorComp);
-                        layout.setColumns(paramsConnectors.size()-1);
-                        synchronized(paramsConnectors){
-                            paramsConnectors.remove(this);
+                        synchronized(paramAnchors){
+                            paramAnchors.remove(info);
+                            updateParamAnchors();
                         }
                     }
                     return ret;
                 }
             };
-            paramsConnectors.add(anchor);
+            info.anchor=anchor;
+            paramAnchors.add(info);
             from.setTo(anchor);
+            updateParamAnchors();
             return anchor;
         }
     }

@@ -68,6 +68,7 @@ public class TopicOperandParameterPanel extends OperandParameterPanel {
             operandPanel.removeAll();
             TopicParameterPanel p=new TopicParameterPanel(parameter,this.directivePanel);
             p.setLabel("");
+            p.setOrderingHint(this.orderingHint);
             operandPanel.add(p);
             this.revalidate();
             operandPanel.repaint();
@@ -78,6 +79,7 @@ public class TopicOperandParameterPanel extends OperandParameterPanel {
             operandPanel.removeAll();
             StringParameterPanel p=new StringParameterPanel(parameter,this.directivePanel);
             p.setLabel("");
+            p.setOrderingHint(this.orderingHint);
             operandPanel.add(p);
             this.revalidate();
             operandPanel.repaint();
