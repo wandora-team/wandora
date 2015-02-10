@@ -29,6 +29,10 @@ package org.wandora.application.tools.extractors.files;
 
 
 
+import eu.medsea.mimeutil.MimeType;
+import eu.medsea.mimeutil.MimeUtil;
+import eu.medsea.mimeutil.detector.MagicMimeMimeDetector;
+
 import org.wandora.application.tools.browserextractors.*;
 import org.wandora.topicmap.TMBox;
 import org.wandora.utils.IObox;
@@ -489,7 +493,32 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             else {
                 byte[] content = IObox.loadBFile(inputStream);
                 String mimeType = "";
-                setBinaryEnrichment(textTopic, topicMap, content, mimeType);
+                MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
+                Collection<MimeType> mimeTypes = new ArrayList();
+                if(locator != null) {
+                    if(MimeTypes.getMimeType(locator) != null) {
+                        mimeTypes.add(new MimeType(MimeTypes.getMimeType(locator)));
+                    }
+                    mimeTypes.addAll(MimeUtil.getMimeTypes(locator));
+                }
+                mimeTypes.addAll(MimeUtil.getMimeTypes(content));
+                boolean isText = false;
+                for(MimeType mime : mimeTypes) {
+                    if(MimeUtil.isTextMimeType(mime)) {
+                        isText = true;
+                        break;
+                    }
+                }
+                if(isText) {
+                    setTextEnrichment(textTopic, topicMap, new String(content), name);
+                }
+                else {
+                    if(!mimeTypes.isEmpty()) {
+                        MimeType mime = mimeTypes.iterator().next();
+                        mimeType = mime.toString();
+                    }
+                    setBinaryEnrichment(textTopic, topicMap, content, mimeType);
+                }
             }
         }
         catch(Exception e) {
@@ -511,7 +540,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                 StringBuilder contentData = new StringBuilder("data:");
                 contentData.append(mimeType);
                 contentData.append(";base64,");
-                contentData.append(Base64.encodeBytes(content));
+                contentData.append(org.wandora.utils.Base64.encodeBytes(content));
                 setData(textTopic, contentType, defaultLang, contentData.toString());
             }
         }
