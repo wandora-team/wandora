@@ -46,6 +46,9 @@ public abstract class AbstractGenerator extends AbstractWandoraTool implements W
     }
     
     
+    public Topic getOrCreateTopic(TopicMap map, String si) {
+        return getOrCreateTopic(map, si, null);
+    }
     
 
     
@@ -67,7 +70,44 @@ public abstract class AbstractGenerator extends AbstractWandoraTool implements W
     }
     
     
+    public Topic getOrCreateTopic(TopicMap map, String si, String basename, Topic type) {
+        Topic topic = null;
+        try {
+            topic = map.getTopic(si);
+            if(topic == null) {
+                topic = map.createTopic();
+                topic.addSubjectIdentifier(new Locator(si));
+                if(basename != null && basename.length() > 0) topic.setBaseName(basename);
+                if(type != null && type.isRemoved()) topic.addType(type);
+            }
+        }
+        catch(Exception e) {
+            log(e);
+            e.printStackTrace();
+        }
+        return topic;
+    }
+    
+    
+    public void makeSuperclassSubclass(TopicMap map, Topic superclass, Topic subclass) {
+        try {
+            if(map == null || superclass == null || subclass == null) return;
+            Topic associationType = getOrCreateTopic(map, XTMPSI.SUPERCLASS_SUBCLASS);
+            Topic superRole = getOrCreateTopic(map, XTMPSI.SUPERCLASS);
+            Topic subRole = getOrCreateTopic(map, XTMPSI.SUBCLASS);
 
+            if(associationType != null && superRole != null && subRole != null) {
+                Association a = map.createAssociation(associationType);
+                a.addPlayer(subclass, subRole);
+                a.addPlayer(superclass, superRole);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    
     @Override
     public WandoraToolType getType() {
         return WandoraToolType.createGeneratorType();

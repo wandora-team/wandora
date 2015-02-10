@@ -32,6 +32,7 @@ import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import java.util.*;
+import org.wandora.utils.swing.GuiTools;
 
 
 /**
@@ -39,7 +40,12 @@ import java.util.*;
  * @author akivela
  */
 public class RandomGraphGenerator extends AbstractGenerator implements WandoraTool {
-    public static String SI_PREFIX = "http://wandora.org/si/topic/";
+    public static String RANDOM_GRAPH_SI = "http://wandora.org/si/random-graph";
+
+    public static String siPattern = "http://wandora.org/si/topic/__n__";
+    public static String basenamePattern = "Topic __n__";
+    public static boolean connectWithWandoraClass = false;
+    public static boolean ensureNumberOfAssociations = true;
     
     
     
@@ -56,20 +62,31 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         return "Generates a random graph topic map.";
     }
     
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        TopicMap topicmap = solveContextTopicMap(admin, context);
+    @Override
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        TopicMap topicmap = solveContextTopicMap(wandora, context);
         
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Random graph generator",
             "Random graph generator creates a topic map with numbered topics (nodes) "+
               "and random associations (edges). If 'number of associations' is a valid number "+
               "it overrides 'association probality'. Number is a positive integer. "+
-              "Probability is a floating point number between 0.1 and 1.0.",
+              "Probability is a floating point number between 0.0 and 1.0.",
             true,new String[][]{
             new String[]{"Number of topics","string"},
             new String[]{"Number of random associations","string"},
-            new String[]{"Random associations probability","string"}
-        },admin);
+            new String[]{"Random associations probability","string"},
+            new String[]{"---1","separator"},
+            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
+            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
+            new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
+            new String[]{"Association type of random associations","topic",null,"Optional association type for random graph edges."},
+            new String[]{"First role of random associations","topic",null,"Optional role topic for random graph edges."},
+            new String[]{"Second role of random associations","topic",null,"Optional role topic for random graph edges."},
+        },wandora);
+        
+        god.setSize(700, 420);
+        GuiTools.centerWindow(god,wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
         Map<String,String> values=god.getValues();
@@ -100,34 +117,80 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             singleLog(e);
             return;
         }
+
+        try {
+            siPattern = values.get("Subject identifier pattern");
+            basenamePattern = values.get("Basename pattern");
+            connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
+        }
+        catch(Exception e) {
+            singleLog(e);
+        }
         
         setDefaultLogger();
         setLogTitle("Random graph generator");
-        log("Creating topics");
+        log("Creating topics.");
         
         Topic[] topics = new Topic[n];
+        String graphIdentifier = ""+System.currentTimeMillis();
         
         setProgressMax(n);
         for(int i=0; i<n && !forceStop(); i++) {
             setProgress(n);
-            topics[i] = getOrCreateTopic(topicmap, SI_PREFIX+i, "Topic "+i);
+            String newBasename = basenamePattern.replaceAll("__n__", ""+i);
+            String newSubjectIdentifier = siPattern.replaceAll("__n__", ""+i);
+            topics[i] = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
+            if(connectWithWandoraClass) {
+                Topic randomGraphTopic = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI, "Random graph");
+                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
+                makeSuperclassSubclass(topicmap, wandoraClass, randomGraphTopic);
+                Topic randomGraphInstanceTopic = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+graphIdentifier, "Random graph "+graphIdentifier, randomGraphTopic);
+                randomGraphInstanceTopic.addType(randomGraphTopic);
+                topics[i].addType(randomGraphInstanceTopic);
+            }
         }
+        
+        log("Checking association type and role topics.");
+        Topic aType = topicmap.getTopic(values.get("Association type of random associations"));
+        if(aType == null || aType.isRemoved()) {
+            aType = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"associationType", "Random association");
+        }
+        
+        Topic role1 = topicmap.getTopic(values.get("Association type of random associations"));
+        if(role1 == null || role1.isRemoved()) {
+            role1 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role1", "Role 1");
+        }
+        
+        Topic role2 = topicmap.getTopic(values.get("Association type of random associations"));
+        if(role2 == null || role2.isRemoved()) {
+            role2 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role2", "Role 2");
+        }
+
+        
+        Association a = null;
         Topic t1 = null;
         Topic t2 = null;
-        Topic aType = getOrCreateTopic(topicmap, SI_PREFIX+"associationType", "Association");
-        Topic role1 = getOrCreateTopic(topicmap, SI_PREFIX+"role1", "Role 1");
-        Topic role2 = getOrCreateTopic(topicmap, SI_PREFIX+"role2", "Role 2");
-        Association a = null;
         
-        log("Creating random associations");
+        log("Creating random associations.");
         setProgress(0);
         
-        // Creating excact number of random associations!
+        // Creating exact number of random associations!
         if(useAssociationNumber) {
             setProgressMax(an);
+            HashSet createdAssociations = new HashSet(an);
             for(int j=0; j<an && !forceStop(); j++) {
                 int n1 = (int) Math.floor( Math.random() * n );
                 int n2 = (int) Math.floor( Math.random() * n );
+                if(ensureNumberOfAssociations) {
+                    String hash = n1+"-"+n2;
+                    int retries = 100;
+                    while(createdAssociations.contains(hash) && --retries>0) {
+                        n1 = (int) Math.floor( Math.random() * n );
+                        n2 = (int) Math.floor( Math.random() * n );
+                        hash = n1+"-"+n2;
+                    }
+                    createdAssociations.add(hash);
+                }
 
                 t1 = topics[n1];
                 t2 = topics[n2];
@@ -159,8 +222,17 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             }
         }
         
-        setState(CLOSE);
+        if(connectWithWandoraClass) {
+            log("You'll find created topics and associations under the 'Random graph' topic.");
+        }
+        else {
+            String searchWord = basenamePattern.replaceAll("__n__", "");
+            searchWord = searchWord.trim();
+            log("You'll find created topics and associations by searching with a '"+searchWord+"'.");
+        }
+        log("Ok.");
         
+        setState(WAIT);
     }
     
     

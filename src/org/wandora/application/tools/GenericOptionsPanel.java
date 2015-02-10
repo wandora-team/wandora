@@ -89,11 +89,15 @@ public class GenericOptionsPanel extends JPanel {
             gbc.gridy=i;
             gbc.gridx=0;
             gbc.weightx=0.0;
+            gbc.gridwidth=1;
+            gbc.insets=new Insets(5,5,0,5);
             String id=fields[i][0];
             String type=fields[i][1];
             String value="";
             if(fields[i].length>2) value=fields[i][2];
-            this.add(new SimpleLabel(id),gbc);
+            if(!type.equalsIgnoreCase("separator")){
+                this.add(new SimpleLabel(id),gbc);
+            }
             Component c=null;
             if(type.equalsIgnoreCase("string")){
                 c=new SimpleField();
@@ -108,6 +112,10 @@ public class GenericOptionsPanel extends JPanel {
                 if(value.equalsIgnoreCase("true")) ((SimpleCheckBox)c).setSelected(true);
                 else ((SimpleCheckBox)c).setSelected(false);
             }
+            else if(type.equalsIgnoreCase("separator")){
+                c=new JSeparator();
+                ((JSeparator) c).setOrientation(JSeparator.HORIZONTAL);
+            }
             else if(type.equalsIgnoreCase("topic")){
                 try{
                     if(value == null || value.length()==0) {
@@ -116,7 +124,8 @@ public class GenericOptionsPanel extends JPanel {
                     else {
                         c=new GetTopicButton(admin.getTopicMap().getTopic(value),admin,admin,true);
                     }
-                }catch(TopicMapException tme){
+                }
+                catch(TopicMapException tme){
                     admin.handleError(tme);
                     c=new SimpleLabel("Topic map exception");
                 }
@@ -127,11 +136,20 @@ public class GenericOptionsPanel extends JPanel {
                 ((SimpleComboBox)c).setEditable(false);
                 ((SimpleComboBox)c).setSelectedItem(value);
             }
-            gbc.gridx=1;
+            if(type.equalsIgnoreCase("separator")){
+                gbc.gridx=0;
+                gbc.gridwidth = 2;
+                gbc.insets=new Insets(12,5,7,5);
+            }
+            else {
+                gbc.gridx=1;
+                gbc.gridwidth=1;
+                gbc.insets=new Insets(5,5,0,5);
+            }
             gbc.weightx=1.0;
             this.add(c,gbc);
             components.put(id,c);
-            if(fields[i].length>3){
+            if(fields[i].length>3) {
                 gbc.gridx=2;
                 gbc.weightx=0.0;
                 JLabel label=new JLabel(icon);
