@@ -23,26 +23,21 @@
 package org.wandora.application.tools.extractors.reddit;
 
 import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.async.Callback;
 import org.wandora.dep.json.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import org.apache.commons.io.IOUtils;
 import org.wandora.topicmap.TopicMap;
-import java.util.List;
 
 
 import java.util.HashMap;
-import java.util.concurrent.Future;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
 
 
@@ -78,43 +73,38 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
-        
-        
-        log("handling url " + str);
-        
-        Callback<JsonNode> callback = new Callback<JsonNode>() {
-            @Override
-            public void failed(Exception e){}
-            @Override
-            public void cancelled(){}
-            @Override
-            public void completed(HttpResponse<JsonNode> response){
-                try {
-                    File f = new File("resp_" + System.currentTimeMillis() + ".json");
-                    FileOutputStream fos = new FileOutputStream(f);
-                    IOUtils.write(IOUtils.toString(response.getRawBody()), fos);
-                    fos.close();
-                    parse(response);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
+          @Override
+          public void run(HttpResponse<JsonNode> response){
+              try {
+                  parse(response);
+              } catch (JSONException | TopicMapException e) {
+                  log(e.getMessage());
+              }
+          }
+          @Override
+          protected void error(Exception e, String body) {
+            log(e.getMessage());
+            if(body != null){
+              log("Server responed with");
+              log(body);
             }
+
+          }
             
         };
         
-        //List<Future<HttpResponse<JsonNode>>> futures = 
-        //        new ArrayList<Future<HttpResponse<JsonNode>>>();
+        requester.doRequest(Unirest.get(str), callback);
         
-        //Future<HttpResponse<JsonNode>> f = doAsyncRequest(str, callback);
+        boolean shouldQuit = false;
         
-        //futures.add(f);
-        //We don't want to return before stuff's done
-        //for(Future fut : futures){
-        //    fut.get();
-        //}
+        while(!shouldQuit){
+           Thread.sleep(2000);
+           shouldQuit = forceStop() || !requester.hasJobs() || waitingUserInput;
+        }
         
-        HttpResponse<JsonNode> resp = doRequest(str);
-        parse(resp);
+        requester.cancel();
         
         return true;
     }

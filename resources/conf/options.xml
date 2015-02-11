@@ -10,8 +10,8 @@
    </window>
    <textEditor>
       <window>
-         <width>648</width>
-         <height>450</height>
+         <width>800</width>
+         <height>600</height>
          <x>50</x>
          <y>50</y>
       </window>
@@ -418,18 +418,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.importers.SimpleRDFTurtleImport</class>
          </item>
          <item>
-            <name>--- GENE ONTOLOGY FORMATS ---</name>
-            <class>org.wandora.application.tools.DummyTool</class>
-         </item>
-         <item>
-            <name>OBO import...</name>
-            <class>org.wandora.application.tools.importers.OBOImport</class>
-         </item>
-         <item>
-            <name>GOA import...</name>
-            <class>org.wandora.application.tools.importers.GOAImport</class>
-         </item>
-         <item>
             <name>--- MATRIXS AND LISTS ---</name>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
@@ -444,6 +432,18 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Incidence matrix import...</name>
             <class>org.wandora.application.tools.importers.graphs.IncidenceMatrixImport</class>
+         </item>
+         <item>
+            <name>--- GENE ONTOLOGY FORMATS ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>OBO import...</name>
+            <class>org.wandora.application.tools.importers.OBOImport</class>
+         </item>
+         <item>
+            <name>GOA import...</name>
+            <class>org.wandora.application.tools.importers.GOAImport</class>
          </item>
          <item>
             <name>--- OTHER ---</name>
@@ -837,16 +837,20 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Simple files</name>
             <item>
+               <name>Simple document extractor...</name>
+               <class>org.wandora.application.tools.extractors.files.SimpleDocumentExtractor</class>
+            </item>
+            <item>
+               <name>---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
                <name>Directory structure extractor...</name>
                <class>org.wandora.application.tools.extractors.files.DirectoryStructureExtractor2</class>
             </item>
             <item>
                <name>(Old) Directory structure extractor...</name>
                <class>org.wandora.application.tools.extractors.files.DirectoryStructureExtractor</class>
-            </item>
-            <item>
-               <name>Simple document extractor...</name>
-               <class>org.wandora.application.tools.extractors.files.SimpleDocumentExtractor</class>
             </item>
             <item>
                <name>---</name>
@@ -1087,18 +1091,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.exporters.RDFExport</class>
          </item>
          <item>
-            <name>--- GENE ONTOLOGY FORMATS ---</name>
-            <class>org.wandora.application.tools.DummyTool</class>
-         </item>
-         <item>
-            <name>Export OBO...</name>
-            <class>org.wandora.application.tools.exporters.OBOExport</class>
-         </item>
-         <item>
-            <name>OBO round trip...</name>
-            <class>org.wandora.application.tools.exporters.OBORoundTrip</class>
-         </item>
-         <item>
             <name>--- GRAPH FORMATS ---</name>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
@@ -1142,7 +1134,19 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <name>Export incidence matrix...</name>
             <class>org.wandora.application.tools.exporters.IncidenceMatrixExport</class>
          </item>
-        <item>
+         <item>
+            <name>--- GENE ONTOLOGY FORMATS ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Export OBO...</name>
+            <class>org.wandora.application.tools.exporters.OBOExport</class>
+         </item>
+         <item>
+            <name>OBO round trip...</name>
+            <class>org.wandora.application.tools.exporters.OBORoundTrip</class>
+         </item>
+         <item>
             <name>--- SEARCH INDEX BUILDERS ---</name>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
@@ -1185,9 +1189,9 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.fng.opendata.v2b.FngOpenDataDublinCoreExporter</class>
             </item>
             <item>
-                <name>--- SIMBERG ---</name>
-                <class>org.wandora.application.tools.DummyTool</class>
-             </item>
+               <name>--- SIMBERG ---</name>
+               <class>org.wandora.application.tools.DummyTool</class>
+            </item>
             <item>
                <name>Simberg open data exporter...</name>
                <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOpenDataExporter</class>
@@ -1471,7 +1475,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </shortcuts>
    <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
    <current>
-      <directory>/home/olli/grip/simberg/html</directory>
+      <directory>/home/</directory>
       <port></port>
       <user></user>
       <host></host>
@@ -1517,7 +1521,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <bsh>
       <path></path>
    </bsh>
-   <httpuseragent>Wandora</httpuseragent>
+   <httpuseragent>java:org.wandora</httpuseragent>
    <trees>
       <type>
          <name>Instances</name>

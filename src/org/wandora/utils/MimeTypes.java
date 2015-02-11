@@ -32,13 +32,41 @@ import java.net.URL;
  * @author olli
  */
 public class MimeTypes {
-    public static HashMap<String,String> extensionMap=new HashMap<String,String>();
-    static{
+    public static HashMap<String,String> extensionMap = new LinkedHashMap<String,String>();
+    static {
+        try {
+            String mimeContent = IObox.loadResource("conf/mime.types");
+            String[] mimeLines = mimeContent.split("\n");
+            for(int i=0; i<mimeLines.length; i++) {
+                String mimeLine = mimeLines[i].trim();
+                if(mimeLine.length() == 0) continue;
+                if(mimeLine.startsWith("#")) continue;
+                String[] mimeParts = mimeLine.split("\\s");
+                if(mimeParts.length > 1) {
+                    String mimeType = mimeParts[0].trim();
+                    if(mimeType.length() > 0) {
+                        for(int j=1; j<mimeParts.length; j++) {
+                            String fileExtension = mimeParts[j].trim();
+                            if(fileExtension.length() > 0) {
+                                extensionMap.put(fileExtension, mimeType);
+                                System.out.println(" "+mimeType+"\t\t"+fileExtension);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Exception '"+e.getMessage()+"' occurred while reading mime types from 'conf/mime.types'.");
+        }
+
+        /*
         extensionMap.put("ai","application/postscript");
         extensionMap.put("aif","audio/x-aiff");
         extensionMap.put("aifc","audio/x-aiff");
         extensionMap.put("aiff","audio/x-aiff");
         extensionMap.put("asc","text/plain");
+        extensionMap.put("atom","application/atom+xml ");
         extensionMap.put("au","audio/basic");
         extensionMap.put("avi","video/x-msvideo");
         extensionMap.put("bin","application/octet-stream");
@@ -53,21 +81,37 @@ public class MimeTypes {
         extensionMap.put("exe","application/octet-stream");
         extensionMap.put("fli","video/x-fli");
         extensionMap.put("gif","image/gif");
+        extensionMap.put("gml","application/gml+xml");
+        extensionMap.put("gpx","application/gpx+xml");
+        extensionMap.put("gxf","application/gxf");
         extensionMap.put("gtar","application/x-gtar");
         extensionMap.put("gz","application/x-gzip");
         extensionMap.put("htm","text/html");
         extensionMap.put("html","text/html");
+        extensionMap.put("hqx","application/mac-binhex40");
         extensionMap.put("ief","image/ief");
+        extensionMap.put("jar","application/java-archive");
+        extensionMap.put("ser","application/java-serialized-object");
+        extensionMap.put("class","application/java-vm");
         extensionMap.put("jpe","image/jpeg");
         extensionMap.put("jpeg","image/jpeg");
         extensionMap.put("jpg","image/jpeg");
         extensionMap.put("js","application/x-javascript");
+        extensionMap.put("json","application/json");
+        extensionMap.put("jsonml","application/jsonml+json");
         extensionMap.put("latex","application/x-latex");
         extensionMap.put("lha","application/octet-stream");
         extensionMap.put("lsp","application/x-lisp");
         extensionMap.put("lzh","application/octet-stream");
+        extensionMap.put("ma","application/mathematica");
+        extensionMap.put("mads","application/mads+xml");
         extensionMap.put("man","application/x-troff-man");
+        extensionMap.put("mathml","application/mathml+xml");
+        extensionMap.put("mbox","application/mbox");
+        extensionMap.put("mrc","application/marc");
+        extensionMap.put("mrcx","application/marcxml+xml");
         extensionMap.put("mesh","model/mesh");
+        extensionMap.put("mods","application/mods+xml");
         extensionMap.put("mid","audio/midi");
         extensionMap.put("midi","audio/midi");
         extensionMap.put("mime","www/mime");
@@ -82,6 +126,7 @@ public class MimeTypes {
         extensionMap.put("ms","application/x-troff-ms");
         extensionMap.put("msh","model/mesh");
         extensionMap.put("nc","application/x-netcdf");
+        extensionMap.put("ogx","application/ogg");
         extensionMap.put("pbm","image/x-portable-bitmap");
         extensionMap.put("pdf","application/pdf");
         extensionMap.put("pgm","image/x-portable-graymap");
@@ -96,10 +141,12 @@ public class MimeTypes {
         extensionMap.put("qt","video/quicktime");
         extensionMap.put("ra","audio/x-realaudio");
         extensionMap.put("ram","audio/x-pn-realaudio");
+        extensionMap.put("rdf","application/rdf+xml");
         extensionMap.put("rgb","image/x-rgb");
         extensionMap.put("rm","audio/x-pn-realaudio");
         extensionMap.put("roff","application/x-troff");
         extensionMap.put("rpm","audio/x-pn-realaudio-plugin");
+        extensionMap.put("rss","application/rss+xml");
         extensionMap.put("rtf","text/rtf");
         extensionMap.put("rtx","text/richtext");
         extensionMap.put("sgm","text/sgml");
@@ -134,9 +181,10 @@ public class MimeTypes {
         extensionMap.put("xml","text/xml");
         extensionMap.put("xpm","image/x-xpixmap");
         extensionMap.put("zip","application/zip");
+        */
     }
-    public static HashMap<String,String> inverseMap=new HashMap<String,String>();
-    static{
+    public static HashMap<String,String> inverseMap = new LinkedHashMap<String,String>();
+    static {
         for(Map.Entry<String,String> e : extensionMap.entrySet()){
             inverseMap.put(e.getValue(), e.getKey());
         }

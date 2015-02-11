@@ -25,32 +25,19 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel;
 
-import bibliothek.gui.DockController;
-import bibliothek.gui.DockStation;
-import bibliothek.gui.Dockable;
+
 import bibliothek.gui.dock.DefaultDockable;
-import bibliothek.gui.dock.DockElement;
-import bibliothek.gui.dock.action.DockActionSource;
-import bibliothek.gui.dock.common.DefaultSingleCDockable;
-import bibliothek.gui.dock.common.intern.DefaultCDockable;
-import bibliothek.gui.dock.displayer.DisplayerRequest;
-import bibliothek.gui.dock.displayer.DockableDisplayerHints;
-import bibliothek.gui.dock.dockable.DockableStateListener;
-import bibliothek.gui.dock.event.DockHierarchyListener;
-import bibliothek.gui.dock.event.DockableListener;
 import bibliothek.gui.dock.title.DockTitle;
-import bibliothek.gui.dock.title.DockTitleRequest;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.Icon;
-import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 
+
+
 /**
+ * 
  *
  * @author akivela
  */
@@ -69,7 +56,7 @@ public class WandoraDockable extends DefaultDockable {
         for(int i=0; i<dtitles.length; i++) {
             DockTitle dtitle = dtitles[i];
             Component comp = dtitle.getComponent();
-            System.out.println("COMP="+comp);
+            //System.out.println("COMP="+comp);
             //comp.add(tp.getViewPopupMenu());
         }
         this.addMouseInputListener(new WandoraDockableMouseListener());

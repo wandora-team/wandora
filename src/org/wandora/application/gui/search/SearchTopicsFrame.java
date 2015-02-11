@@ -51,6 +51,7 @@ public class SearchTopicsFrame extends javax.swing.JFrame {
         initComponents();
         
         searchPanels = new SearchTopicPanel();
+        searchPanels.setUseResultScrollPanes(true);
         searchPanels.init();
         containerPanel.add(searchPanels.getGui(), BorderLayout.CENTER);
         
@@ -101,13 +102,11 @@ public class SearchTopicsFrame extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         containerPanel.setLayout(new java.awt.BorderLayout());
-        containerScrollPane.setViewportView(containerPanel);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        getContentPane().add(containerScrollPane, gridBagConstraints);
+        getContentPane().add(containerPanel, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

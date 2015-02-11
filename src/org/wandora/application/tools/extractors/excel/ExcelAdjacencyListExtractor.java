@@ -136,9 +136,11 @@ public class ExcelAdjacencyListExtractor extends AbstractExcelExtractor {
                         }
                         if(a != null) {
                             String roleSI = rolesPerColumn.get(Integer.toString(cell.getColumnIndex()));
-                            Topic role = tm.getTopic(roleSI);
-                            if(role == null) role = getDefaultRoleTopic(cell, tm);
-                            a.addPlayer(player, role);
+                            if(roleSI != null) {
+                                Topic role = tm.getTopic(roleSI);
+                                if(role == null) role = getDefaultRoleTopic(cell, tm);
+                                a.addPlayer(player, role);
+                            }
                         }
                     }
                 }

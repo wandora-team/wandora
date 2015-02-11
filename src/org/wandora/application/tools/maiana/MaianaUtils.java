@@ -214,11 +214,11 @@ public class MaianaUtils {
             return "";
         }
 
-        int         c = 0;
-        int          i;
-        int          len = string.length();
+        int c = 0;
+        int i;
+        int len = string.length();
         StringBuilder sb = new StringBuilder(len + 4);
-        String       t;
+        String t;
 
         for (i=0; i<len; i=i+1) {
             c = string.charAt(i);
@@ -250,13 +250,7 @@ public class MaianaUtils {
                sb.append("\\r");
                break;
             default:
-                if (c < ' ') {
-                    t = "000" + Integer.toHexString(c);
-                    sb.append("\\u" + t.substring(t.length() - 4));
-                }
-                else {
-                    sb.append((char) c);
-                }
+                sb.append((char) c);
             }
         }
         return sb.toString();
@@ -308,9 +302,8 @@ public class MaianaUtils {
                 con.setRequestProperty("Content-length", data.length() + "");
                 // con.setRequestProperty("Accept-Charset", "UTF-8");
                 con.setDoOutput(true);
-                //PrintWriter out = new PrintWriter(new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8));
-                PrintWriter out = new PrintWriter(new OutputStreamWriter(con.getOutputStream()));
-                out.print(data);
+                OutputStreamWriter out = new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8);
+                out.write(data);
                 out.flush();
                 out.close();
             }

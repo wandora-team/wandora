@@ -689,6 +689,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         
         private Color noOccurrenceColor = UIConstants.noContentBackgroundColor;
         private Color occurrenceInfoTextColor = new Color(150,150,150);
+        private Color dataOccurrenceColor = new Color(240,255,250);
         
         public DataCellRenderer(){
             occurrenceTextField = new SimpleTextPane();
@@ -701,7 +702,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             occurrenceInfoLabel = new SimpleLabel();
             occurrenceInfoLabel.setOpaque(true);
             occurrenceInfoLabel.setBackground(Color.WHITE);
-            occurrenceInfoLabel.setPreferredSize(new Dimension(50,16));
+            occurrenceInfoLabel.setPreferredSize(new Dimension(60,16));
             occurrenceInfoLabel.setAlignmentY(SimpleLabel.TOP_ALIGNMENT);
             occurrenceInfoLabel.setAlignmentX(SimpleLabel.RIGHT_ALIGNMENT);
             occurrenceInfoLabel.setHorizontalTextPosition(SimpleLabel.RIGHT);
@@ -721,12 +722,24 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if(value == null) value = "";
             String occurrenceText = value.toString();
-            occurrenceTextField.setText(occurrenceText);
+            String viewedOccurrenceText = occurrenceText;
+            boolean isDataOccurrence = false;
+            if(viewedOccurrenceText.startsWith("data:")) {
+                isDataOccurrence = true;
+                viewedOccurrenceText = viewedOccurrenceText.substring(0, Math.max(5, viewedOccurrenceText.indexOf(',')));
+            }
+            else {
+                if(viewedOccurrenceText.length() > 9999) {
+                    viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
+                }
+            }
+            occurrenceTextField.setText(viewedOccurrenceText);
             String occurrenceInfoText = (occurrenceText.length() > 0 ? " "+occurrenceText.length()+" " : "");
             occurrenceInfoLabel.setText(occurrenceInfoText);
             Color c=colors[row];
-            if(c!=null) {
+            if(c != null) {
                 occurrenceTextField.setForeground(c);
                 occurrenceInfoLabel.setForeground(occurrenceInfoTextColor);
             }
@@ -734,9 +747,13 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 occurrenceTextField.setForeground(Color.BLACK);
                 occurrenceInfoLabel.setForeground(occurrenceInfoTextColor);
             }
-            if(value == null || value.toString().length() == 0) {
+            if(occurrenceText.length() == 0) {
                 occurrenceTextField.setBackground(noOccurrenceColor);
                 occurrenceInfoLabel.setBackground(noOccurrenceColor);
+            }
+            else if(isDataOccurrence) {
+                occurrenceTextField.setBackground(dataOccurrenceColor);
+                occurrenceInfoLabel.setBackground(dataOccurrenceColor);
             }
             else {
                 occurrenceTextField.setBackground(Color.WHITE);
@@ -782,10 +799,23 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            if(value == null) value="";
+            
             realCol=convertColumnIndexToModel(column);
             realRow=sorter.modelIndex(row);
             scope=langs[realRow];
-            label.setText(value.toString());
+            
+            String viewedOccurrenceText = value.toString();
+            if(viewedOccurrenceText.startsWith("data:")) {
+                viewedOccurrenceText = viewedOccurrenceText.substring(0, Math.max(5, viewedOccurrenceText.indexOf(',')));
+            }
+            else {
+                if(viewedOccurrenceText.length() > 9999) {
+                    viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
+                }
+            }
+            label.setText(viewedOccurrenceText);
+            
             editedText=value.toString();
             return label;
         }

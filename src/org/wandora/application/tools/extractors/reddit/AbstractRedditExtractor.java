@@ -22,18 +22,23 @@
 package org.wandora.application.tools.extractors.reddit;
 
 import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.request.body.MultipartBody;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.Future;
+import java.util.Map;
 
 import javax.swing.Icon;
 
+import org.apache.commons.httpclient.HttpStatus;
+
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.dep.json.*;
@@ -46,11 +51,10 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
 public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
-    private static final int REQUEST_DELAY = 2000; // 1 req / 2 s
     protected static final String apiRoot = "http://api.reddit.com/";
     private static final String THING_TYPE_COMMENT = "t1";
     private static final String THING_TYPE_ACCOUNT = "t2";
@@ -93,14 +97,19 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     private static final String TITLE_SI = SI_ROOT + "title";
     
     
-    private static long LAST_EXTRACT = System.currentTimeMillis();
     private static HashMap<String, Boolean> CRAWL_SETTINGS = null;
-    private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance();
+    private static DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
     private static ArrayList<String> extracted;
     
     private static WandoraToolLogger logger;
     private static int progress = 0;
+    
+    protected static String uaString;
+    protected static Requester requester;
+    
+    protected static boolean waitingUserInput = false;
+    
     
     @Override
     public String getName() {
@@ -138,7 +147,30 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     // -----------------------------------------------------------------
     
     public static void resetExtracted(){
-        extracted = new ArrayList<String>();
+        extracted = new ArrayList<>();
+    }
+    
+    protected static void setRequester(String ua){
+      requester = new Requester(ua);
+    }
+    
+    protected static void unsetRequester(){
+      requester.cancel();
+    }
+    
+    private static final Map<Integer, String> additionalPhrases;
+    static {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(429, "Too many requests");
+        additionalPhrases = Collections.unmodifiableMap(map);
+    }
+    
+    protected static String statusToPhrase(int status){
+      String phrase = HttpStatus.getStatusText(status);
+      if(phrase == null && additionalPhrases.containsKey(status)){
+        phrase  = additionalPhrases.get(status);
+      }
+      return phrase;
     }
     
     
@@ -182,7 +214,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     // ------------------------------------------------------------------
     protected static HashMap<String, Topic> getThingTypes(TopicMap tm)
             throws TopicMapException {
-        HashMap<String, Topic> types = new HashMap<String, Topic>();
+        HashMap<String, Topic> types = new HashMap<>();
 
         types.put(THING_TYPE_COMMENT, getOrCreateTopic(tm, COMMENT_SI, "Comment"));
         types.put(THING_TYPE_LINK, getOrCreateTopic(tm, LINK_SI, "Link"));
@@ -203,7 +235,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     protected static HashMap<String, Topic> getAssociationTypes(TopicMap tm)
             throws TopicMapException {
 
-        HashMap<String, Topic> types = new HashMap<String, Topic>();
+        HashMap<String, Topic> types = new HashMap<>();
 
         types.put("Parent", getOrCreateTopic(tm, PARENT_SI, "Parent"));
         types.put("Child", getOrCreateTopic(tm, CHILD_SI, "Child"));
@@ -323,12 +355,12 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             commentTopic.setData(types.get("Created"), lang, createdString);
         }
 
-        String ups = commentData.getString("ups");
+        String ups = Integer.toString(commentData.getInt("ups"));
         if (ups != null) {
             commentTopic.setData(types.get("Upvotes"), lang, ups);
         }
 
-        String downs = commentData.getString("downs");
+        String downs = Integer.toString(commentData.getInt("downs"));
         if (downs != null) {
             commentTopic.setData(types.get("Downvotes"), lang, downs);
         }
@@ -357,12 +389,12 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             accountTopic.setData(types.get("Created UTC"), lang, createdUtcString);
         }
 
-        String cKarma = accountData.getString("comment_karma");
+        String cKarma = Integer.toString(accountData.getInt("comment_karma"));
         if (cKarma != null) {
             accountTopic.setData(types.get("Comment Karma"), lang, cKarma);
         }
 
-        String lKarma = accountData.getString("link_karma");
+        String lKarma = Integer.toString(accountData.getInt("link_karma"));
         if (lKarma != null) {
             accountTopic.setData(types.get("Link Karma"), lang, lKarma);
         }
@@ -399,12 +431,12 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             subredditTopic.setData(types.get("Public Description"), lang, pubDesc);
         }
 
-        String accAct = subredditData.getString("accounts_active");
+        String accAct = Integer.toString(subredditData.getInt("accounts_active"));
         if (accAct != null) {
             subredditTopic.setData(types.get("Accounts Active"), lang, accAct);
         }
 
-        String subs = subredditData.getString("subscribers");
+        String subs = Integer.toString(subredditData.getInt("subscribers"));
         if (subs != null) {
             subredditTopic.setData(types.get("Subscribers"), lang, subs);
         }
@@ -417,63 +449,20 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     }
 
-    // --------------------------------------------------------------------- //
-    protected static void delayRequest() {
-        try {
-            long curTime = System.currentTimeMillis();
-            long delta = curTime - LAST_EXTRACT;
-            if (delta < REQUEST_DELAY) {
-                Thread.sleep(REQUEST_DELAY - delta);
+    protected static void getSubmissions(String q, ParseCallback<JsonNode> callback) {
 
-            }
-            LAST_EXTRACT = System.currentTimeMillis();
-        } catch (Exception e) {
-            System.out.println("can't wait!");
-        }
+        String u = apiRoot + "search?q=" + urlEncode(q);
 
-    }
-
-    protected static void getSubmissions(String q, Callback<JsonNode> callback) {
-
-        String u = apiRoot + "/search?q=" + q;
-
-        delayRequest();
-        Unirest.get(u).asJsonAsync(callback);
+        requester.doRequest(Unirest.get(u),callback);
 
     }
     
-    protected static void getSubreddits(String q, Callback<JsonNode> callback) {
+    protected static void getSubreddits(String q, ParseCallback<JsonNode> callback) {
 
-        String u = apiRoot + "/subreddits/search?q=" + q;
+        String u = apiRoot + "subreddits/search?q=" + urlEncode(q);
 
-        delayRequest();
-        Unirest.get(u).asJsonAsync(callback);
+        requester.doRequest(Unirest.get(u),callback);
 
-    }
-
-    protected static HttpResponse<JsonNode> doRequest(String q) {
-        return doRequest(q, "get");
-    }
-
-    protected static HttpResponse<JsonNode> doRequest(String q, String type) {
-        delayRequest();
-        HttpResponse<JsonNode> resp = null;
-        
-        if (type.equals("get")) {
-            resp = Unirest.get(q).asJson();
-        } else if (type.equals("post")) {
-            resp = Unirest.post(q).asJson();
-        }
-
-        return resp;
-    }
-
-    protected static Future<HttpResponse<JsonNode>> doAsyncRequest(String q,
-            Callback<JsonNode> callback) {
-
-        delayRequest();
-        Future<HttpResponse<JsonNode>> f = Unirest.get(q).asJsonAsync(callback);
-        return f;
     }
 
     // --------------------------------------------------------------------- //
@@ -498,36 +487,55 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         }
 
         try {
+
+            if(thing.has("error")){
+              Object error = thing.get("error");
+              throw new JSONException("API error \"" + statusToPhrase((int)error) + "\"");
+            }
+          
             JSONObject data = thing.getJSONObject("data");
             String kind = thing.getString("kind");
-            if (kind.equals(THING_TYPE_COMMENT)) {
+            switch (kind) {
+              case THING_TYPE_COMMENT:
                 parseComment(thing, thingTypes, tm);
-            } else if (kind.equals(THING_TYPE_LINK)) {
+                break;
+              case THING_TYPE_LINK:
                 parseLink(thing, thingTypes, tm);
-            } else if (kind.equals(THING_TYPE_ACCOUNT)) {
+                break;
+              case THING_TYPE_ACCOUNT:
                 parseAccount(thing, thingTypes, tm);
-            } else if (kind.equals(THING_TYPE_SUBREDDIT)) {
+                break;
+              case THING_TYPE_SUBREDDIT:
                 parseSubreddit(thing, thingTypes, tm);
+                break;
             }
 
             if (data.has("children")) {
                 JSONArray children = data.getJSONArray("children");
                 for (int i = 0; i < children.length(); i++) {
+                    JSONObject child;
                     try {
-                        JSONObject child = children.getJSONObject(i);
-                        if (child.getString("kind").equals(THING_TYPE_MORE)) {
-                            parseMore(data, child, tm, thingTypes);
-                        } else {
-                            parseThing(child, tm, thingTypes);
-                        }
+                        child = children.getJSONObject(i);
+                        
                     } catch (JSONException jse) {
-                        // child is not an json array... 
+                      continue;
                     }
+                    parseThing(child, tm, thingTypes);
 
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (JSONException jse) {
+          log("Parsing response failed: " + jse.getMessage());
+          try {
+            log("The JSON message in question was");
+            log(thing.toString(2));
+          } catch (JSONException jsee) {
+            log("The message JSON was invalid.");
+          }
+          jse.printStackTrace();
+          
+        } catch (TopicMapException tme){
+          log(tme.getMessage());
         }
 
     }
@@ -553,37 +561,61 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             }
         }
 
-        System.out.println("getting more...");
-
-        delayRequest();
-        HttpResponse<JsonNode> resp = Unirest.post(apiRoot + "api/morechildren")
+        MultipartBody r = Unirest.post(apiRoot + "api/morechildren")
                 .header("accept", "application/json")
+                .header("User-Agent", uaString)
                 .field("api_type", "json")
                 .field("id", id)
                 .field("link_id", link_id)
-                .field("children", childString.toString())
-                .asJson();
-
-        JSONObject respJSON = resp.getBody().getObject();
-        if (respJSON.getJSONObject("json").getJSONArray("errors").length() == 0) {
-            JSONArray things = respJSON
-                    .getJSONObject("json")
-                    .getJSONObject("data")
-                    .getJSONArray("things");
-            for (int i = 0; i < things.length(); i++) {
-                parseThing(things.getJSONObject(i), tm, thingTypes);
+                .field("children", childString.toString());
+        
+        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+          @Override
+          public void run(HttpResponse<JsonNode> response){
+            try {
+              JSONObject respJSON = response.getBody().getObject();
+              if (respJSON.getJSONObject("json").getJSONArray("errors").length() == 0) {
+                  JSONArray things = respJSON
+                          .getJSONObject("json")
+                          .getJSONObject("data")
+                          .getJSONArray("things");
+                  for (int i = 0; i < things.length(); i++) {
+                      parseThing(things.getJSONObject(i), tm, thingTypes);
+                  }
+              }
+            } catch (Exception e) {
+              log(e.getMessage());
             }
-        }
+
+          }
+          @Override
+          protected void error(Exception e, String body) {
+            log(e.getMessage());
+            if(body != null){
+              log("Server responed with");
+              log(body);
+            }
+
+          }
+            
+        };
+        
+        requester.doRequest(r, callback);
+
+        
+        
 
     }
 
-    private Topic parseLink(JSONObject link, HashMap<String, Topic> thingTypes,
+    private Topic parseLink(JSONObject l, HashMap<String, Topic> thingTypes,
             TopicMap tm)
             throws JSONException, TopicMapException {
 
         if (forceStop()) {
             return null;
         }
+        
+        final JSONObject link = l;
 
         JSONObject linkData = link.getJSONObject("data");
         String kind = link.getString("kind");
@@ -592,7 +624,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         String title = linkData.getString("title");
 
         log("parsing link: " + title);
-
+        
         Topic linkTopic = getOrCreateTopic(tm, SI_ROOT + id);
 
         linkTopic.setDisplayName("en", title);
@@ -605,75 +637,148 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             Association a = tm.createAssociation(assTypes.get("Destination"));
             a.addPlayer(linkTopic, thingTypes.get(THING_TYPE_LINK));
             a.addPlayer(destinationTopic, assTypes.get("Destination"));
-            
-            //Locator l = new Locator(linkUrl);
-            //linkTopic.setSubjectLocator(l);
+
         }
         linkTopic.addType(thingTypes.get(kind));
 
         addLinkOccurenceData(tm, linkData, linkTopic);
 
         if (linkData.has("author")) {
-            String author = linkData.getString("author");
-
-            Topic account = tm.getTopic(SI_ROOT + author);
+            final String author = linkData.getString("author");
 
             if (!extracted.contains(author) && CRAWL_SETTINGS.get("linkUser")) {
                 String authorUrl = apiRoot + "user/" + author + "/about.json";
 
-                HttpResponse<JsonNode> resp = doRequest(authorUrl);
-                JSONObject respObject = resp.getBody().getObject();
-                if (respObject.has("kind")
-                        && respObject.getString("kind").equals("t2")) {
+                ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                  @Override
+                  public void run(HttpResponse<JsonNode> response){
+                    try {
+                      JSONObject respObject = response.getBody().getObject();
+                      Topic account = null;
+                      if (respObject.has("kind")
+                              && respObject.getString("kind").equals(THING_TYPE_ACCOUNT)) {
+
+                          extracted.add(author);
+                          account = parseAccount(respObject, thingTypes, tm);
+
+                      }
+                      
+                      if (account != null) {
+                          associateAccount(tm, link, account, thingTypes);
+                      }
+                    } catch (JSONException | TopicMapException e) {
+                      log(e.getMessage());
+                    }
+
+                  }
+                  @Override
+                  protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
                     
-                    extracted.add(author);
-                    account = parseAccount(respObject, thingTypes, tm);
-                    
-                }
+                  }
+
+                };
+                
+                requester.doRequest(Unirest.get(authorUrl), callback);
+                
             }
             
-            if (account != null) {
-                associateAccount(tm, link, account, thingTypes);
-            }
+            
             
         }
 
-        if (linkData.has("subreddit")) {
+        try {
+          if (linkData.has("subreddit")) {
 
-            
-            String subredditId = linkData.getString("subreddit_id");
-            Topic subredditTopic = tm.getTopic(SI_ROOT + subredditId);
-            
-            String subreddit = linkData.getString("subreddit");
-            if (!extracted.contains(subreddit) && CRAWL_SETTINGS.get("linkSubreddit")) {
-                
-                String subredditUrl = apiRoot + "r/" + subreddit + "/about.json";
-                HttpResponse<JsonNode> resp = doRequest(subredditUrl);
-                JSONObject respObject = resp.getBody().getObject();
-                if (respObject.has("kind")
-                        && respObject.getString("kind").equals("t5")) {
-                    extracted.add(subreddit);
-                    subredditTopic = parseSubreddit(respObject, thingTypes, tm);
-                    
-                }
-            }
-            
-            if (subredditTopic != null) {
-                associateSubreddit(tm, link, subredditTopic, thingTypes);
-            }
-            
+
+              String subredditId = linkData.getString("subreddit_id");
+              String subredditName = linkData.getString("subreddit");
+              Topic subredditTopic = getOrCreateTopic(tm, SI_ROOT + subredditId);
+
+              associateSubreddit(tm, link, subredditTopic, thingTypes);
+
+              final String subreddit = linkData.getString("subreddit");
+              if (!extracted.contains(subreddit) && CRAWL_SETTINGS.get("linkSubreddit")) {
+
+                  String subredditUrl = apiRoot + "r/" + subreddit + "/about.json";
+
+                  ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                    @Override
+                    public void run(HttpResponse<JsonNode> response){
+                      try {
+                        JSONObject respObject = response.getBody().getObject();
+                        Topic subredditTopic = null;
+                        if (respObject.has("kind")
+                                && respObject.getString("kind").equals(THING_TYPE_SUBREDDIT)) {
+
+                            extracted.add(subreddit);
+                            subredditTopic = parseSubreddit(respObject, thingTypes, tm);
+
+                        }
+
+                        if (subredditTopic != null) {
+                            associateSubreddit(tm, link, subredditTopic, thingTypes);
+                        }
+                      } catch (JSONException | TopicMapException e) {
+                        log(e.getMessage());
+                      }
+
+                    }
+                    @Override
+                    protected void error(Exception e, String body) {
+                      log(e.getMessage());
+                      if(body != null){
+                        log("Server responed with");
+                        log(body);
+                      }
+
+                    }
+
+                  };
+
+                  requester.doRequest(Unirest.get(subredditUrl), callback);
+
+              }
+
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
         }
         
         if (CRAWL_SETTINGS.get("linkComment")) {
             String commentUrl = apiRoot + "comments/" + linkData.getString("id");
-            HttpResponse<JsonNode> resp = doRequest(commentUrl);
-                JSONArray respArray = resp.getBody().getArray();
-                
-            try {
-                // Object #0 is the link, which we skip here
-                parseThing(respArray.getJSONObject(1),tm,thingTypes);
-            } catch (Exception e) {
-            }
+            
+            ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                  @Override
+                  public void run(HttpResponse<JsonNode> response){
+                    try {
+                      JSONArray respArray = response.getBody().getArray();
+
+                        // Object #0 is the link, which we skip here
+                        parseThing(respArray.getJSONObject(1),tm,thingTypes);
+                    } catch (Exception e) {
+                      log(e.getMessage());
+                    }
+                  }
+                  @Override
+                  protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
+                  }
+
+                };
+            
+            System.out.println("Requesting " + commentUrl);
+            requester.doRequest(Unirest.get(commentUrl), callback);
+
             
         }
 
@@ -681,7 +786,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     }
 
-    private Topic parseComment(JSONObject comment,
+    private Topic parseComment(JSONObject c,
             HashMap<String, Topic> thingTypes, TopicMap tm)
             throws JSONException, TopicMapException {
 
@@ -689,11 +794,15 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             return null;
         }
 
+        final JSONObject comment = c;
+        
         JSONObject commentData = comment.getJSONObject("data");
         String kind = comment.getString("kind");
 
         String id = commentData.getString("name");
-                
+        
+        log("parsing comment: " + id);
+        
         Topic commentTopic = getOrCreateTopic(tm, SI_ROOT + id);
         commentTopic.setBaseName("Comment " + " (" + id + ")");
 
@@ -702,7 +811,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
         } catch (Exception e) {
 
-            System.out.println("failed to add type " + kind);
+            log("failed to add type " + kind);
         }
 
         addCommentOccurenceData(tm, commentData, commentTopic);
@@ -719,17 +828,38 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             } else if (!author.equals("[deleted]") && CRAWL_SETTINGS.get("commentUser")) {
                 log("parsing user: " + author);
                 String authorUrl = apiRoot + "user/" + author + "/about";
-                HttpResponse<JsonNode> resp = doRequest(authorUrl);
-                JSONObject respObject = resp.getBody().getObject();
-                if (respObject.has("kind")
-                        && respObject.getString("kind").equals("t2")) {
+                
+                ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                  @Override
+                  public void run(HttpResponse<JsonNode> response){
+                    try {
+                      JSONObject respObject = response.getBody().getObject();
+                      if (respObject.has("kind")
+                              && respObject.getString("kind").equals(THING_TYPE_ACCOUNT)) {
 
-                    JSONObject respData = respObject.getJSONObject("data");
-                    String name = respData.getString("name");
+                          Topic account = parseAccount(respObject, thingTypes, tm);
+                          associateAccount(tm, comment, account, thingTypes);
+                      }
+                    } catch (JSONException | TopicMapException e) {
+                      log(e.getMessage());
+                    }
 
-                    account = parseAccount(respObject, thingTypes, tm);
-                    associateAccount(tm, comment, account, thingTypes);
-                }
+                  }
+                  @Override
+                  protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
+                  }
+
+                };
+                
+                requester.doRequest(Unirest.get(authorUrl), callback);
+                
+                
             }
         }
 
@@ -770,12 +900,30 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             Topic linkTopic = tm.getTopic(SI_ROOT + link_id);
 
             if (linkTopic == null  && CRAWL_SETTINGS.get("commentLink")) {
-                HttpResponse<JsonNode> resp =
-                        doRequest(apiRoot + "api/info?id=" + link_id);
+              ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                  @Override
+                  public void run(HttpResponse<JsonNode> response){
+                    try {
+                      JSONObject respObj = response.getBody().getObject();
+                      parseThing(respObj, tm, thingTypes);
+                    } catch (Exception e) {
+                    }
 
-                JSONObject respObj = resp.getBody().getObject();
-                parseThing(respObj, tm, thingTypes);
+                  }
+                  @Override
+                  protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
+                  }
 
+                };
+                
+                requester.doRequest(Unirest.get(apiRoot + "api/info?id=" + link_id), callback);
+             
             }
         }
 
@@ -796,6 +944,8 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
         String id = accountData.getString("name");
 
+        log("parsing account: " + id);
+        
         Topic accountTopic = getOrCreateTopic(tm, SI_ROOT + id);
         accountTopic.setDisplayName("en", id);
         accountTopic.setBaseName(id);
@@ -806,20 +956,56 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
         if (CRAWL_SETTINGS.get("userLink")) {
 
-            HttpResponse<JsonNode> resp =
-                    doRequest(apiRoot + "user/" + id + "/submitted.json");
+            ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+              @Override
+              public void run(HttpResponse<JsonNode> response){
+                try {
+                  JSONObject respObj = response.getBody().getObject();
+                  parseThing(respObj, tm, thingTypes);
+                } catch (Exception e) {
+                  log(e.getMessage());
+                }
 
-            JSONObject respObj = resp.getBody().getObject();
-            parseThing(respObj, tm, thingTypes);
+              }
+              @Override
+              protected void error(Exception e, String body) {
+                    log(e.getMessage());
+                    if(body != null){
+                      log("Server responed with");
+                      log(body);
+                    }
+                    
+                  }
+
+            };
+                
+            requester.doRequest(Unirest.get(apiRoot + "user/" + id + "/submitted.json"), callback);
         }
 
         if (CRAWL_SETTINGS.get("userComment")) {
+          ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+            @Override
+            public void run(HttpResponse<JsonNode> response){
+              try {
+                JSONObject respObj = response.getBody().getObject();
+                parseThing(respObj, tm, thingTypes);
+              } catch (Exception e) {
+                log(e.getMessage());
+              }
+            }
+            @Override
+            protected void error(Exception e, String body) {
+              log(e.getMessage());
+              if(body != null){
+                log("Server responed with");
+                log(body);
+              }
 
-            HttpResponse<JsonNode> resp =
-                    doRequest(apiRoot + "user/" + id + "/comments.json");
+            }
 
-            JSONObject respObj = resp.getBody().getObject();
-            parseThing(respObj, tm, thingTypes);
+          };
+
+          requester.doRequest(Unirest.get(apiRoot + "user/" + id + "/comments.json"), callback);
         }
 
         return accountTopic;
@@ -838,8 +1024,9 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         String kind = subreddit.getString("kind");
 
         String id = subredditData.getString("name");
-        String disp = subredditData.getString("display_name");
+        final String disp = subredditData.getString("display_name");
 
+        
         log("parsing subreddit: " + disp);
         
         Topic subredditTopic = getOrCreateTopic(tm, SI_ROOT + id);
@@ -852,12 +1039,46 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         subredditTopic.addType(thingTypes.get(kind));
 
         if (CRAWL_SETTINGS.get("subredditLink")) {
+          
+          ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+            @Override
+            public void run(HttpResponse<JsonNode> response){
+              try {
+                JSONObject respObj = response.getBody().getObject();
+                parseThing(respObj, tm, thingTypes);
+                
+                waitingUserInput = true;
+                
+                if(WandoraOptionPane.showConfirmDialog(getWandora(),
+                        "Load more links?","Load more links?",
+                        WandoraOptionPane.YES_NO_OPTION) == WandoraOptionPane.YES_OPTION){
+                  
+                  waitingUserInput = false;
+                  String after = respObj.getJSONObject("data").getString("after");
+                  
+                  requester.doRequest(Unirest.get(apiRoot + "r/" + disp + "/hot.json?after=" + after), this);
+                } else {
+                  waitingUserInput = false;
+                }
+                
+              } catch (Exception e) {
+                log(e.getMessage());
+              }
 
-            HttpResponse<JsonNode> resp =
-                    doRequest(apiRoot + "r/" + disp + "/hot.json");
+            }
+            @Override
+            protected void error(Exception e, String body) {
+              log(e.getMessage());
+              if(body != null){
+                log("Server responed with");
+                log(body);
+              }
 
-            JSONObject respObj = resp.getBody().getObject();
-            parseThing(respObj, tm, thingTypes);
+            }
+
+          };
+
+          requester.doRequest(Unirest.get(apiRoot + "r/" + disp + "/hot.json"), callback);
         }
 
         return subredditTopic;

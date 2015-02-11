@@ -139,31 +139,17 @@
 			<value>English language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic44"/>
+					<topicRef href="#topic40"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>Englisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>English</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic40"/>
+					<topicRef href="#topic41"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>anglais</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic42"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>engelska</resourceData>
 			</variant>
 			<variant>
 				<scope>
@@ -174,7 +160,21 @@
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic41"/>
+					<topicRef href="#topic42"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>engelska</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>English</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic44"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>inglés</resourceData>
@@ -288,6 +288,57 @@
 		</name>
 	</topic>
 	<topic id="topic40">
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#de"/>
+		<instanceOf>
+			<topicRef href="#topic39"/>
+		</instanceOf>
+		<name>
+			<value>German language</value>
+			<variant>
+				<scope>
+					<topicRef href="#topic40"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>Deutsche</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic41"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>allemand</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic43"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>saksa</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic42"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>tysk</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>German</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic44"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>alemán</resourceData>
+			</variant>
+		</name>
+	</topic>
+	<topic id="topic41">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#fr"/>
 		<instanceOf>
 			<topicRef href="#topic39"/>
@@ -296,31 +347,17 @@
 			<value>French language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic44"/>
+					<topicRef href="#topic40"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>Französisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>French</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic40"/>
+					<topicRef href="#topic41"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>français</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic42"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>franska</resourceData>
 			</variant>
 			<variant>
 				<scope>
@@ -331,61 +368,24 @@
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic41"/>
+					<topicRef href="#topic42"/>
 					<topicRef href="#topic33"/>
 				</scope>
-				<resourceData>francés</resourceData>
-			</variant>
-		</name>
-	</topic>
-	<topic id="topic41">
-		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#es"/>
-		<instanceOf>
-			<topicRef href="#topic39"/>
-		</instanceOf>
-		<name>
-			<value>Spanish language</value>
-			<variant>
-				<scope>
-					<topicRef href="#topic44"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>Spanisch</resourceData>
+				<resourceData>franska</resourceData>
 			</variant>
 			<variant>
 				<scope>
 					<topicRef href="#topic33"/>
 					<topicRef href="#topic34"/>
 				</scope>
-				<resourceData>Spanish</resourceData>
+				<resourceData>French</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic40"/>
+					<topicRef href="#topic44"/>
 					<topicRef href="#topic33"/>
 				</scope>
-				<resourceData>espagnol</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic42"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>spanska</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic43"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>espanja</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic41"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>español</resourceData>
+				<resourceData>francés</resourceData>
 			</variant>
 		</name>
 	</topic>
@@ -398,31 +398,17 @@
 			<value>Swedish language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic44"/>
+					<topicRef href="#topic40"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>Schwedisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>Swedish</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic40"/>
+					<topicRef href="#topic41"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>suédois</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic42"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>svenska</resourceData>
 			</variant>
 			<variant>
 				<scope>
@@ -433,7 +419,21 @@
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic41"/>
+					<topicRef href="#topic42"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>svenska</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>Swedish</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic44"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>sueco</resourceData>
@@ -449,31 +449,17 @@
 			<value>Finnish language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic44"/>
+					<topicRef href="#topic40"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>Finnisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>Finnish</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic40"/>
+					<topicRef href="#topic41"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>finnois</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic42"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>finska</resourceData>
 			</variant>
 			<variant>
 				<scope>
@@ -484,7 +470,21 @@
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic41"/>
+					<topicRef href="#topic42"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>finska</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>Finnish</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic44"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>finlandés</resourceData>
@@ -492,53 +492,53 @@
 		</name>
 	</topic>
 	<topic id="topic44">
-		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#de"/>
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#es"/>
 		<instanceOf>
 			<topicRef href="#topic39"/>
 		</instanceOf>
 		<name>
-			<value>German language</value>
-			<variant>
-				<scope>
-					<topicRef href="#topic44"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>Deutsche</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>German</resourceData>
-			</variant>
+			<value>Spanish language</value>
 			<variant>
 				<scope>
 					<topicRef href="#topic40"/>
 					<topicRef href="#topic33"/>
 				</scope>
-				<resourceData>allemand</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic42"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>tysk</resourceData>
-			</variant>
-			<variant>
-				<scope>
-					<topicRef href="#topic43"/>
-					<topicRef href="#topic33"/>
-				</scope>
-				<resourceData>saksa</resourceData>
+				<resourceData>Spanisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
 					<topicRef href="#topic41"/>
 					<topicRef href="#topic33"/>
 				</scope>
-				<resourceData>alemán</resourceData>
+				<resourceData>espagnol</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic43"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>espanja</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic42"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>spanska</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>Spanish</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic44"/>
+					<topicRef href="#topic33"/>
+				</scope>
+				<resourceData>español</resourceData>
 			</variant>
 		</name>
 	</topic>
@@ -747,7 +747,7 @@
 			<topicRef href="#topic46"/>
 		</instanceOf>
 		<name>
-			<value>Topic Maps Application</value>
+			<value>Topic map application</value>
 		</name>
 	</topic>
 	<topic id="topic59">
@@ -760,17 +760,17 @@
 			<value>tinyTiM</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>tinyTiM - The tiny Topic Maps engine</resourceData>
-			</variant>
-			<variant>
-				<scope>
 					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>tinyTiM</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>tinyTiM - The tiny Topic Maps engine</resourceData>
 			</variant>
 		</name>
 		<occurrence>
@@ -786,10 +786,10 @@
 	<topic id="topic60">
 		<subjectIdentifier href="http://wandora.org/si/temp/1422273809914-3"/>
 		<instanceOf>
-			<topicRef href="#topic63"/>
+			<topicRef href="#topic62"/>
 		</instanceOf>
 		<name>
-			<value>Topic Maps engine</value>
+			<value>Engine</value>
 		</name>
 	</topic>
 	<topic id="topic61">
@@ -798,10 +798,19 @@
 			<topicRef href="#topic46"/>
 		</instanceOf>
 		<name>
-			<value>Topic Map application description</value>
+			<value>Topic map application description</value>
 		</name>
 	</topic>
 	<topic id="topic62">
+		<subjectIdentifier href="http://wandora.org/si/temp/1422273795874-2"/>
+		<instanceOf>
+			<topicRef href="#topic46"/>
+		</instanceOf>
+		<name>
+			<value>Topic map application category</value>
+		</name>
+	</topic>
+	<topic id="topic63">
 		<subjectIdentifier href="http://tm4j.org/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
@@ -811,27 +820,18 @@
 			<value>TM4J</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>TM4J</resourceData>
-			</variant>
-			<variant>
-				<scope>
 					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>TM4J</resourceData>
 			</variant>
-		</name>
-	</topic>
-	<topic id="topic63">
-		<subjectIdentifier href="http://wandora.org/si/temp/1422273795874-2"/>
-		<instanceOf>
-			<topicRef href="#topic46"/>
-		</instanceOf>
-		<name>
-			<value>Topic Map application category</value>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>TM4J</resourceData>
+			</variant>
 		</name>
 	</topic>
 	<topic id="topic64">
@@ -844,15 +844,15 @@
 			<value>Perl XTM Engine</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>Perl XTM Engine</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>Perl XTM Engine</resourceData>
 			</variant>
@@ -862,16 +862,10 @@
 		<subjectIdentifier href="http://rubygems.org/gems/rtm"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic60"/>
 		</instanceOf>
 		<name>
 			<value>Ruby Topic Maps</value>
-			<variant>
-				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>Ruby Topic Maps</resourceData>
-			</variant>
 			<variant>
 				<scope>
 					<topicRef href="#topic35"/>
@@ -879,7 +873,23 @@
 				</scope>
 				<resourceData>Ruby Topic Maps</resourceData>
 			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>Ruby Topic Maps</resourceData>
+			</variant>
 		</name>
+		<occurrence>
+			<type>
+				<topicRef href="#topic61"/>
+			</type>
+			<scope>
+				<topicRef href="#topic34"/>
+			</scope>
+			<resourceData>RTM is a Topic Maps engine written in Ruby.</resourceData>
+		</occurrence>
 	</topic>
 	<topic id="topic66">
 		<subjectIdentifier href="https://github.com/joschmidt/phptmapi3"/>
@@ -890,15 +900,15 @@
 			<value>PHPTMAPI 3</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>PHPTMAPI 3</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>PHPTMAPI 3</resourceData>
 			</variant>
@@ -908,16 +918,10 @@
 		<subjectIdentifier href="http://quaaxtm.sourceforge.net/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic60"/>
 		</instanceOf>
 		<name>
 			<value>QuaaxTM</value>
-			<variant>
-				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>QuaaxTM</resourceData>
-			</variant>
 			<variant>
 				<scope>
 					<topicRef href="#topic35"/>
@@ -925,7 +929,23 @@
 				</scope>
 				<resourceData>QuaaxTM</resourceData>
 			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>QuaaxTM</resourceData>
+			</variant>
 		</name>
+		<occurrence>
+			<type>
+				<topicRef href="#topic61"/>
+			</type>
+			<scope>
+				<topicRef href="#topic34"/>
+			</scope>
+			<resourceData>A PHP Topic Maps engine with persistent storage which supports ISO/IEC 13250-2 Topic Maps Data Model (TMDM). </resourceData>
+		</occurrence>
 	</topic>
 	<topic id="topic68">
 		<subjectIdentifier href="http://www.topincs.com/home"/>
@@ -936,15 +956,15 @@
 			<value>Topincs</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>Topincs</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>Topincs</resourceData>
 			</variant>
@@ -959,15 +979,15 @@
 			<value>TM++</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>TM++</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>TM++</resourceData>
 			</variant>
@@ -982,17 +1002,17 @@
 			<value>Zope Topic Maps system</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
-				</scope>
-				<resourceData>Zope Topic Maps system (ZTM)</resourceData>
-			</variant>
-			<variant>
-				<scope>
 					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
 				</scope>
 				<resourceData>Zope Topic Maps system</resourceData>
+			</variant>
+			<variant>
+				<scope>
+					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
+				</scope>
+				<resourceData>Zope Topic Maps system (ZTM)</resourceData>
 			</variant>
 		</name>
 		<occurrence>
@@ -1014,15 +1034,15 @@
 			<value>sharptm</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>sharptm</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>sharptm</resourceData>
 			</variant>
@@ -1051,15 +1071,15 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<value>Wandora</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>Wandora</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>Wandora</resourceData>
 			</variant>
@@ -1078,20 +1098,25 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		<subjectIdentifier href="http://www.ontopia.net/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic90"/>
+			<topicRef href="#topic60"/>
+			<topicRef href="#topic92"/>
+			<topicRef href="#topic94"/>
+			<topicRef href="#topic88"/>
 		</instanceOf>
 		<name>
 			<value>Ontopia</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>Ontopia</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>Ontopia</resourceData>
 			</variant>
@@ -1115,22 +1140,22 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<value>xSiteable</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>xSiteable</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>xSiteable</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic63"/>
+				<topicRef href="#topic62"/>
 			</type>
 			<scope>
 				<topicRef href="#topic34"/>
@@ -1142,20 +1167,23 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		<subjectIdentifier href="http://common-lisp.net/project/isidorus/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic60"/>
+			<topicRef href="#topic90"/>
+			<topicRef href="#topic92"/>
 		</instanceOf>
 		<name>
 			<value>isidorus</value>
 			<variant>
 				<scope>
+					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
-					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>isidorus</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic35"/>
 					<topicRef href="#topic33"/>
+					<topicRef href="#topic34"/>
 				</scope>
 				<resourceData>isidorus</resourceData>
 			</variant>
@@ -1179,10 +1207,12 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<value>Wandora language (disabled)</value>
 		</name>
 	</topic>
-	<topic id="topic125">
+	<topic id="topic77">
 		<subjectIdentifier href="http://sourceforge.net/projects/atop/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic92"/>
+			<topicRef href="#topic90"/>
 		</instanceOf>
 		<name>
 			<value>ATop</value>
@@ -1197,7 +1227,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<resourceData>&#34;Topic Map&#34; navigator and editor</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic127">
+	<topic id="topic78">
 		<subjectIdentifier href="https://code.launchpad.net/~topiengine/topiengine/main"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
@@ -1206,10 +1236,11 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<value>Topic Maps Engine</value>
 		</name>
 	</topic>
-	<topic id="topic129">
+	<topic id="topic79">
 		<subjectIdentifier href="https://code.google.com/p/mappa/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic60"/>
 		</instanceOf>
 		<name>
 			<value>Semagia Mappa</value>
@@ -1224,7 +1255,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<resourceData>Mappa is a Topic Maps engine that is written in Python.</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic131">
+	<topic id="topic80">
 		<subjectIdentifier href="http://tm4jscript.sourceforge.net/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
@@ -1242,13 +1273,13 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<resourceData>TM4Jscript is an open-source Topic Maps engine written entirely in JavaScript, and hence supported by a host of browsers out there. It includes JTMA (Javascript Topic Maps Application), a Topic Maps editor, also written in JavaScript.</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic133">
+	<topic id="topic81">
 		<subjectIdentifier href="https://code.google.com/p/tmql/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
 		</instanceOf>
 		<name>
-			<value>TMQL</value>
+			<value>TMQL4j</value>
 		</name>
 		<occurrence>
 			<type>
@@ -1260,7 +1291,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<resourceData>TMQL4J is the first TMQL engine written in Java. The current version supports the full draft of this query language. In addition it realizes additional features to support the process of development and designing of applications using the data model of Topic Maps. </resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic135">
+	<topic id="topic82">
 		<subjectIdentifier href="http://www.tmapi.org/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
@@ -1269,10 +1300,11 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<value>TMAPI</value>
 		</name>
 	</topic>
-	<topic id="topic137">
+	<topic id="topic83">
 		<subjectIdentifier href="https://code.google.com/p/majortom/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic60"/>
 		</instanceOf>
 		<name>
 			<value>MaJorToM</value>
@@ -1287,16 +1319,18 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<resourceData>The MaJorToM ( Merging Topic Maps Engine ) project was founded to develop a lightweight, merging and flexible Topic Maps engine satisfying different business use cases. The engine provides a couple of new features above to other engines based on the Topic Maps API version 2.0. </resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic139">
+	<topic id="topic84">
 		<subjectIdentifier href="http://www.deepamehta.de/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic88"/>
+			<topicRef href="#topic92"/>
 		</instanceOf>
 		<name>
 			<value>DeepaMehta</value>
 		</name>
 	</topic>
-	<topic id="topic141">
+	<topic id="topic85">
 		<subjectIdentifier href="https://github.com/jansc/node-psi-server"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
@@ -1305,7 +1339,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<value>node-psi-server</value>
 		</name>
 	</topic>
-	<topic id="topic143">
+	<topic id="topic86">
 		<subjectIdentifier href="https://code.google.com/p/sesametm/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
@@ -1314,10 +1348,14 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<value>SesameTM</value>
 		</name>
 	</topic>
-	<topic id="topic145">
+	<topic id="topic87">
 		<subjectIdentifier href="http://kamala-cloud.com/"/>
 		<instanceOf>
 			<topicRef href="#topic58"/>
+			<topicRef href="#topic90"/>
+			<topicRef href="#topic92"/>
+			<topicRef href="#topic94"/>
+			<topicRef href="#topic88"/>
 		</instanceOf>
 		<name>
 			<value>Kamala</value>
@@ -1332,6 +1370,177 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 			<resourceData>Kamala is a knowledge platform for organizations and people to link their data and share their knowledge. Key features of Kamala: smart suggestions, semantic search and efficient filtering. These help you to perfect your knowledge model and give you powerful, reusable search results.</resourceData>
 		</occurrence>
 	</topic>
+	<topic id="topic88">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423249532790-0"/>
+		<instanceOf>
+			<topicRef href="#topic62"/>
+		</instanceOf>
+		<name>
+			<value>Visualizer</value>
+		</name>
+	</topic>
+	<topic id="topic90">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423249554349-1"/>
+		<instanceOf>
+			<topicRef href="#topic62"/>
+		</instanceOf>
+		<name>
+			<value>Editor</value>
+		</name>
+	</topic>
+	<topic id="topic92">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423249605892-2"/>
+		<instanceOf>
+			<topicRef href="#topic62"/>
+		</instanceOf>
+		<name>
+			<value>Navigator</value>
+		</name>
+	</topic>
+	<topic id="topic94">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423249775386-3"/>
+		<instanceOf>
+			<topicRef href="#topic62"/>
+		</instanceOf>
+		<name>
+			<value>Querying</value>
+		</name>
+	</topic>
+	<topic id="topic96">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250401331-4"/>
+		<instanceOf>
+			<topicRef href="#topic46"/>
+		</instanceOf>
+		<name>
+			<value>Topic map technology</value>
+		</name>
+	</topic>
+	<topic id="topic98">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250464651-5"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>Python</value>
+		</name>
+	</topic>
+	<topic id="topic100">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250475031-6"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>Java</value>
+		</name>
+	</topic>
+	<topic id="topic102">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250484681-7"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>Ruby</value>
+		</name>
+	</topic>
+	<topic id="topic104">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250500861-8"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>XTM 2.0</value>
+		</name>
+	</topic>
+	<topic id="topic106">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250528562-9"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>TMDM</value>
+		</name>
+	</topic>
+	<topic id="topic108">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250685482-10"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>TMQL</value>
+		</name>
+	</topic>
+	<topic id="topic110">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250917222-11"/>
+		<instanceOf>
+			<topicRef href="#topic46"/>
+		</instanceOf>
+		<name>
+			<value>Topic map application relates</value>
+		</name>
+	</topic>
+	<topic id="topic112">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423250994062-12"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>Perl</value>
+		</name>
+	</topic>
+	<topic id="topic114">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423251022672-13"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>PHP</value>
+		</name>
+	</topic>
+	<topic id="topic116">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423251046612-14"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>Javascript</value>
+		</name>
+	</topic>
+	<topic id="topic118">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423251422242-15"/>
+		<instanceOf>
+			<topicRef href="#topic110"/>
+		</instanceOf>
+		<name>
+			<value>Topic map application uses</value>
+		</name>
+	</topic>
+	<topic id="topic120">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423251452122-16"/>
+		<instanceOf>
+			<topicRef href="#topic110"/>
+		</instanceOf>
+		<name>
+			<value>Topic map application supports</value>
+		</name>
+	</topic>
+	<topic id="topic122">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423251604622-17"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>JTM</value>
+		</name>
+	</topic>
+	<topic id="topic124">
+		<subjectIdentifier href="http://wandora.org/si/temp/1423251625432-18"/>
+		<instanceOf>
+			<topicRef href="#topic96"/>
+		</instanceOf>
+		<name>
+			<value>C++</value>
+		</name>
+	</topic>
 	<association>
 		<type>
 			<topicRef href="#topic31"/>
@@ -1372,15 +1581,15 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic37"/>
-			</type>
-			<topicRef href="#topic31"/>
-		</role>
-		<role>
-			<type>
 				<topicRef href="#topic30"/>
 			</type>
 			<topicRef href="#topic29"/>
+		</role>
+		<role>
+			<type>
+				<topicRef href="#topic37"/>
+			</type>
+			<topicRef href="#topic31"/>
 		</role>
 	</association>
 	<association>
@@ -1440,15 +1649,15 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic37"/>
-			</type>
-			<topicRef href="#topic37"/>
-		</role>
-		<role>
-			<type>
 				<topicRef href="#topic30"/>
 			</type>
 			<topicRef href="#topic30"/>
+		</role>
+		<role>
+			<type>
+				<topicRef href="#topic37"/>
+			</type>
+			<topicRef href="#topic37"/>
 		</role>
 	</association>
 	<association>
@@ -1457,15 +1666,15 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic37"/>
-			</type>
-			<topicRef href="#topic30"/>
-		</role>
-		<role>
-			<type>
 				<topicRef href="#topic30"/>
 			</type>
 			<topicRef href="#topic31"/>
+		</role>
+		<role>
+			<type>
+				<topicRef href="#topic37"/>
+			</type>
+			<topicRef href="#topic30"/>
 		</role>
 	</association>
 	<association>
@@ -1489,18 +1698,18 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		<type>
 			<topicRef href="#topic29"/>
 		</type>
+		<role>
+			<type>
+				<topicRef href="#topic29"/>
+			</type>
+			<topicRef href="#topic32"/>
+		</role>
 		<role>
 			<type>
 				<topicRef href="#topic31"/>
 			</type>
 			<topicRef href="#topic51"/>
 		</role>
-		<role>
-			<type>
-				<topicRef href="#topic29"/>
-			</type>
-			<topicRef href="#topic32"/>
-		</role>
 	</association>
 	<association>
 		<type>
@@ -1508,15 +1717,15 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic31"/>
-			</type>
-			<topicRef href="#topic50"/>
-		</role>
-		<role>
-			<type>
 				<topicRef href="#topic29"/>
 			</type>
 			<topicRef href="#topic32"/>
+		</role>
+		<role>
+			<type>
+				<topicRef href="#topic31"/>
+			</type>
+			<topicRef href="#topic50"/>
 		</role>
 	</association>
 	<association>
@@ -1525,15 +1734,15 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic45"/>
-			</type>
-			<topicRef href="#topic36"/>
-		</role>
-		<role>
-			<type>
 				<topicRef href="#topic37"/>
 			</type>
 			<topicRef href="#topic32"/>
+		</role>
+		<role>
+			<type>
+				<topicRef href="#topic45"/>
+			</type>
+			<topicRef href="#topic36"/>
 		</role>
 	</association>
 	<association>
@@ -1559,15 +1768,15 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic37"/>
-			</type>
-			<topicRef href="#topic32"/>
-		</role>
-		<role>
-			<type>
 				<topicRef href="#topic30"/>
 			</type>
 			<topicRef href="#topic57"/>
+		</role>
+		<role>
+			<type>
+				<topicRef href="#topic37"/>
+			</type>
+			<topicRef href="#topic32"/>
 		</role>
 	</association>
 	<association>
@@ -1593,15 +1802,15 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic37"/>
-			</type>
-			<topicRef href="#topic37"/>
-		</role>
-		<role>
-			<type>
 				<topicRef href="#topic30"/>
 			</type>
 			<topicRef href="#topic45"/>
+		</role>
+		<role>
+			<type>
+				<topicRef href="#topic37"/>
+			</type>
+			<topicRef href="#topic37"/>
 		</role>
 	</association>
 	<association>

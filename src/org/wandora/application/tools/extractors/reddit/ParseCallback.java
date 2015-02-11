@@ -1,10 +1,10 @@
-/*
+ /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
- * 
+ *
  * Copyright (C) 2004-2015 Wandora Team
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,19 +17,43 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-package org.wandora.application.gui.topicpanels;
+package org.wandora.application.tools.extractors.reddit;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import java.util.HashMap;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 
 /**
- * This is just a stub to get this registered in TopicPanelManager. The actual
- * code is in the queryeditorpanel package in a class of the same name, which
- * this class extends (without adding anything whatsoever).
- * @author olli
+ *
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
 
 
-public class QueryEditorTopicPanel extends org.wandora.application.gui.topicpanels.queryeditorpanel.QueryEditorTopicPanel {
-    
+abstract class ParseCallback<Object>{
+  
+  TopicMap tm;
+  HashMap<String, Topic> thingTypes;
+  ParseCallback(TopicMap tm, HashMap<String, Topic> thingTypes) {
+    this.tm = tm;
+    this.thingTypes = thingTypes;
+  }
+  
+  ParseCallback() {
+    this(null ,null);
+  }
+  
+  abstract protected void run(HttpResponse<JsonNode> response);
 
+  protected void error(Exception e){
+    this.error(e, null);
+  }
+  
+  abstract protected void error(Exception e, String body);
+  
+  
 }

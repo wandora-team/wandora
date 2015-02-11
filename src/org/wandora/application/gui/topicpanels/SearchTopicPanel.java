@@ -27,13 +27,11 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseWheelListener;
 import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.wandora.application.CancelledException;
@@ -44,7 +42,6 @@ import org.wandora.application.gui.search.QueryPanel;
 import org.wandora.application.gui.search.SearchPanel;
 import org.wandora.application.gui.search.SimilarityPanel;
 import org.wandora.application.gui.search.TMQLPanel;
-import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.topicmap.Association;
@@ -71,6 +68,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     private Component currentContainerPanel = null;
     private Topic openedTopic = null;
     
+    private boolean useResultScrollPanes = false;
     
     
     /**
@@ -86,13 +84,9 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         similarityPanel = new SimilarityPanel();
         queryPanel = new QueryPanel();
         tmqlPanel = new TMQLPanel();
-        
-        // Let SearchTopicPanel's scrollPanel handle wheel events. Therefore
-        // we need to remove mouse wheel listeners in searchPanel's JScrollPane. 
-        JScrollPane searchResultScrollPanel = searchPanel.getResultScrollPane();
-        MouseWheelListener[] mouseWheelListeners = searchResultScrollPanel.getMouseWheelListeners();
-        for(MouseWheelListener listener : mouseWheelListeners) {
-            searchResultScrollPanel.removeMouseWheelListener(listener);
+
+        if(!useResultScrollPanes) {
+            removeResultScrollPanes();
         }
         
         Wandora wandora = Wandora.getWandora();
@@ -112,6 +106,32 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
             e.printStackTrace();
         }
     }
+    
+    
+    
+    public void setUseResultScrollPanes(boolean use) {
+        useResultScrollPanes = use;
+    }
+
+    
+    /*
+     * By default SearchTopicPanel removes MouseListeners in all result tables of
+     * sub panels. This enables mouse wheel events of SearchTopicPanel to work
+     * over result tables. At the moment SearchTopicsFrame keeps the MouseListeners
+     * intact by calling setUseResultScrollPanes(true). SearchTopicsFrame has no
+     * global ScrollPane but relies on ScrollPanes in result tables.
+     *
+     * Notice, this method in called from init if useResultScrollPanes is false.
+     * By default it is false and you need to call setUseResultScrollPanes(true)
+     * before init is called in order to keep mouse listeners alive.
+     */
+    public void removeResultScrollPanes() {
+        searchPanel.removeResultScrollPanesMouseListeners();
+        similarityPanel.removeResultScrollPanesMouseListeners();
+        queryPanel.removeResultScrollPanesMouseListeners();
+        tmqlPanel.removeResultScrollPanesMouseListeners();
+    }
+    
     
     
     private void setCurrentPanel(Component p) {
@@ -287,17 +307,12 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_search.png");
     }
-
-    @Override
-    public boolean noScroll(){
-        return false;
-    }
-    
+   
     @Override
     public int getOrder() {
         return 9995;
     }
-
+    
     @Override
     public Object[] getViewMenuStruct() {
         return new Object[] {
@@ -319,7 +334,10 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         return null;
     }
 
-    
+    @Override
+    public boolean noScroll(){
+        return false;
+    }
     
     
     // -------------------------------------------------------------------------
@@ -386,4 +404,5 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     public void associationChanged(Association a) throws TopicMapException {
         refresh();
     }
+
 }

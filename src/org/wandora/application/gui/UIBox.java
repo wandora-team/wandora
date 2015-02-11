@@ -52,6 +52,9 @@ import org.wandora.application.gui.topicpanels.webview.WebViewPanel;
 
 
 /**
+ * UIBox is a library of user interface related helper methods. All methods are
+ * static and require no class instance. Offered helper methods include menu
+ * creation, button array creation, icon creation and cache, for example.
  *
  * @author  akivela
  */

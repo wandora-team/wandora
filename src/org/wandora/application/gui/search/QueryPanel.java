@@ -33,6 +33,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelListener;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
@@ -105,7 +107,15 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     }
 
     
-
+    
+    public void removeResultScrollPanesMouseListeners() {
+        MouseWheelListener[] mouseWheelListeners = resultScrollPane.getMouseWheelListeners();
+        for(MouseWheelListener listener : mouseWheelListeners) {
+            resultScrollPane.removeMouseWheelListener(listener);
+        }
+    }
+    
+    
     
     private void readStoredScriptQueries() {
         storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();
@@ -334,6 +344,8 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         scripButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
         clearResultsButton = new SimpleButton();
+        resultContainerPanel = new javax.swing.JPanel();
+        resultScrollPane = new SimpleScrollPane();
         resultPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
@@ -393,6 +405,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         engineLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
         engineLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         engineLabel.setText("Engine");
+        engineLabel.setMinimumSize(new java.awt.Dimension(70, 14));
         engineLabel.setPreferredSize(new java.awt.Dimension(70, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -414,6 +427,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         scriptLabel.setText("Script");
         scriptLabel.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         scriptLabel.setIconTextGap(0);
+        scriptLabel.setMinimumSize(new java.awt.Dimension(70, 14));
         scriptLabel.setPreferredSize(new java.awt.Dimension(70, 14));
         scriptLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -426,7 +440,10 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 2, 4);
         scriptQueryPanel.add(scriptLabel, gridBagConstraints);
 
+        scriptScrollPane.setMinimumSize(new java.awt.Dimension(23, 100));
         scriptScrollPane.setPreferredSize(new java.awt.Dimension(8, 150));
+
+        scriptTextPane.setMinimumSize(new java.awt.Dimension(6, 100));
         scriptScrollPane.setViewportView(scriptTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -477,15 +494,24 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         queryPanel.add(scripButtonPanel, gridBagConstraints);
 
+        resultContainerPanel.setLayout(new java.awt.BorderLayout());
+
+        resultScrollPane.setBorder(null);
+
         resultPanel.setLayout(new java.awt.BorderLayout());
+        resultScrollPane.setViewportView(resultPanel);
+
+        resultContainerPanel.add(resultScrollPane, java.awt.BorderLayout.CENTER);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        queryPanel.add(resultPanel, gridBagConstraints);
+        queryPanel.add(resultContainerPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -583,7 +609,9 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     private javax.swing.JComboBox queryComboBox;
     private javax.swing.JPanel queryPanel;
     private javax.swing.JPanel queryPanelInner;
+    private javax.swing.JPanel resultContainerPanel;
     private javax.swing.JPanel resultPanel;
+    private javax.swing.JScrollPane resultScrollPane;
     private javax.swing.JButton runButton;
     private javax.swing.JPanel scripButtonPanel;
     private javax.swing.JLabel scriptLabel;
