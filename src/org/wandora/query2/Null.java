@@ -39,6 +39,7 @@ public class Null extends Directive implements DirectiveUIHints.Provider {
     @Override
     public DirectiveUIHints getUIHints() {
         DirectiveUIHints ret=new DirectiveUIHints(Null.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, "")
             },
             Directive.getStandardAddonHints(),
             "Null",

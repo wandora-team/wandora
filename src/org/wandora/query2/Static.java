@@ -54,6 +54,7 @@ public class Static extends Directive implements DirectiveUIHints.Provider {
     @Override
     public DirectiveUIHints getUIHints() {
         DirectiveUIHints ret=new DirectiveUIHints(Static.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, "")
             // result row type is not yet supported
 //                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
 //                    new DirectiveUIHints.Parameter(ResultRow.class, true, "row")

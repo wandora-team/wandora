@@ -39,6 +39,7 @@ public class Identity extends Directive implements DirectiveUIHints.Provider {
     @Override
     public DirectiveUIHints getUIHints() {
         DirectiveUIHints ret=new DirectiveUIHints(Identity.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, "")
             },
             Directive.getStandardAddonHints(),
             "Identity",

@@ -51,15 +51,21 @@ public class DnDTools {
             this.next=next;
         }
 
+        public boolean chainCanImport(TransferHandler.TransferSupport support){return false;}
+        
         @Override
         public boolean canImport(TransferHandler.TransferSupport support) {
-            if(next!=null) return next.canImport(support);
+            if(chainCanImport(support)) return true;
+            else if(next!=null) return next.canImport(support);
             else return super.canImport(support);
         }
 
+        public boolean chainImportData(TransferHandler.TransferSupport support){return false;}
+        
         @Override
         public boolean importData(TransferHandler.TransferSupport support) {
-            if(next!=null) return next.importData(support);
+            if(chainImportData(support)) return true;
+            else if(next!=null) return next.importData(support);
             else return super.importData(support);
         }
         
@@ -85,26 +91,19 @@ public class DnDTools {
         
         component.setTransferHandler(new ChainedTransferHandler((ChainedTransferHandler)old){
             @Override
-            public boolean canImport(TransferHandler.TransferSupport support) {
-                return support.isDataFlavorSupported(flavor) ||
-                        super.canImport(support);
+            public boolean chainCanImport(TransferHandler.TransferSupport support) {
+                return support.isDataFlavorSupported(flavor);
             }
 
             @Override
-            public boolean importData(TransferHandler.TransferSupport support) {
-                if(!canImport(support)) {
-                    return super.importData(component, null);
-                }
+            public boolean chainImportData(TransferHandler.TransferSupport support) {
+                if(!chainCanImport(support)) return false;
                 
                 Transferable t=support.getTransferable();
                 try{
                     Object data=t.getTransferData(flavor);
                     K cast=(K)data;
-                    boolean ret=callback.callback(component, cast, support);
-                    if(!ret && old!=null && old.canImport(support)) {
-                        return old.importData(support);
-                    }
-                    else return false;
+                    return callback.callback(component, cast, support);
                 }
                 catch(UnsupportedFlavorException | IOException e){return false;}
             }
