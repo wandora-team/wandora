@@ -209,7 +209,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             if(o != null) {
                 String tooltipText = o.toString();
                 if(tooltipText != null && tooltipText.length() > 5) {
-                    if(tooltipText.length() > 1000) tooltipText = tooltipText.substring(0,999)+"...";
+                    if(tooltipText.length() > 200) tooltipText = tooltipText.substring(0,199)+"...";
                     return Textbox.makeHTMLParagraph(tooltipText, 40);
                 }
             }
@@ -727,6 +727,13 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             String viewedOccurrenceText = occurrenceText;
             boolean isDataOccurrence = false;
             if(viewedOccurrenceText.startsWith("data:")) {
+                try {
+                    Component preview = UIBox.getComponentForData(viewedOccurrenceText);
+                    if(preview != null) return preview;
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
                 isDataOccurrence = true;
                 viewedOccurrenceText = viewedOccurrenceText.substring(0, Math.max(5, viewedOccurrenceText.indexOf(',')));
             }
