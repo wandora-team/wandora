@@ -32,6 +32,7 @@ import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import java.util.*;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -44,9 +45,9 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
 
     public static String siPattern = "http://wandora.org/si/topic/__n__";
     public static String basenamePattern = "Topic __n__";
-    public static boolean connectWithWandoraClass = false;
+    public static boolean connectWithWandoraClass = true;
     public static boolean ensureNumberOfAssociations = true;
-    
+    public static int initialTopicCounter = 0;
     
     
     /** Creates a new instance of RandomGraphGenerator */
@@ -79,13 +80,14 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             new String[]{"---1","separator"},
             new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
             new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
+            new String[]{"Initial node counter","string",""+initialTopicCounter,"What is the number of first generated topic node."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type of random associations","topic",null,"Optional association type for random graph edges."},
             new String[]{"First role of random associations","topic",null,"Optional role topic for random graph edges."},
             new String[]{"Second role of random associations","topic",null,"Optional role topic for random graph edges."},
         },wandora);
         
-        god.setSize(700, 420);
+        god.setSize(700, 460);
         GuiTools.centerWindow(god,wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
@@ -120,11 +122,50 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
 
         try {
             siPattern = values.get("Subject identifier pattern");
+            if(!siPattern.contains("__n__")) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Subject identifier pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to continue?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                if(a != WandoraOptionPane.YES_OPTION) return;
+            }
             basenamePattern = values.get("Basename pattern");
+            if(!basenamePattern.contains("__n__")) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Basename pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to continue?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                if(a != WandoraOptionPane.YES_OPTION) return;
+            }
             connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
+            
+            try {
+                initialTopicCounter = Integer.parseInt(values.get("Initial node counter"));
+            }
+            catch(NumberFormatException nfe) {
+                singleLog("Parse error. Initial node counter should be an integer number. Cancelling.");
+                return;
+            }
         }
         catch(Exception e) {
             singleLog(e);
+            return;
+        }
+        
+        Topic aType = topicmap.getTopic(values.get("Association type of random associations"));
+        if(aType == null || aType.isRemoved()) {
+            aType = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"associationType", "Random graph association");
+        }
+        
+        Topic role1 = topicmap.getTopic(values.get("First role of random associations"));
+        if(role1 == null || role1.isRemoved()) {
+            role1 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role1", "Random graph role 1");
+        }
+        
+        Topic role2 = topicmap.getTopic(values.get("Second role of random associations"));
+        if(role2 == null || role2.isRemoved()) {
+            role2 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role2", "Random graph role 2");
+        }
+
+        if(role1.mergesWithTopic(role2)) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "Role topics are same. This causes associations to be unary instead of binary. Do you want to continue?", "Role topics are same", WandoraOptionPane.WARNING_MESSAGE);
+            if(a != WandoraOptionPane.YES_OPTION) {
+                return;
+            }
         }
         
         setDefaultLogger();
@@ -137,8 +178,9 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         setProgressMax(n);
         for(int i=0; i<n && !forceStop(); i++) {
             setProgress(n);
-            String newBasename = basenamePattern.replaceAll("__n__", ""+i);
-            String newSubjectIdentifier = siPattern.replaceAll("__n__", ""+i);
+            int nodeCounter = initialTopicCounter+i;
+            String newBasename = basenamePattern.replaceAll("__n__", ""+nodeCounter);
+            String newSubjectIdentifier = siPattern.replaceAll("__n__", ""+nodeCounter);
             topics[i] = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
             if(connectWithWandoraClass) {
                 Topic randomGraphTopic = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI, "Random graph");
@@ -149,24 +191,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
                 topics[i].addType(randomGraphInstanceTopic);
             }
         }
-        
-        log("Checking association type and role topics.");
-        Topic aType = topicmap.getTopic(values.get("Association type of random associations"));
-        if(aType == null || aType.isRemoved()) {
-            aType = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"associationType", "Random association");
-        }
-        
-        Topic role1 = topicmap.getTopic(values.get("Association type of random associations"));
-        if(role1 == null || role1.isRemoved()) {
-            role1 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role1", "Role 1");
-        }
-        
-        Topic role2 = topicmap.getTopic(values.get("Association type of random associations"));
-        if(role2 == null || role2.isRemoved()) {
-            role2 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role2", "Role 2");
-        }
-
-        
+                
         Association a = null;
         Topic t1 = null;
         Topic t2 = null;
