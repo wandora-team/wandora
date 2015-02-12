@@ -2238,6 +2238,26 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     }
     
     
+    // ---------------------------------------------- TOPIC MAP TRANSACTIONS ---
+    
+    
+    public void startTransaction() {
+        if(topicMap != null) {
+            topicMap.startTransaction();
+        }
+    }
+    
+    public void endTransaction() {
+        if(topicMap != null) {
+            topicMap.endTransaction();
+        }
+    }
+    
+    
+    
+    
+    
+    
     // -------------------------------------------------------------------------
     // ---------------------------------------------------------------- MAIN ---
     // -------------------------------------------------------------------------
