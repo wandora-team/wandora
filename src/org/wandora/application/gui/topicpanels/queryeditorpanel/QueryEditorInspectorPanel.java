@@ -42,11 +42,16 @@ public class QueryEditorInspectorPanel extends javax.swing.JPanel {
         
         this.add(emptyPanel);
     }
-
-    public void setSelection(Object o){
+    
+    public void saveChanges(){
         if(this.selectedObject!=null && this.selectedObject instanceof DirectivePanel){
             if(editor!=null && editor instanceof DirectiveEditor) ((DirectiveEditor)editor).saveChanges();
         }
+        
+    }
+
+    public void setSelection(Object o){
+        saveChanges();
         
         this.selectedObject=o;
         this.removeAll();
@@ -54,7 +59,8 @@ public class QueryEditorInspectorPanel extends javax.swing.JPanel {
         else if(o instanceof DirectivePanel){
             DirectivePanel panel=(DirectivePanel)o;
             editor=panel.getEditorPanel();
-            this.add(editor);
+            if(editor==null) this.add(new JPanel());
+            else this.add(editor);
         }
         
         this.revalidate();

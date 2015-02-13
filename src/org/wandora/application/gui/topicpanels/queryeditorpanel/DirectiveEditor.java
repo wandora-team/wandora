@@ -1,4 +1,4 @@
-/*
+ /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
@@ -26,16 +26,18 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Objects;
 import javax.swing.JPanel;
 import org.wandora.application.Wandora;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
 import org.wandora.query2.DirectiveUIHints.Addon;
-import org.wandora.query2.DirectiveUIHints.BoundParameter;
 import org.wandora.query2.DirectiveUIHints.Constructor;
 import org.wandora.query2.DirectiveUIHints.Parameter;
 import org.wandora.query2.Operand;
 import org.wandora.query2.TopicOperand;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *
@@ -162,7 +164,29 @@ public class DirectiveEditor extends javax.swing.JPanel {
                 panel.setValue(value);
             }
             
-            // TODO: Addon panels
+            
+            for(AddonParameters ap : params.addons){
+                Addon addon=ap.addon;
+                
+                for(int i=0;i<addonComboBox.getItemCount();i++){
+                    Object o=addonComboBox.getItemAt(i);
+                    if(o instanceof AddonComboItem){
+                        if(((AddonComboItem)o).a.equals(addon)){
+                            AddonPanel addonPanel=addAddon(addon);
+                            for(int j=0;j<addonPanel.parameterPanels.length;j++){
+                                AbstractTypePanel valuePanel=addonPanel.parameterPanels[j];
+                                Object value=null;
+                                if(j<ap.parameters.length && ap.parameters[j]!=null) {
+                                    value=ap.parameters[j].value;
+                                }
+                                valuePanel.setValue(value);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            
         }        
     }
     
@@ -235,6 +259,64 @@ public class DirectiveEditor extends javax.swing.JPanel {
         }
     }
 
+
+    public static class BoundParameter {
+        protected Parameter parameter;
+        protected Object value;
+        public BoundParameter(Parameter parameter,Object value){
+            this.parameter=parameter;
+            this.value=value;
+        }
+        public Parameter getParameter(){return parameter;}
+        public Object getValue(){return value;}
+        public String getScriptValue(){
+            if(value==null) return "null";
+            else if(value instanceof String) return "\""+value+"\"";
+            else if(value instanceof Number) return value.toString();
+            else if(value instanceof Topic) {
+                try{
+                    return "\""+(((Topic)value).getOneSubjectIdentifier())+"\"";
+                }catch(TopicMapException tme){
+                    Wandora.getWandora().handleError(tme);
+                    return null;
+                }
+            }
+            else if(value instanceof DirectivePanel){
+                return ((DirectivePanel)value).buildScript();
+            }
+            
+            else throw new RuntimeException("Unable to convert value to script");
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 37 * hash + Objects.hashCode(this.parameter);
+            hash = 37 * hash + Objects.hashCode(this.value);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final BoundParameter other = (BoundParameter) obj;
+            if (!Objects.equals(this.parameter, other.parameter)) {
+                return false;
+            }
+            if (!Objects.equals(this.value, other.value)) {
+                return false;
+            }
+            return true;
+        }
+
+
+        
+    }    
     
     public static AbstractTypePanel makeMultiplePanel(DirectiveUIHints.Parameter param,Class<? extends AbstractTypePanel> typePanel,String label,DirectivePanel directivePanel){
         MultipleParameterPanel p=new MultipleParameterPanel(param,typePanel,directivePanel);
@@ -317,7 +399,21 @@ public class DirectiveEditor extends javax.swing.JPanel {
         this.constructorParamPanels=populateParametersPanel(constructorParameters,parameters,this.constructorParamPanels,directivePanel);
         this.revalidate();
         constructorParameters.repaint();        
+        
+    }
+    
+    public AddonPanel addAddon(Addon addon){
+        AddonPanel addonPanel=new AddonPanel(this,addon);
+        GridBagConstraints gbc=new GridBagConstraints();
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.weightx=1.0;
+        gbc.gridx=0;
+        gbc.gridy=addonPanels.size();
+        gbc.insets=new Insets(5, 0, 0, 0);
+        addonPanelContainer.add(addonPanel,gbc);
 
+        addonPanels.add(addonPanel);
+        return addonPanel;
     }
     
     public void removeAddon(AddonPanel addonPanel){
@@ -364,6 +460,8 @@ public class DirectiveEditor extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -490,17 +588,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
             AddonComboItem aci=(AddonComboItem)o;
             Addon addon=aci.a;
 
-            AddonPanel addonPanel=new AddonPanel(this,addon);
-            GridBagConstraints gbc=new GridBagConstraints();
-            gbc.fill=GridBagConstraints.HORIZONTAL;
-            gbc.weightx=1.0;
-            gbc.gridx=0;
-            gbc.gridy=addonPanels.size();
-            gbc.insets=new Insets(5, 0, 0, 0);
-            addonPanelContainer.add(addonPanel,gbc);
-
-            addonPanels.add(addonPanel);
-
+            addAddon(addon);
         }
         this.revalidate();
         addonPanelContainer.repaint();

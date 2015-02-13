@@ -79,22 +79,6 @@ public class AddonPanel extends javax.swing.JPanel {
             }
         }
     }
-    
-    public String buildScript(){
-        StringBuilder sb=new StringBuilder();
-        sb.append(".");
-        sb.append(addon.getMethod());
-        sb.append("(");
-        for(int i=0;i<parameterPanels.length;i++){
-            AbstractTypePanel paramPanel=parameterPanels[i];
-            String s=paramPanel.getValueScript();
-            
-            if(i>0) sb.append(",");
-            sb.append(s);
-        }
-        sb.append(")");
-        return sb.toString();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
