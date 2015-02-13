@@ -439,6 +439,20 @@ public abstract class TopicMap implements TopicMapLogger {
     }
     
     
+    // ---------------------------------------------- TOPIC MAP TRANSACTIONS ---
+    
+    
+    public void startTransaction() {
+        // By default topic map doesn't support transactions. Each topic map
+        // implementation must override this method to add support for
+        // transactions.
+    }
+    
+    public void endTransaction() {
+        // By default topic map doesn't support transactions. Each topic map
+        // implementation must override this method to add support for
+        // transactions.
+    }
     
     
     // ---------------------------------------------------- TOPIC MAP LOGGER ---

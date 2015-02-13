@@ -321,11 +321,13 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     }
     
     
+    @Override
     public void clearTopicMap() throws TopicMapException{
         getSelectedLayer().getTopicMap().clearTopicMap();
         clearTopicIndex();
     }
     
+    @Override
     public void clearTopicMapIndexes() throws TopicMapException {
         clearTopicIndex();
         Layer layer = null;
@@ -408,6 +410,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     
     /* See note beginning of the file about TopicMapListeners in LayerStack
      */
+    @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
@@ -417,6 +420,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         removeTopicFromIndex(t.getOneSubjectIdentifier());
     }
+    
+    @Override
     public void associationRemoved(Association a) throws TopicMapException {
         if(!topicMapListeners.isEmpty()) {
             for(TopicMapListener listener : topicMapListeners){
@@ -424,6 +429,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException{
         if(removed!=null) removeTopicFromIndex(removed);
         if(added!=null) removeTopicFromIndex(added);
@@ -437,6 +444,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void topicBaseNameChanged(Topic t,String newName,String oldName) throws TopicMapException{
         for(Locator l : t.getSubjectIdentifiers()){
             removeTopicFromIndex(l);
@@ -449,6 +458,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
         if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
@@ -459,6 +470,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
         if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
@@ -468,6 +481,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
         if(!topicMapListeners.isEmpty()) {
             LayeredTopic lt=makeLayeredTopic(t);
@@ -478,6 +493,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void topicSubjectLocatorChanged(Topic t,Locator newLocator,Locator oldLocator) throws TopicMapException {
         for(Locator l : t.getSubjectIdentifiers()){
             removeTopicFromIndex(l);
@@ -489,6 +506,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void topicChanged(Topic t) throws TopicMapException {
         for(Locator l : t.getSubjectIdentifiers()){
             removeTopicFromIndex(l);
@@ -502,6 +521,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
         if(!topicMapListeners.isEmpty()) {
             LayeredAssociation la=makeLayeredAssociation(a);
@@ -512,6 +533,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
         if(!topicMapListeners.isEmpty()) {
             LayeredAssociation la=makeLayeredAssociation(a);
@@ -523,6 +546,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
     }
+    
+    @Override
     public void associationChanged(Association a) throws TopicMapException {
         if(!topicMapListeners.isEmpty()){
             LayeredAssociation la=null;
@@ -541,23 +566,32 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public boolean isSelectedReadOnly(){
         return getSelectedLayer().isReadOnly();
     }
+    
     /**
      * Gets layer position in the stack. Layer with index 0 is at the top.
      */
-    public int getLayerZPos(Layer l){
+    public int getLayerZPos(Layer l) {
         return layers.indexOf(l);
     }
+    
     /**
      * Gets the layer a topic belongs to.
      */
-    public Layer getLayer(Topic t){return getLayer(t.getTopicMap());}
+    public Layer getLayer(Topic t) {
+        return getLayer(t.getTopicMap());
+    }
+    
     /**
      * Gets the layer of a topic map.
      */
-    public Layer getLayer(TopicMap tm){return layerIndex.get(tm);}
+    public Layer getLayer(TopicMap tm) {
+        return layerIndex.get(tm);
+    }
+    
     /**
      * Gets the layer with the specified name.
      */
+    @Override
     public Layer getLayer(String layerName) {
         Layer layer = null;
         if(layerName != null) {
@@ -570,34 +604,49 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         return null;
     }
+    
     /**
      * Gets the selected layer.
      */
+    @Override
     public Layer getSelectedLayer(){
         return selectedLayer;
     }
+    
     /**
      * Gets the selected layer position in the stack.
      */
+    @Override
     public int getSelectedIndex(){
         return getLayerZPos(selectedLayer);
     }
+    
     /**
      * Makes the specified layer the selected layer.
      */
+    @Override
     public void selectLayer(Layer layer){
         selectedLayer=layer; 
 //        if(controlPanel!=null) controlPanel.resetLayers(layers);
     }
+    
     /**
      * Gets all layers in the order they are in the stack.
      */
-    public List<Layer> getLayers(){return layers;}
+    @Override
+    public List<Layer> getLayers(){
+        return layers;
+    }
+    
     /**
      * Gets all visible layers in the order they are in the stack.
      */
-    public List<Layer> getVisibleLayers(){return visibleLayers;}
+    @Override
+    public List<Layer> getVisibleLayers(){
+        return visibleLayers;
+    }
     
+    @Override
     public void notifyLayersChanged(){
         clearTopicIndex();
         visibleLayers=new Vector<Layer>();
@@ -608,6 +657,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
 //        if(parent!=null && parent instanceof LayerStack) ((LayerStack)parent).notifyLayersChanged();
     }
 
+    @Override
     public Collection<Topic> getTopicsForLayer(Layer l,Topic t) {
         return ((LayeredTopic)t).getTopicsForLayer(l);
     }
@@ -619,10 +669,12 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public void addLayer(Layer l) {
         addLayer(l,layers.size());
     }
+    
     /**
      * Inserts a layer at the specified position in the stack. Layers after
      * that index are moved one position down.
      */
+    @Override
     public void addLayer(Layer l,int pos) {
         if(useUndo) l.wrapInUndo();
         
@@ -643,6 +695,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     /**
      * Sets layer in the specified position removing old layer at that position.
      */
+    @Override
     public void setLayer(Layer l, int pos) {
         if(useUndo) l.wrapInUndo();
         
@@ -662,10 +715,12 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
 //        visibilityChanged(l);
         fireLayerChanged(old, l);
     }
+    
     /**
      * Removes the specified layer. Layers after the removed layer are
      * moved one position up.
      */
+    @Override
     public boolean removeLayer(Layer l) {
         if(layers.remove(l)){
             layerIndex.remove(l);
@@ -681,9 +736,11 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         return false;
     }
+    
     /**
      * Moves layers around to reverse layer order.
      */
+    @Override
     public void reverseLayerOrder() {
         Vector<Layer> newLayers=new Vector<Layer>();
         for(int i=layers.size()-1; i>=0; i--) {
@@ -745,6 +802,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         if(ambiguityResolver!=null) return ambiguityResolver.resolveAmbiguity(event);
         else return AmbiguityResolution.addToSelected;
     }
+    
     public AmbiguityResolution resolveAmbiguity(String event,String msg){
         if(ambiguityResolver!=null) return ambiguityResolver.resolveAmbiguity(event,msg);
         else return AmbiguityResolution.addToSelected;
@@ -778,6 +836,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         //}
         return collected;
     }
+    
     /**
      * Collects all topics from all layers that merge with the given topic. Initially
      * the collected Set is empty but all merging topics are added to it to be returned
@@ -861,6 +920,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return la;
     }
     
+    @Override
     public Topic getTopic(Locator si) throws TopicMapException {
         Set<Topic> collected=new KeyedHashSet<Topic>(new TopicAndLayerKeyMaker());
         for(Layer l : visibleLayers){
@@ -872,6 +932,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return null;
     }
     
+    @Override
     public Topic[] getTopics(String[] sis) throws TopicMapException {
         Topic[] ret=new Topic[sis.length];
         for(int i=0;i<sis.length;i++){
@@ -880,6 +941,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return ret;
     }
     
+    @Override
     public Topic getTopicBySubjectLocator(Locator sl) throws TopicMapException {
         HashSet<Topic> collected=new LinkedHashSet<Topic>();
         for(Layer l : visibleLayers){
@@ -888,6 +950,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }        
         return null;
     }
+    
+    @Override
     public Topic createTopic() throws TopicMapException {
         if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
         if(selectedLayer!=null){
@@ -899,6 +963,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             throw new RuntimeException("No selected layer");
         }
     }
+    
+    @Override
     public Association createAssociation(Topic type) throws TopicMapException {
         if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
         if(selectedLayer!=null){
@@ -929,6 +995,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             // TODO: some other exception
         }
     }
+    
+    @Override
     public Collection<Topic> getTopicsOfType(Topic type) throws TopicMapException {
         Set<Topic> processed=new KeyedHashSet<Topic>(new TopicAndLayerKeyMaker());
         ArrayList<Topic> ret=new ArrayList<Topic>();
@@ -948,6 +1016,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         return ret;
     }
+    
+    @Override
     public Topic getTopicWithBaseName(String name) throws TopicMapException {
         HashSet<Topic> collected=new LinkedHashSet<Topic>();
         for(Layer l : visibleLayers){
@@ -1000,6 +1070,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
         
+        @Override
         public boolean hasNext() {
             if(next!=null) return true;
             while(_hasNext()){
@@ -1023,6 +1094,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             return next!=null;
         }
 
+        @Override
         public Topic next() {
             if(!hasNext()) throw new NoSuchElementException();
             Topic ret=next;
@@ -1065,12 +1137,14 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         }
 
-
+        @Override
         public void remove(){
             throw new UnsupportedOperationException();
         }
     }
     
+    
+    @Override
     public Iterator<Topic> getTopics() throws TopicMapException {
         return new TopicsIterator();
     }
@@ -1109,6 +1183,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         public AssociationsIterator(){
             topicsIterator=new TopicsIterator();
         }
+        @Override
         public boolean hasNext(){
             if(next!=null) return true;
             
@@ -1146,18 +1221,21 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 return false;
             }
         }
+        @Override
         public Association next(){
             if(!hasNext()) throw new NoSuchElementException();
             Association ret=next;
             next=null;
             return ret;
         }
+        @Override
         public void remove(){
             throw new UnsupportedOperationException();
         }
-        
     }
     
+    
+    @Override
     public Iterator<Association> getAssociations() throws TopicMapException {
         return new AssociationsIterator();
 /*        final KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(new TopicAndLayerKeyMaker());
@@ -1237,6 +1315,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return lt;
     }
     
+    @Override
     public Collection<Association> getAssociationsOfType(Topic type) throws TopicMapException {
         LayeredTopic lt=(LayeredTopic)type;
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(new TopicAndLayerKeyMaker());
@@ -1259,6 +1338,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return associations;
     }
     
+    @Override
     public int getNumTopics() throws TopicMapException {
         Set<Topic> processed=new KeyedHashSet<Topic>(new TopicAndLayerKeyMaker());
         int count=0;
@@ -1274,6 +1354,9 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         return count;
     }
+    
+    
+    @Override
     public int getNumAssociations() throws TopicMapException {
         int counter=0;
         AssociationsIterator iter=new AssociationsIterator();
@@ -1305,25 +1388,33 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return associations.size();*/
     }
     
+    @Override
     public Topic copyTopicIn(Topic t,boolean deep) throws TopicMapException {
         Topic ct=selectedLayer.topicMap.copyTopicIn(t,deep);
         return makeLayeredTopic(ct);
     }
+    
+    @Override
     public Association copyAssociationIn(Association a) throws TopicMapException {
         Association ca=selectedLayer.topicMap.copyAssociationIn(a);
         return makeLayeredAssociation(ca);
     }
+    
+    @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
         selectedLayer.topicMap.copyTopicAssociationsIn(t);
     }
+    
     @Override
     public void importXTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
         selectedLayer.topicMap.importXTM(in, logger);
-    }    
+    }
+    
     @Override
     public void importLTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException, TopicMapException {
         selectedLayer.topicMap.importLTM(in, logger);
-    }    
+    }
+    
     @Override
     public void importLTM(java.io.File in) throws java.io.IOException, TopicMapException {
         selectedLayer.topicMap.importLTM(in);
@@ -1332,29 +1423,41 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public void mergeIn(TopicMap tm)  throws TopicMapException {
         selectedLayer.topicMap.mergeIn(tm);
     }
+    
+    @Override
     public boolean trackingDependent(){
         return trackDependent;
     }
+    
+    @Override
     public void setTrackDependent(boolean v){
         trackDependent=v;
     }
     
+    @Override
     public List<TopicMapListener> getTopicMapListeners(){
         return topicMapListeners;
     }
 
+    @Override
     public void addTopicMapListener(TopicMapListener listener){
         if(!topicMapListeners.contains(listener)) topicMapListeners.add(listener);
     }
+    
+    @Override
     public void removeTopicMapListener(TopicMapListener listener){
         topicMapListeners.remove(listener);
     }
+    
+    @Override
     public void disableAllListeners(){
         if(disabledListeners==null){
             disabledListeners=topicMapListeners;
             topicMapListeners=new ArrayList<TopicMapListener>();
         }
     }
+    
+    @Override
     public void enableAllListeners(){
         if(disabledListeners!=null){
             topicMapListeners=disabledListeners;
@@ -1368,6 +1471,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return old;        
     }*/
     
+    @Override
     public boolean resetTopicMapChanged() throws TopicMapException {
         boolean ret=false;
         for(Layer l : visibleLayers){
@@ -1376,12 +1480,35 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return ret;
     }
     
+    @Override
     public boolean isTopicMapChanged() throws TopicMapException {
         for(Layer l : visibleLayers){
             if(l.getTopicMap().isTopicMapChanged()) return true;
         }
         return false;
     }
+    
+    
+    // ---------------------------------------------- TOPIC MAP TRANSACTIONS ---
+    
+    @Override
+    public void startTransaction() {
+        for(Layer l : visibleLayers){
+            l.getTopicMap().startTransaction();
+        }
+    }
+    
+    @Override
+    public void endTransaction() {
+        for(Layer l : visibleLayers){
+            l.getTopicMap().endTransaction();
+        }
+    }
+    
+    
+    
+    
+    
     
     
     public class TopicAndLayerKeyMaker implements Delegate<String,Topic> {
@@ -1404,6 +1531,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     }
     
     
+    @Override
     public Collection<Topic> search(String query, TopicMapSearchOptions options)  throws TopicMapException {
         TopicMapSearchOptions options2=options.duplicate();
         options2.maxResults=-1; // we can't know yet how many results we need from individual topic maps
@@ -1422,6 +1550,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     }
     
     
+    @Override
     public TopicMapStatData getStatistics(TopicMapStatOptions options) throws TopicMapException {
         if(options == null) return null;
         int option = options.getOption();

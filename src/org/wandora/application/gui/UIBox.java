@@ -48,6 +48,7 @@ import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.topicpanels.*;
 import org.wandora.application.gui.topicpanels.graphpanel.*;
 import org.wandora.application.gui.topicpanels.webview.WebViewPanel;
+import org.wandora.utils.Base64;
 
 
 
@@ -1361,4 +1362,47 @@ public class UIBox {
         return ii;
     }
 
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    public static Component getComponentForData(String dataUrl) {
+        if(dataUrl == null || dataUrl.length() == 0) return null;
+        if(!dataUrl.startsWith("data:")) return null;
+        dataUrl = dataUrl.substring("data:".length());
+        int mimeTypeEndIndex = dataUrl.indexOf(';');
+        if(mimeTypeEndIndex <= 0) return null;
+        String mimeType = dataUrl.substring(0, mimeTypeEndIndex);
+        dataUrl = dataUrl.substring(mimeTypeEndIndex+1);
+        int encodingEndIndex = dataUrl.indexOf(',');
+        if(encodingEndIndex <= 0) return null;
+        String encoding = dataUrl.substring(0, encodingEndIndex);
+        String dataString = dataUrl.substring(encodingEndIndex+1);
+        
+        byte[] data = null;
+        
+        if("base64".equalsIgnoreCase(encoding)) {
+            data = Base64.decode(dataString);
+        }
+        if(data != null && data.length > 0) {
+            if("image/gif".equalsIgnoreCase(mimeType) ||
+               "image/bmp".equalsIgnoreCase(mimeType) ||
+               "image/vbmp".equalsIgnoreCase(mimeType) ||
+               "image/jpg".equalsIgnoreCase(mimeType) ||
+               "image/jpeg".equalsIgnoreCase(mimeType) ||
+               "image/png".equalsIgnoreCase(mimeType)) {
+                try {
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(data));
+                    JLabel imageComponent = new JLabel(new ImageIcon(image));
+                    return imageComponent;
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+    
 }
