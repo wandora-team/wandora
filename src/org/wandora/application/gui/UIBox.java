@@ -1395,6 +1395,7 @@ public class UIBox {
                 try {
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(data));
                     JLabel imageComponent = new JLabel(new ImageIcon(image));
+                    imageComponent.setSize(image.getWidth(), image.getHeight());
                     return imageComponent;
                 }
                 catch(Exception e) {
