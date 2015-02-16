@@ -175,6 +175,7 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         add(parameterLabel, gridBagConstraints);
 
         directiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);

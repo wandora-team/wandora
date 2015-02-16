@@ -109,14 +109,18 @@ public class OperandParameterPanel extends AbstractTypePanel {
         setLayout(new java.awt.GridBagLayout());
 
         parameterLabel.setText("Label");
-        add(parameterLabel, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 6);
+        add(parameterLabel, gridBagConstraints);
 
         operandTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 operandTypeComboBoxActionPerformed(evt);
             }
         });
-        add(operandTypeComboBox, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 6);
+        add(operandTypeComboBox, gridBagConstraints);
 
         operandPanel.setLayout(new javax.swing.BoxLayout(operandPanel, javax.swing.BoxLayout.LINE_AXIS));
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -35,6 +35,8 @@ import org.wandora.application.gui.TextEditor;
 import org.wandora.application.gui.UIBox;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
+import org.wandora.query2.DirectiveUIHints.Addon;
+import org.wandora.query2.DirectiveUIHints.Constructor;
 
 /**
  *
@@ -48,6 +50,8 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     
     protected DirectivePanel selectedPanel;
     
+    protected FinalResultPanel finalResultPanel;
+    
     protected ConnectorAnchor finalResultAnchor;
     
     /**
@@ -56,7 +60,10 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     public QueryEditorComponent() {
         initComponents();
         
-        finalResultAnchor=new ComponentConnectorAnchor(finalResultLabel, ConnectorAnchor.Direction.RIGHT, true, false);
+        finalResultPanel=new FinalResultPanel();
+        addDirectivePanel(finalResultPanel);
+        
+        finalResultAnchor=finalResultPanel.getToConnectorAnchor();
         
         DnDTools.addDropTargetHandler(queryGraphPanel, DnDTools.directiveHintsDataFlavor, 
                 new DnDTools.DropTargetCallback<DirectiveUIHints>(){
@@ -69,7 +76,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
                         return true;                        
                     }
                 });
-
+/*
         DnDTools.addDropTargetHandler(finalResultLabel, DnDTools.directivePanelDataFlavor, 
                 new DnDTools.DropTargetCallback<DirectivePanel>(){
                     @Override
@@ -78,7 +85,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
                         return true;                        
                     }
                 });
-        
+*/        
         
         
         Object[] buttonStruct = {
@@ -120,6 +127,13 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     }
     
     public String buildScript(){
+        if(this.selectedPanel!=null) {
+            QueryEditorInspectorPanel inspector=findInspector();
+            if(inspector!=null){
+                inspector.saveChanges();
+            }            
+        }
+        
         ConnectorAnchor from=finalResultAnchor.getFrom();
         if(from==null) return null;
         JComponent component=from.getComponent();
@@ -209,7 +223,6 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         directiveListPanel = new javax.swing.JPanel();
         queryScrollPane = new javax.swing.JScrollPane();
         queryGraphPanel = new GraphPanel();
-        finalResultLabel = new javax.swing.JLabel();
         toolBar = new javax.swing.JToolBar();
         buttonPanel = new javax.swing.JPanel();
         fillerPanel = new javax.swing.JPanel();
@@ -222,11 +235,6 @@ public class QueryEditorComponent extends javax.swing.JPanel {
 
         queryGraphPanel.setBackground(new java.awt.Color(255, 255, 255));
         queryGraphPanel.setLayout(null);
-
-        finalResultLabel.setText("Final result <-");
-        queryGraphPanel.add(finalResultLabel);
-        finalResultLabel.setBounds(10, 10, 100, 17);
-
         queryScrollPane.setViewportView(queryGraphPanel);
 
         add(queryScrollPane, java.awt.BorderLayout.CENTER);
@@ -253,7 +261,6 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel directiveListPanel;
     private javax.swing.JPanel fillerPanel;
-    private javax.swing.JLabel finalResultLabel;
     private javax.swing.JPanel innerFillerPanel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel queryGraphPanel;
@@ -266,7 +273,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        if(selectedPanel!=null){
+        if(selectedPanel!=null && selectedPanel!=finalResultPanel){
             selectedPanel.disconnectConnectors();
             queryGraphPanel.remove(selectedPanel);
             selectedPanel=null;
@@ -287,7 +294,19 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     }     
     
     
-    
+    protected static class FinalResultPanel extends DirectivePanel {
+        public FinalResultPanel(){
+            super(new DirectiveUIHints(null, new Constructor[]{}, new Addon[]{}, "Final result", null));
+            fromDirectiveAnchor.setVisible(false);
+        }
+
+        @Override
+        public JPanel getEditorPanel() {
+            return null;
+        }
+        
+        
+    }
     
     
     private class GraphPanel extends JPanel {

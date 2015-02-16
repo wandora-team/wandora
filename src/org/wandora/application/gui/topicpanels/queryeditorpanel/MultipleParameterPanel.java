@@ -21,9 +21,9 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
@@ -155,6 +155,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         add(parametersPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -176,6 +177,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridx=0;
         gbc.gridy=rows.size();
+        gbc.insets=new Insets(5, 5, 0, 5);
         
         JButton removeButton=new JButton();
         removeButton.setText("Remove");

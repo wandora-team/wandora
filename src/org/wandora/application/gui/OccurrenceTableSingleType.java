@@ -143,7 +143,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             }
         });
         
-        this.setRowHeight(2+rowHeight*16);
+        this.setRowHeight(getRowHeightInPixels());
         this.setAutoCreateColumnsFromModel(false);
         this.setModel(sorter);
         TableColumn column=new TableColumn(0,40,new TopicCellRenderer(),new TopicCellEditor());
@@ -164,7 +164,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     }
     
     
-    
+    protected int getRowHeightInPixels() {
+        return 2+rowHeight*16;
+    }
     
     
     @Override
@@ -729,7 +731,10 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             if(viewedOccurrenceText.startsWith("data:")) {
                 try {
                     Component preview = UIBox.getComponentForData(viewedOccurrenceText);
-                    if(preview != null) return preview;
+                    if(preview != null) {
+                        table.setRowHeight(row, Math.max(getRowHeightInPixels(), preview.getHeight()+10));
+                        return preview;
+                    }
                 }
                 catch(Exception e) {
                     e.printStackTrace();
@@ -742,6 +747,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
                 }
             }
+            table.setRowHeight(row, getRowHeightInPixels());
             occurrenceTextField.setText(viewedOccurrenceText);
             String occurrenceInfoText = (occurrenceText.length() > 0 ? " "+occurrenceText.length()+" " : "");
             occurrenceInfoLabel.setText(occurrenceInfoText);

@@ -25,9 +25,10 @@ package org.wandora.topicmap.undowrapper;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.ContainerTopicMap;
-import org.wandora.topicmap.layered.ContainerTopicMapListener;
 import org.wandora.topicmap.layered.Layer;
+
+
+
 /**
  *
  * @author olli
@@ -399,6 +400,19 @@ public class UndoTopicMap extends TopicMap {
         wrapped.mergeIn(tm,tmLogger);
     }
     
+    
+    
+    // ---------------------------------------------- TOPIC MAP TRANSACTIONS ---
+    
+    @Override
+    public void startTransaction() {
+        wrapped.startTransaction();
+    }
+    
+    @Override
+    public void endTransaction() {
+        wrapped.endTransaction();
+    }
     
     // -------------------------------------------------------------------------
     

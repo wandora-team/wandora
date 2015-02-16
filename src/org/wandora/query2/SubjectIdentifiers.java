@@ -42,6 +42,7 @@ public class SubjectIdentifiers extends Directive implements DirectiveUIHints.Pr
     @Override
     public DirectiveUIHints getUIHints() {
         DirectiveUIHints ret=new DirectiveUIHints(Roles.class,new DirectiveUIHints.Constructor[]{
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{}, "")
             },
             Directive.getStandardAddonHints(),
             "SubjectIdentifiers",

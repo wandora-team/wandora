@@ -93,7 +93,9 @@ public class TopicParameterPanel extends AbstractTypePanel {
         setLayout(new java.awt.GridBagLayout());
 
         parameterLabel.setText("Label");
-        add(parameterLabel, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        add(parameterLabel, gridBagConstraints);
 
         getTopicButton.setText("Topic");
         gridBagConstraints = new java.awt.GridBagConstraints();

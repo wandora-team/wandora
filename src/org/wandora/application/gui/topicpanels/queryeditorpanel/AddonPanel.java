@@ -79,22 +79,6 @@ public class AddonPanel extends javax.swing.JPanel {
             }
         }
     }
-    
-    public String buildScript(){
-        StringBuilder sb=new StringBuilder();
-        sb.append(".");
-        sb.append(addon.getMethod());
-        sb.append("(");
-        for(int i=0;i<parameterPanels.length;i++){
-            AbstractTypePanel paramPanel=parameterPanels[i];
-            String s=paramPanel.getValueScript();
-            
-            if(i>0) sb.append(",");
-            sb.append(s);
-        }
-        sb.append(")");
-        return sb.toString();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -107,34 +91,18 @@ public class AddonPanel extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         addonLabel = new javax.swing.JLabel();
-        parametersScroll = new javax.swing.JScrollPane();
-        parametersPanel = new javax.swing.JPanel();
         deleteButton = new javax.swing.JButton();
+        parametersPanel = new javax.swing.JPanel();
 
-        setBorder(null);
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setLayout(new java.awt.GridBagLayout());
 
+        addonLabel.setFont(new java.awt.Font("Ubuntu", 1, 16)); // NOI18N
         addonLabel.setText("Addon label");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         add(addonLabel, gridBagConstraints);
-
-        parametersScroll.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        parametersPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        parametersPanel.setLayout(new java.awt.GridBagLayout());
-        parametersScroll.setViewportView(parametersPanel);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-        add(parametersScroll, gridBagConstraints);
 
         deleteButton.setText("Delete addon");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -147,6 +115,15 @@ public class AddonPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         add(deleteButton, gridBagConstraints);
+
+        parametersPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        parametersPanel.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        add(parametersPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -158,6 +135,5 @@ public class AddonPanel extends javax.swing.JPanel {
     private javax.swing.JLabel addonLabel;
     private javax.swing.JButton deleteButton;
     private javax.swing.JPanel parametersPanel;
-    private javax.swing.JScrollPane parametersScroll;
     // End of variables declaration//GEN-END:variables
 }

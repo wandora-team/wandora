@@ -30,14 +30,19 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.AddonParameters;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.BoundParameter;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
+import org.wandora.query2.DirectiveUIHints.Constructor;
 
 /**
  *
@@ -214,33 +219,53 @@ public class DirectivePanel extends javax.swing.JPanel {
         return editor;
     }
     
-    protected Object build(boolean script){
-        /*
-        Object o=constructorComboBox.getSelectedItem();
-        if(o==null) return null;
+    protected Object buildConstructor(boolean script){
         
-        ConstructorComboItem cci=(ConstructorComboItem)o;
-        Constructor c=cci.c;
-        
-        BoundParameter[] parameters=getParameters(script);
-        try{
-            if(script) return c.newScript(parameters, hints.getDirectiveClass());
-            else return c.newInstance(parameters, hints.getDirectiveClass());
+        if(!script) throw new RuntimeException("not implemented");
+
+        StringBuilder sb=new StringBuilder();
+        sb.append("new ");
+        sb.append(hints.getDirectiveClass().getSimpleName());
+        sb.append("(");
+
+        if(directiveParameters!=null){
+            Constructor c=directiveParameters.constructor;
+
+            BoundParameter[] parameters=directiveParameters.parameters;
+            for(int i=0;i<parameters.length;i++){
+                BoundParameter p=parameters[i];
+                if(i>0) sb.append(", ");
+                sb.append(p.getScriptValue());
+            }
         }
-        catch(IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException | NoSuchMethodException e){
-            Wandora.getWandora().handleError(e);
-            return null;
-        }        */
-        return null;
+        sb.append(")");
+        return sb.toString();
+    }
+    
+    public String buildAddonScript(AddonParameters addon){
+        
+        StringBuilder sb=new StringBuilder();
+        sb.append(".");
+        sb.append(addon.addon.getMethod());
+        sb.append("(");
+        for(int i=0;i<addon.parameters.length;i++){
+            BoundParameter p=addon.parameters[i];
+            if(i>0) sb.append(", ");
+            sb.append(p.getScriptValue());
+        }
+        sb.append(")");
+        return sb.toString();
     }
     
     public String buildScript(){
-        /*
-        String s=(String)build(true);
         
-        for(AddonPanel addonPanel : addonPanels ){
-            String addonScript=addonPanel.buildScript();
-            if(addonScript!=null) s+=addonScript;
+        String s=(String)buildConstructor(true);
+
+        if(directiveParameters!=null){
+            for(AddonParameters addon : directiveParameters.addons){
+                String addonScript=buildAddonScript(addon);
+                if(addonScript!=null) s+=addonScript;
+            }
         }
         
         ConnectorAnchor fromA=toConnectorAnchor.getFrom();
@@ -255,12 +280,11 @@ public class DirectivePanel extends javax.swing.JPanel {
             return s+".from(\n"+s2+"\n)";
         }
         else return s;
-        */
-        return null;
+
     }
     
     public Directive buildDirective(){
-        return (Directive)build(false);
+        throw new RuntimeException("not implemnted");
         // TODO: Doesn't add connectors as From directives yet
     }
 /*    
@@ -369,7 +393,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         add(fromDirectiveAnchor, gridBagConstraints);
 
         parameterDirectiveAnchors.setMinimumSize(new java.awt.Dimension(1, 1));
-        parameterDirectiveAnchors.setLayout(new java.awt.GridLayout());
+        parameterDirectiveAnchors.setLayout(new java.awt.GridLayout(1, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -387,10 +411,10 @@ public class DirectivePanel extends javax.swing.JPanel {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel directiveLabel;
-    private javax.swing.JLabel fromDirectiveAnchor;
+    protected javax.swing.JLabel directiveLabel;
+    protected javax.swing.JLabel fromDirectiveAnchor;
     private javax.swing.JPanel parameterDirectiveAnchors;
-    private javax.swing.JLabel toDirectiveAnchor;
+    protected javax.swing.JLabel toDirectiveAnchor;
     // End of variables declaration//GEN-END:variables
 
 
