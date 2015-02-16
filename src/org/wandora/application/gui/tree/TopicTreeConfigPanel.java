@@ -64,13 +64,6 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         ((GetTopicButton)rootButton).setTopic(root);
         
         updateRelationsUI(allRelations, selectedRelations);
-        
-        GridBagConstraints gbc=new GridBagConstraints();
-        gbc.gridx=0;
-        gbc.gridy=allRelations.length+1;
-        gbc.weighty=1.0;
-        gbc.fill=GridBagConstraints.VERTICAL;
-        relationsPanel.add(new JPanel(),gbc);
     }
     
     
@@ -126,30 +119,70 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         rootTextField = new org.wandora.application.gui.simple.SimpleField();
-        jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        nameLabel = new org.wandora.application.gui.simple.SimpleLabel();
+        nameTextField = new org.wandora.application.gui.simple.SimpleField();
+        rootLabel = new org.wandora.application.gui.simple.SimpleLabel();
+        rootButton = rootButton;
+        relationsScrollPane = new javax.swing.JScrollPane();
+        relationsContainerPanel = new javax.swing.JPanel();
         relationsPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        relationFillerPanel = new javax.swing.JPanel();
+        buttonPanel = new javax.swing.JPanel();
         editRelationsButton = new SimpleButton();
         jPanel2 = new javax.swing.JPanel();
         okButton = new org.wandora.application.gui.simple.SimpleButton();
         cancelButton = new org.wandora.application.gui.simple.SimpleButton();
-        rootButton = rootButton;
-        jLabel2 = new org.wandora.application.gui.simple.SimpleLabel();
-        nameTextField = new org.wandora.application.gui.simple.SimpleField();
 
         setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Root");
+        nameLabel.setText("Name");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 5, 3, 5);
+        add(nameLabel, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(7, 5, 3, 5);
+        add(nameTextField, gridBagConstraints);
+
+        rootLabel.setText("Root");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
-        add(jLabel1, gridBagConstraints);
+        add(rootLabel, gridBagConstraints);
+
+        rootButton.setMaximumSize(new java.awt.Dimension(35, 20));
+        rootButton.setMinimumSize(new java.awt.Dimension(35, 20));
+        rootButton.setPreferredSize(new java.awt.Dimension(35, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
+        add(rootButton, gridBagConstraints);
+
+        relationsContainerPanel.setLayout(new java.awt.GridBagLayout());
 
         relationsPanel.setLayout(new java.awt.GridBagLayout());
-        jScrollPane1.setViewportView(relationsPanel);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        relationsContainerPanel.add(relationsPanel, gridBagConstraints);
+
+        relationFillerPanel.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        relationsContainerPanel.add(relationFillerPanel, gridBagConstraints);
+
+        relationsScrollPane.setViewportView(relationsContainerPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -159,9 +192,9 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(jScrollPane1, gridBagConstraints);
+        add(relationsScrollPane, gridBagConstraints);
 
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        buttonPanel.setLayout(new java.awt.GridBagLayout());
 
         editRelationsButton.setText("Edit relations");
         editRelationsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -169,11 +202,11 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
                 editRelationsButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(editRelationsButton, new java.awt.GridBagConstraints());
+        buttonPanel.add(editRelationsButton, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(jPanel2, gridBagConstraints);
+        buttonPanel.add(jPanel2, gridBagConstraints);
 
         okButton.setText("OK");
         okButton.setMaximumSize(new java.awt.Dimension(70, 23));
@@ -187,7 +220,7 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel1.add(okButton, gridBagConstraints);
+        buttonPanel.add(okButton, gridBagConstraints);
 
         cancelButton.setText("Cancel");
         cancelButton.setMaximumSize(new java.awt.Dimension(70, 23));
@@ -201,7 +234,7 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 0);
-        jPanel1.add(cancelButton, gridBagConstraints);
+        buttonPanel.add(cancelButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -210,29 +243,7 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        add(jPanel1, gridBagConstraints);
-
-        rootButton.setMaximumSize(new java.awt.Dimension(35, 20));
-        rootButton.setMinimumSize(new java.awt.Dimension(35, 20));
-        rootButton.setPreferredSize(new java.awt.Dimension(35, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
-        add(rootButton, gridBagConstraints);
-
-        jLabel2.setText("Name");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 5, 3, 5);
-        add(jLabel2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 5, 3, 5);
-        add(nameTextField, gridBagConstraints);
+        add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -262,17 +273,19 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton editRelationsButton;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JButton okButton;
+    private javax.swing.JPanel relationFillerPanel;
+    private javax.swing.JPanel relationsContainerPanel;
     private javax.swing.JPanel relationsPanel;
+    private javax.swing.JScrollPane relationsScrollPane;
     private javax.swing.JButton rootButton;
+    private javax.swing.JLabel rootLabel;
     private javax.swing.JTextField rootTextField;
     // End of variables declaration//GEN-END:variables
     

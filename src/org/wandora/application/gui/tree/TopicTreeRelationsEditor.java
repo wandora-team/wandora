@@ -99,6 +99,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
 
     public static void writeAssociationTypes(TopicTreeRelation[] associations) {
         Options options = Wandora.getWandora().getOptions();
+        System.out.println("Writing tree associations: "+associations.length);
         if(options != null) {
             for(int i=0;i<associations.length;i++){
                 options.put("trees.type["+i+"].name",associations[i].name);

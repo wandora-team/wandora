@@ -66,7 +66,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     private TopicTreePanel topicTreePanel = null;
     private String rootSubject = TMBox.WANDORACLASS_SI;
     private Set<String> selectedRelations = null;
-    private TopicTreeRelation[] allRelations = TopicTreeRelationsEditor.readRelationTypes();
+    private TopicTreeRelation[] allRelations = null;
     private Topic openedTopic = null;
     
     
@@ -167,6 +167,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
             Wandora wandora = Wandora.getWandora();
             JDialog jd=new JDialog(wandora, true);
             jd.setTitle("Configure topic tree");
+            allRelations = TopicTreeRelationsEditor.readRelationTypes();
 
             TopicTreeConfigPanel configurationPanel = new TopicTreeConfigPanel(allRelations, selectedRelations, rootSubject, getTitle(), jd, wandora);
             jd.add(configurationPanel);
@@ -180,7 +181,12 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
             title = configurationPanel.getTreeName();
             rootSubject = configurationPanel.getRoot();
             selectedRelations = configurationPanel.getSelectedRelations();
+            allRelations = TopicTreeRelationsEditor.readRelationTypes(); // Important, may have been altered by the configurationPanel. 
+            
             topicTreePanel.setModel(rootSubject, selectedRelations, allRelations);
+            
+            topicTreePanel.refresh();
+            revalidate();
         }
         catch(Exception e) {
             e.printStackTrace();
