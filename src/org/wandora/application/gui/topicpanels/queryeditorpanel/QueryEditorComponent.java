@@ -192,16 +192,40 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         return queryGraphPanel;
     }
     
+    private void changePanelSize(int width,int height, int offsx, int offsy){
+        Dimension d=new Dimension(width,height);
+        queryGraphPanel.setMaximumSize(d);
+        queryGraphPanel.setPreferredSize(d);
+        queryGraphPanel.setMinimumSize(d);
+        queryGraphPanel.setSize(d);
+
+        if(offsx!=0 || offsy!=0){
+            for(int i=0;i<queryGraphPanel.getComponentCount();i++){
+                Component c=queryGraphPanel.getComponent(i);
+                Rectangle b=c.getBounds();
+                
+                c.setBounds(b.x+offsx, b.y+offsy, b.width, b.height);
+            }
+            Point p=queryScrollPane.getViewport().getViewPosition();
+            queryScrollPane.getViewport().setViewPosition(new Point(p.x+offsx,p.y+offsy));
+        }
+    }
+    
     public void panelMoved(DirectivePanel panel){
         Rectangle rect=panel.getBounds();
+        if(rect.x<0){
+            changePanelSize(queryGraphPanel.getWidth()-rect.x,queryGraphPanel.getHeight(),-rect.x,0);
+            rect=panel.getBounds();
+        }
+        if(rect.y<0){
+            changePanelSize(queryGraphPanel.getWidth(),queryGraphPanel.getHeight()-rect.y,0,-rect.y);            
+            rect=panel.getBounds();
+        }
+        
         int width=Math.max(rect.x+rect.width,queryGraphPanel.getWidth());
         int height=Math.max(rect.y+rect.height,queryGraphPanel.getHeight());
         if(width!=this.getWidth() || height!=this.getHeight()){
-            Dimension d=new Dimension(width,height);
-            queryGraphPanel.setMaximumSize(d);
-            queryGraphPanel.setPreferredSize(d);
-            queryGraphPanel.setMinimumSize(d);
-            queryGraphPanel.setSize(d);
+            changePanelSize(width,height,0,0);
         }
         
         queryGraphPanel.invalidate();

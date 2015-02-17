@@ -21,6 +21,7 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -85,6 +86,8 @@ public class DirectiveEditor extends javax.swing.JPanel {
             label+=")";
             constructorComboBox.addItem(new ConstructorComboItem(c,label));
         }
+        constructorComboBox.setMinimumSize(new Dimension(50,constructorComboBox.getMinimumSize().height));
+        constructorComboBox.setPreferredSize(new Dimension(50,constructorComboBox.getPreferredSize().height));
      
         DirectiveUIHints.Addon[] addons=hints.getAddons();
         if(addons!=null){
@@ -100,6 +103,8 @@ public class DirectiveEditor extends javax.swing.JPanel {
                 addonComboBox.addItem(new AddonComboItem(a,label));            
             }
         }
+        addonComboBox.setMinimumSize(new Dimension(50,addonComboBox.getMinimumSize().height));
+        addonComboBox.setPreferredSize(new Dimension(50,addonComboBox.getPreferredSize().height));
     }    
     
 

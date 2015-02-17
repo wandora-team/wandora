@@ -107,8 +107,8 @@ public class DirectivePanel extends javax.swing.JPanel {
                 QueryEditorComponent editor=getEditor();
                 if(editor!=null) {
                     Rectangle rect=getBounds();
-                    setBounds(  Math.max(rect.x+e.getX()-dragStartX,0),
-                                Math.max(rect.y+e.getY()-dragStartY,0),
+                    setBounds(  rect.x+e.getX()-dragStartX,
+                                rect.y+e.getY()-dragStartY,
                                 rect.width,rect.height);
                     editor.panelMoved(DirectivePanel.this);
                 }

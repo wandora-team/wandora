@@ -178,13 +178,13 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         add(parameterLabel, gridBagConstraints);
 
-        directiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        directiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         directiveAnchor.setText("Drag directive here");
         directiveAnchor.setMaximumSize(new java.awt.Dimension(200, 20));
         directiveAnchor.setMinimumSize(new java.awt.Dimension(20, 20));
         directiveAnchor.setPreferredSize(new java.awt.Dimension(150, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         add(directiveAnchor, gridBagConstraints);
 
