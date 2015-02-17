@@ -306,13 +306,20 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         return httpServer;
     }
     
-    public void startHTTPServer(){
-        getHTTPServer().start();
-        menuManager.refreshServerMenu();
+    
+    public void startHTTPServer() {
+        WandoraModulesServer server = getHTTPServer();
+        if(server != null) {
+            server.start();
+            menuManager.refreshServerMenu();
+        }
     }
-    public void stopHTTPServer(){
-        if(httpServer!=null) {
-            getHTTPServer().stopServer();
+    
+    
+    public void stopHTTPServer() {
+        WandoraModulesServer server = getHTTPServer();
+        if(server != null) {
+            server.stopServer();
         }
     }
     
@@ -1186,13 +1193,16 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     }//GEN-LAST:event_formWindowClosing
 
 private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_serverButtonMouseClicked
-        if(getHTTPServer().isRunning()) {
-            stopHTTPServer();
+        WandoraModulesServer server = getHTTPServer();
+        if(server != null) {
+            if(server.isRunning()) {
+                stopHTTPServer();
+            }
+            else {
+                startHTTPServer();
+            }
+            menuManager.refreshServerMenu();
         }
-        else {
-            startHTTPServer();
-        }
-        menuManager.refreshServerMenu();
 }//GEN-LAST:event_serverButtonMouseClicked
 
     private void panelButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelButtonMouseClicked

@@ -42,7 +42,7 @@ import org.wandora.application.gui.simple.*;
  *
  * @author  akivela
  */
-public class InfoDialog extends JDialog implements Runnable, WandoraToolLogger, TopicMapLogger, ActionListener, MouseListener {
+public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLogger, ActionListener, MouseListener {
     
     private Wandora wandora;
     public boolean locked = false;
@@ -79,8 +79,12 @@ public class InfoDialog extends JDialog implements Runnable, WandoraToolLogger, 
     
     
     public void open() {
-        thread = new Thread(this);
-        thread.start();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setVisible(true);
+            }
+        });
         int c = 0;
         do {
             c++;
@@ -91,10 +95,6 @@ public class InfoDialog extends JDialog implements Runnable, WandoraToolLogger, 
     }
     
     
-    @Override
-    public void run() {
-        setVisible(true);
-    }
     
    
     @Override

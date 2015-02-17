@@ -343,61 +343,65 @@ public class WandoraMenuManager {
     
     
     public void refreshServerMenu() {
-       ArrayList menuStructure = new ArrayList();
-
-       if(wandora.getHTTPServer().isRunning()){
-           menuStructure.add("Stop server");
-           menuStructure.add(UIBox.getIcon("gui/icons/server_stop.png"));
-           //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, CTRL_MASK);
-           menuStructure.add(new HTTPServerTool(HTTPServerTool.STOP_AND_MENU));
-       }
-       else{
-           menuStructure.add("Start server");
-           menuStructure.add(UIBox.getIcon("gui/icons/server_start.png"));
-           //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, CTRL_MASK);
-           menuStructure.add(new HTTPServerTool(HTTPServerTool.START_AND_MENU));
-       }
-
-       WandoraModulesServer httpServer = wandora.httpServer;
+        ArrayList menuStructure = new ArrayList();
+        WandoraModulesServer httpServer = wandora.getHTTPServer();
        
-       ArrayList<ModulesWebApp> webApps=httpServer.getWebApps();
-       HashMap<String,ModulesWebApp> webAppsMap=new HashMap<String,ModulesWebApp>();
-       for(ModulesWebApp wa : webApps) {
-           webAppsMap.put(wa.getAppName(), wa);
-       }
-       ArrayList<String> sorted = new ArrayList<String>(webAppsMap.keySet());
-       Collections.sort(sorted);
+        if(httpServer != null) {
+            if(httpServer.isRunning()){
+                menuStructure.add("Stop server");
+                menuStructure.add(UIBox.getIcon("gui/icons/server_stop.png"));
+                //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, CTRL_MASK);
+                menuStructure.add(new HTTPServerTool(HTTPServerTool.STOP_AND_MENU));
+            }
+            else{
+                menuStructure.add("Start server");
+                menuStructure.add(UIBox.getIcon("gui/icons/server_start.png"));
+                //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, CTRL_MASK);
+                menuStructure.add(new HTTPServerTool(HTTPServerTool.START_AND_MENU));
+            }
 
-       ArrayList browseServices = new ArrayList();
-       JMenu browseServicesMenu =  new SimpleMenu("Browse services", UIBox.getIcon("gui/icons/server_open.png"));
-       
-       for(String appName : sorted) {
-           ModulesWebApp wa=webAppsMap.get(appName);
-           
-           if(wa.isRunning()) {
-                String url=wa.getAppStartPage();
-                if(url==null) continue;
+            ArrayList<ModulesWebApp> webApps=httpServer.getWebApps();
+            HashMap<String,ModulesWebApp> webAppsMap=new HashMap<String,ModulesWebApp>();
+            for(ModulesWebApp wa : webApps) {
+                webAppsMap.put(wa.getAppName(), wa);
+            }
+            ArrayList<String> sorted = new ArrayList<String>(webAppsMap.keySet());
+            Collections.sort(sorted);
 
-                browseServices.add(appName);
-                browseServices.add(UIBox.getIcon("gui/icons/open_browser.png"));
-                browseServices.add(new HTTPServerTool(HTTPServerTool.OPEN_PAGE, wa));
-           }
-           else {
-                browseServices.add(appName);
-                browseServices.add(UIBox.getIcon("gui/icons/open_browser.png"));
-                browseServices.add(new HTTPServerTool(HTTPServerTool.OPEN_PAGE, wa));
-           }
-       }
+            ArrayList browseServices = new ArrayList();
+            JMenu browseServicesMenu =  new SimpleMenu("Browse services", UIBox.getIcon("gui/icons/server_open.png"));
 
-       UIBox.attachMenu(browseServicesMenu, browseServices.toArray(), wandora);
-       menuStructure.add( browseServicesMenu );
-       
-       menuStructure.add("Server settings...");
-       menuStructure.add(UIBox.getIcon("gui/icons/server_configure.png"));
-       menuStructure.add(new HTTPServerTool(HTTPServerTool.CONFIGURE+HTTPServerTool.UPDATE_MENU));
-       
-       serverMenu.removeAll();
-       UIBox.attachMenu( serverMenu, menuStructure.toArray(), wandora );        
+            for(String appName : sorted) {
+                ModulesWebApp wa=webAppsMap.get(appName);
+
+                if(wa.isRunning()) {
+                     String url=wa.getAppStartPage();
+                     if(url==null) continue;
+
+                     browseServices.add(appName);
+                     browseServices.add(UIBox.getIcon("gui/icons/open_browser.png"));
+                     browseServices.add(new HTTPServerTool(HTTPServerTool.OPEN_PAGE, wa));
+                }
+                else {
+                     browseServices.add(appName);
+                     browseServices.add(UIBox.getIcon("gui/icons/open_browser.png"));
+                     browseServices.add(new HTTPServerTool(HTTPServerTool.OPEN_PAGE, wa));
+                }
+            }
+
+            UIBox.attachMenu(browseServicesMenu, browseServices.toArray(), wandora);
+            menuStructure.add( browseServicesMenu );
+
+            menuStructure.add("Server settings...");
+            menuStructure.add(UIBox.getIcon("gui/icons/server_configure.png"));
+            menuStructure.add(new HTTPServerTool(HTTPServerTool.CONFIGURE+HTTPServerTool.UPDATE_MENU));
+        }
+        else {
+            menuStructure.add("[No server available]");
+        }
+
+        serverMenu.removeAll();
+        UIBox.attachMenu( serverMenu, menuStructure.toArray(), wandora );        
     }
    
     
@@ -410,8 +414,10 @@ public class WandoraMenuManager {
            "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, CTRL_MASK), new ExecBrowser("http://www.wandora.org"),
            "---",
            "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/wiki/Documentation"),
-           "Discussion forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/forum/index.php"),
-           "WandoraTV", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/tv/"),
+           "Forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/forum/index.php"),
+           "YouTube channel", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/tv/"),
+           "Github repository", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://github.com/wandora-team/wandora"),
+           "Twitter", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://twitter.com/wandora_app"),
            "---",
            "About Wandora...", UIBox.getIcon("gui/icons/info.png"),new AboutWandora(),
            "Wandora credits...", UIBox.getIcon("gui/icons/info.png"),new AboutCredits(),
@@ -420,22 +426,7 @@ public class WandoraMenuManager {
         UIBox.attachMenu( helpMenu, menuStructure, wandora );
     }
     
-    
-    
-    
-    /*
-    *     "Check subject locators of instances...",new CheckSubjectLocators("instances"),
-                "Check all subject locators...",new CheckSubjectLocators("all"),
-                "---",
-                "Move subject locators of instances...", new MoveSubjectLocators("instances"),
-                "Move all subject locators...", new MoveSubjectLocators("all"),
-                "---",
-                "Change host of subject locators in instances...", new MoveSubjectLocators("changehostofinstances"),
-                "Change host of all subject locators...", new MoveSubjectLocators("changehostofall"),
 
-     */
-    
-    
     
     public void refreshViewMenu() { 
         viewMenu.removeAll();
