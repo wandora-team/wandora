@@ -49,13 +49,11 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
     public boolean forceStop = false;
     private int state = 0;
     
-    private StringBuffer history = new StringBuffer();
+    private StringBuilder history = null;
     
     private long startTime = 0;
     private long endTime = 0;
     private int maximumProgress = 100;
-
-    private Thread thread = null;
 
 
 
@@ -65,9 +63,10 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
      */
     public InfoDialog(Wandora wandora) {
         super(wandora, true);
+        this.history = new StringBuilder();
         this.wandora = wandora;
         initComponents();
-        this.setSize(500, 220);
+        this.setSize(600, 300);
         wandora.centerWindow(this);
         textArea.addMouseListener(this);
         textArea.setComponentPopupMenu(getCopyMenu());
@@ -118,7 +117,7 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
             if(!locked) textArea.setText("<html>"+message+"</html>");
         }
         catch(Exception e) {}       
-        history.append(message+"\n");
+        history.append(message).append("\n");
     }
     
     
@@ -219,8 +218,8 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                 String historyString = getHistory();
                 //history = new StringBuffer();
                 logTextPane.setText(historyString);
+                logTextPane.setCaretPosition(history.length());
                 containerPanel.revalidate();
-                //logTextPane.setCaretPosition(history.length());
                 return;
             }
             case CLOSE: {
