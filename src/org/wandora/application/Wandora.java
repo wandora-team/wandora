@@ -293,10 +293,15 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     public WandoraModulesServer getHTTPServer(){
         if(httpServer==null) {
-            // httpServer=new WandoraHttpServer(this);
-            // httpServer=new WandoraWebAppServer(this);
-            httpServer=new WandoraModulesServer(this);
-            httpServer.setStatusComponent(serverButton,"gui/icons/server_start.png","gui/icons/server_stop.png","gui/icons/server_hit.png");
+            try {
+                // httpServer=new WandoraHttpServer(this);
+                // httpServer=new WandoraWebAppServer(this);
+                httpServer=new WandoraModulesServer(this);
+                httpServer.setStatusComponent(serverButton,"gui/icons/server_start.png","gui/icons/server_stop.png","gui/icons/server_hit.png");
+            }
+            catch(Exception e) {
+                handleError(e);
+            }
         }
         return httpServer;
     }
