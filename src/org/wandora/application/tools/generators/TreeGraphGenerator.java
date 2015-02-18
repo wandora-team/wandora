@@ -27,11 +27,13 @@
 
 package org.wandora.application.tools.generators;
 
+import java.util.*;
+import org.wandora.application.*;
+import org.wandora.application.contexts.*;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.*;
-import java.util.*;
+import org.wandora.utils.swing.GuiTools;
 
 
 
@@ -40,7 +42,13 @@ import java.util.*;
  * @author akivela
  */
 public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool {
-    public static String SI_PREFIX = "http://wandora.org/si/topic/";
+    public static String TREE_GRAPH_SI = "http://wandora.org/si/tree-graph/";
+    
+    public static String siPattern = "http://wandora.org/si/topic/__n__";
+    public static String basenamePattern = "Topic __n__";
+    public static boolean connectWithWandoraClass = true;
+    public static int d = 5; // Tree depth
+    public static int n = 2; // Number of child nodes
     
     
     /** Creates a new instance of TreeGraphGenerator */
@@ -58,33 +66,83 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        TopicMap topicmap = solveContextTopicMap(admin, context);
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        TopicMap topicmap = solveContextTopicMap(wandora, context);
         
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Tree graph generator",
-            "Tree graph generator options",
+            "Tree graph generator creates a set of topics and associations that resembles a graph tree where "+
+                "topics are graph nodes and associations edges between child and parent nodes. "+
+                "Tree depth and number of child nodes should be positive integer numbers.",
             true,new String[][]{
-            new String[]{"Tree depth","string"},
-            new String[]{"Number of child nodes","string"},
-            new String[]{"Cayman tree","boolean","false","Should the root contain +1 edges?"},
-            
-        },admin);
+            new String[]{"Tree depth","string",""+d},
+            new String[]{"Number of child nodes","string",""+n},
+            /* new String[]{"Add root additional branch","boolean","false","Should the root contain +1 edges?"}, */
+            new String[]{"---1","separator"},
+            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
+            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
+            new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
+            new String[]{"Association type of tree edges","topic",null,"Optional association type for graph edges."},
+            new String[]{"Parent role in tree edges","topic",null,"Optional role topic for parent topics in tree graph."},
+            new String[]{"Child role in tree edges","topic",null,"Optional role topic for child topics in tree graph."},
+        },wandora);
+        
+        god.setSize(700, 460);
+        GuiTools.centerWindow(god,wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
         Map<String,String> values=god.getValues();
         
-        int d = 0;
-        int n = 0;
-        boolean isCayman = false;
+
+        boolean additionalRootBranch = false;
         try {
             d = Integer.parseInt(values.get("Tree depth"));
             n = Integer.parseInt(values.get("Number of child nodes"));
-            isCayman=Boolean.parseBoolean(values.get("Cayman tree"));
+            // additionalRootBranch=Boolean.parseBoolean(values.get("Add root additional branch"));
+        }
+        catch(Exception e) {
+            singleLog("Parse error. Tree depth and number of child nodes should be integer numbers. Cancelling.", e);
+            return;
+        }
+        
+        try {
+            siPattern = values.get("Subject identifier pattern");
+            if(!siPattern.contains("__n__")) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Subject identifier pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to continue?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                if(a != WandoraOptionPane.YES_OPTION) return;
+            }
+            basenamePattern = values.get("Basename pattern");
+            if(!basenamePattern.contains("__n__")) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Basename pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to continue?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                if(a != WandoraOptionPane.YES_OPTION) return;
+            }
+            connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
         }
         catch(Exception e) {
             singleLog(e);
             return;
+        }
+               
+        Topic aType = topicmap.getTopic(values.get("Association type of tree edges"));
+        if(aType == null || aType.isRemoved()) {
+            aType = getOrCreateTopic(topicmap, TREE_GRAPH_SI+"/"+"associationType", "Tree graph association");
+        }
+        
+        Topic parentT = topicmap.getTopic(values.get("Parent role in tree edges"));
+        if(parentT == null || parentT.isRemoved()) {
+            parentT = getOrCreateTopic(topicmap, TREE_GRAPH_SI+"/"+"parent", "Tree graph parent");
+        }
+        
+        Topic childT = topicmap.getTopic(values.get("Child role in tree edges"));
+        if(childT == null || childT.isRemoved()) {
+            childT = getOrCreateTopic(topicmap, TREE_GRAPH_SI+"/"+"child", "Tree graph child");
+        }
+
+        if(parentT.mergesWithTopic(childT)) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "Parent and child role topics are same. This causes associations to be unary instead of binary. Do you want to continue?", "Role topics are same", WandoraOptionPane.WARNING_MESSAGE);
+            if(a != WandoraOptionPane.YES_OPTION) {
+                return;
+            }
         }
         
         setDefaultLogger();
@@ -98,27 +156,34 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
         int j = 0;
         String id = "";
         
-        Topic aType = getOrCreateTopic(topicmap, SI_PREFIX+"associationType", "Association");
-        Topic parentT = getOrCreateTopic(topicmap, SI_PREFIX+"parent", "Parent");
-        Topic childT = getOrCreateTopic(topicmap, SI_PREFIX+"child", "Child");
         Association a = null;
+        long graphIdentifier = System.currentTimeMillis();
         
-        topics.add(getOrCreateTopic(topicmap, SI_PREFIX+"root", "Topic root"));
+        String newBasename = basenamePattern.replaceAll("__n__", "0");
+        String newSubjectIdentifier = siPattern.replaceAll("__n__", "0");
+        Topic rootTopic = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
+        connectWithWandoraClass(rootTopic, topicmap, graphIdentifier);
+        topics.add(rootTopic);
         
-        setProgressMax((int) Math.pow(n, d-1));
+        setProgressMax((int) (Math.pow(n, (d+1))-1)/(n-1));
         int progress=0;
         int nn = n;
-        for(int dep=0; dep<d && !forceStop(); dep++) {
+        for(int dep=1; dep<=d && !forceStop(); dep++) {
             j = 0;
             nextTopics = new ArrayList<Topic>();
-            if(isCayman && dep == 0) nn = n+1;
+            if(additionalRootBranch && dep == 0) nn = n+1;
             else nn = n;
-            for(Iterator<Topic> topicIterator = topics.iterator(); topicIterator.hasNext() && !forceStop();) {
-                j++;
+            Iterator<Topic> topicIterator = topics.iterator();
+            while( topicIterator.hasNext() && !forceStop() ) {
                 parent = topicIterator.next();
                 for(int k=0; k<nn && !forceStop(); k++) {
-                    id = dep+"-"+j+"-"+k;
-                    child = getOrCreateTopic(topicmap, SI_PREFIX+id, "Topic "+id);
+                    id = dep+"-"+j;
+                    
+                    newBasename = basenamePattern.replaceAll("__n__", id);
+                    newSubjectIdentifier = siPattern.replaceAll("__n__", id);
+                    child = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
+                    connectWithWandoraClass(child, topicmap, graphIdentifier);
+                    
                     nextTopics.add(child);
                     
                     a = topicmap.createAssociation(aType);
@@ -126,14 +191,42 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
                     a.addPlayer(child, childT);
                     
                     setProgress(progress++);
+                    
+                    j++;
                 }
             }
             topics = nextTopics;
         }
-        setState(CLOSE);
+        
+        if(connectWithWandoraClass) {
+            log("You'll find created topics and associations under the 'Tree graph' topic.");
+        }
+        else {
+            String searchWord = basenamePattern.replaceAll("__n__", "");
+            searchWord = searchWord.trim();
+            log("You'll find created topics and associations by searching '"+searchWord+"'.");
+        }
+        log("Ok.");
+        setState(WAIT);
     }
     
     
     
+    
+    private void connectWithWandoraClass(Topic t, TopicMap tm, long graphIdentifier) {
+        if(connectWithWandoraClass) {
+            try {
+                Topic treeGraphTopic = getOrCreateTopic(tm, TREE_GRAPH_SI, "Tree graph");
+                Topic wandoraClass = getOrCreateTopic(tm, TMBox.WANDORACLASS_SI);
+                makeSuperclassSubclass(tm, wandoraClass, treeGraphTopic);
+                Topic treeGraphInstanceTopic = getOrCreateTopic(tm, TREE_GRAPH_SI+"/"+graphIdentifier, "Tree graph "+graphIdentifier, treeGraphTopic);
+                treeGraphInstanceTopic.addType(treeGraphTopic);
+                t.addType(treeGraphInstanceTopic);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
 }
