@@ -1,22 +1,4 @@
 {
-  "dateTimeFormat": "Gregorian",
-  "events":[
-##
-#set( $count = 0 )##
-#set( $lang = "en")##
-##
-#set( $linkTypeSI = "http://wandora.org/si/reddit/link" )##
-#set( $linkType = $topicmap.getTopic( $linkTypeSI ) )##
-##
-#set( $linkCreatedTypeSI = "http://wandora.org/si/reddit/created" )##
-#set( $linkCreatedType = $topicmap.getTopic( $linkCreatedTypeSI ) )##
-
-#set( $links = $topicmap.getTopicsOfType( $linkType ) )##
-##
-#foreach( $link in $links )##
-  #if($linkCreatedType && $link.getData( $linkCreatedType, $lang ) )##
-    #set( $linkDate = $link.getData( $linkCreatedType, $lang ) )##
-  #end{
   "dateTimeFormat": "gregorian",
   "events":[
 ##
@@ -53,6 +35,7 @@
   #if($linkDate)##
 
     #set( $linkTitle = $link.getDisplayName( $lang ) )##
+    #set( $linkTitle = $linkTitle.replaceAll('\"', '\\\"' ) )##
     #if( $count > 0 ),
     #end##
     {
@@ -62,26 +45,6 @@
       "link": "$destination",
       #end
       "description": "",
-      "textColor": "#000000",
-      "classname": "reddit-link",
-      "icon" : "${staticbase}api/images/reddit-icon.png"
-    }
-    #set( $count = $count + 1 )##
-
-  #end##
-#end##
-       ]
-};
-
-
-  #if($linkDate)##
-
-    #set( $linkTitle = $link.getDisplayName( $lang ) )##
-    #if( $count>0 ),
-    #end##
-    {
-      "start": "$startDate",
-      "title": "$eventTitle",
       "textColor": "#000000",
       "classname": "reddit-link",
       "icon" : "${staticbase}api/images/reddit-icon.png"

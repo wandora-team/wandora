@@ -282,18 +282,20 @@ public class WaianaService extends AbstractTopicWebApp {
         in.close();
         
         // System.out.println("FOUND:\n"+sb.toString());
-
-        try {
-            JSONObject requestJSON = new JSONObject(sb.toString());
-            // System.out.println("requestJSON:" +requestJSON.toString());
-            return requestJSON;
-        } 
-        catch (JSONException ex) {
-            // This exception is not logged because the user may user URL 
-            // parameters instead of JSON data.
-            ex.printStackTrace();
-            return null;
+        
+        if(str != null && str.length() > 0) {
+            try {
+                JSONObject requestJSON = new JSONObject(sb.toString());
+                // System.out.println("requestJSON:" +requestJSON.toString());
+                return requestJSON;
+            } 
+            catch (JSONException ex) {
+                // This exception is not logged because the user may user URL 
+                // parameters instead of JSON data.
+                ex.printStackTrace();
+            }
         }
+        return null;
     }
     
     

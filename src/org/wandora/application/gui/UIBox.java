@@ -1406,4 +1406,27 @@ public class UIBox {
         return null;
     }
     
+    
+    public static byte[] getBinaryObjectForData(String dataUrl) {
+        if(dataUrl == null || dataUrl.length() == 0) return null;
+        if(!dataUrl.startsWith("data:")) return null;
+        dataUrl = dataUrl.substring("data:".length());
+        int mimeTypeEndIndex = dataUrl.indexOf(';');
+        if(mimeTypeEndIndex <= 0) return null;
+        String mimeType = dataUrl.substring(0, mimeTypeEndIndex);
+        dataUrl = dataUrl.substring(mimeTypeEndIndex+1);
+        int encodingEndIndex = dataUrl.indexOf(',');
+        if(encodingEndIndex <= 0) return null;
+        String encoding = dataUrl.substring(0, encodingEndIndex);
+        String dataString = dataUrl.substring(encodingEndIndex+1);
+        
+        byte[] data = null;
+        
+        if("base64".equalsIgnoreCase(encoding)) {
+            data = Base64.decode(dataString);
+        }
+        return data;
+    }
+    
+    
 }

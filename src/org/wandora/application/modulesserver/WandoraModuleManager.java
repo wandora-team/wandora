@@ -46,22 +46,26 @@ public class WandoraModuleManager extends ScopedModuleManager {
     }
     
     public void readBundle(File dir) throws IOException {
-        File config=new File(dir,"config.xml");
-        if(!config.exists()) return;
-        
-        log.info("Reading bundle "+dir.getPath());
-                
-        ModuleBundle bundle=new ModuleBundle();
-        
-        initNewBundle(bundle, dir);
-        
-        bundle.readXMLOptionsFile(config.getCanonicalPath());
-        
-        if(bundle.getBundleName()==null){
-            bundle.setBundleName(dir.getName());
+        try {
+            File config=new File(dir,"config.xml");
+            if(!config.exists()) return;
+
+            log.info("Reading bundle "+dir.getPath());
+
+            ModuleBundle bundle=new ModuleBundle();
+
+            initNewBundle(bundle, dir);
+
+            bundle.readXMLOptionsFile(config.getCanonicalPath());
+
+            if(bundle.getBundleName()==null){
+                bundle.setBundleName(dir.getName());
+            }
+            addModule(bundle);
         }
-        addModule(bundle);
-        
+        catch(Exception e) {
+            log.error("Error while initializing bundle module in directory "+dir.getAbsolutePath(), e);
+        }
     }
     
     protected void initNewBundle(ModuleBundle bundle,File dir) throws IOException {
