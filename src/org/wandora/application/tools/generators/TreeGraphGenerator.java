@@ -206,6 +206,8 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
             searchWord = searchWord.trim();
             log("You'll find created topics and associations by searching '"+searchWord+"'.");
         }
+        String rootTopicName = basenamePattern.replaceAll("__n__", "0");
+        log("Root of the tree is topic '"+rootTopicName+"'.");
         log("Ok.");
         setState(WAIT);
     }
