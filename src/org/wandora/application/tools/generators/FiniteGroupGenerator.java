@@ -32,11 +32,10 @@ package org.wandora.application.tools.generators;
 
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
-import java.io.*;
 import java.util.*;
+
 
 /**
  *

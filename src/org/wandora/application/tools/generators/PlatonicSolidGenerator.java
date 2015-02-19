@@ -131,23 +131,19 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         Topic[] nodes = new Topic[4];
         
         for(int i=0; i<4 && !forceStop(); i++) {
-            nodes[i] = getOrCreateTopic(topicmap, TETRAHEDRON_SI+graphIdentifier+"/vertex"+i, "Tetrahedron vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, TETRAHEDRON_SI+graphIdentifier+"/vertex-"+i, "Tetrahedron vertex "+i+" ("+graphIdentifier+")");
             setProgress(++progress);
             if(connectWithWandoraClass) {
-                Topic platonicSolidTopic = getOrCreateTopic(topicmap, PLATONIC_SOLID_GRAPH_SI, "Platonic solid");
-                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
-                makeSuperclassSubclass(topicmap, wandoraClass, platonicSolidTopic);
-                Topic tetrahedronInstanceTopic = getOrCreateTopic(topicmap, TETRAHEDRON_SI+graphIdentifier, "Tetrahedron graph "+graphIdentifier, platonicSolidTopic);
-                tetrahedronInstanceTopic.addType(platonicSolidTopic);
-                nodes[i].addType(tetrahedronInstanceTopic);
+                Topic graphTopic = getOrCreateTopic(topicmap, TETRAHEDRON_SI+graphIdentifier, "Tetrahedron graph "+graphIdentifier);
+                connect(topicmap, nodes[i], graphTopic);
             }
         }
         
         Topic t1 = null;
         Topic t2 = null;
         Topic aType = getOrCreateTopic(topicmap, TETRAHEDRON_SI+"edge", "Tetrahedron edge");
-        Topic role1 = getOrCreateTopic(topicmap, TETRAHEDRON_SI+"role1", "Tetrahedron role 1");
-        Topic role2 = getOrCreateTopic(topicmap, TETRAHEDRON_SI+"role2", "Tetrahedron role 2");
+        Topic role1 = getOrCreateTopic(topicmap, TETRAHEDRON_SI+"role-1", "Tetrahedron role 1");
+        Topic role2 = getOrCreateTopic(topicmap, TETRAHEDRON_SI+"role-2", "Tetrahedron role 2");
         Association a = null;
         for(int i=0; i<3 && !forceStop(); i++) {
             try {
@@ -186,23 +182,19 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         Topic[] nodes = new Topic[8];
         
         for(int i=0; i<8 && !forceStop(); i++) {
-            nodes[i] = getOrCreateTopic(topicmap, CUBE_SI+graphIdentifier+"/vertex"+i, "Cube vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, CUBE_SI+graphIdentifier+"/vertex-"+i, "Cube vertex "+i+" ("+graphIdentifier+")");
             setProgress(++progress);
             if(connectWithWandoraClass) {
-                Topic platonicSolidTopic = getOrCreateTopic(topicmap, PLATONIC_SOLID_GRAPH_SI, "Platonic solid");
-                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
-                makeSuperclassSubclass(topicmap, wandoraClass, platonicSolidTopic);
-                Topic octahedronInstanceTopic = getOrCreateTopic(topicmap, CUBE_SI+graphIdentifier, "Cube graph "+graphIdentifier, platonicSolidTopic);
-                octahedronInstanceTopic.addType(platonicSolidTopic);
-                nodes[i].addType(octahedronInstanceTopic);
+                Topic graphTopic = getOrCreateTopic(topicmap, CUBE_SI+graphIdentifier, "Cube graph "+graphIdentifier);
+                connect(topicmap, nodes[i], graphTopic);
             }
         }
         
         Topic t1 = null;
         Topic t2 = null;
         Topic aType = getOrCreateTopic(topicmap, CUBE_SI+"edge", "Cube edge");
-        Topic role1 = getOrCreateTopic(topicmap, CUBE_SI+"role1", "Cube role 1");
-        Topic role2 = getOrCreateTopic(topicmap, CUBE_SI+"role2", "Cube role 2");
+        Topic role1 = getOrCreateTopic(topicmap, CUBE_SI+"role-1", "Cube role 1");
+        Topic role2 = getOrCreateTopic(topicmap, CUBE_SI+"role-2", "Cube role 2");
         Association a = null;
         for(int i=0; i<4 && !forceStop(); i++) {
             try {
@@ -251,22 +243,18 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         
         for(int i=0; i<6 && !forceStop(); i++) {
             setProgress(++progress);
-            nodes[i] = getOrCreateTopic(topicmap, OCTAHEDRON_SI+graphIdentifier+"/vertex"+i, "Octahedron vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, OCTAHEDRON_SI+graphIdentifier+"/vertex-"+i, "Octahedron vertex "+i+" ("+graphIdentifier+")");
             if(connectWithWandoraClass) {
-                Topic platonicSolidTopic = getOrCreateTopic(topicmap, PLATONIC_SOLID_GRAPH_SI, "Platonic solid");
-                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
-                makeSuperclassSubclass(topicmap, wandoraClass, platonicSolidTopic);
-                Topic octahedronInstanceTopic = getOrCreateTopic(topicmap, OCTAHEDRON_SI+graphIdentifier, "Octahedron graph "+graphIdentifier, platonicSolidTopic);
-                octahedronInstanceTopic.addType(platonicSolidTopic);
-                nodes[i].addType(octahedronInstanceTopic);
+                Topic graphTopic = getOrCreateTopic(topicmap, OCTAHEDRON_SI+graphIdentifier, "Octahedron graph "+graphIdentifier);
+                connect(topicmap, nodes[i], graphTopic);
             }
         }
         
         Topic t1 = null;
         Topic t2 = null;
         Topic aType = getOrCreateTopic(topicmap, OCTAHEDRON_SI+"edge", "Octahedron edge");
-        Topic role1 = getOrCreateTopic(topicmap, OCTAHEDRON_SI+"role1", "Octahedron role 1");
-        Topic role2 = getOrCreateTopic(topicmap, OCTAHEDRON_SI+"role2", "Octahedron role 2");
+        Topic role1 = getOrCreateTopic(topicmap, OCTAHEDRON_SI+"role-1", "Octahedron role 1");
+        Topic role2 = getOrCreateTopic(topicmap, OCTAHEDRON_SI+"role-2", "Octahedron role 2");
         Association a = null;
         for(int i=0; i<4 && !forceStop(); i++) {
             try {
@@ -346,22 +334,18 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         
         for(int i=0; i<20 && !forceStop(); i++) {
             setProgress(++progress);
-            nodes[i] = getOrCreateTopic(topicmap, DODECAHEDRON_SI+graphIdentifier+"/vertex"+i, "Dodecahedron vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, DODECAHEDRON_SI+graphIdentifier+"/vertex-"+i, "Dodecahedron vertex "+i+" ("+graphIdentifier+")");
             if(connectWithWandoraClass) {
-                Topic platonicSolidTopic = getOrCreateTopic(topicmap, PLATONIC_SOLID_GRAPH_SI, "Platonic solid");
-                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
-                makeSuperclassSubclass(topicmap, wandoraClass, platonicSolidTopic);
-                Topic dodecahedronInstanceTopic = getOrCreateTopic(topicmap, DODECAHEDRON_SI+graphIdentifier, "Dodecahedron graph "+graphIdentifier, platonicSolidTopic);
-                dodecahedronInstanceTopic.addType(platonicSolidTopic);
-                nodes[i].addType(dodecahedronInstanceTopic);
+                Topic graphTopic = getOrCreateTopic(topicmap, DODECAHEDRON_SI+graphIdentifier, "Dodecahedron graph "+graphIdentifier);
+                connect(topicmap, nodes[i], graphTopic);
             }
         }
         
         Topic t1 = null;
         Topic t2 = null;
         Topic aType = getOrCreateTopic(topicmap, DODECAHEDRON_SI+"edge", "Dodecahedron edge");
-        Topic role1 = getOrCreateTopic(topicmap, DODECAHEDRON_SI+"role1", "Dodecahedron role 1");
-        Topic role2 = getOrCreateTopic(topicmap, DODECAHEDRON_SI+"role2", "Dodecahedron role 2");
+        Topic role1 = getOrCreateTopic(topicmap, DODECAHEDRON_SI+"role-1", "Dodecahedron role 1");
+        Topic role2 = getOrCreateTopic(topicmap, DODECAHEDRON_SI+"role-2", "Dodecahedron role 2");
         Association a = null;
         for(int i=0; i<dodecahedronEdges.length && !forceStop(); i++) {
             try {
@@ -427,20 +411,16 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
             setProgress(++progress);
             nodes[i] = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+graphIdentifier+"/vertex-"+i, "Icosahedron vertex "+i+" ("+graphIdentifier+")");
             if(connectWithWandoraClass) {
-                Topic platonicSolidTopic = getOrCreateTopic(topicmap, PLATONIC_SOLID_GRAPH_SI, "Platonic solid");
-                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
-                makeSuperclassSubclass(topicmap, wandoraClass, platonicSolidTopic);
-                Topic icosahedronInstanceTopic = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+graphIdentifier, "Icosahedron graph "+graphIdentifier, platonicSolidTopic);
-                icosahedronInstanceTopic.addType(platonicSolidTopic);
-                nodes[i].addType(icosahedronInstanceTopic);
+                Topic graphTopic = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+graphIdentifier, "Icosahedron graph "+graphIdentifier);
+                connect(topicmap, nodes[i], graphTopic);
             }
         }
         
         Topic t1 = null;
         Topic t2 = null;
         Topic aType = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+"edge", "Icosahedron edge");
-        Topic role1 = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+"role1", "Icosahedron role 1");
-        Topic role2 = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+"role2", "Icosahedron role 2");
+        Topic role1 = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+"role-1", "Icosahedron role 1");
+        Topic role2 = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+"role-2", "Icosahedron role 2");
         
         Association a = null;
         for(int i=0; i<icosahedronEdges.length && !forceStop(); i++) {
@@ -458,4 +438,23 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         }
         log("Ok.");
     }
+    
+    
+    
+
+    private void connect(TopicMap topicmap, Topic vertexTopic, Topic platonicSolidInstance) {
+        try {
+            Topic platonicSolidType = getOrCreateTopic(topicmap, PLATONIC_SOLID_GRAPH_SI, "Platonic solid");
+            Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
+            makeSuperclassSubclass(topicmap, wandoraClass, platonicSolidType);
+            platonicSolidInstance.addType(platonicSolidType);
+            vertexTopic.addType(platonicSolidInstance);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
 }

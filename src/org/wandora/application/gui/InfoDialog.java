@@ -218,7 +218,7 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                 String historyString = getHistory();
                 //history = new StringBuffer();
                 logTextPane.setText(historyString);
-                logTextPane.setCaretPosition(history.length());
+                logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
                 containerPanel.revalidate();
                 return;
             }

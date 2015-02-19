@@ -125,7 +125,7 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
                
         Topic aType = topicmap.getTopic(values.get("Association type of tree edges"));
         if(aType == null || aType.isRemoved()) {
-            aType = getOrCreateTopic(topicmap, TREE_GRAPH_SI+"/"+"associationType", "Tree graph association");
+            aType = getOrCreateTopic(topicmap, TREE_GRAPH_SI+"/"+"association-type", "Tree graph association");
         }
         
         Topic parentT = topicmap.getTopic(values.get("Parent role in tree edges"));
