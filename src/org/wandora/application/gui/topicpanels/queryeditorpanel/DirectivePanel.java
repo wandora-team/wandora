@@ -30,9 +30,11 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
@@ -210,6 +212,17 @@ public class DirectivePanel extends javax.swing.JPanel {
     }
     
     public DirectiveParameters getDirectiveParameters(){
+        if(directiveParameters==null){
+            Constructor c=null;
+            if(hints.getConstructors().length>0) c=hints.getConstructors()[0];
+            BoundParameter[] params=new BoundParameter[0];
+            if(c!=null && c.getParameters().length>0) params=new BoundParameter[c.getParameters().length];
+            directiveParameters=new DirectiveParameters(getDirectiveId(),c,params,new AddonParameters[0]);
+        }
+        
+        DirectivePanel from=getFromPanel();
+        directiveParameters.from=from;
+        
         return directiveParameters;
     }
     
@@ -242,6 +255,17 @@ public class DirectivePanel extends javax.swing.JPanel {
         return sb.toString();
     }
     
+    public DirectivePanel getFromPanel(){
+        ConnectorAnchor fromA=toConnectorAnchor.getFrom();
+        if(fromA!=null){
+            JComponent component=fromA.getComponent();
+            if(component==null) return null;
+            DirectivePanel p=QueryEditorComponent.resolveDirectivePanel(component);
+            return p;
+        }
+        else return null;
+    }
+    
     public String buildAddonScript(AddonParameters addon){
         
         StringBuilder sb=new StringBuilder();
@@ -268,18 +292,13 @@ public class DirectivePanel extends javax.swing.JPanel {
             }
         }
         
-        ConnectorAnchor fromA=toConnectorAnchor.getFrom();
-        if(fromA!=null){
-            JComponent component=fromA.getComponent();
-            if(component==null) return null;
-            DirectivePanel p=QueryEditorComponent.resolveDirectivePanel(component);
-            if(p==null) return null;
-            
+        DirectivePanel p=getFromPanel();
+        if(p!=null){
             String s2=p.buildScript();
             s2=DirectiveUIHints.indent(s2, 2);
-            return s+".from(\n"+s2+"\n)";
+            s+=".from(\n"+s2+"\n)";
         }
-        else return s;
+        return s;
 
     }
     
@@ -287,6 +306,152 @@ public class DirectivePanel extends javax.swing.JPanel {
         throw new RuntimeException("not implemnted");
         // TODO: Doesn't add connectors as From directives yet
     }
+    
+    public String getDirectiveId(){
+        return ""+System.identityHashCode(this);
+    }
+    
+/*    
+    protected static DirectivePanel setOptionsSingle(QueryEditorComponent graph,String id,HashMap<String,HashMap<String,String>> directiveMaps) throws ClassNotFoundException {
+        HashMap<String,String> options=directiveMaps.get(id);
+        
+        String directiveClassS=options.get("class");
+        Class<? extends Directive> directiveClass=(Class<? extends Directive>)Class.forName(directiveClassS);
+                
+        DirectiveUIHints hints=DirectiveUIHints.getDirectiveUIHints(directiveClass);
+        if(hints==null) throw new RuntimeException("Couldn't resolve directive ui hints");
+        
+        DirectivePanel panel=graph.addDirective(hints);
+
+        DirectiveParameters params=new DirectiveParameters();
+        params.constructor=Constructor.readOptions(options, "");
+        
+        ArrayList<String> paramValues=new ArrayList<>();
+        int index=0;
+        while(true){
+            String value=options.get("constructor.parameters.paramete["+index+"]");
+            if(value==null) break;
+            
+        }
+        
+        return panel;
+    }    
+    
+    public static void setOptions(QueryEditorComponent graph,HashMap<String,String> options){
+        HashMap<String,HashMap<String,String>> directiveMaps=new HashMap<>();
+        ArrayList<String> directiveIds=new ArrayList<>();
+        
+        int index=0;
+        while(true){
+            String id=options.get("directive["+index+"].id");
+            if(id==null) break;
+            directiveIds.add(id);
+            directiveMaps.put(id,new HashMap<String,String>());
+            index++;
+        }
+        
+        if(index==0) return; // empty query
+        
+        for(Map.Entry<String,String> e : options.entrySet()){
+            String key=e.getKey();
+            if(key.startsWith("directive[")) {
+                int ind=key.indexOf("]");
+                if(ind>10 && ind<=13) {
+                    index=Integer.parseInt(key.substring(10,ind));
+                    key=key.substring(ind+2);
+                    if(index>=directiveIds.size()) throw new RuntimeException("stored query data is malformed");
+                    String id=directiveIds.get(index);
+                    HashMap<String,String> directiveMap=directiveMaps.get(id);
+                    directiveMap.put(key,e.getValue());
+                }
+            }
+        }
+        
+        String rootDirectiveId=options.get("rootDirective");
+        if(rootDirectiveId==null) rootDirectiveId=directiveIds.get(0);
+        
+        try{
+            setOptionsSingle(graph,rootDirectiveId,directiveMaps);        
+        }
+        catch(Exception e){
+            Wandora.getWandora().handleError(e);
+        }
+    }
+    
+    public HashMap<String,String> getOptions(){
+        HashMap<String,String> options=new HashMap<>();
+        getOptions(options,new HashSet<DirectivePanel>());
+        options.put("rootdirective", getOptionsId());
+        return options;
+    }
+    
+    private void getOptions(HashMap<String,String> options,HashSet<DirectivePanel> included){
+        if(included.contains(this)) return;
+        
+        String prefix="directive["+included.size()+"].";
+        included.add(this);
+        
+        options.put(prefix+"id",getOptionsId());
+        
+        Rectangle rect=this.getBounds();
+        options.put(prefix+"bounds",rect.x+","+rect.y+","+rect.width+","+rect.height);
+        
+        options.put(prefix+"class", hints.getDirectiveClass().getName());
+        
+        // CONSTRUCTOR
+        
+        options.putAll(directiveParameters.constructor.getOptions(prefix+"constructor."));
+        
+        if(directiveParameters!=null){
+            BoundParameter[] parameters=directiveParameters.parameters;
+            for(int i=0;i<parameters.length;i++){
+                BoundParameter p=parameters[i];
+                Object value=p.getValue();
+                if(value instanceof DirectivePanel){
+                    ((DirectivePanel)value).getOptions(options,included);
+                    options.put(prefix+"constructor.parameters.parameter["+i+"]",((DirectivePanel)value).getOptionsId());
+                }
+                else {
+                    String svalue=p.getScriptValue();
+                    options.put(prefix+"constructor.parameters.parameter["+i+"]",svalue);
+                }
+            }
+        }
+        
+        // ADDONS
+        if(directiveParameters!=null){
+            for(int i=0;i<directiveParameters.addons.length;i++){
+                AddonParameters addon=directiveParameters.addons[i];
+                options.putAll(addon.addon.getOptions(prefix+"addon["+i+"]"));
+                for(int j=0;j<addon.parameters.length;j++){
+                    Object value=addon.parameters[j].getValue();
+                    if(value instanceof DirectivePanel){
+                        ((DirectivePanel)value).getOptions(options,included);
+                        options.put(prefix+"addon["+i+"].parameters.parameter["+j+"]",((DirectivePanel)value).getOptionsId());
+                    }
+                    else {
+                        String svalue=addon.parameters[j].getScriptValue();
+                        options.put(prefix+"addon["+i+"].parameters.parameter["+j+"]",svalue);
+                    }
+                }
+            }
+        }
+        
+        // FROM
+        ConnectorAnchor fromA=toConnectorAnchor.getFrom();
+        if(fromA!=null){
+            JComponent component=fromA.getComponent();
+            if(component!=null) {
+                DirectivePanel p=QueryEditorComponent.resolveDirectivePanel(component);
+                if(p!=null) {
+                    p.getOptions(options, included);
+                    options.put(prefix+"from",p.getOptionsId());
+                }
+            }
+        }        
+        
+    }
+    */
 /*    
     public BoundParameter[] getParameters(boolean script){
         BoundParameter[] ret=new BoundParameter[constructorParamPanels.length];
@@ -402,13 +567,6 @@ public class DirectivePanel extends javax.swing.JPanel {
         add(parameterDirectiveAnchors, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    private int resizeStartX;
-    private int resizeStartY;
-    private int resizeStartW;
-    private int resizeStartH;
-    private boolean resizing=false;
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JLabel directiveLabel;

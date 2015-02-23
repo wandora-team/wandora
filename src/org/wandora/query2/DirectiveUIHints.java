@@ -31,11 +31,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectivePanel;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMapException;
 
 /**
  *
@@ -249,13 +248,34 @@ public class DirectiveUIHints implements Serializable {
             this.label = label;
         }
         
-        
+        @JsonIgnore
         public Class<?> getReflectType(){
             Class<?> ret=type;
             if(multiple) ret=Array.newInstance(ret, 0).getClass();
             return ret;
         }
 
+        /*
+        @JsonIgnore
+        public HashMap<String,String> getOptions(String prefix){
+            HashMap<String,String> ret=new HashMap<String,String>();
+            ret.put(prefix+"label",label);
+            ret.put(prefix+"type",type.getName());
+            ret.put(prefix+"multiple",""+multiple);
+            return ret;
+        }
+        
+        @JsonIgnore
+        public static Parameter readOptions(HashMap<String,String> map,String prefix){
+            Parameter ret=new Parameter();
+            ret.label=map.get(prefix+"label");
+            ret.multiple=Boolean.parseBoolean(map.get(prefix+"multiple"));
+            String cls=map.get(prefix+"type");
+            try{
+                ret.type=Class.forName(cls);
+            }catch(ClassNotFoundException cnfe){ throw new RuntimeException(cnfe); }
+            return ret;
+        }*/
     }
     
     
@@ -320,10 +340,12 @@ public class DirectiveUIHints implements Serializable {
             this.label = label;
         }
         
+        @JsonIgnore
         public <D> java.lang.reflect.Constructor<D> getReflectConstructor(Class<D> cls) throws NoSuchMethodException {
             return resolveConstructor(cls);
         }
         
+        @JsonIgnore
         public <D> java.lang.reflect.Constructor<D> resolveConstructor(Class<D> cls) throws NoSuchMethodException {
             Class[] params=new Class[parameters.length];
             for(int i=0;i<params.length;i++){
@@ -332,6 +354,36 @@ public class DirectiveUIHints implements Serializable {
             java.lang.reflect.Constructor<D> c=cls.getConstructor(params);
             return c;
         }
+        
+        /*
+        @JsonIgnore
+        public HashMap<String,String> getOptions(String prefix){
+            HashMap<String,String> ret=new HashMap<String,String>();
+            ret.put(prefix+"label",label);
+            for(int i=0;i<parameters.length;i++){
+                String paramPrefix=prefix+"parameter["+i+"].";
+                ret.putAll(parameters[i].getOptions(paramPrefix));
+            }
+            return ret;
+        }
+        
+        @JsonIgnore
+        public static Constructor readOptions(HashMap<String,String> map,String prefix){
+            Constructor ret=new Constructor();
+            ret.label=map.get(prefix+"label");
+            ArrayList<Parameter> parameters=new ArrayList<>();
+            int index=0;
+            while(true){
+                String paramPrefix=prefix+"parameter["+index+"].";
+                String test=map.get(paramPrefix+"label");
+                if(test==null) break;
+                parameters.add(Parameter.readOptions(map, paramPrefix));
+                index++;
+            }
+            ret.parameters=parameters.toArray(new Parameter[parameters.size()]);
+            return ret;
+        } 
+        */
     }
     
     public static class Addon implements Serializable {
@@ -403,6 +455,7 @@ public class DirectiveUIHints implements Serializable {
             this.label = label;
         }
         
+        @JsonIgnore
         public java.lang.reflect.Method resolveMethod(Class<?> cls) throws NoSuchMethodException {
             Class[] params=new Class[parameters.length];
             for(int i=0;i<params.length;i++){
@@ -418,6 +471,36 @@ public class DirectiveUIHints implements Serializable {
             return m;
         }
 
+        /*
+        @JsonIgnore
+        public HashMap<String,String> getOptions(String prefix){
+            HashMap<String,String> ret=new HashMap<String,String>();
+            ret.put(prefix+"label",label);
+            ret.put(prefix+"method",method);
+            for(int i=0;i<parameters.length;i++){
+                String paramPrefix=prefix+"parameter["+i+"].";
+                ret.putAll(parameters[i].getOptions(paramPrefix));
+            }
+            return ret;
+        }
+        
+        @JsonIgnore
+        public static Addon readOptions(HashMap<String,String> map,String prefix){
+            Addon ret=new Addon();
+            ret.label=map.get(prefix+"label");
+            ret.method=map.get(prefix+"method");
+            ArrayList<Parameter> parameters=new ArrayList<>();
+            int index=0;
+            while(true){
+                String paramPrefix=prefix+"parameter["+index+"].";
+                String test=map.get(paramPrefix+"label");
+                if(test==null) break;
+                parameters.add(Parameter.readOptions(map, paramPrefix));
+                index++;
+            }
+            ret.parameters=parameters.toArray(new Parameter[parameters.size()]);
+            return ret;
+        }         */     
     }
     
     public static interface Provider {

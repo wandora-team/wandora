@@ -24,6 +24,7 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 import bibliothek.gui.DockController;
 import bibliothek.gui.dock.DefaultDockable;
 import bibliothek.gui.dock.SplitDockStation;
+import bibliothek.gui.dock.StackDockStation;
 import bibliothek.gui.dock.station.split.SplitDockGrid;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
@@ -41,6 +42,7 @@ public class QueryEditorDockPanel extends JPanel {
     protected QueryEditorComponent queryEditor;
     protected DirectivesListPanel directivesList;
     protected QueryEditorInspectorPanel inspector;
+    protected QueryLibraryPanel queryLibrary;
     
     public QueryEditorDockPanel() {
         dockController=new DockController();
@@ -50,10 +52,18 @@ public class QueryEditorDockPanel extends JPanel {
         queryEditor=new QueryEditorComponent();
         directivesList=new DirectivesListPanel();
         inspector=new QueryEditorInspectorPanel();
+        queryLibrary=new QueryLibraryPanel();
+        
+        StackDockStation topRight=new StackDockStation();
+        DefaultDockable directivesDockable=new DefaultDockable(directivesList, "Directives list");
+        topRight.add(directivesDockable, 0);
+        topRight.add(new DefaultDockable(queryLibrary, "QueryLibrary"), 1);
+        topRight.setFrontDockable(directivesDockable);
+        
         
         SplitDockGrid grid=new SplitDockGrid();
         grid.addDockable(0,0,2,2, new DefaultDockable(queryEditor, "Graph editor"));
-        grid.addDockable(2,0,1,1, new DefaultDockable(directivesList, "Directives list"));
+        grid.addDockable(2,0,1,1, topRight);
         grid.addDockable(2,1,1,1, new DefaultDockable(inspector, "Inspector"));
         dockStation.dropTree( grid.toTree() );
         
@@ -71,6 +81,10 @@ public class QueryEditorDockPanel extends JPanel {
 
     public QueryEditorInspectorPanel getInspector() {
         return inspector;
+    }
+
+    public QueryLibraryPanel getQueryLibrary() {
+        return queryLibrary;
     }
     
     

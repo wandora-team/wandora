@@ -26,7 +26,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
@@ -89,6 +91,13 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         
         Object[] buttonStruct = {
+            "Open",
+            UIBox.getIcon(0xF07C),
+            new java.awt.event.ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            },
             "Build",
             UIBox.getIcon(0xF085), // See resources/gui/fonts/FontAwesome.ttf for alternative icons.
             new java.awt.event.ActionListener() {
@@ -102,7 +111,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     deleteButtonActionPerformed(evt);
                 }
-            },
+            }
         };
         JComponent buttonContainer = UIBox.makeButtonContainer(buttonStruct, Wandora.getWandora());
         buttonPanel.add(buttonContainer);
@@ -126,7 +135,28 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         return ((QueryEditorDockPanel)c).getInspector();
     }
     
+    public void applyInspectorChanges(){
+        if(this.selectedPanel!=null) {
+            QueryEditorInspectorPanel inspector=findInspector();
+            if(inspector!=null){
+                inspector.saveChanges();
+            }            
+        }        
+    }
+    
     public String buildScript(){
+        applyInspectorChanges();
+        
+        ConnectorAnchor from=finalResultAnchor.getFrom();
+        if(from==null) return null;
+        JComponent component=from.getComponent();
+        if(component==null) return null;
+        DirectivePanel p=resolveDirectivePanel(component);
+        if(p==null) return null;
+        else return p.buildScript();
+    }
+/*    
+    public HashMap<String,String> buildOptions(){
         if(this.selectedPanel!=null) {
             QueryEditorInspectorPanel inspector=findInspector();
             if(inspector!=null){
@@ -140,8 +170,9 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         if(component==null) return null;
         DirectivePanel p=resolveDirectivePanel(component);
         if(p==null) return null;
-        else return p.buildScript();
-    }
+        HashMap<String,String> ret=p.getOptions();
+        return ret;
+    }*/
     
     public void selectPanel(DirectivePanel panel){
         DirectivePanel old=this.selectedPanel;
@@ -155,6 +186,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
             inspector.setSelection(panel);
         }
     }
+    
     
     public void addConnector(Connector c){
         synchronized(connectors){
@@ -349,4 +381,6 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         }
         
     }
+    
+    
 }

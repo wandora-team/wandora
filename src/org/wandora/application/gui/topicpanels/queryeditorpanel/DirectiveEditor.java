@@ -25,10 +25,13 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 import javax.swing.JPanel;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.wandora.application.Wandora;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
@@ -196,6 +199,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
     }
     
     public DirectiveParameters getDirectiveParameters(){
+        
         Object o=constructorComboBox.getSelectedItem();
         if(o==null || !(o instanceof ConstructorComboItem)) return null;
         
@@ -204,8 +208,9 @@ public class DirectiveEditor extends javax.swing.JPanel {
         
         AddonParameters[] addonParams=getAddonParameters();
         
-        
-        return new DirectiveParameters(c,constructorParams,addonParams);
+        DirectiveParameters params=new DirectiveParameters(directivePanel.getDirectiveId(),c,constructorParams,addonParams);
+        params.from=directivePanel.getFromPanel();
+        return params;
     }
     
     public AddonParameters[] getAddonParameters(){
@@ -243,15 +248,35 @@ public class DirectiveEditor extends javax.swing.JPanel {
     
     
     public static class DirectiveParameters {
+        public String id;
         public Constructor constructor;
         public BoundParameter[] parameters;
         public AddonParameters[] addons;
+        @JsonIgnore
+        public Object from; // this can be a DirectivePanel or the id for the directive
         public DirectiveParameters(){}
-        public DirectiveParameters(Constructor constructor, BoundParameter[] parameters, AddonParameters[] addons) {
+        public DirectiveParameters(String directiveId,Constructor constructor, BoundParameter[] parameters, AddonParameters[] addons) {
+            this.id=directiveId;
             this.constructor = constructor;
             this.parameters = parameters;
             this.addons = addons;
         }
+
+        public Object getFrom() {
+            if(from instanceof DirectivePanel) return ((DirectivePanel)from).getDirectiveId();
+            else return from;
+        }
+
+        public void setFrom(Object from) {
+            this.from = from; // DirectivePanel and id mapping handled later when references are fixed
+        }
+            
+        @JsonIgnore
+        public DirectivePanel getFromPanel(){
+            if(from!=null && from instanceof DirectivePanel) return (DirectivePanel)from;
+            else return null;
+        }        
+        
     }
     
     public static class AddonParameters {
@@ -267,18 +292,41 @@ public class DirectiveEditor extends javax.swing.JPanel {
 
     public static class BoundParameter {
         protected Parameter parameter;
+        @JsonIgnore
         protected Object value;
+        public BoundParameter(){}
         public BoundParameter(Parameter parameter,Object value){
             this.parameter=parameter;
             this.value=value;
         }
         public Parameter getParameter(){return parameter;}
+        @JsonIgnore
         public Object getValue(){return value;}
+        @JsonIgnore
         public String getScriptValue(){
+            return getScriptValue(parameter,value,false);
+        }
+        @JsonIgnore
+        private static String getScriptValue(Parameter parameter,Object value,boolean multipleComponent){
             if(value==null) return "null";
-            else if(value instanceof String) return "\""+value+"\"";
-            else if(value instanceof Number) return value.toString();
-            else if(value instanceof Topic) {
+            if(!multipleComponent && parameter.isMultiple()){
+                StringBuilder sb=new StringBuilder();
+                sb.append("new ");
+                sb.append(parameter.getType().getSimpleName());
+                sb.append("[]{");
+                boolean first=true;
+                for(int i=0;i<Array.getLength(value);i++){
+                    if(!first) sb.append(", ");
+                    else first=false;
+                    Object v=Array.get(value, i);
+                    sb.append(getScriptValue(parameter,v,true));
+                }
+                sb.append("}");
+                return sb.toString();
+            }
+            else if(parameter.getType().equals(String.class)) return "\""+value+"\"";
+            else if(Number.class.isAssignableFrom(parameter.getType())) return value.toString();
+            else if(Topic.class.isAssignableFrom(parameter.getType())) {
                 try{
                     return "\""+(((Topic)value).getOneSubjectIdentifier())+"\"";
                 }catch(TopicMapException tme){
@@ -286,12 +334,76 @@ public class DirectiveEditor extends javax.swing.JPanel {
                     return null;
                 }
             }
-            else if(value instanceof DirectivePanel){
+            else if(Directive.class.isAssignableFrom(parameter.getType())){
                 return ((DirectivePanel)value).buildScript();
             }
             
             else throw new RuntimeException("Unable to convert value to script");
         }
+        
+        public Object getJsonValue(){
+            if(parameter.getType().equals(Directive.class)){
+                if(value==null) return null;
+                if(parameter.isMultiple()){
+                    String[] ret=new String[Array.getLength(value)];
+                    for(int i=0;i<Array.getLength(value);i++){
+                        Object v=Array.get(value,i);
+                        ret[i]=((DirectivePanel)v).getDirectiveId();
+                    }
+                    return ret;
+                }
+                else {
+                    return ((DirectivePanel)value).getDirectiveId();
+                }
+            }
+            else return value;
+        }
+        public void setJsonValue(Object o){
+            // directive references are resolved later in resolveDIrectiveValues
+            value=o;
+        }
+        
+        @JsonIgnore
+        public void resolveDirectiveValues(Map<String,DirectivePanel> directiveMap){
+            if(parameter.getType().equals(Directive.class)){
+                if(value==null) return;
+                if(parameter.isMultiple()){
+                    Object[] os=new Object[Array.getLength(value)];
+                    for(int i=0;i<Array.getLength(value);i++){
+                        Object v=Array.get(value,i);
+                        os[i]=directiveMap.get(v);
+                    }                    
+                    value=os;
+                }
+                else {
+                    value=directiveMap.get(value);
+                }
+            }            
+        }
+        
+/*        
+        public static BoundParameter parseScriptValue(Parameter parameter,String value){
+            return new BoundParameter(parameter,parseScriptValue(parameter,value,false));
+        }
+        
+        public static Object parseScriptValue(Parameter parameter,String value,boolean multipleComponent){
+            Object parsed=null;
+            if(value!=null){
+                value=value.trim();
+                Class cls=parameter.getType();
+                if(!multipleComponent && parameter.isMultiple()){
+                    throw new RuntimeException("TODO");
+                }
+                else if(cls.equals(String.class)) parsed=value.substring(1,value.length()-1);
+                else if(cls.equals(Integer.class)) parsed=Integer.parseInt(value);
+                else if(cls.equals(Double.class)) parsed=Double.parseDouble(value);
+                else if(cls.equals(Topic.class)) parsed=value.substring(1,value.length()-1); // can't convert to topic here, use SI
+                else if(cls.equals(Directive.class) || cls.equals(DirectivePanel.class)) parsed=value; // this should be the panel id
+                else throw new RuntimeException("Unable to parse bound parameter value");
+            }
+            return parsed;
+        }
+        */
 
         @Override
         public int hashCode() {
