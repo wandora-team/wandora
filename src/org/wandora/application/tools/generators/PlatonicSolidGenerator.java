@@ -54,7 +54,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
     }
     @Override
     public String getDescription() {
-        return "Generates topic map graphs for platonic solids i.e. convex regular polyhedrons such as tetrahedron and cube.";
+        return "Generates topic map graphs for platonic solids such as tetrahedron and cube.";
     }
     
     @Override
@@ -63,7 +63,9 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Platonic solid generator",
-            "Platonic solid generator creates a topic map graph for platonic solids."+
+            "Platonic solid generator creates topic map graphs for platonic solids. "+
+            "Topic map graph consists of topics and associations. Topics are graph nodes and "+
+            "associations graph edges. "+
             "Select one or more graphs to create.",
             true,new String[][]{
             new String[]{"Tetrahedron graph","boolean"},
@@ -131,7 +133,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         Topic[] nodes = new Topic[4];
         
         for(int i=0; i<4 && !forceStop(); i++) {
-            nodes[i] = getOrCreateTopic(topicmap, TETRAHEDRON_SI+graphIdentifier+"/vertex-"+i, "Tetrahedron vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, TETRAHEDRON_SI+graphIdentifier+"/vertex/"+i, "Tetrahedron vertex "+i+" ("+graphIdentifier+")");
             setProgress(++progress);
             if(connectWithWandoraClass) {
                 Topic graphTopic = getOrCreateTopic(topicmap, TETRAHEDRON_SI+graphIdentifier, "Tetrahedron graph "+graphIdentifier);
@@ -182,7 +184,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         Topic[] nodes = new Topic[8];
         
         for(int i=0; i<8 && !forceStop(); i++) {
-            nodes[i] = getOrCreateTopic(topicmap, CUBE_SI+graphIdentifier+"/vertex-"+i, "Cube vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, CUBE_SI+graphIdentifier+"/vertex/"+i, "Cube vertex "+i+" ("+graphIdentifier+")");
             setProgress(++progress);
             if(connectWithWandoraClass) {
                 Topic graphTopic = getOrCreateTopic(topicmap, CUBE_SI+graphIdentifier, "Cube graph "+graphIdentifier);
@@ -243,7 +245,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         
         for(int i=0; i<6 && !forceStop(); i++) {
             setProgress(++progress);
-            nodes[i] = getOrCreateTopic(topicmap, OCTAHEDRON_SI+graphIdentifier+"/vertex-"+i, "Octahedron vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, OCTAHEDRON_SI+graphIdentifier+"/vertex/"+i, "Octahedron vertex "+i+" ("+graphIdentifier+")");
             if(connectWithWandoraClass) {
                 Topic graphTopic = getOrCreateTopic(topicmap, OCTAHEDRON_SI+graphIdentifier, "Octahedron graph "+graphIdentifier);
                 connect(topicmap, nodes[i], graphTopic);
@@ -334,7 +336,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         
         for(int i=0; i<20 && !forceStop(); i++) {
             setProgress(++progress);
-            nodes[i] = getOrCreateTopic(topicmap, DODECAHEDRON_SI+graphIdentifier+"/vertex-"+i, "Dodecahedron vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, DODECAHEDRON_SI+graphIdentifier+"/vertex/"+i, "Dodecahedron vertex "+i+" ("+graphIdentifier+")");
             if(connectWithWandoraClass) {
                 Topic graphTopic = getOrCreateTopic(topicmap, DODECAHEDRON_SI+graphIdentifier, "Dodecahedron graph "+graphIdentifier);
                 connect(topicmap, nodes[i], graphTopic);
@@ -409,7 +411,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
         
         for(int i=0; i<12 && !forceStop(); i++) {
             setProgress(++progress);
-            nodes[i] = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+graphIdentifier+"/vertex-"+i, "Icosahedron vertex "+i+" ("+graphIdentifier+")");
+            nodes[i] = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+graphIdentifier+"/vertex/"+i, "Icosahedron vertex "+i+" ("+graphIdentifier+")");
             if(connectWithWandoraClass) {
                 Topic graphTopic = getOrCreateTopic(topicmap, ICOSAHEDRON_SI+graphIdentifier, "Icosahedron graph "+graphIdentifier);
                 connect(topicmap, nodes[i], graphTopic);

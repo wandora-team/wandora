@@ -43,8 +43,8 @@ import org.wandora.utils.swing.GuiTools;
 public class RandomGraphGenerator extends AbstractGenerator implements WandoraTool {
     public static String RANDOM_GRAPH_SI = "http://wandora.org/si/random-graph";
 
-    public static String siPattern = "http://wandora.org/si/topic/__n__";
-    public static String basenamePattern = "Topic __n__";
+    public static String siPattern = "http://wandora.org/si/random-graph/node/__n__";
+    public static String basenamePattern = "Random graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static boolean ensureNumberOfAssociations = true;
     public static int initialTopicCounter = 0;
@@ -60,7 +60,8 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
     }
     @Override
     public String getDescription() {
-        return "Generates a random graph topic map.";
+        return "Random graph generator creates a graph of given number of nodes "+
+               "and edges between randomly selected graph nodes.";
     }
     
     @Override
@@ -69,8 +70,10 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Random graph generator",
-            "Random graph generator creates a topic map with numbered topics (nodes) "+
-              "and random associations (edges). If 'number of associations' is a valid number "+
+            "Random graph generator creates a graph of given number of nodes "+
+              "and edges between randomly selected graph nodes. A node is a topic and "+
+              "an edge is an association. "+
+              "If 'number of associations' is a valid number "+
               "it overrides 'association probality'. Number is a positive integer. "+
               "Probability is a floating point number between 0.0 and 1.0.",
             true,new String[][]{
@@ -78,8 +81,8 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             new String[]{"Number of random associations","string"},
             new String[]{"Random associations probability","string"},
             new String[]{"---1","separator"},
-            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
-            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
+            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
             new String[]{"Initial node counter","string",""+initialTopicCounter,"What is the number of first generated topic node."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type of random associations","topic",null,"Optional association type for random graph edges."},

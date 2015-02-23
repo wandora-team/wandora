@@ -47,8 +47,8 @@ import org.wandora.utils.swing.GuiTools;
 public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool {
     public static String HYPERCUBE_GRAPH_SI = "http://wandora.org/si/hypercube/";
     
-    public static String siPattern = "http://wandora.org/si/topic/__n__";
-    public static String basenamePattern = "Topic __n__";
+    public static String siPattern = "http://wandora.org/si/hypercube/vertex/__n__";
+    public static String basenamePattern = "Hypercube vertex __n__";
     public static boolean connectWithWandoraClass = true;
     public static int initialTopicCounter = 0;
     public static int n = 4;
@@ -66,7 +66,7 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
     
     @Override
     public String getDescription() {
-        return "Generates hypercube graph topic maps";
+        return "Hypercube graph generator creates hypercube graphs with topic map structures.";
     }
     
     @Override
@@ -75,12 +75,16 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Hypercube graph generator",
-            "Hypercube graph generator creates hypercube graphs with topic map structures.",
+            "Hypercube graph generator creates hypercube graphs with topic map structures. "+
+                    "Topics represent hypercube vertices. Associations represent hypercube edges. In a "+
+                    "hypercube each vertex is connected with other vertices. Number of connections per vertex "+
+                    "is equal to the dimension of the hypercube. For example, in a three dimensional hypercube "+
+                    "each vertex is connected with three other vertices.",
             true,new String[][]{
             new String[]{"Dimension of hypercube","string",""+n},
             new String[]{"---1","separator"},
-            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
-            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
+            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
             new String[]{"Initial node counter","string",""+initialTopicCounter,"What is the number of first generated topic node."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type topic","topic",null,"Optional association type for graph edges."},
@@ -99,12 +103,10 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
             n = Integer.parseInt(values.get("Dimension of hypercube"));
         }
         catch(Exception e) {
-            singleLog(e);
+            singleLog("Parse error. Hypercube dimension should be an integer number. Cancelling.", e);
             return;
         }
         
-        
-
         try {
             siPattern = values.get("Subject identifier pattern");
             if(!siPattern.contains("__n__")) {

@@ -48,8 +48,8 @@ import org.wandora.utils.swing.GuiTools;
 public class FullyConnectedGraphGenerator extends AbstractGenerator implements WandoraTool {
     public static String CONNECTED_GRAPH_SI = "http://wandora.org/si/connected-graph";
 
-    public static String siPattern = "http://wandora.org/si/topic/__n__";
-    public static String basenamePattern = "Topic __n__";
+    public static String siPattern = "http://wandora.org/si/connected-graph/node/__n__";
+    public static String basenamePattern = "Connected graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static int initialTopicCounter = 0;
     

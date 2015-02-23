@@ -61,7 +61,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     
     @Override
     public String getDescription() {
-        return "Generates tiling graph topic maps";
+        return "Tiling graph generator creates simple graphs that resemble plane tilings by regular polygons.";
     }
     
     @Override
@@ -71,7 +71,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Tiling graph generator",
             "Tiling graph generator creates simple graphs that resemble plane tilings by regular polygons. "+
-            "Created tilings consist of topics and associations. Topics can be thought as tiling vertises and "+
+            "Created tilings consist of topics and associations. Topics can be thought as tiling vertices and "+
             "associations as tiling edges. Select the type and size of created tiling below. Optionally you "+
             "can set the name and subject identifier patterns of vertex topics as well as the assocation type and "+
             "roles of tiling graph edges. Connecting topics with Wandora class creates some additional topics and "+

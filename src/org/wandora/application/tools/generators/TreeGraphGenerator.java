@@ -44,8 +44,8 @@ import org.wandora.utils.swing.GuiTools;
 public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool {
     public static String TREE_GRAPH_SI = "http://wandora.org/si/tree-graph/";
     
-    public static String siPattern = "http://wandora.org/si/topic/__n__";
-    public static String basenamePattern = "Topic __n__";
+    public static String siPattern = "http://wandora.org/si/tree-graph/node/__n__";
+    public static String basenamePattern = "Tree graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static int d = 5; // Tree depth
     public static int n = 2; // Number of child nodes
@@ -62,7 +62,9 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
     }
     @Override
     public String getDescription() {
-        return "Generates a tree graph topic map.";
+        return "Tree graph generator creates a set of topics and associations that resembles a graph tree where "+
+               "topics are graph nodes and associations graph edges between child and parent nodes. A tree has "+
+               "one root node. A tree node is connected with equal number of child nodes and one parent node.";
     }
     
     @Override
@@ -72,15 +74,16 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Tree graph generator",
             "Tree graph generator creates a set of topics and associations that resembles a graph tree where "+
-                "topics are graph nodes and associations edges between child and parent nodes. "+
+                "topics are graph nodes and associations graph edges between child and parent nodes. A tree has "+
+                "one root node. A tree node is connected with equal number of child nodes and one parent node."+
                 "Tree depth and number of child nodes should be positive integer numbers.",
             true,new String[][]{
             new String[]{"Tree depth","string",""+d},
             new String[]{"Number of child nodes","string",""+n},
             /* new String[]{"Add root additional branch","boolean","false","Should the root contain +1 edges?"}, */
             new String[]{"---1","separator"},
-            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
-            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
+            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type of tree edges","topic",null,"Optional association type for graph edges."},
             new String[]{"Parent role in tree edges","topic",null,"Optional role topic for parent topics in tree graph."},
@@ -122,7 +125,7 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
             singleLog(e);
             return;
         }
-               
+ 
         Topic aType = topicmap.getTopic(values.get("Association type of tree edges"));
         if(aType == null || aType.isRemoved()) {
             aType = getOrCreateTopic(topicmap, TREE_GRAPH_SI+"/"+"association-type", "Tree graph association");
