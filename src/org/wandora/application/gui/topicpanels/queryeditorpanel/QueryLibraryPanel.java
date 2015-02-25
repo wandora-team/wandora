@@ -23,7 +23,9 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Container;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -34,6 +36,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
+import org.wandora.utils.JsonMapper;
 import org.wandora.utils.Options;
 
 /**
@@ -47,6 +50,13 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
     protected String openedName;
     
     protected final ArrayList<StoredQuery> storedQueries=new ArrayList<StoredQuery>();
+    
+    public static class StoredQueries {
+        public StoredQuery[] queries;
+        public StoredQueries(){}
+        public StoredQueries(StoredQuery[] queries){this.queries=queries;}
+        public StoredQueries(ArrayList<StoredQuery> queries){this.queries=queries.toArray(new StoredQuery[queries.size()]);}
+    }
     
     public static class StoredQuery {
         public String name;
@@ -62,7 +72,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
             this.rootDirective = rootDirective;
         }
         
-        
+        @Override
         public String toString(){return name;}
         
         @JsonIgnore
@@ -166,6 +176,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(jPanel1, gridBagConstraints);
 
+        queryList.setModel(new DefaultListModel());
         jScrollPane2.setViewportView(queryList);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -188,8 +199,34 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
     }
     
     public void readQueries(Options options){
+        StoredQuery[] queries=null;
+        String queriesJson=options.get(OPTIONS_KEY);
+        if(queriesJson!=null){
+            JsonMapper mapper=new JsonMapper();
+            try{
+                StoredQueries wrapper=(StoredQueries)mapper.readValue(queriesJson,StoredQueries.class);
+                queries=wrapper.queries;
+            }
+            catch(IOException ioe){Wandora.getWandora().handleError(ioe);}
+        }
+        else queries=new StoredQuery[0];
+        
+        if(queries!=null){
+            synchronized(storedQueries){
+                storedQueries.clear();
+                storedQueries.addAll(Arrays.asList(queries));
+
+                DefaultListModel model=(DefaultListModel)queryList.getModel();            
+                model.clear();
+                for(StoredQuery q : storedQueries){
+                    model.addElement(q);
+                }
+                
+            }
+        }
+/*        
         synchronized(storedQueries){
-/*            Map<String,String> optionsMap=options.asMap();
+            Map<String,String> optionsMap=options.asMap();
             storedQueries.clear();
             
             DefaultListModel model=(DefaultListModel)queryList.getModel();
@@ -227,25 +264,55 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                     continue;
                 }
                 model.addElement(model);
-            }*/
-        }        
+            }
+        }    */    
     }
     
-    private static final String OPTIONS_PREFIX="options.queryeditor.storedqueries.";
+    private static final String OPTIONS_KEY="options.queryeditor.storedqueries";
     public void writeQueries(Options options){
+        JsonMapper mapper=new JsonMapper();
+        String json=null;
         synchronized(storedQueries){
-/*            options.removeAll(OPTIONS_PREFIX);
+            json=mapper.writeValue(new StoredQueries(storedQueries));
+        }
+        options.put(OPTIONS_KEY,json);
+        
+        
+/*        synchronized(storedQueries){
+            options.removeAll(OPTIONS_PREFIX);
             for(int i=0;i<storedQueries.size();i++){
                 StoredQuery q=storedQueries.get(i);
                 for(Map.Entry<String,String> e : q.options.entrySet()){
                     options.put(OPTIONS_PREFIX+"query["+i+"]."+e.getKey(),e.getValue());
                 }
-            }*/
-        }        
+            }
+        }    */    
     }
     
     
     public void save(String name){
+        QueryEditorComponent graph=findGraph();
+        StoredQuery query=graph.getStoredQuery();
+        if(query==null) return;
+        query.name=name;
+        
+        synchronized(storedQueries){
+            boolean saved=false;
+            for(int i=0;i<storedQueries.size();i++){
+                StoredQuery q=storedQueries.get(i);
+                if(q.name!=null && q.name.equals(name)){
+                    saved=true;
+                    storedQueries.set(i, query);
+                    break;
+                }
+            }
+            if(!saved){
+                storedQueries.add(query);
+                DefaultListModel model=(DefaultListModel)queryList.getModel();            
+                model.addElement(query);
+            }
+        }
+        
 /*        QueryEditorComponent graph=findGraph();
         HashMap<String,String> options=graph.buildOptions();
         options.put("queryname",name);
@@ -272,6 +339,9 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
     public void openQuery(StoredQuery query){
         nameField.setText(query.name);
         QueryEditorComponent graph=findGraph();        
+        
+        graph.clearQuery();
+        graph.openStoredQuery(query);
         
 //        DirectivePanel.setOptions(graph, query.options);
     }

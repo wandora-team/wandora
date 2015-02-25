@@ -206,7 +206,24 @@ public class DirectivePanel extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Sets directive parameters and connects any connectors set in the params
+     * as well as sets the panel dimensions.
+     * @param params 
+     */
+    public void setDirectiveParams(DirectiveParameters params){
+        this.directiveParameters=params;
+        Rectangle bounds=getBounds();
+        setBounds(new Rectangle(params.posx,params.posy,bounds.width,bounds.height));
+        
+        params.connectAnchors(this);
+    }
     
+    /**
+     * Sets directive parameters but does not connect connectors, or panel
+     * dimensions, only stores the parameters variable.
+     * @param params 
+     */
     public void saveDirectiveParameters(DirectiveParameters params){
         this.directiveParameters=params;
     }
@@ -220,8 +237,12 @@ public class DirectivePanel extends javax.swing.JPanel {
             directiveParameters=new DirectiveParameters(getDirectiveId(),c,params,new AddonParameters[0]);
         }
         
-        DirectivePanel from=getFromPanel();
-        directiveParameters.from=from;
+        directiveParameters.from=getFromPanel();
+        directiveParameters.cls=hints.getDirectiveClass().getName();
+        
+        Rectangle bounds=getBounds();
+        directiveParameters.posx=bounds.x;
+        directiveParameters.posy=bounds.y;
         
         return directiveParameters;
     }
@@ -265,6 +286,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         }
         else return null;
     }
+        
     
     public String buildAddonScript(AddonParameters addon){
         

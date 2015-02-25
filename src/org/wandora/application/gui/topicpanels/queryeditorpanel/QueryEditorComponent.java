@@ -35,6 +35,8 @@ import javax.swing.TransferHandler;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.TextEditor;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.QueryLibraryPanel.StoredQuery;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
 import org.wandora.query2.DirectiveUIHints.Addon;
@@ -144,14 +146,19 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         }        
     }
     
-    public String buildScript(){
-        applyInspectorChanges();
-        
+    public DirectivePanel getRootPanel(){
         ConnectorAnchor from=finalResultAnchor.getFrom();
         if(from==null) return null;
         JComponent component=from.getComponent();
         if(component==null) return null;
         DirectivePanel p=resolveDirectivePanel(component);
+        if(p==null) return null;
+        return p;
+    }
+    
+    public String buildScript(){
+        applyInspectorChanges();
+        DirectivePanel p=getRootPanel();
         if(p==null) return null;
         else return p.buildScript();
     }
@@ -173,6 +180,73 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         HashMap<String,String> ret=p.getOptions();
         return ret;
     }*/
+    
+    public StoredQuery getStoredQuery(){
+        applyInspectorChanges();
+        
+        DirectivePanel rootPanel=getRootPanel();
+        if(rootPanel==null) return null;
+                
+        StoredQuery ret=new StoredQuery();
+        ret.name=null;
+        ret.rootDirective=rootPanel.getDirectiveId();
+        
+        ArrayList<DirectiveParameters> directiveParams=new ArrayList<>();
+        
+        for(int i=0;i<queryGraphPanel.getComponentCount();i++){
+            Component c=queryGraphPanel.getComponent(i);
+            if(c instanceof DirectivePanel && c!=finalResultPanel){
+                DirectivePanel panel=(DirectivePanel)c;
+                directiveParams.add(panel.getDirectiveParameters());
+            }
+        }
+        
+        ret.directiveParameters=directiveParams;
+        
+        return ret;
+    }
+    
+    public void clearQuery(){
+        for(int i=0;i<queryGraphPanel.getComponentCount();i++){
+            Component c=queryGraphPanel.getComponent(i);
+            synchronized(connectors){
+                connectors.clear();
+            }
+            selectPanel(null);
+            finalResultAnchor.to.setFrom(null);
+            if(c instanceof DirectivePanel && c!=finalResultPanel){
+                queryGraphPanel.remove(c);
+            }
+        }
+    }
+    
+    public void openStoredQuery(StoredQuery query){
+        
+        HashMap<String,DirectivePanel> directiveMap=new HashMap<>();
+        
+        for(DirectiveParameters params : query.directiveParameters){
+            try{
+                Class cls=Class.forName(params.cls);
+                if(!Directive.class.isAssignableFrom(cls)) throw new ClassCastException("Stored query class is not a Directive");
+                DirectiveUIHints hints=DirectiveUIHints.getDirectiveUIHints(cls);
+                DirectivePanel panel=addDirective(hints);
+                                
+                directiveMap.put(params.id, panel);
+                
+            }catch(ClassNotFoundException | ClassCastException e){
+                Wandora.getWandora().handleError(e);
+            }
+        }
+        
+        for(DirectiveParameters params : query.directiveParameters){
+            params.resolveDirectiveValues(directiveMap);
+        }        
+        
+        for(DirectiveParameters params : query.directiveParameters){
+            DirectivePanel panel=directiveMap.get(params.id);
+            
+        }        
+    }
     
     public void selectPanel(DirectivePanel panel){
         DirectivePanel old=this.selectedPanel;

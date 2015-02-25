@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -210,6 +211,12 @@ public class DirectiveEditor extends javax.swing.JPanel {
         
         DirectiveParameters params=new DirectiveParameters(directivePanel.getDirectiveId(),c,constructorParams,addonParams);
         params.from=directivePanel.getFromPanel();
+        params.cls=hints.getDirectiveClass().getName();
+        
+        Rectangle bounds=directivePanel.getBounds();
+        params.posx=bounds.x;
+        params.posy=bounds.y;
+        
         return params;
     }
     
@@ -249,9 +256,12 @@ public class DirectiveEditor extends javax.swing.JPanel {
     
     public static class DirectiveParameters {
         public String id;
+        public String cls;
         public Constructor constructor;
         public BoundParameter[] parameters;
         public AddonParameters[] addons;
+        public int posx;
+        public int posy;
         @JsonIgnore
         public Object from; // this can be a DirectivePanel or the id for the directive
         public DirectiveParameters(){}
@@ -276,7 +286,36 @@ public class DirectiveEditor extends javax.swing.JPanel {
             if(from!=null && from instanceof DirectivePanel) return (DirectivePanel)from;
             else return null;
         }        
+
+        @JsonIgnore
+        public void resolveDirectiveValues(Map<String,DirectivePanel> directiveMap){
+            for(BoundParameter p : parameters){
+                p.resolveDirectiveValues(directiveMap);
+            }
+            for(AddonParameters a : addons){
+                a.resolveDirectiveValues(directiveMap);
+            }
+            if(from!=null && from instanceof String){
+                from=directiveMap.get((String)from);
+            }
+        }
         
+        @JsonIgnore
+        public void connectAnchors(DirectivePanel panel){
+            for(int i=0;i<parameters.length;i++){
+                BoundParameter p=parameters[i];
+                p.connectAnchors(panel,(i<10?"0":"")+i);
+            }
+            for(int i=0;i<addons.length;i++){
+                AddonParameters a=addons[i];
+                a.connectAnchors(panel,"a"+(i<10?"0":"")+i);
+            }
+            if(from!=null){
+                DirectivePanel p=(DirectivePanel)from;
+                p.getFromConnectorAnchor().setTo(panel.getToConnectorAnchor());
+            }
+            
+        }
     }
     
     public static class AddonParameters {
@@ -287,6 +326,22 @@ public class DirectiveEditor extends javax.swing.JPanel {
             this.addon = addon;
             this.parameters = parameters;
         }
+        
+        @JsonIgnore
+        public void resolveDirectiveValues(Map<String,DirectivePanel> directiveMap){
+            for(BoundParameter p : parameters){
+                p.resolveDirectiveValues(directiveMap);
+            }
+        }
+        
+        @JsonIgnore
+        public void connectAnchors(DirectivePanel panel,String orderingHint){
+            for(int i=0;i<parameters.length;i++){
+                BoundParameter p=parameters[i];
+                p.connectAnchors(panel,orderingHint+(i<10?"0":"")+i);
+            }            
+        }
+        
     }
 
 
@@ -371,15 +426,34 @@ public class DirectiveEditor extends javax.swing.JPanel {
                     Object[] os=new Object[Array.getLength(value)];
                     for(int i=0;i<Array.getLength(value);i++){
                         Object v=Array.get(value,i);
-                        os[i]=directiveMap.get(v);
+                        if(v==null) os[i]=null;
+                        else if(v instanceof String) os[i]=directiveMap.get((String)v);
+                        else os[i]=v;
                     }                    
                     value=os;
                 }
                 else {
-                    value=directiveMap.get(value);
+                    if(value!=null && value instanceof String)
+                        value=directiveMap.get((String)value);
                 }
             }            
         }
+        
+        @JsonIgnore
+        public void connectAnchors(DirectivePanel panel,String orderingHint){
+            if(!parameter.getType().equals(Directive.class)) return;
+            
+            if(parameter.isMultiple()){
+                for(int i=0;i<Array.getLength(value);i++){
+                    Object v=Array.get(value,i);
+                    panel.connectParamAnchor( ((DirectivePanel)v).getFromConnectorAnchor(), orderingHint+i);
+                }                
+            }
+            else {
+                panel.connectParamAnchor( ((DirectivePanel)value).getFromConnectorAnchor(), orderingHint);
+            }
+        }
+        
         
 /*        
         public static BoundParameter parseScriptValue(Parameter parameter,String value){
