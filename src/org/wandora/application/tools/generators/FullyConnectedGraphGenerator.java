@@ -51,7 +51,7 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
     public static String siPattern = "http://wandora.org/si/connected-graph/node/__n__";
     public static String basenamePattern = "Connected graph node __n__";
     public static boolean connectWithWandoraClass = true;
-    public static int initialTopicCounter = 0;
+    public static int topicCounterOffset = 0;
     
     
     
@@ -82,7 +82,7 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
             new String[]{"---1","separator"},
             new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
             new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
-            new String[]{"Initial node counter","string",""+initialTopicCounter,"What is the number of first generated topic node."},
+            new String[]{"Node counter offset","string",""+topicCounterOffset,"What is the number of first generated topic node."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type topic","topic",null,"Optional association type for random graph edges."},
             new String[]{"First role topic","topic",null,"Optional role topic for graph edges."},
@@ -124,7 +124,7 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
             connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
             
             try {
-                initialTopicCounter = Integer.parseInt(values.get("Initial node counter"));
+                topicCounterOffset = Integer.parseInt(values.get("Node counter offset"));
             }
             catch(NumberFormatException nfe) {
                 singleLog("Parse error. Initial node counter should be an integer number. Cancelling.");
@@ -160,7 +160,7 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
         
         setDefaultLogger();
         setLogTitle("Fully connected graph generator");
-        log("Creating topics.");
+        log("Creating connected topics.");
         
         Topic[] topics = new Topic[n];
         long graphIdentifier = System.currentTimeMillis();
@@ -168,7 +168,7 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
         setProgressMax(n);
         for(int i=0; i<n && !forceStop(); i++) {
             setProgress(n);
-            int nodeCounter = initialTopicCounter+i;
+            int nodeCounter = topicCounterOffset+i;
             topics[i] = getOrCreateTopic(topicmap, nodeCounter, graphIdentifier);
         }
               

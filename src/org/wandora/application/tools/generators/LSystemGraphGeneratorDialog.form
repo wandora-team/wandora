@@ -290,7 +290,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="lSystemLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;An L-system or Lindenmayer system is a parallel rewriting system and a type of formal grammar. An L-system consists of an alphabet of symbols that can be used to make strings, a collection of production rules that expand each symbol into some larger string of symbols, an initial &quot;axiom&quot; string from which to begin construction, and a mechanism for translating the generated strings into graph structures.&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;An L-system or Lindenmayer system is a parallel rewriting system and a type of formal grammar. &#xa;An L-system consists of an alphabet of symbols that can be used to make strings, a collection of production rules that expand each &#xa;symbol into some larger string of symbols, an initial &quot;axiom&quot; string from which to begin construction, and a mechanism for translating the &#xa;generated strings into graph structures. Write your L-system to the textarea below or choose an L-system with the selector.&lt;/html&gt;"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleLabel();"/>
@@ -316,10 +316,10 @@
                       <StringArray count="0"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[53, 19]"/>
+                      <Dimension value="[28, 21]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[57, 19]"/>
+                      <Dimension value="[28, 21]"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -340,11 +340,14 @@
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                       <Insets value="[0, 3, 0, 3]"/>
                     </Property>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[50, 21]"/>
+                    </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[50, 19]"/>
+                      <Dimension value="[50, 21]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[50, 19]"/>
+                      <Dimension value="[50, 21]"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -379,6 +382,11 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="lSystemTextPane">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Monospaced" size="12" style="0"/>
+                    </Property>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleTextPane();"/>
                   </AuxValues>
@@ -444,7 +452,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="rawLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;Parse a string with L-system parser. Feature can be used to parse manually constructed strings. Press Generate button to start parse.&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Transform any generated L-system string into a topic map graph. Paste or write you L-system string below. Press Generate button to start transformation.&lt;/html&gt;"/>
                 <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&#xa;Parser vocabulary is&lt;br&gt;&lt;pre&gt;&#xa;a         create topic and association it with previous one&#xa;[A-V]     create named topic and association it with previous&#xa;[eiuoy]  create topic and association it with previous one using named schema&#xa;:[a-zA-Z] change global association type and roles&#xa;:0        reset association type and roles&#xa;&#xa;(         start sequential block&#xa;)         close sequential block&#xa;[         start parallel block&#xa;]         close parallel block&#xa;{         start cycle block&#xa;}         close cycle block&#xa;&#xa;0         reset topic counter&lt;/pre&gt;&#xa;-         substract topic counter by one&#xa;+        add topic counter bt one&lt;/pre&gt;&#xa;&lt;/html&gt;"/>
               </Properties>
               <AuxValues>
@@ -474,6 +482,11 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="rawTextPane">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Monospaced" size="12" style="0"/>
+                    </Property>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleTextPane();"/>
                   </AuxValues>
@@ -493,6 +506,23 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
       <SubComponents>
+        <Component class="javax.swing.JButton" name="infoButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Info"/>
+            <Property name="toolTipText" type="java.lang.String" value="Get more information about L-system generator. Opens web browser at  http://wandora.org/wiki/L-system_generator"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="infoButtonActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleButton();"/>
+          </AuxValues>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+              <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
+            </Constraint>
+          </Constraints>
+        </Component>
         <Container class="javax.swing.JPanel" name="fillerPanel">
           <Properties>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -508,7 +538,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="437" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="364" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -521,11 +551,8 @@
         <Component class="javax.swing.JButton" name="generateButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Generate"/>
-            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 2, 2, 2]"/>
-            </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[70, 23]"/>
+              <Dimension value="[80, 23]"/>
             </Property>
           </Properties>
           <Events>
@@ -544,7 +571,7 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancel"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[70, 23]"/>
+              <Dimension value="[80, 23]"/>
             </Property>
           </Properties>
           <Events>

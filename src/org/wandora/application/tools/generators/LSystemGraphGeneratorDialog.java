@@ -483,6 +483,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         rawScrollPane = new javax.swing.JScrollPane();
         rawTextPane = new org.wandora.application.gui.simple.SimpleTextPane();
         buttonPanel = new javax.swing.JPanel();
+        infoButton = new SimpleButton();
         fillerPanel = new javax.swing.JPanel();
         generateButton = new org.wandora.application.gui.simple.SimpleButton();
         cancelButton = new org.wandora.application.gui.simple.SimpleButton();
@@ -619,7 +620,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
         lSystemPanel.setLayout(new java.awt.GridBagLayout());
 
-        lSystemLabel.setText("<html>An L-system or Lindenmayer system is a parallel rewriting system and a type of formal grammar. An L-system consists of an alphabet of symbols that can be used to make strings, a collection of production rules that expand each symbol into some larger string of symbols, an initial \"axiom\" string from which to begin construction, and a mechanism for translating the generated strings into graph structures.</html>");
+        lSystemLabel.setText("<html>An L-system or Lindenmayer system is a parallel rewriting system and a type of formal grammar. \nAn L-system consists of an alphabet of symbols that can be used to make strings, a collection of production rules that expand each \nsymbol into some larger string of symbols, an initial \"axiom\" string from which to begin construction, and a mechanism for translating the \ngenerated strings into graph structures. Write your L-system to the textarea below or choose an L-system with the selector.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -629,8 +630,8 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
         selectLSystemPanel.setLayout(new java.awt.GridBagLayout());
 
-        lSystemComboBox.setMinimumSize(new java.awt.Dimension(53, 19));
-        lSystemComboBox.setPreferredSize(new java.awt.Dimension(57, 19));
+        lSystemComboBox.setMinimumSize(new java.awt.Dimension(28, 21));
+        lSystemComboBox.setPreferredSize(new java.awt.Dimension(28, 21));
         lSystemComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lSystemComboBoxActionPerformed(evt);
@@ -645,8 +646,9 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
         saveLSystemButton.setText("new");
         saveLSystemButton.setMargin(new java.awt.Insets(0, 3, 0, 3));
-        saveLSystemButton.setMinimumSize(new java.awt.Dimension(50, 19));
-        saveLSystemButton.setPreferredSize(new java.awt.Dimension(50, 19));
+        saveLSystemButton.setMaximumSize(new java.awt.Dimension(50, 21));
+        saveLSystemButton.setMinimumSize(new java.awt.Dimension(50, 21));
+        saveLSystemButton.setPreferredSize(new java.awt.Dimension(50, 21));
         saveLSystemButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveLSystemButtonActionPerformed(evt);
@@ -664,6 +666,8 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         lSystemPanel.add(selectLSystemPanel, gridBagConstraints);
 
         lSystemScrollPane.setPreferredSize(new java.awt.Dimension(10, 100));
+
+        lSystemTextPane.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         lSystemScrollPane.setViewportView(lSystemTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -699,7 +703,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
         rawPanel.setLayout(new java.awt.GridBagLayout());
 
-        rawLabel.setText("<html>Parse a string with L-system parser. Feature can be used to parse manually constructed strings. Press Generate button to start parse.</html>");
+        rawLabel.setText("<html>Transform any generated L-system string into a topic map graph. Paste or write you L-system string below. Press Generate button to start transformation.</html>");
         rawLabel.setToolTipText("<html>\nParser vocabulary is<br><pre>\na         create topic and association it with previous one\n[A-V]     create named topic and association it with previous\n[eiuoy]  create topic and association it with previous one using named schema\n:[a-zA-Z] change global association type and roles\n:0        reset association type and roles\n\n(         start sequential block\n)         close sequential block\n[         start parallel block\n]         close parallel block\n{         start cycle block\n}         close cycle block\n\n0         reset topic counter</pre>\n-         substract topic counter by one\n+        add topic counter bt one</pre>\n</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -709,6 +713,8 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         rawPanel.add(rawLabel, gridBagConstraints);
 
         rawScrollPane.setPreferredSize(new java.awt.Dimension(10, 100));
+
+        rawTextPane.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         rawScrollPane.setViewportView(rawTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -733,13 +739,22 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
+        infoButton.setText("Info");
+        infoButton.setToolTipText("Get more information about L-system generator. Opens web browser at  http://wandora.org/wiki/L-system_generator");
+        infoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoButtonActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(infoButton, new java.awt.GridBagConstraints());
+
         fillerPanel.setPreferredSize(new java.awt.Dimension(100, 10));
 
         javax.swing.GroupLayout fillerPanelLayout = new javax.swing.GroupLayout(fillerPanel);
         fillerPanel.setLayout(fillerPanelLayout);
         fillerPanelLayout.setHorizontalGroup(
             fillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 437, Short.MAX_VALUE)
+            .addGap(0, 364, Short.MAX_VALUE)
         );
         fillerPanelLayout.setVerticalGroup(
             fillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -752,8 +767,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         buttonPanel.add(fillerPanel, gridBagConstraints);
 
         generateButton.setText("Generate");
-        generateButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        generateButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        generateButton.setPreferredSize(new java.awt.Dimension(80, 23));
         generateButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 generateButtonMouseReleased(evt);
@@ -764,7 +778,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         buttonPanel.add(generateButton, gridBagConstraints);
 
         cancelButton.setText("Cancel");
-        cancelButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        cancelButton.setPreferredSize(new java.awt.Dimension(80, 23));
         cancelButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 cancelButtonMouseReleased(evt);
@@ -826,6 +840,18 @@ private void lSystemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//G
     }
 }//GEN-LAST:event_lSystemComboBoxActionPerformed
 
+    private void infoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoButtonActionPerformed
+        Desktop desktop = Desktop.getDesktop();
+        if(desktop != null) {
+            try {
+                desktop.browse(new URI("http://wandora.org/wiki/L-system_generator"));
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_infoButtonActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -844,6 +870,7 @@ private void lSystemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//G
     private javax.swing.JTextPane fileTextPane;
     private javax.swing.JPanel fillerPanel;
     private javax.swing.JButton generateButton;
+    private javax.swing.JButton infoButton;
     private javax.swing.JComboBox lSystemComboBox;
     private javax.swing.JLabel lSystemLabel;
     private javax.swing.JPanel lSystemPanel;
