@@ -22,16 +22,20 @@
   #if($articleDateType && $article.getData( $articleDateType,"en" ) )##
     #set( $startDate = $article.getData( $articleDateType,"en" ) )##
   #end
-  #set( $articleLink = $article.getData( $articleLinkType, "en" ) )##
+  #if($articleLinkType)##
+    #set( $articleLink = $article.getData( $articleLinkType, "en" ) )##
+  #end##
   #set( $articleTitle = $article.getDisplayName( $lang ) )##
   #if(! $articleTitle )
     #set ( $articleTitle = $article.getBaseName())##
   #end
-  #if($article.getData( $articleContentType,"en"))##
+  #if($articleContentType && $article.getData( $articleContentType,"en"))##
     #set ($articleContent = $article.getData( $articleContentType,"en"))##
     #set( $articleContent = $articleContent.replaceAll('\"', '\\\"' ) )##
     #set( $articleContent = $articleContent.replaceAll('[\p{Cntrl}\p{Space}]', ' ') )##
     #set ($articleContent = $articleContent.trim())##
+  #else
+    #set ($articleContent = "")##
   #end
   #set( $articleTitle = $articleTitle.replaceAll('\"', '\\\"' ) )##
   #set( $articleTitle = $articleTitle.replaceAll('[\p{Cntrl}\p{Space}]', ' ') )##
@@ -44,7 +48,9 @@
                                       "classname": "nyt-article",
                                       "description": "$articleContent",
                                       "icon" : "${staticbase}api/images/guardian-icon.png",
+                                      #if($articleLink)##
                                       "link" : "$articleLink"
+                                      #end##
                               }
   #set( $count = $count + 1 )##
 #end##

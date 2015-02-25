@@ -71,7 +71,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
     
     @Override
     public String getDescription() {
-        return "Generates topic maps with user specified L-systems.";
+        return "Generates topic maps with L-systems.";
     }
     
     @Override
@@ -213,7 +213,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
     
     
     public Topic createTopic(TopicMap tm) throws Exception {
-        Topic t = tm.getTopicWithBaseName("topic "+topicCounter);
+        Topic t = tm.getTopicWithBaseName("L-system topic "+topicCounter);
         if(t == null) {
             t = tm.createTopic();
             t.addSubjectIdentifier(new Locator(userSiPrefix + "topic-" + topicCounter));
@@ -226,7 +226,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
             if(type == null) {
                 type = tm.createTopic();
                 type.addSubjectIdentifier(new Locator(typeSi));
-                type.setBaseName("type-"+currentColor);
+                type.setBaseName("L-system type-"+currentColor);
             }
             t.addType(type);
         }
@@ -303,7 +303,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
      * it. Parser's vocabulary is
      * 
      * <pre>
-     *  a       Create topic and associate it with previous topic if such exists in current block.
+     *  a       Create a topic and associate it with previous topic if such exists in current block.
      *  A-V     Create named topic and associate it with previous topic if such exists in current block.
      *  eyuio   Create colored (=typed) topic and associate it with previous one using colored association.
      *  

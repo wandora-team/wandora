@@ -87,7 +87,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         ((SimpleTextPane) urlTextPane).setLineWrap(false);
 
         setTitle("L-system generator");
-        setSize(500,340);
+        setSize(700,500);
         if(parent != null) parent.centerWindow(this);
     }
     
@@ -619,7 +619,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
         lSystemPanel.setLayout(new java.awt.GridBagLayout());
 
-        lSystemLabel.setText("<html>This tab is used to inject L-system to the generator. You can also use ready-made L-systems. L-system contains an initiator and one or more rules. Each rule contains a predecessor and a successor.</html>");
+        lSystemLabel.setText("<html>An L-system or Lindenmayer system is a parallel rewriting system and a type of formal grammar. An L-system consists of an alphabet of symbols that can be used to make strings, a collection of production rules that expand each symbol into some larger string of symbols, an initial \"axiom\" string from which to begin construction, and a mechanism for translating the generated strings into graph structures.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -678,8 +678,8 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
         depthTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         depthTextField.setText("5");
-        depthTextField.setMinimumSize(new java.awt.Dimension(25, 20));
-        depthTextField.setPreferredSize(new java.awt.Dimension(25, 20));
+        depthTextField.setMinimumSize(new java.awt.Dimension(35, 20));
+        depthTextField.setPreferredSize(new java.awt.Dimension(35, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         depthPanel.add(depthTextField, gridBagConstraints);
@@ -699,7 +699,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
         rawPanel.setLayout(new java.awt.GridBagLayout());
 
-        rawLabel.setText("<html>This tab is used to inject a string to L-system parser. Feature can be used to parse manually constructed strings. Press Generate button to start parse.</html>");
+        rawLabel.setText("<html>Parse a string with L-system parser. Feature can be used to parse manually constructed strings. Press Generate button to start parse.</html>");
         rawLabel.setToolTipText("<html>\nParser vocabulary is<br><pre>\na         create topic and association it with previous one\n[A-V]     create named topic and association it with previous\n[eiuoy]  create topic and association it with previous one using named schema\n:[a-zA-Z] change global association type and roles\n:0        reset association type and roles\n\n(         start sequential block\n)         close sequential block\n[         start parallel block\n]         close parallel block\n{         start cycle block\n}         close cycle block\n\n0         reset topic counter</pre>\n-         substract topic counter by one\n+        add topic counter bt one</pre>\n</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -739,7 +739,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         fillerPanel.setLayout(fillerPanelLayout);
         fillerPanelLayout.setHorizontalGroup(
             fillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
+            .addGap(0, 437, Short.MAX_VALUE)
         );
         fillerPanelLayout.setVerticalGroup(
             fillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

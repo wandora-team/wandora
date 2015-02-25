@@ -36,7 +36,7 @@ import org.wandora.utils.ScriptManager;
 /**
  *
  * This is a utility class to help with running queries read from a query
- * script in a String. The CatchException versions aremostly meant for Velocity
+ * script in a String. The CatchException versions are mostly meant for Velocity
  * where catching exceptions is impossible in the template code. Instead you
  * can just check for an exception in the result after the method finishes.
  * 

@@ -13,7 +13,7 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
 ##
 ##
 ##
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <!-- *********************************************************************** -->
 <!-- ****         TIMELINE - WANDORA EMBEDDED HTTP SERVER TEMPLATE      **** -->
@@ -25,7 +25,7 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
 <!-- *********************************************************************** -->
 <head>
     <title>Wandora - Timeline</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 
     <!-- ############################################################################ -->
     <!-- To use this file on your own system, replace ../../api/timeline-api.js with  -->
@@ -65,14 +65,17 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
         var bandInfos;
         function onLoad() {
             var combinedEventSource = new Timeline.DefaultEventSource(0);
-            		
+                
             var theme = Timeline.ClassicTheme.create();
             theme.ether.backgroundColors.unshift("white");
             theme.mouseWheel = "scroll";
+            theme.event.track.height = 32;
+            theme.event.instant.iconWidth = 32;
+            theme.event.instant.iconHeight = 32;
 
             var overviewTheme = Timeline.ClassicTheme.create();
             overviewTheme.event.track.height = 4;
-			
+      
             var d = new Date();
             bandInfos = [
               Timeline.createBandInfo({
@@ -163,8 +166,7 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
 </head>
 <body onload="onLoad();" onresize="onResize();">
     <div id="body">
-        <div id="tl" class="timeline-default" style="height: 800px;width:100%">
-        </div>
+        <div id="tl" class="timeline-default" style="height: 800px;width:100%"></div>
     </div>
 </body>
 </html>

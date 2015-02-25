@@ -48,8 +48,8 @@ import org.wandora.utils.swing.GuiTools;
 public class FullyConnectedGraphGenerator extends AbstractGenerator implements WandoraTool {
     public static String CONNECTED_GRAPH_SI = "http://wandora.org/si/connected-graph";
 
-    public static String siPattern = "http://wandora.org/si/topic/__n__";
-    public static String basenamePattern = "Topic __n__";
+    public static String siPattern = "http://wandora.org/si/connected-graph/node/__n__";
+    public static String basenamePattern = "Connected graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static int initialTopicCounter = 0;
     
@@ -138,17 +138,17 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
         
         Topic aType = topicmap.getTopic(values.get("Association type topic"));
         if(aType == null || aType.isRemoved()) {
-            aType = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI+"/"+"associationType", "Connected graph association");
+            aType = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI+"/"+"association-type", "Connected graph association");
         }
         
         Topic role1 = topicmap.getTopic(values.get("First role topic"));
         if(role1 == null || role1.isRemoved()) {
-            role1 = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI+"/"+"role1", "Connected graph role 1");
+            role1 = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI+"/"+"role-1", "Connected graph role 1");
         }
         
         Topic role2 = topicmap.getTopic(values.get("Second role topic"));
         if(role2 == null || role2.isRemoved()) {
-            role2 = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI+"/"+"role2", "Connected graph role 2");
+            role2 = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI+"/"+"role-2", "Connected graph role 2");
         }
         
         if(role1.mergesWithTopic(role2)) {
@@ -163,25 +163,14 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
         log("Creating topics.");
         
         Topic[] topics = new Topic[n];
-        String graphIdentifier = ""+System.currentTimeMillis();
+        long graphIdentifier = System.currentTimeMillis();
         
         setProgressMax(n);
         for(int i=0; i<n && !forceStop(); i++) {
             setProgress(n);
             int nodeCounter = initialTopicCounter+i;
-            String newBasename = basenamePattern.replaceAll("__n__", ""+nodeCounter);
-            String newSubjectIdentifier = siPattern.replaceAll("__n__", ""+nodeCounter);
-            topics[i] = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
-            if(connectWithWandoraClass) {
-                Topic connectedGraphTopic = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI, "Connected graph");
-                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
-                makeSuperclassSubclass(topicmap, wandoraClass, connectedGraphTopic);
-                Topic connectedGraphInstanceTopic = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI+"/"+graphIdentifier, "Connected graph "+graphIdentifier, connectedGraphTopic);
-                connectedGraphInstanceTopic.addType(connectedGraphTopic);
-                topics[i].addType(connectedGraphInstanceTopic);
-            }
+            topics[i] = getOrCreateTopic(topicmap, nodeCounter, graphIdentifier);
         }
-        
               
         Topic t1 = null;
         Topic t2 = null;
@@ -217,5 +206,30 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
         
         setState(WAIT);
     }
+    
+    
+    
+    
+    private Topic getOrCreateTopic(TopicMap topicmap, int topicIdentifier, long graphIdentifier) {
+        String newBasename = basenamePattern.replaceAll("__n__", ""+topicIdentifier);
+        String newSubjectIdentifier = siPattern.replaceAll("__n__", ""+topicIdentifier);
+        Topic t = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
+        if(connectWithWandoraClass) {
+            try {
+                Topic graphTopic = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI, "Connected graph");
+                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
+                makeSuperclassSubclass(topicmap, wandoraClass, graphTopic);
+                Topic graphInstanceTopic = getOrCreateTopic(topicmap, CONNECTED_GRAPH_SI+"/"+graphIdentifier, "Connected graph "+graphIdentifier, graphTopic);
+                graphInstanceTopic.addType(graphTopic);
+                t.addType(graphInstanceTopic);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return t;
+    }
+    
+    
     
 }

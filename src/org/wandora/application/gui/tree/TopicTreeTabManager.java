@@ -231,7 +231,7 @@ public class TopicTreeTabManager {
      */
     public void writeTopicTreeRelations() {
         int counter=0;
-        options.removeAll("trees");
+        options.removeAll("trees.tree");
         for(String tab : tabTrees) {
             //for(Map.Entry<String,Set<String>> e : selectedTreeAssociations.entrySet()){
             Set<String> as=selectedTreeRelations.get(tab);

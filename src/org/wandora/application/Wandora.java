@@ -293,21 +293,33 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     public WandoraModulesServer getHTTPServer(){
         if(httpServer==null) {
-            // httpServer=new WandoraHttpServer(this);
-            // httpServer=new WandoraWebAppServer(this);
-            httpServer=new WandoraModulesServer(this);
-            httpServer.setStatusComponent(serverButton,"gui/icons/server_start.png","gui/icons/server_stop.png","gui/icons/server_hit.png");
+            try {
+                // httpServer=new WandoraHttpServer(this);
+                // httpServer=new WandoraWebAppServer(this);
+                httpServer=new WandoraModulesServer(this);
+                httpServer.setStatusComponent(serverButton,"gui/icons/server_start.png","gui/icons/server_stop.png","gui/icons/server_hit.png");
+            }
+            catch(Exception e) {
+                handleError(e);
+            }
         }
         return httpServer;
     }
     
-    public void startHTTPServer(){
-        getHTTPServer().start();
-        menuManager.refreshServerMenu();
+    
+    public void startHTTPServer() {
+        WandoraModulesServer server = getHTTPServer();
+        if(server != null) {
+            server.start();
+            menuManager.refreshServerMenu();
+        }
     }
-    public void stopHTTPServer(){
-        if(httpServer!=null) {
-            getHTTPServer().stopServer();
+    
+    
+    public void stopHTTPServer() {
+        WandoraModulesServer server = getHTTPServer();
+        if(server != null) {
+            server.stopServer();
         }
     }
     
@@ -1181,13 +1193,16 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     }//GEN-LAST:event_formWindowClosing
 
 private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_serverButtonMouseClicked
-        if(getHTTPServer().isRunning()) {
-            stopHTTPServer();
+        WandoraModulesServer server = getHTTPServer();
+        if(server != null) {
+            if(server.isRunning()) {
+                stopHTTPServer();
+            }
+            else {
+                startHTTPServer();
+            }
+            menuManager.refreshServerMenu();
         }
-        else {
-            startHTTPServer();
-        }
-        menuManager.refreshServerMenu();
 }//GEN-LAST:event_serverButtonMouseClicked
 
     private void panelButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelButtonMouseClicked

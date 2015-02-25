@@ -97,11 +97,11 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
         
         requester.doRequest(Unirest.get(str), callback);
         
-        boolean shouldQuit = false;
+        boolean cont = true;
         
-        while(!shouldQuit){
+        while(cont){
            Thread.sleep(2000);
-           shouldQuit = forceStop() || !requester.hasJobs() || waitingUserInput;
+           cont = !forceStop() && (requester.hasJobs() || waitingUserInput);
         }
         
         requester.cancel();
