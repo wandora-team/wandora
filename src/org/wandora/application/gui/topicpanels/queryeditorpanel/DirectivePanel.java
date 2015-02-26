@@ -237,6 +237,7 @@ public class DirectivePanel extends javax.swing.JPanel {
             directiveParameters=new DirectiveParameters(getDirectiveId(),c,params,new AddonParameters[0]);
         }
         
+        directiveParameters.id=this.getDirectiveId();
         directiveParameters.from=getFromPanel();
         directiveParameters.cls=hints.getDirectiveClass().getName();
         

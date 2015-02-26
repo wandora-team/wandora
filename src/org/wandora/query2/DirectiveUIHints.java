@@ -172,6 +172,7 @@ public class DirectiveUIHints implements Serializable {
          * whatever else is suitable. Do not make this an array type though,
          * use the multiple flag for that.
          */
+        @JsonIgnore
         protected Class<?> type;
         /**
          * Is this parameter an array?
@@ -220,14 +221,30 @@ public class DirectiveUIHints implements Serializable {
             return true;
         }
 
-
+        public String getTypeName(){
+            if(type==null) return null;
+            else return type.getName();
+        }
+        
+        public void setTypeName(String s){
+            if(s==null) type=null;
+            else {
+                try{
+                    type=Class.forName(s);
+                }
+                catch(ClassNotFoundException cnfe){
+                    throw new RuntimeException(cnfe);
+                }
+            }
+        }
         
         
-        
+        @JsonIgnore
         public Class<?> getType() {
             return type;
         }
 
+        @JsonIgnore
         public void setType(Class<?> type) {
             this.type = type;
         }

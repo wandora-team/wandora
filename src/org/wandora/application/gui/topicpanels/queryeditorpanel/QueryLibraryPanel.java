@@ -56,6 +56,15 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         public StoredQueries(){}
         public StoredQueries(StoredQuery[] queries){this.queries=queries;}
         public StoredQueries(ArrayList<StoredQuery> queries){this.queries=queries.toArray(new StoredQuery[queries.size()]);}
+        @JsonIgnore
+        public StoredQueries duplicate(){
+            StoredQueries ret=new StoredQueries();
+            ret.queries=new StoredQuery[queries.length];
+            for(int i=0;i<queries.length;i++){
+                ret.queries[i]=queries[i].duplicate();
+            }
+            return ret;
+        }
     }
     
     public static class StoredQuery {
@@ -81,6 +90,13 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                 if(p.id!=null && p.id.equals(rootDirective)) return p;
             }
             return null;
+        }
+        
+        @JsonIgnore
+        public StoredQuery duplicate(){
+            ArrayList<DirectiveParameters> newParams=new ArrayList<>();
+            for(DirectiveParameters p : directiveParameters) newParams.add(p.duplicate());
+            return new StoredQuery(name,newParams,rootDirective);
         }
     }
     
@@ -341,7 +357,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         QueryEditorComponent graph=findGraph();        
         
         graph.clearQuery();
-        graph.openStoredQuery(query);
+        graph.openStoredQuery(query.duplicate());
         
 //        DirectivePanel.setOptions(graph, query.options);
     }

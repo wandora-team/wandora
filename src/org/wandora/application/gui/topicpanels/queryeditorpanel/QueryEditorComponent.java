@@ -195,7 +195,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         for(int i=0;i<queryGraphPanel.getComponentCount();i++){
             Component c=queryGraphPanel.getComponent(i);
-            if(c instanceof DirectivePanel && c!=finalResultPanel){
+            if(c instanceof DirectivePanel){
                 DirectivePanel panel=(DirectivePanel)c;
                 directiveParams.add(panel.getDirectiveParameters());
             }
@@ -207,17 +207,22 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     }
     
     public void clearQuery(){
+        ArrayList<Component> remove=new ArrayList<>();
         for(int i=0;i<queryGraphPanel.getComponentCount();i++){
             Component c=queryGraphPanel.getComponent(i);
             synchronized(connectors){
                 connectors.clear();
             }
             selectPanel(null);
-            finalResultAnchor.to.setFrom(null);
+            finalResultAnchor.setFrom(null);
             if(c instanceof DirectivePanel && c!=finalResultPanel){
-                queryGraphPanel.remove(c);
+                remove.add(c);
             }
         }
+        
+        for(Component c : remove) queryGraphPanel.remove(c);
+        Rectangle bounds=finalResultPanel.getBounds();
+        finalResultPanel.setBounds(new Rectangle(0,0,bounds.width,bounds.height));
     }
     
     public void openStoredQuery(StoredQuery query){
@@ -227,9 +232,15 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         for(DirectiveParameters params : query.directiveParameters){
             try{
                 Class cls=Class.forName(params.cls);
+                DirectivePanel panel=null;
                 if(!Directive.class.isAssignableFrom(cls)) throw new ClassCastException("Stored query class is not a Directive");
-                DirectiveUIHints hints=DirectiveUIHints.getDirectiveUIHints(cls);
-                DirectivePanel panel=addDirective(hints);
+                if(cls.equals(FinalResultDirective.class)){
+                    panel=finalResultPanel;
+                }
+                else {
+                    DirectiveUIHints hints=DirectiveUIHints.getDirectiveUIHints(cls);
+                    panel=addDirective(hints);
+                }
                                 
                 directiveMap.put(params.id, panel);
                 
@@ -240,11 +251,11 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         for(DirectiveParameters params : query.directiveParameters){
             params.resolveDirectiveValues(directiveMap);
-        }        
+        }
         
         for(DirectiveParameters params : query.directiveParameters){
             DirectivePanel panel=directiveMap.get(params.id);
-            
+            panel.setDirectiveParams(params);
         }        
     }
     
@@ -423,10 +434,17 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         }
     }     
     
+    /*
+     This is just a placeholder class used for the final result panel.
+     It serves no other function than to identify the panel in some cases.
+    */
+    protected static class FinalResultDirective extends Directive {
+        public FinalResultDirective(){}
+    }
     
     protected static class FinalResultPanel extends DirectivePanel {
         public FinalResultPanel(){
-            super(new DirectiveUIHints(null, new Constructor[]{}, new Addon[]{}, "Final result", null));
+            super(new DirectiveUIHints(FinalResultDirective.class, new Constructor[]{}, new Addon[]{}, "Final result", null));
             fromDirectiveAnchor.setVisible(false);
         }
 

@@ -314,7 +314,25 @@ public class DirectiveEditor extends javax.swing.JPanel {
                 DirectivePanel p=(DirectivePanel)from;
                 p.getFromConnectorAnchor().setTo(panel.getToConnectorAnchor());
             }
+        }
+        
+        @JsonIgnore
+        public DirectiveParameters duplicate(){
+            BoundParameter[] newParams=new BoundParameter[parameters.length];
+            AddonParameters[] newAddons=new AddonParameters[addons.length];
+            for(int i=0;i<parameters.length;i++){
+                newParams[i]=parameters[i].duplicate();
+            }
+            for(int i=0;i<addons.length;i++){
+                newAddons[i]=addons[i].duplicate();
+            }
             
+            DirectiveParameters ret=new DirectiveParameters(id, constructor, newParams, newAddons);
+            ret.cls=this.cls;
+            ret.posx=this.posx;
+            ret.posy=this.posy;
+            ret.from=this.from;
+            return ret;
         }
     }
     
@@ -342,10 +360,19 @@ public class DirectiveEditor extends javax.swing.JPanel {
             }            
         }
         
+        @JsonIgnore
+        public AddonParameters duplicate(){
+            BoundParameter[] newParams=new BoundParameter[parameters.length];
+            for(int i=0;i<parameters.length;i++){
+                newParams[i]=parameters[i].duplicate();
+            }
+            return new AddonParameters(addon,newParams);
+        }
     }
 
 
     public static class BoundParameter {
+        @JsonIgnore
         protected Parameter parameter;
         @JsonIgnore
         protected Object value;
@@ -355,6 +382,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
             this.value=value;
         }
         public Parameter getParameter(){return parameter;}
+        public void setParameter(Parameter p){this.parameter=p;}
         @JsonIgnore
         public Object getValue(){return value;}
         @JsonIgnore
@@ -397,6 +425,11 @@ public class DirectiveEditor extends javax.swing.JPanel {
         }
         
         public Object getJsonValue(){
+            // two problems
+            // 1. Values like topics need to serialised sensibly.
+            // 2. Parameter.getType doesn't fully tell us the type of the value.
+            //    It could be Operand, for example, and the value can be a directive.
+            
             if(parameter.getType().equals(Directive.class)){
                 if(value==null) return null;
                 if(parameter.isMultiple()){
@@ -454,6 +487,10 @@ public class DirectiveEditor extends javax.swing.JPanel {
             }
         }
         
+        @JsonIgnore
+        public BoundParameter duplicate(){
+            return new BoundParameter(parameter, value);
+        }
         
 /*        
         public static BoundParameter parseScriptValue(Parameter parameter,String value){
