@@ -43,11 +43,11 @@ import org.wandora.utils.swing.GuiTools;
 public class RandomGraphGenerator extends AbstractGenerator implements WandoraTool {
     public static String RANDOM_GRAPH_SI = "http://wandora.org/si/random-graph";
 
-    public static String siPattern = "http://wandora.org/si/topic/__n__";
-    public static String basenamePattern = "Topic __n__";
+    public static String siPattern = "http://wandora.org/si/random-graph/node/__n__";
+    public static String basenamePattern = "Random graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static boolean ensureNumberOfAssociations = true;
-    public static int initialTopicCounter = 0;
+    public static int nodeCounterOffset = 0;
     
     
     /** Creates a new instance of RandomGraphGenerator */
@@ -60,7 +60,8 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
     }
     @Override
     public String getDescription() {
-        return "Generates a random graph topic map.";
+        return "Random graph generator creates a graph of given number of nodes "+
+               "and edges between randomly selected graph nodes.";
     }
     
     @Override
@@ -69,8 +70,10 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Random graph generator",
-            "Random graph generator creates a topic map with numbered topics (nodes) "+
-              "and random associations (edges). If 'number of associations' is a valid number "+
+            "Random graph generator creates a graph of given number of nodes "+
+              "and edges between randomly selected graph nodes. A node is a topic and "+
+              "an edge is an association. "+
+              "If 'number of associations' is a valid number "+
               "it overrides 'association probality'. Number is a positive integer. "+
               "Probability is a floating point number between 0.0 and 1.0.",
             true,new String[][]{
@@ -78,9 +81,9 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             new String[]{"Number of random associations","string"},
             new String[]{"Random associations probability","string"},
             new String[]{"---1","separator"},
-            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
-            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node counter."},
-            new String[]{"Initial node counter","string",""+initialTopicCounter,"What is the number of first generated topic node."},
+            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Node counter offset","string",""+nodeCounterOffset,"What is the number of first generated topic node."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type of random associations","topic",null,"Optional association type for random graph edges."},
             new String[]{"First role of random associations","topic",null,"Optional role topic for random graph edges."},
@@ -134,11 +137,11 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
             
             try {
-                initialTopicCounter = Integer.parseInt(values.get("Initial node counter"));
+                nodeCounterOffset = Integer.parseInt(values.get("Node counter offset"));
             }
             catch(NumberFormatException nfe) {
-                singleLog("Parse error. Initial node counter should be an integer number. Cancelling.");
-                return;
+                singleLog("Parse error. Node counter offset should be an integer number. Using default value (0).");
+                nodeCounterOffset = 0;
             }
         }
         catch(Exception e) {
@@ -148,17 +151,17 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         
         Topic aType = topicmap.getTopic(values.get("Association type of random associations"));
         if(aType == null || aType.isRemoved()) {
-            aType = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"associationType", "Random graph association");
+            aType = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"association-type", "Random graph association");
         }
         
         Topic role1 = topicmap.getTopic(values.get("First role of random associations"));
         if(role1 == null || role1.isRemoved()) {
-            role1 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role1", "Random graph role 1");
+            role1 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role-1", "Random graph role 1");
         }
         
         Topic role2 = topicmap.getTopic(values.get("Second role of random associations"));
         if(role2 == null || role2.isRemoved()) {
-            role2 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role2", "Random graph role 2");
+            role2 = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+"role-2", "Random graph role 2");
         }
 
         if(role1.mergesWithTopic(role2)) {
@@ -173,23 +176,13 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         log("Creating topics.");
         
         Topic[] topics = new Topic[n];
-        String graphIdentifier = ""+System.currentTimeMillis();
+        long graphIdentifier = System.currentTimeMillis();
         
         setProgressMax(n);
         for(int i=0; i<n && !forceStop(); i++) {
             setProgress(n);
-            int nodeCounter = initialTopicCounter+i;
-            String newBasename = basenamePattern.replaceAll("__n__", ""+nodeCounter);
-            String newSubjectIdentifier = siPattern.replaceAll("__n__", ""+nodeCounter);
-            topics[i] = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
-            if(connectWithWandoraClass) {
-                Topic randomGraphTopic = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI, "Random graph");
-                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
-                makeSuperclassSubclass(topicmap, wandoraClass, randomGraphTopic);
-                Topic randomGraphInstanceTopic = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+graphIdentifier, "Random graph "+graphIdentifier, randomGraphTopic);
-                randomGraphInstanceTopic.addType(randomGraphTopic);
-                topics[i].addType(randomGraphInstanceTopic);
-            }
+            int nodeCounter = nodeCounterOffset+i;
+            topics[i] = getOrCreateTopic(topicmap, nodeCounter, graphIdentifier);
         }
                 
         Association a = null;
@@ -261,5 +254,25 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
     }
     
     
+
     
+    private Topic getOrCreateTopic(TopicMap topicmap, int topicIdentifier, long graphIdentifier) {
+        String newBasename = basenamePattern.replaceAll("__n__", ""+topicIdentifier);
+        String newSubjectIdentifier = siPattern.replaceAll("__n__", ""+topicIdentifier);
+        Topic t = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
+        if(connectWithWandoraClass) {
+            try {
+                Topic graphTopic = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI, "Random graph");
+                Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
+                makeSuperclassSubclass(topicmap, wandoraClass, graphTopic);
+                Topic graphInstanceTopic = getOrCreateTopic(topicmap, RANDOM_GRAPH_SI+"/"+graphIdentifier, "Random graph "+graphIdentifier, graphTopic);
+                graphInstanceTopic.addType(graphTopic);
+                t.addType(graphInstanceTopic);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return t;
+    }
 }

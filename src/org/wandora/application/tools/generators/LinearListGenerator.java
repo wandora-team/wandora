@@ -36,6 +36,8 @@ import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import java.util.*;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.utils.swing.GuiTools;
 
 
 /**
@@ -43,7 +45,15 @@ import java.util.*;
  * @author akivela
  */
 public class LinearListGenerator extends AbstractGenerator implements WandoraTool {
-    public static String SI_PREFIX = "http://wandora.org/si/topic/";
+    public static String LIST_GRAPH_SI = "http://wandora.org/si/linear-list/";
+    
+    public static String siPattern = "http://wandora.org/si/linear-list/node/__n__";
+    public static String basenamePattern = "Linear list vertex __n__";
+    public static boolean connectWithWandoraClass = true;
+    public static int n = 10;
+    public static int topicCounterOffset = 0;
+    public static boolean makeCycle = false;
+    
     
     
     /** Creates a new instance of LinearListGenerator */
@@ -61,52 +71,112 @@ public class LinearListGenerator extends AbstractGenerator implements WandoraToo
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        TopicMap topicmap = solveContextTopicMap(admin, context);
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        TopicMap topicmap = solveContextTopicMap(wandora, context);
         
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Linear list graph generator",
             "Linear list graph generator creates a topic map of given number of " +
-              "topics associated as a linked list.",
+            "topics associated like a linked list.",
             true,new String[][]{
-            new String[]{"Number of list nodes","string"},
-            new String[]{"Make cycle","boolean","false","Link last and first node?"},
-        },admin);
+            new String[]{"Number of list nodes","string",""+n},
+            new String[]{"Make cycle","boolean", makeCycle?"true":"false","Link last and first node?"},
+            new String[]{"---1","separator"},
+            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Topic counter offset","string",""+topicCounterOffset,"What is the number of first generated topic node."},
+            new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
+            new String[]{"Association type for edges of the linear list","topic",null,"Optional association type for graph edges."},
+            new String[]{"Role topic for the previous node","topic",null,"Optional role topic for parent topics in tree graph."},
+            new String[]{"Role topic for the next node","topic",null,"Optional role topic for child topics in tree graph."},
+        },wandora);
+        
+        god.setSize(700, 460);
+        GuiTools.centerWindow(god,wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
         Map<String,String> values=god.getValues();
         
-        int n = 0;
-        boolean makeCycle = false;
         try {
             n = Integer.parseInt(values.get("Number of list nodes"));
             makeCycle=Boolean.parseBoolean(values.get("Make cycle"));
         }
         catch(Exception e) {
+            singleLog("Number of list nodes is not a number. Cancelling.", e);
+            return;
+        }
+        
+
+        try {
+            siPattern = values.get("Subject identifier pattern");
+            if(!siPattern.contains("__n__")) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Subject identifier pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to continue?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                if(a != WandoraOptionPane.YES_OPTION) return;
+            }
+            basenamePattern = values.get("Basename pattern");
+            if(!basenamePattern.contains("__n__")) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Basename pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to continue?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                if(a != WandoraOptionPane.YES_OPTION) return;
+            }
+            connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
+            
+            try {
+                topicCounterOffset = Integer.parseInt(values.get("Topic counter offset"));
+            }
+            catch(NumberFormatException nfe) {
+                singleLog("Parse error. Topic counter offset should be an integer number. Cancelling.");
+                return;
+            }
+        }
+        catch(Exception e) {
             singleLog(e);
             return;
+        }
+               
+        Topic aType = topicmap.getTopic(values.get("Association type for edges of the linear list"));
+        if(aType == null || aType.isRemoved()) {
+            aType = getOrCreateTopic(topicmap, LIST_GRAPH_SI+"/"+"association-type", "Linear list association");
+        }
+        
+        Topic previousT = topicmap.getTopic(values.get("Role topic for the previous node"));
+        if(previousT == null || previousT.isRemoved()) {
+            previousT = getOrCreateTopic(topicmap, LIST_GRAPH_SI+"/"+"previous", "Previous in list");
+        }
+        
+        Topic nextT = topicmap.getTopic(values.get("Role topic for the next node"));
+        if(nextT == null || nextT.isRemoved()) {
+            nextT = getOrCreateTopic(topicmap, LIST_GRAPH_SI+"/"+"next", "Next in list");
+        }
+
+        if(previousT.mergesWithTopic(nextT)) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "Previous and next role topics are same. This causes associations to be unary instead of binary. Do you want to continue?", "Role topics are same", WandoraOptionPane.WARNING_MESSAGE);
+            if(a != WandoraOptionPane.YES_OPTION) {
+                return;
+            }
         }
         
         setDefaultLogger();
         setLogTitle("Linear list graph generator");
         log("Creating linear list graph");
                
-        Topic aType = getOrCreateTopic(topicmap, SI_PREFIX+"associationType", "Association");
-        Topic previousT = getOrCreateTopic(topicmap, SI_PREFIX+"previous", "Previous");
-        Topic nextT = getOrCreateTopic(topicmap, SI_PREFIX+"next", "Next");
         Association a = null;
-        
-        Topic first = getOrCreateTopic(topicmap, SI_PREFIX+"0", "Topic 0");
-        Topic previous = first;
+        long graphIdentifier = System.currentTimeMillis();
+        Topic first = null;
+        Topic previous = null;
         Topic next = null;
         
         setProgressMax(n);
         int progress=0;
-        for(int i=1; i<n && !forceStop(); i++) {
-            next = getOrCreateTopic(topicmap, SI_PREFIX+i, "Topic "+i);
-            a = topicmap.createAssociation(aType);
-            a.addPlayer(previous, previousT);
-            a.addPlayer(next, nextT);
+        for(int i=topicCounterOffset; i<topicCounterOffset+n && !forceStop(); i++) {
+            next = getOrCreateTopic(topicmap, i, graphIdentifier);
+            if(previous != null) {
+                a = topicmap.createAssociation(aType);
+                a.addPlayer(previous, previousT);
+                a.addPlayer(next, nextT);
+            }
+            else {
+                first = next;
+            }
             setProgress(progress++);
             previous = next;
         }
@@ -115,8 +185,41 @@ public class LinearListGenerator extends AbstractGenerator implements WandoraToo
             a.addPlayer(previous, previousT);
             a.addPlayer(first, nextT);
         }
-        setState(CLOSE);
+
+        if(connectWithWandoraClass) {
+            log("You'll find created topics and associations under the 'Linear list' topic.");
+        }
+        else {
+            String searchWord = basenamePattern.replaceAll("__n__", "");
+            searchWord = searchWord.trim();
+            log("You'll find created topics and associations by searching '"+searchWord+"'.");
+        }
+        log("Ok.");
+        setState(WAIT);
     }
+
+
     
-    
+ 
+    private Topic getOrCreateTopic(TopicMap tm, int topicIdentifier, long graphIdentifier) {
+        String newBasename = basenamePattern.replaceAll("__n__", ""+topicIdentifier);
+        String newSubjectIdentifier = siPattern.replaceAll("__n__", ""+topicIdentifier);
+        Topic t = getOrCreateTopic(tm, newSubjectIdentifier, newBasename);
+        if(connectWithWandoraClass) {
+            try {
+                Topic listGraphTopic = getOrCreateTopic(tm, LIST_GRAPH_SI, "Linear list");
+                Topic wandoraClass = getOrCreateTopic(tm, TMBox.WANDORACLASS_SI);
+                makeSuperclassSubclass(tm, wandoraClass, listGraphTopic);
+                Topic listGraphInstanceTopic = getOrCreateTopic(tm, LIST_GRAPH_SI+"/"+graphIdentifier, "Linear list "+graphIdentifier, listGraphTopic);
+                listGraphInstanceTopic.addType(listGraphTopic);
+                t.addType(listGraphInstanceTopic);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return t;
+    }
 }
+    
+

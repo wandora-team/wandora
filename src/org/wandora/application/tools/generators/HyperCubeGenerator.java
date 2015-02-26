@@ -34,7 +34,9 @@ import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import java.util.*;
+import org.wandora.application.gui.WandoraOptionPane;
 import static org.wandora.utils.Tuples.T2;
+import org.wandora.utils.swing.GuiTools;
 
 
 
@@ -43,7 +45,12 @@ import static org.wandora.utils.Tuples.T2;
  * @author akivela
  */
 public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool {
-    public static String SI_PREFIX = "http://wandora.org/si/hypercube/";
+    public static String HYPERCUBE_GRAPH_SI = "http://wandora.org/si/hypercube/";
+    
+    public static String siPattern = "http://wandora.org/si/hypercube/vertex/__n__";
+    public static String basenamePattern = "Hypercube vertex __n__";
+    public static boolean connectWithWandoraClass = true;
+    public static int n = 4;
     
     
     /** Creates a new instance of HyperCubeGenerator */
@@ -58,53 +65,104 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
     
     @Override
     public String getDescription() {
-        return "Generates hypercube graph topic maps";
+        return "Hypercube graph generator creates hypercube graphs with topic map structures.";
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        TopicMap topicmap = solveContextTopicMap(admin, context);
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        TopicMap topicmap = solveContextTopicMap(wandora, context);
         
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Hypercube graph generator",
-            "Hypercube graph generator creates hypercube abstractions with topic map structures.",
+            "Hypercube graph generator creates hypercube graphs with topic map structures. "+
+                    "Topics represent hypercube vertices. Associations represent hypercube edges. In a "+
+                    "hypercube each vertex is connected with other vertices. Number of connections per vertex "+
+                    "is equal to the dimension of the hypercube. For example, in a three dimensional hypercube "+
+                    "each vertex is connected with three other vertices.",
             true,new String[][]{
-            new String[]{"Dimension of hypercube","string"},
-        },admin);
+            new String[]{"Dimension of hypercube","string",""+n},
+            new String[]{"---1","separator"},
+            new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
+            new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
+            new String[]{"Association type topic","topic",null,"Optional association type for graph edges."},
+            new String[]{"First role topic","topic",null,"Optional role topic for graph edges."},
+            new String[]{"Second role topic","topic",null,"Optional role topic for graph edges."},
+        },wandora);
+        
+        god.setSize(700, 420);
+        GuiTools.centerWindow(god,wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
         Map<String,String> values=god.getValues();
         
         int progress = 0;
-        int n = 0;
         try {
             n = Integer.parseInt(values.get("Dimension of hypercube"));
+        }
+        catch(Exception e) {
+            singleLog("Parse error. Hypercube dimension should be an integer number. Cancelling.", e);
+            return;
+        }
+        
+        try {
+            siPattern = values.get("Subject identifier pattern");
+            if(!siPattern.contains("__n__")) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Subject identifier pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to continue?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                if(a != WandoraOptionPane.YES_OPTION) return;
+            }
+            basenamePattern = values.get("Basename pattern");
+            if(!basenamePattern.contains("__n__")) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Basename pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to continue?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                if(a != WandoraOptionPane.YES_OPTION) return;
+            }
+            connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
         }
         catch(Exception e) {
             singleLog(e);
             return;
         }
         
+        Topic atype = topicmap.getTopic(values.get("Association type topic"));
+        if(atype == null || atype.isRemoved()) {
+            atype = getOrCreateTopic(topicmap, HYPERCUBE_GRAPH_SI+"/"+"association-type", "Hypercube edge");
+        }
+        
+        Topic role1 = topicmap.getTopic(values.get("First role topic"));
+        if(role1 == null || role1.isRemoved()) {
+            role1 = getOrCreateTopic(topicmap, HYPERCUBE_GRAPH_SI+"/"+"role-1", "Hypercube edge role 1");
+        }
+        
+        Topic role2 = topicmap.getTopic(values.get("Second role topic"));
+        if(role2 == null || role2.isRemoved()) {
+            role2 = getOrCreateTopic(topicmap, HYPERCUBE_GRAPH_SI+"/"+"role-2", "Hypercube edge role 2");
+        }
+        
+        if(role1.mergesWithTopic(role2)) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "Role topics are same. This causes associations to be unary instead of binary. Do you want to continue?", "Role topics are same", WandoraOptionPane.WARNING_MESSAGE);
+            if(a != WandoraOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        
         setDefaultLogger();
         setLogTitle("Hypercube graph generator");
-        log("Creating hypercube graph");
+        log("Creating hypercube graph.");
                        
         HyperCube hypercube = new HyperCube(n);
-        ArrayList<T2> edges = hypercube.getEdges();
+        Collection<T2<String,String>> edges = hypercube.getEdges();
         
-        Topic atype = getOrCreateTopic(topicmap, SI_PREFIX+"edge", "hypercube edge");
-        Topic role1 = getOrCreateTopic(topicmap, SI_PREFIX+"role1", "role1");
-        Topic role2 = getOrCreateTopic(topicmap, SI_PREFIX+"role2", "role2");
         Association a = null;
         Topic node1 = null;
         Topic node2 = null;
+        long graphIdentifier = System.currentTimeMillis();
         
-        if(edges.size() > 0) {
+        if(!edges.isEmpty()) {
             setProgressMax(edges.size());
-            for(T2 edge: edges) {
+            for(T2<String,String> edge : edges) {
                 if(edge != null) {
-                    node1 = getOrCreateTopic(topicmap, SI_PREFIX+"vertex-"+edge.e1, "hypercube vertex "+edge.e1);
-                    node2 = getOrCreateTopic(topicmap, SI_PREFIX+"vertex-"+edge.e2, "hypercube vertex "+edge.e2);
+                    node1 = getOrCreateTopic(topicmap, edge.e1, graphIdentifier);
+                    node2 = getOrCreateTopic(topicmap, edge.e2, graphIdentifier);
                     if(node1 != null && node2 != null) {
                         a = topicmap.createAssociation(atype);
                         a.addPlayer(node1, role1);
@@ -114,8 +172,43 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
                 }
             }
         }
-        setState(CLOSE);
+        
+        if(connectWithWandoraClass) {
+            log("You'll find created topics and associations under the 'Hypercube graph' topic.");
+        }
+        else {
+            String searchWord = basenamePattern.replaceAll("__n__", "");
+            searchWord = searchWord.trim();
+            log("You'll find created topics and associations by searching with a '"+searchWord+"'.");
+        }
+        log("Ok.");
+        setState(WAIT);
     }
+    
+    
+    
+    
+    
+    private Topic getOrCreateTopic(TopicMap tm, String vertexIdentifier, long graphIdentifier) {
+        String newBasename = basenamePattern.replaceAll("__n__", vertexIdentifier);
+        String newSubjectIdentifier = siPattern.replaceAll("__n__", vertexIdentifier);
+        Topic t = getOrCreateTopic(tm, newSubjectIdentifier, newBasename);
+        if(connectWithWandoraClass) {
+            try {
+                Topic graphTopic = getOrCreateTopic(tm, HYPERCUBE_GRAPH_SI, "Hypercube graph");
+                Topic wandoraClass = getOrCreateTopic(tm, TMBox.WANDORACLASS_SI);
+                makeSuperclassSubclass(tm, wandoraClass, graphTopic);
+                Topic graphInstanceTopic = getOrCreateTopic(tm, HYPERCUBE_GRAPH_SI+"/"+graphIdentifier, "Hypercube graph "+graphIdentifier, graphTopic);
+                graphInstanceTopic.addType(graphTopic);
+                t.addType(graphInstanceTopic);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return t;
+    }
+    
     
     
     
@@ -141,15 +234,15 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
         }
         
     
-        public ArrayList<T2> getEdges() {
-            ArrayList<T2> edges = new ArrayList<T2>();
+        public Collection<T2<String,String>> getEdges() {
+            ArrayList<T2<String,String>> edges = new ArrayList<T2<String,String>>();
             if(this.dimension == 0) {}
             else if(this.dimension == 1) {
                 edges.add(new T2("0", "0-1"));
             }
             else {
                 if(parent != null) {
-                    ArrayList<T2> parentEdges = parent.getEdges();
+                    Collection<T2<String,String>> parentEdges = parent.getEdges();
                     edges.addAll(parentEdges);
                     
                     for(T2 edge : parentEdges) {
@@ -158,7 +251,7 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
                         }
                     }
                     
-                    ArrayList<String> parentVertices = parent.getVertices();
+                    Collection<String> parentVertices = parent.getVertices();
                     for(String vertex : parentVertices) {
                         if(vertex != null) {
                             edges.add( new T2(vertex+"-"+this.dimension, vertex) );
@@ -171,14 +264,14 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
         }
         
         
-        public ArrayList<String> getVertices() {
+        public Collection<String> getVertices() {
             ArrayList<String> vertices = new ArrayList<String>();
             if(this.dimension == 0) {
                 vertices.add( "0" );
             }
             else {
                 if(parent != null) {
-                    ArrayList<String> parentVertices = parent.getVertices();
+                    Collection<String> parentVertices = parent.getVertices();
                     vertices.addAll(parentVertices);
                     for(String vertex : parentVertices) {
                         vertices.add(vertex+"-"+this.dimension);
