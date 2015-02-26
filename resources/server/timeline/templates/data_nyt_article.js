@@ -21,26 +21,31 @@
   #end
   #set( $articleLink = $article.getOneSubjectIdentifier() )##
   #set( $articleTitle = $article.getDisplayName( $lang ) )##
-  #if($article.getData( $articleContentType,"en"))##
+  #if($articleContentType && $article.getData( $articleContentType,"en"))##
     #set ($articleContent = $article.getData( $articleContentType,"en"))##
     #set( $articleContent = $articleContent.replaceAll('\"', '\\\"' ) )##
     #set( $articleContent = $articleContent.replaceAll('[\p{Cntrl}\p{Space}]', ' ') )##
     #set ($articleContent = $articleContent.trim())##
+  #else##
+    #set ($articleContent = "")##
   #end
   #set( $articleTitle = $articleTitle.replaceAll('\"', '\\\"' ) )##
   #set( $articleTitle = $articleTitle.replaceAll('[\p{Cntrl}\p{Space}]', ' ') )##
   #if( $count>0 ),
   #end##
                               {
-                                      "start": "$startDate.substring(0,4)-$startDate.substring(4,6)-$startDate.substring(6,8)",
+                                      "start": "$startDate",
                                       "title": "$articleTitle",
                                       "textColor": "#000000",
                                       "classname": "nyt-article",
                                       "description": "$articleContent",
-                                      "icon" : "${staticbase}api/images/nyt-icon.png",
+                                      "icon" : "${staticbase}api/images/NYT-icon.png",
                                       "link" : "$articleLink"
                               }
   #set( $count = $count + 1 )##
 #end##
        ]
 };
+
+#set( $articleType = false )##
+#set( $articles = false )##

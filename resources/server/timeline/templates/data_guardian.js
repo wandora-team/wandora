@@ -16,6 +16,7 @@
 #set( $articleLinkTypeSI = "http://wandora.org/si/theguardian/field/shortUrl" )##
 #set( $articleLinkType = $topicmap.getTopic( $articleLinkTypeSI ) )##
 ##
+
 #set( $articles = $topicmap.getTopicsOfType( $articleType ) )##
 ##
 #foreach( $article in $articles )##
@@ -56,3 +57,6 @@
 #end##
        ]
 };
+
+#set( $articleType = false )##
+#set( $articles = false )##
