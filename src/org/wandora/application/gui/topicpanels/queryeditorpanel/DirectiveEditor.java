@@ -43,6 +43,7 @@ import org.wandora.query2.Operand;
 import org.wandora.query2.TopicOperand;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.JsonMapper;
 
 /**
  *
@@ -370,6 +371,20 @@ public class DirectiveEditor extends javax.swing.JPanel {
         }
     }
 
+    public static class TypedValue {
+        public String parser;
+        public Object value;
+        public TypedValue[] array;
+        public TypedValue(){};
+        public TypedValue(String parser, Object value) {
+            this.parser = parser;
+            this.value = value;
+        }
+        public TypedValue(TypedValue[] array) {
+            this.parser = "array";
+            this.array=array;
+        }
+    }
 
     public static class BoundParameter {
         @JsonIgnore
@@ -424,12 +439,59 @@ public class DirectiveEditor extends javax.swing.JPanel {
             else throw new RuntimeException("Unable to convert value to script");
         }
         
-        public Object getJsonValue(){
+        @JsonIgnore
+        protected static TypedValue getJsonValue(Object value,Parameter parameter){
+            if(parameter!=null && parameter.isMultiple()){
+                TypedValue[] ret=new TypedValue[Array.getLength(value)];
+                for(int i=0;i<Array.getLength(value);i++){
+                    Object v=Array.get(value,i);
+                    ret[i]=getJsonValue(v,null);
+                }
+                return new TypedValue(ret);
+            }
+            else {
+                if(value instanceof DirectivePanel){
+                    return new TypedValue("directive",((DirectivePanel)value).getDirectiveId());
+                }
+                else if(value instanceof Topic){
+                    try{
+                        return new TypedValue("topic",((Topic)value).getOneSubjectIdentifier().toExternalForm());
+                    }catch(TopicMapException tme){Wandora.getWandora().handleError(tme);return null;}
+                }
+                else return new TypedValue("default",value);
+            }
+        }
+        
+        public static Object parseJsonValue(TypedValue value){
+            if(value==null) return null;
+            switch (value.parser) {
+                case "directive":
+                    return value;
+                case "topic":
+                    return value.value;
+                case "array":
+                    Object[] ret=new Object[Array.getLength(value.array)];
+                    for(int i=0;i<Array.getLength(value.array);i++){
+                        Object v=Array.get(value.array,i);
+                        ret[i]=parseJsonValue((TypedValue)v);
+                    }
+                    return ret;                        
+                case "default":
+                    return value.value;
+                default:
+                    throw new RuntimeException("Unknown type in stored json");
+            }
+        }
+         
+        public TypedValue getJsonValue(){
+            return getJsonValue(value,parameter);
+            
+            
             // two problems
             // 1. Values like topics need to serialised sensibly.
             // 2. Parameter.getType doesn't fully tell us the type of the value.
             //    It could be Operand, for example, and the value can be a directive.
-            
+            /*
             if(parameter.getType().equals(Directive.class)){
                 if(value==null) return null;
                 if(parameter.isMultiple()){
@@ -444,15 +506,46 @@ public class DirectiveEditor extends javax.swing.JPanel {
                     return ((DirectivePanel)value).getDirectiveId();
                 }
             }
-            else return value;
+            else return value;*/
         }
-        public void setJsonValue(Object o){
-            // directive references are resolved later in resolveDIrectiveValues
-            value=o;
+        public void setJsonValue(TypedValue o){
+            // Directive references are resolved later in resolveDirectiveValues.
+            // Topics can be stored as SI Strings, they are resolved to Topic objects
+            // automatically as needed.
+            value=parseJsonValue(o);
+        }
+
+        @JsonIgnore
+        public static Object resolveDirectiveValues(Object value,Parameter parameter,Map<String,DirectivePanel> directiveMap){
+            if(value==null) return null;
+            if(parameter!=null && parameter.isMultiple()){
+                Object[] os=new Object[Array.getLength(value)];
+                for(int i=0;i<Array.getLength(value);i++){
+                    Object v=Array.get(value,i);
+                    os[i]=resolveDirectiveValues(v,null,directiveMap);
+                }                    
+                return os;
+            }
+            else {
+                if(value instanceof TypedValue){
+                    TypedValue pv=(TypedValue)value;
+                    switch (pv.parser) {
+                        case "directive":
+                            return directiveMap.get((String)pv.value);
+                        default:
+                            throw new RuntimeException("No handling for parameter value type "+pv.parser);
+                    }
+                    
+                }
+                else return value;
+            }
         }
         
         @JsonIgnore
         public void resolveDirectiveValues(Map<String,DirectivePanel> directiveMap){
+            value=resolveDirectiveValues(value,parameter,directiveMap);
+            
+            /*
             if(parameter.getType().equals(Directive.class)){
                 if(value==null) return;
                 if(parameter.isMultiple()){
@@ -469,20 +562,19 @@ public class DirectiveEditor extends javax.swing.JPanel {
                     if(value!=null && value instanceof String)
                         value=directiveMap.get((String)value);
                 }
-            }            
+            }   */        
         }
         
         @JsonIgnore
         public void connectAnchors(DirectivePanel panel,String orderingHint){
-            if(!parameter.getType().equals(Directive.class)) return;
-            
             if(parameter.isMultiple()){
                 for(int i=0;i<Array.getLength(value);i++){
                     Object v=Array.get(value,i);
-                    panel.connectParamAnchor( ((DirectivePanel)v).getFromConnectorAnchor(), orderingHint+i);
+                    if(v instanceof DirectivePanel)
+                        panel.connectParamAnchor( ((DirectivePanel)v).getFromConnectorAnchor(), orderingHint+i);
                 }                
             }
-            else {
+            else if(value instanceof DirectivePanel){
                 panel.connectParamAnchor( ((DirectivePanel)value).getFromConnectorAnchor(), orderingHint);
             }
         }
