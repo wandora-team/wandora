@@ -93,7 +93,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
             String systemStr = sourceDialog.getContent();
             int depth = sourceDialog.getDepth();
 
-            log("Creating L-system!");
+            log("Starting L-system generation.");
             
             userSiPrefix = DEFAULT_SI_PREFIX;
     
@@ -158,30 +158,29 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
                         if(a == WandoraOptionPane.NO_OPTION) doit = false;
                     }
                     if(doit) {
-                        log("Iterating L-system!");
+                        log("Generating L-system string:");
                         LSystem lsystem = new LSystem(initiator, rules, depth );
-                        log("L-system generated results:");
                         log(lsystem.getState().toString());
 
                         LSystemParser lparser = new LSystemParser(this, lsystem.getState(), tm);
-                        log("Parsing L-system results!");
+                        log("Parsing L-system results.");
                         lparser.parse();
                     }
                 }
             }
             else {
-                log("No L-system given!");
+                log("No L-system given.");
             }
         }
         else if(sourceType == LSystemGraphGeneratorDialog.RAW_RESULT) {
             LSystemParser lparser = new LSystemParser(this, new Word( sourceDialog.getContent() ), tm);
-            log("Parsing L-system results!");
+            log("Parsing L-system string.");
             lparser.parse();
         }
-        if(forceStop()) log("User has force stopped the L-system generator!");
-        log("Total "+topicCounter+" topics created!");
-        log("Total "+associationCounter+" associations created!");
-        log("Ok!");
+        if(forceStop()) log("User has stopped the L-system generator.");
+        log("Total "+topicCounter+" topics created.");
+        log("Total "+associationCounter+" associations created.");
+        log("Ok.");
         setState(WAIT);
     }
     

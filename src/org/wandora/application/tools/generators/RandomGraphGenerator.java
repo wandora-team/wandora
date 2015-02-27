@@ -47,7 +47,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
     public static String basenamePattern = "Random graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static boolean ensureNumberOfAssociations = true;
-    public static int initialTopicCounter = 0;
+    public static int nodeCounterOffset = 0;
     
     
     /** Creates a new instance of RandomGraphGenerator */
@@ -83,7 +83,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             new String[]{"---1","separator"},
             new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
             new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
-            new String[]{"Initial node counter","string",""+initialTopicCounter,"What is the number of first generated topic node."},
+            new String[]{"Node counter offset","string",""+nodeCounterOffset,"What is the number of first generated topic node."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type of random associations","topic",null,"Optional association type for random graph edges."},
             new String[]{"First role of random associations","topic",null,"Optional role topic for random graph edges."},
@@ -137,11 +137,11 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
             
             try {
-                initialTopicCounter = Integer.parseInt(values.get("Initial node counter"));
+                nodeCounterOffset = Integer.parseInt(values.get("Node counter offset"));
             }
             catch(NumberFormatException nfe) {
-                singleLog("Parse error. Initial node counter should be an integer number. Cancelling.");
-                return;
+                singleLog("Parse error. Node counter offset should be an integer number. Using default value (0).");
+                nodeCounterOffset = 0;
             }
         }
         catch(Exception e) {
@@ -181,7 +181,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         setProgressMax(n);
         for(int i=0; i<n && !forceStop(); i++) {
             setProgress(n);
-            int nodeCounter = initialTopicCounter+i;
+            int nodeCounter = nodeCounterOffset+i;
             topics[i] = getOrCreateTopic(topicmap, nodeCounter, graphIdentifier);
         }
                 

@@ -51,7 +51,7 @@ public class LinearListGenerator extends AbstractGenerator implements WandoraToo
     public static String basenamePattern = "Linear list vertex __n__";
     public static boolean connectWithWandoraClass = true;
     public static int n = 10;
-    public static int initialTopicCounter = 0;
+    public static int topicCounterOffset = 0;
     public static boolean makeCycle = false;
     
     
@@ -84,7 +84,7 @@ public class LinearListGenerator extends AbstractGenerator implements WandoraToo
             new String[]{"---1","separator"},
             new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
             new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
-            new String[]{"Initial node counter","string",""+initialTopicCounter,"What is the number of first generated topic node."},
+            new String[]{"Topic counter offset","string",""+topicCounterOffset,"What is the number of first generated topic node."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type for edges of the linear list","topic",null,"Optional association type for graph edges."},
             new String[]{"Role topic for the previous node","topic",null,"Optional role topic for parent topics in tree graph."},
@@ -121,10 +121,10 @@ public class LinearListGenerator extends AbstractGenerator implements WandoraToo
             connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
             
             try {
-                initialTopicCounter = Integer.parseInt(values.get("Initial node counter"));
+                topicCounterOffset = Integer.parseInt(values.get("Topic counter offset"));
             }
             catch(NumberFormatException nfe) {
-                singleLog("Parse error. Initial node counter should be an integer number. Cancelling.");
+                singleLog("Parse error. Topic counter offset should be an integer number. Cancelling.");
                 return;
             }
         }
@@ -167,7 +167,7 @@ public class LinearListGenerator extends AbstractGenerator implements WandoraToo
         
         setProgressMax(n);
         int progress=0;
-        for(int i=initialTopicCounter; i<initialTopicCounter+n && !forceStop(); i++) {
+        for(int i=topicCounterOffset; i<topicCounterOffset+n && !forceStop(); i++) {
             next = getOrCreateTopic(topicmap, i, graphIdentifier);
             if(previous != null) {
                 a = topicmap.createAssociation(aType);

@@ -50,7 +50,6 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
     public static String siPattern = "http://wandora.org/si/hypercube/vertex/__n__";
     public static String basenamePattern = "Hypercube vertex __n__";
     public static boolean connectWithWandoraClass = true;
-    public static int initialTopicCounter = 0;
     public static int n = 4;
     
     
@@ -85,7 +84,6 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
             new String[]{"---1","separator"},
             new String[]{"Subject identifier pattern","string",siPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
             new String[]{"Basename pattern","string",basenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with node identifier."},
-            new String[]{"Initial node counter","string",""+initialTopicCounter,"What is the number of first generated topic node."},
             new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
             new String[]{"Association type topic","topic",null,"Optional association type for graph edges."},
             new String[]{"First role topic","topic",null,"Optional role topic for graph edges."},
@@ -119,14 +117,6 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
                 if(a != WandoraOptionPane.YES_OPTION) return;
             }
             connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
-            
-            try {
-                initialTopicCounter = Integer.parseInt(values.get("Initial node counter"));
-            }
-            catch(NumberFormatException nfe) {
-                singleLog("Parse error. Initial node counter should be an integer number. Cancelling.");
-                return;
-            }
         }
         catch(Exception e) {
             singleLog(e);
