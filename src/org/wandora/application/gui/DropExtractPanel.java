@@ -333,75 +333,86 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     
     
     private void acceptFiles(java.util.List<File> files) throws Exception {
-        if(files != null && files.size() > 0 && tool != null) {
-            setLogger(tool);
-            if(tool instanceof DropExtractor) {
-                try {
-                    ((DropExtractor) tool).dropExtract(files.toArray(new File[files.size()]), wandora);
+        if(tool != null) {
+            if(files != null && files.size() > 0) {
+                setLogger(tool);
+                if(tool instanceof DropExtractor) {
+                    try {
+                        ((DropExtractor) tool).dropExtract(files.toArray(new File[files.size()]), wandora);
+                    }
+                    catch(Exception exx) { 
+                        exx.printStackTrace();
+                    }
                 }
-                catch(Exception exx) { 
-                    exx.printStackTrace();
+                else {
+                    WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
                 }
             }
-            else {
-                WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
-            }
-        }        
+        }
+        else {
+            WandoraOptionPane.showMessageDialog(wandora, "You have not selected extractor. Can't extract. Select extractor first.", "No extractor selected", WandoraOptionPane.WARNING_MESSAGE);
+        }
     }
     
     
     private void acceptUrls(java.util.List<String> urls) throws Exception {
-        if(urls != null && urls.size() > 0 && tool != null) {
-            setLogger(tool);
-            if(tool instanceof DropExtractor) {
-                try {
-                    ((DropExtractor) tool).dropExtract(urls.toArray(new String[urls.size()]), wandora);
+        if(tool != null) {
+            if(urls != null && urls.size() > 0) {
+                setLogger(tool);
+                if(tool instanceof DropExtractor) {
+                    try {
+                        ((DropExtractor) tool).dropExtract(urls.toArray(new String[urls.size()]), wandora);
+                    }
+                    catch(Exception exx) { 
+                        exx.printStackTrace();
+                    }
                 }
-                catch(Exception exx) { 
-                    exx.printStackTrace();
-                }
+                else {
+                    WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
+                }        
             }
-            else {
-                WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
-            }
-        }        
+        }
     }
     
     
     private void acceptString(String content) throws Exception {
-        if(content != null && tool != null) {
-            setLogger(tool);
-            if(tool instanceof DropExtractor) {
-                try {
-                    ((DropExtractor) tool).dropExtract(content, wandora);
+        if(tool != null) {
+            if(content != null) {
+                setLogger(tool);
+                if(tool instanceof DropExtractor) {
+                    try {
+                        ((DropExtractor) tool).dropExtract(content, wandora);
+                    }
+                    catch(Exception exx) { 
+                        exx.printStackTrace();
+                    }
                 }
-                catch(Exception exx) { 
-                    exx.printStackTrace();
+                else {
+                    WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
                 }
-            }
-            else {
-                WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
             }
         }
     }
     
         
     private void acceptHTMLString(String htmlContent) throws Exception {
-        if(htmlContent != null && tool != null) {
-            setLogger(tool);
-            if(tool instanceof DropExtractor) {
-                try {
-                    System.out.println("PROCESSING HTML CONTENT!:" + htmlContent);
-                    ((DropExtractor) tool).dropExtract(htmlContent, wandora);
+        if(tool != null) {
+            if(htmlContent != null) {
+                setLogger(tool);
+                if(tool instanceof DropExtractor) {
+                    try {
+                        System.out.println("PROCESSING HTML CONTENT!:" + htmlContent);
+                        ((DropExtractor) tool).dropExtract(htmlContent, wandora);
+                    }
+                    catch(Exception exx) { 
+                        exx.printStackTrace();
+                    }
                 }
-                catch(Exception exx) { 
-                    exx.printStackTrace();
+                else {
+                    WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
                 }
             }
-            else {
-                WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
-            }
-        }        
+        }
     }
     
     
@@ -414,117 +425,122 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
         try {
-            //System.out.println("Drop!");
-            forceStop = false;
-            DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
-            DataFlavor stringFlavor = DataFlavor.stringFlavor;
-            DataFlavor uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String");
-            Transferable tr = e.getTransferable();
-            boolean handled=false;
-                    
-            e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-            DataFlavor[] flavors=tr.getTransferDataFlavors();
-/*
-            for(int i=0;i<flavors.length;i++){
-                System.out.println("Flavor: "+flavors[i].toString());
-                try{
-                    System.out.println("  "+tr.getTransferData(flavors[i]).toString());
-                }catch(Exception ex){
-                    ex.printStackTrace();
+            if(tool != null) {
+                System.out.println("Drop!");
+                forceStop = false;
+                DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
+                DataFlavor stringFlavor = DataFlavor.stringFlavor;
+                DataFlavor uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String");
+                Transferable tr = e.getTransferable();
+                boolean handled=false;
+
+                e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                DataFlavor[] flavors=tr.getTransferDataFlavors();
+    /*
+                for(int i=0;i<flavors.length;i++){
+                    System.out.println("Flavor: "+flavors[i].toString());
+                    try{
+                        System.out.println("  "+tr.getTransferData(flavors[i]).toString());
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
-            }
-            */
-            
-            if(tool instanceof AbstractExtractor) {
-                AbstractExtractor atool = (AbstractExtractor) tool;
-                String[] contentTypes = atool.getContentTypes();
-                String contentType = null;
-                for(int i=0; i<contentTypes.length; i++) {
-                    contentType = contentTypes[i];
-                    System.out.println("Checking content type: "+contentType);
-                    if(contentType.equalsIgnoreCase("text/html")) {
-                        DataFlavor contentTypeFlavor = new DataFlavor("text/html; class=java.lang.String");
-                        System.out.println("Checking: "+contentTypeFlavor);
-                        if(tr.isDataFlavorSupported(contentTypeFlavor)) {
-                            System.out.println("FOUND TEXT/HTML AS A DATA FLAVOR!!!!");
-                            String data = (String)tr.getTransferData(contentTypeFlavor);
-                            acceptHTMLString(data);
-                            handled=true;
-                            e.dropComplete(true);
-                            break;
+                */
+
+                if(tool instanceof AbstractExtractor) {
+                    AbstractExtractor atool = (AbstractExtractor) tool;
+                    String[] contentTypes = atool.getContentTypes();
+                    String contentType = null;
+                    for(int i=0; i<contentTypes.length; i++) {
+                        contentType = contentTypes[i];
+                        System.out.println("Checking content type: "+contentType);
+                        if(contentType.equalsIgnoreCase("text/html")) {
+                            DataFlavor contentTypeFlavor = new DataFlavor("text/html; class=java.lang.String");
+                            System.out.println("Checking: "+contentTypeFlavor);
+                            if(tr.isDataFlavorSupported(contentTypeFlavor)) {
+                                System.out.println("FOUND TEXT/HTML AS A DATA FLAVOR!!!!");
+                                String data = (String)tr.getTransferData(contentTypeFlavor);
+                                acceptHTMLString(data);
+                                handled=true;
+                                e.dropComplete(true);
+                                break;
+                            }
                         }
                     }
                 }
-            }
-            
-            if(!handled) {
-                if(tr.isDataFlavorSupported(fileListFlavor)) {
-                    //e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
-                    if(tool != null) {
-                        acceptFiles(files);
-                        e.dropComplete(true);
-                    }
-                }
-                else if(tr.isDataFlavorSupported(stringFlavor) || tr.isDataFlavorSupported(uriListFlavor)) {
-                    if(tool != null) {
+
+                if(!handled) {
+                    if(tr.isDataFlavorSupported(fileListFlavor)) {
                         //e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                        String data = null;
-                        if(e.isDataFlavorSupported(uriListFlavor)) data=(String)tr.getTransferData(uriListFlavor);
-                        else data=(String)tr.getTransferData(stringFlavor);
-
-                        System.out.println("Trying string data flavor. Data="+data);
-
-                        System.out.println("Trying url");
-                        String[] split=data.split("\n");
-                        boolean allFiles=true;
-                        ArrayList<URI> uris=new ArrayList<URI>();
-                        for(int i=0;i<split.length;i++){
-                            try {
-                                URI u=new URI(split[i].trim());
-                                if(u.getScheme()==null) continue;
-                                if(!u.getScheme().toLowerCase().equals("file")) allFiles=false;
-                                uris.add(u);
-                            } 
-                            catch(java.net.URISyntaxException ue){}
+                        java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
+                        if(tool != null) {
+                            acceptFiles(files);
+                            e.dropComplete(true);
                         }
-                        if(uris.size()>0) {
-                            if(allFiles) {
-                                java.util.List<File> files=new java.util.ArrayList<File>();
-                                for(URI u : uris){
-                                    try{
-                                        files.add(new File(u));
-                                    }
-                                    catch(IllegalArgumentException iae){iae.printStackTrace();}
-                                }
-                                acceptFiles(files);
+                    }
+                    else if(tr.isDataFlavorSupported(stringFlavor) || tr.isDataFlavorSupported(uriListFlavor)) {
+                        if(tool != null) {
+                            //e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                            String data = null;
+                            if(e.isDataFlavorSupported(uriListFlavor)) data=(String)tr.getTransferData(uriListFlavor);
+                            else data=(String)tr.getTransferData(stringFlavor);
+
+                            System.out.println("Trying string data flavor. Data="+data);
+
+                            System.out.println("Trying url");
+                            String[] split=data.split("\n");
+                            boolean allFiles=true;
+                            ArrayList<URI> uris=new ArrayList<URI>();
+                            for(int i=0;i<split.length;i++){
+                                try {
+                                    URI u=new URI(split[i].trim());
+                                    if(u.getScheme()==null) continue;
+                                    if(!u.getScheme().toLowerCase().equals("file")) allFiles=false;
+                                    uris.add(u);
+                                } 
+                                catch(java.net.URISyntaxException ue){}
                             }
-                            else{
-                                java.util.List<String> urls=new java.util.ArrayList<String>();
-                                for(URI u : uris){
-                                    try {
-                                        urls.add(u.toString());
+                            if(!uris.isEmpty()) {
+                                if(allFiles) {
+                                    java.util.List<File> files=new java.util.ArrayList<File>();
+                                    for(URI u : uris){
+                                        try{
+                                            files.add(new File(u));
+                                        }
+                                        catch(IllegalArgumentException iae){iae.printStackTrace();}
                                     }
-                                    catch(IllegalArgumentException iae){iae.printStackTrace();}
+                                    acceptFiles(files);
                                 }
-                                acceptUrls(urls);                            
+                                else{
+                                    java.util.List<String> urls=new java.util.ArrayList<String>();
+                                    for(URI u : uris){
+                                        try {
+                                            urls.add(u.toString());
+                                        }
+                                        catch(IllegalArgumentException iae){iae.printStackTrace();}
+                                    }
+                                    acceptUrls(urls);                            
+                                }
+                                handled=true;
                             }
-                            handled=true;
-                        }
 
-                        if(!handled){
-                            System.out.println("Trying extractor");
-                            acceptString(data);    
-                            handled=true;
-                        }
+                            if(!handled){
+                                System.out.println("Trying extractor");
+                                acceptString(data);    
+                                handled=true;
+                            }
 
-                        e.dropComplete(true);
+                            e.dropComplete(true);
+                        }
+                    }
+                    else {
+                        //System.out.println("Drop rejected! Wrong data flavor!");
+                        //e.rejectDrop();
                     }
                 }
-                else {
-                    //System.out.println("Drop rejected! Wrong data flavor!");
-                    //e.rejectDrop();
-                }
+            }
+            else {
+                WandoraOptionPane.showMessageDialog(wandora, "No extractor selected. Can't extract. Select extractor first.", "No extractor selected", WandoraOptionPane.WARNING_MESSAGE);
             }
         }
         catch(IOException ioe) {

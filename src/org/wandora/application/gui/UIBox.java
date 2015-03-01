@@ -1367,33 +1367,17 @@ public class UIBox {
     // -------------------------------------------------------------------------
     
     
-    public static Component getComponentForData(String dataUrl) {
-        if(dataUrl == null || dataUrl.length() == 0) return null;
-        if(!dataUrl.startsWith("data:")) return null;
-        dataUrl = dataUrl.substring("data:".length());
-        int mimeTypeEndIndex = dataUrl.indexOf(';');
-        if(mimeTypeEndIndex <= 0) return null;
-        String mimeType = dataUrl.substring(0, mimeTypeEndIndex);
-        dataUrl = dataUrl.substring(mimeTypeEndIndex+1);
-        int encodingEndIndex = dataUrl.indexOf(',');
-        if(encodingEndIndex <= 0) return null;
-        String encoding = dataUrl.substring(0, encodingEndIndex);
-        String dataString = dataUrl.substring(encodingEndIndex+1);
-        
-        byte[] data = null;
-        
-        if("base64".equalsIgnoreCase(encoding)) {
-            data = Base64.decode(dataString);
-        }
-        if(data != null && data.length > 0) {
-            if("image/gif".equalsIgnoreCase(mimeType) ||
-               "image/bmp".equalsIgnoreCase(mimeType) ||
-               "image/vbmp".equalsIgnoreCase(mimeType) ||
-               "image/jpg".equalsIgnoreCase(mimeType) ||
-               "image/jpeg".equalsIgnoreCase(mimeType) ||
-               "image/png".equalsIgnoreCase(mimeType)) {
+    public static Component getPreview(DataURL dataURL) {
+        if(dataURL != null) {
+            String mimetype = dataURL.getMimetype();
+            if("image/gif".equalsIgnoreCase(mimetype) ||
+               "image/bmp".equalsIgnoreCase(mimetype) ||
+               "image/vbmp".equalsIgnoreCase(mimetype) ||
+               "image/jpg".equalsIgnoreCase(mimetype) ||
+               "image/jpeg".equalsIgnoreCase(mimetype) ||
+               "image/png".equalsIgnoreCase(mimetype)) {
                 try {
-                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(data));
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(dataURL.getData()));
                     JLabel imageComponent = new JLabel(new ImageIcon(image));
                     imageComponent.setSize(image.getWidth(), image.getHeight());
                     return imageComponent;
@@ -1404,28 +1388,6 @@ public class UIBox {
             }
         }
         return null;
-    }
-    
-    
-    public static byte[] getBinaryObjectForData(String dataUrl) {
-        if(dataUrl == null || dataUrl.length() == 0) return null;
-        if(!dataUrl.startsWith("data:")) return null;
-        dataUrl = dataUrl.substring("data:".length());
-        int mimeTypeEndIndex = dataUrl.indexOf(';');
-        if(mimeTypeEndIndex <= 0) return null;
-        String mimeType = dataUrl.substring(0, mimeTypeEndIndex);
-        dataUrl = dataUrl.substring(mimeTypeEndIndex+1);
-        int encodingEndIndex = dataUrl.indexOf(',');
-        if(encodingEndIndex <= 0) return null;
-        String encoding = dataUrl.substring(0, encodingEndIndex);
-        String dataString = dataUrl.substring(encodingEndIndex+1);
-        
-        byte[] data = null;
-        
-        if("base64".equalsIgnoreCase(encoding)) {
-            data = Base64.decode(dataString);
-        }
-        return data;
     }
     
     

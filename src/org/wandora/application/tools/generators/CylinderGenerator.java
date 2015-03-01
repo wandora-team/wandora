@@ -33,7 +33,9 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import java.io.*;
 import java.util.*;
+import org.wandora.application.gui.WandoraOptionPane;
 import static org.wandora.utils.Tuples.T2;
+import org.wandora.utils.swing.GuiTools;
 
 /**
  *
@@ -42,7 +44,11 @@ import static org.wandora.utils.Tuples.T2;
  * @author elehtonen
  */
 public class CylinderGenerator extends AbstractGenerator implements WandoraTool {
-
+    public static String globalSiPattern = "";
+    public static String globalBasenamePattern = "";
+    public static boolean connectWithWandoraClass = true;
+    
+    
     /**
      * Creates a new instance of Cylinder Generator
      */
@@ -60,31 +66,70 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
     }
 
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        TopicMap topicmap = solveContextTopicMap(admin, context);
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        TopicMap topicmap = solveContextTopicMap(wandora, context);
 
-        GenericOptionsDialog god = new GenericOptionsDialog(admin,
-                "Cylinder graph generator",
-                "Cylinder graph generator creates cylinder abstractions with topic map structures.",
-                true, new String[][]{
-                    new String[]{"Create a cylinder with square tiling", "boolean"},
-                    new String[]{"Create a cylinder with triangular tiling", "boolean"},
-                    new String[]{"Create a cylinder with hexagonal tiling", "boolean"},
-                    new String[]{"Width of cylinder", "string"},
-                    new String[]{"Height of cylinder", "string"},
-                    new String[]{"Toroid", "boolean"},}, admin);
+        GenericOptionsDialog god = new GenericOptionsDialog(wandora,
+            "Cylinder graph generator",
+            "Cylinder graph generator creates simple graphs that resemble cylinders created with regular polygons. "+
+            "Created cylinders consist of topics and associations. Topics can be thought as cylinder vertices and "+
+            "associations as cylinder edges. Select the type and size of created tiling below. Optionally you "+
+            "can set the name and subject identifier patterns for vertex topics as well as the assocation type and "+
+            "roles of cylinder graph edges. Connecting topics with Wandora class creates some additional topics and "+
+            "associations that link the cylinder graph with Wandora class topic.",
+            true, new String[][]{
+                new String[]{"Create a cylinder with square tiling", "boolean"},
+                new String[]{"Create a cylinder with triangular tiling", "boolean"},
+                new String[]{"Create a cylinder with hexagonal tiling", "boolean"},
+                new String[]{"Width of cylinder", "string"},
+                new String[]{"Height of cylinder", "string"},
+                new String[]{"Toroid", "boolean"},
+
+                new String[]{"---3","separator"},
+                new String[]{"Subject identifier pattern","string",globalSiPattern,"Subject identifier patterns for the created node topics. Part __n__ in patterns is replaced with vertex identifier."},
+                new String[]{"Basename pattern","string",globalBasenamePattern,"Basename patterns for the created node topics. Part __n__ in patterns is replaced with vertex identifier."},
+                new String[]{"Connect topics with Wandora class","boolean", connectWithWandoraClass ? "true" : "false","Create additional topics and associations that connect created topics with the Wandora class." },
+                new String[]{"Association type topic","topic",null,"Optional association type for graph edges."},
+                new String[]{"First role topic","topic",null,"Optional role topic for graph edges."},
+                new String[]{"Second role topic","topic",null,"Optional role topic for graph edges."},
+            }, 
+            wandora);
+        
+        god.setSize(700, 620);
+        GuiTools.centerWindow(god,wandora);
         god.setVisible(true);
         if (god.wasCancelled()) {
             return;
         }
         Map<String, String> values = god.getValues();
 
-        ArrayList<Cylinder> cylinders = new ArrayList<Cylinder>();
+        try {
+            globalSiPattern = values.get("Subject identifier pattern");
+            if(globalSiPattern != null && globalSiPattern.trim().length() > 0) {
+                if(!globalSiPattern.contains("__n__")) {
+                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Subject identifier pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to use it?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                    if(a != WandoraOptionPane.YES_OPTION) globalSiPattern = null;
+                }
+            }
+            globalBasenamePattern = values.get("Basename pattern");
+            if(globalBasenamePattern != null && globalBasenamePattern.trim().length() > 0) {
+                if(!globalBasenamePattern.contains("__n__")) {
+                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Basename pattern doesn't contain part for topic counter '__n__'. This causes all generated topics to merge. Do you want to use it?", "Missing topic counter part", WandoraOptionPane.WARNING_MESSAGE);
+                    if(a != WandoraOptionPane.YES_OPTION) globalBasenamePattern = null;
+                }
+            }
+            connectWithWandoraClass = "true".equalsIgnoreCase(values.get("Connect topics with Wandora class"));
+        }
+        catch(Exception e) {
+            log(e);
+        }
+        
+        
+        ArrayList<Cylinder> cylinders = new ArrayList<>();
 
         int progress = 0;
         int width = 0;
         int height = 0;
-        int depth = 0;
         boolean toggleToroid = false;
         try {
             toggleToroid = "true".equals(values.get("Toroid"));
@@ -99,32 +144,34 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
             if ("true".equals(values.get("Create a cylinder with hexagonal tiling"))) {
                 cylinders.add(new HexagonalCylinder(width, height, toggleToroid));
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             singleLog(e);
             return;
         }
-
+        
         setDefaultLogger();
         setLogTitle("Cylinder graph generator");
 
         for (Cylinder cylinder : cylinders) {
-            ArrayList<T2> edges = cylinder.getEdges();
+            Collection<T2> edges = cylinder.getEdges();
 
             log("Creating " + cylinder.getName() + " graph");
 
-            Topic atype = getOrCreateTopic(topicmap, cylinder.getSIPrefix() + "edge", cylinder.getName() + " edge");
-            Topic role1 = getOrCreateTopic(topicmap, cylinder.getSIPrefix() + "role1", "role1");
-            Topic role2 = getOrCreateTopic(topicmap, cylinder.getSIPrefix() + "role2", "role2");
+            Topic atype = cylinder.getAssociationTypeTopic(topicmap,values);
+            Topic role1 = cylinder.getRole1Topic(topicmap,values);
+            Topic role2 = cylinder.getRole2Topic(topicmap,values);
+            
             Association a = null;
             Topic node1 = null;
             Topic node2 = null;
 
             if (edges.size() > 0) {
                 setProgressMax(edges.size());
-                for (T2 edge : edges) {
+                for (T2<String,String> edge : edges) {
                     if (edge != null) {
-                        node1 = getOrCreateTopic(topicmap, cylinder.getSIPrefix() + "vertex-" + edge.e1, cylinder.getName() + " " + edge.e1);
-                        node2 = getOrCreateTopic(topicmap, cylinder.getSIPrefix() + "vertex-" + edge.e2, cylinder.getName() + " " + edge.e2);
+                        node1 = cylinder.getVertexTopic(edge.e1, topicmap, values);
+                        node2 = cylinder.getVertexTopic(edge.e2, topicmap, values);
                         if (node1 != null && node2 != null) {
                             a = topicmap.createAssociation(atype);
                             a.addPlayer(node1, role1);
@@ -133,28 +180,150 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
                         setProgress(progress++);
                     }
                 }
+                
+                if(connectWithWandoraClass) {
+                    log("You'll find created topics under the '"+cylinder.getName()+" graph' topic.");
+                }
+                else {
+                    String searchWord = cylinder.getName();
+                    if(globalBasenamePattern != null && globalBasenamePattern.trim().length() > 0) {
+                        searchWord = globalBasenamePattern.replaceAll("__n__", "");
+                        searchWord = searchWord.trim();
+                    }
+                    log("You'll find created topics by searching with a '"+searchWord+"'.");
+                }
+            }
+            else {
+                log("Number of cylinder edges is zero. Cylinder has no vertices neithers.");
             }
         }
 
-        setState(CLOSE);
+        if(cylinders.isEmpty()) {
+            log("No cylinder selected.");
+        }
+        log("Ok.");
+        setState(WAIT);
     }
 
+    
     // -------------------------------------------------------------------------
-    private interface Cylinder {
-
+    // ----------------------------------------------------------- CYLINDERS ---
+    // -------------------------------------------------------------------------
+    
+    
+    public interface Cylinder {
         public String getSIPrefix();
-
         public String getName();
-
         public int getSize();
+        public Collection<T2> getEdges();
+        public Collection<String> getVertices();
+        public Topic getVertexTopic(String vertex, TopicMap topicmap, Map<String,String> optionsValues);
+        public Topic getAssociationTypeTopic(TopicMap topicmap, Map<String,String> optionsValues);
+        public Topic getRole1Topic(TopicMap topicmap, Map<String,String> optionsValues);
+        public Topic getRole2Topic(TopicMap topicmap, Map<String,String> optionsValues);
+    }
+    
+    
+    public abstract class AbstractCylinder implements Cylinder {
 
-        public ArrayList<T2> getEdges();
+        @Override
+        public Topic getVertexTopic(String vertex, TopicMap topicmap, Map<String,String> optionsValues) {
+            String newBasename = getName()+" vertex "+vertex;
+            if(globalBasenamePattern != null && globalBasenamePattern.trim().length() > 0) {
+                newBasename = globalBasenamePattern.replaceAll("__n__", vertex);
+            }
+            
+            String newSubjectIdentifier = getSIPrefix()+"vertex-"+vertex;
+            if(globalSiPattern != null && globalSiPattern.trim().length() > 0) {
+                newSubjectIdentifier = globalSiPattern.replaceAll("__n__", vertex);
+            }
+      
+            Topic t = getOrCreateTopic(topicmap, newSubjectIdentifier, newBasename);
+            if(connectWithWandoraClass) {
+                try {
+                    Topic graphTopic = getOrCreateTopic(topicmap, getSIPrefix(), getName()+" graph");
+                    Topic wandoraClass = getOrCreateTopic(topicmap, TMBox.WANDORACLASS_SI);
+                    makeSuperclassSubclass(topicmap, wandoraClass, graphTopic);
+                    t.addType(graphTopic);
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return t;
+        }
+        
+        @Override
+        public Topic getAssociationTypeTopic(TopicMap topicmap, Map<String,String> optionsValues) {
+            String atypeStr = null;
+            Topic atype = null;
+            if(optionsValues != null) {
+                atypeStr = optionsValues.get("Association type topic");
+            }
+            if(atypeStr != null) {
+                try {
+                    atype = topicmap.getTopic(atypeStr);
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(atype == null) {
+                atype = getOrCreateTopic(topicmap, getSIPrefix()+"edge", getName()+" edge");
+            }
+            return atype;
+        }
+        
+        
+        @Override
+        public Topic getRole1Topic(TopicMap topicmap, Map<String,String> optionsValues) {
+            String roleStr = null;
+            Topic role = null;
+            if(optionsValues != null) {
+                roleStr = optionsValues.get("First role topic");
+            }
+            if(roleStr != null) {
+                try {
+                    role = topicmap.getTopic(roleStr);
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(role == null) {
+                role = getOrCreateTopic(topicmap, getSIPrefix()+"role-1", "role 1");
+            }
+            return role;
+        }
+        
 
-        public ArrayList<String> getVertices();
+        @Override
+        public Topic getRole2Topic(TopicMap topicmap, Map<String,String> optionsValues) {
+            String roleStr = null;
+            Topic role = null;
+            if(optionsValues != null) {
+                roleStr = optionsValues.get("Second role topic");
+            }
+            if(roleStr != null) {
+                try {
+                    role = topicmap.getTopic(roleStr);
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(role == null) {
+                role = getOrCreateTopic(topicmap, getSIPrefix()+"role-2", "role 2");
+            }
+            return role;
+        }
     }
 
+    
     // -------------------------------------------------------------------------
-    private class SquareCylinder implements Cylinder {
+    
+    
+    public class SquareCylinder extends AbstractCylinder implements Cylinder {
 
         private int size = 0;
         private int width = 0;
@@ -168,20 +337,24 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
             this.isToroid = toroid;
         }
 
+        @Override
         public String getSIPrefix() {
             return "http://wandora.org/si/cylinder/square/";
         }
 
+        @Override
         public String getName() {
-            return "square-cylinder";
+            return "Square-cylinder";
         }
 
+        @Override
         public int getSize() {
             return size;
         }
 
-        public ArrayList<T2> getEdges() {
-            ArrayList<T2> edges = new ArrayList<T2>();
+        @Override
+        public Collection<T2> getEdges() {
+            ArrayList<T2> edges = new ArrayList<>();
 
             for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
@@ -197,13 +370,12 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
                     edges.add(new T2(height + "-" + w, height + "-" + ww));
                 }
             }
-
-
             return edges;
         }
 
-        public ArrayList<String> getVertices() {
-            ArrayList<String> vertices = new ArrayList<String>();
+        @Override
+        public Collection<String> getVertices() {
+            ArrayList<String> vertices = new ArrayList<>();
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     vertices.add(x + "-" + y);
@@ -213,8 +385,12 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
         }
     }
 
+    
+    
     // -------------------------------------------------------------------------
-    private class TriangularCylinder implements Cylinder {
+    
+    
+    public class TriangularCylinder extends AbstractCylinder implements Cylinder {
 
         private int depth = 0;
         private int width = 0;
@@ -226,14 +402,17 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
             this.isToroid = toroid;
         }
 
+        @Override
         public String getSIPrefix() {
             return "http://wandora.org/si/cylinder/triangular/";
         }
 
+        @Override
         public String getName() {
-            return "triangular-cylinder";
+            return "Triangular-cylinder";
         }
 
+        @Override
         public int getSize() {
             int size = 0;
             for (int d = 0; d < depth; d++) {
@@ -244,8 +423,9 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
             return size;
         }
 
-        public ArrayList<T2> getEdges() {
-            ArrayList<T2> edges = new ArrayList<T2>();
+        @Override
+        public Collection<T2> getEdges() {
+            ArrayList<T2> edges = new ArrayList<>();
 
             for (int d = 0; d < depth; d++) {
                 for (int w = 0; w < width; w++) {
@@ -264,12 +444,12 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
                 }
             }
 
-
             return edges;
         }
 
-        public ArrayList<String> getVertices() {
-            ArrayList<String> vertices = new ArrayList<String>();
+        @Override
+        public Collection<String> getVertices() {
+            ArrayList<String> vertices = new ArrayList<>();
             for (int d = 0; d < depth; d++) {
                 for (int f = 0; f < d; f++) {
                     vertices.add(d + "-" + f);
@@ -279,8 +459,11 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
         }
     }
 
+    
     // -------------------------------------------------------------------------
-    private class HexagonalCylinder implements Cylinder {
+    
+    
+    public class HexagonalCylinder extends AbstractCylinder implements Cylinder {
 
         private int depth = 0;
         private int width = 0;
@@ -292,14 +475,17 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
             this.isToroid = toroid;
         }
 
+        @Override
         public String getSIPrefix() {
             return "http://wandora.org/si/cylinder/hexagonal/";
         }
 
+        @Override
         public String getName() {
-            return "hexagonal-cylinder";
+            return "Hexagonal-cylinder";
         }
 
+        @Override
         public int getSize() {
             int size = 0;
             for (int d = 0; d < depth; d++) {
@@ -310,8 +496,9 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
             return size;
         }
 
-        public ArrayList<T2> getEdges() {
-            ArrayList<T2> edges = new ArrayList<T2>();
+        @Override
+        public Collection<T2> getEdges() {
+            ArrayList<T2> edges = new ArrayList<>();
             String nc = null;
             String n1 = null;
             String n2 = null;
@@ -345,12 +532,12 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
                 }
             }
 
-
             return edges;
         }
 
-        public ArrayList<String> getVertices() {
-            HashSet<String> verticesSet = new HashSet<String>();
+        @Override
+        public Collection<String> getVertices() {
+            HashSet<String> verticesSet = new LinkedHashSet<>();
             for (int d = 0; d < depth; d++) {
                 for (int f = 0; f < d + 1; f++) {
                     verticesSet.add(d + "-" + f + "-c");
@@ -364,9 +551,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
                     }
                 }
             }
-            ArrayList<String> vertices = new ArrayList<String>();
-            vertices.addAll(verticesSet);
-            return vertices;
+            return verticesSet;
         }
     }
 }
