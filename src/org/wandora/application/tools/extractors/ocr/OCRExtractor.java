@@ -65,7 +65,7 @@ public class OCRExtractor extends AbstractExtractor {
 
 
     
-    protected String TEMP_PATH = "temp\\ocr";
+    protected String TEMP_PATH = "temp"+File.separator+"ocr";
     protected SimpleDateFormat dateFormatter;
     
     
@@ -252,16 +252,18 @@ public class OCRExtractor extends AbstractExtractor {
             cmd.add("-l");
             cmd.add(lang);
         }
-        
+                
         ProcessBuilder pb = new ProcessBuilder();
         pb.command(cmd);
         
         try {
             Process p = pb.start();
             StreamGobbler gobbler = new StreamGobbler(p.getInputStream());
+            StreamGobbler errorGobbler = new StreamGobbler((p.getErrorStream()));
             gobbler.start();
+            errorGobbler.start();
             int w = p.waitFor();
-            if(w == 0){ // Exited alright
+            if(w == 0 && p.exitValue() == 0){ // Exited alright
                 FileInputStream is = new FileInputStream(TEMP_PATH + ".txt");
                 try{
                     text = IOUtils.toString(is);
@@ -269,8 +271,12 @@ public class OCRExtractor extends AbstractExtractor {
                     is.close();
                 }
             } else { // Something got messed up
-                System.out.println(gobbler.getMessage());
-                throw new RuntimeException(gobbler.getMessage());
+                String error = errorGobbler.getMessage();
+                if(error.length() == 0){
+                    error = gobbler.getMessage();
+                }
+                System.out.println(error);
+                throw new RuntimeException(error);
             }
             
             String extracted = dateFormatter.format(new Date());
@@ -295,6 +301,7 @@ public class OCRExtractor extends AbstractExtractor {
 
         } catch(RuntimeException rte){
             log("The OCR runtime failed for " + f.getPath());
+            log(rte.getMessage());
         } catch (TopicMapException tme) { // Adding the topic failed
             log("Failed to add the file topic with the path " + f.getPath());
         } catch (IOException ioe) { // A file operation failed
