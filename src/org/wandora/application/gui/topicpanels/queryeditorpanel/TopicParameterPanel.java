@@ -52,7 +52,11 @@ public class TopicParameterPanel extends AbstractTypePanel {
     @Override
     public void setValue(Object o){
         try{
-            ((GetTopicButton)getTopicButton).setTopic((Topic)o);
+            if(o instanceof Topic)
+                ((GetTopicButton)getTopicButton).setTopic((Topic)o);
+            else if(o instanceof String)
+                ((GetTopicButton)getTopicButton).setTopic((String)o);
+            else throw new RuntimeException("Topic value must be a topic or a string");
         }catch(TopicMapException tme){
             Wandora.getWandora().handleError(tme);
         }
@@ -66,13 +70,19 @@ public class TopicParameterPanel extends AbstractTypePanel {
     public String getValueScript(){
         Object o=getValue();
         if(o==null) return "null";
-        if(!(o instanceof Topic)) throw new RuntimeException("Topic value is not a topic");
-        try{
-            return "\""+((Topic)o).getOneSubjectIdentifier().toExternalForm()+"\"";
-        }catch(TopicMapException tme){
-            Wandora.getWandora().handleError(tme);
-            return null;
+        
+        if(o instanceof Topic){
+            try{
+                return "\""+((Topic)o).getOneSubjectIdentifier().toExternalForm()+"\"";
+            }catch(TopicMapException tme){
+                Wandora.getWandora().handleError(tme);
+                return null;
+            }
         }
+        else if(o instanceof String){
+            return "\""+o+"\"";
+        }
+        else throw new RuntimeException("Topic value must be a topic or a string");
     }
     
     /**

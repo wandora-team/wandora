@@ -361,6 +361,17 @@ public class Options {
         }
     }
     
+    /**
+     * Adds all key-value pairs from a map into this one.
+     * @param map The values to add.
+     * @param prefix A prefix to add all key-value pairs.
+     */
+    public void putAll(Map<String,String> map,String prefix){
+        if(prefix==null) prefix="";
+        for(Map.Entry<String,String> e : map.entrySet()){
+            put(prefix+e.getKey(),e.getValue());
+        }
+    }
     
     
     // -------------------------------------------------------------------------
