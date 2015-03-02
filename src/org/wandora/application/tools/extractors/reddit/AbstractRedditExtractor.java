@@ -98,7 +98,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     
     
     private static HashMap<String, Boolean> CRAWL_SETTINGS = null;
-    private static DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private static DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     private static ArrayList<String> extracted;
     
