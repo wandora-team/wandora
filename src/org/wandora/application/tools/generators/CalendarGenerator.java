@@ -57,6 +57,7 @@ public class CalendarGenerator extends AbstractGenerator implements WandoraTool 
         return "Generates a calendar topic map.";
     }
     
+    @Override
     public void execute(Wandora admin, Context context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(admin, context);
         

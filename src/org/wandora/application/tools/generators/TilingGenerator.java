@@ -73,9 +73,9 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
             "Tiling graph generator creates simple graphs that resemble plane tilings by regular polygons. "+
             "Created tilings consist of topics and associations. Topics can be thought as tiling vertices and "+
             "associations as tiling edges. Select the type and size of created tiling below. Optionally you "+
-            "can set the name and subject identifier patterns of vertex topics as well as the assocation type and "+
+            "can set the name and subject identifier patterns for vertex topics as well as the assocation type and "+
             "roles of tiling graph edges. Connecting topics with Wandora class creates some additional topics and "+
-            "associations that link tiling graph with Wandora class topic.",
+            "associations that link the tiling graph with Wandora class topic.",
             true,new String[][]{
             new String[]{"Create square tiling","boolean"},
             new String[]{"Width of square tiling","string"},
@@ -230,7 +230,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
                 }
             }
             else {
-                log("Number of tiling edged is zero. Created nothing.");
+                log("Number of tiling edges is zero. Tiling has no nodes either.");
             }
         }
     }
@@ -256,17 +256,6 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     
     
     public abstract class AbstractTiling implements Tiling {
-        @Override
-        public abstract String getSIPrefix();
-        @Override
-        public abstract String getName();
-        @Override
-        public abstract int getSize();
-        @Override
-        public abstract Collection<T2<String,String>> getEdges();
-        @Override
-        public abstract Collection<String> getVertices();
-
 
         @Override
         public Topic getVertexTopic(String vertex, TopicMap topicmap, Map<String,String> optionsValues) {

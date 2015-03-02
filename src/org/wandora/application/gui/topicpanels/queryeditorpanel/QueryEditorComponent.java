@@ -26,13 +26,17 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.TextEditor;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
+import org.wandora.application.gui.topicpanels.queryeditorpanel.QueryLibraryPanel.StoredQuery;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
 import org.wandora.query2.DirectiveUIHints.Addon;
@@ -89,6 +93,13 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         
         Object[] buttonStruct = {
+            "Open",
+            UIBox.getIcon(0xF07C),
+            new java.awt.event.ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            },
             "Build",
             UIBox.getIcon(0xF085), // See resources/gui/fonts/FontAwesome.ttf for alternative icons.
             new java.awt.event.ActionListener() {
@@ -102,7 +113,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     deleteButtonActionPerformed(evt);
                 }
-            },
+            }
         };
         JComponent buttonContainer = UIBox.makeButtonContainer(buttonStruct, Wandora.getWandora());
         buttonPanel.add(buttonContainer);
@@ -126,7 +137,33 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         return ((QueryEditorDockPanel)c).getInspector();
     }
     
+    public void applyInspectorChanges(){
+        if(this.selectedPanel!=null) {
+            QueryEditorInspectorPanel inspector=findInspector();
+            if(inspector!=null){
+                inspector.saveChanges();
+            }            
+        }        
+    }
+    
+    public DirectivePanel getRootPanel(){
+        ConnectorAnchor from=finalResultAnchor.getFrom();
+        if(from==null) return null;
+        JComponent component=from.getComponent();
+        if(component==null) return null;
+        DirectivePanel p=resolveDirectivePanel(component);
+        if(p==null) return null;
+        return p;
+    }
+    
     public String buildScript(){
+        applyInspectorChanges();
+        DirectivePanel p=getRootPanel();
+        if(p==null) return null;
+        else return p.buildScript();
+    }
+/*    
+    public HashMap<String,String> buildOptions(){
         if(this.selectedPanel!=null) {
             QueryEditorInspectorPanel inspector=findInspector();
             if(inspector!=null){
@@ -140,7 +177,86 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         if(component==null) return null;
         DirectivePanel p=resolveDirectivePanel(component);
         if(p==null) return null;
-        else return p.buildScript();
+        HashMap<String,String> ret=p.getOptions();
+        return ret;
+    }*/
+    
+    public StoredQuery getStoredQuery(){
+        applyInspectorChanges();
+        
+        DirectivePanel rootPanel=getRootPanel();
+        if(rootPanel==null) return null;
+                
+        StoredQuery ret=new StoredQuery();
+        ret.name=null;
+        ret.rootDirective=rootPanel.getDirectiveId();
+        
+        ArrayList<DirectiveParameters> directiveParams=new ArrayList<>();
+        
+        for(int i=0;i<queryGraphPanel.getComponentCount();i++){
+            Component c=queryGraphPanel.getComponent(i);
+            if(c instanceof DirectivePanel){
+                DirectivePanel panel=(DirectivePanel)c;
+                directiveParams.add(panel.getDirectiveParameters());
+            }
+        }
+        
+        ret.directiveParameters=directiveParams;
+        
+        return ret;
+    }
+    
+    public void clearQuery(){
+        ArrayList<Component> remove=new ArrayList<>();
+        for(int i=0;i<queryGraphPanel.getComponentCount();i++){
+            Component c=queryGraphPanel.getComponent(i);
+            synchronized(connectors){
+                connectors.clear();
+            }
+            selectPanel(null);
+            finalResultAnchor.setFrom(null);
+            if(c instanceof DirectivePanel && c!=finalResultPanel){
+                remove.add(c);
+            }
+        }
+        
+        for(Component c : remove) queryGraphPanel.remove(c);
+        Rectangle bounds=finalResultPanel.getBounds();
+        finalResultPanel.setBounds(new Rectangle(0,0,bounds.width,bounds.height));
+    }
+    
+    public void openStoredQuery(StoredQuery query){
+        
+        HashMap<String,DirectivePanel> directiveMap=new HashMap<>();
+        
+        for(DirectiveParameters params : query.directiveParameters){
+            try{
+                Class cls=Class.forName(params.cls);
+                DirectivePanel panel=null;
+                if(!Directive.class.isAssignableFrom(cls)) throw new ClassCastException("Stored query class is not a Directive");
+                if(cls.equals(FinalResultDirective.class)){
+                    panel=finalResultPanel;
+                }
+                else {
+                    DirectiveUIHints hints=DirectiveUIHints.getDirectiveUIHints(cls);
+                    panel=addDirective(hints);
+                }
+                                
+                directiveMap.put(params.id, panel);
+                
+            }catch(ClassNotFoundException | ClassCastException e){
+                Wandora.getWandora().handleError(e);
+            }
+        }
+        
+        for(DirectiveParameters params : query.directiveParameters){
+            params.resolveDirectiveValues(directiveMap);
+        }
+        
+        for(DirectiveParameters params : query.directiveParameters){
+            DirectivePanel panel=directiveMap.get(params.id);
+            panel.setDirectiveParams(params);
+        }        
     }
     
     public void selectPanel(DirectivePanel panel){
@@ -155,6 +271,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
             inspector.setSelection(panel);
         }
     }
+    
     
     public void addConnector(Connector c){
         synchronized(connectors){
@@ -192,16 +309,40 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         return queryGraphPanel;
     }
     
+    private void changePanelSize(int width,int height, int offsx, int offsy){
+        Dimension d=new Dimension(width,height);
+        queryGraphPanel.setMaximumSize(d);
+        queryGraphPanel.setPreferredSize(d);
+        queryGraphPanel.setMinimumSize(d);
+        queryGraphPanel.setSize(d);
+
+        if(offsx!=0 || offsy!=0){
+            for(int i=0;i<queryGraphPanel.getComponentCount();i++){
+                Component c=queryGraphPanel.getComponent(i);
+                Rectangle b=c.getBounds();
+                
+                c.setBounds(b.x+offsx, b.y+offsy, b.width, b.height);
+            }
+            Point p=queryScrollPane.getViewport().getViewPosition();
+            queryScrollPane.getViewport().setViewPosition(new Point(p.x+offsx,p.y+offsy));
+        }
+    }
+    
     public void panelMoved(DirectivePanel panel){
         Rectangle rect=panel.getBounds();
+        if(rect.x<0){
+            changePanelSize(queryGraphPanel.getWidth()-rect.x,queryGraphPanel.getHeight(),-rect.x,0);
+            rect=panel.getBounds();
+        }
+        if(rect.y<0){
+            changePanelSize(queryGraphPanel.getWidth(),queryGraphPanel.getHeight()-rect.y,0,-rect.y);            
+            rect=panel.getBounds();
+        }
+        
         int width=Math.max(rect.x+rect.width,queryGraphPanel.getWidth());
         int height=Math.max(rect.y+rect.height,queryGraphPanel.getHeight());
         if(width!=this.getWidth() || height!=this.getHeight()){
-            Dimension d=new Dimension(width,height);
-            queryGraphPanel.setMaximumSize(d);
-            queryGraphPanel.setPreferredSize(d);
-            queryGraphPanel.setMinimumSize(d);
-            queryGraphPanel.setSize(d);
+            changePanelSize(width,height,0,0);
         }
         
         queryGraphPanel.invalidate();
@@ -293,10 +434,17 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         }
     }     
     
+    /*
+     This is just a placeholder class used for the final result panel.
+     It serves no other function than to identify the panel in some cases.
+    */
+    protected static class FinalResultDirective extends Directive {
+        public FinalResultDirective(){}
+    }
     
     protected static class FinalResultPanel extends DirectivePanel {
         public FinalResultPanel(){
-            super(new DirectiveUIHints(null, new Constructor[]{}, new Addon[]{}, "Final result", null));
+            super(new DirectiveUIHints(FinalResultDirective.class, new Constructor[]{}, new Addon[]{}, "Final result", null));
             fromDirectiveAnchor.setVisible(false);
         }
 
@@ -325,4 +473,6 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         }
         
     }
+    
+    
 }

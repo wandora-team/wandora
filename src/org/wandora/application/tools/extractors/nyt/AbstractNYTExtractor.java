@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.nyt;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.Icon;
-import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
@@ -35,9 +34,12 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
-
-
-
+/**
+ *
+ * @author
+ * akivela
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ */
 public abstract class AbstractNYTExtractor extends AbstractExtractor {
 
     @Override
@@ -89,6 +91,7 @@ public abstract class AbstractNYTExtractor extends AbstractExtractor {
     public static final String DATE_SI = "http://wandora.org/si/nytimes/date";
     public static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     public static final String FACET_SI = "http://wandora.org/si/nytimes/facet";
+    public static final String KEYWORD_SI = "http://wandora.org/si/nytimes/keyword";
     public static final String DES_FACET_SI = "http://wandora.org/si/nytimes/facet/des";
     public static final String GEO_FACET_SI = "http://wandora.org/si/nytimes/facet/geo";
     public static final String ORG_FACET_SI = "http://wandora.org/si/nytimes/facet/org";
@@ -126,89 +129,25 @@ public abstract class AbstractNYTExtractor extends AbstractExtractor {
         return type;
     }
     
+    public static Topic getKeywordTopic(String keyword, TopicMap tm) throws TopicMapException {
+        Topic keywordTopic=getOrCreateTopic(tm, KEYWORD_SI+"/"+urlEncode(keyword), keyword);
+        keywordTopic.addType(getKeywordTypeTopic(tm));
+        return keywordTopic;
+    }
     
-    public static Topic getMaterialTypeFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, MATERIAL_TYPE_FACET_SI, "article-material-type (New York Times API)");
+    public static Topic getKeywordNameTopic(String name, TopicMap tm) throws TopicMapException {
+        Topic nameTopic=getOrCreateTopic(tm, KEYWORD_SI+"/"+urlEncode(name), "article-"+name+"-keyword (New York Times API)");
+        Topic typeTopic = getKeywordTypeTopic(tm);
+        makeSubclassOf(tm, nameTopic, typeTopic);
+        return nameTopic;
+    }
+    
+    public static Topic getKeywordTypeTopic(TopicMap tm) throws TopicMapException {
+        Topic typeTopic=getOrCreateTopic(tm, KEYWORD_SI, "article-keyword (New York Times API)");
         Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
+        makeSubclassOf(tm, typeTopic, nytTopic);
+        return typeTopic;
     }
-    
-    
-    public static Topic getColumnFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, COLUMN_FACET_SI, "article-column-facet (New York Times API)");
-        Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
-    }
-    
-    public static Topic getClassifierFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, CLASSIFIER_FACET_SI, "article-classifier-facet (New York Times API)");
-        Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
-    }
-    
-    
-    public static Topic getPerFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, PER_FACET_SI, "article-per-facet (New York Times API)");
-        Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
-    }
-    
-    
-    
-    public static Topic getOrgFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, ORG_FACET_SI, "article-org-facet (New York Times API)");
-        Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
-    }
-    
-    
-   
-    
-    public static Topic getGeoFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, GEO_FACET_SI, "article-geo-facet (New York Times API)");
-        Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
-    }
-    
-    
-    public static Topic getSourceFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, SOURCE_FACET_SI, "article-source-facet (New York Times API)");
-        Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
-    }
-
-    
-    public static Topic getDesFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, DES_FACET_SI, "article-des-facet (New York Times API)");
-        Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
-    }
-    
-    
-    
-    public static Topic getFacetTopic(String facet, TopicMap tm) throws TopicMapException {
-        Topic facetTopic=getOrCreateTopic(tm, FACET_SI+"/"+urlEncode(facet), facet);
-        facetTopic.addType(getFacetTypeTopic(tm));
-        return facetTopic;
-    }
-    
-    
-    
-    public static Topic getFacetTypeTopic(TopicMap tm) throws TopicMapException {
-        Topic type=getOrCreateTopic(tm, FACET_SI, "article-facet (New York Times API)");
-        Topic nytTopic = getNYTTypeTopic(tm);
-        makeSubclassOf(tm, type, nytTopic);
-        return type;
-    }
-    
     
     public static Topic getDBpediaResourceTopic(String res, TopicMap tm) throws TopicMapException {
         Topic resTopic=getOrCreateTopic(tm, res);

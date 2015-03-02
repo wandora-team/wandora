@@ -180,7 +180,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         gbc.insets=new Insets(5, 5, 0, 5);
         
         JButton removeButton=new JButton();
-        removeButton.setText("Remove");
+        removeButton.setText("X");
         removeButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -192,7 +192,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         gbc.gridx=1;
         gbc.weightx=1.0;
         gbc.fill=GridBagConstraints.HORIZONTAL;
-        paramPanel.setLabel("-");
+        paramPanel.setLabel("");
         parametersPanel.add(paramPanel,gbc);
         if(this.orderingHint!=null) {
             paramPanel.setOrderingHint(orderingHint+rows.size());

@@ -55,3 +55,7 @@
 #end##
        ]
 };
+
+
+#set( $linkType = false )##
+#set( $links = false )##

@@ -49,7 +49,7 @@ public class MimeTypes {
                             String fileExtension = mimeParts[j].trim();
                             if(fileExtension.length() > 0) {
                                 extensionMap.put(fileExtension, mimeType);
-                                System.out.println(" "+mimeType+"\t\t"+fileExtension);
+                                // System.out.println(" "+mimeType+"\t\t"+fileExtension);
                             }
                         }
                     }

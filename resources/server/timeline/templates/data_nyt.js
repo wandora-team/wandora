@@ -66,3 +66,7 @@
 #end##
        ]
 };
+
+
+#set( $eventType = false )##
+#set( $events = false )##
