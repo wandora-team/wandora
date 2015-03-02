@@ -405,6 +405,12 @@ public class DirectiveEditor extends javax.swing.JPanel {
             return getScriptValue(parameter,value,false);
         }
         @JsonIgnore
+        public static String escapeString(Object o){
+            if(o==null) return "null";
+            return "\""+(o.toString().replace("\\","\\\\").replace("\"","\\\""))+"\"";
+        }
+        
+        @JsonIgnore
         private static String getScriptValue(Parameter parameter,Object value,boolean multipleComponent){
             if(value==null) return "null";
             if(!multipleComponent && parameter.isMultiple()){
@@ -422,15 +428,32 @@ public class DirectiveEditor extends javax.swing.JPanel {
                 sb.append("}");
                 return sb.toString();
             }
-            else if(parameter.getType().equals(String.class)) return "\""+value+"\"";
+            else if(parameter.getType().equals(String.class)) return escapeString(value);
             else if(Number.class.isAssignableFrom(parameter.getType())) return value.toString();
             else if(Topic.class.isAssignableFrom(parameter.getType())) {
                 try{
-                    return "\""+(((Topic)value).getOneSubjectIdentifier())+"\"";
+                    return escapeString(((Topic)value).getOneSubjectIdentifier());
                 }catch(TopicMapException tme){
                     Wandora.getWandora().handleError(tme);
                     return null;
                 }
+            }
+            else if(TopicOperand.class.isAssignableFrom(parameter.getType())){
+                if(value instanceof DirectivePanel) return ((DirectivePanel)value).buildScript();
+                else if(value instanceof Topic) {
+                    try{
+                        return escapeString(((Topic)value).getOneSubjectIdentifier());
+                    }catch(TopicMapException tme){
+                        Wandora.getWandora().handleError(tme);
+                        return null;
+                    }
+                }
+                else return escapeString(value); // Subject identifier string
+            }
+            else if(Operand.class.isAssignableFrom(parameter.getType())){
+                if(value instanceof DirectivePanel) return ((DirectivePanel)value).buildScript();
+                else return escapeString(value);
+                
             }
             else if(Directive.class.isAssignableFrom(parameter.getType())){
                 return ((DirectivePanel)value).buildScript();

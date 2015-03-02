@@ -312,6 +312,8 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         if(query==null) return;
         query.name=name;
         
+        
+        
         synchronized(storedQueries){
             boolean saved=false;
             for(int i=0;i<storedQueries.size();i++){
@@ -328,6 +330,13 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                 model.addElement(query);
             }
         }
+        writeQueries(Wandora.getWandora().getOptions());
+        // Some parts of StoredQuery will contain object references rather than
+        // serialisations of those. This will cause problems when trying to open
+        // them. To fix this, cycle the queries through serialisation and
+        // deserialisation once.
+        readQueries(Wandora.getWandora().getOptions());
+        
         
 /*        QueryEditorComponent graph=findGraph();
         HashMap<String,String> options=graph.buildOptions();
@@ -346,9 +355,9 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                 }
             }
             if(!added) storedQueries.add(newQuery);
-        }*/
+        }
         
-        writeQueries(Wandora.getWandora().getOptions());
+        writeQueries(Wandora.getWandora().getOptions()); */
     }
     
     
