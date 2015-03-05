@@ -42,7 +42,8 @@ public class StringParameterPanel extends AbstractTypePanel {
 
     @Override
     public void setValue(Object o){
-        valueTextField.setText(o.toString());
+        if(o==null) valueTextField.setText("");
+        else valueTextField.setText(o.toString());
     }
     
     @Override

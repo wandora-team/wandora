@@ -54,7 +54,7 @@ public class TopicParameterPanel extends AbstractTypePanel {
         try{
             if(o instanceof Topic)
                 ((GetTopicButton)getTopicButton).setTopic((Topic)o);
-            else if(o instanceof String)
+            else if(o instanceof String) 
                 ((GetTopicButton)getTopicButton).setTopic((String)o);
             else throw new RuntimeException("Topic value must be a topic or a string");
         }catch(TopicMapException tme){

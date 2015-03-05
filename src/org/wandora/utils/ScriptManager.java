@@ -127,4 +127,38 @@ public class ScriptManager {
         return o;
     }
     
+    /**
+     * This helper class is meant for creation of arrays in javascript. Mozilla
+     * Rhino engine doesn't have an easy way to dynamically create array objects.
+     * This helper class can be used like so:
+     * 
+     * <code>
+     * new ArrayBuilder(java.lang.String.class).add("foo").add("bar").add("qux").finalise()
+     * </code>
+     * 
+     * In actual Rhino code, leave out the .class after java.lang.String.
+     */
+    public static class ArrayBuilder {
+        public Class<?> cls;
+        public ArrayList<Object> list;
+        
+        public ArrayBuilder(Class<?> cls){
+            this.cls=cls;
+            list=new ArrayList<>();
+        }
+        
+        public ArrayBuilder add(Object o){
+            list.add(o);
+            return this;
+        }
+        
+        public Object finalise(){
+            Object array=java.lang.reflect.Array.newInstance(cls, list.size());
+            for(int i=0;i<list.size();i++){
+                Object o=list.get(i);
+                java.lang.reflect.Array.set(array, i, o);
+            }
+            return array;
+        }
+    }
 }

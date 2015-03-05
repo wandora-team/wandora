@@ -45,6 +45,7 @@ import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.LayeredTopicContext;
 import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -551,17 +552,24 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     
     
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
-        Iterator contextObjects = (new ArrayList()).iterator();
+//        Iterator contextObjects = (new ArrayList()).iterator();
         
         // TODO: Get global context objects and pass them into the getTopicsByQuery.
         // if(context != null) contextObjects = context.getContextObjects();
         
+        Context context = new LayeredTopicContext();
+        context.initialize(wandora, null, null);
+        Iterator contextObjects = context.getContextObjects();
+        
         try {
             resultPanel.removeAll();
+            resultScrollPane.setColumnHeaderView(null);
             clearResultsButton.setEnabled(false);
             resultsTable = getTopicsByQuery(contextObjects);
             if(resultsTable != null) {
-                resultPanel.add(resultsTable, BorderLayout.NORTH);
+                resultScrollPane.setColumnHeaderView(resultsTable.getTableHeader());
+//                resultPanel.add(resultsTable.getTableHeader(), BorderLayout.NORTH);
+                resultPanel.add(resultsTable, BorderLayout.CENTER);
                 clearResultsButton.setEnabled(true);
             }
             else {

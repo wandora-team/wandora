@@ -414,6 +414,10 @@ public class DirectiveEditor extends javax.swing.JPanel {
         private static String getScriptValue(Parameter parameter,Object value,boolean multipleComponent){
             if(value==null) return "null";
             if(!multipleComponent && parameter.isMultiple()){
+                
+/*              // This is the way you'd create arrays in java usually but
+                // Mozilla Rhino doesn't support this. We have to use
+                // a helper class to get this done.
                 StringBuilder sb=new StringBuilder();
                 sb.append("new ");
                 sb.append(parameter.getType().getSimpleName());
@@ -426,6 +430,17 @@ public class DirectiveEditor extends javax.swing.JPanel {
                     sb.append(getScriptValue(parameter,v,true));
                 }
                 sb.append("}");
+                return sb.toString();*/
+                
+                StringBuilder sb=new StringBuilder();
+                sb.append("new org.wandora.utils.ScriptManager.ArrayBuilder(").append(parameter.getType().getName()).append(")");
+                for(int i=0;i<Array.getLength(value);i++){
+                    Object v=Array.get(value, i);
+                    sb.append(".add(");
+                    sb.append(getScriptValue(parameter,v,true));
+                    sb.append(")");
+                }
+                sb.append(".finalise()");
                 return sb.toString();
             }
             else if(parameter.getType().equals(String.class)) return escapeString(value);
@@ -439,10 +454,10 @@ public class DirectiveEditor extends javax.swing.JPanel {
                 }
             }
             else if(TopicOperand.class.isAssignableFrom(parameter.getType())){
-                if(value instanceof DirectivePanel) return ((DirectivePanel)value).buildScript();
+                if(value instanceof DirectivePanel) return "new TopicOperand("+((DirectivePanel)value).buildScript()+")";
                 else if(value instanceof Topic) {
                     try{
-                        return escapeString(((Topic)value).getOneSubjectIdentifier());
+                        return "new TopicOperand("+escapeString(((Topic)value).getOneSubjectIdentifier())+")";
                     }catch(TopicMapException tme){
                         Wandora.getWandora().handleError(tme);
                         return null;
@@ -451,8 +466,8 @@ public class DirectiveEditor extends javax.swing.JPanel {
                 else return escapeString(value); // Subject identifier string
             }
             else if(Operand.class.isAssignableFrom(parameter.getType())){
-                if(value instanceof DirectivePanel) return ((DirectivePanel)value).buildScript();
-                else return escapeString(value);
+                if(value instanceof DirectivePanel) return "new Operand("+((DirectivePanel)value).buildScript()+")";
+                else return "new Operand("+escapeString(value)+")";
                 
             }
             else if(Directive.class.isAssignableFrom(parameter.getType())){
@@ -473,7 +488,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
                 return new TypedValue(ret);
             }
             else {
-                if(value instanceof DirectivePanel){
+                 if(value instanceof DirectivePanel){
                     return new TypedValue("directive",((DirectivePanel)value).getDirectiveId());
                 }
                 else if(value instanceof Topic){
