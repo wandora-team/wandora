@@ -32,6 +32,7 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.*;
@@ -730,11 +731,14 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             boolean isDataOccurrence = false;
             if(viewedOccurrenceText.startsWith("data:")) {
                 try {
-                    Component preview = UIBox.getComponentForData(viewedOccurrenceText);
+                    Component preview = UIBox.getPreview(new DataURL(viewedOccurrenceText));
                     if(preview != null) {
                         table.setRowHeight(row, Math.max(getRowHeightInPixels(), preview.getHeight()+10));
                         return preview;
                     }
+                }
+                catch(MalformedURLException mue) {
+                    System.out.println("Warning: Malformed data-url found.");
                 }
                 catch(Exception e) {
                     e.printStackTrace();
@@ -1115,64 +1119,68 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     else if(transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                         try {
                             java.util.List<File> fileList = (java.util.List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                            if(fileList != null && fileList.size() > 0) {
+                            if(fileList != null && !fileList.isEmpty()) {
+                                
+                                int a = WandoraOptionPane.showConfirmDialog(wandora, "Make data-url occurrence?", "Make data-url occurrence?", WandoraOptionPane.QUESTION_MESSAGE);
+                                boolean makeDataURLOccurrence = (a == WandoraOptionPane.YES_OPTION ? true : false);
+                                
                                 for( File occurrenceFile : fileList ) {
-
-                                    Reader inputReader = null;
-                                    String content = "";
-
-                                    String filename = occurrenceFile.getPath().toLowerCase();
-                                    String extension = filename.substring(Math.max(filename.lastIndexOf(".")+1, 0));
-
-                                    // --- handle rtf files ---
-                                    if("rtf".equals(extension)) {
-                                        content=Textbox.RTF2PlainText(new FileInputStream(occurrenceFile));
-                                        inputReader = new StringReader(content);
+                                    if(makeDataURLOccurrence) {
+                                        DataURL dataUrl = new DataURL(occurrenceFile);
+                                        topic.setData(type, langs[realRow], dataUrl.toExternalForm());
                                     }
+                                    else {
+                                        String content = null;
 
-                                    // --- handle pdf files ---
-                                    if("pdf".equals(extension)) {
-                                        try {
-                                            PDDocument doc = PDDocument.load(occurrenceFile);
-                                            PDFTextStripper stripper = new PDFTextStripper();
-                                            content = stripper.getText(doc);
-                                            doc.close();
-                                            inputReader = new StringReader(content);
-                                        }
-                                        catch(Exception e) {
-                                            System.out.println("No PDF support!");
-                                        }
-                                    }
+                                        String filename = occurrenceFile.getPath().toLowerCase();
+                                        String suffix = filename.substring(Math.max(filename.lastIndexOf(".")+1, 0));
 
-                                    // --- handle MS office files ---
-                                    if("doc".equals(extension) ||
-                                       "ppt".equals(extension) ||
-                                       "xsl".equals(extension) ||
-                                       "vsd".equals(extension) 
-                                       ) {
-                                            content = MSOfficeBox.getText(occurrenceFile);
-                                            if(content != null) {
-                                                inputReader = new StringReader(content);
+                                        // --- handle rtf files ---
+                                        if("rtf".equals(suffix)) {
+                                            content = Textbox.RTF2PlainText(new FileInputStream(occurrenceFile));
+                                        }
+
+                                        // --- handle pdf files ---
+                                        else if("pdf".equals(suffix)) {
+                                            try {
+                                                PDDocument doc = PDDocument.load(occurrenceFile);
+                                                PDFTextStripper stripper = new PDFTextStripper();
+                                                content = stripper.getText(doc);
+                                                doc.close();
                                             }
-                                    }
-                                    
-                                    if("docx".equals(extension)) {
+                                            catch(Exception e) {
+                                                System.out.println("No PDF support!");
+                                            }
+                                        }
+
+                                        // --- handle MS office files ---
+                                        else if("doc".equals(suffix) ||
+                                           "ppt".equals(suffix) ||
+                                           "xsl".equals(suffix) ||
+                                           "vsd".equals(suffix) 
+                                           ) {
+                                                content = MSOfficeBox.getText(occurrenceFile);
+                                        }
+
+                                        else if("docx".equals(suffix)) {
                                             content = MSOfficeBox.getDocxText(occurrenceFile);
-                                            if(content != null) {
-                                                inputReader = new StringReader(content);
-                                            }
-                                    }
+                                        }
+                                        
+                                        else if("txt".equals(suffix)) {
+                                            FileReader inputReader = new FileReader(occurrenceFile);
+                                            content = IObox.loadFile(inputReader);
+                                        }
 
+                                        // --- handle everything else ---
+                                        if(content == null) {
+                                            FileReader inputReader = new FileReader(occurrenceFile);
+                                            content = IObox.loadFile(inputReader);
+                                        }
+                                        
+                                        if(content != null) {
+                                            topic.setData(type, langs[realRow], content);
+                                        }
 
-
-                                    // --- handle everything else ---
-                                    if(inputReader == null) {
-                                        inputReader = new FileReader(occurrenceFile);
-                                    }
-
-                                    String occurrenceText = IObox.loadFile(inputReader);
-                                    if(occurrenceText != null) {
-                                        topic.setData(type, langs[realRow], occurrenceText);
                                     }
                                 }
                             }

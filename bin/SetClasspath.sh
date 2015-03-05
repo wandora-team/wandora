@@ -31,4 +31,4 @@ WANDORACLASSES=$WANDORACLASSES:lib/unirest/*
 WANDORACLASSES=$WANDORACLASSES:lib/tmql4j/*
 WANDORACLASSES=$WANDORACLASSES:lib/*
 #  To use Webview Panel with Java 7 fix next line to address the location of JavaFX jar jfxrt.jar .
-WANDORACLASSES=$WANDORACLASSES:/usr/jdk/jre/lib/jfxrt.jar
+WANDORACLASSES=$WANDORACLASSES:$JAVA_HOME/jre/lib/jfxrt.jar
