@@ -57,11 +57,14 @@ public abstract class Directive {
         addons.add(new Addon("of", new Parameter[]{new Parameter(String.class,false,"column")}, "of"));
         addons.add(new Addon("where", new Parameter[]{new Parameter(Directive.class,false,"where directive")}, "where"));
         addons.add(new Addon("where", new Parameter[]{
-            // TODO: the operands can actually be either topic operands or normal
-            // operands, depending on the operator
-            new Parameter(TopicOperand.class,false,"operand 1"),
+            new Parameter(Operand.class,false,"operand 1"),
             new Parameter(String.class,false,"operator"),
-            new Parameter(TopicOperand.class,false,"operand 2")
+            new Parameter(Operand.class,false,"operand 2")
+        }, "where"));
+        addons.add(new Addon("where", new Parameter[]{
+            new Parameter(TopicOperand.class,false,"topic operand 1"),
+            new Parameter(String.class,false,"operator"),
+            new Parameter(TopicOperand.class,false,"topic operand 2")
         }, "where"));
         
         if(extras!=null && extras.length>0) {

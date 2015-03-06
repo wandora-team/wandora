@@ -463,7 +463,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
                         return null;
                     }
                 }
-                else return escapeString(value); // Subject identifier string
+                else return "new TopicOperand("+escapeString(value)+")"; // Subject identifier string
             }
             else if(Operand.class.isAssignableFrom(parameter.getType())){
                 if(value instanceof DirectivePanel) return "new Operand("+((DirectivePanel)value).buildScript()+")";
