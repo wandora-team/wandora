@@ -71,6 +71,19 @@ public class Regex extends WhereDirective implements DirectiveUIHints.Provider {
         DirectiveUIHints ret=new DirectiveUIHints(Regex.class,new DirectiveUIHints.Constructor[]{
                 new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
                     new DirectiveUIHints.Parameter(String.class, false, "regex")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(String.class, false, "regex"),
+                    new DirectiveUIHints.Parameter(Integer.class, false, "mode")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(String.class, false, "regex"),
+                    new DirectiveUIHints.Parameter(String.class, false, "replace")
+                }, ""),
+                new DirectiveUIHints.Constructor(new DirectiveUIHints.Parameter[]{
+                    new DirectiveUIHints.Parameter(Operand.class, false, "regex"),
+                    new DirectiveUIHints.Parameter(Operand.class, false, "replace"),
+                    new DirectiveUIHints.Parameter(Integer.class, false, "mode")
                 }, "")
             },
             Directive.getStandardAddonHints(),

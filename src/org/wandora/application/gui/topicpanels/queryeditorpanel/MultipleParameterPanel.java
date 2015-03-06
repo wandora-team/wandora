@@ -72,11 +72,13 @@ public class MultipleParameterPanel extends AbstractTypePanel {
         parametersPanel.removeAll();
         rows.clear();
         
-        Object[] a=(Object[])o;
-        for (Object ao : a) {
-            addParameter();
-            Row row=rows.get(rows.size()-1);
-            row.panel.setValue(ao);
+        if(o!=null){
+            Object[] a=(Object[])o;
+            for (Object ao : a) {
+                addParameter();
+                Row row=rows.get(rows.size()-1);
+                row.panel.setValue(ao);
+            }
         }
     }    
     

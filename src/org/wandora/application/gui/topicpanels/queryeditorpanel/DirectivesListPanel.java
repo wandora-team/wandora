@@ -98,25 +98,41 @@ public class DirectivesListPanel extends javax.swing.JPanel {
         categoryNodes.add(other);
                 
         for(DirectiveUIHints h: hints){
-            DefaultMutableTreeNode parent=other;
-            String category=h.getCategory();
-            if(category!=null && category.trim().length()>0 && !category.trim().equalsIgnoreCase("Other")) {
-                category=category.trim();
-                for(DefaultMutableTreeNode n : categoryNodes ){
-                    String name=n.toString();
-                    if(name!=null && name.equalsIgnoreCase(category)) {
-                        parent=n;
-                        break;
+            boolean added=false;
+            String categoryAll=h.getCategory();
+            if(categoryAll==null) categoryAll="";
+            String[] categories=categoryAll.split(";");
+            for(String category : categories){
+                DefaultMutableTreeNode parent=null;
+                if(category!=null && category.trim().length()>0) {
+                    category=category.trim();
+                    if(!category.equalsIgnoreCase("Other")) {
+                        for(DefaultMutableTreeNode n : categoryNodes ){
+                            String name=n.toString();
+                            if(name!=null && name.equalsIgnoreCase(category)) {
+                                parent=n;
+                                break;
+                            }
+                        }
+                        
+                        if(parent==null){
+                            parent=new DefaultMutableTreeNode(category);
+                            categoryNodes.add(parent);
+                        }
                     }
                 }
-                if(parent==other){
-                    parent=new DefaultMutableTreeNode(category);
-                    categoryNodes.add(parent);
+                
+                if(parent!=null){
+                    DefaultMutableTreeNode node=new DefaultMutableTreeNode(h);
+                    parent.add(node);
+                    added=true;
                 }
             }
             
-            DefaultMutableTreeNode node=new DefaultMutableTreeNode(h);
-            parent.add(node);
+            if(!added){
+                DefaultMutableTreeNode node=new DefaultMutableTreeNode(h);
+                other.add(node);                
+            }
         }
         
         Collections.sort(categoryNodes,new Comparator<DefaultMutableTreeNode>(){
