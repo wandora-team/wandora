@@ -103,15 +103,24 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
                     OccurrenceTable ot = (OccurrenceTable) contextSource;
                     String occurrence = ot.getPointedOccurrence();
                     Topic topic = ot.getTopic();
-                    String url = extractURLFromOccurrence(occurrence);
                     typeTopic = ot.getPointedOccurrenceType();
                     langTopic = ot.getPointedOccurrenceLang();
-                    if(url != null) {
-                        if(targetPath == null) {
-                            targetPath = selectDirectory("Select download directory", admin);
-                            if(targetPath == null) return;
+                    if(occurrence != null) {
+                        if(occurrence.startsWith("data:")) {
+                            File targetFile = selectFile("Select target file", admin);
+                            if(targetFile == null) return;
+                            DataURL.saveToFile(occurrence, targetFile);
                         }
-                        download(admin, topic, url, targetPath);
+                        else {
+                            String url = extractURLFromOccurrence(occurrence);
+                            if(url != null) {
+                                if(targetPath == null) {
+                                    targetPath = selectDirectory("Select download directory", admin);
+                                    if(targetPath == null) return;
+                                }
+                                download(admin, topic, url, targetPath);
+                            }
+                        }
                     }
                 }
                 catch(Exception e) {
@@ -266,6 +275,31 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
         return currentDirectory;
     }
 
+    
+    
+
+    private File selectFile(String directoryDialogTitle, Wandora admin) {
+        File currentFile = null;
+        try {
+            SimpleFileChooser chooser=UIConstants.getFileChooser();
+            chooser.setDialogTitle(directoryDialogTitle);
+            chooser.setApproveButtonText("Select file");
+            chooser.setFileSelectionMode(SimpleFileChooser.FILES_ONLY);
+
+            if(chooser.open(admin, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+                currentFile = chooser.getSelectedFile();
+            }
+            else {
+                currentFile = null;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return currentFile;
+    }
+    
+    
 
     @Override
     public String getName() {

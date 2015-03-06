@@ -83,6 +83,7 @@ public class SplitTopics extends AbstractWandoraTool implements WandoraTool {
     
     
     
+    @Override
     public void execute(Wandora w, Context context) {
         duplicateAssociations = true;
         copyInstances = true;
@@ -111,7 +112,7 @@ public class SplitTopics extends AbstractWandoraTool implements WandoraTool {
     public void splitTopic(Topic original, TopicMap topicMap, Wandora w)  throws TopicMapException {
         Collection originalSIs = original.getSubjectIdentifiers();
         if(originalSIs == null || originalSIs.isEmpty() || originalSIs.size() == 1) {
-            log("Topic '"+ getTopicName(original) +"' has only one SI and can't be splitted. Skipping!");
+            log("Topic '"+ getTopicName(original) +"' has only one subject identifier. Can't split.");
             return;
         }
         
@@ -127,11 +128,11 @@ public class SplitTopics extends AbstractWandoraTool implements WandoraTool {
 
             split = splitMap.copyTopicIn(original, false);
             if(duplicateAssociations) {
-                Collection assocs = original.getAssociations();
-                Association a;
-                for(Iterator iter = assocs.iterator(); iter.hasNext();) {
-                    a = (Association) iter.next();
-                    splitMap.copyAssociationIn(a);
+                Collection<Association> associations = original.getAssociations();
+                if(associations != null && !associations.isEmpty()) {
+                    for(Association association : associations) {
+                        splitMap.copyAssociationIn(association);
+                    }
                 }
             }
 
@@ -185,13 +186,10 @@ public class SplitTopics extends AbstractWandoraTool implements WandoraTool {
 
             // --- attach instances ---
             if(split != null && copyInstances) {
-                Collection col = topicMap.getTopicsOfType(original);
-                Iterator iter=col.iterator();
-                Topic t = null;
-                while(iter.hasNext()) {
-                    t=(Topic)iter.next();
-                    if(t.isOfType(original)) {
-                        t.addType(split);
+                Collection<Topic> instances = topicMap.getTopicsOfType(original);
+                if(instances != null && !instances.isEmpty()) {
+                    for(Topic instance : instances) {
+                        instance.addType(split);
                     }
                 }
             }

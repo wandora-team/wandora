@@ -501,6 +501,25 @@ public class SimbergOpenDataHandler {
                             s.append("<lido:eventSet>");
                                 s.append("<lido:event>");
                                     s.append("<lido:eventType>");
+                                        s.append("<lido:term>valmistus</lido:term>");
+                                    s.append("</lido:eventType>");
+                                    String authorString = (author != null && author.length() > 0 ? author : "Tuntematon");
+                                    s.append("<lido:eventActor>");
+                                        s.append("<lido:actorInRole>");
+                                            s.append("<lido:actor>");
+                                                s.append("<lido:nameActorSet>");
+                                                    s.append("<lido:appellationValue>"+encodeXMLValue(authorString)+"</lido:appellationValue>");
+                                                s.append("</lido:nameActorSet>");
+                                            s.append("</lido:actor>");
+                                            s.append("<lido:roleActor><lido:term>valokuvaaja</lido:term></lido:roleActor>");
+                                        s.append("</lido:actorInRole>");
+                                    s.append("</lido:eventActor>");
+                                 s.append("</lido:event>");
+                            s.append("</lido:eventSet>");
+
+                            s.append("<lido:eventSet>");
+                                s.append("<lido:event>");
+                                    s.append("<lido:eventType>");
                                         s.append("<lido:term>valokuvaus</lido:term>");
                                     s.append("</lido:eventType>");
                                     if(author != null && author.length() > 0) {

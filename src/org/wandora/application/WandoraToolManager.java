@@ -486,7 +486,7 @@ public class WandoraToolManager extends AbstractWandoraTool implements WandoraTo
                 importTools.add(importer);
             }
             else if(fileName.endsWith(".wpr")) {
-                if(importTools.size() == 0) {
+                if(importTools.isEmpty()) {
                     LoadWandoraProject loader = new LoadWandoraProject(file);
                     importTools.add(loader);
                 }

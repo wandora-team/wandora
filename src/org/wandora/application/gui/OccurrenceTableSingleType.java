@@ -211,9 +211,11 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             Object o = getValueAt(e);
             if(o != null) {
                 String tooltipText = o.toString();
-                if(tooltipText != null && tooltipText.length() > 5) {
-                    if(tooltipText.length() > 200) tooltipText = tooltipText.substring(0,199)+"...";
-                    return Textbox.makeHTMLParagraph(tooltipText, 40);
+                if(!tooltipText.startsWith("data:")) {
+                    if(tooltipText != null && tooltipText.length() > 5) {
+                        if(tooltipText.length() > 200) tooltipText = tooltipText.substring(0,199)+"...";
+                        return Textbox.makeHTMLParagraph(tooltipText, 40);
+                    }
                 }
             }
         }
@@ -479,12 +481,21 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     occurrence = occurrence.trim();
                     if(occurrence.length() > 0) {
                         try {
-                            Desktop desktop = Desktop.getDesktop();
-                            desktop.browse(new URI(occurrence));
+                            if(!occurrence.startsWith("data:")) {
+                                Desktop desktop = Desktop.getDesktop();
+                                desktop.browse(new URI(occurrence));
+                            }
+                            else {
+                                errorMessage = "Due to security restrictions Wandora can't open data-urls with desktop browser. "+
+                                               "Copy data-url to clipboard and paste it to browser's address field.";
+                            }
+                        }
+                        catch(IOException ioe) {
+                            errorMessage = "IOException occurred while starting external browser for occurrence: "+ioe.getMessage();
                         }
                         catch(Exception e) {
                             if(occurrence.length() > 80) occurrence = occurrence.substring(0, 80)+"...";
-                            errorMessage = "Exception occurred while starting external browser for occurrence. Check if occurrence text is a valid URL.";
+                            errorMessage = "Exception '"+e.getMessage()+"' occurred while starting external browser for occurrence. Check if the occurrence text is a valid URL.";
                             e.printStackTrace();
                         }
                     }

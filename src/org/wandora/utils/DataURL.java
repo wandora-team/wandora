@@ -23,6 +23,8 @@
 package org.wandora.utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -162,6 +164,28 @@ public class DataURL {
     }
     
     
+    public String toExternalForm(int options) {
+        StringBuilder dataURL = new StringBuilder("");
+        dataURL.append("data:");
+        if(mimetype != null) dataURL.append(mimetype).append(";");
+        if(encoding != null) dataURL.append(encoding).append(",");
+        if(data != null) {
+            if("base64".equalsIgnoreCase(encoding)) {
+                dataURL.append(Base64.encodeBytes(data, options));
+            }
+            else {
+                try {
+                    dataURL.append(new String(data,defaultStringEncoding));
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return dataURL.toString();
+    }
+    
+    
     
     // -------------------------------------------------------------------------
     
@@ -229,5 +253,24 @@ public class DataURL {
         else {
             return 0;
         }
+    }
+    
+    // -------------------------------------------------------------------------
+    
+    
+    
+    public static String removeLineBreaks(String dataURLString) throws MalformedURLException {
+        DataURL dataURL = new DataURL(dataURLString);
+        dataURLString = dataURL.toExternalForm(Base64.DONT_BREAK_LINES);
+        return dataURLString;
+    }
+    
+    
+    public static void saveToFile(String dataURLString, File file) throws MalformedURLException, IOException {
+        DataURL dataURL = new DataURL(dataURLString);
+        byte[] bytes = dataURL.getData();
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(bytes);
+        fos.close();
     }
 }

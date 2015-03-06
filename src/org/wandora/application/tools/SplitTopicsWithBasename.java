@@ -48,13 +48,14 @@ import javax.swing.*;
  * @author akivela
  */
 public class SplitTopicsWithBasename extends AbstractWandoraTool implements WandoraTool {
+    public static boolean SKIP_WHITE_SPACE_SPLIT_PARTS = true;
     
 
     public boolean duplicateAssociations = true;
     public boolean copyInstances = true;
     
     public boolean askName=false;
-    public String splitString = "";
+    public static String splitString = "";
     private int topicCounter = 0;
     private int splitCounter = 0;
             
@@ -96,7 +97,8 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
         splitString = WandoraOptionPane.showInputDialog(w, "Enter regular expression string used to split base name:", splitString);
         
         if(splitString == null || splitString.length() == 0) return;
-        
+
+        String splitStringCopy = splitString;
         Topic topic = null;
         duplicateAssociations = true;
         copyInstances = true;
@@ -104,11 +106,12 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
         splitCounter = 0;
         topicCounter = 0;
         setDefaultLogger();
+        
         while(topics.hasNext() && !forceStop()) {
             try {
                 topic = (Topic) topics.next();
                 Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
-                splitTopic(ltopic, splitString, tm, w);
+                splitTopic(ltopic, splitStringCopy, tm, w);
             } 
             catch(Exception e) {
                 log(e);
@@ -129,15 +132,15 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
     public void splitTopic(Topic original, String splitString, TopicMap topicMap, Wandora w)  throws TopicMapException {
         if(original == null) return;
         if(original.getBaseName() == null) {
-            log("Topic has no basename. Skipping!");
+            log("Topic has no basename. Can't split.");
             return;
         }
         if(original.getBaseName().length() == 0) {
-            log("Topic's basename is zero length. Skipping!");
+            log("Topic's basename length is zero. Can't split.");
         }
         String[] splitParts = original.getBaseName().split(splitString);
         if(splitParts.length < 2) {
-            log("No split parts for topic '"+ getTopicName(original) +"'. Skipping!");
+            log("No split parts found for topic '"+ getTopicName(original) +"'.");
             return;
         }
         
@@ -147,8 +150,14 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
         for(int i=1; i<splitParts.length; i++) {
             splitBasename = splitParts[i];
             if(splitBasename == null || splitBasename.length() == 0) {
-                log("Invalid zero length split part for topic '"+ getTopicName(original) +"'!");
+                log("Zero length split part found for topic '"+ getTopicName(original) +"'.");
                 continue;
+            }
+            if(SKIP_WHITE_SPACE_SPLIT_PARTS) {
+                if(splitBasename.trim().length() == 0) {
+                    log("White space split part found for topic '"+ getTopicName(original) +"'.");
+                    continue;
+                }
             }
 
             // --- copy topic and associations ---
@@ -157,11 +166,11 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
             
             split = splitMap.copyTopicIn(original, false);
             if(duplicateAssociations) {
-                Collection assocs = original.getAssociations();
-                Association a;
-                for(Iterator iter = assocs.iterator(); iter.hasNext();) {
-                    a = (Association) iter.next();
-                    splitMap.copyAssociationIn(a);
+                Collection<Association> associations = original.getAssociations();
+                if(associations != null && !associations.isEmpty()) {
+                    for(Association association : associations) {
+                        splitMap.copyAssociationIn(association);
+                    }
                 }
             }
 
@@ -196,15 +205,12 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
             }
            
             // --- resolve new subject identifiers ---
-            Collection sis = split.getSubjectIdentifiers();
-            Vector siv = new Vector();
-            for(Iterator iter = sis.iterator(); iter.hasNext(); ) {
-                siv.add(iter.next());
-            }
-            Locator lo = null;
+            Collection<Locator> sis = split.getSubjectIdentifiers();
+            ArrayList<Locator> siv = new ArrayList();
+            siv.addAll(sis);
+
             Locator l = null;
-            for(int j=0; j<siv.size(); j++) {
-                lo = (Locator) siv.elementAt(j);
+            for(Locator lo : siv) {
                 split.removeSubjectIdentifier(lo);
                 l = (Locator) new Locator(lo.toExternalForm() + "_split");
                 int c = 2;
@@ -221,13 +227,10 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
             
             // --- attach instances ---
             if(split != null && copyInstances) {
-                Collection col = topicMap.getTopicsOfType(original);
-                Iterator iter=col.iterator();
-                Topic t = null;
-                while(iter.hasNext()) {
-                    t=(Topic)iter.next();
-                    if(t.isOfType(original)) {
-                        t.addType(split);
+                Collection<Topic> instances = topicMap.getTopicsOfType(original);
+                if(instances != null && !instances.isEmpty()) {
+                    for(Topic instance : instances) {
+                        instance.addType(split);
                     }
                 }
             }
