@@ -32,12 +32,14 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.wandora.application.*;
@@ -211,7 +213,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             Object o = getValueAt(e);
             if(o != null) {
                 String tooltipText = o.toString();
-                if(!tooltipText.startsWith("data:")) {
+                if(!DataURL.isDataURL(tooltipText)) {
                     if(tooltipText != null && tooltipText.length() > 5) {
                         if(tooltipText.length() > 200) tooltipText = tooltipText.substring(0,199)+"...";
                         return Textbox.makeHTMLParagraph(tooltipText, 40);
@@ -481,7 +483,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     occurrence = occurrence.trim();
                     if(occurrence.length() > 0) {
                         try {
-                            if(!occurrence.startsWith("data:")) {
+                            if(!DataURL.isDataURL(occurrence)) {
                                 Desktop desktop = Desktop.getDesktop();
                                 desktop.browse(new URI(occurrence));
                             }
@@ -524,11 +526,37 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     occurrence = occurrence.trim();
                     if(occurrence.length() > 0) {
                         try {
-                            String occurrenceContent = IObox.doUrl(new URL(occurrence));
-                            topic.setData(type, langs[realCol-1], occurrenceContent);
+                            URL url = new URL(occurrence);
+                            int a = WandoraOptionPane.showConfirmDialog(wandora, "Make data-url instead of text occurrence?", "Make data-url", WandoraOptionPane.INFORMATION_MESSAGE);
+                            if(a == WandoraOptionPane.YES_OPTION) {
+                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                connection.setRequestMethod("HEAD");
+                                connection.connect();
+                                String contentType = connection.getContentType();
+                                connection.disconnect();
+                                
+                                InputStream is = url.openStream();
+                                
+                                byte[] dataBytes = IOUtils.toByteArray(is);
+                                DataURL dataURL = new DataURL(contentType, dataBytes);
+                                topic.setData(type, langs[realCol-1], dataURL.toExternalForm());
+                            }
+                            else {
+                                String occurrenceContent = IObox.doUrl(url);
+                                topic.setData(type, langs[realCol-1], occurrenceContent);
+                            }
+                        }
+                        catch(MalformedURLException mue) {
+                            WandoraOptionPane.showMessageDialog(wandora, "The occurrence is invalid URL. Can't download.", "Invalid URL exception", WandoraOptionPane.ERROR_MESSAGE);
+                        }
+                        catch(IOException ioe) {
+                            WandoraOptionPane.showMessageDialog(wandora, "Can't read the occurrence URL. IOException occurred ('"+ioe.getMessage()+"').", "Can't read the URL", WandoraOptionPane.ERROR_MESSAGE);
+                        }
+                        catch(TopicMapException tme) {
+                            WandoraOptionPane.showMessageDialog(wandora, "Can't set the occurrence because of a topic map exception. Topic map doesn't function as intended", "Topic map exception occurred", WandoraOptionPane.ERROR_MESSAGE);
                         }
                         catch(Exception e) {
-                            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while downloading URL '"+occurrence+"'.", "Error downloading URL", WandoraOptionPane.ERROR_MESSAGE);
+                            WandoraOptionPane.showMessageDialog(wandora, "Exception '"+e.getMessage()+"' occurred while downloading URL '"+occurrence+"'.", "Error downloading URL", WandoraOptionPane.ERROR_MESSAGE);
                             e.printStackTrace();
                         }
                     }
@@ -740,7 +768,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             String occurrenceText = value.toString();
             String viewedOccurrenceText = occurrenceText;
             boolean isDataOccurrence = false;
-            if(viewedOccurrenceText.startsWith("data:")) {
+            if(DataURL.isDataURL(viewedOccurrenceText)) {
                 try {
                     Component preview = UIBox.getPreview(new DataURL(viewedOccurrenceText));
                     if(preview != null) {
@@ -834,7 +862,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             scope=langs[realRow];
             
             String viewedOccurrenceText = value.toString();
-            if(viewedOccurrenceText.startsWith("data:")) {
+            if(DataURL.isDataURL(viewedOccurrenceText)) {
                 viewedOccurrenceText = viewedOccurrenceText.substring(0, Math.max(5, viewedOccurrenceText.indexOf(',')));
             }
             else {

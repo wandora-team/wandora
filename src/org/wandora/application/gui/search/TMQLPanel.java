@@ -175,7 +175,7 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     }
     
     
-    public MixedTopicTable getTopicsByTMQL() throws TopicMapException {
+    public MixedTopicTable getResultsByTMQL() throws TopicMapException {
         TopicMap topicMap = wandora.getTopicMap();
         String query = tmqlTextPane.getText();
 
@@ -360,8 +360,8 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
         try {
             tmqlResultPanel.removeAll();
-            clearResultsButton.setEnabled(false);
-            resultsTable = getTopicsByTMQL();
+            clearResultsButton.setEnabled(true);
+            resultsTable = getResultsByTMQL();
             if(resultsTable != null) {
                 tmqlResultPanel.add(resultsTable, BorderLayout.NORTH);
             }

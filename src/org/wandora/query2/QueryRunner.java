@@ -45,8 +45,8 @@ import org.wandora.utils.ScriptManager;
 
 
 public class QueryRunner {
-    protected String scriptEngineName=null;
-    static protected ScriptManager scriptManager=new ScriptManager();
+    protected String scriptEngineName = null;
+    static protected ScriptManager scriptManager = new ScriptManager();
     protected ScriptEngine scriptEngine;
     
     /**
@@ -73,25 +73,25 @@ public class QueryRunner {
         this(null);
     }
     
-    public ArrayList<ResultRow> runQuery(String query,Topic contextTopic) throws ScriptException, QueryException {
+    public ArrayList<ResultRow> runQuery(String query, Topic contextTopic) throws ScriptException, QueryException {
         ArrayList<Topic> context=new ArrayList<Topic>();
         context.add(contextTopic);
         return runQuery(query,context);
     }
-    public QueryResult runQueryCatchException(String query,Topic contextTopic) {
+    public QueryResult runQueryCatchException(String query, Topic contextTopic) {
         try{ return new QueryResult(runQuery(query,contextTopic)); }
         catch(Exception e){ return new QueryResult(e); }
     }
-    public ArrayList<ResultRow> runQuery(Directive directive,Topic contextTopic) throws QueryException {
+    public ArrayList<ResultRow> runQuery(Directive directive, Topic contextTopic) throws QueryException {
         ArrayList<Topic> context=new ArrayList<Topic>();
         context.add(contextTopic);
         return runQuery(directive,context);
     }
-    public QueryResult runQueryCatchException(Directive directive,Topic contextTopic) {
+    public QueryResult runQueryCatchException(Directive directive, Topic contextTopic) {
         try{ return new QueryResult(runQuery(directive,contextTopic)); }
         catch(Exception e){ return new QueryResult(e); }
     }
-    public ArrayList<ResultRow> runQuery(String query,Collection<Topic> contextTopics) throws ScriptException, QueryException {
+    public ArrayList<ResultRow> runQuery(String query, Collection<Topic> contextTopics) throws ScriptException, QueryException {
         if(this.scriptEngine==null) throw new RuntimeException("No scripting engine initialised");
         
         Directive directive = null;
@@ -105,12 +105,12 @@ public class QueryRunner {
         
         return runQuery(directive,contextTopics);
     }
-    public QueryResult runQueryCatchException(String query,Collection<Topic> contextTopics) {
+    public QueryResult runQueryCatchException(String query, Collection<Topic> contextTopics) {
         try{ return new QueryResult(runQuery(query,contextTopics)); }
         catch(Exception e){ return new QueryResult(e); }
     }
     
-    public ArrayList<ResultRow> runQuery(Directive directive,Collection<Topic> contextTopics) throws QueryException {
+    public ArrayList<ResultRow> runQuery(Directive directive, Collection<Topic> contextTopics) throws QueryException {
         TopicMap tm=null;
         ArrayList<ResultRow> context=new ArrayList<ResultRow>();
         for(Topic t : contextTopics){
@@ -137,23 +137,65 @@ public class QueryRunner {
         catch(Exception e){ return new QueryResult(e); }
     }
     
+    
+    
+    
     public static class QueryResult {
         public ArrayList<ResultRow> rows;
         public Throwable exception;
+        
         public QueryResult(ArrayList<ResultRow> rows){
             this.rows=rows;
         }
+        
         public QueryResult(Throwable exception){
             this.exception=exception;
         }
-        public ArrayList<ResultRow> getRows(){return rows;}
-        public boolean isException(){return exception!=null;}
-        public Throwable getException(){return exception;}
-        public String getStackTrace(){
+        
+        public ArrayList<ResultRow> getRows() {
+            return rows;
+        }
+        
+        public boolean isException() {
+            return exception!=null;
+        }
+        
+        public Throwable getException() {
+            return exception;
+        }
+        
+        public String getStackTrace() {
             if(exception==null) return "";
             StringWriter sw=new StringWriter();
             exception.printStackTrace(new PrintWriter(sw));
             return sw.toString();
+        }
+        
+        public Object[][] getData() {
+            String[] columns = getColumns();
+            Object[][] data = new Object[rows.size()][columns.length];
+            for(int i=0; i<rows.size(); i++){
+                ResultRow row=rows.get(i);
+                ArrayList<String> roles=row.getRoles();
+                for(int j=0; j<columns.length; j++){
+                    String r=columns[j];
+                    int ind=roles.indexOf(r);
+                    if(ind!=-1) data[i][j]=row.getValue(ind);
+                    else data[i][j]=null;
+                }
+            }
+            return data;
+        }
+        
+        public String[] getColumns() {
+            ArrayList<String> columns=new ArrayList<>();
+            for(ResultRow row : rows) {
+                for(int i=0;i<row.getNumValues();i++){
+                    String l=row.getRole(i);
+                    if(!columns.contains(l)) columns.add(l);
+                }
+            }
+            return columns.toArray( new String[] {} );
         }
     }
 }

@@ -53,7 +53,8 @@ public class TMQLRunner {
     
     public TMQLRunner(){}
     
-    public static TMQLResult runTMQL(TopicMap topicMap,String query) throws TopicMapException {
+
+    public static TMQLResult runTMQL(TopicMap topicMap, String query) throws TopicMapException {
         ITMQLRuntime tmql = TMQLRuntimeFactory.newFactory().newRuntime("tmql-2007");
         org.tmapi.core.TopicMap tm;
 

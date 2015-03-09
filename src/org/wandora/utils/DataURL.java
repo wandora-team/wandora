@@ -259,6 +259,16 @@ public class DataURL {
     
     
     
+    public static boolean isDataURL(String dataURLString) {
+        if(dataURLString != null) {
+            if(dataURLString.startsWith("data:")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
     public static String removeLineBreaks(String dataURLString) throws MalformedURLException {
         DataURL dataURL = new DataURL(dataURLString);
         dataURLString = dataURL.toExternalForm(Base64.DONT_BREAK_LINES);
