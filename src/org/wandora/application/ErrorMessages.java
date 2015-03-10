@@ -37,7 +37,7 @@ public class ErrorMessages {
     
     
     
-    public static String getMessage(Exception e) {
+    public static String getMessage(Throwable e) {
         String msg = "An exception has occurred in Wandora.";
         if(e != null) {
             if(e instanceof org.wandora.topicmap.TopicMapReadOnlyException) {
@@ -64,24 +64,11 @@ public class ErrorMessages {
                       "In other words, the open topic operation is not supported by the topic panel. "+
                       "You can select or create another topic panel and try again.";
             }
-            else {
-                msg = "An exception has occurred in Wandora: "+e.getMessage()+"";
-            }
-        }
-        return msg;
-    }
-    
-    
-    public static String getMessage(Exception e, WandoraTool t) {
-        String msg = getMessage(e);
-        return msg;
-    }
-
-    
-    public static String getMessage(Error e) {
-        String msg = "An error has occurred in Wandora.";
-        if(e != null) {
-            if(e instanceof java.lang.OutOfMemoryError) {
+           
+           
+            
+            
+            else if(e instanceof java.lang.OutOfMemoryError) {
                 msg = "Wandora is running out of memory. "+
                       "Save your project and restart Wandora application. "+
                       "If possible, use startup script with larger memory.";
@@ -95,16 +82,22 @@ public class ErrorMessages {
                       "Save your project and restart Wandora application. "+
                       "If this message appears again, try to reinstall Java Virtual Machine (JRE).";
             }
+            
+            
+            
             else {
                 msg = "An error has occurred in Wandora. Error message follows:\n\n"+e.getMessage();
             }
+            
+            
         }
         return msg;
     }
     
     
-    public static String getMessage(Error e, WandoraTool t) {
+    public static String getMessage(Throwable e, WandoraTool t) {
         String msg = getMessage(e);
         return msg;
     }
+    
 }

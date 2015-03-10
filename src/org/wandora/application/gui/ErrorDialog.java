@@ -54,18 +54,7 @@ public class ErrorDialog extends javax.swing.JDialog {
     
     
     /** Creates new form ErrorDialog */
-    public ErrorDialog(Wandora w, Exception e) {
-        super(w, true);
-        initComponents();
-        this.setSize(700,400);
-        w.centerWindow(this);
-        setTitle("Exception");
-        setError(e);
-        okButton.setVisible(false);
-        setVisible(true);
-    }
-    
-    public ErrorDialog(Wandora w, Error e) {
+    public ErrorDialog(Wandora w, Throwable e) {
         super(w, true);
         initComponents();
         this.setSize(700,400);
@@ -107,21 +96,14 @@ public class ErrorDialog extends javax.swing.JDialog {
     
     // -------------------------------------------------------------------------
     
-    
-    
-    public void setError(Exception ex) {
+    public void setError(Throwable t) {
         stacktraceTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-        stacktraceTextPane.setText(getStacktTace(ex));
-        String msg = ErrorMessages.getMessage(ex);
+        stacktraceTextPane.setText(getStacktTace(t));
+        String msg = ErrorMessages.getMessage(t);
         messageLabel.setText("<html>"+msg+"</html>");
     }
     
-    public void setError(Error er) {
-        stacktraceTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-        stacktraceTextPane.setText(getStacktTace(er));
-        String msg = ErrorMessages.getMessage(er);
-        messageLabel.setText("<html>"+msg+"</html>");
-    }
+
     
     public int getButton(){
         return button;

@@ -175,16 +175,21 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     }
     
     
-    public MixedTopicTable getTopicsByTMQL() throws TopicMapException {
+    public MixedTopicTable getTopicsByTMQL() throws TopicMapException, Throwable {
         TopicMap topicMap = wandora.getTopicMap();
         String query = tmqlTextPane.getText();
-
-        TMQLRunner.TMQLResult res = TMQLRunner.runTMQL(topicMap,query);
-        Object[][] data = res.getData();
-        Object[] columns = Arrays.copyOf(res.getColumns(), res.getNumColumns(), Object[].class);
-
         MixedTopicTable table = new MixedTopicTable(wandora);
-        table.initialize(data,columns);
+
+        TMQLRunner.TMQLResult res = TMQLRunner.runTMQLCatchException(topicMap,query);
+        if(res.isException()) {
+            throw res.getException();
+        }
+        else {
+            Object[][] data = res.getData();
+            Object[] columns = Arrays.copyOf(res.getColumns(), res.getNumColumns(), Object[].class);
+            table.initialize(data,columns);
+        }
+
         return table;        
     }
 
@@ -379,7 +384,13 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
             revalidate();
             repaint();
             wandora.handleError(e);
-            return;
+        }
+        catch(Throwable t) {
+            message.setText("Error!");
+            tmqlResultPanel.add(message, BorderLayout.CENTER);
+            revalidate();
+            repaint();
+            wandora.handleError(t);
         }
     }//GEN-LAST:event_runButtonActionPerformed
 

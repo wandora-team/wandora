@@ -1647,14 +1647,13 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      * with the message "Exception occurred" and the exception stack trace.
      * Also ErrorHandler implementation.
      */
-    public void handleError(Exception e) {
+    public void handleError(Throwable throwable) {
         synchronized(errorHandlerLock){
-            /*debug*/ e.printStackTrace();
+            /*debug*/ throwable.printStackTrace();
             if(!handleErrors) return;
-            ErrorDialog ed = new ErrorDialog(this, e);
+            ErrorDialog ed = new ErrorDialog(this, throwable);
         }
     }
-
     
     
     

@@ -33,6 +33,6 @@ package org.wandora.application;
  */
 public interface ErrorHandler {
     
-    public void handleError(Exception e);
+    public void handleError(Throwable throwable);
     
 }
