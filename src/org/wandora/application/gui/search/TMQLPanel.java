@@ -365,7 +365,7 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
         try {
             tmqlResultPanel.removeAll();
-            clearResultsButton.setEnabled(false);
+            clearResultsButton.setEnabled(true);
             resultsTable = getTopicsByTMQL();
             if(resultsTable != null) {
                 tmqlResultPanel.add(resultsTable, BorderLayout.NORTH);
