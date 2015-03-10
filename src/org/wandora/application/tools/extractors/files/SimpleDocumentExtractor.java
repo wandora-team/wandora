@@ -537,11 +537,8 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
         try {
             if(content != null && content.length > 0) {
                 Topic contentType = createTopic(topicMap, "document-content");
-                StringBuilder contentData = new StringBuilder("data:");
-                contentData.append(mimeType);
-                contentData.append(";base64,");
-                contentData.append(org.wandora.utils.Base64.encodeBytes(content));
-                setData(textTopic, contentType, defaultLang, contentData.toString());
+                DataURL dataURL = new DataURL(mimeType, content);
+                setData(textTopic, contentType, defaultLang, dataURL.toExternalForm());
             }
         }
         catch(Exception e) {

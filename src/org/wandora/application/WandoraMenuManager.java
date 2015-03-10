@@ -66,6 +66,8 @@ import org.wandora.application.tools.navigate.*;
 import org.wandora.application.tools.occurrences.*;
 import org.wandora.application.tools.occurrences.clipboards.*;
 import org.wandora.application.tools.occurrences.refine.*;
+import org.wandora.application.tools.occurrences.run.RunOccurrenceAsQuery;
+import org.wandora.application.tools.occurrences.run.RunOccurrenceAsTMQL;
 import org.wandora.application.tools.project.*;
 import org.wandora.application.tools.selections.*;
 import org.wandora.application.tools.server.*;
@@ -1846,8 +1848,8 @@ public class WandoraMenuManager {
             "Delete occurrence...", new DeleteOccurrence(),
             "---",
             "Open URL occurrence...", new OpenURLOccurrence(),
-            "Download URL to a file...", new DownloadOccurrence(DownloadOccurrence.TARGET_FILE),
             "Download URL to the occurrence", new DownloadOccurrence(DownloadOccurrence.TARGET_OCCURRENCE),
+            "Save URL to a file...", new DownloadOccurrence(DownloadOccurrence.TARGET_FILE),
             "---",
             "Upload occurrence to Pastebin...", new PasteBinOccurrenceUploader(),
             "Download occurrence from Pastebin", new PasteBinOccurrenceDownloader(),
@@ -1858,6 +1860,11 @@ public class WandoraMenuManager {
             "Translate occurrence with Google...", new OccurrenceGoogleTranslate(),
             "Translate occurrence with Microsoft...", new OccurrenceMicrosoftTranslate(),
             "Translate occurrence with Watson...", new OccurrenceWatsonTranslate(),
+            "---",
+            "Run occurrence", new Object[] {
+                "Run as Query", new RunOccurrenceAsQuery(),
+                "Run as TMQL", new RunOccurrenceAsTMQL(),
+            },
             "---",
             "View", new Object[] {
                 "View schema scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_SCHEMA, options), (OccurrenceTable.VIEW_SCHEMA.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),

@@ -83,7 +83,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         Object contextSource = context.getContextSource();
         
         // ***** TARGET OCCURRENCE ***** 
@@ -106,8 +106,8 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
                     typeTopic = ot.getPointedOccurrenceType();
                     langTopic = ot.getPointedOccurrenceLang();
                     if(occurrence != null) {
-                        if(occurrence.startsWith("data:")) {
-                            File targetFile = selectFile("Select target file", admin);
+                        if(DataURL.isDataURL(occurrence)) {
+                            File targetFile = selectFile("Select target file", wandora);
                             if(targetFile == null) return;
                             DataURL.saveToFile(occurrence, targetFile);
                         }
@@ -115,10 +115,10 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
                             String url = extractURLFromOccurrence(occurrence);
                             if(url != null) {
                                 if(targetPath == null) {
-                                    targetPath = selectDirectory("Select download directory", admin);
+                                    targetPath = selectDirectory("Select download directory", wandora);
                                     if(targetPath == null) return;
                                 }
-                                download(admin, topic, url, targetPath);
+                                download(wandora, topic, url, targetPath);
                             }
                         }
                     }
@@ -130,7 +130,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
             else {
                 Iterator topics = context.getContextObjects();
                 File targetPath = null;
-                TopicMap tm = admin.getTopicMap();
+                TopicMap tm = wandora.getTopicMap();
 
                 if(topics != null && topics.hasNext()) {
                     try {
@@ -141,12 +141,12 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
                         overWriteAll = false;
 
                         if(topics.hasNext()) {
-                            GenericOptionsDialog god=new GenericOptionsDialog(admin,
+                            GenericOptionsDialog god=new GenericOptionsDialog(wandora,
                                 "Download occurrences",
                                 "To download occurrences please give occurrence type and scope topics.",true,new String[][]{
                                 new String[]{"Type of downloaded occurrences","topic","","Type topic of occurrences"},
                                 new String[]{"Scope of downloaded occurrences","topic","","Scope topic i.e. language of occurrences"},
-                            },admin);
+                            },wandora);
                             god.setVisible(true);
                             if(god.wasCancelled()) return;
 
@@ -165,13 +165,13 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
                                     if(url != null) {
                                         if(targetPath == null) {
                                             setState(INVISIBLE);
-                                            targetPath = selectDirectory("Select download directory", admin);
+                                            targetPath = selectDirectory("Select download directory", wandora);
                                             setState(VISIBLE);
                                             if(targetPath == null) break;
                                         }
                                         setDefaultLogger();
                                         setLogTitle("Download URL occurrences...");
-                                        cont = download(admin, topic, url, targetPath);
+                                        cont = download(wandora, topic, url, targetPath);
                                         count++;
                                     }
                                 }
