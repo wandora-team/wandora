@@ -41,13 +41,16 @@ public class DragNodeMouseTool extends MouseTool {
     private boolean pinned=false;
     private VNode draggingNode=null;
     private double dragOffsX,dragOffsY,dragOffsX2,dragOffsY2;
+    
+    
     /** Creates a new instance of DragNodeMouseTool */
     public DragNodeMouseTool() {
     }
  
+    
     @Override
-    public boolean mouseReleased(TopicMapGraphPanel panel, int mousex,int mousey) {
-        if(draggingNode!=null){
+    public boolean mouseReleased(TopicMapGraphPanel panel, int mousex, int mousey) {
+        if(draggingNode!=null) {
             draggingNode.setPinned(pinned);
             panel.releaseMouseTool();
             draggingNode=null;
@@ -56,10 +59,11 @@ public class DragNodeMouseTool extends MouseTool {
         else return false;
     }
     
+    
     @Override
-    public boolean mousePressed(TopicMapGraphPanel panel, int mousex,int mousey) {
+    public boolean mousePressed(TopicMapGraphPanel panel, int mousex, int mousey) {
         VNode mouseOverNode=panel.getMouseOverNode();
-        if(mouseOverNode!=null && panel.lockMouseTool(this)){
+        if(mouseOverNode!=null && panel.lockMouseTool(this)) {
             T2<Double,Double> m=panel.getMouseWorldCoordinates();
             draggingNode=mouseOverNode;
             pinned=mouseOverNode.isPinned();
@@ -71,9 +75,10 @@ public class DragNodeMouseTool extends MouseTool {
         return false;
     }
 
+    
     @Override
-    public boolean mouseDragged(TopicMapGraphPanel panel, int mousex,int mousey) {
-        if(draggingNode!=null){
+    public boolean mouseDragged(TopicMapGraphPanel panel, int mousex, int mousey) {
+        if(draggingNode!=null) {
             panel.setMouseFollowNode(null);
             T2<Double,Double> m=panel.getMouseWorldCoordinates();
             draggingNode.setX(m.e1);
@@ -82,6 +87,7 @@ public class DragNodeMouseTool extends MouseTool {
         }
         return false;
     }
+    
     
     @Override
     public Cursor getCursor(TopicMapGraphPanel panel, int mousex, int mousey){

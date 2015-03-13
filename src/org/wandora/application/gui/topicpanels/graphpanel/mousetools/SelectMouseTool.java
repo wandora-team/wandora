@@ -32,6 +32,8 @@ import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection
 import java.awt.*;
 import java.util.*;
 import static org.wandora.utils.Tuples.*;
+
+
 /**
  *
  * @author olli
@@ -45,19 +47,24 @@ public class SelectMouseTool extends MouseTool {
     private boolean selectNodes;
     private boolean selectEdges;
     
+    
     /** Creates a new instance of SelectMouseTool */
-    public SelectMouseTool(boolean selectNodes,boolean selectEdges,boolean clearSelection) {
+    public SelectMouseTool(boolean selectNodes, boolean selectEdges, boolean clearSelection) {
         this.clearSelection=clearSelection;
         this.selectNodes=selectNodes;
         this.selectEdges=selectEdges;
     }
+    
+    
     public SelectMouseTool(boolean clearSelection) {
         this(true,true,clearSelection);
     }
     
+    
     public SelectMouseTool() {
         this(true,true,true);
     }
+    
     
     @Override
     public boolean mouseReleased(TopicMapGraphPanel panel, int mousex,int mousey) {
@@ -74,6 +81,7 @@ public class SelectMouseTool extends MouseTool {
         else return false;
     }
     
+    
     @Override
     public boolean mousePressed(TopicMapGraphPanel panel, int mousex,int mousey) {
         if(panel.lockMouseTool(this)){
@@ -86,6 +94,7 @@ public class SelectMouseTool extends MouseTool {
         return false;
     }
 
+    
     @Override
     public boolean mouseDragged(TopicMapGraphPanel panel, int mousex,int mousey) {
         if(drawingSelection){
@@ -95,6 +104,7 @@ public class SelectMouseTool extends MouseTool {
         else return false;
     }
 
+    
     @Override
     public boolean mouseClicked(TopicMapGraphPanel panel, int mousex,int mousey) {
         VNode mouseOverNode=panel.getMouseOverNode();
@@ -116,6 +126,7 @@ public class SelectMouseTool extends MouseTool {
         return true;
     }
 
+    
     @Override
     public void paint(Graphics2D g2,TopicMapGraphPanel panel){
         if(drawingSelection){
@@ -133,6 +144,7 @@ public class SelectMouseTool extends MouseTool {
             
         }
     }
+    
     
     @Override
     public Cursor getCursor(TopicMapGraphPanel panel, int mousex, int mousey){

@@ -82,6 +82,8 @@ public class HyperbolicProjection implements Projection {
     public void modify(int param, double delta) {
         modify(param, delta, 1.0);
     }
+    
+    
     @Override
     public void modify(int param, double delta, double multiplier) {
         switch(param) {
@@ -118,6 +120,8 @@ public class HyperbolicProjection implements Projection {
         }
         precalc();
     }
+    
+    
     @Override
     public void set(int param, double value) {
         switch(param) {
@@ -152,6 +156,8 @@ public class HyperbolicProjection implements Projection {
         }
         precalc();
     }
+    
+    
     @Override
     public double get(int param) {
         switch(param) {
@@ -164,7 +170,8 @@ public class HyperbolicProjection implements Projection {
         }
         return 0.0;
     }
-
+    
+    
     private void precalc(){
         viewR=viewWidth;
         if(viewHeight<viewWidth) viewR=viewHeight;
@@ -172,9 +179,12 @@ public class HyperbolicProjection implements Projection {
         A=viewR*viewR/scale;        
         ApViewR=A/viewR;
     }
+    
+    
     private double viewR=0.0;
     private double A=0.0;
     private double ApViewR=0.0;
+    
     
     @Override
     public double scale(double x, double y) {
@@ -186,6 +196,8 @@ public class HyperbolicProjection implements Projection {
 //            return (screenR2-screenR1)*getScale();
         return screenR2-screenR1;
     }
+    
+    
     @Override
     public T2<Double,Double> worldToScreen(double x,double y){
         double dx=x-viewX;
@@ -196,6 +208,7 @@ public class HyperbolicProjection implements Projection {
         return t2(viewWidth/2.0+dx/worldR*screenR,viewHeight/2.0-dy/worldR*screenR);
     }
 
+    
     @Override
     public T2<Double,Double> screenToWorld(double x,double y){
         double dx=x-viewWidth/2.0;
@@ -206,14 +219,17 @@ public class HyperbolicProjection implements Projection {
         else worldR=A/(viewR-screenR)-ApViewR;
         return t2(viewX+dx/screenR*worldR,viewY+dy/screenR*worldR);
     }
+    
+    
     @Override
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g) {
         g.setColor(Color.LIGHT_GRAY);
         g.setStroke(new BasicStroke(1));
         g.drawOval((int)(viewWidth/2.0-viewR),(int)(viewHeight/2.0-viewR),
                 (int)(viewR*2.0),(int)(viewR*2.0));
     }
 
+    
     @Override
     public void initialize(Options options, String prefix) {
         this.options = options;
@@ -226,20 +242,25 @@ public class HyperbolicProjection implements Projection {
         precalc();
     }
 
+    
     private synchronized void storeValue(String key, double value) {
         if(options != null) {
             options.put(optionsPrefix+key, value);
         }
     }
     
+    
     @Override
     public String getName() {
         return "Hyperbolic projection";
     }
+    
+    
     @Override
     public String getDescription() {
         return getName();
     }
+    
     
     @Override
     public Icon getIcon() {

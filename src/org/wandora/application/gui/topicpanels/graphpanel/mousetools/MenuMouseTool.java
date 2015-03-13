@@ -29,7 +29,6 @@ package org.wandora.application.gui.topicpanels.graphpanel.mousetools;
 
 import org.wandora.application.gui.topicpanels.graphpanel.*;
 import javax.swing.*;
-import java.awt.Point;
 
 /**
  *
@@ -43,24 +42,21 @@ public class MenuMouseTool extends MouseTool {
 
 
     @Override
-    public boolean mouseClicked(TopicMapGraphPanel panel, int mousex,int mousey) {
+    public boolean mouseClicked(TopicMapGraphPanel panel, int mousex, int mousey) {
         VNode mouseOverNode=panel.getMouseOverNode();
         VEdge mouseOverEdge=panel.getMouseOverEdge();
         VModel model=panel.getModel();
         if(mouseOverNode!=null){
-//            popupOpen=true;
             if(!mouseOverNode.isSelected()) model.setSelection(mouseOverNode);
             JPopupMenu menu=panel.getNodeMenu();
             menu.show(panel,mousex,mousey);
         }
         else if(mouseOverEdge!=null){
-//            popupOpen=true;
             if(!mouseOverEdge.isSelected()) model.setSelection(mouseOverEdge);
             JPopupMenu menu=panel.getEdgeMenu();
             menu.show(panel,mousex,mousey);
         }
-        else {
-//            popupOpen=true;               
+        else {            
             JPopupMenu menu=panel.getGeneralMenu();
             menu.show(panel,mousex,mousey);
         }        

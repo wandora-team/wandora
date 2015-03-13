@@ -26,10 +26,13 @@
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel.mousetools;
+
 import org.wandora.application.gui.topicpanels.graphpanel.*;
-import javax.swing.*;
 import java.awt.*;
+import java.util.Set;
+import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection;
 import static org.wandora.utils.Tuples.*;
+
 
 /**
  *
@@ -42,9 +45,10 @@ public class RotateMouseTool extends MouseTool {
     public RotateMouseTool() {
     }
  
+    
     @Override
     public boolean mouseReleased(TopicMapGraphPanel panel, int mousex,int mousey) {
-        if(draggingView){
+        if(draggingView) {
             panel.releaseMouseTool();
             draggingView=false;
             return true;
@@ -52,37 +56,41 @@ public class RotateMouseTool extends MouseTool {
         else return false;
     }
     
+    
     @Override
     public boolean mousePressed(TopicMapGraphPanel panel, int mousex,int mousey) {
-       if(panel.lockMouseTool(this)){
+       if(panel.lockMouseTool(this)) {
             draggingView=true;
-            VNode center=panel.getModel().getNode(panel.getTopicMapModel().getNodeFor(panel.getRootTopic()));
-            T2<Double,Double> m=panel.getMouseWorldCoordinates();
-            dragAngle=Math.atan2(m.e2-center.getY(),m.e1-center.getX());
+            T2<Double,Double> center = getRotationCenter(panel);
+            T2<Double,Double> m = panel.getMouseWorldCoordinates();
+            dragAngle=Math.atan2(m.e2-center.e2, m.e1-center.e1);
             return true;
         }
         return false;
     }
 
+    
     @Override
     public boolean mouseDragged(TopicMapGraphPanel panel, int mousex,int mousey) {
-        if(draggingView){
-            panel.setMouseFollowNode(null);
-            VNode center=panel.getModel().getNode(panel.getTopicMapModel().getNodeFor(panel.getRootTopic()));
-            T2<Double,Double> m=panel.getMouseWorldCoordinates();
-            double angle=Math.atan2(m.e2-center.getY(),m.e1-center.getX());
-            double d=angle-dragAngle;
-            
-            for(VNode vnode : panel.getModel().getNodes()){
-                double dx=vnode.getX()-center.getX();
-                double dy=vnode.getY()-center.getY();
-                double l=Math.sqrt(dx*dx+dy*dy);
-                double a=Math.atan2(dy,dx);
-                vnode.setX(center.getX()+l*Math.cos(a+d));
-                vnode.setY(center.getY()+l*Math.sin(a+d));
+        if(draggingView && panel != null) {
+            VModel model = panel.getModel();
+            if(model != null) {
+                panel.setMouseFollowNode(null);
+                T2<Double,Double> center = getRotationCenter(panel);
+                T2<Double,Double> m = panel.getMouseWorldCoordinates();
+                double angle=Math.atan2(m.e2-center.e2, m.e1-center.e1);
+                double d=angle-dragAngle;
+
+                for(VNode vnode : model.getNodes()) {
+                    double dx=vnode.getX()-center.e1;
+                    double dy=vnode.getY()-center.e2;
+                    double l=Math.sqrt(dx*dx+dy*dy);
+                    double a=Math.atan2(dy,dx);
+                    vnode.setX(center.e1+l*Math.cos(a+d));
+                    vnode.setY(center.e2+l*Math.sin(a+d));
+                }
+                dragAngle=angle;
             }
-            
-            dragAngle=angle;
             return true;
         }
         return false;
@@ -93,5 +101,38 @@ public class RotateMouseTool extends MouseTool {
     public Cursor getCursor(TopicMapGraphPanel panel, int mousex, int mousey){
         return Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
     }
+    
+    
+    private T2<Double,Double> getRotationCenter(TopicMapGraphPanel panel) {
+        double centerX = 0;
+        double centerY = 0;
+
+        VNode rootNode = panel.getRootNode();
+        if(rootNode != null) {
+            centerX = rootNode.getX();
+            centerY = rootNode.getY();
+        }
+        else {
+            Set<VNode> selectedNodes = panel.getSelectedNodes();
+            if(selectedNodes != null && !selectedNodes.isEmpty()) {
+                VNode selectedNode = selectedNodes.iterator().next();
+                if(selectedNode != null) {
+                    centerX = selectedNode.getX();
+                    centerY = selectedNode.getY();
+                }
+            }
+            else {
+                Projection projection = panel.getProjection();
+                if(projection != null) {
+                    T2<Double,Double> leftUpper = projection.screenToWorld(0, 0);
+                    T2<Double,Double> rightLower = projection.screenToWorld(panel.getWidth(), panel.getHeight());
+                    centerX = leftUpper.e1 + ((rightLower.e1 - leftUpper.e1) / 2);
+                    centerY = leftUpper.e2 + ((rightLower.e2 - leftUpper.e2) / 2);
+                }
+            }
+        }
+        return new T2(centerX, centerY);
+    }
+    
     
 }

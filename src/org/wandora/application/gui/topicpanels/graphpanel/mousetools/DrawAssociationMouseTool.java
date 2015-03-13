@@ -26,15 +26,15 @@
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel.mousetools;
+
 import org.wandora.application.gui.topicpanels.graphpanel.*;
 import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection;
-import javax.swing.*;
 import java.awt.*;
-import org.wandora.application.*;
 import org.wandora.topicmap.*;
 import java.util.*;
 import static org.wandora.utils.Tuples.*;
 import org.wandora.application.gui.*;
+
 
 /**
  *
@@ -44,9 +44,11 @@ public class DrawAssociationMouseTool extends MouseTool {
     private VNode startNode=null;
     private VNode endNode=null;
     
+    
     /** Creates a new instance of DrawAssociationMouseTool */
     public DrawAssociationMouseTool() {
     }
+    
     
     @Override
     public boolean mouseReleased(TopicMapGraphPanel panel, int mousex,int mousey) {
@@ -64,12 +66,12 @@ public class DrawAssociationMouseTool extends MouseTool {
                         d.prefill(false);
                         d.setVisible(true);
                         Association a=d.getCreatedAssociation();
-                        if(a!=null){
+                        if(a!=null) {
                             TopicMapModel tmModel=panel.getTopicMapModel();
                             VModel vModel=panel.getModel();
                             Edge e=tmModel.getEdgeFor(a);
                             if(e!=null) vModel.addEdge(e);
-                            else{
+                            else {
                                 Node n=tmModel.getNodeFor(a);
                                 if(n!=null){
                                     VNode vn=vModel.addNode(n);
@@ -77,7 +79,10 @@ public class DrawAssociationMouseTool extends MouseTool {
                                 }
                             }
                         }
-                    }catch(TopicMapException tme){tme.printStackTrace();}
+                    }
+                    catch(TopicMapException tme){
+                        tme.printStackTrace();
+                    }
                 }
             }
             startNode=null;
@@ -86,6 +91,7 @@ public class DrawAssociationMouseTool extends MouseTool {
         }
         else return false;
     }
+    
     
     @Override
     public boolean mousePressed(TopicMapGraphPanel panel, int mousex,int mousey) {
@@ -98,6 +104,7 @@ public class DrawAssociationMouseTool extends MouseTool {
         return false;
     }
 
+    
     @Override
     public boolean mouseDragged(TopicMapGraphPanel panel, int mousex,int mousey) {
         if(startNode!=null){
@@ -108,12 +115,15 @@ public class DrawAssociationMouseTool extends MouseTool {
         }
         return false;
     }
+    
+    
     @Override
     public Cursor getCursor(TopicMapGraphPanel panel, int mousex, int mousey){
         VNode mouseOverNode=panel.getMouseOverNode();
         if(mouseOverNode!=null) return Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
         else return null;
     }
+    
     
     @Override
     public void paint(Graphics2D g2,TopicMapGraphPanel panel){

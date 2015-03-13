@@ -28,7 +28,6 @@
 package org.wandora.application.gui.topicpanels.graphpanel.mousetools;
 
 import org.wandora.application.gui.topicpanels.graphpanel.*;
-import javax.swing.*;
 import java.awt.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
@@ -43,6 +42,7 @@ public class OpenTopicMouseTool extends MouseTool {
     public OpenTopicMouseTool() {
     }
 
+    
     @Override
     public boolean mouseClicked(TopicMapGraphPanel panel, int mousex,int mousey) {
         VNode mouseOverNode = panel.getMouseOverNode();

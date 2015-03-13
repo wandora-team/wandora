@@ -397,14 +397,14 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         return ret;
     }
     public void clearModel(){
-        System.out.println("Clear model");
+        // System.out.println("Clear model");
         model=null;
         tmModel=null;
         stopThread();
         repaint();
     }
     public void remakeModels(TopicMap tm){
-        System.out.println("Remake model");
+        // System.out.println("Remake model");
         needsRefresh=false;
         model=new VModel(this);
         tmModel=new TopicMapModel(model,tm);

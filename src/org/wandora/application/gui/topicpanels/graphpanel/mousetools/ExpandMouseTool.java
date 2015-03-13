@@ -36,20 +36,24 @@ import java.awt.*;
  */
 public class ExpandMouseTool extends MouseTool {
     
+    
     /** Creates a new instance of ExpandMouseTool */
     public ExpandMouseTool() {
     }
 
+    
     @Override
     public boolean mouseClicked(TopicMapGraphPanel panel, int mousex,int mousey) {
         VNode mouseOverNode=panel.getMouseOverNode();
         VModel model=panel.getModel();
-        if(mouseOverNode!=null) {
+        if(mouseOverNode != null && model != null) {
             model.openNode(mouseOverNode);
             return true;
         }
         else return false;
     }
+    
+    
     @Override
     public Cursor getCursor(TopicMapGraphPanel panel, int mousex, int mousey){
         VNode mouseOverNode=panel.getMouseOverNode();
