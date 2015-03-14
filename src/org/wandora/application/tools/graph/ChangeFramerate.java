@@ -25,19 +25,8 @@
 package org.wandora.application.tools.graph;
 
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import javax.swing.JWindow;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.GraphNodeContext;
-import org.wandora.application.gui.simple.SimpleButton;
-import org.wandora.application.gui.simple.SimpleLabel;
-import org.wandora.application.gui.simple.SimpleSlider;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 
 

@@ -1334,7 +1334,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         if((e.getModifiers()&MouseWheelEvent.SHIFT_MASK)!=0){
             projection.modify(Projection.MOUSEWHEEL2, notches, multiplier);
         }
-        else{
+        else {
             projection.modify(Projection.MOUSEWHEEL1, notches, multiplier);
         }
     }

@@ -25,20 +25,8 @@
 package org.wandora.application.tools.graph;
 
 
-import java.awt.Component;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import javax.swing.JWindow;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.GraphNodeContext;
-import org.wandora.application.gui.simple.SimpleButton;
-import org.wandora.application.gui.simple.SimpleLabel;
-import org.wandora.application.gui.simple.SimpleSlider;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 import org.wandora.application.gui.topicpanels.graphpanel.projections.HyperbolicProjection;
 import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection;
@@ -55,8 +43,7 @@ public class ChangeCurvature extends AbstractSliderTool implements WandoraTool {
     private int key = HyperbolicProjection.CURVATURE;
     private int minVal = 1;
     private int maxVal = 100;
-    private double multiplier = 20.0;
-    
+
     
     /** Creates a new instance of ChangeCurvature */
     public ChangeCurvature(TopicMapGraphPanel gp) {
@@ -90,7 +77,7 @@ public class ChangeCurvature extends AbstractSliderTool implements WandoraTool {
         if(graphPanel != null) {
             Projection projection = graphPanel.getProjection();
             double val = projection.get(key);
-            int defaultValue = maxVal - ((int) (val*multiplier)) + minVal;
+            int defaultValue = scaleToInteger(val, 0.5, 10.0, minVal, maxVal);
             if(defaultValue < minVal) defaultValue = minVal;
             if(defaultValue > maxVal) defaultValue = maxVal;
             return defaultValue;
@@ -107,7 +94,8 @@ public class ChangeCurvature extends AbstractSliderTool implements WandoraTool {
         if(graphPanel != null) {
             synchronized(graphPanel) {
                 Projection projection = graphPanel.getProjection();
-                projection.set(key, -(newValue-maxVal-minVal)/multiplier);
+                double vald = scaleToDouble(newValue, minVal, maxVal, 0.5, 10.0);
+                projection.set(key, vald);
             }
         }
     }

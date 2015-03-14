@@ -49,7 +49,7 @@ public class AssociationEdge extends AbstractEdge {
     
     
     /** Creates a new instance of AssociationEdge */
-    public AssociationEdge(Association association,TopicMapModel model) {
+    public AssociationEdge(Association association, TopicMapModel model) {
         this.association=association;
         this.model=model;
         try {
@@ -61,7 +61,9 @@ public class AssociationEdge extends AbstractEdge {
             nodes = t2((Node)model.getNodeFor(association.getPlayer(role1)),
                      (Node)model.getNodeFor(association.getPlayer(role2)));
         }
-        catch(TopicMapException tme){tme.printStackTrace();}
+        catch(TopicMapException tme){
+            tme.printStackTrace();
+        }
     }
     
     
@@ -107,14 +109,18 @@ public class AssociationEdge extends AbstractEdge {
         return association;
     }
 
+    
+    @Override
     public T2<Node, Node> getNodes() {
         return nodes;
     }
+    
     
     public void setBaseLength(double l){
         baseLength=l;
     }
 
+    
     @Override
     public double getLength() {
         return baseLength+(nodes.e1.getMass()+nodes.e2.getMass())/4.0;

@@ -131,6 +131,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
             new SimpleToggleButton("gui/icons/graphpanel/change_scale_on.png", "gui/icons/graphpanel/change_scale.png"), new ChangeScale(getGraphPanel()),
             new SimpleToggleButton("gui/icons/graphpanel/change_curvature_on.png", "gui/icons/graphpanel/change_curvature.png"), new ChangeCurvature(getGraphPanel()),
             new SimpleToggleButton("gui/icons/graphpanel/change_framerate_on.png", "gui/icons/graphpanel/change_framerate.png"), new ChangeFramerate(getGraphPanel()),
+            new SimpleToggleButton("gui/icons/graphpanel/change_stiffness_on.png", "gui/icons/graphpanel/change_stiffness.png"), new ChangeStiffness(getGraphPanel()),
             "---",
             new SimpleButton(UIBox.getIcon("gui/icons/graphpanel/change_view.png")), new ToggleProjectionSettings(getGraphPanel()),
             new SimpleButton(UIBox.getIcon("gui/icons/graphpanel/center_view.png")), new CenterCurrentTopic(getGraphPanel()),

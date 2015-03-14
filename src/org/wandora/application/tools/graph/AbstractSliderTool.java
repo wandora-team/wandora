@@ -237,6 +237,18 @@ public abstract class AbstractSliderTool extends AbstractGraphTool implements Wa
     protected abstract int getMaxValue(TopicMapGraphPanel graphPanel);
     
     
+    protected double scaleToDouble(int val, int min, int max, double mind, double maxd) {
+        double vald = mind + (maxd-mind) * ((val-min*1.0) / (max-min*1.0));
+        return vald;
+    }
+    
+    
+    protected int scaleToInteger(double vald, double mind, double maxd, int min, int max) {
+        int val = (int) Math.round(min + (max-min) * ((vald-mind) / (maxd-mind)));
+        return val;
+    }
+    
+    
     
     @Override
     public boolean requiresRefresh() {

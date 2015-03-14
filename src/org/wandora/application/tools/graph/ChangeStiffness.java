@@ -25,11 +25,13 @@
 package org.wandora.application.tools.graph;
 
 
+
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.GraphNodeContext;
+import org.wandora.application.gui.topicpanels.graphpanel.AbstractEdge;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
-import org.wandora.application.gui.topicpanels.graphpanel.projections.HyperbolicProjection;
-import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection;
+
+
 
 /**
  *
@@ -37,17 +39,12 @@ import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection
  */
 
 
-public class ChangeScale extends AbstractSliderTool implements WandoraTool {
+public class ChangeStiffness extends AbstractSliderTool implements WandoraTool {
     
 
-    
-    private int key = HyperbolicProjection.SCALE;
-    private int minVal = 1;
-    private int maxVal = 100;
 
-    
-    /** Creates a new instance of ChangeScale */
-    public ChangeScale(TopicMapGraphPanel gp) {
+    /** Creates a new instance of ChangeStiffness */
+    public ChangeStiffness(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
     }
@@ -55,56 +52,32 @@ public class ChangeScale extends AbstractSliderTool implements WandoraTool {
     
     @Override
     public String getName(){
-        return "Change scale of a graph topic panel";
+        return "Change edge stiffness of graph topic panel";
     }
-    
     
 
     
-    
     @Override
     protected int getMinValue(TopicMapGraphPanel graphPanel) {
-        return minVal;
+        return 1;
     }
     
     @Override
     protected int getMaxValue(TopicMapGraphPanel graphPanel) {
-        return maxVal;
+        return 100;
     }
     
     
     @Override
     protected int getDefaultValue(TopicMapGraphPanel graphPanel) {
-        if(graphPanel != null) {
-            Projection projection = graphPanel.getProjection();
-            double val = projection.get(key);
-            int defaultValue = scaleToInteger(val, 0.05, 5.0, minVal, maxVal);
-            if(defaultValue < minVal) defaultValue = minVal;
-            if(defaultValue > maxVal) defaultValue = maxVal;
-            return defaultValue;
-        }
-        else {
-            return minVal;
-        }
+        return scaleToInteger(AbstractEdge.defaultEdgeStiffness, 0.001, 0.2, 1, 100);
     }
     
 
 
     @Override
     protected void setValue(TopicMapGraphPanel graphPanel, int newValue) {
-        if(graphPanel != null) {
-            synchronized(graphPanel) {
-                Projection projection = graphPanel.getProjection();
-                double vald = scaleToDouble(newValue, minVal, maxVal, 0.05, 5.0);
-                projection.set(key, vald);
-            }
-        }
+        AbstractEdge.defaultEdgeStiffness = scaleToDouble(newValue, 1, 100, 0.001, 0.2);
     }
-    
-    
-    
-    
-    
-
 
 }

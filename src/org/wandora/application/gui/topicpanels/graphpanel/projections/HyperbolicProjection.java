@@ -31,8 +31,6 @@ package org.wandora.application.gui.topicpanels.graphpanel.projections;
 
 import org.wandora.utils.Options;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import org.wandora.utils.*;
 import static org.wandora.utils.Tuples.*;
 import java.awt.*;
 import javax.swing.*;
@@ -44,6 +42,11 @@ import javax.swing.*;
  * @author olli, akivela
  */
 public class HyperbolicProjection implements Projection {
+    public static final double MAX_SCALE_VALUE = 5.0;
+    public static final double MIN_SCALE_VALUE = 0.05;
+    public static final double MAX_CURVATURE_VALUE = 10.0;
+    public static final double MIN_CURVATURE_VALUE = 0.5;
+    
     
     private double scale = 1.0;
     private double curvature = 1.0;
@@ -108,12 +111,16 @@ public class HyperbolicProjection implements Projection {
             case SCALE: {
                 if(delta<0) scale*=Math.pow(multiplier,-delta);
                 else scale/=Math.pow(multiplier,delta);
+                if(scale > MAX_SCALE_VALUE) scale = MAX_SCALE_VALUE;
+                if(scale < MIN_SCALE_VALUE) scale = MIN_SCALE_VALUE;
                 storeValue("scale", scale);
                 break;
             }
             case CURVATURE: {
                 if(delta<0) curvature*=Math.pow(multiplier,-delta);
                 else curvature/=Math.pow(multiplier,delta);
+                if(curvature > MAX_CURVATURE_VALUE) curvature = MAX_CURVATURE_VALUE;
+                if(curvature < MIN_CURVATURE_VALUE) curvature = MIN_CURVATURE_VALUE;
                 storeValue("curvature", curvature);
                 break;
             }

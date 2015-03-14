@@ -34,32 +34,37 @@ import static org.wandora.utils.Tuples.*;
  * @author olli
  */
 public abstract class AbstractEdge implements Edge {
+    public static double defaultEdgeStiffness = 0.1;
+    public static double defaultEdgeLength = 50.0;
+    public static double defaultEdgeWidth = 2.0;
+    
     
     @Override
     public String getLabel(){
         return null;
     }
     
+    
     @Override
     public T2<String,String> getNodeLabels(){
         return null;
     }
     
+    
     @Override
     public double getStiffness() {
-        return 0.1;
+        return defaultEdgeStiffness;
     }
 
+    
     @Override
     public double getLength() {
-        return 50.0;
+        return defaultEdgeLength;
     }
 
+    
     public double getEdgeWidth() {
-        return 2.0;
+        return defaultEdgeWidth;
     }
 
-    
-
-    
 }
