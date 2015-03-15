@@ -43,8 +43,7 @@ public class TopicNode extends AbstractNode {
     private Topic topic;
     private TopicMapModel model;
     private Collection<Edge> edges;
-    
-    public static double defaultMass = 100.0;
+
     public static double edgeMassFactor = 10.0;
 
     
@@ -58,8 +57,8 @@ public class TopicNode extends AbstractNode {
 
     @Override
     public double getMass() {
-        if(edges!=null) return defaultMass+edges.size()*edgeMassFactor;
-        else return defaultMass;
+        if(edges!=null) return massMultiplier * (defaultMass+edges.size()*edgeMassFactor);
+        else return massMultiplier * defaultMass;
     }
 
     

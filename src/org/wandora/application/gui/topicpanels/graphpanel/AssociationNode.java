@@ -66,7 +66,7 @@ public class AssociationNode extends AbstractNode  {
     
     @Override
     public double getMass() {
-        return 50.0;
+        return massMultiplier * defaultMass / 2.0;
     }
 
     @Override

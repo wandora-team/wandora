@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * ChangeStiffness.java
+ * ChangeNodeMass.java
  *
  */
 package org.wandora.application.tools.graph;
@@ -28,7 +28,7 @@ package org.wandora.application.tools.graph;
 
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.GraphNodeContext;
-import org.wandora.application.gui.topicpanels.graphpanel.AbstractEdge;
+import org.wandora.application.gui.topicpanels.graphpanel.AbstractNode;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 
 
@@ -39,12 +39,12 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
  */
 
 
-public class ChangeStiffness extends AbstractSliderTool implements WandoraTool {
+public class ChangeNodeMass extends AbstractSliderTool implements WandoraTool {
     
 
 
     /** Creates a new instance of ChangeStiffness */
-    public ChangeStiffness(TopicMapGraphPanel gp) {
+    public ChangeNodeMass(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
     }
@@ -52,15 +52,15 @@ public class ChangeStiffness extends AbstractSliderTool implements WandoraTool {
     
     @Override
     public String getName(){
-        return "Change edge stiffness of graph topic panel";
+        return "Change node mass of graph topic panel";
     }
-    
 
     
     @Override
     protected int getMinValue(TopicMapGraphPanel graphPanel) {
         return 1;
     }
+    
     
     @Override
     protected int getMaxValue(TopicMapGraphPanel graphPanel) {
@@ -70,14 +70,13 @@ public class ChangeStiffness extends AbstractSliderTool implements WandoraTool {
     
     @Override
     protected int getDefaultValue(TopicMapGraphPanel graphPanel) {
-        return scaleToInteger(AbstractEdge.defaultEdgeStiffness, 0.001, 0.2, 1, 100);
+        return scaleToInteger(AbstractNode.massMultiplier, 0.1, 10.0, 1, 100);
     }
     
 
-
     @Override
     protected void setValue(TopicMapGraphPanel graphPanel, int newValue) {
-        AbstractEdge.defaultEdgeStiffness = scaleToDouble(newValue, 1, 100, 0.001, 0.2);
+        AbstractNode.massMultiplier = scaleToDouble(newValue, 1, 100, 0.1, 10.0);
     }
 
 }

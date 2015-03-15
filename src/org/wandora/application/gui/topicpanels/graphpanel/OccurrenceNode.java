@@ -84,7 +84,7 @@ public class OccurrenceNode extends AbstractNode {
 
     @Override
     public double getMass() {
-        return 25.0;
+        return massMultiplier * defaultMass / 4.0;
     }
     
     

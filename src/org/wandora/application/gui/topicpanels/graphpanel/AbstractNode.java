@@ -35,11 +35,14 @@ package org.wandora.application.gui.topicpanels.graphpanel;
  */
 public abstract class AbstractNode implements Node {
 
-
+    public static double defaultMass = 100.0;
+    public static double massMultiplier = 1.0;
+    
+    
 
     @Override
     public double getMass() {
-        return 100.0;
+        return massMultiplier * defaultMass;
     }
 
     @Override
