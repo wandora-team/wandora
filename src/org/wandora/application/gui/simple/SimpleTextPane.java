@@ -347,7 +347,9 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+        if(actionEvent == null) return;
         String c = actionEvent.getActionCommand();
+        if(c == null) return;
 
         if(c.equals("Copy")) {
             this.copy();
@@ -359,7 +361,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             this.paste();
         }
         else if(c.equals("Clear")) {
-            this.setText("");
+            this.setDocumentText("");
         }
         else if(c.equals("Select all")) {
             this.selectAll();
@@ -371,10 +373,12 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             save();
         }
         else if(c.startsWith("Print")) {
-            try{
+            try {
                 print();
-            }catch(java.awt.print.PrinterException pe){
+            } 
+            catch(java.awt.print.PrinterException pe){
                 pe.printStackTrace();
+                wandora.handleError(pe);
             }
         }
         else if(c.startsWith("Translate with Google")) {
@@ -570,12 +574,17 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                         setCaretPosition(0);
                     }
                 }
+                catch(MalformedURLException mfue) {
+                    mfue.printStackTrace();
+                    wandora.handleError(mfue);
+                }
                 catch(IOException ioe) {
                     ioe.printStackTrace();
                     wandora.handleError(ioe);
                 }
                 catch(Exception e) {
-                    System.out.println("Exception '" + e.toString() + "' occurred while reading file '" + file.getPath() + "'.");
+                    e.printStackTrace();
+                    wandora.handleError(e);
                 }
             }
         }
@@ -606,12 +615,17 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                     writer.close();
                 }
             }
+            catch(MalformedURLException mfue) {
+                mfue.printStackTrace();
+                wandora.handleError(mfue);
+            }
             catch(IOException ioe) {
                 ioe.printStackTrace();
                 wandora.handleError(ioe);
             }
             catch(Exception e) {
-                System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + file.getPath() + "'.");
+                e.printStackTrace();
+                wandora.handleError(e);
             }
         }
     }
@@ -709,7 +723,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                 
                 String[] split=data.split("\n");
                 boolean allFiles=true;
-                ArrayList<URI> uris=new ArrayList<URI>();
+                ArrayList<URI> uris=new ArrayList<>();
                 for(int i=0;i<split.length;i++) {
                     try {
                         URI u=new URI(split[i].trim());
@@ -719,7 +733,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                     } 
                     catch(java.net.URISyntaxException ue){}
                 }
-                if(uris.size()>0) {
+                if(!uris.isEmpty()) {
                     if(allFiles) {
                         boolean CTRLPressed = ((e.getDropAction() & DnDConstants.ACTION_COPY) != 0);
                         if(DROP_FILE_NAMES_INSTEAD_FILE_CONTENT && !CTRLPressed || (!DROP_FILE_NAMES_INSTEAD_FILE_CONTENT  && CTRLPressed)) {
@@ -732,14 +746,16 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                             if(text == null) text = "";
                             if(text.length() > 0 && !text.endsWith("\n")) text = text + "\n" + sb.toString();
                             else text = text + sb.toString();
-                            setText(text);
+                            setDocumentText(text);
                         }
                         else {
                             for(URI u : uris){
                                 try {
                                     load(new File(u));
                                 }
-                                catch(IllegalArgumentException iae){iae.printStackTrace();}
+                                catch(IllegalArgumentException iae){
+                                    iae.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -749,13 +765,13 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                             if(text.length()>0) text+="\n";
                             text+=u.toString();
                         }
-                        this.setText(text);
+                        this.setDocumentText(text);
                     }
                     handled=true;
                 }
 
                 if(!handled){
-                    this.setText(data);
+                    this.setDocumentText(data);
                     handled=true;
                 }
 

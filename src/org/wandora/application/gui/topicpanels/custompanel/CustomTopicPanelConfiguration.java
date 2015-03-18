@@ -184,8 +184,8 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         QueryInfo q=(QueryInfo)path[2];
         ScriptEditor editor=new ScriptEditor(q);
         editor.setVisible(true);
-        if(editor.acceptChanges){
-            q.script=editor.text;
+        if(editor.acceptChanges()){
+            q.script=editor.getText();
             q.scriptEngine=engineComboBox.getSelectedItem().toString();
             q.name=nameField.getText();
             treeModel.fireNodesChanged(new TreeModelEvent(this,new Object[]{rootNode,g},new int[]{g.queries.indexOf(q)},new Object[]{q}));            

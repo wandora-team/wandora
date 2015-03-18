@@ -54,7 +54,6 @@ import org.wandora.application.tools.extractors.zemanta.ZemantaExtractor;
 
 import org.wandora.application.tools.occurrences.*;
 import org.wandora.topicmap.*;
-import org.wandora.utils.*;
 import org.wandora.utils.language.GoogleTranslateBox;
 import org.wandora.utils.language.MicrosoftTranslateBox;
 import org.wandora.utils.language.SelectGoogleTranslationLanguagesPanel;
@@ -177,7 +176,10 @@ public class OccurrenceTextEditor extends TextEditor {
     
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+        if(actionEvent == null) return;
         String c = actionEvent.getActionCommand();
+        if(c == null) return;
+        
         try {
             if("Insert base name".equalsIgnoreCase(c)) {
                 if(occurrenceTopic != null && !occurrenceTopic.isRemoved()) {
@@ -185,7 +187,7 @@ public class OccurrenceTextEditor extends TextEditor {
                     AttributeSet ca = textPane.getCharacterAttributes();
                     String bn = occurrenceTopic.getBaseName();
                     if(bn != null) {
-                        doc.insertString(textPane.getCaretPosition(),bn , ca);
+                        doc.insertString(textPane.getCaretPosition(), bn, ca);
                     }
                     else {
                         WandoraOptionPane.showMessageDialog(this, "Base name is null and can not be inserted to the occurrence text.", "Base name is null", WandoraOptionPane.ERROR_MESSAGE);
@@ -205,7 +207,7 @@ public class OccurrenceTextEditor extends TextEditor {
                     String variantName = occurrenceTopic.getVariant(scope);
                     if(variantName == null) variantName = occurrenceTopic.getDisplayName();
                     if(variantName != null) {
-                        doc.insertString(textPane.getCaretPosition(),variantName , ca);
+                        doc.insertString(textPane.getCaretPosition(), variantName, ca);
                     }
                     else {
                         WandoraOptionPane.showMessageDialog(this, "No variant names found for insertion.", "No variant names found", WandoraOptionPane.ERROR_MESSAGE);
@@ -262,8 +264,8 @@ public class OccurrenceTextEditor extends TextEditor {
 
                     SelectGoogleTranslationLanguagesPanel selectLanguages = new SelectGoogleTranslationLanguagesPanel();
                     selectLanguages.notInTopicMapsContext();
-                    if(admin == null) admin = Wandora.getWandora(this);
-                    selectLanguages.openInDialog(admin);
+                    if(wandora == null) wandora = Wandora.getWandora(this);
+                    selectLanguages.openInDialog(wandora);
                     if(selectLanguages.wasAccepted()) {
                         boolean markTranslation = selectLanguages.markTranslatedText();
                         Language sourceLang = selectLanguages.getSourceLanguage();
@@ -293,8 +295,8 @@ public class OccurrenceTextEditor extends TextEditor {
 
                     SelectMicrosoftTranslationLanguagesPanel selectLanguages = new SelectMicrosoftTranslationLanguagesPanel();
                     selectLanguages.notInTopicMapsContext();
-                    if(admin == null) admin = Wandora.getWandora(this);
-                    selectLanguages.openInDialog(admin);
+                    if(wandora == null) wandora = Wandora.getWandora(this);
+                    selectLanguages.openInDialog(wandora);
                     if(selectLanguages.wasAccepted()) {
                         boolean markTranslation = selectLanguages.markTranslatedText();
                         com.memetix.mst.language.Language sourceLang = selectLanguages.getSourceLanguage();
@@ -323,8 +325,8 @@ public class OccurrenceTextEditor extends TextEditor {
 
                     SelectWatsonTranslationLanguagesPanel selectLanguages = new SelectWatsonTranslationLanguagesPanel();
                     selectLanguages.notInTopicMapsContext();
-                    if(admin == null) admin = Wandora.getWandora(this);
-                    selectLanguages.openInDialog(admin);
+                    if(wandora == null) wandora = Wandora.getWandora(this);
+                    selectLanguages.openInDialog(wandora);
                     if(selectLanguages.wasAccepted()) {
                         boolean markTranslation = selectLanguages.markTranslatedText();
                         String languages = WatsonTranslateBox.getLanguagesCodeFor(selectLanguages.getSelectedLanguages());
