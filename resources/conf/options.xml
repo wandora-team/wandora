@@ -628,6 +628,18 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>ReKognition scene detection extractor...</name>
                <class>org.wandora.application.tools.extractors.rekognition.RekognitionSceneDetector</class>
             </item>
+            <item>
+               <name>--- WORD ---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>Word extractor...</name>
+               <class>org.wandora.application.tools.extractors.word.SimpleWordMatchingExtractor</class>
+            </item>
+            <item>
+               <name>Word Similarity extractor...</name>
+               <class>org.wandora.application.tools.extractors.word.SimilarityMatchingExtractor</class>
+            </item>
          </item>
          <item>
             <name>Language</name>
@@ -872,10 +884,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>OCR extractor...</name>
                <class>org.wandora.application.tools.extractors.ocr.OCRExtractor</class>
-            </item>
-            <item>
-               <name>Word extractor...</name>
-               <class>org.wandora.application.tools.extractors.word.SimpleWordMatchingExtractor</class>
             </item>
          </item>
          <item>
