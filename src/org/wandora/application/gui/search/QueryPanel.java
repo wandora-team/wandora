@@ -53,12 +53,13 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleScrollPane;
-import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.application.gui.tree.TopicTreePanel;
+import static org.wandora.application.server.topicmapservice.TopicMapService.tm;
 import org.wandora.query2.Directive;
 import org.wandora.query2.QueryContext;
+import org.wandora.query2.QueryException;
 import org.wandora.query2.ResultRow;
 import org.wandora.query2.Static;
 import org.wandora.topicmap.Topic;
@@ -215,43 +216,18 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         }
     }
     
-
     public MixedTopicTable getTopicsByQuery(Iterator<Topic> contextTopics) throws ScriptException, TopicMapException, Exception {
-        TopicMap tm = wandora.getTopicMap();
-        WandoraScriptManager sm = new WandoraScriptManager();
         String engineName = engineComboBox.getSelectedItem().toString();
-        ScriptEngine engine = sm.getScriptEngine(engineName);
         String scriptStr =  scriptTextPane.getText();
-        Directive query = null;
-        if(engine != null && engineName.toLowerCase().contains("nashorn")) {
-            try {
-                // https://bugs.openjdk.java.net/browse/JDK-8025132
-                engine.eval("load('nashorn:mozilla_compat.js');");
-            }
-            catch(Exception e) {}
-        }
-        Object o=engine.eval(scriptStr);
-        if(o==null) o=engine.get("query");
-        if(o!=null && o instanceof Directive) {
-            query = (Directive)o;
-        }
-
+        return getTopicsByQuery(wandora,engineName,scriptStr,contextTopics);
+    }
+        
+    public static MixedTopicTable getTopicsByQuery(Wandora wandora,TopicMap tm,Directive query,Iterator<Topic> contextTopics) throws QueryException, TopicMapException {
         ArrayList<ResultRow> res = new ArrayList<>();
-        Topic contextTopic = null;
-        if(contextTopics == null) contextTopics = (new ArrayList()).iterator();
-        if(!contextTopics.hasNext()){
-            // if context is empty just add some (root of a tree chooser) topic
-            HashMap<String,TopicTreePanel> trees=wandora.getTopicTreeManager().getTrees();
-            TopicTreePanel tree=trees.values().iterator().next();
-            Topic t=tm.getTopic(tree.getRootSI());
-            ArrayList<Topic> al=new ArrayList<>();
-            al.add(t);
-            contextTopics=al.iterator();
-        }
-        while(contextTopics.hasNext()) {
-            contextTopic = contextTopics.next();
-            if(contextTopic != null && !contextTopic.isRemoved()) {
-                res.add( new ResultRow(contextTopic) );
+        if(contextTopics!=null){
+            while(contextTopics.hasNext()){
+                Topic t=contextTopics.next();
+                if(t!=null && !t.isRemoved()) res.add( new ResultRow(t));
             }
         }
 
@@ -305,7 +281,38 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
             table.initialize(data,columnTopics);
             return table;
         }
-        return null;
+        return null;        
+    }
+    
+    public static MixedTopicTable getTopicsByQuery(Wandora wandora,String engineName,String scriptStr,Iterator<Topic> contextTopics) throws ScriptException, TopicMapException, Exception {
+        TopicMap tm = wandora.getTopicMap();
+        WandoraScriptManager sm = new WandoraScriptManager();
+        ScriptEngine engine = sm.getScriptEngine(engineName);
+        Directive query = null;
+        if(engine != null && engineName.toLowerCase().contains("nashorn")) {
+            try {
+                // https://bugs.openjdk.java.net/browse/JDK-8025132
+                engine.eval("load('nashorn:mozilla_compat.js');");
+            }
+            catch(Exception e) {}
+        }
+        Object o=engine.eval(scriptStr);
+        if(o==null) o=engine.get("query");
+        if(o!=null && o instanceof Directive) {
+            query = (Directive)o;
+        }
+        
+        if(contextTopics==null || !contextTopics.hasNext()){
+            // if context is empty just add some (root of a tree chooser) topic
+            HashMap<String,TopicTreePanel> trees=wandora.getTopicTreeManager().getTrees();
+            TopicTreePanel tree=trees.values().iterator().next();
+            Topic t=tm.getTopic(tree.getRootSI());
+            ArrayList<Topic> al=new ArrayList<>();
+            al.add(t);
+            contextTopics=al.iterator();
+        }
+
+        return getTopicsByQuery(wandora, wandora.getTopicMap(), query, contextTopics);
     }
     
     

@@ -67,6 +67,7 @@ public class QueryEditorTopicPanel implements TopicPanel {
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
         openedTopic=topic;
+        panel.getResultsPanel().setContextTopic(topic);
     }
 
     @Override

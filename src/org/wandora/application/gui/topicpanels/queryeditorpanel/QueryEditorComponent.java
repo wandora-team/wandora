@@ -66,6 +66,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         finalResultPanel=new FinalResultPanel();
         addDirectivePanel(finalResultPanel);
+        finalResultPanel.setSize(finalResultPanel.getPreferredSize());
         
         finalResultAnchor=finalResultPanel.getToConnectorAnchor();
         
@@ -107,6 +108,13 @@ public class QueryEditorComponent extends javax.swing.JPanel {
                     buildButtonActionPerformed(evt);
                 }
             },
+            "Run",
+            UIBox.getIcon(0xF04B), 
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    runButtonActionPerformed(evt);
+                }
+            },
             "Delete",
             UIBox.getIcon(0xF014),
             new java.awt.event.ActionListener() {
@@ -127,14 +135,19 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         return (DirectivePanel)component; // this could be null but the cast will work
     }    
     
-    public QueryEditorInspectorPanel findInspector(){
+    public QueryEditorDockPanel findDockPanel(){
         Container c=this;
         while(c!=null && !(c instanceof QueryEditorDockPanel)){
             c=c.getParent();
         }
         
         if(c==null) return null;
-        return ((QueryEditorDockPanel)c).getInspector();
+        return (QueryEditorDockPanel)c;
+    }
+    public QueryEditorInspectorPanel findInspector(){
+        QueryEditorDockPanel p=findDockPanel();
+        if(p==null) return null;
+        else return p.getInspector();
     }
     
     public void applyInspectorChanges(){
@@ -162,6 +175,14 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         if(p==null) return null;
         else return p.buildScript();
     }
+    
+    public Directive buildDirective(){
+        applyInspectorChanges();
+        DirectivePanel p=getRootPanel();
+        if(p==null) return null;
+        else return p.buildDirective();
+    }
+    
 /*    
     public HashMap<String,String> buildOptions(){
         if(this.selectedPanel!=null) {
@@ -422,6 +443,14 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         }
     }                                            
 
+    
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        QueryEditorDockPanel p=findDockPanel();
+        if(p==null) return;
+        p.bringResultsFront();
+        ResultsPanel res=p.getResultsPanel();
+        res.executeQuery();
+    }
     
     private void buildButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
         try{

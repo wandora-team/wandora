@@ -399,7 +399,40 @@ public class DirectiveEditor extends javax.swing.JPanel {
         public Parameter getParameter(){return parameter;}
         public void setParameter(Parameter p){this.parameter=p;}
         @JsonIgnore
-        public Object getValue(){return value;}
+        public Object getBuildValue(Parameter parameter,Object value,boolean multipleComponent){
+            if(value==null) return null;
+            if(!multipleComponent && parameter.isMultiple()){
+                Object array=Array.newInstance(parameter.getReflectType().getComponentType(), Array.getLength(value));
+                
+                for(int i=0;i<Array.getLength(value);i++){
+                    Object v=Array.get(value, i);
+                    Array.set(array, i, getBuildValue(parameter,v,true));
+                }
+                return array;
+            }
+            else{
+                if(TopicOperand.class.isAssignableFrom(parameter.getType())){
+                    if(value instanceof DirectivePanel) return new TopicOperand(((DirectivePanel)value).buildDirective());
+                    else return new TopicOperand(value);
+                }
+                else if(Operand.class.isAssignableFrom(parameter.getType())){
+                    if(value instanceof DirectivePanel) return new Operand(((DirectivePanel)value).buildDirective());
+                    else return new Operand(value);
+                }
+                else if(Directive.class.isAssignableFrom(parameter.getType())){
+                    return ((DirectivePanel)value).buildDirective();
+                }
+                else return value;            
+            }
+        }
+        @JsonIgnore
+        public Object getBuildValue(){
+            return getBuildValue(parameter,value,false);
+        }
+        @JsonIgnore
+        public Object getValue(){
+            return value;
+        }
         @JsonIgnore
         public String getScriptValue(){
             return getScriptValue(parameter,value,false);
