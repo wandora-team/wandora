@@ -264,8 +264,8 @@ public class DirectiveUIHints implements Serializable {
             if(s==null) reflectType=null;
             else {
                 try{
-                    if(s.startsWith("[")){
-                        reflectType=Class.forName(s.substring(1));
+                    if(s.startsWith("[L")){
+                        reflectType=Class.forName(s.substring(2,s.length()-1));
                         reflectType=Array.newInstance(reflectType, 0).getClass();
                     }
                     else{

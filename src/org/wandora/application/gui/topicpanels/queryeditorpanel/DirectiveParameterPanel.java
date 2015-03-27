@@ -127,7 +127,7 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
     
     @Override
     public void setValue(Object o){
-        if(o==null) {
+        if(o==null || !(o instanceof DirectivePanel)) {
             fromAnchor=null;
             fromPanel=null;
             disconnectButton.setVisible(false);
