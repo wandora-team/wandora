@@ -66,6 +66,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         finalResultPanel=new FinalResultPanel();
         addDirectivePanel(finalResultPanel);
+        finalResultPanel.setSize(finalResultPanel.getPreferredSize());
         
         finalResultAnchor=finalResultPanel.getToConnectorAnchor();
         
@@ -93,27 +94,34 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         
         Object[] buttonStruct = {
-            "Open",
-            UIBox.getIcon(0xF07C),
-            new java.awt.event.ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
+            "New",
+            UIBox.getIcon(0xF016), // See resources/gui/fonts/FontAwesome.ttf for alternative icons.
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    newButtonActionPerformed(evt);
                 }
             },
-            "Build",
+            "Build script",
             UIBox.getIcon(0xF085), // See resources/gui/fonts/FontAwesome.ttf for alternative icons.
             new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     buildButtonActionPerformed(evt);
                 }
             },
-            "Delete",
+            "Run",
+            UIBox.getIcon(0xF04B), 
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    runButtonActionPerformed(evt);
+                }
+            },
+/*            "Delete",
             UIBox.getIcon(0xF014),
             new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     deleteButtonActionPerformed(evt);
                 }
-            }
+            }*/
         };
         JComponent buttonContainer = UIBox.makeButtonContainer(buttonStruct, Wandora.getWandora());
         buttonPanel.add(buttonContainer);
@@ -127,14 +135,19 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         return (DirectivePanel)component; // this could be null but the cast will work
     }    
     
-    public QueryEditorInspectorPanel findInspector(){
+    public QueryEditorDockPanel findDockPanel(){
         Container c=this;
         while(c!=null && !(c instanceof QueryEditorDockPanel)){
             c=c.getParent();
         }
         
         if(c==null) return null;
-        return ((QueryEditorDockPanel)c).getInspector();
+        return (QueryEditorDockPanel)c;
+    }
+    public QueryEditorInspectorPanel findInspector(){
+        QueryEditorDockPanel p=findDockPanel();
+        if(p==null) return null;
+        else return p.getInspector();
     }
     
     public void applyInspectorChanges(){
@@ -162,6 +175,14 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         if(p==null) return null;
         else return p.buildScript();
     }
+    
+    public Directive buildDirective(){
+        applyInspectorChanges();
+        DirectivePanel p=getRootPanel();
+        if(p==null) return null;
+        else return p.buildDirective();
+    }
+    
 /*    
     public HashMap<String,String> buildOptions(){
         if(this.selectedPanel!=null) {
@@ -410,18 +431,28 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     
-    
-    
-
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        if(selectedPanel!=null && selectedPanel!=finalResultPanel){
-            selectedPanel.disconnectConnectors();
-            queryGraphPanel.remove(selectedPanel);
-            selectedPanel=null;
+    public void removeDirective(DirectivePanel panel){
+        if(panel!=null && panel!=finalResultPanel){
+            panel.disconnectConnectors();
+            queryGraphPanel.remove(panel);
+            if(selectedPanel==panel) selectPanel(null);
             queryGraphPanel.repaint();
-        }
-    }                                            
+        }        
+    }
+    
 
+    
+    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        clearQuery();
+    }
+    
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        QueryEditorDockPanel p=findDockPanel();
+        if(p==null) return;
+        p.bringResultsFront();
+        ResultsPanel res=p.getResultsPanel();
+        res.executeQuery();
+    }
     
     private void buildButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
         try{

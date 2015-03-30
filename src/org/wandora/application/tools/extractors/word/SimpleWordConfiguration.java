@@ -27,36 +27,34 @@ import java.util.HashMap;
  *
  * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
-class SimpleWordConfiguration {
+class SimpleWordConfiguration extends WordConfiguration{
 
-    private HashMap<Bools, Boolean> booleanConfig;
-
-    protected enum Bools {
-        REGEX,
-        CASE_SENSITIVE,
-        MATCH_WORDS,
-        BASE_NAME,
-        VARIANT_NAME,
-        INSTANCE_DATA
-    }
+    private boolean REGEX;
+    private boolean MATCH_WORDS;
 
     public SimpleWordConfiguration() {
 
-        booleanConfig = new HashMap<>();
-        booleanConfig.put(Bools.REGEX, false);
-        booleanConfig.put(Bools.CASE_SENSITIVE, false);
-        booleanConfig.put(Bools.MATCH_WORDS, false);
-        booleanConfig.put(Bools.BASE_NAME, true);
-        booleanConfig.put(Bools.VARIANT_NAME, true);
-        booleanConfig.put(Bools.INSTANCE_DATA, true);
+        super();
+        
+        REGEX = false;
+        MATCH_WORDS = false;
 
     }
 
-    protected boolean bool(Bools b) {
-        return booleanConfig.get(b);
+    protected boolean getRegex(){
+        return REGEX;
     }
-
-    protected boolean bool(Bools b, boolean v) {
-        return booleanConfig.put(b, v);
+    
+    protected boolean getMatchWords(){
+        return MATCH_WORDS;
     }
+    
+    protected void setRegex(boolean b){
+        REGEX = b;
+    }
+    
+    protected void setMatchWords(boolean b){
+        MATCH_WORDS = b;
+    }
+    
 }

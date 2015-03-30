@@ -885,9 +885,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 ed.setTitle("Edit occurrence text of '"+typeName+"' attached to '"+topicName+"'");
                 ed.setVisible(true);
                 
-                if(ed.acceptChanges) {
-                    if(ed.text!=null) {
-                        editedText=ed.text;
+                if(ed.acceptChanges()) {
+                    if(ed.getText() != null) {
+                        editedText=ed.getText();
                         data[realRow]=editedText;
                     }
                     try {

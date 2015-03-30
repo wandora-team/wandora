@@ -471,7 +471,7 @@
 					}
 
 					var t = this.getOrCreateTopic(tdata.subject_identifiers[0]);
-					for (i = 1; i < tdata.subject_identifiers; i++) {
+					for (i = 1; i < tdata.subject_identifiers.length; i++) {
 						t.addSi(tdata.subject_identifiers[i]);
 					}
 

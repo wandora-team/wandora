@@ -30,6 +30,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -88,7 +89,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         this();
         setDirective(hints);
         
-        directiveLabel.addMouseListener(new MouseAdapter(){
+        titleLabel.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseReleased(MouseEvent e) {
                 dragging=false;
@@ -103,7 +104,7 @@ public class DirectivePanel extends javax.swing.JPanel {
                 if(editor!=null) editor.selectPanel(DirectivePanel.this);
             }
         });
-        directiveLabel.addMouseMotionListener(new MouseMotionAdapter(){
+        titleLabel.addMouseMotionListener(new MouseMotionAdapter(){
             @Override
             public void mouseDragged(MouseEvent e) {
                 QueryEditorComponent editor=getEditor();
@@ -164,6 +165,12 @@ public class DirectivePanel extends javax.swing.JPanel {
     
     }
     
+    public void setDetailsText(String text){
+        detailsLabel.setText(text);
+        int height=titleLabel.getPreferredSize().height+detailsLabel.getPreferredSize().height;
+        this.setSize(this.getSize().width, height);
+    }
+    
     protected void updateParamAnchors(){
         synchronized(paramAnchors){
             Collections.sort(paramAnchors);
@@ -212,7 +219,7 @@ public class DirectivePanel extends javax.swing.JPanel {
      * @param params 
      */
     public void setDirectiveParams(DirectiveParameters params){
-        this.directiveParameters=params;
+        saveDirectiveParameters(params);
         Rectangle bounds=getBounds();
         setBounds(new Rectangle(params.posx,params.posy,bounds.width,bounds.height));
         
@@ -226,6 +233,7 @@ public class DirectivePanel extends javax.swing.JPanel {
      */
     public void saveDirectiveParameters(DirectiveParameters params){
         this.directiveParameters=params;
+        
     }
     
     public DirectiveParameters getDirectiveParameters(){
@@ -326,8 +334,64 @@ public class DirectivePanel extends javax.swing.JPanel {
     }
     
     public Directive buildDirective(){
-        throw new RuntimeException("not implemnted");
-        // TODO: Doesn't add connectors as From directives yet
+
+        Object[] params=null;
+        java.lang.reflect.Constructor constr=null;
+        try{
+            if(directiveParameters!=null) {
+                constr=directiveParameters.constructor.getReflectConstructor(hints.getDirectiveClass());
+                params=new Object[directiveParameters.parameters.length];
+
+                for(int i=0;i<directiveParameters.parameters.length;i++){
+                    BoundParameter param=directiveParameters.parameters[i];
+                    params[i]=param.getBuildValue();
+                }
+            }
+            else {
+                Constructor[] cs=hints.getConstructors();
+                for(Constructor c : cs){
+                    if(c.getParameters().length==0){
+                        constr=c.getReflectConstructor(hints.getDirectiveClass());
+                        params=new Object[0];
+                        break;
+                    }
+                }            
+            }
+
+            if(constr!=null){
+                try{
+                    Object newInst=constr.newInstance(params);
+                    Directive dir=(Directive)newInst;
+
+                    if(directiveParameters!=null){
+                        for(AddonParameters addon : directiveParameters.addons){
+                            java.lang.reflect.Method method=addon.addon.resolveMethod(dir.getClass());
+                            Object[] addonParams=new Object[addon.parameters.length];
+                            for(int i=0;i<addon.parameters.length;i++){
+                                BoundParameter param=addon.parameters[i];
+                                addonParams[i]=param.getBuildValue();
+                            }
+                            dir=(Directive)method.invoke(dir, addonParams);
+                        }
+                    }
+
+                    DirectivePanel p=getFromPanel();
+                    if(p!=null){
+                        Directive from=p.buildDirective();
+                        return dir.from(from);
+                    }
+                    else return dir;
+
+                }
+                catch(IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException e){
+                    Wandora.getWandora().handleError(e);
+                }
+            }        
+        }
+        catch(NoSuchMethodException e){
+            Wandora.getWandora().handleError(e);            
+        }
+        return null;
     }
     
     public String getDirectiveId(){
@@ -527,7 +591,7 @@ public class DirectivePanel extends javax.swing.JPanel {
     
     public void setDirective(DirectiveUIHints hints){
         this.hints=hints;
-        this.directiveLabel.setText(this.hints.getLabel());
+        this.titleLabel.setText(this.hints.getLabel());
         this.setSize(this.getPreferredSize());
     }
     
@@ -543,20 +607,20 @@ public class DirectivePanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        directiveLabel = new javax.swing.JLabel();
+        detailsLabel = new javax.swing.JLabel();
         toDirectiveAnchor = new javax.swing.JLabel();
         fromDirectiveAnchor = new javax.swing.JLabel();
         parameterDirectiveAnchors = new javax.swing.JPanel();
+        titleLabel = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         setLayout(new java.awt.GridBagLayout());
-
-        directiveLabel.setText("Directive label");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.weightx = 1.0;
-        add(directiveLabel, gridBagConstraints);
+        add(detailsLabel, gridBagConstraints);
 
         toDirectiveAnchor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         toDirectiveAnchor.setText("<-");
@@ -584,17 +648,25 @@ public class DirectivePanel extends javax.swing.JPanel {
         parameterDirectiveAnchors.setLayout(new java.awt.GridLayout(1, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         add(parameterDirectiveAnchors, gridBagConstraints);
+
+        titleLabel.setText("Title");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
+        add(titleLabel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    protected javax.swing.JLabel directiveLabel;
+    protected javax.swing.JLabel detailsLabel;
     protected javax.swing.JLabel fromDirectiveAnchor;
     private javax.swing.JPanel parameterDirectiveAnchors;
+    private javax.swing.JLabel titleLabel;
     protected javax.swing.JLabel toDirectiveAnchor;
     // End of variables declaration//GEN-END:variables
 

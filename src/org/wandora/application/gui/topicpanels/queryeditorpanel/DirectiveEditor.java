@@ -399,7 +399,40 @@ public class DirectiveEditor extends javax.swing.JPanel {
         public Parameter getParameter(){return parameter;}
         public void setParameter(Parameter p){this.parameter=p;}
         @JsonIgnore
-        public Object getValue(){return value;}
+        public Object getBuildValue(Parameter parameter,Object value,boolean multipleComponent){
+            if(value==null) return null;
+            if(!multipleComponent && parameter.isMultiple()){
+                Object array=Array.newInstance(parameter.getReflectType().getComponentType(), Array.getLength(value));
+                
+                for(int i=0;i<Array.getLength(value);i++){
+                    Object v=Array.get(value, i);
+                    Array.set(array, i, getBuildValue(parameter,v,true));
+                }
+                return array;
+            }
+            else{
+                if(TopicOperand.class.isAssignableFrom(parameter.getType())){
+                    if(value instanceof DirectivePanel) return new TopicOperand(((DirectivePanel)value).buildDirective());
+                    else return new TopicOperand(value);
+                }
+                else if(Operand.class.isAssignableFrom(parameter.getType())){
+                    if(value instanceof DirectivePanel) return new Operand(((DirectivePanel)value).buildDirective());
+                    else return new Operand(value);
+                }
+                else if(Directive.class.isAssignableFrom(parameter.getType())){
+                    return ((DirectivePanel)value).buildDirective();
+                }
+                else return value;            
+            }
+        }
+        @JsonIgnore
+        public Object getBuildValue(){
+            return getBuildValue(parameter,value,false);
+        }
+        @JsonIgnore
+        public Object getValue(){
+            return value;
+        }
         @JsonIgnore
         public String getScriptValue(){
             return getScriptValue(parameter,value,false);
@@ -478,12 +511,12 @@ public class DirectiveEditor extends javax.swing.JPanel {
         }
         
         @JsonIgnore
-        protected static TypedValue getJsonValue(Object value,Parameter parameter){
-            if(parameter!=null && parameter.isMultiple()){
+        protected static TypedValue getJsonValue(Object value,Parameter parameter,boolean multipleComponent){
+            if(parameter!=null && parameter.isMultiple() && !multipleComponent){
                 TypedValue[] ret=new TypedValue[Array.getLength(value)];
                 for(int i=0;i<Array.getLength(value);i++){
                     Object v=Array.get(value,i);
-                    ret[i]=getJsonValue(v,null);
+                    ret[i]=getJsonValue(v,parameter,true);
                 }
                 return new TypedValue(ret);
             }
@@ -496,10 +529,14 @@ public class DirectiveEditor extends javax.swing.JPanel {
                         return new TypedValue("topic",((Topic)value).getOneSubjectIdentifier().toExternalForm());
                     }catch(TopicMapException tme){Wandora.getWandora().handleError(tme);return null;}
                 }
+                else if(value instanceof TypedValue){
+                    return (TypedValue)value;
+                }
                 else return new TypedValue("default",value);
             }
         }
         
+        @JsonIgnore
         public static Object parseJsonValue(TypedValue value){
             if(value==null) return null;
             switch (value.parser) {
@@ -522,29 +559,8 @@ public class DirectiveEditor extends javax.swing.JPanel {
         }
          
         public TypedValue getJsonValue(){
-            return getJsonValue(value,parameter);
-            
-            
-            // two problems
-            // 1. Values like topics need to serialised sensibly.
-            // 2. Parameter.getType doesn't fully tell us the type of the value.
-            //    It could be Operand, for example, and the value can be a directive.
-            /*
-            if(parameter.getType().equals(Directive.class)){
-                if(value==null) return null;
-                if(parameter.isMultiple()){
-                    String[] ret=new String[Array.getLength(value)];
-                    for(int i=0;i<Array.getLength(value);i++){
-                        Object v=Array.get(value,i);
-                        ret[i]=((DirectivePanel)v).getDirectiveId();
-                    }
-                    return ret;
-                }
-                else {
-                    return ((DirectivePanel)value).getDirectiveId();
-                }
-            }
-            else return value;*/
+            return getJsonValue(value,parameter,false);
+
         }
         public void setJsonValue(TypedValue o){
             // Directive references are resolved later in resolveDirectiveValues.
@@ -807,6 +823,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
         directiveLabel = new javax.swing.JLabel();
+        deleteButton = new javax.swing.JButton();
         constructorComboBox = new javax.swing.JComboBox();
         constructorParameters = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -828,12 +845,24 @@ public class DirectiveEditor extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
         jPanel2.add(directiveLabel, gridBagConstraints);
+
+        deleteButton.setText("Remove");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        jPanel2.add(deleteButton, gridBagConstraints);
 
         constructorComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -957,6 +986,15 @@ public class DirectiveEditor extends javax.swing.JPanel {
 
     }//GEN-LAST:event_addonComboBoxActionPerformed
 
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        if(directivePanel==null) return;
+        
+        QueryEditorComponent editor=directivePanel.getEditor();
+        if(editor==null) return;
+        
+        editor.removeDirective(directivePanel);
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAddonButton;
@@ -964,6 +1002,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
     private javax.swing.JPanel addonPanelContainer;
     private javax.swing.JComboBox constructorComboBox;
     private javax.swing.JPanel constructorParameters;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JLabel directiveLabel;
     private javax.swing.JPanel fillerPanel;
     private javax.swing.JLabel jLabel1;

@@ -33,17 +33,14 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import java.awt.print.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
-import javax.swing.text.rtf.*;
 import javax.swing.undo.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
@@ -72,16 +69,15 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     
     private Border defaultBorder = null;
-    private DropTarget dt;
-    private Wandora admin = null;
+    private DropTarget dropTarget;
+    private Wandora wandora = null;
     
     
     
     // NOTE: THIS CLASS USES SAME OPTION DOMAIN AS TEXTEDITOR CLASS!!!
     public static final String OPTIONS_PREFIX = "textEditor.";
     
-    
-    JPanel parent = null;
+
     protected JPopupMenu popup;
     protected Object[] popupStruct = new Object[] {
         "Cut", UIBox.getIcon("gui/icons/cut.png"),
@@ -109,19 +105,22 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     /** Creates a new instance of SimpleTextPane */
     public SimpleTextPane(JPanel parent) {
-        this.parent = parent;
+        wandora = Wandora.getWandora();
         if(parent != null && parent instanceof MouseListener) this.addMouseListener((MouseListener) parent);
         //this.addFocusListener(this);
         this.addMouseListener(this);
-        setUpGui();
         this.setFocusable(true);
         this.setFocusTraversalKeysEnabled(true);
         this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)})));
         this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)})));
     
         getDocument().addUndoableEditListener(this);
-        dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
+        dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
         this.setDragEnabled(true);
+        
+        popup = UIBox.makePopupMenu(popupStruct, this);
+        setComponentPopupMenu(popup);
+        setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
     
 
@@ -129,19 +128,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         this(null);
     }
     
-    
-    // -------------------------------------------------------------------------
-    
-    
-    
-    
-    public void setUpGui() {
-        popup = UIBox.makePopupMenu(popupStruct, this);
-        setComponentPopupMenu(popup);
-        setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-    }
-        
-        
+   
     
     // ----------------------------------------------------- WRAP LONG LINES ---
     
@@ -166,6 +153,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         super.setSize(d);
     }
 
+    
     @Override
     public boolean getScrollableTracksViewportWidth() {
         if(!shouldWrapLines) return false;
@@ -178,21 +166,23 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }
     
     
+    public void setDocumentText(String str) {
+        Document doc = getDocument();
+        try {
+            AttributeSet ca = this.getCharacterAttributes();
+            doc.remove(0, doc.getLength());
+            doc.insertString(0, str, ca);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
     
     // ------------------------------------------------------------ PRINTING ---
     
-/*    public void print() {
-        PrinterJob printJob = PrinterJob.getPrinterJob();
-        printJob.setPrintable(this);
-        if (printJob.printDialog()) {
-            try {
-                printJob.print();
-            } catch(PrinterException pe) {
-                System.out.println("Error printing: " + pe);
-            }
-        }
-    }*/
-    
+
   
     @Override
     public int print(java.awt.Graphics graphics, java.awt.print.PageFormat pageFormat, int param) throws java.awt.print.PrinterException {
@@ -215,6 +205,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         UIConstants.preparePaint(g);
         super.paint(g);
     }
+    
     
     // ----------------------------------------------- FIND AND REPLACE TEXT ---
     
@@ -310,6 +301,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     // ---------------------------------------------------------------- UNDO ---
     
+    
     @Override
     public void undoableEditHappened(UndoableEditEvent e) {
         //Remember the edit and update the menus
@@ -355,7 +347,9 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+        if(actionEvent == null) return;
         String c = actionEvent.getActionCommand();
+        if(c == null) return;
 
         if(c.equals("Copy")) {
             this.copy();
@@ -367,7 +361,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             this.paste();
         }
         else if(c.equals("Clear")) {
-            this.setText("");
+            this.setDocumentText("");
         }
         else if(c.equals("Select all")) {
             this.selectAll();
@@ -379,10 +373,12 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             save();
         }
         else if(c.startsWith("Print")) {
-            try{
+            try {
                 print();
-            }catch(java.awt.print.PrinterException pe){
+            } 
+            catch(java.awt.print.PrinterException pe){
                 pe.printStackTrace();
+                wandora.handleError(pe);
             }
         }
         else if(c.startsWith("Translate with Google")) {
@@ -401,8 +397,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
 
                 SelectGoogleTranslationLanguagesPanel selectLanguages = new SelectGoogleTranslationLanguagesPanel();
                 selectLanguages.notInTopicMapsContext();
-                if(admin == null) admin = Wandora.getWandora(this);
-                selectLanguages.openInDialog(admin);
+                selectLanguages.openInDialog(wandora);
                 if(selectLanguages.wasAccepted()) {
                     boolean markTranslation = selectLanguages.markTranslatedText();
                     Language sourceLang = selectLanguages.getSourceLanguage();
@@ -437,8 +432,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
 
                 SelectMicrosoftTranslationLanguagesPanel selectLanguages = new SelectMicrosoftTranslationLanguagesPanel();
                 selectLanguages.notInTopicMapsContext();
-                if(admin == null) admin = Wandora.getWandora(this);
-                selectLanguages.openInDialog(admin);
+                selectLanguages.openInDialog(wandora);
                 if(selectLanguages.wasAccepted()) {
                     boolean markTranslation = selectLanguages.markTranslatedText();
                     com.memetix.mst.language.Language sourceLang = selectLanguages.getSourceLanguage();
@@ -473,8 +467,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
 
                 SelectWatsonTranslationLanguagesPanel selectLanguages = new SelectWatsonTranslationLanguagesPanel();
                 selectLanguages.notInTopicMapsContext();
-                if(admin == null) admin = Wandora.getWandora(this);
-                selectLanguages.openInDialog(admin);
+                selectLanguages.openInDialog(wandora);
                 if(selectLanguages.wasAccepted()) {
                     boolean markTranslation = selectLanguages.markTranslatedText();
                     String languages = selectLanguages.getSelectedLanguages();
@@ -504,7 +497,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     public void load() {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
-        chooser.setDialogTitle("Open text file");
+        chooser.setDialogTitle("Open file");
         if(chooser.open(Wandora.getWandora(), SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
             load(chooser.getSelectedFile());
             getDocument().addUndoableEditListener(this);
@@ -512,104 +505,130 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }
     
     
-    public void load(File textFile) {
-        if(textFile != null) {
-            if(textFile.length() > MAX_TEXT_SIZE){
-                setText("File size too big!");
+    public void load(File file) {
+        if(file != null) {
+            if(file.length() > MAX_TEXT_SIZE) {
+                WandoraOptionPane.showMessageDialog(wandora, "File size is too big.", "File size is too big", WandoraOptionPane.WARNING_MESSAGE);
             }
             else {
-                String newText = "";
                 try {
-                    Object desc = getStyledDocument();
-
-                    Reader inputReader = null;
-                    String content = "";
-                    
-                    String filename = textFile.getPath().toLowerCase();
-                    String extension = filename.substring(Math.max(filename.lastIndexOf(".")+1, 0));
-                    
-                    // --- handle rtf files ---
-                    if("rtf".equals(extension)) {
-                        content=Textbox.RTF2PlainText(new FileInputStream(textFile));
-                        inputReader = new StringReader(content);
+                    int a = WandoraOptionPane.showConfirmDialog(wandora, "Store the file content as a data URI?", "Make data URI?", WandoraOptionPane.QUESTION_MESSAGE);
+                    if(a == WandoraOptionPane.YES_OPTION) {
+                        DataURL url = new DataURL(file);
+                        setDocumentText(url.toExternalForm());
                     }
-                    
-                    // --- handle pdf files ---
-                    if("pdf".equals(extension)) {
-                        try {
-                            PDDocument doc = PDDocument.load(textFile);
-                            PDFTextStripper stripper = new PDFTextStripper();
-                            content = stripper.getText(doc);
-                            doc.close();
+                    else {
+                        Object desc = getStyledDocument();
+
+                        Reader inputReader = null;
+                        String content = "";
+
+                        String filename = file.getPath().toLowerCase();
+                        String extension = filename.substring(Math.max(filename.lastIndexOf(".")+1, 0));
+
+                        // --- handle rtf files ---
+                        if("rtf".equals(extension)) {
+                            content=Textbox.RTF2PlainText(new FileInputStream(file));
                             inputReader = new StringReader(content);
                         }
-                        catch(Exception e) {
-                            System.out.println("No PDF support!");
-                        }
-                    }
-                    
-                    // --- handle MS office files ---
-                    if("doc".equals(extension) ||
-                       "ppt".equals(extension) ||
-                       "xls".equals(extension) ||
-                       "vsd".equals(extension) ||
-                       "odt".equals(extension)
-                       ) {
-                            content = MSOfficeBox.getText(new FileInputStream(textFile));
-                            if(content != null) {
-                                inputReader = new StringReader(content);
-                            }
-                    }
 
-                    if("docx".equals(extension)) {
-                            content = MSOfficeBox.getDocxText(textFile);
-                            if(content != null) {
+                        // --- handle pdf files ---
+                        if("pdf".equals(extension)) {
+                            try {
+                                PDDocument doc = PDDocument.load(file);
+                                PDFTextStripper stripper = new PDFTextStripper();
+                                content = stripper.getText(doc);
+                                doc.close();
                                 inputReader = new StringReader(content);
                             }
+                            catch(Exception e) {
+                                System.out.println("No PDF support!");
+                            }
+                        }
+
+                        // --- handle MS office files ---
+                        if("doc".equals(extension) ||
+                           "ppt".equals(extension) ||
+                           "xls".equals(extension) ||
+                           "vsd".equals(extension) ||
+                           "odt".equals(extension)) {
+                                content = MSOfficeBox.getText(new FileInputStream(file));
+                                if(content != null) {
+                                    inputReader = new StringReader(content);
+                                }
+                        }
+
+                        if("docx".equals(extension)) {
+                                content = MSOfficeBox.getDocxText(file);
+                                if(content != null) {
+                                    inputReader = new StringReader(content);
+                                }
+                        }
+
+                        // --- handle everything else ---
+                        if(inputReader == null) {
+                            inputReader = new FileReader(file);
+                        }
+                        read(inputReader, desc);
+                        inputReader.close();
+                        setCaretPosition(0);
                     }
-                    
-                    // --- handle everything else ---
-                    if(inputReader == null) {
-                        inputReader = new FileReader(textFile);
-                    }
-                    read(inputReader, desc);
-                    setCaretPosition(0);
+                }
+                catch(MalformedURLException mfue) {
+                    mfue.printStackTrace();
+                    wandora.handleError(mfue);
+                }
+                catch(IOException ioe) {
+                    ioe.printStackTrace();
+                    wandora.handleError(ioe);
                 }
                 catch(Exception e) {
-                    System.out.println("Exception '" + e.toString() + "' occurred while reading file '" + textFile.getPath() + "'.");
+                    e.printStackTrace();
+                    wandora.handleError(e);
                 }
             }
         }
     }
     
-    
-    
+
     
     public void save() {
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
-        chooser.setDialogTitle("Save text file");
-        if(chooser.open(Wandora.getWandora(), SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+        SimpleFileChooser chooser = UIConstants.getFileChooser();
+        chooser.setDialogTitle("Save file");
+        if(chooser.open(Wandora.getWandora(), SimpleFileChooser.SAVE_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
             save(chooser.getSelectedFile());
         }
     }
     
     
     
-    public void save(File textFile) {
-        if(textFile != null) {
+    public void save(File file) {
+        if(file != null) {
             try {
-                FileWriter writer=new FileWriter(textFile);
-                write(writer);
-                writer.close();
+                String text = getText();
+                if(DataURL.isDataURL(text)) {
+                    DataURL.saveToFile(text, file);
+                }
+                else {
+                    FileWriter writer = new FileWriter(file);
+                    write(writer);
+                    writer.close();
+                }
+            }
+            catch(MalformedURLException mfue) {
+                mfue.printStackTrace();
+                wandora.handleError(mfue);
+            }
+            catch(IOException ioe) {
+                ioe.printStackTrace();
+                wandora.handleError(ioe);
             }
             catch(Exception e) {
-                System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + textFile.getPath() + "'.");
+                e.printStackTrace();
+                wandora.handleError(e);
             }
         }
     }
-    
-    
-    
     
     
 
@@ -620,9 +639,8 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
-        if(admin == null) admin = Wandora.getWandora(this);
-        if(admin != null) {
-            admin.gainFocus(this);
+        if(wandora != null) {
+            wandora.gainFocus(this);
         }
     }
     
@@ -638,9 +656,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     // --------------------------------------------------------- DRAG & DROP ---
     // -------------------------------------------------------------------------
     
-    
 
-    
     @Override
     public void dragEnter(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
         if(! UIConstants.dragBorder.equals( this.getBorder())) {
@@ -673,36 +689,29 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             DataFlavor uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String");
             Transferable tr = e.getTransferable();
             if(tr.isDataFlavorSupported(fileListFlavor)) {
-                //int ret=WandoraOptionPane.showOptionDialog(this, "Would you like to load text from the dropped document?","Load or reject", WandoraOptionPane.YES_NO_OPTION);
-                //if(ret==WandoraOptionPane.YES_OPTION) {
-                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
-                    String fileName = null;
-                    boolean CTRLPressed = ((e.getDropAction() & DnDConstants.ACTION_COPY) != 0);
-                    if(DROP_FILE_NAMES_INSTEAD_FILE_CONTENT && !CTRLPressed || (!DROP_FILE_NAMES_INSTEAD_FILE_CONTENT  && CTRLPressed)) {
-                        StringBuilder sb = new StringBuilder("");
-                        for( File file : files ) {
-                            fileName = file.getAbsolutePath();
-                            sb.append(fileName);
-                            sb.append('\n');
-                        }
-                        String text = getText();
-                        if(text == null) text = "";
-                        if(text.length() > 0 && !text.endsWith("\n")) text = text + "\n" + sb.toString();
-                        else text = text + sb.toString();
-                        setText(text);
+                e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
+                String fileName = null;
+                boolean CTRLPressed = ((e.getDropAction() & DnDConstants.ACTION_COPY) != 0);
+                if(DROP_FILE_NAMES_INSTEAD_FILE_CONTENT && !CTRLPressed || (!DROP_FILE_NAMES_INSTEAD_FILE_CONTENT  && CTRLPressed)) {
+                    StringBuilder sb = new StringBuilder("");
+                    for( File file : files ) {
+                        fileName = file.getAbsolutePath();
+                        sb.append(fileName);
+                        sb.append('\n');
                     }
-                    else {
-                        ArrayList<WandoraTool> importTools = new ArrayList<WandoraTool>();
-                        for( File file : files ) {
-                            fileName = file.getName().toLowerCase();
-                            //if(fileName.endsWith(".txt")) {
-                                load(file);
-                            //}
-                        }
+                    String text = getText();
+                    if(text == null) text = "";
+                    if(text.length() > 0 && !text.endsWith("\n")) text = text + "\n" + sb.toString();
+                    else text = text + sb.toString();
+                    setText(text);
+                }
+                else {
+                    for( File file : files ) {
+                        load(file);
                     }
-                    e.dropComplete(true);
-                //}
+                }
+                e.dropComplete(true);
             }
             else if(tr.isDataFlavorSupported(stringFlavor) || tr.isDataFlavorSupported(uriListFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
@@ -714,21 +723,22 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                 
                 String[] split=data.split("\n");
                 boolean allFiles=true;
-                ArrayList<URI> uris=new ArrayList<URI>();
-                for(int i=0;i<split.length;i++){
-                    try{
+                ArrayList<URI> uris=new ArrayList<>();
+                for(int i=0;i<split.length;i++) {
+                    try {
                         URI u=new URI(split[i].trim());
                         if(u.getScheme()==null) continue;
                         if(!u.getScheme().toLowerCase().equals("file")) allFiles=false;
                         uris.add(u);
-                    } catch(java.net.URISyntaxException ue){}
+                    } 
+                    catch(java.net.URISyntaxException ue){}
                 }
-                if(uris.size()>0){
-                    if(allFiles){
+                if(!uris.isEmpty()) {
+                    if(allFiles) {
                         boolean CTRLPressed = ((e.getDropAction() & DnDConstants.ACTION_COPY) != 0);
                         if(DROP_FILE_NAMES_INSTEAD_FILE_CONTENT && !CTRLPressed || (!DROP_FILE_NAMES_INSTEAD_FILE_CONTENT  && CTRLPressed)) {
                             StringBuilder sb = new StringBuilder("");
-                            for(URI u : uris){
+                            for(URI u : uris) {
                                 sb.append(u.toString());
                                 sb.append('\n');
                             }
@@ -736,38 +746,39 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                             if(text == null) text = "";
                             if(text.length() > 0 && !text.endsWith("\n")) text = text + "\n" + sb.toString();
                             else text = text + sb.toString();
-                            setText(text);
+                            setDocumentText(text);
                         }
                         else {
                             for(URI u : uris){
-                                try{
+                                try {
                                     load(new File(u));
                                 }
-                                catch(IllegalArgumentException iae){iae.printStackTrace();}
+                                catch(IllegalArgumentException iae){
+                                    iae.printStackTrace();
+                                }
                             }
                         }
                     }
-                    else{
-                        java.util.List<String> urls=new java.util.ArrayList<String>();
+                    else {
                         String text="";
                         for(URI u : uris){
                             if(text.length()>0) text+="\n";
                             text+=u.toString();
                         }
-                        this.setText(text);
+                        this.setDocumentText(text);
                     }
                     handled=true;
                 }
 
                 if(!handled){
-                    this.setText(data);
+                    this.setDocumentText(data);
                     handled=true;
                 }
 
                 e.dropComplete(true);
             }
             else {
-                System.out.println("Drop rejected! Wrong data flavor!");
+                System.out.println("Unknown data flavor. Drop rejected.");
                 e.rejectDrop();
             }
         }
@@ -783,10 +794,12 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         this.setBorder(defaultBorder);
     }
     
+    
     @Override
     public void dropActionChanged(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
     }
 
+    
     @Override
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
     }    

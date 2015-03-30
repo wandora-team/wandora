@@ -26,7 +26,6 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
-import org.wandora.application.tools.extractors.word.SimpleWordConfiguration.Bools;
 
 /**
  *
@@ -50,7 +49,8 @@ class SimpleWordConfigurationDialog extends javax.swing.JPanel {
 
     }
 
-    public void openDialog() {
+    public void openDialog(SimpleWordConfiguration c) {
+        
         wasAccepted = false;
         if (myDialog == null) {
             myDialog = new JDialog(wandora, true);
@@ -60,13 +60,13 @@ class SimpleWordConfigurationDialog extends javax.swing.JPanel {
             UIBox.centerWindow(myDialog, wandora);
         }
 
-        newConfig = new SimpleWordConfiguration();
-        toggleRegex.setSelected(newConfig.bool(Bools.REGEX));
-        toggleCaseSensitive.setSelected(newConfig.bool(Bools.CASE_SENSITIVE));
-        toggleMatchWords.setSelected(newConfig.bool(Bools.MATCH_WORDS));
-        toggleBaseName.setSelected(newConfig.bool(Bools.BASE_NAME));
-        toggleVariantName.setSelected(newConfig.bool(Bools.VARIANT_NAME));
-        toggleInstanceData.setSelected(newConfig.bool(Bools.INSTANCE_DATA));
+        newConfig = (c != null) ? c : new SimpleWordConfiguration();
+        toggleRegex.setSelected(newConfig.getRegex());
+        toggleCaseSensitive.setSelected(newConfig.getCaseSensitive());
+        toggleMatchWords.setSelected(newConfig.getMatchWords());
+        toggleBaseName.setSelected(newConfig.getBaseName());
+        toggleVariantName.setSelected(newConfig.getVariantName());
+        toggleInstanceData.setSelected(newConfig.getInstanceData());
 
         myDialog.setVisible(true);
     }
@@ -76,18 +76,19 @@ class SimpleWordConfigurationDialog extends javax.swing.JPanel {
             newConfig = new SimpleWordConfiguration();
         }
 
-        newConfig.bool(Bools.REGEX, toggleRegex.isSelected());
-        newConfig.bool(Bools.CASE_SENSITIVE, toggleCaseSensitive.isSelected());
-        newConfig.bool(Bools.MATCH_WORDS, toggleMatchWords.isSelected());
-        newConfig.bool(Bools.BASE_NAME, toggleBaseName.isSelected());
-        newConfig.bool(Bools.VARIANT_NAME, toggleVariantName.isSelected());
-        newConfig.bool(Bools.INSTANCE_DATA, toggleInstanceData.isSelected());
+        newConfig.setRegex(toggleRegex.isSelected());
+        newConfig.setCaseSensitive(toggleCaseSensitive.isSelected());
+        newConfig.setMatchWords(toggleMatchWords.isSelected());
+        newConfig.setBaseName(toggleBaseName.isSelected());
+        newConfig.setVariantName(toggleVariantName.isSelected());
+        newConfig.setInstanceData(toggleInstanceData.isSelected());
 
         config = newConfig;
 
     }
 
     protected SimpleWordConfiguration getConfiguration() {
+        if(config == null) config = new SimpleWordConfiguration();
         return config;
     }
 

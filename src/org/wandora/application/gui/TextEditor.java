@@ -47,15 +47,13 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
 
     public static final String optionPrefix = "textEditor.";
     
-    public boolean acceptChanges;
-    public String text;
-    public boolean textChanged = false;
+    protected boolean acceptChanges;
     private boolean shouldWrapLines = true;
     private String fontFace = "Sans Serif";
     private int fontSize = 12;
     private boolean inverseColors = false;
 
-    protected Wandora admin = null;
+    protected Wandora wandora = null;
     
     protected JMenu fileMenu;
     protected JMenu editMenu;
@@ -66,12 +64,12 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
    
     
     
-    public TextEditor(Wandora admin, boolean modal, String initText) {
-        this(admin,modal,initText,null);
+    public TextEditor(Wandora wandora, boolean modal, String initText) {
+        this(wandora,modal,initText,null);
     }
-    public TextEditor(Wandora admin, boolean modal, String initText, String contentType) {
-        super(admin, modal);
-        this.admin = admin;
+    public TextEditor(Wandora wandora, boolean modal, String initText, String contentType) {
+        super(wandora, modal);
+        this.wandora = wandora;
         initComponents();
         if(contentType!=null) textPane.setContentType(contentType);
         textPane.setForeground(Color.BLACK);
@@ -79,16 +77,16 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
         textPane.setText(initText);
         textPane.setCaretPosition(0);
         textPane.setFocusTraversalKeysEnabled(false);
-        initWindow(admin);
+        initWindow(wandora);
         infoLabel.setText("Editing text");
     }
     
     
     /** Creates new form TextEditor */
-    public TextEditor(Wandora admin, boolean modal) {
-        super(admin, modal);
+    public TextEditor(Wandora wandora, boolean modal) {
+        super(wandora, modal);
         initComponents();
-        initWindow(admin);
+        initWindow(wandora);
     }
     
     
@@ -146,7 +144,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     
     public void placeWindow() {
         boolean placedSuccessfully = false;
-        Options options = admin.options;
+        Options options = wandora.options;
         if(options != null) {
             try {
                 int x = Integer.parseInt(options.get(getOptionsPrefix()+"window.x"));
@@ -171,7 +169,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 else if(initText.length() > 500) preferred = new Dimension(800,400);
             }
             this.setSize(preferred);
-            if(admin != null) admin.centerWindow(this);
+            wandora.centerWindow(this);
         }
     }
     
@@ -179,11 +177,10 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     
     public void exitTextEditor(boolean acceptingChanges) {
         this.acceptChanges=acceptingChanges;
-        if(acceptingChanges) text = textPane.getText();
         try {
             Dimension d = super.getSize();
             Point l = super.getLocation();
-            Options options = admin.options;
+            Options options = wandora.options;
             if(options != null) {
                 options.put(getOptionsPrefix()+"window.width", d.width);
                 options.put(getOptionsPrefix()+"window.height", d.height);
@@ -202,6 +199,9 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     }
     
     
+    public boolean acceptChanges() {
+        return acceptChanges;
+    }
     
     
     public JMenu getFileMenu() {
@@ -304,7 +304,10 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+        if(actionEvent == null) return;
         String c = actionEvent.getActionCommand();
+        if(c == null) return;
+        
         try {
             // --- Edit -------------------------------
             if("Trim".equalsIgnoreCase(c)) {
@@ -506,7 +509,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 try{
                     ((SimpleTextPane) textPane).print();
                 }catch(java.awt.print.PrinterException pe){
-                    admin.handleError(pe);
+                    wandora.handleError(pe);
                 }
             }
             else if("close".equalsIgnoreCase(c)) {
@@ -515,7 +518,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 acceptDialog.setTitle("Accept changes?");
                 acceptDialog.add(acceptPanel);
                 acceptDialog.setSize(350, 180);
-                if(admin != null) admin.centerWindow(acceptDialog, this);
+                wandora.centerWindow(acceptDialog, this);
                 acceptDialog.setVisible(true);
             }
 
@@ -548,9 +551,9 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 inverseColors = !inverseColors;
                 updateEditorColors();
             }
-
             else {
-                System.out.println("Warning: Action command " + c + " NOT processed in TextEditor!");
+                System.out.println("Passing actionEvent '"+c+"' to SimpleTextPane.");
+                ((SimpleTextPane) textPane).actionPerformed(actionEvent);
             }
         }
         catch(Exception e) {
@@ -909,7 +912,6 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     }//GEN-LAST:event_refreshCaretPositionInfo
 
     private void textChangeRegistered(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChangeRegistered
-        textChanged = true;
         refreshCaretInfo();
     }//GEN-LAST:event_textChangeRegistered
 
