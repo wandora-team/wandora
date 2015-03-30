@@ -43,7 +43,7 @@ import org.wandora.utils.*;
  */
 public class TextEditor extends javax.swing.JDialog implements ActionListener {
     
-    public static final int MAX_TEXT_SIZE = 99999;
+    public static final int MAX_TEXT_SIZE = 999999;
 
     public static final String optionPrefix = "textEditor.";
     

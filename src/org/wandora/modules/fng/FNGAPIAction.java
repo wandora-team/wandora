@@ -69,8 +69,8 @@ public class FNGAPIAction extends CachedAction {
     protected String IS_IDENTIFIED_BY_SI = "http://www.muusa.net/P131.is_identified_by";
     protected String IS_IDENTIFIED_BY_ROLE1_SI = "http://www.muusa.net/P131.is_identified_by_role_1";
             
-    protected String BIRTH_SI = "http://www.wandora.net/person_birth";
-    protected String DEATH_SI = "http://www.wandora.net/person_death";
+    protected String BIRTH_SI = "http://wandora.org/si/fng/person_birth";
+    protected String DEATH_SI = "http://wandora.org/si/fng/person_death";
     protected String PERSON_SI = "http://www.muusa.net/person";
     protected String LOCATION_SI = "http://www.muusa.net/paikka";
     
@@ -180,6 +180,7 @@ public class FNGAPIAction extends CachedAction {
                                     new Exists( new Variant().where( new Contains(query) ) )
                                 )
                             ),
+                            /*
                             new Players(IS_IDENTIFIED_BY_SI, IS_IDENTIFIED_BY_ROLE1_SI).whereInputIs(ARTIST_SI).from(
                                 new Instances().from( ARTIST_SI ).where(
                                     new Or(
@@ -188,7 +189,7 @@ public class FNGAPIAction extends CachedAction {
                                     )
                                 )
                             ),
-                            /*
+                            
                             new Players(AUTHOR_SI, ARTIST_SI).whereInputIs(ARTWORK_SI).from(
                                 new Instances().from( ARTWORK_SI ).where(
                                     new Or(
