@@ -26,6 +26,7 @@
  */
 
 package org.wandora.application.gui.topicpanels.custompanel;
+import org.wandora.application.gui.texteditor.TextEditor;
 import org.wandora.application.gui.topicpanels.CustomTopicPanel;
 import org.wandora.application.*;
 import org.wandora.application.gui.simple.*;

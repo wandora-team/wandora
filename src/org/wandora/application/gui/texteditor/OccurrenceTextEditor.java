@@ -25,8 +25,9 @@
  */
 
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.texteditor;
 
+import org.wandora.application.gui.texteditor.TextEditor;
 import com.google.api.translate.Language;
 
 import java.util.*;
@@ -35,6 +36,8 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 import org.wandora.application.*;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.tools.associations.FindAssociationsInOccurrenceSimple;

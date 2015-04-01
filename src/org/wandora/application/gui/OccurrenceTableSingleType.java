@@ -28,6 +28,7 @@ package org.wandora.application.gui;
 
 
 
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;

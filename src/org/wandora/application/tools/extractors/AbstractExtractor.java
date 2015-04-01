@@ -28,6 +28,7 @@ package org.wandora.application.tools.extractors;
 
 
 
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.DropExtractor;
 import org.wandora.topicmap.*;

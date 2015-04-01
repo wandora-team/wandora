@@ -24,7 +24,7 @@
  * Created on 5. toukokuuta 2006, 20:29
  */
 
-package org.wandora.application.gui;
+package org.wandora.application.gui.texteditor;
 
 
 import java.io.*;
@@ -33,6 +33,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.*;
 import org.wandora.application.*;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.*;
 import org.wandora.utils.*;
 
