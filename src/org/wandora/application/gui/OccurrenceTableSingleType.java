@@ -75,7 +75,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     private Wandora wandora;    
 
     private String[] originalData;
-    private int rowHeight = 1;
+    private int defaultRowHeight = 1;
     
     private Object[] popupStruct;
     private MouseEvent mouseEvent;
@@ -94,8 +94,8 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 tableType = opts.get(VIEW_OPTIONS_KEY);
                 if(tableType == null || tableType.length() == 0) tableType = VIEW_SCHEMA;
                 
-                rowHeight = opts.getInt(ROW_HEIGHT_OPTIONS_KEY);
-                if(rowHeight < 1) rowHeight = 1;
+                defaultRowHeight = opts.getInt(ROW_HEIGHT_OPTIONS_KEY);
+                if(defaultRowHeight < 1) defaultRowHeight = 1;
             }
         }
         catch(Exception e) {
@@ -147,7 +147,6 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             }
         });
         
-        this.setRowHeight(getRowHeightInPixels());
         this.setAutoCreateColumnsFromModel(false);
         this.setModel(sorter);
         TableColumn column=new TableColumn(0,40,new TopicCellRenderer(),new TopicCellEditor());
@@ -156,6 +155,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         this.addColumn(column);
         sorter.setTableHeader(this.getTableHeader());
 
+        this.setRowHeight(getDefaultRowHeightInPixels());
+        updateRowHeights();
+        
         popupStruct = WandoraMenuManager.getOccurrenceTableMenu(this, options);
         JPopupMenu popup = UIBox.makePopupMenu(popupStruct, wandora);
         this.setComponentPopupMenu(popup);
@@ -168,8 +170,29 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     }
     
     
-    protected int getRowHeightInPixels() {
-        return 2+rowHeight*16;
+    protected int getDefaultRowHeightInPixels() {
+        return 2+defaultRowHeight*16;
+    }
+    
+    
+    protected void updateRowHeights() {
+        for(int i=0; i<data.length; i++) {
+            try {
+                String occurrenceData = data[i];
+                if(DataURL.isDataURL(occurrenceData)) {
+                    Component preview = UIBox.getPreview(new DataURL(occurrenceData));
+                    if(preview != null) {
+                        setRowHeight(i, Math.max(getDefaultRowHeightInPixels(), preview.getHeight()+10));
+                    }
+                }
+                else {
+                    setRowHeight(i, getDefaultRowHeightInPixels());
+                }
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     
@@ -232,7 +255,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     
     @Override
     public int getRowHeightOption() {
-        return rowHeight;
+        return defaultRowHeight;
     }
     
     
@@ -741,6 +764,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             Font f = occurrenceTextField.getFont();
             occurrenceTextField.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
             occurrenceTextField.setBackground(Color.WHITE);
+            occurrenceTextField.putClientProperty("html.disable", Boolean.TRUE);
             
             occurrenceInfoLabel = new SimpleLabel();
             occurrenceInfoLabel.setOpaque(true);
@@ -773,7 +797,6 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 try {
                     Component preview = UIBox.getPreview(new DataURL(viewedOccurrenceText));
                     if(preview != null) {
-                        table.setRowHeight(row, Math.max(getRowHeightInPixels(), preview.getHeight()+10));
                         return preview;
                     }
                 }
@@ -791,7 +814,6 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
                 }
             }
-            table.setRowHeight(row, getRowHeightInPixels());
             occurrenceTextField.setText(viewedOccurrenceText);
             String occurrenceInfoText = (occurrenceText.length() > 0 ? " "+occurrenceText.length()+" " : "");
             occurrenceInfoLabel.setText(occurrenceInfoText);
@@ -843,6 +865,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             Font f=label.getFont();
             label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
             label.addMouseListener(this);
+            label.putClientProperty("html.disable", Boolean.TRUE);
         }
         
         
@@ -863,13 +886,8 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             scope=langs[realRow];
             
             String viewedOccurrenceText = value.toString();
-            if(DataURL.isDataURL(viewedOccurrenceText)) {
-                viewedOccurrenceText = viewedOccurrenceText.substring(0, Math.max(5, viewedOccurrenceText.indexOf(',')));
-            }
-            else {
-                if(viewedOccurrenceText.length() > 9999) {
-                    viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
-                }
+            if(viewedOccurrenceText.length() > 9999) {
+                viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
             }
             label.setText(viewedOccurrenceText);
             

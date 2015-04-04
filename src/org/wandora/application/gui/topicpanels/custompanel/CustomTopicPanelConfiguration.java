@@ -59,11 +59,11 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
     
     private CustomTreeModel treeModel;
     
-    private Wandora admin;
+    private Wandora wandora;
     
     /** Creates new form CustomTopicPanelConfiguration */
-    public CustomTopicPanelConfiguration(Wandora admin) {
-        this.admin=admin;
+    public CustomTopicPanelConfiguration(Wandora wandora) {
+        this.wandora=wandora;
         initComponents();
         groupsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         DefaultTreeCellRenderer cellRenderer=new DefaultTreeCellRenderer();
@@ -440,36 +440,50 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
     private javax.swing.JPanel scriptToolPanel;
     // End of variables declaration//GEN-END:variables
 
+    
     public class CustomTreeModel implements TreeModel {
         
         public ArrayList<TreeModelListener> listeners;
         public CustomTreeModel(){
             listeners=new ArrayList<TreeModelListener>();
         }
-                
+
+        
+        @Override
         public Object getRoot() {
             return rootNode;
         }
         
+        
         public void fireNodesChanged(TreeModelEvent e){
             for(TreeModelListener l : listeners) l.treeNodesChanged(e);
         }
+        
+        
         public void fireNodesInserted(TreeModelEvent e){
             for(TreeModelListener l : listeners) l.treeNodesInserted(e);
         }
+        
+        
         public void fireNodesRemoved(TreeModelEvent e){
             for(TreeModelListener l : listeners) l.treeNodesRemoved(e);
         }
+        
+        
         public void fireStructureChanged(TreeModelEvent e){
             for(TreeModelListener l : listeners) l.treeStructureChanged(e);
         }
         
+        
+        @Override
         public int getIndexOfChild(Object parent, Object child) {
             if(parent==rootNode) return groups.indexOf(child);
             else if(child instanceof QueryGroupInfo) return ((QueryGroupInfo)child).queries.indexOf(child);
             else return -1;
         }
 
+        
+        @Override
         public Object getChild(Object parent, int index) {
             if(parent==rootNode){
                 return groups.get(index);
@@ -480,26 +494,36 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
             return null;
         }
 
+        
+        @Override
         public boolean isLeaf(Object node) {
             if(node == rootNode) return false;
             else if(node instanceof QueryGroupInfo) return false;
             else return true;
         }
 
+        
+        @Override
         public int getChildCount(Object parent) {
             if(parent==rootNode) return groups.size();
             else if(parent instanceof QueryGroupInfo) return ((QueryGroupInfo)parent).queries.size();
             else return 0;
         }
 
+        
+        @Override
         public void removeTreeModelListener(TreeModelListener l) {
             listeners.remove(l);
         }
 
+        
+        @Override
         public void addTreeModelListener(TreeModelListener l) {
             listeners.add(l);
         }
 
+        
+        @Override
         public void valueForPathChanged(TreePath path, Object newValue) {
             Object o=path.getLastPathComponent();
             if(o instanceof QueryGroupInfo) {
@@ -513,10 +537,12 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
                 fireNodesChanged(new TreeModelEvent(this,new Object[]{rootNode,g},new int[]{g.queries.indexOf(o)},new Object[]{o}));
             }
         }
-        
     }
     
+    
     public class DraggableTree extends DragJTree {
+        
+        @Override
         public int allowDrop(TreePath destinationParent, TreePath destinationPosition, TreePath source) {
             Object[] s=source.getPath();
             if(destinationParent==null) return DnDConstants.ACTION_NONE;
@@ -532,6 +558,8 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
             else return DnDConstants.ACTION_NONE;
         }
 
+        
+        @Override
         public void doDrop(TreePath destinationParent, TreePath destinationPosition, TreePath source, int action) {
             Object[] s=source.getPath();
             Object[] d=destinationParent.getPath();
@@ -584,8 +612,9 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         public static final String optionPrefix = "scriptTextEditor.";
         protected JMenu scriptMenu;
         
+        
         public ScriptEditor(QueryInfo queryInfo){
-            super(CustomTopicPanelConfiguration.this.admin,true,queryInfo.script);
+            super(CustomTopicPanelConfiguration.this.wandora,true,queryInfo.script);
             this.setTitle("Edit query script");
             this.wrapLines(false);
             ArrayList<String> engines=WandoraScriptManager.getAvailableEngines();
@@ -607,28 +636,37 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
             });
             setCustomButtons(scriptToolPanel);
         }
+        
+        
         public void checkScript(){
-            String message=CustomTopicPanel.checkScript(admin,engineComboBox.getSelectedItem().toString(),textPane.getText());
+            String message=CustomTopicPanel.checkScript(wandora, engineComboBox.getSelectedItem().toString(), simpleTextPane.getText());
             if(message!=null){
-                WandoraOptionPane.showMessageDialog(admin, message, "Check syntax", WandoraOptionPane.ERROR_MESSAGE);        
+                WandoraOptionPane.showMessageDialog(wandora, message, "Check syntax", WandoraOptionPane.ERROR_MESSAGE);        
             }
             else{
-                WandoraOptionPane.showMessageDialog(admin, "No errors", "Check syntax", WandoraOptionPane.INFORMATION_MESSAGE);                    
+                WandoraOptionPane.showMessageDialog(wandora, "No errors", "Check syntax", WandoraOptionPane.INFORMATION_MESSAGE);                    
             }        
         }
+        
+        
+        @Override
         public String getOptionsPrefix(){
             return optionPrefix;
         }
+        
+        
+        @Override
         public void exitTextEditor(boolean acceptingChanges) {
             if(acceptingChanges){
-                String message=CustomTopicPanel.checkScript(admin,engineComboBox.getSelectedItem().toString(),textPane.getText());
+                String message=CustomTopicPanel.checkScript(wandora, engineComboBox.getSelectedItem().toString(), simpleTextPane.getText());
                 if(message!=null){
-                    int c=WandoraOptionPane.showConfirmDialog(admin, "Unabled to evaluate script. Do you want continue?<br><br>"+message,"Check syntax.");
+                    int c=WandoraOptionPane.showConfirmDialog(wandora, "Unabled to evaluate script. Do you want continue?<br><br>"+message, "Check syntax.");
                     if(c!=WandoraOptionPane.YES_OPTION) return;
                 }
             }
             super.exitTextEditor(acceptingChanges);
         }
+        
         
         public JMenu getScriptMenu(){
             scriptMenu = new SimpleMenu("Script", (Icon) null);
@@ -641,11 +679,15 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
             return scriptMenu;
         }
         
+        
+        @Override
         public void initMenuBar(){
             super.initMenuBar();
             menuBar.add(getScriptMenu());        
         }
 
+        
+        @Override
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
             String c = actionEvent.getActionCommand();
             if("check script".equalsIgnoreCase(c)){

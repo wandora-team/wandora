@@ -53,6 +53,8 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     private String fontFace = "Sans Serif";
     private int fontSize = 12;
     private boolean inverseColors = false;
+    
+    protected SimpleTextPane simpleTextPane = null;
 
     protected Wandora wandora = null;
     
@@ -72,6 +74,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
         super(wandora, modal);
         this.wandora = wandora;
         initComponents();
+        simpleTextPane = (SimpleTextPane) textPane;
         if(contentType!=null) textPane.setContentType(contentType);
         textPane.setForeground(Color.BLACK);
         textPane.setBackground(Color.WHITE);
@@ -240,8 +243,8 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
             "Find...", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK), UIBox.getIcon("gui/icons/find_generic.png"),
             "Replace...", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK), UIBox.getIcon("gui/icons/replace.png"),
             "---",
-            "HTML entities encode", 
-            "HTML entities decode",
+            "Encode HTML entities", 
+            "Decode HTML entities",
             "Strip HTML tags",
             "Make HTML clean up", 
             "Make XML clean up",
@@ -312,129 +315,43 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
         try {
             // --- Edit -------------------------------
             if("Trim".equalsIgnoreCase(c)) {
-                Document doc = textPane.getDocument();
-                int selectionStartLoc = 0;
-                int selectionEndLoc = doc.getLength();
-                int d = selectionEndLoc-selectionStartLoc;
-                
-                String changeThis = doc.getText(selectionStartLoc, d);
-
-                AttributeSet ca = textPane.getCharacterAttributes();               
-                doc.remove(selectionStartLoc, d);
-                
-                doc.insertString(selectionStartLoc, changeThis.trim(), ca);
+                String changeThis = simpleTextPane.getText();
+                simpleTextPane.setText(changeThis.trim());
             }
             else if("Uppercase".equalsIgnoreCase(c)) {
-                Document doc = textPane.getDocument();
-                int selectionStartLoc = textPane.getSelectionStart();
-                int selectionEndLoc = textPane.getSelectionEnd();
-
-                if(selectionStartLoc == selectionEndLoc) {
-                    selectionStartLoc = 0;
-                    selectionEndLoc = doc.getLength();
-                }
-                int d = selectionEndLoc-selectionStartLoc;
-                
-                String changeThis = doc.getText(selectionStartLoc, d);
-
-                AttributeSet ca = textPane.getCharacterAttributes();               
-                doc.remove(selectionStartLoc, d);
-                doc.insertString(selectionStartLoc, changeThis.toUpperCase(), ca);
+                String changeThis = simpleTextPane.getSelectedOrAllText();
+                simpleTextPane.replaceSelectedOrAllText(changeThis.toUpperCase());
             }
             else if("Lowercase".equalsIgnoreCase(c)) {
-                Document doc = textPane.getDocument();
-                int selectionStartLoc = textPane.getSelectionStart();
-                int selectionEndLoc = textPane.getSelectionEnd();
-
-                if(selectionStartLoc == selectionEndLoc) {
-                    selectionStartLoc = 0;
-                    selectionEndLoc = doc.getLength();
-                }
-                int d = selectionEndLoc-selectionStartLoc;
-                
-                String changeThis = doc.getText(selectionStartLoc, d);
-
-                AttributeSet ca = textPane.getCharacterAttributes();               
-                doc.remove(selectionStartLoc, d);
-                doc.insertString(selectionStartLoc, changeThis.toLowerCase(), ca);
+                String changeThis = simpleTextPane.getSelectedOrAllText();
+                simpleTextPane.replaceSelectedOrAllText(changeThis.toLowerCase());
             }
-            else if("HTML entities encode".equalsIgnoreCase(c)) {
-                Document doc = textPane.getDocument();
-                int selectionStartLoc = textPane.getSelectionStart();
-                int selectionEndLoc = textPane.getSelectionEnd();
-
-                if(selectionStartLoc == selectionEndLoc) {
-                    selectionStartLoc = 0;
-                    selectionEndLoc = doc.getLength();
-                }
-                int d = selectionEndLoc-selectionStartLoc;
-                
-                String changeThis = doc.getText(selectionStartLoc, d);
-
-                AttributeSet ca = textPane.getCharacterAttributes();               
-                doc.remove(selectionStartLoc, d);
-                doc.insertString(selectionStartLoc, HTMLEntitiesCoder.encode(changeThis), ca);
+            else if("Encode HTML entities".equalsIgnoreCase(c)) {
+                String changeThis = simpleTextPane.getSelectedOrAllText();
+                simpleTextPane.replaceSelectedOrAllText(HTMLEntitiesCoder.encode(changeThis));
             }
-            else if("HTML entities decode".equalsIgnoreCase(c)) {
-                Document doc = textPane.getDocument();
-                int selectionStartLoc = textPane.getSelectionStart();
-                int selectionEndLoc = textPane.getSelectionEnd();
-
-                if(selectionStartLoc == selectionEndLoc) {
-                    selectionStartLoc = 0;
-                    selectionEndLoc = doc.getLength();
-                }
-                int d = selectionEndLoc-selectionStartLoc;
-                
-                String changeThis = doc.getText(selectionStartLoc, d);
-
-                AttributeSet ca = textPane.getCharacterAttributes();               
-                doc.remove(selectionStartLoc, d);
-                doc.insertString(selectionStartLoc, HTMLEntitiesCoder.decode(changeThis), ca);
+            else if("Decade HTML entities".equalsIgnoreCase(c)) {
+                String changeThis = simpleTextPane.getSelectedOrAllText();
+                simpleTextPane.replaceSelectedOrAllText(HTMLEntitiesCoder.decode(changeThis));
             }
             else if("Make HTML clean up".equalsIgnoreCase(c)) {
-                Document doc = textPane.getDocument();
-                int selectionStartLoc = 0;
-                int selectionEndLoc = doc.getLength();
-                int d = selectionEndLoc-selectionStartLoc;
-                
-                String changeThis = doc.getText(selectionStartLoc, d);
+                String changeThis = simpleTextPane.getText();
 
-                AttributeSet ca = textPane.getCharacterAttributes();               
-                doc.remove(selectionStartLoc, d);
-                
                 org.w3c.tidy.Tidy tidy = new org.w3c.tidy.Tidy();
                 tidy.setTidyMark(false);
                 ByteArrayOutputStream tidyOutput = null;
                 tidyOutput = new ByteArrayOutputStream();       
                 tidy.parse(new ByteArrayInputStream(changeThis.getBytes()), tidyOutput);
                 
-                doc.insertString(selectionStartLoc, tidyOutput.toString(), ca);
+                simpleTextPane.setText(tidyOutput.toString());
             }
             else if("Strip HTML tags".equalsIgnoreCase(c)) {
-                Document doc = textPane.getDocument();
-                int selectionStartLoc = 0;
-                int selectionEndLoc = doc.getLength();
-                int d = selectionEndLoc-selectionStartLoc;
-                
-                String changeThis = doc.getText(selectionStartLoc, d);
-
-                AttributeSet ca = textPane.getCharacterAttributes();               
-                doc.remove(selectionStartLoc, d);
-                
-                doc.insertString(selectionStartLoc, XMLbox.naiveGetAsText(changeThis), ca);
+                String changeThis = simpleTextPane.getText();
+                simpleTextPane.setText(XMLbox.naiveGetAsText(changeThis));
             }
             else if("Make XML clean up".equalsIgnoreCase(c)) {
-                Document doc = textPane.getDocument();
-                int selectionStartLoc = 0;
-                int selectionEndLoc = doc.getLength();
-                int d = selectionEndLoc-selectionStartLoc;
-                
-                String changeThis = doc.getText(selectionStartLoc, d);
+                String changeThis = simpleTextPane.getText();
 
-                AttributeSet ca = textPane.getCharacterAttributes();               
-                doc.remove(selectionStartLoc, d);
-                
                 org.w3c.tidy.Tidy tidy = new org.w3c.tidy.Tidy();
                 tidy.setTidyMark(false);
                 tidy.setXmlOut(true);
@@ -443,11 +360,11 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 tidyOutput = new ByteArrayOutputStream();       
                 tidy.parse(new ByteArrayInputStream(changeThis.getBytes()), tidyOutput);
                 
-                doc.insertString(selectionStartLoc, tidyOutput.toString(), ca);
+                simpleTextPane.setText(tidyOutput.toString());
             }
             else if("undo".equalsIgnoreCase(c)) {
                 try {
-                    ((SimpleTextPane)textPane).undo.undo();
+                    simpleTextPane.undo.undo();
                     infoLabel.setText("Undo OK!");
                 }
                 catch(Exception e) {
@@ -456,7 +373,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
             }
             else if("redo".equalsIgnoreCase(c)) {
                 try {
-                    ((SimpleTextPane)textPane).undo.redo();
+                    simpleTextPane.undo.redo();
                     infoLabel.setText("Redo OK!");
                 }
                 catch(Exception e) {
@@ -464,19 +381,19 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 }
             }
             else if("cut".equalsIgnoreCase(c)) {
-                textPane.cut();
+                simpleTextPane.cut();
                 infoLabel.setText("Cut OK!");
             }
             else if("copy".equalsIgnoreCase(c)) {
-                textPane.copy();
+                simpleTextPane.copy();
                 infoLabel.setText("Copy OK!");
             }
             else if("paste".equalsIgnoreCase(c)) {
-                textPane.paste();
+                simpleTextPane.paste();
                 infoLabel.setText("Paste OK!");
             }
             else if("clear".equalsIgnoreCase(c)) {
-                textPane.setText("");
+                simpleTextPane.setText("");
                 infoLabel.setText("Clear OK!");
             }
             else if("find...".equalsIgnoreCase(c)) {
@@ -490,26 +407,27 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 findTextField.requestFocus();
             }
             else if("select all".equalsIgnoreCase(c)) {
-                textPane.selectAll();
+                simpleTextPane.selectAll();
                 infoLabel.setText("Select all OK!");
             }
 
             // --- File -------------------------------
             else if("open...".equalsIgnoreCase(c)) {
                 infoLabel.setText("Reading text from file!");
-                ((SimpleTextPane)textPane).load();
+                simpleTextPane.load();
                 infoLabel.setText("OK!");
             }
             else if("save...".equalsIgnoreCase(c)) {
                 infoLabel.setText("Saving text to file!");
-                ((SimpleTextPane)textPane).save();
+                simpleTextPane.save();
                 infoLabel.setText("OK!");
             }
             else if("print...".equalsIgnoreCase(c)) {
                 infoLabel.setText("Printing text!");
                 try{
-                    ((SimpleTextPane) textPane).print();
-                }catch(java.awt.print.PrinterException pe){
+                    simpleTextPane.print();
+                }
+                catch(java.awt.print.PrinterException pe){
                     wandora.handleError(pe);
                 }
             }
@@ -554,7 +472,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
             }
             else {
                 System.out.println("Passing actionEvent '"+c+"' to SimpleTextPane.");
-                ((SimpleTextPane) textPane).actionPerformed(actionEvent);
+                simpleTextPane.actionPerformed(actionEvent);
             }
         }
         catch(Exception e) {
@@ -566,7 +484,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     
     
     private void updateEditorFont() {
-        textPane.setFont(new Font(fontFace, Font.PLAIN, fontSize));
+        simpleTextPane.setFont(new Font(fontFace, Font.PLAIN, fontSize));
         updateFormatMenu();
     }
     private void updateEditorColors() {
@@ -576,8 +494,8 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
             background = Color.BLACK;
             foreground = Color.WHITE;
         }
-        textPane.setForeground(foreground);
-        textPane.setBackground(background);
+        simpleTextPane.setForeground(foreground);
+        simpleTextPane.setBackground(background);
     }
     
 
@@ -594,18 +512,16 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     public void wrapLines(boolean shouldWrap) {
         shouldWrapLines = shouldWrap;
         updateFormatMenu();
-        if(textPane instanceof SimpleTextPane) {
-            ((SimpleTextPane) textPane).setLineWrap(shouldWrapLines);
-            if(shouldWrapLines) infoLabel.setText("Line wrap set ON");
-            else infoLabel.setText("Line wrap set OFF");
-        }
+        simpleTextPane.setLineWrap(shouldWrapLines);
+        if(shouldWrapLines) infoLabel.setText("Line wrap set ON");
+        else infoLabel.setText("Line wrap set OFF");
     }
     
     
     public void refreshCaretInfo() {
         try {
-            int pos = textPane.getCaretPosition();
-            int len = textPane.getDocument().getLength();
+            int pos = simpleTextPane.getCaretPosition();
+            int len = simpleTextPane.getDocument().getLength();
             infoLabel.setText("" + pos + "/" + len);
         }
         catch(Exception e) {
@@ -674,7 +590,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
 
         acceptButton.setText("Accept");
         acceptButton.setMargin(new java.awt.Insets(1, 14, 1, 14));
-        acceptButton.setPreferredSize(new java.awt.Dimension(70, 20));
+        acceptButton.setPreferredSize(new java.awt.Dimension(70, 21));
         acceptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 acceptButtonActionPerformed(evt);
@@ -683,7 +599,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 6, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 2);
         acceptPanel.add(acceptButton, gridBagConstraints);
 
         rejectButton.setText("Reject");
@@ -697,7 +613,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
         acceptPanel.add(rejectButton, gridBagConstraints);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -951,7 +867,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     protected javax.swing.JPanel replacePanel;
     protected javax.swing.JTextField replaceTextField;
     protected javax.swing.JScrollPane scrollPane;
-    protected javax.swing.JTextPane textPane;
+    private javax.swing.JTextPane textPane;
     protected javax.swing.JPanel toolPanel;
     // End of variables declaration//GEN-END:variables
     

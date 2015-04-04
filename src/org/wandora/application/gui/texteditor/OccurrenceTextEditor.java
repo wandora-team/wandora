@@ -186,11 +186,9 @@ public class OccurrenceTextEditor extends TextEditor {
         try {
             if("Insert base name".equalsIgnoreCase(c)) {
                 if(occurrenceTopic != null && !occurrenceTopic.isRemoved()) {
-                    Document doc = textPane.getDocument();
-                    AttributeSet ca = textPane.getCharacterAttributes();
                     String bn = occurrenceTopic.getBaseName();
                     if(bn != null) {
-                        doc.insertString(textPane.getCaretPosition(), bn, ca);
+                        simpleTextPane.insertText(bn);
                     }
                     else {
                         WandoraOptionPane.showMessageDialog(this, "Base name is null and can not be inserted to the occurrence text.", "Base name is null", WandoraOptionPane.ERROR_MESSAGE);
@@ -200,17 +198,16 @@ public class OccurrenceTextEditor extends TextEditor {
                     WandoraOptionPane.showMessageDialog(this, "Invalid occurrence carrier topic.", "Invalid occurrence carrier topic.", WandoraOptionPane.ERROR_MESSAGE);
                 }
             }
+            
             else if("Insert variant name".equalsIgnoreCase(c)) {
                 if(occurrenceTopic != null && !occurrenceTopic.isRemoved()) {
-                    Document doc = textPane.getDocument();
-                    AttributeSet ca = textPane.getCharacterAttributes(); 
                     Set<Topic> scope = new HashSet<Topic>();
                     scope.add(this.occurrenceVersion);
                     scope.add(TMBox.getDisplayNameTopic(occurrenceType));
                     String variantName = occurrenceTopic.getVariant(scope);
                     if(variantName == null) variantName = occurrenceTopic.getDisplayName();
                     if(variantName != null) {
-                        doc.insertString(textPane.getCaretPosition(), variantName, ca);
+                        simpleTextPane.insertText(variantName);
                     }
                     else {
                         WandoraOptionPane.showMessageDialog(this, "No variant names found for insertion.", "No variant names found", WandoraOptionPane.ERROR_MESSAGE);
@@ -222,11 +219,9 @@ public class OccurrenceTextEditor extends TextEditor {
             }
             else if("Insert subject identifier".equalsIgnoreCase(c)) {
                 if(occurrenceTopic != null && !occurrenceTopic.isRemoved()) {
-                    Document doc = textPane.getDocument();
-                    AttributeSet ca = textPane.getCharacterAttributes(); 
                     String si = occurrenceTopic.getOneSubjectIdentifier().toExternalForm();
                     if(si != null) {
-                        doc.insertString(textPane.getCaretPosition(), si, ca);
+                        simpleTextPane.insertText(si);
                     }
                     else {
                         WandoraOptionPane.showMessageDialog(this, "No subject identifiers found for insertion. Invalid topic as occurrence carrier.", "No subject identifier found", WandoraOptionPane.ERROR_MESSAGE);
@@ -238,12 +233,10 @@ public class OccurrenceTextEditor extends TextEditor {
             }
             else if("Insert subject locator".equalsIgnoreCase(c)) {
                 if(occurrenceTopic != null && !occurrenceTopic.isRemoved()) {
-                    Document doc = textPane.getDocument();
-                    AttributeSet ca = textPane.getCharacterAttributes(); 
                     Locator sl = occurrenceTopic.getSubjectLocator();
                     if(sl != null) {
                         String sls = sl.toExternalForm();
-                        doc.insertString(textPane.getCaretPosition(), sls, ca);
+                        simpleTextPane.insertText(sls);
                     }
                     else {
                         WandoraOptionPane.showMessageDialog(this, "No subject locator found for insertion.", "No subject locator found", WandoraOptionPane.ERROR_MESSAGE);
@@ -254,95 +247,16 @@ public class OccurrenceTextEditor extends TextEditor {
                 }
             }
             
-            
-            
             else if(c.startsWith("Translate with Google")) {
-                try {
-                    Document doc = textPane.getDocument();
-                    int selectionStartLoc = 0;
-                    int selectionEndLoc = doc.getLength();
-                    int d = selectionEndLoc-selectionStartLoc;
-                    String translateThis = doc.getText(selectionStartLoc, d);
-                    AttributeSet ca = textPane.getCharacterAttributes();
-
-                    SelectGoogleTranslationLanguagesPanel selectLanguages = new SelectGoogleTranslationLanguagesPanel();
-                    selectLanguages.notInTopicMapsContext();
-                    if(wandora == null) wandora = Wandora.getWandora(this);
-                    selectLanguages.openInDialog(wandora);
-                    if(selectLanguages.wasAccepted()) {
-                        boolean markTranslation = selectLanguages.markTranslatedText();
-                        Language sourceLang = selectLanguages.getSourceLanguage();
-                        Collection<Language> targetLangs = selectLanguages.getTargetLanguages();
-                        for(Language targetLang : targetLangs) {
-                            String translated = GoogleTranslateBox.translate(translateThis, sourceLang, targetLang, markTranslation);
-                            doc.remove(selectionStartLoc, d);
-                            doc.insertString(selectionStartLoc, translated, ca);
-                            break;
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
+                simpleTextPane.translateWithGoogle();
             }
-
             
             else if(c.startsWith("Translate with Microsoft")) {
-                try {
-                    Document doc = textPane.getDocument();
-                    int selectionStartLoc = 0;
-                    int selectionEndLoc = doc.getLength();
-                    int d = selectionEndLoc-selectionStartLoc;
-                    String translateThis = doc.getText(selectionStartLoc, d);
-                    AttributeSet ca = textPane.getCharacterAttributes();
-
-                    SelectMicrosoftTranslationLanguagesPanel selectLanguages = new SelectMicrosoftTranslationLanguagesPanel();
-                    selectLanguages.notInTopicMapsContext();
-                    if(wandora == null) wandora = Wandora.getWandora(this);
-                    selectLanguages.openInDialog(wandora);
-                    if(selectLanguages.wasAccepted()) {
-                        boolean markTranslation = selectLanguages.markTranslatedText();
-                        com.memetix.mst.language.Language sourceLang = selectLanguages.getSourceLanguage();
-                        Collection<com.memetix.mst.language.Language> targetLangs = selectLanguages.getTargetLanguages();
-                        for(com.memetix.mst.language.Language targetLang : targetLangs) {
-                            String translated = MicrosoftTranslateBox.translate(translateThis, sourceLang, targetLang, markTranslation);
-                            doc.remove(selectionStartLoc, d);
-                            doc.insertString(selectionStartLoc, translated, ca);
-                            break;
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
+                simpleTextPane.translateWithMicrosoft();
             }
             
             else if(c.startsWith("Translate with Watson")) {
-                try {
-                    Document doc = textPane.getDocument();
-                    int selectionStartLoc = 0;
-                    int selectionEndLoc = doc.getLength();
-                    int d = selectionEndLoc-selectionStartLoc;
-                    String translateThis = doc.getText(selectionStartLoc, d);
-                    AttributeSet ca = textPane.getCharacterAttributes();
-
-                    SelectWatsonTranslationLanguagesPanel selectLanguages = new SelectWatsonTranslationLanguagesPanel();
-                    selectLanguages.notInTopicMapsContext();
-                    if(wandora == null) wandora = Wandora.getWandora(this);
-                    selectLanguages.openInDialog(wandora);
-                    if(selectLanguages.wasAccepted()) {
-                        boolean markTranslation = selectLanguages.markTranslatedText();
-                        String languages = WatsonTranslateBox.getLanguagesCodeFor(selectLanguages.getSelectedLanguages());
-                        String translated = WatsonTranslateBox.translate(translateThis, languages, markTranslation);
-                        if(translated != null) {
-                            doc.remove(selectionStartLoc, d);
-                            doc.insertString(selectionStartLoc, translated, ca);
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
+                simpleTextPane.translateWithWatson();
             }
 
             else {
