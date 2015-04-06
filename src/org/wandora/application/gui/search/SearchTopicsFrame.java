@@ -36,7 +36,7 @@ import org.wandora.application.gui.topicpanels.SearchTopicPanel;
  */
 
 
-public class SearchTopicsFrame extends javax.swing.JFrame {
+public class SearchTopicsFrame extends javax.swing.JDialog {
 
     private SearchTopicPanel searchPanels = null;
     
@@ -44,6 +44,7 @@ public class SearchTopicsFrame extends javax.swing.JFrame {
      * Creates new form SearchTopicsFrame
      */
     public SearchTopicsFrame() {
+        super(Wandora.getWandora(), false);
         Wandora wandora = Wandora.getWandora();
         setAlwaysOnTop(false);
         setTitle("Search and query");

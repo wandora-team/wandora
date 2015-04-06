@@ -209,6 +209,7 @@ public class MaianaImportPanel extends javax.swing.JPanel {
                 JSONObject list = MaianaUtils.listAvailableTopicMaps(getApiEndPoint(), getApiKey());
                 if(list.has("msg")) {
                     WandoraOptionPane.showMessageDialog(window, list.getString("msg"), "API says", WandoraOptionPane.WARNING_MESSAGE);
+                    //System.out.println("REPLY:"+list.toString());
                 }
 
                 if(list.has("data")) {
