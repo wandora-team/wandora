@@ -27,6 +27,7 @@
 
 package org.wandora.application.contexts;
 
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.table.MixedTopicTable;

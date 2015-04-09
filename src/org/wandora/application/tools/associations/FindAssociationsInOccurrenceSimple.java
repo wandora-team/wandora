@@ -29,6 +29,7 @@
 package org.wandora.application.tools.associations;
 
 
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import java.util.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
