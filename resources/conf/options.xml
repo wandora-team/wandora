@@ -637,7 +637,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.word.SimpleWordMatchingExtractor</class>
             </item>
             <item>
-               <name>Word Similarity extractor...</name>
+               <name>Word similarity extractor...</name>
                <class>org.wandora.application.tools.extractors.word.SimilarityMatchingExtractor</class>
             </item>
          </item>
@@ -729,16 +729,20 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Social</name>
             <item>
-               <name>Facebook graph extractor...</name>
-               <class>org.wandora.application.tools.extractors.facebook.FacebookAPIExtractor</class>
-            </item>
-            <item>
                <name>Twitter extractor...</name>
                <class>org.wandora.application.tools.extractors.twitter.TwitterExtractor</class>
             </item>
             <item>
                <name>Twitter JSON extractor...</name>
                <class>org.wandora.application.tools.extractors.twitter.TwitterJSONExtractor</class>
+            </item>
+            <item>
+               <name>--- OTHER SOCIAL ---</name>
+               <class>org.wandora.application.tools.DummyTool</class>
+            </item>
+            <item>
+               <name>Facebook graph extractor...</name>
+               <class>org.wandora.application.tools.extractors.facebook.FacebookAPIExtractor</class>
             </item>
             <item>
                <name>Reddit extractor...</name>

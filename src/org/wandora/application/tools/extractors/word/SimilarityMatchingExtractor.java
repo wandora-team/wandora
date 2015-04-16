@@ -37,7 +37,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 public class SimilarityMatchingExtractor extends AbstractWordExtractor{
 
     private final String SI_BASE = "http://wandora.org/si/word-similarity/";
-    private static final String BN_SUFFIX = "(similarity matching extractor)";
+    private static final String BN_SUFFIX = "(word similarity matching extractor)";
     
     protected SimilarityWordConfiguration config;
     

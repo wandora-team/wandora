@@ -30,7 +30,7 @@ import java.io.*;
 import java.util.ArrayList;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.OccurrenceTextEditor;
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.xml.sax.*;
 

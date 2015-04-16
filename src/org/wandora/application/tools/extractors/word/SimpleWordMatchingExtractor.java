@@ -44,7 +44,7 @@ public class SimpleWordMatchingExtractor extends AbstractWordExtractor {
     @Override
     public String getDescription(){
         return "Matches given words and regular expressions to topic data and"
-                + "creates associations between matched topics and given words.";
+                + " creates associations between matched topics and given words.";
     }
     
     @Override
