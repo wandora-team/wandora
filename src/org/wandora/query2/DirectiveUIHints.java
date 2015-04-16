@@ -111,6 +111,11 @@ public class DirectiveUIHints implements Serializable {
         // one which takes a directive array and then for convenience we also
         // have versions which take one, or two, or three directives, remove all
         // but the array version.
+        //
+        // At the moment, pretty much all Directives implement DirectiveUIHInts.Provider
+        // and will give a sensible constructor array through that mechanism.
+        // Ideally the above should still be added to this method for Directives
+        // that don't implement the Provider but it's not essential at the moment.
     }
     
     public static DirectiveUIHints guessHints(Class<? extends Directive> cls){
@@ -316,27 +321,6 @@ public class DirectiveUIHints implements Serializable {
             }
         }
 
-        /*
-        @JsonIgnore
-        public HashMap<String,String> getOptions(String prefix){
-            HashMap<String,String> ret=new HashMap<String,String>();
-            ret.put(prefix+"label",label);
-            ret.put(prefix+"type",type.getName());
-            ret.put(prefix+"multiple",""+multiple);
-            return ret;
-        }
-        
-        @JsonIgnore
-        public static Parameter readOptions(HashMap<String,String> map,String prefix){
-            Parameter ret=new Parameter();
-            ret.label=map.get(prefix+"label");
-            ret.multiple=Boolean.parseBoolean(map.get(prefix+"multiple"));
-            String cls=map.get(prefix+"type");
-            try{
-                ret.type=Class.forName(cls);
-            }catch(ClassNotFoundException cnfe){ throw new RuntimeException(cnfe); }
-            return ret;
-        }*/
     }
     
     
@@ -416,35 +400,6 @@ public class DirectiveUIHints implements Serializable {
             return c;
         }
         
-        /*
-        @JsonIgnore
-        public HashMap<String,String> getOptions(String prefix){
-            HashMap<String,String> ret=new HashMap<String,String>();
-            ret.put(prefix+"label",label);
-            for(int i=0;i<parameters.length;i++){
-                String paramPrefix=prefix+"parameter["+i+"].";
-                ret.putAll(parameters[i].getOptions(paramPrefix));
-            }
-            return ret;
-        }
-        
-        @JsonIgnore
-        public static Constructor readOptions(HashMap<String,String> map,String prefix){
-            Constructor ret=new Constructor();
-            ret.label=map.get(prefix+"label");
-            ArrayList<Parameter> parameters=new ArrayList<>();
-            int index=0;
-            while(true){
-                String paramPrefix=prefix+"parameter["+index+"].";
-                String test=map.get(paramPrefix+"label");
-                if(test==null) break;
-                parameters.add(Parameter.readOptions(map, paramPrefix));
-                index++;
-            }
-            ret.parameters=parameters.toArray(new Parameter[parameters.size()]);
-            return ret;
-        } 
-        */
     }
     
     public static class Addon implements Serializable {
@@ -532,36 +487,6 @@ public class DirectiveUIHints implements Serializable {
             return m;
         }
 
-        /*
-        @JsonIgnore
-        public HashMap<String,String> getOptions(String prefix){
-            HashMap<String,String> ret=new HashMap<String,String>();
-            ret.put(prefix+"label",label);
-            ret.put(prefix+"method",method);
-            for(int i=0;i<parameters.length;i++){
-                String paramPrefix=prefix+"parameter["+i+"].";
-                ret.putAll(parameters[i].getOptions(paramPrefix));
-            }
-            return ret;
-        }
-        
-        @JsonIgnore
-        public static Addon readOptions(HashMap<String,String> map,String prefix){
-            Addon ret=new Addon();
-            ret.label=map.get(prefix+"label");
-            ret.method=map.get(prefix+"method");
-            ArrayList<Parameter> parameters=new ArrayList<>();
-            int index=0;
-            while(true){
-                String paramPrefix=prefix+"parameter["+index+"].";
-                String test=map.get(paramPrefix+"label");
-                if(test==null) break;
-                parameters.add(Parameter.readOptions(map, paramPrefix));
-                index++;
-            }
-            ret.parameters=parameters.toArray(new Parameter[parameters.size()]);
-            return ret;
-        }         */     
     }
     
     public static interface Provider {

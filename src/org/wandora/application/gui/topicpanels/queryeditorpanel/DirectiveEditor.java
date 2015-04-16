@@ -638,29 +638,6 @@ public class DirectiveEditor extends javax.swing.JPanel {
             return new BoundParameter(parameter, value);
         }
         
-/*        
-        public static BoundParameter parseScriptValue(Parameter parameter,String value){
-            return new BoundParameter(parameter,parseScriptValue(parameter,value,false));
-        }
-        
-        public static Object parseScriptValue(Parameter parameter,String value,boolean multipleComponent){
-            Object parsed=null;
-            if(value!=null){
-                value=value.trim();
-                Class cls=parameter.getType();
-                if(!multipleComponent && parameter.isMultiple()){
-                    throw new RuntimeException("TODO");
-                }
-                else if(cls.equals(String.class)) parsed=value.substring(1,value.length()-1);
-                else if(cls.equals(Integer.class)) parsed=Integer.parseInt(value);
-                else if(cls.equals(Double.class)) parsed=Double.parseDouble(value);
-                else if(cls.equals(Topic.class)) parsed=value.substring(1,value.length()-1); // can't convert to topic here, use SI
-                else if(cls.equals(Directive.class) || cls.equals(DirectivePanel.class)) parsed=value; // this should be the panel id
-                else throw new RuntimeException("Unable to parse bound parameter value");
-            }
-            return parsed;
-        }
-        */
 
         @Override
         public int hashCode() {

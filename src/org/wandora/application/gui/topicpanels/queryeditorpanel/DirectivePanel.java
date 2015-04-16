@@ -173,9 +173,18 @@ public class DirectivePanel extends javax.swing.JPanel {
     }
     
     public void setDetailsText(String text){
+        if(text==null) text="";
+        if(!text.isEmpty()) {
+            text=text.replace("&","&amp;");
+            text=text.replace("<","&lt;");
+            text=text.replace("\n", "<br>");
+            text="<html>"+text+"</html>";
+        }
+        
         detailsLabel.setText(text);
-        int height=titleLabel.getPreferredSize().height+detailsLabel.getPreferredSize().height;
-        this.setSize(this.getSize().width, height);
+        //int height=titleLabel.getPreferredSize().height+detailsLabel.getPreferredSize().height+5;
+        //this.setSize(this.getSize().width, height);
+        this.setSize(this.getMinimumSize());
     }
     
     protected void updateParamAnchors(){
@@ -278,6 +287,58 @@ public class DirectivePanel extends javax.swing.JPanel {
     public void saveDirectiveParameters(DirectiveParameters params){
         this.directiveParameters=params;
         
+        setDetailsText(buildDetailsText());
+    }
+    
+    public String buildDetailsParamText(Object o){
+        if(o==null){
+            return "null";
+        }
+        else if(o instanceof DirectivePanel){
+            return "<DIR>";
+        }
+        else if(o.getClass().isArray()){
+            String s="[";
+            for(int i=0;i<Array.getLength(o);i++){
+                if(s.length()>1) s+="\n";
+                s+=buildDetailsParamText(Array.get(o, i));
+            }
+            s+="]";
+            return s;
+        }
+        else {
+            String s=o.toString();
+            if(s.length()>15){
+                int ind=s.lastIndexOf("#");
+                if(ind>=0) s=s.substring(ind);
+                else {
+                    ind=s.lastIndexOf("/");
+                    if(ind>=0) s=s.substring(ind);
+                }
+                if(s.length()>15) s="..."+s.substring(s.length()-15);
+                else s="..."+s;
+            }
+            if(o instanceof String) return "\""+s+"\"";
+            else return "<"+s+">";
+        }
+        
+    }
+    
+    public String buildDetailsText(){
+        StringBuilder sb=new StringBuilder();
+        
+        BoundParameter[] params=this.directiveParameters.parameters;
+        
+        for(BoundParameter p : params){
+            if(sb.length()>0) sb.append(",\n");
+            else sb.append("(");
+            Object o=p.getValue();
+            String s=buildDetailsParamText(o);
+            if(s!=null) sb.append(s);
+        }
+        if(sb.length()>0) sb.append(")");
+        
+        return sb.toString();
     }
     
     public DirectiveParameters getDirectiveParameters(){
@@ -538,6 +599,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         add(parameterDirectiveAnchors, gridBagConstraints);
 
+        titleLabel.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         titleLabel.setText("Title");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
