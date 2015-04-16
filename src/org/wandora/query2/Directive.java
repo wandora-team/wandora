@@ -194,19 +194,25 @@ public abstract class Directive {
     }
 
     public static String debugStringInner(Directive[] directives,String indent){
-        StringBuffer ret=new StringBuffer("\n");
-        for(int i=0;i<directives.length;i++){
-            if(i>0) ret.append(",\n");
-            ret.append(indent+"\t");
-            ret.append(directives[i].debugString(indent+"\t"));
+        StringBuilder ret=new StringBuilder("");
+        if(directives==null){
+            ret.append("null");
         }
-        ret.append("\n");
+        else {
+            ret.append("\n");
+            for(int i=0;i<directives.length;i++){
+                if(i>0) ret.append(",\n");
+                ret.append(indent+"\t");
+                ret.append(directives[i].debugString(indent+"\t"));
+            }
+            ret.append("\n");
+        }
         ret.append(indent);
         return ret.toString();
     }
 
     public static String debugStringInner(List<Directive> directives,String indent){
-        StringBuffer ret=new StringBuffer("\n");
+        StringBuilder ret=new StringBuilder("\n");
         for(int i=0;i<directives.size();i++){
             if(i>0) ret.append(",\n");
             ret.append(indent+"\t");
@@ -218,9 +224,10 @@ public abstract class Directive {
     }
 
     public static String debugStringInner(Directive directive,String indent){
-        StringBuffer sb=new StringBuffer("");
+        StringBuilder sb=new StringBuilder("");
         sb.append("\n\t"+indent);
-        sb.append(directive.debugString(indent+"\t"));
+        if(directive==null) sb.append("null");
+        else sb.append(directive.debugString(indent+"\t"));
         sb.append("\n"+indent);
         return sb.toString();
     }

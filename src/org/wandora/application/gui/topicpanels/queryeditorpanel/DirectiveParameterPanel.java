@@ -38,7 +38,6 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public class DirectiveParameterPanel extends AbstractTypePanel {
 
-    protected ConnectorAnchor connectorAnchor;
     protected Class<? extends Directive> directiveType;
     
     protected ConnectorAnchor fromAnchor;
@@ -51,8 +50,6 @@ public class DirectiveParameterPanel extends AbstractTypePanel {
         super(parameter, panel);
         initComponents();
         disconnectButton.setVisible(false);
-        
-        connectorAnchor=new ComponentConnectorAnchor(directiveAnchor,Direction.RIGHT,true,false);
         
         DnDTools.addDropTargetHandler(directiveAnchor, DnDTools.directiveHintsDataFlavor, 
                 new DnDTools.DropTargetCallback<DirectiveUIHints>() {

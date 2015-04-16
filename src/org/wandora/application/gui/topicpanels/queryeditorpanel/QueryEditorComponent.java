@@ -173,7 +173,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         applyInspectorChanges();
         DirectivePanel p=getRootPanel();
         if(p==null) return null;
-        else return p.buildScript();
+        else return "importPackage(org.wandora.query2);\n"+p.buildScript();
     }
     
     public Directive buildDirective(){
@@ -183,24 +183,6 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         else return p.buildDirective();
     }
     
-/*    
-    public HashMap<String,String> buildOptions(){
-        if(this.selectedPanel!=null) {
-            QueryEditorInspectorPanel inspector=findInspector();
-            if(inspector!=null){
-                inspector.saveChanges();
-            }            
-        }
-        
-        ConnectorAnchor from=finalResultAnchor.getFrom();
-        if(from==null) return null;
-        JComponent component=from.getComponent();
-        if(component==null) return null;
-        DirectivePanel p=resolveDirectivePanel(component);
-        if(p==null) return null;
-        HashMap<String,String> ret=p.getOptions();
-        return ret;
-    }*/
     
     public StoredQuery getStoredQuery(){
         applyInspectorChanges();
