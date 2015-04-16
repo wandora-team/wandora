@@ -35,6 +35,8 @@ import java.util.*;
 import org.wandora.application.Wandora;
 import org.wandora.utils.GripCollections;
 import org.wandora.application.gui.TopicGuiWrapper;
+import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.topicmap.Topic;
 
 
 
@@ -45,7 +47,7 @@ import org.wandora.application.gui.TopicGuiWrapper;
 public class TopicTreeTopicRenderer extends DefaultTreeCellRenderer {
 
     private TopicTree topicTree;
-
+    private Wandora wandora = Wandora.getWandora();
     
     
     public Map<String,Icon> icons=GripCollections.addArrayToMap(new HashMap<String,Icon>(),new Object[]{
@@ -81,23 +83,40 @@ public class TopicTreeTopicRenderer extends DefaultTreeCellRenderer {
             if(topicTree.isBroken()) return c;
             String res=((TopicGuiWrapper)value).icon;
             setIcon(solveIcon(res));
+            Topic topic = null;
 
+            if(value == null || value instanceof Topic) {
+                topic = (Topic) value;
+            }
+            else if(value instanceof TopicGuiWrapper) {
+                TopicGuiWrapper topicWrapper = (TopicGuiWrapper) value;
+                topic = topicWrapper.topic;
+            }
+            
             if(c instanceof JLabel) {
                 JLabel label = (JLabel) c;
-                TopicGuiWrapper topicWrapper = (TopicGuiWrapper) value;
                 try {
-                    String topicName = topicWrapper.toString();
+                    String topicName = TopicToString.toString(topic);
                     label.setText(topicName);
-                    Wandora wandora = Wandora.getWandora();
                     Color color = null;
-                    if(wandora != null) wandora.topicHilights.getLayerColor(topicWrapper.topic);
+                    if(wandora != null) {
+                        color = wandora.topicHilights.getLayerColor(topic);
+                    }
+                    if(topic == null) {
+                        color = Color.LIGHT_GRAY;
+                    }
+                    else if(topic.isRemoved()) {
+                        color = Color.RED;
+                    }
                     if(color!=null) label.setForeground(color);
                     else label.setForeground(Color.BLACK);
                 }
                 catch(Exception ex) {}
             }
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { 
+            e.printStackTrace(); 
+        }
         
         return c;
     }
