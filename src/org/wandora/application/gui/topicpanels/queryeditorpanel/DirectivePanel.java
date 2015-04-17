@@ -44,6 +44,7 @@ import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.
 import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
+import org.wandora.query2.DirectiveUIHints.Addon;
 import org.wandora.query2.DirectiveUIHints.Constructor;
 
 /**
@@ -184,7 +185,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         detailsLabel.setText(text);
         //int height=titleLabel.getPreferredSize().height+detailsLabel.getPreferredSize().height+5;
         //this.setSize(this.getSize().width, height);
-        this.setSize(this.getMinimumSize());
+        this.setSize(this.getPreferredSize());
     }
     
     protected void updateParamAnchors(){
@@ -290,6 +291,25 @@ public class DirectivePanel extends javax.swing.JPanel {
         setDetailsText(buildDetailsText());
     }
     
+    public String buildDetailsLine(String text,String next){
+        StringBuilder sb=new StringBuilder(text);
+        buildDetailsLine(sb,next);
+        return sb.toString();
+    }
+    public void buildDetailsLine(StringBuilder text,String next){
+        int ind=text.lastIndexOf("\n");
+        int lastLineLength=text.length()-(ind+1);
+        
+        ind=next.indexOf("\n");
+        int nextLineLength=(ind>=0?ind:(next.length()));
+        
+        if(lastLineLength+nextLineLength>25 && text.length()>0) text.append("\n").append(next);
+        else {
+            if(text.length()>0) text.append(" ");
+            text.append(next);
+        }
+    }
+    
     public String buildDetailsParamText(Object o){
         if(o==null){
             return "null";
@@ -298,13 +318,13 @@ public class DirectivePanel extends javax.swing.JPanel {
             return "<DIR>";
         }
         else if(o.getClass().isArray()){
-            String s="[";
+            StringBuilder sb=new StringBuilder();
             for(int i=0;i<Array.getLength(o);i++){
-                if(s.length()>1) s+="\n";
-                s+=buildDetailsParamText(Array.get(o, i));
+                if(i>0) sb.append(",");
+                buildDetailsLine(sb,buildDetailsParamText(Array.get(o, i)));
             }
-            s+="]";
-            return s;
+            sb.append("]");
+            return "["+sb.toString();
         }
         else {
             String s=o.toString();
@@ -324,19 +344,36 @@ public class DirectivePanel extends javax.swing.JPanel {
         
     }
     
-    public String buildDetailsText(){
+    public String buildDetailsParamsText(BoundParameter[] params){
         StringBuilder sb=new StringBuilder();
         
-        BoundParameter[] params=this.directiveParameters.parameters;
-        
         for(BoundParameter p : params){
-            if(sb.length()>0) sb.append(",\n");
-            else sb.append("(");
             Object o=p.getValue();
             String s=buildDetailsParamText(o);
-            if(s!=null) sb.append(s);
+            if(s!=null) {
+                if(sb.length()>0) sb.append(",");
+                buildDetailsLine(sb,s);
+            }
         }
-        if(sb.length()>0) sb.append(")");
+        
+        return sb.toString();
+    }
+    
+    public String buildDetailsText(){
+        
+        StringBuilder sb=new StringBuilder();
+        String constructor=buildDetailsParamsText(this.directiveParameters.parameters);
+        if(constructor.length()>0) sb.append("(").append(constructor).append(")");
+        
+        AddonParameters[] addons=this.directiveParameters.addons;
+        for(AddonParameters a : addons){
+            String addon=buildDetailsParamsText(a.parameters);
+            if(addon.length()>0){
+                if(sb.length()>0) sb.append("\n");
+                sb.append(".").append(a.addon.getMethod());
+                sb.append("(").append(addon).append(")");
+            }
+        }
         
         return sb.toString();
     }
@@ -565,6 +602,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         add(detailsLabel, gridBagConstraints);
 
