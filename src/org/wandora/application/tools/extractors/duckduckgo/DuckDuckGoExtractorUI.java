@@ -44,8 +44,7 @@ public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
     private Context context = null;
     private Wandora wandora = null;
     
-    private static final String ddgEndpoint
-        = "http://api.duckduckgo.com/";
+    private static final String ddgEndpoint = "http://api.duckduckgo.com/";
     
     /**
      * Creates new form DuckDuckGoExtractorUI
@@ -83,7 +82,7 @@ public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
         String query = ddgInput.getText();
         String extractUrl = ddgEndpoint + "?q=" + query + "&format=json";
         DuckDuckGoZeroClickExtractor ex = new DuckDuckGoZeroClickExtractor();
-        ex.setForceUrls(new String[]{extractUrl});
+        ex.setForceUrls(new String[]{ extractUrl });
         wt = ex;
         wts.add(wt);
         
@@ -113,7 +112,7 @@ public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
 
         duckDuckGoPanel.setLayout(new java.awt.GridBagLayout());
 
-        ddgLabel.setText("Search query:");
+        ddgLabel.setText("Search query");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

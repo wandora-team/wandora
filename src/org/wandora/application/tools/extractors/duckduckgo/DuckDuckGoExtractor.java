@@ -40,8 +40,9 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-public class DuckDuckGoExtractor extends AbstractWandoraTool{
-private DuckDuckGoExtractorUI ui = null;
+public class DuckDuckGoExtractor extends AbstractWandoraTool {
+    
+    private DuckDuckGoExtractorUI ui = null;
     
 
     @Override
@@ -60,8 +61,8 @@ private DuckDuckGoExtractorUI ui = null;
         return UIBox.getIcon("gui/icons/extract_duckduckgo.png");
     }
 
-    private final String[] contentTypes=new String[] { "text/plain", "text/json", "application/json" };
 
+    
     @Override
     public void execute(Wandora wandora, Context context) {
         try {

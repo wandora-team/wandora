@@ -35,6 +35,7 @@ import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 import javax.swing.*;
+import org.wandora.topicmap.TopicMap;
 
 
 /**
@@ -67,14 +68,14 @@ public class DbpediaExtractor extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         int counter = 0;
         try {
             if(selector == null) {
-                selector = new DbpediaExtractorSelector(admin);
+                selector = new DbpediaExtractorSelector(wandora);
             }
             selector.setAccepted(false);
-            selector.setWandora(admin);
+            selector.setWandora(wandora);
             selector.setContext(context);
             selector.setVisible(true);
             if(selector.wasAccepted()) {
@@ -82,7 +83,7 @@ public class DbpediaExtractor extends AbstractWandoraTool {
                 WandoraTool extractor = selector.getWandoraTool(this);
                 if(extractor != null) {
                     extractor.setToolLogger(getDefaultLogger());
-                    extractor.execute(admin, context);
+                    extractor.execute(wandora, context);
                 }
             }
             else {

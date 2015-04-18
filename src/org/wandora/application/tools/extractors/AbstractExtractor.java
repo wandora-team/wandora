@@ -103,6 +103,8 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     
     /** Creates a new instance of AbstractExtractor */
     public AbstractExtractor() {
+        this.wandora = Wandora.getWandora();
+        if(wandora != null) this.topicMap = wandora.getTopicMap();
     }
     
     
@@ -227,6 +229,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     @Override
     public void execute(Wandora admin, Context context) {
         setWandora(admin);
+        if(admin != null) topicMap = admin.getTopicMap();
         Object contextSource = context.getContextSource();
         if(contextSource instanceof OccurrenceTextEditor) {
             try {
@@ -238,7 +241,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
                     if(str == null || str.length() == 0) {
                         str = occurrenceEditor.getText();
                     }
-                    _extractTopicsFrom(str, admin.getTopicMap());
+                    _extractTopicsFrom(str, topicMap);
                 }
             }
             catch(Exception e) {
@@ -247,31 +250,15 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         }
         else {
             try {
-                this.topicMap = admin.getTopicMap();
-
                 extractionCounter = 0;
                 foundCounter = 0;
                 browseCounter = 0;
 
-                // --- EXTRACT WITH PREDEFINED CONTENT ---
-                if(forceUrls != null) {
-                    handleUrls(forceUrls, topicMap);
-                    forceUrls = null;
-                }
-
-                else if(forceFiles != null) {
-                    handleFiles(forceFiles, topicMap);
-                    forceFiles = null;
-                }
-
-                else if(forceContent != null){
-                    handleContent(forceContent, topicMap);
-                    forceContent = null;
-                }
-
-                // --- ASK CONTENT FOR EXTRACTION ---
-                else {
-
+                boolean handledForcedContent = handleForcedContent();
+                
+                if(!handledForcedContent) {
+                    // --- ASK CONTENT FOR EXTRACTION ---
+                    
                     int possibleTypes = getExtractorType();
                     extractorSourceDialog = new AbstractExtractorDialog(admin, true);
                     extractorSourceDialog.initialize(this);
@@ -332,6 +319,27 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     }
     
 
+    public boolean handleForcedContent() {
+        boolean handledForcedContent = false;
+        if(forceUrls != null) {
+            handleUrls(forceUrls, topicMap);
+            handledForcedContent = true;
+            forceUrls = null;
+        }
+        else if(forceFiles != null) {
+            handleFiles(forceFiles, topicMap);
+            handledForcedContent = true;
+            forceFiles = null;
+        }
+        else if(forceContent != null){
+            handleContent(forceContent, topicMap);
+            handledForcedContent = true;
+            forceContent = null;
+        }
+        return handledForcedContent;
+    }
+    
+    
     
     
      public void handleFiles(File[] files, TopicMap tm) {
