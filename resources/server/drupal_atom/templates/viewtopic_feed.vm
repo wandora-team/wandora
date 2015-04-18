@@ -4,22 +4,22 @@
 ##
 ## ***********************************************************************
 ## ****                   WANDORA ATOM FEED TEMPLATE                  ****
-## ****             (c) 2009 by Grip Studios Interactive Oy           ****
+## ****                    (c) 2009 by Wandora Team                   ****
 ## ***********************************************************************
 ##
-## Velocity template used to generate a bit modidied vesion of atom feed
+## Velocity template used to generate a bit modified version of atom feed
 ## for displaying topic.
 ##
 #set( $currentTime = "2009-12-13:T18:30:02Z")##
-#macro( linkTopic $t )##
+#macro( linkAtomTopic $t )##
 $t.getOneSubjectIdentifier().toExternalForm().replaceAll( "&", "&amp;" )##
 #end##
 ##
 #macro( generateEntryContent $t)##
 	<title>$t.getBaseName().replaceAll( "&", "&amp;" )</title>
-	<id>#linkTopic($t)</id>
+	<id>#linkAtomTopic($t)</id>
 	<updated>$currentTime</updated>
-	<link rel="alternate" href="#linkTopic($t)"/>##
+	<link rel="alternate" href="#linkAtomTopic($t)"/>##
 #end##
 ##
 ##
@@ -36,8 +36,8 @@ $t.getOneSubjectIdentifier().toExternalForm().replaceAll( "&", "&amp;" )##
 ##
 
 <title>$topic.getBaseName().replaceAll( "&", "&amp;" )</title>
-	<id>#linkTopic($topic)</id>
-	<link href="#linkTopic($topic)"/>
+	<id>#linkAtomTopic($topic)</id>
+	<link href="#linkAtomTopic($topic)"/>
 	<updated>$currentTime</updated>
 	<author>
 	<name>Wandora</name>
@@ -58,9 +58,9 @@ $t.getOneSubjectIdentifier().toExternalForm().replaceAll( "&", "&amp;" )##
 #* *#	<title>$varTitle.replaceAll( "&", "&amp;" )</title>
 #* *#	<updated>$currentTime</updated>
 #* *#	<category term="name"/>
-#* *#	<id>#linkTopic($topic)</id>
+#* *#	<id>#linkAtomTopic($topic)</id>
 #* *##foreach($scopetopic in $scope)
-#*  *#	<wandora:link wandora:rel="scope" wandora:name="$scopetopic" wandora:href="#linkTopic($scopetopic)"/>
+#*  *#	<wandora:link wandora:rel="scope" wandora:name="$scopetopic" wandora:href="#linkAtomTopic($scopetopic)"/>
 #*  *##set( $varTitle = "$varTitle $scopetopic ")
 #* *##end##
 #* *##set( $varTitle = "$varTitle)")##
@@ -140,9 +140,9 @@ $t.getOneSubjectIdentifier().toExternalForm().replaceAll( "&", "&amp;" )##
 #set( $asTitle = "" )##
 #foreach($role in $roles)##
 	<wandora:member>
-		<wandora:link wandora:rel="type" wandora:name="$role.getBaseName().replaceAll( "&", "&amp;" )" wandora:href="#linkTopic($role)" />
+		<wandora:link wandora:rel="type" wandora:name="$role.getBaseName().replaceAll( "&", "&amp;" )" wandora:href="#linkAtomTopic($role)" />
 #*		*##set($player = $association.getPlayer($role))##
-		<wandora:link wandora:rel="player" wandora:name="$player.getBaseName().replaceAll( "&", "&amp;" )" wandora:href="#linkTopic($player)" />
+		<wandora:link wandora:rel="player" wandora:name="$player.getBaseName().replaceAll( "&", "&amp;" )" wandora:href="#linkAtomTopic($player)" />
 #*		*##if($roles.lastElement() == $role)##
 #*			*##set( $asTitle = "$asTitle$player.getBaseName()" )##
 #*		*##else##
@@ -151,9 +151,9 @@ $t.getOneSubjectIdentifier().toExternalForm().replaceAll( "&", "&amp;" )##
 	</wandora:member>
 #end##
 	<title>$asTitle.replaceAll( "&", "&amp;" )</title>
-	<id>#linkTopic($association.getType())</id>
+	<id>#linkAtomTopic($association.getType())</id>
 	<updated>$currentTime</updated>
-	<link rel="alternate" href="#linkTopic($association.getType())"/>
+	<link rel="alternate" href="#linkAtomTopic($association.getType())"/>
 	<content type="html" ><![CDATA[<p>Assosication between $asTitle</p>]]></content>
 </entry>
 #end##

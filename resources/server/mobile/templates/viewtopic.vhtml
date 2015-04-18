@@ -6,7 +6,7 @@
 ##
 ##
 ##
-#macro( linkTopic $t )##
+#macro( linkMobileTopic $t )##
 ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
 #end##
 ##
@@ -55,7 +55,7 @@ ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIde
        #set( $count = 0 )##
        #foreach( $instancetopic in $wcs )##
         #if( $count > 0)#end##
-        <li><a href="#linkTopic( $instancetopic )">$instancetopic.getDisplayName($lang)</a></li>##
+        <li><a href="#linkMobileTopic( $instancetopic )">$instancetopic.getDisplayName($lang)</a></li>##
         #set( $count = $count + 1 )##
        #end##
      </ul></div>
@@ -95,7 +95,7 @@ ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIde
         <div data-role="controlgroup" data-type="horizontal">
             #foreach( $type in $types )
                 #if( $type!=$topic)
-                    <a href="#linkTopic($type)" data-role="button">$type.getDisplayName($lang)</a>##
+                    <a href="#linkMobileTopic($type)" data-role="button">$type.getDisplayName($lang)</a>##
                 #end
             #end
         </div>
@@ -113,7 +113,7 @@ ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIde
            #set( $occurrencetext = $topic.getData($type,$lang) )##
            #set( $occurrencetext = $occurrencetext.replaceAll( "\n", "<br>" ) )##
            <div class="linkGroup occurrenceTypeGroup" data-role="controlgroup" data-type="horizontal">
-            <a style="width: 100%" data-role="button" data-theme="a" href="#linkTopic($type)">$type.getDisplayName($lang)</a>
+            <a style="width: 100%" data-role="button" data-theme="a" href="#linkMobileTopic($type)">$type.getDisplayName($lang)</a>
            </div>
            <div class="occurrenceText">$occurrencetext</div>
           #end        
@@ -161,12 +161,12 @@ ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIde
     #set($associationType = $association.getType())##
     #if($associationTableTitles == 0)##
        <div class="linkGroup associationTypeGroup" data-role="controlgroup" data-type="horizontal">
-        <a style="width: 100%" data-role="button" data-theme="a" href="#linkTopic($associationType)">$associationType.getDisplayName($lang)</a>
+        <a style="width: 100%" data-role="button" data-theme="a" href="#linkMobileTopic($associationType)">$associationType.getDisplayName($lang)</a>
        </div>
       #set($roleWidth = 99.5/$roles.size())
        <div class="linkGroup associationRolesGroup" data-role="controlgroup" data-type="horizontal">
           #foreach( $role in $roles )
-           <a style="width: $roleWidth%" data-role="button" data-theme="b" href="#linkTopic($role)">$role.getDisplayName($lang)</a>
+           <a style="width: $roleWidth%" data-role="button" data-theme="b" href="#linkMobileTopic($role)">$role.getDisplayName($lang)</a>
           #end
        </div>       
      </tr>
@@ -176,7 +176,7 @@ ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIde
    <div class="linkGroup associationPlayersGroup" data-role="controlgroup" data-type="horizontal">
      #foreach( $role in $roles )
       #set( $player = $association.getPlayer($role) )
-      <a style="width: $roleWidth%" data-role="button" href="#linkTopic($player)">$player.getDisplayName($lang)</a>
+      <a style="width: $roleWidth%" data-role="button" href="#linkMobileTopic($player)">$player.getDisplayName($lang)</a>
      #end
     </div>
    #end
@@ -192,7 +192,7 @@ ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIde
         <h2>Instances <span class="countnumber">($instances.size())</span></h2>
       #foreach( $instancetopic in $instances )
        <div class="linkGroup instancesGroup" data-role="controlgroup" data-type="horizontal">
-          <a style="width: 100%" data-role="button" href="#linkTopic($instancetopic)">$instancetopic.getDisplayName($lang)</a>
+          <a style="width: 100%" data-role="button" href="#linkMobileTopic($instancetopic)">$instancetopic.getDisplayName($lang)</a>
        </div>
       #end
     </div>
