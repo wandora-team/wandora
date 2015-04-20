@@ -186,6 +186,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         //int height=titleLabel.getPreferredSize().height+detailsLabel.getPreferredSize().height+5;
         //this.setSize(this.getSize().width, height);
         this.setSize(this.getPreferredSize());
+        this.repaint();
     }
     
     protected void updateParamAnchors(){
@@ -254,6 +255,7 @@ public class DirectivePanel extends javax.swing.JPanel {
                         synchronized(paramAnchors){
                             paramAnchors.remove(info);
                             updateParamAnchors();
+                            updateDetailsText();
                         }
                     }
                     return ret;
@@ -263,6 +265,8 @@ public class DirectivePanel extends javax.swing.JPanel {
             paramAnchors.add(info);
             from.setTo(anchor);
             updateParamAnchors();
+            getEditor().applyInspectorChanges();
+            updateDetailsText();
             return anchor;
         }
     }
@@ -287,8 +291,11 @@ public class DirectivePanel extends javax.swing.JPanel {
      */
     public void saveDirectiveParameters(DirectiveParameters params){
         this.directiveParameters=params;
-        
-        setDetailsText(buildDetailsText());
+        updateDetailsText();
+    }
+    
+    public void updateDetailsText(){
+        setDetailsText(buildDetailsText());        
     }
     
     public String buildDetailsLine(String text,String next){
