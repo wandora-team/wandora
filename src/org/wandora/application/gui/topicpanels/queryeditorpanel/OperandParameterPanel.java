@@ -119,7 +119,8 @@ public class OperandParameterPanel extends AbstractTypePanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 6);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         add(operandTypeComboBox, gridBagConstraints);
 
         operandPanel.setLayout(new javax.swing.BoxLayout(operandPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -127,10 +128,10 @@ public class OperandParameterPanel extends AbstractTypePanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         add(operandPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 

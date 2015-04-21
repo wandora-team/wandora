@@ -852,7 +852,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel2.add(constructorComboBox, gridBagConstraints);
 
         constructorParameters.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -877,6 +877,7 @@ public class DirectiveEditor extends javax.swing.JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel1.add(addAddonButton, gridBagConstraints);
 
         addonComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -892,12 +893,14 @@ public class DirectiveEditor extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(addonComboBox, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel2.setText("Addons");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel1.add(jLabel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
