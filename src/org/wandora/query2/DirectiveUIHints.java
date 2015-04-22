@@ -174,6 +174,18 @@ public class DirectiveUIHints implements Serializable {
          */
         @JsonIgnore
         protected Class<?> type;
+        
+        /**
+         * Sometimes the type used in a method or constructor can be different
+         * to the type used in the UI. For example, the UI might be expecting a
+         * TopicOperand type, but the method takes just Objects. In such a case,
+         * the type used by the actual method is stored here. If it is an array,
+         * type, make this an actual array type in addition to using the multiple
+         * boolean flag.
+         */
+        @JsonIgnore
+        protected Class<?> reflectType;
+        
         /**
          * Is this parameter an array?
          */
@@ -186,7 +198,12 @@ public class DirectiveUIHints implements Serializable {
         public Parameter(){}
 
         public Parameter(Class<?> type, boolean multiple, String label) {
+            this(type,null,multiple,label);
+        }
+        
+        public Parameter(Class<?> type, Class<?> reflectType, boolean multiple, String label) {
             this.type = type;
+            this.reflectType = reflectType;
             this.multiple = multiple;
             this.label = label;
         }
@@ -238,6 +255,30 @@ public class DirectiveUIHints implements Serializable {
             }
         }
         
+        public String getReflectTypeName(){
+            if(reflectType==null) return null;
+            else return reflectType.getName();
+        }
+        
+        public void setReflectTypeName(String s){
+            if(s==null) reflectType=null;
+            else {
+                try{
+                    if(s.startsWith("[L")){
+                        reflectType=Class.forName(s.substring(2,s.length()-1));
+                        reflectType=Array.newInstance(reflectType, 0).getClass();
+                    }
+                    else{
+                        reflectType=Class.forName(s);
+                    }
+                }
+                catch(ClassNotFoundException cnfe){
+                    throw new RuntimeException(cnfe);
+                }
+            }
+        }
+        
+        
         
         @JsonIgnore
         public Class<?> getType() {
@@ -267,9 +308,12 @@ public class DirectiveUIHints implements Serializable {
         
         @JsonIgnore
         public Class<?> getReflectType(){
-            Class<?> ret=type;
-            if(multiple) ret=Array.newInstance(ret, 0).getClass();
-            return ret;
+            if(reflectType!=null) return reflectType;
+            else {
+                Class<?> ret=type;
+                if(multiple) ret=Array.newInstance(ret, 0).getClass();
+                return ret;
+            }
         }
 
         /*

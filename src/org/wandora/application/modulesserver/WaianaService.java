@@ -283,7 +283,7 @@ public class WaianaService extends AbstractTopicWebApp {
         
         // System.out.println("FOUND:\n"+sb.toString());
         
-        if(str != null && str.length() > 0) {
+        if(sb.length() > 0) {
             try {
                 JSONObject requestJSON = new JSONObject(sb.toString());
                 // System.out.println("requestJSON:" +requestJSON.toString());

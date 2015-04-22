@@ -45,7 +45,19 @@ import org.wandora.utils.IObox;
     
 
 /**
+ * This index builder assumes the Solr database has fields:
+ * 
+ *  <pre>
+ *  &lt;field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /&gt; 
+ *  &lt;field name="basename" type="text_general" indexed="true" stored="true" /&gt;  
+ *  &lt;field name="sl" type="string" indexed="true" stored="true" multiValued="false" /&gt; 
+ *  &lt;field name="si" type="string" indexed="true" stored="true" multiValued="true"/&gt; 
+ *  &lt;field name="name" type="text_general" indexed="true" stored="true" multiValued="true"/&gt; 
+ *  &lt;field name="occurrence" type="text_general" indexed="true" stored="true" multiValued="true"/&gt; 
+ *  </pre>
+ * 
  * http://wiki.apache.org/solr/Solrj
+ * 
  * 
  * @author akivela
  */
@@ -172,7 +184,7 @@ public class SolrIndexBuilder extends AbstractExportTool implements WandoraTool 
 
     @Override
     public String getDescription() {
-        return "Exports topic map as Solr index json file.";
+        return "Exports topic map data to a Solr server instance as a search index.";
     }
 
     
@@ -279,17 +291,16 @@ public class SolrIndexBuilder extends AbstractExportTool implements WandoraTool 
     
     // -------------------------------------------------------------------------
     
-
+    
     /*
+        Copy these to Solr's configuration
     
-   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
-   
-   <field name="basename" type="text_general" indexed="true" stored="true"/>
-   <field name="sl" type="string" indexed="true" stored="true" multiValued="false" />
-   <field name="si" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="name" type="text_general" indexed="true" stored="true" multiValued="true"/>
-   <field name="occurrence" type="text_general" indexed="true" stored="true" multiValued="true"/>
-    
+        <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
+        <field name="basename" type="text_general" indexed="true" stored="true"/>
+        <field name="sl" type="string" indexed="true" stored="true" multiValued="false" />
+        <field name="si" type="string" indexed="true" stored="true" multiValued="true"/>
+        <field name="name" type="text_general" indexed="true" stored="true" multiValued="true"/>
+        <field name="occurrence" type="text_general" indexed="true" stored="true" multiValued="true"/>
     */
     
 }

@@ -70,16 +70,16 @@ public class Players extends Directive implements DirectiveUIHints.Provider {
     @Override
     public DirectiveUIHints getUIHints() {
         DirectiveUIHints ret=new DirectiveUIHints(Players.class,new Constructor[]{
-                new Constructor(new Parameter[]{new Parameter(TopicOperand.class, false, "association type")}, ""),
+                new Constructor(new Parameter[]{new Parameter(TopicOperand.class, Object.class, false, "association type")}, ""),
                 new Constructor(new Parameter[]{
-                        new Parameter(TopicOperand.class, false, "association type"),
-                        new Parameter(TopicOperand.class, true, "players")
+                        new Parameter(TopicOperand.class, Object.class, false, "association type"),
+                        new Parameter(TopicOperand.class, Object[].class, true, "players")
                 }, "")
             },
             Directive.getStandardAddonHints(
                 new Addon[]{ 
                     new Addon("usingColumns", new Parameter[]{new Parameter(String.class, true, "column")}, "usingColumns") ,
-                    new Addon("whereInputIs", new Parameter[]{new Parameter(TopicOperand.class, false, "role")}, "whereInputIs")
+                    new Addon("whereInputIs", new Parameter[]{new Parameter(TopicOperand.class, Object.class, false, "role")}, "whereInputIs")
                 }
             ),
             "Players",

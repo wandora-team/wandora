@@ -61,47 +61,47 @@ public class MaianaUtils {
     
     public static String exportTemplate = 
             "{ \n"+
-            "  api_key: \"__APIKEY__\", \n"+
-            "  parameters: { \n"+
-            "    command: \"__CMD__\", \n"+
-            "    short_name: \"__SHORTNAME__\", \n"+
-            "    name: \"__NAME__\", \n"+
-            "    is_public: __ISPUBLIC__, \n"+
-            "    is_downloadable: __ISDOWNLOADABLE__, \n"+
-            "    is_editable: __ISEDITABLE__, \n"+
-            "    is_schema: __ISSCHEMA__ \n"+
+            "  \"api_key\": \"__APIKEY__\", \n"+
+            "  \"parameters\": { \n"+
+            "    \"command\": \"__CMD__\", \n"+
+            "    \"short_name\": \"__SHORTNAME__\", \n"+
+            "    \"name\": \"__NAME__\", \n"+
+            "    \"is_public\": __ISPUBLIC__, \n"+
+            "    \"is_downloadable\": __ISDOWNLOADABLE__, \n"+
+            "    \"is_editable\": __ISEDITABLE__, \n"+
+            "    \"is_schema\": __ISSCHEMA__ \n"+
             "  }, \n"+
-            "  data: \"__DATA__\" \n"+
+            "  \"data\": \"__DATA__\" \n"+
             "} \n";
 
     
     public static String importTemplate =
             "{ \n"+
-            "  api_key: \"__APIKEY__\", \n"+
-            "  parameters: { \n"+
-            "    command: \"__CMD__\", \n"+
-            "    short_name: \"__SHORTNAME__\", \n"+
-            "    owner: \"__NAME__\", \n"+
-            "    format: \"__FORMAT__\" \n"+
+            "  \"api_key\": \"__APIKEY__\", \n"+
+            "  \"parameters\": { \n"+
+            "    \"command\": \"__CMD__\", \n"+
+            "    \"short_name\": \"__SHORTNAME__\", \n"+
+            "    \"owner\": \"__NAME__\", \n"+
+            "    \"format\": \"__FORMAT__\" \n"+
             "  } \n"+
             "} \n";
 
     
     public static String deleteTemplate =
             "{ \n"+
-            "  api_key: \"__APIKEY__\", \n"+
-            "  parameters: { \n"+
-            "    command: \"__CMD__\", \n"+
-            "    short_name: \"__SHORTNAME__\", \n"+
+            "  \"api_key\": \"__APIKEY__\", \n"+
+            "  \"parameters\": { \n"+
+            "    \"command\": \"__CMD__\", \n"+
+            "    \"short_name\": \"__SHORTNAME__\", \n"+
             "  } \n"+
             "} \n";
     
     
     public static String listTemplate =
             "{ \n"+
-            "  api_key: \"__APIKEY__\", \n"+
-            "  parameters: { \n"+
-            "    command: \"__CMD__\" \n"+
+            "  \"api_key\": \"__APIKEY__\", \n"+
+            "  \"parameters\": { \n"+
+            "    \"command\": \"__CMD__\" \n"+
             "  } \n"+
             "} \n";
 

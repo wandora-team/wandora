@@ -71,7 +71,8 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     private Border defaultBorder = null;
     private DropTarget dropTarget;
     private Wandora wandora = null;
-    
+    private Document document = null;
+    private AttributeSet characterAttributes;
     
     
     // NOTE: THIS CLASS USES SAME OPTION DOMAIN AS TEXTEDITOR CLASS!!!
@@ -80,6 +81,9 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
 
     protected JPopupMenu popup;
     protected Object[] popupStruct = new Object[] {
+        "Undo", UIBox.getIcon("gui/icons/undo_undo.png"),
+        "Redo", UIBox.getIcon("gui/icons/undo_redo.png"),
+        "---",
         "Cut", UIBox.getIcon("gui/icons/cut.png"),
         "Copy", UIBox.getIcon("gui/icons/copy.png"),
         "Paste", UIBox.getIcon("gui/icons/paste.png"),
@@ -89,10 +93,10 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         "---",
         "Load...", UIBox.getIcon("gui/icons/file_open.png"),
         "Save...", UIBox.getIcon("gui/icons/file_save.png"),
-        "---",
-        "Translate with Google...", UIBox.getIcon("gui/icons/google_translate.png"),
-        "Translate with Microsoft...", UIBox.getIcon("gui/icons/microsoft_translate.png"),
-        "Translate with Watson...", UIBox.getIcon("gui/icons/watson_translate.png"),
+        // "---",
+        // "Translate with Google...", UIBox.getIcon("gui/icons/google_translate.png"),
+        // "Translate with Microsoft...", UIBox.getIcon("gui/icons/microsoft_translate.png"),
+        // "Translate with Watson...", UIBox.getIcon("gui/icons/watson_translate.png"),
         "---",
         "Print...", UIBox.getIcon("gui/icons/print.png"),
     };
@@ -115,6 +119,8 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)})));
     
         getDocument().addUndoableEditListener(this);
+        document = getDocument();
+        characterAttributes = getCharacterAttributes();
         dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
         this.setDragEnabled(true);
         
@@ -166,18 +172,126 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }
     
     
-    public void setDocumentText(String str) {
-        Document doc = getDocument();
+    public void setText(String str) {
         try {
-            AttributeSet ca = this.getCharacterAttributes();
-            doc.remove(0, doc.getLength());
-            doc.insertString(0, str, ca);
+            document.remove(0, document.getLength());
+            document.insertString(0, str, characterAttributes);
         }
         catch(Exception e) {
             e.printStackTrace();
         }
     }
     
+    
+    public String getSelectedText() {
+        String text = null;
+        try {
+            int selectionStartLoc = this.getSelectionStart();
+            int selectionEndLoc = this.getSelectionEnd();
+
+            if(selectionStartLoc < selectionEndLoc) {
+                int d = selectionEndLoc-selectionStartLoc;
+                text = document.getText(selectionStartLoc, d);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return text;
+    }
+    
+    
+    public String getSelectedOrAllText() {
+        String text = null;
+        try {
+            int selectionStartLoc = this.getSelectionStart();
+            int selectionEndLoc = this.getSelectionEnd();
+
+            if(selectionStartLoc == selectionEndLoc) {
+                selectionStartLoc = 0;
+                selectionEndLoc = document.getLength();
+            }
+            int d = selectionEndLoc-selectionStartLoc;
+            text = document.getText(selectionStartLoc, d);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return text;
+    }
+    
+    
+    public void replaceSelectedText(String txt) {
+        try {
+            int selectionStartLoc = this.getSelectionStart();
+            int selectionEndLoc = this.getSelectionEnd();
+
+            if(selectionStartLoc != selectionEndLoc) {
+                int d = selectionEndLoc-selectionStartLoc;
+                document.remove(selectionStartLoc, d);
+            }
+            document.insertString(selectionStartLoc, txt, characterAttributes);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    public void replaceSelectedOrAllText(String txt) {
+        try {
+            int selectionStartLoc = this.getSelectionStart();
+            int selectionEndLoc = this.getSelectionEnd();
+
+            if(selectionStartLoc == selectionEndLoc) {
+                selectionStartLoc = 0;
+                selectionEndLoc = document.getLength();
+            }
+            int d = selectionEndLoc-selectionStartLoc;
+            document.remove(selectionStartLoc, d);
+            document.insertString(selectionStartLoc, txt, characterAttributes);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    public void insertText(String txt) {
+        try {
+            int selectionStartLoc = this.getSelectionStart();
+            int selectionEndLoc = this.getSelectionEnd();
+
+            if(selectionStartLoc == selectionEndLoc) {
+                selectionStartLoc = 0;
+                selectionEndLoc = document.getLength();
+            }
+            int d = selectionEndLoc-selectionStartLoc;
+            document.remove(selectionStartLoc, d);
+            document.insertString(selectionStartLoc, txt, characterAttributes);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    public void removeSelectedText() {
+        try {
+            int selectionStartLoc = this.getSelectionStart();
+            int selectionEndLoc = this.getSelectionEnd();
+
+            if(selectionStartLoc != selectionEndLoc) {
+                int d = selectionEndLoc-selectionStartLoc;
+                document.remove(selectionStartLoc, d);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     
     // ------------------------------------------------------------ PRINTING ---
@@ -351,7 +465,13 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         String c = actionEvent.getActionCommand();
         if(c == null) return;
 
-        if(c.equals("Copy")) {
+        if(c.equals("Undo")) {
+            if(undo != null) undo.undo();
+        }
+        else if(c.equals("Redo")) {
+            if(undo != null) undo.redo();
+        }
+        else if(c.equals("Copy")) {
             this.copy();
         }
         else if(c.equals("Cut")) {
@@ -361,7 +481,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             this.paste();
         }
         else if(c.equals("Clear")) {
-            this.setDocumentText("");
+            this.setText("");
         }
         else if(c.equals("Select all")) {
             this.selectAll();
@@ -382,105 +502,13 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             }
         }
         else if(c.startsWith("Translate with Google")) {
-            try {
-                Document doc = this.getDocument();
-                int selectionStartLoc = this.getSelectionStart();
-                int selectionEndLoc = this.getSelectionEnd();
-
-                if(selectionStartLoc == selectionEndLoc) {
-                    selectionStartLoc = 0;
-                    selectionEndLoc = doc.getLength();
-                }
-                int d = selectionEndLoc-selectionStartLoc;
-                String translateThis = doc.getText(selectionStartLoc, d);
-                AttributeSet ca = this.getCharacterAttributes();
-
-                SelectGoogleTranslationLanguagesPanel selectLanguages = new SelectGoogleTranslationLanguagesPanel();
-                selectLanguages.notInTopicMapsContext();
-                selectLanguages.openInDialog(wandora);
-                if(selectLanguages.wasAccepted()) {
-                    boolean markTranslation = selectLanguages.markTranslatedText();
-                    Language sourceLang = selectLanguages.getSourceLanguage();
-                    Collection<Language> targetLangs = selectLanguages.getTargetLanguages();
-                    for(Language targetLang : targetLangs) {
-                        String translated = GoogleTranslateBox.translate(translateThis, sourceLang, targetLang, markTranslation);
-                        if(translated != null) {
-                            doc.remove(selectionStartLoc, d);
-                            doc.insertString(selectionStartLoc, translated, ca);
-                        }
-                        break;
-                    }
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
+            translateWithGoogle();
         }
         else if(c.startsWith("Translate with Microsoft")) {
-            try {
-                Document doc = this.getDocument();
-                int selectionStartLoc = this.getSelectionStart();
-                int selectionEndLoc = this.getSelectionEnd();
-
-                if(selectionStartLoc == selectionEndLoc) {
-                    selectionStartLoc = 0;
-                    selectionEndLoc = doc.getLength();
-                }
-                int d = selectionEndLoc-selectionStartLoc;
-                String translateThis = doc.getText(selectionStartLoc, d);
-                AttributeSet ca = this.getCharacterAttributes();
-
-                SelectMicrosoftTranslationLanguagesPanel selectLanguages = new SelectMicrosoftTranslationLanguagesPanel();
-                selectLanguages.notInTopicMapsContext();
-                selectLanguages.openInDialog(wandora);
-                if(selectLanguages.wasAccepted()) {
-                    boolean markTranslation = selectLanguages.markTranslatedText();
-                    com.memetix.mst.language.Language sourceLang = selectLanguages.getSourceLanguage();
-                    Collection<com.memetix.mst.language.Language> targetLangs = selectLanguages.getTargetLanguages();
-                    for(com.memetix.mst.language.Language targetLang : targetLangs) {
-                        String translated = MicrosoftTranslateBox.translate(translateThis, sourceLang, targetLang, markTranslation);
-                        if(translated != null) {
-                            doc.remove(selectionStartLoc, d);
-                            doc.insertString(selectionStartLoc, translated, ca);
-                        }
-                        break;
-                    }
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
+            translateWithMicrosoft();
         }
         else if(c.startsWith("Translate with Watson")) {
-            try {
-                Document doc = this.getDocument();
-                int selectionStartLoc = this.getSelectionStart();
-                int selectionEndLoc = this.getSelectionEnd();
-
-                if(selectionStartLoc == selectionEndLoc) {
-                    selectionStartLoc = 0;
-                    selectionEndLoc = doc.getLength();
-                }
-                int d = selectionEndLoc-selectionStartLoc;
-                String translateThis = doc.getText(selectionStartLoc, d);
-                AttributeSet ca = this.getCharacterAttributes();
-
-                SelectWatsonTranslationLanguagesPanel selectLanguages = new SelectWatsonTranslationLanguagesPanel();
-                selectLanguages.notInTopicMapsContext();
-                selectLanguages.openInDialog(wandora);
-                if(selectLanguages.wasAccepted()) {
-                    boolean markTranslation = selectLanguages.markTranslatedText();
-                    String languages = selectLanguages.getSelectedLanguages();
-                    String translated = WatsonTranslateBox.translate(translateThis, WatsonTranslateBox.getLanguagesCodeFor(languages), markTranslation);
-                    if(translated != null) {
-                        doc.remove(selectionStartLoc, d);
-                        doc.insertString(selectionStartLoc, translated, ca);
-                    }
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
+            translateWithWatson();
         }
     }
     
@@ -500,7 +528,6 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         chooser.setDialogTitle("Open file");
         if(chooser.open(Wandora.getWandora(), SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
             load(chooser.getSelectedFile());
-            getDocument().addUndoableEditListener(this);
         }
     }
     
@@ -515,7 +542,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                     int a = WandoraOptionPane.showConfirmDialog(wandora, "Store the file content as a data URI?", "Make data URI?", WandoraOptionPane.QUESTION_MESSAGE);
                     if(a == WandoraOptionPane.YES_OPTION) {
                         DataURL url = new DataURL(file);
-                        setDocumentText(url.toExternalForm());
+                        setText(url.toExternalForm());
                     }
                     else {
                         Object desc = getStyledDocument();
@@ -632,23 +659,83 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     
     
 
+    
     // -------------------------------------------------------------------------
-
+    // --------------------------------------------------------- TRANSLATION ---
+    // -------------------------------------------------------------------------
     
     
-    
-    @Override
-    public void focusGained(java.awt.event.FocusEvent focusEvent) {
-        if(wandora != null) {
-            wandora.gainFocus(this);
+    public void translateWithGoogle() {
+        try {
+            String translateThis = getSelectedOrAllText();
+            SelectGoogleTranslationLanguagesPanel selectLanguages = new SelectGoogleTranslationLanguagesPanel();
+            selectLanguages.notInTopicMapsContext();
+            selectLanguages.openInDialog(wandora);
+            if(selectLanguages.wasAccepted()) {
+                boolean markTranslation = selectLanguages.markTranslatedText();
+                Language sourceLang = selectLanguages.getSourceLanguage();
+                Collection<Language> targetLangs = selectLanguages.getTargetLanguages();
+                for(Language targetLang : targetLangs) {
+                    String translated = GoogleTranslateBox.translate(translateThis, sourceLang, targetLang, markTranslation);
+                    if(translated != null) {
+                        replaceSelectedOrAllText(translated);
+                    }
+                    break;
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
     }
     
-    @Override
-    public void focusLost(java.awt.event.FocusEvent focusEvent) {
-        // DO NOTHING...
+    
+    
+    public void translateWithWatson() {
+        try {
+            String translateThis = getSelectedOrAllText();
+            SelectWatsonTranslationLanguagesPanel selectLanguages = new SelectWatsonTranslationLanguagesPanel();
+            selectLanguages.notInTopicMapsContext();
+            selectLanguages.openInDialog(wandora);
+            if(selectLanguages.wasAccepted()) {
+                boolean markTranslation = selectLanguages.markTranslatedText();
+                String languages = selectLanguages.getSelectedLanguages();
+                String translated = WatsonTranslateBox.translate(translateThis, WatsonTranslateBox.getLanguagesCodeFor(languages), markTranslation);
+                if(translated != null) {
+                    replaceSelectedOrAllText(translated);
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     
+    
+    
+    public void translateWithMicrosoft() {
+        try {
+            String translateThis = getSelectedOrAllText();
+            SelectMicrosoftTranslationLanguagesPanel selectLanguages = new SelectMicrosoftTranslationLanguagesPanel();
+            selectLanguages.notInTopicMapsContext();
+            selectLanguages.openInDialog(wandora);
+            if(selectLanguages.wasAccepted()) {
+                boolean markTranslation = selectLanguages.markTranslatedText();
+                com.memetix.mst.language.Language sourceLang = selectLanguages.getSourceLanguage();
+                Collection<com.memetix.mst.language.Language> targetLangs = selectLanguages.getTargetLanguages();
+                for(com.memetix.mst.language.Language targetLang : targetLangs) {
+                    String translated = MicrosoftTranslateBox.translate(translateThis, sourceLang, targetLang, markTranslation);
+                    if(translated != null) {
+                        replaceSelectedOrAllText(translated);
+                    }
+                    break;
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     
     
@@ -746,7 +833,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                             if(text == null) text = "";
                             if(text.length() > 0 && !text.endsWith("\n")) text = text + "\n" + sb.toString();
                             else text = text + sb.toString();
-                            setDocumentText(text);
+                            setText(text);
                         }
                         else {
                             for(URI u : uris){
@@ -765,13 +852,13 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                             if(text.length()>0) text+="\n";
                             text+=u.toString();
                         }
-                        this.setDocumentText(text);
+                        this.setText(text);
                     }
                     handled=true;
                 }
 
                 if(!handled){
-                    this.setDocumentText(data);
+                    this.setText(data);
                     handled=true;
                 }
 
@@ -805,6 +892,23 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }    
     
     
+
+    // -------------------------------------------------------------------------
+
+    
+    
+    
+    @Override
+    public void focusGained(java.awt.event.FocusEvent focusEvent) {
+        if(wandora != null) {
+            wandora.gainFocus(this);
+        }
+    }
+    
+    @Override
+    public void focusLost(java.awt.event.FocusEvent focusEvent) {
+        // DO NOTHING...
+    }
     
 
 }

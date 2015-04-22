@@ -25,6 +25,7 @@
 package org.wandora.application.tools;
 
 
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.gui.search.SearchTopicsResults;
 import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;

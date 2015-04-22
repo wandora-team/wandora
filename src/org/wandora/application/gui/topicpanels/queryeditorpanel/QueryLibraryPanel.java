@@ -127,6 +127,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
             UIBox.getIcon(0xF014),
             new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    deleteClicked();
                 }
             }
         };
@@ -240,48 +241,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                 
             }
         }
-/*        
-        synchronized(storedQueries){
-            Map<String,String> optionsMap=options.asMap();
-            storedQueries.clear();
-            
-            DefaultListModel model=(DefaultListModel)queryList.getModel();
-            model.clear();
-            
-            for(Map.Entry<String,String> e : optionsMap.entrySet()){
-                String key=e.getKey();
-                if(key.startsWith(OPTIONS_PREFIX)){
-                    key=key.substring(OPTIONS_PREFIX.length());
-                    if(key.startsWith("query[")){
-                        int ind=key.indexOf("]");
-                        if(ind>6 && ind<=8) {
-                            int index=Integer.parseInt(key.substring(6,ind));
-                            key=key.substring(ind+2);
-                            
-                            while(storedQueries.size()<=index) storedQueries.add(null);
-                            StoredQuery q=storedQueries.get(index);
-                            if(q==null){
-                                q=new StoredQuery();
-                                storedQueries.set(index,q);
-                            }
-                            
-                            q.options.put(key,e.getValue());
-                            if(key.equals("queryname")) q.name=e.getValue();
-                        }
-                    }
-                }
-            }
-            
-            for(int i=0;i<storedQueries.size();i++){
-                StoredQuery q=storedQueries.get(i);
-                if(q==null) {
-                    storedQueries.remove(i);
-                    i--;
-                    continue;
-                }
-                model.addElement(model);
-            }
-        }    */    
+
     }
     
     private static final String OPTIONS_KEY="options.queryeditor.storedqueries";
@@ -293,16 +253,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         }
         options.put(OPTIONS_KEY,json);
         
-        
-/*        synchronized(storedQueries){
-            options.removeAll(OPTIONS_PREFIX);
-            for(int i=0;i<storedQueries.size();i++){
-                StoredQuery q=storedQueries.get(i);
-                for(Map.Entry<String,String> e : q.options.entrySet()){
-                    options.put(OPTIONS_PREFIX+"query["+i+"]."+e.getKey(),e.getValue());
-                }
-            }
-        }    */    
+         
     }
     
     
@@ -312,6 +263,13 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         if(query==null) return;
         query.name=name;
         
+        // cycle through serialisation and deserialisation to make everything consistent
+        JsonMapper mapper=new JsonMapper();
+        String json=mapper.writeValue(query);
+        try{
+            query=mapper.readValue(json, StoredQuery.class);
+        }
+        catch(IOException e){Wandora.getWandora().handleError(e); return;}
         
         
         synchronized(storedQueries){
@@ -330,34 +288,9 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                 model.addElement(query);
             }
         }
+        
         writeQueries(Wandora.getWandora().getOptions());
-        // Some parts of StoredQuery will contain object references rather than
-        // serialisations of those. This will cause problems when trying to open
-        // them. To fix this, cycle the queries through serialisation and
-        // deserialisation once.
-        readQueries(Wandora.getWandora().getOptions());
         
-        
-/*        QueryEditorComponent graph=findGraph();
-        HashMap<String,String> options=graph.buildOptions();
-        options.put("queryname",name);
-        
-        StoredQuery newQuery=new StoredQuery(name, options);
-        
-        synchronized(storedQueries){
-            boolean added=false;
-            for(int i=0;i<storedQueries.size();i++){
-                StoredQuery query=storedQueries.get(i);
-                if(query.name.equals(name)){
-                    storedQueries.set(i, newQuery);
-                    added=true;
-                    break;
-                }
-            }
-            if(!added) storedQueries.add(newQuery);
-        }
-        
-        writeQueries(Wandora.getWandora().getOptions()); */
     }
     
     
@@ -368,7 +301,6 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         graph.clearQuery();
         graph.openStoredQuery(query.duplicate());
         
-//        DirectivePanel.setOptions(graph, query.options);
     }
     
     public void open(String name){
@@ -380,6 +312,31 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                 }
             }
             WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Query not found.");            
+        }
+    }
+    
+    public void deleteClicked(){
+        Object o=queryList.getSelectedValue();
+        if(o==null) return;
+        String openName=o.toString();
+        
+        if(WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Do you want to delete query "+openName)
+                    == WandoraOptionPane.YES_OPTION ){
+            
+            
+            synchronized(storedQueries) {
+                for(StoredQuery q : storedQueries){
+                    if(q.name.equals(openName)){
+                        storedQueries.remove(q);
+                        
+                        DefaultListModel model=(DefaultListModel)queryList.getModel();            
+                        model.removeElement(o);
+                        
+                        writeQueries(Wandora.getWandora().getOptions());
+                        break;
+                    }
+                }
+            }
         }
     }
     

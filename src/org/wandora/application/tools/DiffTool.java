@@ -25,6 +25,7 @@
 package org.wandora.application.tools;
 
 
+import org.wandora.application.gui.texteditor.TextEditor;
 import org.wandora.topicmap.diff.*;
 import org.wandora.topicmap.*;
 import org.wandora.topicmap.memory.*;

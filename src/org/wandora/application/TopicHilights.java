@@ -36,13 +36,18 @@ import org.wandora.topicmap.layered.*;
 import static org.wandora.utils.Tuples.*;
 
 /**
- * <p>
- * TopicHilights are used to color given topics in Wandora. Current Wandora
- * uses this feature <b>poorly</b> as it slows down the GUI significantly.
- * </p>
- * 
- * @author akivela
- */
+  * <p>
+  * TopicHilights is used to color topics in Wandora's user interface, typically
+  * in topic tables and trees. Generally a topic is colored black. If the topic 
+  * doesn't locate in current layer, the topic is colored dark red.
+  * </p>
+  * <p>
+  * This class doesn't set colors in GraphTopicPanel nor TopicTreePanel.
+  * </p>
+  * 
+  * @author akivela
+ **/
+
 public class TopicHilights {
     
     private HashMap hilighted = new HashMap();

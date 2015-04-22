@@ -22,6 +22,8 @@
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import bibliothek.gui.DockController;
+import bibliothek.gui.DockStation;
+import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.DefaultDockable;
 import bibliothek.gui.dock.SplitDockStation;
 import bibliothek.gui.dock.StackDockStation;
@@ -44,6 +46,11 @@ public class QueryEditorDockPanel extends JPanel {
     protected QueryEditorInspectorPanel inspector;
     protected QueryLibraryPanel queryLibrary;
     
+    protected ResultsPanel resultsPanel;
+    
+    protected Dockable resultsDockable;
+    protected Dockable editorDockable;
+    
     public QueryEditorDockPanel() {
         dockController=new DockController();
         dockStation=new SplitDockStation();
@@ -53,6 +60,15 @@ public class QueryEditorDockPanel extends JPanel {
         directivesList=new DirectivesListPanel();
         inspector=new QueryEditorInspectorPanel();
         queryLibrary=new QueryLibraryPanel();
+        resultsPanel=new ResultsPanel();
+        
+        StackDockStation mainStack=new StackDockStation();
+        editorDockable=new DefaultDockable(queryEditor, "Graph Editor");
+        mainStack.add(editorDockable, 0);
+        resultsDockable=new DefaultDockable(resultsPanel, "Query results");
+        mainStack.add(resultsDockable, 1);
+        mainStack.setFrontDockable(editorDockable);
+        
         
         StackDockStation topRight=new StackDockStation();
         DefaultDockable directivesDockable=new DefaultDockable(directivesList, "Directives list");
@@ -62,10 +78,12 @@ public class QueryEditorDockPanel extends JPanel {
         
         
         SplitDockGrid grid=new SplitDockGrid();
-        grid.addDockable(0,0,2,2, new DefaultDockable(queryEditor, "Graph editor"));
+        grid.addDockable(0,0,2,2, mainStack);
         grid.addDockable(2,0,1,1, topRight);
         grid.addDockable(2,1,1,1, new DefaultDockable(inspector, "Inspector"));
         dockStation.dropTree( grid.toTree() );
+        
+        
         
         this.setLayout(new BorderLayout());
         this.add(dockStation.getComponent());
@@ -87,6 +105,18 @@ public class QueryEditorDockPanel extends JPanel {
         return queryLibrary;
     }
     
+    public ResultsPanel getResultsPanel() {
+        return resultsPanel;
+    }
     
+    public void bringEditorFront(){
+        DockStation station=editorDockable.getDockParent();
+        station.setFrontDockable(editorDockable);        
+    }
+    
+    public void bringResultsFront(){
+        DockStation station=resultsDockable.getDockParent();
+        station.setFrontDockable(resultsDockable);
+    }
     
 }

@@ -24,6 +24,7 @@
 package org.wandora.application.tools.occurrences;
 
 
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;

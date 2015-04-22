@@ -464,6 +464,9 @@ public class FacebookGraphParser {
         else if(areEqual("about", key)) {
             setOccurrence(t, key, value);
         }
+        else if(areEqual("bio", key)) {
+            setOccurrence(t, key, value);
+        }
         else if(areEqual("application", key)) {
             associate(key, t, value);
         }
