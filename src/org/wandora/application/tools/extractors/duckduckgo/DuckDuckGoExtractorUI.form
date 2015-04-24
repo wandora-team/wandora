@@ -27,7 +27,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="ddgLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Search query:"/>
+            <Property name="text" type="java.lang.String" value="Search query"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleLabel()"/>

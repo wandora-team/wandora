@@ -70,7 +70,7 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
             dialog = new JDialog(wandora, true);
             dialog.setTitle("Simple email extractor");
             dialog.add(this);
-            dialog.setSize(550,200);
+            dialog.setSize(650,200);
             UIBox.centerWindow(dialog, wandora);
         }
         isAccepted = false;
@@ -137,7 +137,7 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
 
         emailPanelInner.setLayout(new java.awt.GridBagLayout());
 
-        descriptionLabel.setText("<html>Simple email extractor can extract single email files and MBOX email repositories. First select resource type. Then address the email resource file and press Extract button.</html>");
+        descriptionLabel.setText("<html>Simple email extractor can extract single email files and MBOX email repositories. First select resource type. Then locate the email resource file and press Extract button.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -155,8 +155,8 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         optionsPanel.add(typeLabel, gridBagConstraints);
 
         typeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Single email file", "MBOX email repository" }));
-        typeComboBox.setMinimumSize(new java.awt.Dimension(127, 20));
-        typeComboBox.setPreferredSize(new java.awt.Dimension(130, 20));
+        typeComboBox.setMinimumSize(new java.awt.Dimension(127, 21));
+        typeComboBox.setPreferredSize(new java.awt.Dimension(130, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
@@ -171,6 +171,9 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         optionsPanel.add(resourceLabel, gridBagConstraints);
+
+        resourceTextField.setMinimumSize(new java.awt.Dimension(6, 21));
+        resourceTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -180,9 +183,9 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
 
         fileButton.setText("Browse");
         fileButton.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        fileButton.setMaximumSize(new java.awt.Dimension(60, 20));
-        fileButton.setMinimumSize(new java.awt.Dimension(60, 20));
-        fileButton.setPreferredSize(new java.awt.Dimension(60, 20));
+        fileButton.setMaximumSize(new java.awt.Dimension(70, 21));
+        fileButton.setMinimumSize(new java.awt.Dimension(70, 21));
+        fileButton.setPreferredSize(new java.awt.Dimension(70, 21));
         fileButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 fileButtonMouseReleased(evt);
@@ -218,6 +221,9 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         buttonPanel.add(buttonFillerPanel, gridBagConstraints);
 
         extractButton.setText("Extract");
+        extractButton.setMaximumSize(new java.awt.Dimension(70, 23));
+        extractButton.setMinimumSize(new java.awt.Dimension(70, 23));
+        extractButton.setPreferredSize(new java.awt.Dimension(70, 23));
         extractButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 extractButtonMouseReleased(evt);
@@ -228,6 +234,9 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         buttonPanel.add(extractButton, gridBagConstraints);
 
         cancelButton2.setText("Cancel");
+        cancelButton2.setMaximumSize(new java.awt.Dimension(70, 23));
+        cancelButton2.setMinimumSize(new java.awt.Dimension(70, 23));
+        cancelButton2.setPreferredSize(new java.awt.Dimension(70, 23));
         cancelButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 cancelButton2MouseReleased(evt);

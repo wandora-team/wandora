@@ -32,21 +32,12 @@ package org.wandora.application.gui.table;
 
 import org.wandora.application.gui.topicstringify.TopicToString;
 import java.awt.*;
-import java.awt.image.*;
-import java.net.*;
-import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
-
-
-import org.wandora.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.gui.TopicGuiWrapper;
-import org.wandora.application.gui.UIBox;
-import org.wandora.utils.swing.*;
-import org.wandora.application.gui.simple.SimpleLabel;
+
 
 
 

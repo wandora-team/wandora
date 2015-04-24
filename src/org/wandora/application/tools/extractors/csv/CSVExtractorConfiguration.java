@@ -173,7 +173,7 @@ public class CSVExtractorConfiguration extends javax.swing.JPanel {
 
         optionsPanel.setLayout(new java.awt.GridBagLayout());
 
-        confLabel.setText("CVS extractor options are");
+        confLabel.setText("CSV extractor options are");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;

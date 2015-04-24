@@ -54,6 +54,7 @@ import net.fortuna.mstor.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 
 
@@ -136,29 +137,35 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
-        if(gui == null) {
-            gui = new SimpleEmailExtractorPanel(admin);
-        }
-        gui.showDialog();
-        // WAIT TILL CLOSED
-
-        if(gui.wasAccepted()) {
-            int resourceType = gui.getEmailResourceType();
-            String resourceAddress = gui.getResourceAddress();
-            if(resourceAddress != null && resourceAddress.length() > 0) {
-                TopicMap tm = admin.getTopicMap();
-                try {
-                    setDefaultLogger();
-                    _extractTopicsFrom(new File(resourceAddress), tm, resourceType);
-                    setState(WAIT);
-                }
-                catch(Exception e) {
-                    log(e);
-                }
+    public void execute(Wandora wandora, Context context) {
+        TopicMap tm = wandora.getTopicMap();
+        
+        setTopicMap(tm);
+        boolean handledForcedContent = handleForcedContent();
+            
+        if(!handledForcedContent) {
+            if(gui == null) {
+                gui = new SimpleEmailExtractorPanel(wandora);
             }
-            else {
-                log("No email resource given.");
+            gui.showDialog();
+            // WAIT TILL CLOSED
+
+            if(gui.wasAccepted()) {
+                int resourceType = gui.getEmailResourceType();
+                String resourceAddress = gui.getResourceAddress();
+                if(resourceAddress != null && resourceAddress.length() > 0) {
+                    try {
+                        setDefaultLogger();
+                        _extractTopicsFrom(new File(resourceAddress), tm, resourceType);
+                        setState(WAIT);
+                    }
+                    catch(Exception e) {
+                        log(e);
+                    }
+                }
+                else {
+                    log("No email resource given.");
+                }
             }
         }
     }
@@ -167,6 +174,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     
     
+    @Override
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         try {
             URLConnection uc = null;
@@ -186,13 +194,16 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     }
 
 
+    @Override
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
         _extractTopicsFromStream("http://wandora.org/si/simple-email-extractor/"+System.currentTimeMillis(), new ByteArrayInputStream(str.getBytes()), topicMap);
         return true;
     }
 
     
+    @Override
     public boolean _extractTopicsFrom(File file, TopicMap topicMap) throws Exception {
+        System.out.println("@ _extractTopicsFrom: "+file.getAbsolutePath());
         return _extractTopicsFrom(file, topicMap, SimpleEmailExtractorPanel.EMAIL_RESOURCE);
     }
     

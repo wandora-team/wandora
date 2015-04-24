@@ -77,6 +77,7 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         message.setHorizontalAlignment(SimpleLabel.CENTER);
         message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
         tmqlTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        clearResultsButton.setEnabled(false);
         ((TMQLTextPane) tmqlTextPane).setHorizontallyResizeable(false);
         readStoredTmqlQueries();
     }
@@ -421,7 +422,12 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
 
 
     
+    
+    // -------------------------------------------------------------------------
+    // ------------------------------------------------------- TMQLTextPane ----
+    // -------------------------------------------------------------------------
 
+    
     
     private class TMQLTextPane extends SimpleTextPaneResizeable {
     

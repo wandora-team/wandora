@@ -175,8 +175,8 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     /*
      * <code>topicHilights</code> implements a hidden feature in Wandora application.
-     * It is not actually used at the moment. <code>topicHilights</code> provides
-     * a way to color topics in Wandora UI.
+     * It is poorly used at the moment. <code>topicHilights</code> provides
+     * a way to color topics in Wandora's user interface.
      */
     public TopicHilights topicHilights;
     

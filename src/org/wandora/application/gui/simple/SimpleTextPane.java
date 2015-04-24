@@ -81,6 +81,9 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
 
     protected JPopupMenu popup;
     protected Object[] popupStruct = new Object[] {
+        "Undo", UIBox.getIcon("gui/icons/undo_undo.png"),
+        "Redo", UIBox.getIcon("gui/icons/undo_redo.png"),
+        "---",
         "Cut", UIBox.getIcon("gui/icons/cut.png"),
         "Copy", UIBox.getIcon("gui/icons/copy.png"),
         "Paste", UIBox.getIcon("gui/icons/paste.png"),
@@ -462,7 +465,13 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         String c = actionEvent.getActionCommand();
         if(c == null) return;
 
-        if(c.equals("Copy")) {
+        if(c.equals("Undo")) {
+            if(undo != null) undo.undo();
+        }
+        else if(c.equals("Redo")) {
+            if(undo != null) undo.redo();
+        }
+        else if(c.equals("Copy")) {
             this.copy();
         }
         else if(c.equals("Cut")) {

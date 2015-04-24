@@ -334,6 +334,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/docking</path>
       <path>org/wandora/application/tools/solr</path>
       <path>org/wandora/application/tools/extractors/word</path>
+      <path>org/wandora/application/tools/iot</path>
       <set>
          <name>generator</name>
          <item>
@@ -1415,6 +1416,14 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>R console</name>
             <class>org.wandora.application.tools.r.OpenRConsole</class>
+         </item>
+         <item>
+            <name>---</name>
+            <class>org.wandora.application.tools.TestTool</class>
+         </item>
+         <item>
+            <name>IOT Pinger</name>
+            <class>org.wandora.application.tools.iot.Pinger</class>
          </item>
       </set>
       <set>

@@ -17,19 +17,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-package org.wandora.application.gui.topicpanels;
+package org.wandora.application.tools.iot;
+
+import java.net.MalformedURLException;
 
 /**
- * This is just a stub to get this registered in TopicPanelManager. The actual
- * code is in the queryeditorpanel package in a class of the same name, which
- * this class extends (without adding anything whatsoever).
- * @author olli
+ * An IoTSource represents a simple virtual source of data for the IoT tool. It
+ * functions as a callback for a given URL in SourceMapping.
+ * 
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
-
-
-public class QueryEditorTopicPanel /* extends org.wandora.application.gui.topicpanels.queryeditorpanel.QueryEditorTopicPanel */ {
+public interface IoTSource {
     
-
+    
+    /**
+     * getData returns a String representation corresponding to the output of
+     * the virtual service. (e.g. a simple virtual time service just returns a
+     * String representation of the current system time.)'
+     * 
+     * @param url
+     * @return a response from the virtual endpoint
+     */
+    String getData(String url);
+    
+    boolean matches(String url) throws MalformedURLException;
+    
 }

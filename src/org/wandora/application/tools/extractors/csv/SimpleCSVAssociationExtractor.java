@@ -85,6 +85,7 @@ public class SimpleCSVAssociationExtractor extends AbstractCSVExtractor {
     
     
     
+    @Override
     public boolean _extractTopicsFrom(Table table, TopicMap tm) throws Exception {
         if(table == null || tm == null) return false;
         
