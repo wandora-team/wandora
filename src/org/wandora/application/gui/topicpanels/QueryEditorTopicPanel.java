@@ -29,7 +29,7 @@ package org.wandora.application.gui.topicpanels;
  */
 
 
-public class QueryEditorTopicPanel /* extends org.wandora.application.gui.topicpanels.queryeditorpanel.QueryEditorTopicPanel */ {
+public class QueryEditorTopicPanel extends org.wandora.application.gui.topicpanels.queryeditorpanel.QueryEditorTopicPanel {
     
 
 }
