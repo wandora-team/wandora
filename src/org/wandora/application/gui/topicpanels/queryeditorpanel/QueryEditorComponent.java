@@ -260,6 +260,9 @@ public class QueryEditorComponent extends javax.swing.JPanel {
             DirectivePanel panel=directiveMap.get(params.id);
             panel.setDirectiveParams(params);
         }        
+        
+        updatePanelSize();
+        
     }
     
     public void selectPanel(DirectivePanel panel){
@@ -331,6 +334,24 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         }
     }
     
+    private void updatePanelSize(){
+        int w=0;
+        int h=0;
+        for(int i=0;i<queryGraphPanel.getComponentCount();i++){
+            Component c=queryGraphPanel.getComponent(i);
+            if(c instanceof DirectivePanel){
+                Rectangle rect=c.getBounds();
+                w=Math.max(w,rect.x+rect.width);
+                h=Math.max(h,rect.y+rect.height);
+            }
+        }
+        
+        if(w!=this.getWidth() || h!=this.getHeight()){
+            changePanelSize(w,h,0,0);
+        }        
+        
+    }
+    
     public void panelMoved(DirectivePanel panel){
         Rectangle rect=panel.getBounds();
         if(rect.x<0){
@@ -342,11 +363,7 @@ public class QueryEditorComponent extends javax.swing.JPanel {
             rect=panel.getBounds();
         }
         
-        int width=Math.max(rect.x+rect.width,queryGraphPanel.getWidth());
-        int height=Math.max(rect.y+rect.height,queryGraphPanel.getHeight());
-        if(width!=this.getWidth() || height!=this.getHeight()){
-            changePanelSize(width,height,0,0);
-        }
+        updatePanelSize();
         
         queryGraphPanel.invalidate();
         queryGraphPanel.repaint();
