@@ -333,6 +333,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/docking/add</path>
       <path>org/wandora/application/tools/docking</path>
       <path>org/wandora/application/tools/solr</path>
+      <path>org/wandora/application/tools/extractors/word</path>
+      <path>org/wandora/application/tools/iot</path>
       <set>
          <name>generator</name>
          <item>
@@ -627,6 +629,18 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>ReKognition scene detection extractor...</name>
                <class>org.wandora.application.tools.extractors.rekognition.RekognitionSceneDetector</class>
             </item>
+            <item>
+               <name>--- WORD ---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>Word extractor...</name>
+               <class>org.wandora.application.tools.extractors.word.SimpleWordMatchingExtractor</class>
+            </item>
+            <item>
+               <name>Word similarity extractor...</name>
+               <class>org.wandora.application.tools.extractors.word.SimilarityMatchingExtractor</class>
+            </item>
          </item>
          <item>
             <name>Language</name>
@@ -716,19 +730,25 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Social</name>
             <item>
+               <name>Twitter extractor...</name>
+               <class>org.wandora.application.tools.extractors.twitter.TwitterExtractor</class>
+            </item>
+            <item>
+               <name>Twitter JSON extractor...</name>
+               <class>org.wandora.application.tools.extractors.twitter.TwitterJSONExtractor</class>
+            </item>
+            <item>
+               <name>--- OTHER SOCIAL ---</name>
+               <class>org.wandora.application.tools.DummyTool</class>
+            </item>
+            <item>
                <name>Facebook graph extractor...</name>
                <class>org.wandora.application.tools.extractors.facebook.FacebookAPIExtractor</class>
             </item>
             <item>
-               <name>Twitter extractor...</name>
-               <class>org.wandora.application.tools.extractors.twitter.TwitterExtractor</class>
-            </item>
-            <!--
-            <item>
                <name>Reddit extractor...</name>
                <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
             </item>
-            -->
          </item>
          <item>
             <name>Services</name>
@@ -1397,6 +1417,14 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <name>R console</name>
             <class>org.wandora.application.tools.r.OpenRConsole</class>
          </item>
+         <item>
+            <name>---</name>
+            <class>org.wandora.application.tools.TestTool</class>
+         </item>
+         <item>
+            <name>IOT Pinger</name>
+            <class>org.wandora.application.tools.iot.Pinger</class>
+         </item>
       </set>
       <set>
          <name>Extract buttons</name>
@@ -1523,7 +1551,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <bsh>
       <path></path>
    </bsh>
-   <httpuseragent>Wandora</httpuseragent>
+   <httpuseragent>java:org.wandora</httpuseragent>
    <trees>
       <type>
          <name>Instances</name>
@@ -1838,4 +1866,7 @@ WHERE test:testctype >> characteristics tm:name</query>
 MERGE test:testctype, test:testatype</query>
       </query>
    </tmqlQueries>
+   <queryeditor>
+      <storedqueries>{"queries":[{"name":"Cover songs (FreeDB sample)","directiveParameters":[{"id":"1424551821","cls":"org.wandora.application.gui.topicpanels.queryeditorpanel.QueryEditorComponent$FinalResultDirective","constructor":null,"parameters":[],"addons":[],"posx":14,"posy":15,"from":"747702421"},{"id":"156030449","cls":"org.wandora.query2.Regex","constructor":{"label":"","parameters":[{"multiple":false,"reflectTypeName":null,"label":"regex","typeName":"java.lang.String"},{"multiple":false,"reflectTypeName":null,"label":"replace","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"^([^\\\\(]*).*$","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"regex","typeName":"java.lang.String"}},{"jsonValue":{"parser":"default","value":"$1","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"replace","typeName":"java.lang.String"}}],"addons":[{"addon":{"label":"as","method":"as","parameters":[{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#originalname","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}}]}],"posx":482,"posy":131,"from":"1613422552"},{"id":"1269117632","cls":"org.wandora.query2.Join","constructor":{"label":"","parameters":[{"multiple":true,"reflectTypeName":null,"label":"directives","typeName":"org.wandora.query2.Directive"}]},"parameters":[{"jsonValue":{"parser":"array","value":null,"array":[{"parser":"directive","value":"123164196","array":null},{"parser":"directive","value":"156030449","array":null}]},"parameter":{"multiple":true,"reflectTypeName":null,"label":"directives","typeName":"org.wandora.query2.Directive"}}],"addons":[],"posx":366,"posy":51,"from":null},{"id":"123164196","cls":"org.wandora.query2.Players","constructor":{"label":"","parameters":[{"multiple":false,"reflectTypeName":"java.lang.Object","label":"association type","typeName":"org.wandora.query2.TopicOperand"},{"multiple":true,"reflectTypeName":"[Ljava.lang.Object;","label":"players","typeName":"org.wandora.query2.TopicOperand"}]},"parameters":[{"jsonValue":{"parser":"default","value":"http://www.wandora.net/freedb/track","array":null},"parameter":{"multiple":false,"reflectTypeName":"java.lang.Object","label":"association type","typeName":"org.wandora.query2.TopicOperand"}},{"jsonValue":{"parser":"array","value":null,"array":[{"parser":"default","value":"http://www.wandora.net/freedb/artist","array":null}]},"parameter":{"multiple":true,"reflectTypeName":"[Ljava.lang.Object;","label":"players","typeName":"org.wandora.query2.TopicOperand"}}],"addons":[{"addon":{"label":"as","method":"as","parameters":[{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#artist","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}}]},{"addon":{"label":"of","method":"of","parameters":[{"multiple":false,"reflectTypeName":null,"label":"column","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#track","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"column","typeName":"java.lang.String"}}]}],"posx":358,"posy":210,"from":"713363460"},{"id":"713363460","cls":"org.wandora.query2.Regex","constructor":{"label":"","parameters":[{"multiple":false,"reflectTypeName":null,"label":"regex","typeName":"java.lang.String"},{"multiple":false,"reflectTypeName":null,"label":"replace","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"^([^\\\\(]*).*$","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"regex","typeName":"java.lang.String"}},{"jsonValue":{"parser":"default","value":"$1","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"replace","typeName":"java.lang.String"}}],"addons":[{"addon":{"label":"as","method":"as","parameters":[{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#trackname","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}}]}],"posx":409,"posy":311,"from":"1627344266"},{"id":"1627344266","cls":"org.wandora.query2.BaseName","constructor":{"label":"","parameters":[]},"parameters":[],"addons":[],"posx":508,"posy":380,"from":"771039880"},{"id":"771039880","cls":"org.wandora.query2.Instances","constructor":{"label":"","parameters":[]},"parameters":[],"addons":[{"addon":{"label":"as","method":"as","parameters":[{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#track","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}}]},{"addon":{"label":"from literals","method":"from","parameters":[{"multiple":true,"reflectTypeName":null,"label":"literal","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"array","value":null,"array":[{"parser":"default","value":"http://www.wandora.net/freedb/track","array":null}]},"parameter":{"multiple":true,"reflectTypeName":null,"label":"literal","typeName":"java.lang.String"}}]}],"posx":588,"posy":423,"from":null},{"id":"1613422552","cls":"org.wandora.query2.BaseName","constructor":{"label":"","parameters":[]},"parameters":[],"addons":[],"posx":554,"posy":194,"from":"406542361"},{"id":"406542361","cls":"org.wandora.query2.Players","constructor":{"label":"","parameters":[{"multiple":false,"reflectTypeName":"java.lang.Object","label":"association type","typeName":"org.wandora.query2.TopicOperand"},{"multiple":true,"reflectTypeName":"[Ljava.lang.Object;","label":"players","typeName":"org.wandora.query2.TopicOperand"}]},"parameters":[{"jsonValue":{"parser":"default","value":"http://www.wandora.net/freedb/track","array":null},"parameter":{"multiple":false,"reflectTypeName":"java.lang.Object","label":"association type","typeName":"org.wandora.query2.TopicOperand"}},{"jsonValue":{"parser":"array","value":null,"array":[{"parser":"default","value":"http://www.wandora.net/freedb/track","array":null}]},"parameter":{"multiple":true,"reflectTypeName":"[Ljava.lang.Object;","label":"players","typeName":"org.wandora.query2.TopicOperand"}}],"addons":[{"addon":{"label":"as","method":"as","parameters":[{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#originaltrack","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}}]}],"posx":608,"posy":235,"from":"104498500"},{"id":"747702421","cls":"org.wandora.query2.Identity","constructor":{"label":"","parameters":[]},"parameters":[],"addons":[{"addon":{"label":"where","method":"where","parameters":[{"multiple":false,"reflectTypeName":"java.lang.Object","label":"operand 1","typeName":"org.wandora.query2.Operand"},{"multiple":false,"reflectTypeName":null,"label":"operator","typeName":"java.lang.String"},{"multiple":false,"reflectTypeName":"java.lang.Object","label":"operand 2","typeName":"org.wandora.query2.Operand"}]},"parameters":[{"jsonValue":{"parser":"directive","value":"1541256001","array":null},"parameter":{"multiple":false,"reflectTypeName":"java.lang.Object","label":"operand 1","typeName":"org.wandora.query2.Operand"}},{"jsonValue":{"parser":"default","value":"=","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"operator","typeName":"java.lang.String"}},{"jsonValue":{"parser":"directive","value":"1937559399","array":null},"parameter":{"multiple":false,"reflectTypeName":"java.lang.Object","label":"operand 2","typeName":"org.wandora.query2.Operand"}}]},{"addon":{"label":"where","method":"where","parameters":[{"multiple":false,"reflectTypeName":"java.lang.Object","label":"operand 1","typeName":"org.wandora.query2.Operand"},{"multiple":false,"reflectTypeName":null,"label":"operator","typeName":"java.lang.String"},{"multiple":false,"reflectTypeName":"java.lang.Object","label":"operand 2","typeName":"org.wandora.query2.Operand"}]},"parameters":[{"jsonValue":{"parser":"directive","value":"1003698965","array":null},"parameter":{"multiple":false,"reflectTypeName":"java.lang.Object","label":"operand 1","typeName":"org.wandora.query2.Operand"}},{"jsonValue":{"parser":"default","value":"t!=","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"operator","typeName":"java.lang.String"}},{"jsonValue":{"parser":"directive","value":"1491956604","array":null},"parameter":{"multiple":false,"reflectTypeName":"java.lang.Object","label":"operand 2","typeName":"org.wandora.query2.Operand"}}]}],"posx":120,"posy":52,"from":"1269117632"},{"id":"1541256001","cls":"org.wandora.query2.Of","constructor":{"label":"","parameters":[{"multiple":false,"reflectTypeName":null,"label":"role","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#trackname","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"role","typeName":"java.lang.String"}}],"addons":[],"posx":86,"posy":164,"from":null},{"id":"1937559399","cls":"org.wandora.query2.Of","constructor":{"label":"","parameters":[{"multiple":false,"reflectTypeName":null,"label":"role","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#originalname","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"role","typeName":"java.lang.String"}}],"addons":[],"posx":123,"posy":210,"from":null},{"id":"1003698965","cls":"org.wandora.query2.Of","constructor":{"label":"","parameters":[{"multiple":false,"reflectTypeName":null,"label":"role","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#artist","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"role","typeName":"java.lang.String"}}],"addons":[],"posx":166,"posy":253,"from":null},{"id":"1491956604","cls":"org.wandora.query2.Of","constructor":{"label":"","parameters":[{"multiple":false,"reflectTypeName":null,"label":"role","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#originalartist","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"role","typeName":"java.lang.String"}}],"addons":[],"posx":192,"posy":301,"from":null},{"id":"104498500","cls":"org.wandora.query2.Identity","constructor":{"label":"","parameters":[]},"parameters":[],"addons":[{"addon":{"label":"as","method":"as","parameters":[{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}]},"parameters":[{"jsonValue":{"parser":"default","value":"#originalartist","array":null},"parameter":{"multiple":false,"reflectTypeName":null,"label":"column name","typeName":"java.lang.String"}}]}],"posx":688,"posy":299,"from":null}],"rootDirective":"747702421"}]}</storedqueries>
+   </queryeditor>
 </options>

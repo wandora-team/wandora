@@ -39,9 +39,11 @@ import org.slf4j.Marker;
 public class WandoraLoggerAdapter implements Logger {
 
     
+    StringBuilder logData = null;
+    
     
     public WandoraLoggerAdapter(String name) {
-        
+        logData = new StringBuilder();
     }
     
     
@@ -49,6 +51,8 @@ public class WandoraLoggerAdapter implements Logger {
     public String getName() {
         return "Wandora logger";
     }
+    
+    // -------------------------------------------------------------------------
 
     @Override
     public boolean isTraceEnabled() {
@@ -57,27 +61,32 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void trace(String string) {
-        
+        log(string);
     }
 
     @Override
     public void trace(String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void trace(String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void trace(String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void trace(String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
 
     @Override
@@ -87,29 +96,37 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void trace(Marker marker, String string) {
-        
+        log(string);
     }
 
     @Override
     public void trace(Marker marker, String string, Object o) {
-
+        log(string);
+        log(o);
     }
 
     @Override
     public void trace(Marker marker, String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void trace(Marker marker, String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void trace(Marker marker, String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
 
+    
+    // -------------------------------------------------------------------------
+    
     @Override
     public boolean isDebugEnabled() {
         return false;
@@ -117,27 +134,32 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void debug(String string) {
-        
+        log(string);
     }
 
     @Override
     public void debug(String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void debug(String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void debug(String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void debug(String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
 
     @Override
@@ -147,29 +169,36 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void debug(Marker marker, String string) {
-        
+        log(string);
     }
 
     @Override
     public void debug(Marker marker, String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void debug(Marker marker, String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void debug(Marker marker, String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void debug(Marker marker, String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
 
+    // -------------------------------------------------------------------------
+    
     @Override
     public boolean isInfoEnabled() {
         return true;
@@ -177,27 +206,32 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void info(String string) {
-        
+        log(string);
     }
 
     @Override
     public void info(String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void info(String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void info(String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void info(String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
 
     @Override
@@ -207,29 +241,35 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void info(Marker marker, String string) {
-        
+        log(string);
     }
 
     @Override
     public void info(Marker marker, String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void info(Marker marker, String string, Object o, Object o1) {
-        
+        log(string);
+        log(o1);
     }
 
     @Override
     public void info(Marker marker, String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void info(Marker marker, String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
 
+    // -------------------------------------------------------------------------
+    
     @Override
     public boolean isWarnEnabled() {
         return true;
@@ -237,27 +277,32 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void warn(String string) {
-        
+        log(string);
     }
 
     @Override
     public void warn(String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void warn(String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void warn(String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void warn(String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
 
     @Override
@@ -267,28 +312,35 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void warn(Marker marker, String string) {
-        
+        log(string);
     }
 
     @Override
     public void warn(Marker marker, String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void warn(Marker marker, String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void warn(Marker marker, String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void warn(Marker marker, String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
+    
+    // -------------------------------------------------------------------------
 
     @Override
     public boolean isErrorEnabled() {
@@ -297,27 +349,32 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void error(String string) {
-        
+        log(string);
     }
 
     @Override
     public void error(String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void error(String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void error(String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void error(String string, Throwable thrwbl) {
-        
+        log(string);
+        log(thrwbl);
     }
 
     @Override
@@ -327,27 +384,50 @@ public class WandoraLoggerAdapter implements Logger {
 
     @Override
     public void error(Marker marker, String string) {
-        
+        log(string);
     }
 
     @Override
     public void error(Marker marker, String string, Object o) {
-        
+        log(string);
+        log(o);
     }
 
     @Override
     public void error(Marker marker, String string, Object o, Object o1) {
-        
+        log(string);
+        log(o);
+        log(o1);
     }
 
     @Override
     public void error(Marker marker, String string, Object[] os) {
-        
+        log(string);
+        log(os);
     }
 
     @Override
     public void error(Marker marker, String string, Throwable thrwbl) {
-       
+       log(string);
+       log(thrwbl);
     }
+    
+    // -------------------------------------------------------------------------
+    
+    private void log(Object o) {
+        if(o == null) return;
+        
+        if(o instanceof String) {
+            System.out.println(o);
+        }
+        else if(o instanceof Throwable) {
+            Throwable thrwbl = (Throwable) o;
+            // thrwbl.printStackTrace();
+        }
+        else {
+            System.out.println(o.toString());
+        }
+    }
+    
     
 }

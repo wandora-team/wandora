@@ -39,6 +39,7 @@ import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleScrollPane;
@@ -73,6 +74,7 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     public TMQLPanel() {
         wandora = Wandora.getWandora();
         initComponents();
+        runtimeComboBox.setEditable(false);
         message = new SimpleLabel();
         message.setHorizontalAlignment(SimpleLabel.CENTER);
         message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
@@ -176,23 +178,7 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     }
     
     
-    public MixedTopicTable getTopicsByTMQL() throws TopicMapException, Throwable {
-        TopicMap topicMap = wandora.getTopicMap();
-        String query = tmqlTextPane.getText();
-        MixedTopicTable table = new MixedTopicTable(wandora);
 
-        TMQLRunner.TMQLResult res = TMQLRunner.runTMQLCatchException(topicMap,query);
-        if(res.isException()) {
-            throw res.getException();
-        }
-        else {
-            Object[][] data = res.getData();
-            Object[] columns = Arrays.copyOf(res.getColumns(), res.getNumColumns(), Object[].class);
-            table.initialize(data,columns);
-        }
-
-        return table;        
-    }
 
     
     public void refresh() {
@@ -223,6 +209,9 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         delTmqlButton = new SimpleButton();
         tmqlScrollPane = new javax.swing.JScrollPane();
         tmqlTextPane = new TMQLTextPane();
+        tmqlOptionPanel = new javax.swing.JPanel();
+        runtimeLabel = new javax.swing.JLabel();
+        runtimeComboBox = new SimpleComboBox();
         tmqlButtonPanel = new javax.swing.JPanel();
         runButton = new SimpleButton();
         clearResultsButton = new SimpleButton();
@@ -298,6 +287,24 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         gridBagConstraints.weightx = 1.0;
         add(tmqlPanel, gridBagConstraints);
 
+        tmqlOptionPanel.setLayout(new java.awt.GridBagLayout());
+
+        runtimeLabel.setText("Use runtime");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 4);
+        tmqlOptionPanel.add(runtimeLabel, gridBagConstraints);
+
+        runtimeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "TMQL-2007" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
+        tmqlOptionPanel.add(runtimeComboBox, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 8);
+        add(tmqlOptionPanel, gridBagConstraints);
+
         tmqlButtonPanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         tmqlButtonPanel.setMinimumSize(new java.awt.Dimension(91, 40));
         tmqlButtonPanel.setPreferredSize(new java.awt.Dimension(91, 40));
@@ -367,7 +374,25 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         try {
             tmqlResultPanel.removeAll();
             clearResultsButton.setEnabled(true);
-            resultsTable = getTopicsByTMQL();
+            
+            resultsTable = null;
+            TopicMap topicMap = wandora.getTopicMap();
+            String query = tmqlTextPane.getText();
+            String runtime = runtimeComboBox.getSelectedItem().toString();
+
+            TMQLRunner.TMQLResult res = TMQLRunner.runTMQLCatchException(topicMap, query, runtime);
+            if(res.isException()) {
+                throw res.getException();
+            }
+            else {
+                if(res.getData() != null && res.getData().length > 0) {
+                    resultsTable = new MixedTopicTable(wandora);
+                    Object[][] data = res.getData();
+                    Object[] columns = Arrays.copyOf(res.getColumns(), res.getNumColumns(), Object[].class);
+                    resultsTable.initialize(data,columns);
+                }
+            }
+            
             if(resultsTable != null) {
                 tmqlResultPanel.add(resultsTable, BorderLayout.NORTH);
             }
@@ -410,9 +435,12 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
     private javax.swing.JButton delTmqlButton;
     private javax.swing.JScrollPane resultScrollPane;
     private javax.swing.JButton runButton;
+    private javax.swing.JComboBox runtimeComboBox;
+    private javax.swing.JLabel runtimeLabel;
     private javax.swing.JPanel selectQueryPanel1;
     private javax.swing.JPanel tmqlButtonPanel;
     private javax.swing.JComboBox tmqlComboBox;
+    private javax.swing.JPanel tmqlOptionPanel;
     private javax.swing.JPanel tmqlPanel;
     private javax.swing.JPanel tmqlResultContainerPanel;
     private javax.swing.JPanel tmqlResultPanel;

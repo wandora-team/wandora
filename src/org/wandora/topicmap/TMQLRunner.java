@@ -27,6 +27,7 @@ import de.topicmapslab.tmql4j.components.processor.results.model.IResult;
 import de.topicmapslab.tmql4j.components.processor.results.model.IResultSet;
 import de.topicmapslab.tmql4j.components.processor.runtime.ITMQLRuntime;
 import de.topicmapslab.tmql4j.components.processor.runtime.TMQLRuntimeFactory;
+import de.topicmapslab.tmql4j.path.components.processor.runtime.TmqlRuntime2007;
 import de.topicmapslab.tmql4j.query.IQuery;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -51,33 +52,46 @@ import org.wandora.topicmap.wandora2tmapi.W2TTopic;
 
 public class TMQLRunner {
     
-    public TMQLRunner(){}
+    public TMQLRunner() {}
     
 
     public static TMQLResult runTMQL(TopicMap topicMap, String query) throws TopicMapException {
-        ITMQLRuntime tmql = TMQLRuntimeFactory.newFactory().newRuntime("tmql-2007");
+        return runTMQL(topicMap, query, "TMQL-2010");
+    }
+    
+    public static TMQLResult runTMQL(TopicMap topicMap, String query, String runtime) throws TopicMapException {
+        ITMQLRuntime tmql = TMQLRuntimeFactory.newFactory().newRuntime(runtime);
+        //ITMQLRuntime tmql = TMQLRuntimeFactory.newFactory().newRuntime();
+        //ITMQLRuntime tmql = new TmqlRuntime2007();
+        
+        System.out.println(tmql.getLanguageName());
+        System.out.println(tmql.getTmqlProcessor().toString());
+        
         org.tmapi.core.TopicMap tm;
 
-        tm=new org.wandora.topicmap.wandora2tmapi.W2TTopicMap(topicMap);
+        tm = new org.wandora.topicmap.wandora2tmapi.W2TTopicMap(topicMap);
 
-        IQuery tmqlQuery=tmql.run(tm,query);
-        IResultSet<?> resultSet=tmqlQuery.getResults();
+        IQuery tmqlQuery = tmql.run(tm,query);
+        IResultSet<?> resultSet = tmqlQuery.getResults();
 
-        if(resultSet.isEmpty()) return new TMQLResult(new Object[0][0],new String[0]);
+        if(resultSet.isEmpty()) {
+            System.out.println("TMQL resultset is empty.");
+            return new TMQLResult(new Object[0][0],new String[0]);
+        }
 
-        IResult firstRow=resultSet.get(0);
-        int rowSize=firstRow.size();
-        String[] columns=new String[rowSize];        
-        for(int i=0;i<rowSize;i++){
+        IResult firstRow = resultSet.get(0);
+        int rowSize = firstRow.size();
+        String[] columns = new String[rowSize];        
+        for(int i=0; i<rowSize; i++) {
             String label=resultSet.getAlias(i);
             if(label==null) label=""+i;
             columns[i]=label;
         }
 
-        Object[][] data=new Object[resultSet.size()][rowSize];
-        for(int i=0;i<resultSet.size();i++){
+        Object[][] data = new Object[resultSet.size()][rowSize];
+        for(int i=0; i<resultSet.size(); i++) {
             IResult row=resultSet.get(i);
-            for(int j=0;j<rowSize;j++){
+            for(int j=0; j<rowSize; j++) {
                 Object o=row.get(j);
                 if(o instanceof W2TTopic) o=((W2TTopic)o).getWrapped();
                 else if(o instanceof DatatypeAware) o=((DatatypeAware)o).getValue();
@@ -90,10 +104,35 @@ public class TMQLRunner {
         return new TMQLResult(data,columns);
     }
     
-    public static TMQLResult runTMQLCatchException(TopicMap topicMap,String query) {
-        try{ return runTMQL(topicMap,query); }
-        catch(Exception e){ return new TMQLResult(e); }
+    
+    public static TMQLResult runTMQLCatchException(TopicMap topicMap, String query) {
+        try { 
+            return runTMQL(topicMap, query); 
+        }
+        catch(Exception e){ 
+            return new TMQLResult(e);
+        }
+        catch(Error er) {
+            return new TMQLResult(er);
+        }
     }
+    
+            
+    public static TMQLResult runTMQLCatchException(TopicMap topicMap, String query, String runtime) {
+        try { 
+            return runTMQL(topicMap, query, runtime); 
+        }
+        catch(Exception e){ 
+            return new TMQLResult(e);
+        }
+        catch(Error er) {
+            return new TMQLResult(er);
+        }
+    }
+    
+    
+    // -------------------------------------------------------------------------
+    
     
     public static class TMQLResult {
         Object[][] data;
