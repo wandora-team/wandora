@@ -56,7 +56,7 @@ public class TMQLRunner {
     
 
     public static TMQLResult runTMQL(TopicMap topicMap, String query) throws TopicMapException {
-        return runTMQL(topicMap, query, "TMQL-2010");
+        return runTMQL(topicMap, query, "TMQL-2007");
     }
     
     public static TMQLResult runTMQL(TopicMap topicMap, String query, String runtime) throws TopicMapException {
