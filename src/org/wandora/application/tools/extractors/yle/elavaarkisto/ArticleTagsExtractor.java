@@ -77,6 +77,7 @@ public class ArticleTagsExtractor extends AbstractElavaArkistoExtractor {
     public boolean _extractTopicsFrom(File f, TopicMap tm) throws Exception {
         CSVParser csvParser = new CSVParser();
         CSVParser.Table table = csvParser.parse(f, "UTF-8");
+        //CSVParser.Table table = csvParser.parse(f);
         return _extractTopicsFrom(table, tm);
     }
 
@@ -87,6 +88,7 @@ public class ArticleTagsExtractor extends AbstractElavaArkistoExtractor {
         try {
             CSVParser csvParser = new CSVParser();
             table = csvParser.parse(in, "UTF-8");
+            //table = csvParser.parse(in);
         } 
         finally {
             in.close();
@@ -114,6 +116,7 @@ public class ArticleTagsExtractor extends AbstractElavaArkistoExtractor {
         
         for(CSVParser.Row row : table) {
             setProgress(i++);
+            if(i == 1) continue;
             if(row.size() == 6) {
                 try {
                     String aid = stringify(row.get(0));
