@@ -335,6 +335,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/solr</path>
       <path>org/wandora/application/tools/extractors/word</path>
       <path>org/wandora/application/tools/iot</path>
+      <path>org/wandora/application/tools/extractors/yle/elavaarkisto</path>
       <set>
          <name>generator</name>
          <item>
@@ -854,6 +855,30 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>ReKognition scene detection extractor...</name>
                <class>org.wandora.application.tools.extractors.rekognition.RekognitionSceneDetector</class>
+            </item>
+            <item>
+               <name>--- YLE Elava arkisto ---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>YLE Elava arkisto terms</name>
+               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.TermsExtractor</class>
+            </item>
+            <item>
+               <name>YLE Elava arkisto articles</name>
+               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticlesExtractor</class>
+            </item>
+            <item>
+               <name>YLE Elava arkisto article additions</name>
+               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticlesAdditionalFieldsExtractor</class>
+            </item>
+            <item>
+               <name>YLE Elava arkisto article tags</name>
+               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticleTagsExtractor</class>
+            </item>
+            <item>
+               <name>YLE Elava arkisto media of the article</name>
+               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.MediaArticleExtractor</class>
             </item>
          </item>
          <item>
