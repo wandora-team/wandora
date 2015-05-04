@@ -32,8 +32,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wandora.application.*;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.*;
 import org.wandora.utils.*;
 
@@ -248,6 +252,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
             "Strip HTML tags",
             "Make HTML clean up", 
             "Make XML clean up",
+            "Prettyprint JSON",
             "---",
             "Uppercase",
             "Lowercase",
@@ -361,6 +366,27 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 tidy.parse(new ByteArrayInputStream(changeThis.getBytes()), tidyOutput);
                 
                 simpleTextPane.setText(tidyOutput.toString());
+            }
+            else if("Prettyprint JSON".equalsIgnoreCase(c)) {
+                String changeThis = simpleTextPane.getText();
+
+                String prettyOutput;
+                try {
+                    JSONObject obj = new JSONObject(changeThis); // Try object
+                    prettyOutput = obj.toString(2);
+                    simpleTextPane.setText(prettyOutput);
+                } catch (JSONException objEx) { // Not a JSON Object
+                    try {
+                        JSONArray arr = new JSONArray(changeThis); // Try array
+                        prettyOutput = arr.toString(2);
+                        simpleTextPane.setText(prettyOutput);
+                    } catch (JSONException arrEx) { // Give up
+                        WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                                "Couldn't parse given text as JSON",
+                                "JSON parse error",
+                                WandoraOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
             }
             else if("undo".equalsIgnoreCase(c)) {
                 try {
