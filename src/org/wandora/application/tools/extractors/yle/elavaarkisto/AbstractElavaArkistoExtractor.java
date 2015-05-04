@@ -136,13 +136,11 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
 
         if(articleTopic == null) {
             articleTopic = tm.createTopic();
-            if(isValidData(url)) {
-                articleTopic.addSubjectIdentifier(new Locator(url));
-                articleTopic.setSubjectLocator(new Locator(url));
-            }
-            else {
-                articleTopic.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
-            }
+            articleTopic.addSubjectIdentifier(new Locator(si));
+        }
+        if(isValidData(url)) {
+            articleTopic.addSubjectIdentifier(new Locator(url));
+            articleTopic.setSubjectLocator(new Locator(url));
         }
         Topic articleTypeTopic = getElavaArkistoArticleType(tm);
         if(articleTypeTopic != null) {
@@ -207,8 +205,54 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
     }
     
     
-    public Topic getElavaArkistoTagTopic(String kid, String label, TopicMap tm) throws TopicMapException {
+    public Topic getElavaArkistoTagTopic(String kid, String label, TopicMap tm) throws TopicMapException {       
+        try {
+            // Fix label encoding.
+            label = new String(label.getBytes(), "UTF-8");
+        }
+        catch(Exception e) {}
+        
+        if(kid.startsWith("keyword=")) {
+            kid = label;
+        }
+        
         String si = ELAVA_ARKISTO_TAG_TYPE_SI + "/" + urlEncode(kid);
+        
+        
+        if(kid.startsWith("/term/finto/httpwwwysofiontokoko")) {
+            String ysoId = kid.substring("/term/finto/httpwwwysofiontokoko".length());
+            ysoId = ysoId.substring(0, ysoId.indexOf("/"));
+            kid = "http://www.yso.fi/onto/koko/"+ysoId;
+        }
+        if(kid.startsWith("/aihe/termi/finto/httpwwwysofiontokoko")) {
+            String ysoId = kid.substring("/aihe/termi/finto/httpwwwysofiontokoko".length());
+            ysoId = ysoId.substring(0, ysoId.indexOf("/"));
+            kid = "http://www.yso.fi/onto/koko/"+ysoId;
+        }
+        
+        if(kid.startsWith("/aihe/termi/freebase/m")) {
+            String freebaseId = kid.substring("/aihe/termi/freebase/m".length());
+            freebaseId = freebaseId.substring(0, freebaseId.indexOf("/"));
+            kid = "http://www.freebase.com/m/"+freebaseId;
+        }
+        if(kid.startsWith("/term/freebase/m")) {
+            String freebaseId = kid.substring("/term/freebase/m".length());
+            freebaseId = freebaseId.substring(0, freebaseId.indexOf("/"));
+            kid = "http://www.freebase.com/m/"+freebaseId;
+        }
+        if(kid.startsWith("http://")) {
+            si = kid;
+        }
+        if(kid.startsWith("http://www.freebase.com/m/")) {
+            kid = kid.substring("http://www.freebase.com/m/".length());
+        }
+        if(kid.startsWith("http://www.yso.fi/onto/koko/")) {
+            kid = kid.substring("http://www.yso.fi/onto/koko/".length());
+        }
+        if(kid.equals(label)) {
+            kid = "tag";
+        }
+
         Topic tagTopic = tm.getTopic(si);
         if(tagTopic == null) {
             tagTopic = tm.createTopic();
@@ -246,6 +290,7 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
     protected boolean isValidData(String d) {
         if(d == null) return false;
         if(d.length() == 0) return false;
+        if("null".equalsIgnoreCase(d)) return false;
         return true;
     }
     
