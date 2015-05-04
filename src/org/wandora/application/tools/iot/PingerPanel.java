@@ -172,7 +172,7 @@ public class PingerPanel extends javax.swing.JPanel {
         sourceIsBinaryButton.setEnabled(!running);
         expiryToggle.setEnabled(!running);
         
-        saveToggle.setEnabled(saveOnTick && !running);
+        saveToggle.setEnabled(!running);
         saveFolderField.setEnabled(saveOnTick && !running);
         saveButton.setEnabled(saveOnTick && !running);
         
