@@ -98,7 +98,7 @@ public class PasteSIs extends AbstractWandoraTool implements WandoraTool {
         int answer = 0;
         boolean shouldAdd = true;
 
-        ArrayList<Object> dt = new ArrayList<Object>();
+        ArrayList<Object> dt = new ArrayList<>();
         while(topics.hasNext() && !forceStop()) {
             dt.add(topics.next());
         }
@@ -113,7 +113,7 @@ public class PasteSIs extends AbstractWandoraTool implements WandoraTool {
                         existingTopic = topic.getTopicMap().getTopic(locator);
                         shouldAdd = true;
                         if(confirm && existingTopic != null && !existingTopic.equals(topic)) {
-                            answer = WandoraOptionPane.showConfirmDialog(admin,"There exists another topic with SI\n" + locator.toExternalForm() + "\nMerge occurs if SI is added to the topic.\nDo you want to add the SI to the topic?","Confirm merge", WandoraOptionPane.YES_NO_OPTION);
+                            answer = WandoraOptionPane.showConfirmDialog(admin,"There exists another topic with subject identifier '" + locator.toExternalForm() + "'. Merge occurs if subject identifier is added to the topic. Do you want to add the subject identifier to the topic?","Confirm merge", WandoraOptionPane.YES_NO_OPTION);
                             if(answer != WandoraOptionPane.YES_OPTION) shouldAdd = false;
                         }
                         if(shouldAdd) {
@@ -123,7 +123,7 @@ public class PasteSIs extends AbstractWandoraTool implements WandoraTool {
                 }
             }
             catch (Exception e) {
-                answer = WandoraOptionPane.showConfirmDialog(admin,"Exception '" + e.getMessage() + "' occurred while adding SI\n" + locator.toExternalForm() + "\nWould you like to continue with the operation?","Continue?", WandoraOptionPane.YES_NO_OPTION);
+                answer = WandoraOptionPane.showConfirmDialog(admin,"Exception '" + e.getMessage() + "' occurred while adding subject identifier '" + locator.toExternalForm() + "'. Would you like to continue with the operation?","Continue?", WandoraOptionPane.YES_NO_OPTION);
                 if(answer != WandoraOptionPane.YES_OPTION) return;
             }
         }
@@ -133,19 +133,19 @@ public class PasteSIs extends AbstractWandoraTool implements WandoraTool {
 
     @Override
     public String getName() {
-        return "Paste SIs";
+        return "Paste subject identifiers";
     }
 
     @Override
     public String getDescription() {
-        return "Injects clipboard SIs i.e. URLs "+
-               "to current topics as subject identifiers. If execution results "+
-               "multiple topics with same SI merge occurs.";
+        return "Adds subject identifiers in clipboard "+
+               "to current topics. If same subject identifier is added to many topics, the "+
+               "topics are merged automatically by Wandora.";
     }
     
     
     public Collection<Locator> solveSIs(Wandora admin) {
-        ArrayList<Locator> SIs = new ArrayList<Locator>();
+        ArrayList<Locator> SIs = new ArrayList<>();
         String text = ClipboardBox.getClipboard();
         StringTokenizer st = new StringTokenizer(text, "\n");
         String sis = null;
@@ -159,7 +159,7 @@ public class PasteSIs extends AbstractWandoraTool implements WandoraTool {
                 SIs.add(sil);
             }
             catch(java.net.MalformedURLException mue){
-                int answer = WandoraOptionPane.showConfirmDialog(admin,"Malformed subject identifier given.\n" + sis + "\nWould you like to continue with the operation?","Malformed SI", WandoraOptionPane.YES_NO_OPTION);
+                int answer = WandoraOptionPane.showConfirmDialog(admin,"Malformed subject identifier given: '" + sis + "'. Would you like to continue with the operation?", "Malformed subject identifier", WandoraOptionPane.YES_NO_OPTION);
                 if(answer != WandoraOptionPane.YES_OPTION) return null;
             }
             catch(Exception e) {

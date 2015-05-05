@@ -72,12 +72,12 @@ public class DeleteSIs extends AbstractWandoraTool implements WandoraTool {
 
     @Override
     public String getName() {
-        return "Delete SIs";
+        return "Delete subject identifiers";
     }
 
     @Override
     public String getDescription() {
-        return "Removes subject identifiers in context topics.";
+        return "Removes subject identifiers in topics.";
     }
     
     
@@ -85,9 +85,7 @@ public class DeleteSIs extends AbstractWandoraTool implements WandoraTool {
     @Override
     public void execute(Wandora w, Context context) throws TopicMapException {
         this.wandora = w;
-        
         setDefaultLogger();
-        
         if(context instanceof SIContext) {
             Iterator sii = context.getContextObjects();
             if(sii.hasNext()) {
@@ -231,23 +229,19 @@ public class DeleteSIs extends AbstractWandoraTool implements WandoraTool {
     
     public boolean yesToAll = false;
     public boolean confirmDelete(Topic topic, Locator si) throws TopicMapException  {
-        String topicName = null;
-        if(topic != null) {
-            topicName = topic.getBaseName();
-            if(topicName == null) topicName = topic.getOneSubjectIdentifier().toExternalForm();
-        }
+        String topicName = TopicToString.toString(topic);
         
         if(yesToAll) {
             if(topicName != null) {
-                hlog("Deleting topic's '"+ topicName +"' SI '"+si.toExternalForm()+"'.");
+                hlog("Deleting topic's '"+ topicName +"' subject identifier '"+si.toExternalForm()+"'.");
             }
             else {
-                hlog("Deleting SI '"+si.toExternalForm()+"'.");
+                hlog("Deleting subject identifier '"+si.toExternalForm()+"'.");
             }
             return true;
         }
         else {
-            setState(INVISIBLE);
+            //setState(INVISIBLE);
 
             String confirmMessage;
             if(topicName != null) {
@@ -257,7 +251,7 @@ public class DeleteSIs extends AbstractWandoraTool implements WandoraTool {
                 confirmMessage = "Would you like delete subject identifier '"+si.toExternalForm()+"'?";
             }
             int answer = WandoraOptionPane.showConfirmDialog(wandora, confirmMessage, "Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
-            setState(VISIBLE);
+            //setState(VISIBLE);
             if(answer == WandoraOptionPane.YES_OPTION) {
                 return true;
             }

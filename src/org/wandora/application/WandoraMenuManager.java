@@ -1999,21 +1999,21 @@ public class WandoraMenuManager {
     
     public static Object[] getSubjectIdentifierTablePopupStruct() {
         return new Object[] {
-            "Open subject identifier...", new OpenSI(new SIContext()),
-            "Add subject identifier", new AddSubjectIdentifier(),
+            "Open...", new OpenSI(new SIContext()),
+            "Add...", new AddSubjectIdentifier(),
             "---",
             "Select all", new SelectAll(),
             "Deselect", new ClearSelection(),
             "Invert selection", new InvertSelection(),
             "---",
-            "Copy subject identifiers", new CopySIs(new SIContext()),
-            "Paste subject identifiers", new PasteSIs(new SIContext()),
+            "Copy", new CopySIs(new SIContext()),
+            "Paste", new PasteSIs(new SIContext()),
             "---",
-            "Duplicate selected subject identifiers", new DuplicateSI(new SIContext()),
-            "Remove selected subject identifiers", new DeleteSIs(new SIContext()),
-            "Remove subject identifier with regex...", new DeleteSIsWithRegex(new SIContext()),
-            "Flatten identity...", new FlattenSIs(),
-            "Expand identity", new Object[] {
+            "Duplicate", new DuplicateSI(new SIContext()),
+            "Remove...", new DeleteSIs(new SIContext()),
+            "Remove with regex...", new DeleteSIsWithRegex(new SIContext()),
+            "Flatten...", new FlattenSIs(),
+            "Expand", new Object[] {
                 "Expand with sameAs.org", new SameAsSubjectExpander(new SIContext()),
                 "Expand with sameAs.org store", new Object[] {
                     "Expand with 270a store", new SameAs270aStoreSubjectExpander(new SIContext()),
@@ -2037,7 +2037,7 @@ public class WandoraMenuManager {
                 "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(new SIContext()),
             },
             "---",
-            "Copy subject identifier to subject locator", new MakeSLWithSI(new SIContext()),
+            "Copy to subject locator", new MakeSLWithSI(new SIContext()),
         };
     }
     
@@ -2045,12 +2045,12 @@ public class WandoraMenuManager {
     
     public static Object[] getSubjectIdentifierLabelPopupStruct() {
         return new Object[] {
-            "Add subject identifier...", new AddSubjectIdentifier(new ApplicationContext()),
-            "Copy subject identifiers", new CopySIs(new ApplicationContext()),
-            "Paste subject identifiers", new PasteSIs(new ApplicationContext()),
+            "Add...", new AddSubjectIdentifier(new ApplicationContext()),
+            "Copy", new CopySIs(new ApplicationContext()),
+            "Paste", new PasteSIs(new ApplicationContext()),
             "---",
-            "Flatten identity...", new FlattenSIs(new ApplicationContext()),
-            "Expand identity", new Object[] {
+            "Flatten...", new FlattenSIs(new ApplicationContext()),
+            "Expand", new Object[] {
                 "Expand with sameAs.org", new SameAsSubjectExpander(new ApplicationContext()),
                 "Expand with sameAs.org store", new Object[] {
                     "Expand with 270a store", new SameAs270aStoreSubjectExpander(new ApplicationContext()),
@@ -2080,18 +2080,18 @@ public class WandoraMenuManager {
         return new Object[] {
             "Open...", new OpenSL(new ApplicationContext()),
             "---",
-            "Make subject locator with a file...", new PickFileSL(new ApplicationContext()),
-            "Check subject locator...", new SubjectLocatorChecker(new ApplicationContext()),
-            "Download subject locator...", new DownloadSubjectLocators(new ApplicationContext()),
+            "Set a file...", new PickFileSL(new ApplicationContext()),
+            "Check...", new SubjectLocatorChecker(new ApplicationContext()),
+            "Download...", new DownloadSubjectLocators(new ApplicationContext()),
             //"Move to fileserver", new MoveSubjectLocators(new ApplicationContext()),
                     // new ContextToolWrapper(
                     // parent.getToolManager().getConfigurableTool(MoveSubjectLocators.class,"movesl","Move SL to fileserver"),
                     // new ApplicationContext()),
-            "Upload subject locator resource to Mediawiki...", new MediawikiSubjectLocatorUploader(new ApplicationContext()),
+            "Upload to Mediawiki...", new MediawikiSubjectLocatorUploader(new ApplicationContext()),
             "---",
             "Extract with", WandoraMenuManager.getSubjectLocatorExtractorMenu(Wandora.getWandora(), new ApplicationContext()),
             "---", 
-            "Remove subject locator...", new SubjectLocatorRemover(new ApplicationContext()),
+            "Remove...", new SubjectLocatorRemover(new ApplicationContext()),
             /*
              "---",
             "Regex replace SL...", new RegexReplacer("single_sl"),
