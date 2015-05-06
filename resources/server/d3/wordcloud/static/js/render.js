@@ -98,18 +98,18 @@ function init(words,font,spiral,scale,rotOr,rotFrom,rotTo){
             queryString,
             newHref,
             queryStringPattern = new RegExp(/\?.*/),
-            siPattern = new RegExp(/&si=([^&#]*)/);
+            siPattern = new RegExp(/si=([^&#]*)/);
 
             if(queryStringPattern.test(oldHref)){ // has a query string
                 queryString = queryStringPattern.exec(oldHref);
                 if(siPattern.test(queryString)){ // has si argument
                     var oldSI = siPattern.exec(queryString)[0];
-                    newHref = oldHref.replace(oldSI,"&si="+escape(d.SI));
+                    newHref = oldHref.replace(oldSI,"si="+escape(d.SI));
                 } else {
-                    newHref = oldHref + "&si="+escape(d.SI);
+                    newHref = oldHref + "?si="+escape(d.SI);
                 }
             } else {
-                newHref = oldHref + "?&si="+escape(d.SI);
+                newHref = oldHref + "?si="+escape(d.SI);
             }
             window.location.assign(newHref);
         }

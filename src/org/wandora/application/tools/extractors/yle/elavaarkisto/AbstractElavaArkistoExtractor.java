@@ -59,6 +59,7 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
     public static final String ELAVA_ARKISTO_SI = "http://wandora.org/si/yle/elava-arkisto";
     
     public static final String ELAVA_ARKISTO_ARTICLE_TYPE_SI = ELAVA_ARKISTO_SI+"/article";
+    public static final String ELAVA_ARKISTO_ARTICLE_ID_TYPE_SI = ELAVA_ARKISTO_SI+"/article-id";
     public static final String ELAVA_ARKISTO_ARTICLE_PUBLISHED_TYPE_SI = ELAVA_ARKISTO_SI+"/article-published";
     public static final String ELAVA_ARKISTO_SERVICE_TYPE_SI = ELAVA_ARKISTO_SI+"/service";
     public static final String ELAVA_ARKISTO_TAG_TYPE_SI = ELAVA_ARKISTO_SI+"/tag";
@@ -156,6 +157,12 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
     }
     
     
+    public Topic getElavaArkistoArticleIdType(TopicMap tm) throws TopicMapException {
+        Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_ARTICLE_ID_TYPE_SI, "Elava-arkisto article id", getElavaArkistoType(tm), tm);
+        return type;
+    }
+    
+    
     public Topic getElavaArkistoServiceTopic(String id, TopicMap tm) throws TopicMapException {
         String si = ELAVA_ARKISTO_SERVICE_TYPE_SI+"/"+urlEncode(id);
         Topic serviceTopic = null;
@@ -165,6 +172,7 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
                 serviceTopic = tm.createTopic();
                 serviceTopic.addSubjectIdentifier(new Locator(si));
                 serviceTopic.addType(getElavaArkistoServiceType(tm));
+                serviceTopic.setBaseName(id + " (YLE service)");
             }
         }
         catch(Exception e) {
@@ -208,7 +216,7 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
     public Topic getElavaArkistoTagTopic(String kid, String label, TopicMap tm) throws TopicMapException {       
         try {
             // Fix label encoding.
-            label = new String(label.getBytes(), "UTF-8");
+            // label = new String(label.getBytes(), "UTF-8");
         }
         catch(Exception e) {}
         

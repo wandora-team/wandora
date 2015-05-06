@@ -119,6 +119,7 @@ public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtra
         
         for(CSVParser.Row row : table) {
             setProgress(i++);
+            if(i == 1) continue; // Skip title row
             if(row.size() == 6) {
                 try {
                     String aid = stringify(row.get(0));
@@ -156,7 +157,7 @@ public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtra
                         Topic deltaIdTypeTopic = getElavaArkistoArticleDeltaIdType(tm);
                         Topic langIndependent = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
                         if(deltaIdTypeTopic != null && langIndependent != null) {
-                            articleTopic.setData(deltaIdTypeTopic, langIndependent, arkkiid);
+                            articleTopic.setData(deltaIdTypeTopic, langIndependent, deltaid);
                         }
                     }
                     if(EXTRACT_SERVICE && isValidData(service)) {

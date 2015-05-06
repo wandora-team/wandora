@@ -110,30 +110,35 @@ public class MediaArticleExtractor extends AbstractElavaArkistoExtractor {
         
         for(CSVParser.Row row : table) {
             setProgress(i++);
+            if(i == 1) continue; // Skip column labels
             if(row.size() == 3) {
                 try {
                     String aid = stringify(row.get(0));
                     String service = stringify(row.get(1));
                     String mid = stringify(row.get(2));
                     
-                    Topic articleTopic = getElavaArkistoArticleTopic(aid, null, tm);
-                    Topic articleType = getElavaArkistoArticleType(tm);
+                    if(isValidData(aid) && isValidData(mid)) {
+                        Topic articleTopic = getElavaArkistoArticleTopic(aid, null, tm);
+                        Topic articleType = getElavaArkistoArticleType(tm);
 
-                    Topic mediaTopic = getElavaArkistoMediaTopic(mid, tm);
-                    Topic mediaType = getElavaArkistoMediaType(tm);
-                    if(mediaTopic != null && mediaType != null) {
-                        Association a = tm.createAssociation(mediaType);
-                        a.addPlayer(articleTopic, articleType);
-                        a.addPlayer(mediaTopic, mediaType);
-                        
-                        if(EXTRACT_SERVICE && isValidData(service)) {
-                            Topic serviceTopic = getElavaArkistoServiceTopic(service, tm);
-                            Topic serviceType = getElavaArkistoServiceType(tm);
-                            if(serviceTopic != null && serviceType != null) {
-                                a.addPlayer(serviceTopic, serviceType);
+                        Topic mediaTopic = getElavaArkistoMediaTopic(mid, tm);
+                        Topic mediaType = getElavaArkistoMediaType(tm);
+                        if(mediaTopic != null && mediaType != null) {
+                            Association a = tm.createAssociation(mediaType);
+                            a.addPlayer(articleTopic, articleType);
+                            a.addPlayer(mediaTopic, mediaType);
+
+                            if(EXTRACT_SERVICE && isValidData(service)) {
+                                Topic serviceTopic = getElavaArkistoServiceTopic(service, tm);
+                                Topic serviceType = getElavaArkistoServiceType(tm);
+                                if(serviceTopic != null && serviceType != null) {
+                                    a.addPlayer(serviceTopic, serviceType);
+                                }
                             }
                         }
-                    
+                    }
+                    else {
+                        log("Invalid identifier in CSV row. Skipping the row.");
                     }
                 }
                 catch(Exception e) {
