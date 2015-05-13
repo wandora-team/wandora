@@ -111,6 +111,7 @@ public class PingerPanel extends javax.swing.JPanel {
         delayField.setInputVerifier(verifier);
         
         toggleExpirationFieldEnabled();
+        setSetupEnabled(isRunning);
     }
 
     protected void openInOwnWindow(Wandora w) {
@@ -133,9 +134,14 @@ public class PingerPanel extends javax.swing.JPanel {
         
         if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
             
-            saveFolder = chooser.getCurrentDirectory();
+            saveFolder = chooser.getSelectedFile();
             saveFolderField.setText(saveFolder.getAbsolutePath());
+        } else if(saveFolder == null){ // saveFolder is invalid, revert to default
+            saveToggle.setSelected(false);
+            saveButton.setEnabled(false);
         }
+        
+        
         
     }
     
@@ -172,7 +178,7 @@ public class PingerPanel extends javax.swing.JPanel {
         sourceIsBinaryButton.setEnabled(!running);
         expiryToggle.setEnabled(!running);
         
-        saveToggle.setEnabled(saveOnTick && !running);
+        saveToggle.setEnabled(!running);
         saveFolderField.setEnabled(saveOnTick && !running);
         saveButton.setEnabled(saveOnTick && !running);
         
@@ -741,6 +747,8 @@ public class PingerPanel extends javax.swing.JPanel {
         boolean selected = saveToggle.isSelected();
         saveFolderField.setEnabled(selected);
         saveButton.setEnabled(selected);
+        
+        if(selected && saveFolder == null) openFileChooser();
     }//GEN-LAST:event_saveToggleActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed

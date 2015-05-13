@@ -29,8 +29,10 @@ package org.wandora.application.gui;
 
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import javax.swing.border.*;
 import javax.swing.*;
+import javax.swing.text.DefaultEditorKit;
 import org.wandora.application.gui.filechooser.WPRFileChooser;
 import org.wandora.application.gui.simple.*;
 
@@ -103,7 +105,18 @@ public class UIConstants {
     }
 
 
-
+    private static final String[] COPY_PASTE_COMPONENTS = {
+        "TextField.focusInputMap",
+        "PasswordField.focusInputMap",
+        "TextArea.focusInputMap",
+        "TextPane.focusInputMap",
+        "EditorPane.focusInputMap",
+        "FormattedTextField.focusInputMap",
+        "List.focusInputMap",
+        "Table.ancestorInputMap",
+        "Tree.focusInputMap"
+    };
+    
     // http://deeploveprogram.pbworks.com/w/page/17134461/UIManager,%20set%20default%20look%20and%20feel
     
     public static void initializeGUI() {
@@ -154,6 +167,15 @@ public class UIConstants {
             UIManager.put("Slider.VerticalThumbIcon", UIBox.getIcon("resources/gui/icons/slider_thumb_vertical.png"));
             
             UIManager.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
+            
+            for (String component : COPY_PASTE_COMPONENTS) {
+                InputMap im = (InputMap) UIManager.get(component);
+                int shortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcutMask), DefaultEditorKit.copyAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcutMask), DefaultEditorKit.pasteAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, shortcutMask), DefaultEditorKit.cutAction);
+            }
+            
         } 
         catch (UnsupportedLookAndFeelException e) {
            e.printStackTrace();

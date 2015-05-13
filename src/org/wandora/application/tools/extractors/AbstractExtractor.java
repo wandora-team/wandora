@@ -132,28 +132,63 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         return false;
     }
     public boolean useURLCrawler() {
-        return true;
+        return false;
     }
 
 
+    // ------------------------------------------------------- DropExtractor ---
+    
+    
+    public boolean instantDropHandle() {
+        return false;
+    }
     
     
     @Override
-    public void dropExtract(File[] files, Wandora admin) throws TopicMapException {
-        this.forceFiles = files;
-        this.execute(admin);
-    }
-    @Override
-    public void dropExtract(String[] urls, Wandora admin) throws TopicMapException {
-        this.forceUrls = urls;
-        this.execute(admin);
-    }
-    @Override
-    public void dropExtract(String content, Wandora admin) throws TopicMapException {
-        this.forceContent = content;
-        this.execute(admin);
+    public void dropExtract(File[] files) throws TopicMapException {
+        if(instantDropHandle()) {
+            this.wandora = Wandora.getWandora();
+            topicMap = wandora.getTopicMap();
+            handleFiles(files, topicMap);
+            wandora.doRefresh();
+        }
+        else {
+            this.forceFiles = files;
+            this.execute(Wandora.getWandora());
+        }
     }
     
+    @Override
+    public void dropExtract(String[] urls) throws TopicMapException {
+        if(instantDropHandle()) {
+            this.wandora = Wandora.getWandora();
+            topicMap = wandora.getTopicMap();
+            handleUrls(urls, topicMap);
+            wandora.doRefresh();
+        }
+        else {
+            this.forceUrls = urls;
+            this.execute(Wandora.getWandora());
+        }
+    }
+    
+    @Override
+    public void dropExtract(String content) throws TopicMapException {
+        if(instantDropHandle()) {
+            this.wandora = Wandora.getWandora();
+            topicMap = wandora.getTopicMap();
+            handleContent(content, topicMap);
+            wandora.doRefresh();
+        }
+        else {
+            this.forceContent = content;
+            this.execute(Wandora.getWandora());
+        }
+    }
+    
+    
+    
+    // -------------------------------------------------------------------------
     
     
     public String getGUIText(int textType, Object[] params) {

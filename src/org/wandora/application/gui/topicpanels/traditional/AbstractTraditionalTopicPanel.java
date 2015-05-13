@@ -310,7 +310,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                             tcm.removeColumn(tcm.getColumn(0));
                         }
                         for(int j=0; j<columnProps.size(); j++) {
-                            tcm.addColumn(sortedTableColumns[j]);
+                            if(sortedTableColumns[j] != null) {
+                                tcm.addColumn(sortedTableColumns[j]);
+                            }
                         }
                     }
                     if(!selectedAssociationWithRoles.isEmpty()) {

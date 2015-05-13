@@ -60,6 +60,7 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
         var data_email = #parse( "${templatesdir}data_email.js" )
         var data_calendar = #parse( "${templatesdir}data_calendar.js" )
         var data_directory = #parse( "${templatesdir}data_directory.js" )
+        var data_yle_elava_arkisto = #parse( "${templatesdir}data_yle_elava_arkisto_article.js" )
 
         var tl;
         var bandInfos;
@@ -145,6 +146,7 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
             combinedEventSource.loadJSON(data_calendar, document.location.href);
             combinedEventSource.loadJSON(data_guardian, document.location.href);
             combinedEventSource.loadJSON(data_directory, document.location.href);
+            combinedEventSource.loadJSON(data_yle_elava_arkisto, document.location.href);
             tl.layout();
             tl.hideLoadingMessage();
 

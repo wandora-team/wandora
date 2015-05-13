@@ -102,6 +102,7 @@ public class SimpleCSVAssociationExtractor extends AbstractCSVExtractor {
             if(i == 0) {
                 a.remove();
             }
+            if(forceStop()) break;
         }
         return true;
     }

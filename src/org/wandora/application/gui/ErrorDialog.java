@@ -32,9 +32,13 @@ package org.wandora.application.gui;
 
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextPane;
 import org.wandora.application.ErrorMessages;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -57,7 +61,7 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, Throwable e) {
         super(w, true);
         initComponents();
-        this.setSize(700,400);
+        this.setSize(800,400);
         w.centerWindow(this);
         setTitle("Error");
         setError(e);
@@ -68,7 +72,7 @@ public class ErrorDialog extends javax.swing.JDialog {
     public ErrorDialog(Wandora w, boolean modal, Throwable e, String message) {
         super(w, modal);
         initComponents();
-        this.setSize(700,400);
+        this.setSize(800,400);
         setTitle("Failure");
         w.centerWindow(this);
         okButton.setVisible(false);
@@ -80,7 +84,7 @@ public class ErrorDialog extends javax.swing.JDialog {
         super(w, modal);
         initComponents();
         setTitle("Failure");
-        this.setSize(700,400);
+        this.setSize(800,400);
         w.centerWindow(this);
         closeButton.setText(no);
         if(yes!=null) okButton.setText(yes);
@@ -136,7 +140,7 @@ public class ErrorDialog extends javax.swing.JDialog {
         messageLabel = new SimpleLabel();
         stacktracePanel = new javax.swing.JPanel();
         stacktraceScrollPane = new javax.swing.JScrollPane();
-        stacktraceTextPane = new javax.swing.JTextPane();
+        stacktraceTextPane = new StackTraceTextPane();
         buttonPanel = new javax.swing.JPanel();
         buttonpanelFillerPanel = new javax.swing.JPanel();
         okButton = new SimpleButton();
@@ -277,4 +281,55 @@ public class ErrorDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane stacktraceScrollPane;
     private javax.swing.JTextPane stacktraceTextPane;
     // End of variables declaration//GEN-END:variables
+
+
+
+
+
+    public class StackTraceTextPane extends JTextPane implements ActionListener {
+        
+        
+        public StackTraceTextPane() {
+            super();
+            
+            JPopupMenu popup;
+            Object[] popupStruct = new Object[] {
+                "Copy", UIBox.getIcon("gui/icons/copy.png"),
+                "Select all", UIBox.getIcon("gui/icons/select_all.png"),
+                "Print...", UIBox.getIcon("gui/icons/print.png"),
+            };
+   
+            popup = UIBox.makePopupMenu(popupStruct, this);
+            setComponentPopupMenu(popup);
+        }
+        
+        
+        @Override
+        public boolean getScrollableTracksViewportWidth() {
+            return false;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e == null) return;
+            String c = e.getActionCommand();
+
+            if("Copy".equals(c)) {
+                this.copy();
+            }
+            else if("Select all".equals(c)) {
+                this.selectAll();
+            }
+            else if("Print...".equals(c)) {
+                try {
+                    this.print();
+                }
+                catch(Exception ex) {
+                    Wandora.getWandora().handleError(ex);
+                }
+            }
+        }
+        
+    }
+
 }

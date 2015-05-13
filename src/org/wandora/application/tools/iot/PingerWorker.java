@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.commons.io.IOUtils;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.extractors.ExtractHelper;

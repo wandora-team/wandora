@@ -219,7 +219,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                         String c = actionEvent.getActionCommand();
                         try {
                             String s = getSelection();
-                            ((DropExtractor) myTool).dropExtract(s, admin);
+                            ((DropExtractor) myTool).dropExtract(s);
                             //System.out.println("extracting " + s);
                             //System.out.println("extractor " + myTool);
                         }
@@ -402,7 +402,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                         String c = actionEvent.getActionCommand();
                         try {
                             String url = currentHyperLink.toExternalForm();
-                            ((DropExtractor) myTool).dropExtract(new String[] { url }, admin);
+                            ((DropExtractor) myTool).dropExtract(new String[] { url });
                             System.out.println("extracting url " + url);
                             System.out.println("extractor " + myTool);
                         }

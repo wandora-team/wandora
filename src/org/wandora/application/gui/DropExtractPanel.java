@@ -332,13 +332,13 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     }
     
     
-    private void acceptFiles(java.util.List<File> files) throws Exception {
+    private void dropExtractFiles(java.util.List<File> files) throws Exception {
         if(tool != null) {
             if(files != null && files.size() > 0) {
                 setLogger(tool);
                 if(tool instanceof DropExtractor) {
                     try {
-                        ((DropExtractor) tool).dropExtract(files.toArray(new File[files.size()]), wandora);
+                        ((DropExtractor) tool).dropExtract(files.toArray(new File[files.size()]));
                     }
                     catch(Exception exx) { 
                         exx.printStackTrace();
@@ -355,13 +355,13 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     }
     
     
-    private void acceptUrls(java.util.List<String> urls) throws Exception {
+    private void dropExtractUrls(java.util.List<String> urls) throws Exception {
         if(tool != null) {
             if(urls != null && urls.size() > 0) {
                 setLogger(tool);
                 if(tool instanceof DropExtractor) {
                     try {
-                        ((DropExtractor) tool).dropExtract(urls.toArray(new String[urls.size()]), wandora);
+                        ((DropExtractor) tool).dropExtract(urls.toArray(new String[urls.size()]));
                     }
                     catch(Exception exx) { 
                         exx.printStackTrace();
@@ -375,13 +375,13 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     }
     
     
-    private void acceptString(String content) throws Exception {
+    private void dropExtractString(String content) throws Exception {
         if(tool != null) {
             if(content != null) {
                 setLogger(tool);
                 if(tool instanceof DropExtractor) {
                     try {
-                        ((DropExtractor) tool).dropExtract(content, wandora);
+                        ((DropExtractor) tool).dropExtract(content);
                     }
                     catch(Exception exx) { 
                         exx.printStackTrace();
@@ -395,14 +395,14 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     }
     
         
-    private void acceptHTMLString(String htmlContent) throws Exception {
+    private void dropExtractHTMLString(String htmlContent) throws Exception {
         if(tool != null) {
             if(htmlContent != null) {
                 setLogger(tool);
                 if(tool instanceof DropExtractor) {
                     try {
                         System.out.println("PROCESSING HTML CONTENT!:" + htmlContent);
-                        ((DropExtractor) tool).dropExtract(htmlContent, wandora);
+                        ((DropExtractor) tool).dropExtract(htmlContent);
                     }
                     catch(Exception exx) { 
                         exx.printStackTrace();
@@ -460,7 +460,7 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
                             if(tr.isDataFlavorSupported(contentTypeFlavor)) {
                                 System.out.println("FOUND TEXT/HTML AS A DATA FLAVOR!!!!");
                                 String data = (String)tr.getTransferData(contentTypeFlavor);
-                                acceptHTMLString(data);
+                                dropExtractHTMLString(data);
                                 handled=true;
                                 e.dropComplete(true);
                                 break;
@@ -474,7 +474,7 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
                         //e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                         java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
                         if(tool != null) {
-                            acceptFiles(files);
+                            dropExtractFiles(files);
                             e.dropComplete(true);
                         }
                     }
@@ -509,7 +509,7 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
                                         }
                                         catch(IllegalArgumentException iae){iae.printStackTrace();}
                                     }
-                                    acceptFiles(files);
+                                    dropExtractFiles(files);
                                 }
                                 else{
                                     java.util.List<String> urls=new java.util.ArrayList<String>();
@@ -519,14 +519,14 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
                                         }
                                         catch(IllegalArgumentException iae){iae.printStackTrace();}
                                     }
-                                    acceptUrls(urls);                            
+                                    dropExtractUrls(urls);                            
                                 }
                                 handled=true;
                             }
 
                             if(!handled){
                                 System.out.println("Trying extractor");
-                                acceptString(data);    
+                                dropExtractString(data);    
                                 handled=true;
                             }
 
