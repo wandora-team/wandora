@@ -59,7 +59,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
      */
     // To avoid constant folding by the compiler,
     // this field must *not* be final
-    public static String REQUESTED_API_VERSION = "1.5.8";  // !final
+    public static String REQUESTED_API_VERSION = "1.7.6";  // !final
  
     private static final String loggerFactoryClassStr
         = WandoraLoggerFactory.class.getName();

@@ -132,6 +132,7 @@ public class Content extends ModelBase {
                 .appendNotNull("height", height<0?null:height)
                 .appendNotNull("format", format)
                 .appendNotNull("motivation", motivation)
+                .appendNotNull("on",on==null?null:on.getId())
                 .append("resource", getResourceJsonLD());
     }
     
