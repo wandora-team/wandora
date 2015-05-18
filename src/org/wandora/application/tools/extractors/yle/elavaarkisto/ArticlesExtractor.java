@@ -73,7 +73,7 @@ public class ArticlesExtractor extends AbstractElavaArkistoExtractor {
     
     @Override
     public String getDescription() {
-        return "YLE Elava arkisto terms extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/articles.csv";
+        return "YLE Elava arkisto article extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/articles.csv";
     }
     
     
@@ -199,7 +199,10 @@ public class ArticlesExtractor extends AbstractElavaArkistoExtractor {
             else {
                 System.out.println("Row has invalid number of values. Skipping the row.");
             }
-            if(forceStop()) break;
+            if(forceStop()) {
+                log("Extraction stopped.");
+                break;
+            }
         }
         return true;
     }
@@ -223,3 +226,30 @@ public class ArticlesExtractor extends AbstractElavaArkistoExtractor {
     }
     
 }
+
+
+
+/*
+
+Example of extracted CSV:
+
+AID,SERVICE,URL,LANGUAGE,TITLE,PUBLISHED
+7-916094,arkivet,http://svenska.yle.fi/artikel/2015/04/08/eurovisionen-ar-1974,sv,"Eurovisionen år 1974",2015-04-08T18:39:57+03:00
+7-915599,arkivet,http://svenska.yle.fi/artikel/2015/04/07/eurovisionen-ar-1973,sv,"Eurovisionen år 1973",2015-04-07T19:23:59+03:00
+7-915523,arkivet,http://svenska.yle.fi/artikel/2015/04/07/eurovisionen-ar-1972,sv,"Eurovisionen år 1972",2015-04-07T16:41:27+03:00
+7-913620,arkivet,http://svenska.yle.fi/artikel/2015/04/06/43-000-ord-men-ingen-karlek,sv,"43 000 ord men ingen kärlek",2015-04-06T13:00:00+03:00
+7-913066,arkivet,http://svenska.yle.fi/artikel/2015/04/06/historiekollen-landsbygdspartiet-blev-sannfinlandskt,sv,"Historiekollen: Landsbygdspartiet blev Sannfinländskt",2015-04-06T09:00:00+03:00
+7-915098,arkivet,http://svenska.yle.fi/artikel/2015/04/06/eurovisionen-ar-1971,sv,"Eurovisionen år 1971",2015-04-06T03:36:42+03:00
+
+
+where
+
+    AID = artikkelin Yle ID (Article ID)
+    SERVICE = artikkelin lähde (Elävä arkisto vai Arkivet)
+    URL = artikkelin HTML-version osoite
+    LANGUAGE = artikkelin kieli (ISO 639-1 -muodossa: fi tai sv)
+    TITLE = artikkelin otsikko
+    PUBLISHED = julkaisuaika (ISO 8601 -muoto)
+
+
+*/
