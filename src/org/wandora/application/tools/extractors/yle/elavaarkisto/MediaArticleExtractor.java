@@ -62,7 +62,7 @@ public class MediaArticleExtractor extends AbstractElavaArkistoExtractor {
     
     @Override
     public String getDescription() {
-        return "YLE Elava arkisto terms extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/media-article.csv";
+        return "YLE Elava arkisto media-article extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/media-article.csv";
     }
     
     
@@ -110,30 +110,35 @@ public class MediaArticleExtractor extends AbstractElavaArkistoExtractor {
         
         for(CSVParser.Row row : table) {
             setProgress(i++);
+            if(i == 1) continue; // Skip column labels
             if(row.size() == 3) {
                 try {
                     String aid = stringify(row.get(0));
                     String service = stringify(row.get(1));
                     String mid = stringify(row.get(2));
                     
-                    Topic articleTopic = getElavaArkistoArticleTopic(aid, null, tm);
-                    Topic articleType = getElavaArkistoArticleType(tm);
+                    if(isValidData(aid) && isValidData(mid)) {
+                        Topic articleTopic = getElavaArkistoArticleTopic(aid, null, tm);
+                        Topic articleType = getElavaArkistoArticleType(tm);
 
-                    Topic mediaTopic = getElavaArkistoMediaTopic(mid, tm);
-                    Topic mediaType = getElavaArkistoMediaType(tm);
-                    if(mediaTopic != null && mediaType != null) {
-                        Association a = tm.createAssociation(mediaType);
-                        a.addPlayer(articleTopic, articleType);
-                        a.addPlayer(mediaTopic, mediaType);
-                        
-                        if(EXTRACT_SERVICE && isValidData(service)) {
-                            Topic serviceTopic = getElavaArkistoServiceTopic(service, tm);
-                            Topic serviceType = getElavaArkistoServiceType(tm);
-                            if(serviceTopic != null && serviceType != null) {
-                                a.addPlayer(serviceTopic, serviceType);
+                        Topic mediaTopic = getElavaArkistoMediaTopic(mid, tm);
+                        Topic mediaType = getElavaArkistoMediaType(tm);
+                        if(mediaTopic != null && mediaType != null) {
+                            Association a = tm.createAssociation(mediaType);
+                            a.addPlayer(articleTopic, articleType);
+                            a.addPlayer(mediaTopic, mediaType);
+
+                            if(EXTRACT_SERVICE && isValidData(service)) {
+                                Topic serviceTopic = getElavaArkistoServiceTopic(service, tm);
+                                Topic serviceType = getElavaArkistoServiceType(tm);
+                                if(serviceTopic != null && serviceType != null) {
+                                    a.addPlayer(serviceTopic, serviceType);
+                                }
                             }
                         }
-                    
+                    }
+                    else {
+                        log("Invalid identifier in CSV row. Skipping the row.");
                     }
                 }
                 catch(Exception e) {
@@ -144,10 +149,42 @@ public class MediaArticleExtractor extends AbstractElavaArkistoExtractor {
             else {
                 System.out.println("Row has invalid number of values. Skipping the row.");
             }
-            if(forceStop()) break;
+            if(forceStop()) {
+                log("Extraction stopped.");
+                break;
+            }
         }
         return true;
     }
     
     
 }
+
+
+
+/*
+
+Example of extracted CSV:
+
+AID,SERVICE,MID
+7-908526,arkivet,26-819
+7-889791,arkivet,26-108100
+7-889791,arkivet,26-108101
+7-889791,arkivet,26-108102
+7-889791,arkivet,26-108103
+7-889791,arkivet,26-108097
+7-886631,arkivet,26-64006
+7-886631,arkivet,26-108419
+7-886631,arkivet,26-108423
+7-886631,arkivet,26-108420
+
+
+
+where
+
+    AID = Artikkelin Yle ID (Article ID)
+    SERVICE = Elävä arkisto vai Arkivet
+    MID = Median Yle ID (Media ID)
+
+
+*/

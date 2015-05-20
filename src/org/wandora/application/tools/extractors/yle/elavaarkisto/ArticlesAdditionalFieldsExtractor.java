@@ -71,7 +71,7 @@ public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtra
     
     @Override
     public String getDescription() {
-        return "YLE Elava arkisto terms extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/articles-additional-fields.csv";
+        return "YLE Elava arkisto article additional field extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/articles-additional-fields.csv";
     }
     
     
@@ -119,6 +119,7 @@ public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtra
         
         for(CSVParser.Row row : table) {
             setProgress(i++);
+            if(i == 1) continue; // Skip title row
             if(row.size() == 6) {
                 try {
                     String aid = stringify(row.get(0));
@@ -156,7 +157,7 @@ public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtra
                         Topic deltaIdTypeTopic = getElavaArkistoArticleDeltaIdType(tm);
                         Topic langIndependent = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
                         if(deltaIdTypeTopic != null && langIndependent != null) {
-                            articleTopic.setData(deltaIdTypeTopic, langIndependent, arkkiid);
+                            articleTopic.setData(deltaIdTypeTopic, langIndependent, deltaid);
                         }
                     }
                     if(EXTRACT_SERVICE && isValidData(service)) {
@@ -178,7 +179,10 @@ public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtra
             else {
                 System.out.println("Row has invalid number of values. Skipping the row.");
             }
-            if(forceStop()) break;
+            if(forceStop()) {
+                log("Extraction stopped.");
+                break;
+            }
         }
         return true;
     }
@@ -217,3 +221,27 @@ public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtra
         return type;
     }
 }
+
+
+/*
+
+Example of extracted CSV:
+
+AID,SERVICE,CONTRIBUTORS,EDITORS,DELTAID,ARKKIID
+7-884577,arkivet,"Fredrik Hackman, Ywe Jalander, Öivind Nyquist, Jyrki Rapp",RTV,61796,5720
+20-87062,elava-arkisto,,,82350,
+20-108693,elava-arkisto,"Leike 1: Hannu Vilpponen (tuot toim), Tauno Jarva (ohj), Risto Heikkilä (toimsiht), Leo Lehdistö & Seppo Heikki Salonen & Arne Wessberg & Erkki Saksa (toim), Pirjo Isomäki (kuvsiht). Leike 2: Jarmo Porola (tuot ohj toim), Matti Rosvall (toim), Eija Pietarinen (kuvsiht). Leike 3: Kirsti Wallasvaara (juont).","TV2 Ajankohtaistoimitus. TV2 Viihdetoimitus.",48220,9230
+20-94053,elava-arkisto,"LEENA VIHTONEN (TUOT), ANNELI SJÖSTEDT (KUVSIHT). Matti Rosvall & Jouko Konttinen & Jarmo Porola (toim). Ulla Paulaniemi (kuvsiht). Mikko Alatalo (juont).","RTV Viihdetoimitus. TV2 Viihdetoimitus.",25733,4508
+
+
+where:
+
+    AID = artikkelin Yle ID (Article ID)
+    SERVICE = artikkelin lähde (Elävä arkisto vai Arkivet)
+    CONTRIBUTORS = artikkelin medioiden tekijät
+    EDITORS = artikkelin medioiden toimitukset
+    DELTAID = legacy ID
+    ARKKIID = legacy ID
+
+
+*/

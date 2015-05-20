@@ -220,7 +220,7 @@ public class SparqlExtractor extends AbstractExtractor {
             }
             else if("RDF/XML".equalsIgnoreCase(format)) {
                 System.out.println("Processing SPARQL results set as RDF/XML");
-                results = ResultSetFactory.load(in, ResultSetFormat.syntaxRDF_XML);
+                results = ResultSetFactory.load(in, ResultsFormat.FMT_RDF_XML);
             }
         }
         return results;
