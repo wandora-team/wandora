@@ -307,6 +307,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/extractors/stands4</path>
       <path>org/wandora/application/tools/extractors/marcxml</path>
       <path>org/wandora/application/tools/extractors/facebook</path>
+      <path>org/wandora/application/tools/extractors/facebook/v2</path>
       <path>org/wandora/application/tools/extractors/omakaupunki</path>
       <path>org/wandora/application/tools/extractors/palvelukartta</path>
       <path>org/wandora/application/tools/extractors/palvelukartta_v2</path>
@@ -745,6 +746,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>Facebook graph extractor...</name>
                <class>org.wandora.application.tools.extractors.facebook.FacebookAPIExtractor</class>
+            </item>
+            <item>
+               <name>Facebook graph extractor v2...</name>
+               <class>org.wandora.application.tools.extractors.facebook.v2.FBGraphExtractor</class>
             </item>
             <item>
                <name>Reddit extractor...</name>
