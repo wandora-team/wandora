@@ -30,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -60,6 +61,7 @@ import org.wandora.utils.CSVParser;
 
 public class MediaExtractor extends AbstractElavaArkistoExtractor {
     
+    public static boolean CREATE_MID_IF_MISSING = true;
     
 
     @Override
@@ -122,11 +124,25 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
             if(row.size() == 29) {
                 try {
                     String mid = stringify(row.get(0));
+                    boolean midIsReal = true;
+                    
+                    if(CREATE_MID_IF_MISSING && !isValidData(mid)) {
+                        mid = System.currentTimeMillis() + "-" + Math.round(Math.random() * 9999);
+                        log("Media has no MID identifier. Creating MID '"+mid+"' for the media.");
+                        midIsReal = false;
+                    }
                     
                     if(isValidData(mid)) {
                         Topic mediaTopic = getElavaArkistoMediaTopic(mid, tm);
                         Topic mediaType = getElavaArkistoMediaType(tm);
                         if(mediaTopic != null && mediaType != null) {
+                            if(midIsReal) {
+                                Topic midType = getElavaArkistoMediaMidType(tm);
+                                Topic enLang = tm.getTopic(XTMPSI.getLang("en"));
+                                if(midType != null && enLang != null) {
+                                    mediaTopic.setData(midType, enLang, mid);
+                                }
+                            }
                             
                             String mediatype = stringify(row.get(1));
                             if(isValidData(mediatype)) {
@@ -233,9 +249,37 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
                             }
                             
                             String classificationAnalytics = stringify(row.get(11));
+                            if(isValidData(classificationAnalytics)) {
+                                Topic classificationAnalyticsType = getElavaArkistoMediaClassificationAnalyticsType(tm);
+                                Topic classificationAnalyticsTopic = getElavaArkistoMediaClassificationAnalyticsTopic(classificationAnalytics, tm);
+                                if(classificationAnalyticsType != null && classificationAnalyticsTopic != null) {
+                                    Association a = tm.createAssociation(classificationAnalyticsType);
+                                    a.addPlayer(classificationAnalyticsTopic, classificationAnalyticsType);
+                                    a.addPlayer(mediaTopic, mediaType);
+                                }
+                            }
+                            
                             String classificationMainClass = stringify(row.get(12));
+                            if(isValidData(classificationMainClass)) {
+                                Topic classificationMainClassType = getElavaArkistoMediaClassificationMainClassType(tm);
+                                Topic classificationMainClassTopic = getElavaArkistoMediaClassificationMainClassTopic(classificationMainClass, tm);
+                                if(classificationMainClassType != null && classificationMainClassTopic != null) {
+                                    Association a = tm.createAssociation(classificationMainClassType);
+                                    a.addPlayer(classificationMainClassTopic, classificationMainClassType);
+                                    a.addPlayer(mediaTopic, mediaType);
+                                }
+                            }
                             
                             String classificationSubClass = stringify(row.get(13));
+                            if(isValidData(classificationSubClass)) {
+                                Topic classificationSubClassType = getElavaArkistoMediaClassificationSubClassType(tm);
+                                Topic classificationSubClassTopic = getElavaArkistoMediaClassificationSubClassTopic(classificationSubClass, tm);
+                                if(classificationSubClassType != null && classificationSubClassTopic != null) {
+                                    Association a = tm.createAssociation(classificationSubClassType);
+                                    a.addPlayer(classificationSubClassTopic, classificationSubClassType);
+                                    a.addPlayer(mediaTopic, mediaType);
+                                }
+                            }
                             
                             String actors = stringify(row.get(14));
                             if(isValidData(actors)) {
@@ -307,26 +351,122 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
                                 }
                             }
                             
-                            String firstRun = stringify(row.get(20));
+                            String firstRun = stringify(row.get(21));
                             if(isValidData(firstRun)) {
                                 Topic firstRunTypeTopic = getElavaArkistoMediaFirstRunType(tm);
                                 Topic langIndependent = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-                                Topic englishLangTopic = tm.getTopic(XTMPSI.getLang("en"));
-                                
+
                                 if(firstRunTypeTopic != null && langIndependent != null) {
                                     mediaTopic.setData(firstRunTypeTopic, langIndependent, firstRun);
                                 }
-                                if(firstRunTypeTopic != null &&  englishLangTopic != null) {
-                                    mediaTopic.setData(firstRunTypeTopic, englishLangTopic, firstRun);
+                                
+                                try {
+                                    firstRun = firstRun.trim();
+                                    SimpleDateFormat dateParser = new SimpleDateFormat("EEE MMM d HH:mm:ss zzzz yyyy", Locale.ENGLISH);
+                                    SimpleDateFormat altDateParser = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                                    SimpleDateFormat alt2DateParser = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+                                    Date date = null;
+                                    
+                                    try { date = dateParser.parse(firstRun); }
+                                    catch(ParseException pe1) {
+                                        try { date = altDateParser.parse(firstRun); }
+                                        catch(ParseException pe2) {
+                                            try { date = alt2DateParser.parse(firstRun); }
+                                            catch(ParseException pe3) {
+                                                log("Can't parse first run date '"+firstRun+"'.");
+                                            }
+                                        }
+                                    }
+                                    
+                                    if(date != null) {
+                                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                        String formattedDate = formatter.format(date);
+                                        Topic englishLangTopic = tm.getTopic(XTMPSI.getLang("en"));
+                                        if(firstRunTypeTopic != null &&  englishLangTopic != null && formattedDate != null) {
+                                            mediaTopic.setData(firstRunTypeTopic, englishLangTopic, formattedDate);
+                                        }
+                                        Topic dateType = getElavaArkistoDateType(tm);
+                                        Topic dateTopic = getElavaArkistoDateTopic(formattedDate, tm);
+
+                                        if(dateTopic != null && dateType != null && firstRunTypeTopic != null) {
+                                            Association a = tm.createAssociation(firstRunTypeTopic);
+                                            a.addPlayer(mediaTopic, mediaType);
+                                            a.addPlayer(dateTopic, dateType);
+                                        }
+                                    }
+                                }
+                                catch(Exception e) {
+                                    log("Coudn't parse media first run date '"+firstRun+"'");
+                                    e.printStackTrace();
                                 }
                             }
                             
-                            String publications = stringify(row.get(21));
+                            String publications = stringify(row.get(22));
                             if(isValidData(publications)) {
-                                log("Publications: "+publications);
+                                Topic publicationsTypeTopic = getElavaArkistoMediaPublicationsType(tm);
+                                Topic langIndependent = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
+                                
+                                if(publicationsTypeTopic != null && langIndependent != null) {
+                                    mediaTopic.setData(publicationsTypeTopic, langIndependent, publications);
+                                }
+                                
+                                try {
+                                    publications = publications.trim();
+                                    String[] publicationsArray = publications.split(";");
+                                    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.ENGLISH);
+                                    SimpleDateFormat altDateParser = new SimpleDateFormat("EEE MMM d HH:mm:ss zzzz yyyy", Locale.ENGLISH);
+                                    SimpleDateFormat alt2DateParser = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                    SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+                                    for(String publication : publicationsArray) {
+                                        publication = publication.trim();
+                                        try {
+                                            Date date = null;
+                                            try { date = dateParser.parse(publication); }
+                                            catch(ParseException pe1) {
+                                                try { date = altDateParser.parse(publication); }
+                                                catch(ParseException pe2) {
+                                                    try { date = alt2DateParser.parse(publication); }
+                                                    catch(ParseException pe3) {
+                                                        log("Can't parse publication date '"+publication+"'.");
+                                                    }
+                                                }
+                                            }
+                                            
+                                            if(date != null) {
+                                                String formattedDate = formatter.format(date);
+                                                String formattedTime = timeFormatter.format(date);
+
+                                                Topic dateType = getElavaArkistoDateType(tm);
+                                                Topic dateTopic = getElavaArkistoDateTopic(formattedDate, tm);
+
+                                                Topic timeType = getElavaArkistoTimeType(tm);
+                                                Topic timeTopic = getElavaArkistoTimeTopic(formattedTime, tm);
+
+                                                if(dateTopic != null && dateType != null && publicationsTypeTopic != null) {
+                                                    Association a = tm.createAssociation(publicationsTypeTopic);
+                                                    a.addPlayer(mediaTopic, mediaType);
+                                                    a.addPlayer(dateTopic, dateType);
+                                                    if(timeTopic != null && timeType != null) {
+                                                        a.addPlayer(timeTopic, timeType);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch(Exception e) {
+                                            log("Coudn't parse media publication date '"+publication+"'");
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                                catch(Exception e) {
+                                    log("Coudn't parse media publication dates '"+publications+"'");
+                                    e.printStackTrace();
+                                }
+                                
                             }
                             
-                            String geoRestriction = stringify(row.get(22));
+                            String geoRestriction = stringify(row.get(23));
                             if(isValidData(geoRestriction)) {
                                 if("1".equals(geoRestriction)) {
                                     Topic isGeoRestrictedType = getElavaArkistoMediaIsGeoRestrictedType(tm);
@@ -339,7 +479,7 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
                                 }
                             }
                             
-                            String download = stringify(row.get(23));
+                            String download = stringify(row.get(24));
                             if(isValidData(download)) {
                                 if("1".equals(download)) {
                                     Topic isDownloadableType = getElavaArkistoMediaIsDownloadableType(tm);
@@ -352,11 +492,11 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
                                 }
                             }
                             
-                            String embed = stringify(row.get(24));
+                            String embed = stringify(row.get(25));
                             if(isValidData(embed)) {
                                 if("1".equals(embed)) {
                                     Topic isEmbeddableType = getElavaArkistoMediaIsEmbeddableType(tm);
-                                    Topic isEmbeddableTopic = getElavaArkistoMediaIsEmbeddableTopic(download, tm);
+                                    Topic isEmbeddableTopic = getElavaArkistoMediaIsEmbeddableTopic(embed, tm);
                                     if(isEmbeddableType != null && isEmbeddableTopic != null) {
                                         Association a = tm.createAssociation(isEmbeddableType);
                                         a.addPlayer(isEmbeddableTopic, isEmbeddableType);
@@ -367,7 +507,7 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
                             
                             // --- meta ---
                             
-                            String eaCreator = stringify(row.get(25));
+                            String eaCreator = stringify(row.get(26));
                             if(isValidData(eaCreator)) {
                                 Topic type = getElavaArkistoMediaEACreatorType(tm);
                                 Topic fiLang = tm.getTopic(XTMPSI.getLang("fi"));
@@ -376,16 +516,32 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
                                 }
                             }
                             
-                            String eaPublished = stringify(row.get(26));
+                            String eaPublished = stringify(row.get(27));
                             if(isValidData(eaPublished)) {
                                 Topic type = getElavaArkistoMediaEAPublishedType(tm);
                                 Topic fiLang = tm.getTopic(XTMPSI.getLang("fi"));
                                 if(type != null && fiLang != null) {
                                     mediaTopic.setData(type, fiLang, eaPublished);
                                 }
+                                
+                                try {
+                                    eaPublished = eaPublished.trim();
+                                    SimpleDateFormat dateParser = new SimpleDateFormat("EEE MMM d HH:mm:ss zzzz yyyy", Locale.ENGLISH);
+                                    Date date = dateParser.parse(eaPublished);
+                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                    String formattedDate = formatter.format(date);
+                                    Topic englishLangTopic = tm.getTopic(XTMPSI.getLang("en"));
+                                    if(type != null &&  englishLangTopic != null && formattedDate != null) {
+                                        mediaTopic.setData(type, englishLangTopic, formattedDate);
+                                    }
+                                }
+                                catch(Exception e) {
+                                    log("Coudn't parse media EA published date '"+eaPublished+"'");
+                                    e.printStackTrace();
+                                }
                             }
                             
-                            String eaUpdated = stringify(row.get(27));
+                            String eaUpdated = stringify(row.get(28));
                             if(isValidData(eaUpdated)) {
                                 Topic type = getElavaArkistoMediaEAUpdatedType(tm);
                                 Topic fiLang = tm.getTopic(XTMPSI.getLang("fi"));
@@ -396,7 +552,7 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
                         }
                     }
                     else {
-                        log("Invalid identifier in CSV row. Skipping row "+i);
+                        log("Invalid identifier '"+mid+"' in CSV row. Skipping row "+i);
                     }
                 }
                 catch(Exception e) {
@@ -418,9 +574,9 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
     
     // -------------------------------------------------------------------------
     
-    
-    
+   
     public static final String ELAVA_ARKISTO_MEDIA_TYPE_SI = ELAVA_ARKISTO_SI+"/media-type";
+    public static final String ELAVA_ARKISTO_MEDIA_MID_SI = ELAVA_ARKISTO_SI+"/media-mid";
     public static final String ELAVA_ARKISTO_MEDIA_PROMO_TITLE_SI = ELAVA_ARKISTO_SI+"/media-promo-title";
     public static final String ELAVA_ARKISTO_MEDIA_ORIGINAL_TITLE_SI = ELAVA_ARKISTO_SI+"/media-original-title";
     public static final String ELAVA_ARKISTO_MEDIA_DESCRIPTION_SI = ELAVA_ARKISTO_SI+"/media-description";
@@ -432,13 +588,20 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
     public static final String ELAVA_ARKISTO_MEDIA_DURATION_SI = ELAVA_ARKISTO_SI+"/media-duration";
     public static final String ELAVA_ARKISTO_MEDIA_DURATION_PERCENTAGE_SI = ELAVA_ARKISTO_SI+"/media-duration-percentage";
     public static final String ELAVA_ARKISTO_MEDIA_FIRST_RUN_SI = ELAVA_ARKISTO_SI+"/media-first-run";
-    public static final String ELAVA_ARKISTO_MEDIA_IS_GEO_RESTRICTED_SI = ELAVA_ARKISTO_SI+"/is-geo-restricted";
-    public static final String ELAVA_ARKISTO_MEDIA_IS_DOWNLOADABLE_SI = ELAVA_ARKISTO_SI+"/is-downloadable";
-    public static final String ELAVA_ARKISTO_MEDIA_IS_EMBEDDABLE_SI = ELAVA_ARKISTO_SI+"/is-embeddable";
+    public static final String ELAVA_ARKISTO_MEDIA_PUBLICATIONS_SI = ELAVA_ARKISTO_SI+"/media-publications";
+    public static final String ELAVA_ARKISTO_MEDIA_IS_GEO_RESTRICTED_SI = ELAVA_ARKISTO_SI+"/media-is-geo-restricted";
+    public static final String ELAVA_ARKISTO_MEDIA_IS_DOWNLOADABLE_SI = ELAVA_ARKISTO_SI+"/media-is-downloadable";
+    public static final String ELAVA_ARKISTO_MEDIA_IS_EMBEDDABLE_SI = ELAVA_ARKISTO_SI+"/media-is-embeddable";
     
-    public static final String ELAVA_ARKISTO_MEDIA_EA_CREATOR_SI = ELAVA_ARKISTO_SI+"/ea-created";
-    public static final String ELAVA_ARKISTO_MEDIA_EA_PUBLISHED_SI = ELAVA_ARKISTO_SI+"/ea-published";
-    public static final String ELAVA_ARKISTO_MEDIA_EA_UPDATED_SI = ELAVA_ARKISTO_SI+"/ea-updated";
+    public static final String ELAVA_ARKISTO_MEDIA_EA_CREATOR_SI = ELAVA_ARKISTO_SI+"/media-ea-created";
+    public static final String ELAVA_ARKISTO_MEDIA_EA_PUBLISHED_SI = ELAVA_ARKISTO_SI+"/media-ea-published";
+    public static final String ELAVA_ARKISTO_MEDIA_EA_UPDATED_SI = ELAVA_ARKISTO_SI+"/media-ea-updated";
+    
+    public static final String ELAVA_ARKISTO_MEDIA_CLASSIFICATION_SUBCLASS_SI = ELAVA_ARKISTO_SI+"/media-subclass";
+    public static final String ELAVA_ARKISTO_MEDIA_CLASSIFICATION_MAIN_CLASS_SI = ELAVA_ARKISTO_SI+"/media-main-class";
+    public static final String ELAVA_ARKISTO_MEDIA_CLASSIFICATION_ANALYTICS_SI = ELAVA_ARKISTO_SI+"/media-analytics";
+    
+    
     
     
     public Topic getElavaArkistoMediaTypeType(TopicMap tm) throws TopicMapException {
@@ -462,6 +625,12 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
             log(e);
         }
         return typeTopic;
+    }
+    
+    
+    public Topic getElavaArkistoMediaMidType(TopicMap tm) throws TopicMapException {
+        Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_MEDIA_MID_SI, "Elava-arkisto media mid", getElavaArkistoType(tm), tm);
+        return type;
     }
     
     
@@ -560,6 +729,11 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
         return type;
     }
     
+    public Topic getElavaArkistoMediaPublicationsType(TopicMap tm) throws TopicMapException {
+        Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_MEDIA_PUBLICATIONS_SI, "Elava-arkisto media publications", getElavaArkistoType(tm), tm);
+        return type;
+    }
+    
     public Topic getElavaArkistoMediaIsGeoRestrictedType(TopicMap tm) throws TopicMapException {
         Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_MEDIA_IS_GEO_RESTRICTED_SI, "Elava-arkisto media is geo restricted", getElavaArkistoType(tm), tm);
         return type;
@@ -640,6 +814,94 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
         Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_MEDIA_EA_UPDATED_SI, "Elava-arkisto media EA updated", getElavaArkistoType(tm), tm);
         return type;
     }
+    
+    
+    
+    
+    public Topic getElavaArkistoMediaClassificationAnalyticsType(TopicMap tm) throws TopicMapException {
+        Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_MEDIA_CLASSIFICATION_ANALYTICS_SI, "Elava-arkisto classification analytics", getElavaArkistoType(tm), tm);
+        return type;
+    }
+    
+
+    public Topic getElavaArkistoMediaClassificationAnalyticsTopic(String cl, TopicMap tm) throws TopicMapException {
+        String si = ELAVA_ARKISTO_MEDIA_CLASSIFICATION_ANALYTICS_SI+"/"+urlEncode(cl);
+        Topic topic = null;
+        try {
+            topic = tm.getTopic(si);
+            if(topic == null) {
+                topic = tm.createTopic();
+                topic.addSubjectIdentifier(new Locator(si));
+                topic.addType(getElavaArkistoMediaClassificationAnalyticsType(tm));
+                topic.setBaseName(cl + " (YLE media classification analytics)");
+            }
+        }
+        catch(Exception e) {
+            log(e);
+        }
+        return topic;
+    }
+    
+    
+    
+
+    
+    public Topic getElavaArkistoMediaClassificationMainClassType(TopicMap tm) throws TopicMapException {
+        Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_MEDIA_CLASSIFICATION_MAIN_CLASS_SI, "Elava-arkisto classification main class", getElavaArkistoType(tm), tm);
+        return type;
+    }
+    
+
+    public Topic getElavaArkistoMediaClassificationMainClassTopic(String cl, TopicMap tm) throws TopicMapException {
+        String si = ELAVA_ARKISTO_MEDIA_CLASSIFICATION_MAIN_CLASS_SI+"/"+urlEncode(cl);
+        Topic topic = null;
+        try {
+            topic = tm.getTopic(si);
+            if(topic == null) {
+                topic = tm.createTopic();
+                topic.addSubjectIdentifier(new Locator(si));
+                topic.addType(getElavaArkistoMediaClassificationMainClassType(tm));
+                topic.setBaseName(cl + " (YLE media classification main class)");
+            }
+        }
+        catch(Exception e) {
+            log(e);
+        }
+        return topic;
+    }
+    
+    
+    
+
+    
+
+    
+    public Topic getElavaArkistoMediaClassificationSubClassType(TopicMap tm) throws TopicMapException {
+        Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_MEDIA_CLASSIFICATION_SUBCLASS_SI, "Elava-arkisto classification subclass", getElavaArkistoType(tm), tm);
+        return type;
+    }
+    
+
+    public Topic getElavaArkistoMediaClassificationSubClassTopic(String cl, TopicMap tm) throws TopicMapException {
+        String si = ELAVA_ARKISTO_MEDIA_CLASSIFICATION_SUBCLASS_SI+"/"+urlEncode(cl);
+        Topic topic = null;
+        try {
+            topic = tm.getTopic(si);
+            if(topic == null) {
+                topic = tm.createTopic();
+                topic.addSubjectIdentifier(new Locator(si));
+                topic.addType(getElavaArkistoMediaClassificationSubClassType(tm));
+                topic.setBaseName(cl + " (YLE media classification subclass)");
+            }
+        }
+        catch(Exception e) {
+            log(e);
+        }
+        return topic;
+    }
+    
+    
+    
 }
 
 
