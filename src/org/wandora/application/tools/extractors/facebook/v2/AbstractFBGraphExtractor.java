@@ -56,7 +56,7 @@ abstract class AbstractFBGraphExtractor extends AbstractExtractor{
     protected static final com.restfb.Version API_VERSION = Version.VERSION_2_3;
     protected static final String URL_ROOT = "https://graph.facebook.com/v2.3/";
 
-    protected static final String AUTH_PAGE = "http://localhost:8080";
+    protected static final String AUTH_PAGE = "http://wandora.org/fbv2";
     
     protected static final String NAME = "Facebook Open Graph Extractor";
     

@@ -57,6 +57,8 @@ public abstract class AbstractFBTypeWrapper extends AbstractFBWrapper {
     Topic mapToTopicMap(TopicMap tm) throws TopicMapException {
         FacebookType entity = getEnclosedEntity();
 
+        if(entity == null) return null;
+        
         String id = entity.getId();
         String name;
         if(entity instanceof NamedFacebookType){

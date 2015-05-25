@@ -128,6 +128,9 @@ abstract class AbstractFBWrapper {
     
     protected void associateNamedType(TopicMap tm, NamedFacebookType type, String name, Topic parent, Topic parentType) throws TopicMapException{
         Topic topic = mapNamedType(type, tm);
+        
+        if(topic == null) return;
+        
         Topic topicType = getOrCreateType(tm, name);
         
         Association employerAssoc = tm.createAssociation(topicType);
