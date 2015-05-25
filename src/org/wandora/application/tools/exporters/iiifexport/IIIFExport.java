@@ -75,6 +75,7 @@ public class IIIFExport extends AbstractExportTool {
         // TODO: smart scanning of builders
         ArrayList<IIIFBuilder> al=new ArrayList<>();
         al.add(new SimpleSelectionIIIFBuilder());
+        al.add(new SelectionInstancesIIIFBuilder());
         return al;
     }
     
@@ -92,20 +93,22 @@ public class IIIFExport extends AbstractExportTool {
     public void initialize(Wandora wandora, Options options, String prefix) throws TopicMapException {
         super.initialize(wandora, options, prefix); 
 
-        String builderStr=options.get(prefix+"builder");
-        selectedBuilder=null;
-        ArrayList<IIIFBuilder> builders=getBuilders();
-        if(builderStr!=null){
-            selectedBuilder=resolveBuilder(builderStr);
-            if(selectedBuilder==null){
-                WandoraOptionPane.showMessageDialog(wandora, "Cannot find IIIF builder \""+builderStr+"\" which was specified in options.");
+        if(options!=null){
+            String builderStr=options.get(prefix+"builder");
+            selectedBuilder=null;
+            ArrayList<IIIFBuilder> builders=getBuilders();
+            if(builderStr!=null){
+                selectedBuilder=resolveBuilder(builderStr);
+                if(selectedBuilder==null){
+                    WandoraOptionPane.showMessageDialog(wandora, "Cannot find IIIF builder \""+builderStr+"\" which was specified in options.");
+                }
             }
+            if(selectedBuilder==null){
+                selectedBuilder=builders.get(0);
+            }
+
+            prettyPrint=options.getBoolean(prefix+"prettyprint",prettyPrint);
         }
-        if(selectedBuilder==null){
-            selectedBuilder=builders.get(0);
-        }
-        
-        prettyPrint=options.getBoolean(prefix+"prettyprint",prettyPrint);
     }
 
     
@@ -141,6 +144,19 @@ public class IIIFExport extends AbstractExportTool {
         }
     }
 
+    /*
+     These two methods are mostly intended for situations where the export is
+     inside other code and normal configuration dialogs and options mechanics
+     are skipped.
+    */
+    public void setBuilder(IIIFBuilder builder){
+        selectedBuilder=builder;
+    }
+    
+    public void setPrettyPrint(boolean p){
+        prettyPrint=p;
+    }
+    
     @Override
     public boolean isConfigurable() {
         return true;

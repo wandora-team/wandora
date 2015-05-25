@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<options>
+    <!--
+        This file is meant to be imported by the Wandora Modules Servlet. In general
+        this file is like all other configuration files of the Wandora modules 
+        framework, described at http://wandora.org/wiki/Wandora_modules_framework .
+        There are a few additions however. Wandora automatically adds some modules
+        and variables when it loads bundle configurations like this.
+    -->
+
+    <!-- Some imports for this bundle, these are defined in the Modules Servlet
+         base configration. -->
+    <import class="org.wandora.modules.LoggingModule"></import>
+    <import class="org.wandora.modules.topicmap.TopicMapManager"></import>
+    <!-- ServletModule is added automatically by Wandora, we don't need to import that -->
+
+    <!-- The action that implements a Waiana storage -->
+    <module class="org.wandora.application.modulesserver.IIIFWebApp">
+        <param key="webAppName">IIIF Export</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="defaultAction">true</param>
+        <param key="iiifBuilder">org.wandora.application.tools.exporters.iiifexport.SelectionInstancesIIIFBuilder</param>
+        <param key="prettyPrint">true</param>
+    </module>
+    
+</options>
