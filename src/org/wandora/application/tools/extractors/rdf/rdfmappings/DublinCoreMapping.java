@@ -36,6 +36,7 @@ package org.wandora.application.tools.extractors.rdf.rdfmappings;
 public class DublinCoreMapping extends RDF2TopicMapsMapping {
     public final static String DC_ELEMENTS_NS = "http://purl.org/dc/elements/1.1/";
     public final static String DC_TERMS_NS = "http://purl.org/dc/terms/";
+    public final static String DC_TYPES_NS = "http://purl.org/dc/dcmitype/";
     
     public static final String DC_ROLE_NS = "http://wandora.org/si/dc/role/";
     
@@ -264,6 +265,33 @@ public class DublinCoreMapping extends RDF2TopicMapsMapping {
             "dc-term:Getty Thesaurus of Geographic Names",
         DC_TERMS_NS+"NLM",
             "dc-term:National Library of Medicine Classification",
+            
+            
+        /* DC Types */
+        DC_TYPES_NS+"Collection",
+            "dctypes:Collection",
+        DC_TYPES_NS+"Dataset",
+            "dctypes:Dataset",
+        DC_TYPES_NS+"Event",
+            "dctypes:Event",
+        DC_TYPES_NS+"Image",
+            "dctypes:Image",
+        DC_TYPES_NS+"InteractiveResource",
+            "dctypes:InteractiveResource",
+        DC_TYPES_NS+"MovingImage",
+            "dctypes:MovingImage",
+        DC_TYPES_NS+"PhysicalObject",
+            "dctypes:PhysicalObject",
+        DC_TYPES_NS+"Service",
+            "dctypes:Service",
+        DC_TYPES_NS+"Software",
+            "dctypes:Software",
+        DC_TYPES_NS+"Sound",
+            "dctypes:Sound",
+        DC_TYPES_NS+"StillImage",
+            "dctypes:StillImage",
+        DC_TYPES_NS+"Text",
+            "dctypes:Text",
 
     };
     

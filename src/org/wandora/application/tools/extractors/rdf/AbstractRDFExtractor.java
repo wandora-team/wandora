@@ -42,6 +42,8 @@ import org.wandora.topicmap.*;
 
 import org.wandora.application.gui.*;
 import com.hp.hpl.jena.rdf.model.*;
+import java.util.List;
+import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
 import org.wandora.utils.Tuples.*;
 
 
@@ -153,8 +155,14 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     }
     
     
-
-    
+    /**
+     * Override this if the RDF is in some other container format than XML/RDF.
+     * See Jena documentation for Model.read.
+     * @return 
+     */
+    public String getRDFContainerFormat(){
+        return null;
+    }
     
     
     public void importRDF(InputStream in, TopicMap map) {
@@ -162,7 +170,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
             // create an empty model
             Model model = ModelFactory.createDefaultModel();
             // read the RDF/XML file
-            model.read(in, "");
+            model.read(in, "", getRDFContainerFormat());
             RDF2TopicMap(model, map);
         }
     }
@@ -194,25 +202,54 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     }
 
     
+    public static final String RDF_LIST_ORDER="http://wandora.org/si/rdf/list_order";
 
-
-   
-    
     public void handleStatement(Statement stmt, TopicMap map) throws TopicMapException {
         Resource subject   = stmt.getSubject();     // get the subject
         Property predicate = stmt.getPredicate();   // get the predicate
         RDFNode object     = stmt.getObject();      // get the object
 
+        String predicateS=predicate.toString();
+        if(predicateS!=null && (
+                predicateS.equals(RDFMapping.RDF_NS+"first") || 
+                predicateS.equals(RDFMapping.RDF_NS+"rest") ) ) {
+            // skip broken down list statements, the list
+            // should be handled properly when they are the object
+            // of some other statement
+            return;
+        }
+            
+        
         //System.out.println("statement:\n  "+subject+"\n   "+predicate+"\n    "+object);
         
         Topic subjectTopic = getOrCreateTopic(map, subject.toString());
                 
         if(object.isResource()) {
-            Topic objectTopic = getOrCreateTopic(map, object.toString());
             Topic predicateTopic = getOrCreateTopic(map, predicate.toString());
-            Association association = map.createAssociation(predicateTopic);
-            association.addPlayer(subjectTopic, solveSubjectRoleFor(predicate, subject, map));
-            association.addPlayer(objectTopic, solveObjectRoleFor(predicate, object, map));
+            if(object.canAs(RDFList.class)){
+                List<RDFNode> list=((RDFList)object.as(RDFList.class)).asJavaList();
+                int counter=1;
+                Topic orderRole = getOrCreateTopic(map, RDF_LIST_ORDER, "List order");
+                for(RDFNode listObject : list){
+                    if(!listObject.isResource()){
+                        log("List element is not a resource, skipping.");
+                        continue;
+                    }
+                    Topic objectTopic = getOrCreateTopic(map, listObject.toString());                
+                    Topic orderTopic = getOrCreateTopic(map, RDF_LIST_ORDER+"/"+counter, ""+counter);
+                    Association association = map.createAssociation(predicateTopic);
+                    association.addPlayer(subjectTopic, solveSubjectRoleFor(predicate, subject, map));
+                    association.addPlayer(objectTopic, solveObjectRoleFor(predicate, object, map));
+                    association.addPlayer(orderTopic, orderRole);
+                    counter++;
+                }
+            }
+            else {
+                Topic objectTopic = getOrCreateTopic(map, object.toString());                
+                Association association = map.createAssociation(predicateTopic);
+                association.addPlayer(subjectTopic, solveSubjectRoleFor(predicate, subject, map));
+                association.addPlayer(objectTopic, solveObjectRoleFor(predicate, object, map));
+            }
         }
         else if(object.isLiteral()) {
             Topic predicateTopic = getOrCreateTopic(map, predicate.toString());
@@ -256,9 +293,10 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
         T2<String, String> mapped = null;
         for(int i=0; i<mappings.length; i++) {
             mapped = mappings[i].solveSubjectRoleFor(predicateString, subjectString);
-            if(mapped.e1 != null && mapped.e2 != null) {
+            if(mapped.e1 != null) {
                 si = mapped.e1;
                 bn = mapped.e2;
+                if(bn==null) bn=solveBasenameFor(si);
                 break;
             }
         }
@@ -275,9 +313,10 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
         T2<String, String> mapped = null;
         for(int i=0; i<mappings.length; i++) {
             mapped = mappings[i].solveObjectRoleFor(predicateString, objectString);
-            if(mapped.e1 != null && mapped.e2 != null) {
+            if(mapped.e1 != null) {
                 si = mapped.e1;
                 bn = mapped.e2;
+                if(bn==null) bn=solveBasenameFor(si);
                 break;
             }
         }
@@ -313,7 +352,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
             if(si.indexOf("://") == -1 && getBaseUrl() != null) {
                 si = getBaseUrl() + "/" + si;
             }
-            topic = map.getTopic(si);
+            topic = map.getTopic(si);            
             if(topic == null && basename != null) {
                 topic = map.getTopicWithBaseName(basename);
                 if(topic != null) {
