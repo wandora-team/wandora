@@ -307,6 +307,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/extractors/stands4</path>
       <path>org/wandora/application/tools/extractors/marcxml</path>
       <path>org/wandora/application/tools/extractors/facebook</path>
+      <path>org/wandora/application/tools/extractors/facebook/v2</path>
       <path>org/wandora/application/tools/extractors/omakaupunki</path>
       <path>org/wandora/application/tools/extractors/palvelukartta</path>
       <path>org/wandora/application/tools/extractors/palvelukartta_v2</path>
@@ -336,6 +337,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/extractors/word</path>
       <path>org/wandora/application/tools/iot</path>
       <path>org/wandora/application/tools/extractors/yle/elavaarkisto</path>
+      <path>org/wandora/application/tools/exporters/iiifexport</path>
       <set>
          <name>generator</name>
          <item>
@@ -419,6 +421,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Simple RDF Turtle import...</name>
             <class>org.wandora.application.tools.importers.SimpleRDFTurtleImport</class>
+         </item>
+         <item>
+            <name>Simple RDF JSON-LD import...</name>
+            <class>org.wandora.application.tools.importers.SimpleRDFJsonLDImport</class>
          </item>
          <item>
             <name>--- MATRIXS AND LISTS ---</name>
@@ -747,6 +753,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.facebook.FacebookAPIExtractor</class>
             </item>
             <item>
+               <name>Facebook graph extractor v2...</name>
+               <class>org.wandora.application.tools.extractors.facebook.v2.FBGraphExtractor</class>
+            </item>
+            <item>
                <name>Reddit extractor...</name>
                <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
             </item>
@@ -875,6 +885,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>YLE Elava arkisto article tags</name>
                <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticleTagsExtractor</class>
+            </item>
+            <item>
+               <name>YLE Elava arkisto media</name>
+               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.MediaExtractor</class>
             </item>
             <item>
                <name>YLE Elava arkisto media of the article</name>
@@ -1224,6 +1238,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Export schema as topic map...</name>
             <class>org.wandora.application.tools.exporters.ExportSchemaMap</class>
+         </item>
+         <item>
+            <name>Export IIIF JSON-LD...</name>
+            <class>org.wandora.application.tools.exporters.iiifexport.IIIFExport</class>
          </item>
          <item>
             <name>--- FINNISH NATIONAL GALLERY ---</name>

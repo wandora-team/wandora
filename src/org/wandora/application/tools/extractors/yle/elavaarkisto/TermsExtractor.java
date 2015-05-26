@@ -96,6 +96,9 @@ public class TermsExtractor extends AbstractElavaArkistoExtractor {
             _extractTopicsFrom(json.getJSONObject(i), tm);
             setProgress(i);
         }
+        if(forceStop()) {
+            log("Extraction stopped.");
+        }
         return true;
     }
     

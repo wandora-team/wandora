@@ -106,7 +106,7 @@ function init(words,font,spiral,scale,rotOr,rotFrom,rotTo){
                     var oldSI = siPattern.exec(queryString)[0];
                     newHref = oldHref.replace(oldSI,"si="+escape(d.SI));
                 } else {
-                    newHref = oldHref + "?si="+escape(d.SI);
+                    newHref = oldHref + "&si="+escape(d.SI);
                 }
             } else {
                 newHref = oldHref + "?si="+escape(d.SI);

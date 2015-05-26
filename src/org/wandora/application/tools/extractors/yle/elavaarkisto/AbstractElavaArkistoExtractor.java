@@ -65,6 +65,9 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
     public static final String ELAVA_ARKISTO_TAG_TYPE_SI = ELAVA_ARKISTO_SI+"/tag";
     public static final String ELAVA_ARKISTO_TAG_ARTICLE_RELATION_TYPE_SI = ELAVA_ARKISTO_SI+"/tag-article-relation";
     public static final String ELAVA_ARKISTO_MEDIA_TYPE_SI = ELAVA_ARKISTO_SI+"/media";
+    public static final String ELAVA_ARKISTO_DATE_TYPE_SI = ELAVA_ARKISTO_SI+"/date";
+    public static final String ELAVA_ARKISTO_TIME_TYPE_SI = ELAVA_ARKISTO_SI+"/time";
+    
     
     
     
@@ -290,6 +293,45 @@ public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
         }
         return tagTopic;
     }
+    
+    
+    public Topic getElavaArkistoDateType(TopicMap tm) throws TopicMapException {
+        Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_DATE_TYPE_SI, "Elava-arkisto date", getElavaArkistoType(tm), tm);
+        return type;
+    }
+    
+    
+    public Topic getElavaArkistoDateTopic(String date, TopicMap tm) throws TopicMapException {
+        String si = ELAVA_ARKISTO_DATE_TYPE_SI + "/" + urlEncode(date);
+        Topic dateTopic = tm.getTopic(si);
+        if(dateTopic == null) {
+            dateTopic = tm.createTopic();
+            dateTopic.addSubjectIdentifier(new Locator(si));
+            dateTopic.setBaseName( date );
+            dateTopic.addType(getElavaArkistoDateType(tm));
+        }
+        return dateTopic;
+    }
+    
+
+    public Topic getElavaArkistoTimeType(TopicMap tm) throws TopicMapException {
+        Topic type = ExtractHelper.getOrCreateTopic(ELAVA_ARKISTO_TIME_TYPE_SI, "Elava-arkisto time", getElavaArkistoType(tm), tm);
+        return type;
+    }
+    
+    
+    public Topic getElavaArkistoTimeTopic(String time, TopicMap tm) throws TopicMapException {
+        String si = ELAVA_ARKISTO_TIME_TYPE_SI + "/" + urlEncode(time);
+        Topic timeTopic = tm.getTopic(si);
+        if(timeTopic == null) {
+            timeTopic = tm.createTopic();
+            timeTopic.addSubjectIdentifier(new Locator(si));
+            timeTopic.setBaseName( time );
+            timeTopic.addType(getElavaArkistoTimeType(tm));
+        }
+        return timeTopic;
+    }
+    
     
     
     // -------------------------------------------------------------------------

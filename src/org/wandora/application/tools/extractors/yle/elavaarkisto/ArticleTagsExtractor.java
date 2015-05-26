@@ -66,7 +66,7 @@ public class ArticleTagsExtractor extends AbstractElavaArkistoExtractor {
     
     @Override
     public String getDescription() {
-        return "YLE Elava arkisto terms extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/article-tags.csv";
+        return "YLE Elava arkisto article tag extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/article-tags.csv";
     }
     
     
@@ -171,9 +171,39 @@ public class ArticleTagsExtractor extends AbstractElavaArkistoExtractor {
             else {
                 System.out.println("Row has invalid number of values. Skipping the row.");
             }
-            if(forceStop()) break;
+            if(forceStop()) {
+                log("Extraction stopped.");
+                break;
+            }
         }
         return true;
     }
     
 }
+
+
+/*
+
+Example of extracted CSV:
+
+AID,SERVICE,KID,LANGUAGE,LABEL,REL
+7-908526,arkivet,/program/spotlight,sv,Spotlight,
+7-908526,arkivet,/term/finto/httpwwwysofiontokokop32958/politik,sv,politik,
+7-908526,arkivet,http://www.yso.fi/onto/koko/p32958,sv,politik,dc:subject
+7-908526,arkivet,/term/finto/httpwwwysofiontokokop32580/partier,sv,partier,
+7-908526,arkivet,http://www.yso.fi/onto/koko/p32580,sv,partier,dc:subject
+7-908526,arkivet,/term/finto/httpwwwysofiontokokop32366/val,sv,val,
+7-908526,arkivet,http://www.yso.fi/onto/koko/p32366,sv,val,dc:subject
+
+
+where
+
+    AID = artikkelin Yle ID (Article ID)
+    SERVICE = artikkelin lähde (Elävä arkisto vai Arkivet)
+    KID = termin Yle ID (Keyword ID)
+    LANGUAGE = termin kieli
+    LABEL = termin nimi
+    REL = termin suhde artikkeliin: dc:subject (=aihe), dc:partOf (=osa kokonaisuus)
+
+
+*/

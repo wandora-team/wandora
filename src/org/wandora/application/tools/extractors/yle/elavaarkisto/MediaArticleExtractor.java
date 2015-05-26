@@ -62,7 +62,7 @@ public class MediaArticleExtractor extends AbstractElavaArkistoExtractor {
     
     @Override
     public String getDescription() {
-        return "YLE Elava arkisto terms extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/media-article.csv";
+        return "YLE Elava arkisto media-article extractor reads CSV feeds like http://elavaarkisto.kokeile.yle.fi/data/media-article.csv";
     }
     
     
@@ -149,10 +149,42 @@ public class MediaArticleExtractor extends AbstractElavaArkistoExtractor {
             else {
                 System.out.println("Row has invalid number of values. Skipping the row.");
             }
-            if(forceStop()) break;
+            if(forceStop()) {
+                log("Extraction stopped.");
+                break;
+            }
         }
         return true;
     }
     
     
 }
+
+
+
+/*
+
+Example of extracted CSV:
+
+AID,SERVICE,MID
+7-908526,arkivet,26-819
+7-889791,arkivet,26-108100
+7-889791,arkivet,26-108101
+7-889791,arkivet,26-108102
+7-889791,arkivet,26-108103
+7-889791,arkivet,26-108097
+7-886631,arkivet,26-64006
+7-886631,arkivet,26-108419
+7-886631,arkivet,26-108423
+7-886631,arkivet,26-108420
+
+
+
+where
+
+    AID = Artikkelin Yle ID (Article ID)
+    SERVICE = Elävä arkisto vai Arkivet
+    MID = Median Yle ID (Media ID)
+
+
+*/

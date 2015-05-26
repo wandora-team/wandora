@@ -1,4 +1,4 @@
-/*
+ /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
@@ -17,17 +17,45 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * 
+ * 
  */
-package org.wandora.application.tools.exporters;
+
+package org.wandora.application.tools.extractors.facebook.v2;
+
+import com.restfb.types.Category;
+import com.restfb.types.FacebookType;
 
 /**
- * This class simply extends the class with the same name in the iiifexport
- * subpackage. This is to make Wandora automatically find the export tool.
- * @author olli
+ *
+ * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
  */
 
 
-public class IIIFExport extends org.wandora.application.tools.exporters.iiifexport.IIIFExport {
+public class CategoryWrapper extends AbstractFBTypeWrapper {
     
+    private static final String SI_BASE = AbstractFBGraphExtractor.SI_BASE + "category/";
+
+    
+    private final Category category;
+    
+    CategoryWrapper(Category c){
+        this.category = c;
+    }
+    
+    @Override
+    public FacebookType getEnclosedEntity() {
+        return category;
+    }
+
+    @Override
+    public String getType() {
+        return "Category";
+    }
+
+    @Override
+    public String getSIBase() {
+        return SI_BASE;
+    }
+
 }
