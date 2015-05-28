@@ -76,6 +76,7 @@ public class IIIFExport extends AbstractExportTool {
         ArrayList<IIIFBuilder> al=new ArrayList<>();
         al.add(new SimpleSelectionIIIFBuilder());
         al.add(new SelectionInstancesIIIFBuilder());
+        al.add(new FullIIIFBuilder());
         return al;
     }
     

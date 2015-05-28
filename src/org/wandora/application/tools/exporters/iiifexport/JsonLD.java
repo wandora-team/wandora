@@ -88,7 +88,7 @@ public class JsonLD {
     }
 
     public static String jsonLDString(String s){
-        return "\""+s.replace("\\", "\\\\").replace("\"","\\\"")+"\"";
+        return "\""+s.replace("\\", "\\\\").replace("\"","\\\"").replace("\n","\\n")+"\"";
     }    
     
     public String outputJson(boolean pretty){

@@ -35,6 +35,9 @@ import java.io.*;
 import javax.swing.*;
 
 import com.hp.hpl.jena.rdf.model.*;
+import java.util.List;
+import static org.wandora.application.tools.extractors.rdf.AbstractRDFExtractor.RDF_LIST_ORDER;
+import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
 
 
 
@@ -183,6 +186,8 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
     public static final String objectTypeSI = "http://wandora.org/si/core/rdf-object";
     public static final String predicateTypeSI = "http://wandora.org/si/core/rdf-predicate";
     
+    public static final String RDF_LIST_ORDER="http://wandora.org/si/rdf/list_order";
+    
     
     public void handleStatement(Statement stmt,TopicMap map,Topic subjectType,Topic predicateType,Topic objectType) throws TopicMapException {
         Resource subject   = stmt.getSubject();     // get the subject
@@ -190,6 +195,17 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
         RDFNode object    = stmt.getObject();      // get the object
         String lan          = null;
        
+        String predicateS=predicate.toString();
+        if(predicateS!=null && (
+                predicateS.equals(RDFMapping.RDF_NS+"first") || 
+                predicateS.equals(RDFMapping.RDF_NS+"rest") ) ) {
+            // skip broken down list statements, the list
+            // should be handled properly when they are the object
+            // of some other statement
+            return;
+        }
+        
+        
         Topic subjectTopic = getOrCreateTopic(map, subject);
         Topic predicateTopic = getOrCreateTopic(map, predicate);
 
@@ -206,13 +222,36 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
             }
         }
         else if(object.isResource()) {
-            Topic objectTopic = getOrCreateTopic(map, (Resource)object);
+            if(object.canAs(RDFList.class)){
+                List<RDFNode> list=((RDFList)object.as(RDFList.class)).asJavaList();
+                int counter=1;
+                Topic orderRole = getOrCreateTopic(map, RDF_LIST_ORDER);
+                for(RDFNode listObject : list){
+                    if(!listObject.isResource()){
+                        log("List element is not a resource, skipping.");
+                        continue;
+                    }
+                    Topic objectTopic = getOrCreateTopic(map, listObject.toString());                
+                    objectTopic.addType(objectType);
+                    
+                    Topic orderTopic = getOrCreateTopic(map, RDF_LIST_ORDER+"/"+counter);
+                    if(orderTopic.getBaseName()==null) orderTopic.setBaseName(""+counter);
+                    Association association = map.createAssociation(predicateTopic);
+                    association.addPlayer(subjectTopic, subjectType);
+                    association.addPlayer(objectTopic, objectType);
+                    association.addPlayer(orderTopic, orderRole);
+                    counter++;
+                }
+            }
+            else {
+                Topic objectTopic = getOrCreateTopic(map, (Resource)object);
 
-            Association association = map.createAssociation(predicateTopic);
-            association.addPlayer(subjectTopic, subjectType);
-            association.addPlayer(objectTopic, objectType);
+                Association association = map.createAssociation(predicateTopic);
+                association.addPlayer(subjectTopic, subjectType);
+                association.addPlayer(objectTopic, objectType);
 
-            objectTopic.addType(objectType);
+                objectTopic.addType(objectType);
+            }
         }
         else if(object.isURIResource()) {
             log("URIResource found but not handled!");

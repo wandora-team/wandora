@@ -31,6 +31,9 @@ package org.wandora.application.tools.importers;
 import org.wandora.topicmap.*;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.*;
+import java.util.List;
+import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
+import static org.wandora.application.tools.importers.SimpleRDFImport.RDF_LIST_ORDER;
 
 
 /**
@@ -68,6 +71,17 @@ public class BasicRDFImport extends SimpleRDFImport {
         RDFNode object      = stmt.getObject();      // get the object
         String lan          = null;
 
+        String predicateS=predicate.toString();
+        if(predicateS!=null && (
+                predicateS.equals(RDFMapping.RDF_NS+"first") || 
+                predicateS.equals(RDFMapping.RDF_NS+"rest") ) ) {
+            // skip broken down list statements, the list
+            // should be handled properly when they are the object
+            // of some other statement
+            return;
+        }
+        
+        
         try {
             lan = stmt.getLanguage();
         }
@@ -93,17 +107,40 @@ public class BasicRDFImport extends SimpleRDFImport {
             }
         }
         else if(object.isResource()) {
-            Topic objectTopic = getOrCreateTopic(map, (Resource)object);
-            
-            if(predicate.toString().equals(TYPE_LOCATOR)){
-                subjectTopic.addType(objectTopic);
+            if(object.canAs(RDFList.class)){
+                List<RDFNode> list=((RDFList)object.as(RDFList.class)).asJavaList();
+                int counter=1;
+                Topic orderRole = getOrCreateTopic(map, RDF_LIST_ORDER);
+                for(RDFNode listObject : list){
+                    if(!listObject.isResource()){
+                        log("List element is not a resource, skipping.");
+                        continue;
+                    }
+                    Topic objectTopic = getOrCreateTopic(map, listObject.toString());                
+                    objectTopic.addType(objectType);
+                    
+                    Topic orderTopic = getOrCreateTopic(map, RDF_LIST_ORDER+"/"+counter);
+                    if(orderTopic.getBaseName()==null) orderTopic.setBaseName(""+counter);
+                    Association association = map.createAssociation(predicateTopic);
+                    association.addPlayer(subjectTopic, subjectType);
+                    association.addPlayer(objectTopic, objectType);
+                    association.addPlayer(orderTopic, orderRole);
+                    counter++;
+                }
             }
             else {
-                Association association = map.createAssociation(predicateTopic);
-                association.addPlayer(subjectTopic, subjectType);
-                association.addPlayer(objectTopic, objectType);
+                Topic objectTopic = getOrCreateTopic(map, (Resource)object);
 
-                objectTopic.addType(objectType);
+                if(predicate.toString().equals(TYPE_LOCATOR)){
+                    subjectTopic.addType(objectTopic);
+                }
+                else {
+                    Association association = map.createAssociation(predicateTopic);
+                    association.addPlayer(subjectTopic, subjectType);
+                    association.addPlayer(objectTopic, objectType);
+
+                    objectTopic.addType(objectType);
+                }
             }
         }
         else if(object.isURIResource()) {
