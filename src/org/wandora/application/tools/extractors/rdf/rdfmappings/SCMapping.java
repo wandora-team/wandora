@@ -23,6 +23,7 @@
 package org.wandora.application.tools.extractors.rdf.rdfmappings;
 
 import static org.wandora.application.tools.extractors.rdf.rdfmappings.DublinCoreMapping.DC_ELEMENTS_NS;
+import static org.wandora.application.tools.extractors.rdf.rdfmappings.OAMapping.RDF_NS;
 
 /**
  *
@@ -86,6 +87,10 @@ public class SCMapping extends RDF2TopicMapsMapping{
         SC_NS+"hasImageAnnotations",
             SC_NS+"Canvas", null,
             OAMapping.OA_NS+"Annotation", null,
+
+        SC_NS+"hasRelatedService",
+            RDF_NS+"subject", "Subject",
+            RDF_NS+"object", "Object",
     };
     
     

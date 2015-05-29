@@ -36,6 +36,7 @@ import org.wandora.application.tools.extractors.rdf.rdfmappings.EXIFMapping;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.OAMapping;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.SCMapping;
+import org.wandora.application.tools.importers.SimpleRDFImport;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -59,7 +60,7 @@ public class FullIIIFBuilder implements IIIFBuilder {
         return buildManifest(topic,tool);
     }
     
-    protected void setItem(ModelBase modelObject, String setter, Object value) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
+    protected void setItem(Object modelObject, String setter, Object value) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
         boolean languageString=false;
         Method setterMethod=null;
         if(value instanceof Integer){
@@ -91,7 +92,7 @@ public class FullIIIFBuilder implements IIIFBuilder {
         if(languageString) setterMethod.invoke(modelObject, new LanguageString((String)value));
         else setterMethod.invoke(modelObject, value);            
     }
-    protected void copyOccurrenceInteger(ModelBase modelObject, String setter, Topic t, String occurrenceType) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
+    protected void copyOccurrenceInteger(Object modelObject, String setter, Topic t, String occurrenceType) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
         Topic type=t.getTopicMap().getTopic(occurrenceType);
         String o=t.getData(type, (String)null);
         if(o!=null) {
@@ -102,12 +103,12 @@ public class FullIIIFBuilder implements IIIFBuilder {
         }
         
     }
-    protected void copyOccurrence(ModelBase modelObject, String setter, Topic t, String occurrenceType) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
+    protected void copyOccurrence(Object modelObject, String setter, Topic t, String occurrenceType) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
         Topic type=t.getTopicMap().getTopic(occurrenceType);
         String o=t.getData(type, (String)null);
         if(o!=null) setItem(modelObject, setter, o);
     }
-    protected void copyAssociationString(ModelBase modelObject, String setter, Topic t, String associationType, String roleType) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
+    protected void copyAssociationString(Object modelObject, String setter, Topic t, String associationType, String roleType) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
         Topic type=t.getTopicMap().getTopic(associationType);
         Topic role=t.getTopicMap().getTopic(roleType);
         if(type==null || role==null) return;
@@ -116,6 +117,19 @@ public class FullIIIFBuilder implements IIIFBuilder {
             Topic p=a.getPlayer(role);
             if(p!=null && !p.mergesWithTopic(t) && p.getBaseName()!=null) {
                 setItem(modelObject,setter, p.getBaseName());
+                break;
+            }
+        }
+    }
+    protected void copyAssociationSI(Object modelObject, String setter, Topic t, String associationType, String roleType) throws TopicMapException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
+        Topic type=t.getTopicMap().getTopic(associationType);
+        Topic role=t.getTopicMap().getTopic(roleType);
+        if(type==null || role==null) return;
+        ArrayList<Association> as=new ArrayList<>(t.getAssociations(type));
+        for(Association a : as){
+            Topic p=a.getPlayer(role);
+            if(p!=null && !p.mergesWithTopic(t)) {
+                setItem(modelObject,setter, p.getOneSubjectIdentifier().toExternalForm());
                 break;
             }
         }
@@ -311,8 +325,38 @@ public class FullIIIFBuilder implements IIIFBuilder {
         Locator l=t.getSubjectLocator();
         if(l==null) l=t.getOneSubjectIdentifier();
         c.setResourceId(l.toExternalForm());
+        
+        Topic hasService=tm.getTopic(SCMapping.SC_NS+"hasRelatedService");
+        Topic rdfObject=tm.getTopic(RDFMapping.RDF_NS+"object");
+        if(hasService!=null && rdfObject!=null){
+            ArrayList<Association> services=new ArrayList<>(t.getAssociations(hasService));
+            for(Association a : services){
+                Topic service=a.getPlayer(rdfObject);
+                if(service!=null){
+                    Service s=buildService(service, tool);
+                    if(s!=null) c.addResourceService(s);
+                }
+            }
+        }
+        
     }
 
+    protected Service buildService(Topic t, IIIFExport tool) throws TopicMapException {
+        TopicMap tm=t.getTopicMap();
+        Service s=new Service();
+
+        try{
+            copyAssociationSI(s, "setProfile", t, DublinCoreMapping.DC_TERMS_NS+"conformsTo", SimpleRDFImport.objectTypeSI);
+        }
+        catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e){
+            tool.log(e);
+        }
+        
+        
+        s.setId(t.getOneSubjectIdentifier().toExternalForm());
+        
+        return s;
+    }
     
     @Override
     public String getBuilderName() {

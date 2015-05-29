@@ -120,6 +120,8 @@ public class Content extends ModelBase {
         JsonLD jsonLD=new JsonLD();
         jsonLD.append("@id", resourceId)
               .append("@type", resourceType)
+              .appendNotNull("width", width<0?null:width)
+              .appendNotNull("height", height<0?null:height)
               .append("format", format)
               .appendNotEmpty("service", resourceService, true);
         return jsonLD;
@@ -128,9 +130,6 @@ public class Content extends ModelBase {
     @Override
     public JsonLD toJsonLD() {
         return super.toJsonLD()
-                .appendNotNull("width", width<0?null:width)
-                .appendNotNull("height", height<0?null:height)
-                .appendNotNull("format", format)
                 .appendNotNull("motivation", motivation)
                 .appendNotNull("on",on==null?null:on.getId())
                 .append("resource", getResourceJsonLD());
