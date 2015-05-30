@@ -60,7 +60,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         super(admin, modal);
         this.wandora = admin;
         initComponents();
-        setSize(600,400);
+        setSize(640,400);
         //initialize(null);
     }
     
@@ -88,7 +88,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         else {
             setTitle("Select extract sources");
         }
-        setSize(600,400);
+        setSize(640,400);
         if(wandora != null) {
             wandora.centerWindow(this);
         }
@@ -404,7 +404,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
 
         urlPanel.setLayout(new java.awt.GridBagLayout());
 
-        urlLabel.setText("<html>Select URLs to be extracted. Write URL addresses below or get subjects from context topics.</html>");
+        urlLabel.setText("<html>Select URLs to be extracted. Write URL addresses below or get subjects from the context topics.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -446,9 +446,9 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
 
         urlButtonPanel.setLayout(new java.awt.GridBagLayout());
 
-        urlGetSIButton.setText("Get SIs");
+        urlGetSIButton.setText("Get subject identifiers");
         urlGetSIButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        urlGetSIButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        urlGetSIButton.setPreferredSize(new java.awt.Dimension(130, 21));
         urlGetSIButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 urlGetSIButtonMouseReleased(evt);
@@ -458,9 +458,9 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 1);
         urlButtonPanel.add(urlGetSIButton, gridBagConstraints);
 
-        urlGetSLButton.setText("Get SLs");
+        urlGetSLButton.setText("Get subject locators");
         urlGetSLButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        urlGetSLButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        urlGetSLButton.setPreferredSize(new java.awt.Dimension(130, 21));
         urlGetSLButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 urlGetSLButtonMouseReleased(evt);
@@ -472,7 +472,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
 
         urlClearButton.setText("Clear");
         urlClearButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        urlClearButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        urlClearButton.setPreferredSize(new java.awt.Dimension(60, 21));
         urlClearButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 urlClearButtonMouseReleased(evt);
@@ -496,6 +496,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         filePanel.add(fileLabel, gridBagConstraints);
+        fileLabel.getAccessibleContext().setAccessibleName("<html>Select files to be extracted. Write or browse filenames or get files from subject locators. The text field accepts file drops too.</html>");
 
         fileScrollPane.setPreferredSize(new java.awt.Dimension(10, 100));
         fileScrollPane.setViewportView(fileTextPane);
@@ -522,9 +523,9 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 1);
         fileButtonPanel.add(fileBrowseButton, gridBagConstraints);
 
-        fileGetSLButton.setText("Get SLs");
+        fileGetSLButton.setText("Get subject locators");
         fileGetSLButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        fileGetSLButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        fileGetSLButton.setPreferredSize(new java.awt.Dimension(130, 21));
         fileGetSLButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 fileGetSLButtonMouseReleased(evt);
@@ -536,7 +537,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
 
         fileClearButton.setText("Clear");
         fileClearButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        fileClearButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        fileClearButton.setPreferredSize(new java.awt.Dimension(60, 21));
         fileClearButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 fileClearButtonMouseReleased(evt);
@@ -553,7 +554,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
 
         rawPanel.setLayout(new java.awt.GridBagLayout());
 
-        rawLabel.setText("<html>This tab is used to inject content for the extractor. Write, paste or drag and drop content to the text field below.</html>");
+        rawLabel.setText("<html>This tab is used to inject raw content for the extractor. Write, paste or drop the content to the text field.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

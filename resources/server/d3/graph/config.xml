@@ -43,7 +43,7 @@
     
     <!-- The action that displays a topic -->
     <module class="org.wandora.application.modulesserver.ViewTopicWebApp">
-        <param key="webAppName">d3graph</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="webAppName">D3 graph</param> <!-- the name used for this webapp in Wandora menus -->
         <param key="action">d3graph</param> <!-- this is the action identifier -->
         <param key="templateKey">d3graph</param> <!-- the template to use for this action -->
         <param key="defaultTopic">${defaultSI}</param> <!-- default topic -->

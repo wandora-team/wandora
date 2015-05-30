@@ -16,7 +16,7 @@
 
     <!-- The action that implements a Waiana storage -->
     <module class="org.wandora.application.modulesserver.WaianaService">
-        <param key="webAppName">waiana</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="webAppName">Waiana</param> <!-- the name used for this webapp in Wandora menus -->
         <param key="defaultAction">true</param>
         <param key="basePath">${home}</param>
     </module>

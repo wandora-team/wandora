@@ -6,7 +6,7 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
 <html>
 <!-- *********************************************************************** -->
 <!-- ****              WANDORA EMBEDDED HTTP SERVER TEMPLATE            **** -->
-<!-- ****             (c) 2014 by Grip Studios Interactive Oy           **** -->
+<!-- ****                     (c) 2015 by Wandora Team                  **** -->
 <!-- *********************************************************************** -->
 
 <head>
@@ -129,9 +129,9 @@ ${urlbase}?lang=$lang&action=viewtopic&topic=$urlencoder.encode($t.getOneSubject
 
 <h3>Documentation</h3>
 <ul>
-<li><a href="http://wandora.org/wiki/Query_language">Wandora query language</a></li>
-<li><a href="http://wandora.org/wiki/TMQL">TMQL at Wandora Wiki</a></li>
-<li><a href="http://tmql4j.topicmapslab.de/">TMQL4J documentation</a></li>
+<li><a href="http://wandora.org/wiki/Query_language" target="_blank">Wandora query language</a></li>
+<li><a href="http://wandora.org/wiki/TMQL" target="_blank">TMQL at Wandora Wiki</a></li>
+<li><a href="http://tmql4j.topicmapslab.de/" target="_blank">TMQL4J documentation</a></li>
 </ul>
 
 #parse( "${templatesdir}footer.vhtml" )

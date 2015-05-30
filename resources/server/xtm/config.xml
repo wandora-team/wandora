@@ -16,7 +16,7 @@
 
     <!-- The action that outputs xtm -->
     <module class="org.wandora.application.modulesserver.XTMWebApp">
-        <param key="webAppName">xtm</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="webAppName">XTM</param> <!-- the name used for this webapp in Wandora menus -->
         <param key="defaultAction">true</param>
     </module>
     

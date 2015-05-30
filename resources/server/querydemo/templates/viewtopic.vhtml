@@ -1,10 +1,23 @@
+##
+##
+## This is a simple Velocity (http://velocity.apache.org/) template for Wandora's 
+## embedded server framework. The template performs Wandora query 
+## (http://wandora.org/wiki/Query_language) to solve types of the context topic.
+## Additionally the template performs TMQL query to solve instance topics of the
+## context topic. Wandora query is run with $queryrunner.runQuery . TMQL 
+## query is run with $tmqlrunner.runTMQL . Actual queries are set with
+## typesQuery and instancesTmqlQuery macros. Macro linkQueryTopic is used to
+## build a URL link to a topic.
+## 
+##
+##
 #set( $topicMap = $topic.getTopicMap() )
 #set( $wandoraClass = $topicMap.getTopic("http://wandora.org/si/core/wandora-class") )##
 #set( $ctopic = $topic )##
 ##set( $lang = "en" )##
 ##
-#macro( linkTopic $t )##
-${urlbase}?lang=$lang&action=querydemo&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
+#macro( linkQueryTopic $t )##
+${urlbase}?lang=$lang&topic=$urlencoder.encode($t.getOneSubjectIdentifier().toExternalForm())##
 #end##
 ##
 #macro( typesQuery )
@@ -18,17 +31,23 @@ ${topic.getOneSubjectIdentifier()} >> instances
 ##
 <html>
 <head>
- <title>Wandora - $topic.getBaseName()</title>
+ <title>Wandora - Query Demo - $topic.getBaseName()</title>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
+    <h3>
+        This is an example service for Wandora's embedded server framework
+        that views <a href="http://wandora.org/wiki/Query_language" target="_blank">Wandora queries</a> and
+        <a href="http://wandora.org/wiki/TMQL" target="_blank">TMQL queries</a>. Queries result type and
+        instance topics of the context topic. See service's Velocity template file for detailed code.
+    </h3>
     <h1>$topic.getDisplayName($lang)</h1>
     <h2>Types</h2>
     <ul>
         #set( $result = $queryrunner.runQuery( "#typesQuery", $topic ) )
         #foreach( $row in $result )
             #set( $resultTopic = $row.getActiveValue() )
-            <li><a href="#linkTopic($resultTopic)">$resultTopic.getDisplayName($lang)</a></li>
+            <li><a href="#linkQueryTopic($resultTopic)">$resultTopic.getDisplayName($lang)</a></li>
         #end
     </ul>
     <h2>Instances TMQL</h2>
@@ -36,7 +55,7 @@ ${topic.getOneSubjectIdentifier()} >> instances
         #set( $tmqlResult = $tmqlrunner.runTMQL( $topicMap, "#instancesTmqlQuery" ).getData() )
         #foreach( $row in $tmqlResult )
             #set( $resultTopic = $row[0] )
-            <li><a href="#linkTopic($resultTopic)">$resultTopic.getDisplayName($lang)</a></li>
+            <li><a href="#linkQueryTopic($resultTopic)">$resultTopic.getDisplayName($lang)</a></li>
         #end
     </ul>
 </body>

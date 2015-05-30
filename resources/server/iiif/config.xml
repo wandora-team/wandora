@@ -16,7 +16,7 @@
 
     <!-- The action that implements a Waiana storage -->
     <module class="org.wandora.application.modulesserver.IIIFWebApp">
-        <param key="webAppName">IIIF Export</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="webAppName">IIIF JSON</param> <!-- the name used for this webapp in Wandora menus -->
         <param key="defaultAction">true</param>
         <param key="iiifBuilder">org.wandora.application.tools.exporters.iiifexport.SelectionInstancesIIIFBuilder</param>
         <param key="prettyPrint">true</param>

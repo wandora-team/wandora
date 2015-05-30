@@ -16,7 +16,8 @@
 
     <!-- The action that outputs jtm -->
     <module class="org.wandora.application.modulesserver.JTMWebApp">
-        <param key="webAppName">jtm</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="webAppName">JTM</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="action">jtm</param> <!-- this is the action identifier -->
         <param key="defaultAction">true</param>
     </module>
     

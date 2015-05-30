@@ -44,7 +44,7 @@
     
     <!-- The action that displays a topic -->
     <module class="org.wandora.application.modulesserver.ViewTopicWebApp">
-        <param key="webAppName">layer</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="webAppName">D3 layer visualization</param> <!-- the name used for this webapp in Wandora menus -->
         <param key="action">layer</param> <!-- this is the action identifier -->
         <param key="templateKey">layer</param> <!-- the template to use for this action -->
         <param key="defaultTopic">${defaultSI}</param> <!-- default topic -->

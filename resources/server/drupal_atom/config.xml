@@ -44,8 +44,8 @@
     
     <!-- The action that displays a topic -->
     <module class="org.wandora.application.modulesserver.ViewTopicWebApp">
-        <param key="webAppName">drupal atom</param> <!-- the name used for this webapp in Wandora menus -->
-        <param key="action">drupal_atom</param> <!-- this is the action identifier -->
+        <param key="webAppName">Atom</param> <!-- the name used for this webapp in Wandora menus -->
+        <param key="action">atom</param> <!-- this is the action identifier -->
         <param key="templateKey">viewtopic</param> <!-- the template to use for this action -->
         <param key="defaultTopic">${defaultSI}</param> <!-- default topic -->
         <param key="defaultLang">en</param> <!-- default language -->

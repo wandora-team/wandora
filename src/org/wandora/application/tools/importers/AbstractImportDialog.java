@@ -48,7 +48,7 @@ import java.io.*;
  * @author  akivela
  */
 public class AbstractImportDialog extends javax.swing.JDialog {
-    private Wandora parent = null;
+    private Wandora wandora = null;
     private WandoraTool parentTool = null;
     private boolean wasAccepted = false;
     private HashMap<Component,Integer> registeredSources = null;
@@ -56,9 +56,9 @@ public class AbstractImportDialog extends javax.swing.JDialog {
     
     
     /** Creates new form AbstractImportDialog */
-    public AbstractImportDialog(Wandora admin, boolean modal) {
-        super(admin, modal);
-        this.parent = admin;
+    public AbstractImportDialog(Wandora wandora, boolean modal) {
+        super(wandora, modal);
+        this.wandora = wandora;
         initComponents();
         initialize(null);
     }
@@ -73,8 +73,8 @@ public class AbstractImportDialog extends javax.swing.JDialog {
 
         if(parentTool != null) setTitle(parentTool.getName());
         else setTitle("Select imported resources");
-        setSize(500,300);
-        if(parent != null) parent.centerWindow(this);
+        setSize(640,400);
+        if(wandora != null) wandora.centerWindow(this);
         registeredSources = new HashMap<Component,Integer>();
     }
     
@@ -182,7 +182,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
         chooser.setFileSelectionMode(SimpleFileChooser.FILES_AND_DIRECTORIES);
         //if(accessoryPanel != null) { chooser.setAccessory(accessoryPanel); }
 
-        if(chooser.open(parent, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+        if(chooser.open(wandora, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
             File[] files = chooser.getSelectedFiles();
             File f = null;
             String fs = "";
@@ -349,7 +349,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
 
         urlPanel.setLayout(new java.awt.GridBagLayout());
 
-        urlLabel.setText("<html>Select URL resources to be imported. Please write URL addresses below or get subjects from context topics.</html>");
+        urlLabel.setText("<html>Select URL resources to be imported. Enter URLs below or get subject identifiers or subject locators from context topics.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -370,9 +370,9 @@ public class AbstractImportDialog extends javax.swing.JDialog {
 
         urlButtonPanel.setLayout(new java.awt.GridBagLayout());
 
-        urlGetSIButton.setText("Get SIs");
+        urlGetSIButton.setText("Get subject identifiers");
         urlGetSIButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        urlGetSIButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        urlGetSIButton.setPreferredSize(new java.awt.Dimension(140, 21));
         urlGetSIButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 urlGetSIButtonMouseReleased(evt);
@@ -382,9 +382,9 @@ public class AbstractImportDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 1);
         urlButtonPanel.add(urlGetSIButton, gridBagConstraints);
 
-        urlGetSLButton.setText("Get SLs");
+        urlGetSLButton.setText("Get subject locators");
         urlGetSLButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        urlGetSLButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        urlGetSLButton.setPreferredSize(new java.awt.Dimension(140, 21));
         urlGetSLButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 urlGetSLButtonMouseReleased(evt);
@@ -396,7 +396,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
 
         urlClearButton.setText("Clear");
         urlClearButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        urlClearButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        urlClearButton.setPreferredSize(new java.awt.Dimension(60, 21));
         urlClearButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 urlClearButtonMouseReleased(evt);
@@ -413,7 +413,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
 
         filePanel.setLayout(new java.awt.GridBagLayout());
 
-        fileLabel.setText("<html>Select files to be imported. Please browse files or get subject locator files. Text area accepts file drops too.</html>");
+        fileLabel.setText("<html>Select files to be imported. Enter or browse or get subject locator files. Text area accepts file drops too.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -446,9 +446,9 @@ public class AbstractImportDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 1);
         fileButtonPanel.add(fileBrowseButton, gridBagConstraints);
 
-        fileGetSLButton.setText("Get SLs");
+        fileGetSLButton.setText("Get subject locators");
         fileGetSLButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        fileGetSLButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        fileGetSLButton.setPreferredSize(new java.awt.Dimension(130, 21));
         fileGetSLButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 fileGetSLButtonMouseReleased(evt);
@@ -460,7 +460,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
 
         fileClearButton.setText("Clear");
         fileClearButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        fileClearButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        fileClearButton.setPreferredSize(new java.awt.Dimension(60, 21));
         fileClearButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 fileClearButtonMouseReleased(evt);
@@ -477,7 +477,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
 
         rawPanel.setLayout(new java.awt.GridBagLayout());
 
-        rawLabel.setText("<html>Paste or drag and drop actual content for the importer.</html>");
+        rawLabel.setText("<html>Enter, paste or drop the actual content for the importer.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
