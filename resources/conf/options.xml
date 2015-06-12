@@ -386,7 +386,19 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
       </set>
       <set>
-         <name>generic</name>
+        <name>generic</name>
+        <item>
+            <name>R console</name>
+            <class>org.wandora.application.tools.r.OpenRConsole</class>
+         </item>
+         <item>
+            <name>IOT Pinger</name>
+            <class>org.wandora.application.tools.iot.Pinger</class>
+         </item>
+         <item>
+            <name>--- RULER ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
          <item>
             <name>Add your tools here with Tool manager</name>
             <class>org.wandora.application.WandoraToolManager2</class>
@@ -474,10 +486,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>OpenCyc extractor...</name>
                <class>org.wandora.application.tools.extractors.opencyc.OpenCycExtractor</class>
-            </item>
-            <item>
-               <name>Freebase extractor...</name>
-               <class>org.wandora.application.tools.extractors.freebase.FreebaseExtractor</class>
             </item>
             <item>
                <name>--- UMBEL ---</name>
@@ -747,10 +755,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>--- OTHER SOCIAL ---</name>
                <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Facebook graph extractor...</name>
-               <class>org.wandora.application.tools.extractors.facebook.FacebookAPIExtractor</class>
             </item>
             <item>
                <name>Facebook graph extractor v2...</name>
@@ -1459,18 +1463,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>---</name>
             <class>org.wandora.application.tools.TestTool</class>
-         </item>
-         <item>
-            <name>R console</name>
-            <class>org.wandora.application.tools.r.OpenRConsole</class>
-         </item>
-         <item>
-            <name>---</name>
-            <class>org.wandora.application.tools.TestTool</class>
-         </item>
-         <item>
-            <name>IOT Pinger</name>
-            <class>org.wandora.application.tools.iot.Pinger</class>
          </item>
       </set>
       <set>
