@@ -27,6 +27,7 @@ $ $
 ) )
 , ,
 - :
+– :
 -- :
 . .
 ... :
@@ -2234,6 +2235,7 @@ color-coded VBN
 color-coding VBG
 color-television NN
 colored VBN
+coloured VBN
 colorlessness NN
 colossus NN
 combat NN VB

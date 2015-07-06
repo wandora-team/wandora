@@ -10,7 +10,7 @@
 *
 *  Diana Maynard, 10 Sep 2001
 * 
-*  $Id: unknown.jape,v 1.1 2011-03-09 07:31:54 cvs Exp $
+*  $Id: unknown.jape 17326 2014-02-17 16:38:01Z dgmaynard $
 */
 
 Phase:	Unknown
@@ -39,7 +39,7 @@ Priority: 100
 Rule:Unknown
 Priority: 50
 ( 
- {Token.category == NNP}
+ {Token.category == NNP, Token.length != "1"}
 ) 
 :unknown
 -->

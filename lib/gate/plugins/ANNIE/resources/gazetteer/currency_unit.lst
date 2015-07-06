@@ -13,15 +13,14 @@ E
 ECU
 East Caribbean dollar
 Ecu
-EURO
-EUROS
-Euro
-Euros
-European Currency Units
+EURO:symbol=€
+EUROS:symbol=€
+Euro:symbol=€
+Euros:symbol=€
 F Fr
 FFr
 Fr
-GBP
+GBP:symbol=£
 German mark
 German marks
 Macau Palaca
@@ -33,8 +32,8 @@ Ost Mark
 S Fr
 SFr
 Saudi riyal
-US dollar
-US dollars
+US dollar:symbol=$
+US dollars:symbol=$
 austral
 baht
 balboa
@@ -56,8 +55,8 @@ deutschemarks
 dinar
 dinari
 dirham
-dollar
-dollars
+dollar:symbol=$
+dollars:symbol=$
 drach
 drachma
 drachmas
@@ -65,8 +64,8 @@ ecu
 escudo
 escudos
 euc
-euro
-euros
+euro:symbol=€
+euros:symbol=€
 floren
 florens
 forint
@@ -112,10 +111,10 @@ peseta
 pesetas
 peso
 pesos
-pound
-pound sterling
-pounds
-pounds sterling
+pound:symbol=£
+pound sterling:symbol=£
+pounds:symbol=£
+pounds sterling:symbol=£
 pula
 punt
 punts
@@ -138,7 +137,7 @@ shekels
 shilling
 shillings
 sol
-sterling
+sterling:symbol=£
 sucre
 taka
 tugrik
@@ -167,8 +166,8 @@ Deutschemarks
 Dinar
 Dinari
 Dirham
-Dollar
-Dollars
+Dollar:symbol=$
+Dollars:symbol=$
 Drach
 Drachma
 Drachmas
@@ -220,10 +219,10 @@ Peseta
 Pesetas
 Peso
 Pesos
-Pound
-Pound Sterling
-Pounds
-Pounds Sterling
+Pound:symbol=£
+Pound Sterling:symbol=£
+Pounds:symbol=£
+Pounds Sterling:symbol=£
 Pula
 Punt
 Punts
@@ -246,7 +245,7 @@ Shekels
 Shilling
 Shillings
 Sol
-Sterling
+Sterling:symbol=£
 Sucre
 Taka
 Tugrik
@@ -255,3 +254,4 @@ Won
 Yen
 Zaire
 Zloty
+USD:symbol=$

@@ -33,6 +33,7 @@ import gate.corpora.DocumentContentImpl;
 import gate.corpora.DocumentImpl;
 import gate.creole.*;
 import gate.util.*;
+import gate.util.persistence.PersistenceManager;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -69,18 +70,18 @@ public class AnnieExtractor extends AbstractGate {
 
     // ----- Configuration -----
     private AnnieConfiguration configuration = null;
-    private static SerialAnalyserController annieController = null;
+    private static CorpusController annieController = null;
 
 
 
     @Override
     public String getName() {
-        return "GATE Annie extractor";
+        return "Gate Annie extractor";
     }
 
     @Override
     public String getDescription(){
-        return "Recognizes entities out of given text with GATE Annie. See http://gate.ac.uk";
+        return "Look for entities out of given text with Gate Annie. See http://gate.ac.uk";
     }
     
 
@@ -135,6 +136,7 @@ public class AnnieExtractor extends AbstractGate {
 
 
 
+    @Override
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         URLConnection uc = url.openConnection();
         uc.setUseCaches(false);
@@ -143,6 +145,7 @@ public class AnnieExtractor extends AbstractGate {
     }
 
 
+    @Override
     public boolean _extractTopicsFrom(File file, TopicMap topicMap) throws Exception {
         return _extractTopicsFrom(new FileInputStream(file),topicMap);
     }
@@ -161,6 +164,7 @@ public class AnnieExtractor extends AbstractGate {
     }
 
 
+    @Override
     public boolean _extractTopicsFrom(String in, TopicMap tm) throws Exception {
         try {
             doAnnie(in, tm);
@@ -173,34 +177,20 @@ public class AnnieExtractor extends AbstractGate {
 
 
 
-    public void initializeAnnie() throws GateException, MalformedURLException {
+    public void initializeAnnie() throws GateException, MalformedURLException, IOException {
         Gate.setGateHome(new File(GATE_HOME));
         Gate.setPluginsHome(new File(GATE_PLUGIN_HOME));
         Gate.setSiteConfigFile(new File(CONFIG_FILE));
 
         Gate.init();
 
-        // Load ANNIE plugin
-        File gateHome = Gate.getGateHome();
-        File pluginsHome = new File(gateHome, "plugins");
-        Gate.getCreoleRegister().registerDirectories(new File(pluginsHome, "ANNIE").toURI().toURL());
         log("GATE initialised");
-
-        // -------------------------------------------------
-        // initialise ANNIE (this may take several minutes)
-        annieController = (SerialAnalyserController) Factory.createResource(
-            "gate.creole.SerialAnalyserController", Factory.newFeatureMap(),
-            Factory.newFeatureMap(), "ANNIE_" + Gate.genSym()
-        );
-
-        for(int i = 0; i < ANNIEConstants.PR_NAMES.length; i++) {
-            FeatureMap params = Factory.newFeatureMap(); // use default parameters
-            ProcessingResource pr = (ProcessingResource)
-            Factory.createResource(ANNIEConstants.PR_NAMES[i], params);
-
-            // add the PR to the pipeline controller
-            annieController.add(pr);
-        }
+        
+        // Load ANNIE plugin
+        File pluginsHome = Gate.getPluginsHome();
+        File anniePlugin = new File(pluginsHome, "ANNIE");
+        File annieGapp = new File(anniePlugin, "ANNIE_with_defaults.gapp");
+        annieController = (CorpusController) PersistenceManager.loadObjectFromFile(annieGapp);
         log("ANNIE loaded successfully");
     }
 

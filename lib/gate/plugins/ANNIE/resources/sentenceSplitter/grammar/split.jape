@@ -10,7 +10,7 @@
 *
 *  Valentin Tablan, March 7th, 2007
 *
-*  $Id: split.jape,v 1.1 2011-03-09 07:31:52 cvs Exp $
+*  $Id: split.jape 17376 2014-02-21 10:07:24Z dgmaynard $
 */
 
 Phase:split
@@ -41,7 +41,7 @@ Rule: internalSplits
     Collections.sort(tokList, new OffsetComparator());
     for(Annotation token : tokList){
       String tokenKind = (String)token.getFeatures().get("kind");
-      if("word".equals(tokenKind)){
+      //if("word".equals(tokenKind)){
         Long startOffset = token.getStartNode().getOffset();
         if(startOffset.compareTo(endOffset) < 0){
           //create the new sentence
@@ -53,7 +53,7 @@ Rule: internalSplits
           }catch( InvalidOffsetException ioe){
             throw new GateRuntimeException(ioe);
           }
-        }
+       // }
         return;
       }
     }
@@ -86,7 +86,7 @@ Rule: externalSplits
     Collections.sort(tokList, new OffsetComparator());
     for(Annotation token : tokList){
       String tokenKind = (String)token.getFeatures().get("kind");
-      if("word".equals(tokenKind)){
+     // if("word".equals(tokenKind)){
         Long startOffset = token.getStartNode().getOffset();
         if(startOffset.compareTo(endOffset) < 0){
           //create the new sentence
@@ -97,7 +97,7 @@ Rule: externalSplits
           }catch( InvalidOffsetException ioe){
             throw new GateRuntimeException(ioe);
           }
-        }
+       // }
         return;
       }
     }

@@ -10,15 +10,14 @@
 *
 *  Diana Maynard, 10 Sep 2001
 * 
-*  $Id: first.jape,v 1.1 2011-03-09 07:31:54 cvs Exp $
+*  $Id: first.jape 17726 2014-03-21 15:10:00Z dgmaynard $
 */
 
 Phase:	First
-Input: Token Lookup
-Options: control = once
+Input: Token NumberLetter
+Options: control = appelt
 
 // this has to be run first of all 
-// contains any macros etc needed only for standard grammars
 
 //////////////////////////////////////////////////////////////
 Macro: SPACE
@@ -40,9 +39,57 @@ Macro: SPACE
 )
 
 
+
+
 ///////////////////////////////////////////////////////////////
 
-Rule: Silly
-// we have to have a rule here, so we'll just have something silly
+Rule: ClosedClass
+// closed class words should not be part of names generally, so let's identify them
+Priority: 100
 
-{Token} --> {}
+(
+ {Token.category == DT}|
+ {Token.category == PRP}|
+ {Token.category == RB}|
+ {Token.category == IN}
+):tag
+-->
+:tag.ClosedClass = {rule = "ClosedClass"}
+
+Rule: NumberLetter
+Priority: 100
+( 
+ {NumberLetter}
+):tag
+-->
+{} 
+
+
+Rule: UpperAllCaps
+Priority: 100
+// separate proper nouns that are in all caps, as they're more ambiguous
+(
+ {Token.category == NNP, Token.orth == allCaps}
+ ({Token.string == "-"}
+  {Token.category == NNP, Token.orth == allCaps}
+ )?
+):tag
+-->
+:tag.Upper = {kind = "allCaps", rule = "Upper"}
+
+Rule: Upper
+// define what can be a possible proper noun - cater for the fact that POS tag might not be correct
+(
+ ({Token.category == NNP}| 
+   {Token.orth == upperInitial}|
+   {Token.orth == mixedCaps} 
+  )
+ ({Token.string == "-"}
+  {Token.category == NNP}
+ )?
+):tag
+-->
+:tag.Upper = {rule = "Upper"}
+
+
+

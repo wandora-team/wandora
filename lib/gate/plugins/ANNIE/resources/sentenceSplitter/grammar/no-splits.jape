@@ -10,7 +10,7 @@
 *
 *  Valentin Tablan, 23 Jan 2007
 * 
-*  $Id: no-splits.jape,v 1.1 2011-03-09 07:31:52 cvs Exp $
+*  $Id$
 */
 
 //This grammar deals with documents that have no splits

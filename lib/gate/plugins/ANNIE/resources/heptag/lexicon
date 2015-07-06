@@ -1,4 +1,4 @@
-! .
+De! .
 # #
 $ $
 % NN JJ
@@ -32,6 +32,7 @@ $ $
 ) )
 , ,
 - :
+– :	
 -- :
 . .
 ... :
@@ -777,6 +778,7 @@ BEER NN
 BEING VBG
 BENEFITS NNS
 BEWARE VB
+BIG JJ
 BIGGER JJR
 BILL NN
 BILLS NNS NNPS
@@ -913,7 +915,7 @@ Beyond IN NNP
 Bicyclists NNPS
 Bidding NN
 Bids NNS
-Big NNP JJ
+Big JJ
 Big-bucks JJ
 Bigger JJR
 Biggest JJS
@@ -927,6 +929,7 @@ Billionaire NN
 Billions NNS
 Bills NNS
 BioSciences NNP NNPS
+Biodiesel NN
 Bioengineers NNS
 Biological NNP JJ
 Biotechnology NNP NN
@@ -1720,6 +1723,7 @@ Defenders NNS
 Defending VBG
 Defense NNP NN
 Defining VBG
+Deforestation NN
 Defuse VB
 Del.-based JJ
 Delayed JJ
@@ -2035,7 +2039,7 @@ Entertainment NNP NN
 Enthusiasts NNS
 Entrepreneurs NNS
 Environmental NNP JJ
-Environmentalists NNPS NNS
+Environmentalists NNS
 Epinalers NNPS
 Episcopalians NNPS
 Equally RB
@@ -2207,6 +2211,7 @@ Factoring NN
 Factory NN NNP
 Faculty NN
 Fahrenheit NN NNP
+Failed JJ
 Fails VBZ
 Failure NN
 Failures NNS
@@ -2343,7 +2348,7 @@ Foreign-exchange NN
 Foreigners NNS
 Foremost NNP RB
 Foresight NN
-Forest NNP NN
+Forest NN NNP
 Forest-products NNS
 Forget VB
 Form NN NNP
@@ -3429,6 +3434,7 @@ Metal NNP NN
 Metallgesellschaft NNP NN
 Metals NNP NNPS NNS
 Metamorphosis NN
+Methane NN
 Methodists NNPS
 Metzenbaums NNPS
 Mexican JJ NNP
@@ -3565,6 +3571,7 @@ NEC-compatible JJ
 NEW JJ NNP NN
 NEWS NN NNP
 NEWSPAPERS NNPS
+NHS NNP
 NIH-appointed JJ
 NO DT RB UH
 NORTHEAST NN
@@ -3631,6 +3638,7 @@ Newspapers NNS NNP
 Newsprint NN
 Newsstands NNS
 Next JJ NNP RB IN
+Nhs NNP
 Nicaraguan JJ NNP
 Niche-itis NN
 Nicholas NNP NNS
@@ -3949,7 +3957,7 @@ Passport NN
 Past JJ NNP
 Patent NNP NN
 Path NNP NN
-Patients NNPS NNS
+Patients NNS
 Patrician NN
 Patriots NNPS
 Patterns NNS
@@ -4317,6 +4325,7 @@ Railroad NN NNP
 Railroad-rate JJ
 Rails NNPS
 Rain NN
+Rainforest NN
 Raise VB
 Raising VBG NNP
 Rake NN
@@ -6822,6 +6831,7 @@ bimonthly JJ
 binding JJ VBG
 bio-research NN
 bioTechnology NNP
+biodiesel NN
 biographer\/critic NN
 biomedical-products NNS
 biotech JJ
@@ -7713,6 +7723,7 @@ color-coded VBN
 color-coding VBG
 color-television NN
 colored VBN
+coloured VBN
 colorlessness NN
 colossus NN
 combat NN VB
@@ -8491,6 +8502,7 @@ deflate VB
 deflated VBN VBD
 deflect VB
 deflected VBD
+deforestation NN
 deformed VBN
 defraud VB
 defrauded VBD VBN
@@ -12249,6 +12261,7 @@ met VBD VBN
 metabolized VBN
 metal-workers NNS
 meted VBN
+methane NN
 metric JJ NN
 metropolitan JJ
 mice NNS
@@ -12660,6 +12673,8 @@ newsworthiness NN
 newsworthy JJ
 next JJ IN RB
 nexus NN
+nhs NNP
+nhS NNP
 nibble NN
 nice JJ
 nicer JJR

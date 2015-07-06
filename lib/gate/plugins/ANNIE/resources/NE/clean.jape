@@ -10,12 +10,12 @@
 *
 *  Diana Maynard, 10 Sep 2001
 * 
-*  $Id: clean.jape,v 1.1 2011-03-09 07:31:54 cvs Exp $
+*  $Id: clean.jape 18106 2014-06-20 17:42:07Z dgmaynard $
 */
 
 Phase:	Clean
-Input: TempPerson TempLocation TempOrganization TempDate TempTime TempYear TempZone Street Postcode Email Url Phone Ip TempIdentifier TempSpecs
-Options: control = appelt
+Input: TempPerson TempLocation TempOrganization TempDate TempTime TempYear TempZone Street Postcode Email Url Phone Ip TempIdentifier TempSpecs ClosedClass Initials Upper FirstPerson JobTitle HashtagToken HashtagLookup NumberLetter Temp Title UrlPre
+Options: control = all
 
 Rule:CleanTempAnnotations
 (
@@ -33,7 +33,18 @@ Rule:CleanTempAnnotations
  {Phone}|
  {Ip}|
  {TempIdentifier}|
- {TempSpecs}
+ {TempSpecs}|
+ {ClosedClass}|
+ {Upper}|
+ {Initials}|
+ {FirstPerson}|
+ {JobTitle}|
+ {HashtagToken}|
+ {HashtagLookup}|
+ {Title}|
+ {UrlPre}|
+ {Temp}|
+ {NumberLetter}
 ):temp
 -->
 {

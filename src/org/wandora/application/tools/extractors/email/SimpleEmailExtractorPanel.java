@@ -53,7 +53,9 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
     private Wandora wandora = null;
     private JDialog dialog = null;
     private boolean isAccepted =  false;
-
+    private static String currentFile = null;
+    
+    
 
 
     /** Creates new form SimpleEmailExtractorPanel */
@@ -155,8 +157,8 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         optionsPanel.add(typeLabel, gridBagConstraints);
 
         typeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Single email file", "MBOX email repository" }));
-        typeComboBox.setMinimumSize(new java.awt.Dimension(127, 21));
-        typeComboBox.setPreferredSize(new java.awt.Dimension(130, 21));
+        typeComboBox.setMinimumSize(new java.awt.Dimension(127, 23));
+        typeComboBox.setPreferredSize(new java.awt.Dimension(130, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
@@ -172,8 +174,8 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         optionsPanel.add(resourceLabel, gridBagConstraints);
 
-        resourceTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        resourceTextField.setPreferredSize(new java.awt.Dimension(6, 21));
+        resourceTextField.setMinimumSize(new java.awt.Dimension(6, 23));
+        resourceTextField.setPreferredSize(new java.awt.Dimension(6, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -274,11 +276,15 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
     private void fileButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileButtonMouseReleased
         SimpleFileChooser fc = UIConstants.getFileChooser();
         fc.setDialogTitle("Select email resource");
+        if(currentFile != null) {
+            fc.setSelectedFile(new File(currentFile));
+        }
         int answer = fc.open(dialog, SimpleFileChooser.OPEN_DIALOG, "Select");
         if(answer == SimpleFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
             if(f != null) {
                 resourceTextField.setText(f.getAbsolutePath());
+                currentFile = f.getAbsolutePath();
             }
         }
     }//GEN-LAST:event_fileButtonMouseReleased

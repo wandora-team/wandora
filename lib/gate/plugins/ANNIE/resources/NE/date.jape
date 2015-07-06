@@ -10,7 +10,7 @@
 *
 *  Diana Maynard, 10 Sep 2001
 * 
-*  $Id: date.jape,v 1.1 2011-03-09 07:31:53 cvs Exp $
+*  $Id: date.jape 17311 2014-02-14 18:49:50Z dgmaynard $
 */
 
 
@@ -62,6 +62,9 @@ Macro: SLASH
   
 Macro: DASH
   {Token.string == "-"}
+
+Macro: DOT
+  {Token.string == "."}
 
 Macro: OF
   {Token.string == "of"}
@@ -395,7 +398,6 @@ Rule:	DateDash
  :date.TempDate = {rule = "DateDash"}
 
 
-
 Rule: 	DateName
 Priority: 20
 // Wed 10 July
@@ -494,16 +496,16 @@ Rule:	DateNumDashRev
  :date.TempDate = {rule = "DateNumDashRev"}
 
 
-Rule:	DateNumSlash
+Rule:	DateNumSlashDot
 // 01/07/00
 // Note: not 07/00
 
 ( 
-DAY_MONTH_NUM SLASH DAY_MONTH_NUM SLASH YEAR
+DAY_MONTH_NUM (SLASH|DOT) DAY_MONTH_NUM (SLASH|DOT) YEAR
 )
 :date
 -->
- :date.TempDate = {rule = "DateNumSlash"}
+ :date.TempDate = {rule = "DateNumSlashDot"}
 
 
 Rule: ModifierMonth
@@ -615,7 +617,7 @@ Priority: 10
 
 (FOUR_DIGIT)
 :date -->
- :date.TempYear = {kind = "positive", rule = "TempYear3"}
+ :date.TempYear = {kind = "negative", rule = "TempYear3"}
 
 
 Rule: YearWords

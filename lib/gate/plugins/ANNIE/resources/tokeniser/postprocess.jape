@@ -133,6 +133,89 @@ Rule: VBneg
   }//if first token ends with "n"
 }
 
+
+/* ?N'T (AF, 2011-01)
+ * copied & slightly modified from ?n't rule above   */
+Rule: VBnegUppercase
+   ({Token}):one
+   ({Token.string=="'"}{Token.string=="T"}):two
+-->
+{
+  gate.Annotation firstToken = (gate.Annotation)
+                               ((gate.AnnotationSet)bindings.get("one")).iterator().next();
+  String firstTokenText = (String)firstToken.getFeatures().get("string");
+  if(firstTokenText.endsWith("N")){
+    //remove the old tokens
+    outputAS.removeAll((gate.AnnotationSet)bindings.get("one"));
+    outputAS.removeAll((gate.AnnotationSet)bindings.get("two"));
+    //create the new tokens
+    Long ofs0 = firstToken.getStartNode().getOffset();
+    Long ofs1 = new Long(firstToken.getEndNode().getOffset().longValue() - 1);
+    Long ofs2 = ((gate.AnnotationSet)bindings.get("two")).lastNode().getOffset();
+    try{
+      gate.FeatureMap features;
+      if(!ofs0.equals(ofs1)){
+        features = Factory.newFeatureMap();
+        features.put("kind", "word");
+        String text = firstTokenText.substring(0, firstTokenText.length() - 1);
+        features.put("string", text);
+        features.put("length", Integer.toString(text.length()));
+        features.put("orth", firstToken.getFeatures().get("orth"));
+        outputAS.add(ofs0, ofs1, "Token", features);
+      }
+
+      features = Factory.newFeatureMap();
+      features.put("kind", "word");
+      features.put("string", "N'T");
+      features.put("length", "3");
+      features.put("orth", "uppercase");
+      outputAS.add(ofs1, ofs2, "Token", features);
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+  }//if first token ends with "N"
+}
+
+
+/* "cannot" (AF, 2011-01) */
+Rule: Cannot
+({Token.string ==~ "[Cc][Aa][Nn][Nn][Oo][Tt]"}):cannot
+-->
+:cannot  {
+  Annotation cannot = cannotAnnots.iterator().next();
+  String cannotStr = cannot.getFeatures().get("string").toString();
+  String canStr = cannotStr.substring(0,3);
+  String notStr = cannotStr.substring(3,6);
+
+  Long start = cannot.getStartNode().getOffset();
+  Long end   = cannot.getEndNode().getOffset();
+  Long middle = start + 3L;
+
+  /* Copy orth, &c., from the original Token;
+   * overwrite the others appropriately.  */
+  FeatureMap canFM = Factory.newFeatureMap();
+  FeatureMap notFM = Factory.newFeatureMap();
+  canFM.putAll(cannot.getFeatures());
+  notFM.putAll(cannot.getFeatures());
+
+  canFM.put("string", canStr);
+  notFM.put("string", notStr);
+  canFM.put("length", Integer.toString(3));
+  notFM.put("length", Integer.toString(3));
+
+  try {
+    outputAS.add(start, middle, "Token", canFM);
+    outputAS.add(middle, end, "Token", notFM);
+  }
+  catch (InvalidOffsetException e) {
+    /* This should never happen */
+    e.printStackTrace();
+  }
+
+  outputAS.remove(cannot);
+}
+
+
 // CR+LF | CR |LF+CR -> One single SpaceToken
 Rule: NewLine
  (

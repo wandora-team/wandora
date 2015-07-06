@@ -10,11 +10,11 @@
 *
 *  Diana Maynard, 10 Sep 2001
 * 
-*  $Id: name_post.jape,v 1.1 2011-03-09 07:31:53 cvs Exp $
+*  $Id: name_post.jape 17683 2014-03-17 16:13:33Z dgmaynard $
 */
 
 Phase:	NamePost
-Input: Token Lookup FirstPerson
+Input: Token Lookup FirstPerson 
 Options: control = appelt
 
 // this runs after name.jape to fix some problems that may have been caused
@@ -53,8 +53,13 @@ if (firstPerson != null && firstPerson.size()>0)
   gate.Annotation personAnn = (gate.Annotation)firstPerson.iterator().next();
   features.put("gender", personAnn.getFeatures().get("gender"));
 }
-  features.put("kind", "personName");
+  features.put("kind", "firstName");
   features.put("rule", "FirstPersonStop");
 outputAS.add(personSet.firstNode(), personSet.lastNode(), "TempPerson",
 features);
 }}
+
+
+
+
+ 

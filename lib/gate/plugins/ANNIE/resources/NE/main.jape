@@ -10,11 +10,12 @@
 *
 *  Diana Maynard, 02 Aug 2001
 *
-*  $Id: main.jape,v 1.1 2011-03-09 07:31:54 cvs Exp $
+*  $Id: main.jape 18302 2014-09-09 15:28:58Z dgmaynard $
 */
 
 MultiPhase:	TestTheGrammars
-Phases: 
+Phases:
+numberletter 
 first
 firstname
 name
@@ -23,6 +24,7 @@ date_pre
 date
 reldate
 number
+number_clean
 address
 url_pre
 url

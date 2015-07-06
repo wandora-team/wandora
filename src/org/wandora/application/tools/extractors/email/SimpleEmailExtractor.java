@@ -86,7 +86,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     @Override
     public String doBrowserExtract(BrowserExtractRequest request, Wandora wandora) throws TopicMapException {
         String url=request.getSource();
-        try{
+        try {
             ByteArrayInputStream in=new ByteArrayInputStream(request.getContent().getBytes("ISO-8859-1"));
             TopicMap tm=wandora.getTopicMap();
             _extractTopicsFromStream(request.getSource(), in, tm);

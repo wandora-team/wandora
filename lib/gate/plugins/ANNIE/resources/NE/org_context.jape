@@ -10,14 +10,20 @@
 *
 *  Diana Maynard, 10 Sep 2001
 * 
-*  $Id: org_context.jape,v 1.1 2011-03-09 07:31:53 cvs Exp $
+*  $Id: org_context.jape 18220 2014-07-31 15:05:47Z dgmaynard $
 */
 
 
 Phase:	Org_Context
-Input: SpaceToken Token Lookup Organization Unknown Location Person
+Input: Token Lookup Organization Unknown Location Person JobTitle Initials
 Options: control = appelt
 
+Macro: THE
+( 
+ {Token.string == "the"}|
+ {Token.string == "The"}|
+ {Token.string == "THE"}
+)
 
 
 Rule:OrgContext1
@@ -33,7 +39,7 @@ Priority: 1
   )
  )?
 )
-(
+( 
  {Unknown.kind == PN}
 )
 :org
@@ -42,6 +48,7 @@ Priority: 1
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "OrgContext1");
+features.put("orgType ", "company");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
@@ -68,6 +75,7 @@ Priority: 5
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "OrgContext2");
+features.put("orgType ", "company");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
@@ -88,6 +96,7 @@ Priority: 5
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "OrgContext3");
+features.put("orgType ", "company");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
@@ -109,6 +118,7 @@ Priority: 10
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "OrgContext4");
+features.put("orgType ", "company");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
@@ -132,6 +142,7 @@ Priority: 10
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "OrgContext5");
+features.put("orgType ", "company");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
@@ -149,7 +160,7 @@ Priority: 50
   {Token.string == "joins"}|
   {Token.string == "join"}
  )
- SPACE
+
 )
 ( 
  {Unknown.kind ==PN}
@@ -160,6 +171,7 @@ Priority: 50
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "JoinOrg");
+features.put("orgType ", "company");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
@@ -177,7 +189,7 @@ Priority: 20
  ({Token.string == "'"}
   ({Token.string == "s"})?
  )?
- SPACE
+
  {Person.rule1 == PersonTitle}
 )
 --> 
@@ -188,6 +200,7 @@ gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 //create the new annotation
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "OrgPerson");
+features.put("orgType ", "company");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 
@@ -195,6 +208,33 @@ features);
 outputAS.removeAll(org);
 }
 
+Rule:UnknownJobTitlePerson
+
+(
+ {Unknown.kind == PN}
+):org 
+(
+ ({Token.string == "'"}
+  ({Token.string == "s"})?
+ )?
+{JobTitle}
+ {Person}
+)
+--> 
+ {
+//get the matched annotation(s)
+gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
+
+//create the new annotation
+gate.FeatureMap features = Factory.newFeatureMap();
+features.put("rule ", "UnknownJobTitlePerson");
+features.put("orgType ", "company");
+outputAS.add(org.firstNode(), org.lastNode(), "Organization",
+features);
+
+//delete the old annotation(s)
+outputAS.removeAll(org);
+}
 
 Rule: OrgConjOrg1 
 Priority: 10
@@ -203,9 +243,7 @@ Priority: 10
 {Unknown.kind == PN}
 ):org
 (
-(SPACE)
 {Token.category == CC}
-(SPACE)
 {Organization}
 )
 -->
@@ -213,6 +251,7 @@ Priority: 10
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "OrgConjOrg1");
+features.put("orgType ", "unknown");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
@@ -224,9 +263,7 @@ Priority: 10
 
 (
  {Organization}
- (SPACE)
  {Token.category == CC}
- (SPACE)
 )
 (
  {Unknown.kind == PN}
@@ -236,6 +273,7 @@ Priority: 10
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
 features.put("rule ", "OrgConjOrg2");
+features.put("orgType ", "unknown");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
@@ -243,41 +281,97 @@ outputAS.removeAll(org);
 
 
 
-Rule: OrgJobtitle
+//Rule: OrgJobtitle
+//Priority: 30
+//(
+// {Unknown.kind == PN}
+//):org
+//( 
+// {Lookup.majorType == jobtitle}
+//)
+//-->
+//  {
+//gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
+//gate.FeatureMap features = Factory.newFeatureMap();
+//features.put("rule ", "OrgJobTitle");
+//features.put("orgType ", "company");
+//outputAS.add(org.firstNode(), org.lastNode(), "Organization",
+//features);
+//outputAS.removeAll(org);
+//}
+
+
+Rule: AcronymOrg
 Priority: 30
-(
- {Unknown.kind == PN}
-):org
-( 
- SPACE
- {Lookup.majorType == jobtitle}
-)
+
+
+ (THE)
+ ({Initials, Unknown.kind == PN}):org
 -->
-  {
+{
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule ", "OrgJobTitle");
+features.put("rule ", "AcronymOrg");
+features.put("orgType ", "unknown");
+outputAS.add(org.firstNode(), org.lastNode(), "Organization",
+features);
+outputAS.removeAll(org);
+}
+
+ 
+Rule: OrgBracketOrg
+Priority: 30
+
+(
+ {Organization}
+ {Token.string == "("}
+)
+({Initials, Unknown.kind == PN}):org
+-->
+{
+gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
+gate.FeatureMap features = Factory.newFeatureMap();
+features.put("rule ", "OrgBracketOrg");
+features.put("orgType ", "unknown");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);
 }
 
 
-
-Rule:LocOrg
-Priority: 20
-// guess that Unknown preceded by Loc is an Org
+Rule: PersonOrgEnding
+Priority: 30
+// J.W. Fish & Co should be an Organisation not a Person
 
 (
- {Location}
- {Unknown.kind == PN}
+ ({Person}):person
+ {Lookup.majorType == cdg}
 ):org
 -->
 {
-//removes Unknown annotation, adds a new Org annotation
 gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("org");
+gate.AnnotationSet personSet = (gate.AnnotationSet) bindings.get("person");
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule", "LocOrg");
+features.put("rule ", "PersonOrgEnding");
+features.put("orgType ", "company");
+outputAS.add(org.firstNode(), org.lastNode(), "Organization",
+features);
+outputAS.removeAll(personSet);
+}
+
+
+Rule:CityUniversity
+
+(
+ {Location.locType == city}
+ {Token.string == "University"}
+ ):tag
+ -->
+ {
+gate.AnnotationSet org = (gate.AnnotationSet) bindings.get("tag");
+gate.FeatureMap features = Factory.newFeatureMap();
+features.put("rule ", "CityUniversity");
+features.put("orgType ", "university");
 outputAS.add(org.firstNode(), org.lastNode(), "Organization",
 features);
 outputAS.removeAll(org);

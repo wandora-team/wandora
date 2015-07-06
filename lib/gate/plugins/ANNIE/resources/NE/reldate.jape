@@ -10,7 +10,7 @@
 *
 *  Diana Maynard, 10 Sep 2001
 * 
-*  $Id: reldate.jape,v 1.1 2011-03-09 07:31:53 cvs Exp $
+*  $Id: reldate.jape 17810 2014-04-11 12:27:15Z markagreenwood $
 */
 
 // this file must follow time.jape
@@ -120,7 +120,7 @@ features.put("rule", dateAnn.getFeatures().get("rule"));
 features.put("rule2", "EarlyDate");
 outputAS.add(date.firstNode(), date.lastNode(), "TempDate",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(date.get("TempDate"));
 }
  
 Rule:FiscalDate

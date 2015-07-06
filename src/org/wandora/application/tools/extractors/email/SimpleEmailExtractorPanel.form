@@ -69,10 +69,10 @@
                   </StringArray>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[127, 21]"/>
+                  <Dimension value="[127, 23]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[130, 21]"/>
+                  <Dimension value="[130, 23]"/>
                 </Property>
               </Properties>
               <AuxValues>
@@ -100,10 +100,10 @@
             <Component class="javax.swing.JTextField" name="resourceTextField">
               <Properties>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[6, 21]"/>
+                  <Dimension value="[6, 23]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[6, 21]"/>
+                  <Dimension value="[6, 23]"/>
                 </Property>
               </Properties>
               <AuxValues>

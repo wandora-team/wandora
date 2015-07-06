@@ -10,7 +10,7 @@
 *
 *  Diana Maynard, 02 Aug 2001
 * 
-*  $Id: url.jape,v 1.1 2011-03-09 07:31:53 cvs Exp $
+*  $Id: url.jape 18155 2014-07-04 13:22:03Z dgmaynard $
 */
 
 Phase:	Url
@@ -32,11 +32,24 @@ Priority: 50
 
 (	
  {UrlPre}
- ({Token})*
+ ({Token})[1,7]
 ):urlAddress 
-({SpaceToken})
+ ({SpaceToken})
 -->
 :urlAddress.Url = {kind = "urlAddress", rule = "Url1"}
+
+Rule: Url2
+Priority: 100
+
+(	
+ {UrlPre}
+ ({Token})[1,7]
+ {Token.string == "."}
+ {Lookup.majorType == country_code}
+):urlAddress 
+ 
+-->
+:urlAddress.Url = {kind = "urlAddress", rule = "Url2"}
 
 Rule: UrlContext
 Priority: 20
@@ -66,4 +79,19 @@ Priority: 20
 :urlAddress 
 -->
  :urlAddress.Url = {kind = "urlAddress", rule = "UrlContext"}
+
+Rule: UrlGuess
+Priority: 10
+// token(s) + url_ending e.g. gate.ac.uk
+
+(
+ (	{Token}
+	{Token.string == "."})+ 
+  	{Lookup.majorType == url_key}
+	{Token.string == "."}
+        {Lookup.majorType == country_code}
+)
+:urlAddress 
+-->
+ :urlAddress.Url = {kind = "urlAddress", rule = "UrlGuess"}
 

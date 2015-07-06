@@ -10,7 +10,7 @@
 *
 *  Diana Maynard, 19 April 2002
 * 
-*  $Id: email.jape,v 1.1 2011-03-09 07:31:53 cvs Exp $
+*  $Id: email.jape 17311 2014-02-14 18:49:50Z dgmaynard $
 */
 
 Phase:	Email
@@ -26,7 +26,7 @@ Priority: 50
  (
   {Token.kind == word}|
   {Token.kind == number}
- )+
+ )[1,9]
  (
   {Token.string == "_"}
  )?
@@ -34,7 +34,7 @@ Priority: 50
   ({Token.kind == word}|
    {Token.kind == number}|
    {Token.string == "_"}
-  )*
+  )[0,9]
  
  {Token.string == "@"}		
  (
@@ -49,7 +49,7 @@ Priority: 50
   {Token.kind == symbol}|
   {Token.kind == punctuation}|
   {Token.kind == number}
- )*
+ )[0,9]
  ({Token.string == "."})?
 (
   {Token.kind == word}|

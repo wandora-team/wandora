@@ -10,40 +10,40 @@
 *
 *  Diana Maynard, 10 Sep 2001
 * 
-*  $Id: final.jape,v 1.1 2011-03-09 07:31:53 cvs Exp $
+*  $Id: final.jape 18105 2014-06-20 17:07:26Z dgmaynard $
 */
 
 //note: organization should be included as part of the address ??
 
 Phase:	Final
-Input: Token Lookup Jobtitle TempPerson TempLocation TempOrganization TempDate TempTime TempYear TempZone Street Postcode Email Url Phone Ip TempIdentifier TempSpecs Title Split
+Input: Token Lookup Jobtitle TempPerson TempLocation TempOrganization TempDate TempTime TempYear TempZone Street Postcode Email Url Phone Ip TempIdentifier TempSpecs Title Split Money
 Options: control = appelt
 
 
 ///////////////////////////////////////////////////////////////
+Rule: Money
+Priority: 200
+(
+ {Money}
+)
+--> 
+{}
 
 Rule: PersonFinal
 Priority: 30
-//({JobTitle}
-//)?
+
 (
- {TempPerson.kind == personName}
+ {TempPerson}
 )
 :person
 --> 
 {
  gate.FeatureMap features = Factory.newFeatureMap();
 gate.AnnotationSet personSet = (gate.AnnotationSet)bindings.get("person");
-gate.Annotation person1Ann = (gate.Annotation)personSet.iterator().next();
+gate.Annotation personAnn = (gate.Annotation)personSet.iterator().next();
 
-gate.AnnotationSet firstPerson = (gate.AnnotationSet)personSet.get("TempPerson");
-if (firstPerson != null && firstPerson.size()>0)
-{
-  gate.Annotation personAnn = (gate.Annotation)firstPerson.iterator().next();
-  features.put("gender", personAnn.getFeatures().get("gender"));
-}
-  features.put("rule1", person1Ann.getFeatures().get("rule"));
-  features.put("rule", "PersonFinal");
+features.putAll(personAnn.getFeatures());
+features.put("ruleFinal", "PersonFinal");
 outputAS.add(personSet.firstNode(), personSet.lastNode(), "Person",
 features);
 outputAS.removeAll(personSet);
@@ -75,22 +75,22 @@ Priority: 50
 -->
 {
 //removes TempOrg annotation, gets the rule feature and adds a new Org annotation
-gate.AnnotationSet org = (gate.AnnotationSet)bindings.get("org");
+gate.AnnotationSet orgSet = (gate.AnnotationSet)bindings.get("org");
 //locate the first TempOrganization annotation
 //(there will always be at least one)
-gate.Annotation orgAnn = org.get("TempOrganization").iterator().next();
+gate.Annotation orgAnn = orgSet.get("TempOrganization").iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-if (orgAnn.getFeatures().containsKey("orgType"))  features.put("orgType", orgAnn.getFeatures().get("orgType"));
-features.put("rule1", orgAnn.getFeatures().get("rule"));
-features.put("rule2", "OrgCountryFinal");
-outputAS.add(org.firstNode(), org.lastNode(), "Organization",
+
+features.putAll(orgAnn.getFeatures());
+features.put("ruleFinal", "OrgCountryFinal");
+outputAS.add(orgSet.firstNode(), orgSet.lastNode(), "Organization",
 features);
-outputAS.removeAll(org);
+outputAS.removeAll(orgSet);
 }
  
 
-
-//note - move this rule to after final
+// note - move this rule to after final
+// another note - I have no idea why the original note is there, or even which rule this refers to
 
 Rule: OrgFinal
 Priority: 10
@@ -101,21 +101,21 @@ Priority: 10
 --> 
 {
 //removes TempOrg annotation, gets the rule feature and adds a new Org annotation
-gate.AnnotationSet org = (gate.AnnotationSet)bindings.get("org");
-gate.Annotation orgAnn = (gate.Annotation)org.iterator().next();
+gate.AnnotationSet orgSet = (gate.AnnotationSet)bindings.get("org");
+gate.Annotation orgAnn = (gate.Annotation)orgSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-if (orgAnn.getFeatures().containsKey("orgType"))  features.put("orgType", orgAnn.getFeatures().get("orgType"));
-features.put("rule1", orgAnn.getFeatures().get("rule"));
-features.put("rule2", "OrgFinal");
-outputAS.add(org.firstNode(), org.lastNode(), "Organization",
+
+features.putAll(orgAnn.getFeatures());
+features.put("ruleFinal", "OrgFinal");
+outputAS.add(orgSet.firstNode(), orgSet.lastNode(), "Organization",
 features);
-outputAS.removeAll(org);
+outputAS.removeAll(orgSet);
 }
 
 
 Rule: PersonLocFinal
 Priority: 100
-// George Airport
+// George Airport is a Location not a Person
 // later we might change this to any facility, rather than just airports
 
 (
@@ -127,15 +127,15 @@ Priority: 100
 -->
  {
 //removes TempLoc annotation, gets the rule feature and adds a new Loc annotation
-gate.AnnotationSet loc = (gate.AnnotationSet)bindings.get("loc");
-gate.Annotation locAnn = (gate.Annotation)loc.iterator().next();
+gate.AnnotationSet locSet = (gate.AnnotationSet)bindings.get("loc");
+gate.Annotation locAnn = (gate.Annotation)locSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", locAnn.getFeatures().get("rule"));
-features.put("rule2", "PersonLocFinal");
+features.putAll(locAnn.getFeatures());
+features.put("ruleFinal", "PersonLocFinal");
 features.put("locType", "airport");
-outputAS.add(loc.firstNode(), loc.lastNode(), "Location",
+outputAS.add(locSet.firstNode(), locSet.lastNode(), "Location",
 features);
-outputAS.removeAll(loc);
+outputAS.removeAll(locSet);
 }
 
 
@@ -149,15 +149,14 @@ Priority: 10
 --> 
  {
 //removes TempLoc annotation, gets the rule feature and adds a new Loc annotation
-gate.AnnotationSet loc = (gate.AnnotationSet)bindings.get("loc");
-gate.Annotation locAnn = (gate.Annotation)loc.iterator().next();
+gate.AnnotationSet locSet = (gate.AnnotationSet)bindings.get("loc");
+gate.Annotation locAnn = (gate.Annotation)locSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-if (locAnn.getFeatures().containsKey("locType")) features.put("locType",locAnn.getFeatures().get("locType"));
-features.put("rule1", locAnn.getFeatures().get("rule"));
-features.put("rule2", "LocFinal");
-outputAS.add(loc.firstNode(), loc.lastNode(), "Location",
+features.putAll(locAnn.getFeatures());
+features.put("ruleFinal", "LocFinal");
+outputAS.add(locSet.firstNode(), locSet.lastNode(), "Location",
 features);
-outputAS.removeAll(loc);
+outputAS.removeAll(locSet);
 }
 
 
@@ -168,13 +167,15 @@ outputAS.removeAll(loc);
 Rule: DateTimeFinal
 Priority: 20
 // Friday 10 January 2000 2pm
+// 2008-01-25T16:10:48
 
 (
  {TempDate}
  (
   ({Token.string == ","})?
   {TempDate})?
- ({Token.string == ":"})?
+ ({Token.string == ":"}|
+  {Token.string == "T"})?
  {TempTime}
  ({TempYear})?
  ({TempZone})?
@@ -183,15 +184,14 @@ Priority: 20
 -->
  {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-//features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule2", "DateTimeFinal");
+features.put("ruleFinal", "DateTimeFinal");
 features.put("kind", "dateTime");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 
@@ -206,15 +206,15 @@ Priority: 15
 -->
  {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule2", "SeasonYearFinal");
+features.putAll(dateAnn.getFeatures());
+features.put("ruleFinal", "SeasonYearFinal");
 features.put("kind", "date");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 
@@ -232,15 +232,15 @@ Priority: 10
 -->
  {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", dateAnn.getFeatures().get("rule"));
+features.putAll(dateAnn.getFeatures());
 features.put("rule2", "DateYearFinal");
 features.put("kind", "date");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 
@@ -259,15 +259,14 @@ Priority: 10
 -->
  {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-//features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule2", "TimeDateFinal");
+features.put("ruleFinal", "TimeDateFinal");
 features.put("kind", "dateTime");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 
@@ -285,15 +284,14 @@ Priority: 10
 -->
   {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-//features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule2", "TimeYearFinal");
+features.put("ruleFinal", "TimeYearFinal");
 features.put("kind", "dateTime");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 
@@ -312,15 +310,15 @@ Priority: 50
 -->
  {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule2", "DateOnlyFinal");
+features.putAll(dateAnn.getFeatures());
+features.put("ruleFinal", "DateOnlyFinal");
 features.put("kind", "date");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 //fix this later
@@ -339,25 +337,26 @@ Priority: 10
 -->
   {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule", "TimeContextFinal");
+features.putAll(dateAnn.getFeatures());
+features.put("ruleFinal", "TimeContextFinal");
 features.put("kind", "date");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
+
 //removes TempTime annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet time = (gate.AnnotationSet)bindings.get("time");
-gate.Annotation timeAnn = (gate.Annotation)time.iterator().next();
+gate.AnnotationSet timeSet = (gate.AnnotationSet)bindings.get("time");
+gate.Annotation timeAnn = (gate.Annotation)timeSet.iterator().next();
 gate.FeatureMap features2 = Factory.newFeatureMap();
-features2.put("rule1", timeAnn.getFeatures().get("rule"));
-features2.put("rule", "TimeContextFinal");
+features.putAll(timeAnn.getFeatures());
+features2.put("ruleFinal", "TimeContextFinal");
 features2.put("kind", "time");
-outputAS.add(time.firstNode(), date.lastNode(), "Date",
+outputAS.add(timeSet.firstNode(), timeSet.lastNode(), "Date",
 features2);
-outputAS.removeAll(time);
+outputAS.removeAll(timeSet);
 }
 
 
@@ -374,15 +373,15 @@ Priority: 50
 -->
  {
 //removes TempTime annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule2", "TimeWordsContextFinal");
+features.putAll(dateAnn.getFeatures());
+features.put("ruleFinal", "TimeWordsContextFinal");
 features.put("kind", "time");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 
@@ -395,15 +394,15 @@ Priority: 10
 --> 
 {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule2", "YearOnlyFinal");
+features.putAll(dateAnn.getFeatures());
+features.put("ruleFinal", "YearOnlyFinal");
 features.put("kind", "date");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 
@@ -417,15 +416,15 @@ Priority: 10
 -->
 {
 //removes TempDate annotation, gets the rule feature and adds a new Date annotation
-gate.AnnotationSet date = (gate.AnnotationSet)bindings.get("date");
-gate.Annotation dateAnn = (gate.Annotation)date.iterator().next();
+gate.AnnotationSet dateSet = (gate.AnnotationSet)bindings.get("date");
+gate.Annotation dateAnn = (gate.Annotation)dateSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", dateAnn.getFeatures().get("rule"));
-features.put("rule2", "TimeOnlyFinal");
+features.putAll(dateAnn.getFeatures());
+features.put("ruleFinal", "TimeOnlyFinal");
 features.put("kind", "time");
-outputAS.add(date.firstNode(), date.lastNode(), "Date",
+outputAS.add(dateSet.firstNode(), dateSet.lastNode(), "Date",
 features);
-outputAS.removeAll(date);
+outputAS.removeAll(dateSet);
 }
 
 
@@ -446,15 +445,15 @@ Priority: 100
 -->
 {
 //removes TempAddress annotation, gets the rule feature and adds a new Address annotation
-gate.AnnotationSet address = (gate.AnnotationSet)bindings.get("address");
-gate.Annotation addressAnn = (gate.Annotation)address.iterator().next();
+gate.AnnotationSet addressSet = (gate.AnnotationSet)bindings.get("address");
+gate.Annotation addressAnn = (gate.Annotation)addressSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", addressAnn.getFeatures().get("rule"));
-features.put("rule2", "AddressFull");
+features.putAll(addressAnn.getFeatures());
+features.put("ruleFinal", "AddressFull");
 features.put("kind", "complete");
-outputAS.add(address.firstNode(), address.lastNode(), "Address",
+outputAS.add(addressSet.firstNode(), addressSet.lastNode(), "Address",
 features);
-outputAS.removeAll(address);
+outputAS.removeAll(addressSet);
 }
 
 
@@ -467,15 +466,15 @@ Priority: 50
 -->
 {
 //removes Email annotation, gets the rule feature and adds a new Address annotation
-gate.AnnotationSet address = (gate.AnnotationSet)bindings.get("address");
-gate.Annotation addressAnn = (gate.Annotation)address.iterator().next();
+gate.AnnotationSet addressSet = (gate.AnnotationSet)bindings.get("address");
+gate.Annotation addressAnn = (gate.Annotation)addressSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", addressAnn.getFeatures().get("rule"));
-features.put("rule2", "EmailFinal");
+features.putAll(addressAnn.getFeatures());
+features.put("ruleFinal", "EmailFinal");
 features.put("kind", "email");
-outputAS.add(address.firstNode(), address.lastNode(), "Address",
+outputAS.add(addressSet.firstNode(), addressSet.lastNode(), "Address",
 features);
-outputAS.removeAll(address);
+outputAS.removeAll(addressSet);
 }
 
 
@@ -488,15 +487,15 @@ Priority: 50
 -->
 {
 //removes TempAddress annotation, gets the rule feature and adds a new Address annotation
-gate.AnnotationSet address = (gate.AnnotationSet)bindings.get("address");
-gate.Annotation addressAnn = (gate.Annotation)address.iterator().next();
+gate.AnnotationSet addressSet = (gate.AnnotationSet)bindings.get("address");
+gate.Annotation addressAnn = (gate.Annotation)addressSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", addressAnn.getFeatures().get("rule"));
-features.put("rule2", "PhoneFinal");
+features.putAll(addressAnn.getFeatures());
+features.put("ruleFinal", "PhoneFinal");
 features.put("kind", "phone");
-outputAS.add(address.firstNode(), address.lastNode(), "Address",
+outputAS.add(addressSet.firstNode(), addressSet.lastNode(), "Address",
 features);
-outputAS.removeAll(address);
+outputAS.removeAll(addressSet);
 }
 
 
@@ -509,15 +508,15 @@ Priority: 50
 -->
 {
 //removes TempAddress annotation, gets the rule feature and adds a new Address annotation
-gate.AnnotationSet address = (gate.AnnotationSet)bindings.get("address");
-gate.Annotation addressAnn = (gate.Annotation)address.iterator().next();
+gate.AnnotationSet addressSet = (gate.AnnotationSet)bindings.get("address");
+gate.Annotation addressAnn = (gate.Annotation)addressSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", addressAnn.getFeatures().get("rule"));
-features.put("rule2", "PostcodeFinal");
+features.putAll(addressAnn.getFeatures());
+features.put("ruleFinal", "PostcodeFinal");
 features.put("kind", "postcode");
-outputAS.add(address.firstNode(), address.lastNode(), "Address",
+outputAS.add(addressSet.firstNode(), addressSet.lastNode(), "Address",
 features);
-outputAS.removeAll(address);
+outputAS.removeAll(addressSet);
 }
 
 
@@ -530,15 +529,15 @@ Priority: 50
 -->
 {
 //removes TempAddress annotation, gets the rule feature and adds a new Address annotation
-gate.AnnotationSet address = (gate.AnnotationSet)bindings.get("address");
-gate.Annotation addressAnn = (gate.Annotation)address.iterator().next();
+gate.AnnotationSet addressSet = (gate.AnnotationSet)bindings.get("address");
+gate.Annotation addressAnn = (gate.Annotation)addressSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", addressAnn.getFeatures().get("rule"));
-features.put("rule2", "IpFinal");
+features.putAll(addressAnn.getFeatures());
+features.put("ruleFinal", "IpFinal");
 features.put("kind", "ip");
-outputAS.add(address.firstNode(), address.lastNode(), "Address",
+outputAS.add(addressSet.firstNode(), addressSet.lastNode(), "Address",
 features);
-outputAS.removeAll(address);
+outputAS.removeAll(addressSet);
 }
 
 
@@ -551,15 +550,15 @@ Priority: 50
 -->
 {
 //removes TempAddress annotation, gets the rule feature and adds a new Address annotation
-gate.AnnotationSet address = (gate.AnnotationSet)bindings.get("address");
-gate.Annotation addressAnn = (gate.Annotation)address.iterator().next();
+gate.AnnotationSet addressSet = (gate.AnnotationSet)bindings.get("address");
+gate.Annotation addressAnn = (gate.Annotation)addressSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", addressAnn.getFeatures().get("rule"));
+features.putAll(addressAnn.getFeatures());
 features.put("rule2", "UrlFinal");
 features.put("kind", "url");
-outputAS.add(address.firstNode(), address.lastNode(), "Address",
+outputAS.add(addressSet.firstNode(), addressSet.lastNode(), "Address",
 features);
-outputAS.removeAll(address);
+outputAS.removeAll(addressSet);
 }
 
 
@@ -573,14 +572,14 @@ Priority: 50
 -->
 {
 //removes TempAddress annotation, gets the rule feature and adds a new Address annotation
-gate.AnnotationSet address = (gate.AnnotationSet)bindings.get("address");
-gate.Annotation addressAnn = (gate.Annotation)address.iterator().next();
+gate.AnnotationSet addressSet = (gate.AnnotationSet)bindings.get("address");
+gate.Annotation addressAnn = (gate.Annotation)addressSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", addressAnn.getFeatures().get("rule"));
-features.put("rule2", "StreetFinal");
-outputAS.add(address.firstNode(), address.lastNode(), "Location",
+features.putAll(addressAnn.getFeatures());
+features.put("ruleFinal", "StreetFinal");
+outputAS.add(addressSet.firstNode(), addressSet.lastNode(), "Location",
 features);
-outputAS.removeAll(address);
+outputAS.removeAll(addressSet);
 }
 
 ////////////////////////////////////////////////////////////
@@ -596,14 +595,14 @@ Priority: 10
 -->
 {
 //removes TempIdent annotation, gets the rule feature and adds a new Identifier annotation
-gate.AnnotationSet ident = (gate.AnnotationSet)bindings.get("ident");
-gate.Annotation identAnn = (gate.Annotation)ident.iterator().next();
+gate.AnnotationSet identSet = (gate.AnnotationSet)bindings.get("ident");
+gate.Annotation identAnn = (gate.Annotation)identSet.iterator().next();
 gate.FeatureMap features = Factory.newFeatureMap();
-features.put("rule1", identAnn.getFeatures().get("rule"));
-features.put("rule2", "IdentifierFinal");
-outputAS.add(ident.firstNode(), ident.lastNode(), "Identifier",
+features.putAll(identAnn.getFeatures());
+features.put("ruleFinal", "IdentifierFinal");
+outputAS.add(identSet.firstNode(), identSet.lastNode(), "Identifier",
 features);
-outputAS.removeAll(ident);
+outputAS.removeAll(identSet);
 }
 
 
@@ -619,38 +618,10 @@ Priority: 1000
 -->
 {
 //removes TempSpecs annotation
-gate.AnnotationSet spec = (gate.AnnotationSet)bindings.get("spec");
+gate.AnnotationSet specSet = (gate.AnnotationSet)bindings.get("spec");
 //gate.FeatureMap features = Factory.newFeatureMap();
-outputAS.removeAll(spec);
+outputAS.removeAll(specSet);
 }
 
 //////////////////////////////////////////////////////
-
-//Rule: UnknownPerson
-//Priority: 5
-//( 
-// {Token.category == NNP}
-// ((SPACE|{Token.string == "-"})
-//  {Token.category == NNP})?
-// (SPACE {Token.category == NNP})?
-// (SPACE {Token.category == NNP})?
-//):unknown
-// (SPACE)
-//(
-// {TempPerson}
-//):person
-//-->
-//:unknown.Unknown = {kind = "PN", rule = UnknownTempPerson},
-//{
-//removes TempPerson annotation, gets the rule feature and adds a new Person annotation
-//gate.AnnotationSet person = (gate.AnnotationSet)bindings.get("person");
-//gate.Annotation personAnn = (gate.Annotation)person.iterator().next();
-//gate.FeatureMap features = Factory.newFeatureMap();
-//features.put("gender", personAnn.getFeatures().get("gender"));
-//features.put("rule1", personAnn.getFeatures().get("rule"));
-//features.put("rule2", "UnknownPerson");
-//outputAS.add(person.firstNode(), person.lastNode(), "Person",
-//features);
-//outputAS.removeAll(person);
-//}
 
