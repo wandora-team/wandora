@@ -208,14 +208,14 @@ public class SplitToInstancesWithBasename extends AbstractWandoraTool implements
             Locator l = null;
             for(int j=0; j<siv.size(); j++) {
                 lo = (Locator) siv.elementAt(j);
-                split.removeSubjectIdentifier(lo);
                 l = (Locator) new Locator(lo.toExternalForm() + "_split");
                 int c = 2;
-                while(topicMap.getTopic(l) != null && c<10000) {
+                while((topicMap.getTopic(l) != null || splitMap.getTopic(l) != null) && c<10000) {
                     l = (Locator) new Locator(lo.toExternalForm() + "_split" + c);
                     c++;
                 }
                 split.addSubjectIdentifier(l);
+                split.removeSubjectIdentifier(lo);
             }
 
             //log("Merging splitted topic to original map...");

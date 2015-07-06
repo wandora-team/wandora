@@ -29,13 +29,16 @@
 package org.wandora.application.tools;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.contexts.*;
-import org.wandora.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import javax.swing.*;
+import org.wandora.*;
+import org.wandora.application.*;
+import org.wandora.application.contexts.*;
+import org.wandora.application.gui.*;
+import org.wandora.topicmap.*;
 
 
 
@@ -211,14 +214,14 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
 
             Locator l = null;
             for(Locator lo : siv) {
-                split.removeSubjectIdentifier(lo);
-                l = (Locator) new Locator(lo.toExternalForm() + "_split");
+                l = new Locator(lo.toExternalForm() + "_split");
                 int c = 2;
-                while(topicMap.getTopic(l) != null && c<10000) {
-                    l = (Locator) new Locator(lo.toExternalForm() + "_split" + c);
+                while((topicMap.getTopic(l) != null || splitMap.getTopic(l) != null) && c<10000) {
+                    l = new Locator(lo.toExternalForm() + "_split" + c);
                     c++;
                 }
                 split.addSubjectIdentifier(l);
+                split.removeSubjectIdentifier(lo);
             }
 
             //log("Merging splitted topic to original map...");
@@ -240,4 +243,77 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
         original.setBaseName(splitParts[0]);
         topicCounter++;
     }
+    
+    
+    
+    
+    // -------------------------------------------------------------------------
+    /*
+    
+
+    public static void main(String[] args) {
+        String originalFilename = "F:\\projects\\kokoelmat\\update150615\\asiasanat\\original.txt";
+        String modsFilename = "F:\\projects\\kokoelmat\\update150615\\asiasanat\\mods.txt";
+        
+        try {
+            FileInputStream fstream = new FileInputStream(originalFilename);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+            String str = null;
+            HashMap originals = new HashMap();
+
+            while ((str = br.readLine()) != null)   {
+                String[] keyValue = str.split("\t");
+                if(keyValue.length == 2) {
+                    String key = keyValue[1].trim();
+                    String value = keyValue[0];
+                    if(!originals.containsKey(key)) {
+                        originals.put(key, value);
+                        // System.out.println("Adding key: "+key);
+                    }
+                    else {
+                        System.out.println("Originals already contains key: "+key);
+                        originals.put(key, originals.get(key) + " ; " + value);
+                    }
+                }
+                else {
+                    System.out.println("Illegal number of elements in original line: "+str);
+                }
+            }
+            System.out.println("Originals has "+originals.size()+" values.");
+            
+            br.close();
+            
+            FileInputStream fstream2 = new FileInputStream(modsFilename);
+            BufferedReader br2 = new BufferedReader(new InputStreamReader(fstream2));
+            
+            while ((str = br2.readLine()) != null)   {
+                String[] keyValue = str.split("\t");
+                if(keyValue.length == 2) {
+                    String key = keyValue[1].trim();
+                    String value = keyValue[0];
+                    if(originals.containsKey(key)) {
+                        String originalValue = (String) originals.get(key);
+                        if(originalValue.contains(value)) {
+                            // OK!
+                        }
+                        else {
+                            System.out.println("Original key "+keyValue[1]+ " contains no '"+keyValue[0]+"'");
+                        }
+                    }
+                    else {
+                        System.out.println("Originals has no key: "+keyValue[1]);
+                    }
+                }
+                else {
+                    System.out.println("Illegal number of elements in original line: "+str);
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    */
 }

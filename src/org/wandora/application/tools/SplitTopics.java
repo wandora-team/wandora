@@ -174,10 +174,11 @@ public class SplitTopics extends AbstractWandoraTool implements WandoraTool {
             }
            
             // --- resolve new subject identifiers ---
-            for(int j=0; j<SIParts.size(); j++) {
-                split.removeSubjectIdentifier((Locator) SIParts.get(j));
+            for(Locator si : SIParts) {
+                if(!si.equals(splitSI)) {
+                    split.removeSubjectIdentifier(si);
+                }
             }
-            split.addSubjectIdentifier(splitSI);
             original.removeSubjectIdentifier(splitSI);
             
             //log("Merging splitted topic to original map...");
