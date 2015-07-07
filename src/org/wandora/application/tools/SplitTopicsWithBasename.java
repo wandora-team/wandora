@@ -113,8 +113,12 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
         while(topics.hasNext() && !forceStop()) {
             try {
                 topic = (Topic) topics.next();
-                Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
-                splitTopic(ltopic, splitStringCopy, tm, w);
+                if(topic != null) {
+                    if(!topic.isRemoved()) {
+                        Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
+                        splitTopic(ltopic, splitStringCopy, tm, w);
+                    }
+                }
             } 
             catch(Exception e) {
                 log(e);
@@ -248,9 +252,8 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
     
     
     // -------------------------------------------------------------------------
-    /*
-    
 
+    
     public static void main(String[] args) {
         String originalFilename = "F:\\projects\\kokoelmat\\update150615\\asiasanat\\original.txt";
         String modsFilename = "F:\\projects\\kokoelmat\\update150615\\asiasanat\\mods.txt";
@@ -313,7 +316,5 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
             e.printStackTrace();
         }
     }
-    
-    
-    */
+
 }

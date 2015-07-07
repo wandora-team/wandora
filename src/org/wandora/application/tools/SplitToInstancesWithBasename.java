@@ -112,8 +112,12 @@ public class SplitToInstancesWithBasename extends AbstractWandoraTool implements
         while(topics.hasNext() && !forceStop()) {
             try {
                 topic = (Topic) topics.next();
-                Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
-                splitTopic(ltopic, splitString, tm, w);
+                if(topic != null) {
+                    if(!topic.isRemoved()) {
+                        Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
+                        splitTopic(ltopic, splitString, tm, w);
+                    }
+                }
             }
             catch(Exception e) {
                 log(e);

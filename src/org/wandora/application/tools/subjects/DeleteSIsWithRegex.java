@@ -82,19 +82,14 @@ public class DeleteSIsWithRegex extends DeleteSIs implements WandoraTool {
     @Override
     public Collection<Locator> collectSubjectIdentifiers(Topic topic) throws TopicMapException {
         ArrayList sisToDelete = new ArrayList();
-        Collection sis = topic.getSubjectIdentifiers();
-        int s = sis.size();
-        if(s > 1) {
-            Iterator sii = sis.iterator();
-            Locator l = null;
-            while(sii.hasNext() && s > 1) {
-                l = (Locator) sii.next();
+        Collection<Locator> sis = topic.getSubjectIdentifiers();
+        if(sis.size() > 1) {
+            for(Locator l : sis) {
                 String ls = l.toExternalForm();
                 if(editor.matches(ls)) {
                     sisToDelete.add(l);
                 }
             }
-            sii = sisToDelete.iterator();
         }
         return sisToDelete;
     }

@@ -98,8 +98,12 @@ public class SplitTopics extends AbstractWandoraTool implements WandoraTool {
         while(topics.hasNext() && !forceStop()) {
             try {
                 topic = (Topic) topics.next();
-                Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
-                splitTopic(ltopic, tm, w);
+                if(topic != null) {
+                    if(!topic.isRemoved()) {
+                        Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
+                        splitTopic(ltopic, tm, w);
+                    }
+                }
             } 
             catch(Exception e) {
                 log(e);

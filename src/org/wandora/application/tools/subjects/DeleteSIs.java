@@ -189,7 +189,12 @@ public class DeleteSIs extends AbstractWandoraTool implements WandoraTool {
                                 tcount++;
                                 sii = sisToDelete.iterator();
                                 while(sii.hasNext()) {
-                                    topic.removeSubjectIdentifier(sii.next());
+                                    if(topic.getSubjectIdentifiers().size() > 1) {
+                                        topic.removeSubjectIdentifier(sii.next());
+                                    }
+                                    else {
+                                        log("Topic '"+TopicToString.toString(topic)+"' has only one subject identifier. Skipping deletion.");
+                                    }
                                 }
                             }
                         }
