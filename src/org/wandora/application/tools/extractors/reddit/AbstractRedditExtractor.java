@@ -36,7 +36,6 @@ import javax.swing.Icon;
 
 import org.apache.commons.httpclient.HttpStatus;
 
-import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -51,10 +50,14 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
+ * @author akivela
  */
 public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
+    private static final String ERROR_MSG = "Reddit API error occurred:";
+    private static final String ERROR_RESPONSE_MSG = "API response follows:";
+    
     protected static final String apiRoot = "http://api.reddit.com/";
     private static final String THING_TYPE_COMMENT = "t1";
     private static final String THING_TYPE_ACCOUNT = "t2";
@@ -102,14 +105,11 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     private static ArrayList<String> extracted;
     
-    private static WandoraToolLogger logger;
     private static int progress = 0;
     
-    protected static String uaString;
-    protected static Requester requester;
+    protected Requester requester = new Requester();
     
-    protected static boolean waitingUserInput = false;
-    
+
     
     @Override
     public String getName() {
@@ -125,6 +125,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/extract_reddit.png");
     }
+    
     private final String[] contentTypes = new String[]{
         "text/plain", "text/json", "application/json"
     };
@@ -146,17 +147,10 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     // -----------------------------------------------------------------
     
-    public static void resetExtracted(){
+    public static void resetExtracted() {
         extracted = new ArrayList<>();
     }
-    
-    protected static void setRequester(String ua){
-      requester = new Requester(ua);
-    }
-    
-    protected static void unsetRequester(){
-      requester.cancel();
-    }
+
     
     private static final Map<Integer, String> additionalPhrases;
     static {
@@ -165,40 +159,37 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         additionalPhrases = Collections.unmodifiableMap(map);
     }
     
-    protected static String statusToPhrase(int status){
-      String phrase = HttpStatus.getStatusText(status);
-      if(phrase == null && additionalPhrases.containsKey(status)){
-        phrase  = additionalPhrases.get(status);
-      }
-      return phrase;
+    protected static String statusToPhrase(int status) {
+        String phrase = HttpStatus.getStatusText(status);
+        if(phrase == null && additionalPhrases.containsKey(status)){
+            phrase  = additionalPhrases.get(status);
+        }
+        return phrase;
     }
     
     
-    // ------------------------------------------------------ HELPERS ---
+    // ------------------------------------------------------------- HELPERS ---
+    
+    
     protected static Topic getRedditClass(TopicMap tm) throws TopicMapException {
         Topic reddit = getOrCreateTopic(tm, SI_ROOT, "Reddit");
         makeSubclassOf(tm, reddit, getWandoraClassTopic(tm));
         return reddit;
     }
 
-    protected static Topic getWandoraClassTopic(TopicMap tm)
-            throws TopicMapException {
+    protected static Topic getWandoraClassTopic(TopicMap tm) throws TopicMapException {
         return getOrCreateTopic(tm, TMBox.WANDORACLASS_SI, "Wandora class");
     }
 
-    protected static Topic getOrCreateTopic(TopicMap tm, String si)
-            throws TopicMapException {
+    protected static Topic getOrCreateTopic(TopicMap tm, String si) throws TopicMapException {
         return getOrCreateTopic(tm, si, null);
     }
 
-    protected static Topic getOrCreateTopic(TopicMap tm, String si, String bn)
-            throws TopicMapException {
+    protected static Topic getOrCreateTopic(TopicMap tm, String si, String bn) throws TopicMapException {
         return ExtractHelper.getOrCreateTopic(si, bn, tm);
     }
 
-    protected static void makeSubclassOf(TopicMap tm, Topic t, Topic superclass)
-            throws TopicMapException {
-
+    protected static void makeSubclassOf(TopicMap tm, Topic t, Topic superclass) throws TopicMapException {
         ExtractHelper.makeSubclassOf(t, superclass, tm);
     }
 
@@ -211,9 +202,11 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         return dateTimeFormat.format(d);
     }
 
+    
     // ------------------------------------------------------------------
-    protected static HashMap<String, Topic> getThingTypes(TopicMap tm)
-            throws TopicMapException {
+    
+    
+    protected static HashMap<String, Topic> getThingTypes(TopicMap tm) throws TopicMapException {
         HashMap<String, Topic> types = new HashMap<>();
 
         types.put(THING_TYPE_COMMENT, getOrCreateTopic(tm, COMMENT_SI, "Comment"));
@@ -232,8 +225,8 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         return types;
     }
 
-    protected static HashMap<String, Topic> getAssociationTypes(TopicMap tm)
-            throws TopicMapException {
+    
+    protected static HashMap<String, Topic> getAssociationTypes(TopicMap tm) throws TopicMapException {
 
         HashMap<String, Topic> types = new HashMap<>();
 
@@ -271,9 +264,8 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         return types;
     }
 
-    private void associateParent(TopicMap tm, Topic commentTopic,
-            Topic parentTopic) throws TopicMapException {
-
+    
+    private void associateParent(TopicMap tm, Topic commentTopic, Topic parentTopic) throws TopicMapException {
         HashMap<String, Topic> types = getAssociationTypes(tm);
 
         Association a = tm.createAssociation(types.get("Parent-Child"));
@@ -281,10 +273,8 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         a.addPlayer(commentTopic, types.get("Child"));
     }
 
-    private void associateAccount(TopicMap tm, JSONObject thing,
-            Topic account, HashMap<String, Topic> types)
-            throws TopicMapException, JSONException {
-        
+    
+    private void associateAccount(TopicMap tm, JSONObject thing, Topic account, HashMap<String, Topic> types) throws TopicMapException, JSONException {
         if(account == null) return;
 
         JSONObject thingData = thing.getJSONObject("data");
@@ -296,13 +286,10 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         Association a = tm.createAssociation(types.get(THING_TYPE_ACCOUNT));
         a.addPlayer(account, types.get(THING_TYPE_ACCOUNT));
         a.addPlayer(thingTopic, types.get(thingKind));
-
     }
+    
 
-    private void associateSubreddit(TopicMap tm, JSONObject thing,
-            Topic subreddit, HashMap<String, Topic> types)
-            throws TopicMapException, JSONException {
-
+    private void associateSubreddit(TopicMap tm, JSONObject thing, Topic subreddit, HashMap<String, Topic> types) throws TopicMapException, JSONException {
         JSONObject thingData = thing.getJSONObject("data");
         String thingKind = thing.getString("kind");
         String thingId = thingData.getString("name");
@@ -312,239 +299,226 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         Association a = tm.createAssociation(types.get(THING_TYPE_SUBREDDIT));
         a.addPlayer(subreddit, types.get(THING_TYPE_SUBREDDIT));
         a.addPlayer(thingTopic, types.get(thingKind));
-
     }
 
-    private void addLinkOccurenceData(TopicMap tm, JSONObject linkData,
-            Topic linkTopic) throws TopicMapException, JSONException {
-
+    
+    private void addLinkOccurenceData(TopicMap tm, JSONObject linkData, Topic linkTopic) throws TopicMapException, JSONException {
         HashMap<String, Topic> types = getAssociationTypes(tm);
-
         Topic lang = types.get("Lang");
 
         Long created = linkData.getLong("created");
         String createdString = unixToString(created);
-        if (createdString != null) {
+        if(createdString != null) {
             linkTopic.setData(types.get("Created"), lang, createdString);
         }
 
         Long createdUtc = linkData.getLong("created_utc");
         String createdUtcString = unixToString(createdUtc);
-        if (createdUtcString != null) {
+        if(createdUtcString != null) {
             linkTopic.setData(types.get("Created UTC"), lang, createdUtcString);
         }
-
-
     }
 
-    private void addCommentOccurenceData(TopicMap tm, JSONObject commentData,
-            Topic commentTopic) throws TopicMapException, JSONException {
-
+    
+    private void addCommentOccurenceData(TopicMap tm, JSONObject commentData, Topic commentTopic) throws TopicMapException, JSONException {
         HashMap<String, Topic> types = getAssociationTypes(tm);
-
         Topic lang = types.get("Lang");
 
         String body = commentData.getString("body");
-        if (body != null) {
+        if(body != null) {
             commentTopic.setData(types.get("Body"), lang, body);
         }
 
         Long created = commentData.getLong("created");
         String createdString = unixToString(created);
-        if (createdString != null) {
+        if(createdString != null) {
             commentTopic.setData(types.get("Created"), lang, createdString);
         }
 
         String ups = Integer.toString(commentData.getInt("ups"));
-        if (ups != null) {
+        if(ups != null) {
             commentTopic.setData(types.get("Upvotes"), lang, ups);
         }
 
         String downs = Integer.toString(commentData.getInt("downs"));
-        if (downs != null) {
+        if(downs != null) {
             commentTopic.setData(types.get("Downvotes"), lang, downs);
         }
 
         //String score = commentData.getString("score");
         //if(score != null) commentTopic.setData(types.get("Score"), lang, score);
-
     }
 
-    private void addAccountOccurenceData(TopicMap tm, JSONObject accountData,
-            Topic accountTopic) throws TopicMapException, JSONException {
-
+    
+    private void addAccountOccurenceData(TopicMap tm, JSONObject accountData, Topic accountTopic) throws TopicMapException, JSONException {
         HashMap<String, Topic> types = getAssociationTypes(tm);
-
         Topic lang = types.get("Lang");
 
         Long created = accountData.getLong("created");
         String createdString = unixToString(created);
-        if (createdString != null) {
+        if(createdString != null) {
             accountTopic.setData(types.get("Created"), lang, createdString);
         }
 
         Long createdUtc = accountData.getLong("created_utc");
         String createdUtcString = unixToString(createdUtc);
-        if (createdUtcString != null) {
+        if(createdUtcString != null) {
             accountTopic.setData(types.get("Created UTC"), lang, createdUtcString);
         }
 
         String cKarma = Integer.toString(accountData.getInt("comment_karma"));
-        if (cKarma != null) {
+        if(cKarma != null) {
             accountTopic.setData(types.get("Comment Karma"), lang, cKarma);
         }
 
         String lKarma = Integer.toString(accountData.getInt("link_karma"));
-        if (lKarma != null) {
+        if(lKarma != null) {
             accountTopic.setData(types.get("Link Karma"), lang, lKarma);
         }
-
     }
 
-    private void addSubredditOccurrenceData(TopicMap tm, JSONObject subredditData,
-            Topic subredditTopic) throws TopicMapException, JSONException {
-
+    
+    private void addSubredditOccurrenceData(TopicMap tm, JSONObject subredditData, Topic subredditTopic) throws TopicMapException, JSONException {
         HashMap<String, Topic> types = getAssociationTypes(tm);
-
         Topic lang = types.get("Lang");
 
         Long created = subredditData.getLong("created");
         String createdString = unixToString(created);
-        if (createdString != null) {
+        if(createdString != null) {
             subredditTopic.setData(types.get("Created"), lang, createdString);
-            
         }
 
         Long createdUtc = subredditData.getLong("created_utc");
         String createdUtcString = unixToString(createdUtc);
-        if (createdUtcString != null) {
+        if(createdUtcString != null) {
             subredditTopic.setData(types.get("Created UTC"), lang, createdUtcString);
         }
 
         String desc = subredditData.getString("description");
-        if (desc != null && desc.length() > 0) {
+        if(desc != null && desc.length() > 0) {
             subredditTopic.setData(types.get("Description"), lang, desc);
         }
 
         String pubDesc = subredditData.getString("public_description");
-        if (pubDesc != null && pubDesc.length() > 0) {
+        if(pubDesc != null && pubDesc.length() > 0) {
             subredditTopic.setData(types.get("Public Description"), lang, pubDesc);
         }
 
         String accAct = Integer.toString(subredditData.getInt("accounts_active"));
-        if (accAct != null) {
+        if(accAct != null) {
             subredditTopic.setData(types.get("Accounts Active"), lang, accAct);
         }
 
         String subs = Integer.toString(subredditData.getInt("subscribers"));
-        if (subs != null) {
+        if(subs != null) {
             subredditTopic.setData(types.get("Subscribers"), lang, subs);
         }
 
         String title = subredditData.getString("title");
-        if (title != null && title.length() > 0) {
+        if(title != null && title.length() > 0) {
             subredditTopic.setData(types.get("Title"), lang, title);
         }
-
-
-    }
-
-    protected static void getSubmissions(String q, ParseCallback<JsonNode> callback) {
-
-        String u = apiRoot + "search?q=" + urlEncode(q);
-
-        requester.doRequest(Unirest.get(u),callback);
-
     }
     
+
+    
+    /*
+        This is being called from the RedditExtractorUI.
+    */
+    protected static void getSubmissions(String q, ParseCallback<JsonNode> callback) {
+        String u = apiRoot + "search?q=" + urlEncode(q);
+        Requester tempRequester = new Requester();
+        tempRequester.addRequest(Unirest.get(u),callback);
+        tempRequester.runNext();
+    }
+    
+    
+    /*
+        This is being called from the RedditExtractorUI.
+    */
     protected static void getSubreddits(String q, ParseCallback<JsonNode> callback) {
-
         String u = apiRoot + "subreddits/search?q=" + urlEncode(q);
-
-        requester.doRequest(Unirest.get(u),callback);
-
+        Requester tempRequester = new Requester();
+        tempRequester.addRequest(Unirest.get(u),callback);
+        tempRequester.runNext();
     }
 
-    // --------------------------------------------------------------------- //
-    protected void parseThing(JSONObject thing, TopicMap tm,
-            HashMap<String, Topic> thingTypes,
-            HashMap<String, Boolean> crawlSettings) {
-
+    
+    
+    // ---------------------------------------------------------------------- //
+    
+    
+    protected void parseThing(JSONObject thing, TopicMap tm, HashMap<String, Topic> thingTypes, HashMap<String, Boolean> crawlSettings) {
         CRAWL_SETTINGS = crawlSettings;
-
         parseThing(thing, tm, thingTypes);
-
     }
 
-    protected void parseThing(JSONObject thing, TopicMap tm,
-            HashMap<String, Topic> thingTypes) {
-
+    
+    protected void parseThing(JSONObject thing, TopicMap tm, HashMap<String, Topic> thingTypes) {
         progress = (progress+1)%100;
         getDefaultLogger().setProgress(progress);
         
-        if (forceStop()) {
+        if(forceStop()) {
             return;
         }
 
         try {
-
             if(thing.has("error")){
-              Object error = thing.get("error");
-              throw new JSONException("API error \"" + statusToPhrase((int)error) + "\"");
+                Object error = thing.get("error");
+                throw new JSONException("API error \"" + statusToPhrase((int)error) + "\"");
             }
           
             JSONObject data = thing.getJSONObject("data");
             String kind = thing.getString("kind");
-            switch (kind) {
-              case THING_TYPE_COMMENT:
-                parseComment(thing, thingTypes, tm);
-                break;
-              case THING_TYPE_LINK:
-                parseLink(thing, thingTypes, tm);
-                break;
-              case THING_TYPE_ACCOUNT:
-                parseAccount(thing, thingTypes, tm);
-                break;
-              case THING_TYPE_SUBREDDIT:
-                parseSubreddit(thing, thingTypes, tm);
-                break;
+            switch(kind) {
+                case THING_TYPE_COMMENT:
+                    parseComment(thing, thingTypes, tm);
+                    break;
+                case THING_TYPE_LINK:
+                    parseLink(thing, thingTypes, tm);
+                    break;
+                case THING_TYPE_ACCOUNT:
+                    parseAccount(thing, thingTypes, tm);
+                    break;
+                case THING_TYPE_SUBREDDIT:
+                    parseSubreddit(thing, thingTypes, tm);
+                    break;
             }
 
-            if (data.has("children")) {
+            if(data.has("children")) {
                 JSONArray children = data.getJSONArray("children");
-                for (int i = 0; i < children.length(); i++) {
+                for(int i = 0; i < children.length(); i++) {
                     JSONObject child;
                     try {
                         child = children.getJSONObject(i);
-                        
-                    } catch (JSONException jse) {
-                      continue;
+                    } 
+                    catch(JSONException jse) {
+                        jse.printStackTrace();
+                        continue;
                     }
                     parseThing(child, tm, thingTypes);
-
                 }
             }
-        } catch (JSONException jse) {
-          log("Parsing response failed: " + jse.getMessage());
-          try {
-            log("The JSON message in question was");
-            log(thing.toString(2));
-          } catch (JSONException jsee) {
-            log("The message JSON was invalid.");
-          }
-          jse.printStackTrace();
-          
-        } catch (TopicMapException tme){
-          log(tme.getMessage());
+        } 
+        catch(JSONException jse) {
+            log("Parsing response failed: " + jse.getMessage());
+            try {
+                log("The JSON message in question was");
+                log(thing.toString(2));
+            }
+            catch(JSONException jsee) {
+                log("The message JSON was invalid.");
+            }
+            jse.printStackTrace();
+        } 
+        catch (TopicMapException tme){
+            log(tme.getMessage());
         }
-
     }
 
-    private void parseMore(JSONObject commentData, JSONObject child, TopicMap tm,
-            HashMap<String, Topic> thingTypes)
-            throws JSONException, TopicMapException {
-
-        if (forceStop()) {
+    
+    private void parseMore(JSONObject commentData, JSONObject child, TopicMap tm, HashMap<String, Topic> thingTypes) throws JSONException, TopicMapException {
+        if(forceStop()) {
             return;
         }
 
@@ -554,64 +528,51 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         StringBuilder childString = new StringBuilder();
         JSONArray children = child.getJSONObject("data").getJSONArray("children");
         int count = children.length();
-        for (int i = 0; i < count; i++) {
+        for(int i=0; i<count; i++) {
             childString.append(children.getString(i));
-            if (i < count - 1) {
+            if(i < count - 1) {
                 childString.append(",");
             }
         }
 
         MultipartBody r = Unirest.post(apiRoot + "api/morechildren")
                 .header("accept", "application/json")
-                .header("User-Agent", uaString)
                 .field("api_type", "json")
                 .field("id", id)
                 .field("link_id", link_id)
                 .field("children", childString.toString());
         
         ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-          @Override
-          public void run(HttpResponse<JsonNode> response){
-            try {
-              JSONObject respJSON = response.getBody().getObject();
-              if (respJSON.getJSONObject("json").getJSONArray("errors").length() == 0) {
-                  JSONArray things = respJSON
-                          .getJSONObject("json")
-                          .getJSONObject("data")
-                          .getJSONArray("things");
-                  for (int i = 0; i < things.length(); i++) {
-                      parseThing(things.getJSONObject(i), tm, thingTypes);
-                  }
-              }
-            } catch (Exception e) {
-              log(e.getMessage());
-            }
+            @Override
+            public void run(HttpResponse<JsonNode> response) {
+                try {
+                    JSONObject respJSON = response.getBody().getObject();
+                    if(respJSON.getJSONObject("json").getJSONArray("errors").length() == 0) {
+                        JSONArray things = respJSON
+                                .getJSONObject("json")
+                                .getJSONObject("data")
+                                .getJSONArray("things");
+                        for(int i = 0; i < things.length(); i++) {
+                            parseThing(things.getJSONObject(i), tm, thingTypes);
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    logParseCallbackRunError(e);
+                }
 
-          }
-          @Override
-          protected void error(Exception e, String body) {
-            log(e.getMessage());
-            if(body != null){
-              log("Server responed with");
-              log(body);
             }
-
-          }
-            
+            @Override
+            protected void error(Exception e, String body) {
+                logParseCallbackError(e, body);
+            }
         };
-        
-        requester.doRequest(r, callback);
-
-        
-        
-
+        requester.addRequest(r, callback);
     }
 
-    private Topic parseLink(JSONObject l, HashMap<String, Topic> thingTypes,
-            TopicMap tm)
-            throws JSONException, TopicMapException {
-
-        if (forceStop()) {
+    
+    private Topic parseLink(JSONObject l, HashMap<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
+        if(forceStop()) {
             return null;
         }
         
@@ -619,11 +580,10 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
         JSONObject linkData = link.getJSONObject("data");
         String kind = link.getString("kind");
-
         String id = linkData.getString("name");
         String title = linkData.getString("title");
 
-        log("parsing link: " + title);
+        hlog("Parsing link " + title);
         
         Topic linkTopic = getOrCreateTopic(tm, SI_ROOT + id);
 
@@ -637,160 +597,120 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             Association a = tm.createAssociation(assTypes.get("Destination"));
             a.addPlayer(linkTopic, thingTypes.get(THING_TYPE_LINK));
             a.addPlayer(destinationTopic, assTypes.get("Destination"));
-
         }
         linkTopic.addType(thingTypes.get(kind));
 
         addLinkOccurenceData(tm, linkData, linkTopic);
 
-        if (linkData.has("author")) {
+        if(linkData.has("author")) {
             final String author = linkData.getString("author");
 
-            if (!extracted.contains(author) && CRAWL_SETTINGS.get("linkUser")) {
+            if(!extracted.contains(author) && CRAWL_SETTINGS.get("linkUser")) {
                 String authorUrl = apiRoot + "user/" + author + "/about.json";
 
                 ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-                  @Override
-                  public void run(HttpResponse<JsonNode> response){
-                    try {
-                      JSONObject respObject = response.getBody().getObject();
-                      Topic account = null;
-                      if (respObject.has("kind")
-                              && respObject.getString("kind").equals(THING_TYPE_ACCOUNT)) {
-
-                          extracted.add(author);
-                          account = parseAccount(respObject, thingTypes, tm);
-
-                      }
-                      
-                      if (account != null) {
-                          associateAccount(tm, link, account, thingTypes);
-                      }
-                    } catch (JSONException | TopicMapException e) {
-                      log(e.getMessage());
-                    }
-
-                  }
-                  @Override
-                  protected void error(Exception e, String body) {
-                    log(e.getMessage());
-                    if(body != null){
-                      log("Server responed with");
-                      log(body);
-                    }
-                    
-                  }
-
-                };
-                
-                requester.doRequest(Unirest.get(authorUrl), callback);
-                
-            }
-            
-            
-            
-        }
-
-        try {
-          if (linkData.has("subreddit")) {
-
-
-              String subredditId = linkData.getString("subreddit_id");
-              String subredditName = linkData.getString("subreddit");
-              Topic subredditTopic = getOrCreateTopic(tm, SI_ROOT + subredditId);
-
-              associateSubreddit(tm, link, subredditTopic, thingTypes);
-
-              final String subreddit = linkData.getString("subreddit");
-              if (!extracted.contains(subreddit) && CRAWL_SETTINGS.get("linkSubreddit")) {
-
-                  String subredditUrl = apiRoot + "r/" + subreddit + "/about.json";
-
-                  ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
                     @Override
-                    public void run(HttpResponse<JsonNode> response){
-                      try {
-                        JSONObject respObject = response.getBody().getObject();
-                        Topic subredditTopic = null;
-                        if (respObject.has("kind")
-                                && respObject.getString("kind").equals(THING_TYPE_SUBREDDIT)) {
-
-                            extracted.add(subreddit);
-                            subredditTopic = parseSubreddit(respObject, thingTypes, tm);
-
+                    public void run(HttpResponse<JsonNode> response) {
+                        try {
+                            JSONObject respObject = response.getBody().getObject();
+                            Topic account = null;
+                            if(respObject.has("kind") && respObject.getString("kind").equals(THING_TYPE_ACCOUNT)) {
+                                extracted.add(author);
+                                account = parseAccount(respObject, thingTypes, tm);
+                            }
+                            if (account != null) {
+                                associateAccount(tm, link, account, thingTypes);
+                            }
                         }
-
-                        if (subredditTopic != null) {
-                            associateSubreddit(tm, link, subredditTopic, thingTypes);
+                        catch (JSONException | TopicMapException e) {
+                            logParseCallbackRunError(e);
                         }
-                      } catch (JSONException | TopicMapException e) {
-                        log(e.getMessage());
-                      }
-
                     }
                     @Override
                     protected void error(Exception e, String body) {
-                      log(e.getMessage());
-                      if(body != null){
-                        log("Server responed with");
-                        log(body);
-                      }
-
+                        logParseCallbackError(e, body);
                     }
+                };
+                
+                requester.addRequest(Unirest.get(authorUrl), callback);
+            }
+        }
 
-                  };
+        try {
+            if(linkData.has("subreddit")) {
+                String subredditId = linkData.getString("subreddit_id");
+                String subredditName = linkData.getString("subreddit");
+                Topic subredditTopic = getOrCreateTopic(tm, SI_ROOT + subredditId);
 
-                  requester.doRequest(Unirest.get(subredditUrl), callback);
+                associateSubreddit(tm, link, subredditTopic, thingTypes);
 
-              }
+                final String subreddit = linkData.getString("subreddit");
+                if(!extracted.contains(subreddit) && CRAWL_SETTINGS.get("linkSubreddit")) {
 
-          }
-        } catch (Exception e) {
+                    String subredditUrl = apiRoot + "r/" + subreddit + "/about.json";
+
+                    ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                        @Override
+                        public void run(HttpResponse<JsonNode> response){
+                            try {
+                                JSONObject respObject = response.getBody().getObject();
+                                Topic subredditTopic = null;
+                                if (respObject.has("kind") && respObject.getString("kind").equals(THING_TYPE_SUBREDDIT)) {
+                                    extracted.add(subreddit);
+                                    subredditTopic = parseSubreddit(respObject, thingTypes, tm);
+                                }
+                                if (subredditTopic != null) {
+                                    associateSubreddit(tm, link, subredditTopic, thingTypes);
+                                }
+                            }
+                            catch (JSONException | TopicMapException e) {
+                                logParseCallbackRunError(e);
+                            }
+                        }
+                        @Override
+                        protected void error(Exception e, String body) {
+                            logParseCallbackError(e, body);
+                        }
+                    };
+
+                    requester.addRequest(Unirest.get(subredditUrl), callback);
+                }
+            }
+        }
+        catch (Exception e) {
           e.printStackTrace();
         }
         
-        if (CRAWL_SETTINGS.get("linkComment")) {
+        if(CRAWL_SETTINGS.get("linkComment")) {
             String commentUrl = apiRoot + "comments/" + linkData.getString("id");
             
             ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-                  @Override
-                  public void run(HttpResponse<JsonNode> response){
+                @Override
+                public void run(HttpResponse<JsonNode> response){
                     try {
                       JSONArray respArray = response.getBody().getArray();
 
                         // Object #0 is the link, which we skip here
                         parseThing(respArray.getJSONObject(1),tm,thingTypes);
-                    } catch (Exception e) {
-                      log(e.getMessage());
+                    } 
+                    catch (Exception e) {
+                        logParseCallbackRunError(e);
                     }
-                  }
-                  @Override
-                  protected void error(Exception e, String body) {
-                    log(e.getMessage());
-                    if(body != null){
-                      log("Server responed with");
-                      log(body);
-                    }
-                    
-                  }
-
-                };
+                }
+                @Override
+                protected void error(Exception e, String body) {
+                    logParseCallbackError(e, body);
+                }
+            };
             
             System.out.println("Requesting " + commentUrl);
-            requester.doRequest(Unirest.get(commentUrl), callback);
-
-            
+            requester.addRequest(Unirest.get(commentUrl), callback);
         }
-
         return linkTopic;
-
     }
 
-    private Topic parseComment(JSONObject c,
-            HashMap<String, Topic> thingTypes, TopicMap tm)
-            throws JSONException, TopicMapException {
-
-        if (forceStop()) {
+    private Topic parseComment(JSONObject c, HashMap<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
+        if(forceStop()) {
             return null;
         }
 
@@ -798,25 +718,17 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         
         JSONObject commentData = comment.getJSONObject("data");
         String kind = comment.getString("kind");
-
         String id = commentData.getString("name");
         
-        log("parsing comment: " + id);
+        hlog("Parsing comment " + id);
         
         Topic commentTopic = getOrCreateTopic(tm, SI_ROOT + id);
         commentTopic.setBaseName("Comment " + " (" + id + ")");
-
-        try {
-            commentTopic.addType(thingTypes.get(kind));
-
-        } catch (Exception e) {
-
-            log("failed to add type " + kind);
-        }
+        commentTopic.addType(thingTypes.get(kind));
 
         addCommentOccurenceData(tm, commentData, commentTopic);
 
-        if (commentData.has("author")) {
+        if(commentData.has("author")) {
             String author = commentData.getString("author");
 
             Topic account = tm.getTopic(SI_ROOT + author);
@@ -824,52 +736,42 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             //Early return if we already scraped the url
             if (account != null) {
                 associateAccount(tm, comment, account, thingTypes);
-
-            } else if (!author.equals("[deleted]") && CRAWL_SETTINGS.get("commentUser")) {
-                log("parsing user: " + author);
+            }
+            else if(!author.equals("[deleted]") && CRAWL_SETTINGS.get("commentUser")) {
+                hlog("Parsing user " + author);
                 String authorUrl = apiRoot + "user/" + author + "/about";
                 
                 ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-                  @Override
-                  public void run(HttpResponse<JsonNode> response){
-                    try {
-                      JSONObject respObject = response.getBody().getObject();
-                      if (respObject.has("kind")
-                              && respObject.getString("kind").equals(THING_TYPE_ACCOUNT)) {
-
-                          Topic account = parseAccount(respObject, thingTypes, tm);
-                          associateAccount(tm, comment, account, thingTypes);
-                      }
-                    } catch (JSONException | TopicMapException e) {
-                      log(e.getMessage());
+                    @Override
+                    public void run(HttpResponse<JsonNode> response) {
+                        try {
+                            JSONObject respObject = response.getBody().getObject();
+                            if (respObject.has("kind") && respObject.getString("kind").equals(THING_TYPE_ACCOUNT)) {
+                                Topic account = parseAccount(respObject, thingTypes, tm);
+                                associateAccount(tm, comment, account, thingTypes);
+                            }
+                        } 
+                        catch (JSONException | TopicMapException e) {
+                            logParseCallbackRunError(e);
+                        }
                     }
-
-                  }
-                  @Override
-                  protected void error(Exception e, String body) {
-                    log(e.getMessage());
-                    if(body != null){
-                      log("Server responed with");
-                      log(body);
+                    @Override
+                    protected void error(Exception e, String body) {
+                        logParseCallbackError(e, body);
                     }
-                    
-                  }
-
                 };
                 
-                requester.doRequest(Unirest.get(authorUrl), callback);
-                
-                
+                requester.addRequest(Unirest.get(authorUrl), callback);
             }
         }
 
-        if (commentData.has("parent_id")) {
+        if(commentData.has("parent_id")) {
             String parentId = commentData.getString("parent_id");
             Topic parentTopic = getOrCreateTopic(tm, SI_ROOT + parentId);
             associateParent(tm, commentTopic, parentTopic);
         }
 
-        if (commentData.has("replies")) {
+        if(commentData.has("replies")) {
             JSONArray children;
             try {
                 children = commentData
@@ -877,211 +779,203 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                         .getJSONObject("data")
                         .getJSONArray("children");
 
-            } catch (JSONException jse) {
+            } 
+            catch(JSONException jse) {
                 children = new JSONArray();
             }
 
             for (int i = 0; i < children.length(); i++) {
-                JSONObject childData = children
-                        .getJSONObject(i);
+                JSONObject childData = children.getJSONObject(i);
                 String childKind = childData.getString("kind");
                 if (childKind.equals(THING_TYPE_MORE) && CRAWL_SETTINGS.get("more")) {
                     parseMore(commentData, childData, tm, thingTypes);
-                } else {
+                } 
+                else {
                     parseThing(childData, tm, thingTypes);
                 }
             }
-
         }
 
-        if (commentData.has("link_id")) {
+        if(commentData.has("link_id")) {
 
             String link_id = commentData.getString("link_id");
             Topic linkTopic = tm.getTopic(SI_ROOT + link_id);
 
-            if (linkTopic == null  && CRAWL_SETTINGS.get("commentLink")) {
-              ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-                  @Override
-                  public void run(HttpResponse<JsonNode> response){
-                    try {
-                      JSONObject respObj = response.getBody().getObject();
-                      parseThing(respObj, tm, thingTypes);
-                    } catch (Exception e) {
+            if(linkTopic == null  && CRAWL_SETTINGS.get("commentLink")) {
+                ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                    @Override
+                    public void run(HttpResponse<JsonNode> response){
+                        try {
+                            JSONObject respObj = response.getBody().getObject();
+                            parseThing(respObj, tm, thingTypes);
+                        } 
+                        catch (Exception e) {
+                            logParseCallbackRunError(e);
+                        }
                     }
-
-                  }
-                  @Override
-                  protected void error(Exception e, String body) {
-                    log(e.getMessage());
-                    if(body != null){
-                      log("Server responed with");
-                      log(body);
+                    @Override
+                    protected void error(Exception e, String body) {
+                        logParseCallbackError(e, body);
                     }
-                    
-                  }
-
                 };
                 
-                requester.doRequest(Unirest.get(apiRoot + "api/info?id=" + link_id), callback);
-             
+                requester.addRequest(Unirest.get(apiRoot + "api/info?id=" + link_id), callback);
             }
         }
-
         return commentTopic;
-
     }
 
-    private Topic parseAccount(JSONObject account,
-            HashMap<String, Topic> thingTypes, TopicMap tm)
-            throws JSONException, TopicMapException {
-
+    
+    private Topic parseAccount(JSONObject account, HashMap<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
         if (forceStop()) {
             return null;
         }
 
         JSONObject accountData = account.getJSONObject("data");
         String kind = account.getString("kind");
-
         String id = accountData.getString("name");
 
-        log("parsing account: " + id);
+        hlog("Parsing account " + id);
         
         Topic accountTopic = getOrCreateTopic(tm, SI_ROOT + id);
         accountTopic.setDisplayName("en", id);
         accountTopic.setBaseName(id);
 
         addAccountOccurenceData(tm, accountData, accountTopic);
-
         accountTopic.addType(thingTypes.get(kind));
 
-        if (CRAWL_SETTINGS.get("userLink")) {
-
+        if(CRAWL_SETTINGS.get("userLink")) {
             ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-              @Override
-              public void run(HttpResponse<JsonNode> response){
-                try {
-                  JSONObject respObj = response.getBody().getObject();
-                  parseThing(respObj, tm, thingTypes);
-                } catch (Exception e) {
-                  log(e.getMessage());
-                }
-
-              }
-              @Override
-              protected void error(Exception e, String body) {
-                    log(e.getMessage());
-                    if(body != null){
-                      log("Server responed with");
-                      log(body);
+                @Override
+                public void run(HttpResponse<JsonNode> response) {
+                    try {
+                        JSONObject respObj = response.getBody().getObject();
+                        parseThing(respObj, tm, thingTypes);
+                    } 
+                    catch(Exception e) {
+                        logParseCallbackRunError(e);
                     }
-                    
-                  }
-
+                }
+                @Override
+                protected void error(Exception e, String body) {
+                    logParseCallbackError(e, body);
+                }
             };
-                
-            requester.doRequest(Unirest.get(apiRoot + "user/" + id + "/submitted.json"), callback);
+
+            requester.addRequest(Unirest.get(apiRoot + "user/" + id + "/submitted.json"), callback);
         }
 
-        if (CRAWL_SETTINGS.get("userComment")) {
-          ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-            @Override
-            public void run(HttpResponse<JsonNode> response){
-              try {
-                JSONObject respObj = response.getBody().getObject();
-                parseThing(respObj, tm, thingTypes);
-              } catch (Exception e) {
-                log(e.getMessage());
-              }
-            }
-            @Override
-            protected void error(Exception e, String body) {
-              log(e.getMessage());
-              if(body != null){
-                log("Server responed with");
-                log(body);
-              }
+        if(CRAWL_SETTINGS.get("userComment")) {
+            ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                @Override
+                public void run(HttpResponse<JsonNode> response){
+                    try {
+                        JSONObject respObj = response.getBody().getObject();
+                        parseThing(respObj, tm, thingTypes);
+                    } 
+                    catch(Exception e) {
+                        logParseCallbackRunError(e);
+                    }
+                }
+                @Override
+                protected void error(Exception e, String body) {
+                    logParseCallbackError(e, body);
+                }
+            };
 
-            }
-
-          };
-
-          requester.doRequest(Unirest.get(apiRoot + "user/" + id + "/comments.json"), callback);
+            requester.addRequest(Unirest.get(apiRoot + "user/" + id + "/comments.json"), callback);
         }
-
         return accountTopic;
-
     }
 
-    private Topic parseSubreddit(JSONObject subreddit,
-            HashMap<String, Topic> thingTypes, TopicMap tm)
-            throws JSONException, TopicMapException {
-
-        if (forceStop()) {
+    private Topic parseSubreddit(JSONObject subreddit, HashMap<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
+        if(forceStop()) {
             return null;
         }
 
         JSONObject subredditData = subreddit.getJSONObject("data");
         String kind = subreddit.getString("kind");
-
         String id = subredditData.getString("name");
         final String disp = subredditData.getString("display_name");
 
-        
-        log("parsing subreddit: " + disp);
+        hlog("Parsing subreddit " + disp);
         
         Topic subredditTopic = getOrCreateTopic(tm, SI_ROOT + id);
         subredditTopic.setDisplayName("en",disp );
         subredditTopic.setBaseName(disp + " (" + id + ")");
         
-
         addSubredditOccurrenceData(tm, subredditData, subredditTopic);
-
         subredditTopic.addType(thingTypes.get(kind));
 
-        if (CRAWL_SETTINGS.get("subredditLink")) {
-          
-          ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
-            @Override
-            public void run(HttpResponse<JsonNode> response){
-              try {
-                JSONObject respObj = response.getBody().getObject();
-                parseThing(respObj, tm, thingTypes);
-                
-                waitingUserInput = true;
-                
-                if(WandoraOptionPane.showConfirmDialog(getWandora(),
-                        "Load more links?","Load more links?",
-                        WandoraOptionPane.YES_NO_OPTION) == WandoraOptionPane.YES_OPTION){
-                  
-                  waitingUserInput = false;
-                  String after = respObj.getJSONObject("data").getString("after");
-                  
-                  requester.doRequest(Unirest.get(apiRoot + "r/" + disp + "/hot.json?after=" + after), this);
-                } else {
-                  waitingUserInput = false;
+        if(CRAWL_SETTINGS.get("subredditLink")) {
+            ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>(tm, thingTypes) {
+                @Override
+                public void run(HttpResponse<JsonNode> response){
+                    try {
+                        JSONObject respObj = response.getBody().getObject();
+                        parseThing(respObj, tm, thingTypes);
+
+                        if(WandoraOptionPane.showConfirmDialog(getWandora(),
+                                "Load more links?","Load more links?",
+                                WandoraOptionPane.YES_NO_OPTION) == WandoraOptionPane.YES_OPTION) {
+
+                            String after = respObj.getJSONObject("data").getString("after");
+                            requester.addRequest(Unirest.get(apiRoot + "r/" + disp + "/hot.json?after=" + after), this);
+                        }
+                    } 
+                    catch(Exception e) {
+                        logParseCallbackRunError(e);
+                    }
                 }
-                
-              } catch (Exception e) {
-                log(e.getMessage());
-              }
+                @Override
+                protected void error(Exception e, String body) {
+                    logParseCallbackError(e, body);
+                }
+            };
 
-            }
-            @Override
-            protected void error(Exception e, String body) {
-              log(e.getMessage());
-              if(body != null){
-                log("Server responed with");
-                log(body);
-              }
-
-            }
-
-          };
-
-          requester.doRequest(Unirest.get(apiRoot + "r/" + disp + "/hot.json"), callback);
+            requester.addRequest(Unirest.get(apiRoot + "r/" + disp + "/hot.json"), callback);
         }
 
         return subredditTopic;
-
     }
+    
+    
+    
+    
+    /*
+        ParseCallBack objects use this method to log exceptions in error methods.
+    */
+    protected void logParseCallbackError(Exception e, String body) {
+        if(e != null) {
+            e.printStackTrace();
+            log(ERROR_MSG);
+            log(e.getMessage());
+            if(body != null) {
+                log(ERROR_RESPONSE_MSG);
+                log(body);
+            }
+        }
+    }
+    
+    /*
+        ParseCallBack objects use this method to log exceptions in run methods.
+    */
+    protected void logParseCallbackRunError(Exception e) {
+        if(e != null) {
+            e.printStackTrace();
+            if(e instanceof JSONException) {
+                log("Exception occurred while processing JSON data in Reddit extractor. Details follow.");
+                log(e.getMessage());
+            }
+            else if(e instanceof TopicMapException) {
+                log("Exception occurred while accessing topic map in Reddit extractor. Details follow.");
+                log(e.getMessage());
+            }
+            else {
+                log("Exception occurred while processing API response in Reddit extractor. Details follow.");
+                log(e.getMessage());
+            }
+        }
+    }
+    
 }

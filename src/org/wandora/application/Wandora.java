@@ -34,6 +34,7 @@ package org.wandora.application;
 
 
 
+import com.mashape.unirest.http.Unirest;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -2316,7 +2317,8 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             wandoraApplication.dispose();
         }
         while(exitCode == RESTART_APPLICATION);
-
+        Unirest.shutdown();
+        
         System.exit(0);
     }
  

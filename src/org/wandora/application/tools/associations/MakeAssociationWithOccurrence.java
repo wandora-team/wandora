@@ -72,7 +72,7 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
     public String SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
     
     
-    private boolean deleteOccurrence = true;
+    private boolean deleteOccurrence = false;
     private boolean askTemplate = true;
     private boolean requiresRefresh = false;
     
@@ -163,9 +163,9 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
                             log("Processing occurrence of topic '"+getTopicName(topic)+"'");
                             // First occurrence is modified to suit as the SI and base name... 
                             if(occurrence.length() > MAXLEN) {
-                                occurrence.substring(0, MAXLEN);
+                                occurrence = occurrence.substring(0, MAXLEN);
                             }
-                            if(occurrence.indexOf("\n") != -1 || occurrence.indexOf("\r") != -1) {
+                            if(occurrence.contains("\n") || occurrence.contains("\r")) {
                                 occurrence = occurrence.replaceAll("\r", replacement);
                                 occurrence = occurrence.replaceAll("\n", replacement);
                             }

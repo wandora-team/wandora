@@ -26,31 +26,33 @@ import com.mashape.unirest.http.*;
 import org.wandora.dep.json.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.commons.io.IOUtils;
 import org.wandora.topicmap.TopicMap;
 
 
 import java.util.HashMap;
+import org.wandora.application.Wandora;
+import static org.wandora.application.tools.extractors.reddit.AbstractRedditExtractor.getThingTypes;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
+ * @author akivela
  */
 
 
-public class RedditThingExtractor extends AbstractRedditExtractor{
+public class RedditThingExtractor extends AbstractRedditExtractor {
     
-    private boolean shouldCrawl;
-    
+
     private HashMap<String,Boolean> crawlSettings;
     
-    public void setShouldCrawl(boolean c){
-        shouldCrawl = c;
-    }
-    public void setCrawling(HashMap<String,Boolean> crawls){
+    
+
+    public void setCrawlingSettings(HashMap<String,Boolean> crawls){
         crawlSettings = crawls;
     }
     
@@ -58,66 +60,99 @@ public class RedditThingExtractor extends AbstractRedditExtractor{
     @Override
     public boolean _extractTopicsFrom(File f, TopicMap tm) throws Exception {
         FileInputStream is = new FileInputStream(f);
-        String query = IOUtils.toString(is);
-        _extractTopicsFrom(query, tm);
-        return true;
-        
+        String fileContent = IOUtils.toString(is);
+        return _extractTopicsFrom(fileContent, tm);
     }
 
+    
+    
     @Override
     public boolean _extractTopicsFrom(URL u, TopicMap tm) throws Exception {
-        String currentURL = u.toExternalForm();
-        extractTopicsFromText(currentURL, tm);
+        if(u == null || tm == null) return false;
+        
+        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
+            @Override
+            public void run(HttpResponse<JsonNode> response) {
+                try {
+                    TopicMap tm = getWandora().getTopicMap();
+                    JSONArray respArray = response.getBody().getArray();
+                    final HashMap<String, Topic> thingTypes = getThingTypes(tm);
+                    for(int i=0; i<respArray.length(); i++) {
+                        parseThing(respArray.getJSONObject(i),tm,thingTypes, crawlSettings);
+                    }
+                }
+                catch (JSONException | TopicMapException e) {
+                    log(e.getMessage());
+                }
+            }
+            @Override
+            protected void error(Exception e, String body) {
+                log(e.getMessage());
+                if(body != null){
+                    log("Server responed with");
+                    log(body);
+                }
+            }
+        };
+        
+        resetExtracted();
+        requester.addRequest(Unirest.get(u.toExternalForm()), callback);
+        
+        while(requester.hasRequests()) {
+            if(forceStop()) {
+                log("Aborting...");
+                log("Deleting "+requester.size()+" requests in run queue.");
+                requester.clear();
+            }
+            else {
+                if(requester.getRunCounter() > 0) {
+                    hlog("Queue contains "+requester.size()+" requests. Running next request. Already processed "+requester.getRunCounter()+" requests.");
+                }
+                else {
+                    hlog("Queue contains "+requester.size()+" requests. Running request.");
+                }
+                requester.runNext();
+            }
+        }
+        
+        // Print some statistics of successful and failed requests.
+        int failCounter = requester.getFailCounter();
+        if(failCounter > 0) {
+            log("Failed to handle "+requester.getFailCounter()+" requests.");
+        }
+        else {
+            log("All API request were successful.");
+        }
+        int runCounter = requester.getRunCounter();
+        log("Handled successfully "+runCounter+" Reddit API requests.");
+        
         return true;
     }
+    
+    
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
-
-        ParseCallback<JsonNode> callback = new ParseCallback<JsonNode>() {
-          @Override
-          public void run(HttpResponse<JsonNode> response){
-              try {
-                  parse(response);
-              } catch (JSONException | TopicMapException e) {
-                  log(e.getMessage());
-              }
-          }
-          @Override
-          protected void error(Exception e, String body) {
-            log(e.getMessage());
-            if(body != null){
-              log("Server responed with");
-              log(body);
+        if(str == null || tm == null) return false;
+        
+        // We assume the string contains URLs that are separated with a new line
+        // character.
+        String[] urls = str.split("\n");
+        for(String urlString : urls) {
+            urlString = urlString.trim();
+            if(urlString.length() > 1) {
+                try {
+                    URL url = new URL(urlString);
+                    _extractTopicsFrom(url, tm);
+                }
+                catch(MalformedURLException mfue) {
+                    log("Found malformed URL '"+urlString+"' in text processed by RedditThingExtractor.");
+                }
             }
-
-          }
-            
-        };
-        
-        requester.doRequest(Unirest.get(str), callback);
-        
-        boolean cont = true;
-        
-        while(cont){
-           Thread.sleep(2000);
-           cont = !forceStop() && (requester.hasJobs() || waitingUserInput);
         }
-        
-        requester.cancel();
         
         return true;
     }
-    private void parse(HttpResponse<JsonNode> resp) 
-            throws JSONException, TopicMapException{
-        
-        resetExtracted();
-        
-        TopicMap tm = getWandora().getTopicMap();
-        JSONArray respArray = resp.getBody().getArray();
-        final HashMap<String, Topic> thingTypes = getThingTypes(tm);
-        for (int i = 0; i < respArray.length(); i++) {
-            parseThing(respArray.getJSONObject(i),tm,thingTypes, crawlSettings);
-        }
-    }  
+    
+ 
 }

@@ -24,7 +24,8 @@ package org.wandora.application.tools.extractors.reddit;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
+ * @author akivela
  */
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
@@ -33,7 +34,6 @@ import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
-
 
 
 public class RedditExtractor extends AbstractWandoraTool{
@@ -75,39 +75,43 @@ public class RedditExtractor extends AbstractWandoraTool{
     @Override
     public void execute(Wandora wandora, Context context) {
         try {
-            AbstractRedditExtractor.setRequester(Wandora.USER_AGENT);
             if(ui == null) {
                 ui = new RedditExtractorUI();
             }
-
+            
             ui.open(wandora, context);
 
             if(ui.wasAccepted()) {
                 WandoraTool[] extrs = null;
-                try{
+                try {
                      extrs = ui.getExtractors(this);
-                } catch(Exception e) {
-                    log(e.getMessage());
+                } 
+                catch(Exception e) {
+                    log("Failed to solve Reddit subextractors because of an exception: "+e.getMessage());
                     return;
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
                     int c = 0;
-                    
-                    log("Performing the API query...");
+                    if(extrs.length > 1) {
+                        log("Requested operation requires "+extrs.length+" Reddit extractions.");
+                    }
                     for(int i=0; i<extrs.length && !forceStop(); i++) {
                         try {
+                            if(extrs.length > 1) {
+                                log("Starting Reddit extraction "+(i+1)+".");
+                            }
                             WandoraTool e = extrs[i];
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora,context);
+                            log("Finished extraction "+(i+1)+".");
                             c++;
                         }
                         catch(Exception e) {
                             log(e);
                         }
-                        
                     }
-                    log("Done.");
+                    log("Ok.");
                 }
                 else {
                     log("Couldn't find a suitable subextractor to perform or "
@@ -118,7 +122,8 @@ public class RedditExtractor extends AbstractWandoraTool{
         catch(Exception e) {
             e.printStackTrace();
             singleLog(e);
-        } finally {
+        } 
+        finally {
             if(ui != null && ui.wasAccepted()) setState(WAIT);
             else setState(WAIT);
         }

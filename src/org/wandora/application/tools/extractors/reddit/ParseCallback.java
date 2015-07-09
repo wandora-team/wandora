@@ -34,26 +34,27 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-abstract class ParseCallback<Object>{
+abstract class ParseCallback<Object> {
   
-  TopicMap tm;
-  HashMap<String, Topic> thingTypes;
-  ParseCallback(TopicMap tm, HashMap<String, Topic> thingTypes) {
-    this.tm = tm;
-    this.thingTypes = thingTypes;
-  }
-  
-  ParseCallback() {
-    this(null ,null);
-  }
-  
-  abstract protected void run(HttpResponse<JsonNode> response);
+    TopicMap tm;
+    HashMap<String, Topic> thingTypes;
+    
+    public ParseCallback(TopicMap tm, HashMap<String, Topic> thingTypes) {
+        this.tm = tm;
+        this.thingTypes = thingTypes;
+    }
 
-  protected void error(Exception e){
-    this.error(e, null);
-  }
-  
-  abstract protected void error(Exception e, String body);
+    public ParseCallback() {
+        this(null ,null);
+    }
+
+    abstract public void run(HttpResponse<JsonNode> response);
+
+    public void error(Exception e){
+        this.error(e, null);
+    }
+
+    abstract protected void error(Exception e, String body);
   
   
 }
