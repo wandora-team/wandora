@@ -392,7 +392,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.r.OpenRConsole</class>
          </item>
          <item>
-            <name>IOT Pinger</name>
+            <name>IoT pinger</name>
             <class>org.wandora.application.tools.iot.Pinger</class>
          </item>
          <item>
@@ -580,10 +580,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>uClassify...</name>
                <class>org.wandora.application.tools.extractors.uclassify.UClassifier</class>
             </item>
+            <!--
             <item>
                <name>OpenCalais classifier...</name>
                <class>org.wandora.application.tools.extractors.opencalais.OpenCalaisClassifier</class>
             </item>
+            -->
             <item>
                <name>TextWise classifier...</name>
                <class>org.wandora.application.tools.extractors.textwise.TextWiseClassifier</class>
@@ -1457,12 +1459,20 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.Search</class>
          </item>
          <item>
+            <name>---</name>
+            <class>org.wandora.application.tools.TestTool</class>
+         </item>
+         <item>
             <name>Server</name>
             <class>org.wandora.application.tools.server.HTTPServerOpenPage</class>
          </item>
          <item>
-            <name>---</name>
-            <class>org.wandora.application.tools.TestTool</class>
+            <name>R console</name>
+            <class>org.wandora.application.tools.r.OpenRConsole</class>
+         </item>
+         <item>
+            <name>IoT pinger</name>
+            <class>org.wandora.application.tools.iot.Pinger</class>
          </item>
       </set>
       <set>

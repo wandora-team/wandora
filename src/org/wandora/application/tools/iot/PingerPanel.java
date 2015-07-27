@@ -46,6 +46,7 @@ import org.wandora.application.gui.simple.SimplePanel;
 import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.gui.simple.SimpleTextArea;
+import org.wandora.application.gui.simple.SimpleToggleButton;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 
@@ -57,16 +58,13 @@ import org.wandora.topicmap.TopicMap;
 
 public class PingerPanel extends javax.swing.JPanel {
 
-    private static final String PANEL_TITLE = "IoT Pinger";
+    private static final String PANEL_TITLE = "IoT pinger";
     
     private GetTopicButton maybeTargetButton;
     private GetTopicButton maybeSourceButton;
-    
     private boolean expires;
     private boolean isRunning;
-    
     private int delay;
-    
     private TimerTask task;
     
     
@@ -114,6 +112,7 @@ public class PingerPanel extends javax.swing.JPanel {
         setSetupEnabled(isRunning);
     }
 
+    
     protected void openInOwnWindow(Wandora w) {
         JDialog dialog = new JDialog(w, false);
         dialog.add(this);
@@ -124,7 +123,9 @@ public class PingerPanel extends javax.swing.JPanel {
         dialog.setTitle(PANEL_TITLE);
     }
     
+    
     private File saveFolder;
+    
     
     private void openFileChooser() {
         JFileChooser chooser = new JFileChooser();
@@ -140,10 +141,8 @@ public class PingerPanel extends javax.swing.JPanel {
             saveToggle.setSelected(false);
             saveButton.setEnabled(false);
         }
-        
-        
-        
     }
+    
     
     private void toggleExpirationFieldEnabled() {
         
@@ -156,8 +155,8 @@ public class PingerPanel extends javax.swing.JPanel {
         hoursField.setValue(c.get(Calendar.HOUR_OF_DAY)+1);
         minutesField.setValue(c.get(Calendar.MINUTE));
         secondsField.setValue(c.get(Calendar.SECOND));
-        
     }
+    
 
     private void setTimeFieldsEnabled(boolean enabled){
         yearField.setEnabled(enabled);
@@ -167,6 +166,7 @@ public class PingerPanel extends javax.swing.JPanel {
         minutesField.setEnabled(enabled);
         secondsField.setEnabled(enabled);
     }
+    
     
     private void setSetupEnabled(boolean running) {
         
@@ -183,33 +183,31 @@ public class PingerPanel extends javax.swing.JPanel {
         saveButton.setEnabled(saveOnTick && !running);
         
         setTimeFieldsEnabled(expires && !running);
-        
     }
+    
     
     /**
      * Logging helper passed to PingerWorker
      */
-    protected interface Logger{
+    protected interface Logger {
         void log(Exception e);
         void log(String s);
     }
     
     private static final DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss Z");
-    private Logger logger = new Logger(){
+    private Logger logger = new Logger() {
 
         @Override
         public void log(Exception e) {
             this.log(e.getMessage());
         }
 
-        
-
         @Override
         public void log(String s) {
             logArea.append("[" + df.format(new Date()) + "] " + s + "\n");
         }
-        
     };
+    
     
     private long getExpiry(){
         Calendar expCal = Calendar.getInstance();
@@ -225,14 +223,15 @@ public class PingerPanel extends javax.swing.JPanel {
         return expCal.getTimeInMillis();
     }
     
-    private void start() {
+    
+    private boolean start() {
         
         final Topic targetType = ((GetTopicButton)targetButton).getTopic();
         final Topic sourceType = ((GetTopicButton)sourceButton).getTopic();
         
         if(targetType == null || sourceType == null){
             JOptionPane.showMessageDialog(this, "Target or Source type not set.");
-            return;
+            return false;
         }
         
         final boolean isBinary = sourceIsBinaryButton.isSelected();
@@ -243,19 +242,16 @@ public class PingerPanel extends javax.swing.JPanel {
             openFileChooser();
             if(saveFolder == null){
                 JOptionPane.showMessageDialog(this, "Save folder not set. ");
-                return;
+                return false;
             }
         }
         
         delay = ((Number)delayField.getValue()).intValue();
         Timer timer = new Timer();
         
-        
-        task = new TimerTask(){
-
+        task = new TimerTask() {
             @Override
             public void run() {
-                
                 if(expires && expiry < System.currentTimeMillis()){
                     logger.log("Stopping due to expiry");
                     stop();
@@ -271,13 +267,11 @@ public class PingerPanel extends javax.swing.JPanel {
                     } else {
                         PingerWorker.run(targetType, sourceType, tm, logger, isBinary);
                     }
-                    
-                } catch (Exception e) {
+                } 
+                catch (Exception e) {
                     logArea.append(e.getMessage());
                 }
             }
-
-            
         };
         
         logger.log("Starting pinger");
@@ -286,14 +280,14 @@ public class PingerPanel extends javax.swing.JPanel {
         
         isRunning = true;
         setSetupEnabled(isRunning);
+        return true;
     }
     
     
 
     
     private void stop() {
-        
-        if(task != null){
+        if(task != null) {
             logger.log("Stopping pinger");
             task.cancel();
         }
@@ -314,6 +308,7 @@ public class PingerPanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        statusField = new javax.swing.JTextField();
         tabs = new SimpleTabbedPane();
         Setupcontainer = new SimplePanel();
         setupPane = new SimplePanel();
@@ -347,8 +342,12 @@ public class PingerPanel extends javax.swing.JPanel {
         logPane = new SimplePanel();
         logScroll = new SimpleScrollPane();
         logArea = new SimpleTextArea();
-        startStopButton = new SimpleButton();
-        statusField = new javax.swing.JTextField();
+        startStopButton = new SimpleToggleButton();
+
+        statusField.setEditable(false);
+        statusField.setText("Stopped");
+        statusField.setBorder(null);
+        statusField.setOpaque(false);
 
         setMinimumSize(new java.awt.Dimension(520, 300));
         setPreferredSize(new java.awt.Dimension(520, 300));
@@ -378,7 +377,7 @@ public class PingerPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         setupPane.add(description, gridBagConstraints);
 
-        targetLabel.setText("Target Occurrence Type");
+        targetLabel.setText("Target occurrence type");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -396,7 +395,7 @@ public class PingerPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
         setupPane.add(targetButton, gridBagConstraints);
 
-        sourceLabel.setText("Source Occurrence Type");
+        sourceLabel.setText("Source occurrence type");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -614,7 +613,7 @@ public class PingerPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         setupPane.add(secondsField, gridBagConstraints);
 
-        saveLabel.setText("Save on Tick");
+        saveLabel.setText("Save on tick");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -694,24 +693,12 @@ public class PingerPanel extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.weightx = 0.7;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         add(startStopButton, gridBagConstraints);
-
-        statusField.setEditable(false);
-        statusField.setText("Stopped");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(2, 4, 0, 4);
-        add(statusField, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void yearFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearFieldActionPerformed
@@ -733,12 +720,6 @@ public class PingerPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_expiryToggleActionPerformed
 
-    private void startStopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startStopButtonActionPerformed
-        isRunning = !isRunning;
-        if(isRunning) start(); else stop();
-        
-    }//GEN-LAST:event_startStopButtonActionPerformed
-
     private void minutesFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minutesFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_minutesFieldActionPerformed
@@ -754,6 +735,17 @@ public class PingerPanel extends javax.swing.JPanel {
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         openFileChooser();
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void startStopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startStopButtonActionPerformed
+        isRunning = !isRunning;
+        if(isRunning) {
+            isRunning = start();
+        }
+        else {
+            stop();
+        }
+        startStopButton.setSelected(isRunning);
+    }//GEN-LAST:event_startStopButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -785,7 +777,7 @@ public class PingerPanel extends javax.swing.JPanel {
     private javax.swing.JButton sourceButton;
     private javax.swing.JCheckBox sourceIsBinaryButton;
     private javax.swing.JLabel sourceLabel;
-    private javax.swing.JButton startStopButton;
+    private javax.swing.JToggleButton startStopButton;
     private javax.swing.JTextField statusField;
     private javax.swing.JTabbedPane tabs;
     private javax.swing.JButton targetButton;
