@@ -30,7 +30,7 @@ import org.wandora.dep.json.JSONObject;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public class GeolocationSource extends AbstractIoTSource implements IoTSource {
 
@@ -41,19 +41,19 @@ public class GeolocationSource extends AbstractIoTSource implements IoTSource {
 
     @Override
     public String getData(String url) {
-
         try {
             JsonNode resp = Unirest.get(API_URL).asJson().getBody();
             JSONObject obj = resp.getObject();
 
             return Double.toString(obj.getDouble("lat")) + ", " + Double.toString(obj.getDouble("lon"));
-
-        } catch (UnirestException ex) {
+        } 
+        catch (UnirestException ex) {
+            // IGNORE
         }
 
         return null;
-
     }
+    
 
     @Override
     public boolean matches(String url) throws MalformedURLException {

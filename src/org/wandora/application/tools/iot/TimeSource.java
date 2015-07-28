@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.Map;
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
@@ -47,34 +47,26 @@ class TimeSource extends AbstractIoTSource implements IoTSource {
         try {
             URL u = new URL(url);
             params = parseParams(u);
-            
-            if(params != null && params.containsKey("format")){
-                
+            if(params != null && params.containsKey("format")) {
                 String formatString = params.get("format");
                 
                 DateFormat format = new SimpleDateFormat(formatString);
                 Date date = new Date();
                 
                 return format.format(date);
-                
             }
-            
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        
         return Long.toString(System.currentTimeMillis()); // Default
-
     }
 
+    
     @Override
     public boolean matches(String url) throws MalformedURLException{
         URL u = new URL(url);
-        
-        
         return u.getHost().equals(HOST) && u.getPath().equals(PATH);
-        
     }
     
 }

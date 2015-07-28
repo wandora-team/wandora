@@ -31,7 +31,7 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public class TMStatsSource extends AbstractIoTSource implements IoTSource {
 
@@ -40,7 +40,6 @@ public class TMStatsSource extends AbstractIoTSource implements IoTSource {
 
     @Override
     public String getData(String url) {
-        
         TopicMap tm = Wandora.getWandora().getTopicMap();
         
         try {
@@ -49,12 +48,12 @@ public class TMStatsSource extends AbstractIoTSource implements IoTSource {
             o.put("num_associations", tm.getNumAssociations());
             
             return o.toString();
-
-        } catch (TopicMapException | JSONException e) {
+        }
+        catch (TopicMapException | JSONException e) {
+            // IGNORE
         }
         
         return null;
-        
     }
 
     @Override

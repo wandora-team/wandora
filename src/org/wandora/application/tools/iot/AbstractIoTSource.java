@@ -30,34 +30,32 @@ import java.util.Map;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
 abstract class AbstractIoTSource {
     
-    protected Map<String,String> parseParams(URL u){
-        
+    protected Map<String,String> parseParams(URL u) {
         Map<String, String> params = new HashMap<>();
-        
         String q = u.getQuery();
         
         if(q == null) return params;
         
         String[] splits = q.split("&");
         
-        for(String split: splits){
+        for(String split: splits) {
             int idx = split.indexOf("=");
             try {
                 String k = URLDecoder.decode(split.substring(0, idx), "UTF-8");
                 String v = URLDecoder.decode(split.substring(idx+1), "UTF-8");
                 params.put(k,v);    
-            } catch (Exception e) {}
-            
+            } 
+            catch (Exception e) {
+                // IGNORE
+            }
         }
         
         return params;
-        
     }
-    
 }

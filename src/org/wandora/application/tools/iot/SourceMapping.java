@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
@@ -46,23 +46,26 @@ final class SourceMapping {
     
     private static SourceMapping instance = null;
     
-    protected static synchronized SourceMapping getInstance(){
+    protected static synchronized SourceMapping getInstance() {
         if(instance == null) instance = new SourceMapping();
         return instance;
     }
     
-    public IoTSource match(String url){
+    
+    public IoTSource match(String url) {
         
-        for(IoTSource source : sources){
+        for(IoTSource source : sources) {
             try{
-                if(source.matches(url)) return source;
-            } catch (MalformedURLException e) {
+                if(source.matches(url)) {
+                    return source;
+                }
+            } 
+            catch (MalformedURLException e) {
             }
             
         }
         
         return null;
-        
     }
 
     

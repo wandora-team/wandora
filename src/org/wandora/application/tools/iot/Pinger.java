@@ -23,33 +23,42 @@
 
 package org.wandora.application.tools.iot;
 
+import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
 public class Pinger extends AbstractWandoraTool implements WandoraTool, Runnable {
-    
-    private static final String DESCRIPTION = "Open the IoT Pinger panel";
+
     
     @Override
     public String getDescription(){
-        return DESCRIPTION;
+        return "Open the IoT pinger";
+    }
+    
+    @Override
+    public String getName(){
+        return "IoT pinger";
+    }
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon("gui/icons/iot_pinger.png");
     }
     
     @Override
     public void execute(final Wandora wandora, Context context) throws TopicMapException {
-        
         PingerPanel panel = new PingerPanel(wandora.getTopicMap());
         panel.openInOwnWindow(wandora);
-        
     }
     
 }

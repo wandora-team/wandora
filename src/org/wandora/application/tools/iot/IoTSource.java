@@ -28,7 +28,7 @@ import java.net.MalformedURLException;
  * An IoTSource represents a simple virtual source of data for the IoT tool. It
  * functions as a callback for a given URL in SourceMapping.
  * 
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public interface IoTSource {
     

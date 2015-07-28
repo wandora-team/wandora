@@ -37,6 +37,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.GetTopicButton;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -66,17 +67,18 @@ public class PingerPanel extends javax.swing.JPanel {
     private boolean isRunning;
     private int delay;
     private TimerTask task;
-    
+    private static final DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss Z");
+    private File saveFolder = null;
     
     private TopicMap tm;
+    
+    
     /**
      * Creates new form PingerPanel
      * @param tm
      */
     public PingerPanel(TopicMap tm) {
-        
         this.tm = tm;
-        
         isRunning = false;
         
         try {
@@ -89,14 +91,12 @@ public class PingerPanel extends javax.swing.JPanel {
         initComponents();
         
         InputVerifier verifier = new InputVerifier(){
-
             @Override
             public boolean verify(JComponent input) {
                 JFormattedTextField tf = (JFormattedTextField)input;
                 int v = Integer.parseInt(tf.getText());
-                return v > 0;
+                return v >= 0;
             }
-            
         };
         
         yearField.setInputVerifier(verifier);
@@ -116,15 +116,12 @@ public class PingerPanel extends javax.swing.JPanel {
     protected void openInOwnWindow(Wandora w) {
         JDialog dialog = new JDialog(w, false);
         dialog.add(this);
-        dialog.setSize(550, 370);
-        dialog.setMinimumSize(new Dimension(550, 370));
+        dialog.setSize(600, 380);
+        dialog.setMinimumSize(new Dimension(600, 380));
         dialog.setLocationRelativeTo(w);
         dialog.setVisible(true);
         dialog.setTitle(PANEL_TITLE);
     }
-    
-    
-    private File saveFolder;
     
     
     private void openFileChooser() {
@@ -133,11 +130,10 @@ public class PingerPanel extends javax.swing.JPanel {
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setDialogTitle("Choose folder for saved data");
         
-        if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
-            
+        if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             saveFolder = chooser.getSelectedFile();
             saveFolderField.setText(saveFolder.getAbsolutePath());
-        } else if(saveFolder == null){ // saveFolder is invalid, revert to default
+        } else if(saveFolder == null) { // saveFolder is invalid, revert to default
             saveToggle.setSelected(false);
             saveButton.setEnabled(false);
         }
@@ -145,7 +141,6 @@ public class PingerPanel extends javax.swing.JPanel {
     
     
     private void toggleExpirationFieldEnabled() {
-        
         setTimeFieldsEnabled(expires);
         
         Calendar c = Calendar.getInstance();
@@ -194,7 +189,7 @@ public class PingerPanel extends javax.swing.JPanel {
         void log(String s);
     }
     
-    private static final DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss Z");
+    
     private Logger logger = new Logger() {
 
         @Override
@@ -205,23 +200,61 @@ public class PingerPanel extends javax.swing.JPanel {
         @Override
         public void log(String s) {
             logArea.append("[" + df.format(new Date()) + "] " + s + "\n");
+            try {
+                logArea.setCaretPosition(logArea.getLineStartOffset(logArea.getLineCount() - 1));
+            }
+            catch(Exception e) {
+                // IGNORE
+            }
         }
     };
     
     
-    private long getExpiry(){
+    private long getExpiry() {
         Calendar expCal = Calendar.getInstance();
-        expCal.set(
-            (int)yearField.getValue(),
-            (int)monthField.getValue()-1,
-            (int)dayField.getValue(),
-            (int)hoursField.getValue(),
-            (int)minutesField.getValue(),
-            (int)secondsField.getValue()
-        );
+        try {
+            int year = getIntegerFieldValue(yearField, expCal.get(Calendar.YEAR));
+            int month = getIntegerFieldValue(monthField, expCal.get(Calendar.MONTH));
+            int day = getIntegerFieldValue(dayField, expCal.get(Calendar.DAY_OF_MONTH));
+            
+            int hours = getIntegerFieldValue(hoursField, expCal.get(Calendar.HOUR));
+            int minutes = getIntegerFieldValue(minutesField, expCal.get(Calendar.MINUTE));
+            int seconds = getIntegerFieldValue(secondsField, expCal.get(Calendar.SECOND));
+            
+            expCal.set(
+                year,
+                month-1,
+                day,
+                hours,
+                minutes,
+                seconds
+            );
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
                 
         return expCal.getTimeInMillis();
     }
+    
+    
+    private int getIntegerFieldValue(JTextField field, int defaultValue) {
+        if(field != null) {
+            String text = field.getText();
+            if(text != null && text.length() > 0) {
+                try {
+                    int integerValue = Integer.parseInt(text);
+                    return integerValue;
+                }
+                catch(Exception e) {
+                    // IGNORE
+                }
+            }
+        }
+        return defaultValue;
+    }
+    
+    
     
     
     private boolean start() {
@@ -238,9 +271,9 @@ public class PingerPanel extends javax.swing.JPanel {
         
         final long expiry = (expires) ? getExpiry() : Long.MAX_VALUE;
         
-        if(saveToggle.isSelected() && saveFolder == null){
+        if(saveToggle.isSelected() && saveFolder == null) {
             openFileChooser();
-            if(saveFolder == null){
+            if(saveFolder == null) {
                 JOptionPane.showMessageDialog(this, "Save folder not set. ");
                 return false;
             }
@@ -258,7 +291,7 @@ public class PingerPanel extends javax.swing.JPanel {
                     return;
                 }
                 
-                startStopButton.setText("Stop");
+                startStopButton.setText("Running, press to stop");
                 statusField.setText("Running");
                 
                 try {
@@ -269,17 +302,16 @@ public class PingerPanel extends javax.swing.JPanel {
                     }
                 } 
                 catch (Exception e) {
-                    logArea.append(e.getMessage());
+                    logger.log(e);
                 }
             }
         };
         
         logger.log("Starting pinger");
-        
-        timer.schedule(task, 0, delay*1000);
-        
         isRunning = true;
         setSetupEnabled(isRunning);
+        
+        timer.schedule(task, 0, Math.max(1000, delay*1000));
         return true;
     }
     
@@ -292,6 +324,7 @@ public class PingerPanel extends javax.swing.JPanel {
             task.cancel();
         }
         startStopButton.setText("Start");
+        startStopButton.setSelected(false);
         statusField.setText("Stopped");
         setupPane.setEnabled(true);
         isRunning = false;
@@ -365,7 +398,7 @@ public class PingerPanel extends javax.swing.JPanel {
         description.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         description.setLineWrap(true);
         description.setRows(4);
-        description.setText("The IoT pinger facilitates fetching data from an abritrary HTTP endpoint and storing it as an occurrence of a topic. The pinger looks for an source occurrance in each topic for the endpoint and stores the fetched response as a target occurrence of the corresponding topic. The process is repeated according to the delay parameter.\n");
+        description.setText("The IoT pinger facilitates fetching data from an abritrary HTTP endpoint and storing it as an occurrence of a topic. The pinger looks for an source occurrence in each topic for the endpoint and stores the fetched response as a target occurrence of the corresponding topic. The process is repeated according to the delay parameter.\n");
         description.setWrapStyleWord(true);
         description.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -390,7 +423,7 @@ public class PingerPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
         setupPane.add(targetButton, gridBagConstraints);
@@ -408,16 +441,16 @@ public class PingerPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
         setupPane.add(sourceButton, gridBagConstraints);
 
         sourceIsBinaryButton.setText("is binary");
+        sourceIsBinaryButton.setToolTipText("Is the downloaded resource binary data. Check to turn the downloaded resource into a data url.");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
         setupPane.add(sourceIsBinaryButton, gridBagConstraints);
@@ -642,6 +675,7 @@ public class PingerPanel extends javax.swing.JPanel {
         setupPane.add(saveFolderField, gridBagConstraints);
 
         saveButton.setText("Browse");
+        saveButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
@@ -728,8 +762,9 @@ public class PingerPanel extends javax.swing.JPanel {
         boolean selected = saveToggle.isSelected();
         saveFolderField.setEnabled(selected);
         saveButton.setEnabled(selected);
-        
-        if(selected && saveFolder == null) openFileChooser();
+        if(selected && saveFolder == null) {
+            openFileChooser();
+        }
     }//GEN-LAST:event_saveToggleActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
