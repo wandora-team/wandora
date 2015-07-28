@@ -33,6 +33,7 @@ import org.wandora.application.gui.simple.SimpleLabel;
 
 /**
  *
+ * @deprecated
  * @author  olli
  */
 public class ConnectionPrompt extends javax.swing.JDialog {

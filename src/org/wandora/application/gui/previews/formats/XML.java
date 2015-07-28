@@ -76,7 +76,7 @@ public class XML extends JPanel implements Runnable, MouseListener, ActionListen
     public void initialize(Wandora admin) {
         this.admin = admin;
         this.addMouseListener(this);
-        bgImage = UIBox.getImage("gui/doctype_xml.png");
+        bgImage = UIBox.getImage("gui/icons/doctype/doctype_xml.png");
         
         if(admin != null) {
             options = admin.options;

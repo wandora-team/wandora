@@ -79,7 +79,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     public void initialize(Map<String, String> options) {
         this.options = options;
         this.addMouseListener(this);
-        bgImage = UIBox.getImage("gui/doctype_audio_sample.png");
+        bgImage = UIBox.getImage("gui/icons/doctype/doctype_audio_sample.png");
         
         panelDimensions = new Dimension(100, 100);
         this.setPreferredSize(panelDimensions);

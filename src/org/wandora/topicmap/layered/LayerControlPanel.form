@@ -218,7 +218,7 @@
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new EditorPanel(wandora, org.wandora.application.tools.importers.AbstractImportTool.TOPICMAP_MAKE_NEW_LAYER, wandora);"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="((EditorPanel) layersPanel).setImage(&quot;gui/components/LayerControlPanelBackground.jpg&quot;);&#xa;((EditorPanel) layersPanel).setAlign(EditorPanel.BOTTOM_LEFT_ALIGN);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="((EditorPanel) layersPanel).setAlign(EditorPanel.BOTTOM_LEFT_ALIGN);"/>
           </AuxValues>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>

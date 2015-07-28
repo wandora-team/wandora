@@ -85,7 +85,7 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
     public void initialize(Map<String, String> options) {
         this.options = options;
         this.addMouseListener(this);
-        bgImage = UIBox.getImage("gui/doctype_audio_midi.png");
+        bgImage = UIBox.getImage("gui/icons/doctype/doctype_audio_midi.png");
         
         panelDimensions = new Dimension(100, 100);
         this.setPreferredSize(panelDimensions);

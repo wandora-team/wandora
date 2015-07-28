@@ -46,7 +46,7 @@ public class Unknown extends JPanel implements PreviewPanel {
     
     public Unknown(String locator, Wandora admin) {
         this.admin = admin;
-        this.bgImage = UIBox.getImage("gui/doctype_unknown.png");
+        this.bgImage = UIBox.getImage("gui/icons/doctype/doctype_unknown.png");
 
         Dimension dim = new Dimension(bgImage.getWidth(), bgImage.getHeight());
         this.setPreferredSize(dim);

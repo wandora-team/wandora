@@ -313,7 +313,6 @@ public class LayerControlPanel extends javax.swing.JPanel implements AmbiguityRe
         setLayout(new java.awt.GridBagLayout());
 
         layersPanel.setBackground(UIConstants.defaultInactiveBackground);
-        ((EditorPanel) layersPanel).setImage("gui/components/LayerControlPanelBackground.jpg");
         ((EditorPanel) layersPanel).setAlign(EditorPanel.BOTTOM_LEFT_ALIGN);
         layersPanel.setLayout(new java.awt.GridBagLayout());
 

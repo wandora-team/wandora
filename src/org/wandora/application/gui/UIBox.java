@@ -1147,19 +1147,19 @@ public class UIBox {
             
             if(thumb == null) {
                 if(endsWith(l, new String[] { ".mp1", ".mp2", ".mp3", ".aif", ".aiff", ".wav", ".au", ".mid", ".midi" })) {
-                    thumb = UIBox.getImage("gui/doctype_audio.png");
+                    thumb = UIBox.getImage("gui/icons/doctype/doctype_audio.png");
                 }
                 else if(endsWith(l, new String[] { ".jpg", ".jpeg", ".png", ".tif", ".gif", ".psd", ".jfif", ".jpe"  })) {
-                    if(thumb == null) thumb = UIBox.getImage("gui/doctype_image.png");
+                    if(thumb == null) thumb = UIBox.getImage("gui/icons/doctype/doctype_image.png");
                 }
                 else if(endsWith(l, new String[] { ".mpg", ".mpeg", ".mpg", ".mov", ".avi", ".mpa" })) {
-                    thumb =  UIBox.getImage("gui/doctype_video.png");
+                    thumb =  UIBox.getImage("gui/icons/doctype/doctype_video.png");
                 }
                 else if(endsWith(l, new String[] { ".txt", ".doc", ".rtf" })) {
-                    thumb =  UIBox.getImage("gui/doctype_text.png");
+                    thumb =  UIBox.getImage("gui/icons/doctype/doctype_text.png");
                 }
                 else {
-                    thumb = UIBox.getImage("gui/doctype_unknown.png", httpAuthorizer);
+                    thumb = UIBox.getImage("gui/icons/doctype/doctype_unknown.png", httpAuthorizer);
                 }
             }
         }
