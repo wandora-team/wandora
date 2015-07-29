@@ -84,7 +84,8 @@ public class PingerPanel extends javax.swing.JPanel {
         try {
             maybeTargetButton = new GetTopicButton();
             maybeSourceButton = new GetTopicButton();
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             return;
         }
         
@@ -291,7 +292,13 @@ public class PingerPanel extends javax.swing.JPanel {
                     return;
                 }
                 
-                startStopButton.setText("Running, press to stop");
+                if(expires) {
+                    long tillExpiry = (expiry - System.currentTimeMillis()) / 1000;
+                    startStopButton.setText("Running, stops automatically in "+tillExpiry+" seconds. Press to force stop.");
+                }
+                else {
+                    startStopButton.setText("Running, press to stop");
+                }
                 statusField.setText("Running");
                 
                 try {
@@ -311,7 +318,7 @@ public class PingerPanel extends javax.swing.JPanel {
         isRunning = true;
         setSetupEnabled(isRunning);
         
-        timer.schedule(task, 0, Math.max(1000, delay*1000));
+        timer.schedule(task, 0, Math.max(5000, delay*1000));
         return true;
     }
     
@@ -330,6 +337,7 @@ public class PingerPanel extends javax.swing.JPanel {
         isRunning = false;
         setSetupEnabled(isRunning);
     }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -465,7 +473,7 @@ public class PingerPanel extends javax.swing.JPanel {
 
         delayField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         delayField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        delayField.setValue(new Integer(5));
+        delayField.setValue(new Integer(10));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -699,6 +707,7 @@ public class PingerPanel extends javax.swing.JPanel {
         logArea.setEditable(false);
         logArea.setColumns(20);
         logArea.setRows(5);
+        logArea.setMargin(new java.awt.Insets(4, 4, 4, 4));
         logScroll.setViewportView(logArea);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

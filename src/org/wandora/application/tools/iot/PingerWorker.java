@@ -32,9 +32,9 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.extractors.ExtractHelper;
@@ -43,6 +43,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.DataURL;
 
 
@@ -61,7 +62,8 @@ class PingerWorker {
         String fileName = "iot_" + df.format(new Date()) + ".jtm";
         try {
             tm.exportJTM(saveFolder.getAbsolutePath() + File.separator + fileName);
-        } catch (IOException | TopicMapException e) {
+        }
+        catch (IOException | TopicMapException e) {
             logger.log(e);
         }
     }
@@ -71,68 +73,82 @@ class PingerWorker {
         
         logger.log("Initiating run");
         
-        List<Topic> validTopics;
-        Topic lang;
+        Collection<Topic> validTopics;
+        Collection<Topic> languageTopics;
         
         Unirest.clearDefaultHeaders();
         Unirest.setDefaultHeader("User-Agent", Wandora.USER_AGENT);
         
         try {
+            languageTopics = getLanguageTopics(tm);
             validTopics = getValidTopics(tm, sourceType);
-            lang = ExtractHelper.getOrCreateTopic(TMBox.LANGINDEPENDENT_SI, tm);
-
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             logger.log(e);
             return;
         }
         
+        int successCount = 0;
         for(Topic t : validTopics) {
-            try {
-                handleTopic(t, targetType, sourceType, lang, isBinary);
-            } catch (TopicMapException | UnirestException | IOException e) {
-                logger.log(e);
+            for(Topic lang : languageTopics) {
+                try {
+                    boolean success = handleTopic(t, targetType, sourceType, lang, isBinary);
+                    if(success) successCount++;
+                } 
+                catch (TopicMapException | UnirestException | IOException e) {
+                    logger.log(e);
+                }
             }
         }
-    }
-    
-    
-    private static void handleTopic(Topic t, Topic targetType, Topic sourceType,
-            Topic langTopic, boolean isBinary)
-            throws TopicMapException, UnirestException, IOException {
-        
-        String url = t.getData(sourceType, langTopic);
-        
-        if(url == null) {
-            throw new TopicMapException("Invalid URL for topic " + t.getBaseName());
+        if(successCount == 0) {
+            logger.log("Found no occurrence urls. Done nothing.");
         }
-        
-        // Check if URL matches any virtual sources
-        SourceMapping sourceMapping = SourceMapping.getInstance();
-        IoTSource iotSource = sourceMapping.match(url);    
-        if(iotSource != null) {
-            String data = iotSource.getData(url);
-            t.setData(targetType, langTopic, data);
+        else if(successCount == 1) {
+            logger.log("Found and processed one occurrence url.");
         }
-        else if(isBinary) { // Fallback: check if we're fetching binary data
-            
-            HttpResponse<InputStream> response = Unirest.get(url).asBinary();
-            InputStream stream = response.getBody();
-            String contentType = response.getHeaders().getFirst("content-type");
-            byte[] data = IOUtils.toByteArray(stream);
-            DataURL durl = new DataURL(contentType, data);        
-            t.setData(targetType, langTopic, durl.toExternalForm());
-        } 
-        else { // Fallback: fetch as String
-            HttpResponse<String> response = Unirest.get(url).asString();
-            String data = response.getBody();
-            t.setData(targetType, langTopic, data);
+        else {
+            logger.log("Found and processed "+successCount+" occurrence urls.");
         }
     }
     
     
-    private static List<Topic> getValidTopics(TopicMap tm, Topic sourceType) throws TopicMapException {
+    private static boolean handleTopic(Topic t, Topic targetType, Topic sourceType, Topic lang, boolean isBinary) throws TopicMapException, UnirestException, IOException {
+        boolean success = false;
+        String url = t.getData(sourceType, lang);
+
+        if(url != null) {
+            // Check if URL matches any virtual sources
+            SourceMapping sourceMapping = SourceMapping.getInstance();
+            IoTSource iotSource = sourceMapping.match(url);    
+            if(iotSource != null) {
+                String data = iotSource.getData(url);
+                t.setData(targetType, lang, data);
+                success = true;
+            }
+            else if(isBinary) { // Fallback: check if we're fetching binary data
+
+                HttpResponse<InputStream> response = Unirest.get(url).asBinary();
+                InputStream stream = response.getBody();
+                String contentType = response.getHeaders().getFirst("content-type");
+                byte[] data = IOUtils.toByteArray(stream);
+                DataURL durl = new DataURL(contentType, data);        
+                t.setData(targetType, lang, durl.toExternalForm());
+                success = true;
+            } 
+            else { // Fallback: fetch as String
+                HttpResponse<String> response = Unirest.get(url).asString();
+                String data = response.getBody();
+                t.setData(targetType, lang, data);
+                success = true;
+            }
+        }
+        return success;
+    }
+    
+    
+    private static Collection<Topic> getValidTopics(TopicMap tm, Topic sourceType) throws TopicMapException {
         Iterator<Topic> topics = tm.getTopics();
-        List<Topic> validTopics = new ArrayList<>();
+        Collection<Topic> validTopics = new ArrayList<>();
         
         while(topics.hasNext()){
             Topic t = topics.next();
@@ -144,4 +160,18 @@ class PingerWorker {
         return validTopics;
     }
 
+    
+    private static Collection<Topic> getLanguageTopics(TopicMap tm) throws TopicMapException {
+        Collection<Topic> languageTopics = tm.getTopicsOfType(XTMPSI.LANGUAGE);
+
+        if(languageTopics == null) {
+            languageTopics = new ArrayList();
+        }
+        
+        if(languageTopics.isEmpty()) {
+            Topic lang = ExtractHelper.getOrCreateTopic(TMBox.LANGINDEPENDENT_SI, tm);
+            languageTopics.add(lang);
+        }
+        return languageTopics;
+    }
 }
