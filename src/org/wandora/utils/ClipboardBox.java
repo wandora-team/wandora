@@ -33,7 +33,10 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.datatransfer.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import javax.imageio.ImageIO;
+import org.wandora.utils.transferables.TransferableImage;
 
 
 /**
@@ -104,9 +107,20 @@ public class ClipboardBox {
      */
     public static String getClipboard() {
         Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-    
+        if(t == null) return null;
+        
         try {
-            if (t != null && t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            if(t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                BufferedImage image = (BufferedImage) t.getTransferData(DataFlavor.imageFlavor);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write( image, "png", baos );
+                baos.flush();
+                byte[] imageBytes = baos.toByteArray();
+                baos.close();
+                DataURL dataURL = new DataURL("image/png", imageBytes);
+                return dataURL.toExternalForm();
+            }
+            else if(t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 String text = (String)t.getTransferData(DataFlavor.stringFlavor);
                 return text;
             }
@@ -123,8 +137,23 @@ public class ClipboardBox {
      * Sets the contents of the clipboard.
      */
     public static void setClipboard(String str) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection ss = new StringSelection(str);
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+        if(DataURL.isDataURL(str)) {
+            try {
+                DataURL dataURL = new DataURL(str);
+                if(dataURL.getMimetype().contains("image")) {
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(dataURL.getData()));
+                    TransferableImage imageTranferable = new TransferableImage(image, str);
+                    clipboard.setContents(imageTranferable, null);
+                    return;
+                }
+            }
+            catch(Exception e) {
+                // IGNORE
+            }
+        }
+        clipboard.setContents(ss, null);
     }
     
     /**
@@ -142,46 +171,9 @@ public class ClipboardBox {
      * Sets the contents of the clipboard.
      */
     public static void setClipboard(Image image) {
-        ImageSelection imgSel = new ImageSelection(image);
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(imgSel, null);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        TransferableImage imgSel = new TransferableImage(image);
+        clipboard.setContents(imgSel, null);
     }
-    
-    
-    
-    
-    
-    // This class is used to hold an image while on the clipboard.
-    public static class ImageSelection implements Transferable {
-        private Image image;
-    
-        public ImageSelection(Image image) {
-            this.image = image;
-        }
-    
-        // Returns supported flavors
-        public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[]{DataFlavor.imageFlavor};
-        }
-    
-        // Returns true if flavor is supported
-        public boolean isDataFlavorSupported(DataFlavor flavor) {
-            return DataFlavor.imageFlavor.equals(flavor);
-        }
-    
-        // Returns image
-        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-            if (!DataFlavor.imageFlavor.equals(flavor)) {
-                throw new UnsupportedFlavorException(flavor);
-            }
-            return image;
-        }
-    }
-    
-    
+
 }
-/*
-
-
-
-
-*/

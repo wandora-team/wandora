@@ -40,13 +40,12 @@ import java.util.*;
 import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.text.Document;
 
 
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.UIBox;
-import org.wandora.utils.*;
+import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.EasyVector;
 import org.wandora.utils.language.GoogleTranslateBox;
 import org.wandora.utils.language.MicrosoftTranslateBox;
@@ -398,20 +397,15 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             Transferable tr = e.getTransferable();
             if(e.isDataFlavorSupported(fileListFlavor)) {
-                //int ret=WandoraOptionPane.showOptionDialog(this, "Would you like to load text from the dropped document?","Load or reject", WandoraOptionPane.YES_NO_OPTION,WandoraOptionPane.QUESTION_MESSAGE);
-                //if(ret==WandoraOptionPane.YES_OPTION) {
-                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
-                    String fileName = null;
-                    ArrayList<WandoraTool> importTools = new ArrayList<WandoraTool>();
-                    String text="";
-                    for( File file : files ) {
-                        if(text.length()>0) text+=";";
-                        text+=file.getPath();
-                    }
-                    this.setText(text);
-                    e.dropComplete(true);
-                //}
+                e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
+                String text="";
+                for( File file : files ) {
+                    if(text.length()>0) text+=";";
+                    text+=file.getPath();
+                }
+                this.setText(text);
+                e.dropComplete(true);
             }
             else if(e.isDataFlavorSupported(stringFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
@@ -451,6 +445,72 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
         UIConstants.preparePaint(g);
         super.paint(g);
     }
+    
+    
+    // ----------------------------------------------------------- CLIPBOARD ---
+    
+    
+    @Override
+    public void copy() {
+        String text = getSelectedText();
+        ClipboardBox.setClipboard(text);
+    }
+    
+    
+    @Override
+    public void cut() {
+        String text = getSelectedText();
+        ClipboardBox.setClipboard(text);
+        removeSelectedText();
+    }
+    
+    
+    @Override
+    public void paste() {
+        String text = ClipboardBox.getClipboard();
+        replaceSelectedText(text);
+    }
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    public void removeSelectedText() {
+        try {
+            int selectionStartLoc = this.getSelectionStart();
+            int selectionEndLoc = this.getSelectionEnd();
+
+            if(selectionStartLoc != selectionEndLoc) {
+                int d = selectionEndLoc-selectionStartLoc;
+                this.removeSelectedText();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    
+    
+    public void replaceSelectedText(String txt) {
+        try {
+            int selectionStartLoc = this.getSelectionStart();
+            int selectionEndLoc = this.getSelectionEnd();
+
+            if(selectionStartLoc != selectionEndLoc) {
+                int d = selectionEndLoc-selectionStartLoc;
+                this.getDocument().remove(selectionStartLoc, d);
+            }
+            this.getDocument().insertString(selectionStartLoc, txt, null);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
 }
 
 

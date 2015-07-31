@@ -172,6 +172,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }
     
     
+    @Override
     public void setText(String str) {
         try {
             document.remove(0, document.getLength());
@@ -183,6 +184,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }
     
     
+    @Override
     public String getSelectedText() {
         String text = null;
         try {
@@ -911,4 +913,28 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     }
     
 
+    // ----------------------------------------------------------- CLIPBOARD ---
+    
+    
+    @Override
+    public void copy() {
+        String text = getSelectedText();
+        ClipboardBox.setClipboard(text);
+    }
+    
+    
+    @Override
+    public void cut() {
+        String text = getSelectedText();
+        ClipboardBox.setClipboard(text);
+        removeSelectedText();
+    }
+    
+    
+    @Override
+    public void paste() {
+        String text = ClipboardBox.getClipboard();
+        replaceSelectedText(text);
+    }
+    
 }
