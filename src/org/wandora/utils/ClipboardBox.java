@@ -36,6 +36,7 @@ import java.awt.datatransfer.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
+import org.wandora.utils.transferables.TransferableDataURL;
 import org.wandora.utils.transferables.TransferableImage;
 
 
@@ -48,6 +49,10 @@ import org.wandora.utils.transferables.TransferableImage;
 
 
 public class ClipboardBox {
+    
+    public static boolean makeDataURLs = true;
+    
+    
     
     /** Creates a new instance of ClipboardBox */
     public ClipboardBox() {
@@ -110,7 +115,28 @@ public class ClipboardBox {
         if(t == null) return null;
         
         try {
-            if(t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+            if(t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                java.util.List<File> files = (java.util.List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
+                if(makeDataURLs) {
+                    for( File file : files ) {
+                        if(file != null) {
+                            DataURL dataURL = new DataURL(file);
+                            return dataURL.toExternalForm(); // CAN'T HANDLE MULTIPLE FILES. RETURN FIRST FILE AS A DATAURL.
+                        }
+                    }
+                }
+                else {
+                    String text = "";
+                    for( File file : files ) {
+                        if(file != null) {
+                            if(text.length()>0) text+=";";
+                            text += file.toURI().toString();
+                        }
+                    }
+                    return text;
+                }
+            }
+            else if(t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
                 BufferedImage image = (BufferedImage) t.getTransferData(DataFlavor.imageFlavor);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write( image, "png", baos );
@@ -138,14 +164,18 @@ public class ClipboardBox {
      */
     public static void setClipboard(String str) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        StringSelection ss = new StringSelection(str);
         if(DataURL.isDataURL(str)) {
             try {
                 DataURL dataURL = new DataURL(str);
-                if(dataURL.getMimetype().contains("image")) {
+                if(dataURL.getMimetype().startsWith("image")) {
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(dataURL.getData()));
-                    TransferableImage imageTranferable = new TransferableImage(image, str);
-                    clipboard.setContents(imageTranferable, null);
+                    TransferableImage imageTransferable = new TransferableImage(image, str);
+                    clipboard.setContents(imageTransferable, null);
+                    return;
+                }
+                else {
+                    TransferableDataURL dataURLTransferable = new TransferableDataURL(dataURL);
+                    clipboard.setContents(dataURLTransferable, null);
                     return;
                 }
             }
@@ -153,6 +183,7 @@ public class ClipboardBox {
                 // IGNORE
             }
         }
+        StringSelection ss = new StringSelection(str);
         clipboard.setContents(ss, null);
     }
     

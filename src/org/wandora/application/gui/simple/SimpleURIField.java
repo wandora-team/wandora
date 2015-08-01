@@ -38,7 +38,10 @@ import java.net.URI;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.utils.DataURL;
 
 
 
@@ -70,7 +73,7 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
                 new URI(u);
             }
             catch(Exception e) {
-                return false;
+                return DataURL.isDataURL(u);
             }
         }
         return true;
@@ -98,8 +101,18 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             Transferable tr = e.getTransferable();
             if(e.isDataFlavorSupported(fileListFlavor)) {
-                //int ret=WandoraOptionPane.showOptionDialog(this, "Would you like to load text from the dropped document?","Load or reject", WandoraOptionPane.YES_NO_OPTION,WandoraOptionPane.QUESTION_MESSAGE);
-                //if(ret==WandoraOptionPane.YES_OPTION) {
+                int ret=WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Make DataURI out of given file content? Answering no uses filename as an URI.","Make DataURI?", WandoraOptionPane.YES_NO_OPTION);
+                if(ret==WandoraOptionPane.YES_OPTION) {
+                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                    java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
+                    for( File file : files ) {
+                        DataURL dataURL = new DataURL(file);
+                        this.setText(dataURL.toExternalForm());
+                        break; // CAN'T HANDLE MULTIPLE FILES. ONLY FIRST IS USED.
+                    }
+                    e.dropComplete(true);
+                }
+                else if(ret==WandoraOptionPane.NO_OPTION) {
                     e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                     java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
                     String text="";
@@ -109,7 +122,7 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
                     }
                     this.setText(text);
                     e.dropComplete(true);
-                //}
+                }
             }
             else if(e.isDataFlavorSupported(stringFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
@@ -118,7 +131,7 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
                 e.dropComplete(true);
             }
             else {
-                System.out.println("Drop rejected! Wrong data flavor!");
+                System.out.println("Drop rejected! Unsupported data flavor!");
                 e.rejectDrop();
             }
         }
@@ -141,16 +154,19 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
     
     
     
+    @Override
     public void insertUpdate(DocumentEvent e) {
         paint(this.getGraphics());
         revalidate();
     }
 
+    @Override
     public void removeUpdate(DocumentEvent e) {
         paint(this.getGraphics());
         revalidate();
     }
 
+    @Override
     public void changedUpdate(DocumentEvent e) {
         paint(this.getGraphics());
         revalidate();
