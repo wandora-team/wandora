@@ -467,7 +467,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
                 try {
                     DataURL dataURL = new DataURL(url);
                     String mimeType = dataURL.getMimetype();
-                    if(mimeType.startsWith("image")) {
+                    if(mimeType != null && mimeType.toLowerCase().startsWith("image")) {
                         return true;
                     }
                 }

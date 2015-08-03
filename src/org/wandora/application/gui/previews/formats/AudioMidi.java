@@ -46,6 +46,8 @@ import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 import javax.sound.midi.*;
+import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.utils.DataURL;
 
 
 
@@ -72,9 +74,9 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
         initialize(admin);
     }
     */
-    public AudioMidi(String audioLocator, Map<String, String> options) {
+    public AudioMidi(String audioLocator) {
         this.audioLocator = audioLocator;
-        initialize(options);
+        initialize();
     }
     
     @Override
@@ -82,8 +84,8 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
         return false;
     }
     
-    public void initialize(Map<String, String> options) {
-        this.options = options;
+    public void initialize() {
+        this.options = Wandora.getWandora().getOptions().asMap();
         this.addMouseListener(this);
         bgImage = UIBox.getImage("gui/icons/doctype/doctype_audio_midi.png");
         
@@ -133,18 +135,22 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
                 try {
                     sequencer = MidiSystem.getSequencer();
                     sequencer.open();
-
-                    // From URL
-                    URL audioURL = new URL(audioLocator);
-                    //BufferedInputStream is = new BufferedInputStream(audioURL.openStream());
-                    //sequencer.setSequence(is);
+                    Sequence sequence = null;
                     
-                    Sequence sequence = MidiSystem.getSequence(audioURL);
-                    sequencer.setSequence(sequence);
-                    
-                    sequencer.addMetaEventListener(this);
-                    // Start playing.
-                    sequencer.start();
+                    if(DataURL.isDataURL(audioLocator)) {
+                        DataURL dataURL = new DataURL(audioLocator);
+                        sequence = MidiSystem.getSequence(new ByteArrayInputStream(dataURL.getData()));
+                    }
+                    else {
+                        URL audioURL = new URL(audioLocator);
+                        sequence = MidiSystem.getSequence(audioURL);
+                    }
+                    if(sequence != null) {
+                        sequencer.setSequence(sequence);
+                        sequencer.addMetaEventListener(this);
+                        // Start playing.
+                        sequencer.start();
+                    }
                 }
                 catch (MidiUnavailableException e) {  e.printStackTrace(); }
                 catch (MalformedURLException e) {  e.printStackTrace(); } 
@@ -193,13 +199,23 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
     
     public void forkAudioPlayer() {
         if(audioLocator != null && audioLocator.length() > 0) {
-            System.out.println("Spawning viewer for \""+audioLocator+"\"");
-            try {
-                Desktop desktop = Desktop.getDesktop();
-                desktop.browse(new URI(audioLocator));
+            if(!DataURL.isDataURL(audioLocator)) {
+                System.out.println("Spawning viewer for \""+audioLocator+"\"");
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    desktop.browse(new URI(audioLocator));
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            else {
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                        "Due to Java's security restrictions Wandora can't open the DataURI "+
+                        "in external application. Manually copy and paste the locator to browser's "+
+                        "address field to view the locator.", 
+                        "Can't open the locator in external application",
+                        WandoraOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -330,7 +346,12 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
     public void save(File audioFile) {
         if(audioFile != null) {
             try {
-                IObox.moveUrl(new URL(audioLocator), audioFile);
+                if(DataURL.isDataURL(audioLocator)) {
+                    DataURL.saveToFile(audioLocator, audioFile);
+                }
+                else {
+                    IObox.moveUrl(new URL(audioLocator), audioFile);
+                }
             }
             catch(Exception e) {
                 System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + audioFile.getPath() + "'.");
@@ -339,6 +360,35 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
     }
     
     
-   
+    // -------------------------------------------------------------------------
+    
+    
+    public static boolean canView(String url) {
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType != null) {
+                        String lowercaseMimeType = mimeType.toLowerCase();
+                        if(lowercaseMimeType.startsWith("audio/midi") ||
+                           lowercaseMimeType.startsWith("application/x-midi")) {
+                                return true;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(endsWithAny(url.toLowerCase(), ".mid", ".midi", ".rmf")) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
     
 }

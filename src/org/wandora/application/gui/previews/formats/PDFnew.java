@@ -51,6 +51,9 @@ import org.wandora.utils.Option;
 import static org.wandora.utils.Option.*;
 
 import static java.awt.event.KeyEvent.*;
+import java.net.URISyntaxException;
+import org.wandora.application.Wandora;
+import static org.wandora.application.gui.previews.Util.endsWithAny;
 
 
 
@@ -74,7 +77,7 @@ public class PDFnew implements PreviewPanel {
         }
     };
 
-    private final URI source;
+    private final String source;
     private final Map<String, String> options;
     private final Fn1<Abortable, URI> makeCopier;
     
@@ -82,10 +85,12 @@ public class PDFnew implements PreviewPanel {
 
     
     
-    public PDFnew(final URI source, final Frame dlgParent, final Map<String, String> options) throws FileNotFoundException, IOException, MalformedURLException {
-        this.options = options;
-        this.dlgParent = dlgParent;
-        this.source = source;
+    public PDFnew(String pdfLocator) throws FileNotFoundException, IOException, MalformedURLException, URISyntaxException {
+        
+        this.source = pdfLocator;
+        this.options = Wandora.getWandora().getOptions().asMap();
+        this.dlgParent = Wandora.getWandora();
+        
         currentPage = 0;
 
         pdfPanel.addMouseListener(actionListener);
@@ -93,84 +98,39 @@ public class PDFnew implements PreviewPanel {
         pdfPanel.addKeyListener(actionListener);
         pdfPanel.setComponentPopupMenu(menu);
         
-        if("file".equalsIgnoreCase(source.getScheme())) {
-            final RandomAccessFile file =
-                    new RandomAccessFile(createPath(source), "r");
-            
+        if(DataURL.isDataURL(pdfLocator)) {
             cleanup = new Pr0() {
-                public void invoke() {
-                    pdfFile = null;
-                    try { file.close(); } catch(IOException e) {}
-                }
+                public void invoke() {};
             };
-            
-            try {
-                final FileChannel channel = file.getChannel();
-                final MappedByteBuffer buf =
-                        channel.map(FileChannel.MapMode.READ_ONLY,
-                                    0,
-                                    channel.size());
+            byte[] pdfBytes = new DataURL(pdfLocator).getData();
+            pdfFile = new PDFFile(ByteBuffer.wrap(pdfBytes));
 
-                pdfFile = new PDFFile(buf);
-                pageCount = pdfFile.getNumPages();
-                if(pageCount == 0) {
-                    System.err.println("No pages in pdf file!");
-                }
-                else {
-                    setPageText.invoke(currentPage + 1, pageCount);
-                }
-                
-                pdfPanel.changePage(some(pdfFile.getPage(0)));
-                
-                makeCopier = flip(curry(makeFileCopier)).invoke(source);
+            pageCount = pdfFile.getNumPages();
+            if(pageCount == 0) {
+                System.err.println("No pages in pdf file!");
             }
-            catch(IOException e) {
-                cleanup.invoke();
-                throw e;
+            else {
+                setPageText.invoke(currentPage + 1, pageCount);
             }
+
+            pdfPanel.changePage(some(pdfFile.getPage(0)));
+            makeCopier = flip(curry(makeMemoryCopier)).invoke(pdfBytes);
         }
         else {
-            cleanup = new Pr0() { public void invoke() { } };
-            
-            final DownloadDialog[] dlg = new DownloadDialog[1];
-            
-            final Abortable.ImplFactory dlgFactory =
-                new Abortable.ImplFactory() {
-                    public Impl create(Abortable parent) {
-                        dlg[0] = new DownloadDialog(source, parent);
-                        return dlg[0];
-                    }
+            URI sourceURI = new URI(pdfLocator);
+            if("file".equalsIgnoreCase(sourceURI.getScheme())) {
+                final RandomAccessFile file = new RandomAccessFile(createPath(sourceURI), "r");
+                cleanup = new Pr0() {
+                    public void invoke() {
+                        try { file.close(); } catch(Exception e) {};
+                    };
                 };
-            
-            final Abortable ab =
-                    new Abortable(dlgParent, dlgFactory, some("Downloading pdf"));
-            
-            ab.run();
-            
-            switch(ab.getStatus()) {
-                case Failure:
-                    for(MalformedURLException e : dlg[0].urlException)
-                        throw e;
-                    for(IOException e : dlg[0].ioException)
-                        throw e;
-                    for(RuntimeException e : dlg[0].runtimeException)
-                        throw e;
-                    
-                    assert false :
-                        "Download failure with no exception stored.";
-                    
-                case InProgress:
-                    assert false :
-                        "Abortable.run returned with " +
-                        "status InProgress.";
-                    
-                case Success:
-                    assert dlg[0].data != null:
-                        "Download returned with success but " +
-                        "with no buffer stored.";
-                    
-                    pdfFile = new PDFFile(ByteBuffer.wrap(dlg[0].data));
+                try {
+                    final FileChannel channel = file.getChannel();
+                    final MappedByteBuffer buf =
+                            channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 
+                    pdfFile = new PDFFile(buf);
                     pageCount = pdfFile.getNumPages();
                     if(pageCount == 0) {
                         System.err.println("No pages in pdf file!");
@@ -180,11 +140,82 @@ public class PDFnew implements PreviewPanel {
                     }
 
                     pdfPanel.changePage(some(pdfFile.getPage(0)));
-                    break;
+
+                    makeCopier = flip(curry(makeFileCopier)).invoke(sourceURI);
+                }
+                catch(IOException e) {
+                    pdfFile = null;
+                    try { 
+                        file.close(); 
+                    } 
+                    catch(IOException e2) {}
+                    throw e;
+                }
             }
-            
-            makeCopier = flip(curry(makeMemoryCopier))
-                         .invoke(dlg[0].data);
+            else {
+                final DownloadDialog[] dlg = new DownloadDialog[1];
+                cleanup = new Pr0() {
+                    public void invoke() {
+                    };
+                };
+
+                final Abortable.ImplFactory dlgFactory =
+                    new Abortable.ImplFactory() {
+                        public Impl create(Abortable parent) {
+                            try {
+                                dlg[0] = new DownloadDialog(new URI(source), parent);
+                                return dlg[0];
+                            }
+                            catch(Exception e) {
+                                return null;
+                            }
+                        }
+                    };
+
+                final Abortable ab =
+                        new Abortable(dlgParent, dlgFactory, some("Downloading pdf"));
+
+                ab.run();
+
+                switch(ab.getStatus()) {
+                    case Failure:
+                        for(MalformedURLException e : dlg[0].urlException)
+                            throw e;
+                        for(IOException e : dlg[0].ioException)
+                            throw e;
+                        for(RuntimeException e : dlg[0].runtimeException)
+                            throw e;
+
+                        assert false :
+                            "Download failure with no exception stored.";
+
+                    case InProgress:
+                        assert false :
+                            "Abortable.run returned with " +
+                            "status InProgress.";
+
+                    case Success:
+                        assert dlg[0].data != null:
+                            "Download returned with success but " +
+                            "with no buffer stored.";
+
+                        pdfFile = new PDFFile(ByteBuffer.wrap(dlg[0].data));
+
+                        pageCount = pdfFile.getNumPages();
+                        if(pageCount == 0) {
+                            System.err.println("No pages in pdf file!");
+                        }
+                        else {
+                            setPageText.invoke(currentPage + 1, pageCount);
+                        }
+
+                        pdfPanel.changePage(some(pdfFile.getPage(0)));
+                        break;
+                }
+
+                makeCopier = flip(curry(makeMemoryCopier))
+                             .invoke(dlg[0].data);
+            }
         }
     }
 
@@ -207,6 +238,36 @@ public class PDFnew implements PreviewPanel {
     }
     
 
+    // -------------------------------------------------------------------------
+    
+    
+    public static boolean canView(String url) {
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType != null) {
+                        String lowercaseMimeType = mimeType.toLowerCase();
+                        if(lowercaseMimeType.startsWith("application/pdf")) {
+                            return true;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(endsWithAny(url.toLowerCase(), ".pdf")) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
     
     
     
@@ -348,14 +409,23 @@ public class PDFnew implements PreviewPanel {
         public void actionPerformed(ActionEvent args) {
             for(final String c : some(args.getActionCommand())) {
                 if(c.equals(OPEN_EXTERNAL)) {
-                    for(final String cmdRaw : Util.getOption(options, "mediaviewer")) {
-                        final String cmd = cmdRaw.replaceAll("__URL__", source.toString());
+                    if(!DataURL.isDataURL(source)) {
+                        System.out.println("Spawning viewer for \""+source+"\"");
                         try {
-                            Runtime.getRuntime().exec(cmd);
+                            Desktop desktop = Desktop.getDesktop();
+                            desktop.browse(new URI(source));
                         }
-                        catch(IOException e) {
-
+                        catch(Exception e) {
+                            e.printStackTrace();
                         }
+                    }
+                    else {
+                        WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                                "Due to Java's security restrictions Wandora can't open the DataURI "+
+                                "in external application. Manually copy and paste the locator to browser's "+
+                                "address field to view the locator.", 
+                                "Can't open the locator in external application",
+                                WandoraOptionPane.WARNING_MESSAGE);
                     }
                 }
                 else if(c.equals(COPY_LOCATION)) {
@@ -471,58 +541,62 @@ public class PDFnew implements PreviewPanel {
     
     
     private static final
-            String OPEN_EXTERNAL = "Open in external viewer...",
-                   COPY_LOCATION = "Copy media location",
-                   COPY_IMAGE = "Copy as image",
-                   SAVE_AS = "Save media as...",
-                   ZOOM_OUT = "Zoom out",
-                   ZOOM_IN = "Zoom in",
-                   ZOOM_50 = "50%",
-                   ZOOM_DEFAULT = "100%",
-                   ZOOM_150 = "150%",
-                   ZOOM_200 = "200%",
-                   NEXT_PAGE = "Next page",
-                   PREV_PAGE = "Previous page",
-                   JUMP_10_FWD = "10 pages forward",
-                   JUMP_10_REV = "10 pages back",
-                   JUMP_100_FWD = "100 pages forward",
-                   JUMP_100_REV = "100 pages back",
-                   JUMP_HOME = "First page",
-                   JUMP_END = "Last page",
-                   OFFSET_DEFAULT = "Reset panning";
+        String OPEN_EXTERNAL = "Open in external viewer...",
+               COPY_LOCATION = "Copy media location",
+               COPY_IMAGE = "Copy as image",
+               SAVE_AS = "Save media as...",
+               ZOOM_OUT = "Zoom out",
+               ZOOM_IN = "Zoom in",
+               ZOOM_50 = "50%",
+               ZOOM_DEFAULT = "100%",
+               ZOOM_150 = "150%",
+               ZOOM_200 = "200%",
+               NEXT_PAGE = "Next page",
+               PREV_PAGE = "Previous page",
+               JUMP_10_FWD = "10 pages forward",
+               JUMP_10_REV = "10 pages back",
+               JUMP_100_FWD = "100 pages forward",
+               JUMP_100_REV = "100 pages back",
+               JUMP_HOME = "First page",
+               JUMP_END = "Last page",
+               OFFSET_DEFAULT = "Reset panning";
     
     private static final Object[] popupStructure = new Object[] {
-            "[No page loaded]",
+        "[No page loaded]",
+        "---",
+        NEXT_PAGE, KeyStroke.getKeyStroke(VK_PAGE_UP, 0),
+        PREV_PAGE, KeyStroke.getKeyStroke(VK_PAGE_UP, 0),
+        "Jump", new Object[] {
+            JUMP_HOME, KeyStroke.getKeyStroke(VK_HOME, 0),
+            JUMP_END, KeyStroke.getKeyStroke(VK_END, 0),
             "---",
-            NEXT_PAGE, KeyStroke.getKeyStroke(VK_PAGE_UP, 0),
-            PREV_PAGE, KeyStroke.getKeyStroke(VK_PAGE_UP, 0),
-            "Jump", new Object[] {
-                JUMP_HOME, KeyStroke.getKeyStroke(VK_HOME, 0),
-                JUMP_END, KeyStroke.getKeyStroke(VK_END, 0),
-                "---",
-                JUMP_100_FWD, KeyStroke.getKeyStroke(VK_PAGE_DOWN, CTRL_MASK),
-                JUMP_10_FWD, KeyStroke.getKeyStroke(VK_PAGE_DOWN, SHIFT_MASK),
-                JUMP_10_REV, KeyStroke.getKeyStroke(VK_PAGE_UP, SHIFT_MASK),
-                JUMP_100_REV, KeyStroke.getKeyStroke(VK_PAGE_UP, CTRL_MASK),
-            },
+            JUMP_100_FWD, KeyStroke.getKeyStroke(VK_PAGE_DOWN, CTRL_MASK),
+            JUMP_10_FWD, KeyStroke.getKeyStroke(VK_PAGE_DOWN, SHIFT_MASK),
+            JUMP_10_REV, KeyStroke.getKeyStroke(VK_PAGE_UP, SHIFT_MASK),
+            JUMP_100_REV, KeyStroke.getKeyStroke(VK_PAGE_UP, CTRL_MASK),
+        },
+        "---",
+        // OFFSET_DEFAULT,
+        "Zoom", new Object[] {
+            ZOOM_IN, KeyStroke.getKeyStroke(VK_PLUS, 0),
+            ZOOM_OUT, KeyStroke.getKeyStroke(VK_MINUS, 0),
             "---",
-            // OFFSET_DEFAULT,
-            "Zoom", new Object[] {
-                ZOOM_IN, KeyStroke.getKeyStroke(VK_PLUS, 0),
-                ZOOM_OUT, KeyStroke.getKeyStroke(VK_MINUS, 0),
-                "---",
-                ZOOM_50,
-                ZOOM_DEFAULT,
-                ZOOM_150,
-                ZOOM_200,
-            },
-            "---",
-            OPEN_EXTERNAL,
-            COPY_LOCATION,
-            COPY_IMAGE, KeyStroke.getKeyStroke(VK_C, CTRL_MASK),
-            "---",
-            SAVE_AS,
-        };
+            ZOOM_50,
+            ZOOM_DEFAULT,
+            ZOOM_150,
+            ZOOM_200,
+        },
+        "---",
+        OPEN_EXTERNAL,
+        COPY_LOCATION,
+        COPY_IMAGE, KeyStroke.getKeyStroke(VK_C, CTRL_MASK),
+        "---",
+        SAVE_AS,
+    };
+    
+    
+
+    
 }
 
 
@@ -687,4 +761,5 @@ class DownloadDialog implements Abortable.Impl {
                     e.getMessage());
         }
     }
+    
 }

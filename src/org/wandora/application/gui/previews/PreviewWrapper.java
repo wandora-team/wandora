@@ -84,8 +84,7 @@ public class PreviewWrapper extends JPanel {
             return;
         
         currentPanel =
-                new PreviewFactory(admin)
-                .create(subjectLocator)
+                PreviewFactory.create(subjectLocator)
                 .getOrElse(new Fn0<PreviewPanel>() {
                     @Override
                     public PreviewPanel invoke() {

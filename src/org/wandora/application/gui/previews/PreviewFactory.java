@@ -42,58 +42,56 @@ import org.wandora.utils.Functional.*;
 import static org.wandora.utils.Option.none;
 import static org.wandora.utils.Option.some;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
-import org.wandora.utils.DataURL;
+
+
 /**
  *
  * @author anttirt
  */
 public class PreviewFactory {
     
-    private final Wandora wandora;
-    
-    public PreviewFactory(Wandora wandora) {
-        this.wandora = wandora;
-    }
+
     
     
-    
-    private Fn1<PreviewPanel, PreviewPanel> wrapHeavy = new Fn1<PreviewPanel, PreviewPanel>() {
-    @Override
-    public PreviewPanel invoke(PreviewPanel panel) {
-        if(panel.isHeavy())
-            return new AWTWrapper(wandora, panel);
-        else
-            return panel;
-    }};
+    private static Fn1<PreviewPanel, PreviewPanel> wrapHeavy = new Fn1<PreviewPanel, PreviewPanel>() {
+        @Override
+        public PreviewPanel invoke(PreviewPanel panel) {
+            if(panel.isHeavy())
+                return new AWTWrapper(Wandora.getWandora(), panel);
+            else
+                return panel;
+        }
+    };
     
     
     
-    public Option<PreviewPanel> create(final Locator subjectLocator) {
+    public static Option<PreviewPanel> create(final Locator subjectLocator) {
         return createAux(subjectLocator).map(wrapHeavy);
     }
     
     
     
-    private Option<? extends PreviewPanel> createAux(final Locator subjectLocator) {
+    private static Option<? extends PreviewPanel> createAux(final Locator subjectLocator) {
+        final Wandora wandora = Wandora.getWandora();
         final String urlString = subjectLocator.toExternalForm();
 
         final String urlLower = subjectLocator.toExternalForm().toLowerCase();
         final Map<String, String> options = wandora.getOptions().asMap();
         final java.awt.Frame dlgParent = wandora;
 
-        if(endsWithAny(urlLower, ".mid", ".rmf")) {
-            try { return some(new AudioMidi(urlString, options)); } catch(Exception e) { }
+        if(AudioMidi.canView(urlString)) {
+            try { return some(new AudioMidi(urlString)); } catch(Exception e) { }
         }
-        else if(endsWithAny(urlLower, ".aif", /*".mp3", */".wav", ".au")) {
-            try { return some(new AudioSample(urlString, options)); } catch(Exception e) { }
+        else if(AudioSample.canView(urlString)) {
+            try { return some(new AudioSample(urlString)); } catch(Exception e) { }
         }
         else if(Picture.canView(urlString)) {
             try { return some(new Picture(urlString)); } catch(Exception e) { wandora.handleError(e); }
         }
-        else if(endsWithAny(urlLower, ".pdf")) {
+        else if(PDFnew.canView(urlString)) {
             //try { return some(new PDF(urlString, admin)); } catch(Exception e) { }
             try {
-                return some(new PDFnew(new URI(urlLower), wandora, options));
+                return some(new PDFnew(urlString));
             }
             catch(URISyntaxException e) { }
             catch(MalformedURLException e) { }

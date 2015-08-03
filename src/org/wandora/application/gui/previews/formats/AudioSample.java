@@ -47,6 +47,8 @@ import org.wandora.application.*;
 
 import javax.sound.sampled.*;
 import javax.sound.midi.*;
+import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.utils.DataURL;
 
 
 
@@ -66,9 +68,9 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     
     
     /** Creates a new instance of WandoraImagePanel */
-    public AudioSample(String audioLocator, Map<String, String> options) {
+    public AudioSample(String audioLocator) {
         this.audioLocator = audioLocator;
-        initialize(options);
+        initialize();
     }
     
     @Override
@@ -76,8 +78,8 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
         return false;
     }
     
-    public void initialize(Map<String, String> options) {
-        this.options = options;
+    public void initialize() {
+        this.options = Wandora.getWandora().getOptions().asMap();
         this.addMouseListener(this);
         bgImage = UIBox.getImage("gui/icons/doctype/doctype_audio_sample.png");
         
@@ -126,8 +128,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     public void run() {
         try {
             isPlaying = true;
-            URL audioURL = new URL(audioLocator);
-            playSample(audioURL);
+            playSample(audioLocator);
         }
         catch (MalformedURLException e)  { e.printStackTrace();  }
         catch (IOException e)  { e.printStackTrace();  }
@@ -143,8 +144,16 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     
     
     
-    private void playSample(URL audioURL) throws Exception {
-        AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioURL);
+    private void playSample(String audioLocator) throws Exception {
+        AudioInputStream audioStream = null;
+        if(DataURL.isDataURL(audioLocator)) {
+            DataURL dataURL = new DataURL(audioLocator);
+            audioStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(dataURL.getData()));
+        }
+        else {
+            URL audioURL = new URL(audioLocator);
+            audioStream = AudioSystem.getAudioInputStream(audioURL);
+        }
         AudioFormat format = audioStream.getFormat();
         if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
             format = new AudioFormat(
@@ -194,13 +203,23 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     
     public void forkAudioPlayer() {
         if(audioLocator != null && audioLocator.length() > 0) {
-            System.out.println("Spawning viewer for \""+audioLocator+"\"");
-            try {
-                Desktop desktop = Desktop.getDesktop();
-                desktop.browse(new URI(audioLocator));
+            if(!DataURL.isDataURL(audioLocator)) {
+                System.out.println("Spawning viewer for \""+audioLocator+"\"");
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    desktop.browse(new URI(audioLocator));
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            else {
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                        "Due to Java's security restrictions Wandora can't open the DataURI "+
+                        "in external application. Manually copy and paste the locator to browser's "+
+                        "address field to view the locator.", 
+                        "Can't open the locator in external application",
+                        WandoraOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -311,7 +330,12 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     public void save(File audioFile) {
         if(audioFile != null) {
             try {
-                IObox.moveUrl(new URL(audioLocator), audioFile);
+                if(DataURL.isDataURL(audioLocator)) {
+                    DataURL.saveToFile(audioLocator, audioFile);
+                }
+                else {
+                    IObox.moveUrl(new URL(audioLocator), audioFile);
+                }
             }
             catch(Exception e) {
                 System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + audioFile.getPath() + "'.");
@@ -319,6 +343,38 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
         }
     }
     
+    
+    // -------------------------------------------------------------------------
+    
+    
+    public static boolean canView(String url) {
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType != null) {
+                        String lowercaseMimeType = mimeType.toLowerCase();
+                        if(lowercaseMimeType.startsWith("audio/x-aiff") ||
+                           lowercaseMimeType.startsWith("audio/basic") ||
+                           lowercaseMimeType.startsWith("audio/x-wav")) {
+                                return true;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(endsWithAny(url.toLowerCase(), ".aif", /*".mp3", */".wav", ".au")) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
     
    
     
