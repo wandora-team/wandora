@@ -66,9 +66,16 @@ public class TransferableImage implements Transferable {
     
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        DataFlavor[] flavors = new DataFlavor[2];
-        flavors[0] = DataFlavor.imageFlavor;
-        flavors[1] = DataFlavor.stringFlavor;
+        DataFlavor[] flavors = null;
+        if(transferableString != null) {
+            flavors = new DataFlavor[2];
+            flavors[0] = DataFlavor.imageFlavor;
+            flavors[1] = DataFlavor.stringFlavor;
+        }
+        else {
+            flavors = new DataFlavor[1];
+            flavors[0] = DataFlavor.imageFlavor;
+        }
         return flavors;
     }
 

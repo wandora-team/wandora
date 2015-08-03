@@ -27,6 +27,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.net.URI;
 import org.wandora.application.gui.UIBox;
+import org.wandora.utils.DataURL;
 
 /**
  *
@@ -54,6 +55,9 @@ public class SimpleURILabel extends SimpleLabel {
         String u = getText();
         if(u != null && u.length() > 0) {
             try {
+                if(DataURL.isDataURL(u)) {
+                    return true;
+                }
                 new URI(u);
             }
             catch(Exception e) {

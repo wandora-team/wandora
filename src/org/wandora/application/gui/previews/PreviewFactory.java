@@ -25,11 +25,14 @@
 package org.wandora.application.gui.previews;
 
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import org.gstreamer.GstException;
 import org.wandora.application.gui.previews.formats.*;
 import org.wandora.application.Wandora;
@@ -39,23 +42,26 @@ import org.wandora.utils.Functional.*;
 import static org.wandora.utils.Option.none;
 import static org.wandora.utils.Option.some;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.utils.DataURL;
 /**
  *
  * @author anttirt
  */
 public class PreviewFactory {
     
-    private final Wandora admin;
+    private final Wandora wandora;
     
-    public PreviewFactory(Wandora admin) {
-        this.admin = admin;
+    public PreviewFactory(Wandora wandora) {
+        this.wandora = wandora;
     }
+    
+    
     
     private Fn1<PreviewPanel, PreviewPanel> wrapHeavy = new Fn1<PreviewPanel, PreviewPanel>() {
     @Override
     public PreviewPanel invoke(PreviewPanel panel) {
         if(panel.isHeavy())
-            return new AWTWrapper(admin, panel);
+            return new AWTWrapper(wandora, panel);
         else
             return panel;
     }};
@@ -70,30 +76,31 @@ public class PreviewFactory {
     
     private Option<? extends PreviewPanel> createAux(final Locator subjectLocator) {
         final String urlString = subjectLocator.toExternalForm();
+
         final String urlLower = subjectLocator.toExternalForm().toLowerCase();
-        final Map<String, String> options = admin.getOptions().asMap();
-        final java.awt.Frame dlgParent = admin;
-        
-        if     (endsWithAny(urlLower, ".mid", ".rmf")) {
+        final Map<String, String> options = wandora.getOptions().asMap();
+        final java.awt.Frame dlgParent = wandora;
+
+        if(endsWithAny(urlLower, ".mid", ".rmf")) {
             try { return some(new AudioMidi(urlString, options)); } catch(Exception e) { }
         }
         else if(endsWithAny(urlLower, ".aif", /*".mp3", */".wav", ".au")) {
             try { return some(new AudioSample(urlString, options)); } catch(Exception e) { }
         }
-        else if(endsWithAny(urlLower, ".gif", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".png")) {
-            try { return some(new Picture(urlString, admin)); } catch(Exception e) { admin.handleError(e); }
+        else if(Picture.canView(urlString)) {
+            try { return some(new Picture(urlString)); } catch(Exception e) { wandora.handleError(e); }
         }
         else if(endsWithAny(urlLower, ".pdf")) {
             //try { return some(new PDF(urlString, admin)); } catch(Exception e) { }
             try {
-                return some(new PDFnew(new URI(urlLower), admin, options));
+                return some(new PDFnew(new URI(urlLower), wandora, options));
             }
             catch(URISyntaxException e) { }
             catch(MalformedURLException e) { }
             catch(IOException e) { } 
         }
         else if(endsWithAny(urlLower, ".xml")) {
-            try { return some(new XML(urlLower, admin)); } catch(Exception e) { }
+            try { return some(new XML(urlLower, wandora)); } catch(Exception e) { }
         }
         else {
             final String mediafw = System.getProperty("org.wandora.mediafw");
@@ -121,7 +128,7 @@ public class PreviewFactory {
         }
 
         //try { return some(new JDICBrowser(urlString, options)); } catch(Exception e) { }
-        try { return some(new HTML(urlString, admin)); } catch(Exception e) { }
+        try { return some(new HTML(urlString, wandora)); } catch(Exception e) { }
         return none();
     }
 }

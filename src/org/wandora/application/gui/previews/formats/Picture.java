@@ -47,6 +47,8 @@ import static java.awt.event.KeyEvent.*;
 
 import org.wandora.application.gui.*;
 import org.wandora.application.*;
+import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.utils.DataURL;
 
 
 
@@ -60,9 +62,9 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     private static final double ZOOMFACTOR = 1.1;
     
     private String imageLocator;
-    private BufferedImage tempImage;
+    private BufferedImage previewImage;
     private Dimension panelDimensions;
-    private Wandora admin;
+    private Wandora wandora;
     private Options options;
 
     private double zoomFactor = 1.0;
@@ -73,18 +75,19 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         return false;
     }
     
-    /**
-     * Creates a new instance of Picture
-     */
-    public Picture(String imageLocator, Wandora admin) {
-        this.admin = admin;
+
+    
+    
+    
+    public Picture(String imageLocator) {
+        this.wandora = Wandora.getWandora();
         this.imageLocator = imageLocator;
         this.addMouseListener(this);
         this.addKeyListener(this);
         setImageSize(1.0);
         
-        if(admin != null) {
-            options = admin.options;
+        if(wandora != null) {
+            options = wandora.options;
             if(options != null) {
                 String zoomFactorString = options.get(OPTIONS_PREFIX + "imageSize");
                 if(zoomFactorString != null) {
@@ -96,13 +99,11 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
             }
         }
 //        setURL(imageLocator);
-        reset(imageLocator);
+        reset();
     }
     
     
-    private void reset(String imageLocator) {
-        this.imageLocator = imageLocator;
-        updateImageMenu();
+    private void reset() {
         if(imageLocator != null && imageLocator.length() > 0) {
             Thread imageThread = new Thread(this);
             imageThread.start();
@@ -116,7 +117,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         if(newZoomFactor > 0.1 && newZoomFactor < 10) {
             if(options != null) options.put(OPTIONS_PREFIX + "imageSize", newZoomFactor);
             zoomFactor = newZoomFactor;
-            reset(imageLocator);
+            reset();
         }
     }
     
@@ -142,15 +143,16 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     @Override
     public void run() {
         if(imageLocator != null && imageLocator.length() > 0) {
-            tempImage = UIBox.getThumbForLocator(imageLocator, admin.wandoraHttpAuthorizer);
-            if(tempImage != null) {
-                int targetWidth = (int) (tempImage.getWidth() * zoomFactor);
-                int targetHeight = (int) (tempImage.getHeight() * zoomFactor);
-                Graphics g = this.getGraphics();
-                if(g != null)
-                    g.drawImage(tempImage, 0,0, targetWidth, targetHeight, this);
-                panelDimensions = new Dimension(targetWidth, targetHeight);
+            previewImage = UIBox.getThumbForLocator(imageLocator, wandora.wandoraHttpAuthorizer);
+        }
+        if(previewImage != null) {
+            int targetWidth = (int) (previewImage.getWidth() * zoomFactor);
+            int targetHeight = (int) (previewImage.getHeight() * zoomFactor);
+            Graphics g = this.getGraphics();
+            if(g != null) {
+                g.drawImage(previewImage, 0,0, targetWidth, targetHeight, this);
             }
+            panelDimensions = new Dimension(targetWidth, targetHeight);
         }
         else {
             panelDimensions = new Dimension(2, 2);
@@ -159,6 +161,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         this.setMaximumSize(panelDimensions);
         this.setMinimumSize(panelDimensions);
         
+        updateImageMenu();
         repaint();
         revalidate();
     }
@@ -178,9 +181,9 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(tempImage != null && panelDimensions != null) {
+        if(previewImage != null && panelDimensions != null) {
             //System.out.println(" image x =" + imageDimensions.width + ", y=" + imageDimensions.height );
-            g.drawImage(tempImage,0,0,panelDimensions.width, panelDimensions.height, this);
+            g.drawImage(previewImage,0,0,panelDimensions.width, panelDimensions.height, this);
         }
     }
     
@@ -195,13 +198,23 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     
     public void forkImageViewer() {
         if(imageLocator != null && imageLocator.length() > 0) {
-            System.out.println("Spawning viewer for \""+imageLocator+"\"");
-            try {
-                Desktop desktop = Desktop.getDesktop();
-                desktop.browse(new URI(imageLocator));
+            if(!DataURL.isDataURL(imageLocator)) {
+                // System.out.println("Spawning viewer for \""+imageLocator+"\"");
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    desktop.browse(new URI(imageLocator));
+                }
+                catch(Exception tme) {
+                    tme.printStackTrace(); // TODO EXCEPTION
+                }
             }
-            catch(Exception tme) {
-                tme.printStackTrace(); // TODO EXCEPTION
+            else {
+                WandoraOptionPane.showMessageDialog(wandora, 
+                        "Due to Java's security restrictions Wandora can't open the DataURI "+
+                        "in external application. Manually copy and paste the locator to browser's "+
+                        "address field to view the locator.", 
+                        "Can't open the locator in external application",
+                        WandoraOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -251,8 +264,8 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
             setImageSize(zoomFactor * ZOOMFACTOR);
         }
         else if(keyCode == KeyEvent.VK_C && e.isControlDown()) {
-            if(tempImage != null) {
-                ClipboardBox.setClipboard(tempImage);
+            if(previewImage != null) {
+                ClipboardBox.setClipboard(previewImage);
             }
         }
     }
@@ -270,7 +283,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     
     
     public void updateImageMenu() {
-        if(imageLocator != null && imageLocator.length() > 0) {
+        if(previewImage != null) {
             this.setComponentPopupMenu(getImageMenu());
         }
         else {
@@ -340,8 +353,8 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         }
 
         else if(c.equalsIgnoreCase("Copy image")) {
-            if(tempImage != null) {
-                ClipboardBox.setClipboard(tempImage);
+            if(previewImage != null) {
+                ClipboardBox.setClipboard(previewImage);
             }
         }
         else if(c.equalsIgnoreCase("Copy image location")) {
@@ -350,12 +363,12 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
             }
         }
         else if(c.startsWith("Save image")) {
-            if(tempImage != null) {
+            if(previewImage != null) {
                 save();
             }
         }
         else if(c.startsWith("Print image")) {
-            if(tempImage != null) {
+            if(previewImage != null) {
                 print();
             }
         }
@@ -386,7 +399,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         if(imageFile != null) {
             try {
                 String format = solveImageFormat(imageFile.getName());
-                ImageIO.write(tempImage, format, imageFile);
+                ImageIO.write(previewImage, format, imageFile);
             }
             catch(Exception e) {
                 System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + imageFile.getPath() + "'.");
@@ -441,6 +454,35 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
             // Turn double buffering back on
             return(PAGE_EXISTS);
         }
+    }
+    
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    public static boolean canView(String url) {
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType.startsWith("image")) {
+                        return true;
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(endsWithAny(url.toLowerCase(), ".gif", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".png")) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
     
     

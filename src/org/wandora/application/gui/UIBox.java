@@ -1062,41 +1062,56 @@ public class UIBox {
     }
             
     public static BufferedImage getImage(String imageName, HttpAuthorizer httpAuthorizer) {
-        try {
-            URL iconUrl = ClassLoader.getSystemResource(imageName);
-            BufferedImage image = javax.imageio.ImageIO.read(iconUrl);
-            return image;
-        }
-        catch (Exception e) {
+        if(DataURL.isDataURL(imageName)) {
             try {
-
-                URL url = new URL(imageName);
-                URLConnection urlConnection = null;
-                if(httpAuthorizer != null) {
-                     urlConnection = httpAuthorizer.getAuthorizedAccess(url);
-                }
-                else {
-                    urlConnection = url.openConnection();
-                    Wandora.initUrlConnection(urlConnection);
-                }
-                BufferedImage image = ImageIO.read(urlConnection.getInputStream());
-                return image;
-            }
-            catch (Exception e1) {
-                //e1.printStackTrace();
-                try {
-                    String fname = imageName;
-                    if(fname.startsWith("file:")) {
-                        fname = IObox.getFileFromURL(fname);
-                    }
-                    //System.out.print("Finding file name: " + fname);
-                    File imageFile = new File(fname); 
-                    BufferedImage image = ImageIO.read(imageFile);
+                DataURL dataURL = new DataURL(imageName);
+                String mimeType = dataURL.getMimetype();
+                if(mimeType.startsWith("image")) {
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(dataURL.getData()));
                     return image;
                 }
-                catch (Exception e2) {
-                    //e2.printStackTrace();
-                    System.out.println("'"+e2.getMessage()+"' occurred while reading image '" + imageName + "'!");
+            }
+            catch(Exception e) {
+                System.out.println("'"+e.getMessage()+"' occurred while reading datauri image '" + imageName + "'!");
+            }
+        }
+        else {
+            try {
+                URL iconUrl = ClassLoader.getSystemResource(imageName);
+                BufferedImage image = javax.imageio.ImageIO.read(iconUrl);
+                return image;
+            }
+            catch (Exception e) {
+                try {
+
+                    URL url = new URL(imageName);
+                    URLConnection urlConnection = null;
+                    if(httpAuthorizer != null) {
+                         urlConnection = httpAuthorizer.getAuthorizedAccess(url);
+                    }
+                    else {
+                        urlConnection = url.openConnection();
+                        Wandora.initUrlConnection(urlConnection);
+                    }
+                    BufferedImage image = ImageIO.read(urlConnection.getInputStream());
+                    return image;
+                }
+                catch (Exception e1) {
+                    //e1.printStackTrace();
+                    try {
+                        String fname = imageName;
+                        if(fname.startsWith("file:")) {
+                            fname = IObox.getFileFromURL(fname);
+                        }
+                        //System.out.print("Finding file name: " + fname);
+                        File imageFile = new File(fname); 
+                        BufferedImage image = ImageIO.read(imageFile);
+                        return image;
+                    }
+                    catch (Exception e2) {
+                        //e2.printStackTrace();
+                        System.out.println("'"+e2.getMessage()+"' occurred while reading image '" + imageName + "'!");
+                    }
                 }
             }
         }

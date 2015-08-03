@@ -43,35 +43,30 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 
 
 /**
- * Tool checks if subject locators of context topics exists i.e. refer to existing
- * web resources. Tool produces textual report of missing, existing and invalid
- * subject locators.
+ * Checks if subject locators resolves. Produces textual report of resolving, 
+ * non-resolving, datauri and missing subject locators.
  *
  * @author  akivela
  */
-public class SubjectLocatorChecker extends AbstractWandoraTool implements WandoraTool {
 
-    String urlExists = "EXISTS\t'<locator/>'";
-    String urlDoesntExists = "MISSING\t'<locator/>'";
-    String noSubjectLocator = "NO SL\t'<topic/>'.";
-    String illegalSubjectLocator = "INVALID\t'<topic/>'.";
-    String topicError = "TOPIC ERROR\t'<topic/>'.";
+public class SubjectLocatorChecker extends AbstractWandoraTool implements WandoraTool {
 
     
     /**
      * <code>reportType</code> contains characters defining tool
      * generated reports. Possible report characters are:
      *
-     * m = report missing sl
-     * s = report existing sl (successful)
-     * i = report invalid sl (exception occurred)
-     * n = report when topic has no sl
+     * m = report missing subject locator
+     * s = report valid subject locators (resource found)
+     * d = report datauri subject locators
+     * i = report invalid subject locators (resource not found, exception occurred)
+     * n = report when topic has no subject locator
      * e = report topic errors (topic == null || exceptions)
      */
-    String reportType = "mi";
+    String reportType = "mid";
 
-    File currentDirectory = null;
-    Iterator topicsToCheck;
+    private File currentDirectory = null;
+    private Iterator topicsToCheck;
     
     
     public SubjectLocatorChecker() {}
@@ -96,35 +91,38 @@ public class SubjectLocatorChecker extends AbstractWandoraTool implements Wandor
         }
         if(topicsToCheck != null) {
             try {
-                setLogTitle("Check subject locators of topics...");
+                setLogTitle("Checking subject locators");
                 Topic topic = null;
-                int valid = 0;
-                int invalid = 0;
-                int total = 0;
-                int nosl = 0;
+                int resourceFoundCounter = 0;
+                int dataUrlFoundCounter = 0;
+                int resourceNotFoundCounter = 0;
+                int topicsCheckedCount = 0;
+                int noSubjectLocatorCounter = 0;
                 int r = 0;
 
                 while(topicsToCheck.hasNext() && !forceStop()) {
                     try {
-                        total++;
+                        topicsCheckedCount++;
                         topic = (Topic) topicsToCheck.next();
                         if(topic != null && !topic.isRemoved()) {
                             r = checkSubjectLocator(topic);
-                            if(r == 1) valid++;
-                            if(r == -1) invalid++;
-                            if(r == 0) nosl++;
+                            if(r == 1 || r == 2) resourceFoundCounter++;
+                            if(r == 2) dataUrlFoundCounter++;
+                            if(r == -1) resourceNotFoundCounter++;
+                            if(r == 0) noSubjectLocatorCounter++;
                         }
                     }
                     catch (Exception e) {
                         log(e);
                     }
-                    setLogTitle("Check subject locators in topics... " + total);
+                    setLogTitle("Checking subject locators. Total " + topicsCheckedCount + " topics checked...");
                 }
-                log("Total " + total + " topics checked.");
-                log(nosl + " topics had no subject locator.");
-                log((total-nosl) + " topics had subject locator.");
-                log(valid + " valid and existing subject locators found.");
-                log(invalid + " invalid or missing subject locators found.");
+                log("Total " + topicsCheckedCount + " topics checked.");
+                log((topicsCheckedCount-noSubjectLocatorCounter) + " topics had subject locator.");
+                log(resourceFoundCounter + " subject locator resources found.");
+                log(dataUrlFoundCounter + " datauri subject locators found.");
+                log(resourceNotFoundCounter + " subject locator resources missing or invalid.");
+                log(noSubjectLocatorCounter + " topics had no subject locator.");
             }
             catch (Exception e) {
                 log(e);
@@ -139,13 +137,13 @@ public class SubjectLocatorChecker extends AbstractWandoraTool implements Wandor
     
     @Override
     public String getName() {
-        return "Check Subject Locators";
+        return "Check subject locators";
     }
     
 
     @Override
     public String getDescription() {
-        return "Tool checks if subject locators of context topics really exists.";
+        return "Checks if subject locators resolve.";
     }
     
     
@@ -172,26 +170,36 @@ public class SubjectLocatorChecker extends AbstractWandoraTool implements Wandor
 
     public int checkSubjectLocator(Topic t)  throws TopicMapException {
         if(t != null) {
+            String topicName = TopicToString.toString(t);
             Locator l = t.getSubjectLocator();
+            String locatorString = l.toExternalForm();
             if(l != null) {
                 try {
-                    URL SubjectUrl = new URL(l.toExternalForm());
-                    if(IObox.urlExists(SubjectUrl)) {
-                        if(reportAbout('s')) {
-                            log(urlExists.replaceAll("<locator/>", SubjectUrl.toExternalForm()));
+                    if(DataURL.isDataURL(locatorString)) {
+                        if(reportAbout('d')) {
+                            log("'"+topicName+"' - found datauri subject locator.");
                         }
-                        return 1;
+                        return 2;
                     }
                     else {
-                        if(reportAbout('m')) {
-                            log(urlDoesntExists.replaceAll("<locator/>", SubjectUrl.toExternalForm()));
+                        URL subjectUrl = new URL(locatorString);
+                        if(IObox.urlExists(subjectUrl)) {
+                            if(reportAbout('s')) {
+                                log("'"+topicName+"' - found subject locator resource "+locatorString);
+                            }
+                            return 1;
                         }
-                        return -1;
+                        else {
+                            if(reportAbout('m')) {
+                                log("'"+topicName+"' - unable to resolve subject locator resource "+locatorString);
+                            }
+                            return -1;
+                        }
                     }
                 }
                 catch (Exception e) {
                     if(reportAbout('i')) {
-                        log(illegalSubjectLocator.replaceAll("<topic/>", TopicToString.toString(t)));
+                        log("'"+topicName+"' - invalid url used as subject locator: "+locatorString);
                         log("\t"+e.toString());
                         return -1;
                     }
@@ -199,13 +207,13 @@ public class SubjectLocatorChecker extends AbstractWandoraTool implements Wandor
             }
             else {
                 if(reportAbout('n')) { 
-                    log(noSubjectLocator.replaceAll("<topic/>", TopicToString.toString(t))); 
+                    log("'"+topicName+"' - has no subject locator at all.");
                 }
             }
         }
         else {
             if(reportAbout('e')) { 
-                log(noSubjectLocator.replaceAll("<topic/>", "TOPIC IS NULL")); 
+                log("INVALID TOPIC.");
             }
         }
         return 0;

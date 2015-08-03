@@ -76,8 +76,8 @@ public class LTMParser {
     public static boolean OVERWRITE_BASENAME = true;
     public static boolean OVERWRITE_SUBJECT_LOCATORS = false;
 
-    public static int MAX_SI_LEN = 9999;
-    public static int MAX_NAME_LEN = 9999;
+    public static int MAX_SI_LEN = 99999;
+    public static int MAX_NAME_LEN = 99999;
     public static int MAX_STRING_LEN = 99999;
 
     public static String DEFAULT_ROLE_IDENTIFIER = "role";

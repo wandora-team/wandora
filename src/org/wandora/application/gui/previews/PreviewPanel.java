@@ -26,6 +26,7 @@ package org.wandora.application.gui.previews;
 
 
 import java.awt.Component;
+import org.wandora.topicmap.Locator;
 
 /**
  *

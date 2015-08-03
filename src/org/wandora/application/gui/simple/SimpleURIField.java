@@ -41,6 +41,7 @@ import javax.swing.text.Document;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
 
 
@@ -107,7 +108,7 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
                     java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
                     for( File file : files ) {
                         DataURL dataURL = new DataURL(file);
-                        this.setText(dataURL.toExternalForm());
+                        this.setText(dataURL.toExternalForm(Base64.DONT_BREAK_LINES));
                         break; // CAN'T HANDLE MULTIPLE FILES. ONLY FIRST IS USED.
                     }
                     e.dropComplete(true);
