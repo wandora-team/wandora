@@ -1,6 +1,10 @@
 /*
- * Copyright (C) 2015 akivela
- *
+ * WANDORA
+ * Knowledge Extraction, Management, and Publishing Application
+ * http://wandora.org
+ * 
+ * Copyright (C) 2004-2015 Wandora Team
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -13,13 +17,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package org.wandora.application.gui.previews.formats;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -27,7 +31,6 @@ import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
 import javax.swing.JPanel;
 import org.wandora.application.gui.previews.PreviewPanel;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
