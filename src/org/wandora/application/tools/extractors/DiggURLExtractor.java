@@ -51,7 +51,7 @@ import org.wandora.utils.IObox;
  *
  * @author anttirt
  */
-public class DiggURLExtractor extends AbstractWandoraTool{
+public class DiggURLExtractor extends AbstractWandoraTool {
     @Override
     public WandoraToolType getType() {
         return WandoraToolType.createExtractType();

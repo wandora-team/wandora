@@ -722,9 +722,11 @@ public class TopicTools {
     public static String cleanDirtyLocator(String s) {
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        for(int k=0; k<s.length() && ++i<256; k++) {
+        for(int k=0; k<s.length() && ++i<99999; k++) {
             char c = s.charAt(k);
-            if(isDirtyLocatorCharacter(c)) sb.append(repacementLocatorCharacterFor(c));
+            if(isDirtyLocatorCharacter(c)) {
+                sb.append(repacementLocatorCharacterFor(c));
+            }
             else sb.append(c);
         }
         return sb.toString();

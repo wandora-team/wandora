@@ -47,7 +47,7 @@ public class SIChecker extends AbstractWandoraTool implements WandoraTool {
 
     @Override
     public String getName() {
-        return "SI checker";
+        return "Subject identifier checker";
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SIChecker extends AbstractWandoraTool implements WandoraTool {
         Iterator contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             setDefaultLogger();
-            setLogTitle("Checking SIs");
+            setLogTitle("Checking subject identifiers");
             Topic topic = null;
             Locator l = null;
             Collection sis = null;
@@ -79,7 +79,7 @@ public class SIChecker extends AbstractWandoraTool implements WandoraTool {
                                 l = (Locator) siIterator.next();
                                 if(l != null) {
                                     checked++;
-                                    hlog("Investigating SI\n"+l.toExternalForm());
+                                    hlog("Investigating "+l.toExternalForm());
                                     try {
                                         String si = l.toExternalForm();
                                         URI.create(si);
