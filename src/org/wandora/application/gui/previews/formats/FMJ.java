@@ -22,7 +22,6 @@
 
 package org.wandora.application.gui.previews.formats;
 
-import org.wandora.application.gui.previews.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
@@ -53,14 +52,20 @@ import javax.media.protocol.DataSource;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.previews.*;
+import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.utils.Abortable;
 import org.wandora.utils.Abortable.Impl;
 import org.wandora.utils.Abortable.ImplFactory;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.DataURL;
 import static org.wandora.utils.Functional.*;
-import org.wandora.utils.Abortable;
-import static org.wandora.utils.Option.*;
+import org.wandora.utils.Functional.Fn1;
+import org.wandora.utils.Functional.Fn2;
 import org.wandora.utils.ManualFileCopy;
+import static org.wandora.utils.Option.*;
 
 /**
  *
@@ -98,7 +103,7 @@ public class FMJ extends JPanel implements PreviewPanel, ActionListener {
     
     
     
-    public FMJ(final String source, final Frame dlgParent, final Map<String, String> options) throws CannotRealizeException, NoPlayerException, IOException {
+    public FMJ(final String source) throws CannotRealizeException, NoPlayerException, IOException {
         if(source == null || source.length() == 0)
             throw new NoPlayerException("Null or empty subject locator passed to FMJ preview panel");
         
@@ -107,9 +112,9 @@ public class FMJ extends JPanel implements PreviewPanel, ActionListener {
         Manager.setHint(Manager.LIGHTWEIGHT_RENDERER, true);
         
         this.source = source;
-        this.dlgParent = dlgParent;
+        this.dlgParent = Wandora.getWandora();
         this.makeCopier = flip(curry(makeCopier_)).invoke(source); // add salt and serve with chardonnay
-        this.options = options;
+        this.options = Wandora.getWandora().getOptions().asMap();
         
         player = Manager.createRealizedPlayer(new MediaLocator(source));
         final Component video = player.getVisualComponent();
@@ -318,5 +323,42 @@ public class FMJ extends JPanel implements PreviewPanel, ActionListener {
             if(controls != null)
                 ((JComponent) controls).setInheritsPopupMenu(true);
         }
+    }
+    
+    
+    
+    public static boolean canView(String url) {
+        boolean answer = false;
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType != null) {
+                        String lowercaseMimeType = mimeType.toLowerCase();
+                        if(lowercaseMimeType.startsWith("video/mpeg")) {
+                                answer = true;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(endsWithAny(url.toLowerCase(), ".mpe", ".mpeg", "mpg")) {
+                    answer = true;
+                }
+            }
+        }
+        
+        if(answer == true) {
+            String mediafw = System.getProperty("org.wandora.mediafw");
+            if(!"FMJ".equals(mediafw)) {
+                answer = false;
+            }
+        }
+        
+        return answer;
     }
 }

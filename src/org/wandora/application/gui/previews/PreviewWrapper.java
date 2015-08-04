@@ -83,15 +83,12 @@ public class PreviewWrapper extends JPanel {
         if(subjectLocator.toExternalForm().equals(""))
             return;
         
-        currentPanel =
-                PreviewFactory.create(subjectLocator)
-                .getOrElse(new Fn0<PreviewPanel>() {
-                    @Override
-                    public PreviewPanel invoke() {
-                        return new Unknown("", admin); }});
+        currentPanel = PreviewFactory.create(subjectLocator);
         
-        add(currentPanel.getGui(), BorderLayout.CENTER);
-        setPreferredSize(currentPanel.getGui().getPreferredSize());
+        if(currentPanel != null) {
+            add(currentPanel.getGui(), BorderLayout.CENTER);
+            setPreferredSize(currentPanel.getGui().getPreferredSize());
+        }
         revalidate();
     }
     // -------------------------------------------------------------------------

@@ -210,6 +210,10 @@ public class AbstractTwitterExtractor extends AbstractExtractor {
                     int currentPage = 0;
                     log("Processing Twitter query '"+currentQuery.getQuery()+"'");
                     while(currentQuery != null) {
+                        if(forceStop()) {
+                            log("Aborting...");
+                            break;
+                        }
                         currentPage++;
                         hlog("Requesting search result page "+currentPage+(pages == 0 ? "" : " of "+pages));
                         

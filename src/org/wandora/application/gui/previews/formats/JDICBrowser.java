@@ -28,19 +28,20 @@
 package org.wandora.application.gui.previews.formats;
 
 
-import org.wandora.application.gui.previews.*;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 
 
 import java.util.Map;
+import javax.swing.*;
 
 import org.jdesktop.jdic.browser.*;
 import org.jdic.web.*;
-import org.jdic.web.event.BrComponentListener;
 import org.jdic.web.event.BrComponentEvent;
+import org.jdic.web.event.BrComponentListener;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.previews.*;
 
 
 /**
@@ -56,9 +57,9 @@ public class JDICBrowser extends JPanel implements MouseListener, PreviewPanel, 
     private BrComponent explorer = null;
     
     
-    public JDICBrowser(String wwwLocator, Map<String, String> options) {
+    public JDICBrowser(String wwwLocator) {
         this.wwwLocator = wwwLocator;
-        initialize(options);
+        initialize();
     }
     
     @Override
@@ -68,8 +69,8 @@ public class JDICBrowser extends JPanel implements MouseListener, PreviewPanel, 
     
     
     
-    public void initialize(Map<String, String> options) {
-        this.options = options;
+    public void initialize() {
+        this.options = Wandora.getWandora().getOptions().asMap();
         try {
             this.setLayout(new BorderLayout());
             BrowserEngineManager mng=BrowserEngineManager.instance();  

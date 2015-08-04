@@ -28,6 +28,7 @@
 package org.wandora.application.gui.simple;
 
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.io.*;
 import java.awt.datatransfer.*;
@@ -42,6 +43,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.utils.Base64;
+import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 
 
@@ -54,8 +56,9 @@ import org.wandora.utils.DataURL;
 public class SimpleURIField extends SimpleField implements DocumentListener {
 
     
-    
-    private static BufferedImage invalidURIImage = UIBox.getImage("resources/gui/icons/invalid_uri.png");
+    private Color BROKEN_URI_COLOR = new Color(255, 240, 240);
+    private Color DATA_URI_COLOR = Color.WHITE;
+    private Color UNSET_URI_COLOR = new Color(246, 246, 246);
     
     
     
@@ -67,31 +70,43 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
     
 
     
-    public boolean isValidURI() {
-        String u = getText();
-        if(u != null && u.length() > 0) {
+    public boolean isValidURI(String uriString) {
+        if(uriString != null && uriString.length() > 0) {
             try {
-                new URI(u);
+                new URI(uriString);
             }
             catch(Exception e) {
-                return DataURL.isDataURL(u);
+                return DataURL.isDataURL(uriString);
             }
         }
         return true;
     }
     
     
-  
     
-    
-    @Override
-    public void paint(Graphics gfx) {
-        super.paint(gfx);
-        if(!isValidURI() && gfx != null) {
-            gfx.drawImage(invalidURIImage, this.getWidth()-20, 1, this);
+    private Color getBackgroundColorFor(String uriString) {
+        if(uriString == null || uriString.length() == 0) {
+            return UNSET_URI_COLOR;
         }
+        if(DataURL.isDataURL(uriString)) {
+            return DATA_URI_COLOR;
+        }
+        try {
+            new URI(uriString);
+        }
+        catch(Exception e) {
+            return BROKEN_URI_COLOR;
+        }
+        return Color.WHITE;
     }
     
+
+    
+    @Override
+    public void setText(String text) {
+        setBackground(getBackgroundColorFor(text));
+        super.setText(text);
+    }
     
     
     

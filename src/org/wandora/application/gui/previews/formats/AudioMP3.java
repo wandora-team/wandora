@@ -19,9 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * AudioSample.java
+ * AudioMP3.java
  *
- * Created on 29. toukokuuta 2006, 14:33
  *
  */
 
@@ -30,25 +29,24 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import org.wandora.application.gui.previews.*;
-import org.wandora.utils.IObox;
-import org.wandora.utils.ClipboardBox;
-import org.wandora.application.gui.simple.*;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.*;
-import java.net.*;
-import java.io.*;
 import java.awt.event.*;
-
+import java.awt.image.*;
+import java.io.*;
+import java.net.*;
 import java.util.Map;
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
-
-import javax.sound.sampled.*;
 import javax.sound.midi.*;
+import javax.sound.sampled.*;
+import javax.swing.*;
+import javazoom.jl.player.Player;
+import org.wandora.application.*;
+import org.wandora.application.gui.*;
+import org.wandora.application.gui.previews.*;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.application.gui.simple.*;
+import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.IObox;
 
 
 
@@ -56,19 +54,19 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class AudioSample extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
-    private static final String OPTIONS_PREFIX = "gui.audioSamplePreviewPanel.";
+public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
+    private static final String OPTIONS_PREFIX = "gui.audioMP3PreviewPanel.";
 
     Map<String, String> options;
     String audioLocator;
     Dimension panelDimensions;
     BufferedImage bgImage;
     boolean isPlaying = false;
-    SourceDataLine player = null;
+    Player player = null;
     
     
-    /** Creates a new instance of AudioSample */
-    public AudioSample(String audioLocator) {
+    /** Creates a new instance of AudioMP3 */
+    public AudioMP3(String audioLocator) {
         this.audioLocator = audioLocator;
         initialize();
     }
@@ -81,7 +79,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     public void initialize() {
         this.options = Wandora.getWandora().getOptions().asMap();
         this.addMouseListener(this);
-        bgImage = UIBox.getImage("gui/icons/doctype/doctype_audio_sample.png");
+        bgImage = UIBox.getImage("gui/icons/doctype/doctype_audio_mp3.png");
         
         panelDimensions = new Dimension(100, 100);
         this.setPreferredSize(panelDimensions);
@@ -107,19 +105,13 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     @Override
     public void finish() {
         isPlaying = false;
-        if(player != null) {
-            player.drain();
-            player.stop();
-        }
+        if(player != null) player.close();
     }
 
     @Override
     public void stop() {
         isPlaying = false;
-        if(player != null) {
-            player.drain();
-            player.stop();
-        }
+        if(player != null) player.close();
     }
     
     @Override
@@ -130,19 +122,16 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     
     
     
-    // http://dailywav.com/0506/everyonewillbe.wav
     public void run() {
         try {
             isPlaying = true;
-            playSample(audioLocator);
+            playMP3(audioLocator);
         }
         catch (MalformedURLException e)  { e.printStackTrace();  }
         catch (IOException e)  { e.printStackTrace();  }
         catch (LineUnavailableException e)  { e.printStackTrace();  }
         catch (UnsupportedAudioFileException e) { e.printStackTrace();  }
-        
         catch (Exception e) { e.printStackTrace(); }
-        isPlaying = false;
     }
     
     
@@ -150,48 +139,16 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     
     
     
-    private void playSample(String audioLocator) throws Exception {
-        AudioInputStream audioStream = null;
+    private void playMP3(String audioLocator) throws Exception {
         if(DataURL.isDataURL(audioLocator)) {
             DataURL dataURL = new DataURL(audioLocator);
-            audioStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(dataURL.getData()));
+            player = new Player(new ByteArrayInputStream(dataURL.getData()));
         }
         else {
             URL audioURL = new URL(audioLocator);
-            audioStream = AudioSystem.getAudioInputStream(audioURL);
+            player = new Player(audioURL.openStream());
         }
-        AudioFormat format = audioStream.getFormat();
-        if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
-            format = new AudioFormat(
-                    AudioFormat.Encoding.PCM_SIGNED,
-                    format.getSampleRate(),
-                    format.getSampleSizeInBits()*2,
-                    format.getChannels(),
-                    format.getFrameSize()*2,
-                    format.getFrameRate(),
-                    true);        // big endian
-            audioStream = AudioSystem.getAudioInputStream(format, audioStream);
-        }
-        // Create line
-        SourceDataLine.Info info = new DataLine.Info(
-            SourceDataLine.class, audioStream.getFormat(),
-            ((int)audioStream.getFrameLength()*format.getFrameSize()));
-        player = (SourceDataLine) AudioSystem.getLine(info);
-        player.open(audioStream.getFormat());
-        player.start();
-
-        byte[] audioBuffer = new byte[player.getBufferSize()];
-        int numRead = 0;
-        int offset = 0;
-
-        while(isPlaying && (numRead = audioStream.read(audioBuffer)) >= 0) {
-            offset = 0;
-            while (offset < numRead) {
-                offset += player.write(audioBuffer, offset, numRead-offset);
-            }
-        }
-        player.drain();
-        player.stop();
+        player.play();
     }
     
     
@@ -297,8 +254,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
         if(c.startsWith("Stop")) {
             isPlaying = false;
             if(player != null) {
-                player.drain();
-                player.stop();
+                player.close();
             }
         }
         if(c.startsWith("Open in external")) {
@@ -364,9 +320,9 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
                     String mimeType = dataURL.getMimetype();
                     if(mimeType != null) {
                         String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/x-aiff") ||
-                           lowercaseMimeType.startsWith("audio/basic") ||
-                           lowercaseMimeType.startsWith("audio/x-wav")) {
+                        if(lowercaseMimeType.startsWith("audio/mpeg") ||
+                           lowercaseMimeType.startsWith("audio/x-mpeg-3") ||
+                           lowercaseMimeType.startsWith("audio/mpeg3")) {
                                 return true;
                         }
                     }
@@ -376,7 +332,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
                 }
             }
             else {
-                if(endsWithAny(url.toLowerCase(), ".aif", /*".mp3", */".wav", ".au")) {
+                if(endsWithAny(url.toLowerCase(), ".mp3")) {
                     return true;
                 }
             }

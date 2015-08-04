@@ -28,40 +28,48 @@
 
 package org.wandora.application.gui.previews.formats;
 
-import org.wandora.application.gui.previews.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.io.File;
-import java.net.URI;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import org.gstreamer.Bus;
-import org.gstreamer.URIType;
-import org.gstreamer.Gst;
-import org.gstreamer.GstObject;
-import org.gstreamer.GstException;
-import org.gstreamer.State;
 import org.gstreamer.Element;
-import org.gstreamer.elements.PlayBin;
+import org.gstreamer.Gst;
+import org.gstreamer.GstException;
+import org.gstreamer.GstObject;
 import org.gstreamer.Pipeline;
+import org.gstreamer.State;
+import org.gstreamer.URIType;
+import org.gstreamer.elements.PlayBin;
 import org.gstreamer.lowlevel.GstUriHandlerAPI;
 import org.gstreamer.swing.VideoComponent;
-import org.wandora.utils.Option;
-import static org.wandora.utils.Option.*;
-import static org.wandora.utils.Functional.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.previews.*;
+import static org.wandora.application.gui.previews.Util.endsWithAny;
 import org.wandora.utils.Abortable;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.DataURL;
+import static org.wandora.utils.Functional.*;
+import org.wandora.utils.Functional.Fn1;
+import org.wandora.utils.Functional.Fn2;
 import org.wandora.utils.ManualFileCopy;
 import org.wandora.utils.NativeFileCopy;
-import org.wandora.utils.ClipboardBox;
-import org.wandora.application.gui.UIBox;
+import org.wandora.utils.Option;
+import static org.wandora.utils.Option.*;
 
 
 /**
@@ -76,21 +84,21 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
     private final VideoComponent vidc;
     private final Component controls;
     private final Fn1<Abortable, URI> makeCopier;
-    private final URI source;
+    private final String source;
     
     
     
-    public GST(final URI subjectLocator, final Frame dlgParent, final Map<String, String> options) throws GstException {
+    public GST(final String subjectLocator) throws GstException, URISyntaxException {
         Gst.init("Wandora", new String[]{});
         
-        this.options = options;
-        this.dlgParent = dlgParent;
+        this.options = Wandora.getWandora().getOptions().asMap();
+        this.dlgParent = Wandora.getWandora();
         this.source = subjectLocator;
         
         setLayout(new BorderLayout());
         setComponentPopupMenu(UIBox.makePopupMenu(menuStructure, this));
 
-        this.playbin = new PlayBin("Wandora", subjectLocator);
+        this.playbin = new PlayBin("Wandora", new URI(source));
         this.vidc = new VideoComponent();
         this.controls = new GSTControls(
                         Option.some(playAction), 
@@ -100,23 +108,23 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
         playbin.setVideoSink(vidc.getElement());
         
         if(subjectLocator.toString().startsWith("file"))
-                makeCopier = flip(curry(makeFileCopier)).invoke(subjectLocator);
+                makeCopier = flip(curry(makeFileCopier)).invoke(new URI(source));
         else
-                makeCopier = flip(curry(makeStreamCopier)).invoke(subjectLocator);
+                makeCopier = flip(curry(makeStreamCopier)).invoke(new URI(source));
 
         add(vidc, BorderLayout.NORTH);
         add(controls, BorderLayout.SOUTH);
 
-    pauseAction.run();
+        pauseAction.run();
 
-    //revalidate();
+        //revalidate();
     }
     
-    public GST(final File inputFile, final Frame dlgParent, final Map<String, String> options)
-           throws GstException
-    {
-        this(inputFile.toURI(), dlgParent, options);
+    
+    public GST(final File inputFile) throws GstException, URISyntaxException {
+        this(inputFile.toURI().toString());
     }
+    
 
     // to avoid threading issues, the gstreamer objects will only be modified from the Swing EDT
     public void play() {
@@ -164,14 +172,23 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
         final String locatorString = source.toString();
         for(String c : Option.some(args.getActionCommand())) {
             if(c.equals(OPEN_EXTERNAL)) {
-                for(final String cmdRaw : Util.getOption(options, "mediaviewer")) {
-                    final String cmd = cmdRaw.replaceAll("__URL__", locatorString);
+                if(!DataURL.isDataURL(source )) {
+                    System.out.println("Spawning viewer for \""+source+"\"");
                     try {
-                        Runtime.getRuntime().exec(cmd);
+                        Desktop desktop = Desktop.getDesktop();
+                        desktop.browse(new URI(source));
                     }
-                    catch(IOException e) {
-                        
+                    catch(Exception e) {
+                        e.printStackTrace();
                     }
+                }
+                else {
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                            "Due to Java's security restrictions Wandora can't open the DataURI "+
+                            "in external application. Manually copy and paste the locator to browser's "+
+                            "address field to view the locator.", 
+                            "Can't open the locator in external application",
+                            WandoraOptionPane.WARNING_MESSAGE);
                 }
             }
             else if(c.equals(COPY_LOCATION)) {
@@ -259,9 +276,8 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
      */ 
     private Fn2<Abortable, URI, URI>
     makeFileCopier = new Fn2<Abortable, URI, URI>() {
-    public Abortable invoke(final URI destination,
-                            final URI source)
-    {
+        
+    public Abortable invoke(final URI destination, final URI source) {
         final String in = source.toString();
         final String out = destination.toString();
 
@@ -271,19 +287,20 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
         return new Abortable(dlgParent, ManualFileCopy.factory(out, in), some("Copying file"));
     }};
 
+    
+    
     /**
      * Same as above but copies from a gstreamer stream
      * instead of a file
      */ 
     private Fn2<Abortable, URI, URI>
     makeStreamCopier = new Fn2<Abortable, URI, URI>() {
-    public Abortable invoke(final URI destination,
-                            final URI source)
-    {
+    public Abortable invoke(final URI destination, final URI source) {
         return new Abortable(dlgParent, StreamCopy.factory(destination, source), some("Copying file"));
     }};
 
 
+    
     
     // -------------------------------------------------------------------------
     
@@ -430,5 +447,43 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
                     break;
             }
         }
+    }
+    
+    
+    
+
+    public static boolean canView(String url) {
+        boolean answer = false;
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType != null) {
+                        String lowercaseMimeType = mimeType.toLowerCase();
+                        if(lowercaseMimeType.startsWith("video/mpeg")) {
+                                answer = true;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(endsWithAny(url.toLowerCase(), ".mpe", ".mpeg", "mpg")) {
+                    answer = true;
+                }
+            }
+        }
+        
+        if(answer == true) {
+            String mediafw = System.getProperty("org.wandora.mediafw");
+            if(!"GST".equals(mediafw)) {
+                answer = false;
+            }
+        }
+        
+        return answer;
     }
 }

@@ -645,9 +645,9 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         idPanel.add(baseNameLabel, gridBagConstraints);
 
-        baseNameField.setFont(new java.awt.Font("SansSerif", 0, 15)); // NOI18N
+        baseNameField.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         baseNameField.setForeground(new java.awt.Color(33, 33, 33));
-        baseNameField.setPreferredSize(new java.awt.Dimension(6, 25));
+        baseNameField.setPreferredSize(new java.awt.Dimension(6, 29));
         baseNameField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 baseNameFieldKeyReleased(evt);
@@ -671,9 +671,9 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         idPanel.add(subjectLocatorLabel, gridBagConstraints);
 
-        subjectLocatorField.setFont(new java.awt.Font("SansSerif", 0, 15)); // NOI18N
+        subjectLocatorField.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         subjectLocatorField.setForeground(new java.awt.Color(33, 33, 33));
-        subjectLocatorField.setPreferredSize(new java.awt.Dimension(6, 25));
+        subjectLocatorField.setPreferredSize(new java.awt.Dimension(6, 29));
         subjectLocatorField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 subjectLocatorFieldKeyReleased(evt);

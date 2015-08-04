@@ -45,6 +45,7 @@ import java.awt.print.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.*;
+import static org.wandora.application.gui.previews.Util.endsWithAny;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 
@@ -55,7 +56,7 @@ import org.wandora.topicmap.*;
 public class XML extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
     private static final String OPTIONS_PREFIX = "gui.xmlPreviewPanel.";
     
-    Wandora admin;
+    Wandora wandora;
     Options options;
     Dimension panelDimensions;
     BufferedImage bgImage;
@@ -66,20 +67,20 @@ public class XML extends JPanel implements Runnable, MouseListener, ActionListen
     }
     
     /** Creates a new instance of XMLPreviewPanel */
-    public XML(String xmlLocator, Wandora admin) {
+    public XML(String xmlLocator) {
         this.xmlLocator = xmlLocator;
-        initialize(admin);
+        initialize();
         updateXMLMenu();
     }
     
     
-    public void initialize(Wandora admin) {
-        this.admin = admin;
+    public void initialize() {
+        this.wandora = Wandora.getWandora();
         this.addMouseListener(this);
         bgImage = UIBox.getImage("gui/icons/doctype/doctype_xml.png");
         
-        if(admin != null) {
-            options = admin.options;
+        if(wandora != null) {
+            options = wandora.options;
             if(options != null) {
 
             }
@@ -131,12 +132,23 @@ public class XML extends JPanel implements Runnable, MouseListener, ActionListen
     
   public void forkExternal() {
         if(xmlLocator != null && xmlLocator.length() > 0) {
-            try {
-                Desktop desktop = Desktop.getDesktop();
-                desktop.browse(new URI(xmlLocator));
+            if(!DataURL.isDataURL(xmlLocator)) {
+                System.out.println("Spawning viewer for \""+xmlLocator+"\"");
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    desktop.browse(new URI(xmlLocator));
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
-            catch(Exception tme) {
-                tme.printStackTrace(); // TODO EXCEPTION
+            else {
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                        "Due to Java's security restrictions Wandora can't open the DataURI "+
+                        "in external application. Manually copy and paste the locator to browser's "+
+                        "address field to view the locator.", 
+                        "Can't open the locator in external application",
+                        WandoraOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -168,6 +180,7 @@ public class XML extends JPanel implements Runnable, MouseListener, ActionListen
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
+    
     // -------------------------------------------------------------------------
     
     
@@ -225,7 +238,7 @@ public class XML extends JPanel implements Runnable, MouseListener, ActionListen
             chooser.setSelectedFile(new File(xmlLocator.substring(xmlLocator.lastIndexOf(File.pathSeparator)+1)));
         }
         catch(Exception e) {}
-        if(chooser.open(admin, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+        if(chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
             save(chooser.getSelectedFile());
         }
     }
@@ -243,5 +256,36 @@ public class XML extends JPanel implements Runnable, MouseListener, ActionListen
         }
     }
     
+    
+    // -------------------------------------------------------------------------
+    
+    
+    public static boolean canView(String url) {
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType != null) {
+                        String lowercaseMimeType = mimeType.toLowerCase();
+                        if(lowercaseMimeType.startsWith("application/xml") ||
+                           lowercaseMimeType.startsWith("text/xml")) {
+                                return true;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(endsWithAny(url.toLowerCase(), ".xml")) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
     
 }

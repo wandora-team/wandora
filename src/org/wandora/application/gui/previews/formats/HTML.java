@@ -56,7 +56,7 @@ import org.wandora.topicmap.*;
 public class HTML extends JPanel implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener {
     private static final String OPTIONS_PREFIX = "gui.htmlPreviewPanel.";
     
-    private Wandora admin;
+    private Wandora wandora;
     private Options options;
     
     private String locator;
@@ -75,10 +75,10 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
     /** Creates a new instance of HTMLPreviewPanel */
    
     /** Creates a new instance of WandoraImagePanel */
-    public HTML(String locator, Wandora admin) {
+    public HTML(String locator) {
         this.locator = locator;
         
-        this.admin = admin;
+        this.wandora = Wandora.getWandora();
         
         this.addMouseListener(this);
         this.setLayout(new BorderLayout());
@@ -90,8 +90,8 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         htmlPane.addMouseListener(this);
         htmlPane.setBorder(BorderFactory.createLineBorder(borderColor));
                 
-        if(admin != null) {
-            options = admin.options;
+        if(wandora != null) {
+            options = wandora.getOptions();
             if(options != null) {
 
             }
@@ -205,7 +205,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
     
     
     public JPopupMenu getMenu() {
-        WandoraToolSet extractTools = admin.toolManager.getToolSet("extract");
+        WandoraToolSet extractTools = wandora.toolManager.getToolSet("extract");
         WandoraToolSet.ToolFilter filter = extractTools.new ToolFilter() {
             @Override
             public boolean acceptTool(WandoraTool tool) {
@@ -224,7 +224,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                             //System.out.println("extractor " + myTool);
                         }
                         catch(Exception exx) { 
-                            admin.handleError(exx);
+                            wandora.handleError(exx);
                         }
                     }
                 };
@@ -280,7 +280,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                     ClipboardBox.setClipboard(s);
                 }
                 catch(Exception e) {
-                    admin.handleError(e);
+                    wandora.handleError(e);
                 }
             }
         }
@@ -306,19 +306,19 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
             String s = getSelection();
             if(s != null && s.length() > 0) {
                 try {
-                    Topic t = admin.getOpenTopic();
+                    Topic t = wandora.getOpenTopic();
                     if(t != null) {
-                        Topic type = admin.showTopicFinder("Select display name language");
+                        Topic type = wandora.showTopicFinder("Select display name language");
                         if(type == null) return;
                         HashSet scope = new HashSet();
                         scope.add(type);
                         scope.add(t.getTopicMap().getTopic(XTMPSI.DISPLAY));
                         t.setVariant(scope, s);
-                        admin.doRefresh();
+                        wandora.doRefresh();
                     }
                 }
                 catch(Exception e) {
-                    admin.handleError(e);
+                    wandora.handleError(e);
                 }
             }
         }
@@ -326,14 +326,14 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
             String s = getSelection();
             if(s != null && s.length() > 0) {
                 try {
-                    Topic t = admin.getOpenTopic();
+                    Topic t = wandora.getOpenTopic();
                     if(t != null) {
                         t.setBaseName(s);
-                        admin.doRefresh();
+                        wandora.doRefresh();
                     }
                 }
                 catch(Exception e) {
-                    admin.handleError(e);
+                    wandora.handleError(e);
                 }
             }
         }
@@ -341,18 +341,18 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
             String s = getSelection();
             if(s != null && s.length() > 0) {
                 try {
-                    Topic type = admin.showTopicFinder("Select occurrence type");
+                    Topic type = wandora.showTopicFinder("Select occurrence type");
                     if(type == null) return;
-                    Topic scope = admin.showTopicFinder("Select occurrence scope");
+                    Topic scope = wandora.showTopicFinder("Select occurrence scope");
                     if(scope == null) return;
-                    Topic t = admin.getOpenTopic();
+                    Topic t = wandora.getOpenTopic();
                     if(t != null) {
                         t.setData(type, scope, s);
-                        admin.doRefresh();
+                        wandora.doRefresh();
                     }
                 }
                 catch(Exception e) {
-                    admin.handleError(e);
+                    wandora.handleError(e);
                 }
             }
         }
@@ -388,7 +388,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
     
     
     public void updateLinkMenu() {
-        WandoraToolSet extractTools = admin.toolManager.getToolSet("extract");
+        WandoraToolSet extractTools = wandora.toolManager.getToolSet("extract");
         WandoraToolSet.ToolFilter filter = extractTools.new ToolFilter() {
             @Override
             public boolean acceptTool(WandoraTool tool) {
@@ -407,7 +407,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                             System.out.println("extractor " + myTool);
                         }
                         catch(Exception exx) { 
-                            admin.handleError(exx);
+                            wandora.handleError(exx);
                         }
                     }
                 };

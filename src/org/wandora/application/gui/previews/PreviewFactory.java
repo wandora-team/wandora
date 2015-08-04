@@ -19,114 +19,70 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * PreviewPanel.java
+ * PreviewFactory.java
  */
 
 package org.wandora.application.gui.previews;
 
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
-import javax.imageio.ImageIO;
-import org.gstreamer.GstException;
 import org.wandora.application.gui.previews.formats.*;
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.Locator;
-import org.wandora.utils.Option;
-import org.wandora.utils.Functional.*;
-import static org.wandora.utils.Option.none;
-import static org.wandora.utils.Option.some;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+
 
 
 /**
  *
- * @author anttirt
+ * @author anttirt, akivela
  */
 public class PreviewFactory {
     
 
     
-    
-    private static Fn1<PreviewPanel, PreviewPanel> wrapHeavy = new Fn1<PreviewPanel, PreviewPanel>() {
-        @Override
-        public PreviewPanel invoke(PreviewPanel panel) {
-            if(panel.isHeavy())
-                return new AWTWrapper(Wandora.getWandora(), panel);
-            else
-                return panel;
-        }
-    };
-    
-    
-    
-    public static Option<PreviewPanel> create(final Locator subjectLocator) {
-        return createAux(subjectLocator).map(wrapHeavy);
-    }
-    
-    
-    
-    private static Option<? extends PreviewPanel> createAux(final Locator subjectLocator) {
+    public static PreviewPanel create(final Locator locator) {
         final Wandora wandora = Wandora.getWandora();
-        final String urlString = subjectLocator.toExternalForm();
+        final String urlString = locator.toExternalForm();
+        PreviewPanel previewPanel = null;
 
-        final String urlLower = subjectLocator.toExternalForm().toLowerCase();
-        final Map<String, String> options = wandora.getOptions().asMap();
-        final java.awt.Frame dlgParent = wandora;
-
-        if(AudioMidi.canView(urlString)) {
-            try { return some(new AudioMidi(urlString)); } catch(Exception e) { }
-        }
-        else if(AudioSample.canView(urlString)) {
-            try { return some(new AudioSample(urlString)); } catch(Exception e) { }
-        }
-        else if(Picture.canView(urlString)) {
-            try { return some(new Picture(urlString)); } catch(Exception e) { wandora.handleError(e); }
-        }
-        else if(PDFnew.canView(urlString)) {
-            //try { return some(new PDF(urlString, admin)); } catch(Exception e) { }
-            try {
-                return some(new PDFnew(urlString));
+        try {
+            if(AudioMidi.canView(urlString)) {
+                previewPanel = new AudioMidi(urlString); 
             }
-            catch(URISyntaxException e) { }
-            catch(MalformedURLException e) { }
-            catch(IOException e) { } 
+            else if(AudioSample.canView(urlString)) {
+                previewPanel = new AudioSample(urlString); 
+            }
+            else if(AudioMP3.canView(urlString)) {
+                previewPanel = new AudioMP3(urlString);
+            }
+            else if(Picture.canView(urlString)) {
+                previewPanel = new Picture(urlString);
+            }
+            else if(PDFnew.canView(urlString)) {
+                previewPanel = new PDFnew(urlString);
+            }
+            else if(XML.canView(urlString)) {
+                previewPanel = new XML(urlString);
+            }
+            else if(FMJ.canView(urlString)) {
+                previewPanel = new FMJ(urlString);
+            }
+            else if(GST.canView(urlString)) {
+                previewPanel = new GST(urlString);
+            }
+            else {
+                previewPanel = new HTML(urlString);
+            }
         }
-        else if(endsWithAny(urlLower, ".xml")) {
-            try { return some(new XML(urlLower, wandora)); } catch(Exception e) { }
+        catch(Exception e) {
+            wandora.handleError(e);
+        }
+        
+        
+        if(previewPanel != null && previewPanel.isHeavy()) {
+            return new AWTWrapper(Wandora.getWandora(), previewPanel);
         }
         else {
-            final String mediafw = System.getProperty("org.wandora.mediafw");
-            System.err.println(mediafw);
-            if("FMJ".equals(mediafw)) {
-                try {
-                    return some(new FMJ(urlLower, dlgParent, options));
-                }
-                catch(Exception e) {
-                    System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                }
-            }
-            else if("GST".equals(mediafw)) {
-                try {
-                    return some(new GST(new URI(subjectLocator.toString()), dlgParent, options));
-                }
-
-                catch(URISyntaxException e) {
-                    System.err.println("Invalid URI syntax: " + subjectLocator.toString());
-                }
-                catch(GstException e) {
-                    System.err.println("GST exception: " + e.getMessage());
-                }
-            }
+            return previewPanel;
         }
-
-        //try { return some(new JDICBrowser(urlString, options)); } catch(Exception e) { }
-        try { return some(new HTML(urlString, wandora)); } catch(Exception e) { }
-        return none();
     }
 }
