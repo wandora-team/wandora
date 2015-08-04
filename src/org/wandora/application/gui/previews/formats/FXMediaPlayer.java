@@ -24,13 +24,25 @@ package org.wandora.application.gui.previews.formats;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import javax.swing.JPanel;
 import org.wandora.application.gui.previews.PreviewPanel;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
@@ -44,6 +56,10 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
     private String mediaUrlString = null;
     private JFXPanel fxPanel;
     private MediaPlayer player;
+    private Scene scene;
+    private VBox sliderBox;
+    private MediaView mediaView;
+    private Slider slider;
     
     
     public FXMediaPlayer(String mediaUrlString) {
@@ -61,16 +77,32 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 Group root = new Group();
-                Scene scene = new Scene(root, 500, 200);
+                scene = new Scene(root);
+                scene.setCursor(Cursor.HAND);
+                scene.setFill(Color.rgb(255, 255, 255, 0.0));
 
-                Media media = new Media(mediaUrlString);
-                player = new MediaPlayer(media);
-                player.play();
+                Media media = getMediaFor(mediaUrlString);
+                player = getMediaPlayerFor(media);
+                if(player != null) {
+                    slider = new Slider();
+                    slider.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Boolean> obs, Boolean wasChanging, Boolean isNowChanging) {
+                            if(!isNowChanging) {
+                                player.seek(Duration.seconds(slider.getValue()));
+                            }
+                        }
+                    });
+                    
+                    sliderBox = new VBox();
+                    sliderBox.visibleProperty().set(false);
+                    sliderBox.getChildren().add(slider);
+                    
+                    mediaView = new MediaView(player);
 
-                //Add a mediaView, to display the media. Its necessary !
-                //This mediaView is added to a Pane
-                MediaView mediaView = new MediaView(player);
-                root.getChildren().add(mediaView);
+                    root.getChildren().add(mediaView);
+                    root.getChildren().add(sliderBox);
+                }
 
                 fxPanel.setScene(scene);
             }
@@ -78,6 +110,78 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
     }
     
     
+    // -------------------------------------------------------------------------
+    
+    
+    private Media getMediaFor(String mediaLocator) {
+        Media media = new Media(mediaLocator);
+        if(media.getError() == null) {
+            media.setOnError(new Runnable() {
+                public void run() {
+                    // Handle asynchronous error in Media object.
+                }
+            });
+        }
+        else {
+            // Handle synchronous error creating Media.
+        }
+        return media;
+    }
+    
+    
+    private MediaPlayer getMediaPlayerFor(Media media) {
+        try {
+            final MediaPlayer mediaPlayer = new MediaPlayer(media);
+            if(mediaPlayer.getError() == null) {
+                mediaPlayer.currentTimeProperty().addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                        if(!slider.isValueChanging()) {
+                            Duration newDuration = (Duration) newValue;
+                            slider.setValue(newDuration.toSeconds());
+                        }
+                    }
+                });
+                mediaPlayer.setOnReady(new Runnable() {
+                    public void run() {
+                        int w = mediaPlayer.getMedia().getWidth();
+                        int h = mediaPlayer.getMedia().getHeight();
+                        
+                        fxPanel.setSize(w, h);
+                        fxPanel.setPreferredSize(new Dimension(w, h));
+                        fxPanel.revalidate();
+                        
+                        sliderBox.setMaxSize(w-10, 20);
+                        sliderBox.setMinSize(w-10, 20);
+                        sliderBox.translateYProperty().set(h-20);
+                        sliderBox.visibleProperty().set(true);
+                        
+                        slider.setMin(0.0);
+                        slider.setValue(0.0);
+                        slider.setMax(mediaPlayer.getTotalDuration().toSeconds());
+                        
+                        player.play();
+                    }
+                });
+                mediaPlayer.setOnError(new Runnable() {
+                    public void run() {
+                        // Handle asynchronous error in MediaPlayer object.
+                    }
+                });
+            }
+            else {
+                // Handle synchronous error creating MediaPlayer.
+            }
+            return mediaPlayer;
+        }
+        catch(Exception e) {
+            // Handle exception creating MediaPlayer.
+        }
+        return null;
+    }
+    
+    
+    // -------------------------------------------------------------------------
 
 
     @Override
@@ -101,6 +205,9 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
     }
     
     
+    // -------------------------------------------------------------------------
+    
+    
     public static boolean canView(String url) {
         boolean answer = false;
         if(url != null) {
@@ -110,7 +217,17 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
                     String mimeType = dataURL.getMimetype();
                     if(mimeType != null) {
                         String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("video/mp4")) {
+                        if(lowercaseMimeType.startsWith("video/mp4") ||
+                            lowercaseMimeType.startsWith("video/x-flv") ||
+                            lowercaseMimeType.startsWith("video/x-javafx") ||
+                            lowercaseMimeType.startsWith("application/vnd.apple.mpegurl") ||
+                            lowercaseMimeType.startsWith("audio/mpegurl") ||
+                            lowercaseMimeType.startsWith("audio/mp3") ||
+                            lowercaseMimeType.startsWith("audio/aiff") ||
+                            lowercaseMimeType.startsWith("audio/x-aiff") ||
+                            lowercaseMimeType.startsWith("audio/wav") ||
+                            lowercaseMimeType.startsWith("audio/x-m4a") ||
+                            lowercaseMimeType.startsWith("video/x-m4v")) {
                                 answer = true;
                         }
                     }
@@ -120,7 +237,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
                 }
             }
             else {
-                if(endsWithAny(url.toLowerCase(), "mp4")) {
+                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", ".mp3", ".aif", ".aiff", ".wav", ".m4a", ".m4v")) {
                     answer = true;
                 }
             }
