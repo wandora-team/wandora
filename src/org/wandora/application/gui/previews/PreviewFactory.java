@@ -45,7 +45,10 @@ public class PreviewFactory {
         PreviewPanel previewPanel = null;
 
         try {
-            if(AudioMidi.canView(urlString)) {
+            if(FXMediaPlayer.canView(urlString)) {
+                previewPanel = new FXMediaPlayer(urlString);
+            }
+            else if(AudioMidi.canView(urlString)) {
                 previewPanel = new AudioMidi(urlString); 
             }
             else if(AudioSample.canView(urlString)) {
