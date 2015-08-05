@@ -253,17 +253,6 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
             }
         }
         
-        return answer && hasJavaFX();
-    }
-    
-    
-    public static boolean hasJavaFX() {
-        try {
-            Class jfxPanel = Class.forName("javafx.embed.swing.JFXPanel");
-            return true;
-        } 
-        catch (ClassNotFoundException e) {
-            return false;
-        }
+        return answer;
     }
 }

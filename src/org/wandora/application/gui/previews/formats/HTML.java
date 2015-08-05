@@ -45,8 +45,10 @@ import java.awt.event.*;
 
 import org.wandora.application.gui.*;
 import org.wandora.application.*;
+import static org.wandora.application.gui.previews.Util.endsWithAny;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
+import org.wandora.utils.DataURL;
 
 
 /**
@@ -500,4 +502,39 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
             }
         }
     }
+    
+    
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    public static boolean canView(String url) {
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType != null) {
+                        String lowercaseMimeType = mimeType.toLowerCase();
+                        if(lowercaseMimeType.startsWith("text/plain") ||
+                           lowercaseMimeType.startsWith("text/html")) {
+                                return true;
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(endsWithAny(url.toLowerCase(), ".html", ".htm", ".txt")) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
 }

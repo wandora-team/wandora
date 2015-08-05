@@ -45,7 +45,7 @@ public class PreviewFactory {
         PreviewPanel previewPanel = null;
 
         try {
-            if(FXMediaPlayer.canView(urlString)) {
+            if(hasJavaFX() && FXMediaPlayer.canView(urlString)) {
                 previewPanel = new FXMediaPlayer(urlString);
             }
             else if(AudioMidi.canView(urlString)) {
@@ -72,7 +72,7 @@ public class PreviewFactory {
             else if(GST.canView(urlString)) {
                 previewPanel = new GST(urlString);
             }
-            else {
+            else if(HTML.canView(urlString)) {
                 previewPanel = new HTML(urlString);
             }
         }
@@ -86,6 +86,19 @@ public class PreviewFactory {
         }
         else {
             return previewPanel;
+        }
+    }
+    
+    
+    
+    
+    private static boolean hasJavaFX() {
+        try {
+            Class jfxPanel = Class.forName("javafx.embed.swing.JFXPanel");
+            return true;
+        } 
+        catch (ClassNotFoundException e) {
+            return false;
         }
     }
 }
