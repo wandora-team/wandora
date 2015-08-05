@@ -85,7 +85,12 @@ public class PreviewWrapper extends JPanel {
         if(subjectLocator.toExternalForm().equals(""))
             return;
         
-        currentPanel = PreviewFactory.create(subjectLocator);
+        try {
+            currentPanel = PreviewFactory.create(subjectLocator);
+        }
+        catch(Exception e) {
+            System.out.println("Warning: Exception thrown when creating preview.");
+        }
         
         if(currentPanel != null) {
             add(currentPanel.getGui(), BorderLayout.CENTER);
