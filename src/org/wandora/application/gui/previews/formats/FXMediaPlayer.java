@@ -29,14 +29,10 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -63,6 +59,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
     
     
     public FXMediaPlayer(String mediaUrlString) {
+        Platform.setImplicitExit(false);
         this.mediaUrlString = mediaUrlString;
         initialize();
     }
@@ -87,10 +84,11 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
                     slider = new Slider();
                     slider.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
                         @Override
-                        public void changed(ObservableValue<? extends Boolean> obs, Boolean wasChanging, Boolean isNowChanging) {
+                        public void changed(ObservableValue<? extends Boolean> obs, Boolean wasChanging, final Boolean isNowChanging) {
                             if(!isNowChanging) {
                                 player.seek(Duration.seconds(slider.getValue()));
                             }
+
                         }
                     });
                     
@@ -186,7 +184,13 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
 
     @Override
     public void finish() {
-        if(player != null) player.stop();
+        if(player != null) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.stop();
+                }
+            });
+        }
     }
 
     @Override
@@ -201,7 +205,14 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
 
     @Override
     public void stop() {
-        if(player != null) player.stop();
+        if(player != null) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    // System.out.println("FXMediaPlayer stopped.");
+                    player.stop();
+                }
+            });
+        }
     }
     
     
@@ -222,10 +233,10 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
                             lowercaseMimeType.startsWith("video/x-javafx") ||
                             lowercaseMimeType.startsWith("application/vnd.apple.mpegurl") ||
                             lowercaseMimeType.startsWith("audio/mpegurl") ||
-                            lowercaseMimeType.startsWith("audio/mp3") ||
-                            lowercaseMimeType.startsWith("audio/aiff") ||
-                            lowercaseMimeType.startsWith("audio/x-aiff") ||
-                            lowercaseMimeType.startsWith("audio/wav") ||
+                            //lowercaseMimeType.startsWith("audio/mp3") ||
+                            //lowercaseMimeType.startsWith("audio/aiff") ||
+                            //lowercaseMimeType.startsWith("audio/x-aiff") ||
+                            //lowercaseMimeType.startsWith("audio/wav") ||
                             lowercaseMimeType.startsWith("audio/x-m4a") ||
                             lowercaseMimeType.startsWith("video/x-m4v")) {
                                 answer = true;
@@ -237,7 +248,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
                 }
             }
             else {
-                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", ".mp3", ".aif", ".aiff", ".wav", ".m4a", ".m4v")) {
+                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", /* ".mp3", ".aif", ".aiff", ".wav", */ ".m4a", ".m4v")) {
                     answer = true;
                 }
             }

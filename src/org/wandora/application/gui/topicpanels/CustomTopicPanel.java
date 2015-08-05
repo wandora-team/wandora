@@ -189,6 +189,11 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
                 options = new Options(globalOptions);
             }
         }
+        
+        if(previewPanel != null) {
+            ((PreviewWrapper) previewPanel).stop();
+        }
+        
         this.removeAll();
         
         this.setTransferHandler(new TopicPanelTransferHandler());
@@ -699,7 +704,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         configOkButton = new org.wandora.application.gui.simple.SimpleButton();
         panelContainer = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        previewPanel = PreviewWrapper.getPreviewWrapper(wandora);
+        previewPanel = PreviewWrapper.getPreviewWrapper();
         jPanel1 = new javax.swing.JPanel();
         idPanel = new javax.swing.JPanel();
         baseNameLabel = new org.wandora.application.gui.simple.SimpleLabel();

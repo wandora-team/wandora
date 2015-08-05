@@ -134,7 +134,10 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     
     @Override
     public void open(Topic topic) {
-
+        if(previewPanel != null) {
+            ((PreviewWrapper) previewPanel).stop();
+        }
+        
        this.removeAll();
        initComponents();
        buttonWrapperPanel.add(buttonContainer);
@@ -605,7 +608,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         subjectIdentifierRootPanel = new org.wandora.application.gui.simple.SimplePanel();
         subjectIdentifierPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        previewPanel = PreviewWrapper.getPreviewWrapper(wandora);
+        previewPanel = PreviewWrapper.getPreviewWrapper();
         variantScrollPanel = new javax.swing.JPanel();
         variantPanelContainer = new javax.swing.JPanel();
         basenamePanel = new javax.swing.JPanel();

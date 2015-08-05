@@ -138,6 +138,10 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         this.topic = topic;
         this.topicSI = null;
         
+        if(previewPanel != null) {
+            ((PreviewWrapper) previewPanel).stop();
+        }
+        
         try {
             if(topic != null && !topic.isRemoved()) {
                 this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
@@ -363,6 +367,9 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     
     public void updatePreview() {
         try {
+            if(previewPanel != null) {
+                ((PreviewWrapper) previewPanel).stop();
+            }
             boolean viewPreview = options.getBoolean(OPTIONS_VIEW_PREFIX+"previewPanel", false);
             if(viewPreview) {
                 if(topic.getSubjectLocator() != null) {
@@ -588,7 +595,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
         containerPanel = new javax.swing.JPanel();
         previewContainerPanel = new javax.swing.JPanel();
-        previewPanel = PreviewWrapper.getPreviewWrapper(wandora);
+        previewPanel = PreviewWrapper.getPreviewWrapper();
         idPanel = new javax.swing.JPanel();
         baseNameLabel = new org.wandora.application.gui.simple.SimpleLabel();
         baseNameField = new SimpleField();

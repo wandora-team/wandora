@@ -44,20 +44,20 @@ import static org.wandora.utils.Functional.*;
 public class PreviewWrapper extends JPanel {
     private PreviewPanel currentPanel = null;
     
-    Wandora admin = null;
+    Wandora wandora = null;
     
     /**
      * Creates a new instance of PreviewWrapper
      */
-    public PreviewWrapper(Wandora admin) {
-        this.admin = admin;
+    public PreviewWrapper() {
+        this.wandora = Wandora.getWandora();
         this.setLayout(new BorderLayout());
     }
     
     
     
-    public static PreviewWrapper getPreviewWrapper(Wandora wandora) {
-        return new PreviewWrapper(wandora);
+    public static PreviewWrapper getPreviewWrapper() {
+        return new PreviewWrapper();
     }
     
     
@@ -65,8 +65,10 @@ public class PreviewWrapper extends JPanel {
     // -------------------------------------------------------------------------
     
     public void stop() {
-        if(currentPanel != null)
+        if(currentPanel != null) {
+            System.out.println("Stopping preview wrapper.");
             currentPanel.stop();
+        }
     }
     
     public void setURL(Locator subjectLocator) {
@@ -91,6 +93,8 @@ public class PreviewWrapper extends JPanel {
         }
         revalidate();
     }
+    
+    
     // -------------------------------------------------------------------------
     
     
