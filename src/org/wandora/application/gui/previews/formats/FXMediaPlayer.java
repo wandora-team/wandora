@@ -84,11 +84,10 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
                     slider = new Slider();
                     slider.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
                         @Override
-                        public void changed(ObservableValue<? extends Boolean> obs, Boolean wasChanging, final Boolean isNowChanging) {
+                        public void changed(ObservableValue<? extends Boolean> obs, Boolean wasChanging, Boolean isNowChanging) {
                             if(!isNowChanging) {
                                 player.seek(Duration.seconds(slider.getValue()));
                             }
-
                         }
                     });
                     

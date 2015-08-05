@@ -66,7 +66,7 @@ public class PreviewWrapper extends JPanel {
     
     public void stop() {
         if(currentPanel != null) {
-            System.out.println("Stopping preview wrapper.");
+            // System.out.println("Stopping preview wrapper.");
             currentPanel.stop();
         }
     }
