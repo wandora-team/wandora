@@ -25,6 +25,17 @@ package org.wandora.application.gui.previews.formats;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
+import static java.lang.Math.floor;
+import static java.lang.String.format;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -32,32 +43,34 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Slider;
-import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.DataURL;
 
 /**
  *
  * @author akivela
  */
-public class FXMediaPlayer extends JPanel implements PreviewPanel {
+public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListener, ComponentListener {
     private String mediaUrlString = null;
     private JFXPanel fxPanel;
     private MediaPlayer player;
+    private boolean playerReady = false;
     private Scene scene;
-    private VBox sliderBox;
     private MediaView mediaView;
-    private Slider slider;
-    
-    
+    private SimpleTimeSlider progressBar;
+    private Media media;
+
+
     public FXMediaPlayer(String mediaUrlString) {
         Platform.setImplicitExit(false);
         this.mediaUrlString = mediaUrlString;
@@ -68,42 +81,59 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
 
     private void initialize() {
         fxPanel = new JFXPanel();
-        this.setLayout(new BorderLayout());
-        this.add(fxPanel, BorderLayout.CENTER);
+
+        JPanel fxPanelContainer = new JPanel();
+        fxPanelContainer.setBackground(java.awt.Color.BLACK);
+        fxPanelContainer.setLayout(new BorderLayout());
+        fxPanelContainer.add(fxPanel, BorderLayout.CENTER);
+        
+        progressBar = new SimpleTimeSlider();
+        JPanel progressBarContainer = new JPanel();
+        progressBarContainer.setLayout(new BorderLayout());
+        progressBarContainer.add(progressBar, BorderLayout.CENTER);
+
+        JPanel controllerPanel = new JPanel();
+        controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
+        
+        this.setLayout(new BorderLayout(4,4));
+        this.add(fxPanelContainer, BorderLayout.NORTH);
+        this.add(progressBarContainer, BorderLayout.CENTER);
+        this.add(controllerPanel, BorderLayout.SOUTH);
+        
         
         Platform.runLater(new Runnable() {
-            @Override public void run() {
+            @Override 
+            public void run() {
                 Group root = new Group();
                 scene = new Scene(root);
                 scene.setCursor(Cursor.HAND);
-                scene.setFill(Color.rgb(255, 255, 255, 0.0));
-
-                Media media = getMediaFor(mediaUrlString);
-                player = getMediaPlayerFor(media);
-                if(player != null) {
-                    slider = new Slider();
-                    slider.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Boolean> obs, Boolean wasChanging, Boolean isNowChanging) {
-                            if(!isNowChanging) {
-                                player.seek(Duration.seconds(slider.getValue()));
+                scene.setFill(Color.rgb(0, 0, 0, 1.0));
+                media = getMediaFor(mediaUrlString);
+                if(media != null) {
+                    player = getMediaPlayerFor(media);
+                    if(player != null) {
+                        progressBar.addMouseMotionListener(new MouseMotionAdapter() {
+                            public void mouseDragged(java.awt.event.MouseEvent e) {
+                                int mouseValue = progressBar.getValueFor(e);
+                                player.seek(Duration.seconds(mouseValue));
                             }
-                        }
-                    });
-                    
-                    sliderBox = new VBox();
-                    sliderBox.visibleProperty().set(false);
-                    sliderBox.getChildren().add(slider);
-                    
-                    mediaView = new MediaView(player);
+                        });
+                        progressBar.addMouseListener(new MouseAdapter() {
+                            public void mousePressed(java.awt.event.MouseEvent e) {
+                                int mouseValue = progressBar.getValueFor(e);
+                                player.seek(Duration.seconds(mouseValue));
+                            }
+                        });
 
-                    root.getChildren().add(mediaView);
-                    root.getChildren().add(sliderBox);
+                        mediaView = new MediaView(player);
+                        root.getChildren().add(mediaView);
+                    }
                 }
 
                 fxPanel.setScene(scene);
             }
         });
+        this.addComponentListener(this);
     }
     
     
@@ -111,71 +141,119 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
     
     
     private Media getMediaFor(String mediaLocator) {
-        Media media = new Media(mediaLocator);
-        if(media.getError() == null) {
-            media.setOnError(new Runnable() {
+        Media m = new Media(mediaLocator);
+        if(m.getError() == null) {
+            m.setOnError(new Runnable() {
                 public void run() {
                     // Handle asynchronous error in Media object.
+                    System.out.println("Asynchronous error while running media player.");
                 }
             });
+            return m;
         }
         else {
             // Handle synchronous error creating Media.
+            System.out.println("Synchronous error running media player.");
         }
-        return media;
+        return null;
     }
     
     
     private MediaPlayer getMediaPlayerFor(Media media) {
         try {
+            playerReady = false;
             final MediaPlayer mediaPlayer = new MediaPlayer(media);
             if(mediaPlayer.getError() == null) {
+                mediaPlayer.setAutoPlay(false);
                 mediaPlayer.currentTimeProperty().addListener(new ChangeListener() {
                     @Override
                     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                        if(!slider.isValueChanging()) {
-                            Duration newDuration = (Duration) newValue;
-                            slider.setValue(newDuration.toSeconds());
-                        }
+                        Duration newDuration = (Duration) newValue;
+                        progressBar.setValue((int) Math.round(newDuration.toSeconds()));
+                        updateTimeLabel();
                     }
                 });
                 mediaPlayer.setOnReady(new Runnable() {
                     public void run() {
-                        int w = mediaPlayer.getMedia().getWidth();
-                        int h = mediaPlayer.getMedia().getHeight();
-                        
-                        fxPanel.setSize(w, h);
-                        fxPanel.setPreferredSize(new Dimension(w, h));
-                        fxPanel.revalidate();
-                        
-                        sliderBox.setMaxSize(w-10, 20);
-                        sliderBox.setMinSize(w-10, 20);
-                        sliderBox.translateYProperty().set(h-20);
-                        sliderBox.visibleProperty().set(true);
-                        
-                        slider.setMin(0.0);
-                        slider.setValue(0.0);
-                        slider.setMax(mediaPlayer.getTotalDuration().toSeconds());
-                        
-                        player.play();
+                        playerReady = true;
+                        progressBar.setMinimum(0.0);
+                        progressBar.setValue(0.0);
+                        progressBar.setMaximum(mediaPlayer.getTotalDuration().toSeconds());
+                        refreshLayout();
                     }
                 });
                 mediaPlayer.setOnError(new Runnable() {
                     public void run() {
                         // Handle asynchronous error in MediaPlayer object.
+                        System.out.println("Error while running media player.");
                     }
                 });
+                return mediaPlayer;
             }
             else {
                 // Handle synchronous error creating MediaPlayer.
+                System.out.println("Synchronous error creating media player.");
             }
-            return mediaPlayer;
         }
         catch(Exception e) {
             // Handle exception creating MediaPlayer.
+            System.out.println("Exception creating media player.");
+            e.printStackTrace();
         }
         return null;
     }
+    
+    
+    private JComponent getJToolBar() {
+        return UIBox.makeButtonContainer(new Object[] {
+            "Play", UIBox.getIcon(0xf04b), this,
+            "Pause", UIBox.getIcon(0xf04c), this,
+            "Backward", UIBox.getIcon(0xf04a), this,
+            "Forward", UIBox.getIcon(0xf04e), this,
+            "Start", UIBox.getIcon(0xf048), this,
+            "End", UIBox.getIcon(0xf051), this,
+            "Restart", UIBox.getIcon(0xf0e2), this,
+        }, this);
+
+    }
+
+    
+    
+    private void refreshLayout() {
+        if(playerReady) {
+            int w = player.getMedia().getWidth();
+            int h = player.getMedia().getHeight();
+
+            int outerWidth = FXMediaPlayer.this.getWidth();
+
+            fxPanel.setSize(w, h);
+            fxPanel.setPreferredSize(new Dimension(w, h));
+            fxPanel.revalidate();
+
+            mediaView.translateXProperty().set(outerWidth/2 - w/2);
+
+            progressBar.setPreferredSize(new Dimension(outerWidth, 17));
+            //progressBar.setMaximumSize(new Dimension(outerWidth, 16));
+            //progressBar.setMinimumSize(new Dimension(outerWidth, 16));
+            progressBar.validate();
+            this.validate();
+        }
+    }
+    
+    
+    private void updateTimeLabel() {
+        if(progressBar != null) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    Duration currentTime = player.getCurrentTime();
+                    progressBar.setValue(currentTime.toSeconds());
+                }
+            });
+        }
+    }
+    
+    
+    
     
     
     // -------------------------------------------------------------------------
@@ -218,6 +296,111 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
     // -------------------------------------------------------------------------
     
     
+    
+    @Override
+    public void actionPerformed(java.awt.event.ActionEvent e) {
+        if(e == null) return;
+        
+        String actionCommand = e.getActionCommand();
+        System.out.println("Action '"+actionCommand+"' performed at FXMediaPlayer");
+        
+        if("Play".equalsIgnoreCase(actionCommand)) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.play();
+                }
+            });
+        }
+        
+        else if("Pause".equalsIgnoreCase(actionCommand)) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.pause();
+                }
+            });
+        }
+        
+        else if("Backward".equalsIgnoreCase(actionCommand)) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.seek(player.getCurrentTime().divide(1.5));
+                }
+            });
+        }
+        
+        else if("Forward".equalsIgnoreCase(actionCommand)) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.seek(player.getCurrentTime().multiply(1.5));
+                }
+            });
+        }
+        
+        else if("Start".equalsIgnoreCase(actionCommand)) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.seek(player.getStartTime());
+                    player.stop();
+                }
+            });
+        }
+        
+        else if("End".equalsIgnoreCase(actionCommand)) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.stop();
+                    player.seek(player.getTotalDuration());
+                }
+            });
+        }
+        
+        else if("Restart".equalsIgnoreCase(actionCommand)) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.seek(player.getStartTime());
+                }
+            });
+        }
+    }
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        Platform.runLater(new Runnable() {
+            @Override 
+            public void run() {
+                refreshLayout();
+            }
+        });
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    
+    
+    @Override
+    public void componentShown(ComponentEvent e) {
+        
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
+    }
+
+    
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
     public static boolean canView(String url) {
         boolean answer = false;
         if(url != null) {
@@ -232,10 +415,10 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
                             lowercaseMimeType.startsWith("video/x-javafx") ||
                             lowercaseMimeType.startsWith("application/vnd.apple.mpegurl") ||
                             lowercaseMimeType.startsWith("audio/mpegurl") ||
-                            //lowercaseMimeType.startsWith("audio/mp3") ||
-                            //lowercaseMimeType.startsWith("audio/aiff") ||
-                            //lowercaseMimeType.startsWith("audio/x-aiff") ||
-                            //lowercaseMimeType.startsWith("audio/wav") ||
+                            lowercaseMimeType.startsWith("audio/mp3") ||
+                            lowercaseMimeType.startsWith("audio/aiff") ||
+                            lowercaseMimeType.startsWith("audio/x-aiff") ||
+                            lowercaseMimeType.startsWith("audio/wav") ||
                             lowercaseMimeType.startsWith("audio/x-m4a") ||
                             lowercaseMimeType.startsWith("video/x-m4v")) {
                                 answer = true;
@@ -247,7 +430,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
                 }
             }
             else {
-                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", /* ".mp3", ".aif", ".aiff", ".wav", */ ".m4a", ".m4v")) {
+                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", ".mp3", ".aif", ".aiff", ".wav", ".m4a", ".m4v")) {
                     answer = true;
                 }
             }
@@ -255,4 +438,6 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel {
         
         return answer;
     }
+
+    
 }

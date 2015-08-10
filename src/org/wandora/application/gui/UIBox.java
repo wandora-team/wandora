@@ -687,7 +687,12 @@ public class UIBox {
                             e.printStackTrace();
                         }
                     }
-
+                    else if(struct[i] instanceof Image) {
+                        if(button != null) {
+                            Image image = (Image) struct[i];
+                            button.setIcon(new ImageIcon(image));
+                        }
+                    }
                     else if(struct[i] instanceof Icon) {
                         if(button != null) {
                             Icon icon = (Icon) struct[i];
@@ -1057,6 +1062,36 @@ public class UIBox {
     }
     
     
+    public static BufferedImage getImage32(int character) {
+        try {
+            if(iconFont == null) {
+                InputStream is = ClassLoader.getSystemResourceAsStream("gui/fonts/fontawesome/fontawesome-webfont.ttf");
+                iconFont = Font.createFont(Font.TRUETYPE_FONT, is);
+            }
+            if(iconFont != null) {
+                BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = (Graphics2D) image.getGraphics();
+                g.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+                g.setRenderingHint(
+                    RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                Font iconFont28 = iconFont.deriveFont(28f);
+                g.setFont(iconFont28);
+                g.setColor(UIConstants.wandoraBlueColor);
+                String iconText = Character.toString((char)character);
+                g.drawChars(iconText.toCharArray(), 0, 1, 2, 13);
+                return image;
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    
+    
     public static BufferedImage getImage(String imageName) {
         return getImage(imageName, null);
     }
@@ -1121,6 +1156,27 @@ public class UIBox {
     
     // -------------------------------------------------------------------------
     
+    
+    
+    public static javafx.scene.image.Image tranformAwtImageToFXImage(java.awt.Image image) throws IOException {
+        if(!(image instanceof RenderedImage)) {
+            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
+                    image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+            Graphics g = bufferedImage.createGraphics();
+            g.drawImage(image, 0, 0, null);
+            g.dispose();
+
+            image = bufferedImage;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write((RenderedImage) image, "png", out);
+        out.flush();
+        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        return new javafx.scene.image.Image(in);
+      }
+    
+    
+    // -------------------------------------------------------------------------
     
     private static HashMap iconThumbCache = new HashMap();
     
