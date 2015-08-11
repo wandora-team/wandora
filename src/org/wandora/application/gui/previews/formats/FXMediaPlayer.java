@@ -25,17 +25,11 @@ package org.wandora.application.gui.previews.formats;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
-import static java.lang.Math.floor;
-import static java.lang.String.format;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -210,8 +204,8 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
             "Pause", UIBox.getIcon(0xf04c), this,
             "Backward", UIBox.getIcon(0xf04a), this,
             "Forward", UIBox.getIcon(0xf04e), this,
-            "Start", UIBox.getIcon(0xf048), this,
-            "End", UIBox.getIcon(0xf051), this,
+            //"Start", UIBox.getIcon(0xf048), this,
+            //"End", UIBox.getIcon(0xf051), this,
             "Restart", UIBox.getIcon(0xf0e2), this,
         }, this);
 
@@ -232,10 +226,10 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
 
             mediaView.translateXProperty().set(outerWidth/2 - w/2);
 
-            progressBar.setPreferredSize(new Dimension(outerWidth, 17));
+            //progressBar.setPreferredSize(new Dimension(outerWidth, 17));
             //progressBar.setMaximumSize(new Dimension(outerWidth, 16));
             //progressBar.setMinimumSize(new Dimension(outerWidth, 16));
-            progressBar.validate();
+            //progressBar.validate();
             this.validate();
         }
     }
@@ -335,28 +329,11 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
                 }
             });
         }
-        
-        else if("Start".equalsIgnoreCase(actionCommand)) {
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    player.seek(player.getStartTime());
-                    player.stop();
-                }
-            });
-        }
-        
-        else if("End".equalsIgnoreCase(actionCommand)) {
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
-                    player.stop();
-                    player.seek(player.getTotalDuration());
-                }
-            });
-        }
-        
+
         else if("Restart".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
+                    player.play();
                     player.seek(player.getStartTime());
                 }
             });
