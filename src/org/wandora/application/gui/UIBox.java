@@ -1051,7 +1051,11 @@ public class UIBox {
                 g.setFont(iconFont16);
                 g.setColor(UIConstants.wandoraBlueColor);
                 String iconText = Character.toString((char)character);
-                g.drawChars(iconText.toCharArray(), 0, 1, 2, 13);
+                
+                FontMetrics fontMetrics = g.getFontMetrics(iconFont16);
+                int stringWidth = fontMetrics.stringWidth(iconText);
+                
+                g.drawChars(iconText.toCharArray(), 0, 1, (16-stringWidth)/2, 13);
                 return image;
             }
         }
@@ -1158,7 +1162,7 @@ public class UIBox {
     
     
     
-    public static javafx.scene.image.Image tranformAwtImageToFXImage(java.awt.Image image) throws IOException {
+    public static javafx.scene.image.Image transformAwtImageToFXImage(java.awt.Image image) throws IOException {
         if(!(image instanceof RenderedImage)) {
             BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
                     image.getHeight(null), BufferedImage.TYPE_INT_ARGB);

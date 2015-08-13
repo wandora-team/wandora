@@ -69,6 +69,8 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
 
     private double zoomFactor = 1.0;
     
+    private JPanel wrapperPanel = null;
+    
     
     @Override
     public boolean isHeavy() {
@@ -82,6 +84,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     public Picture(String imageLocator) {
         this.wandora = Wandora.getWandora();
         this.imageLocator = imageLocator;
+
         this.addMouseListener(this);
         this.addKeyListener(this);
         setImageSize(1.0);
@@ -100,6 +103,18 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         }
 //        setURL(imageLocator);
         reset();
+        
+        
+        JPanel controllerPanel = new JPanel();
+        controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
+        
+        JPanel imagePanel = new JPanel();
+        imagePanel.add(this, BorderLayout.CENTER);
+        
+        wrapperPanel = new JPanel();
+        wrapperPanel.setLayout(new BorderLayout(8,8));
+        wrapperPanel.add(imagePanel, BorderLayout.CENTER);
+        wrapperPanel.add(controllerPanel, BorderLayout.SOUTH);
     }
     
     
@@ -134,7 +149,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     
     @Override
     public Component getGui() {
-        return this;
+        return wrapperPanel;
     }
     
 
@@ -278,6 +293,21 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
 
     }
         
+    // -------------------------------------------------------------------------
+    
+    
+    private JComponent getJToolBar() {
+        return UIBox.makeButtonContainer(new Object[] {
+            "Open ext", UIBox.getIcon(0xf08e), this,
+            "Zoom in", UIBox.getIcon(0xf00e), this,
+            "Zoom out", UIBox.getIcon(0xf010), this,
+            "Copy image", UIBox.getIcon(0xf0c5), this,
+            "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Save as", UIBox.getIcon(0xf0c7), this, // f019
+            "Print", UIBox.getIcon(0xf02f), this,
+        }, this);
+    }
+
         
     // -------------------------------------------------------------------------
     
@@ -327,47 +357,47 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         String c = actionEvent.getActionCommand();
         if(c == null) return;
         
-        if(c.startsWith("Open in external")) {
+        if(startsWith(c, "Open in external", "Open ext")) {
             forkImageViewer();
         }
-        else if(c.startsWith("25")) {
+        else if(startsWith(c, "25")) {
             setImageSize(0.25);
         }
-        else if(c.startsWith("50")) {
+        else if(startsWith(c, "50")) {
             setImageSize(0.5);
         }
-        else if(c.startsWith("100")) {
+        else if(startsWith(c, "100")) {
             setImageSize(1.0);
         }
-        else if(c.startsWith("150")) {
+        else if(startsWith(c, "150")) {
             setImageSize(1.5);
         }
-        else if(c.startsWith("200")) {
+        else if(startsWith(c, "200")) {
             setImageSize(2.0);
         }
-        else if(c.startsWith("Zoom in")) {
+        else if(startsWith(c, "Zoom in")) {
             setImageSize(zoomFactor * 1.1);
         }
-        else if(c.startsWith("Zoom out")) {
+        else if(startsWith(c, "Zoom out")) {
             setImageSize(zoomFactor / 1.1);
         }
 
-        else if(c.equalsIgnoreCase("Copy image")) {
+        else if(startsWith(c, "Copy image")) {
             if(previewImage != null) {
                 ClipboardBox.setClipboard(previewImage);
             }
         }
-        else if(c.equalsIgnoreCase("Copy image location")) {
+        else if(startsWith(c, "Copy location")) {
             if(imageLocator != null) {
                 ClipboardBox.setClipboard(imageLocator);
             }
         }
-        else if(c.startsWith("Save image")) {
+        else if(startsWith(c, "Save")) {
             if(previewImage != null) {
                 save();
             }
         }
-        else if(c.startsWith("Print image")) {
+        else if(startsWith(c, "Print")) {
             if(previewImage != null) {
                 print();
             }
@@ -375,6 +405,16 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     }
    
    
+    private boolean startsWith(String str, String... arguments) {
+        if(str != null) {
+            for(int i=0; i<arguments.length; ++i) {
+                if(str.startsWith(arguments[i])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
    
    // ----------------------------------------------------------------- SAVE ---
    

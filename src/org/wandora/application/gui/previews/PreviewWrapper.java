@@ -43,6 +43,7 @@ import static org.wandora.utils.Functional.*;
  */
 public class PreviewWrapper extends JPanel {
     private PreviewPanel currentPanel = null;
+    private Component currentUI = null;
     
     Wandora wandora = null;
     
@@ -75,8 +76,9 @@ public class PreviewWrapper extends JPanel {
         if(currentPanel != null) {
             currentPanel.stop();
             currentPanel.finish();
-            remove(currentPanel.getGui());
+            removeAll();
             currentPanel = null;
+            currentUI = null;
         }
 
         if(subjectLocator == null)
@@ -93,8 +95,11 @@ public class PreviewWrapper extends JPanel {
         }
         
         if(currentPanel != null) {
-            add(currentPanel.getGui(), BorderLayout.CENTER);
-            setPreferredSize(currentPanel.getGui().getPreferredSize());
+            currentUI = currentPanel.getGui();
+            if(currentUI != null) {
+                add(currentUI, BorderLayout.CENTER);
+                setPreferredSize(currentUI.getPreferredSize());
+            }
         }
         revalidate();
     }
@@ -105,19 +110,35 @@ public class PreviewWrapper extends JPanel {
     
     @Override
     public Dimension getPreferredSize() {
-        if(currentPanel != null) return currentPanel.getGui().getPreferredSize();
-        else return new Dimension(0,0);
+        if(currentUI != null) {
+            return currentUI.getPreferredSize();
+        }
+        else {
+            return new Dimension(0,0);
+        }
     }
+    
+    
     @Override
     public Dimension getMinimumSize() {
-        if(currentPanel != null) return currentPanel.getGui().getMinimumSize();
-        else return new Dimension(0,0);
+        if(currentUI != null) {
+            return currentUI.getMinimumSize();
+        }
+        else {
+            return new Dimension(0,0);
+        }
     }
+    
+    
     /*
     @Override
     public Dimension getMaximumSize() {
-        if(currentPanel != null) return currentPanel.getGui().getMaximumSize();
-        else return new Dimension(0,0);
+        if(currentUI != null) {
+            return currentUI.getMaximumSize();
+        }
+        else {
+            return new Dimension(0,0);
+        }
     }
     */
 }

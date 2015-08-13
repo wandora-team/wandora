@@ -208,7 +208,6 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
             //"End", UIBox.getIcon(0xf051), this,
             "Restart", UIBox.getIcon(0xf0e2), this,
         }, this);
-
     }
 
     
