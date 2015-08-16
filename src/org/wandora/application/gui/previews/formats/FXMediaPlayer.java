@@ -406,7 +406,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
                 }
             }
             else {
-                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", ".mp3", ".aif", ".aiff", ".wav", ".m4a", ".m4v")) {
+                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", ".mp3", ".aif", ".aiff", /*".wav",*/ ".m4a", ".m4v")) {
                     answer = true;
                 }
             }

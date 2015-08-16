@@ -36,18 +36,18 @@ import org.wandora.utils.ClipboardBox;
 import org.wandora.application.gui.simple.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.*;
 import java.net.*;
 import java.io.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import java.util.Map;
 import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 import javax.sound.sampled.*;
-import javax.sound.midi.*;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
+import static org.wandora.application.gui.previews.Util.startsWithAny;
 import org.wandora.utils.DataURL;
 
 
@@ -59,12 +59,13 @@ import org.wandora.utils.DataURL;
 public class AudioSample extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
     private static final String OPTIONS_PREFIX = "gui.audioSamplePreviewPanel.";
 
-    Map<String, String> options;
-    String audioLocator;
-    Dimension panelDimensions;
-    BufferedImage bgImage;
-    boolean isPlaying = false;
-    SourceDataLine player = null;
+    private Map<String, String> options;
+    private String audioLocator;
+    private boolean isPlaying = false;
+    private SourceDataLine player = null;
+    private JPanel wrapperPanel = null;
+    private WaveformPanel waveformPanel = null;
+    private long frameLength = 0;
     
     
     /** Creates a new instance of AudioSample */
@@ -80,57 +81,58 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     
     public void initialize() {
         this.options = Wandora.getWandora().getOptions().asMap();
+
+        JPanel controllerPanel = new JPanel();
+        controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
+
+        waveformPanel = new WaveformPanel(audioLocator);
         this.addMouseListener(this);
-        bgImage = UIBox.getImage("gui/icons/doctype/doctype_audio_sample.png");
+        this.setLayout(new BorderLayout());
+        this.add(waveformPanel, BorderLayout.CENTER);
         
-        panelDimensions = new Dimension(100, 100);
-        this.setPreferredSize(panelDimensions);
-        this.setMaximumSize(panelDimensions);
-        this.setMinimumSize(panelDimensions);
+        wrapperPanel = new JPanel();
+        wrapperPanel.setLayout(new BorderLayout(8,8));
+        wrapperPanel.add(this, BorderLayout.CENTER);
+        wrapperPanel.add(controllerPanel, BorderLayout.SOUTH);
         
         repaint();
         revalidate();
         updateAudioMenu();
     }
 
-    
-    
-    
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        if(bgImage != null) {
-            g.drawImage(bgImage,0,0,this);
-        }
-    }
-    
+
     @Override
     public void finish() {
         isPlaying = false;
+       if(waveformPanel != null) {
+            waveformPanel.stop();
+        }
         if(player != null) {
-            player.drain();
             player.stop();
+            player.flush();
         }
     }
 
     @Override
     public void stop() {
         isPlaying = false;
+        if(waveformPanel != null) {
+            waveformPanel.stop();
+        }
         if(player != null) {
-            player.drain();
             player.stop();
+            player.flush();
         }
     }
     
     @Override
     public JPanel getGui() {
-        return this;
+        return wrapperPanel;
     }
     
     
-    
-    
-    // http://dailywav.com/0506/everyonewillbe.wav
+
+    @Override
     public void run() {
         try {
             isPlaying = true;
@@ -144,11 +146,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
         catch (Exception e) { e.printStackTrace(); }
         isPlaying = false;
     }
-    
-    
-    
-    
-    
+
     
     private void playSample(String audioLocator) throws Exception {
         AudioInputStream audioStream = null;
@@ -161,23 +159,13 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
             audioStream = AudioSystem.getAudioInputStream(audioURL);
         }
         AudioFormat format = audioStream.getFormat();
-        if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
-            format = new AudioFormat(
-                    AudioFormat.Encoding.PCM_SIGNED,
-                    format.getSampleRate(),
-                    format.getSampleSizeInBits()*2,
-                    format.getChannels(),
-                    format.getFrameSize()*2,
-                    format.getFrameRate(),
-                    true);        // big endian
-            audioStream = AudioSystem.getAudioInputStream(format, audioStream);
-        }
+        frameLength = audioStream.getFrameLength();
+
         // Create line
-        SourceDataLine.Info info = new DataLine.Info(
-            SourceDataLine.class, audioStream.getFormat(),
-            ((int)audioStream.getFrameLength()*format.getFrameSize()));
+        SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
         player = (SourceDataLine) AudioSystem.getLine(info);
-        player.open(audioStream.getFormat());
+        player.addLineListener((LineListener) waveformPanel);
+        player.open(format);
         player.start();
 
         byte[] audioBuffer = new byte[player.getBufferSize()];
@@ -204,6 +192,19 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
         }
     }
     
+    
+    public long getFramePosition() {
+        if(player != null && isPlaying) {
+            int fp = player.getFramePosition();
+            return fp;
+        }
+        return 0;
+    }
+    
+    
+    public long getFrameLength() {
+        return frameLength;
+    }
     
     
     
@@ -284,6 +285,16 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     }
     
     
+    private JComponent getJToolBar() {
+        return UIBox.makeButtonContainer(new Object[] {
+            "Play", UIBox.getIcon(0xf04b), this,
+            // "Pause", UIBox.getIcon(0xf04c), this,
+            "Stop", UIBox.getIcon(0xf04d), this,
+            "Open ext", UIBox.getIcon(0xf08e), this,
+            "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Save as", UIBox.getIcon(0xf0c7), this, // f019
+        }, this);
+    }
     
     
     @Override
@@ -291,26 +302,25 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
         String c = actionEvent.getActionCommand();
         if(c == null) return;
         
-        if(c.startsWith("Play")) {
+        if(startsWithAny(c, "Play")) {
             play();
         }
-        if(c.startsWith("Stop")) {
+        else if(startsWithAny(c, "Stop")) {
             isPlaying = false;
             if(player != null) {
                 player.drain();
                 player.stop();
             }
         }
-        if(c.startsWith("Open in external")) {
+        else if(startsWithAny(c, "Open in external", "Open ext")) {
             forkAudioPlayer();
         }
-        
-        else if(c.equalsIgnoreCase("Copy audio location")) {
+        else if(startsWithAny(c, "Copy audio location", "Copy location")) {
             if(audioLocator != null) {
                 ClipboardBox.setClipboard(audioLocator);
             }
         }
-        else if(c.startsWith("Save audio")) {
+        else if(startsWithAny(c, "Save")) {
             save();
         }
     }
@@ -386,5 +396,293 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     }
     
    
+    // -------------------------------------------------------------------------
+    // ------------------------------------------------------- WaveformPanel ---
+    // -------------------------------------------------------------------------
+
+    
+    
+    public class WaveformPanel extends JPanel implements Runnable, LineListener, ComponentListener {    
+        private int[][] waveformData = null;
+        private int[][][] waveformView = null;
+        private String audioLocator = null;
+        private Font infoFont = new Font(Font.SANS_SERIF, Font.PLAIN, 15);
+        private Thread waveformThread = null;
+        private long framePosition = 0;
+        private long frameLength = 0;
+        private AudioFormat format = null;
+        private boolean isRunning = false;
+        private boolean requiresRefresh = true;
+        
+        
+	public WaveformPanel(String audioLocator) {
+            this.addComponentListener(this);
+            this.audioLocator = audioLocator;
+            isRunning = true;
+            waveformThread = new Thread(this);
+            waveformThread.start();
+	}
+        
+        
+        
+        public void stop() {
+            isRunning = false;
+        }
+        
+        
+        
+        @Override
+        public void run() {
+            try {
+                AudioInputStream audioStream = null;
+                if(DataURL.isDataURL(audioLocator)) {
+                    DataURL dataURL = new DataURL(audioLocator);
+                    audioStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(dataURL.getData()));
+                }
+                else {
+                    URL audioURL = new URL(audioLocator);
+                    audioStream = AudioSystem.getAudioInputStream(audioURL);
+                }
+                format = audioStream.getFormat();
+                frameLength = audioStream.getFrameLength();
+                byte[] waveformRawData = new byte[(int) frameLength*format.getFrameSize()];
+                int bytesRead = audioStream.read(waveformRawData);
+                waveformData = sortAudioBytes(waveformRawData, format);
+
+                if(audioStream != null) {
+                    audioStream.close();
+                }
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+            
+            while(isRunning) {
+                try {
+                    long newFramePosition = getFramePosition();
+                    if(newFramePosition != framePosition) {
+                        framePosition = newFramePosition;
+                        requiresRefresh = true;
+                    }
+                    if(requiresRefresh) {
+                        repaint();
+                        requiresRefresh = false;
+                    }
+                    Thread.sleep(50);
+                }
+                catch(Exception e) {
+                    
+                }
+            }
+        }
+        
+
+        
+        private int[][] sortAudioBytes(byte[] raw, AudioFormat format) {
+            int numChannels = format.getChannels();
+            int[][] waveform = new int[numChannels][(int) frameLength];
+            int sampleIndex = 0;
+            boolean isBigEndian = format.isBigEndian();
+            boolean isSigned = true;
+            
+            if(format.getSampleSizeInBits() == 8) {
+                for(int t=0; t<raw.length;) {
+                    for(int channel=0; channel<numChannels; channel++) {
+                        int sample = 0;
+                        if(isSigned) {
+                            sample = (raw[t] << 8) ;
+                        }
+                        else {
+                            sample = ((raw[t] ^ 0x80) << 8);
+                        }
+                        waveform[channel][sampleIndex] = sample;
+                        t = t+1;
+                    }
+                    sampleIndex++;
+                }
+            }
+            else if(format.getSampleSizeInBits() == 16) {
+                for(int t=0; t<raw.length;) {
+                    for(int channel=0; channel<numChannels; channel++) {
+                        int low = (int) raw[t];
+                        int high = (int) raw[t+1];
+                        int sample = 0;
+                        if(isBigEndian) {
+                            sample = (low << 8) | (high & 0x00ff);
+                        }
+                        else {
+                            sample = (low & 0x00ff) | (high << 8);
+                        }
+                        waveform[channel][sampleIndex] = sample;
+                        t = t+2;
+                    }
+                    sampleIndex++;
+                }
+            }
+            else if(format.getSampleSizeInBits() == 24) {
+                for(int t=0; t<raw.length;) {
+                    for(int channel=0; channel<numChannels; channel++) {
+                        int low = (int) raw[t];
+                        int mid = (int) raw[t+1];
+                        int high = (int) raw[t+2];
+                        int sample = 0;
+                        if(isBigEndian) {
+                            sample = (low << 16) | ((mid & 0xFF) << 8) | (high & 0x00ff);
+                        }
+                        else {
+                            sample = (low & 0x00ff) | ((mid & 0xFF) << 8) | (high << 16);
+                        }
+                        waveform[channel][sampleIndex] = sample;
+                        t = t+3;
+                    }
+                    sampleIndex++;
+                }
+            }
+            else if(format.getSampleSizeInBits() == 32) {
+                for(int t=0; t<raw.length;) {
+                    for(int channel=0; channel<numChannels; channel++) {
+                        int low = (int) raw[t];
+                        int mid1 = (int) raw[t+1];
+                        int mid2 = (int) raw[t+2];
+                        int high = (int) raw[t+3];
+                        int sample = 0;
+                        if(isBigEndian) {
+                            sample = (low << 24) | ((mid1 & 0xFF) << 16) | ((mid2 & 0xFF) << 8) | (high & 0x00ff);
+                        }
+                        else {
+                            sample = (low & 0x00ff) | ((mid1 & 0xFF) << 8) | ((mid1 & 0xFF) << 16) | (high << 24);
+                        }
+                        waveform[channel][sampleIndex] = sample;
+                        t = t+4;
+                    }
+                    sampleIndex++;
+                }
+            }
+
+            return waveform;
+        }
+        
+        
+        private void makeWaveformView() {
+            int w = this.getWidth();
+            int h = this.getHeight();
+            int numberOfChannels = waveformData.length;
+            waveformView = new int[numberOfChannels][w][2];
+            for(int channel=0; channel<numberOfChannels; channel++) {
+                int step = waveformData[channel].length / w;
+                if(step == 0) step = 1;
+                int o = (channel+1) * h/numberOfChannels - (h/numberOfChannels)/2;
+
+                int y = 0;
+                for(int x=0; x<w; x++) {
+                    int xstep = x*step;
+                    int max = waveformData[channel][xstep];
+                    int min = waveformData[channel][xstep];
+                    for(int s=1; s<step; s++) {
+                        if(waveformData[channel][xstep+s] > max) {
+                            max = waveformData[channel][xstep+s];
+                        }
+                        if(waveformData[channel][xstep+s] < min) {
+                            min = waveformData[channel][xstep+s];
+                        }
+                    }
+                    int ymax = o + (max / (256*numberOfChannels));
+                    int ymin = o + (min / (256*numberOfChannels));
+                    
+                    waveformView[channel][x][0] = ymin;
+                    waveformView[channel][x][1] = ymax;
+                }
+            }
+        }
+        
+        
+        @Override
+        public void update(LineEvent event) {
+            if(isPlaying) {
+                //framePosition = event.getFramePosition();
+                //repaint();
+            }
+        }
+    
+    
+        @Override
+        public void paint(Graphics g) {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.WHITE);
+            g.setFont(infoFont);
+            if(waveformData == null) {
+                String text = "Preparing waveform";
+                byte[] textBytes = text.getBytes();
+                FontMetrics fontMetrics = g.getFontMetrics(infoFont);
+                int w = fontMetrics.bytesWidth(textBytes, 0, 0);
+                int h = fontMetrics.getHeight();
+                g.drawString(text, getWidth()/2-w/2, getHeight()/2-h/2);
+            }
+            else if(waveformView == null) {
+                makeWaveformView();
+            }
+            if(waveformView != null) {
+                int h = this.getHeight();
+                int numberOfChannels = waveformData.length;
+                int w = waveformView[0].length;
+                for(int channel=0; channel<numberOfChannels; channel++) {
+                    int o = (channel+1) * h/numberOfChannels - (h/numberOfChannels)/2;
+                    w = waveformView[channel].length;
+                    g.drawLine(0, o, w, o);
+                    for(int x=0; x<w; x++) {
+                        int ymax = waveformView[channel][x][0];
+                        int ymin = waveformView[channel][x][1];
+                        g.drawLine(x, ymin, x, ymax);
+                    }
+                }
+                
+                if(framePosition > 0 && frameLength > 0) {
+                    int playPositionOnScreen = (int) ((framePosition * w) / frameLength);
+                    g.drawLine(playPositionOnScreen, 0, playPositionOnScreen, h);
+                }
+            }
+        }
+
+        
+        @Override
+        public Dimension getMinimumSize() {
+            return new Dimension(320, 256);
+        }
+        
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(320, 256);
+        }
+        
+        @Override
+        public Dimension getMaximumSize() {
+            return new Dimension(320, 256);
+        }
+
+        @Override
+        public void componentResized(ComponentEvent e) {
+            makeWaveformView();
+            requiresRefresh = true;
+        }
+
+        @Override
+        public void componentMoved(ComponentEvent e) {
+            makeWaveformView();
+            requiresRefresh = true;
+        }
+
+        @Override
+        public void componentShown(ComponentEvent e) {
+            makeWaveformView();
+            requiresRefresh = true;
+        }
+
+        @Override
+        public void componentHidden(ComponentEvent e) {
+            //makeWaveformView();
+            //requiresRefresh = true;
+        }
+    }
     
 }

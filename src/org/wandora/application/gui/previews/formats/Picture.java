@@ -47,6 +47,7 @@ import static java.awt.event.KeyEvent.*;
 
 import org.wandora.application.gui.*;
 import org.wandora.application.*;
+import static org.wandora.application.gui.previews.Util.startsWithAny;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
 import org.wandora.utils.DataURL;
 
@@ -62,7 +63,9 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     private static final double ZOOMFACTOR = 1.1;
     
     private String imageLocator;
-    private BufferedImage previewImage;
+    private BufferedImage image;
+    private BufferedImage scaledImage;
+    
     private Dimension panelDimensions;
     private Wandora wandora;
     private Options options;
@@ -158,14 +161,25 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     @Override
     public void run() {
         if(imageLocator != null && imageLocator.length() > 0) {
-            previewImage = UIBox.getThumbForLocator(imageLocator, wandora.wandoraHttpAuthorizer);
+            image = UIBox.getThumbForLocator(imageLocator, wandora.wandoraHttpAuthorizer);
         }
-        if(previewImage != null) {
-            int targetWidth = (int) (previewImage.getWidth() * zoomFactor);
-            int targetHeight = (int) (previewImage.getHeight() * zoomFactor);
-            Graphics g = this.getGraphics();
+        if(image != null) {
+            int targetWidth = (int) (image.getWidth() * zoomFactor);
+            int targetHeight = (int) (image.getHeight() * zoomFactor);
+            scaledImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+            Graphics g = scaledImage.createGraphics();
             if(g != null) {
-                g.drawImage(previewImage, 0,0, targetWidth, targetHeight, this);
+                if(g instanceof Graphics2D) {
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2.drawImage(image, 0,0, targetWidth, targetHeight, this);
+                    g2.dispose();
+                }
+                else {
+                    g.drawImage(image, 0,0, targetWidth, targetHeight, this);
+                }
             }
             panelDimensions = new Dimension(targetWidth, targetHeight);
         }
@@ -196,9 +210,9 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(previewImage != null && panelDimensions != null) {
+        if(scaledImage != null && panelDimensions != null) {
             //System.out.println(" image x =" + imageDimensions.width + ", y=" + imageDimensions.height );
-            g.drawImage(previewImage,0,0,panelDimensions.width, panelDimensions.height, this);
+            g.drawImage(scaledImage,0,0,scaledImage.getWidth(), scaledImage.getHeight(), this);
         }
     }
     
@@ -279,8 +293,8 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
             setImageSize(zoomFactor * ZOOMFACTOR);
         }
         else if(keyCode == KeyEvent.VK_C && e.isControlDown()) {
-            if(previewImage != null) {
-                ClipboardBox.setClipboard(previewImage);
+            if(image != null) {
+                ClipboardBox.setClipboard(image);
             }
         }
     }
@@ -313,7 +327,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     
     
     public void updateImageMenu() {
-        if(previewImage != null) {
+        if(image != null) {
             this.setComponentPopupMenu(getImageMenu());
         }
         else {
@@ -357,64 +371,54 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         String c = actionEvent.getActionCommand();
         if(c == null) return;
         
-        if(startsWith(c, "Open in external", "Open ext")) {
+        if(startsWithAny(c, "Open in external", "Open ext")) {
             forkImageViewer();
         }
-        else if(startsWith(c, "25")) {
+        else if(startsWithAny(c, "25")) {
             setImageSize(0.25);
         }
-        else if(startsWith(c, "50")) {
+        else if(startsWithAny(c, "50")) {
             setImageSize(0.5);
         }
-        else if(startsWith(c, "100")) {
+        else if(startsWithAny(c, "100")) {
             setImageSize(1.0);
         }
-        else if(startsWith(c, "150")) {
+        else if(startsWithAny(c, "150")) {
             setImageSize(1.5);
         }
-        else if(startsWith(c, "200")) {
+        else if(startsWithAny(c, "200")) {
             setImageSize(2.0);
         }
-        else if(startsWith(c, "Zoom in")) {
+        else if(startsWithAny(c, "Zoom in")) {
             setImageSize(zoomFactor * 1.1);
         }
-        else if(startsWith(c, "Zoom out")) {
+        else if(startsWithAny(c, "Zoom out")) {
             setImageSize(zoomFactor / 1.1);
         }
 
-        else if(startsWith(c, "Copy image")) {
-            if(previewImage != null) {
-                ClipboardBox.setClipboard(previewImage);
+        else if(startsWithAny(c, "Copy image")) {
+            if(image != null) {
+                ClipboardBox.setClipboard(image);
             }
         }
-        else if(startsWith(c, "Copy location")) {
+        else if(startsWithAny(c, "Copy location")) {
             if(imageLocator != null) {
                 ClipboardBox.setClipboard(imageLocator);
             }
         }
-        else if(startsWith(c, "Save")) {
-            if(previewImage != null) {
+        else if(startsWithAny(c, "Save")) {
+            if(image != null) {
                 save();
             }
         }
-        else if(startsWith(c, "Print")) {
-            if(previewImage != null) {
+        else if(startsWithAny(c, "Print")) {
+            if(image != null) {
                 print();
             }
         }
     }
    
-   
-    private boolean startsWith(String str, String... arguments) {
-        if(str != null) {
-            for(int i=0; i<arguments.length; ++i) {
-                if(str.startsWith(arguments[i])) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+
    
    // ----------------------------------------------------------------- SAVE ---
    
@@ -439,7 +443,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         if(imageFile != null) {
             try {
                 String format = solveImageFormat(imageFile.getName());
-                ImageIO.write(previewImage, format, imageFile);
+                ImageIO.write(image, format, imageFile);
             }
             catch(Exception e) {
                 System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + imageFile.getPath() + "'.");
@@ -521,7 +525,6 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
                 }
             }
         }
-        
         return false;
     }
     

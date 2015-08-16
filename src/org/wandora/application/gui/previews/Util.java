@@ -90,14 +90,31 @@ public class Util {
         }
     };
     
-    public static boolean endsWithAny(String urlString, String... args) {
-        for(String s : args) {
-            if(urlString.endsWith(s))
-                return true;
+    
+   
+    public static boolean startsWithAny(String str, String... args) {
+        if(str != null) {
+            for(String s : args) {
+                if(str.startsWith(s)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
-        
+    
+    
+    public static boolean endsWithAny(String str, String... args) {
+        if(str != null) {
+            for(String s : args) {
+                if(str.endsWith(s))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    
     public static Option<String> choosePath(
 			final Map<String, String> options,
 			final JComponent dlgParent,
