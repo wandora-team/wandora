@@ -81,6 +81,9 @@ public class PreviewFactory {
             else if(HTML.canView(urlString)) {
                 previewPanel = new HTML(urlString);
             }
+            else if(ZMachine.canView(urlString)) {
+                previewPanel = new ZMachine(urlString); 
+            }
         }
         catch(Exception e) {
             wandora.handleError(e);
