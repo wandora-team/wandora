@@ -34,17 +34,21 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
 import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.previews.PreviewPanel;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
 import static org.wandora.application.gui.previews.Util.startsWithAny;
+import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 
@@ -58,7 +62,7 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
     private Thread playerThread = null;
     private Mixer currentMixer;
     private JPanel ui = null;
-    
+    private SimpleTimeSlider progressBar = null;
     
     
     
@@ -66,10 +70,7 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
         super(false);
         this.locator = locator;
         ui = makeUI();
-    }
-    
-    
-    public void createMixer() {
+        
         Properties props = new Properties();
         props.setProperty(ModContainer.PROPERTY_PLAYER_ISP, "3");
         props.setProperty(ModContainer.PROPERTY_PLAYER_STEREO, "2");
@@ -81,7 +82,10 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
         props.setProperty(ModContainer.PROPERTY_PLAYER_FREQUENCY, "48000");
         props.setProperty(ModContainer.PROPERTY_PLAYER_MSBUFFERSIZE, "250");
         MultimediaContainerManager.configureContainer(props);
-        
+    }
+    
+    
+    public void createMixer() {
         try {
             MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(new URL(locator));
             currentMixer = multimediaContainer.createNewMixer();
@@ -94,16 +98,22 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
     
     @Override
     public void run() {
+        ProgressThread progressThread = null;
         try {
             if(currentMixer == null) {
                 createMixer();
             }
             if(currentMixer != null) {
+                progressThread = new ProgressThread(currentMixer, progressBar);
+                progressThread.start();
                 currentMixer.startPlayback();
             }
         }
-        catch (Throwable ex) {
+        catch(Throwable ex) {
             ex.printStackTrace(System.err);
+        }
+        if(progressThread != null) {
+            progressThread.abort();
         }
     }
 
@@ -136,13 +146,18 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
         String cmd = e.getActionCommand();
         
         if(startsWithAny(cmd, "Play")) {
-            playerThread = new Thread(this);
-            playerThread.setDaemon(true);
-            playerThread.start();
+            if(currentMixer != null && currentMixer.isPaused()) {
+                currentMixer.pausePlayback();
+            }
+            else {
+                playerThread = new Thread(this);
+                playerThread.setDaemon(true);
+                playerThread.start();
+            }
         }
         else if(startsWithAny(cmd, "Pause")) {
             if(currentMixer != null) {
-                currentMixer.stopPlayback();
+                currentMixer.pausePlayback();
             }
         }
         else if(startsWithAny(cmd, "Stop")) {
@@ -153,12 +168,20 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
         }
         else if(startsWithAny(cmd, "Forward")) {
             if(currentMixer != null) {
-                currentMixer.setMillisecondPosition(Math.min(currentMixer.getLengthInMilliseconds(), currentMixer.getMillisecondPosition()+2000));
+                if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
+                    long currentPosition = currentMixer.getMillisecondPosition();
+                    long forwardPosition = currentPosition + 10000;
+                    currentMixer.setMillisecondPosition(forwardPosition);
+                }
             }
         }
         else if(startsWithAny(cmd, "Backward")) {
             if(currentMixer != null) {
-                currentMixer.setMillisecondPosition(Math.max(0, currentMixer.getMillisecondPosition()-2000));
+                if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
+                    long currentPosition = currentMixer.getMillisecondPosition();
+                    long backwardPosition = currentPosition - 10000;
+                    currentMixer.setMillisecondPosition(Math.max(0, backwardPosition));
+                }
             }
         }
         else if(startsWithAny(cmd, "Open ext")) {
@@ -178,16 +201,42 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
         }
     }
     
+    
+    protected Mixer getMixer() {
+        return currentMixer;
+    }
+    
+    
     // ------------------
     
     private JPanel makeUI() {
         JPanel ui = new JPanel();
         
+        progressBar = new SimpleTimeSlider();
+        progressBar.setString(locator);
+        JPanel progressBarContainer = new JPanel();
+        progressBarContainer.setLayout(new BorderLayout());
+        progressBarContainer.add(progressBar, BorderLayout.CENTER);
+        
         JPanel controllerPanel = new JPanel();
         controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
         
         ui.setLayout(new BorderLayout(8,8));
+        ui.add(progressBarContainer, BorderLayout.CENTER);
         ui.add(controllerPanel, BorderLayout.SOUTH);
+
+        progressBar.addMouseListener(new MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                int mouseValue = progressBar.getValueFor(e);
+                if(currentMixer != null && currentMixer.isSeekSupported()) {
+                    if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
+                        currentMixer.setMillisecondPosition(mouseValue*1000);
+                        System.out.println("newPosition: "+mouseValue*1000);
+                        System.out.println("newPosition2: "+currentMixer.getMillisecondPosition());
+                    }
+                }
+            }
+        });
         
         return ui;
     }
@@ -264,5 +313,55 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
         
         return false;
     }
+    
+
+    
+    // -------------------------------------------------------------------------
+    
+    
+    
+    private class ProgressThread extends Thread {
+        private Mixer progressMixer = null;
+        private SimpleTimeSlider progressBar = null;
+        private boolean isRunning = true;
+        
+        
+        public ProgressThread(Mixer mixer, SimpleTimeSlider bar) {
+            progressMixer = mixer;
+            progressBar = bar;
+            if(progressBar != null) {
+                progressBar.setMinimum(0.0);
+                progressBar.setValue(0.0);
+                if(progressMixer != null) {
+                    progressBar.setMaximum(progressMixer.getLengthInMilliseconds() / 1000);
+                }
+            }
+        }
+        
+        
+        
+        @Override
+        public void run() {
+            while(progressMixer != null && progressBar != null && isRunning) {
+                if(currentMixer.isNotSeeking()) {
+                    long progress = progressMixer.getMillisecondPosition() / 1000;
+                    progressBar.setValue((int) progress);
+                }
+                try {
+                    Thread.sleep(100);
+                }
+                catch(Exception e) {}
+            }
+            progressBar.setValue(0);
+            progressBar.setString(locator);
+        }
+        
+        
+        public void abort() {
+            isRunning = false;
+        }
+    }
+    
+    
     
 }

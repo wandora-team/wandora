@@ -23,6 +23,8 @@
 
 package org.wandora.application.gui.previews.formats;
 
+import de.quippy.javamod.mixer.Mixer;
+import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
 import org.wandora.application.gui.UIBox;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
@@ -45,12 +47,45 @@ public class AudioSid extends AudioMod {
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
             "Play", UIBox.getIcon(0xf04b), this,
+            "Pause", UIBox.getIcon(0xf04c), this,
             "Stop", UIBox.getIcon(0xf04d), this,
+            "Previous", UIBox.getIcon(0xf048), this,
+            "Next", UIBox.getIcon(0xf051), this,
             "Open ext", UIBox.getIcon(0xf08e), this,
             "Copy location", UIBox.getIcon(0xf0c5), this,
             "Save as", UIBox.getIcon(0xf0c7), this, // f019
         }, this);
     }
+    
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String cmd = e.getActionCommand();
+        Mixer mixer = getMixer();
+        if(startsWithAny(cmd, "Next")) {
+            if(mixer != null) {
+                if(mixer.isNotSeeking() && mixer.isNotPausingNorPaused()) {
+                    long currentTrack = mixer.getMillisecondPosition();
+                    long nextTrack = currentTrack + 1;
+                    mixer.setMillisecondPosition(Math.min(mixer.getLengthInMilliseconds(), nextTrack));
+                }
+            }
+        }
+        else if(startsWithAny(cmd, "Previous")) {
+            if(mixer != null) {
+                if(mixer.isNotSeeking() && mixer.isNotPausingNorPaused()) {
+                    long currentTrack = mixer.getMillisecondPosition();
+                    long previousTrack = currentTrack - 1001;
+                    mixer.setMillisecondPosition(Math.max(0, previousTrack));
+                }
+            }
+        }
+        else {
+            super.actionPerformed(e);
+        }
+    }
+    
+    
     
     // -------------------------------------------------------------------------
     
