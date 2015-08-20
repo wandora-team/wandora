@@ -42,7 +42,7 @@ import java.util.*;
  */
 public class ChainExecuter extends AbstractWandoraTool implements WandoraTool {
     
-    ArrayList<WandoraTool> tools = new ArrayList<WandoraTool>();
+    private ArrayList<WandoraTool> tools = new ArrayList<WandoraTool>();
     
     
     
@@ -67,6 +67,7 @@ public class ChainExecuter extends AbstractWandoraTool implements WandoraTool {
     }
     
     
+    @Override
     public void execute(Wandora wandora, Context context) {
         for(WandoraTool tool : tools) {
             try {

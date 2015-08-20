@@ -29,17 +29,19 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.utils.swing.JPanelWithBackground;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import org.wandora.utils.DnDBox;
+import javax.swing.border.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.topicpanels.*;
 import org.wandora.application.tools.*;
+import org.wandora.application.tools.extractors.files.SimpleDocumentExtractor;
+import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
+import org.wandora.utils.DnDBox;
+import org.wandora.utils.swing.JPanelWithBackground;
 
 
 /**
@@ -98,11 +100,40 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
     }
     
     private void acceptFileList(java.util.List<File> files) throws Exception {
-        ArrayList<WandoraTool> importTools=WandoraToolManager.getImportTools(files, orders);
-        for(WandoraTool t : importTools){
-            if(t==null){
-                WandoraOptionPane.showMessageDialog(parent, "You have dropped Wandora a file with unsupported file type! Wandora supports drop of wpr, xtm, ltm, jtm, rdf(s), n3, and obo files. Extractors may support also other file types.", "Unsupported file type", WandoraOptionPane.ERROR_MESSAGE);                
-                break;
+        ArrayList<WandoraTool> importTools = new ArrayList<>();
+        boolean yesToAll = false;
+        
+        System.out.println("processing files: "+ files.size());
+        for(File file : files) {
+            System.out.println("processing file: "+ file);
+            ArrayList<WandoraTool> importToolsForFile = WandoraToolManager.getImportTools(file, orders);
+            if(importToolsForFile != null && !importToolsForFile.isEmpty()) {
+                importTools.addAll(importToolsForFile);
+            }
+            else {
+                System.out.println("processing file 2: "+ file);
+                if(yesToAll) {
+                    SimpleDocumentExtractor extractor = new SimpleDocumentExtractor();
+                    extractor.setForceFiles(new File[] { file } );
+                    importTools.add(extractor);
+                }
+                else {
+                    System.out.println("processing file 3: "+ file);
+                    int a = WandoraOptionPane.showConfirmDialog(parent, 
+                        "Extract the dropped file with Simple File Extractor?",
+                        "Extract instead of import?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                    if(a == WandoraOptionPane.YES_OPTION || a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                        SimpleFileExtractor extractor = new SimpleFileExtractor();
+                        extractor.setForceFiles(new File[] { file } );
+                        importTools.add(extractor);
+                    }
+                    if(a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                        yesToAll = true;
+                    }
+                    if(a == WandoraOptionPane.CANCEL_OPTION) {
+                        return;
+                    }
+                }               
             }
         }
         //System.out.println("drop context == " + dropContext);
@@ -116,13 +147,15 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
     @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
         java.util.List<File> files=DnDBox.acceptFileList(e);
-        if(files==null){
+        if(files==null) {
             System.out.println("Drop rejected! Wrong data flavor!");
             e.rejectDrop();
         }
-        else{
+        else {
             try{
-                if(files.size()>0) acceptFileList(files);
+                if(!files.isEmpty()) {
+                    acceptFileList(files);
+                }
             }
             catch(Exception ex){
                 ex.printStackTrace();

@@ -57,6 +57,7 @@ public class PDFPanel extends JPanel {
     private static final Dimension defaultSize =
             new Dimension(400, 400);
 
+    
     public PDFPanel() {
         super();
         imageDone = new AtomicBoolean();

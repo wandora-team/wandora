@@ -40,14 +40,14 @@ import org.wandora.application.*;
 public class TopicEditorPanel extends EditorPanel implements Scrollable {
     
     /** Creates a new instance of TopicEditorPanel */
-    public TopicEditorPanel(Wandora admin, Object dc) {
-        super(admin,dc);
+    public TopicEditorPanel(Wandora wandora, Object dc) {
+        super(wandora,dc);
     }
     
     
     /** Creates a new instance of EditorPanel */
-    public TopicEditorPanel(Wandora admin, int o, Object dc) {
-        super(admin,o,dc);
+    public TopicEditorPanel(Wandora wandora, int o, Object dc) {
+        super(wandora,o,dc);
     }
     
     @Override

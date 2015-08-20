@@ -458,9 +458,15 @@ public class WandoraToolManager extends AbstractWandoraTool implements WandoraTo
     }
     
     
+    public static ArrayList<WandoraTool> getImportTools(File file, int orders) {
+        ArrayList<File> files = new ArrayList<>();
+        files.add(file);
+        ArrayList<WandoraTool> toolList = getImportTools(files, orders);
+        return toolList;
+    }
     
     
-    public static ArrayList<WandoraTool> getImportTools(java.util.List<File> files, int orders){
+    public static ArrayList<WandoraTool> getImportTools(java.util.List<File> files, int orders) {
         String fileName = null;
         ArrayList<WandoraTool> importTools = new ArrayList<WandoraTool>();
         for( File file : files ) {
@@ -480,6 +486,16 @@ public class WandoraToolManager extends AbstractWandoraTool implements WandoraTo
                 importer.forceFiles = file;
                 importTools.add(importer);
             }
+            else if(fileName.endsWith(".ttl")) {
+                SimpleRDFTurtleImport importer = new SimpleRDFTurtleImport(orders);
+                importer.forceFiles = file;
+                importTools.add(importer);
+            }
+            else if(fileName.endsWith(".jsonld")) {
+                SimpleRDFJsonLDImport importer = new SimpleRDFJsonLDImport(orders);
+                importer.forceFiles = file;
+                importTools.add(importer);
+            }
             else if(fileName.endsWith(".obo")) {
                 OBOImport importer = new OBOImport(orders);
                 importer.forceFiles = file;
@@ -495,10 +511,7 @@ public class WandoraToolManager extends AbstractWandoraTool implements WandoraTo
                     importTools.add(merger);
                 }
             }
-            else {
-                importTools.add(null);
-            }
-        }        
+        }
         return importTools;
     }
     

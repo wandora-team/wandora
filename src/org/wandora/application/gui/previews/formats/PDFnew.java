@@ -57,12 +57,13 @@ import static org.wandora.application.gui.previews.Util.endsWithAny;
 
 
 
-public class PDFnew implements PreviewPanel {
+public class PDFnew implements PreviewPanel, ActionListener {
     private double ZOOMFACTOR = 0.8;
     private final Frame dlgParent;
     private final Pr0 cleanup;
     private PDFFile pdfFile;
     private final PDFPanel pdfPanel = new PDFPanel();
+    private JPanel masterPanel = null;
     private int pageCount;
     private int currentPage;
     private final PDFActionListener actionListener = new PDFActionListener();
@@ -229,7 +230,20 @@ public class PDFnew implements PreviewPanel {
 
     @Override
     public Component getGui() {
-        return pdfPanel;
+        if(masterPanel == null) {
+            masterPanel = new JPanel();
+            masterPanel.setLayout(new BorderLayout(8, 8));
+            
+            JPanel pdfWrapper = new JPanel();
+            pdfWrapper.add(pdfPanel, BorderLayout.CENTER);
+            
+            JPanel controllerPanel = new JPanel();
+            controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
+            
+            masterPanel.add(pdfWrapper, BorderLayout.CENTER);
+            masterPanel.add(controllerPanel, BorderLayout.SOUTH);
+        }
+        return masterPanel;
     }
 
     @Override
@@ -238,6 +252,53 @@ public class PDFnew implements PreviewPanel {
     }
     
 
+
+    private JComponent getJToolBar() {
+        return UIBox.makeButtonContainer(new Object[] {
+            "First", UIBox.getIcon(0xf049), this,
+            "Previous", UIBox.getIcon(0xf048), this,
+            "Next", UIBox.getIcon(0xf051), this,
+            "Last", UIBox.getIcon(0xf050), this,
+            "Zoom in", UIBox.getIcon(0xf00e), this,
+            "Zoom out", UIBox.getIcon(0xf010), this,
+            "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Save", UIBox.getIcon(0xf019), this,
+        }, this);
+    }
+    
+    
+// -------------------------------------------------------------------------
+    
+    
+    
+    @Override
+    public void actionPerformed(java.awt.event.ActionEvent e) {
+        if(e == null) return;
+        String actionCommand = e.getActionCommand();
+        
+        if("Play".equalsIgnoreCase(actionCommand)) {
+
+        }
+        
+        else if("Pause".equalsIgnoreCase(actionCommand)) {
+
+        }
+        
+        else if("Backward".equalsIgnoreCase(actionCommand)) {
+
+        }
+        
+        else if("Forward".equalsIgnoreCase(actionCommand)) {
+
+        }
+
+        else if("Restart".equalsIgnoreCase(actionCommand)) {
+
+        }
+    }
+    
+    
+    
     // -------------------------------------------------------------------------
     
     

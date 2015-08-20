@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
 package org.wandora.application.gui.simple;
 
 
@@ -27,17 +29,19 @@ import javax.swing.JProgressBar;
 
 
 /**
+ * SimpleTimeSlider is a modified progress bar used to preview progress of an
+ * audio and video clips.
  *
  * @author akivela
  */
 public class SimpleTimeSlider extends JProgressBar {
     
     
+    
     public SimpleTimeSlider() {
         super();
         setStringPainted(true);
         setBorderPainted(false);
-        setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
     }
     
 
@@ -72,6 +76,7 @@ public class SimpleTimeSlider extends JProgressBar {
     }
 
     
+    @Override
     public int getValue() {
         int v = super.getValue();
         return v/100;
@@ -90,6 +95,29 @@ public class SimpleTimeSlider extends JProgressBar {
     }
     
     
+    // -------------------------------------------------------------------------
+    
+    
+    
+    @Override
+    public void addMouseMotionListener(MouseMotionListener listener) {
+        setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+        super.addMouseMotionListener(listener);
+    }
+    
+    
+    @Override
+    public void addMouseListener(MouseListener listener) {
+        if(getCursor().getType() != Cursor.W_RESIZE_CURSOR) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        super.addMouseListener(listener);
+    }
+    
+    
+    
+    // -------------------------------------------------------------------------
+    
     
     private String getFormatTime(int elapsed, int duration) {
         elapsed = elapsed/100;
@@ -100,8 +128,7 @@ public class SimpleTimeSlider extends JProgressBar {
             elapsed -= elapsedHours * 60 * 60;
         }
         int elapsedMinutes = elapsed / 60;
-        int elapsedSeconds = elapsed - elapsedHours * 60 * 60
-                - elapsedMinutes * 60;
+        int elapsedSeconds = elapsed - elapsedMinutes * 60;
 
         if (duration > 0) {
             int durationHours = duration / (60 * 60);
@@ -109,18 +136,19 @@ public class SimpleTimeSlider extends JProgressBar {
                 duration -= durationHours * 60 * 60;
             }
             int durationMinutes = duration / 60;
-            int durationSeconds = duration - durationHours * 60 * 60
-                    - durationMinutes * 60;
+            int durationSeconds = duration - durationMinutes * 60;
             if (durationHours > 0) {
                 return format("%d:%02d:%02d/%d:%02d:%02d",
                         elapsedHours, elapsedMinutes, elapsedSeconds,
                         durationHours, durationMinutes, durationSeconds);
-            } else {
+            } 
+            else {
                 return format("%02d:%02d/%02d:%02d",
                         elapsedMinutes, elapsedSeconds, durationMinutes,
                         durationSeconds);
             }
-        } else {
+        } 
+        else {
             if (elapsedHours > 0) {
                 return format("%d:%02d:%02d", elapsedHours,
                         elapsedMinutes, elapsedSeconds);

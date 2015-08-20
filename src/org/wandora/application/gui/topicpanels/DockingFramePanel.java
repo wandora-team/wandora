@@ -85,6 +85,8 @@ import org.wandora.application.tools.docking.DeleteCurrentDockable;
 import org.wandora.application.tools.docking.DeleteDockable;
 import org.wandora.application.tools.docking.MaximizeDockable;
 import org.wandora.application.tools.docking.SelectDockable;
+import org.wandora.application.tools.extractors.files.SimpleDocumentExtractor;
+import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
 import org.wandora.application.tools.navigate.CloseCurrentTopicPanel;
 import org.wandora.application.tools.navigate.OpenTopicIn;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
@@ -1103,7 +1105,49 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     
     
+    
+    
     private void acceptFileList(java.util.List<File> files) throws Exception {
+        ArrayList<WandoraTool> importTools = new ArrayList<>();
+        boolean yesToAll = false;
+        
+        for(File file : files) {
+            ArrayList<WandoraTool> importToolsForFile = WandoraToolManager.getImportTools(file, orders);
+            if(importToolsForFile != null && !importToolsForFile.isEmpty()) {
+                importTools.addAll(importToolsForFile);
+            }
+            else {
+                if(yesToAll) {
+                    SimpleDocumentExtractor extractor = new SimpleDocumentExtractor();
+                    extractor.setForceFiles(new File[] { file } );
+                    importTools.add(extractor);
+                }
+                else {
+                    int a = WandoraOptionPane.showConfirmDialog(wandora, 
+                        "Extract the dropped file with Simple File Extractor?",
+                        "Extract instead of import?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                    if(a == WandoraOptionPane.YES_OPTION || a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                        SimpleFileExtractor extractor = new SimpleFileExtractor();
+                        extractor.setForceFiles(new File[] { file } );
+                        importTools.add(extractor);
+                    }
+                    if(a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                        yesToAll = true;
+                    }
+                    if(a == WandoraOptionPane.CANCEL_OPTION || a == WandoraOptionPane.CLOSED_OPTION) {
+                        return;
+                    }
+                }               
+            }
+        }
+        //System.out.println("drop context == " + dropContext);
+        ActionEvent fakeEvent = new ActionEvent(wandora, 0, "merge");
+        ChainExecuter chainExecuter = new ChainExecuter(importTools);
+        chainExecuter.execute(wandora, fakeEvent);
+    }
+    /*
+    private void acceptFileList(java.util.List<File> files) throws Exception {
+        System.out.println("hre we are");
         ArrayList<WandoraTool> importTools=WandoraToolManager.getImportTools(files, orders);
         for(WandoraTool t : importTools){
             if(t==null){
@@ -1116,7 +1160,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         ChainExecuter chainExecuter = new ChainExecuter(importTools);
         chainExecuter.execute(wandora, fakeEvent);
     }
-    
+    */
     
     
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
