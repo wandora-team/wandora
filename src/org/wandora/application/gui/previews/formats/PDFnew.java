@@ -57,7 +57,7 @@ import static org.wandora.application.gui.previews.Util.endsWithAny;
 
 
 
-public class PDFnew implements PreviewPanel, ActionListener {
+public class PDFnew implements PreviewPanel {
     private double ZOOMFACTOR = 0.8;
     private final Frame dlgParent;
     private final Pr0 cleanup;
@@ -173,9 +173,7 @@ public class PDFnew implements PreviewPanel, ActionListener {
                         }
                     };
 
-                final Abortable ab =
-                        new Abortable(dlgParent, dlgFactory, some("Downloading pdf"));
-
+                final Abortable ab = new Abortable(dlgParent, dlgFactory, some("Downloading pdf"));
                 ab.run();
 
                 switch(ab.getStatus()) {
@@ -255,49 +253,19 @@ public class PDFnew implements PreviewPanel, ActionListener {
 
     private JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "First", UIBox.getIcon(0xf049), this,
-            "Previous", UIBox.getIcon(0xf048), this,
-            "Next", UIBox.getIcon(0xf051), this,
-            "Last", UIBox.getIcon(0xf050), this,
-            "Zoom in", UIBox.getIcon(0xf00e), this,
-            "Zoom out", UIBox.getIcon(0xf010), this,
-            "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Save", UIBox.getIcon(0xf019), this,
-        }, this);
+            FIRST, UIBox.getIcon(0xf049), actionListener,
+            PREV, UIBox.getIcon(0xf048), actionListener,
+            NEXT, UIBox.getIcon(0xf051), actionListener,
+            LAST, UIBox.getIcon(0xf050), actionListener,
+            ZOOM_IN, UIBox.getIcon(0xf00e), actionListener,
+            ZOOM_OUT, UIBox.getIcon(0xf010), actionListener,
+            COPY_LOCATION, UIBox.getIcon(0xf0c5), actionListener,
+            SAVE, UIBox.getIcon(0xf019), actionListener,
+        }, actionListener);
     }
     
     
-// -------------------------------------------------------------------------
-    
-    
-    
-    @Override
-    public void actionPerformed(java.awt.event.ActionEvent e) {
-        if(e == null) return;
-        String actionCommand = e.getActionCommand();
-        
-        if("Play".equalsIgnoreCase(actionCommand)) {
 
-        }
-        
-        else if("Pause".equalsIgnoreCase(actionCommand)) {
-
-        }
-        
-        else if("Backward".equalsIgnoreCase(actionCommand)) {
-
-        }
-        
-        else if("Forward".equalsIgnoreCase(actionCommand)) {
-
-        }
-
-        else if("Restart".equalsIgnoreCase(actionCommand)) {
-
-        }
-    }
-    
-    
     
     // -------------------------------------------------------------------------
     
@@ -469,7 +437,7 @@ public class PDFnew implements PreviewPanel, ActionListener {
 
         public void actionPerformed(ActionEvent args) {
             for(final String c : some(args.getActionCommand())) {
-                if(c.equals(OPEN_EXTERNAL)) {
+                if(c.equals(OPEN_EXTERNAL) || c.equals(OPEN_EXT)) {
                     if(!DataURL.isDataURL(source)) {
                         System.out.println("Spawning viewer for \""+source+"\"");
                         try {
@@ -497,7 +465,7 @@ public class PDFnew implements PreviewPanel, ActionListener {
                     pdfPanel.paint(image.getGraphics());
                     ClipboardBox.setClipboard(image);
                 }
-                else if(c.equals(SAVE_AS)) {
+                else if(c.equals(SAVE_AS) || c.equals(SAVE)) {
                     final Option<String> path =
                             Util.choosePath(options,
                                             pdfPanel,
@@ -527,10 +495,10 @@ public class PDFnew implements PreviewPanel, ActionListener {
                 else if(c.equals(OFFSET_DEFAULT)) {
                     setOffset(new Dimension(0, 0));
                 }
-                else if(c.equals(NEXT_PAGE)) {
+                else if(c.equals(NEXT_PAGE) || c.equals(NEXT)) {
                     changePage(1);
                 }
-                else if(c.equals(PREV_PAGE)) {
+                else if(c.equals(PREV_PAGE) || c.equals(PREV)) {
                     changePage(-1);
                 }
                 else if(c.equals(JUMP_10_FWD)) {
@@ -545,10 +513,10 @@ public class PDFnew implements PreviewPanel, ActionListener {
                 else if(c.equals(JUMP_100_REV)) {
                     changePage(-100);
                 }
-                else if(c.equals(JUMP_HOME)) {
+                else if(c.equals(JUMP_HOME) || c.equals(FIRST)) {
                     setFirstPage();
                 }
-                else if(c.equals(JUMP_END)) {
+                else if(c.equals(JUMP_END) || c.equals(LAST)) {
                     setLastPage();
                 }
             }
@@ -602,9 +570,11 @@ public class PDFnew implements PreviewPanel, ActionListener {
     
     
     private static final
-        String OPEN_EXTERNAL = "Open in external viewer...",
-               COPY_LOCATION = "Copy media location",
+        String OPEN_EXT = "Open ext",
+               OPEN_EXTERNAL = "Open in external viewer...",
+               COPY_LOCATION = "Copy location",
                COPY_IMAGE = "Copy as image",
+               SAVE = "Save",
                SAVE_AS = "Save media as...",
                ZOOM_OUT = "Zoom out",
                ZOOM_IN = "Zoom in",
@@ -612,13 +582,17 @@ public class PDFnew implements PreviewPanel, ActionListener {
                ZOOM_DEFAULT = "100%",
                ZOOM_150 = "150%",
                ZOOM_200 = "200%",
+               NEXT = "Next",
                NEXT_PAGE = "Next page",
+               PREV = "Previous",
                PREV_PAGE = "Previous page",
                JUMP_10_FWD = "10 pages forward",
                JUMP_10_REV = "10 pages back",
                JUMP_100_FWD = "100 pages forward",
                JUMP_100_REV = "100 pages back",
+               FIRST = "First",
                JUMP_HOME = "First page",
+               LAST = "Last",
                JUMP_END = "Last page",
                OFFSET_DEFAULT = "Reset panning";
     
