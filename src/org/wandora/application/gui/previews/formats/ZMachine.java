@@ -57,6 +57,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.Util;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
 import static org.wandora.application.gui.previews.Util.startsWithAny;
 import org.wandora.utils.ClipboardBox;
@@ -272,7 +273,7 @@ public class ZMachine implements ActionListener, PreviewPanel {
         }
         else if(startsWithAny(cmd, "Open ext")) {
             if(locator != null) {
-                forkExternalPlayer();
+                Util.forkExternalPlayer(locator);
             }
         }
         else if(startsWithAny(cmd, "Copy location")) {
@@ -282,35 +283,12 @@ public class ZMachine implements ActionListener, PreviewPanel {
         }
         else if(startsWithAny(cmd, "Save")) {
             if(locator != null) {
-                
+                Util.saveToFile(locator);
             }
         }
     }
     
 
-    public void forkExternalPlayer() {
-        if(locator != null && locator.length() > 0) {
-            if(!DataURL.isDataURL(locator)) {
-                System.out.println("Spawning viewer for \""+locator+"\"");
-                try {
-                    Desktop desktop = Desktop.getDesktop();
-                    desktop.browse(new URI(locator));
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
-                        "Due to Java's security restrictions Wandora can't open the DataURI "+
-                        "in external application. Manually copy and paste the locator to browser's "+
-                        "address field to view the locator.", 
-                        "Can't open the locator in external application",
-                        WandoraOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }
-    
     
     // -------------------------------------------------------------------------
     

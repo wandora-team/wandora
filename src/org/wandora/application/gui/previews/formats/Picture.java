@@ -216,39 +216,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         }
     }
     
-    
-    
 
-    
-   
-    // -------------------------------------------------------------------------
-    
-    
-    
-    public void forkImageViewer() {
-        if(imageLocator != null && imageLocator.length() > 0) {
-            if(!DataURL.isDataURL(imageLocator)) {
-                // System.out.println("Spawning viewer for \""+imageLocator+"\"");
-                try {
-                    Desktop desktop = Desktop.getDesktop();
-                    desktop.browse(new URI(imageLocator));
-                }
-                catch(Exception tme) {
-                    tme.printStackTrace(); // TODO EXCEPTION
-                }
-            }
-            else {
-                WandoraOptionPane.showMessageDialog(wandora, 
-                        "Due to Java's security restrictions Wandora can't open the DataURI "+
-                        "in external application. Manually copy and paste the locator to browser's "+
-                        "address field to view the locator.", 
-                        "Can't open the locator in external application",
-                        WandoraOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }
-   
-    
     
     // -------------------------------------------------------------------------
     
@@ -258,7 +226,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         if(mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
-            forkImageViewer();
+            Util.forkExternalPlayer(imageLocator);
         }
     }
     
@@ -372,7 +340,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         if(c == null) return;
         
         if(startsWithAny(c, "Open in external", "Open ext")) {
-            forkImageViewer();
+            Util.forkExternalPlayer(imageLocator);
         }
         else if(startsWithAny(c, "25")) {
             setImageSize(0.25);

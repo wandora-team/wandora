@@ -163,33 +163,7 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
     
     
     
-    
-    public void forkAudioPlayer() {
-        if(audioLocator != null && audioLocator.length() > 0) {
-            if(!DataURL.isDataURL(audioLocator)) {
-                System.out.println("Spawning viewer for \""+audioLocator+"\"");
-                try {
-                    Desktop desktop = Desktop.getDesktop();
-                    desktop.browse(new URI(audioLocator));
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
-                        "Due to Java's security restrictions Wandora can't open the DataURI "+
-                        "in external application. Manually copy and paste the locator to browser's "+
-                        "address field to view the locator.", 
-                        "Can't open the locator in external application",
-                        WandoraOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }
-    
-    
 
-    
     
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
@@ -213,6 +187,8 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
+    
+    
     // -------------------------------------------------------------------------
     
     
@@ -251,64 +227,26 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
         if(c.startsWith("Play")) {
             play();
         }
-        if(c.startsWith("Stop")) {
+        else if(c.startsWith("Stop")) {
             isPlaying = false;
             if(player != null) {
                 player.close();
             }
         }
-        if(c.startsWith("Open in external")) {
-            forkAudioPlayer();
+        else if(c.startsWith("Open in external")) {
+            Util.forkExternalPlayer(audioLocator);
         }
-        
         else if(c.equalsIgnoreCase("Copy audio location")) {
             if(audioLocator != null) {
                 ClipboardBox.setClipboard(audioLocator);
             }
         }
         else if(c.startsWith("Save audio")) {
-            save();
+            Util.saveToFile(audioLocator);
         }
     }
-   
-   
-   
-   // ----------------------------------------------------------------- SAVE ---
-   
    
 
-    public void save() {
-        Wandora wandora = Wandora.getWandora(this);
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
-        chooser.setDialogTitle("Save audio file");
-        try {
-            chooser.setSelectedFile(new File(audioLocator.substring(audioLocator.lastIndexOf(File.pathSeparator)+1)));
-        }
-        catch(Exception e) {}
-        if(chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
-            save(chooser.getSelectedFile());
-        }
-    }
-    
-    
-    
-    public void save(File audioFile) {
-        if(audioFile != null) {
-            try {
-                if(DataURL.isDataURL(audioLocator)) {
-                    DataURL.saveToFile(audioLocator, audioFile);
-                }
-                else {
-                    IObox.moveUrl(new URL(audioLocator), audioFile);
-                }
-            }
-            catch(Exception e) {
-                System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + audioFile.getPath() + "'.");
-            }
-        }
-    }
-    
-    
     // -------------------------------------------------------------------------
     
     
@@ -337,7 +275,6 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
                 }
             }
         }
-        
         return false;
     }
     

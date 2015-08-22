@@ -39,6 +39,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -46,8 +47,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.Util;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
 import org.wandora.application.gui.simple.SimpleTimeSlider;
+import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 
 /**
@@ -202,11 +205,16 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
         return UIBox.makeButtonContainer(new Object[] {
             "Play", UIBox.getIcon(0xf04b), this,
             "Pause", UIBox.getIcon(0xf04c), this,
+            "Stop", UIBox.getIcon(0xf04d), this,
             "Backward", UIBox.getIcon(0xf04a), this,
             "Forward", UIBox.getIcon(0xf04e), this,
             //"Start", UIBox.getIcon(0xf048), this,
             //"End", UIBox.getIcon(0xf051), this,
             "Restart", UIBox.getIcon(0xf0e2), this,
+            "---",
+            "Open ext", UIBox.getIcon(0xf08e), this,
+            "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Save as", UIBox.getIcon(0xf0c7), this, // f019
         }, this);
     }
 
@@ -300,7 +308,10 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
         if("Play".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
-                    player.play();
+                    Status status = player.getStatus();
+                    if(!status.equals(Status.PLAYING)) {
+                        player.play();
+                    }
                 }
             });
         }
@@ -308,7 +319,22 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
         else if("Pause".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
-                    player.pause();
+                    Status status = player.getStatus();
+                    if(status.equals(Status.PAUSED)) {
+                        player.play();
+                    }
+                    else if(status.equals(Status.PLAYING)) {
+                        player.pause();
+                    }
+                }
+            });
+        }
+        
+        else if("Stop".equalsIgnoreCase(actionCommand)) {
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    player.seek(player.getStartTime());
+                    player.stop();
                 }
             });
         }
@@ -336,6 +362,20 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
                     player.seek(player.getStartTime());
                 }
             });
+        }
+        
+        else if("Open ext".equalsIgnoreCase(actionCommand)) {
+            Util.forkExternalPlayer(mediaUrlString);
+        }
+        
+        else if("Save".equalsIgnoreCase(actionCommand)) {
+            Util.saveToFile(mediaUrlString);
+        }
+        
+        else if("Copy location".equalsIgnoreCase(actionCommand)) {
+            if(mediaUrlString != null) {
+                ClipboardBox.setClipboard(mediaUrlString);
+            }
         }
     }
     

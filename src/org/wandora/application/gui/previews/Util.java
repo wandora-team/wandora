@@ -23,6 +23,8 @@
 
 package org.wandora.application.gui.previews;
 
+import java.awt.Desktop;
+import java.io.File;
 import org.wandora.utils.Option;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import javax.swing.*;
@@ -30,10 +32,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Map;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.utils.DataURL;
 import org.wandora.utils.Functional.Fn0;
 import org.wandora.utils.Functional.Fn1;
+import org.wandora.utils.IObox;
 import static org.wandora.utils.Option.*;
 
 public class Util {
@@ -161,4 +169,65 @@ public class Util {
         return Option.none();
     }
     */
+    
+    
+    
+    // -------------------------------------------------------------------------
+
+    
+    
+    public static void forkExternalPlayer(String locator) {
+        if(locator != null && locator.length() > 0) {
+            if(!DataURL.isDataURL(locator)) {
+                System.out.println("Spawning viewer for \""+locator+"\"");
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    desktop.browse(new URI(locator));
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                        "Due to Java's security restrictions Wandora can't open the DataURI "+
+                        "in external application. Manually copy and paste the locator to browser's "+
+                        "address field to view the locator.", 
+                        "Can't open the locator in external application",
+                        WandoraOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+
+    public static void saveToFile(String locator) {
+        Wandora wandora = Wandora.getWandora();
+        SimpleFileChooser chooser = UIConstants.getFileChooser();
+        chooser.setDialogTitle("Save locator to file");
+        try {
+            chooser.setSelectedFile(new File(locator.substring(locator.lastIndexOf(File.pathSeparator)+1)));
+        }
+        catch(Exception e) {}
+        if(chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            try {
+                if(DataURL.isDataURL(locator)) {
+                    DataURL.saveToFile(locator, file);
+                }
+                else {
+                    IObox.moveUrl(new URL(locator), file);
+                }
+            }
+            catch(Exception e) {
+                System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + file.getPath() + "'.");
+            }
+        }
+    }
+    
+    
+    
 }

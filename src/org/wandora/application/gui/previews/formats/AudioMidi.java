@@ -196,34 +196,6 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
     
     
     
-    
-    public void forkAudioPlayer() {
-        if(audioLocator != null && audioLocator.length() > 0) {
-            if(!DataURL.isDataURL(audioLocator)) {
-                System.out.println("Spawning viewer for \""+audioLocator+"\"");
-                try {
-                    Desktop desktop = Desktop.getDesktop();
-                    desktop.browse(new URI(audioLocator));
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
-                        "Due to Java's security restrictions Wandora can't open the DataURI "+
-                        "in external application. Manually copy and paste the locator to browser's "+
-                        "address field to view the locator.", 
-                        "Can't open the locator in external application",
-                        WandoraOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }
-    
-    
-
-    
-    
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         if(mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
@@ -297,7 +269,7 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
             if(sequencer != null) sequencer.stop();
         }
         if(c.startsWith("Open in external")) {
-            forkAudioPlayer();
+            Util.forkExternalPlayer(audioLocator);
         }
         
         else if(c.equalsIgnoreCase("Copy audio location")) {
@@ -306,7 +278,7 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
             }
         }
         else if(c.startsWith("Save audio")) {
-            save();
+            Util.saveToFile(audioLocator);
         }
         else if(c.equalsIgnoreCase("Volume 100%")) {
             setVolume(100);

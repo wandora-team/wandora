@@ -69,6 +69,9 @@ public class PreviewFactory {
             else if(PDFnew.canView(urlString)) {
                 previewPanel = new PDFnew(urlString);
             }
+            else if(Text.canView(urlString)) {
+                previewPanel = new Text(urlString); 
+            }
             else if(XML.canView(urlString)) {
                 previewPanel = new XML(urlString);
             }
