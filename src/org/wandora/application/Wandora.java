@@ -2378,6 +2378,28 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
                     w.displayException("Unable to load N3 file '"+lastParam+"' due to an exception!", e);
                 }
             }
+            else if(lastParamLower.endsWith(".ttl")) {
+                try {
+                    SimpleRDFTurtleImport importer = new SimpleRDFTurtleImport();
+                    importer.setOptions(importer.getOptions() | TopicMapImport.CLOSE_LOGS);
+                    importer.forceFiles = new File(lastParam);
+                    importer.execute(w);
+                }
+                catch(Exception e) {
+                    w.displayException("Unable to load RDF turtle file '"+lastParam+"' due to an exception!", e);
+                }
+            }
+            else if(lastParamLower.endsWith(".jsonld")) {
+                try {
+                    SimpleRDFJsonLDImport importer = new SimpleRDFJsonLDImport();
+                    importer.setOptions(importer.getOptions() | TopicMapImport.CLOSE_LOGS);
+                    importer.forceFiles = new File(lastParam);
+                    importer.execute(w);
+                }
+                catch(Exception e) {
+                    w.displayException("Unable to load JSON-LD file '"+lastParam+"' due to an exception!", e);
+                }
+            }
         }
     }
 

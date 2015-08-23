@@ -76,10 +76,12 @@ import org.zmpp.swingui.DisplaySettings;
 import org.zmpp.swingui.FileSaveGameDataStore;
 import org.zmpp.swingui.GameInfoDialog;
 import org.zmpp.swingui.GameThread;
+import org.zmpp.swingui.JPanelMachineFactory;
 import org.zmpp.swingui.LineEditorImpl;
 import org.zmpp.swingui.PreferencesDialog;
 import org.zmpp.swingui.TextViewport;
 import org.zmpp.swingui.Viewport6;
+import org.zmpp.swingui.ZmppPanel;
 import org.zmpp.vm.Machine;
 import org.zmpp.vm.MachineFactory;
 import org.zmpp.vm.SaveGameDataStore;
@@ -109,9 +111,55 @@ public class ZMachine implements ActionListener, PreviewPanel {
     }
     
     
+    public void runStoryData(byte[] storydata) {
+        // Read in the story file
+        if (storydata != null) {
+            try {
+                JPanelMachineFactory factory = new JPanelMachineFactory(storydata);
+                machine = factory.buildMachine();
+                gamePanel = factory.getUI();      
+                gamePanel.startMachine();
+            }
+            catch (IOException ex) {
+                JOptionPane.showMessageDialog(null,
+                    String.format("Could not read game.\nReason: '%s'", ex.getMessage()),
+                    "Story data error", JOptionPane.ERROR_MESSAGE);
+            }
+        } 
+        else {
+            JOptionPane.showMessageDialog(null,
+                String.format("The selected story data was illegal"),
+                "Story url not found", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    public void runStoryUrl(URL storyurl) {
+        // Read in the story file
+        if (storyurl != null) {
+            try {
+                JPanelMachineFactory factory = new JPanelMachineFactory(storyurl);
+                machine = factory.buildMachine();
+                gamePanel = factory.getUI();      
+                gamePanel.startMachine();
+            }
+            catch (IOException ex) {
+                JOptionPane.showMessageDialog(null,
+                    String.format("Could not read game.\nReason: '%s'", ex.getMessage()),
+                    "Story file error", JOptionPane.ERROR_MESSAGE);
+            }
+        } 
+        else {
+            JOptionPane.showMessageDialog(null,
+                String.format("The selected story url '%s' was not found",
+                storyurl != null ? storyurl : ""),
+                "Story url not found", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
     
     public void runStoryFile(File storyfile) {
-
         // Read in the story file
         if (storyfile != null && storyfile.exists() && storyfile.isFile()) {
             JPanelMachineFactory factory;
@@ -185,7 +233,15 @@ public class ZMachine implements ActionListener, PreviewPanel {
         
         if(gamePanel == null) {
             try {
-                runStoryFile(new File((new URL(locator)).toURI()) );
+                if(DataURL.isDataURL(locator)) {
+                    runStoryData((new DataURL(locator)).getData() );
+                }
+                else if(locator.startsWith("file:")) {
+                    runStoryFile(new File((new URL(locator)).toURI()) );
+                }
+                else {
+                    runStoryUrl(new URL(locator));
+                }
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -207,12 +263,12 @@ public class ZMachine implements ActionListener, PreviewPanel {
 
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Restart", UIBox.getIcon(0xf04b), this,
-            "Info", UIBox.getIcon(0xf04c), this,
-            "Stop", UIBox.getIcon(0xf04d), this,
+            //"Restart", UIBox.getIcon(0xf021), this,
+            //"Info", UIBox.getIcon(0xf129), this,
+            "Preferences", UIBox.getIcon(0xf013), this,
             "Open ext", UIBox.getIcon(0xf08e), this,
             "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Save as", UIBox.getIcon(0xf0c7), this, // f019
+            "Save", UIBox.getIcon(0xf0c7), this, // f019
         }, this);
     }
     
@@ -253,7 +309,25 @@ public class ZMachine implements ActionListener, PreviewPanel {
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         
-        if(startsWithAny(cmd, "Restart")) {
+        if(startsWithAny(cmd, "Preferences")) {
+            EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    if(gamePanel != null) {
+                        gamePanel.editPreferences(Wandora.getWandora());
+                    }
+                }
+            });
+        }
+        else if(startsWithAny(cmd, "Info")) {
+            EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    if(gamePanel != null) {
+                        gamePanel.aboutGame(Wandora.getWandora());
+                    }
+                }
+            });
+        }
+        else if(startsWithAny(cmd, "Restart")) {
             EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     if(machine != null) {
@@ -330,428 +404,5 @@ public class ZMachine implements ActionListener, PreviewPanel {
     
     
     
-    // -------------------------------------------------------------------------
-    // ------------------------------------------------ JPanelMachineFactory ---
-    // -------------------------------------------------------------------------
-    
-    
-    
-    public class JPanelMachineFactory extends MachineFactory<ZmppPanel> {
-
-        private File storyfile;
-        private File blorbfile;
-        private ZmppPanel zmppPanel;
-        private FormChunk blorbchunk;
-        private SaveGameDataStore savegamestore;
-  
-        public JPanelMachineFactory(File storyfile, File blorbfile) {
-            this.storyfile = storyfile;
-            this.blorbfile = blorbfile;
-        }
-
-        public JPanelMachineFactory(File blorbfile) {
-            this.blorbfile = blorbfile;
-        }
-  
-        /**
-         * {@inheritDoc}
-         */
-        protected byte[] readStoryData() throws IOException {
-
-            if (storyfile != null) {
-                return FileUtils.readFileBytes(storyfile);
-            } 
-            else {
-              // Read from Z BLORB
-              FormChunk formchunk = readBlorb();
-              return formchunk != null ? new BlorbStory(formchunk).getStoryData() : null;
-            }
-        }
-  
-        private FormChunk readBlorb() throws IOException {
-            if (blorbchunk == null) {
-                byte[] data = FileUtils.readFileBytes(blorbfile);
-                if (data != null) {
-                    blorbchunk = new DefaultFormChunk(new DefaultMemoryAccess(data));
-                    if (!"IFRS".equals(new String(blorbchunk.getSubId()))) {
-                        throw new IOException("not a valid Blorb file");
-                    }
-                }
-            }
-            return blorbchunk;
-        }
-  
-        /**
-         * {@inheritDoc}
-         */
-        protected Resources readResources() throws IOException {
-            FormChunk formchunk = readBlorb();
-            return (formchunk != null) ? new BlorbResources(formchunk) : null;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        protected void reportInvalidStory() {
-            JOptionPane.showMessageDialog(null,
-                "Invalid story file.",
-                "Story file read error", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
-        }
-      
-        
-        /**
-         * {@inheritDoc}
-         */
-        protected ZmppPanel initUI(Machine machine) {
-
-          zmppPanel = new ZmppPanel(machine);
-          savegamestore = new FileSaveGameDataStore(zmppPanel);
-          return zmppPanel;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public ZmppPanel getUI() { return zmppPanel; }
-
-        /**
-         * {@inheritDoc}
-         */
-        protected IOSystem getIOSystem() { return zmppPanel; }  
-
-        /**
-         * {@inheritDoc}
-         */
-        protected InputStream getKeyboardInputStream() { return zmppPanel; }
-
-        /**
-         * {@inheritDoc}
-         */
-        protected StatusLine getStatusLine() { return zmppPanel; }
-
-        /**
-         * {@inheritDoc}
-         */
-        protected ScreenModel getScreenModel() { return zmppPanel.getScreenModel(); }
-
-        /**
-         * {@inheritDoc}
-         */
-        protected SaveGameDataStore getSaveGameDataStore() { return savegamestore; }
-    }
-
-    
-    
-    
-    
-    
-    // -------------------------------------------------------------------------
-    // ----------------------------------------------------------- ZmppPanel ---
-    // -------------------------------------------------------------------------
-    
-    
-    
-    public class ZmppPanel extends JPanel implements InputStream, StatusLine, IOSystem {
-
-        /**
-         * Serial version UID.
-         */
-        private static final long serialVersionUID = 1L;
-
-        private JLabel global1ObjectLabel;
-        private JLabel statusLabel;
-        private ScreenModel screen;
-        private Machine machine;
-        private LineEditorImpl lineEditor;
-        private GameThread currentGame;
-        private DisplaySettings settings;
-        private Preferences preferences;
-
-        /**
-         * Constructor.
-         * 
-         * @param machine a Machine object
-         */
-        public ZmppPanel(final Machine machine) {
-
-            this.machine = machine;
-            lineEditor = new LineEditorImpl(machine.getGameData().getStoryFileHeader(),
-                machine.getGameData().getZsciiEncoding());
-
-            JComponent view = null;
-
-            preferences = Preferences.userNodeForPackage(ZmppPanel.class);
-            settings = createDisplaySettings(preferences);
-
-            if (machine.getGameData().getStoryFileHeader().getVersion() ==  6) {
-                view = new Viewport6(machine, lineEditor, settings);
-                screen = (ScreenModel) view;
-            } 
-            else {
-                view = new TextViewport(machine, lineEditor, settings);
-                screen = (ScreenModel) view;
-            }
-            view.setPreferredSize(new Dimension(640, 476));
-            view.setMinimumSize(new Dimension(400, 300));
-
-            if (machine.getGameData().getStoryFileHeader().getVersion() <= 3) {
-                JPanel statusPanel = new JPanel(new GridLayout(1, 2));
-                JPanel status1Panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-                JPanel status2Panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-                statusPanel.add(status1Panel);
-                statusPanel.add(status2Panel);
-
-                global1ObjectLabel = new JLabel(" ");
-                statusLabel = new JLabel(" ");
-                status1Panel.add(global1ObjectLabel);
-                status2Panel.add(statusLabel);    
-                this.add(statusPanel, BorderLayout.NORTH);
-                this.add(view, BorderLayout.CENTER);
-            } 
-            else {
-                this.add(view, BorderLayout.CENTER);
-            }
-
-            JPopupMenu menubar = new JPopupMenu();
-            this.setComponentPopupMenu(menubar);
-
-            JMenu fileMenu = new JMenu("File");
-            fileMenu.setMnemonic('F');
-            menubar.add(fileMenu);
-
-            // Quit is already in the application menu
-            JMenuItem exitItem = new JMenuItem("Exit");
-            exitItem.setMnemonic('x');
-            fileMenu.add(exitItem);
-            exitItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    // System.exit(0);
-                    System.out.println("EXIT!");
-                }
-            });
-
-            JMenu editMenu = new JMenu("Edit");
-            menubar.add(editMenu);
-            editMenu.setMnemonic('E');
-            JMenuItem preferencesItem = new JMenuItem("Preferences...");
-            preferencesItem.setMnemonic('P');
-            editMenu.add(preferencesItem);
-            preferencesItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    editPreferences();
-                }
-            });
-
-            JMenu helpMenu = new JMenu("Help");
-            menubar.add(helpMenu);
-            helpMenu.setMnemonic('H');
-
-            JMenuItem aboutItem = new JMenuItem("About ZMPP...");
-            aboutItem.setMnemonic('A');
-            helpMenu.add(aboutItem);
-            aboutItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    about();
-                }
-            });
-
-            //addKeyListener(lineEditor);
-            view.addKeyListener(lineEditor);
-            view.addMouseListener(lineEditor);
-
-            // just for debugging
-            view.addMouseMotionListener(new MouseMotionAdapter() {
-                public void mouseMoved(MouseEvent e) {
-                    //System.out.printf("mouse pos: %d %d\n", e.getX(), e.getY());
-                }
-            });
-
-            // Add an info dialog and a title if metadata exists
-            Resources resources = machine.getGameData().getResources();
-            if (resources != null && resources.getMetadata() != null) {
-                StoryMetadata storyinfo = resources.getMetadata().getStoryInfo();
-                setTitle(storyinfo.getTitle() + " (" + storyinfo.getAuthor() + ")");
-
-                JMenuItem aboutGameItem = new JMenuItem("About this Game ...");
-                helpMenu.add(aboutGameItem);
-                aboutGameItem.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        aboutGame();
-                    }
-                });
-            }
-        }
-        
-
-
-        public void setTitle(String title) {
-            System.out.println("title: "+title);
-        }
-
-
-        /**
-         * Access to screen model.
-         * 
-         * @return the screen model
-         */
-        public ScreenModel getScreenModel() {
-            return screen;
-        }
-
-        public void startMachine() {
-            currentGame = new GameThread(machine, screen);
-            currentGame.start();
-        }
-
-        
-        
-        
-        // *************************************************************************
-        // ******** StatusLine interface
-        // ******************************************
-
-        
-        @Override
-        public void updateStatusScore(final String objectName, final int score, final int steps) {
-            EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    global1ObjectLabel.setText(objectName);
-                    statusLabel.setText(score + "/" + steps);
-                }
-            });
-        }
-
-        
-        @Override
-        public void updateStatusTime(final String objectName, final int hours, final int minutes) {
-            EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    global1ObjectLabel.setText(objectName);
-                    statusLabel.setText(String.format("%02d:%02d", hours, minutes));
-                }
-            });
-        }
-        
-                
-
-        // *************************************************************************
-        // ******** IOSystem interface
-        // ******************************************
-
-        
-        @Override
-        public Writer getTranscriptWriter() {
-            File currentdir = new File(System.getProperty("user.dir"));    
-            JFileChooser fileChooser = new JFileChooser(currentdir);
-            fileChooser.setDialogTitle("Set transcript file ...");
-            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                try {
-                  return new FileWriter(fileChooser.getSelectedFile());
-                }
-                catch (IOException ex) {
-                  ex.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        
-        @Override
-        public Reader getInputStreamReader() {
-            File currentdir = new File(System.getProperty("user.dir"));    
-            JFileChooser fileChooser = new JFileChooser(currentdir);
-            fileChooser.setDialogTitle("Set input stream file ...");
-            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                try {
-                  return new FileReader(fileChooser.getSelectedFile());
-                }
-                catch (IOException ex) {
-                  ex.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        
-        
-        
-        
-        // *************************************************************************
-        // ******** InputStream interface
-        // ******************************************
-
-        
-        public void close() { 
-        }
-
-        
-        public void cancelInput() {
-            lineEditor.cancelInput();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public short getZsciiChar(boolean flushBeforeGet) {
-            enterEditMode(flushBeforeGet);
-            short zsciiChar = lineEditor.nextZsciiChar();
-            leaveEditMode(flushBeforeGet);
-            return zsciiChar;
-        }
-        
-
-        private void enterEditMode(boolean flushbuffer) {
-            if (!lineEditor.isInputMode()) {
-                screen.resetPagers();
-                lineEditor.setInputMode(true, flushbuffer);
-            }
-        }
-
-        
-        private void leaveEditMode(boolean flushbuffer) {
-            lineEditor.setInputMode(false, flushbuffer);
-        }
-
-        
-        
-        // -------------------------------------
-        
-        
-        private void about() {
-          JOptionPane.showMessageDialog(this,
-              "\n\u00a9 2005-2006 by Wei-ju Wu\n" +
-              "This software is released under the GNU public license.",
-              "About...",
-              JOptionPane.INFORMATION_MESSAGE);
-        }
-
-        
-        private void aboutGame() {
-            GameInfoDialog dialog = new GameInfoDialog(Wandora.getWandora(),machine.getGameData().getResources());
-            dialog.setVisible(true);
-        }
-        
-
-        private void editPreferences() {
-            PreferencesDialog dialog = new PreferencesDialog(Wandora.getWandora(), preferences, settings);
-            dialog.setLocationRelativeTo(this);
-            dialog.setVisible(true);
-        }
-
-        
-        private DisplaySettings createDisplaySettings(Preferences preferences) {
-            int stdfontsize = preferences.getInt("stdfontsize", 12);
-            int fixedfontsize = preferences.getInt("fixedfontsize", 12);
-            int defaultforeground = preferences.getInt("defaultforeground", ColorTranslator.UNDEFINED);
-            int defaultbackground = preferences.getInt("defaultbackground", ColorTranslator.UNDEFINED);
-            boolean antialias = preferences.getBoolean("antialias", true);
-
-            return new DisplaySettings(stdfontsize, fixedfontsize, defaultbackground, defaultforeground, antialias);    
-        }
-
-        
-    }
-
     
 }
