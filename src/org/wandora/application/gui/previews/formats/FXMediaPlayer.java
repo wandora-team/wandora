@@ -67,6 +67,8 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
     private SimpleTimeSlider progressBar;
     private Media media;
 
+    private boolean hasProblems = false;
+    
 
     public FXMediaPlayer(String mediaUrlString) {
         Platform.setImplicitExit(false);
@@ -101,6 +103,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
         Platform.runLater(new Runnable() {
             @Override 
             public void run() {
+                hasProblems = false;
                 Group root = new Group();
                 scene = new Scene(root);
                 scene.setCursor(Cursor.HAND);
@@ -138,19 +141,33 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
     
     
     private Media getMediaFor(String mediaLocator) {
-        Media m = new Media(mediaLocator);
+        final Media m = new Media(mediaLocator);
         if(m.getError() == null) {
             m.setOnError(new Runnable() {
                 public void run() {
                     // Handle asynchronous error in Media object.
+                    if(!hasProblems) {
+                        hasProblems = true;
+                        if(progressBar != null) {
+                            progressBar.setString("Could not play the media. "+m.getError().getMessage());
+                        }
+                    }
                     System.out.println("Asynchronous error while running media player.");
+                    m.getError().printStackTrace();
                 }
             });
             return m;
         }
         else {
             // Handle synchronous error creating Media.
+            if(!hasProblems) {
+                hasProblems = true;
+                if(progressBar != null) {
+                    progressBar.setString("Could not play the media. "+m.getError().getMessage());
+                }
+            }
             System.out.println("Synchronous error running media player.");
+            m.getError().printStackTrace();
         }
         return null;
     }
@@ -182,18 +199,38 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
                 mediaPlayer.setOnError(new Runnable() {
                     public void run() {
                         // Handle asynchronous error in MediaPlayer object.
+                        if(!hasProblems) {
+                            hasProblems = true;
+                            if(progressBar != null) {
+                                progressBar.setString("Error in media player. "+mediaPlayer.getError().getMessage());
+                            }
+                        }
                         System.out.println("Error while running media player.");
+                        mediaPlayer.getError().printStackTrace();
                     }
                 });
                 return mediaPlayer;
             }
             else {
                 // Handle synchronous error creating MediaPlayer.
+                if(!hasProblems) {
+                    hasProblems = true;
+                    if(progressBar != null) {
+                        progressBar.setString("Error in media player. "+mediaPlayer.getError().getMessage());
+                    }
+                }
                 System.out.println("Synchronous error creating media player.");
+                mediaPlayer.getError().printStackTrace();
             }
         }
         catch(Exception e) {
             // Handle exception creating MediaPlayer.
+            if(!hasProblems) {
+                hasProblems = true;
+                if(progressBar != null) {
+                    progressBar.setString("Error in media player. "+e.getMessage());
+                }
+            }
             System.out.println("Exception creating media player.");
             e.printStackTrace();
         }
