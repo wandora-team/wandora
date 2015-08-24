@@ -184,6 +184,14 @@ public class Util {
                     Desktop desktop = Desktop.getDesktop();
                     desktop.browse(new URI(locator));
                 }
+                catch(IOException ioe) {
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                        "Due to Java's security restrictions Wandora can't open some local URLs "+
+                        "in external application. Copy and paste the locator manually to browser's "+
+                        "address field to view the locator.", 
+                        "Can't open the locator in external application",
+                        WandoraOptionPane.WARNING_MESSAGE);
+                }
                 catch(Exception e) {
                     e.printStackTrace();
                 }
@@ -191,7 +199,7 @@ public class Util {
             else {
                 WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
                         "Due to Java's security restrictions Wandora can't open the DataURI "+
-                        "in external application. Manually copy and paste the locator to browser's "+
+                        "in external application. Copy and paste the locator manually to browser's "+
                         "address field to view the locator.", 
                         "Can't open the locator in external application",
                         WandoraOptionPane.WARNING_MESSAGE);

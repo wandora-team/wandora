@@ -41,6 +41,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.StringTokenizer;
@@ -62,32 +63,12 @@ import static org.wandora.application.gui.previews.Util.endsWithAny;
 import static org.wandora.application.gui.previews.Util.startsWithAny;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
-import org.zmpp.base.DefaultMemoryAccess;
-import org.zmpp.blorb.BlorbResources;
-import org.zmpp.blorb.BlorbStory;
-import org.zmpp.iff.DefaultFormChunk;
-import org.zmpp.iff.FormChunk;
-import org.zmpp.io.IOSystem;
-import org.zmpp.io.InputStream;
-import org.zmpp.media.Resources;
-import org.zmpp.media.StoryMetadata;
-import org.zmpp.swingui.ColorTranslator;
-import org.zmpp.swingui.DisplaySettings;
-import org.zmpp.swingui.FileSaveGameDataStore;
-import org.zmpp.swingui.GameInfoDialog;
-import org.zmpp.swingui.GameThread;
-import org.zmpp.swingui.JPanelMachineFactory;
-import org.zmpp.swingui.LineEditorImpl;
-import org.zmpp.swingui.PreferencesDialog;
-import org.zmpp.swingui.TextViewport;
-import org.zmpp.swingui.Viewport6;
+import org.zmpp.swingui.PanelMachineFactory;
 import org.zmpp.swingui.ZmppPanel;
+import org.zmpp.vm.Cpu;
+import org.zmpp.vm.Input;
 import org.zmpp.vm.Machine;
-import org.zmpp.vm.MachineFactory;
-import org.zmpp.vm.SaveGameDataStore;
-import org.zmpp.vm.ScreenModel;
-import org.zmpp.vm.StatusLine;
-import org.zmpp.vmutil.FileUtils;
+import org.zmpp.vm.Output;
 
 
 
@@ -111,94 +92,84 @@ public class ZMachine implements ActionListener, PreviewPanel {
     }
     
     
-    public void runStoryData(byte[] storydata) {
-        // Read in the story file
-        if (storydata != null) {
-            try {
-                JPanelMachineFactory factory = new JPanelMachineFactory(storydata);
-                machine = factory.buildMachine();
-                gamePanel = factory.getUI();      
-                gamePanel.startMachine();
+    
+    public void runStory(String locator) {
+        PanelMachineFactory factory = null;
+        
+        // First get a game factory with the locator. The factory is always
+        // PanelMachineFactory but the instantiation varies and depends on the
+        // locator. Locator can be either a file, an url or a dataurl.
+        try {
+            if(DataURL.isDataURL(locator)) {
+                DataURL storyDataURL = new DataURL(locator);
+                byte[] storyData = storyDataURL.getData();
+                if(storyDataURL.getMimetype().contains("application/x-blorb")) {
+                    factory = new PanelMachineFactory(storyData); // storyData == blorb
+                }
+                else {
+                    factory = new PanelMachineFactory(storyData, null); 
+                }
             }
-            catch (IOException ex) {
-                JOptionPane.showMessageDialog(null,
-                    String.format("Could not read game.\nReason: '%s'", ex.getMessage()),
-                    "Story data error", JOptionPane.ERROR_MESSAGE);
-            }
-        } 
-        else {
-            JOptionPane.showMessageDialog(null,
-                String.format("The selected story data was illegal"),
-                "Story url not found", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    
-    public void runStoryUrl(URL storyurl) {
-        // Read in the story file
-        if (storyurl != null) {
-            try {
-                JPanelMachineFactory factory = new JPanelMachineFactory(storyurl);
-                machine = factory.buildMachine();
-                gamePanel = factory.getUI();      
-                gamePanel.startMachine();
-            }
-            catch (IOException ex) {
-                JOptionPane.showMessageDialog(null,
-                    String.format("Could not read game.\nReason: '%s'", ex.getMessage()),
-                    "Story file error", JOptionPane.ERROR_MESSAGE);
-            }
-        } 
-        else {
-            JOptionPane.showMessageDialog(null,
-                String.format("The selected story url '%s' was not found",
-                storyurl != null ? storyurl : ""),
-                "Story url not found", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    
-    
-    public void runStoryFile(File storyfile) {
-        // Read in the story file
-        if (storyfile != null && storyfile.exists() && storyfile.isFile()) {
-            JPanelMachineFactory factory;
-            if(isZblorbSuffix(storyfile.getName())) {
-                factory = new JPanelMachineFactory(storyfile);
+            else if(locator.startsWith("file:")) {
+                File storyFile = new File((new URL(locator)).toURI());
+                if(storyFile.isFile() && storyFile.exists()) {
+                    String filename = storyFile.getName();
+                    if(filename.endsWith("zblorb") || filename.endsWith("zlb")) {
+                        factory = new PanelMachineFactory(storyFile); // storyFile == blorb
+                    }
+                    else {
+                        File blorbfile = searchForResources(storyFile);
+                        factory = new PanelMachineFactory(storyFile, blorbfile);
+                    }
+                }
             }
             else {
-                File blorbfile = searchForResources(storyfile);
-                factory = new JPanelMachineFactory(storyfile, blorbfile);
+                if(locator.endsWith("zblorb") || locator.endsWith("zlb")) {
+                    factory = new PanelMachineFactory(null, new URL(locator));
+                }
+                else {
+                    factory = new PanelMachineFactory(new URL(locator), null);
+                }
             }
-
+        }
+        catch(MalformedURLException mfue) {
+            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                    "Illegal URL used as a Z Machine source.", "Illegal URL", 
+                    WandoraOptionPane.WARNING_MESSAGE);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        // Now we should have a valid game factory. Create ui and start the game.
+        if(factory != null) {
             try {
                 machine = factory.buildMachine();
                 gamePanel = factory.getUI();      
                 gamePanel.startMachine();
             }
-            catch (IOException ex) {
-                JOptionPane.showMessageDialog(null,
-                    String.format("Could not read game.\nReason: '%s'", ex.getMessage()),
-                    "Story file error", JOptionPane.ERROR_MESSAGE);
+            catch(IOException ioe) {
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                        "Could not read the Z Machine source.", "Read error", 
+                        WandoraOptionPane.WARNING_MESSAGE);
             }
-        } 
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
         else {
-            JOptionPane.showMessageDialog(null,
-                String.format("The selected story file '%s' was not found",
-                storyfile != null ? storyfile.getPath() : ""),
-                "Story file not found", JOptionPane.ERROR_MESSAGE);
+            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                    "Could not initialize game.", "Story file error", 
+                    WandoraOptionPane.WARNING_MESSAGE);
         }
     }
     
     
-
-    private static boolean isZblorbSuffix(String filename) {
-        return filename.endsWith("zblorb") || filename.endsWith("zlb");
-    }
-  
+        
+    
     
     /**
-     * Trys to find a resource file in Blorb format.
+     * Tries to find a resource file in Blorb format.
      * 
      * @param storyfile the storyfile
      * @return the blorb file if one exists or null
@@ -213,11 +184,9 @@ public class ZMachine implements ActionListener, PreviewPanel {
                             + prefix + ".blorb";
 
         File blorbfile1 = new File(blorbpath1);
-        System.out.printf("does '%s' exist ? -> %b\n", blorbfile1.getPath(), blorbfile1.exists());
         if (blorbfile1.exists()) return blorbfile1;
 
         File blorbfile2 = new File(blorbpath2);
-        System.out.printf("does '%s' exist ? -> %b\n", blorbfile2.getPath(), blorbfile2.exists());
         if (blorbfile2.exists()) return blorbfile2;
 
         return null;
@@ -233,15 +202,7 @@ public class ZMachine implements ActionListener, PreviewPanel {
         
         if(gamePanel == null) {
             try {
-                if(DataURL.isDataURL(locator)) {
-                    runStoryData((new DataURL(locator)).getData() );
-                }
-                else if(locator.startsWith("file:")) {
-                    runStoryFile(new File((new URL(locator)).toURI()) );
-                }
-                else {
-                    runStoryUrl(new URL(locator));
-                }
+                runStory(locator);
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -249,7 +210,6 @@ public class ZMachine implements ActionListener, PreviewPanel {
         }
         
         JPanel gameWrapperPanel = new JPanel();
-        // gameWrapperPanel.setBackground(Color.WHITE);
         if(gamePanel != null) gameWrapperPanel.add(gamePanel, BorderLayout.CENTER);
         
         ui.setLayout(new BorderLayout(8,8));       
@@ -280,7 +240,20 @@ public class ZMachine implements ActionListener, PreviewPanel {
     public void stop() {
         if(machine != null) {
             System.out.println("Stopping machine!");
-            //machine.quit();
+            /*
+            Input in = machine.getInput();
+            if(in != null) {
+                in.close();
+            }
+            Output out = machine.getOutput();
+            if(out != null) {
+                out.close();
+            }
+            Cpu cpu = machine.getCpu();
+            if(cpu != null) {
+                cpu.setRunning(false);
+            }
+            */
         }
     }
 
@@ -288,10 +261,26 @@ public class ZMachine implements ActionListener, PreviewPanel {
     public void finish() {
         if(machine != null) {
             System.out.println("Finishing machine!");
-            //machine.quit();
+            
+            /*
+            Input in = machine.getInput();
+            if(in != null) {
+                in.close();
+            }
+            Output out = machine.getOutput();
+            if(out != null) {
+                out.close();
+            }
+            Cpu cpu = machine.getCpu();
+            if(cpu != null) {
+                cpu.setRunning(false);
+            }
+            */
         }
     }
 
+    
+    
     @Override
     public Component getGui() {
         if(ui == null) {
@@ -375,15 +364,16 @@ public class ZMachine implements ActionListener, PreviewPanel {
                     String mimeType = dataURL.getMimetype();
                     if(mimeType != null) {
                         String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("application/z1") ||
-                           lowercaseMimeType.startsWith("application/z2") ||
-                           lowercaseMimeType.startsWith("application/z3") ||
-                           lowercaseMimeType.startsWith("application/z4") ||
-                           lowercaseMimeType.startsWith("application/z5") ||
-                           lowercaseMimeType.startsWith("application/z6") ||
-                           lowercaseMimeType.startsWith("application/z7") ||
-                           lowercaseMimeType.startsWith("application/z8") ||
-                           lowercaseMimeType.startsWith("application/zblorb")) {
+                        if(lowercaseMimeType.startsWith("application/x-zmachine") ||
+                           lowercaseMimeType.startsWith("application/x-zmachine-1") ||
+                           lowercaseMimeType.startsWith("application/x-zmachine-2") ||
+                           lowercaseMimeType.startsWith("application/x-zmachine-3") ||
+                           lowercaseMimeType.startsWith("application/x-zmachine-4") ||
+                           lowercaseMimeType.startsWith("application/x-zmachine-5") ||
+                           lowercaseMimeType.startsWith("application/x-zmachine-6") ||
+                           lowercaseMimeType.startsWith("application/x-zmachine-7") ||
+                           lowercaseMimeType.startsWith("application/x-zmachine-8") ||
+                           lowercaseMimeType.startsWith("application/x-blorb")) {
                                 return true;
                         }
                     }

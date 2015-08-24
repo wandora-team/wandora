@@ -1586,3 +1586,13 @@ video/x-msvideo					avi
 video/x-sgi-movie				movie
 video/x-smv					smv
 x-conference/x-cooltalk				ice
+application/x-zmachine				z5
+application/x-zmachine-1				z1
+application/x-zmachine-2				z2
+application/x-zmachine-3				z3
+application/x-zmachine-4				z4
+application/x-zmachine-5				z5
+application/x-zmachine-6				z6
+application/x-zmachine-7				z7
+application/x-zmachine-8				z8
+application/x-blorb					zblorb
