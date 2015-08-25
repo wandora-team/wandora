@@ -51,8 +51,8 @@ public class AudioSid extends AudioMod {
             "Stop", UIBox.getIcon(0xf04d), this,
             "Previous", UIBox.getIcon(0xf048), this,
             "Next", UIBox.getIcon(0xf051), this,
-            "Open ext", UIBox.getIcon(0xf08e), this,
             "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Open ext", UIBox.getIcon(0xf08e), this,
             "Save as", UIBox.getIcon(0xf0c7), this, // f019
         }, this);
     }

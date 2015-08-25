@@ -44,8 +44,9 @@ import static org.wandora.utils.Functional.*;
 public class PreviewWrapper extends JPanel {
     private PreviewPanel currentPanel = null;
     private Component currentUI = null;
+    private Wandora wandora = null;
     
-    Wandora wandora = null;
+    
     
     /**
      * Creates a new instance of PreviewWrapper
@@ -89,6 +90,7 @@ public class PreviewWrapper extends JPanel {
         
         try {
             currentPanel = PreviewFactory.create(subjectLocator);
+            System.out.println("Created preview "+currentPanel.getClass()+" for "+subjectLocator.toExternalForm());
         }
         catch(Exception e) {
             System.out.println("Warning: Exception thrown when creating preview.");

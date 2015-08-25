@@ -23,37 +23,17 @@
 package org.wandora.application.gui.previews.formats;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.StringTokenizer;
-import java.util.prefs.Preferences;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -226,8 +206,8 @@ public class ZMachine implements ActionListener, PreviewPanel {
             //"Restart", UIBox.getIcon(0xf021), this,
             //"Info", UIBox.getIcon(0xf129), this,
             "Preferences", UIBox.getIcon(0xf013), this,
-            "Open ext", UIBox.getIcon(0xf08e), this,
             "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Open ext", UIBox.getIcon(0xf08e), this,
             "Save", UIBox.getIcon(0xf0c7), this, // f019
         }, this);
     }

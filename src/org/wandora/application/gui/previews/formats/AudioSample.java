@@ -261,8 +261,8 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
             "Play", UIBox.getIcon(0xf04b), this,
             // "Pause", UIBox.getIcon(0xf04c), this,
             "Stop", UIBox.getIcon(0xf04d), this,
-            "Open ext", UIBox.getIcon(0xf08e), this,
             "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Open ext", UIBox.getIcon(0xf08e), this,
             "Save as", UIBox.getIcon(0xf0c7), this, // f019
         }, this);
     }

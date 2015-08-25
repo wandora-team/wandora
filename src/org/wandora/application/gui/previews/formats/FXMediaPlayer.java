@@ -25,6 +25,7 @@ package org.wandora.application.gui.previews.formats;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -43,12 +44,14 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.Util;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
@@ -67,7 +70,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
     private SimpleTimeSlider progressBar;
     private Media media;
 
-    private boolean hasProblems = false;
+    private JPanel errorPanel = null;
     
 
     public FXMediaPlayer(String mediaUrlString) {
@@ -99,11 +102,11 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
         this.add(progressBarContainer, BorderLayout.CENTER);
         this.add(controllerPanel, BorderLayout.SOUTH);
         
+        errorPanel = null;
         
         Platform.runLater(new Runnable() {
             @Override 
             public void run() {
-                hasProblems = false;
                 Group root = new Group();
                 scene = new Scene(root);
                 scene.setCursor(Cursor.HAND);
@@ -141,33 +144,22 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
     
     
     private Media getMediaFor(String mediaLocator) {
-        final Media m = new Media(mediaLocator);
-        if(m.getError() == null) {
-            m.setOnError(new Runnable() {
-                public void run() {
-                    // Handle asynchronous error in Media object.
-                    if(!hasProblems) {
-                        hasProblems = true;
-                        if(progressBar != null) {
-                            progressBar.setString("Could not play the media. "+m.getError().getMessage());
-                        }
+        try {
+            final Media m = new Media(mediaLocator);
+            if(m.getError() == null) {
+                m.setOnError(new Runnable() {
+                    public void run() {
+                        processError(m.getError());
                     }
-                    System.out.println("Asynchronous error while running media player.");
-                    m.getError().printStackTrace();
-                }
-            });
-            return m;
-        }
-        else {
-            // Handle synchronous error creating Media.
-            if(!hasProblems) {
-                hasProblems = true;
-                if(progressBar != null) {
-                    progressBar.setString("Could not play the media. "+m.getError().getMessage());
-                }
+                });
+                return m;
             }
-            System.out.println("Synchronous error running media player.");
-            m.getError().printStackTrace();
+            else {
+                processError(m.getError());
+            }
+        }
+        catch(Exception e) {
+            processError(e);
         }
         return null;
     }
@@ -198,44 +190,47 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
                 });
                 mediaPlayer.setOnError(new Runnable() {
                     public void run() {
-                        // Handle asynchronous error in MediaPlayer object.
-                        if(!hasProblems) {
-                            hasProblems = true;
-                            if(progressBar != null) {
-                                progressBar.setString("Error in media player. "+mediaPlayer.getError().getMessage());
-                            }
-                        }
-                        System.out.println("Error while running media player.");
-                        mediaPlayer.getError().printStackTrace();
+                        processError(mediaPlayer.getError());
                     }
                 });
                 return mediaPlayer;
             }
             else {
-                // Handle synchronous error creating MediaPlayer.
-                if(!hasProblems) {
-                    hasProblems = true;
-                    if(progressBar != null) {
-                        progressBar.setString("Error in media player. "+mediaPlayer.getError().getMessage());
-                    }
-                }
-                System.out.println("Synchronous error creating media player.");
-                mediaPlayer.getError().printStackTrace();
+                processError(mediaPlayer.getError());
             }
         }
         catch(Exception e) {
-            // Handle exception creating MediaPlayer.
-            if(!hasProblems) {
-                hasProblems = true;
-                if(progressBar != null) {
-                    progressBar.setString("Error in media player. "+e.getMessage());
-                }
-            }
-            System.out.println("Exception creating media player.");
-            e.printStackTrace();
+            processError(e);
         }
         return null;
     }
+    
+    
+    
+    private void processError(Exception e) {
+        if(e != null) {
+            if(errorPanel == null) {
+                
+                errorPanel = new JPanel();
+                errorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+                errorPanel.setBorder(BorderFactory.createLineBorder(java.awt.Color.RED, 4));
+                
+                String message = "<html><center>Can't view preview for '"+mediaUrlString+"'. <br> " +e.getMessage()+"</center></html>";
+                SimpleLabel label = new SimpleLabel();
+                label.setText(message);
+                label.setHorizontalAlignment(SimpleLabel.CENTER);
+                errorPanel.add(label);
+                
+                this.removeAll();
+                this.add(errorPanel, BorderLayout.CENTER);
+                
+                this.revalidate();
+                this.repaint();
+            }
+            e.printStackTrace();
+        }
+    }
+    
     
     
     private JComponent getJToolBar() {
@@ -357,7 +352,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
             Platform.runLater(new Runnable() {
                 @Override public void run() {
                     Status status = player.getStatus();
-                    if(status.equals(Status.PAUSED)) {
+                    if(status.equals(Status.PAUSED) || status.equals(Status.READY) || status.equals(Status.STOPPED)) {
                         player.play();
                     }
                     else if(status.equals(Status.PLAYING)) {

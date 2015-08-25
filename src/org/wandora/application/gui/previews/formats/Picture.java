@@ -280,12 +280,13 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     
     private JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Open ext", UIBox.getIcon(0xf08e), this,
             "Zoom in", UIBox.getIcon(0xf00e), this,
             "Zoom out", UIBox.getIcon(0xf010), this,
-            "Copy image", UIBox.getIcon(0xf0c5), this,
+            "Reset size", UIBox.getIcon(0xf002), this,
+            "Copy image", UIBox.getIcon(0xf03e), this,
             "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Save as", UIBox.getIcon(0xf0c7), this, // f019
+            "Open ext", UIBox.getIcon(0xf08e), this,
+            "Save", UIBox.getIcon(0xf0c7), this, // f019
             "Print", UIBox.getIcon(0xf02f), this,
         }, this);
     }
@@ -363,7 +364,9 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         else if(startsWithAny(c, "Zoom out")) {
             setImageSize(zoomFactor / 1.1);
         }
-
+        else if(startsWithAny(c, "Reset size")) {
+            setImageSize(1.0);
+        }
         else if(startsWithAny(c, "Copy image")) {
             if(image != null) {
                 ClipboardBox.setClipboard(image);

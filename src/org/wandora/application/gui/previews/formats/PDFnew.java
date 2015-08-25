@@ -259,6 +259,7 @@ public class PDFnew implements PreviewPanel {
             LAST, UIBox.getIcon(0xf050), actionListener,
             ZOOM_IN, UIBox.getIcon(0xf00e), actionListener,
             ZOOM_OUT, UIBox.getIcon(0xf010), actionListener,
+            COPY_IMAGE, UIBox.getIcon(0xf03e), actionListener,
             COPY_LOCATION, UIBox.getIcon(0xf0c5), actionListener,
             SAVE, UIBox.getIcon(0xf019), actionListener,
         }, actionListener);
@@ -435,6 +436,7 @@ public class PDFnew implements PreviewPanel {
             pdfPanel.setViewOffset(offset);
         }
 
+        @Override
         public void actionPerformed(ActionEvent args) {
             for(final String c : some(args.getActionCommand())) {
                 if(c.equals(OPEN_EXTERNAL) || c.equals(OPEN_EXT)) {
@@ -525,6 +527,7 @@ public class PDFnew implements PreviewPanel {
         
         // ---------------------------------------------
         
+        @Override
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
             if(keyCode == KeyEvent.VK_PAGE_UP) {
@@ -557,9 +560,13 @@ public class PDFnew implements PreviewPanel {
                 ClipboardBox.setClipboard(image);
             }
         }
+        
+        @Override
         public void keyReleased(KeyEvent e) {
             
         }
+        
+        @Override
         public void keyTyped(KeyEvent e) {
             
         }

@@ -35,7 +35,6 @@ import java.awt.image.*;
 import java.io.*;
 import java.net.*;
 import java.util.Map;
-import javax.sound.midi.*;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javazoom.jl.player.Player;
@@ -43,11 +42,8 @@ import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.previews.*;
 import static org.wandora.application.gui.previews.Util.endsWithAny;
-import org.wandora.application.gui.simple.*;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
-import org.wandora.utils.IObox;
-
 
 
 /**
@@ -206,9 +202,9 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
             "Play",
             "Stop",
             "---",
-            "Open in external player...",
-            "---",
             "Copy audio location",
+            "---",
+            "Open in external player...",
             "---",
             "Save audio as...",
            

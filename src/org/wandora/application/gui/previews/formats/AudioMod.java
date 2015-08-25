@@ -250,8 +250,8 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
             "Stop", UIBox.getIcon(0xf04d), this,
             "Backward", UIBox.getIcon(0xf04a), this,
             "Forward", UIBox.getIcon(0xf04e), this,
-            "Open ext", UIBox.getIcon(0xf08e), this,
             "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Open ext", UIBox.getIcon(0xf08e), this,
             "Save as", UIBox.getIcon(0xf0c7), this, // f019
         }, this);
     }

@@ -243,9 +243,9 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
             },
              */
             "---",
-            "Open in external player...",
-            "---",
             "Copy audio location",
+            "---",
+            "Open in external player...",
             "---",
             "Save audio as...",
            
