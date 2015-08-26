@@ -23,7 +23,9 @@
 
 package org.wandora.application.gui.previews;
 
+import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.FlowLayout;
 import java.io.File;
 import org.wandora.utils.Option;
 import org.wandora.application.gui.simple.SimpleFileChooser;
@@ -38,6 +40,7 @@ import java.util.Map;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.Functional.Fn0;
 import org.wandora.utils.Functional.Fn1;
@@ -238,4 +241,34 @@ public class Util {
     
     
     
+    public static JPanel previewError(JPanel parent, String msg, Exception e) {
+        if(e != null) {
+            JPanel errorPanel = new JPanel();
+            errorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+            errorPanel.setBorder(BorderFactory.createLineBorder(java.awt.Color.RED, 4));
+
+            StringBuilder labelText = new StringBuilder("<html><center>");
+            if(msg != null) labelText.append(msg+"<br>");
+            labelText.append(e.getMessage());
+            labelText.append("</center></html>");
+            
+            SimpleLabel label = new SimpleLabel();
+            label.setText(labelText.toString());
+            label.setHorizontalAlignment(SimpleLabel.CENTER);
+            errorPanel.add(label);
+
+            if(parent != null) {
+                parent.removeAll();
+                parent.add(errorPanel, BorderLayout.CENTER);
+
+                parent.revalidate();
+                parent.repaint();
+            }
+            
+            e.printStackTrace();
+            
+            return errorPanel;
+        }
+        return null;
+    }
 }

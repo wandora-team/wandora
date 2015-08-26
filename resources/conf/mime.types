@@ -1360,7 +1360,7 @@ image/x-cmu-raster				ras
 image/x-cmx					cmx
 image/x-freehand				fh fhc fh4 fh5 fh7
 image/x-icon					ico
-image/x-mrsid-image				sid
+# image/x-mrsid-image				sid
 image/x-pcx					pcx
 image/x-pict					pic pct
 image/x-portable-anymap				pnm
@@ -1596,3 +1596,4 @@ application/x-zmachine-6				z6
 application/x-zmachine-7				z7
 application/x-zmachine-8				z8
 application/x-blorb					zblorb
+audio/x-sidtune				sid

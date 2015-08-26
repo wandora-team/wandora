@@ -98,7 +98,12 @@ public class AudioSid extends AudioMod {
                     String mimeType = dataURL.getMimetype();
                     if(mimeType != null) {
                         String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/sid")) {
+                        if(lowercaseMimeType.startsWith("audio/x-sidtune") ||
+                           lowercaseMimeType.startsWith("audio/sidtune") ||
+                           lowercaseMimeType.startsWith("audio/x-psid") ||
+                           lowercaseMimeType.startsWith("audio/psid") ||
+                           lowercaseMimeType.startsWith("audio/prs.sid") ||
+                           lowercaseMimeType.startsWith("audio/x-sid")) {
                                 return true;
                         }
                     }

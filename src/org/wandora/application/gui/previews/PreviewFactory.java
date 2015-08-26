@@ -48,6 +48,12 @@ public class PreviewFactory {
             if(hasJavaFX() && FXMediaPlayer.canView(urlString)) {
                 previewPanel = new FXMediaPlayer(urlString);
             }
+            else if(AudioFlac.canView(urlString)) {
+                previewPanel = new AudioFlac(urlString); 
+            }
+            else if(AudioOgg.canView(urlString)) {
+                previewPanel = new AudioOgg(urlString); 
+            }
             else if(AudioSid.canView(urlString)) {
                 previewPanel = new AudioSid(urlString); 
             }

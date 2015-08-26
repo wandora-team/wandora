@@ -255,6 +255,36 @@ public class DataURL {
         }
     }
     
+    
+    // -------------------------------------------------------------------------
+    
+    
+    public File createTempFile() {
+        File tempFile = null;
+        try {
+            byte[] bytes = this.getData();
+            if(bytes != null && bytes.length > 0) {
+                String mimetype = this.getMimetype();
+                String prefix = "tmp" + this.hashCode();
+                String suffix = MimeTypes.getExtension(mimetype);
+                if(suffix == null) suffix = "tmp";
+                if(!suffix.startsWith(".")) suffix = "."+suffix;
+                tempFile = File.createTempFile(prefix, suffix);
+                tempFile.deleteOnExit();
+                
+                FileOutputStream fos = new FileOutputStream(tempFile);
+                fos.write(bytes);
+                fos.close();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return tempFile;
+    }
+    
+    
+    
     // -------------------------------------------------------------------------
     
     

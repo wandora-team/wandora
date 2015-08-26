@@ -36,6 +36,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
@@ -64,6 +65,7 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
     private Mixer currentMixer;
     private JPanel ui = null;
     private SimpleTimeSlider progressBar = null;
+    private File tmpFile = null;
     
     
     
@@ -88,11 +90,24 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
     
     public void createMixer() {
         try {
-            MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(new URL(locator));
-            currentMixer = multimediaContainer.createNewMixer();
+            if(DataURL.isDataURL(locator)) {
+                DataURL dataUrl = new DataURL(locator);
+                tmpFile = dataUrl.createTempFile();
+                if(tmpFile != null) {
+                    MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(tmpFile);
+                    currentMixer = multimediaContainer.createNewMixer();
+                }
+                else {
+                    Util.previewError(ui, "Unable to create temporal file for a dataurl.", null);
+                }
+            }
+            else {
+                MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(new URL(locator));
+                currentMixer = multimediaContainer.createNewMixer();
+            }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            Util.previewError(ui, "Unable to play audio.", e);
         }
     }
     
@@ -271,7 +286,11 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
                         String lowercaseMimeType = mimeType.toLowerCase();
                         if(lowercaseMimeType.startsWith("audio/mod") ||
                            lowercaseMimeType.startsWith("audio/xm") ||
-                           lowercaseMimeType.startsWith("audio/s3m")) {
+                           lowercaseMimeType.startsWith("audio/wow") ||
+                           lowercaseMimeType.startsWith("audio/it") ||
+                           lowercaseMimeType.startsWith("audio/stm") ||
+                           lowercaseMimeType.startsWith("audio/s3m") ||
+                           lowercaseMimeType.startsWith("audio/xm")) {
                                 return true;
                         }
                     }
@@ -281,7 +300,7 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
                 }
             }
             else {
-                if(endsWithAny(url.toLowerCase(), ".mod", ".s3m", ".xm") || startsWithAny(url.toLowerCase(), "mod.")) {
+                if(endsWithAny(url.toLowerCase(), ".mod", ".wow", ".it", ".stm", ".s3m", ".xm") || startsWithAny(url.toLowerCase(), "mod.")) {
                     return true;
                 }
             }

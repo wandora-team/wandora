@@ -47,6 +47,8 @@ public class SimpleTimeSlider extends JProgressBar {
 
     @Override
     public void setString(String txt) {
+        if(txt == null) txt = "";
+        if(txt.length() > 100) txt = txt.substring(0, 100) + "...";
         super.setString(txt);
     }
 

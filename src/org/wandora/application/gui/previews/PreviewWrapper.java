@@ -77,10 +77,10 @@ public class PreviewWrapper extends JPanel {
         if(currentPanel != null) {
             currentPanel.stop();
             currentPanel.finish();
-            removeAll();
             currentPanel = null;
             currentUI = null;
         }
+        removeAll();
 
         if(subjectLocator == null)
             return;
@@ -90,10 +90,12 @@ public class PreviewWrapper extends JPanel {
         
         try {
             currentPanel = PreviewFactory.create(subjectLocator);
-            System.out.println("Created preview "+currentPanel.getClass()+" for "+subjectLocator.toExternalForm());
+            String locatorString = subjectLocator.toExternalForm();
+            if(locatorString.length() > 50) locatorString = locatorString.substring(0,50)+"...";
+            System.out.println("Created preview "+currentPanel.getClass()+" for "+locatorString);
         }
         catch(Exception e) {
-            System.out.println("Warning: Exception thrown when creating preview.");
+            Util.previewError(this, "Creating preview failed.", e);
         }
         
         if(currentPanel != null) {
