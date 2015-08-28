@@ -53,7 +53,7 @@ import static org.wandora.utils.Option.*;
 import static java.awt.event.KeyEvent.*;
 import java.net.URISyntaxException;
 import org.wandora.application.Wandora;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 
 
 
@@ -469,12 +469,12 @@ public class PDFnew implements PreviewPanel {
                 }
                 else if(c.equals(SAVE_AS) || c.equals(SAVE)) {
                     final Option<String> path =
-                            Util.choosePath(options,
+                            PreviewUtils.choosePath(options,
                                             pdfPanel,
                                             "pdfPreviewPanel");
                     
                     
-                    final Option<URI> uri = path.flatMap(Util.makeFileURI);
+                    final Option<URI> uri = path.flatMap(PreviewUtils.makeFileURI);
                     uri
                         .map(makeCopier)
                         .apply(runner());
@@ -688,7 +688,7 @@ class MemoryFileCopier implements Abortable.Impl {
                             "Saving file...");
             
             drain(new FileOutputStream(new File(dest)),
-                    Util.makeInputStream(ByteBuffer.wrap(src)));
+                    PreviewUtils.makeInputStream(ByteBuffer.wrap(src)));
             
             if(!stop.get())
                 parent.progress(1.0,

@@ -49,8 +49,8 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
-import org.wandora.application.gui.previews.Util;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.application.gui.previews.PreviewUtils;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.ClipboardBox;
@@ -397,11 +397,11 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
         }
         
         else if("Open ext".equalsIgnoreCase(actionCommand)) {
-            Util.forkExternalPlayer(mediaUrlString);
+            PreviewUtils.forkExternalPlayer(mediaUrlString);
         }
         
         else if("Save".equalsIgnoreCase(actionCommand)) {
-            Util.saveToFile(mediaUrlString);
+            PreviewUtils.saveToFile(mediaUrlString);
         }
         
         else if("Copy location".equalsIgnoreCase(actionCommand)) {
@@ -478,7 +478,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
                 }
             }
             else {
-                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", ".mp3", ".aif", ".aiff", /*".wav",*/ ".m4a", ".m4v")) {
+                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", /* ".mp3", */ ".aif", ".aiff", /*".wav",*/ ".m4a", ".m4v")) {
                     answer = true;
                 }
             }

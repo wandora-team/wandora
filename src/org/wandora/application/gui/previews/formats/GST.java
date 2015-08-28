@@ -59,7 +59,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.previews.*;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.Abortable;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
@@ -195,8 +195,8 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
                 ClipboardBox.setClipboard(locatorString);
             }
             else if(c.equals(SAVE_AS)) {
-                Util.choosePath(options, this, "gstPreviewPanel")
-                        .flatMap(Util.makeFileURI)
+                PreviewUtils.choosePath(options, this, "gstPreviewPanel")
+                        .flatMap(PreviewUtils.makeFileURI)
                         .map(makeCopier)
                         .apply(runner());
             }
@@ -281,7 +281,7 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
         final String in = source.toString();
         final String out = destination.toString();
 
-        for(String c : Util.getOption(options, "copycommand"))
+        for(String c : PreviewUtils.getOption(options, "copycommand"))
             return new Abortable(dlgParent, NativeFileCopy.factory(c.split("\\s+"), out, in), some("Copying file"));
 
         return new Abortable(dlgParent, ManualFileCopy.factory(out, in), some("Copying file"));

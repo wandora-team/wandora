@@ -38,9 +38,9 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.previews.PreviewPanel;
-import org.wandora.application.gui.previews.Util;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
-import static org.wandora.application.gui.previews.Util.startsWithAny;
+import org.wandora.application.gui.previews.PreviewUtils;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.zmpp.swingui.PanelMachineFactory;
@@ -316,7 +316,7 @@ public class ZMachine implements ActionListener, PreviewPanel {
         }
         else if(startsWithAny(cmd, "Open ext")) {
             if(locator != null) {
-                Util.forkExternalPlayer(locator);
+                PreviewUtils.forkExternalPlayer(locator);
             }
         }
         else if(startsWithAny(cmd, "Copy location")) {
@@ -326,7 +326,7 @@ public class ZMachine implements ActionListener, PreviewPanel {
         }
         else if(startsWithAny(cmd, "Save")) {
             if(locator != null) {
-                Util.saveToFile(locator);
+                PreviewUtils.saveToFile(locator);
             }
         }
     }

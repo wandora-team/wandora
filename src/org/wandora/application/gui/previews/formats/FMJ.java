@@ -55,7 +55,7 @@ import javax.swing.JPopupMenu;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.*;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.Abortable;
 import org.wandora.utils.Abortable.Impl;
 import org.wandora.utils.Abortable.ImplFactory;
@@ -85,7 +85,7 @@ public class FMJ extends JPanel implements PreviewPanel, ActionListener {
     public Abortable invoke(final String destination, final String source) {
         if (source.startsWith("file")) {
             /*
-            for(final String cmd : Util.getOption(options, "copycommand"))
+            for(final String cmd : PreviewUtils.getOption(options, "copycommand"))
                 return new Abortable(dlgParent, NativeFileCopy.factory(cmd.split("\\s+"), destination, source), some("Copying file"));
             */
             return new Abortable(dlgParent, ManualFileCopy.factory(destination, source), some("Copying file"));
@@ -126,7 +126,7 @@ public class FMJ extends JPanel implements PreviewPanel, ActionListener {
         heavyWeight = !(lightVideo && lightCtrls);
         
         // fmj might return a video component even if there isn't any video to show
-        if(video != null && !Util.endsWithAny(source, ".mp3"))
+        if(video != null && !PreviewUtils.endsWithAny(source, ".mp3"))
             add(video, BorderLayout.NORTH);
         if(controls != null)
             add(controls, BorderLayout.SOUTH);
@@ -154,7 +154,7 @@ public class FMJ extends JPanel implements PreviewPanel, ActionListener {
     public void actionPerformed(ActionEvent args) {
         for(String c : some(args.getActionCommand())) {
             if(c.equals(OPEN_EXTERNAL)) {
-                for(final String cmdRaw : Util.getOption(options, "mediaviewer")) {
+                for(final String cmdRaw : PreviewUtils.getOption(options, "mediaviewer")) {
                     final String cmd = cmdRaw.replaceAll("__URL__", source);
                     try {
                         Runtime.getRuntime().exec(cmd);
@@ -170,7 +170,7 @@ public class FMJ extends JPanel implements PreviewPanel, ActionListener {
                 }
             }
             else if(c.equals(SAVE_AS)) {
-                Util.choosePath(options, this, OPTIONS_PREFIX).map(makeCopier).apply(runner());
+                PreviewUtils.choosePath(options, this, OPTIONS_PREFIX).map(makeCopier).apply(runner());
             }
         }
     }

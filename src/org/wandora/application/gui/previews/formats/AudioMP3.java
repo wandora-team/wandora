@@ -41,7 +41,7 @@ import javazoom.jl.player.Player;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.previews.*;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 
@@ -230,7 +230,7 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
             }
         }
         else if(c.startsWith("Open in external")) {
-            Util.forkExternalPlayer(audioLocator);
+            PreviewUtils.forkExternalPlayer(audioLocator);
         }
         else if(c.equalsIgnoreCase("Copy audio location")) {
             if(audioLocator != null) {
@@ -238,7 +238,7 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
             }
         }
         else if(c.startsWith("Save audio")) {
-            Util.saveToFile(audioLocator);
+            PreviewUtils.saveToFile(audioLocator);
         }
     }
    

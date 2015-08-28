@@ -47,8 +47,8 @@ import static java.awt.event.KeyEvent.*;
 
 import org.wandora.application.gui.*;
 import org.wandora.application.*;
-import static org.wandora.application.gui.previews.Util.startsWithAny;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.DataURL;
 
 
@@ -226,7 +226,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         if(mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
-            Util.forkExternalPlayer(imageLocator);
+            PreviewUtils.forkExternalPlayer(imageLocator);
         }
     }
     
@@ -341,7 +341,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
         if(c == null) return;
         
         if(startsWithAny(c, "Open in external", "Open ext")) {
-            Util.forkExternalPlayer(imageLocator);
+            PreviewUtils.forkExternalPlayer(imageLocator);
         }
         else if(startsWithAny(c, "25")) {
             setImageSize(0.25);

@@ -29,131 +29,115 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import org.wandora.application.gui.previews.*;
-import org.wandora.utils.Options;
-import org.wandora.utils.IObox;
-import org.wandora.utils.ClipboardBox;
-import org.wandora.application.gui.simple.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
+import javafx.embed.swing.JFXPanel;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.web.PopupFeatures;
+import javafx.scene.web.PromptData;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebEvent;
+import javafx.scene.web.WebView;
+import javafx.util.Callback;
 import javax.swing.*;
 import javax.swing.event.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.awt.event.*;
-
-import org.wandora.application.gui.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
 import org.wandora.application.*;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.application.gui.*;
+import org.wandora.application.gui.previews.*;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
+import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.Options;
 
 
 /**
  *
  * @author akivela
  */
-public class HTML extends JPanel implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener {
-    private static final String OPTIONS_PREFIX = "gui.htmlPreviewPanel.";
-    
+public class HTML extends JPanel implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener, ComponentListener {
+
     private Wandora wandora;
-    private Options options;
-    
     private String locator;
-    private JEditorPane htmlPane;
-    
-    private Color borderColor = Color.DARK_GRAY;
+    private FXHTML htmlPane;
 
     private JPopupMenu linkPopup = null;
     private MouseEvent mouseEvent = null;
     
-    @Override
-    public boolean isHeavy() {
-        return false;
-    }
     
-    /** Creates a new instance of HTMLPreviewPanel */
-   
-    /** Creates a new instance of WandoraImagePanel */
+    /** Creates a new instance of HTML */
     public HTML(String locator) {
-        this.locator = locator;
-        
-        this.wandora = Wandora.getWandora();
-        
-        this.addMouseListener(this);
-        this.setLayout(new BorderLayout());
-        
-        htmlPane = new JEditorPane();
-        htmlPane.setEditable(false);
-        htmlPane.setContentType("text/html; charset=ISO-8859-1");
-        htmlPane.addHyperlinkListener(this);
-        htmlPane.addMouseListener(this);
-        htmlPane.setBorder(BorderFactory.createLineBorder(borderColor));
-                
-        if(wandora != null) {
-            options = wandora.getOptions();
-            if(options != null) {
-
-            }
-        }
-        
-        updateLinkMenu();
-        this.add(htmlPane, BorderLayout.CENTER);
-        repaint();
-        revalidate();
-        
-        //System.out.println("HTML locator is " + locator);
         try {
-            htmlPane.setPage(new URL(locator));
-        }
-        catch(java.io.FileNotFoundException fex) {
-            System.out.println("Wandora can't resolve subject locator resource!");
-            htmlPane.setContentType("text/html");
-            htmlPane.setText("<html><br><center><font face=sanserif size=2>Unable to resolve subject locator resource!</font></center><br></html>");
+            this.wandora = Wandora.getWandora();
+            this.locator = locator;
+            this.addMouseListener(this);
+            this.setLayout(new BorderLayout());
+
+            this.setPreferredSize(new Dimension(640, 480));
+            this.setMinimumSize(new Dimension(640, 480));
+            
+            htmlPane = new FXHTML(locator);
+            //htmlPane.addMouseListener(this);
+            //htmlPane.setBorder(BorderFactory.createLineBorder(borderColor));
+
+            //updateLinkMenu();
+                      
+            this.add(htmlPane, BorderLayout.CENTER);
+            
+            this.addComponentListener(this);
+            
+            repaint();
+            revalidate();
         }
         catch(Exception e) {
-            htmlPane.setContentType("text/html");
-            htmlPane.setText("<html><br><center><font face=sanserif size=2>Exception "+e.toString()+" occurred while opening the subject locator resource!</font></center><br></html>");
+            PreviewUtils.previewError(this, "Error occurred while viewing locator!", e);
             e.printStackTrace();
         }
-        
-        updateMenu();
+        //updateMenu();
     }
     
     @Override
-    public void stop() {}
+    public void stop() {
+        if(htmlPane != null) {
+            htmlPane.close();
+        }
+    }
     
     
     @Override
     public void finish() {
+        if(htmlPane != null) {
+            htmlPane.close();
+        }
     }
     
     @Override
     public JPanel getGui() {
         return this;
     }
-    
-  
-    
-  public void forkExternal() {
-        if(locator != null && locator.length() > 0) {
-            System.out.println("Spawning viewer for \""+locator+"\"");
-            try {
-                Desktop desktop = Desktop.getDesktop();
-                desktop.browse(new URI(locator));
-            }
-            catch(Exception tme) {
-                tme.printStackTrace(); // TODO EXCEPTION
-            }
-        }
+
+    @Override
+    public boolean isHeavy() {
+        return false;
     }
     
-    
-    
 
-    
     
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
@@ -266,7 +250,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         if(c == null) return;
         
         if(c.startsWith("Open in external")) {
-            forkExternal();
+            PreviewUtils.forkExternalPlayer(locator);
         }
         
         else if(c.equalsIgnoreCase("Copy location")) {
@@ -296,7 +280,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         }
         
         else if(c.startsWith("Save as")) {
-            save();
+            PreviewUtils.saveToFile(locator);
         }
         
         // ---------------------------------------------------------------------
@@ -363,20 +347,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
     
 
     public String getSelection() {
-        /*
-        Document doc = htmlPane.getDocument();
-        String selection = "";
-        
-        try {
-            selection = doc.getText(htmlPane.getSelectionStart(), htmlPane.getSelectionEnd()-htmlPane.getSelectionStart());
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-        
-        System.out.println("selection == "+ selection);
-        */
-        return htmlPane.getSelectedText(); //selection;
+        return "";
     }
     
     
@@ -385,8 +356,6 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
 
-    
-    
     
     
     public void updateLinkMenu() {
@@ -471,39 +440,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         }
     }
     
-    
-   
-   // ----------------------------------------------------------------- SAVE ---
-   
-   
 
-    public void save() {
-        Wandora w = Wandora.getWandora(this);
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
-        chooser.setDialogTitle("Save XML file");
-        try {
-            chooser.setSelectedFile(new File(locator.substring(locator.lastIndexOf(File.pathSeparator)+1)));
-        }
-        catch(Exception e) {}
-        if(chooser.open(w,SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
-            save(chooser.getSelectedFile());
-        }
-    }
-    
-    
-    
-    public void save(File file) {
-        if(file != null) {
-            try {
-                IObox.moveUrl(new URL(locator), file);
-            }
-            catch(Exception e) {
-                System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + file.getPath() + "'.");
-            }
-        }
-    }
-    
-    
     
     
     // -------------------------------------------------------------------------
@@ -537,4 +474,304 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         return false;
     }
     
+    
+    
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    
+    
+    
+    public class FXHTML extends JFXPanel {
+        
+        private final String locator;
+        
+        public WebView webView = null;
+        private WebEngine webEngine = null;
+        private boolean informPopupBlocking = true;
+        private boolean informVisibilityChanges = true;
+        private String webSource = null;
+        
+        
+        
+        public FXHTML(final String locator) {
+            this.locator = locator;
+            initialize();
+            open(locator);
+        }
+        
+        
+        public void open(final String locator) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if(DataURL.isDataURL(locator)) {
+                            DataURL dataUrl = new DataURL(locator);
+                            String data = new String( dataUrl.getData() );
+                            webEngine.loadContent(data);
+                        }
+                        else if(locator != null && locator.startsWith("file:")) {
+
+                        }
+                        else {
+                            webEngine.load(locator);
+                        }
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        
+        
+        public void close() {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        webEngine.load(null);
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        
+
+        private void initialize() {
+            Platform.setImplicitExit(false);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    initializeFX();
+                }
+            });
+        }
+    
+        
+
+
+        private void initializeFX() {
+            Group group = new Group();
+            Scene scene = new Scene(group);
+            this.setScene(scene);
+
+            webView = new WebView();
+
+            String javaFXVersion = com.sun.javafx.runtime.VersionInfo.getRuntimeVersion();
+            int javaFXVersionInt = Integer.parseInt(javaFXVersion.substring(0, javaFXVersion.indexOf(".")));
+            
+            if(javaFXVersionInt >= 8) {
+                webView.setScaleX(1.0);
+                webView.setScaleY(1.0);
+                //webView.setFitToHeight(false);
+                //webView.setFitToWidth(false);
+                //webView.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
+            }
+
+            group.getChildren().add(webView);
+
+            int w = HTML.this.getWidth();
+            int h = HTML.this.getHeight();
+
+            webView.setMinSize(w, h);
+            webView.setMaxSize(w, h);
+            webView.setPrefSize(w, h);
+
+            // Obtain the webEngine to navigate
+            webEngine = webView.getEngine();
+
+            webEngine.locationProperty().addListener(new javafx.beans.value.ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+                        if (newValue.endsWith(".pdf")) {
+                            try {
+                                int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Open PDF document in external application?", "Open PDF document in external application?", WandoraOptionPane.YES_NO_OPTION);
+                                if(a == WandoraOptionPane.YES_OPTION) {
+                                    Desktop dt = Desktop.getDesktop();
+                                    dt.browse(new URI(newValue));
+                                }
+                            }
+                            catch(Exception e) {}
+                        }
+                        else {
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override 
+                                public void run() {
+                                    // Nothing here
+                                }
+                            });
+                        }
+                    }
+            });
+            webEngine.titleProperty().addListener(new javafx.beans.value.ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override 
+                            public void run() {
+                                // Nothing here
+                            }
+                        });
+                    }
+            });
+            webEngine.setOnAlert(new EventHandler<WebEvent<java.lang.String>>() {
+                @Override
+                public void handle(WebEvent<String> t) {
+                    if(t != null) {
+                        String str = t.getData();
+                        if(str != null && str.length() > 0) {
+                            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), str, "Javascript Alert", WandoraOptionPane.PLAIN_MESSAGE);
+                        }
+                    }
+                }
+            });
+            webEngine.setConfirmHandler(new Callback<String, Boolean>() {
+                @Override 
+                public Boolean call(String msg) {
+                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), msg, "Javascript Alert", WandoraOptionPane.YES_NO_OPTION);
+                    return (a == WandoraOptionPane.YES_OPTION);
+                }
+            });
+            webEngine.setPromptHandler(new Callback<PromptData, String>() {
+                @Override 
+                public String call(PromptData data) {
+                    String a = WandoraOptionPane.showInputDialog(Wandora.getWandora(), data.getMessage(), data.getDefaultValue(), "Javascript Alert", WandoraOptionPane.QUESTION_MESSAGE);
+                    return a;
+                }
+            });
+
+            webEngine.setCreatePopupHandler(new Callback<PopupFeatures,WebEngine>() {
+                @Override 
+                public WebEngine call(PopupFeatures features) {
+                    if(informPopupBlocking) {
+                        WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                                "A javascript popup has been blocked. Wandora doesn't allow javascript popups in Webview topic panel.", 
+                                "Javascript popup blocked", 
+                                WandoraOptionPane.PLAIN_MESSAGE);
+                    }
+                    informPopupBlocking = false;
+                    return null;
+                }
+            });
+            webEngine.setOnVisibilityChanged(new EventHandler<WebEvent<Boolean>>() {
+                @Override
+                public void handle(WebEvent<Boolean> t) {
+                    if(t != null) {
+                        Boolean b = t.getData();
+                        if(informVisibilityChanges) {
+                            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
+                                    "A browser window visibility change has been blocked. Wandora doesn't allow visibility changes of windows in Webview topic panel.", 
+                                    "Javascript visibility chnage blocked", 
+                                    WandoraOptionPane.PLAIN_MESSAGE);
+                            informVisibilityChanges = false;
+                        }
+                    }
+                }
+            });
+            webEngine.getLoadWorker().stateProperty().addListener(
+                new javafx.beans.value.ChangeListener<Worker.State>() {
+                    @Override
+                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+                        if(newState == Worker.State.SCHEDULED) {
+                            //System.out.println("Scheduled!");
+                            
+                        }
+                        if(newState == Worker.State.SUCCEEDED) {
+                            Document doc = webEngine.getDocument();
+                            try {
+                                Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                                //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+                                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                                transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+                                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+                                // transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(System.out, "UTF-8")));
+
+                                StringWriter stringWriter = new StringWriter();
+                                transformer.transform(new DOMSource(doc), new StreamResult(stringWriter));
+                                webSource = stringWriter.toString();
+                            }
+                            catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        else if(newState == Worker.State.CANCELLED) {
+                            //System.out.println("Cancelled!");
+                        }
+                        else if(newState == Worker.State.FAILED) {
+                            String failedToOpenMessage = "<h1>Failed to open URL</h1>";
+                            webEngine.loadContent(failedToOpenMessage);
+                        }
+                    }
+                });
+
+        }
+    
+        
+    }
+    
+    
+    // -------------------------------------------------------------------------
+    // --------------------------------------------------- ComponentListener ---
+    // -------------------------------------------------------------------------
+    
+    
+    @Override
+    public void componentShown(ComponentEvent e) {
+        handleComponentEvent(e);
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        handleComponentEvent(e);
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+        handleComponentEvent(e);
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+        handleComponentEvent(e);
+    }
+   
+    
+    private void handleComponentEvent(ComponentEvent e) {
+        try {
+            Component c = this;
+            if(this.getParent() != null) c = this.getParent();
+            
+            final int w = c.getWidth();
+            final int h = c.getHeight();
+            Dimension d = new Dimension(w, h);
+            
+            if(this.getParent() != null) {
+                this.setPreferredSize(d);
+                this.setMinimumSize(d);
+                this.setMaximumSize(d);
+            }
+
+            if(htmlPane != null) {
+                if(htmlPane.webView != null && w > 1 && h > 1) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            htmlPane.webView.setMinSize(w, h);
+                            htmlPane.webView.setMaxSize(w, h);
+                            htmlPane.webView.setPrefSize(w, h);
+                        }
+                    });
+                }
+            }
+            revalidate();
+            repaint();
+        }
+        catch(Exception ex) {}
+    }
 }

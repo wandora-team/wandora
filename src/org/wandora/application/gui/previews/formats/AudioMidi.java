@@ -46,7 +46,7 @@ import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 import javax.sound.midi.*;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.DataURL;
 
 
@@ -269,7 +269,7 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
             if(sequencer != null) sequencer.stop();
         }
         if(c.startsWith("Open in external")) {
-            Util.forkExternalPlayer(audioLocator);
+            PreviewUtils.forkExternalPlayer(audioLocator);
         }
         
         else if(c.equalsIgnoreCase("Copy audio location")) {
@@ -278,7 +278,7 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
             }
         }
         else if(c.startsWith("Save audio")) {
-            Util.saveToFile(audioLocator);
+            PreviewUtils.saveToFile(audioLocator);
         }
         else if(c.equalsIgnoreCase("Volume 100%")) {
             setVolume(100);

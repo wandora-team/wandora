@@ -90,12 +90,14 @@ public class PreviewWrapper extends JPanel {
         
         try {
             currentPanel = PreviewFactory.create(subjectLocator);
-            String locatorString = subjectLocator.toExternalForm();
-            if(locatorString.length() > 50) locatorString = locatorString.substring(0,50)+"...";
-            System.out.println("Created preview "+currentPanel.getClass()+" for "+locatorString);
+            if(currentPanel != null) {
+                String locatorString = subjectLocator.toExternalForm();
+                if(locatorString.length() > 50) locatorString = locatorString.substring(0,50)+"...";
+                System.out.println("Created preview "+currentPanel.getClass()+" for "+locatorString);
+            }
         }
         catch(Exception e) {
-            Util.previewError(this, "Creating preview failed.", e);
+            PreviewUtils.previewError(this, "Creating preview failed.", e);
         }
         
         if(currentPanel != null) {

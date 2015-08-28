@@ -14,28 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.wandora.application.gui.previews.formats;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.net.URL;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
-import org.wandora.application.gui.previews.Util;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import org.wandora.application.gui.previews.PreviewUtils;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.application.gui.simple.SimpleScrollPane;
-import org.wandora.application.gui.simple.SimpleTextPane;
-import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.IObox;
+import org.wandora.utils.swing.TextLineNumber;
 
 /**
  *
@@ -70,17 +69,27 @@ public class Text implements ActionListener, PreviewPanel {
     }
     
     
+    protected JComponent getTextComponent(String locator) {
+        JTextPane textComponent = new JTextPane();
+        textComponent.setText(getContent(locator));
+        textComponent.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        textComponent.setEditable(false);
+        textComponent.setCaretPosition(0);
+        return textComponent;
+    }
+    
+    
+    
     @Override
     public JPanel getGui() {
         if(ui == null) {
             ui = new JPanel();
             ui.setLayout(new BorderLayout(8,8));
-            textPane = new JTextPane();
-            textPane.setText(getContent(locator));
-            textPane.setEditable(false);
-            textPane.setCaretPosition(0);
+            textPane = (JTextPane) getTextComponent(locator);
             
             JScrollPane scrollPane = new SimpleScrollPane(textPane);
+            TextLineNumber tln = new TextLineNumber(textPane);
+            scrollPane.setRowHeaderView( tln );
             
             JPanel textPaneWrapper = new JPanel();
             textPaneWrapper.setLayout(new BorderLayout());
@@ -101,12 +110,12 @@ public class Text implements ActionListener, PreviewPanel {
     
     
     
-    private String getContent(String locator) {
+    protected String getContent(String locator) {
         try {
             return IObox.doUrl(new URL(locator));
         }
         catch(Exception e) {
-            
+            PreviewUtils.previewError(ui, "Unable to read locator content.", e);
         }
         return "";
     }
@@ -130,7 +139,7 @@ public class Text implements ActionListener, PreviewPanel {
         
         
         if(c.startsWith("Open ext")) {
-            Util.forkExternalPlayer(locator);
+            PreviewUtils.forkExternalPlayer(locator);
         }
         else if(c.equalsIgnoreCase("Copy location")) {
             if(locator != null) {
@@ -138,7 +147,7 @@ public class Text implements ActionListener, PreviewPanel {
             }
         }
         else if(c.startsWith("Save")) {
-            Util.saveToFile(locator);
+            PreviewUtils.saveToFile(locator);
         }
     }
     

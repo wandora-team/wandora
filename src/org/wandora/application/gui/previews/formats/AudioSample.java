@@ -43,8 +43,8 @@ import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 import javax.sound.sampled.*;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
-import static org.wandora.application.gui.previews.Util.startsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 import org.wandora.utils.DataURL;
 
 
@@ -284,7 +284,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
             }
         }
         else if(startsWithAny(c, "Open in external", "Open ext")) {
-            Util.forkExternalPlayer(audioLocator);
+            PreviewUtils.forkExternalPlayer(audioLocator);
         }
         else if(startsWithAny(c, "Copy audio location", "Copy location")) {
             if(audioLocator != null) {
@@ -292,7 +292,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
             }
         }
         else if(startsWithAny(c, "Save")) {
-            Util.saveToFile(audioLocator);
+            PreviewUtils.saveToFile(audioLocator);
         }
     }
 

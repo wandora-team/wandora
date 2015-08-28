@@ -41,11 +41,11 @@ import org.wandora.application.gui.previews.PreviewPanel;
  * @author anttirt
  */
 public class Unknown extends JPanel implements PreviewPanel {
-    private BufferedImage bgImage;
-    private Wandora admin;
     
-    public Unknown(String locator, Wandora admin) {
-        this.admin = admin;
+    private BufferedImage bgImage;
+    
+    
+    public Unknown(String locator) {
         this.bgImage = UIBox.getImage("gui/icons/doctype/doctype_unknown.png");
 
         Dimension dim = new Dimension(bgImage.getWidth(), bgImage.getHeight());
@@ -55,6 +55,7 @@ public class Unknown extends JPanel implements PreviewPanel {
         revalidate();
     }
     
+    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -63,6 +64,7 @@ public class Unknown extends JPanel implements PreviewPanel {
         }
     }
 
+    
     @Override
     public void stop() {}
     

@@ -24,7 +24,7 @@
 package org.wandora.application.gui.previews.formats;
 
 
-import static org.wandora.application.gui.previews.Util.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.DataURL;
 
 /**

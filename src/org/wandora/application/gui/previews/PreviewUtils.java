@@ -47,7 +47,7 @@ import org.wandora.utils.Functional.Fn1;
 import org.wandora.utils.IObox;
 import static org.wandora.utils.Option.*;
 
-public class Util {
+public class PreviewUtils {
     
     private static final Fn1<SimpleFileChooser, String> makeNamedChooser = new Fn1<SimpleFileChooser, String>() {
     @Override

@@ -47,9 +47,9 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.previews.PreviewPanel;
-import org.wandora.application.gui.previews.Util;
-import static org.wandora.application.gui.previews.Util.endsWithAny;
-import static org.wandora.application.gui.previews.Util.startsWithAny;
+import org.wandora.application.gui.previews.PreviewUtils;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
+import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
@@ -98,7 +98,7 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
                     currentMixer = multimediaContainer.createNewMixer();
                 }
                 else {
-                    Util.previewError(ui, "Unable to create temporal file for a dataurl.", null);
+                    PreviewUtils.previewError(ui, "Unable to create temporal file for a dataurl.", null);
                 }
             }
             else {
@@ -107,7 +107,7 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
             }
         }
         catch(Exception e) {
-            Util.previewError(ui, "Unable to play audio.", e);
+            PreviewUtils.previewError(ui, "Unable to play audio.", e);
         }
     }
     
@@ -202,7 +202,7 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
         }
         else if(startsWithAny(cmd, "Open ext")) {
             if(locator != null) {
-                Util.forkExternalPlayer(locator);
+                PreviewUtils.forkExternalPlayer(locator);
             }
         }
         else if(startsWithAny(cmd, "Copy audio location", "Copy location")) {
@@ -212,7 +212,7 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
         }
         else if(startsWithAny(cmd, "Save")) {
             if(locator != null) {
-                Util.saveToFile(locator);
+                PreviewUtils.saveToFile(locator);
             }
         }
     }
