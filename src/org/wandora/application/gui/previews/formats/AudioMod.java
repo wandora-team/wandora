@@ -31,21 +31,15 @@ import de.quippy.javamod.multimedia.MultimediaContainerManager;
 import de.quippy.javamod.multimedia.mod.ModContainer;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionAdapter;
 import java.io.File;
-import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
@@ -277,37 +271,27 @@ public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionLis
     
 
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/mod") ||
-                           lowercaseMimeType.startsWith("audio/xm") ||
-                           lowercaseMimeType.startsWith("audio/wow") ||
-                           lowercaseMimeType.startsWith("audio/it") ||
-                           lowercaseMimeType.startsWith("audio/stm") ||
-                           lowercaseMimeType.startsWith("audio/s3m") ||
-                           lowercaseMimeType.startsWith("audio/xm")) {
-                                return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "audio/mod",
+                    "audio/xm",
+                    "audio/wow",
+                    "audio/it",
+                    "audio/stm",
+                    "audio/s3m",
+                    "audio/xm"
+                }, 
+                new String[] { 
+                    "mod", 
+                    "wow", 
+                    "it", 
+                    "stm",
+                    "s3m", 
+                    "xm"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".mod", ".wow", ".it", ".stm", ".s3m", ".xm") || startsWithAny(url.toLowerCase(), "mod.")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        );
     }
+   
     
 
     

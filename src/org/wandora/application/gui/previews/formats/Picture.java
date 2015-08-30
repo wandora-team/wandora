@@ -477,27 +477,11 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     
     
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null && mimeType.toLowerCase().startsWith("image")) {
-                        return true;
-                    }
-                }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".gif", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".png")) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return PreviewUtils.isOfType(url, 
+                new String[] { "image" }, 
+                new String[] { "gif", "jpg", "jpeg", "tif", "tiff", "bmp", "png" }
+        );
     }
-    
+        
     
 }

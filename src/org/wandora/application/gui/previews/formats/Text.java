@@ -154,33 +154,10 @@ public class Text implements ActionListener, PreviewPanel {
     
     // -------------------------------------------------------------------------
     
-    
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("text/plain")) {
-                                return true;
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".txt")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        return PreviewUtils.isOfType(url, 
+                new String[] { "text/plain" }, 
+                new String[] { "txt", "text" }
+        );
     }
-    
-    
 }

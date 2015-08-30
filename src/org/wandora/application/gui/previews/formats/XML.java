@@ -64,33 +64,16 @@ public class XML extends Text implements ActionListener, PreviewPanel {
     
     // -------------------------------------------------------------------------
     
-    
+
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("application/xml") ||
-                           lowercaseMimeType.startsWith("text/xml")) {
-                                return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "application/xml",
+                    "text/xml" }, 
+                new String[] { 
+                    "xml"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".xml")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        );
     }
     
 }

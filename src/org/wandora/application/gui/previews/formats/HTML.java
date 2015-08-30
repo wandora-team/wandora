@@ -64,14 +64,14 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
-import org.wandora.utils.Options;
+
 
 
 /**
  *
  * @author akivela
  */
-public class HTML extends JPanel implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener, ComponentListener {
+public class HTML implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener, ComponentListener {
 
     private Wandora wandora;
     private String locator;
@@ -79,38 +79,17 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
 
     private JPopupMenu linkPopup = null;
     private MouseEvent mouseEvent = null;
+    private JPanel ui = null;
+    
     
     
     /** Creates a new instance of HTML */
     public HTML(String locator) {
-        try {
-            this.wandora = Wandora.getWandora();
-            this.locator = locator;
-            this.addMouseListener(this);
-            this.setLayout(new BorderLayout());
-
-            this.setPreferredSize(new Dimension(640, 480));
-            this.setMinimumSize(new Dimension(640, 480));
-            
-            htmlPane = new FXHTML(locator);
-            //htmlPane.addMouseListener(this);
-            //htmlPane.setBorder(BorderFactory.createLineBorder(borderColor));
-
-            //updateLinkMenu();
-                      
-            this.add(htmlPane, BorderLayout.CENTER);
-            
-            this.addComponentListener(this);
-            
-            repaint();
-            revalidate();
-        }
-        catch(Exception e) {
-            PreviewUtils.previewError(this, "Error occurred while viewing locator!", e);
-            e.printStackTrace();
-        }
-        //updateMenu();
+        Platform.setImplicitExit(false);
+        this.wandora = Wandora.getWandora();
+        this.locator = locator;
     }
+    
     
     @Override
     public void stop() {
@@ -127,11 +106,61 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         }
     }
     
+    
     @Override
     public JPanel getGui() {
-        return this;
+        // System.out.println("getting ui...");
+        if(ui == null) {
+            ui = new JPanel();
+            // ui.addMouseListener(this);
+            ui.setLayout(new BorderLayout(4,4));
+            ui.setPreferredSize(new Dimension(640, 480+56));
+            ui.setMinimumSize(new Dimension(640, 480+56));
+            
+            JPanel htmlWrapper = new JPanel();
+            htmlWrapper.setLayout(new BorderLayout());
+
+            htmlPane = new FXHTML(locator);
+            htmlPane.initialize();
+
+            htmlWrapper.add(htmlPane, BorderLayout.CENTER);
+            
+            //htmlPane.addMouseListener(this);
+            //htmlPane.setBorder(BorderFactory.createLineBorder(borderColor));
+            //updateLinkMenu();
+
+            JPanel controllerPanel = new JPanel();
+            controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
+            
+            ui.add(htmlWrapper, BorderLayout.CENTER);
+            ui.add(controllerPanel, BorderLayout.SOUTH);
+            ui.addComponentListener(this);
+        }
+        ui.revalidate();
+        ui.repaint();
+        return ui;
     }
 
+    
+    
+    private JComponent getJToolBar() {
+        return UIBox.makeButtonContainer(new Object[] {
+            "Reload", UIBox.getIcon(0xf015), this, // 0xf01e
+            "---",
+            "Open ext", UIBox.getIcon(0xf08e), this,
+            "Copy location", UIBox.getIcon(0xf0c5), this,
+            "Copy selection", UIBox.getIcon(0xf0c5), this,
+            "Copy as image", UIBox.getIcon(0xf0c5), this,
+            "Save as", UIBox.getIcon(0xf0c7), this, // f019
+            "---",
+            "Set basename", UIBox.getIcon(0xf067), this,
+            "Set display name", UIBox.getIcon(0xf067), this,
+            "Set occurrence", UIBox.getIcon(0xf067), this,
+        }, this);
+    }
+
+    
+    
     @Override
     public boolean isHeavy() {
         return false;
@@ -167,10 +196,9 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         this.mouseEvent = mouseEvent;
     }
     
+    
+    
     // -------------------------------------------------------------------------
-    
-    
-   
 
     
     
@@ -178,7 +206,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         if(locator != null && locator.length() > 0) {
             JPopupMenu m = getMenu();
             if(m != null) {
-                this.setComponentPopupMenu(m);
+                ui.setComponentPopupMenu(m);
                 if(htmlPane != null) htmlPane.setComponentPopupMenu(m);
             }
         }
@@ -230,7 +258,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
             "Save as...",
             "---",
             "For selection", new Object[] {
-                "Make selection base name",
+                "Make selection basename",
                 "Make selection display name",
                 "Make selection occurrence...",
             },
@@ -249,7 +277,13 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         String c = actionEvent.getActionCommand();
         if(c == null) return;
         
-        if(c.startsWith("Open in external")) {
+        if(PreviewUtils.startsWithAny(c, "Reload")) {
+            if(htmlPane != null) {
+                htmlPane.reload();
+            }
+        }
+        
+        else if(PreviewUtils.startsWithAny(c, "Open in external", "Open ext")) {
             PreviewUtils.forkExternalPlayer(locator);
         }
         
@@ -283,12 +317,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
             PreviewUtils.saveToFile(locator);
         }
         
-        // ---------------------------------------------------------------------
-        // ---------------------------------------------------------------------
-        // ---------------------------------------------------------------------
-        
-        
-        else if("Make selection display name".equals(c)) {
+        else if(PreviewUtils.startsWithAny(c, "Make selection display name", "Make display name")) {
             String s = getSelection();
             if(s != null && s.length() > 0) {
                 try {
@@ -308,7 +337,8 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                 }
             }
         }
-        else if("Make selection base name".equals(c)) {
+        
+        else if(PreviewUtils.startsWithAny(c, "Make selection basename", "Set basename")) {
             String s = getSelection();
             if(s != null && s.length() > 0) {
                 try {
@@ -323,7 +353,8 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                 }
             }
         }
-        else if("Make selection occurrence...".equals(c)) {
+        
+        else if(PreviewUtils.startsWithAny(c, "Make selection occurrence...", "Set occurrence")) {
             String s = getSelection();
             if(s != null && s.length() > 0) {
                 try {
@@ -347,6 +378,9 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
     
 
     public String getSelection() {
+        if(htmlPane != null) {
+            return htmlPane.getSelectedText();
+        }
         return "";
     }
     
@@ -418,7 +452,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                 System.out.println("link pupup1");
                 if(mouseEvent != null) {
                     System.out.println("link pupup2");
-                    linkPopup.show(this, mouseEvent.getX(), mouseEvent.getY());
+                    linkPopup.show(ui, mouseEvent.getX(), mouseEvent.getY());
                 }
             }
              
@@ -447,31 +481,9 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
     
     
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("text/plain") ||
-                           lowercaseMimeType.startsWith("text/html")) {
-                                return true;
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".html", ".htm", ".txt")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        return PreviewUtils.isOfType(url, 
+                new String[] { "text/html" }, 
+                new String[] { "html", "htm" });
     }
     
     
@@ -493,64 +505,22 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
         private String webSource = null;
         
         
-        
         public FXHTML(final String locator) {
             this.locator = locator;
-            initialize();
-            open(locator);
         }
         
-        
-        public void open(final String locator) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if(DataURL.isDataURL(locator)) {
-                            DataURL dataUrl = new DataURL(locator);
-                            String data = new String( dataUrl.getData() );
-                            webEngine.loadContent(data);
-                        }
-                        else if(locator != null && locator.startsWith("file:")) {
-
-                        }
-                        else {
-                            webEngine.load(locator);
-                        }
-                    }
-                    catch(Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-        
-        
-        public void close() {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        webEngine.load(null);
-                    }
-                    catch(Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
         
 
-        private void initialize() {
-            Platform.setImplicitExit(false);
+        public void initialize() {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     initializeFX();
+                    open(locator);
                 }
             });
         }
-    
+        
         
 
 
@@ -574,12 +544,12 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
 
             group.getChildren().add(webView);
 
-            int w = HTML.this.getWidth();
-            int h = HTML.this.getHeight();
+            //int w = HTML.this.ui.getWidth();
+            //int h = HTML.this.ui.getHeight();
 
-            webView.setMinSize(w, h);
-            webView.setMaxSize(w, h);
-            webView.setPrefSize(w, h);
+            //webView.setMinSize(w, h);
+            //webView.setMaxSize(w, h);
+            //webView.setPrefSize(w, h);
 
             // Obtain the webEngine to navigate
             webEngine = webView.getEngine();
@@ -708,11 +678,106 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
                             webEngine.loadContent(failedToOpenMessage);
                         }
                     }
-                });
+                }
+            );
 
+        }
+        
+        
+        public void open(final String locator) {
+            try {
+                if(DataURL.isDataURL(locator)) {
+                    DataURL dataUrl = new DataURL(locator);
+                    String data = new String( dataUrl.getData() );
+                    webEngine.loadContent(data);
+                }
+                else if(locator != null && locator.startsWith("file:")) {
+
+                }
+                else {
+                    webEngine.load(locator);
+                }
+                
+                Component c = HTML.this.ui.getParent();
+                if(c != null) {
+                    int w = c.getWidth();
+                    webView.setMinSize(w, 480);
+                    webView.setMaxSize(w, 480);
+                    webView.setPrefSize(w, 480);
+                }
+                else {
+                    webView.setMinSize(640, 480);
+                    webView.setMaxSize(640, 480);
+                    webView.setPrefSize(640, 480);
+                }
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        
+        public void close() {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if(webEngine != null) {
+                            webEngine.load(null);
+                        }
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     
         
+        
+        public void reload() {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    open(locator);
+                }
+            });
+        }
+        
+        
+        
+        public String getSelectedText() {
+            //System.out.println("get selected text");
+            String selection = (String) executeSynchronizedScript("window.getSelection().toString()");
+            //System.out.println("  and the selection is "+selection);
+            return selection;
+        }
+        
+        
+        private Object scriptReturn = null;
+        public Object executeSynchronizedScript(final String script) {
+            scriptReturn = null;
+            if(script != null && script.length()>0) {
+                Thread runner = new Thread() {
+                    @Override
+                    public void run() {
+                        scriptReturn = webEngine.executeScript(script);
+                    }
+                };
+                Platform.runLater(runner);
+
+                do {
+                    try {
+                        Thread.sleep(100);
+                    }
+                    catch(Exception ex) {
+
+                    }
+                }
+                while(runner.isAlive());
+            }
+            return scriptReturn;
+        }
     }
     
     
@@ -733,7 +798,7 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
 
     @Override
     public void componentHidden(ComponentEvent e) {
-        handleComponentEvent(e);
+        //handleComponentEvent(e);
     }
 
     @Override
@@ -744,33 +809,35 @@ public class HTML extends JPanel implements MouseListener, ActionListener, Previ
     
     private void handleComponentEvent(ComponentEvent e) {
         try {
-            Component c = this;
-            if(this.getParent() != null) c = this.getParent();
-            
-            final int w = c.getWidth();
-            final int h = c.getHeight();
-            Dimension d = new Dimension(w, h);
-            
-            if(this.getParent() != null) {
-                this.setPreferredSize(d);
-                this.setMinimumSize(d);
-                this.setMaximumSize(d);
+            if(ui.getParent() != null) {
+                Dimension d = new Dimension(640, 480+56);
+                ui.setPreferredSize(d);
+                ui.setMinimumSize(d);
+                ui.setMaximumSize(d);
             }
-
+ 
             if(htmlPane != null) {
-                if(htmlPane.webView != null && w > 1 && h > 1) {
+                if(htmlPane.webView != null) {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            htmlPane.webView.setMinSize(w, h);
-                            htmlPane.webView.setMaxSize(w, h);
-                            htmlPane.webView.setPrefSize(w, h);
+                            Component c = ui;
+                            if(ui.getParent() != null) c = ui.getParent();
+                            if(c != null) {
+                                int w = c.getWidth();
+                                int h = c.getHeight();
+                                if(w > 1 && h > 1) {
+                                    htmlPane.webView.setMinSize(w, h-56);
+                                    htmlPane.webView.setMaxSize(w, h-56);
+                                    htmlPane.webView.setPrefSize(w, h-56);
+                                }
+                            }
                         }
                     });
                 }
             }
-            revalidate();
-            repaint();
+            ui.revalidate();
+            ui.repaint();
         }
         catch(Exception ex) {}
     }

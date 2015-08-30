@@ -23,6 +23,7 @@
 
 package org.wandora.application.gui.previews;
 
+
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
@@ -36,7 +37,21 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import org.apache.tika.Tika;
+import org.apache.tika.detect.CompositeDetector;
+import org.apache.tika.detect.Detector;
+import org.apache.tika.detect.DefaultDetector;
+import org.apache.tika.detect.MagicDetector;
+import org.apache.tika.io.TikaInputStream;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MimeTypes;
+import org.apache.tika.parser.microsoft.POIFSContainerDetector;
+import org.apache.tika.parser.pkg.ZipContainerDetector;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -270,5 +285,69 @@ public class PreviewUtils {
             return errorPanel;
         }
         return null;
+    }
+    
+    
+    
+    
+    
+    public static boolean isOfType(String url, String[] mimeTypes, String[] extensions) {
+        if(url != null) {
+            if(DataURL.isDataURL(url)) {
+                // The url is a data-url and has an explicit mimetype.
+                try {
+                    DataURL dataURL = new DataURL(url);
+                    String mimeType = dataURL.getMimetype();
+                    if(mimeType != null && mimeTypes != null) {
+                        String lowerCaseMimeType = mimeType.toLowerCase();
+                        for(String testMimeType : mimeTypes) {
+                            if(lowerCaseMimeType.startsWith(testMimeType)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    // Ignore --> Can't view
+                }
+            }
+            else {
+                if(extensions != null && extensions.length > 0) {
+                    // Look at the given file extension list and test...
+                    String lowerCaseUrl = url.toLowerCase();
+                    for(String extension : extensions) {
+                        if(extension != null) {
+                            if(!extension.startsWith(".")) {
+                                extension = "."+extension;
+                            }
+                            if(endsWithAny(lowerCaseUrl, extension)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                
+                // Extensions didn't work. Now look again the mime types and
+                // deeper inside the url content.
+                if(mimeTypes != null && mimeTypes.length > 0) {
+                    try {
+                        Tika tika = new Tika();
+                        String mimeType = tika.detect(new URL(url));
+                        String lowerCaseMimeType = mimeType.toLowerCase();
+                        System.out.println("Tika detected mimetype: "+lowerCaseMimeType);
+                        for(String testMimeType : mimeTypes) {
+                            if(lowerCaseMimeType.startsWith(testMimeType)) {
+                                return true;
+                            }
+                        }
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
 }

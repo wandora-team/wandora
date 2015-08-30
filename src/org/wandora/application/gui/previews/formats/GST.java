@@ -453,29 +453,16 @@ public class GST extends JPanel implements PreviewPanel, ActionListener {
     
 
     public static boolean canView(String url) {
-        boolean answer = false;
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("video/mpeg")) {
-                                answer = true;
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
+        boolean answer = PreviewUtils.isOfType(url, 
+            new String[] { 
+                "video/mpeg",
+            }, 
+            new String[] { 
+                "mpe", 
+                "mpeg", 
+                "mpg"
             }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".mpe", ".mpeg", "mpg")) {
-                    answer = true;
-                }
-            }
-        }
+        );
         
         if(answer == true) {
             String mediafw = System.getProperty("org.wandora.mediafw");

@@ -448,44 +448,33 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
     
     // -------------------------------------------------------------------------
     
-    
     public static boolean canView(String url) {
-        boolean answer = false;
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("video/mp4") ||
-                            lowercaseMimeType.startsWith("video/x-flv") ||
-                            lowercaseMimeType.startsWith("video/x-javafx") ||
-                            lowercaseMimeType.startsWith("application/vnd.apple.mpegurl") ||
-                            lowercaseMimeType.startsWith("audio/mpegurl") ||
-                            lowercaseMimeType.startsWith("audio/mp3") ||
-                            lowercaseMimeType.startsWith("audio/aiff") ||
-                            lowercaseMimeType.startsWith("audio/x-aiff") ||
-                            lowercaseMimeType.startsWith("audio/wav") ||
-                            lowercaseMimeType.startsWith("audio/x-m4a") ||
-                            lowercaseMimeType.startsWith("video/x-m4v")) {
-                                answer = true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "video/mp4",
+                    "video/x-flv",
+                    "video/x-javafx",
+                    "application/vnd.apple.mpegurl",
+                    "audio/mpegurl",
+                    "audio/mp3",
+                    "audio/aiff",
+                    "audio/x-aiff",
+                    "audio/wav",
+                    "audio/x-m4a",
+                    "video/x-m4v"
+                }, 
+                new String[] { 
+                    "mp4", 
+                    "flv", 
+                    "fxm", 
+                    "m3u8", 
+                    /* "mp3", */ 
+                    "aif", 
+                    "aiff", 
+                    /*".wav",*/ 
+                    "m4a", 
+                    "m4v"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".mp4", ".flv", ".fxm", ".m3u8", /* ".mp3", */ ".aif", ".aiff", /*".wav",*/ ".m4a", ".m4v")) {
-                    answer = true;
-                }
-            }
-        }
-        
-        return answer;
+        );
     }
-
-    
 }

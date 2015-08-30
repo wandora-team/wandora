@@ -247,33 +247,15 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
     
     
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/mpeg") ||
-                           lowercaseMimeType.startsWith("audio/x-mpeg-3") ||
-                           lowercaseMimeType.startsWith("audio/mpeg3")) {
-                                return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "audio/mpeg",
+                    "audio/x-mpeg-3",
+                    "audio/mpeg3"
+                }, 
+                new String[] { 
+                    "mp3"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".mp3")) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        );
     }
-    
-   
-    
 }

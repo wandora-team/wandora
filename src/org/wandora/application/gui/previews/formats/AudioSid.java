@@ -27,6 +27,7 @@ import de.quippy.javamod.mixer.Mixer;
 import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.previews.PreviewUtils;
 import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 import org.wandora.utils.DataURL;
@@ -91,33 +92,18 @@ public class AudioSid extends AudioMod {
     
 
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/x-sidtune") ||
-                           lowercaseMimeType.startsWith("audio/sidtune") ||
-                           lowercaseMimeType.startsWith("audio/x-psid") ||
-                           lowercaseMimeType.startsWith("audio/psid") ||
-                           lowercaseMimeType.startsWith("audio/prs.sid") ||
-                           lowercaseMimeType.startsWith("audio/x-sid")) {
-                                return true;
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
+        return PreviewUtils.isOfType(url, 
+            new String[] { 
+                "audio/x-sidtune",
+                "audio/sidtune",
+                "audio/x-psid",
+                "audio/psid",
+                "audio/prs.sid",
+                "audio/x-sid"
+            }, 
+            new String[] { 
+                "sid"
             }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".sid")) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        );
     }
 }

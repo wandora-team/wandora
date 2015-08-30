@@ -24,6 +24,7 @@
 package org.wandora.application.gui.previews.formats;
 
 
+import org.wandora.application.gui.previews.PreviewUtils;
 import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.DataURL;
 
@@ -44,28 +45,13 @@ public class AudioOgg extends AudioMod {
     
 
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/ogg")) {
-                                return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "audio/ogg",
+                }, 
+                new String[] { 
+                    "ogg"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".ogg")) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        );
     }
 }

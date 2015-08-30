@@ -271,32 +271,19 @@ public class PDFnew implements PreviewPanel {
     // -------------------------------------------------------------------------
     
     
+    
+    
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("application/pdf")) {
-                            return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "application/pdf",
+                }, 
+                new String[] { 
+                    "pdf"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".pdf")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        );
     }
+    
     
     
     

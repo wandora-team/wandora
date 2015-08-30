@@ -337,42 +337,30 @@ public class ZMachine implements ActionListener, PreviewPanel {
     
     
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("application/x-zmachine") ||
-                           lowercaseMimeType.startsWith("application/x-zmachine-1") ||
-                           lowercaseMimeType.startsWith("application/x-zmachine-2") ||
-                           lowercaseMimeType.startsWith("application/x-zmachine-3") ||
-                           lowercaseMimeType.startsWith("application/x-zmachine-4") ||
-                           lowercaseMimeType.startsWith("application/x-zmachine-5") ||
-                           lowercaseMimeType.startsWith("application/x-zmachine-6") ||
-                           lowercaseMimeType.startsWith("application/x-zmachine-7") ||
-                           lowercaseMimeType.startsWith("application/x-zmachine-8") ||
-                           lowercaseMimeType.startsWith("application/x-blorb")) {
-                                return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "application/x-zmachine",
+                    "application/x-zmachine-1",
+                    "application/x-zmachine-2",
+                    "application/x-zmachine-3",
+                    "application/x-zmachine-4",
+                    "application/x-zmachine-5",
+                    "application/x-zmachine-6",
+                    "application/x-zmachine-7",
+                    "application/x-zmachine-8",
+                    "application/x-blorb" }, 
+                new String[] { 
+                    "z1", 
+                    "z2", 
+                    "z3", 
+                    "z4", 
+                    "z5", 
+                    "z6", 
+                    "z7", 
+                    "z8", 
+                    "zblorb", 
+                    "zlb"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".z1", ".z2", ".z3", ".z4", ".z5", ".z6", ".z7", ".z8", ".zblorb", "zlb")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        );
     }
-    
-    
-    
-    
 }

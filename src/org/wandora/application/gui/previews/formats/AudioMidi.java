@@ -336,31 +336,16 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
     
     
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/midi") ||
-                           lowercaseMimeType.startsWith("application/x-midi")) {
-                                return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "audio/midi",
+                    "application/x-midi",
+                }, 
+                new String[] { 
+                    ".mid", 
+                    ".midi", 
+                    ".rmf"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".mid", ".midi", ".rmf")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        );
     }
-    
 }

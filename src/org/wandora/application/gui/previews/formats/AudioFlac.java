@@ -23,12 +23,9 @@
 
 package org.wandora.application.gui.previews.formats;
 
-import de.quippy.javamod.mixer.Mixer;
-import java.awt.event.ActionEvent;
-import javax.swing.JComponent;
-import org.wandora.application.gui.UIBox;
+
+import org.wandora.application.gui.previews.PreviewUtils;
 import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
-import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 import org.wandora.utils.DataURL;
 
 /**
@@ -48,28 +45,13 @@ public class AudioFlac extends AudioMod {
     
 
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/x-flac")) {
-                                return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "audio/x-flac",
+                }, 
+                new String[] { 
+                    "flac"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".flac")) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        );
     }
 }

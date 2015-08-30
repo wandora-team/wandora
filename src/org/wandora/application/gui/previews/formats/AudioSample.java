@@ -301,34 +301,20 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     // -------------------------------------------------------------------------
     
     
-    
     public static boolean canView(String url) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
-                try {
-                    DataURL dataURL = new DataURL(url);
-                    String mimeType = dataURL.getMimetype();
-                    if(mimeType != null) {
-                        String lowercaseMimeType = mimeType.toLowerCase();
-                        if(lowercaseMimeType.startsWith("audio/x-aiff") ||
-                           lowercaseMimeType.startsWith("audio/basic") ||
-                           lowercaseMimeType.startsWith("audio/x-wav")) {
-                                return true;
-                        }
-                    }
+        return PreviewUtils.isOfType(url, 
+                new String[] { 
+                    "audio/x-aiff",
+                    "audio/basic",
+                    "audio/x-wav"
+                }, 
+                new String[] { 
+                    "aif", 
+                    /*"mp3", */
+                    "wav", 
+                    "au"
                 }
-                catch(Exception e) {
-                    // Ignore --> Can't view
-                }
-            }
-            else {
-                if(endsWithAny(url.toLowerCase(), ".aif", /*".mp3", */".wav", ".au")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        );
     }
     
    

@@ -19,7 +19,6 @@ set WANDORACLASSES=%WANDORACLASSES%;lib/musicbrainz/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/axis2/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/pdfbox/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/sesame/*
-set WANDORACLASSES=%WANDORACLASSES%;lib/any23/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/stanford-ner/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/gate/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/gate/lib/*
@@ -31,5 +30,6 @@ set WANDORACLASSES=%WANDORACLASSES%;lib/df/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/unirest/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/tmql4j/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/*
+set WANDORACLASSES=%WANDORACLASSES%;lib/any23/*
 REM  To use the Webview Panel with Java 7 fix next line to address the location of JavaFX jar jfxrt.jar .
 set WANDORACLASSES=%WANDORACLASSES%;C:\Program Files\Java\jre7\lib\jfxrt.jar
