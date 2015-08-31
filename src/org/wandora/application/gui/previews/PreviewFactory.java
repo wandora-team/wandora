@@ -45,8 +45,8 @@ public class PreviewFactory {
         PreviewPanel previewPanel = null;
 
         try {
-            if(hasJavaFX() && FXMediaPlayer.canView(urlString)) {
-                previewPanel = new FXMediaPlayer(urlString);
+            if(hasJavaFX() && VideoMp4.canView(urlString)) {
+                previewPanel = new VideoMp4(urlString);
             }
             else if(AudioFlac.canView(urlString)) {
                 previewPanel = new AudioFlac(urlString); 
@@ -63,23 +63,23 @@ public class PreviewFactory {
             else if(AudioMidi.canView(urlString)) {
                 previewPanel = new AudioMidi(urlString); 
             }
-            else if(AudioSample.canView(urlString)) {
-                previewPanel = new AudioSample(urlString); 
+            else if(AudioWav.canView(urlString)) {
+                previewPanel = new AudioWav(urlString); 
             }
             else if(AudioMP3.canView(urlString)) {
                 previewPanel = new AudioMP3(urlString);
             }
-            else if(Picture.canView(urlString)) {
-                previewPanel = new Picture(urlString);
+            else if(Image.canView(urlString)) {
+                previewPanel = new Image(urlString);
             }
-            else if(PDFnew.canView(urlString)) {
-                previewPanel = new PDFnew(urlString);
+            else if(ApplicationPDF.canView(urlString)) {
+                previewPanel = new ApplicationPDF(urlString);
             }
             else if(Text.canView(urlString)) {
                 previewPanel = new Text(urlString); 
             }
-            else if(XML.canView(urlString)) {
-                previewPanel = new XML(urlString);
+            else if(ApplicationXML.canView(urlString)) {
+                previewPanel = new ApplicationXML(urlString);
             }
             else if(FMJ.canView(urlString)) {
                 previewPanel = new FMJ(urlString);
@@ -87,11 +87,11 @@ public class PreviewFactory {
             else if(GST.canView(urlString)) {
                 previewPanel = new GST(urlString);
             }
-            else if(HTML.canView(urlString)) {
-                previewPanel = new HTML(urlString);
+            else if(TextHTML.canView(urlString)) {
+                previewPanel = new TextHTML(urlString);
             }
-            else if(ZMachine.canView(urlString)) {
-                previewPanel = new ZMachine(urlString); 
+            else if(ApplicationZMachine.canView(urlString)) {
+                previewPanel = new ApplicationZMachine(urlString); 
             }
         }
         catch(Exception e) {

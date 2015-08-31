@@ -19,23 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
+ * ApplicationXML.java
+ *
+ *
  */
 
 package org.wandora.application.gui.previews.formats;
 
 
-import org.wandora.application.gui.previews.PreviewUtils;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.event.*;
+import javax.swing.JComponent;
+import javax.swing.JTextPane;
+import org.wandora.application.gui.previews.*;
+import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
+import org.wandora.utils.*;
 
 
 /**
  *
  * @author akivela
  */
-public class AudioFlac extends AudioAbstract {
+public class ApplicationXML extends Text implements ActionListener, PreviewPanel {
+
     
-    
-    public AudioFlac(String locator) {
+    /** Creates a new instance of XML */
+    public ApplicationXML(String locator) {
         super(locator);
+    }
+    
+    
+    protected JComponent getTextComponent(String locator) {
+        JTextPane textComponent = new JTextPane();
+        textComponent.setText(getContent(locator));
+        textComponent.setFont(new Font("monospaced", Font.PLAIN, 12));
+        textComponent.setEditable(false);
+        textComponent.setCaretPosition(0);
+        textComponent.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        return textComponent;
     }
     
     
@@ -46,11 +68,12 @@ public class AudioFlac extends AudioAbstract {
     public static boolean canView(String url) {
         return PreviewUtils.isOfType(url, 
                 new String[] { 
-                    "audio/x-flac",
-                }, 
+                    "application/xml",
+                    "text/xml" }, 
                 new String[] { 
-                    "flac"
+                    "xml"
                 }
         );
     }
+    
 }

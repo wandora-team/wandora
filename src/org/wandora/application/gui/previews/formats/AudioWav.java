@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * AudioSample.java
+ * AudioWav.java
  *
  * Created on 29. toukokuuta 2006, 14:33
  *
@@ -43,7 +43,6 @@ import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 import javax.sound.sampled.*;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 import org.wandora.utils.DataURL;
 
@@ -53,7 +52,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class AudioSample extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
+public class AudioWav extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
     private static final String OPTIONS_PREFIX = "gui.audioSamplePreviewPanel.";
 
     private Map<String, String> options;
@@ -66,7 +65,7 @@ public class AudioSample extends JPanel implements Runnable, MouseListener, Acti
     
     
     /** Creates a new instance of AudioSample */
-    public AudioSample(String audioLocator) {
+    public AudioWav(String audioLocator) {
         this.audioLocator = audioLocator;
         initialize();
     }

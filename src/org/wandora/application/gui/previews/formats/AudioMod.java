@@ -35,7 +35,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Properties;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -53,294 +55,37 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class AudioMod extends JavaModMainBase implements PreviewPanel, ActionListener, Runnable {
-    private String locator = null;
-    private Thread playerThread = null;
-    private Mixer currentMixer;
-    private JPanel ui = null;
-    private SimpleTimeSlider progressBar = null;
-    private File tmpFile = null;
+public class AudioMod extends AudioAbstract {
     
-    
-    
+
     public AudioMod(String locator) {
-        super(false);
-        this.locator = locator;
-        ui = makeUI();
-        
-        Properties props = new Properties();
-        props.setProperty(ModContainer.PROPERTY_PLAYER_ISP, "3");
-        props.setProperty(ModContainer.PROPERTY_PLAYER_STEREO, "2");
-        props.setProperty(ModContainer.PROPERTY_PLAYER_WIDESTEREOMIX, "FALSE");
-        props.setProperty(ModContainer.PROPERTY_PLAYER_NOISEREDUCTION, "FALSE");
-        props.setProperty(ModContainer.PROPERTY_PLAYER_NOLOOPS, "1");
-        props.setProperty(ModContainer.PROPERTY_PLAYER_MEGABASS, "TRUE");
-        props.setProperty(ModContainer.PROPERTY_PLAYER_BITSPERSAMPLE, "16");			
-        props.setProperty(ModContainer.PROPERTY_PLAYER_FREQUENCY, "48000");
-        props.setProperty(ModContainer.PROPERTY_PLAYER_MSBUFFERSIZE, "250");
-        MultimediaContainerManager.configureContainer(props);
+        super(locator);
     }
     
     
-    public void createMixer() {
-        try {
-            if(DataURL.isDataURL(locator)) {
-                DataURL dataUrl = new DataURL(locator);
-                tmpFile = dataUrl.createTempFile();
-                if(tmpFile != null) {
-                    MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(tmpFile);
-                    currentMixer = multimediaContainer.createNewMixer();
-                }
-                else {
-                    PreviewUtils.previewError(ui, "Unable to create temporal file for a dataurl.", null);
-                }
-            }
-            else {
-                MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(new URL(locator));
-                currentMixer = multimediaContainer.createNewMixer();
-            }
-        }
-        catch(Exception e) {
-            PreviewUtils.previewError(ui, "Unable to play audio.", e);
-        }
-    }
-    
-    
-    @Override
-    public void run() {
-        ProgressThread progressThread = null;
-        try {
-            if(currentMixer == null) {
-                createMixer();
-            }
-            if(currentMixer != null) {
-                progressThread = new ProgressThread(currentMixer, progressBar);
-                progressThread.start();
-                currentMixer.startPlayback();
-            }
-        }
-        catch(Throwable ex) {
-            ex.printStackTrace(System.err);
-        }
-        if(progressThread != null) {
-            progressThread.abort();
-        }
-    }
-
-    @Override
-    public void stop() {
-        if(currentMixer != null) {
-            currentMixer.stopPlayback();
-        }
-    }
-
-    @Override
-    public void finish() {
-        if(currentMixer != null) {
-            currentMixer.stopPlayback();
-        }
-    }
-
-    @Override
-    public Component getGui() {
-        return ui;
-    }
-
-    @Override
-    public boolean isHeavy() {
-        return false;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String cmd = e.getActionCommand();
-        
-        if(startsWithAny(cmd, "Play")) {
-            if(currentMixer != null && currentMixer.isPaused()) {
-                currentMixer.pausePlayback();
-            }
-            else {
-                playerThread = new Thread(this);
-                playerThread.setDaemon(true);
-                playerThread.start();
-            }
-        }
-        else if(startsWithAny(cmd, "Pause")) {
-            if(currentMixer != null) {
-                currentMixer.pausePlayback();
-            }
-        }
-        else if(startsWithAny(cmd, "Stop")) {
-            if(currentMixer != null) {
-                currentMixer.stopPlayback();
-                currentMixer = null;
-            }
-        }
-        else if(startsWithAny(cmd, "Forward")) {
-            if(currentMixer != null) {
-                if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
-                    long currentPosition = currentMixer.getMillisecondPosition();
-                    long forwardPosition = currentPosition + 10000;
-                    currentMixer.setMillisecondPosition(forwardPosition);
-                }
-            }
-        }
-        else if(startsWithAny(cmd, "Backward")) {
-            if(currentMixer != null) {
-                if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
-                    long currentPosition = currentMixer.getMillisecondPosition();
-                    long backwardPosition = currentPosition - 10000;
-                    currentMixer.setMillisecondPosition(Math.max(0, backwardPosition));
-                }
-            }
-        }
-        else if(startsWithAny(cmd, "Open ext")) {
-            if(locator != null) {
-                PreviewUtils.forkExternalPlayer(locator);
-            }
-        }
-        else if(startsWithAny(cmd, "Copy audio location", "Copy location")) {
-            if(locator != null) {
-                ClipboardBox.setClipboard(locator);
-            }
-        }
-        else if(startsWithAny(cmd, "Save")) {
-            if(locator != null) {
-                PreviewUtils.saveToFile(locator);
-            }
-        }
-    }
-    
-    
-    protected Mixer getMixer() {
-        return currentMixer;
-    }
-    
-    
-    // ------------------
-    
-    private JPanel makeUI() {
-        JPanel ui = new JPanel();
-        
-        progressBar = new SimpleTimeSlider();
-        progressBar.setString(locator);
-        JPanel progressBarContainer = new JPanel();
-        progressBarContainer.setLayout(new BorderLayout());
-        progressBarContainer.add(progressBar, BorderLayout.CENTER);
-        
-        JPanel controllerPanel = new JPanel();
-        controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
-        
-        ui.setLayout(new BorderLayout(8,8));
-        ui.add(progressBarContainer, BorderLayout.CENTER);
-        ui.add(controllerPanel, BorderLayout.SOUTH);
-
-        progressBar.addMouseListener(new MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent e) {
-                int mouseValue = progressBar.getValueFor(e);
-                if(currentMixer != null && currentMixer.isSeekSupported()) {
-                    if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
-                        currentMixer.setMillisecondPosition(mouseValue*1000);
-                        System.out.println("newPosition: "+mouseValue*1000);
-                        System.out.println("newPosition2: "+currentMixer.getMillisecondPosition());
-                    }
-                }
-            }
-        });
-        
-        return ui;
-    }
-    
-    
-    protected JComponent getJToolBar() {
-        return UIBox.makeButtonContainer(new Object[] {
-            "Play", UIBox.getIcon(0xf04b), this,
-            "Pause", UIBox.getIcon(0xf04c), this,
-            "Stop", UIBox.getIcon(0xf04d), this,
-            "Backward", UIBox.getIcon(0xf04a), this,
-            "Forward", UIBox.getIcon(0xf04e), this,
-            "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Open ext", UIBox.getIcon(0xf08e), this,
-            "Save as", UIBox.getIcon(0xf0c7), this, // f019
-        }, this);
-    }
-    
-
     
     // -------------------------------------------------------------------------
     
 
     public static boolean canView(String url) {
         return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "audio/mod",
-                    "audio/xm",
-                    "audio/wow",
-                    "audio/it",
-                    "audio/stm",
-                    "audio/s3m",
-                    "audio/xm"
-                }, 
-                new String[] { 
-                    "mod", 
-                    "wow", 
-                    "it", 
-                    "stm",
-                    "s3m", 
-                    "xm"
-                }
+            new String[] { 
+                "audio/mod",
+                "audio/xm",
+                "audio/wow",
+                "audio/it",
+                "audio/stm",
+                "audio/s3m",
+                "audio/xm"
+            }, 
+            new String[] { 
+                "mod", 
+                "wow", 
+                "it", 
+                "stm",
+                "s3m", 
+                "xm"
+            }
         );
     }
-   
-    
-
-    
-    // -------------------------------------------------------------------------
-    
-    
-    
-    private class ProgressThread extends Thread {
-        private Mixer progressMixer = null;
-        private SimpleTimeSlider progressBar = null;
-        private boolean isRunning = true;
-        
-        
-        public ProgressThread(Mixer mixer, SimpleTimeSlider bar) {
-            progressMixer = mixer;
-            progressBar = bar;
-            if(progressBar != null) {
-                progressBar.setMinimum(0.0);
-                progressBar.setValue(0.0);
-                if(progressMixer != null) {
-                    progressBar.setMaximum(progressMixer.getLengthInMilliseconds() / 1000);
-                }
-            }
-        }
-        
-        
-        
-        @Override
-        public void run() {
-            while(progressMixer != null && progressBar != null && isRunning) {
-                if(currentMixer.isNotSeeking()) {
-                    long progress = progressMixer.getMillisecondPosition() / 1000;
-                    progressBar.setValue((int) progress);
-                }
-                try {
-                    Thread.sleep(100);
-                }
-                catch(Exception e) {}
-            }
-            progressBar.setValue(0);
-            progressBar.setString(locator);
-        }
-        
-        
-        public void abort() {
-            isRunning = false;
-        }
-    }
-    
-    
-    
 }

@@ -265,7 +265,7 @@ public class DataURL {
             byte[] bytes = this.getData();
             if(bytes != null && bytes.length > 0) {
                 String mimetype = this.getMimetype();
-                String prefix = "tmp" + this.hashCode();
+                String prefix = "wandora" + this.hashCode();
                 String suffix = MimeTypes.getExtension(mimetype);
                 if(suffix == null) suffix = "tmp";
                 if(!suffix.startsWith(".")) suffix = "."+suffix;

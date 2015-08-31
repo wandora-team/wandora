@@ -63,6 +63,18 @@ public class SimpleTimeSlider extends JProgressBar {
     }
     
     
+    @Override
+    public void setMaximum(int value) {
+        super.setMaximum(value*100);
+    }
+    
+    
+    @Override
+    public void setMinimum(int value) {
+        super.setMinimum(value*100);
+    }
+    
+    
     public void setValue(double value) {
         super.setValue((int) floor(value*100));
         setString(getFormatTime((int) floor(value*100), this.getMaximum()));

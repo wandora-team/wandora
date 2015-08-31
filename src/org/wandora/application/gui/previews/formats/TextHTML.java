@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * HTML.java
+ * TextHTML.java
  *
  * Created on 24. lokakuuta 2007, 17:15
  *
@@ -71,7 +71,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class HTML implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener, ComponentListener {
+public class TextHTML implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener, ComponentListener {
 
     private Wandora wandora;
     private String locator;
@@ -84,7 +84,7 @@ public class HTML implements MouseListener, ActionListener, PreviewPanel, Hyperl
     
     
     /** Creates a new instance of HTML */
-    public HTML(String locator) {
+    public TextHTML(String locator) {
         Platform.setImplicitExit(false);
         this.wandora = Wandora.getWandora();
         this.locator = locator;
@@ -116,14 +116,16 @@ public class HTML implements MouseListener, ActionListener, PreviewPanel, Hyperl
             ui.setLayout(new BorderLayout(4,4));
             ui.setPreferredSize(new Dimension(640, 480+56));
             ui.setMinimumSize(new Dimension(640, 480+56));
-            
+
             JPanel htmlWrapper = new JPanel();
+            htmlWrapper.setBorder(BorderFactory.createLineBorder(Color.GRAY));
             htmlWrapper.setLayout(new BorderLayout());
 
             htmlPane = new FXHTML(locator);
             htmlPane.initialize();
 
             htmlWrapper.add(htmlPane, BorderLayout.CENTER);
+            
             
             //htmlPane.addMouseListener(this);
             //htmlPane.setBorder(BorderFactory.createLineBorder(borderColor));
@@ -544,8 +546,8 @@ public class HTML implements MouseListener, ActionListener, PreviewPanel, Hyperl
 
             group.getChildren().add(webView);
 
-            //int w = HTML.this.ui.getWidth();
-            //int h = HTML.this.ui.getHeight();
+            //int w = TextHTML.this.ui.getWidth();
+            //int h = TextHTML.this.ui.getHeight();
 
             //webView.setMinSize(w, h);
             //webView.setMaxSize(w, h);
@@ -698,7 +700,7 @@ public class HTML implements MouseListener, ActionListener, PreviewPanel, Hyperl
                     webEngine.load(locator);
                 }
                 
-                Component c = HTML.this.ui.getParent();
+                Component c = TextHTML.this.ui.getParent();
                 if(c != null) {
                     int w = c.getWidth();
                     webView.setMinSize(w, 480);

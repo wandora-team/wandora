@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * Picture.java
+ * Image.java
  *
  * Created on 17. toukokuuta 2006, 16:38
  *
@@ -58,7 +58,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class Picture extends JPanel implements Runnable, MouseListener, KeyListener, ImageObserver, ActionListener, Printable, PreviewPanel {
+public class Image extends JPanel implements Runnable, MouseListener, KeyListener, ImageObserver, ActionListener, Printable, PreviewPanel {
     private static final String OPTIONS_PREFIX = "gui.imagePreviewPanel.";
     private static final double ZOOMFACTOR = 1.1;
     
@@ -84,7 +84,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     
     
     
-    public Picture(String imageLocator) {
+    public Image(String imageLocator) {
         this.wandora = Wandora.getWandora();
         this.imageLocator = imageLocator;
 
@@ -196,7 +196,7 @@ public class Picture extends JPanel implements Runnable, MouseListener, KeyListe
     }
     
 
-    public boolean imageUpdate(Picture img, int infoflags, int x, int y, int width, int height) {
+    public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
         if((infoflags & ImageObserver.ALLBITS) != 0) {
             repaint();
             revalidate();

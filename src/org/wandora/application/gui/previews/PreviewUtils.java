@@ -28,39 +28,31 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.io.File;
-import org.wandora.utils.Option;
-import org.wandora.application.gui.simple.SimpleFileChooser;
-import javax.swing.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import javax.swing.*;
 import org.apache.tika.Tika;
-import org.apache.tika.detect.CompositeDetector;
-import org.apache.tika.detect.Detector;
-import org.apache.tika.detect.DefaultDetector;
-import org.apache.tika.detect.MagicDetector;
-import org.apache.tika.io.TikaInputStream;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.mime.MediaType;
-import org.apache.tika.mime.MimeTypes;
-import org.apache.tika.parser.microsoft.POIFSContainerDetector;
-import org.apache.tika.parser.pkg.ZipContainerDetector;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.Functional.Fn0;
 import org.wandora.utils.Functional.Fn1;
 import org.wandora.utils.IObox;
+import org.wandora.utils.Option;
 import static org.wandora.utils.Option.*;
+
 
 public class PreviewUtils {
     
@@ -290,6 +282,8 @@ public class PreviewUtils {
     
     
     
+    private static HashMap<String,String> tikaDetections = new HashMap();
+    private static int tikeDetectionsMaxSize = 999;
     
     public static boolean isOfType(String url, String[] mimeTypes, String[] extensions) {
         if(url != null) {
@@ -331,15 +325,44 @@ public class PreviewUtils {
                 // deeper inside the url content.
                 if(mimeTypes != null && mimeTypes.length > 0) {
                     try {
-                        Tika tika = new Tika();
-                        String mimeType = tika.detect(new URL(url));
-                        String lowerCaseMimeType = mimeType.toLowerCase();
-                        System.out.println("Tika detected mimetype: "+lowerCaseMimeType);
-                        for(String testMimeType : mimeTypes) {
-                            if(lowerCaseMimeType.startsWith(testMimeType)) {
-                                return true;
+                        String urlDecoded = URLDecoder.decode(url, "utf-8");
+                        URL realUrl = new URL(urlDecoded);
+                        if(realUrl != null) {
+                            String lowerCaseMimeType = null;
+                            if(tikaDetections.containsKey(url)) {
+                                lowerCaseMimeType = tikaDetections.get(url);
+                                
+                            }
+                            else {
+                                Tika tika = new Tika();
+                                String mimeType = tika.detect(realUrl);
+                                lowerCaseMimeType = mimeType.toLowerCase();
+                                if(tikaDetections.size() > tikeDetectionsMaxSize) {
+                                    tikaDetections.clear();
+                                }
+                                tikaDetections.put(url, lowerCaseMimeType);
+                            }
+                            if(lowerCaseMimeType != null) {
+                                // System.out.println("Tika detected mimetype: "+lowerCaseMimeType);
+                                for(String testMimeType : mimeTypes) {
+                                    if(lowerCaseMimeType.startsWith(testMimeType)) {
+                                        return true;
+                                    }
+                                }
                             }
                         }
+                    }
+                    catch(ConnectException ce) {
+                        tikaDetections.put(url, null);
+                        System.out.println("ConnectException occurred while detecting preview's type: "+ce.getMessage());
+                    }
+                    catch(FileNotFoundException fnfe) {
+                        tikaDetections.put(url, null);
+                        System.out.println("FileNotFoundException occurred while detecting preview's type: "+fnfe.getMessage());
+                    }
+                    catch(IllegalArgumentException iae) {
+                        tikaDetections.put(url, null);
+                        System.out.println("IllegalArgumentException occurred while detecting preview's type: "+iae.getMessage());
                     }
                     catch(Exception e) {
                         e.printStackTrace();
@@ -347,7 +370,6 @@ public class PreviewUtils {
                 }
             }
         }
-        
         return false;
     }
 }

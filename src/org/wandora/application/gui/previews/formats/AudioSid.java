@@ -28,15 +28,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewUtils;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
-import org.wandora.utils.DataURL;
 
 /**
  *
  * @author akivela
  */
-public class AudioSid extends AudioMod {
+public class AudioSid extends AudioAbstract {
     
     
     public AudioSid(String locator) {

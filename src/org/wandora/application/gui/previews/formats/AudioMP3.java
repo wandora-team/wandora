@@ -254,7 +254,8 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
                     "audio/mpeg3"
                 }, 
                 new String[] { 
-                    "mp3"
+                    "mp3",
+                    "m3a"
                 }
         );
     }

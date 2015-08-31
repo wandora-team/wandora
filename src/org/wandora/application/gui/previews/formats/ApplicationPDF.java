@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * PDFnew.java
+ * ApplicationPDF.java
  *
  * Created on 12. lokakuuta 2007, 17:14
  *
@@ -57,7 +57,7 @@ import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 
 
 
-public class PDFnew implements PreviewPanel {
+public class ApplicationPDF implements PreviewPanel {
     private double ZOOMFACTOR = 0.8;
     private final Frame dlgParent;
     private final Pr0 cleanup;
@@ -86,7 +86,7 @@ public class PDFnew implements PreviewPanel {
 
     
     
-    public PDFnew(String pdfLocator) throws FileNotFoundException, IOException, MalformedURLException, URISyntaxException {
+    public ApplicationPDF(String pdfLocator) throws FileNotFoundException, IOException, MalformedURLException, URISyntaxException {
         
         this.source = pdfLocator;
         this.options = Wandora.getWandora().getOptions().asMap();

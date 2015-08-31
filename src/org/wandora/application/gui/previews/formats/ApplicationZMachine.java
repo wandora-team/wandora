@@ -57,7 +57,7 @@ import org.zmpp.vm.Output;
  *
  * @author akivela
  */
-public class ZMachine implements ActionListener, PreviewPanel {
+public class ApplicationZMachine implements ActionListener, PreviewPanel {
     
     private String locator = null;
     private JPanel ui = null;
@@ -67,7 +67,7 @@ public class ZMachine implements ActionListener, PreviewPanel {
     
     
     
-    public ZMachine(String loc) {
+    public ApplicationZMachine(String loc) {
         this.locator = loc;
     }
     

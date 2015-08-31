@@ -18,46 +18,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * 
- * XML.java
- *
  *
  */
 
 package org.wandora.application.gui.previews.formats;
 
-
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.event.*;
-import javax.swing.JComponent;
-import javax.swing.JTextPane;
-import org.wandora.application.gui.previews.*;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
-import org.wandora.utils.*;
-
+import org.wandora.application.gui.previews.PreviewUtils;
 
 /**
  *
  * @author akivela
  */
-public class XML extends Text implements ActionListener, PreviewPanel {
-
+public class AudioMP3v2 extends AudioAbstract {
     
-    /** Creates a new instance of XML */
-    public XML(String locator) {
+    
+    public AudioMP3v2(String locator) {
         super(locator);
-    }
-    
-    
-    protected JComponent getTextComponent(String locator) {
-        JTextPane textComponent = new JTextPane();
-        textComponent.setText(getContent(locator));
-        textComponent.setFont(new Font("monospaced", Font.PLAIN, 12));
-        textComponent.setEditable(false);
-        textComponent.setCaretPosition(0);
-        textComponent.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-        return textComponent;
     }
     
     
@@ -65,15 +41,17 @@ public class XML extends Text implements ActionListener, PreviewPanel {
     // -------------------------------------------------------------------------
     
 
+    
     public static boolean canView(String url) {
         return PreviewUtils.isOfType(url, 
                 new String[] { 
-                    "application/xml",
-                    "text/xml" }, 
+                    "audio/mpeg",
+                    "audio/x-mpeg-3",
+                    "audio/mpeg3"
+                }, 
                 new String[] { 
-                    "xml"
+                    "mp3"
                 }
         );
     }
-    
 }

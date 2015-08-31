@@ -46,7 +46,6 @@ import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 import javax.sound.midi.*;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.DataURL;
 
 

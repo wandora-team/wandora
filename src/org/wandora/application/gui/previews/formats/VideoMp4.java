@@ -60,7 +60,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListener, ComponentListener {
+public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, ComponentListener {
     private String mediaUrlString = null;
     private JFXPanel fxPanel;
     private MediaPlayer player;
@@ -73,7 +73,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
     private JPanel errorPanel = null;
     
 
-    public FXMediaPlayer(String mediaUrlString) {
+    public VideoMp4(String mediaUrlString) {
         Platform.setImplicitExit(false);
         this.mediaUrlString = mediaUrlString;
         initialize();
@@ -257,7 +257,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
             int w = player.getMedia().getWidth();
             int h = player.getMedia().getHeight();
 
-            int outerWidth = FXMediaPlayer.this.getWidth();
+            int outerWidth = VideoMp4.this.getWidth();
 
             fxPanel.setSize(w, h);
             fxPanel.setPreferredSize(new Dimension(w, h));
@@ -318,7 +318,7 @@ public class FXMediaPlayer extends JPanel implements PreviewPanel, ActionListene
         if(player != null) {
             Platform.runLater(new Runnable() {
                 @Override public void run() {
-                    // System.out.println("FXMediaPlayer stopped.");
+                    // System.out.println("VideoMp4 stopped.");
                     player.stop();
                 }
             });

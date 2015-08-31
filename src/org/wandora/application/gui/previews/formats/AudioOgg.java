@@ -25,14 +25,13 @@ package org.wandora.application.gui.previews.formats;
 
 
 import org.wandora.application.gui.previews.PreviewUtils;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
-import org.wandora.utils.DataURL;
+
 
 /**
  *
  * @author akivela
  */
-public class AudioOgg extends AudioMod {
+public class AudioOgg extends AudioAbstract {
     
     
     public AudioOgg(String locator) {
@@ -48,9 +47,11 @@ public class AudioOgg extends AudioMod {
         return PreviewUtils.isOfType(url, 
                 new String[] { 
                     "audio/ogg",
+                    "application/ogg",
                 }, 
                 new String[] { 
-                    "ogg"
+                    "ogg",
+                    "ogx"
                 }
         );
     }
