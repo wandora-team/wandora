@@ -36,6 +36,7 @@ import javax.swing.JProgressBar;
  */
 public class SimpleTimeSlider extends JProgressBar {
     
+    private final static int MULTIPLIER = 100; 
     
     
     public SimpleTimeSlider() {
@@ -54,38 +55,38 @@ public class SimpleTimeSlider extends JProgressBar {
 
     
     public void setMaximum(double value) {
-        super.setMaximum((int) floor(value*100));
+        super.setMaximum((int) floor(value*MULTIPLIER));
     }
     
     
     public void setMinimum(double value) {
-        super.setMinimum((int) floor(value*100));
+        super.setMinimum((int) floor(value*MULTIPLIER));
     }
     
     
     @Override
     public void setMaximum(int value) {
-        super.setMaximum(value*100);
+        super.setMaximum(value*MULTIPLIER);
     }
     
     
     @Override
     public void setMinimum(int value) {
-        super.setMinimum(value*100);
+        super.setMinimum(value*MULTIPLIER);
     }
     
     
     public void setValue(double value) {
-        super.setValue((int) floor(value*100));
-        setString(getFormatTime((int) floor(value*100), this.getMaximum()));
+        super.setValue((int) floor(value*MULTIPLIER));
+        setString(getFormatTime((int) floor(value*MULTIPLIER), this.getMaximum()));
         setToolTipText(getString());
     }
     
     
     @Override
     public void setValue(int value) {
-        super.setValue(value*100);
-        setString(getFormatTime(value*100, this.getMaximum()));
+        super.setValue(value*MULTIPLIER);
+        setString(getFormatTime(value*MULTIPLIER, this.getMaximum()));
         setToolTipText(getString());
     }
 
@@ -93,7 +94,7 @@ public class SimpleTimeSlider extends JProgressBar {
     @Override
     public int getValue() {
         int v = super.getValue();
-        return v/100;
+        return v/MULTIPLIER;
     }
     
     
@@ -101,11 +102,19 @@ public class SimpleTimeSlider extends JProgressBar {
     public int getValueFor(MouseEvent mouseEvent) {
         if(mouseEvent == null) return getValue();
         else {
-            int newValue = (( (100*(mouseEvent.getX()-getX())) / getWidth()) * getMaximum()) / (100*100);
+            int newValue = (( (MULTIPLIER*(mouseEvent.getX()-getX())) / getWidth()) * getMaximum()) / (MULTIPLIER*MULTIPLIER);
             newValue = Math.max(0, newValue);
             newValue = Math.min(super.getMaximum(), newValue);
             return newValue;
         }
+    }
+    
+    
+    public void setProgress(String text, int minValue, int value, int maxValue) {
+        super.setMinimum(minValue*MULTIPLIER);
+        super.setMaximum(maxValue*MULTIPLIER);
+        super.setValue(value*MULTIPLIER);
+        this.setString(text);
     }
     
     
@@ -134,8 +143,8 @@ public class SimpleTimeSlider extends JProgressBar {
     
     
     private String getFormatTime(int elapsed, int duration) {
-        elapsed = elapsed/100;
-        duration = duration/100;
+        elapsed = elapsed/MULTIPLIER;
+        duration = duration/MULTIPLIER;
         
         int elapsedHours = elapsed / (60 * 60);
         if (elapsedHours > 0) {

@@ -1,5 +1,9 @@
 /*
- * Copyright (C) 2015 akivela
+ * WANDORA
+ * Knowledge Extraction, Management, and Publishing Application
+ * http://wandora.org
+ *
+ * Copyright (C) 2004-2015 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,6 +17,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *
  */
 
 package org.wandora.application.gui.previews.formats;
@@ -32,8 +39,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.util.Properties;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -245,8 +254,10 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
         @Override
         public void run() {
             try {
-                if(currentMixer == null) {
+                if(progressThread == null) {
                     progressThread = new ProgressThread(progressBar);
+                }
+                if(currentMixer == null) {
                     createMixer();
                 }
                 if(currentMixer != null) {
@@ -300,42 +311,77 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
         
         
         private File createTempFile(URL url) throws Exception {
-            File tempFile = null;
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-            byte[] chunk = new byte[256];
-            int bytesRead;
-            URLConnection con = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             Wandora.initUrlConnection(con);
-            int contentLength = con.getContentLength();
-            int totalBytesRead = 0;
-            InputStream stream = con.getInputStream();
-            String mimetype = con.getContentType();
+            con.setRequestMethod("GET");
+            con.setDoOutput(false);
+            //con.setRequestProperty("User-Agent","Mozilla/5.0 ( compatible ) ");
+            //con.setRequestProperty("Accept","*/*");
+            
+            String prefix = "wandora" + url.hashCode();
+            String mimetype = null;
+            String suffix = null;
+            mimetype = MimeTypes.getMimeType(url);
+            if(mimetype != null) {
+                suffix = MimeTypes.getExtension(mimetype);
+            }
+            
+            if(suffix == null) {
+                mimetype = con.getContentType();
+                suffix = MimeTypes.getExtension(mimetype);
+            }
+            
+            //System.out.println("mimetype: "+mimetype);
+            //System.out.println("suffix: "+suffix);
+            
+            if(suffix == null) suffix = "tmp";
+            if(!suffix.startsWith(".")) suffix = "."+suffix;
+            String tmpdir = System.getProperty("java.io.tmpdir");
+                    
+            File tempFile = new File(tmpdir + File.separator + prefix + suffix);
+            
+            //System.out.println("tempFile: "+tempFile.getAbsolutePath());
+            
+            if(!tempFile.exists()) {
+                tempFile.deleteOnExit();
+                
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-            while ((bytesRead = stream.read(chunk)) > 0) {
-                outputStream.write(chunk, 0, bytesRead);
-                if(progressThread != null) {
-                    totalBytesRead = totalBytesRead + bytesRead;
-                    progressThread.setProgress("Downloading", totalBytesRead, contentLength);
+                byte[] chunk = new byte[128];
+                int bytesRead;
+                int contentLength = con.getContentLength();
+                int totalBytesRead = 0;
+                InputStream stream = con.getInputStream();
+
+                try {
+                    while ((bytesRead = stream.read(chunk)) > 0) {
+                        outputStream.write(chunk, 0, bytesRead);
+                        if(progressThread != null) {
+                            totalBytesRead = totalBytesRead + bytesRead;
+                            progressThread.setProgress("Downloading...", totalBytesRead, contentLength);
+                        }
+                    }
+                    stream.close();
+                }
+                catch(Exception e) {
+                    stream.close();
+                    throw e;
+                }
+
+                byte[] bytes = outputStream.toByteArray();
+
+                if(bytes != null && bytes.length > 0) {
+                    FileOutputStream fos = new FileOutputStream(tempFile);
+                    try {
+                        fos.write(bytes);
+                        fos.close();
+                    }
+                    catch(Exception e) {
+                        fos.close();
+                        throw e;
+                    }
                 }
             }
-            stream.close();
-
-            byte[] bytes = outputStream.toByteArray();
-
-            if(bytes != null && bytes.length > 0) {
-                String prefix = "wandora" + url.hashCode();
-                String suffix = MimeTypes.getExtension(mimetype);
-                if(suffix == null) suffix = "tmp";
-                if(!suffix.startsWith(".")) suffix = "."+suffix;
-                tempFile = File.createTempFile(prefix, suffix);
-                tempFile.deleteOnExit();
-
-                FileOutputStream fos = new FileOutputStream(tempFile);
-                fos.write(bytes);
-                fos.close();
-            }
-
             return tempFile;
         }
     }
@@ -370,10 +416,7 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
         
         
         public void setProgress(String text, int value, int maxValue) {
-            progressBar.setMinimum(0.0);
-            progressBar.setMaximum(maxValue);
-            progressBar.setValue(value);
-            progressBar.setString(text);
+            progressBar.setProgress(text, 0, value, maxValue);
         }
         
         

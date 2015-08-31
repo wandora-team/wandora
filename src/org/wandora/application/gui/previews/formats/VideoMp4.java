@@ -468,10 +468,11 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
                     "flv", 
                     "fxm", 
                     "m3u8", 
-                    /* "mp3", */ 
+                    "mp3",
+                    "m3a",
                     "aif", 
                     "aiff", 
-                    /*".wav",*/ 
+                    "wav",
                     "m4a", 
                     "m4v"
                 }

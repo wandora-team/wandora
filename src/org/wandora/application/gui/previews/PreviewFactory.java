@@ -45,10 +45,7 @@ public class PreviewFactory {
         PreviewPanel previewPanel = null;
 
         try {
-            if(hasJavaFX() && VideoMp4.canView(urlString)) {
-                previewPanel = new VideoMp4(urlString);
-            }
-            else if(AudioFlac.canView(urlString)) {
+            if(AudioFlac.canView(urlString)) {
                 previewPanel = new AudioFlac(urlString); 
             }
             else if(AudioOgg.canView(urlString)) {
@@ -66,8 +63,11 @@ public class PreviewFactory {
             else if(AudioWav.canView(urlString)) {
                 previewPanel = new AudioWav(urlString); 
             }
-            else if(AudioMP3.canView(urlString)) {
-                previewPanel = new AudioMP3(urlString);
+            else if(AudioMP3v2.canView(urlString)) {
+                previewPanel = new AudioMP3v2(urlString);
+            }
+            else if(hasJavaFX() && VideoMp4.canView(urlString)) {
+                previewPanel = new VideoMp4(urlString);
             }
             else if(Image.canView(urlString)) {
                 previewPanel = new Image(urlString);

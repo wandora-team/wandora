@@ -185,8 +185,10 @@ public class MimeTypes {
     }
     public static HashMap<String,String> inverseMap = new LinkedHashMap<String,String>();
     static {
-        for(Map.Entry<String,String> e : extensionMap.entrySet()){
-            inverseMap.put(e.getValue(), e.getKey());
+        for(Map.Entry<String,String> e : extensionMap.entrySet()) {
+            if(!inverseMap.containsKey(e.getValue())) {
+                inverseMap.put(e.getValue(), e.getKey());
+            }
         }
     }
 
