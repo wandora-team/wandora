@@ -18,63 +18,71 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * 
- * ApplicationXML.java
- *
- *
  */
 
 package org.wandora.application.gui.previews.formats;
 
 
+import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.event.*;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import javax.swing.JComponent;
-import javax.swing.JTextPane;
-import org.wandora.application.gui.previews.*;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
-import org.wandora.utils.*;
+import javax.swing.JEditorPane;
+import javax.swing.text.rtf.RTFEditorKit;
+import org.wandora.application.gui.previews.PreviewUtils;
+import org.wandora.utils.DataURL;
 
 
 /**
  *
  * @author akivela
  */
-public class ApplicationXML extends Text implements ActionListener, PreviewPanel {
-
+public class TextRTF extends Text {
+     
     
-    /** Creates a new instance of XML */
-    public ApplicationXML(String locator) {
+    public TextRTF(String locator) {
         super(locator);
     }
     
     
     @Override
     protected JComponent getTextComponent(String locator) throws Exception {
-        JTextPane textComponent = new JTextPane();
-        textComponent.setText(getContent(locator));
-        textComponent.setFont(new Font("monospaced", Font.PLAIN, 12));
+        RTFEditorKit rtf = new RTFEditorKit();
+        JEditorPane textComponent = new JEditorPane();
+        textComponent.setEditorKit(rtf);
+        textComponent.setBackground(Color.WHITE);
+        
+        if(locator.startsWith("file:")) {
+            FileInputStream in = new FileInputStream(new URL(locator).getFile());
+            rtf.read(in, textComponent.getDocument(), 0);
+        }
+        else if(DataURL.isDataURL(locator)) {
+            DataURL dataUrl = new DataURL(locator);
+            ByteArrayInputStream in = new ByteArrayInputStream(dataUrl.getData());
+            rtf.read(in, textComponent.getDocument(), 0);
+        }
+        else {
+            InputStream in = new URL(locator).openStream();
+            rtf.read(in, textComponent.getDocument(), 0);
+        }
+
+        textComponent.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
         textComponent.setEditable(false);
         textComponent.setCaretPosition(0);
-        textComponent.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
         return textComponent;
     }
     
     
-    
     // -------------------------------------------------------------------------
     
-
+    
     public static boolean canView(String url) {
         return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "application/xml",
-                    "text/xml" }, 
-                new String[] { 
-                    "xml"
-                }
+                new String[] { "text/rtf", "application/rtf" }, 
+                new String[] { "rtf" }
         );
     }
-    
 }

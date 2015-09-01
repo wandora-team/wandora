@@ -1,6 +1,10 @@
 /*
- * Copyright (C) 2015 akivela
- *
+ * WANDORA
+ * Knowledge Extraction, Management, and Publishing Application
+ * http://wandora.org
+ * 
+ * Copyright (C) 2004-2015 Wandora Team
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -13,6 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package org.wandora.application.gui.previews.formats;
@@ -21,8 +26,10 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -43,7 +50,7 @@ import org.wandora.utils.swing.TextLineNumber;
 public class Text implements ActionListener, PreviewPanel {
     String locator = null;
     JPanel ui = null;
-    JTextPane textPane = null;
+    JEditorPane textPane = null;
     
     
     public Text(String locator) {
@@ -69,7 +76,7 @@ public class Text implements ActionListener, PreviewPanel {
     }
     
     
-    protected JComponent getTextComponent(String locator) {
+    protected JComponent getTextComponent(String locator) throws Exception {
         JTextPane textComponent = new JTextPane();
         textComponent.setText(getContent(locator));
         textComponent.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
@@ -85,11 +92,6 @@ public class Text implements ActionListener, PreviewPanel {
         if(ui == null) {
             ui = new JPanel();
             ui.setLayout(new BorderLayout(8,8));
-            textPane = (JTextPane) getTextComponent(locator);
-            
-            JScrollPane scrollPane = new SimpleScrollPane(textPane);
-            TextLineNumber tln = new TextLineNumber(textPane);
-            scrollPane.setRowHeaderView( tln );
             
             JPanel textPaneWrapper = new JPanel();
             textPaneWrapper.setLayout(new BorderLayout());
@@ -97,27 +99,52 @@ public class Text implements ActionListener, PreviewPanel {
             textPaneWrapper.setPreferredSize(new Dimension(640, 400));
             textPaneWrapper.setMaximumSize(new Dimension(640, 400));
             textPaneWrapper.setSize(new Dimension(640, 400));
-            textPaneWrapper.add(scrollPane);
             
-            JPanel toolbarWrapper = new JPanel();
-            toolbarWrapper.add(getJToolBar());
-            
-            ui.add(textPaneWrapper, BorderLayout.CENTER);
-            ui.add(toolbarWrapper, BorderLayout.SOUTH);
+            try {
+                textPane = (JEditorPane) getTextComponent(locator);
+                JScrollPane scrollPane = new SimpleScrollPane(textPane);
+                TextLineNumber tln = new TextLineNumber(textPane);
+                scrollPane.setRowHeaderView( tln );
+                textPaneWrapper.add(scrollPane);
+
+                JPanel toolbarWrapper = new JPanel();
+                toolbarWrapper.add(getJToolBar());
+
+                ui.add(textPaneWrapper, BorderLayout.CENTER);
+                ui.add(toolbarWrapper, BorderLayout.SOUTH);
+            }
+            catch(FileNotFoundException fnfe) {
+                PreviewUtils.previewError(ui, "Can't find locator resource.", fnfe);
+            }
+            catch(Exception e) {
+                PreviewUtils.previewError(ui, "Can't initialize text viewer. Exception occurred.", e);
+            }
+
         }
         return ui;
     }
     
     
     
-    protected String getContent(String locator) {
+    protected String getContent(String locator) throws Exception {
         try {
-            return IObox.doUrl(new URL(locator));
+            if(locator.startsWith("file:")) {
+                return IObox.loadFile(new URL(locator).getFile());
+            }
+            else if(DataURL.isDataURL(locator)) {
+                DataURL dataUrl = new DataURL(locator);
+                byte[] dataBytes = dataUrl.getData();
+                String dataString = new String(dataBytes);
+                return dataString;
+            }
+            else {
+                return IObox.doUrl(new URL(locator));
+            }
         }
         catch(Exception e) {
-            PreviewUtils.previewError(ui, "Unable to read locator content.", e);
+            // PreviewUtils.previewError(ui, "Unable to read locator content.", e);
+            throw e;
         }
-        return "";
     }
     
     
