@@ -29,6 +29,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
 
 /**
@@ -48,11 +49,18 @@ public class TransferableDataURL implements Transferable {
     @Override
     public Object getTransferData( DataFlavor flavor ) throws UnsupportedFlavorException, IOException {
         if(transferableData != null) {
-            if(flavor.getMimeType().equalsIgnoreCase(transferableData.getMimetype())) {
+            if(flavor.getMimeType().contains(transferableData.getMimetype())) {
                 return transferableData.getData();
             }
             else if(flavor.equals( DataFlavor.stringFlavor )) {
-                return transferableData.toExternalForm();
+                return transferableData.toExternalForm(Base64.DONT_BREAK_LINES);
+            }
+            else if(flavor.isRepresentationClassByteBuffer()) {
+                return ByteBuffer.wrap(transferableData.getData());
+            }
+            else {
+                // Warning, returning dataurl as a string if flavor is not recognized.
+                return transferableData.toExternalForm(Base64.DONT_BREAK_LINES);
             }
         }
         throw new UnsupportedFlavorException( flavor );
@@ -92,6 +100,7 @@ public class TransferableDataURL implements Transferable {
     }
 
     
+    // ------------------------------------------------------ DataURLFlavor ----
     
     
     public class DataURLFlavor extends DataFlavor {
@@ -103,32 +112,13 @@ public class TransferableDataURL implements Transferable {
         @Override
         public Class getRepresentationClass() {
             try {
-                Class c = Class.forName("[B");
+                Class c = Class.forName("[B"); // byte array i.e. byte[]
+                return c;
             }
             catch(Exception e) {
                 e.printStackTrace();
             }
             return null;
-        }
-        
-        
-        @Override
-        public boolean isRepresentationClassReader() {
-            return false;
-        }
-        
-        @Override
-        public boolean isRepresentationClassCharBuffer() {
-            return false;
-        }
-        
-        @Override
-        public boolean isRepresentationClassByteBuffer() {
-            return false;
-        }
-        
-        public boolean isFlavorCharsetTextType() {
-            return false;
         }
     }
 }

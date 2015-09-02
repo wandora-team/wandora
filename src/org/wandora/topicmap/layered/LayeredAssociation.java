@@ -124,7 +124,7 @@ public class LayeredAssociation implements Association {
 //        if(a.getRoles().size()!=getRoles().size()) return false;
         Layer l=layerStack.getLayer(a.getTopicMap());
         Collection<Topic> typeTopics=type.getTopicsForLayer(l);
-        HashSet<LayeredTopic> usedRole=new HashSet<LayeredTopic>();
+        HashSet<LayeredTopic> usedRole=new LinkedHashSet<LayeredTopic>();
         for( Topic role : a.getRoles() ){
             Topic player=a.getPlayer(role);
             boolean found=false;
@@ -169,7 +169,7 @@ public class LayeredAssociation implements Association {
      * Finds all associations in the given layer that match this LayeredAssociation.
      */ 
     public Collection<Association> findAssociationsForLayer(Layer l)  throws TopicMapException {
-        HashSet<Association> ret=new HashSet<Association>();
+        HashSet<Association> ret=new LinkedHashSet<Association>();
         for(Map.Entry<LayeredTopic,LayeredTopic> e : players.entrySet()){
             LayeredTopic p=e.getValue();
             LayeredTopic r=e.getKey();

@@ -36,6 +36,7 @@ import javax.swing.table.*;
 
 import org.wandora.application.gui.simple.SimpleURILabel;
 import org.wandora.topicmap.Locator;
+import org.wandora.utils.DataURL;
 
 
 
@@ -45,40 +46,36 @@ import org.wandora.topicmap.Locator;
  * @author akivela
  */
 public class LocatorTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
-    private SimpleURILabel uriLabel = new SimpleURILabel();
     private LocatorTable locatorTable;
 
     
     public LocatorTableCellRenderer(LocatorTable table) {
         this.locatorTable = table;
-        uriLabel.setEnabled(true);
-        uriLabel.setOpaque(true);
     }
 
-    
     
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-        try {
-            uriLabel.setBackground(c.getBackground());
-                        
+        try {          
             Color foregroundColor = locatorTable.getColorFor(row, column);
-            if(foregroundColor != null) uriLabel.setForeground(foregroundColor);
-            else uriLabel.setForeground(c.getForeground());
+            if(foregroundColor != null) {
+                c.setForeground(foregroundColor);
+            }
             
-            Locator l = (Locator) value;
-            String locatorString = l.toExternalForm();
-            uriLabel.setText(locatorString);
+            if(c instanceof JLabel) {
+                Locator l = (Locator) value;
+                String locatorString = l.toExternalForm();
+                if(DataURL.isDataURL(locatorString)) {
+                    String locatorFragment = locatorString.substring(0, Math.min(locatorString.length(), 64)) + "... ("+locatorString.length()+")";
+                    ((JLabel) c).setText(locatorFragment);
+                }
+            }
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION;
-            // uriLabel.setText("*** Exception occurred while initializing locator table label!");
+            e.printStackTrace(); // TODO EXCEPTION
         }
-        
-        return uriLabel;
+        return c;
     }
-   
-
 }

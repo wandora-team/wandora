@@ -35,7 +35,9 @@ import org.wandora.application.contexts.*;
 import org.wandora.topicmap.TMBox;
 import java.util.*;
 import org.wandora.application.gui.ConfirmResult;
+import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.utils.DataURL;
 
 
 
@@ -59,13 +61,13 @@ public class AddSubjectIdentifier extends AbstractWandoraTool implements Wandora
     
     @Override
     public String getName() {
-        return "Add SI";
+        return "Add subject identifier";
     }
 
     @Override
     public String getDescription() {
-        return "Adds subject identifier (SI) to selected topics. "+
-               "If two topics have same SI, they merge.";
+        return "Adds subject identifier to selected topics. "+
+               "If two topics have same subject identifier, they merge.";
     }
     
     
@@ -79,18 +81,15 @@ public class AddSubjectIdentifier extends AbstractWandoraTool implements Wandora
             
             if( !contextTopics.hasNext() ) {
                 if(topic != null && !topic.isRemoved()) {
-                    String topicName = ( topic.getBaseName() == null ? topic.getOneSubjectIdentifier().toExternalForm() :  topic.getBaseName());
                     AddSubjectIdentifierPanel sip = new AddSubjectIdentifierPanel();
-                    String newSI = sip.open(wandora, "Enter new subject identifier for '" + topicName + "'.", "Add subject identifier");
-                    if(newSI != null) {
-                        newSI = newSI.trim();
+                    String newSubjectIdentifier = sip.open(wandora, "Enter new subject identifier for '" + TopicToString.toString(topic) + "'.", "Add subject identifier");
+                    if(newSubjectIdentifier != null) {
+                        newSubjectIdentifier = newSubjectIdentifier.trim();
                         try {
-                            java.net.URL u=new java.net.URL(newSI);
-                            Locator l=topic.getTopicMap().createLocator(newSI);
-                            if(TMBox.checkSubjectIdentifierChange(wandora,topic,l,true)!=ConfirmResult.yes) {
-                                return;
-                            }
-                            else {
+                            boolean isValid = DataURL.isDataURL(newSubjectIdentifier);
+                            if(!isValid) new java.net.URL(newSubjectIdentifier);
+                            Locator l = topic.getTopicMap().createLocator(newSubjectIdentifier);
+                            if(TMBox.checkSubjectIdentifierChange(wandora,topic,l,true) == ConfirmResult.yes) {
                                 shouldRefresh = true;
                                 topic.addSubjectIdentifier(l);
                             }
@@ -102,7 +101,7 @@ public class AddSubjectIdentifier extends AbstractWandoraTool implements Wandora
                 }
             }
             else {
-                log("Context contains more than one topic! Uncertain which topic to add SI to.");
+                log("Context contains more than one topic! Uncertain which topic to add subject identifier to.");
             }
         }
     }

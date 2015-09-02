@@ -75,7 +75,7 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
     
     
     
-    public void setSort(int column){
+    public void setSort(int column) {
     }
     
     

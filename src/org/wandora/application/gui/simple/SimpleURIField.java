@@ -34,9 +34,6 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.net.URI;
 import javax.swing.JPopupMenu;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -57,7 +54,7 @@ public class SimpleURIField extends SimpleField {
     private static Color DATA_URI_COLOR = Color.WHITE;
     private static Color UNSET_URI_COLOR = new Color(246, 246, 246);
     
-    private String fieldContent = null;
+    private String completeFieldText = null;
 
     private Object[] popupStruct = new Object[] {
         "Cut", UIBox.getIcon("gui/icons/cut.png"),
@@ -110,13 +107,13 @@ public class SimpleURIField extends SimpleField {
         
         try {
             if(DataURL.isDataURL(text)) {
-                String textFragment = text.substring(0, Math.min(text.length(), 100))+"...";
-                fieldContent = text;
+                String textFragment = text.substring(0, Math.min(text.length(), 64))+"... ("+text.length()+")";
+                completeFieldText = text;
                 super.setText(textFragment);
                 setEditable(false);
             }
             else {
-                fieldContent = null;
+                completeFieldText = null;
                 super.setText(text);
                 setEditable(true);
             }
@@ -131,8 +128,8 @@ public class SimpleURIField extends SimpleField {
     @Override
     public String getText() {
         try {
-            if(fieldContent != null) {
-                return fieldContent;
+            if(completeFieldText != null) {
+                return completeFieldText;
             }
             else {
                 return super.getText();

@@ -108,7 +108,7 @@ public class TopicTableCellRenderer extends DefaultTableCellRenderer implements 
                             label.setIcon(null);
                         }
                     }
-                     */
+                    */
                 }
                 catch(Exception tme){
                     tme.printStackTrace(); // TODO EXCEPTION;

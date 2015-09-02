@@ -29,8 +29,6 @@ package org.wandora.application.gui.table;
 
 
 import org.wandora.utils.swing.TableSorter;
-import org.wandora.utils.swing.*;
-import javax.swing.*;
 import javax.swing.table.*;
 
 /**

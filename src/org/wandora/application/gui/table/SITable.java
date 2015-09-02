@@ -57,12 +57,16 @@ public class SITable extends LocatorTable {
     public SITable(Topic topic, Wandora w) throws TopicMapException {
         super(w);
         this.topic=topic;
+        for(Locator l : topic.getSubjectIdentifiers()) {
+            String lstr = l.toExternalForm();
+            System.out.println(lstr.substring(0, Math.min(64, lstr.length())));
+        }
         sis=(Locator[])topic.getSubjectIdentifiers().toArray(new Locator[0]);
         colors=new Color[sis.length];
         for(int i=0;i<colors.length;i++){
             colors[i]=w.topicHilights.getSIColor(topic,sis[i]);
         }
-        initialize(sis, "SIS", colors);
+        initialize(sis, "Subject identifiers", colors);
     }
     
     
@@ -84,6 +88,15 @@ public class SITable extends LocatorTable {
         boolean siAdded = false;
         //System.out.println("data == " + data);
         if(data.startsWith("file:")) {
+            try {
+                topic.addSubjectIdentifier(new Locator(data));
+                siAdded = true;
+            }
+            catch(Exception e) {
+                wandora.handleError(e);
+            }
+        }
+        else if(data.startsWith("data:")) {
             try {
                 topic.addSubjectIdentifier(new Locator(data));
                 siAdded = true;

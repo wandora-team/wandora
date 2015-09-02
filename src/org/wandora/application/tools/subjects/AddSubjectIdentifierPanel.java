@@ -32,6 +32,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleURIField;
 
 /**
  *
@@ -86,7 +87,7 @@ public class AddSubjectIdentifierPanel extends javax.swing.JPanel {
 
         formPanel = new javax.swing.JPanel();
         locatorLabel = new SimpleLabel();
-        locatorField = new SimpleField();
+        locatorField = new SimpleURIField();
         buttonPanel = new javax.swing.JPanel();
         pickFileButton = new SimpleButton();
         buttonFillerPanel = new javax.swing.JPanel();
@@ -104,6 +105,9 @@ public class AddSubjectIdentifierPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 12, 0);
         formPanel.add(locatorLabel, gridBagConstraints);
+
+        locatorField.setMinimumSize(new java.awt.Dimension(6, 21));
+        locatorField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

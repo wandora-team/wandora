@@ -39,18 +39,20 @@ public class SimpleURILabel extends SimpleLabel {
 
     private static BufferedImage invalidURIImage = UIBox.getImage("resources/gui/icons/invalid_uri.png");
     
-    private String labelString = null;
+    private String completeLabelString = null;
 
 
     
     @Override
     public void setText(String str) {
         if(DataURL.isDataURL(str)) {
-            labelString = str;
-            str = str.substring(0, Math.min(str.length(), 128)) + "...";
-            super.setText(str);
+            completeLabelString = str;
+            String strFragment = str.substring(0, Math.min(str.length(), 64)) + "... ("+str.length()+")";
+            System.out.println("strFragment=="+strFragment);
+            super.setText(strFragment);
         }
         else {
+            completeLabelString = null;
             super.setText(str);
         }
     }
@@ -59,8 +61,8 @@ public class SimpleURILabel extends SimpleLabel {
     @Override
     public String getText() {
         try {
-            if(labelString != null) {
-                return labelString;
+            if(completeLabelString != null) {
+                return completeLabelString;
             }
             else {
                 return super.getText();

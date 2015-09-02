@@ -68,7 +68,7 @@ public class LayeredTopic extends Topic {
     /**
      * Comparator used to order the topics LayeredTopic consists of. Topics
      * are first ordered according to the position of the layer of the topic
-     * and then according to the smallest subjectidentifier of the topic.
+     * and then according to the smallest subject identifier of the topic.
      */
     class LayerOrderComparator implements Comparator<Topic>{
         private String getMinSI(Topic t){
@@ -102,7 +102,7 @@ public class LayeredTopic extends Topic {
      * Creates a new instance of LayeredTopic. This layered topic will consist
      * of the given topics and them alone. Thus the layer stack must not contain
      * a topic that merges with any of the topics in the collection that isn't
-     * allready in the collection.
+     * already in the collection.
      */
     public LayeredTopic(Collection<Topic> topics,LayerStack layerStack) {
         this.layerStack=layerStack;
@@ -135,6 +135,7 @@ public class LayeredTopic extends Topic {
         }
         else return false;
     }
+    
     // hashCode is updated whenever topics collection changes.
     private int hashCode=0;
     @Override
@@ -167,7 +168,7 @@ public class LayeredTopic extends Topic {
      * are the same.
      */
     private HashSet<String> makeKeySet(Collection<Topic> topics){
-        HashSet<String> keys=new HashSet<String>();
+        HashSet<String> keys=new LinkedHashSet<String>();
         Delegate <String,Topic> keyMaker=layerStack.new TopicAndLayerKeyMaker();
         for(Topic t : topics){
             keys.add(keyMaker.invoke(t));
@@ -259,7 +260,7 @@ public class LayeredTopic extends Topic {
      * characters. Note that the ID will change based on what layers are visible.
      */
     public String getID() throws TopicMapException {
-        if(topics==null || topics.size()==0) return null;
+        if(topics==null || topics.isEmpty()) return null;
         Topic t=topics.get(0);
         Layer l=layerStack.getLayer(t);
         return "ID"+l.getName().hashCode()+"-"+t.getID();
@@ -270,7 +271,7 @@ public class LayeredTopic extends Topic {
      * consists of.
      */
     public Collection<Locator> getSubjectIdentifiers() throws TopicMapException {
-        HashSet<Locator> sis=new HashSet<Locator>();
+        HashSet<Locator> sis = new LinkedHashSet<Locator>();
         for(Topic t : topics){
             sis.addAll(t.getSubjectIdentifiers());
         }
@@ -303,7 +304,7 @@ public class LayeredTopic extends Topic {
         if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
         Collection<Topic> ts=getTopicsForSelectedLayer();
         Topic t=null;
-        if(ts==null || ts.size()==0) {
+        if(ts==null || ts.isEmpty()) {
             AmbiguityResolution res=resolveAmbiguity("addSubjectIdentifier.noSelected","No topic in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -402,7 +403,7 @@ public class LayeredTopic extends Topic {
         LayeredTopic lt=(LayeredTopic)type;
         Collection<Topic> types=lt.getTopicsForSelectedLayer();
         Topic stype=null;
-        if(types.size()==0){
+        if(types.isEmpty()){
             AmbiguityResolution res=resolveAmbiguity("addType.type.noSelected","No type in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 stype=lt.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -483,7 +484,7 @@ public class LayeredTopic extends Topic {
      */
     protected Set<Topic> createScope(Set<Topic> layeredScope,Layer l,boolean copyTopics) throws TopicMapException {
         // TODO: doesn't handle correctly theoretical case where scope topics get merged
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         for(Topic t : layeredScope){
             LayeredTopic lt=(LayeredTopic)t;
             Collection<Topic> ts=lt.getTopicsForLayer(l);
@@ -520,7 +521,7 @@ public class LayeredTopic extends Topic {
         Layer l =layerStack.getLayer(t);
         Set<Set<Topic>> scopes=t.getVariantScopes();
         LoopA: for(Set<Topic> s : scopes){
-            HashSet<Topic> used=new HashSet<Topic>();
+            HashSet<Topic> used=new LinkedHashSet<Topic>();
             LoopB: for(Topic st : s ){
                 // Note that st cannot belong to several LayeredTopics in scope
                 // because otherwise those multiple LayeredTopics would be merged and be the same topic
@@ -612,12 +613,12 @@ public class LayeredTopic extends Topic {
     
     public Set<Set<Topic>> getVariantScopes() throws TopicMapException {
         // TODO: doesn't handle correctly theoretical case where scope topics get merged
-        Set<Set<Topic>> ret=new HashSet<Set<Topic>>();
+        Set<Set<Topic>> ret=new LinkedHashSet<Set<Topic>>();
         HashMap<Topic,LayeredTopic> collectedMap=new HashMap<Topic,LayeredTopic>();
         for(Topic t : topics){
             Set<Set<Topic>> scopes=t.getVariantScopes();
             for(Set<Topic> scope : scopes){
-                HashSet<Topic> layeredScope=new HashSet<Topic>();
+                HashSet<Topic> layeredScope=new LinkedHashSet<Topic>();
                 for(Topic st : scope){
                     LayeredTopic lt=collectedMap.get(st);
                     if(lt==null) {
@@ -718,8 +719,8 @@ public class LayeredTopic extends Topic {
         return ret;
     }
     public Collection<Topic> getDataTypes() throws TopicMapException {
-        HashSet<Topic> used=new HashSet<Topic>();
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> used=new LinkedHashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
         
         for(Topic t : topics){
@@ -941,7 +942,7 @@ public class LayeredTopic extends Topic {
      * merged, one individual association may become multiple LayeredAssociations.
      */
     public Collection<Association> getAssociations() throws TopicMapException {
-        HashSet<Association> associations=new HashSet<Association>();
+        HashSet<Association> associations=new LinkedHashSet<Association>();
 
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
         for(Topic t : topics){
@@ -979,7 +980,7 @@ public class LayeredTopic extends Topic {
      */
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        HashSet<Association> associations=new HashSet<Association>();
+        HashSet<Association> associations=new LinkedHashSet<Association>();
         LayeredTopic lt=(LayeredTopic)type;
         for(Topic t : topics){
             for(Topic st : lt.getTopicsForLayer(layerStack.getLayer(t))){
@@ -1016,7 +1017,7 @@ public class LayeredTopic extends Topic {
         LayeredTopic lt=(LayeredTopic)type;
         LayeredTopic lr=(LayeredTopic)role;
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        HashSet<Association> associations=new HashSet<Association>();
+        HashSet<Association> associations=new LinkedHashSet<Association>();
         for(Topic t : topics){
             for(Topic st : lt.getTopicsForLayer(layerStack.getLayer(t))){
                 for(Topic sr : lr.getTopicsForLayer(layerStack.getLayer(t))){
@@ -1109,7 +1110,7 @@ public class LayeredTopic extends Topic {
     
     public Collection<Topic> getTopicsWithDataType() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         for(Topic t : topics){
             Collection<Topic> c=t.getTopicsWithDataType();
             for(Topic to : c){
@@ -1121,7 +1122,7 @@ public class LayeredTopic extends Topic {
     }
     public Collection<Association> getAssociationsWithType() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        HashSet<Association> associations=new HashSet<Association>();
+        HashSet<Association> associations=new LinkedHashSet<Association>();
         for(Topic t : topics){
             Collection<Association> c=t.getAssociationsWithType();
             for(Association a : c ){
@@ -1142,7 +1143,7 @@ public class LayeredTopic extends Topic {
     
     public Collection<Association> getAssociationsWithRole() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        HashSet<Association> associations=new HashSet<Association>();
+        HashSet<Association> associations=new LinkedHashSet<Association>();
         for(Topic t : topics){
             Collection<Association> c=t.getAssociationsWithRole();
             for(Association a : c ){
@@ -1164,7 +1165,7 @@ public class LayeredTopic extends Topic {
     @Override
     public Collection<Topic> getTopicsWithDataVersion() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         for(Topic t : topics){
             Collection<Topic> c=t.getTopicsWithDataVersion();
             for(Topic to : c){
@@ -1178,7 +1179,7 @@ public class LayeredTopic extends Topic {
     @Override
     public Collection<Topic> getTopicsWithVariantScope() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        HashSet<Topic> ret=new HashSet<Topic>();
+        HashSet<Topic> ret=new LinkedHashSet<Topic>();
         for(Topic t : topics){
             Collection<Topic> c=t.getTopicsWithVariantScope();
             for(Topic to : c){
