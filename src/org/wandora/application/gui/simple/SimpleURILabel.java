@@ -36,18 +36,40 @@ import org.wandora.utils.DataURL;
 
 
 public class SimpleURILabel extends SimpleLabel {
-    
-    
-    
+
     private static BufferedImage invalidURIImage = UIBox.getImage("resources/gui/icons/invalid_uri.png");
     
+    private String labelString = null;
 
 
     
     @Override
     public void setText(String str) {
-        super.setText(str);
-        //paint(this.getGraphics());
+        if(DataURL.isDataURL(str)) {
+            labelString = str;
+            str = str.substring(0, Math.min(str.length(), 128)) + "...";
+            super.setText(str);
+        }
+        else {
+            super.setText(str);
+        }
+    }
+    
+    
+    @Override
+    public String getText() {
+        try {
+            if(labelString != null) {
+                return labelString;
+            }
+            else {
+                return super.getText();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
     
     
@@ -66,9 +88,7 @@ public class SimpleURILabel extends SimpleLabel {
         }
         return true;
     }
-    
-    
-  
+
     
     
     @Override

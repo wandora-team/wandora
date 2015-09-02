@@ -607,7 +607,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                             String name=topic.getVariant(s);
                             SimpleField field = new SimpleField(name==null ? "" : name);
                             field.setCaretPosition(0);
-                            field.setPreferredSize(new java.awt.Dimension(130,19));
+                            field.setPreferredSize(new java.awt.Dimension(130,21));
                             field.addKeyListener( new KeyAdapter() {
                                 @Override
                                 public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -689,7 +689,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             GridBagConstraints gbc = new java.awt.GridBagConstraints();
             Insets rightGapInsets = new Insets(0,0,0,10);
             Insets noGapsInsets = new Insets(0,0,0,0);
-            Dimension defaultFieldSize = new java.awt.Dimension(130,19);
+            Dimension defaultFieldSize = new java.awt.Dimension(130,21);
             
             nameTable = new HashMap<Set<Topic>,SimpleField>();
             invNameTable = new HashMap<SimpleField,Set<Topic>>();

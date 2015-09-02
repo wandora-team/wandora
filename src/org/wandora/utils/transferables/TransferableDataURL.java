@@ -28,6 +28,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import org.wandora.utils.DataURL;
 
 /**
@@ -42,8 +43,6 @@ public class TransferableDataURL implements Transferable {
     public TransferableDataURL( DataURL transferableData ) {
         this.transferableData = transferableData;
     }
-    
-
     
 
     @Override
@@ -66,7 +65,7 @@ public class TransferableDataURL implements Transferable {
         if(transferableData != null) {
             try {
                 flavors = new DataFlavor[2];
-                flavors[0] = new DataFlavor(transferableData.getMimetype());
+                flavors[0] = new DataURLFlavor(transferableData.getMimetype());
                 flavors[1] = DataFlavor.stringFlavor;
                 return flavors;
             }
@@ -92,4 +91,44 @@ public class TransferableDataURL implements Transferable {
         return false;
     }
 
+    
+    
+    
+    public class DataURLFlavor extends DataFlavor {
+        public DataURLFlavor(String mimeType) throws ClassNotFoundException {
+            super(mimeType);
+        }
+
+        
+        @Override
+        public Class getRepresentationClass() {
+            try {
+                Class c = Class.forName("[B");
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        
+        
+        @Override
+        public boolean isRepresentationClassReader() {
+            return false;
+        }
+        
+        @Override
+        public boolean isRepresentationClassCharBuffer() {
+            return false;
+        }
+        
+        @Override
+        public boolean isRepresentationClassByteBuffer() {
+            return false;
+        }
+        
+        public boolean isFlavorCharsetTextType() {
+            return false;
+        }
+    }
 }

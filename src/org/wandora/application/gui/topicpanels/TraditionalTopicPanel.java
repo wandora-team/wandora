@@ -318,7 +318,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         }
         
         if(iDidIt) {
-            refresh();
+            // refresh();
             wandora.topicPanelsChanged();
         }
     }
@@ -655,6 +655,11 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         baseNameField.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         baseNameField.setForeground(new java.awt.Color(33, 33, 33));
         baseNameField.setPreferredSize(new java.awt.Dimension(6, 29));
+        baseNameField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                baseNameFieldFocusLost(evt);
+            }
+        });
         baseNameField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 baseNameFieldKeyReleased(evt);
@@ -681,6 +686,11 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         subjectLocatorField.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         subjectLocatorField.setForeground(new java.awt.Color(33, 33, 33));
         subjectLocatorField.setPreferredSize(new java.awt.Dimension(6, 29));
+        subjectLocatorField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                subjectLocatorFieldFocusLost(evt);
+            }
+        });
         subjectLocatorField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 subjectLocatorFieldKeyReleased(evt);
@@ -848,6 +858,28 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         }
         catch(Exception e) {}
     }//GEN-LAST:event_subjectLocatorFieldKeyReleased
+
+    private void subjectLocatorFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_subjectLocatorFieldFocusLost
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    applyChanges();
+                }
+                catch(Exception e) {}
+            }
+        });
+    }//GEN-LAST:event_subjectLocatorFieldFocusLost
+
+    private void baseNameFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_baseNameFieldFocusLost
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    applyChanges();
+                }
+                catch(Exception e) {}
+            }
+        });
+    }//GEN-LAST:event_baseNameFieldFocusLost
 
     
     

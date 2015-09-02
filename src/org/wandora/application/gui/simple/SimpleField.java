@@ -40,6 +40,8 @@ import java.util.*;
 import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.text.Document;
+import javax.swing.undo.UndoManager;
 
 
 import org.wandora.application.*;
@@ -63,15 +65,15 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
     protected Border defaultBorder = null;
     protected DropTarget dt;
     protected Wandora wandora = null;
-    
+    protected UndoManager undoManager = null;
     
     
     protected String[] options = new String[] {};
-    private JPopupMenu popup;
     private Object[] popupStruct = new Object[] {
         "Cut", UIBox.getIcon("gui/icons/cut.png"),
         "Copy", UIBox.getIcon("gui/icons/copy.png"),
         "Paste", UIBox.getIcon("gui/icons/paste.png"),
+        "Clear", UIBox.getIcon("gui/icons/clear.png"),
         "---",
         "Translate with Google...", UIBox.getIcon("gui/icons/google_translate.png"),
         "Translate with Microsoft...", UIBox.getIcon("gui/icons/microsoft_translate.png"),
@@ -86,7 +88,7 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
     
     
     
-    /** Creates a new instance of WandoraTextField */
+    /** Creates a new instance of SimpleField */
     public SimpleField() {
         initialize();
     }
@@ -99,24 +101,29 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
     
     public void initialize() {
         this.addMouseListener(this);
-//        this.setFocusTraversalKeysEnabled(false);
+        // this.setFocusTraversalKeysEnabled(false);
         this.addKeyListener(this);
         this.setFocusable(true);
         this.addFocusListener(this);
-        setUpGui();
         this.setFocusTraversalKeysEnabled(true);
         this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)})));
         this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)})));
         this.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        
+        // undoManager = new UndoManager();
+        // Document document = this.getDocument();
+        // document.addUndoableEditListener(undoManager);
  
         this.setDragEnabled(true);
         dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
+        
+        setPopupMenu();
     }
     
     
     
-    public void setUpGui() {
-        popup = UIBox.makePopupMenu(popupStruct, this);
+    public void setPopupMenu() {
+        JPopupMenu popup = UIBox.makePopupMenu(popupStruct, this);
         setComponentPopupMenu(popup);
     }
     
@@ -263,6 +270,23 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
         }
         else if(c.equals("Paste")) {
             this.paste();
+        }
+        else if(c.equals("Clear")) {
+            this.setText("");
+        }
+        else if(c.equals("Undo")) {
+            if(undoManager != null) {
+                if(undoManager.canUndo()) {
+                    undoManager.undo();
+                }
+            }
+        }
+        else if(c.equals("Redo")) {
+            if(undoManager != null) {
+                if(undoManager.canRedo()) {
+                    undoManager.redo();
+                }
+            }
         }
         else if(c.startsWith("Translate with Google")) {
             try {
@@ -453,6 +477,9 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
     @Override
     public void copy() {
         String text = getSelectedText();
+        if(text == null || text.length() == 0) {
+            text = getText();
+        }
         ClipboardBox.setClipboard(text);
     }
     
@@ -460,8 +487,14 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
     @Override
     public void cut() {
         String text = getSelectedText();
-        ClipboardBox.setClipboard(text);
-        removeSelectedText();
+        if(text == null || text.length() == 0) {
+            ClipboardBox.setClipboard(getText());
+            setText("");
+        }
+        else {
+            ClipboardBox.setClipboard(text);
+            removeSelectedText();
+        }   
     }
     
     
@@ -482,7 +515,7 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
 
             if(selectionStartLoc != selectionEndLoc) {
                 int d = selectionEndLoc-selectionStartLoc;
-                this.removeSelectedText();
+                this.getDocument().remove(selectionStartLoc, d);
             }
         }
         catch(Exception e) {

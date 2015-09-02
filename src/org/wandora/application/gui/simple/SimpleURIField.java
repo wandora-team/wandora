@@ -29,13 +29,11 @@ package org.wandora.application.gui.simple;
 
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.io.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.net.URI;
+import javax.swing.JPopupMenu;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
@@ -43,7 +41,6 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.utils.Base64;
-import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 
 
@@ -53,21 +50,27 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class SimpleURIField extends SimpleField implements DocumentListener {
+public class SimpleURIField extends SimpleField {
 
     
-    private Color BROKEN_URI_COLOR = new Color(255, 240, 240);
-    private Color DATA_URI_COLOR = Color.WHITE;
-    private Color UNSET_URI_COLOR = new Color(246, 246, 246);
+    private static Color BROKEN_URI_COLOR = new Color(255, 240, 240);
+    private static Color DATA_URI_COLOR = Color.WHITE;
+    private static Color UNSET_URI_COLOR = new Color(246, 246, 246);
+    
+    private String fieldContent = null;
+
+    private Object[] popupStruct = new Object[] {
+        "Cut", UIBox.getIcon("gui/icons/cut.png"),
+        "Copy", UIBox.getIcon("gui/icons/copy.png"),
+        "Paste", UIBox.getIcon("gui/icons/paste.png"),
+        "Clear", UIBox.getIcon("gui/icons/clear.png"),
+    };
     
     
     
     public SimpleURIField() {
-        super();
-        Document d = this.getDocument();
-        d.addDocumentListener(this);
+        initialize();
     }
-    
 
     
     public boolean isValidURI(String uriString) {
@@ -81,7 +84,6 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
         }
         return true;
     }
-    
     
     
     private Color getBackgroundColorFor(String uriString) {
@@ -105,9 +107,50 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
     @Override
     public void setText(String text) {
         setBackground(getBackgroundColorFor(text));
-        super.setText(text);
+        
+        try {
+            if(DataURL.isDataURL(text)) {
+                String textFragment = text.substring(0, Math.min(text.length(), 100))+"...";
+                fieldContent = text;
+                super.setText(textFragment);
+                setEditable(false);
+            }
+            else {
+                fieldContent = null;
+                super.setText(text);
+                setEditable(true);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     
+    
+    
+    @Override
+    public String getText() {
+        try {
+            if(fieldContent != null) {
+                return fieldContent;
+            }
+            else {
+                return super.getText();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    
+    
+    
+    @Override
+    public void setPopupMenu() {
+        JPopupMenu popup = UIBox.makePopupMenu(popupStruct, this);
+        setComponentPopupMenu(popup);
+    }
     
     
     @Override
@@ -161,30 +204,5 @@ public class SimpleURIField extends SimpleField implements DocumentListener {
             ex.printStackTrace();
         }
         this.setBorder(defaultBorder);
-    }
-
-    
-    
-    
-    // -------------------------------------------------- DOCUMENT LISTENER ----
-    
-    
-    
-    @Override
-    public void insertUpdate(DocumentEvent e) {
-        paint(this.getGraphics());
-        revalidate();
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent e) {
-        paint(this.getGraphics());
-        revalidate();
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent e) {
-        paint(this.getGraphics());
-        revalidate();
     }
 }
