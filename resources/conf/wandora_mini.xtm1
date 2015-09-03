@@ -118,8 +118,8 @@
 	</topic>
 	<topic id="topic589">
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/language"/>
+			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
 			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/language"/>
 		</subjectIdentity>
 		<baseName>

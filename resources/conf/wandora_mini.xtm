@@ -93,8 +93,8 @@
 		</name>
 	</topic>
 	<topic id="topic589">
-		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
 		<subjectIdentifier href="http://wandora.org/si/core/language"/>
+		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
 		<subjectIdentifier href="http://www.wandora.org/core/language"/>
 		<name>
 			<value>Wandora language</value>

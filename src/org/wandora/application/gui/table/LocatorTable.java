@@ -41,6 +41,7 @@ import org.wandora.application.*;
 import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.simple.SimpleTable;
@@ -470,7 +471,8 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
         @Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
-            return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
+            return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor) ||
+                   support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
                    support.isDataFlavorSupported(DataFlavor.stringFlavor);
         }
 
@@ -510,15 +512,24 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
                 }
                 else if(support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)){
                     java.util.List<File> files = (java.util.List<File>)support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    for( File file : files ) {
-                        processDrop(file.toURI().toString());
+                    int ret=WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Make DataURI out of given file content? Answering no uses filename as an URI.","Make DataURI?", WandoraOptionPane.YES_NO_OPTION);
+                    if(ret==WandoraOptionPane.YES_OPTION) {
+                        for( File file : files ) {
+                            DataURL dataURL = new DataURL(file);
+                            String dataUrlLocator = dataURL.toExternalForm(Base64.DONT_BREAK_LINES);
+                            processDrop(dataUrlLocator);
+                        }
+                    }
+                    else if(ret==WandoraOptionPane.NO_OPTION) {
+                        for( File file : files ) {
+                            processDrop(file.toURI().toString());
+                        }
                     }
                 }
                 else if(support.isDataFlavorSupported(DataFlavor.stringFlavor)){
                     String data=(String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
                     processDrop(data);
                 }
-                
             }
             catch(TopicMapException tme){tme.printStackTrace();}
             catch(UnsupportedFlavorException ufe){ufe.printStackTrace();}
@@ -533,11 +544,13 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
     
     
     public void processDrop(String data) {
-        System.out.println("Drag processed at locator table!");
+        // Override this method in extending implementations! 
+        // Look at the SITable class for an example.
     }
 
 
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         String c = e.getActionCommand();
     }

@@ -97,8 +97,8 @@
 			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/wandoraclass"/>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/wandora-class"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/wandoraclass"/>
 		</subjectIdentity>
 		<baseName>
 			<baseNameString>Wandora class</baseNameString>
@@ -201,8 +201,8 @@
 			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/associationtype"/>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/association-type"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/associationtype"/>
 		</subjectIdentity>
 		<baseName>
 			<baseNameString>Association type</baseNameString>
@@ -237,8 +237,8 @@
 			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/schema-type"/>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/schema-type"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/schema-type"/>
 		</subjectIdentity>
 		<baseName>
 			<baseNameString>Schema type</baseNameString>
@@ -332,8 +332,8 @@
 			<topicRef xlink:href="#ID2063089-topic84226"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-occurrence"/>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/default-occurrence"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-occurrence"/>
 		</subjectIdentity>
 		<baseName>
 			<baseNameString>Default occurrence</baseNameString>
@@ -344,8 +344,8 @@
 			<topicRef xlink:href="#ID2063089-topic84242"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/langindependent"/>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/lang-independent"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/langindependent"/>
 		</subjectIdentity>
 		<baseName>
 			<baseNameString>Language independent</baseNameString>
@@ -415,9 +415,9 @@
 			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
+			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/language"/>
 			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/language"/>
 			<subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
-			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/language"/>
 		</subjectIdentity>
 		<baseName>
 			<baseNameString>Wandora language</baseNameString>
@@ -553,8 +553,8 @@
 			<topicRef xlink:href="#ID2063089-topic84228"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/variant-name-version"/>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/variant-name-version"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/variant-name-version"/>
 		</subjectIdentity>
 		<baseName>
 			<baseNameString>Wandora variant name version</baseNameString>
@@ -574,8 +574,8 @@
 			<topicRef xlink:href="#ID2063089-topic84237"/>
 		</instanceOf>
 		<subjectIdentity>
-			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-role-2"/>
 			<subjectIndicatorRef xlink:href="http://wandora.org/si/core/default-role-2"/>
+			<subjectIndicatorRef xlink:href="http://www.wandora.org/core/default-role-2"/>
 		</subjectIdentity>
 		<baseName>
 			<baseNameString>Default role 2</baseNameString>
