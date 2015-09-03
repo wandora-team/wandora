@@ -468,8 +468,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             else if(lowerCaseLocator.endsWith("doc") || lowerCaseLocator.endsWith("docx") ||
                lowerCaseLocator.endsWith("ppt") ||
                lowerCaseLocator.endsWith("xls") ||
-               lowerCaseLocator.endsWith("vsd") ||
-               lowerCaseLocator.endsWith("odt")
+               lowerCaseLocator.endsWith("vsd")
                ) {
                     String content = MSOfficeBox.getText(inputStream);
                     if(content != null) {
@@ -477,6 +476,11 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                     }
             }
 
+            else if(lowerCaseLocator.endsWith("odt")) {
+                        String content = OpenOfficeBox.getText(inputStream);
+                        setTextEnrichment(textTopic, topicMap, content, name);
+            }
+            
             else if(lowerCaseLocator.endsWith("html") ||
                     lowerCaseLocator.endsWith("htm")) {
                         String content = IObox.loadFile(new InputStreamReader(inputStream));

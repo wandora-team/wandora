@@ -25,36 +25,33 @@
 
 package org.wandora.application.tools.extractors.any23;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import org.deri.any23.extractor.ExtractionContext;
-import org.deri.any23.writer.TripleHandlerException;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Value;
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
+
 
 import java.io.*;
-import javax.swing.*;
 
 import java.net.*;
 import java.util.ArrayList;
-import org.deri.any23.Any23;
-import org.deri.any23.http.HTTPClient;
-import org.deri.any23.source.DocumentSource;
-import org.deri.any23.source.FileDocumentSource;
-import org.deri.any23.source.HTTPDocumentSource;
-import org.deri.any23.source.StringDocumentSource;
-import org.deri.any23.writer.TripleHandler;
+import javax.swing.*;
+import org.apache.any23.Any23;
+import org.apache.any23.extractor.ExtractionContext;
+import org.apache.any23.http.HTTPClient;
+import org.apache.any23.source.DocumentSource;
+import org.apache.any23.source.FileDocumentSource;
+import org.apache.any23.source.HTTPDocumentSource;
+import org.apache.any23.source.StringDocumentSource;
+import org.apache.any23.writer.TripleHandler;
+import org.apache.any23.writer.TripleHandlerException;
+import org.openrdf.model.Value;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.*;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
+import org.wandora.application.tools.extractors.*;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDF2TopicMapsMapping;
+import org.wandora.topicmap.*;
 
 
 /**
- * Extract information out of given resources using Any23 (See http://any23.org/).
+ * Extract information out of given resources using Any23 (See https://any23.apache.org/index.html).
  * Transform extracted information to topics and associations. Sign all extracted
  * information with the information source. Information source is added to associations
  * as an extra player topic.
