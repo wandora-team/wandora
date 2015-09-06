@@ -35,6 +35,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.text.*;
+import javax.swing.Icon;
+import org.wandora.application.gui.UIBox;
 
         
 
@@ -62,14 +64,19 @@ public class DirectoryStructureExtractor2 extends AbstractExtractor implements W
     public int getExtractorType() {
         return FILE_EXTRACTOR;
     }
+    
+    
     @Override
     public String getName() {
         return "Extract directory structure";
     }
+    
+    
     @Override
     public String getDescription(){
         return "Converts given directory stucture to a topic map where directories are associated with files and directories within.";
     }
+    
     
     @Override
     public boolean useURLCrawler() {
@@ -77,6 +84,10 @@ public class DirectoryStructureExtractor2 extends AbstractExtractor implements W
     }
 
     
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon(0xf114);
+    }
     
     
     @Override

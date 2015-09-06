@@ -44,15 +44,13 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.XTMPSI;
-import org.wandora.application.Wandora;
-import org.wandora.application.gui.WandoraOptionPane;
-import org.wandora.application.tools.extractors.AbstractExtractor;
-import org.wandora.application.tools.extractors.ExtractHelper;
+
 
 /*
  * @author
  * Eero Lehtonen
  */
+
 public class ICalExtractor extends AbstractExtractor {
 
   public static final String ICAL_SI = "http://tools.ietf.org/html/rfc5545/";
@@ -121,7 +119,7 @@ public class ICalExtractor extends AbstractExtractor {
 
   @Override
   public Icon getIcon() {
-    return UIBox.getIcon("gui/icons/extract.png");
+    return UIBox.getIcon(0xf133);
   }
 
   @Override

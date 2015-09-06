@@ -703,8 +703,8 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         configCancelButton = new org.wandora.application.gui.simple.SimpleButton();
         configOkButton = new org.wandora.application.gui.simple.SimpleButton();
         panelContainer = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        previewPanel = PreviewWrapper.getPreviewWrapper();
+        previewPanelContainer = new javax.swing.JPanel();
+        previewPanel = PreviewWrapper.getPreviewWrapper(this);
         jPanel1 = new javax.swing.JPanel();
         idPanel = new javax.swing.JPanel();
         baseNameLabel = new org.wandora.application.gui.simple.SimpleLabel();
@@ -776,7 +776,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
 
         panelContainer.setLayout(new java.awt.GridBagLayout());
 
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        previewPanelContainer.setLayout(new java.awt.GridBagLayout());
 
         previewPanel.setToolTipText("");
         previewPanel.setMinimumSize(new java.awt.Dimension(2, 2));
@@ -789,14 +789,14 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        jPanel2.add(previewPanel, gridBagConstraints);
+        previewPanelContainer.add(previewPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 5, 15);
-        panelContainer.add(jPanel2, gridBagConstraints);
+        panelContainer.add(previewPanelContainer, gridBagConstraints);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -1001,10 +1001,10 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     private javax.swing.JButton configureButton;
     private javax.swing.JPanel idPanel;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel panelContainer;
     private javax.swing.JPanel previewPanel;
+    private javax.swing.JPanel previewPanelContainer;
     private javax.swing.JPanel removedTopicMessage;
     private javax.swing.JLabel removedTopicMessageLabel;
     private javax.swing.JLabel subjectIdentifierLabel;

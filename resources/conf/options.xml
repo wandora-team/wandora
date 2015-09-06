@@ -789,7 +789,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Media</name>
             <item>
-               <name>Europeana extractor</name>
+               <name>Europeana extractor...</name>
                <class>org.wandora.application.tools.extractors.europeana.EuropeanaExtractor</class>
             </item>
             <item>
@@ -877,47 +877,39 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.DummyExtractor</class>
             </item>
             <item>
-               <name>YLE Elava arkisto terms</name>
+               <name>YLE Elava arkisto terms...</name>
                <class>org.wandora.application.tools.extractors.yle.elavaarkisto.TermsExtractor</class>
             </item>
             <item>
-               <name>YLE Elava arkisto articles</name>
+               <name>YLE Elava arkisto articles...</name>
                <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticlesExtractor</class>
             </item>
             <item>
-               <name>YLE Elava arkisto article additions</name>
+               <name>YLE Elava arkisto article additions...</name>
                <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticlesAdditionalFieldsExtractor</class>
             </item>
             <item>
-               <name>YLE Elava arkisto article tags</name>
+               <name>YLE Elava arkisto article tags...</name>
                <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticleTagsExtractor</class>
             </item>
             <item>
-               <name>YLE Elava arkisto media</name>
+               <name>YLE Elava arkisto media...</name>
                <class>org.wandora.application.tools.extractors.yle.elavaarkisto.MediaExtractor</class>
             </item>
             <item>
-               <name>YLE Elava arkisto media of the article</name>
+               <name>YLE Elava arkisto media of the article...</name>
                <class>org.wandora.application.tools.extractors.yle.elavaarkisto.MediaArticleExtractor</class>
             </item>
          </item>
          <item>
             <name>Simple files</name>
             <item>
+               <name>Simple file extractor...</name>
+               <class>org.wandora.application.tools.extractors.files.SimpleFileExtractor</class>
+            </item>
+            <item>
                <name>Simple document extractor...</name>
                <class>org.wandora.application.tools.extractors.files.SimpleDocumentExtractor</class>
-            </item>
-            <item>
-               <name>---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>Directory structure extractor...</name>
-               <class>org.wandora.application.tools.extractors.files.DirectoryStructureExtractor2</class>
-            </item>
-            <item>
-               <name>(Old) Directory structure extractor...</name>
-               <class>org.wandora.application.tools.extractors.files.DirectoryStructureExtractor</class>
             </item>
             <item>
                <name>---</name>
@@ -938,6 +930,14 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>OCR extractor...</name>
                <class>org.wandora.application.tools.extractors.ocr.OCRExtractor</class>
+            </item>
+            <item>
+               <name>---</name>
+               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
+            </item>
+            <item>
+               <name>Directory structure extractor...</name>
+               <class>org.wandora.application.tools.extractors.files.DirectoryStructureExtractor2</class>
             </item>
          </item>
          <item>

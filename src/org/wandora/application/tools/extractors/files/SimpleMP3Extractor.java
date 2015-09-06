@@ -64,14 +64,20 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
     public String getName() {
         return "Extract MP3 metadata...";
     }
+    
+    
     @Override
     public String getDescription(){
         return "Extracts metadata from MP3 files. Both ID3V1 and ID3V2 metadata tags are supported!";
     }
+    
+    
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/extract_id3.png");
+        return UIBox.getIcon(0xf1c7);
     }
+    
+    
     @Override
     public int getExtractorType() {
         return FILE_EXTRACTOR | URL_EXTRACTOR;

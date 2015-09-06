@@ -30,6 +30,7 @@ package org.wandora.application.gui.previews;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 import org.wandora.application.*;
 import org.wandora.application.gui.previews.formats.Unknown;
@@ -42,52 +43,79 @@ import static org.wandora.utils.Functional.*;
  * @author akivela
  */
 public class PreviewWrapper extends JPanel {
+    private static HashMap<Object,PreviewWrapper> previewWrappers = null;
+    
     private PreviewPanel currentPanel = null;
     private Component currentUI = null;
-    private Wandora wandora = null;
+    private Locator currentLocator = null;
     
     
     
     /**
      * Creates a new instance of PreviewWrapper
      */
-    public PreviewWrapper() {
-        this.wandora = Wandora.getWandora();
+    private PreviewWrapper() {
         this.setLayout(new BorderLayout());
     }
     
     
     
-    public static PreviewWrapper getPreviewWrapper() {
-        return new PreviewWrapper();
+    public static PreviewWrapper getPreviewWrapper(Object owner) {
+        if(previewWrappers == null) {
+            previewWrappers = new HashMap();
+        }
+        PreviewWrapper previewWrapper = previewWrappers.get(owner);
+        if(previewWrapper == null) {
+            previewWrapper = new PreviewWrapper();
+            previewWrappers.put(owner, previewWrapper);
+        }
+        return previewWrapper;
     }
     
     
+    public static void removePreviewWrapper(Object owner) {
+        if(previewWrappers != null) {
+            previewWrappers.remove(owner);
+        }
+    }
+    
+    
+    
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
+    
     
     public void stop() {
         if(currentPanel != null) {
             // System.out.println("Stopping preview wrapper.");
             currentPanel.stop();
+            currentPanel = null;
+            currentLocator = null;
         }
     }
     
+    
     public void setURL(Locator subjectLocator) {
+        if(subjectLocator != null && subjectLocator.equals(currentLocator)) {
+            return;
+        }
+        
         if(currentPanel != null) {
             currentPanel.stop();
             currentPanel.finish();
             currentPanel = null;
             currentUI = null;
         }
+        
         removeAll();
 
+        currentLocator = subjectLocator;
         if(subjectLocator == null)
             return;
-        
+
         if(subjectLocator.toExternalForm().equals(""))
             return;
-        
+
         try {
             currentPanel = PreviewFactory.create(subjectLocator);
             if(currentPanel != null) {
@@ -99,7 +127,7 @@ public class PreviewWrapper extends JPanel {
         catch(Exception e) {
             PreviewUtils.previewError(this, "Creating preview failed.", e);
         }
-        
+
         if(currentPanel != null) {
             currentUI = currentPanel.getGui();
             if(currentUI != null) {

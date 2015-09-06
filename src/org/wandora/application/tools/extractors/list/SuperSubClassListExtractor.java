@@ -106,9 +106,10 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
         return contentTypes;
     }
     
+    
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/extract_html.png");
+        return UIBox.getIcon(0xf121);
     }
     
     

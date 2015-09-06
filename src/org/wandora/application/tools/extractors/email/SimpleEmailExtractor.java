@@ -126,7 +126,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     }
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/extract_email.png");
+        return UIBox.getIcon(0xf003);
     }
     
 

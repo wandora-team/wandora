@@ -41,9 +41,11 @@ import java.util.*;
 import java.text.*;
 import java.io.*;
 import java.net.*;
+import javax.swing.Icon;
 
 
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 
@@ -53,12 +55,13 @@ import org.wandora.application.tools.extractors.ExtractHelper;
  * @author akivela
  */
 public class SimpleFileExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
-    protected String TOPIC_SI = "http://wandora.org/si/topic";
-    protected String SOURCE_SI = "http://wandora.org/si/source";
-    protected String DOCUMENT_SI = "http://wandora.org/si/document";
+    protected static String TOPIC_SI = "http://wandora.org/si/topic";
+    protected static String SOURCE_SI = "http://wandora.org/si/source";
+    protected static String DOCUMENT_SI = "http://wandora.org/si/document";
 
-    private String defaultLang = "en";
+    protected static String DEFAULT_DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
     
+    private String defaultLang = "en";
     private Wandora admin = null;
 
     private ArrayList<String> visitedDirectories = new ArrayList<String>();
@@ -77,20 +80,27 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
     
     @Override
     public String getDescription() {
-        return "Creates a topic for given file.";
+        return "Creates topics for given files. The file URI is set as topic's subject locator.";
     }
     
-
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon(0xf016);
+    }
+    
     
     @Override
     public boolean useTempTopicMap(){
         return false;
     }
     
+    
     @Override
     public boolean useURLCrawler() {
         return false;
     }
+    
     
     @Override
     public String getGUIText(int textType) {
@@ -218,7 +228,7 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
             documentTopic.addType(textType);
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(documentTopic, extractionTimeType, defaultLang, dateString);
@@ -261,7 +271,7 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
             documentTopic.addType(textType);
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(documentTopic, extractionTimeType, defaultLang, dateString);
@@ -306,23 +316,29 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
             String locator = file.toURI().toURL().toExternalForm();
             int hash = locator.hashCode();
 
-            Topic documentTopic = topicMap.getTopic(locator);
-            if(documentTopic == null) documentTopic = topicMap.createTopic();
-            documentTopic.addSubjectIdentifier(new Locator( locator ));
-            documentTopic.setBaseName(file.getName() + " ("+hash+")");
-            documentTopic.setSubjectLocator(new Locator( locator ));
-            documentTopic.addType(textType);
+            Topic fileTopic = topicMap.getTopic(locator);
+            if(fileTopic == null) fileTopic = topicMap.createTopic();
+            fileTopic.addSubjectIdentifier(new Locator( locator ));
+            fileTopic.setBaseName(file.getName() + " ("+hash+")");
+            fileTopic.setSubjectLocator(new Locator( locator ));
+            fileTopic.addType(textType);
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
-            setData(documentTopic, extractionTimeType, defaultLang, dateString);
+            setData(fileTopic, extractionTimeType, defaultLang, dateString);
+            
+            // --- ADD MODIFICATION TIME AS OCCURRENCE ---
+            long lastModified = file.lastModified();
+            Topic modificationTimeType = createTopic(topicMap, "modification-time");
+            String modificationDateString = dateFormatter.format( new Date(lastModified) );
+            setData(fileTopic, modificationTimeType, defaultLang, modificationDateString);
             
             // --- ADD ABSOLUTE FILE NAME AS OCCURRENCE ---
             Topic fileType = createTopic(topicMap, "file-name");
             String fileString = file.getAbsolutePath();
-            setData(documentTopic, fileType, defaultLang, fileString);
+            setData(fileTopic, fileType, defaultLang, fileString);
 
             return true;
         }

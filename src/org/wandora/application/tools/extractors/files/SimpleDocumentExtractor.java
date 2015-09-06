@@ -50,12 +50,14 @@ import java.text.*;
 import java.lang.*;
 import java.io.*;
 import java.net.*;
+import javax.swing.Icon;
 
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 
@@ -65,10 +67,13 @@ import org.wandora.application.tools.extractors.ExtractHelper;
  * @author akivela
  */
 public class SimpleDocumentExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
-    protected String TOPIC_SI = "http://wandora.org/si/topic";
-    protected String SOURCE_SI = "http://wandora.org/si/source";
-    protected String DOCUMENT_SI = "http://wandora.org/si/document";
+    protected static String TOPIC_SI = "http://wandora.org/si/topic";
+    protected static String SOURCE_SI = "http://wandora.org/si/source";
+    protected static String DOCUMENT_SI = "http://wandora.org/si/document";
 
+    
+    protected static String DEFAULT_DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
+    
     private String defaultLang = "en";
     
     private Wandora admin = null;
@@ -83,7 +88,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
     
     @Override
     public String getName() {
-        return "Simple Document Extractor";
+        return "Simple document extractor";
     }
     
     
@@ -91,18 +96,27 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
     public String getDescription() {
         return "Creates a topic for given document and stores document content to an occurrence attached to the topic.";
     }
-    
 
+    
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon(0xf016); // or 0xf15b
+    }
+    
+    
     
     @Override
     public boolean useTempTopicMap(){
         return false;
     }
     
+    
     @Override
     public boolean useURLCrawler() {
         return false;
     }
+    
     
     @Override
     public String getGUIText(int textType) {
@@ -122,10 +136,6 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
         return "";
     }
     
-
-    
-    
-
     
     // ---------------------------------------------------- PLUGIN EXTRACTOR ---
 
@@ -215,7 +225,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
 
         try {
             int hash = str.hashCode();
-            Topic textType = this.getDocumentType(topicMap);
+            Topic documentType = this.getDocumentType(topicMap);
             String locator = "http://wandora.org/si/simple-document-extractor/"+hash;
 
             String name = null;
@@ -230,10 +240,10 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             if(documentTopic == null) documentTopic = topicMap.createTopic();
             documentTopic.addSubjectIdentifier(new Locator( locator ));
             documentTopic.setBaseName(name);
-            documentTopic.addType(textType);
+            documentTopic.addType(documentType);
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(documentTopic, extractionTimeType, defaultLang, dateString);
@@ -256,7 +266,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
         if(url == null || url.toExternalForm().length() == 0) return false;
         
         try {
-            Topic textType = this.getDocumentType(topicMap);
+            Topic documentType = this.getDocumentType(topicMap);
             String locator = url.toExternalForm();
             int hash = locator.hashCode();
             String name = url.getFile();
@@ -274,10 +284,10 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             documentTopic.addSubjectIdentifier(new Locator( locator ));
             documentTopic.setBaseName(name + " ("+hash+")");
             documentTopic.setSubjectLocator(new Locator( locator ));
-            documentTopic.addType(textType);
+            documentTopic.addType(documentType);
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(documentTopic, extractionTimeType, defaultLang, dateString);
@@ -327,7 +337,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
         }
 
         try {
-            Topic textType = this.getDocumentType(topicMap);
+            Topic documentType = this.getDocumentType(topicMap);
             String locator = file.toURI().toURL().toExternalForm();
             int hash = locator.hashCode();
 
@@ -336,13 +346,19 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             documentTopic.addSubjectIdentifier(new Locator( locator ));
             documentTopic.setBaseName(file.getName() + " ("+hash+")");
             documentTopic.setSubjectLocator(new Locator( locator ));
-            documentTopic.addType(textType);
+            documentTopic.addType(documentType);
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(documentTopic, extractionTimeType, defaultLang, dateString);
+            
+            // --- ADD MODIFICATION TIME AS OCCURRENCE ---
+            long lastModified = file.lastModified();
+            Topic modificationTimeType = createTopic(topicMap, "modification-time");
+            String modificationDateString = dateFormatter.format( new Date(lastModified) );
+            setData(documentTopic, modificationTimeType, defaultLang, modificationDateString);
             
             // --- ADD ABSOLUTE FILE NAME AS OCCURRENCE ---
             Topic fileType = createTopic(topicMap, "file-name");
@@ -363,7 +379,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
     
     
     
-    public void _extractTopicsFromStream(String locator, InputStream inputStream, TopicMap topicMap, Topic textTopic) {
+    public void _extractTopicsFromStream(String locator, InputStream inputStream, TopicMap topicMap, Topic topic) {
         try {
             String name = locator;
             if(name.indexOf("/") != -1) {
@@ -378,13 +394,13 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             if(lowerCaseLocator.endsWith("pdf")) {
                 PDDocument doc = PDDocument.load(locator);
                 PDDocumentInformation info = doc.getDocumentInformation();
-                DateFormat dateFormatter = new SimpleDateFormat();
+                DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
 
                 // --- PDF PRODUCER ---
                 String producer = info.getProducer();
                 if(producer != null && producer.length() > 0) {
                     Topic producerType = createTopic(topicMap, "pdf-producer");
-                    setData(textTopic, producerType, defaultLang, producer.trim());
+                    setData(topic, producerType, defaultLang, producer.trim());
                 }
 
                 // --- PDF MODIFICATION DATE ---
@@ -393,7 +409,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                     String mdate = dateFormatter.format(mCal.getTime());
                     if(mdate != null && mdate.length() > 0) {
                         Topic modificationDateType = createTopic(topicMap, "pdf-modification-date");
-                        setData(textTopic, modificationDateType, defaultLang, mdate.trim());
+                        setData(topic, modificationDateType, defaultLang, mdate.trim());
                     }
                 }
 
@@ -401,7 +417,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                 String creator = info.getCreator();
                 if(creator != null && creator.length() > 0) {
                     Topic creatorType = createTopic(topicMap, "pdf-creator");
-                    setData(textTopic, creatorType, defaultLang, creator.trim());
+                    setData(topic, creatorType, defaultLang, creator.trim());
                 }
 
                 // --- PDF CREATION DATE ---
@@ -410,7 +426,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                     String cdate = dateFormatter.format(cCal.getTime());
                     if(cdate != null && cdate.length() > 0) {
                         Topic creationDateType = createTopic(topicMap, "pdf-creation-date");
-                        setData(textTopic, creationDateType, defaultLang, cdate.trim());
+                        setData(topic, creationDateType, defaultLang, cdate.trim());
                     }
                 }
 
@@ -418,21 +434,21 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                 String author = info.getAuthor();
                 if(author != null && author.length() > 0) {
                     Topic authorType = createTopic(topicMap, "pdf-author");
-                    setData(textTopic, authorType, defaultLang, author.trim());
+                    setData(topic, authorType, defaultLang, author.trim());
                 }
 
                 // --- PDF SUBJECT ---
                 String subject = info.getSubject();
                 if(subject != null && subject.length() > 0) {
                     Topic subjectType = createTopic(topicMap, "pdf-subject");
-                    setData(textTopic, subjectType, defaultLang, subject.trim());
+                    setData(topic, subjectType, defaultLang, subject.trim());
                 }
 
                 // --- PDF TITLE ---
                 String title = info.getSubject();
                 if(title != null && title.length() > 0) {
                     Topic titleType = createTopic(topicMap, "pdf-title");
-                    setData(textTopic, titleType, defaultLang, title.trim());
+                    setData(topic, titleType, defaultLang, title.trim());
                 }
 
                 // --- PDF KEYWORDS (SEPARATED WITH SEMICOLON) ---
@@ -445,7 +461,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                         keyword = Textbox.trimExtraSpaces(keywordArray[i]);
                         if(keyword != null && keyword.length() > 0) {
                             Topic keywordTopic = createTopic(topicMap, keyword, keywordType);
-                            createAssociation(topicMap, keywordType, new Topic[] { textTopic, keywordTopic } );
+                            createAssociation(topicMap, keywordType, new Topic[] { topic, keywordTopic } );
                         }
                     }
                 }
@@ -454,14 +470,14 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                 PDFTextStripper stripper = new PDFTextStripper();
                 String content = stripper.getText(doc);
                 doc.close();
-                setTextEnrichment(textTopic, topicMap, content, name);
+                setTextEnrichment(topic, topicMap, content, name);
             }
             
             
             // --- HANDLE RTF DOCUMENTS ---
             else if(lowerCaseLocator.endsWith("rtf")) {
                 String content = Textbox.RTF2PlainText(inputStream);
-                setTextEnrichment(textTopic, topicMap, content, name);
+                setTextEnrichment(topic, topicMap, content, name);
             }
             
             // --- HANDLE OFFICE DOCUMENTS ---
@@ -472,25 +488,91 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                ) {
                     String content = MSOfficeBox.getText(inputStream);
                     if(content != null) {
-                        setTextEnrichment(textTopic, topicMap, content, name);
+                        setTextEnrichment(topic, topicMap, content, name);
                     }
             }
 
-            else if(lowerCaseLocator.endsWith("odt")) {
-                        String content = OpenOfficeBox.getText(inputStream);
-                        setTextEnrichment(textTopic, topicMap, content, name);
+            else if(lowerCaseLocator.endsWith("odt") || 
+                    lowerCaseLocator.endsWith("odp") || 
+                    lowerCaseLocator.endsWith("odg") || 
+                    lowerCaseLocator.endsWith("ods")) {
+                
+                        org.odftoolkit.simple.Document oodocument = org.odftoolkit.simple.Document.loadDocument(inputStream);
+                        String content = OpenOfficeBox.getText(oodocument);
+                        setTextEnrichment(topic, topicMap, content, name);
+
+                        org.odftoolkit.simple.meta.Meta meta = oodocument.getOfficeMetadata();
+                        
+                        // --- OO KEYWORDS ---
+                        List<String> keywords = meta.getKeywords();
+                        if(keywords != null && !keywords.isEmpty()) {
+                            Topic keywordType = createTopic(topicMap, "oo-keyword");
+                            for( String keyword : keywords) {
+                                keyword = keyword.trim();
+                                if(keyword != null && keyword.length() > 0) {
+                                    Topic keywordTopic = createTopic(topicMap, keyword, keywordType);
+                                    createAssociation(topicMap, keywordType, new Topic[] { topic, keywordTopic } );
+                                }
+                            }
+                        }
+                        
+                        // --- OO TITLE ---
+                        String title = meta.getTitle();
+                        if(title != null && title.length() > 0) {
+                            Topic titleType = createTopic(topicMap, "oo-title");
+                            setData(topic, titleType, defaultLang, title.trim());
+                        }
+                        
+                        // --- OO SUBJECT ---
+                        String subject = meta.getSubject();
+                        if(subject != null && subject.length() > 0) {
+                            Topic subjectType = createTopic(topicMap, "oo-subject");
+                            setData(topic, subjectType, defaultLang, subject.trim());
+                        }
+                        
+                        // --- OO CREATOR ---
+                        String author = meta.getCreator();
+                        if(author != null && author.length() > 0) {
+                            Topic authorType = createTopic(topicMap, "oo-author");
+                            setData(topic, authorType, defaultLang, author.trim());
+                        }
+                        
+                        // --- OO CREATION DATE ---
+                        Calendar cCal = meta.getCreationDate();
+                        if(cCal != null) {
+                            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+                            String cdate = dateFormatter.format(cCal.getTime());
+                            if(cdate != null && cdate.length() > 0) {
+                                Topic creationDateType = createTopic(topicMap, "oo-creation-date");
+                                setData(topic, creationDateType, defaultLang, cdate.trim());
+                            }
+                        }
+                        
+                        // --- OO DESCRIPTION ---
+                        String description = meta.getDescription();
+                        if(description != null && description.length() > 0) {
+                            Topic descriptionType = createTopic(topicMap, "oo-description");
+                            setData(topic, descriptionType, defaultLang, description.trim());
+                        }
+
+                        // --- OO GENERATOR ---
+                        String generator = meta.getGenerator();
+                        if(generator != null && generator.length() > 0) {
+                            Topic generatorType = createTopic(topicMap, "oo-generator");
+                            setData(topic, generatorType, defaultLang, generator.trim());
+                        }
             }
             
             else if(lowerCaseLocator.endsWith("html") ||
                     lowerCaseLocator.endsWith("htm")) {
                         String content = IObox.loadFile(new InputStreamReader(inputStream));
-                        setTextEnrichment(textTopic, topicMap, content, name);
+                        setTextEnrichment(topic, topicMap, content, name);
             }
             
             else if(lowerCaseLocator.endsWith("txt") ||
                     lowerCaseLocator.endsWith("text")) {
                         String content = IObox.loadFile(new InputStreamReader(inputStream));
-                        setTextEnrichment(textTopic, topicMap, content, name);
+                        setTextEnrichment(topic, topicMap, content, name);
             }
             
             // --- HANDLE ANY OTHER DOCUMENTS ---
@@ -514,14 +596,14 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
                     }
                 }
                 if(isText) {
-                    setTextEnrichment(textTopic, topicMap, new String(content), name);
+                    setTextEnrichment(topic, topicMap, new String(content), name);
                 }
                 else {
                     if(!mimeTypes.isEmpty()) {
                         MimeType mime = mimeTypes.iterator().next();
                         mimeType = mime.toString();
                     }
-                    setBinaryEnrichment(textTopic, topicMap, content, mimeType);
+                    setBinaryEnrichment(topic, topicMap, content, mimeType);
                 }
             }
         }

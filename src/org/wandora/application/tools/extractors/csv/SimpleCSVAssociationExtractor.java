@@ -24,19 +24,16 @@
 
 package org.wandora.application.tools.extractors.csv;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import org.wandora.application.Wandora;
+
+import javax.swing.Icon;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
-import org.wandora.utils.CSVParser;
 import org.wandora.utils.CSVParser.Row;
 import org.wandora.utils.CSVParser.Table;
+
 
 /**
  *
@@ -50,20 +47,29 @@ public class SimpleCSVAssociationExtractor extends AbstractCSVExtractor {
 
     @Override
     public String getName() {
-        return "Simple CSV association extractor...";
+        return "Simple CSV association extractor";
     }
+    
+    
     @Override
     public String getDescription(){
         return "Convert CSV file to topics and associations. Each row in CSV file is transformed "+
                "into an association. Each column is transformed into a player topic in the association.";
     }
+    
+    
     @Override
     public boolean useURLCrawler() {
         return false;
     }
     
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon(0xf0f6);
+    }
 
-
+    
     @Override
     public String getGUIText(int textType) {
         switch(textType) {

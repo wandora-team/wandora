@@ -53,7 +53,7 @@ public abstract class AbstractJsoupExtractor extends AbstractExtractor {
     
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/extract_html.png");
+        return UIBox.getIcon(0xf121);
     }
     
     @Override

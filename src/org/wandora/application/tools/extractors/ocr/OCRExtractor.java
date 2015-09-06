@@ -82,7 +82,7 @@ public class OCRExtractor extends AbstractExtractor {
 
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/extract.png");
+        return UIBox.getIcon(0xf1c5);
     }
 
     private final String[] contentTypes=new String[] { "image/jpeg", "image/jpg" };

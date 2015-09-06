@@ -31,6 +31,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.text.*;
+import javax.swing.Icon;
 //import org.w3c.tools.jpeg.JpegException;
 //import org.w3c.tools.jpeg.*;
 //import org.xml.sax.*;
@@ -38,6 +39,7 @@ import java.text.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.utils.*;
@@ -75,8 +77,13 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
         return FILE_EXTRACTOR | URL_EXTRACTOR;
     }
     
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon(0xf1c5);
+    }
 
-
+    
     @Override
     public String getGUIText(int textType) {
         switch(textType) {

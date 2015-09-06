@@ -607,8 +607,8 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         subjectIdentifierLabel = new org.wandora.application.gui.simple.SimpleLabel();
         subjectIdentifierRootPanel = new org.wandora.application.gui.simple.SimplePanel();
         subjectIdentifierPanel = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        previewPanel = PreviewWrapper.getPreviewWrapper();
+        previewPanelContainer = new javax.swing.JPanel();
+        previewPanel = PreviewWrapper.getPreviewWrapper(this);
         variantScrollPanel = new javax.swing.JPanel();
         variantPanelContainer = new javax.swing.JPanel();
         basenamePanel = new javax.swing.JPanel();
@@ -700,7 +700,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
         subjectPanelContainer.add(subjectIdentifierRootPanel, gridBagConstraints);
 
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        previewPanelContainer.setLayout(new java.awt.GridBagLayout());
 
         previewPanel.setToolTipText("");
         previewPanel.setMinimumSize(new java.awt.Dimension(100, 100));
@@ -712,7 +712,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        jPanel2.add(previewPanel, gridBagConstraints);
+        previewPanelContainer.add(previewPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -722,7 +722,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
-        subjectPanelContainer.add(jPanel2, gridBagConstraints);
+        subjectPanelContainer.add(previewPanelContainer, gridBagConstraints);
 
         subjectScrollPanel.add(subjectPanelContainer, java.awt.BorderLayout.CENTER);
 
@@ -1155,7 +1155,6 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     private javax.swing.JPanel instancesScrollPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -1164,6 +1163,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     private javax.swing.JPanel jPanel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel previewPanel;
+    private javax.swing.JPanel previewPanelContainer;
     private javax.swing.JPanel removedTopicMessage;
     private javax.swing.JLabel removedTopicMessageLabel;
     private javax.swing.JLabel subjectIdentifierLabel;

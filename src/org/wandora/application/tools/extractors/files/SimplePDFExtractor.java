@@ -35,6 +35,7 @@ import java.util.*;
 import java.text.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.Icon;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 
@@ -42,6 +43,7 @@ import org.apache.pdfbox.util.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -69,10 +71,20 @@ public class SimplePDFExtractor extends AbstractExtractor {
     public String getName() {
         return "Simple PDF extractor...";
     }
+    
+    
     @Override
     public String getDescription(){
         return "Extracts text and metadata from PDF files.";
     }
+    
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon(0xf1c1);
+    }
+    
+    
     @Override
     public int getExtractorType() {
         return FILE_EXTRACTOR | URL_EXTRACTOR;

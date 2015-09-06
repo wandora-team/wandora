@@ -69,23 +69,22 @@ public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
     }
 
 
-
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/extract_gedcom.png");
+        return UIBox.getIcon(0xf1ae);
     }
+    
 
     @Override
     public String getName() {
         return "GEDCOM extractor";
     }
 
+    
     @Override
     public String getDescription() {
         return "Convert GEDCOM (GEnealogical Data COMmunication) formatted files to topic maps.";
     }
-
-
 
 
     @Override
