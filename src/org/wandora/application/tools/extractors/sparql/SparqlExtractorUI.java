@@ -128,7 +128,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
     public void open(Wandora w) {
         accepted = false;
         dialog = new JDialog(w, true);
-        dialog.setSize(750,400);
+        dialog.setSize(800,500);
         dialog.add(this);
         dialog.setTitle("SPARQL Extractor");
         UIBox.centerWindow(dialog, w);
@@ -294,6 +294,20 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         hriQueryTextPane = new SimpleTextPane();
         hriButtonPanel = new javax.swing.JPanel();
         hriCheckButton = new SimpleButton();
+        datagovPanel = new javax.swing.JPanel();
+        datagovInnerPanel = new javax.swing.JPanel();
+        datagovTitle = new SimpleLabel();
+        datagovQueryScrollPane = new SimpleScrollPane();
+        datagovQueryTextPane = new SimpleTextPane();
+        datagovButtonPanel = new javax.swing.JPanel();
+        datagovCheckButton = new SimpleButton();
+        europeanaPanel = new javax.swing.JPanel();
+        europeanaInnerPanel = new javax.swing.JPanel();
+        europeanaTitle = new SimpleLabel();
+        europeanaQueryScrollPane = new SimpleScrollPane();
+        europeanaQueryTextPane = new SimpleTextPane();
+        europeanaButtonPanel = new javax.swing.JPanel();
+        europeanaCheckButton = new SimpleButton();
         tabbedPane = new SimpleTabbedPane();
         genericPanel = new javax.swing.JPanel();
         genericPanelInner = new javax.swing.JPanel();
@@ -319,13 +333,6 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         dbpediaQueryTextPane = new SimpleTextPane();
         dbpediaButtonPanel = new javax.swing.JPanel();
         dbpediaCheckButton = new SimpleButton();
-        europeanaPanel = new javax.swing.JPanel();
-        europeanaInnerPanel = new javax.swing.JPanel();
-        europeanaTitle = new SimpleLabel();
-        europeanaQueryScrollPane = new SimpleScrollPane();
-        europeanaQueryTextPane = new SimpleTextPane();
-        europeanaButtonPanel = new javax.swing.JPanel();
-        europeanaCheckButton = new SimpleButton();
         europeanOpenDataPanel = new javax.swing.JPanel();
         europeanOpenDataInnerPanel = new javax.swing.JPanel();
         europeanOpenDataTitle = new SimpleLabel();
@@ -340,13 +347,6 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         datagovukQueryTextPane = new SimpleTextPane();
         datagovukButtonPanel = new javax.swing.JPanel();
         datagovukCheckButton = new SimpleButton();
-        datagovPanel = new javax.swing.JPanel();
-        datagovInnerPanel = new javax.swing.JPanel();
-        datagovTitle = new SimpleLabel();
-        datagovQueryScrollPane = new SimpleScrollPane();
-        datagovQueryTextPane = new SimpleTextPane();
-        datagovButtonPanel = new javax.swing.JPanel();
-        datagovCheckButton = new SimpleButton();
         buttonPanel = new javax.swing.JPanel();
         buttonFillerPanel = new javax.swing.JPanel();
         okButton = new SimpleButton();
@@ -400,6 +400,102 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         hriPanel.add(hriInnerPanel, gridBagConstraints);
 
+        datagovPanel.setLayout(new java.awt.GridBagLayout());
+
+        datagovInnerPanel.setLayout(new java.awt.GridBagLayout());
+
+        datagovTitle.setText("Write and send SPARQL query to data.gov's SPARQL end point and transform result set to a topic map.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
+        datagovInnerPanel.add(datagovTitle, gridBagConstraints);
+
+        datagovQueryTextPane.setText("select distinct ?Concept where {[] a ?Concept}");
+        datagovQueryScrollPane.setViewportView(datagovQueryTextPane);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        datagovInnerPanel.add(datagovQueryScrollPane, gridBagConstraints);
+
+        datagovButtonPanel.setLayout(new java.awt.GridBagLayout());
+
+        datagovCheckButton.setText("Check Query");
+        datagovCheckButton.setMargin(new java.awt.Insets(0, 5, 0, 5));
+        datagovCheckButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                datagovCheckButtonMouseReleased(evt);
+            }
+        });
+        datagovButtonPanel.add(datagovCheckButton, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
+        datagovInnerPanel.add(datagovButtonPanel, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        datagovPanel.add(datagovInnerPanel, gridBagConstraints);
+
+        europeanaPanel.setLayout(new java.awt.GridBagLayout());
+
+        europeanaInnerPanel.setLayout(new java.awt.GridBagLayout());
+
+        europeanaTitle.setText("<html>Write and send query to Europeana's SPARQL end point at http://europeana.ontotext.com/sparql and transform result set to a topic map.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
+        europeanaInnerPanel.add(europeanaTitle, gridBagConstraints);
+
+        europeanaQueryTextPane.setText("# Creators and collections of Europeana objects from Italy\n\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\nPREFIX edm: <http://www.europeana.eu/schemas/edm/>\n\nSELECT DISTINCT ?EuropeanaObject ?Creator ?Collection\nWHERE {\n?EuropeanaObject dc:creator ?Creator ;\n                 edm:collectionName ?Collection ;\n                 edm:country \"italy\"\n}\nLIMIT 100");
+        europeanaQueryScrollPane.setViewportView(europeanaQueryTextPane);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        europeanaInnerPanel.add(europeanaQueryScrollPane, gridBagConstraints);
+
+        europeanaButtonPanel.setLayout(new java.awt.GridBagLayout());
+
+        europeanaCheckButton.setText("Check Query");
+        europeanaCheckButton.setMargin(new java.awt.Insets(0, 5, 0, 5));
+        europeanaCheckButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                europeanaCheckButtonMouseReleased(evt);
+            }
+        });
+        europeanaButtonPanel.add(europeanaCheckButton, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
+        europeanaInnerPanel.add(europeanaButtonPanel, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        europeanaPanel.add(europeanaInnerPanel, gridBagConstraints);
+
         javax.swing.GroupLayout disabledPanelsLayout = new javax.swing.GroupLayout(disabledPanels);
         disabledPanels.setLayout(disabledPanelsLayout);
         disabledPanelsLayout.setHorizontalGroup(
@@ -410,6 +506,16 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(hriPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(disabledPanelsLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(datagovPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(disabledPanelsLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(europeanaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         disabledPanelsLayout.setVerticalGroup(
             disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -418,6 +524,16 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
                 .addGroup(disabledPanelsLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(hriPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(disabledPanelsLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(datagovPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(disabledPanelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(disabledPanelsLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(europeanaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -496,7 +612,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
         genericButtonPanel.add(genericEncodingComboBox, gridBagConstraints);
 
-        resultFormatLabel.setText("Result set format");
+        resultFormatLabel.setText("Result format");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
         genericButtonPanel.add(resultFormatLabel, gridBagConstraints);
@@ -513,7 +629,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 10, 4, 10);
         genericButtonPanel.add(jSeparator1, gridBagConstraints);
 
-        showGenericButton.setText("Open Request URL");
+        showGenericButton.setText("Open Query URL");
         showGenericButton.setMargin(new java.awt.Insets(0, 5, 0, 5));
         showGenericButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -554,6 +670,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
         dbpediaInnerPanel.add(dbpediaTitle, gridBagConstraints);
 
+        dbpediaQueryTextPane.setText("select distinct ?Concept where {[] a ?Concept}");
         dbpediaQueryScrollPane.setViewportView(dbpediaQueryTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -590,56 +707,6 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         dbpediaPanel.add(dbpediaInnerPanel, gridBagConstraints);
 
         tabbedPane.addTab("DBPedia", dbpediaPanel);
-
-        europeanaPanel.setLayout(new java.awt.GridBagLayout());
-
-        europeanaInnerPanel.setLayout(new java.awt.GridBagLayout());
-
-        europeanaTitle.setText("<html>Write and send query to Europeana's SPARQL end point at http://europeana.ontotext.com/sparql and transform result set to a topic map.</html>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
-        europeanaInnerPanel.add(europeanaTitle, gridBagConstraints);
-
-        europeanaQueryTextPane.setText("# Creators and collections of Europeana objects from Italy\n\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\nPREFIX edm: <http://www.europeana.eu/schemas/edm/>\n\nSELECT DISTINCT ?EuropeanaObject ?Creator ?Collection\nWHERE {\n\n?EuropeanaObject dc:creator ?Creator ;\n                 edm:collectionName ?Collection ;\n                 edm:country \"italy\"\n\n}\nLIMIT 100");
-        europeanaQueryScrollPane.setViewportView(europeanaQueryTextPane);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        europeanaInnerPanel.add(europeanaQueryScrollPane, gridBagConstraints);
-
-        europeanaButtonPanel.setLayout(new java.awt.GridBagLayout());
-
-        europeanaCheckButton.setText("Check Query");
-        europeanaCheckButton.setMargin(new java.awt.Insets(0, 5, 0, 5));
-        europeanaCheckButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                europeanaCheckButtonMouseReleased(evt);
-            }
-        });
-        europeanaButtonPanel.add(europeanaCheckButton, new java.awt.GridBagConstraints());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
-        europeanaInnerPanel.add(europeanaButtonPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        europeanaPanel.add(europeanaInnerPanel, gridBagConstraints);
-
-        tabbedPane.addTab("Europeana", europeanaPanel);
 
         europeanOpenDataPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -740,56 +807,6 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         datagovukPanel.add(datagovukInnerPanel, gridBagConstraints);
 
         tabbedPane.addTab("data.gov.uk", datagovukPanel);
-
-        datagovPanel.setLayout(new java.awt.GridBagLayout());
-
-        datagovInnerPanel.setLayout(new java.awt.GridBagLayout());
-
-        datagovTitle.setText("Write and send SPARQL query to data.gov's SPARQL end point and transform result set to a topic map.");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
-        datagovInnerPanel.add(datagovTitle, gridBagConstraints);
-
-        datagovQueryTextPane.setText("select distinct ?Concept where {[] a ?Concept}");
-        datagovQueryScrollPane.setViewportView(datagovQueryTextPane);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        datagovInnerPanel.add(datagovQueryScrollPane, gridBagConstraints);
-
-        datagovButtonPanel.setLayout(new java.awt.GridBagLayout());
-
-        datagovCheckButton.setText("Check Query");
-        datagovCheckButton.setMargin(new java.awt.Insets(0, 5, 0, 5));
-        datagovCheckButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                datagovCheckButtonMouseReleased(evt);
-            }
-        });
-        datagovButtonPanel.add(datagovCheckButton, new java.awt.GridBagConstraints());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
-        datagovInnerPanel.add(datagovButtonPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        datagovPanel.add(datagovInnerPanel, gridBagConstraints);
-
-        tabbedPane.addTab("data.gov", datagovPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

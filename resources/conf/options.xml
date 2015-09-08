@@ -572,33 +572,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>Stanford Named Entity Recognizer...</name>
                <class>org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier</class>
             </item>
-            <item>
-               <name>--- WEB SERVICES ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>uClassify...</name>
-               <class>org.wandora.application.tools.extractors.uclassify.UClassifier</class>
-            </item>
-            <!--
-            <item>
-               <name>OpenCalais classifier...</name>
-               <class>org.wandora.application.tools.extractors.opencalais.OpenCalaisClassifier</class>
-            </item>
-            -->
-            <item>
-               <name>TextWise classifier...</name>
-               <class>org.wandora.application.tools.extractors.textwise.TextWiseClassifier</class>
-            </item>
-            <item>
-               <name>Yahoo! YQL term extractor...</name>
-               <class>org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract</class>
-            </item>
-            <item>
-               <name>Zemanta extractor...</name>
-               <class>org.wandora.application.tools.extractors.zemanta.ZemantaExtractor</class>
-            </item>
-            <item>
+<item>
                <name>--- ALCHEMY EXTRACTORS ---</name>
                <class>org.wandora.application.tools.DummyTool</class>
             </item>
@@ -633,6 +607,32 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>Alchemy face detection extractor...</name>
                <class>org.wandora.application.tools.extractors.alchemy.AlchemyFaceDetection</class>
+            </item>
+            <item>
+               <name>--- WEB SERVICES ---</name>
+               <class>org.wandora.application.tools.DummyTool</class>
+            </item>
+            <item>
+               <name>uClassify...</name>
+               <class>org.wandora.application.tools.extractors.uclassify.UClassifier</class>
+            </item>
+            <!--
+            <item>
+               <name>OpenCalais classifier...</name>
+               <class>org.wandora.application.tools.extractors.opencalais.OpenCalaisClassifier</class>
+            </item>
+            -->
+            <item>
+               <name>TextWise classifier...</name>
+               <class>org.wandora.application.tools.extractors.textwise.TextWiseClassifier</class>
+            </item>
+            <item>
+               <name>Yahoo! YQL term extractor...</name>
+               <class>org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract</class>
+            </item>
+            <item>
+               <name>Zemanta extractor...</name>
+               <class>org.wandora.application.tools.extractors.zemanta.ZemantaExtractor</class>
             </item>
             <item>
                <name>--- REKOGNITION ---</name>
