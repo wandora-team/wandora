@@ -191,11 +191,11 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
             queryURL = queryURL.replace(QUERY_MACRO, query);
             q = new String[] { queryURL };
         }
-        // ***** EUROPEANA *****
+        // ***** EUROPEAN OPEN DATA *****
         else if(europeanOpenDataPanel.equals(component)) {
             String query = europeanOpenDataQueryTextPane.getText();
             query = prepareQuery(query, "UTF-8");
-            String queryURL = "http://open-data.europa.eu/open-data/sparql?query=__QUERY__&format=application%2Fxml";
+            String queryURL = "http://open-data.europa.eu/sparqlep?query=__QUERY__&format=application%2Fxml";
             queryURL = queryURL.replace(QUERY_MACRO, query);
             q = new String[] { queryURL };
         }
@@ -603,7 +603,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
         europeanaInnerPanel.add(europeanaTitle, gridBagConstraints);
 
-        europeanaQueryTextPane.setText("# Creators and collections of Europeana objects from Italy\n\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\nSELECT DISTINCT ?EuropeanaObject ?Creator ?Collection\nWHERE {\n\n?EuropeanaObject dc:creator ?Creator ;\n                 edm:collectionName ?Collection ;\n                 edm:country \"italy\"\n\n}\nLIMIT 100");
+        europeanaQueryTextPane.setText("# Creators and collections of Europeana objects from Italy\n\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\nPREFIX edm: <http://www.europeana.eu/schemas/edm/>\n\nSELECT DISTINCT ?EuropeanaObject ?Creator ?Collection\nWHERE {\n\n?EuropeanaObject dc:creator ?Creator ;\n                 edm:collectionName ?Collection ;\n                 edm:country \"italy\"\n\n}\nLIMIT 100");
         europeanaQueryScrollPane.setViewportView(europeanaQueryTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -645,7 +645,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
 
         europeanOpenDataInnerPanel.setLayout(new java.awt.GridBagLayout());
 
-        europeanOpenDataTitle.setText("<html>Write and send query to European Comission's Open Data SPARQL end point at http://open-data.europa.eu/open-data/sparql and transform result set to a topic map.</html>");
+        europeanOpenDataTitle.setText("<html>Write and send query to European Comission's Open Data SPARQL end point at http://open-data.europa.eu/sparqlep and transform result set to a topic map.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -653,7 +653,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
         europeanOpenDataInnerPanel.add(europeanOpenDataTitle, gridBagConstraints);
 
-        europeanOpenDataQueryTextPane.setText("select distinct ?Concept where {[] a ?Concept} LIMIT 100");
+        europeanOpenDataQueryTextPane.setText("PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX odp:  <http://open-data.europa.eu/ontologies/ec-odp#>\nPREFIX dc: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\n\nselect distinct ?g ?o where { graph ?g {?s dc:title ?o. filter regex(?o, 'Statistics', 'i') } } LIMIT 10");
         europeanOpenDataQueryScrollPane.setViewportView(europeanOpenDataQueryTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -689,7 +689,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         europeanOpenDataPanel.add(europeanOpenDataInnerPanel, gridBagConstraints);
 
-        tabbedPane.addTab("European Comission Open Data", europeanOpenDataPanel);
+        tabbedPane.addTab("open-data.europa.eu", europeanOpenDataPanel);
 
         datagovukPanel.setLayout(new java.awt.GridBagLayout());
 

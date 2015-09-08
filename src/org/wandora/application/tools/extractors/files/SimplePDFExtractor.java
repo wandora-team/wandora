@@ -57,7 +57,8 @@ import org.wandora.utils.*;
  * @author akivela
  */
 public class SimplePDFExtractor extends AbstractExtractor {
-
+    protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    
     public boolean makePageTopics = false;
     public boolean makeVariantFromTitle = true;
     private String defaultLang = "en";
@@ -203,7 +204,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
             _extractTopicsFromStream(url.toExternalForm(), uc.getInputStream(), topicMap, pdfTopic);
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(pdfTopic, extractionTimeType, defaultLang, dateString);
@@ -242,7 +243,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
             
             // --- ADD LAST MODIFICATION TIME AS OCCURRENCE ---
             try {
-                DateFormat dateFormatter = new SimpleDateFormat();
+                DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
                 Topic modType = createTopic(topicMap, "file-modified");
                 String dateString = dateFormatter.format( new Date(file.lastModified()) );
                 setData(pdfTopic, modType, defaultLang, dateString);
@@ -269,7 +270,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
             }
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(pdfTopic, extractionTimeType, defaultLang, dateString);
@@ -296,7 +297,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
                 doc = PDDocument.load(new File(locator));
             }
             PDDocumentInformation info = doc.getDocumentInformation();
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
 
             // --- PDF PRODUCER ---
             String producer = info.getProducer();

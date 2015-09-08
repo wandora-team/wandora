@@ -53,25 +53,26 @@ import org.wandora.utils.*;
 public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool {
 
     private String defaultLang = "en";
-
+    protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
     
     /** Creates a new instance of SimpleJPGExtractor */
     public SimpleJPGExtractor() {
     }
-    
-    
-    
- 
+
    
     @Override
     public String getName() {
         return "Extract PS metadata from JPEGs...";
     }
+    
+    
     @Override
     public String getDescription(){
         return "Extracts PS metadata from JPEG image files!";
     }
+    
+    
     @Override
     public int getExtractorType() {
         return FILE_EXTRACTOR | URL_EXTRACTOR;
@@ -109,12 +110,14 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
 
 
 
+    @Override
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
         throw(new Exception(STRING_EXTRACTOR_NOT_SUPPORTED_MESSAGE));
     }
 
 
     
+    @Override
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         if(url == null) return false;
         
@@ -131,7 +134,7 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
             imageTopic.setSubjectLocator(new Locator( location ));
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(imageTopic, extractionTimeType, defaultLang, dateString);
@@ -158,6 +161,7 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
     
     
     
+    @Override
     public boolean _extractTopicsFrom(File file, TopicMap topicMap) throws Exception {
         if(file == null || file.isDirectory()) return false;
         
@@ -170,7 +174,7 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
             
             // --- ADD LAST MODIFICATION TIME AS OCCURRENCE ---
             try {
-                DateFormat dateFormatter = new SimpleDateFormat();
+                DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
                 Topic modType = createTopic(topicMap, "file-modified");
                 String dateString = dateFormatter.format( new Date(file.lastModified()) );
                 setData(imageTopic, modType, defaultLang, dateString);
@@ -189,7 +193,7 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
             }
 
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-            DateFormat dateFormatter = new SimpleDateFormat();
+            DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");
             String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
             setData(imageTopic, extractionTimeType, defaultLang, dateString);
@@ -336,7 +340,7 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
     
 
     
-    public JPEGInfo getAPP13Comments(byte[][] data){
+    private JPEGInfo getAPP13Comments(byte[][] data){
         int length=0;
         for(int i=0;i<data.length;i++){length+=data[i].length;}
         byte[] d=new byte[length];
@@ -348,7 +352,8 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
         return getAPP13Comments(d);
     }
     
-    public JPEGInfo getAPP13Comments(byte[] data){
+    
+    private JPEGInfo getAPP13Comments(byte[] data){
         short[] datai=new short[data.length];
         
         Vector keywords=new Vector();
@@ -431,8 +436,9 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
     public String[] getContentTypes() {
         return contentTypes;
     }
-    
 }
+
+
 
 class JPEGInfo {
     String title;

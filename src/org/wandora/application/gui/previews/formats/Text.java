@@ -36,12 +36,12 @@ import javax.swing.JTextPane;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.IObox;
 import org.wandora.utils.swing.TextLineNumber;
+
 
 /**
  *
@@ -183,8 +183,53 @@ public class Text implements ActionListener, PreviewPanel {
     
     public static boolean canView(String url) {
         return PreviewUtils.isOfType(url, 
-                new String[] { "text/plain" }, 
-                new String[] { "txt", "text" }
+                new String[] { 
+                    "text",                   
+                },
+                new String[] { 
+                    "txt", 
+                    "text",
+                    
+                    "asm",
+                    "asp",
+                    "bat",
+                    "c",
+                    "c++",
+                    "cc",
+                    "com",
+                    "conf",
+                    "cpp",
+                    "csh",
+                    "ccs",
+                    "cxx",
+                    "def",
+                    "g",
+                    "h",
+                    "hh",
+                    "idc",
+                    "jav",
+                    "java",
+                    "js",
+                    "ksh",
+                    "list",
+                    "log",
+                    "lst",
+                    "m",
+                    "mar",
+                    "p",
+                    "pas",
+                    "pl",
+                    "py",
+                    "r",
+                    "sdml",
+                    "sgml",
+                    "sh",
+                    "sketch",
+                    "uri",
+                    "uni",
+                    "unis",
+                    "zhs"
+                }
         );
     }
 }

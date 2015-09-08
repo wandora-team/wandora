@@ -72,29 +72,29 @@ public class PreviewFactory {
             else if(Image.canView(urlString)) {
                 previewPanel = new Image(urlString);
             }
-            else if(ApplicationPDF.canView(urlString)) {
-                previewPanel = new ApplicationPDF(urlString);
-            }
-            else if(TextRTF.canView(urlString)) {
-                previewPanel = new TextRTF(urlString); 
-            }
-            else if(Text.canView(urlString)) {
-                previewPanel = new Text(urlString); 
-            }
-            else if(ApplicationXML.canView(urlString)) {
-                previewPanel = new ApplicationXML(urlString);
-            }
             else if(FMJ.canView(urlString)) {
                 previewPanel = new FMJ(urlString);
             }
             else if(GST.canView(urlString)) {
                 previewPanel = new GST(urlString);
             }
+            else if(ApplicationZMachine.canView(urlString)) {
+                previewPanel = new ApplicationZMachine(urlString); 
+            }
+            else if(ApplicationPDF.canView(urlString)) {
+                previewPanel = new ApplicationPDF(urlString);
+            }
+            else if(TextRTF.canView(urlString)) {
+                previewPanel = new TextRTF(urlString); 
+            }
             else if(TextHTML.canView(urlString)) {
                 previewPanel = new TextHTML(urlString);
             }
-            else if(ApplicationZMachine.canView(urlString)) {
-                previewPanel = new ApplicationZMachine(urlString); 
+            else if(ApplicationXML.canView(urlString)) {
+                previewPanel = new ApplicationXML(urlString);
+            }
+            else if(Text.canView(urlString)) {
+                previewPanel = new Text(urlString); 
             }
         }
         catch(Exception e) {
@@ -103,7 +103,7 @@ public class PreviewFactory {
         
         
         if(previewPanel != null && previewPanel.isHeavy()) {
-            return new AWTWrapper(Wandora.getWandora(), previewPanel);
+            return new AWTWrapper(previewPanel);
         }
         else {
             return previewPanel;

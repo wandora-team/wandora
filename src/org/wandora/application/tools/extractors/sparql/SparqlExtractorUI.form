@@ -526,7 +526,7 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextPane" name="europeanaQueryTextPane">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="# Creators and collections of Europeana objects from Italy&#xa;&#xa;PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;&#xa;SELECT DISTINCT ?EuropeanaObject ?Creator ?Collection&#xa;WHERE {&#xa;&#xa;?EuropeanaObject dc:creator ?Creator ;&#xa;                 edm:collectionName ?Collection ;&#xa;                 edm:country &quot;italy&quot;&#xa;&#xa;}&#xa;LIMIT 100"/>
+                        <Property name="text" type="java.lang.String" value="# Creators and collections of Europeana objects from Italy&#xa;&#xa;PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;&#xa;PREFIX edm: &lt;http://www.europeana.eu/schemas/edm/&gt;&#xa;&#xa;SELECT DISTINCT ?EuropeanaObject ?Creator ?Collection&#xa;WHERE {&#xa;&#xa;?EuropeanaObject dc:creator ?Creator ;&#xa;                 edm:collectionName ?Collection ;&#xa;                 edm:country &quot;italy&quot;&#xa;&#xa;}&#xa;LIMIT 100"/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleTextPane();"/>
@@ -571,8 +571,8 @@
         <Container class="javax.swing.JPanel" name="europeanOpenDataPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="European Comission Open Data">
-                <Property name="tabTitle" type="java.lang.String" value="European Comission Open Data"/>
+              <JTabbedPaneConstraints tabName="open-data.europa.eu">
+                <Property name="tabTitle" type="java.lang.String" value="open-data.europa.eu"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -590,7 +590,7 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="europeanOpenDataTitle">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;html&gt;Write and send query to European Comission&apos;s Open Data SPARQL end point at http://open-data.europa.eu/open-data/sparql and transform result set to a topic map.&lt;/html&gt;"/>
+                    <Property name="text" type="java.lang.String" value="&lt;html&gt;Write and send query to European Comission&apos;s Open Data SPARQL end point at http://open-data.europa.eu/sparqlep and transform result set to a topic map.&lt;/html&gt;"/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleLabel();"/>
@@ -616,7 +616,7 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextPane" name="europeanOpenDataQueryTextPane">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="select distinct ?Concept where {[] a ?Concept} LIMIT 100"/>
+                        <Property name="text" type="java.lang.String" value="PREFIX dcat: &lt;http://www.w3.org/ns/dcat#&gt;&#xa;PREFIX odp:  &lt;http://open-data.europa.eu/ontologies/ec-odp#&gt;&#xa;PREFIX dc: &lt;http://purl.org/dc/terms/&gt;&#xa;PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;&#xa;PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;&#xa;&#xa;select distinct ?g ?o where { graph ?g {?s dc:title ?o. filter regex(?o, &apos;Statistics&apos;, &apos;i&apos;) } } LIMIT 10"/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleTextPane();"/>

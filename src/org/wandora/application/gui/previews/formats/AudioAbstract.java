@@ -41,8 +41,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.util.Properties;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -199,8 +197,8 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
                 if(currentMixer != null && currentMixer.isSeekSupported()) {
                     if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
                         currentMixer.setMillisecondPosition(mouseValue*1000);
-                        System.out.println("newPosition: "+mouseValue*1000);
-                        System.out.println("newPosition2: "+currentMixer.getMillisecondPosition());
+                        // System.out.println("newPosition: "+mouseValue*1000);
+                        // System.out.println("newPosition2: "+currentMixer.getMillisecondPosition());
                     }
                 }
             }
@@ -273,7 +271,9 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
             }
             if(progressThread != null) {
                 progressThread.abort();
+                progressThread = null;
             }
+            currentMixer = null;
         }
         
         
@@ -387,6 +387,7 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
     }
     
     
+    // -------------------------------------------------------------------------
     
     
     protected class ProgressThread extends Thread {
@@ -423,10 +424,11 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
         
         @Override
         public void run() {
+            long progress = 0;
             while(progressMixer != null && progressBar != null && isRunning) {
                 try {
-                    if(currentMixer.isNotSeeking()) {
-                        long progress = progressMixer.getMillisecondPosition() / 1000;
+                    if(progressMixer.isNotSeeking()) {
+                        progress = progressMixer.getMillisecondPosition() / 1000;
                         progressBar.setValue((int) progress);
                     }
                     Thread.sleep(100);

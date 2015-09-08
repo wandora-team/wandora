@@ -72,7 +72,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
     protected static String DOCUMENT_SI = "http://wandora.org/si/document";
 
     
-    protected static String DEFAULT_DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
+    protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
     private String defaultLang = "en";
     

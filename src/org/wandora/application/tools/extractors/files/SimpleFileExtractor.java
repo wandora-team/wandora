@@ -59,7 +59,7 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
     protected static String SOURCE_SI = "http://wandora.org/si/source";
     protected static String DOCUMENT_SI = "http://wandora.org/si/document";
 
-    protected static String DEFAULT_DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
+    protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
     private String defaultLang = "en";
     private Wandora admin = null;
@@ -210,8 +210,8 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
 
         try {
             int hash = str.hashCode();
-            Topic textType = this.getDocumentType(topicMap);
-            String locator = "http://wandora.org/si/simple-document-extractor/"+hash;
+            Topic documentType = this.getDocumentType(topicMap);
+            String locator = "http://wandora.org/si/simple-file-extractor/"+hash;
 
             String name = null;
             if(str.length() > 80) {
@@ -225,8 +225,12 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
             if(documentTopic == null) documentTopic = topicMap.createTopic();
             documentTopic.addSubjectIdentifier(new Locator( locator ));
             documentTopic.setBaseName(name);
-            documentTopic.addType(textType);
+            documentTopic.addType(documentType);
 
+            if(DataURL.isDataURL(str)) {
+                documentTopic.setSubjectLocator(new Locator(str));
+            }
+            
             // --- ADD EXTRACTION TIME AS OCCURRENCE ---
             DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
             Topic extractionTimeType = createTopic(topicMap, "extraction-time");

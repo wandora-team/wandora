@@ -44,12 +44,12 @@ public class AWTWrapper extends JPanel implements PreviewPanel {
     
     private Panel heavyContainer;
     private PreviewPanel innerPanel;
-    private Wandora wandora;
     private Dimension prefSize;
+    private Wandora wandora;
     
-    public AWTWrapper(Wandora w, PreviewPanel inner) {
+    
+    public AWTWrapper(PreviewPanel inner) {
         innerPanel = inner;
-        wandora = w;
         setLayout(null);
         heavyContainer = new java.awt.Panel();
         add(heavyContainer);
@@ -57,6 +57,7 @@ public class AWTWrapper extends JPanel implements PreviewPanel {
         setSize(innerPanel.getGui().getPreferredSize());
         heavyContainer.setSize(getSize());
         heavyContainer.repaint();
+        wandora = Wandora.getWandora();
         final JViewport vp = wandora.getViewPort();
         cl = new ChangeListener() {
             @Override

@@ -31,11 +31,8 @@ package org.wandora.application.gui.previews;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
-
-import org.wandora.application.*;
-import org.wandora.application.gui.previews.formats.Unknown;
 import org.wandora.topicmap.Locator;
-import static org.wandora.utils.Functional.*;
+
 
 
 /**

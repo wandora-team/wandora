@@ -20,10 +20,12 @@
  */
 package org.wandora.utils;
 
+import java.awt.Image;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URI;
 import java.util.*;
 
 /**
@@ -36,11 +38,15 @@ public class DnDBox {
     public static final DataFlavor uriListFlavor;
     static {
         DataFlavor f=null;
-        try{
+        try {
              f = new DataFlavor("text/uri-list; class=java.lang.String");
-        }catch(ClassNotFoundException cnfe){cnfe.printStackTrace();}
+        }
+        catch(ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+        }
         uriListFlavor=f;
     }
+    
     
     public static List<File> acceptFileList(java.awt.dnd.DropTargetDropEvent e) {
         try {
@@ -57,37 +63,65 @@ public class DnDBox {
                     e.isDataFlavorSupported(uriListFlavor)) {                   
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 String data = null;
-                if(e.isDataFlavorSupported(stringFlavor)) 
-                    data=(String)tr.getTransferData(stringFlavor);
-                else
-                    data=(String)tr.getTransferData(uriListFlavor);
-
-                try{
-                    String[] split=data.split("\n");
-                    java.net.URI[] uris=new java.net.URI[split.length];
-                    for(int i=0;i<split.length;i++){
-                        uris[i]=new java.net.URI(split[i].trim());
-                    }
-                    java.util.List<File> files=new java.util.ArrayList<File>();
-                    for(int i=0;i<uris.length;i++){
-                        try{
-                            files.add(new File(uris[i]));
-                        }
-                        catch(IllegalArgumentException iae){
-                            iae.printStackTrace();
-                        }
-                    }
-                    e.dropComplete(true);
-                    return files;
+                if(e.isDataFlavorSupported(stringFlavor)) {
+                    data = (String)tr.getTransferData(stringFlavor);
                 }
-                catch(java.net.URISyntaxException ue){
-                    ue.printStackTrace();
+                else {
+                    data = (String)tr.getTransferData(uriListFlavor);
+                }
+                try {
+                    String[] split = data.split("\n");
+                    ArrayList<URI> uris = new ArrayList();
+                    for(int i=0; i<split.length; i++){
+                        try {
+                            URI uri = new URI(split[i].trim());
+                            uris.add( uri );
+                        }
+                        catch(Exception ex) {
+                            // Silently ignore illegal URIs.
+                        }
+                    }
+                    java.util.List<File> files = new java.util.ArrayList<File>();
+                    for(URI uri : uris) {
+                        try{
+                            files.add(new File(uri));
+                        }
+                        catch(Exception exc){
+                            // Silently ignore illegal file URIs.
+                        }
+                    }
+                    if(!files.isEmpty()) {
+                        e.dropComplete(true);
+                    }
+                    return files;
                 }
                 catch(Exception ex){
                     ex.printStackTrace();
                 }
-                e.dropComplete(true);
                 return new ArrayList<File>();
+            }
+        }
+        catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+        catch(UnsupportedFlavorException ufe) {
+            ufe.printStackTrace();
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    
+    
+    public static Image acceptImage(java.awt.dnd.DropTargetDropEvent e) {
+        try {
+            Transferable tr = e.getTransferable();
+            if(e.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                Image image = (Image) tr.getTransferData(DataFlavor.imageFlavor);
+                e.dropComplete(true);
+                return image;
             }
         }
         catch(IOException ioe) {

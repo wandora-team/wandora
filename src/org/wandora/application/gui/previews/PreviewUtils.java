@@ -62,11 +62,13 @@ public class PreviewUtils {
         return new SimpleFileChooser(path);
     }};
     
+    
     private static final Fn0<SimpleFileChooser> makeChooser = new Fn0<SimpleFileChooser>() {
     @Override
     public SimpleFileChooser invoke() {
         return new SimpleFileChooser();
     }};
+    
     
     public static InputStream makeInputStream(final ByteBuffer buffer)
     {
@@ -85,6 +87,7 @@ public class PreviewUtils {
         };
     }
 
+    
     public static Option<String> getOption(final Map<String, String> options, final String key) {
         final String opt = options.get(key);
         if(opt != null)
@@ -92,6 +95,8 @@ public class PreviewUtils {
         
         return none();
     }
+    
+    
     // Transforms a string containing a path like "/home/antti/foo.bar"
     // into a URI containing "file:///home/antti/foo.bar".
     // If a conversion isn't possible, returns none()

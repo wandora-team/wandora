@@ -39,6 +39,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureListener;
 import java.awt.dnd.DropTarget;
@@ -96,6 +97,8 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
+import org.wandora.utils.Base64;
+import org.wandora.utils.DataURL;
 import org.wandora.utils.DnDBox;
 
 
@@ -1088,26 +1091,35 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     private int orders = 0;
     
     
+    @Override
     public void dragEnter(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
         
     }
     
     
+    @Override
     public void dragExit(java.awt.dnd.DropTargetEvent dropTargetEvent) {
         
     }
     
     
+    @Override
     public void dragOver(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
         
     }
     
     
     
+    private void processImage(Image image) throws Exception {
+        SimpleFileExtractor extractor = new SimpleFileExtractor();
+        DataURL dataUrl = new DataURL(image);
+        extractor.setForceContent( dataUrl.toExternalForm(Base64.DONT_BREAK_LINES) );
+        ActionEvent fakeEvent = new ActionEvent(wandora, 0, "merge");
+        extractor.execute(wandora, fakeEvent);
+    }
     
     
-    
-    private void acceptFileList(java.util.List<File> files) throws Exception {
+    private void processFileList(java.util.List<File> files) throws Exception {
         ArrayList<WandoraTool> importTools = new ArrayList<>();
         boolean yesToAll = false;
         
@@ -1118,7 +1130,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             }
             else {
                 if(yesToAll) {
-                    SimpleDocumentExtractor extractor = new SimpleDocumentExtractor();
+                    SimpleFileExtractor extractor = new SimpleFileExtractor();
                     extractor.setForceFiles(new File[] { file } );
                     importTools.add(extractor);
                 }
@@ -1145,44 +1157,44 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         ChainExecuter chainExecuter = new ChainExecuter(importTools);
         chainExecuter.execute(wandora, fakeEvent);
     }
-    /*
-    private void acceptFileList(java.util.List<File> files) throws Exception {
-        System.out.println("hre we are");
-        ArrayList<WandoraTool> importTools=WandoraToolManager.getImportTools(files, orders);
-        for(WandoraTool t : importTools){
-            if(t==null){
-                WandoraOptionPane.showMessageDialog(wandora, "You have dropped Wandora a file with unsupported file type! Wandora supports drop of wpr, xtm, ltm, jtm, rdf(s), n3, and obo files. Extractors may support also other file types.", "Unsupported file type", WandoraOptionPane.ERROR_MESSAGE);                
-                break;
-            }
-        }
-        //System.out.println("drop context == " + dropContext);
-        ActionEvent fakeEvent = new ActionEvent(wandora, 0, "merge");
-        ChainExecuter chainExecuter = new ChainExecuter(importTools);
-        chainExecuter.execute(wandora, fakeEvent);
-    }
-    */
+
     
-    
+    @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
-        java.util.List<File> files=DnDBox.acceptFileList(e);
-        if(files==null){
-            System.out.println("Drop rejected! Wrong data flavor!");
-            e.rejectDrop();
-        }
-        else{
-            try{
-                if(files.size()>0) acceptFileList(files);
+        Image image = DnDBox.acceptImage(e);
+        if(image != null) {
+            try {
+                processImage(image);
             }
             catch(Exception ex){
                 ex.printStackTrace();
             }
         }
+        else {
+            java.util.List<File> files = DnDBox.acceptFileList(e);
+            if(files != null) {
+                try {
+                    if(!files.isEmpty()) {
+                        processFileList(files);
+                    }
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+            else {
+                System.out.println("Drop rejected! Wrong data flavor!");
+                e.rejectDrop();
+            } 
+        }
         this.setBorder(null);
     }
     
+    @Override
     public void dropActionChanged(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
     }
 
+    @Override
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
     }
     

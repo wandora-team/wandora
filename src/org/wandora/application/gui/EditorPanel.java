@@ -113,7 +113,7 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
             else {
                 System.out.println("processing file 2: "+ file);
                 if(yesToAll) {
-                    SimpleDocumentExtractor extractor = new SimpleDocumentExtractor();
+                    SimpleFileExtractor extractor = new SimpleFileExtractor();
                     extractor.setForceFiles(new File[] { file } );
                     importTools.add(extractor);
                 }

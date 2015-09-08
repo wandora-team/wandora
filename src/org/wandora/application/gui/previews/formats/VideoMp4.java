@@ -25,7 +25,6 @@ package org.wandora.application.gui.previews.formats;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -44,17 +43,14 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
-import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.ClipboardBox;
-import org.wandora.utils.DataURL;
+
 
 /**
  *
@@ -208,27 +204,8 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
     
     
     private void processError(Exception e) {
-        if(e != null) {
-            if(errorPanel == null) {
-                
-                errorPanel = new JPanel();
-                errorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
-                errorPanel.setBorder(BorderFactory.createLineBorder(java.awt.Color.RED, 4));
-                
-                String message = "<html><center>Can't view preview for '"+mediaUrlString+"'. <br> " +e.getMessage()+"</center></html>";
-                SimpleLabel label = new SimpleLabel();
-                label.setText(message);
-                label.setHorizontalAlignment(SimpleLabel.CENTER);
-                errorPanel.add(label);
-                
-                this.removeAll();
-                this.add(errorPanel, BorderLayout.CENTER);
-                
-                this.revalidate();
-                this.repaint();
-            }
-            e.printStackTrace();
-        }
+        String message = "Can't view preview for '"+mediaUrlString+"'.";
+        PreviewUtils.previewError(this, message, e);
     }
     
     
@@ -254,35 +231,39 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
     
     private void refreshLayout() {
         if(playerReady) {
-            int w = player.getMedia().getWidth();
-            int h = player.getMedia().getHeight();
+            if(player != null && fxPanel != null && mediaView != null) {
+                if(player.getMedia() != null) {
+                    int w = player.getMedia().getWidth();
+                    int h = player.getMedia().getHeight();
 
-            int outerWidth = VideoMp4.this.getWidth();
+                    int outerWidth = VideoMp4.this.getWidth();
 
-            fxPanel.setSize(w, h);
-            fxPanel.setPreferredSize(new Dimension(w, h));
-            fxPanel.revalidate();
+                    fxPanel.setSize(w, h);
+                    fxPanel.setPreferredSize(new Dimension(w, h));
+                    fxPanel.revalidate();
 
-            mediaView.translateXProperty().set(outerWidth/2 - w/2);
+                    mediaView.translateXProperty().set(outerWidth/2 - w/2);
 
-            //progressBar.setPreferredSize(new Dimension(outerWidth, 17));
-            //progressBar.setMaximumSize(new Dimension(outerWidth, 16));
-            //progressBar.setMinimumSize(new Dimension(outerWidth, 16));
-            //progressBar.validate();
-            this.validate();
+                    //progressBar.setPreferredSize(new Dimension(outerWidth, 17));
+                    //progressBar.setMaximumSize(new Dimension(outerWidth, 16));
+                    //progressBar.setMinimumSize(new Dimension(outerWidth, 16));
+                    //progressBar.validate();
+                    this.validate();
+                }
+            }
         }
     }
     
     
     private void updateTimeLabel() {
-        if(progressBar != null) {
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                if(player != null && progressBar != null) {
                     Duration currentTime = player.getCurrentTime();
                     progressBar.setValue(currentTime.toSeconds());
                 }
-            });
-        }
+            }
+        });
     }
     
     
@@ -294,13 +275,13 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
 
     @Override
     public void finish() {
-        if(player != null) {
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                if(player != null) {
                     player.stop();
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
@@ -315,14 +296,14 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
 
     @Override
     public void stop() {
-        if(player != null) {
-            Platform.runLater(new Runnable() {
-                @Override public void run() {
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                if(player != null) {
                     // System.out.println("VideoMp4 stopped.");
                     player.stop();
                 }
-            });
-        }
+            }
+        });
     }
     
     

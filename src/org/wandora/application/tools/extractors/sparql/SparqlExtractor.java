@@ -262,7 +262,8 @@ public class SparqlExtractor extends AbstractExtractor {
                         Resource r = x.asResource();
                         String uri = r.getURI();
                         String name = r.getLocalName();
-                        player = createTopic(tm, uri, name);
+                        String basename = name + " ("+uri.hashCode()+")";
+                        player = createTopic(tm, uri, basename);
                     }
                     else if(x.isLiteral()) {
                         Literal l = x.asLiteral();

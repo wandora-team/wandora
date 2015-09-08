@@ -47,6 +47,7 @@ import org.wandora.application.gui.UIBox;
  */
 public class DirectoryStructureExtractor extends AbstractExtractor implements WandoraTool {
 
+    private String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     private String defaultLang = "en";
     public static boolean USE_SUPERSUBCLASS_RELATION = true;
 
@@ -142,7 +143,7 @@ public class DirectoryStructureExtractor extends AbstractExtractor implements Wa
                 
                 // --- ADD LAST MODIFICATION TIME AS OCCURRENCE ---
                 try {
-                    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                    DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
                     Topic modType = createTopic(topicMap, baseLocator+"file-modified", "file-modified");
                     String dateString = dateFormatter.format( new Date(file.lastModified()) );
                     setData(fileTopic, modType, defaultLang, dateString);
@@ -200,7 +201,7 @@ public class DirectoryStructureExtractor extends AbstractExtractor implements Wa
                 }
 
                 // --- ADD EXTRACTION TIME AS OCCURRENCE ---
-                DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                DateFormat dateFormatter = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
                 Topic extractionTimeType = createTopic(topicMap, "extraction-time");
                 String dateString = dateFormatter.format( new Date(System.currentTimeMillis()) );
                 setData(fileTopic, extractionTimeType, defaultLang, dateString);

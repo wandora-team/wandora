@@ -29,6 +29,8 @@ package org.wandora.application.gui.previews.formats;
 
 
 
+import com.sun.javafx.embed.EmbeddedSceneInterface;
+import com.sun.javafx.embed.HostInterface;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -59,7 +61,6 @@ import org.w3c.dom.Document;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.previews.*;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.utils.ClipboardBox;
@@ -83,7 +84,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
     
     
     
-    /** Creates a new instance of HTML */
+    /** Creates a new instance of TextHTML */
     public TextHTML(String locator) {
         Platform.setImplicitExit(false);
         this.wandora = Wandora.getWandora();
@@ -102,8 +103,8 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
     @Override
     public void finish() {
         if(htmlPane != null) {
-            htmlPane.close();
-        }
+            // htmlPane.close();
+        }  
     }
     
     
@@ -523,7 +524,6 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
             });
         }
         
-        
 
 
         private void initializeFX() {
@@ -556,10 +556,19 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
             // Obtain the webEngine to navigate
             webEngine = webView.getEngine();
 
+            
+            webEngine.setOnVisibilityChanged(new EventHandler<WebEvent<java.lang.Boolean>>() {
+                @Override
+                public void handle(WebEvent<Boolean> t) {
+                    // Nothing here
+                }
+            });
+            
             webEngine.locationProperty().addListener(new javafx.beans.value.ChangeListener<String>() {
                     @Override
                     public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
-                        if (newValue.endsWith(".pdf")) {
+                        if(newValue == null) return;
+                        if(newValue.endsWith(".pdf")) {
                             try {
                                 int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Open PDF document in external application?", "Open PDF document in external application?", WandoraOptionPane.YES_NO_OPTION);
                                 if(a == WandoraOptionPane.YES_OPTION) {
@@ -686,6 +695,8 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
         }
         
         
+
+        
         public void open(final String locator) {
             try {
                 if(DataURL.isDataURL(locator)) {
@@ -720,19 +731,32 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
         
         
         public void close() {
-            Platform.runLater(new Runnable() {
+            // System.out.println("TEST1");
+            Thread runner = new Thread() {
                 @Override
                 public void run() {
                     try {
                         if(webEngine != null) {
                             webEngine.load(null);
+                            // System.out.println("TEST2");
                         }
                     }
                     catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
-            });
+            };
+            Platform.runLater(runner);
+
+            do {
+                try {
+                    Thread.sleep(100);
+                }
+                catch(Exception ex) {
+
+                }
+            }
+            while(runner.isAlive());
         }
     
         
@@ -763,7 +787,9 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 Thread runner = new Thread() {
                     @Override
                     public void run() {
-                        scriptReturn = webEngine.executeScript(script);
+                        if(webEngine != null) {
+                            scriptReturn = webEngine.executeScript(script);
+                        }
                     }
                 };
                 Platform.runLater(runner);
@@ -810,36 +836,40 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
    
     
     private void handleComponentEvent(ComponentEvent e) {
-        try {
-            if(ui.getParent() != null) {
-                Dimension d = new Dimension(640, 480+56);
-                ui.setPreferredSize(d);
-                ui.setMinimumSize(d);
-                ui.setMaximumSize(d);
-            }
- 
-            if(htmlPane != null) {
-                if(htmlPane.webView != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            Component c = ui;
-                            if(ui.getParent() != null) c = ui.getParent();
-                            if(c != null) {
-                                int w = c.getWidth();
-                                int h = c.getHeight();
-                                if(w > 1 && h > 1) {
-                                    htmlPane.webView.setMinSize(w, h-56);
-                                    htmlPane.webView.setMaxSize(w, h-56);
-                                    htmlPane.webView.setPrefSize(w, h-56);
+        try {           
+            if(ui != null) {
+                if(ui.getParent() != null) {
+                    Dimension d = new Dimension(640, 480+56);
+                    ui.setPreferredSize(d);
+                    ui.setMinimumSize(d);
+                    ui.setMaximumSize(d);
+                }
+
+                if(htmlPane != null) {
+                    if(htmlPane.webView != null) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(ui != null && htmlPane != null && htmlPane.webView != null) {
+                                    Component c = ui;
+                                    if(ui.getParent() != null) c = ui.getParent();
+                                    if(c != null) {
+                                        int w = c.getWidth();
+                                        int h = c.getHeight();
+                                        if(w > 1 && h > 1) {
+                                            htmlPane.webView.setMinSize(w, h-56);
+                                            htmlPane.webView.setMaxSize(w, h-56);
+                                            htmlPane.webView.setPrefSize(w, h-56);
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
+                ui.revalidate();
+                ui.repaint();
             }
-            ui.revalidate();
-            ui.repaint();
         }
         catch(Exception ex) {}
     }

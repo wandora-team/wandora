@@ -70,8 +70,9 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     private String originalSL;
     
     private JComponent buttonContainer = null;
-    
+    private PreviewWrapper previewWrapper = null;
 
+    
     
     /** Creates new form TraditionalTopicPanel */
     public TraditionalTopicPanel(Topic topic, Wandora wandora) {
@@ -135,7 +136,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     
     
     @Override
-    public void open(Topic topic) {
+    public void open(Topic topic) {       
         this.topic = topic;
         this.topicSI = null;
         
@@ -149,6 +150,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         }
         this.removeAll();
         initComponents();
+        previewWrapper = (PreviewWrapper) previewPanel;
         buttonWrapperPanel.add(buttonContainer);
         
         panelStruct = new Object[][] {
@@ -403,11 +405,11 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
         try {
             boolean viewPreview = options.getBoolean(OPTIONS_VIEW_PREFIX+"previewPanel", false);
-            if(viewPreview) {
-                ((PreviewWrapper)previewPanel).setURL(topic.getSubjectLocator());
+            if(viewPreview && previewWrapper != null) {
+                previewWrapper.setURL(topic.getSubjectLocator());
             }
             else {
-                ((PreviewWrapper)previewPanel).stop();
+                previewWrapper.stop();
             }
         }
         catch(Exception e) {
@@ -556,10 +558,10 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     
     @Override
     public void stop() {
-        if(previewPanel != null && previewPanel instanceof PreviewWrapper) {
-            ((PreviewWrapper) previewPanel).stop();
-            PreviewWrapper.removePreviewWrapper(this);
+        if(previewWrapper != null) {
+            previewWrapper.stop();
         }
+        PreviewWrapper.removePreviewWrapper(this);
     }
         
     

@@ -27,19 +27,11 @@
 package org.wandora.application.gui.table;
 
 
-
-import org.wandora.application.tools.subjects.AddSubjectIdentifier;
 import org.wandora.topicmap.*;
 import java.awt.*;
-import org.wandora.utils.swing.*;
+
 import org.wandora.application.*;
 
-
-import org.wandora.application.tools.*;
-import org.wandora.application.tools.subjects.*;
-import org.wandora.application.tools.selections.*;
-
-import org.wandora.application.contexts.*;
 
 /**
  *
@@ -57,10 +49,6 @@ public class SITable extends LocatorTable {
     public SITable(Topic topic, Wandora w) throws TopicMapException {
         super(w);
         this.topic=topic;
-        for(Locator l : topic.getSubjectIdentifiers()) {
-            String lstr = l.toExternalForm();
-            System.out.println(lstr.substring(0, Math.min(64, lstr.length())));
-        }
         sis=(Locator[])topic.getSubjectIdentifiers().toArray(new Locator[0]);
         colors=new Color[sis.length];
         for(int i=0;i<colors.length;i++){
@@ -142,6 +130,4 @@ public class SITable extends LocatorTable {
             wandora.reopenTopic();
         }
     }
-    
-
 }

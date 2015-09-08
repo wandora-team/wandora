@@ -22,6 +22,8 @@
 
 package org.wandora.utils;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +31,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Arrays;
+import javax.imageio.ImageIO;
 import org.apache.commons.io.IOUtils;
+import org.wandora.application.gui.UIBox;
 
 /**
  *
@@ -49,9 +53,11 @@ public class DataURL {
     public DataURL() {
     }
     
+    
     public DataURL(String url) throws MalformedURLException {
         parseDataURL(url);
     }
+    
     
     public DataURL(File file) throws MalformedURLException {
         if(file != null) {
@@ -62,6 +68,26 @@ public class DataURL {
             throw new MalformedURLException();
         }
     }
+    
+    
+    public DataURL(Image image) throws MalformedURLException {        
+        File tempFile = null;
+        try {
+            if(image != null) {
+                String prefix = "wandora" + image.hashCode();
+                String suffix = ".png";
+                tempFile = File.createTempFile(prefix, suffix);
+                tempFile.deleteOnExit();
+                ImageIO.write(UIBox.makeBufferedImage(image), "png", tempFile);
+                mimetype = MimeTypes.getMimeType("png");               
+                setData(Files.readAllBytes(tempFile.toPath()));
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     
     public DataURL(byte[] data) {
         this.data = data;
