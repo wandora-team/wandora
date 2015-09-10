@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * PDFPanel.java
+ * ApplicationPDFPanel.java
  *
  * Created on 12. lokakuuta 2007, 17:14
  *
@@ -37,17 +37,16 @@ import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JPanel;
-import org.wandora.utils.Option;
-import static org.wandora.utils.Option.*;
+
 
 /**
  *
  * @author anttirt
  */
-public class PDFPanel extends JPanel {
+public class ApplicationPDFPanel extends JPanel {
     private Image currentImage;
     private Dimension lastPageSize;
-    private Option<PDFPage> currentPage;
+    private PDFPage currentPage;
     private Rectangle2D currentClip;
     private boolean needsRefresh;
     private final AtomicBoolean imageDone;
@@ -58,10 +57,10 @@ public class PDFPanel extends JPanel {
             new Dimension(400, 400);
 
     
-    public PDFPanel() {
+    public ApplicationPDFPanel() {
         super();
         imageDone = new AtomicBoolean();
-        this.currentPage = none();
+        this.currentPage = null;
         zoom = 1.0;
         viewOffset = new Dimension(0, 0);
         currentClip = null;
@@ -73,7 +72,7 @@ public class PDFPanel extends JPanel {
         setPreferredSize(defaultSize);
     }
 
-    public void changePage(Option<PDFPage> currentPage) {
+    public void changePage(PDFPage currentPage) {
         this.currentPage = currentPage;
         currentClip = null;
         currentImage = null;
@@ -171,16 +170,15 @@ public class PDFPanel extends JPanel {
     
     
     private void refresh() {
-        for(final PDFPage page : currentPage) {
-            
+        if(currentPage != null) {
             if(!imageDone.get()) {
-                page.stop(lastPageSize.width,
+                currentPage.stop(lastPageSize.width,
                           lastPageSize.height,
                           currentClip);
             }
             
             // clip rect in page coordinates (invariant per page)
-            currentClip = page.getBBox();
+            currentClip = currentPage.getBBox();
             
             // w,h = size of virtual display space
             final int w = (int)(defaultSize.width * zoom),
@@ -191,7 +189,7 @@ public class PDFPanel extends JPanel {
             }
             
             final Dimension pageSize =
-                page.getUnstretchedSize((int) (defaultSize.width * zoom), (int) (defaultSize.height * zoom), null);
+                currentPage.getUnstretchedSize((int) (defaultSize.width * zoom), (int) (defaultSize.height * zoom), null);
 
             setPreferredSize(pageSize);
             setMinimumSize(pageSize);
@@ -201,9 +199,11 @@ public class PDFPanel extends JPanel {
             
             // get a size where the image is
             // scaled to fit virtual display space
-            lastPageSize = page.getUnstretchedSize(w, h, currentClip);
+            lastPageSize = currentPage.getUnstretchedSize(w, h, currentClip);
             
-            currentImage = page.getImage(lastPageSize.width,
+            
+            System.out.println("currentClip: "+currentClip);
+            currentImage = currentPage.getImage(lastPageSize.width,
                                          lastPageSize.height,
                                          currentClip,
                                          this,   /* imageobserver */

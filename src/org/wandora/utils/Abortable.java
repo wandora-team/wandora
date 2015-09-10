@@ -92,7 +92,13 @@ public class Abortable implements Runnable {
     public void progress(final double ratio, final Status status, final String message) {
         this.status = status;
         if(dlg != null) {
-            SwingUtilities.invokeLater(new Runnable() { public void run() { dlg.progress(ratio, status, message); } });
+            SwingUtilities.invokeLater(
+                new Runnable() { 
+                    public void run() { 
+                        dlg.progress(ratio, status, message); 
+                    } 
+                }
+            );
         }
     }
 

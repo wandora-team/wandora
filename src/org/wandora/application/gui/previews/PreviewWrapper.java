@@ -92,7 +92,7 @@ public class PreviewWrapper extends JPanel {
     }
     
     
-    public void setURL(Locator subjectLocator) {
+    public void setURL(final Locator subjectLocator) {
         if(subjectLocator != null && subjectLocator.equals(currentLocator)) {
             return;
         }
@@ -113,6 +113,8 @@ public class PreviewWrapper extends JPanel {
         if(subjectLocator.toExternalForm().equals(""))
             return;
 
+        final PreviewWrapper finalThis = this;
+
         try {
             currentPanel = PreviewFactory.create(subjectLocator);
             if(currentPanel != null) {
@@ -122,7 +124,7 @@ public class PreviewWrapper extends JPanel {
             }
         }
         catch(Exception e) {
-            PreviewUtils.previewError(this, "Creating preview failed.", e);
+            PreviewUtils.previewError(finalThis, "Creating preview failed.", e);
         }
 
         if(currentPanel != null) {
@@ -133,6 +135,7 @@ public class PreviewWrapper extends JPanel {
             }
         }
         revalidate();
+
     }
     
     

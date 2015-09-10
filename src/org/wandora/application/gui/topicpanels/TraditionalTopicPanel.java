@@ -338,8 +338,16 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         //System.out.println("currentValue==" + currentValue);
         setVisibitilityOption(optionName, currentValue);
         if(component != null) {
-            //component.setVisible(currentValue);
-            refresh();
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    try {
+                        refresh();
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
     
