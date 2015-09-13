@@ -33,8 +33,6 @@ import java.awt.event.*;
 import javax.swing.JComponent;
 import javax.swing.JTextPane;
 import org.wandora.application.gui.previews.*;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
-import org.wandora.utils.*;
 
 
 /**
@@ -44,7 +42,7 @@ import org.wandora.utils.*;
 public class ApplicationXML extends Text implements ActionListener, PreviewPanel {
 
     
-    /** Creates a new instance of XML */
+    /** Creates a new instance of ApplicationXML */
     public ApplicationXML(String locator) {
         super(locator);
     }

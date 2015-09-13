@@ -45,14 +45,14 @@ public class AudioSid extends AudioAbstract {
 
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Play", UIBox.getIcon(0xf04b), this,
-            "Pause", UIBox.getIcon(0xf04c), this,
-            "Stop", UIBox.getIcon(0xf04d), this,
-            "Previous", UIBox.getIcon(0xf048), this,
-            "Next", UIBox.getIcon(0xf051), this,
-            "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Open ext", UIBox.getIcon(0xf08e), this,
-            "Save as", UIBox.getIcon(0xf0c7), this, // f019
+            "Play", PreviewUtils.ICON_PLAY, this,
+            "Pause", PreviewUtils.ICON_PAUSE, this,
+            "Stop", PreviewUtils.ICON_STOP, this,
+            "Previous", PreviewUtils.ICON_PREVIOUS, this,
+            "Next", PreviewUtils.ICON_NEXT, this,
+            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+            "Save as", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
     

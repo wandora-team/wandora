@@ -45,16 +45,19 @@ public class PreviewWrapper extends JPanel {
     private PreviewPanel currentPanel = null;
     private Component currentUI = null;
     private Locator currentLocator = null;
-    
-    
+    private PreviewWrapperInitializer initializer = null;
+
     
     /**
-     * Creates a new instance of PreviewWrapper
+     * To create a new preview wrapper, call static method getPreviewWrapper
+     * with the caller as an argument. Created preview wrapper is caller
+     * specific and same preview wrapped is returned for the same caller. This
+     * behavior prevents the preview restarting after small changes in the
+     * topic panels.
      */
     private PreviewWrapper() {
         this.setLayout(new BorderLayout());
     }
-    
     
     
     public static PreviewWrapper getPreviewWrapper(Object owner) {
@@ -77,18 +80,25 @@ public class PreviewWrapper extends JPanel {
     }
     
     
-    
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     
     
     public void stop() {
+        if(initializer != null) {
+            if(initializer.isAlive()) {
+                System.out.println("Setting the preview initializer aborted.");
+                initializer.setAborted();
+            }
+        }
         if(currentPanel != null) {
             // System.out.println("Stopping preview wrapper.");
             currentPanel.stop();
-            currentPanel = null;
-            currentLocator = null;
         }
+        currentPanel = null;
+        currentLocator = null;
+        
+        removeAll();
     }
     
     
@@ -100,9 +110,9 @@ public class PreviewWrapper extends JPanel {
         if(currentPanel != null) {
             currentPanel.stop();
             currentPanel.finish();
-            currentPanel = null;
-            currentUI = null;
         }
+        currentPanel = null;
+        currentUI = null;
         
         removeAll();
 
@@ -113,29 +123,14 @@ public class PreviewWrapper extends JPanel {
         if(subjectLocator.toExternalForm().equals(""))
             return;
 
-        final PreviewWrapper finalThis = this;
-
-        try {
-            currentPanel = PreviewFactory.create(subjectLocator);
-            if(currentPanel != null) {
-                String locatorString = subjectLocator.toExternalForm();
-                if(locatorString.length() > 50) locatorString = locatorString.substring(0,50)+"...";
-                System.out.println("Created preview "+currentPanel.getClass()+" for "+locatorString);
-            }
-        }
-        catch(Exception e) {
-            PreviewUtils.previewError(finalThis, "Creating preview failed.", e);
-        }
-
-        if(currentPanel != null) {
-            currentUI = currentPanel.getGui();
-            if(currentUI != null) {
-                add(currentUI, BorderLayout.CENTER);
-                setPreferredSize(currentUI.getPreferredSize());
-            }
-        }
-        revalidate();
-
+        currentUI = PreviewUtils.previewLoadingMessage(this);
+        
+        // All the rest of building the preview happens in a separate class
+        // extending a thread. This way the application doesn't freeze
+        // if the preview initialization takes longer.
+        
+        initializer = new PreviewWrapperInitializer(subjectLocator, this);
+        initializer.start();
     }
     
     
@@ -148,6 +143,7 @@ public class PreviewWrapper extends JPanel {
             return currentUI.getPreferredSize();
         }
         else {
+            //return super.getPreferredSize();
             return new Dimension(0,0);
         }
     }
@@ -159,20 +155,79 @@ public class PreviewWrapper extends JPanel {
             return currentUI.getMinimumSize();
         }
         else {
+            //return super.getMinimumSize();
             return new Dimension(0,0);
         }
     }
     
     
-    /*
-    @Override
-    public Dimension getMaximumSize() {
-        if(currentUI != null) {
-            return currentUI.getMaximumSize();
+    
+    /** ------------------------------------------------------------------------
+     * PreviewWrapperInitializer is a Thread that solves the preview viewer class,
+     * instantiates preview viewer and initialized it. Downloading and initializing
+     * the preview in a thread of it's own, Wandora's user interface doesn't 
+     * block and freeze if it takes longer. Notice, the thread exits once the
+     * preview is ready. If the user stops (exits) the preview for some reason,
+     * the isAborted variable is set true and the thread does as little as it can.
+     * The thread is never really killed (forced to abort) though. This is because
+     * the preview may become unstable if the initialization is stopped carelessly.
+     */
+    
+    protected class PreviewWrapperInitializer extends Thread {
+        private final Locator subjectLocator;
+        private final PreviewWrapper previewWrapper;
+        private boolean isAborted;
+        
+        
+        public PreviewWrapperInitializer(Locator locator, PreviewWrapper wrapper) {
+            subjectLocator = locator;
+            previewWrapper = wrapper;
+            isAborted = false;
         }
-        else {
-            return new Dimension(0,0);
+        
+        
+        public void setAborted() {
+            isAborted = true;
         }
+        
+        
+        @Override
+        public void run() {
+            if(!isAborted) {
+                try {
+                    currentPanel = PreviewFactory.create(subjectLocator);
+                    if(!isAborted) {
+                        if(currentPanel != null) {
+                            String locatorString = subjectLocator.toExternalForm();
+                            if(locatorString.length() > 50) locatorString = locatorString.substring(0,50)+"...";
+                            System.out.println("Created preview "+currentPanel.getClass()+" for "+locatorString);
+                        }
+                        else if(currentPanel == null) {
+                            currentUI = PreviewUtils.previewNoPreview(previewWrapper);
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    if(!isAborted) {
+                        removeAll();
+                        PreviewUtils.previewError(previewWrapper, "Creating preview failed.", e);
+                    }
+                }
+            }
+            
+            if(currentPanel != null && !isAborted) {
+                currentUI = currentPanel.getGui();
+                if(currentUI != null && !isAborted) {
+                    removeAll();
+                    add(currentUI, BorderLayout.CENTER);
+                    setPreferredSize(currentUI.getPreferredSize());
+                }
+            }
+            
+            revalidate();
+        }
+    
+        
     }
-    */
+    
 }

@@ -658,6 +658,7 @@ public class UIBox {
                                 str = str.substring(1, str.length()-1);
                             }
                             button.setText(str);
+                            button.setToolTipText(str);
                             button.setActionCommand(str);
                             container.add(button);
                         }
@@ -1188,6 +1189,8 @@ public class UIBox {
     
     
     public static BufferedImage makeBufferedImage(Image image) {
+        if(image == null) return null;
+        
         BufferedImage bufferedImage = null;
         if(image instanceof BufferedImage) {
             bufferedImage = (BufferedImage) image;

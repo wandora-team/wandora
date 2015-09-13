@@ -203,12 +203,12 @@ public class ApplicationZMachine implements ActionListener, PreviewPanel {
 
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            //"Restart", UIBox.getIcon(0xf021), this,
-            //"Info", UIBox.getIcon(0xf129), this,
-            "Preferences", UIBox.getIcon(0xf013), this,
-            "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Open ext", UIBox.getIcon(0xf08e), this,
-            "Save", UIBox.getIcon(0xf0c7), this, // f019
+            // "Restart", PreviewUtils.ICON_RESTART, this,
+            // "Info", PreviewUtils.ICON_INFO, this,
+            "Preferences", PreviewUtils.ICON_CONFIGURE, this,
+            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+            "Save", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
     

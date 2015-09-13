@@ -32,30 +32,25 @@ import gate.util.Files;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-
 import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.*;
 import javax.swing.event.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.previews.*;
-import org.wandora.utils.Abortable.Impl;
 import org.wandora.utils.*;
 import static org.wandora.utils.Functional.*;
-
 import static java.awt.event.KeyEvent.*;
 import java.net.URISyntaxException;
-import org.wandora.application.Wandora;
+import java.net.URL;
+
 
 
 
 
 public class ApplicationPDF implements PreviewPanel {
-    private double ZOOMFACTOR = 0.8;
+    private static double ZOOMFACTOR = 0.8;
     private PDFFile pdfFile;
     private final ApplicationPDFPanel pdfPanel = new ApplicationPDFPanel();
     private JPanel masterPanel = null;
@@ -84,39 +79,42 @@ public class ApplicationPDF implements PreviewPanel {
     }
 
     
-    private void initialize() throws FileNotFoundException, IOException, MalformedURLException, URISyntaxException {
+    private void initialize() throws FileNotFoundException, IOException, MalformedURLException, URISyntaxException, Exception {
         
         pdfPanel.addMouseListener(actionListener);
         pdfPanel.addMouseMotionListener(actionListener);
         pdfPanel.addKeyListener(actionListener);
         pdfPanel.setComponentPopupMenu(menu);
         
+        byte[] pdfBytes = null;
         if(DataURL.isDataURL(source)) {
-            byte[] pdfBytes = new DataURL(source).getData();
-            pdfFile = new PDFFile(ByteBuffer.wrap(pdfBytes));
+            pdfBytes = new DataURL(source).getData();
         }
         else {
-            URI sourceURI = new URI(source);
-            if("file".equalsIgnoreCase(sourceURI.getScheme())) {
-                byte[] pdfBytes = Files.getByteArray(new File(sourceURI));
-                pdfFile = new PDFFile(ByteBuffer.wrap(pdfBytes));
+            URL sourceURL = new URL(source);
+            if("file".equalsIgnoreCase(sourceURL.getProtocol())) {
+                pdfBytes = Files.getByteArray(new File(sourceURL.toURI()));
             }
             else {
-                byte[] pdfBytes = IObox.fetchUrl(sourceURI.toURL());
-                pdfFile = new PDFFile(ByteBuffer.wrap(pdfBytes));
+                pdfBytes = IObox.fetchUrl(sourceURL);
             }
         }
         
-        if(pdfFile != null) {
-            pageCount = pdfFile.getNumPages();
-            if(pageCount == 0) {
-                System.err.println("No pages in pdf file!");
+        if(pdfBytes != null) {
+            pdfFile = new PDFFile(ByteBuffer.wrap(pdfBytes));
+            if(pdfFile != null) {
+                pageCount = pdfFile.getNumPages();
+                if(pageCount > 0) {
+                    setPageText.invoke(1, pageCount);
+                    pdfPanel.changePage(pdfFile.getPage(0));
+                }
+                else {
+                    throw new Exception("PDF has no pages at all. Can't view.");
+                }          
             }
-            else {
-                setPageText.invoke(1, pageCount);
-            }
-
-            pdfPanel.changePage(pdfFile.getPage(0));
+        }
+        else {
+            throw new Exception("Can't read data out of locator resource.");
         }
     }
     
@@ -135,10 +133,9 @@ public class ApplicationPDF implements PreviewPanel {
     public Component getGui() {
         if(masterPanel == null) {
             masterPanel = new JPanel();
+            masterPanel.setLayout(new BorderLayout(8, 8));
             try {
                 initialize();
-                
-                masterPanel.setLayout(new BorderLayout(8, 8));
 
                 JPanel pdfWrapper = new JPanel();
                 pdfWrapper.add(pdfPanel, BorderLayout.CENTER);
@@ -149,8 +146,20 @@ public class ApplicationPDF implements PreviewPanel {
                 masterPanel.add(pdfWrapper, BorderLayout.CENTER);
                 masterPanel.add(controllerPanel, BorderLayout.SOUTH);
             }
+            catch(URISyntaxException use) {
+                PreviewUtils.previewError(masterPanel, "Malformed locator URI syntax. Can't resolve.", use);
+            }
+            catch(MalformedURLException mue) {
+                PreviewUtils.previewError(masterPanel, "Malformed locator URL. Can't resolve.", mue);
+            }
+            catch(FileNotFoundException fnfe) {
+                PreviewUtils.previewError(masterPanel, "Locator resource not found.", fnfe);
+            }
+            catch(IOException ioe) {
+                PreviewUtils.previewError(masterPanel, "Can't read the locator resource.", ioe);
+            }
             catch(Exception e) {
-                PreviewUtils.previewError(masterPanel, "Error occurred while initializing PFD", e);
+                PreviewUtils.previewError(masterPanel, "Error occurred while initializing the PFD preview.", e);
             }
         }
         return masterPanel;
@@ -169,20 +178,16 @@ public class ApplicationPDF implements PreviewPanel {
             PREV, UIBox.getIcon(0xf048), actionListener,
             NEXT, UIBox.getIcon(0xf051), actionListener,
             LAST, UIBox.getIcon(0xf050), actionListener,
-            ZOOM_IN, UIBox.getIcon(0xf00e), actionListener,
-            ZOOM_OUT, UIBox.getIcon(0xf010), actionListener,
-            COPY_IMAGE, UIBox.getIcon(0xf03e), actionListener,
-            COPY_LOCATION, UIBox.getIcon(0xf0c5), actionListener,
-            SAVE, UIBox.getIcon(0xf019), actionListener,
+            ZOOM_IN, PreviewUtils.ICON_ZOOM_IN, actionListener,
+            ZOOM_OUT, PreviewUtils.ICON_ZOOM_OUT, actionListener,
+            COPY_IMAGE, PreviewUtils.ICON_COPY_IMAGE, actionListener,
+            COPY_LOCATION, PreviewUtils.ICON_COPY_LOCATION, actionListener,
+            SAVE, PreviewUtils.ICON_SAVE, actionListener,
         }, actionListener);
     }
     
     
-
-    
     // -------------------------------------------------------------------------
-    
-    
     
     
     public static boolean canView(String url) {
@@ -210,11 +215,13 @@ public class ApplicationPDF implements PreviewPanel {
             offset = new Dimension(0, 0);
         }
         
+        
         private boolean leftBtnDown(MouseEvent e) {
             final int modifiers = e.getModifiersEx();
             
             return (modifiers & MouseEvent.BUTTON1_DOWN_MASK) != 0;
         }
+        
         
         @Override
         public void mousePressed(MouseEvent e) {
@@ -224,27 +231,19 @@ public class ApplicationPDF implements PreviewPanel {
             }
         }
 
+        
         @Override
         public void mouseDragged(MouseEvent e) {
-            /*
-            // Feature enables PDF preview drag!
-            for(final Point last : this.lastPoint) {
-                final Point next = e.getPoint();
-                final Dimension distance = difference(next, last);
-                lastPoint = some(next);
-
-                setOffset(new Dimension(offset.width + distance.width,
-                                       offset.height + distance.height));
-            }
-            */
         }
 
+        
         @Override
         public void mouseReleased(MouseEvent e) {
             if(!leftBtnDown(e)) {
                 lastPoint = null;
             }
         }
+        
         
         private int intoRange(final int pageNumber) {
             if(pageNumber < 0) {
@@ -255,11 +254,13 @@ public class ApplicationPDF implements PreviewPanel {
             }
         }
         
+        
         private void setLastPage() {
             currentPage = pageCount-1;
             pdfPanel.changePage(pdfFile.getPage(currentPage + 1));
             setPageText.invoke(currentPage + 1, pageCount);
         }
+        
         
         private void setFirstPage() {
             currentPage = 0;
@@ -267,16 +268,13 @@ public class ApplicationPDF implements PreviewPanel {
             setPageText.invoke(currentPage + 1, pageCount);
         }
         
+        
         private void changePage(final int offset) {
             currentPage = intoRange(currentPage + offset);
             pdfPanel.changePage(pdfFile.getPage(currentPage + 1));
             setPageText.invoke(currentPage + 1, pageCount);
         }
         
-        private void setOffset(final Dimension offset) {
-            this.offset = offset;
-            pdfPanel.setViewOffset(offset);
-        }
 
         @Override
         public void actionPerformed(ActionEvent args) {
@@ -312,9 +310,6 @@ public class ApplicationPDF implements PreviewPanel {
             else if(c.equals(ZOOM_OUT)) {
                 pdfPanel.setZoom(pdfPanel.getZoom() * ZOOMFACTOR);
             }
-            else if(c.equals(OFFSET_DEFAULT)) {
-                setOffset(new Dimension(0, 0));
-            }
             else if(c.equals(NEXT_PAGE) || c.equals(NEXT)) {
                 changePage(1);
             }
@@ -343,6 +338,7 @@ public class ApplicationPDF implements PreviewPanel {
         
         
         // ---------------------------------------------
+        
         
         @Override
         public void keyPressed(KeyEvent e) {
@@ -378,10 +374,12 @@ public class ApplicationPDF implements PreviewPanel {
             }
         }
         
+        
         @Override
         public void keyReleased(KeyEvent e) {
             
         }
+        
         
         @Override
         public void keyTyped(KeyEvent e) {
@@ -389,10 +387,7 @@ public class ApplicationPDF implements PreviewPanel {
         }
     }
     
-    
-    
-    
-    
+
     private static final String 
         OPEN_EXT = "Open ext",
         OPEN_EXTERNAL = "Open in external viewer...",
@@ -417,8 +412,7 @@ public class ApplicationPDF implements PreviewPanel {
         FIRST = "First",
         JUMP_HOME = "First page",
         LAST = "Last",
-        JUMP_END = "Last page",
-        OFFSET_DEFAULT = "Reset panning";
+        JUMP_END = "Last page";
     
     
     private static final Object[] popupStructure = new Object[] {

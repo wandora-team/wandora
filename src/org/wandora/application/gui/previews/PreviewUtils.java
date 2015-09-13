@@ -42,6 +42,7 @@ import java.util.Map;
 import javax.swing.*;
 import org.apache.tika.Tika;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleFileChooser;
@@ -55,6 +56,41 @@ import static org.wandora.utils.Option.*;
 
 
 public class PreviewUtils {
+    
+    public static final Icon ICON_ZOOM_IN = UIBox.getIcon(0xf00e);
+    public static final Icon ICON_ZOOM_OUT = UIBox.getIcon(0xf010);
+    public static final Icon ICON_ZOOM_RESET = UIBox.getIcon(0xf002);
+    
+    public static final Icon ICON_COPY_IMAGE = UIBox.getIcon(0xf03e);
+    public static final Icon ICON_COPY_LOCATION = UIBox.getIcon(0xf0c5);
+    public static final Icon ICON_COPY_SELECTION = UIBox.getIcon(0xf0c5);
+    
+    public static final Icon ICON_OPEN_EXT = UIBox.getIcon(0xf14c);
+    public static final Icon ICON_SAVE = UIBox.getIcon(0xf0c7);
+    public static final Icon ICON_PRINT = UIBox.getIcon(0xf02f);
+    
+    public static final Icon ICON_PLAY = UIBox.getIcon(0xf04b);
+    public static final Icon ICON_STOP = UIBox.getIcon(0xf04d);
+    public static final Icon ICON_PAUSE = UIBox.getIcon(0xf04c);
+    public static final Icon ICON_BACKWARD = UIBox.getIcon(0xf04a);
+    public static final Icon ICON_FORWARD = UIBox.getIcon(0xf04e);
+    public static final Icon ICON_START = UIBox.getIcon(0xf048); // In player go to start.
+    public static final Icon ICON_END = UIBox.getIcon(0xf051); // In player go to end.
+    
+    public static final Icon ICON_PREVIOUS = UIBox.getIcon(0xf053);
+    public static final Icon ICON_NEXT = UIBox.getIcon(0xf054);
+    
+    public static final Icon ICON_CONFIGURE = UIBox.getIcon(0xf013);
+    public static final Icon ICON_INFO = UIBox.getIcon(0xf129);
+    public static final Icon ICON_RESTART = UIBox.getIcon(0xf021);
+    
+    public static final Icon ICON_RELOAD_LOCATOR = UIBox.getIcon(0xf015);
+    
+    public static final Icon ICON_SET_BASENAME = UIBox.getIcon(0xf006);
+    public static final Icon ICON_SET_DISPLAY_NAME = UIBox.getIcon(0xf006);
+    public static final Icon ICON_SET_OCCURRENCE = UIBox.getIcon(0xf006);
+    
+    
     
     private static final Fn1<SimpleFileChooser, String> makeNamedChooser = new Fn1<SimpleFileChooser, String>() {
     @Override
@@ -282,6 +318,60 @@ public class PreviewUtils {
             return errorPanel;
         }
         return null;
+    }
+    
+    
+    
+    
+    public static JPanel previewLoadingMessage(JPanel parent) {
+        JPanel loadingPanel = new JPanel();
+        loadingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+
+        StringBuilder labelText = new StringBuilder("<html><center>");
+        labelText.append("Wait while loading and initializing the preview...");
+        labelText.append("</center></html>");
+
+        SimpleLabel label = new SimpleLabel();
+        label.setText(labelText.toString());
+        label.setHorizontalAlignment(SimpleLabel.CENTER);
+        label.setIcon(UIBox.getIcon(0xf110));
+        loadingPanel.add(label);
+
+        if(parent != null) {
+            parent.removeAll();
+            parent.add(loadingPanel, BorderLayout.CENTER);
+
+            parent.revalidate();
+            parent.repaint();
+        }
+        return loadingPanel;
+    }
+    
+    
+    
+
+    public static JPanel previewNoPreview(JPanel parent) {
+        JPanel loadingPanel = new JPanel();
+        loadingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+
+        StringBuilder labelText = new StringBuilder("<html><center>");
+        labelText.append("Don't know how to view the locator.");
+        labelText.append("</center></html>");
+
+        SimpleLabel label = new SimpleLabel();
+        label.setText(labelText.toString());
+        label.setHorizontalAlignment(SimpleLabel.CENTER);
+        label.setIcon(UIBox.getIcon(0xf071));
+        loadingPanel.add(label);
+
+        if(parent != null) {
+            parent.removeAll();
+            parent.add(loadingPanel, BorderLayout.CENTER);
+
+            parent.revalidate();
+            parent.repaint();
+        }
+        return loadingPanel;
     }
     
     

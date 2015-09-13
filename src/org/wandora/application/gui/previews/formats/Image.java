@@ -280,14 +280,15 @@ public class Image extends JPanel implements Runnable, MouseListener, KeyListene
     
     private JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Zoom in", UIBox.getIcon(0xf00e), this,
-            "Zoom out", UIBox.getIcon(0xf010), this,
-            "Reset size", UIBox.getIcon(0xf002), this,
-            "Copy image", UIBox.getIcon(0xf03e), this,
-            "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Open ext", UIBox.getIcon(0xf08e), this,
-            "Save", UIBox.getIcon(0xf0c7), this, // f019
-            "Print", UIBox.getIcon(0xf02f), this,
+            "Zoom in", PreviewUtils.ICON_ZOOM_IN, this,
+            "Zoom out", PreviewUtils.ICON_ZOOM_OUT, this,
+            "Reset size", PreviewUtils.ICON_ZOOM_RESET, this,
+            "---",
+            "Copy image", PreviewUtils.ICON_COPY_IMAGE, this,
+            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+            "Save", PreviewUtils.ICON_SAVE, this, // f019
+            "Print", PreviewUtils.ICON_PRINT, this,
         }, this);
     }
 

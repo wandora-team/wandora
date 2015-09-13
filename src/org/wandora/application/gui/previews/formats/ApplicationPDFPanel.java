@@ -33,67 +33,43 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.geom.Rectangle2D;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
+import org.wandora.application.gui.UIBox;
 
 
 /**
  *
- * @author anttirt
+ * @author akivela, anttirt
  */
 public class ApplicationPDFPanel extends JPanel {
     private Image currentImage;
-    private Dimension lastPageSize;
+    private BufferedImage currentBufferedImage;
     private PDFPage currentPage;
-    private Rectangle2D currentClip;
-    private boolean needsRefresh;
-    private final AtomicBoolean imageDone;
     private double zoom;
-    private Dimension viewOffset;
     
-    private static final Dimension defaultSize =
-            new Dimension(400, 400);
 
-    
     public ApplicationPDFPanel() {
         super();
-        imageDone = new AtomicBoolean();
         this.currentPage = null;
         zoom = 1.0;
-        viewOffset = new Dimension(0, 0);
-        currentClip = null;
         currentImage = null;
-        imageDone.set(true);
-        setDoubleBuffered(true);
-        needsRefresh = true;
-        setMinimumSize(defaultSize);
-        setPreferredSize(defaultSize);
     }
 
-    public void changePage(PDFPage currentPage) {
-        this.currentPage = currentPage;
-        currentClip = null;
-        currentImage = null;
-        needsRefresh = true;
-        
+    
+    public void changePage(PDFPage page) {
+        currentPage = page;
+        refresh();
         repaint();
     }
 
-    public void setViewOffset(Dimension viewOffset) {
-        if(viewOffset == null)
-            throw new NullPointerException(
-                    "Attempt to set view offset to null");
-        this.viewOffset = viewOffset;
-        
-        repaint();
-    }
 
     public void setZoom(double zoom) {
         if(zoom > .1 && zoom < 10) {
             this.zoom = zoom;
-            needsRefresh = true;
+            refresh();
             repaint();
         }
     }
@@ -110,16 +86,18 @@ public class ApplicationPDFPanel extends JPanel {
         repaint();
     }
 
+    
     @Override
     public void setSize(Dimension d) {
         super.setSize(d);
         repaint();
     }
 
+    
     @Override
     protected void paintComponent(Graphics g) {
-        final int w = getWidth();
-        final int h = getHeight();
+        int w = getWidth();
+        int h = getHeight();
         
         if(g instanceof Graphics2D) {
             RenderingHints qualityHints = new RenderingHints(
@@ -132,11 +110,8 @@ public class ApplicationPDFPanel extends JPanel {
             ((Graphics2D) g).addRenderingHints(qualityHints);
             ((Graphics2D) g).addRenderingHints(antialiasHints);
         }
-    
-        if(needsRefresh)
-            refresh();
         
-        if(currentImage == null) {
+        if(currentBufferedImage == null) {
             g.setColor(getBackground());
             g.fillRect(0, 0, w, h);
             g.setColor(Color.black);
@@ -145,95 +120,51 @@ public class ApplicationPDFPanel extends JPanel {
                          getHeight() / 2);
         }
         else {
-            if(!imageDone.get()) {
-                return;
-            }
-            
-            final Dimension imgOffset =
-                    imageToComponentSpace(new Dimension(0, 0));
-            
             g.setColor(getBackground());
             g.fillRect(0, 0, w, h);
-            g.drawImage(currentImage,
-                        imgOffset.width,
-                        imgOffset.height,
+            g.drawImage(currentBufferedImage,
+                        0,
+                        0, 
+                        currentBufferedImage.getWidth(), 
+                        currentBufferedImage.getHeight(),
                         null);
         }
     }
-    
-    private Dimension imageToComponentSpace(Dimension dim) {
-        final int w = viewOffset.width - dim.width,
-                  h = viewOffset.height - dim.height;
-        return new Dimension(w, h);
-    }
-    
-    
+
     
     private void refresh() {
         if(currentPage != null) {
-            if(!imageDone.get()) {
-                currentPage.stop(lastPageSize.width,
-                          lastPageSize.height,
-                          currentClip);
-            }
-            
-            // clip rect in page coordinates (invariant per page)
-            currentClip = currentPage.getBBox();
-            
-            // w,h = size of virtual display space
-            final int w = (int)(defaultSize.width * zoom),
-                      h = (int)(defaultSize.height * zoom);
-            
-            if(w == 0 && h == 0) {
-                return;
-            }
-            
-            final Dimension pageSize =
-                currentPage.getUnstretchedSize((int) (defaultSize.width * zoom), (int) (defaultSize.height * zoom), null);
+            int w = (int) (currentPage.getWidth() * zoom);
+            int h = (int) (currentPage.getHeight() * zoom);
+            Rectangle rect = new Rectangle(0, 0, w, h);
+            Rectangle clip = currentPage.getBBox().getBounds();
 
+            int rotation = currentPage.getRotation();
+            if(rotation == 90 || rotation == 270) {
+                clip = new Rectangle(
+                        (int) clip.getY(), 
+                        (int) clip.getX(), 
+                        (int) clip.getHeight(), 
+                        (int) clip.getWidth()
+                );
+            }
+            
+            Dimension pageSize = new Dimension(rect.width, rect.height);
             setPreferredSize(pageSize);
             setMinimumSize(pageSize);
             setMaximumSize(pageSize);
-
-            imageDone.set(false);
             
-            // get a size where the image is
-            // scaled to fit virtual display space
-            lastPageSize = currentPage.getUnstretchedSize(w, h, currentClip);
+            currentImage = currentPage.getImage(
+                                        rect.width, // lastPageSize.width,
+                                        rect.height, // lastPageSize.height,
+                                        clip,
+                                        null,   /* imageobserver */
+                                        true,  /* draw white bg */
+                                        true); /* block */
             
+            currentBufferedImage = UIBox.makeBufferedImage(currentImage);
             
-            System.out.println("currentClip: "+currentClip);
-            currentImage = currentPage.getImage(lastPageSize.width,
-                                         lastPageSize.height,
-                                         currentClip,
-                                         this,   /* imageobserver */
-                                         true,  /* draw white bg */
-                                         false); /* block */
+            revalidate();
         }
-        revalidate();
-        needsRefresh = false;
-    }
-
-    
-    
-    @Override
-    public boolean imageUpdate(Image img, int infoflags, int x, int y, int w, int h) {
-        final boolean //someDone = (infoflags & SOMEBITS) != 0,
-                      allDone = (infoflags & ALLBITS) != 0,
-                      fail = (infoflags & (ERROR | ABORT)) != 0;
-        
-        if(allDone || fail) {
-            imageDone.set(true);
-        }
-        
-        if(allDone) {
-            repaint();
-        }
-        
-        if(allDone || fail) {
-            return false;
-        }
-        
-        return true;
     }
 }

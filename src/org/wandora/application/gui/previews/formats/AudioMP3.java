@@ -41,7 +41,6 @@ import javazoom.jl.player.Player;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.previews.*;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 

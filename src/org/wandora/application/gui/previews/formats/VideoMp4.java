@@ -212,18 +212,18 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
     
     private JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Play", UIBox.getIcon(0xf04b), this,
-            "Pause", UIBox.getIcon(0xf04c), this,
-            "Stop", UIBox.getIcon(0xf04d), this,
-            "Backward", UIBox.getIcon(0xf04a), this,
-            "Forward", UIBox.getIcon(0xf04e), this,
-            //"Start", UIBox.getIcon(0xf048), this,
-            //"End", UIBox.getIcon(0xf051), this,
-            "Restart", UIBox.getIcon(0xf0e2), this,
+            "Play", PreviewUtils.ICON_PLAY, this,
+            "Pause", PreviewUtils.ICON_PAUSE, this,
+            "Stop", PreviewUtils.ICON_STOP, this,
+            "Backward", PreviewUtils.ICON_BACKWARD, this,
+            "Forward", PreviewUtils.ICON_FORWARD, this,
+            // "Start", PreviewUtils.ICON_START, this,
+            // "End", PreviewUtils.ICON_END, this,
+            "Restart", PreviewUtils.ICON_RESTART, this,
             "---",
-            "Open ext", UIBox.getIcon(0xf08e), this,
-            "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Save as", UIBox.getIcon(0xf0c7), this, // f019
+            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+            "Save as", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
 

@@ -38,7 +38,15 @@ import org.wandora.topicmap.Locator;
 public class PreviewFactory {
     
 
-    
+    /**
+     * Creates a PreviewPanel used to show a preview for a locator, usually the
+     * subject locator. Resolving a suitable preview for the locator is hard coded
+     * into the method as a simple if-then statement. This may change in future
+     * releases of the application. More dynamic preview resolver would be better.
+     * All PreviewPanel classes contain a static method canView that tells if
+     * the class can view the locator. Usually canView methods delegates the
+     * test to the PreviewUtils.isOfType method.
+    */
     public static PreviewPanel create(final Locator locator) {
         final Wandora wandora = Wandora.getWandora();
         final String urlString = locator.toExternalForm();

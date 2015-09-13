@@ -151,9 +151,9 @@ public class Text implements ActionListener, PreviewPanel {
     
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Open ext", UIBox.getIcon(0xf08e), this,
-            "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Save", UIBox.getIcon(0xf0c7), this, // f019
+            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+            "Save", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
     

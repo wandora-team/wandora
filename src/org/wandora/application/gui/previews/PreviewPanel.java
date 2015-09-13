@@ -32,8 +32,34 @@ import java.awt.Component;
  * @author akivela
  */
 public interface PreviewPanel {
+    /**
+     * Called whenever the PreviewPanel should stop i.e. exit. This is usually
+     * called whenever the user closes the preview by closing the topic or by
+     * opening another topic. The PreviewPanel should release all resources while
+     * stopping. This method is usually called from the PreviewWrapper's stop
+     * method.
+     */
     public void stop();
+    
     public void finish();
+    
+    /**
+     * Is called to get the actual preview component. Wandora places the preview
+     * component into the user interface of the application. Usually the returned
+     * component is JPanel containing various other components such as images and
+     * buttons. This method is usually called from the PreviewWrapper. Running
+     * the method has no time limit. PreviewWrapper views a loading message and
+     * uses a separate thread to call the getGui, preventing the application to
+     * freeze.
+     */
     public Component getGui();
+    
+    /**
+     * This is a little deprecated method to tell the preview is a heavy weight
+     * AWT component. These days Java can mix heavy weight and swing component,
+     * and the isHeavy is not that important any more. Notice, returning a true
+     * value actually triggers some additional wrapping for the component returned
+     * by the getGui method. See AWTWrapper class for details.
+     */
     public boolean isHeavy();
 }

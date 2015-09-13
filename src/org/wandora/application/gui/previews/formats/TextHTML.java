@@ -148,17 +148,17 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
     
     private JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Reload", UIBox.getIcon(0xf015), this, // 0xf01e
+            "Reload", PreviewUtils.ICON_RELOAD_LOCATOR, this,
             "---",
-            "Open ext", UIBox.getIcon(0xf08e), this,
-            "Copy location", UIBox.getIcon(0xf0c5), this,
-            "Copy selection", UIBox.getIcon(0xf0c5), this,
-            "Copy as image", UIBox.getIcon(0xf0c5), this,
-            "Save as", UIBox.getIcon(0xf0c7), this, // f019
+            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+            "Copy selection", PreviewUtils.ICON_COPY_SELECTION, this,
+            "Copy as image", PreviewUtils.ICON_COPY_IMAGE, this,
+            "Save as", PreviewUtils.ICON_SAVE, this,
             "---",
-            "Set basename", UIBox.getIcon(0xf067), this,
-            "Set display name", UIBox.getIcon(0xf067), this,
-            "Set occurrence", UIBox.getIcon(0xf067), this,
+            "Set basename", PreviewUtils.ICON_SET_BASENAME, this,
+            "Set display name", PreviewUtils.ICON_SET_DISPLAY_NAME, this,
+            "Set occurrence", PreviewUtils.ICON_SET_OCCURRENCE, this,
         }, this);
     }
 
