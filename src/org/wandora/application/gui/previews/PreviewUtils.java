@@ -297,7 +297,7 @@ public class PreviewUtils {
 
             StringBuilder labelText = new StringBuilder("<html><center>");
             if(msg != null) labelText.append(msg+"<br>");
-            labelText.append(e.getMessage());
+            labelText.append(e.toString());
             labelText.append("</center></html>");
             
             SimpleLabel label = new SimpleLabel();

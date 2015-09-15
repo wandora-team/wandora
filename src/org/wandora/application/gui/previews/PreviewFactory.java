@@ -53,8 +53,8 @@ public class PreviewFactory {
         PreviewPanel previewPanel = null;
 
         try {
-            if(AudioMidiv2.canView(urlString)) {
-                previewPanel = new AudioMidiv2(urlString); 
+            if(AudioMidi.canView(urlString)) {
+                previewPanel = new AudioMidi(urlString); 
             }
             else if(AudioFlac.canView(urlString)) {
                 previewPanel = new AudioFlac(urlString); 
