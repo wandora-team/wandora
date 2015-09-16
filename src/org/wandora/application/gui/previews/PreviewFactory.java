@@ -47,68 +47,64 @@ public class PreviewFactory {
      * the class can view the locator. Usually canView methods delegates the
      * test to the PreviewUtils.isOfType method.
     */
-    public static PreviewPanel create(final Locator locator) {
+    public static PreviewPanel create(final Locator locator) throws Exception {
         final Wandora wandora = Wandora.getWandora();
         final String urlString = locator.toExternalForm();
         PreviewPanel previewPanel = null;
 
-        try {
-            if(AudioMidi.canView(urlString)) {
-                previewPanel = new AudioMidi(urlString); 
-            }
-            else if(AudioFlac.canView(urlString)) {
-                previewPanel = new AudioFlac(urlString); 
-            }
-            else if(AudioOgg.canView(urlString)) {
-                previewPanel = new AudioOgg(urlString); 
-            }
-            else if(AudioSid.canView(urlString)) {
-                previewPanel = new AudioSid(urlString); 
-            }
-            else if(AudioMod.canView(urlString)) {
-                previewPanel = new AudioMod(urlString); 
-            }
-            else if(AudioWav.canView(urlString)) {
-                previewPanel = new AudioWav(urlString); 
-            }
-            else if(AudioMP3v2.canView(urlString)) {
-                previewPanel = new AudioMP3v2(urlString);
-            }
-            else if(hasJavaFX() && VideoMp4.canView(urlString)) {
-                previewPanel = new VideoMp4(urlString);
-            }
-            else if(Image.canView(urlString)) {
-                previewPanel = new Image(urlString);
-            }
-            else if(FMJ.canView(urlString)) {
-                previewPanel = new FMJ(urlString);
-            }
-            else if(GST.canView(urlString)) {
-                previewPanel = new GST(urlString);
-            }
-            else if(ApplicationZMachine.canView(urlString)) {
-                previewPanel = new ApplicationZMachine(urlString); 
-            }
-            else if(ApplicationPDF.canView(urlString)) {
-                previewPanel = new ApplicationPDF(urlString);
-            }
-            else if(TextRTF.canView(urlString)) {
-                previewPanel = new TextRTF(urlString); 
-            }
-            else if(TextHTML.canView(urlString)) {
-                previewPanel = new TextHTML(urlString);
-            }
-            else if(ApplicationXML.canView(urlString)) {
-                previewPanel = new ApplicationXML(urlString);
-            }
-            else if(Text.canView(urlString)) {
-                previewPanel = new Text(urlString); 
-            }
+        if(AudioMidi.canView(urlString)) {
+            previewPanel = new AudioMidi(urlString); 
         }
-        catch(Exception e) {
-            wandora.handleError(e);
+        else if(AudioFlac.canView(urlString)) {
+            previewPanel = new AudioFlac(urlString); 
         }
-        
+        else if(AudioOgg.canView(urlString)) {
+            previewPanel = new AudioOgg(urlString); 
+        }
+        else if(AudioSid.canView(urlString)) {
+            previewPanel = new AudioSid(urlString); 
+        }
+        else if(AudioMod.canView(urlString)) {
+            previewPanel = new AudioMod(urlString); 
+        }
+        else if(AudioWav.canView(urlString)) {
+            previewPanel = new AudioWav(urlString); 
+        }
+        else if(AudioMP3v2.canView(urlString)) {
+            previewPanel = new AudioMP3v2(urlString);
+        }
+        else if(hasJavaFX() && VideoMp4.canView(urlString)) {
+            previewPanel = new VideoMp4(urlString);
+        }
+        else if(Image.canView(urlString)) {
+            previewPanel = new Image(urlString);
+        }
+        else if(ApplicationZMachine.canView(urlString)) {
+            previewPanel = new ApplicationZMachine(urlString); 
+        }
+        else if(ApplicationPDF.canView(urlString)) {
+            previewPanel = new ApplicationPDF(urlString);
+        }
+        else if(TextRTF.canView(urlString)) {
+            previewPanel = new TextRTF(urlString); 
+        }
+        else if(TextHTML.canView(urlString)) {
+            previewPanel = new TextHTML(urlString);
+        }
+        else if(ApplicationXML.canView(urlString)) {
+            previewPanel = new ApplicationXML(urlString);
+        }
+        else if(Text.canView(urlString)) {
+            previewPanel = new Text(urlString); 
+        }
+        /*
+        else if(FMJ.canView(urlString)) {
+            previewPanel = new FMJ(urlString);
+        }
+        else if(GST.canView(urlString)) {
+            previewPanel = new GST(urlString);
+        }
+        */
         
         if(previewPanel != null && previewPanel.isHeavy()) {
             return new AWTWrapper(previewPanel);

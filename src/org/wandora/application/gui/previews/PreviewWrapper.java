@@ -31,6 +31,8 @@ package org.wandora.application.gui.previews;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.wandora.topicmap.Locator;
 
 
@@ -202,15 +204,19 @@ public class PreviewWrapper extends JPanel {
                             if(locatorString.length() > 50) locatorString = locatorString.substring(0,50)+"...";
                             System.out.println("Created preview "+currentPanel.getClass()+" for "+locatorString);
                         }
-                        else if(currentPanel == null) {
+                        else {
                             currentUI = PreviewUtils.previewNoPreview(previewWrapper);
                         }
                     }
                 }
                 catch(Exception e) {
                     if(!isAborted) {
-                        removeAll();
-                        PreviewUtils.previewError(previewWrapper, "Creating preview failed.", e);
+                        currentUI = PreviewUtils.previewError(previewWrapper, "Creating preview failed.", e);
+                    }
+                }
+                catch(Error err) {
+                    if(!isAborted) {
+                        currentUI = PreviewUtils.previewError(previewWrapper, "Creating preview failed.", err);
                     }
                 }
             }

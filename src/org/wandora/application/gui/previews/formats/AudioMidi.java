@@ -54,7 +54,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class AudioMidi extends JPanel implements MouseListener, ActionListener, MetaEventListener, PreviewPanel {
+public class AudioMidi implements ActionListener, MetaEventListener, PreviewPanel {
     private static final String OPTIONS_PREFIX = "gui.audioMidiPreviewPanel.";
     
     //Wandora admin;
@@ -65,6 +65,9 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
     private boolean isPlaying = false;
     private Sequencer sequencer = null;
     private int volume = 100;
+    
+    private JPanel ui = null;
+    
     
     
     /** Creates a new instance of AudioMidiPreviewPanel */
@@ -85,29 +88,10 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
     
     public void initialize() {
         this.options = Wandora.getWandora().getOptions().asMap();
-        this.addMouseListener(this);
-        bgImage = UIBox.getImage("gui/icons/doctype/doctype_audio_midi.png");
-        
-        panelDimensions = new Dimension(100, 100);
-        this.setPreferredSize(panelDimensions);
-        this.setMaximumSize(panelDimensions);
-        this.setMinimumSize(panelDimensions);
-        
-        repaint();
-        revalidate();
-        updateAudioMenu();
     }
 
     
     
-    
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        if(bgImage != null) {
-            g.drawImage(bgImage,0,0,this);
-        }
-    }
     
     @Override
     public void finish() {
@@ -115,9 +99,13 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
         if(sequencer != null) sequencer.stop();
     }
     
+    
     @Override
     public JPanel getGui() {
-        return this;
+        if(ui == null) {
+            ui = makeUI();
+        }
+        return ui;
     }
     
 
@@ -127,6 +115,37 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
         if(sequencer != null) sequencer.stop();
     }
 
+    
+    protected JPanel makeUI() {
+        if(ui == null) {
+            ui = new JPanel();
+
+            JPanel controllerPanel = new JPanel();
+            controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
+
+            ui.setLayout(new BorderLayout(8,8));
+            ui.add(controllerPanel, BorderLayout.SOUTH);
+
+            updateAudioMenu();
+        }
+        return ui;
+    }
+    
+    
+    protected JComponent getJToolBar() {
+        return UIBox.makeButtonContainer(new Object[] {
+            "Play", PreviewUtils.ICON_PLAY, this,
+            "Stop", PreviewUtils.ICON_STOP, this,
+            "---",
+            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+            "Save as", PreviewUtils.ICON_SAVE, this,
+        }, this);
+    }
+    
+
+    
+    
     
     public void play() {
         if(!isPlaying) {
@@ -151,10 +170,18 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
                         sequencer.start();
                     }
                 }
-                catch (MidiUnavailableException e) {  e.printStackTrace(); }
-                catch (MalformedURLException e) {  e.printStackTrace(); } 
-                catch (IOException e) {  e.printStackTrace(); } 
-                catch (InvalidMidiDataException e) {  e.printStackTrace(); }
+                catch (MidiUnavailableException e) { 
+                    PreviewUtils.previewError(ui, "Midi is unavailable.", e);
+                }
+                catch (MalformedURLException e) {
+                    PreviewUtils.previewError(ui, "Midi locator is malformed.", e);
+                } 
+                catch (IOException e) {  
+                    PreviewUtils.previewError(ui, "Unable to read locator resource.", e);
+                } 
+                catch (InvalidMidiDataException e) {
+                    PreviewUtils.previewError(ui, "Midi resource contains bad data.", e);
+                }
             }
         }
     }
@@ -193,41 +220,21 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
         }
     }
     
-    
-    
-    @Override
-    public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
-        if(mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
-            play();
-        }
-    }
-    
-    @Override
-    public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
-    }
-    
-    @Override
-    public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
-    }
-    
-    @Override
-    public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
-    }
-    
-    @Override
-    public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
-    }
+ 
     // -------------------------------------------------------------------------
     
     
     public void updateAudioMenu() {
-        if(audioLocator != null && audioLocator.length() > 0) {
-            this.setComponentPopupMenu(getImageMenu());
-        }
-        else {
-            this.setComponentPopupMenu(null);
+        if(ui != null) {
+            if(audioLocator != null && audioLocator.length() > 0) {
+                ui.setComponentPopupMenu(getImageMenu());
+            }
+            else {
+                ui.setComponentPopupMenu(null);
+            }
         }
     }
+    
     
     public JPopupMenu getImageMenu() {
         Object[] menuStructure = new Object[] {
@@ -242,11 +249,11 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
             },
              */
             "---",
-            "Copy audio location",
+            "Copy locator",
             "---",
             "Open in external player...",
             "---",
-            "Save audio as...",
+            "Save to file...",
            
         };
         return UIBox.makePopupMenu(menuStructure, this);
@@ -260,76 +267,39 @@ public class AudioMidi extends JPanel implements MouseListener, ActionListener, 
         String c = actionEvent.getActionCommand();
         if(c == null) return;
         
-        if(c.startsWith("Play")) {
+        if(PreviewUtils.startsWithAny(c, "Play")) {
             play();
         }
-        if(c.startsWith("Stop")) {
+        else if(PreviewUtils.startsWithAny(c, "Stop")) {
             isPlaying = false;
             if(sequencer != null) sequencer.stop();
         }
-        if(c.startsWith("Open in external")) {
+        else if(PreviewUtils.startsWithAny(c, "Open in external", "Open ext")) {
             PreviewUtils.forkExternalPlayer(audioLocator);
         }
         
-        else if(c.equalsIgnoreCase("Copy audio location")) {
+        else if(PreviewUtils.startsWithAny(c, "Copy locator")) {
             if(audioLocator != null) {
                 ClipboardBox.setClipboard(audioLocator);
             }
         }
-        else if(c.startsWith("Save audio")) {
+        else if(PreviewUtils.startsWithAny(c, "Save to file", "Save as")) {
             PreviewUtils.saveToFile(audioLocator);
         }
-        else if(c.equalsIgnoreCase("Volume 100%")) {
+        else if(PreviewUtils.startsWithAny(c, "Volume 100%")) {
             setVolume(100);
         }
-        else if(c.equalsIgnoreCase("Volume 75%")) {
+        else if(PreviewUtils.startsWithAny(c, "Volume 75%")) {
             setVolume(75);
         }
-        else if(c.equalsIgnoreCase("Volume 50%")) {
+        else if(PreviewUtils.startsWithAny(c, "Volume 50%")) {
             setVolume(50);
         }
-        else if(c.equalsIgnoreCase("Volume 25%")) {
+        else if(PreviewUtils.startsWithAny(c, "Volume 25%")) {
             setVolume(25);
         }
     }
-   
-   
-   
-   // ----------------------------------------------------------------- SAVE ---
-   
-   
 
-    public void save() {
-        Wandora admin = Wandora.getWandora(this);
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
-        chooser.setDialogTitle("Save audio file");
-        try {
-            chooser.setSelectedFile(new File(audioLocator.substring(audioLocator.lastIndexOf(File.pathSeparator)+1)));
-        }
-        catch(Exception e) {}
-        if(chooser.open(admin, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
-            save(chooser.getSelectedFile());
-        }
-    }
-    
-    
-    
-    public void save(File audioFile) {
-        if(audioFile != null) {
-            try {
-                if(DataURL.isDataURL(audioLocator)) {
-                    DataURL.saveToFile(audioLocator, audioFile);
-                }
-                else {
-                    IObox.moveUrl(new URL(audioLocator), audioFile);
-                }
-            }
-            catch(Exception e) {
-                System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + audioFile.getPath() + "'.");
-            }
-        }
-    }
-    
     
     // -------------------------------------------------------------------------
     

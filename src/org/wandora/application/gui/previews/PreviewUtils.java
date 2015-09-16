@@ -288,36 +288,57 @@ public class PreviewUtils {
     }
     
     
+    public static JPanel previewError(JPanel parent, String msg) {
+        return previewError(parent, msg, (String) null);
+    }
+    
+    public static JPanel previewError(JPanel parent, String msg, Error e) {
+        if(e != null) {
+            e.printStackTrace();
+            return previewError(parent, msg, e.toString());
+        }
+        else {
+            return previewError(parent, msg);
+        }
+    }
     
     public static JPanel previewError(JPanel parent, String msg, Exception e) {
         if(e != null) {
-            JPanel errorPanel = new JPanel();
-            errorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
-            errorPanel.setBorder(BorderFactory.createLineBorder(java.awt.Color.RED, 4));
-
-            StringBuilder labelText = new StringBuilder("<html><center>");
-            if(msg != null) labelText.append(msg+"<br>");
-            labelText.append(e.toString());
-            labelText.append("</center></html>");
-            
-            SimpleLabel label = new SimpleLabel();
-            label.setText(labelText.toString());
-            label.setHorizontalAlignment(SimpleLabel.CENTER);
-            errorPanel.add(label);
-
-            if(parent != null) {
-                parent.removeAll();
-                parent.add(errorPanel, BorderLayout.CENTER);
-
-                parent.revalidate();
-                parent.repaint();
-            }
-            
             e.printStackTrace();
-            
-            return errorPanel;
+            return previewError(parent, msg, e.toString());
         }
-        return null;
+        else {
+            return previewError(parent, msg);
+        }
+    }
+    
+    public static JPanel previewError(JPanel parent, String msg, String e) {
+        JPanel errorPanel = new JPanel();
+        errorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+        errorPanel.setBorder(BorderFactory.createLineBorder(java.awt.Color.RED, 4));
+
+        StringBuilder labelText = new StringBuilder("<html><center>");
+        if(msg != null) labelText.append(msg);
+        if(e != null) {
+            labelText.append("<br>");
+            labelText.append(e);
+        }
+        labelText.append("</center></html>");
+
+        SimpleLabel label = new SimpleLabel();
+        label.setText(labelText.toString());
+        label.setHorizontalAlignment(SimpleLabel.CENTER);
+        errorPanel.add(label);
+
+        if(parent != null) {
+            parent.removeAll();
+            parent.add(errorPanel, BorderLayout.CENTER);
+
+            parent.revalidate();
+            parent.repaint();
+        }
+
+        return errorPanel;
     }
     
     
@@ -351,8 +372,8 @@ public class PreviewUtils {
     
 
     public static JPanel previewNoPreview(JPanel parent) {
-        JPanel loadingPanel = new JPanel();
-        loadingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+        JPanel messagePanel = new JPanel();
+        messagePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
 
         StringBuilder labelText = new StringBuilder("<html><center>");
         labelText.append("Don't know how to view the locator.");
@@ -362,16 +383,16 @@ public class PreviewUtils {
         label.setText(labelText.toString());
         label.setHorizontalAlignment(SimpleLabel.CENTER);
         label.setIcon(UIBox.getIcon(0xf071));
-        loadingPanel.add(label);
+        messagePanel.add(label);
 
         if(parent != null) {
             parent.removeAll();
-            parent.add(loadingPanel, BorderLayout.CENTER);
+            parent.add(messagePanel, BorderLayout.CENTER);
 
             parent.revalidate();
             parent.repaint();
         }
-        return loadingPanel;
+        return messagePanel;
     }
     
     
@@ -449,18 +470,21 @@ public class PreviewUtils {
                     }
                     catch(ConnectException ce) {
                         tikaDetections.put(url, null);
-                        System.out.println("ConnectException occurred while detecting preview's type: "+ce.getMessage());
+                        System.out.println("ConnectException occurred while detecting preview's type: "+ce.toString());
                     }
                     catch(FileNotFoundException fnfe) {
                         tikaDetections.put(url, null);
-                        System.out.println("FileNotFoundException occurred while detecting preview's type: "+fnfe.getMessage());
+                        System.out.println("FileNotFoundException occurred while detecting preview's type: "+fnfe.toString());
                     }
                     catch(IllegalArgumentException iae) {
                         tikaDetections.put(url, null);
-                        System.out.println("IllegalArgumentException occurred while detecting preview's type: "+iae.getMessage());
+                        System.out.println("IllegalArgumentException occurred while detecting preview's type: "+iae.toString());
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                        System.out.println("PreviewUtils.canView fails after an exception: "+e.toString());
+                    }
+                    catch(Error err) {
+                        System.out.println("PreviewUtils.canView fails after an error: "+err.toString());
                     }
                 }
             }

@@ -290,7 +290,7 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
                         currentMixer = multimediaContainer.createNewMixer();
                     }
                     else {
-                        PreviewUtils.previewError(ui, "Unable to create temporal file for a dataurl.", null);
+                        PreviewUtils.previewError(ui, "Unable to create temporal file for a dataurl.");
                     }
                 }
                 else if(locator.startsWith("file:")) {
