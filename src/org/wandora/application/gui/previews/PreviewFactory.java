@@ -97,15 +97,8 @@ public class PreviewFactory {
         else if(Text.canView(urlString)) {
             previewPanel = new Text(urlString); 
         }
-        /*
-        else if(FMJ.canView(urlString)) {
-            previewPanel = new FMJ(urlString);
-        }
-        else if(GST.canView(urlString)) {
-            previewPanel = new GST(urlString);
-        }
-        */
         
+        // If created panel is heavy-weight, wrap it into an AWRWrapper.
         if(previewPanel != null && previewPanel.isHeavy()) {
             return new AWTWrapper(previewPanel);
         }

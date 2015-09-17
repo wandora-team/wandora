@@ -1301,6 +1301,7 @@ audio/x-pn-realaudio-plugin			rmp
 # audio/x-tta
 audio/x-wav					wav
 audio/xm					xm
+audio/mod                                       mod
 chemical/x-cdx					cdx
 chemical/x-cif					cif
 chemical/x-cmdf					cmdf
