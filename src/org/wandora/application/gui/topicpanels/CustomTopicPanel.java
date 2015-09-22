@@ -58,6 +58,8 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
     public static boolean USE_GLOBAL_OPTIONS = true;
     
+    private boolean viewSubjectLocatorResources = false;
+    
     protected Topic topic;
     protected String topicSI;
     
@@ -145,8 +147,8 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     
     @Override
     public Object[] getViewMenuStruct() {
-        Icon viewIcon = UIBox.getIcon("gui/icons/view.png");
-        Icon hideIcon = UIBox.getIcon("gui/icons/view_no.png");
+        Icon viewIcon = UIBox.getIcon("gui/icons/view2.png");
+        Icon hideIcon = UIBox.getIcon("gui/icons/view2_no.png");
         Icon configureIcon = UIBox.getIcon("gui/icons/topic_panel_custom_configure.png");
 
         ArrayList menuVector = new ArrayList();
@@ -158,7 +160,12 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         }
 
         menuVector.add( "---" );
-        menuVector.add( "Configure panel" );
+        menuVector.add("View subject locator resources");
+        menuVector.add( viewSubjectLocatorResources ? viewIcon : hideIcon );
+        menuVector.add( this );
+        
+        menuVector.add( "---" );
+        menuVector.add( "Configure..." );
         menuVector.add( configureIcon );
         menuVector.add( this );
         
@@ -190,12 +197,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
             }
         }
         
-        if(previewPanel != null) {
-            ((PreviewWrapper) previewPanel).stop();
-        }
-        
         this.removeAll();
-        
         this.setTransferHandler(new TopicPanelTransferHandler());
         initComponents();
         refresh();
@@ -219,10 +221,16 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command=e.getActionCommand();
-        System.out.println("Got action command "+command);
+        String command = e.getActionCommand();
+        if(command == null) return;
+            
         if(command.equals("Configure panel")){
             showConfigureDialog();            
+        }
+        else if(command.equals("View subject locator resources")) {
+            viewSubjectLocatorResources = !viewSubjectLocatorResources;
+            refresh();
+            wandora.topicPanelsChanged();
         }
         else{
             boolean found=false;
@@ -516,7 +524,16 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         
         super.refresh();
 
-        updatePreview();
+        try {
+            if(viewSubjectLocatorResources && topic.getSubjectLocator() != null) {
+                ((PreviewWrapper) previewPanel).setURL(topic.getSubjectLocator());
+            }
+            else {
+                ((PreviewWrapper) previewPanel).setURL(null);
+            }
+        }
+        catch(Exception e) {}
+        
         if(subjectIdentifierRootPanel.isVisible()) {
             buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
         }
@@ -571,21 +588,6 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
-    }
-    
-    
-    
-    
-    public void updatePreview() {
-        try {
-            if(topic.getSubjectLocator() != null) {
-                ((PreviewWrapper) previewPanel).setURL(topic.getSubjectLocator());
-            }
-            else {
-                ((PreviewWrapper) previewPanel).setURL(null);
-            }
-        }
-        catch(Exception e) {}
     }
     
     
@@ -705,7 +707,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         panelContainer = new javax.swing.JPanel();
         previewPanelContainer = new javax.swing.JPanel();
         previewPanel = PreviewWrapper.getPreviewWrapper(this);
-        jPanel1 = new javax.swing.JPanel();
+        idPanelWrapper = new javax.swing.JPanel();
         idPanel = new javax.swing.JPanel();
         baseNameLabel = new org.wandora.application.gui.simple.SimpleLabel();
         baseNameField = new org.wandora.application.gui.simple.SimpleField();
@@ -798,7 +800,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.insets = new java.awt.Insets(10, 15, 5, 15);
         panelContainer.add(previewPanelContainer, gridBagConstraints);
 
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        idPanelWrapper.setLayout(new java.awt.GridBagLayout());
 
         idPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -872,7 +874,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(7, 15, 7, 15);
-        jPanel1.add(idPanel, gridBagConstraints);
+        idPanelWrapper.add(idPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -881,7 +883,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        panelContainer.add(jPanel1, gridBagConstraints);
+        panelContainer.add(idPanelWrapper, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1000,7 +1002,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     private javax.swing.JPanel configurationPanel;
     private javax.swing.JButton configureButton;
     private javax.swing.JPanel idPanel;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel idPanelWrapper;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel panelContainer;
     private javax.swing.JPanel previewPanel;

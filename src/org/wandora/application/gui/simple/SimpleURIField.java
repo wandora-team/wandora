@@ -38,6 +38,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.utils.Base64;
+import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 
 
@@ -201,5 +202,44 @@ public class SimpleURIField extends SimpleField {
             ex.printStackTrace();
         }
         this.setBorder(defaultBorder);
+    }
+    
+    
+    // ------------------------------------------------- copy, cut and paste ---
+    
+    
+    @Override
+    public void copy() {
+        if(completeFieldText != null) {
+            if(getSelectionStart() == 0 && getSelectionEnd() == super.getText().length()) {
+                ClipboardBox.setClipboard(completeFieldText);
+                return;
+            }
+        }
+        super.copy();
+    }
+    
+    
+    @Override
+    public void cut() {
+        if(completeFieldText != null) {
+            if(getSelectionStart() == 0 && getSelectionStart() == super.getText().length()) {
+                ClipboardBox.setClipboard(completeFieldText);
+                setText("");
+                return;
+            }
+        }
+        super.cut();
+    }
+    
+    
+    @Override
+    public void paste() {
+        if(completeFieldText != null) {
+            String newText = ClipboardBox.getClipboard();
+            setText(newText);
+            return;
+        }
+        super.paste();
     }
 }

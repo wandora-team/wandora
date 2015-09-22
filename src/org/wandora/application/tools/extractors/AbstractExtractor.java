@@ -777,7 +777,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         foundCounter++;
         setProgress(foundCounter);
         if(content != null) {
-            log("Extracting from given string.");
+            // log("Extracting from given string.");
             TopicMap tempMap=null;
             if(useTempTopicMap()) {
                 tempMap=new org.wandora.topicmap.memory.TopicMapImpl();

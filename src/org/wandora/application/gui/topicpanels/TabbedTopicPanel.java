@@ -299,8 +299,8 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
 
     @Override
     public Object[] getViewMenuStruct() {
-        Icon viewIcon = UIBox.getIcon("gui/icons/view.png");
-        Icon hideIcon = UIBox.getIcon("gui/icons/view_no.png");
+        Icon viewIcon = UIBox.getIcon("gui/icons/view2.png");
+        Icon hideIcon = UIBox.getIcon("gui/icons/view2_no.png");
         
         ArrayList menuVector = new ArrayList();
         for(int i=0; i<tabStruct.length; i++) {
