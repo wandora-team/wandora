@@ -35,7 +35,6 @@ import java.awt.*;
 import java.io.*;
 import javax.swing.text.rtf.*;
 import javax.swing.text.*;
-import javax.swing.*;
 
 
 
@@ -48,7 +47,7 @@ public class Textbox {
     
     
     /**
-     * Makes a String representation of a map. Usefull for debugging.
+     * Makes a String representation of a map. Useful for debugging.
      */
     public static String mapToString(Map map){
         StringBuilder buf=new StringBuilder();

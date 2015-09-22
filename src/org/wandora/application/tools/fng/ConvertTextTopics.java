@@ -34,14 +34,9 @@ import org.wandora.topicmap.XTMPSI;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
-import gnu.regexp.*;
 import java.util.*;
 import java.io.*;
-import java.net.*;
 
-import org.wandora.piccolo.Logger;
-import org.wandora.utils.*;
-import org.wandora.topicmap.*;
 
 
 

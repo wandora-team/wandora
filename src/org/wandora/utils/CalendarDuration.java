@@ -30,9 +30,8 @@ package org.wandora.utils;
 
 
 import java.util.*;
-import java.text.*;
-import org.wandora.utils.*;
-import gnu.regexp.*;
+
+
 
 
 public class CalendarDuration {
