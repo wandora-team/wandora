@@ -26,8 +26,7 @@
 
 package org.wandora.application.gui.tree;
 
-import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.topicmap.TMBox;
+
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
@@ -35,10 +34,8 @@ import java.awt.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
-import java.util.*;
-import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.TopicGuiWrapper;
+import org.wandora.application.gui.topicstringify.TopicToString;
 
 /**
  *
@@ -126,31 +123,12 @@ public class TopicTreeTopicEditor extends DefaultTreeCellEditor implements TreeC
                 String value = ((JTextField) field).getText();
                 if(value != null && value.length() > 0) {
                     Topic topic = topicTree.getSelection();
-                    //System.out.println("topicRenders:" + topicRenders);
-                    /*
-                    if(TopicToString.isStringType(TopicToString.TOPIC_RENDERS_BASENAME)) {
-                        if(topic.getBaseName() != null) {
-                            ConfirmResult cr = TMBox.checkBaseNameChange(wandora, topic, value);
-                            if(cr.equals(ConfirmResult.yes) || cr.equals(ConfirmResult.yestoall)) {
-                                topic.setBaseName(value);
-                                wandora.doRefresh();
-                            }
-                        }
-                        else {
-                            // This branch is executed when topic has no basename. 
-                            Locator lvalue = new Locator(value);
-                            ConfirmResult cr = TMBox.checkSubjectIdentifierChange(wandora, topic, lvalue, true);
-                            if(cr.equals(ConfirmResult.yes) || cr.equals(ConfirmResult.yestoall)) {
-                                topic.addSubjectIdentifier(lvalue);
-                                if(!value.equals(originalValue)) {
-                                    topic.removeSubjectIdentifier(new Locator(originalValue.toString()));
-                                    wandora.doRefresh();
-                                }
-                            }
+                    if(topic != null && !topic.isRemoved()) {
+                        if(TopicToString.supportsStringIntoTopic()) {
+                            TopicToString.stringIntoTopic((String) originalValue.toString(), value, topic);
+                            if(wandora != null) wandora.doRefresh();
                         }
                     }
-                     * 
-                     */
                 }
             }
         }
@@ -158,6 +136,5 @@ public class TopicTreeTopicEditor extends DefaultTreeCellEditor implements TreeC
             wandora.handleError(ex);
         }
     }
-
 
 }

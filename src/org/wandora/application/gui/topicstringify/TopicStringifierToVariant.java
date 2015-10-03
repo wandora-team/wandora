@@ -35,6 +35,7 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *
@@ -56,6 +57,7 @@ public class TopicStringifierToVariant implements TopicStringifier {
     }
     
     
+    @Override
     public boolean initialize(Wandora wandora, Context context) {
         try {
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -88,16 +90,19 @@ public class TopicStringifierToVariant implements TopicStringifier {
     
     
     
+    @Override
     public String getDescription() {
         return "Views topic as a variant name";
     }
     
+    @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/view_topic_as_variant.png");
     }
     
     
     
+    @Override
     public String toString(Topic t) {
         String n = null;
         try {
@@ -118,4 +123,25 @@ public class TopicStringifierToVariant implements TopicStringifier {
         return "[unable to solve name for a topic]";
     }
     
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    @Override
+    public boolean supportsStringIntoTopic() {
+        return true;
+    }
+    
+    
+    @Override
+    public void stringIntoTopic(String oldString, String newString, Topic t) throws TopicMapException {
+        if(t != null && !t.isRemoved()) {
+            if(scope != null && !scope.isEmpty()) {
+                t.setVariant(scope, newString);
+            }
+        }
+    }
+    
+
 }

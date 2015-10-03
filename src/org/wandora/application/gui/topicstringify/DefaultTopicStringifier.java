@@ -29,9 +29,12 @@ import java.net.URL;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.UIBox;
+import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 /**
@@ -52,6 +55,7 @@ public class DefaultTopicStringifier implements TopicStringifier {
     
     private int stringType = TOPIC_RENDERS_BASENAME;
     
+    private Wandora wandora = null;
     
     
     
@@ -68,6 +72,7 @@ public class DefaultTopicStringifier implements TopicStringifier {
     
     @Override
     public boolean initialize(Wandora wandora, Context context) {
+        this.wandora = wandora;
         return true;
     }
 
@@ -205,5 +210,69 @@ public class DefaultTopicStringifier implements TopicStringifier {
         }
         catch(Exception e) {}
         return s.toString();
+    }
+    
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    
+    @Override
+    public boolean supportsStringIntoTopic() {
+        switch(stringType) {
+            case TOPIC_RENDERS_ENGLISH_DISPLAY_NAME:
+            case TOPIC_RENDERS_SL:
+            case TOPIC_RENDERS_BASENAME:
+            case TOPIC_RENDERS_BASENAME_WITH_INFO:
+            case TOPIC_RENDERS_SI: {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    
+    
+    @Override
+    public void stringIntoTopic(String oldString, String newString, Topic t) throws TopicMapException {
+        switch(stringType) {
+            case TOPIC_RENDERS_ENGLISH_DISPLAY_NAME: {
+                t.setDisplayName("en", newString);
+                return;
+            }
+            
+            case TOPIC_RENDERS_BASENAME_WITH_INFO:
+            case TOPIC_RENDERS_BASENAME: {
+                ConfirmResult cr = TMBox.checkBaseNameChange(wandora, t, newString);
+                if(cr.equals(ConfirmResult.yes) || cr.equals(ConfirmResult.yestoall)) {
+                    t.setBaseName(newString);
+                }
+                break;
+            }
+            
+            case TOPIC_RENDERS_SI: {
+                Locator subjectIdentifier = new Locator(newString);
+                ConfirmResult cr = TMBox.checkSubjectIdentifierChange(wandora, t, subjectIdentifier, true);
+                if(cr.equals(ConfirmResult.yes) || cr.equals(ConfirmResult.yestoall)) {
+                    t.addSubjectIdentifier(subjectIdentifier);
+                    if(oldString != null) {
+                        t.removeSubjectIdentifier(new Locator(oldString));
+                    }
+                }
+                break;
+            }
+            
+            case TOPIC_RENDERS_SL: {
+                ConfirmResult cr = TMBox.checkSubjectLocatorChange(wandora, t, newString);
+                if(cr.equals(ConfirmResult.yes) || cr.equals(ConfirmResult.yestoall)) {
+                    t.setSubjectLocator(new Locator(newString));
+                }
+                break;
+            }
+            
+        }
+        
     }
 }

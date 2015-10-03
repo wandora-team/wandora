@@ -29,6 +29,7 @@ import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  * TopicStringifier interface specifies all methods required in a Java
@@ -41,20 +42,20 @@ import org.wandora.topicmap.Topic;
 
 public interface TopicStringifier {
     
-    /*
+    /**
      * Initialization method is called before a TopicStringifier is actually used.
      * If initialization returns false, the TopicStringifier should not be used.
      */
     public boolean initialize(Wandora wandora, Context context);
     
-    /* 
+    /**
      * toString method is the actual endpoint used to create a string out of a
      * topic.
      */
     public String toString(Topic t);
     
     
-    /*
+    /**
      * Description is a text that describes the TopicStringifier. Text is
      * shown in Wandora's UI whenever user wants more information about the
      * TopicStringifier, for example, as a tooltip text.
@@ -62,10 +63,30 @@ public interface TopicStringifier {
     public String getDescription();
     
     
-    /*
+    /**
      * Method returns an icon shown in Wandora UI as a mark of the
      * TopicStringifier. Current Wandora views the icon in the infobar near
      * topic's name.
      */
     public Icon getIcon();
+    
+    
+    
+    
+    /**
+     * Sometimes topic viewer may support string editing feature.
+     * This method is used to push string back into a topic. String
+     * is stored into the topic.
+     */
+    public void stringIntoTopic(String oldString, String newString, Topic topic) throws TopicMapException;
+    
+    
+    
+    /**
+     * If topic viewer supports string editing feature and Wandora can push the
+     * string back into the topic, this method should return true. If TopicStringifier
+     * can't push a string back into the topic, method should return false. The
+     * push is implemented in method stringIntoTopic.
+     */
+    public boolean supportsStringIntoTopic();
 }

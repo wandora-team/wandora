@@ -722,9 +722,11 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     
     public Topic getTopicAt(int x, int y) {
         Object object = getValueAt(x, y);
-        if(object instanceof TopicGuiWrapper) {
-            TopicGuiWrapper wrapper = (TopicGuiWrapper) object;
-            if(wrapper != null) return wrapper.topic;
+        if(object != null) {
+            if(object instanceof TopicGuiWrapper) {
+                TopicGuiWrapper wrapper = (TopicGuiWrapper) object;
+                return wrapper.topic;
+            }
         }
         return null;
     }

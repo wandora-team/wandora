@@ -28,6 +28,7 @@ package org.wandora.application.gui.topicstringify;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 /**
@@ -83,7 +84,7 @@ public class TopicToString {
     
     
     
-    /*
+    /**
      * Method is used to create string representation out of a topic. Method
      * uses given TopicStringifier to create a string. If no TopicStringifier is
      * given, method passes the call to defaultTopicStringifier.
@@ -97,4 +98,38 @@ public class TopicToString {
         }
     }
 
+    
+    
+    /**
+     * Returns true if current TopicStringifier can push a string back into
+     * the topic. If current TopicStringifier can't push any string back into
+     * the topic, method returns false.
+     */
+    public static boolean supportsStringIntoTopic() {
+        if(topicStringifier != null) {
+            return topicStringifier.supportsStringIntoTopic();
+        }
+        else {
+            return defaultTopicStringifier.supportsStringIntoTopic();
+        }
+    }
+    
+    
+    
+    /**
+     * Store string into the topic if possible. Return true if storing was
+     * successful. Otherwise return false.
+     */
+    public static void stringIntoTopic(String oldString, String newString, Topic t) throws TopicMapException {
+        if(topicStringifier != null) {
+            topicStringifier.stringIntoTopic(oldString, newString, t);
+        }
+        else {
+            defaultTopicStringifier.stringIntoTopic(oldString, newString, t);
+        }
+    }
+    
+    
+    
+    
 }
