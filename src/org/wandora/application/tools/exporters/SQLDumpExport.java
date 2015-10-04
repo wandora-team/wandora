@@ -137,7 +137,7 @@ public class SQLDumpExport extends AbstractExportTool {
                     tempFiles[i].delete();
                 }
                 outs.close();       
-                log("Export done");
+                log("Ready.");
                 setState(SQLDumpExport.WAIT);
             }
             catch(Exception e){

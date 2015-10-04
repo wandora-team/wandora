@@ -124,7 +124,7 @@ public class AlchemyLanguageExtractor extends AbstractAlchemyExtractor {
                 catch(Exception e){
                     if(!(e instanceof SAXException) || !e.getMessage().equals("User interrupt")) log(e);
                 }
-                log("Alchemy language extraction done!");
+                log("Ready.");
             }
             else {
                 log("No valid API key given! Aborting!");

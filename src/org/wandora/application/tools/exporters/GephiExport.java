@@ -205,7 +205,7 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
             catch(Exception e) {
                Logger.getLogger(GephiExport.class.getName()).log(Level.SEVERE, null, e);
             }
-            log("Done");
+            log("Ready.");
 
 
         }

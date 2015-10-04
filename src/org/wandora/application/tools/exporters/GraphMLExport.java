@@ -161,7 +161,7 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
                 log(exportInfo+" to '"+fileName+"'.");
                 exportGraphML(out, tm, topicMapName, getCurrentLogger());
                 out.close();
-                log("Done");
+                log("Ready.");
             }
             catch(Exception e) {
                 log(e);

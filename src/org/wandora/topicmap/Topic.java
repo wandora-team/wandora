@@ -185,6 +185,7 @@ public abstract class Topic {
      * language.
      */
     public void setDisplayName(String lang,String name) throws TopicMapException {
+        if(getTopicMap().isReadOnly()) throw new TopicMapReadOnlyException();
         String langsi=XTMPSI.getLang(lang);
         Topic langT=getTopicMap().getTopic(langsi);
         String dispsi=XTMPSI.DISPLAY;

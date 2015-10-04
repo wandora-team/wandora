@@ -379,11 +379,16 @@ public class UndoTopicMap extends TopicMap {
         return wrapped.isConnected();
     }
     
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        wrapped.setReadOnly(readOnly);
+    }
 
     @Override
     public boolean isReadOnly() {
         return wrapped.isReadOnly();
     }
+    
     @Override
     public void setConsistencyCheck(boolean value) throws TopicMapException {
         wrapped.setConsistencyCheck(value);

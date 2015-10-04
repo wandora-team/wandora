@@ -48,13 +48,7 @@ public abstract class AbstractLayerTool extends AbstractWandoraTool implements W
     protected Layer solveContextLayer(Wandora admin, Context context) {
         LayerTree layerTree = admin.layerTree;
         Layer layer=null;
-        if(context instanceof LayerStatusPanel) {
-            layer = ((LayerStatusPanel) context).getLayer();
-        }
-        else if(context.getContextSource() instanceof LayerStatusPanel) {
-            layer = ((LayerStatusPanel) context.getContextSource()).getLayer();
-        }
-        else if(context.getContextSource() instanceof LayerTree){
+        if(context.getContextSource() instanceof LayerTree){
             layer = ((LayerTree)context.getContextSource()).getLastClickedLayer();
         }
         if(layer == null) layer = layerTree.getSelectedLayer();

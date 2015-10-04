@@ -94,9 +94,9 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
         
             case FILE_PATTERN: return ".*\\.(mp3|MP3|Mp3|MPEG3|mpeg3)";
             
-            case DONE_FAILED: return "Done! No extractions! %1 mp3 file(s) crawled!";
-            case DONE_ONE: return "Done! Successful extraction! %1 mp3 file(s) crawled!";
-            case DONE_MANY: return "Done! Total %0 successful extractions! %1 mp3 files crawled!";
+            case DONE_FAILED: return "Ready. No extractions! %1 mp3 file(s) crawled!";
+            case DONE_ONE: return "Ready. Successful extraction! %1 mp3 file(s) crawled!";
+            case DONE_MANY: return "Ready. Total %0 successful extractions! %1 mp3 files crawled!";
             
             case LOG_TITLE: return "MP3 ID3V[12] Extraction Log";
         }

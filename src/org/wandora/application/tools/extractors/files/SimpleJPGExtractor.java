@@ -94,9 +94,9 @@ public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool
         
             case FILE_PATTERN: return ".*\\.(jpg|JPG|jpeg|JPEG)";
             
-            case DONE_FAILED: return "Done! No extractions! %1 jpeg file(s) crawled!";
-            case DONE_ONE: return "Done! Successful extraction! %1 jpeg file(s) crawled!";
-            case DONE_MANY: return "Done! Total %0 successful extractions! %1 jpeg(s) crawled!";
+            case DONE_FAILED: return "Ready. No extractions! %1 jpeg file(s) crawled!";
+            case DONE_ONE: return "Ready. Successful extraction! %1 jpeg file(s) crawled!";
+            case DONE_MANY: return "Ready. Total %0 successful extractions! %1 jpeg(s) crawled!";
             
             case LOG_TITLE: return "JPEG Image Extraction Log";
         }

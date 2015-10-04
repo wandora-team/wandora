@@ -360,7 +360,7 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
     
 
     public void finalizeImport(Wandora wandora) {
-        log("Done");
+        log("Ready.");
         if(closeLogs) setState(AbstractWandoraTool.CLOSE);
         else setState(AbstractWandoraTool.WAIT);
     }

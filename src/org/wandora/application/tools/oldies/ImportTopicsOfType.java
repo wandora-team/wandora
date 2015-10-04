@@ -119,7 +119,7 @@ public class ImportTopicsOfType extends AbstractWandoraTool implements WandoraTo
             else{
                 WandoraOptionPane.showMessageDialog(parent,"Type not found in topicmap. Nothing copied.");
             }
-            log("Done");
+            log("Ready.");
             try { parent.doRefresh(); }
             catch(Exception e) {}
         }

@@ -129,7 +129,7 @@ public class ExportTopicMap extends AbstractExportTool implements WandoraTool {
                     tm.exportXTM20(out, getCurrentLogger());
                 }
                 if(out != null) out.close();
-                log("Done");
+                log("Ready.");
             }
             catch(Exception e) {
                 log(e);

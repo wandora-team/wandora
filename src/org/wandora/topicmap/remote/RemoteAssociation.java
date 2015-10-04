@@ -29,9 +29,7 @@
 package org.wandora.topicmap.remote;
 import org.wandora.topicmap.*;
 import org.wandora.topicmap.memory.*;
-import org.wandora.*;
-import org.wandora.application.*;
-import java.util.*;
+
 
 /**
  *

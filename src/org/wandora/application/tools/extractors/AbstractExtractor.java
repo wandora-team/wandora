@@ -208,9 +208,9 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         
             case FILE_PATTERN: return ".*";
             
-            case DONE_FAILED: return "Ok. No extractions!";
-            case DONE_ONE: return "Ok.";
-            case DONE_MANY: return "Ok. Total %0 successful extractions!";
+            case DONE_FAILED: return "Ready. No extractions!";
+            case DONE_ONE: return "Ready.";
+            case DONE_MANY: return "Ready. Total %0 successful extractions!";
             
             case LOG_TITLE: return "Extraction Log";
         }

@@ -43,10 +43,13 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         setLinkedMap(linkedMap);
         this.topicMapListeners=new ArrayList<TopicMapListener>();
     }
+    
     public LinkedTopicMap(String wrappedName){
         this.wrappedName=wrappedName;
         this.topicMapListeners=new ArrayList<TopicMapListener>();
     }
+    
+    // -------------------------------------------------------------------------
     
     public TopicMap getLinkedTopicMap(){
         if(linkedMap==null && !findLinkedMap()) return null;
@@ -58,6 +61,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         linkedMap=null;
         linkedLayer=null;
     }
+    
     protected void setLinkedMap(Layer l){
         linkedLayer=l;
         linkedMap=l.getTopicMap();
@@ -66,6 +70,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         wrappedContainer=(ContainerTopicMap)linkedMap.getParentTopicMap();
         if(wrappedContainer!=null) wrappedContainer.addContainerListener(this);
     }
+    
     protected void setLinkedMap(TopicMap tm){
         linkedMap=tm;
         TopicMap root=this.getRootTopicMap();
@@ -99,10 +104,12 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         if(t==null) return null;
         return new LinkedTopic(t,this);
     }
+    
     public LinkedAssociation getLinkedAssociation(Association a){
         if(a==null) return null;
         return new LinkedAssociation(a,this);
     }
+    
     public Collection<Topic> getLinkedTopics(Collection<Topic> topics){
         ArrayList<Topic> ret=new ArrayList<Topic>();
         for(Topic t : topics){
@@ -110,6 +117,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
         return ret;
     }
+    
     public Set<Topic> getLinkedTopics(Set<Topic> topics){
         HashSet<Topic> ret=new HashSet<Topic>();
         for(Topic t : topics){
@@ -117,6 +125,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
         return ret;
     }
+    
     public Collection<Association> getLinkedAssociations(Collection<Association> associations){
         ArrayList<Association> ret=new ArrayList<Association>();
         for(Association a : associations){
@@ -124,14 +133,17 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
         return ret;
     }
+    
     public Topic getUnlinkedTopic(Topic t){
         if(t==null) return null;
         return ((LinkedTopic)t).getWrappedTopic();
     }
+    
     public Association getUnlinkedAssociation(Association a){
         if(a==null) return null;
         return ((LinkedAssociation)a).getWrappedAssociation();
     }
+    
     public Collection<Topic> getUnlinkedTopics(Collection<Topic> topics){
         ArrayList<Topic> ret=new ArrayList<Topic>();
         for(Topic t : topics){
@@ -139,6 +151,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
         return ret;        
     }
+    
     public Set<Topic> getUnlinkedSetOfTopics(Set<Topic> topics){
         HashSet<Topic> ret=new HashSet<Topic>();
         for(Topic t : topics){
@@ -146,6 +159,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
         return ret;        
     }
+    
     public Collection<Association> getUnlinkedAssociations(Collection<Association> associations){
         ArrayList<Association> ret=new ArrayList<Association>();
         for(Association a : associations){
@@ -160,7 +174,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
     
     @Override
     public void addTopicMapListener(TopicMapListener listener) {
-        if(topicMapListeners.size()==0 && linkedMap!=null) linkedMap.addTopicMapListener(this);
+        if(topicMapListeners.isEmpty() && linkedMap!=null) linkedMap.addTopicMapListener(this);
         if(!topicMapListeners.contains(listener)) topicMapListeners.add(listener);
     }
 
@@ -172,6 +186,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
     
     @Override
     public void clearTopicMap() throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(linkedMap==null && !findLinkedMap()) return;
         linkedMap.clearTopicMap();
     }
@@ -184,30 +199,35 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
 
     @Override
     public Association copyAssociationIn(Association a) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(linkedMap==null && !findLinkedMap()) return null;
         return linkedMap.copyAssociationIn(a);
     }
 
     @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(linkedMap==null && !findLinkedMap()) return;
         linkedMap.copyTopicAssociationsIn(t);
     }
 
     @Override
     public Topic copyTopicIn(Topic t, boolean deep) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(linkedMap==null && !findLinkedMap()) return null;
         return linkedMap.copyTopicIn(t,deep);
     }
 
     @Override
     public Association createAssociation(Topic type) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(linkedMap==null && !findLinkedMap()) return null;
         return getLinkedAssociation(linkedMap.createAssociation(getUnlinkedTopic(type)));
     }
 
     @Override
     public Topic createTopic() throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(linkedMap==null && !findLinkedMap()) return null;
         return getLinkedTopic(linkedMap.createTopic());
     }
@@ -360,7 +380,9 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         return linkedMap.trackingDependent();
     }
 
+    // -------------------------------------------------- TOPIC MAP LISTENER ---
     
+    @Override
     public void associationChanged(Association a) throws TopicMapException {
         Association wa=getLinkedAssociation(a);
         for(TopicMapListener listener : topicMapListeners){
@@ -368,6 +390,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
         Association wa=getLinkedAssociation(a);
         Topic wrole=getLinkedTopic(role);
@@ -378,6 +401,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void associationRemoved(Association a) throws TopicMapException {
         Association wa=getLinkedAssociation(a);
         for(TopicMapListener listener : topicMapListeners){
@@ -385,6 +409,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
         Association wa=getLinkedAssociation(a);
         Topic wNewType=getLinkedTopic(newType);
@@ -394,6 +419,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
         Topic wt=getLinkedTopic(t);
         for(TopicMapListener listener : topicMapListeners){
@@ -401,6 +427,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void topicChanged(Topic t) throws TopicMapException {
         Topic wt=getLinkedTopic(t);
         for(TopicMapListener listener : topicMapListeners){
@@ -408,6 +435,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
         Topic wt=getLinkedTopic(t);
         Topic wtype=getLinkedTopic(type);
@@ -417,6 +445,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         Topic wt=getLinkedTopic(t);
         for(TopicMapListener listener : topicMapListeners){
@@ -424,6 +453,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
         Topic wt=getLinkedTopic(t);
         for(TopicMapListener listener : topicMapListeners){
@@ -431,6 +461,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
         Topic wt=getLinkedTopic(t);
         for(TopicMapListener listener : topicMapListeners){
@@ -438,6 +469,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
         Topic wt=getLinkedTopic(t);
         Topic wadded=getLinkedTopic(added);
@@ -447,6 +479,7 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    @Override
     public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
         Topic wt=getLinkedTopic(t);
         Collection<Topic> wscope=getLinkedTopics(scope);
@@ -455,20 +488,27 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
         }
     }
 
+    // -------------------------------------------------------------------------
+    
+    @Override
     public void layerAdded(Layer l) {}
 
+    @Override
     public void layerChanged(Layer oldLayer, Layer newLayer) {
         if(oldLayer==linkedLayer) unlinkMap();
     }
 
+    @Override
     public void layerRemoved(Layer l) {
         if(l==linkedLayer) unlinkMap();
     }
 
+    @Override
     public void layerStructureChanged() {
         unlinkMap();
     }
 
+    @Override
     public void layerVisibilityChanged(Layer l) {}
     
 }

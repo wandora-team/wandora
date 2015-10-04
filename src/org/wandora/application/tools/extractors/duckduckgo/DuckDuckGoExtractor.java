@@ -97,7 +97,7 @@ public class DuckDuckGoExtractor extends AbstractWandoraTool {
                         }
                         
                     }
-                    log("Done.");
+                    log("Ready.");
                 }
                 else {
                     log("Couldn't find a suitable subextractor to perform or there was an error with an extractor.");

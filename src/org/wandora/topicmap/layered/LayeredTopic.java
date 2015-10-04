@@ -207,6 +207,7 @@ public class LayeredTopic extends Topic {
     public Collection<Topic> getTopicsForSelectedLayer(){
         return getTopicsForLayer(layerStack.getSelectedLayer());
     }
+    
     /**
      * Get all topics of the given layer that are part of this LayeredTopic.
      */
@@ -219,6 +220,7 @@ public class LayeredTopic extends Topic {
         }
         return v;
     }
+    
     /**
      * Get all topics this layered topic consists of in the order they appear
      * in layers. Topics of top layers will appear first in the collection.
@@ -226,6 +228,7 @@ public class LayeredTopic extends Topic {
     public Collection<Topic> getTopicsForAllLayers(){
         return topics;
     }
+    
     /**
      * Gets one of the topics of the selected layer that is part of this layered
      * topic or null if no such topic exists.
@@ -233,6 +236,7 @@ public class LayeredTopic extends Topic {
     public Topic getTopicForSelectedLayer(){
         return getTopicForLayer(layerStack.getSelectedLayer());
     }
+    
     /**
      * Gets one of the topics of given layer that is part of this layered
      * topic or null if no such topic exists.
@@ -270,6 +274,7 @@ public class LayeredTopic extends Topic {
      * Gets all the subject identifiers of all the topics that this layered topic
      * consists of.
      */
+    @Override
     public Collection<Locator> getSubjectIdentifiers() throws TopicMapException {
         HashSet<Locator> sis = new LinkedHashSet<Locator>();
         for(Topic t : topics){
@@ -277,6 +282,7 @@ public class LayeredTopic extends Topic {
         }
         return sis;
     }
+    
     /**
      * Copies a stub of this topic to the given topic map. This can be used
      * to make a stub of this topic when it is needed in a layer that doesn't
@@ -300,8 +306,9 @@ public class LayeredTopic extends Topic {
         return t;
     }
     
+    @Override
     public void addSubjectIdentifier(Locator l) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> ts=getTopicsForSelectedLayer();
         Topic t=null;
         if(ts==null || ts.isEmpty()) {
@@ -324,8 +331,10 @@ public class LayeredTopic extends Topic {
             remakeLayered(t);
         }
     }
+    
+    @Override
     public void removeSubjectIdentifier(Locator l) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> ts=getTopicsForSelectedLayer();
         if(ts==null || ts.size()==0) {
             ambiguity("No topic in selected layer, nothing done (addSubjectIdentifier)");
@@ -347,6 +356,7 @@ public class LayeredTopic extends Topic {
         }
         if(changed!=null) remakeLayered(changed);
     }
+    
     /**
      * Returns the layer that is being used to get the base name for this topic.
      * That is the first layer that contains a topic in this layered topic that has
@@ -362,6 +372,7 @@ public class LayeredTopic extends Topic {
         return null;
     }
         
+    @Override
     public String getBaseName() throws TopicMapException {
         for(Topic t : topics){
             String bn=t.getBaseName();
@@ -369,8 +380,10 @@ public class LayeredTopic extends Topic {
         }
         return null;
     }
+    
+    @Override
     public void setBaseName(String name) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> ts=getTopicsForSelectedLayer();
         Topic t=null;
         if(ts.size()==0) {
@@ -391,6 +404,8 @@ public class LayeredTopic extends Topic {
         t.setBaseName(name);
         remakeLayered(t);
     }
+    
+    @Override
     public Collection<Topic> getTypes() throws TopicMapException {
         Vector<Topic> v=new Vector<Topic>();
         for(Topic t : topics){
@@ -398,8 +413,10 @@ public class LayeredTopic extends Topic {
         }
         return layerStack.makeLayeredTopics(v);
     }
+    
+    @Override
     public void addType(Topic type) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         LayeredTopic lt=(LayeredTopic)type;
         Collection<Topic> types=lt.getTopicsForSelectedLayer();
         Topic stype=null;
@@ -420,7 +437,7 @@ public class LayeredTopic extends Topic {
         }
         Collection<Topic> ts=getTopicsForSelectedLayer();
         Topic t=null;
-        if(ts.size()==0){
+        if(ts.isEmpty()){
             AmbiguityResolution res=resolveAmbiguity("addType.topic.noSelected","No topic in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -437,8 +454,10 @@ public class LayeredTopic extends Topic {
         }
         t.addType(stype);
     }
+    
+    @Override
     public void removeType(Topic type) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         LayeredTopic lt=(LayeredTopic)type;
         Collection<Topic> types=lt.getTopicsForSelectedLayer();
         if(types.size()==0){
@@ -454,6 +473,8 @@ public class LayeredTopic extends Topic {
         else if(ts.size()>1) ambiguity("Several topics in selected layer (removeType)");
         ts.iterator().next().removeType(types.iterator().next());
     }
+    
+    @Override
     public boolean isOfType(Topic type) throws TopicMapException {
         LayeredTopic lt=(LayeredTopic)type;
         for(Topic t : topics){
@@ -475,6 +496,7 @@ public class LayeredTopic extends Topic {
     protected Set<Topic> createScope(Set<Topic> layeredScope,Layer l) throws TopicMapException {
         return createScope(layeredScope,l,false);
     }
+    
     /**
      * Creates a scope from a collection of LayeredTopics that can be used for the
      * given layer. Note that the given layer might not contain all topics needed
@@ -559,6 +581,7 @@ public class LayeredTopic extends Topic {
         return null;
     }
     
+    @Override
     public String getVariant(Set<Topic> scope) throws TopicMapException {
         String ret=null;
         for(Topic t : topics){
@@ -574,11 +597,13 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
+    @Override
     public void setVariant(Set<Topic> scope,String name) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> ts=getTopicsForSelectedLayer();
         Topic selectedTopic=null;
-        if(ts.size()==0){
+        if(ts.isEmpty()){
             AmbiguityResolution res=resolveAmbiguity("setVariant.topic.noSelected","No topic in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 selectedTopic=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -611,6 +636,7 @@ public class LayeredTopic extends Topic {
         selectedTopic.setVariant(s,name);
     }
     
+    @Override
     public Set<Set<Topic>> getVariantScopes() throws TopicMapException {
         // TODO: doesn't handle correctly theoretical case where scope topics get merged
         Set<Set<Topic>> ret=new LinkedHashSet<Set<Topic>>();
@@ -633,8 +659,10 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
+    @Override
     public void removeVariant(Set<Topic> scope) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         // TODO: if multiple, remove all or one? in none ask?
         boolean removed=false;
         for(Topic selectedTopic : getTopicsForSelectedLayer()){
@@ -672,8 +700,9 @@ public class LayeredTopic extends Topic {
             }
         }
         return null;
-        
     }
+    
+    @Override
     public String getData(Topic type,Topic version) throws TopicMapException {
         LayeredTopic lt=(LayeredTopic)type;
         LayeredTopic lv=(LayeredTopic)version;
@@ -696,6 +725,8 @@ public class LayeredTopic extends Topic {
         }
         return found;
     }
+    
+    @Override
     public Hashtable<Topic,String> getData(Topic type) throws TopicMapException {
         LayeredTopic lt=(LayeredTopic)type;
         Hashtable<Topic,String> ret=new Hashtable<Topic,String>();
@@ -718,6 +749,8 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
+    @Override
     public Collection<Topic> getDataTypes() throws TopicMapException {
         HashSet<Topic> used=new LinkedHashSet<Topic>();
         HashSet<Topic> ret=new LinkedHashSet<Topic>();
@@ -733,19 +766,23 @@ public class LayeredTopic extends Topic {
         return ret;
         
     }
+    
+    @Override
     public void setData(Topic type,Hashtable<Topic,String> versionData) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         for(Map.Entry<Topic,String> e : versionData.entrySet()){
             setData(type,e.getKey(),e.getValue());
         }
     }
+    
+    @Override
     public void setData(Topic type,Topic version,String value) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         LayeredTopic lt=(LayeredTopic)type;
         LayeredTopic lv=(LayeredTopic)version;
         Collection<Topic> ts=getTopicsForSelectedLayer();
         Topic t=null;
-        if(ts.size()==0){
+        if(ts.isEmpty()){
             AmbiguityResolution res=resolveAmbiguity("setData.topic.noSelected","No topic in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -762,7 +799,7 @@ public class LayeredTopic extends Topic {
         }
         Collection<Topic> ltype=lt.getTopicsForSelectedLayer();
         Topic stype=null;
-        if(ltype.size()==0){
+        if(ltype.isEmpty()){
             AmbiguityResolution res=resolveAmbiguity("setData.type.noSelected","No type in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 stype=lt.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -779,7 +816,7 @@ public class LayeredTopic extends Topic {
         }
         Collection<Topic> lversion=lv.getTopicsForSelectedLayer();
         Topic sversion=null;
-        if(lversion.size()==0){
+        if(lversion.isEmpty()){
             AmbiguityResolution res=resolveAmbiguity("setData.version.noSelected","No version in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 sversion=lv.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -796,8 +833,10 @@ public class LayeredTopic extends Topic {
         }
         t.setData(stype,sversion,value);
     }
+    
+    @Override
     public void removeData(Topic type,Topic version) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         LayeredTopic lt=(LayeredTopic)type;
         LayeredTopic lv=(LayeredTopic)version;
         boolean removed=false;
@@ -818,8 +857,9 @@ public class LayeredTopic extends Topic {
         }
     }
     
+    @Override
     public void removeData(Topic type) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         LayeredTopic lt=(LayeredTopic)type;
         boolean removed=false;
         for(Topic selectedTopic : getTopicsForSelectedLayer()){
@@ -848,6 +888,7 @@ public class LayeredTopic extends Topic {
         return null;
     }
     
+    @Override
     public Locator getSubjectLocator() throws TopicMapException {
         Locator ret=null;
         for(Topic t : topics){
@@ -862,11 +903,13 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
+    @Override
     public void setSubjectLocator(Locator l) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> ts=getTopicsForSelectedLayer();
         Topic t=null;
-        if(ts.size()==0) {
+        if(ts.isEmpty()) {
             AmbiguityResolution res=resolveAmbiguity("setSubjectLocator.noSelected","No topic in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -886,9 +929,12 @@ public class LayeredTopic extends Topic {
             remakeLayered(t);
         }
     }
+    
+    @Override
     public TopicMap getTopicMap(){
         return layerStack;
     }
+    
     public LayerStack getLayerStack(){
         return layerStack;
     }
@@ -941,6 +987,7 @@ public class LayeredTopic extends Topic {
      * Returns associations of this topic. Note that because roles may get
      * merged, one individual association may become multiple LayeredAssociations.
      */
+    @Override
     public Collection<Association> getAssociations() throws TopicMapException {
         HashSet<Association> associations=new LinkedHashSet<Association>();
 
@@ -978,6 +1025,7 @@ public class LayeredTopic extends Topic {
     /**
      * See notes in getAssociations().
      */
+    @Override
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
         HashSet<Association> associations=new LinkedHashSet<Association>();
@@ -1010,9 +1058,11 @@ public class LayeredTopic extends Topic {
         }        
         return associations;
     }
+    
     /**
      * See notes in getAssociations().
      */
+    @Override
     public Collection<Association> getAssociations(Topic type,Topic role) throws TopicMapException {
         LayeredTopic lt=(LayeredTopic)type;
         LayeredTopic lr=(LayeredTopic)role;
@@ -1048,10 +1098,12 @@ public class LayeredTopic extends Topic {
         }        
         return associations;
     }
+    
+    @Override
     public void remove() throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts.size()==0){
+        if(ts.isEmpty()){
             ambiguity("no topic in selected layer (remove)");
             return;
         }
@@ -1059,6 +1111,8 @@ public class LayeredTopic extends Topic {
 //        layerStack.removeTopicFromIndex(getOneSubjectIdentifier());
         ts.iterator().next().remove();
     }
+    
+    @Override
     public long getEditTime() throws TopicMapException {
         long max=-1;
         for(Topic t : topics){
@@ -1067,12 +1121,16 @@ public class LayeredTopic extends Topic {
         }
         return max;
     }
+    
+    @Override
     public void setEditTime(long time) throws TopicMapException {
         // TODO: edit time of what?
         for(Topic t : getTopicsForSelectedLayer()){
             t.setEditTime(time);
         }
     }
+    
+    @Override
     public long getDependentEditTime() throws TopicMapException {
         long max=-1;
         for(Topic t : topics){
@@ -1081,26 +1139,32 @@ public class LayeredTopic extends Topic {
         }
         return max;        
     }
+    
+    @Override
     public void setDependentEditTime(long time) throws TopicMapException {
         // TODO: edit time of what?
         for(Topic t : getTopicsForSelectedLayer()){
             t.setDependentEditTime(time);
         }        
     }
+    
+    @Override
     public boolean isRemoved() throws TopicMapException {
         // TODO: how should this work?
-        if(topics.size()==0) return true;
+        if(topics.isEmpty()) return true;
         Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts.size()==0){
+        if(ts.isEmpty()){
             ambiguity("no topic in selected layer (isRemoved)");
             return false;
         }
         else if(ts.size()>1) ambiguity("several topics in selected layer (isRemoved)");
         return ts.iterator().next().isRemoved();
     }
+    
+    @Override
     public boolean isDeleteAllowed() throws TopicMapException {
         Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts.size()==0){
+        if(ts.isEmpty()){
             ambiguity("no topic in selected layer (isDeleteAllowed)");
             return false;
         }
@@ -1108,6 +1172,7 @@ public class LayeredTopic extends Topic {
         return ts.iterator().next().isDeleteAllowed();
     }
     
+    @Override
     public Collection<Topic> getTopicsWithDataType() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
         HashSet<Topic> ret=new LinkedHashSet<Topic>();
@@ -1120,6 +1185,8 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
+    @Override
     public Collection<Association> getAssociationsWithType() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
         HashSet<Association> associations=new LinkedHashSet<Association>();
@@ -1141,6 +1208,7 @@ public class LayeredTopic extends Topic {
         return associations;
     }
     
+    @Override
     public Collection<Association> getAssociationsWithRole() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
         HashSet<Association> associations=new LinkedHashSet<Association>();

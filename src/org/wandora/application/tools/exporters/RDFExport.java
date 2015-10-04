@@ -102,7 +102,7 @@ public class RDFExport extends AbstractExportTool {
                 out.flush();
                 out.close();
                 
-                log("Export done");
+                log("Ready.");
                 setState(WAIT);
             }
             catch(Exception e){

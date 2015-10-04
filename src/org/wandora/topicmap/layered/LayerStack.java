@@ -322,7 +322,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     
     
     @Override
-    public void clearTopicMap() throws TopicMapException{
+    public void clearTopicMap() throws TopicMapException {
+        if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
         getSelectedLayer().getTopicMap().clearTopicMap();
         clearTopicIndex();
     }
@@ -1390,37 +1391,45 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     
     @Override
     public Topic copyTopicIn(Topic t,boolean deep) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Topic ct=selectedLayer.topicMap.copyTopicIn(t,deep);
         return makeLayeredTopic(ct);
     }
     
     @Override
     public Association copyAssociationIn(Association a) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Association ca=selectedLayer.topicMap.copyAssociationIn(a);
         return makeLayeredAssociation(ca);
     }
     
     @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.copyTopicAssociationsIn(t);
     }
     
     @Override
     public void importXTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.importXTM(in, logger);
     }
     
     @Override
     public void importLTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.importLTM(in, logger);
     }
     
     @Override
     public void importLTM(java.io.File in) throws java.io.IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.importLTM(in);
-    }    
+    }
+    
     @Override
     public void mergeIn(TopicMap tm)  throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.mergeIn(tm);
     }
     
@@ -1507,7 +1516,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     
     
     
-    
+    // -------------------------------------------------------------------------
     
     
     

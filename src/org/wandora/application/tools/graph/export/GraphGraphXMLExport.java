@@ -109,7 +109,7 @@ public class GraphGraphXMLExport extends AbstractGraphTool {
                         log("Exporting graph view to '"+fileName+"'.");
                         exportGraph(out, model);
                         out.close();
-                        log("Done");
+                        log("Ready.");
                     }
                     catch(Exception e) {
                         log(e);

@@ -120,7 +120,7 @@ public class ExtractTool extends AbstractWandoraTool implements WandoraTool {
             doExtract(tm, logger);
             logger.writelog("INF","Merging results");
             wandoraAdmin.getTopicMap().mergeIn(tm);
-            logger.writelog("INF","Merge done");              
+            logger.writelog("INF","Ready.");              
         }   
         catch (Exception e) {
             e.printStackTrace();
@@ -176,7 +176,7 @@ public class ExtractTool extends AbstractWandoraTool implements WandoraTool {
                         logger.writelog("INF","Merging results");
                         try {
                             wandoraAdmin.getTopicMap().mergeIn(tm);
-                            logger.writelog("INF","Merge done");
+                            logger.writelog("INF","Ready.");
                             updateProgress(1.0);
                         }
                         catch(TopicMapException tme){

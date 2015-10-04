@@ -69,7 +69,7 @@ public class EuropeanaExtractor extends AbstractEuropeanaExtractor {
                             log(e);
                         }
                     }
-                    log("Done.");
+                    log("Ready.");
                 }
                 else {
                     log("Couldn't find a suitable subextractor to perform or there was an error with an extractor.");

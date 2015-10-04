@@ -135,7 +135,6 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
                             String filename = fxmlIn;
                             TopicMap map = null;
                             if(directMerge) {
-                                thisf.log("Merging to context layer while reading.");
                                 map = thisf.solveContextTopicMap(fadmin, getContext());
                             }
                             else {
@@ -168,7 +167,10 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
                                 }
                             }
                             pin.close();
-                            thisf.log("Done");
+                            thisf.log("Ready.");
+                        }
+                        catch(TopicMapReadOnlyException tmroe) {
+                            thisf.log("Topic map is write protected. Merge failed.");
                         }
                         catch(Exception e){
                             thisf.log(e);

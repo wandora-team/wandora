@@ -236,7 +236,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
                     }
                 }
                 
-                log("Done");
+                log("Ready.");
             }
             catch(Exception e) {
                 e.printStackTrace();

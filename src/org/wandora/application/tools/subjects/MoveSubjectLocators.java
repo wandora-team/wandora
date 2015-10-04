@@ -231,7 +231,7 @@ public class MoveSubjectLocators extends AbstractWandoraTool {
         finally{
             if(s!=null) try{s.close();}catch(IOException ioe){}
         }
-        log("Operation done");
+        log("Ready.");
         setState(WAIT);
     }
     

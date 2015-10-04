@@ -91,7 +91,7 @@ public class MusicBrainzExtractor extends AbstractMusicBrainzExtractor {
             else {
                 log("User cancelled the extraction.");
             }
-            log("Done.");
+            log("Ready.");
         }
         catch(Exception e) {
             log(e);

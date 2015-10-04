@@ -108,7 +108,7 @@ public class MakeAssociationConsistentTool extends AbstractLayerTool implements 
             log("Consistency check took " + ((int)((et-st)/1000)) + " seconds.");
             log("After association consistency check the topic map contains " + ana + " associations.");
             log("Total " + (ana -an) + " associations removed.");
-            log("Done");
+            log("Ready.");
         }
         catch(Exception e) {
             log(e);

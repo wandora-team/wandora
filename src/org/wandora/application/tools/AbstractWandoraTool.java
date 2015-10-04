@@ -839,10 +839,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
             //System.out.println("context-source: " + context.getContextSource());
             Object contextSource = context.getContextSource();
             if(contextSource != null) {
-                if(contextSource instanceof LayerStatusPanel) {
-                    return ((LayerStatusPanel) contextSource).getLayer().getTopicMap();
-                }
-                else if(contextSource instanceof TopicMap) {
+                if(contextSource instanceof TopicMap) {
                     return (TopicMap) contextSource;
                 }
                 else if(contextSource instanceof Layer){

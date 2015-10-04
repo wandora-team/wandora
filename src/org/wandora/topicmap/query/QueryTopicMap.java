@@ -360,22 +360,27 @@ public class QueryTopicMap extends ContainerTopicMap implements TopicMapListener
     public void clearTopicMap() throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
+    
     @Override
     public Association copyAssociationIn(Association a) throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
+    
     @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
+    
     @Override
     public Topic copyTopicIn(Topic t, boolean deep) throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
+    
     @Override
     public Association createAssociation(Topic type) throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
+    
     @Override
     public Topic createTopic() throws TopicMapException {
         throw new TopicMapReadOnlyException();
@@ -406,71 +411,91 @@ public class QueryTopicMap extends ContainerTopicMap implements TopicMapListener
         return false;
     }
 
-    // TopicMapListener
+    
+    // ---------------------------------------------------- TopicMapListener ---
+    
+    
+    @Override
     public void associationChanged(Association a) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void associationRemoved(Association a) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void topicChanged(Topic t) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
         clearAssociationCache();
     }
 
+    @Override
     public void layerAdded(Layer l) {
         fireLayerAdded(l);
     }
 
+    @Override
     public void layerChanged(Layer oldLayer, Layer newLayer) {
         fireLayerChanged(oldLayer,newLayer);
     }
 
+    @Override
     public void layerRemoved(Layer l) {
         fireLayerRemoved(l);
     }
 
+    @Override
     public void layerStructureChanged() {
         fireLayerStructureChanged();
     }
 
+    @Override
     public void layerVisibilityChanged(Layer l) {
         fireLayerVisibilityChanged(l);
     }

@@ -119,7 +119,7 @@ public class DetectCycles extends AbstractWandoraTool implements WandoraTool {
                                                 }
                                             }
                                         }
-                                        log("Done.");
+                                        log("Ready.");
                                         setState(WAIT);
                                     }
                                     catch(Exception e) {

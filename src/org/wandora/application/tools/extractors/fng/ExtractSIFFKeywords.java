@@ -129,9 +129,9 @@ public class ExtractSIFFKeywords extends AbstractExtractor implements WandoraToo
         
             case FILE_PATTERN: return ".*\\.txt";
             
-            case DONE_FAILED: return "Done! No extractions! %1 SIFF keyword(s) and %2 other file(s) crawled!";
-            case DONE_ONE: return "Done! Successful extraction! %1 SIFF keyword(s) and %2 other file(s) crawled!";
-            case DONE_MANY: return "Done! Total %0 successful extractions! %1 SIFF keyword(s) and %2 other files crawled!";
+            case DONE_FAILED: return "Ready. No extractions! %1 SIFF keyword(s) and %2 other file(s) crawled!";
+            case DONE_ONE: return "Ready. Successful extraction! %1 SIFF keyword(s) and %2 other file(s) crawled!";
+            case DONE_MANY: return "Ready. Total %0 successful extractions! %1 SIFF keyword(s) and %2 other files crawled!";
             
             case LOG_TITLE: return "SIFF Keyword Extraction Log";
         }

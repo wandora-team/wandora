@@ -28,25 +28,11 @@
 package org.wandora.application.tools.importers;
 
 
-import org.wandora.application.gui.*;
-import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.topicmap.database.*;
-
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
-
-import org.wandora.piccolo.utils.crawler.*;
-import org.wandora.piccolo.utils.crawler.handlers.*;
-
 import java.io.*;
-import java.net.*;
-import java.util.*;
-import org.wandora.utils.swing.*;
-import org.wandora.utils.*;
-import javax.swing.*;
 import java.sql.*;
 
 
@@ -66,9 +52,11 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
     }
     
     
+    @Override
     public String getDescription() {
         return "Injects SQL file(s) into a database topic map layer.";
     }  
+    @Override
     public String getName() {
         return "SQL topic map import";
     }
@@ -76,6 +64,7 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
     
     
     
+    @Override
     public void execute(Wandora admin, Context context) {
         TopicMap topicMap = solveContextTopicMap(admin, context);
         if(topicMap instanceof DatabaseTopicMap) {
@@ -89,6 +78,7 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
     
     
     
+    @Override
     public void importStream(Wandora admin, String streamName, InputStream inputStream) {
         BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream) );
         
@@ -126,6 +116,7 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
     }
 
 
+    @Override
     public String getGUIText(int textType) {
         switch(textType) {
             case FILE_DIALOG_TITLE_TEXT: {

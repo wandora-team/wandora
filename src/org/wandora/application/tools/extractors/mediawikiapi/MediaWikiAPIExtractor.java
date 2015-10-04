@@ -103,7 +103,7 @@ public class MediaWikiAPIExtractor extends AbstractWandoraTool{
                         }
                         
                     }
-                    log("Done.");
+                    log("Ready.");
                 }
                 else {
                     String msg = "Couldn't find a suitable subextractor to "

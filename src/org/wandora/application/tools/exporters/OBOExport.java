@@ -150,7 +150,7 @@ public class OBOExport extends AbstractExportTool {
             exportInstances(out, namespaces, tm);
 
             out.close();
-            log("Done.");
+            log("Ready.");
         }
         catch(Exception e){
             log(e);

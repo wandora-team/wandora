@@ -1432,7 +1432,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
          <item>
             <name>---</name>
-            <class>org.wandora.application.tools.TestTool</class>
+            <class>org.wandora.application.tools.DummyTool</class>
          </item>
          <item>
             <name>Import TM</name>
@@ -1448,7 +1448,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
          <item>
             <name>---</name>
-            <class>org.wandora.application.tools.TestTool</class>
+            <class>org.wandora.application.tools.DummyTool</class>
          </item>
          <item>
             <name>New topic</name>
@@ -1460,7 +1460,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
          <item>
             <name>---</name>
-            <class>org.wandora.application.tools.TestTool</class>
+            <class>org.wandora.application.tools.DummyTool</class>
          </item>
          <item>
             <name>Server</name>

@@ -38,6 +38,7 @@ import org.wandora.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
+import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.*;
 
 
@@ -119,7 +120,13 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
                         splitTopic(ltopic, splitStringCopy, tm, w);
                     }
                 }
-            } 
+            }
+            catch(TopicMapReadOnlyException tmroe) {
+                log("Selected topic map is read only and can't be written. Can't split topic '"+TopicToString.toString(topic)+"'");
+            }
+            catch(TopicMapException tme) {
+                log(tme);
+            }
             catch(Exception e) {
                 log(e);
             }
@@ -169,7 +176,6 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
 
             // --- copy topic and associations ---
             TopicMap splitMap = new org.wandora.topicmap.memory.TopicMapImpl();
-            splitCounter++;
             
             split = splitMap.copyTopicIn(original, false);
             if(duplicateAssociations) {
@@ -241,6 +247,8 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
                     }
                 }
             }
+            
+            splitCounter++;
         }
         
         // Change base name of the original topic....

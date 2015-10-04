@@ -76,9 +76,9 @@ public class GellishExtractor extends AbstractExtractor implements WandoraTool {
         
             case FILE_PATTERN: return ".*";
             
-            case DONE_FAILED: return "Done! No extractions! %1 Gellish ontology file(s) processed!";
-            case DONE_ONE: return "Done! Successful extraction! %1 Gellish ontology file(s) processed!";
-            case DONE_MANY: return "Done! Total %0 successful extractions! %1 Gellish ontology file(s) processed!";
+            case DONE_FAILED: return "Ready. No extractions! %1 Gellish ontology file(s) processed!";
+            case DONE_ONE: return "Ready. Successful extraction! %1 Gellish ontology file(s) processed!";
+            case DONE_MANY: return "Ready. Total %0 successful extractions! %1 Gellish ontology file(s) processed!";
             
             case LOG_TITLE: return "Gellish ontology extraction Log";
         }

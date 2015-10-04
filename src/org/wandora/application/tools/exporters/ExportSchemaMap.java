@@ -117,7 +117,7 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
                 OutputStream out = new FileOutputStream(file);
                 schemaTopicMap.exportXTM(out);
                 out.close();
-                log("Done");
+                log("Ready.");
             }
             catch(IOException e) {
                 log(e);

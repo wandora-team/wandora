@@ -120,7 +120,7 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
                         setState(INVISIBLE);
                         visualization.visualize(map);
                         setState(VISIBLE);
-                        log("Done.");
+                        log("Ready.");
                     }
                     else {
                         log("Grouping role was not selected. Cancelling.");

@@ -278,28 +278,6 @@ public class LayeredTopicContext implements Context {
             }
         }
         
-        // ***** LayerStatusPanel *****
-        else if(contextSource instanceof LayerStatusPanel) {
-            try {
-                TopicMap topicmap = ((LayerStatusPanel) contextSource).getLayer().getTopicMap();
-                TopicMap tm = admin.getTopicMap();
-                Iterator<Topic> topics = topicmap.getTopics();
-                Topic t = null;
-                while(topics.hasNext()) {
-                    t = (Topic) topics.next();
-                    if(t != null && !t.isRemoved()) {
-                        Topic t2 = tm.getTopic(t.getOneSubjectIdentifier());
-                        if(t2 != null && !t2.isRemoved()) {
-                            contextTopics.add(t2);
-                        }
-                    }
-                }
-            }
-            catch(Exception e) {
-                log(e);
-            }
-        }
-        
         // ***** TopicMap *****
         else if(contextSource instanceof TopicMap) {
             TopicMap topicmap = (TopicMap) contextSource;
@@ -365,7 +343,6 @@ public class LayeredTopicContext implements Context {
                 contextSource instanceof OccurrenceTextEditor ||
                 contextSource instanceof TopicTreePanel ||
                 contextSource instanceof TopicTree ||
-                contextSource instanceof LayerStatusPanel ||
                 contextSource instanceof SITable ||
                 contextSource instanceof LayerTree ||
                 contextSource instanceof Layer ||

@@ -43,7 +43,6 @@ public class Layer {
     
     protected TopicMap topicMap;
     protected boolean visible;
-    protected boolean readOnly;
     protected int color;
     protected String name;
     protected boolean broken=false;
@@ -54,7 +53,6 @@ public class Layer {
         this.container=container;
         setName(name);
         setVisible(true);
-        this.readOnly=topicMap.isReadOnly();
         setColor(0x000000);
         
         if(!topicMap.isConnected()){
@@ -78,8 +76,20 @@ public class Layer {
         if(container!=null) container.fireLayerVisibilityChanged(this);
 //        layerStack.visibilityChanged(this);
     }
-    public boolean isReadOnly(){return readOnly;}
-    public void setReadOnly(boolean readOnly){if(!topicMap.isReadOnly()) this.readOnly=readOnly;}
+    
+    public boolean isReadOnly(){
+        if(topicMap != null) {
+            return topicMap.isReadOnly();
+        }
+        return true;
+    }
+    
+    public void setReadOnly(boolean readOnly) {
+        if(topicMap != null) {
+            topicMap.setReadOnly(readOnly);
+        }
+    }
+    
     public int getColor(){return color;}
     public void setColor(int color){this.color=color;}
     public String getName(){return name;}

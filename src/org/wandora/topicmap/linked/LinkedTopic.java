@@ -40,15 +40,19 @@ public class LinkedTopic extends Topic{
         this.topicMap=topicMap;
     }
     
-    public Topic getWrappedTopic(){return wrappedTopic;}
+    public Topic getWrappedTopic(){
+        return wrappedTopic;
+    }
     
     @Override
     public void addSubjectIdentifier(Locator l) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.addSubjectIdentifier(l);
     }
 
     @Override
     public void addType(Topic t) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.addType(topicMap.getUnlinkedTopic(t));
     }
 
@@ -187,41 +191,49 @@ public class LinkedTopic extends Topic{
 
     @Override
     public void remove() throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.remove();
     }
 
     @Override
     public void removeData(Topic type, Topic version) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.removeData(topicMap.getUnlinkedTopic(type),topicMap.getUnlinkedTopic(version));
     }
 
     @Override
     public void removeData(Topic type) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.removeData(topicMap.getUnlinkedTopic(type));
     }
 
     @Override
     public void removeSubjectIdentifier(Locator l) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.removeSubjectIdentifier(l);
     }
 
     @Override
     public void removeType(Topic t) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.removeType(topicMap.getUnlinkedTopic(t));
     }
 
     @Override
     public void removeVariant(Set<Topic> scope) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.removeVariant(topicMap.getUnlinkedSetOfTopics(scope));
     }
 
     @Override
     public void setBaseName(String name) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.setBaseName(name);
     }
 
     @Override
     public void setData(Topic type, Hashtable<Topic, String> versionData) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Hashtable<Topic,String> unwrappedData=new Hashtable<Topic,String>();
         for(Map.Entry<Topic,String> e : versionData.entrySet()){
             unwrappedData.put(topicMap.getUnlinkedTopic(e.getKey()),e.getValue());
@@ -231,6 +243,7 @@ public class LinkedTopic extends Topic{
 
     @Override
     public void setData(Topic type, Topic version, String value) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.setData(topicMap.getUnlinkedTopic(type),topicMap.getUnlinkedTopic(version),value);
     }
 
@@ -246,11 +259,13 @@ public class LinkedTopic extends Topic{
 
     @Override
     public void setSubjectLocator(Locator l) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.setSubjectLocator(l);
     }
 
     @Override
     public void setVariant(Set<Topic> scope, String name) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedTopic.setVariant(topicMap.getUnlinkedSetOfTopics(scope),name);
     }
     

@@ -70,7 +70,7 @@ public class CopyAsImage extends AbstractWandoraTool implements WandoraTool {
                 BufferedImage image = new BufferedImage(c.getWidth(), c.getHeight(), BufferedImage.TYPE_INT_RGB);
                 c.print(image.getGraphics());
                 ClipboardBox.setClipboard(image);
-                log("Copied context component to system clipboard as an image. Done.");
+                log("Copied context component to system clipboard as an image. Ready.");
             }
             catch(Exception e) {
                 log(e);

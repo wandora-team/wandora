@@ -121,7 +121,7 @@ public class AlchemyCategoryExtractor extends AbstractAlchemyExtractor {
                 catch(Exception e){
                     if(!(e instanceof SAXException) || !e.getMessage().equals("User interrupt")) log(e);
                 }
-                log("Done.");
+                log("Ready.");
             }
             else {
                 log("No valid API key given! Aborting!");

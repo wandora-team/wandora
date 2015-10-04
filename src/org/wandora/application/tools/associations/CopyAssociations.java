@@ -268,7 +268,7 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
             else {
                 log("No associations found.");
             }
-            log("Done");
+            log("Ready.");
             setState(WAIT);
         }
         return(sb.toString());

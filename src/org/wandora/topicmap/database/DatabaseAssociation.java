@@ -29,7 +29,6 @@
 package org.wandora.topicmap.database;
 import org.wandora.topicmap.*;
 import java.util.*;
-import java.sql.*;
 
 /**
  *
@@ -50,15 +49,18 @@ public class DatabaseAssociation implements Association {
         this.topicMap=topicMap;
         full=false;
     }
+    
     public DatabaseAssociation(DatabaseTopic type,String id,DatabaseTopicMap topicMap) {
         this(type,topicMap);
         this.id=id;
     }
+    
     public DatabaseAssociation(String id,DatabaseTopicMap topicMap) {
         this.topicMap=topicMap;
         this.id=id;
         full=false;
     }
+    
     public DatabaseAssociation(Map<String,Object> row,DatabaseTopicMap topicMap) throws TopicMapException {
         this(topicMap.buildTopic(row),topicMap);
         this.id=row.get("ASSOCIATIONID").toString();
@@ -136,9 +138,12 @@ public class DatabaseAssociation implements Association {
         }
     }
     
+    @Override
     public Topic getType() throws TopicMapException {
         return type;
     }
+    
+    @Override
     public void setType(Topic t) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(!full) makeFull();
@@ -152,12 +157,17 @@ public class DatabaseAssociation implements Association {
         topicMap.executeUpdate("update ASSOCIATION set TYPE='"+escapeSQL(type.getID())+"' where ASSOCIATIONID='"+escapeSQL(id)+"'");
         topicMap.associationTypeChanged(this,t,old);
     }
+    
+    @Override
     public Topic getPlayer(Topic role) throws TopicMapException {
         if(!full) makeFull();
         return players.get(role);
     }
+    
+    @Override
     public void addPlayer(Topic player,Topic role) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(!full) makeFull();
         Topic old=players.get(role);
         if(old!=null){
@@ -174,8 +184,11 @@ public class DatabaseAssociation implements Association {
         if(topicMap.getConsistencyCheck()) checkRedundancy();
         topicMap.associationPlayerChanged(this,role,player,old);
     }
+    
+    @Override
     public void addPlayers(Map<Topic,Topic> players) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         boolean changed=false;
         for(Map.Entry<Topic,Topic> e : players.entrySet()){
             DatabaseTopic role=(DatabaseTopic)e.getKey();
@@ -195,9 +208,12 @@ public class DatabaseAssociation implements Association {
             topicMap.associationPlayerChanged(this,role,player,old);
         }
         if(topicMap.getConsistencyCheck()) checkRedundancy();
-    }    
+    }
+    
+    @Override
     public void removePlayer(Topic role) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(!full) makeFull();
         Topic old=players.get(role);
         if(old!=null){
@@ -209,14 +225,21 @@ public class DatabaseAssociation implements Association {
         checkRedundancy();
         topicMap.associationPlayerChanged(this,role,null,old);
     }
+    
+    @Override
     public Collection<Topic> getRoles() throws TopicMapException {
         if(!full) makeFull();
         return players.keySet();
     }
+    
+    @Override
     public TopicMap getTopicMap(){
         return topicMap;
     }
+    
+    @Override
     public void remove() throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(!full) makeFull();
         removed=true;
         for(Map.Entry<Topic,Topic> e : players.entrySet()){
@@ -228,11 +251,14 @@ public class DatabaseAssociation implements Association {
         topicMap.executeUpdate("delete from ASSOCIATION where ASSOCIATIONID='"+escapeSQL(id)+"'");
         topicMap.associationRemoved(this);
     }
+    
+    @Override
     public boolean isRemoved() throws TopicMapException {
         return removed;
     }
     
     public void checkRedundancy() throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(players.isEmpty()) return;
         if(type==null) return;
         Collection<Association> smallest=null;
@@ -259,6 +285,7 @@ public class DatabaseAssociation implements Association {
         if(a == null) return false;
         return (players.equals(a.players)&&(type==a.type));
     }
+    
     int _hashCode(){
         return players.hashCode()+type.hashCode();
     }

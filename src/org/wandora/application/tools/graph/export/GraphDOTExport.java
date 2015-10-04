@@ -106,7 +106,7 @@ public class GraphDOTExport extends AbstractGraphTool {
                         exportGraph(out, model);
 
                         out.close();
-                        log("Done");
+                        log("Ready.");
                     }
                     catch(Exception e) {
                         log(e);

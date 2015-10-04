@@ -109,6 +109,7 @@ public class TopicMapImpl extends TopicMap {
         
     @Override
     public void clearTopicMap() throws TopicMapException{
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         typeIndex=new Hashtable<Topic,Collection<Topic>>();
         subjectIdentifierIndex=new Hashtable<Locator,Topic>();
         subjectLocatorIndex=new Hashtable<Locator,Topic>();
@@ -138,6 +139,7 @@ public class TopicMapImpl extends TopicMap {
      */
     @Override
     public void checkAssociationConsistency(TopicMapLogger logger) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         ArrayList<Association> clonedAssociations = new ArrayList<Association>();
         for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
             clonedAssociations.add(iter.next());
@@ -200,6 +202,7 @@ public class TopicMapImpl extends TopicMap {
     
     @Override
     public Topic createTopic() throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         TopicImpl t=constructTopic();
         topics.add(t);
 //        if(topicMapListener!=null) topicMapListener.topicChanged(t);
@@ -212,6 +215,7 @@ public class TopicMapImpl extends TopicMap {
     
     @Override
     public Association createAssociation(Topic type) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Association a=constructAssociation(type);
         associations.add(a);
 //        if(topicMapListener!=null) topicMapListener.associationChanged(a);
@@ -317,9 +321,11 @@ public class TopicMapImpl extends TopicMap {
         if(idCounter>=1000000) idCounter=0;
         return idCounter++;
     }
+    
     private Topic _copyTopicIn(Topic t,boolean deep,Hashtable copied) throws TopicMapException{
         return _copyTopicIn(t,deep,false,copied);
     }
+    
     private Topic _copyTopicIn(Topic t,boolean deep,boolean stub,Hashtable copied) throws TopicMapException{
         
         if(copied.containsKey(t)) {
@@ -450,7 +456,8 @@ public class TopicMapImpl extends TopicMap {
     
     
     @Override
-    public Association copyAssociationIn(Association a) throws TopicMapException{
+    public Association copyAssociationIn(Association a) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Association n=_copyAssociationIn(a);
         Topic minTopic=null;
         int minCount=Integer.MAX_VALUE;
@@ -468,13 +475,15 @@ public class TopicMapImpl extends TopicMap {
     }
     
     @Override
-    public Topic copyTopicIn(Topic t, boolean deep)  throws TopicMapException{
+    public Topic copyTopicIn(Topic t, boolean deep)  throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         return _copyTopicIn(t,deep,false,new Hashtable());
     }
     
     
     @Override
     public void mergeIn(TopicMap tm)  throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Iterator iter=tm.getTopics();
         Hashtable copied=new Hashtable();
         int tcount=0;
@@ -527,6 +536,7 @@ public class TopicMapImpl extends TopicMap {
     
     @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Topic nt=getTopic((Locator)t.getSubjectIdentifiers().iterator().next());
         if(nt==null) nt=copyTopicIn(t,false);
         Iterator iter=t.getAssociations().iterator();
@@ -537,23 +547,28 @@ public class TopicMapImpl extends TopicMap {
     }
     
     public void addTopicSubjectIdentifier(Topic t,Locator l) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         subjectIdentifierIndex.put(l,t);
     }
     
     public void removeTopicSubjectIdentifier(Topic t,Locator l) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         subjectIdentifierIndex.remove(l);
     }
     
     public void setTopicSubjectLocator(Topic t,Locator l,Locator oldLocator) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(oldLocator!=null) subjectLocatorIndex.remove(oldLocator);
         if(l!=null) subjectLocatorIndex.put(l,t);
     }
     
     public void removeTopicSubjectLocator(Topic t,Locator l) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         subjectLocatorIndex.remove(l);
     }
     
     public void addTopicType(Topic t,Topic type) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Collection s=typeIndex.get(type);
         if(s==null) {
             s=new LinkedHashSet();
@@ -563,17 +578,20 @@ public class TopicMapImpl extends TopicMap {
     }
     
     public void removeTopicType(Topic t,Topic type) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Collection s=typeIndex.get(type);
         if(s==null) return;
         s.remove(t);
     }
     
     public void setTopicName(Topic t,String name,String oldname) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(oldname!=null) nameIndex.remove(oldname);
         if(name!=null) nameIndex.put(name,t);
     }
     
     public void setAssociationType(Association a,Topic type,Topic oldtype) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(oldtype!=null) { // note: old type can be null only when setting the initial type
             Collection s=associationTypeIndex.get(oldtype);
             if(s!=null){
@@ -589,6 +607,10 @@ public class TopicMapImpl extends TopicMap {
             s.add(a);
         }
     }
+    
+    
+    // -------------------------------------------------- TOPIC MAP LISTENER ---
+    
     
     public void topicRemoved(Topic t) throws TopicMapException {
         topicMapChanged=true;
@@ -691,6 +713,10 @@ public class TopicMapImpl extends TopicMap {
             listener.associationChanged(a);
         }
     }
+    
+    
+    // --------------------------------------------- TOPIC MAP LISTENER ENDS ---
+    
     
     @Override
     public boolean resetTopicMapChanged(){

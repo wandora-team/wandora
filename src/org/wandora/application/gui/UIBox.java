@@ -1306,7 +1306,6 @@ public class UIBox {
                         //else if(c instanceof JRootPane) nc = ((JRootPane) c).getContentPane();
                         else if(c instanceof JDialog) return c;
                         else if(c instanceof JFrame) return c;
-                        else if(c instanceof LayerStatusPanel) return c;
                         else if(c instanceof TopicMapGraphPanel) return c;
                         else if(c instanceof GraphTopicPanel) return c;
                         else if(c instanceof WebViewPanel) return c;

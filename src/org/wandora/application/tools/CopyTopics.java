@@ -469,7 +469,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
             if(OUTPUT_LOG) log("Sorting clipboard text.");
             ClipboardBox.setClipboard(Textbox.sortStringVector(lines));
             if(OUTPUT_LOG) log("Total " + count + " topics copied.");
-            if(OUTPUT_LOG) log("Done");
+            if(OUTPUT_LOG) log("Ready.");
             if(OUTPUT_LOG) setState(WAIT);
             
             topics = null;

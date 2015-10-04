@@ -416,7 +416,7 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
             }
         }
         topicCache=new HashMap<String,Topic>();
-        log("Extraction done");
+        log("Ready.");
     }
     
     public static DBColumn getOrCreateColumn(HashMap<T2<String,String>,DBColumn> columns,String table,String column){

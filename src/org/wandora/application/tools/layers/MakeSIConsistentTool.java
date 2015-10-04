@@ -101,7 +101,7 @@ public class MakeSIConsistentTool extends AbstractLayerTool implements WandoraTo
             ((DatabaseTopicMap) topicMap).checkSIConsistency(getCurrentLogger());
             long et = System.currentTimeMillis();
             log("SI Consistency check took " + ((int)((et-st)/1000)) + " seconds.");
-            log("Done");
+            log("Ready.");
         }
         catch(Exception e) {
             log(e);

@@ -167,7 +167,7 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
                 out.close();
                 log("Saved GraphXML file has a reference to a local GraphXML.dtd.");
                 log("Download GraphXML.dtd type definition file from http://hypergraph.sourceforge.net/graphs/GraphXML.dtd");
-                log("Done");
+                log("Ready.");
             }
             catch(Exception e) {
                 log(e);

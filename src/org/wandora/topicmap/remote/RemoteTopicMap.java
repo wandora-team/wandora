@@ -73,14 +73,18 @@ public class RemoteTopicMap extends TopicMapImpl {
         fetchedBaseNames=new HashSet();
         fetchedSIs=new HashSet();
     }
+    
     public RemoteTopicMap(ServerInterface server){
         this(server,null);
     }
     
+    @Override
     public void clearTopicMap() throws TopicMapException {
         //server.clearTopicMap() // have to check if it's safe to call this
         throw new TopicMapException("Not supported");
     }
+    
+    @Override
     public void clearTopicMapIndexes() throws TopicMapException {
         // TODO: IMPLEMENTATION REQUIRED!
     }
@@ -93,7 +97,9 @@ public class RemoteTopicMap extends TopicMapImpl {
         return editedAssociations;
     }
     
-    public Association copyAssociationIn(Association a)  throws TopicMapException{
+    @Override
+    public Association copyAssociationIn(Association a)  throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Association as=super.copyAssociationIn(a);
         if(importing==0 && server!=null){
             editedAssociations.add(as);
@@ -101,11 +107,15 @@ public class RemoteTopicMap extends TopicMapImpl {
         return as;
     }
     
+    @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         super.copyTopicAssociationsIn(t);
     }
     
-    public Topic copyTopicIn(Topic t, boolean deep)  throws TopicMapException{
+    @Override
+    public Topic copyTopicIn(Topic t, boolean deep)  throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Topic to=super.copyTopicIn(t,deep);
         // TODO: how to handle deep copying?
         if(importing==0 && server!=null){
@@ -114,7 +124,9 @@ public class RemoteTopicMap extends TopicMapImpl {
         return to;
     }
     
+    @Override
     public Association createAssociation(Topic type) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Association a=super.createAssociation(type);
         if(importing==0 && server!=null){
             editedAssociations.add(a);
@@ -125,11 +137,14 @@ public class RemoteTopicMap extends TopicMapImpl {
     protected TopicImpl constructTopic() throws TopicMapException {
         return new RemoteTopic(this);
     }
+    
     protected AssociationImpl constructAssociation(Topic type) throws TopicMapException {
         return new RemoteAssociation(this,type);
     }
     
-    public Topic createTopic() throws TopicMapException{
+    @Override
+    public Topic createTopic() throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         Topic t=super.createTopic();
         if(importing==0 && server!=null){
             editedTopics.add(t);
@@ -138,10 +153,12 @@ public class RemoteTopicMap extends TopicMapImpl {
         return t;
     }
     
+    @Override
     public Topic[] getTopics(String[] sis) throws TopicMapException{
         return getTopics(sis,false);
     }
-    public Topic[] getTopics(String[] sis,boolean overwrite)  throws TopicMapException{
+    
+    public Topic[] getTopics(String[] sis,boolean overwrite) throws TopicMapException{
         Topic[] ts=new Topic[sis.length];
         boolean gotall=true;
         for(int i=0;i<sis.length;i++){
@@ -172,6 +189,7 @@ public class RemoteTopicMap extends TopicMapImpl {
         return ts;
     }
     
+    @Override
     public Topic getTopic(Locator si)  throws TopicMapException{
         if(importing!=0 || fetchedSIs.contains(si) || server==null) return super.getTopic(si);
         Topic t=super.getTopic(si);
@@ -192,6 +210,7 @@ public class RemoteTopicMap extends TopicMapImpl {
     }
     
         
+    @Override
     public Topic getTopicWithBaseName(String name) throws TopicMapException {
         if(importing!=0 || fetchedBaseNames.contains(name) || server==null) return super.getTopicWithBaseName(name);
         Topic t=super.getTopicWithBaseName(name);
@@ -213,6 +232,7 @@ public class RemoteTopicMap extends TopicMapImpl {
         else return null;
     }
     
+    @Override
     public java.util.Collection getTopicsOfType(Topic type)  throws TopicMapException{
         if(server==null) return super.getTopicsOfType(type);
         Iterator iter=type.getSubjectIdentifiers().iterator();
@@ -231,6 +251,7 @@ public class RemoteTopicMap extends TopicMapImpl {
         return ts;
     }
     
+    @Override
     public Collection getTopicsOfType(String si)  throws TopicMapException{
         if(importing!=0 || server==null) return super.getTopicsOfType(si);
         Topic[] ts;
@@ -277,6 +298,7 @@ public class RemoteTopicMap extends TopicMapImpl {
     private Topic copyFetchedTopicIn(Topic t) throws TopicMapException{
         return copyFetchedTopicIn(t,false);
     }
+    
     private Topic copyFetchedTopicIn(Topic t,boolean overwrite)  throws TopicMapException{
         importing++;
         
@@ -354,6 +376,7 @@ public class RemoteTopicMap extends TopicMapImpl {
         return t;
     }
     
+    @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         if(importing==0 && server!=null){
             Iterator iter=t.getSubjectIdentifiers().iterator();
@@ -375,6 +398,7 @@ public class RemoteTopicMap extends TopicMapImpl {
             editedTopics.add(t);
         }
     }
+    
     private void _associationChanged(Association a) throws TopicMapException {
         if(!((RemoteAssociation)a).isRemoteInitialized() || ((RemoteAssociation)a).isRemoved() || server==null) return;
         if(importing==0 && !editedAssociations.contains(a)){
@@ -387,14 +411,21 @@ public class RemoteTopicMap extends TopicMapImpl {
         }
     }
     
+    // -------------------------------------------------------------------------
+    
+    @Override
     public void topicChanged(Topic t) throws TopicMapException {
         super.topicChanged(t);
         _topicChanged(t);
     }
+    
+    @Override
     public void associationChanged(Association a) throws TopicMapException {
         super.associationChanged(a);
         _associationChanged(a);
     }
+            
+    @Override
     public void associationRemoved(Association a) throws TopicMapException {
         super.associationRemoved(a);
         if(server==null) return;
@@ -419,41 +450,56 @@ public class RemoteTopicMap extends TopicMapImpl {
             }
         }
     }
+    
+    @Override
     public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException{
         super.topicSubjectIdentifierChanged(t,added,removed);
         _topicChanged(t);
     }
+    
+    @Override
     public void topicBaseNameChanged(Topic t,String newName,String oldName) throws TopicMapException{
         super.topicBaseNameChanged(t,newName,oldName);
         _topicChanged(t);
     }
+    
+    @Override
     public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
         super.topicTypeChanged(t,added,removed);
         _topicChanged(t);
     }
+    
+    @Override
     public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
         super.topicVariantChanged(t,scope,newName,oldName);
         _topicChanged(t);
     }
+    
+    @Override
     public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
         super.topicDataChanged(t,type,version,newValue,oldValue);
         _topicChanged(t);
     }
+    
+    @Override
     public void topicSubjectLocatorChanged(Topic t,Locator newLocator,Locator oldLocator) throws TopicMapException {
         super.topicSubjectLocatorChanged(t,newLocator,oldLocator);
         _topicChanged(t);
     }
+    
+    @Override
     public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
         super.associationTypeChanged(a,newType,oldType);
         _associationChanged(a);
     }
+    
+    @Override
     public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
         super.associationPlayerChanged(a,role,newPlayer,oldPlayer);
         _associationChanged(a);
     }
     
-    
-    
+    @Override
     public void topicsMerged(Topic newtopic,Topic deletedtopic){
         super.topicsMerged(newtopic,deletedtopic);
         if(server!=null && editedTopics.contains(deletedtopic)){
@@ -461,6 +507,8 @@ public class RemoteTopicMap extends TopicMapImpl {
             editedTopics.add(newtopic);
         }
     }
+    
+    @Override
     public void duplicateAssociationRemoved(Association a,Association removeda){
         super.duplicateAssociationRemoved(a,removeda);
         if(server!=null && editedAssociations.contains(removeda)){
@@ -489,8 +537,9 @@ public class RemoteTopicMap extends TopicMapImpl {
         }
     }
     
+    @Override
     public void removeTopicSubjectIdentifier(Topic topic,Locator l) throws TopicMapException {
-        if(importing==0 && !topic.isRemoved() && server!=null){
+        if(importing==0 && !topic.isRemoved() && server!=null) {
             try{
                 server.removeSubjectIdentifier(topic,l);
             }catch(ServerException se){
@@ -499,8 +548,10 @@ public class RemoteTopicMap extends TopicMapImpl {
         }
         super.removeTopicSubjectIdentifier(topic,l);
     }
+    
+    @Override
     public void removeTopicType(Topic topic,Topic type) throws TopicMapException {
-        if(importing==0 && !topic.isRemoved() && server!=null){
+        if(importing==0 && !topic.isRemoved() && server!=null) {
             try{
                 server.removeTopicType(topic,type);
             }catch(ServerException se){
@@ -509,8 +560,9 @@ public class RemoteTopicMap extends TopicMapImpl {
         }
         super.removeTopicType(topic,type);
     }
+    
     public void removeTopicVariant(Topic topic,Collection scope) throws TopicMapException {
-        if(importing==0 && !topic.isRemoved() && server!=null){
+        if(importing==0 && !topic.isRemoved() && server!=null) {
             try{
                 server.removeVariantName(topic,scope);
             }catch(ServerException se){
@@ -541,8 +593,9 @@ public class RemoteTopicMap extends TopicMapImpl {
         }
     }
     
+    @Override
     public void setTopicSubjectLocator(Topic topic,Locator locator,Locator oldLocator) throws TopicMapException {
-        if(importing==0 && !topic.isRemoved() && server!=null){
+        if(importing==0 && !topic.isRemoved() && server!=null && isReadOnly()) {
             try{
                 server.removeSubjectLocator(topic);
             }catch(ServerException se){
@@ -558,22 +611,31 @@ public class RemoteTopicMap extends TopicMapImpl {
         throw new RuntimeException("Not implemented");
     }*/
     // TODO: New operations are needed in ServerInterface to implement these efficiently.
+    @Override
     public java.util.Collection getAssociationsOfType(Topic type) throws TopicMapException {
         if(server==null) return super.getAssociationsOfType(type);
         throw new RuntimeException("Not implemented");
     }
+    
+    @Override
     public java.util.Iterator getAssociations() throws TopicMapException {
         if(server==null) return super.getAssociations();
         throw new RuntimeException("Not implemented");
     }
+    
+    @Override
     public int getNumAssociations() throws TopicMapException {
         if(server==null) return super.getNumAssociations();
         throw new RuntimeException("Not implemented");
-    }    
+    } 
+    
+    @Override
     public int getNumTopics()  throws TopicMapException{
         if(server==null) return super.getNumTopics();
         throw new RuntimeException("Not implemented");
     }
+    
+    @Override
     public java.util.Iterator getTopics()  throws TopicMapException{
         if(server==null) return super.getTopics();
         throw new RuntimeException("Not implemented");
@@ -676,6 +738,7 @@ public class RemoteTopicMap extends TopicMapImpl {
         return server==null;
     }
     
+    @Override
     public boolean isConnected(){
         if(server==null) return false;
         else return server.isConnected();
@@ -683,6 +746,7 @@ public class RemoteTopicMap extends TopicMapImpl {
     
     
 
+    @Override
     public Collection<Topic> search(String query, TopicMapSearchOptions options) {
         Collection<Topic> resultTopics = new ArrayList<Topic>();
         int MAX_SEARCH_RESULTS = 100;
@@ -715,6 +779,7 @@ public class RemoteTopicMap extends TopicMapImpl {
         return resultTopics;
     }
 
+    @Override
     public TopicMapStatData getStatistics(TopicMapStatOptions options) throws TopicMapException {
         if(server == null) return super.getStatistics(options);
         else {
@@ -740,10 +805,11 @@ public class RemoteTopicMap extends TopicMapImpl {
     
     
     
-    private void doCommit() throws WandoraException,ServerException{
+    private void doCommit() throws WandoraException, ServerException {
         try{
             server.commit(false);
-        }catch(ConcurrentEditingException cee) {
+        }
+        catch(ConcurrentEditingException cee) {
             if(!isLocal()) {
                 // TODO: concurrent editing handling code very much untested
                 System.out.println("ConcurrentEditingException");
@@ -786,6 +852,7 @@ public class RemoteTopicMap extends TopicMapImpl {
     
     public void mergeIn() throws ServerException,TopicMapException{
         if(server==null) return;
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         TopicMap edited=getEditedTopicMap();
         server.mergeIn(edited);        
     }
@@ -795,7 +862,8 @@ public class RemoteTopicMap extends TopicMapImpl {
         if(server==null) return false;
         try{
             return server.isUncommitted();
-        }catch(ServerException se){
+        }
+        catch(ServerException se){
             server.handleServerError(se);
             return true;
         }
@@ -804,7 +872,7 @@ public class RemoteTopicMap extends TopicMapImpl {
 
     
     public void commit() throws WandoraException,ServerException{
-        if(server==null){
+        if(server==null) {
             System.out.println("Working in local mode, can't commit.");
             return;
         }

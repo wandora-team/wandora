@@ -84,9 +84,9 @@ public class HTMLLinkStructureExtractor extends AbstractExtractor implements Wan
         
             case FILE_PATTERN: return ".*";
             
-            case DONE_FAILED: return "Done! No extractions!";
-            case DONE_ONE: return "Done! Successful extraction!";
-            case DONE_MANY: return "Done! Total %0 successful extractions!";
+            case DONE_FAILED: return "Ready. No extractions!";
+            case DONE_ONE: return "Ready. Successful extraction!";
+            case DONE_MANY: return "Ready. Total %0 successful extractions!";
             
             case LOG_TITLE: return "HTML Link Structure Extraction Log";
         }

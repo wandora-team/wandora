@@ -101,9 +101,9 @@ public class DirectoryStructureExtractor2 extends AbstractExtractor implements W
         
             case FILE_PATTERN: return ".*";
             
-            case DONE_FAILED: return "Done! Extraction failed!";
-            case DONE_ONE: return "Done!";
-            case DONE_MANY: return "Done!";
+            case DONE_FAILED: return "Ready. Extraction failed!";
+            case DONE_ONE: return "Ready.";
+            case DONE_MANY: return "Ready.";
             
             case LOG_TITLE: return "Directory structure extraction log";
         }

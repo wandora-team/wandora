@@ -96,9 +96,9 @@ public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
 
             case FILE_PATTERN: return ".*\\.ged";
 
-            case DONE_FAILED: return "Done! No extractions! %1 GEDCOM data file(s) crawled!";
-            case DONE_ONE: return "Done! Successful extraction! %1 GEDCOM data file(s) crawled!";
-            case DONE_MANY: return "Done! Total %0 successful extractions! %1 GEDCOM data file(s) crawled!";
+            case DONE_FAILED: return "Ready. No extractions! %1 GEDCOM data file(s) crawled!";
+            case DONE_ONE: return "Ready. Successful extraction! %1 GEDCOM data file(s) crawled!";
+            case DONE_MANY: return "Ready. Total %0 successful extractions! %1 GEDCOM data file(s) crawled!";
 
             case LOG_TITLE: return "GEDCOM extraction Log";
         }

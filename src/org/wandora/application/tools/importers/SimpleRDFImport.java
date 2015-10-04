@@ -126,7 +126,6 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
             
             TopicMap map = null;
             if(directMerge) {
-                log("Merging '" + streamName + "' to context layer while reading.");
                 map = solveContextTopicMap(admin, getContext());
             }
             else {
@@ -157,9 +156,11 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
                 }
             }
         }
+        catch(TopicMapReadOnlyException tmroe) {
+            log("Topic map is write protected. Merge failed.");
+        }
         catch(Exception e) {
-            //info.dialog.setVisible(false);
-            log("Reading '" + streamName + "' failed!", e);
+            log("Reading '" + streamName + "' failed.", e);
         }
     }
     

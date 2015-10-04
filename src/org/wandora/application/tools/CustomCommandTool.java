@@ -32,6 +32,7 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.SimpleMenuItem;
+import org.wandora.topicmap.TopicMap;
 
 
 /**
@@ -43,19 +44,17 @@ public class CustomCommandTool extends AbstractWandoraTool implements WandoraToo
     
     @Override
     public void execute(Wandora wandora, Context context) {
-        if(context instanceof LayerStatusPanel && context != null) {
-            Layer l = ((LayerStatusPanel) context).getLayer();
-            if(l.getTopicMap() instanceof RemoteTopicMap) {
-                RemoteTopicMap topicMap = (RemoteTopicMap) l.getTopicMap();
-                String cmd=WandoraOptionPane.showInputDialog(wandora,"Enter custom command");
-                if(cmd!=null){
-                    try{
-                        String result = topicMap.customCommand(cmd);
-                        WandoraOptionPane.showMessageDialog(wandora,"Result: \""+result+"\"");
-                    } catch(ServerException se){
-                        log(se);
-                        //admin.getManager().handleServerError(se);
-                    }
+        TopicMap tm = this.solveContextTopicMap(wandora, context);
+        if(tm instanceof RemoteTopicMap) {
+            RemoteTopicMap topicMap = (RemoteTopicMap) tm;
+            String cmd=WandoraOptionPane.showInputDialog(wandora,"Enter custom command");
+            if(cmd!=null){
+                try{
+                    String result = topicMap.customCommand(cmd);
+                    WandoraOptionPane.showMessageDialog(wandora,"Result: \""+result+"\"");
+                } catch(ServerException se){
+                    log(se);
+                    //admin.getManager().handleServerError(se);
                 }
             }
         }

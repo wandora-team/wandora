@@ -1421,8 +1421,8 @@ public class LayerTree extends DragJTree {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(layer!=null && layer instanceof LayerWrapper){
-                        if(!notifyChanging()){
-                            lockToggle.setSelected(!lockToggle.isSelected());
+                        if(!notifyChanging()) {
+                            lockToggle.setSelected(((LayerWrapper)layer).layer.isReadOnly());
                         }
                         else {
                             ((LayerWrapper)layer).layer.setReadOnly(lockToggle.isSelected());

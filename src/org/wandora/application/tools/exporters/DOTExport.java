@@ -143,7 +143,7 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
                 //System.out.println("tm == "+ tm);
                 exportGraph(out, tm, topicMapName, getCurrentLogger());
                 out.close();
-                log("Done");
+                log("Ready.");
             }
             catch(Exception e) {
                 log(e);

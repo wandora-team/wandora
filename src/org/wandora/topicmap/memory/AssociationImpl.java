@@ -72,7 +72,10 @@ public class AssociationImpl implements Association {
     }
     
     @Override
-    public void setType(Topic t)  throws TopicMapException {
+    public void setType(Topic t) throws TopicMapException {
+        if(removed) throw new TopicMapException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         topicMap.setAssociationType(this,t,type);
         Topic oldType=type;
         if(type!=null) ((TopicImpl)type).removedFromAssociationType(this);
@@ -93,6 +96,9 @@ public class AssociationImpl implements Association {
     
     @Override
     public void addPlayer(Topic player, Topic role)  throws TopicMapException {
+        if(removed) throw new TopicMapException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(role == null || player == null) return;
         
 //        if(players.containsKey(role)) return; // TODO: exception, note also that DatabaseAssociation replaces old
@@ -121,6 +127,9 @@ public class AssociationImpl implements Association {
     
     @Override
     public void addPlayers(Map<Topic,Topic> newPlayers) throws TopicMapException {
+        if(removed) throw new TopicMapException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         boolean changed=false;
         for(Map.Entry<Topic,Topic> e : newPlayers.entrySet()){
             TopicImpl role=(TopicImpl)e.getKey();
@@ -154,6 +163,9 @@ public class AssociationImpl implements Association {
     
     @Override
     public void removePlayer(Topic role)  throws TopicMapException {
+        if(removed) throw new TopicMapException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         TopicImpl t=(TopicImpl)players.get(role);
         if(t!=null){
             players.remove(role);        
@@ -166,6 +178,9 @@ public class AssociationImpl implements Association {
     
     @Override
     public void remove()  throws TopicMapException {
+        if(removed) throw new TopicMapException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         removed=true;
         topicMap.associationRemoved(this);
 /*        Iterator iter=players.entrySet().iterator();
@@ -187,6 +202,9 @@ public class AssociationImpl implements Association {
     }
     
     void checkRedundancy() throws TopicMapException {
+        if(removed) throw new TopicMapException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(players.isEmpty()) return;
         if(type==null) return;
         Collection smallest=null;

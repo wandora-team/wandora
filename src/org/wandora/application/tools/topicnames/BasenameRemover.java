@@ -100,7 +100,7 @@ public class BasenameRemover extends AbstractWandoraTool implements WandoraTool 
                         log(e);
                     }
                 }
-                log("Done.");
+                log("Ready.");
                 setState(WAIT);
             }
         }

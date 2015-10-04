@@ -57,30 +57,30 @@ public class CommitStoredSession extends AbstractWandoraTool implements WandoraT
                "Succesful execution requires a saved session file.";
     }
     
+    @Override
     public void execute(Wandora admin, Context context) {
         Object contextSource = context.getContextSource();
-        if(contextSource instanceof LayerStatusPanel) {
-            Layer l = ((LayerStatusPanel) contextSource).getLayer();
-            if(l.getTopicMap() instanceof RemoteTopicMap) {
-                remoteTopicMap = (RemoteTopicMap) l.getTopicMap();
-                try {
-                    if(remoteTopicMap.isUncommitted()){
-                        if(WandoraOptionPane.showConfirmDialog(admin,"Uncommitted changes exist. Are you sure you want to rollback?","Uncommitted changes",WandoraOptionPane.YES_NO_OPTION) != WandoraOptionPane.YES_OPTION){
-                            return;
-                        }
-                    }
-                    remoteTopicMap.rollback();
-                }
-                catch(ServerException se){
-                    admin.handleError(se);
-                    return;
-                }
 
-                SimpleFileChooser chooser=UIConstants.getFileChooser();
-                if(chooser.open(admin, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION){
-                    setDefaultLogger();
-                    work(admin, chooser.getSelectedFile());
+        TopicMap tm = this.solveContextTopicMap(admin, context);
+        if(tm instanceof RemoteTopicMap) {
+            remoteTopicMap = (RemoteTopicMap) tm;
+            try {
+                if(remoteTopicMap.isUncommitted()){
+                    if(WandoraOptionPane.showConfirmDialog(admin,"Uncommitted changes exist. Are you sure you want to rollback?","Uncommitted changes",WandoraOptionPane.YES_NO_OPTION) != WandoraOptionPane.YES_OPTION){
+                        return;
+                    }
                 }
+                remoteTopicMap.rollback();
+            }
+            catch(ServerException se){
+                admin.handleError(se);
+                return;
+            }
+
+            SimpleFileChooser chooser=UIConstants.getFileChooser();
+            if(chooser.open(admin, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION){
+                setDefaultLogger();
+                work(admin, chooser.getSelectedFile());
             }
         }
     }
@@ -121,7 +121,7 @@ public class CommitStoredSession extends AbstractWandoraTool implements WandoraT
             in.close();
             log("Commiting session");
             remoteTopicMap.commitSession(session,tm);
-            log("Done");
+            log("Ready.");
         } catch(Exception e) {
             log(e);
         }

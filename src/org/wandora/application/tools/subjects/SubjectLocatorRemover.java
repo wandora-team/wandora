@@ -122,7 +122,7 @@ public class SubjectLocatorRemover extends AbstractWandoraTool implements Wandor
             else if(locatorCount == 0) {
                 log("Context didn't contain valid subject locators. Nothing removed.");
             }
-            log("Done.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

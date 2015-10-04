@@ -119,7 +119,7 @@ public class SimbergOAIDCExporter extends AbstractExportTool implements WandoraT
                     zipStream.close();
                 }
                 
-                log("Done");
+                log("Ready.");
             }
             catch(Exception e) {
                 e.printStackTrace();

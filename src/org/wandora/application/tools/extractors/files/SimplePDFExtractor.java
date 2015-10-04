@@ -101,9 +101,9 @@ public class SimplePDFExtractor extends AbstractExtractor {
         
             case FILE_PATTERN: return ".*\\.(pdf|PDF)";
             
-            case DONE_FAILED: return "Done! No extractions! %1 pdf file(s) crawled!";
-            case DONE_ONE: return "Done! Successful extraction! %1 pdf file(s) crawled!";
-            case DONE_MANY: return "Done! Total %0 successful extractions! %1 pdf files crawled!";
+            case DONE_FAILED: return "Ready. No extractions! %1 pdf file(s) crawled!";
+            case DONE_ONE: return "Ready. Successful extraction. %1 pdf file(s) crawled!";
+            case DONE_MANY: return "Ready. Total %0 successful extractions. %1 pdf files crawled!";
             
             case LOG_TITLE: return "Simple PDF Extraction Log";
         }

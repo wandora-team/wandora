@@ -70,6 +70,7 @@ public abstract class TopicMap implements TopicMapLogger {
     protected TopicMapLogger logger = null;
     protected boolean consistencyCheck = true;
     protected boolean consistencyCheckWhenXTMImport = false;
+    protected boolean isReadOnly = false;
     
     public static final String EDITTIME_SI="http://wandora.org/si/core/edittime";
 
@@ -275,9 +276,22 @@ public abstract class TopicMap implements TopicMapLogger {
      * Checks if the topic map is in a read only state. This may be because the
      * topic map implementation only allows reading, editing requires special
      * privileges or a method has been called to set the topic map in read only
-     * state.
+     * state. When a topic map is read only, all write operations throw
+     * TopicMapReadOnlyException.
      */
-    public boolean isReadOnly(){return false;}
+    public boolean isReadOnly() {
+        return isReadOnly;
+    }
+    
+    /**
+     * Sets the topic map in a read-only or read-write state depending on the
+     * argument. If argument is true, the topic map is set read-only. Notice,
+     * some topic map implementations may support only one of the states. Topic
+     * map may not support both states.
+     */
+    public void setReadOnly(boolean readOnly) {
+        isReadOnly = readOnly;
+    }
     
     /**
      * <p>
@@ -720,20 +734,25 @@ public abstract class TopicMap implements TopicMapLogger {
     
     
     public void importLTM(InputStream in) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importLTM(in, this);
     }
     public void importLTM(File inFile) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importLTM(inFile, this);
     }
     public void importLTM(String file) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importLTM(file, this);
     }
     public void importLTM(InputStream in, TopicMapLogger logger) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         LTMParser parser = new LTMParser(this, logger);
         parser.parse(in);
         parser.init();
     }
     public void importLTM(File inFile, TopicMapLogger logger) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(logger == null) logger = this;
         logger.log("Merging LTM file");
         LTMParser parser = new LTMParser(this, logger);
@@ -741,6 +760,7 @@ public abstract class TopicMap implements TopicMapLogger {
         parser.init();
     }
     public void importLTM(String fileName, TopicMapLogger logger) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         File file=new File(fileName);
         importLTM(file, logger);
     }
@@ -1049,26 +1069,32 @@ public abstract class TopicMap implements TopicMapLogger {
     }
 
     public void importJTM(InputStream in) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importJTM(in, this);
     }
     public void importJTM(File inFile) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importJTM(inFile, this);
     }
     public void importJTM(String file) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importJTM(file, this);
     }
     public void importJTM(InputStream in, TopicMapLogger logger) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         JTMParser parser = new JTMParser(this, logger);
         parser.parse(in);
         //logger.log("JTM support not available yet!");
     }
     public void importJTM(File inFile, TopicMapLogger logger) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(logger == null) logger = this;
         //logger.log("JTM support not available yet!");
         JTMParser parser = new JTMParser(this, logger);
         parser.parse(inFile);
     }
     public void importJTM(String fileName, TopicMapLogger logger) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         File file=new File(fileName);
         importJTM(file, logger);
     }
@@ -1321,13 +1347,16 @@ public abstract class TopicMap implements TopicMapLogger {
     
     
     public void importXTM(InputStream in) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importXTM(in, this);
     }
     
     public void importXTM(InputStream in, TopicMapLogger logger) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importXTM(in, logger, consistencyCheckWhenXTMImport);
     }
     public void importXTM(InputStream in, TopicMapLogger logger, boolean checkConsistency) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(logger == null) logger = this;
         boolean oldCheck = getConsistencyCheck();
         if(checkConsistency != oldCheck) {
@@ -1378,11 +1407,13 @@ public abstract class TopicMap implements TopicMapLogger {
     
     
     public void importXTM(String file, TopicMapLogger logger) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         FileInputStream fis=new FileInputStream(file);
         importXTM(fis, logger);
         fis.close();
     }
     public void importXTM(String file) throws IOException, TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
         importXTM(file, this);
     }
     

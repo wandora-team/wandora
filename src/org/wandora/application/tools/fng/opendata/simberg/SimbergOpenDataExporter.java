@@ -195,7 +195,7 @@ public class SimbergOpenDataExporter extends AbstractExportTool implements Wando
                     }
                 }
                 
-                log("Done");
+                log("Ready.");
             }
             catch(Exception e) {
                 e.printStackTrace();

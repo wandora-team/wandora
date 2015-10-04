@@ -127,7 +127,7 @@ public class SimbergLIDOExporter extends AbstractExportTool implements WandoraTo
                     zipStream.close();
                 }
                 
-                log("Done");
+                log("Ready.");
             }
             catch(Exception e) {
                 e.printStackTrace();

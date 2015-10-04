@@ -46,7 +46,7 @@ import java.util.*;
  * If such an association is found, it can be used for the modification. Finding
  * the matching association is made difficult by the fact that role topics of an
  * individual association may have merged. In this case two (or more) roles are showing as
- * only one role in LayeredAssociation. Allthough these kind of topic merges
+ * only one role in LayeredAssociation. Although these kind of topic merges
  * might be rare, they are still possible and may have clever practical uses.
  *
  * In cases where role topics have merged, several LayeredAssociations are
@@ -83,6 +83,7 @@ public class LayeredAssociation implements Association {
         }
         else return false;
     }
+    
     private Integer hashCode=null;;
     public int hashCode(){
         if(hashCode==null) hashCode=players.hashCode()+type.hashCode();
@@ -97,8 +98,9 @@ public class LayeredAssociation implements Association {
         return type;
     }
     
+    @Override
     public void setType(Topic t) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> types=((LayeredTopic)t).getTopicsForSelectedLayer();
         if(types.size()==0){
             ambiguity("No type for selected layer (setType)");
@@ -113,6 +115,7 @@ public class LayeredAssociation implements Association {
         }
     }
     
+    @Override
     public Topic getPlayer(Topic role){
         return players.get((LayeredTopic)role);
     }
@@ -142,6 +145,7 @@ public class LayeredAssociation implements Association {
         if(usedRole.size()==players.size()) return true;
         else return false;
     }
+    
     /**
      * Finds an association in the given layer that matches this LayredAssociation.
      * Returns null if no such association is found.
@@ -165,6 +169,7 @@ public class LayeredAssociation implements Association {
         }
         return null;
     }
+    
     /**
      * Finds all associations in the given layer that match this LayeredAssociation.
      */ 
@@ -206,16 +211,17 @@ public class LayeredAssociation implements Association {
     
     /**
      * Adds a player to the association and modifies the appropriate individual
-     * association accordingly. Note that if this association isn't allready
+     * association accordingly. Note that if this association isn't already
      * in the selected layer, it will be copied there. Also any roles and players
      * (the ones being added or existing ones) will be copied to the selected
-     * layer if they aren't there allready.
+     * layer if they aren't there already.
      */
+    @Override
     public void addPlayer(Topic player,Topic role) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> lplayer=((LayeredTopic)player).getTopicsForSelectedLayer();
         Topic splayer=null;
-        if(lplayer.size()==0){
+        if(lplayer.isEmpty()){
             AmbiguityResolution res=layerStack.resolveAmbiguity("addPlayer.player.noSelected","No player in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 splayer=((LayeredTopic)player).copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -232,7 +238,7 @@ public class LayeredAssociation implements Association {
         }
         Collection<Topic> lrole=((LayeredTopic)role).getTopicsForSelectedLayer();
         Topic srole=null;
-        if(lrole.size()==0){
+        if(lrole.isEmpty()){
             AmbiguityResolution res=layerStack.resolveAmbiguity("addPlayer.role.noSelected","No role in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 srole=((LayeredTopic)role).copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -249,11 +255,11 @@ public class LayeredAssociation implements Association {
         }
         // TODO: doesn't handle multiple association matches
         Association a=null;
-        if(players.size()==0){
+        if(players.isEmpty()){
             Layer l=layerStack.getSelectedLayer();
             Collection<Topic> c=type.getTopicsForSelectedLayer();
             Topic st=null;
-            if(c.size()==0){
+            if(c.isEmpty()){
                 AmbiguityResolution res=layerStack.resolveAmbiguity("addPlayer.type.noSelected","No type in selected layer");
                 if(res==AmbiguityResolution.addToSelected){
                     st=((LayeredTopic)type).copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -278,15 +284,19 @@ public class LayeredAssociation implements Association {
         }
         else ambiguity("No matching association found in selected layer (addPlayer)");
     }
+    
+    @Override
     public void addPlayers(Map<Topic,Topic> players) throws TopicMapException {
         for(Map.Entry<Topic,Topic> e : players.entrySet()){
             addPlayer(e.getValue(), e.getKey()); // PARAMETER ORDER: PLAYER, ROLE
         }
     }
+    
+    @Override
     public void removePlayer(Topic role) throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> lrole=((LayeredTopic)role).getTopicsForSelectedLayer();
-        if(lrole.size()==0){
+        if(lrole.isEmpty()){
             ambiguity("No role in selected layer, nothing done (removePlayer)");
             return;
         }
@@ -317,21 +327,29 @@ public class LayeredAssociation implements Association {
         }
         ambiguity("No matching association found in selected layer (removePlayer)");
     }
+    
+    @Override
     public Collection<Topic> getRoles(){
         Vector<Topic> v=new Vector<Topic>();
         v.addAll(players.keySet());
         return v;
     }
+    
+    @Override
     public TopicMap getTopicMap(){
         return layerStack;
     }
+    
+    @Override
     public void remove() throws TopicMapException {
-        if(layerStack.isSelectedReadOnly())  throw new TopicMapReadOnlyException();
+        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         // TODO: doesn't handle multiple matches
         Association a=findAssociationForLayer(layerStack.getSelectedLayer());
         if(a==null) ambiguity("No matching assaciation found in selected layer (remove)");
         else a.remove();
     }
+    
+    @Override
     public boolean isRemoved() throws TopicMapException {
         // TODO: doesn't handle multiple matches
         Association a=findAssociationForLayer(layerStack.getSelectedLayer());

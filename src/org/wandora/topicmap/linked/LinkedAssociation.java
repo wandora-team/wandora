@@ -38,13 +38,19 @@ public class LinkedAssociation implements Association {
         this.topicMap=topicMap;
     }
     
-    public Association getWrappedAssociation(){return wrappedAssociation;}
+    public Association getWrappedAssociation() {
+        return wrappedAssociation;
+    }
     
+    @Override
     public void addPlayer(Topic player, Topic role) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedAssociation.addPlayer(topicMap.getUnlinkedTopic(player),topicMap.getUnlinkedTopic(role));
     }
 
+    @Override
     public void addPlayers(Map<Topic, Topic> players) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Map<Topic,Topic> unwrapped=new HashMap<Topic,Topic>();
         for(Map.Entry<Topic,Topic> e : players.entrySet()){
             unwrapped.put(topicMap.getUnlinkedTopic(e.getKey()),topicMap.getUnlinkedTopic(e.getValue()));
@@ -52,35 +58,46 @@ public class LinkedAssociation implements Association {
         wrappedAssociation.addPlayers(unwrapped);
     }
 
+    @Override
     public Topic getPlayer(Topic role) throws TopicMapException {
         return topicMap.getLinkedTopic(wrappedAssociation.getPlayer(topicMap.getUnlinkedTopic(role)));
     }
 
+    @Override
     public Collection<Topic> getRoles() throws TopicMapException {
         return topicMap.getLinkedTopics(wrappedAssociation.getRoles());
     }
 
+    @Override
     public TopicMap getTopicMap() {
         return topicMap;
     }
 
+    @Override
     public Topic getType() throws TopicMapException {
         return topicMap.getLinkedTopic(wrappedAssociation.getType());
     }
 
+    @Override
     public boolean isRemoved() throws TopicMapException {
         return wrappedAssociation.isRemoved();
     }
 
+    @Override
     public void remove() throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedAssociation.remove();
     }
 
+    @Override
     public void removePlayer(Topic role) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedAssociation.removePlayer(topicMap.getUnlinkedTopic(role));
     }
 
+    @Override
     public void setType(Topic t) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         wrappedAssociation.setType(topicMap.getUnlinkedTopic(t));
     }
 

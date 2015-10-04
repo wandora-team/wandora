@@ -58,34 +58,31 @@ public class SaveSession extends AbstractWandoraTool implements WandoraTool {
     
     
     public void execute(Wandora admin, Context context)  throws TopicMapException {
-        Object contextSource = context.getContextSource();
-        if(contextSource instanceof LayerStatusPanel) {
-            Layer l = ((LayerStatusPanel) context).getLayer();
-            if(l.getTopicMap() instanceof RemoteTopicMap) {
-                remoteTopicMap = (RemoteTopicMap) l.getTopicMap();
-                try{
-                    admin.applyChanges();
-                }catch(CancelledException ce){return;}
+        TopicMap tm = this.solveContextTopicMap(admin, context);
+        if(tm instanceof RemoteTopicMap) {
+            remoteTopicMap = (RemoteTopicMap) tm;
+            try{
+                admin.applyChanges();
+            }catch(CancelledException ce){return;}
 
-                SimpleFileChooser chooser=UIConstants.getFileChooser();
-                if(chooser.open(admin, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
-                    setDefaultLogger();
-                    File file = chooser.getSelectedFile();
-                    try{
-                        log("Saving session");
-                        OutputStream out=new FileOutputStream(file);
-                        StringBuffer session=remoteTopicMap.getSession();
-                        out.write(session.toString().getBytes("UTF-8"));
-                        out.write("merge\n".getBytes("UTF-8"));
-                        remoteTopicMap.getEditedTopicMap().exportXTM(out);
-                        out.close();
-                        log("Done");
-                    }
-                    catch(IOException e){
-                        log("Writing session failed!", e);
-                    }
-                    setState(WAIT);
+            SimpleFileChooser chooser=UIConstants.getFileChooser();
+            if(chooser.open(admin, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+                setDefaultLogger();
+                File file = chooser.getSelectedFile();
+                try{
+                    log("Saving session");
+                    OutputStream out=new FileOutputStream(file);
+                    StringBuffer session=remoteTopicMap.getSession();
+                    out.write(session.toString().getBytes("UTF-8"));
+                    out.write("merge\n".getBytes("UTF-8"));
+                    remoteTopicMap.getEditedTopicMap().exportXTM(out);
+                    out.close();
+                    log("Ready.");
                 }
+                catch(IOException e){
+                    log("Writing session failed!", e);
+                }
+                setState(WAIT);
             }
         }
     }

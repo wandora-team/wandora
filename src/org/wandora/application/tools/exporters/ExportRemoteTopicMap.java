@@ -83,7 +83,7 @@ public class ExportRemoteTopicMap extends AbstractExportTool implements WandoraT
                     OutputStream out=new FileOutputStream(file);
                     remoteTopicMap.writeTopicMapTo(out);
                     out.close();
-                    log("Done");
+                    log("Ready.");
                     setState(WAIT);
                 }
                 catch(IOException e){

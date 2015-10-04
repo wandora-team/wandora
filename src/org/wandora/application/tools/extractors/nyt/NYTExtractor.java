@@ -111,7 +111,7 @@ public class NYTExtractor extends AbstractExtractor {
                             log(e);
                         }
                     }
-                    log("Done.");
+                    log("Ready.");
                 }
                 else {
                     log("Couldn't find a suitable subextractor to perform or there was an error with an extractor.");

@@ -52,146 +52,21 @@ import org.wandora.application.gui.search.SearchTopicsFrame;
  * @author  olli, ak
  */
 public class Search extends AbstractWandoraTool implements WandoraTool {
-    
-    public static boolean useFrameSearch = true;
-    
-    private static SearchTopicsDialog dialog = null;
+
     private static SearchTopicsFrame searchFrame = null;
 
     
     
     @Override
     public void execute(Wandora wandora, Context context) {
-        if(useFrameSearch) {
-            if(searchFrame == null) {
-                searchFrame = new SearchTopicsFrame();
-            }
-            if(searchFrame != null) {
-                searchFrame.setVisible(true);
-            }
-            else {
-                System.out.println("Unable in instantiate SearchTopicsFrame.");
-            }
+        if(searchFrame == null) {
+            searchFrame = new SearchTopicsFrame();
+        }
+        if(searchFrame != null) {
+            searchFrame.setVisible(true);
         }
         else {
-            // This is the old search dialog of Wandora application.
-            // It is here only for historical curiosity and code preservation.
-            oldExecute(wandora, context);
-        }
-    }
-    
-    
-    
-
-
-    public void oldExecute(final Wandora wandora, Context context) {
-        Object contextSource = context.getContextSource();
-        TopicMap topicMap = null;
-        if(contextSource != null && contextSource instanceof LayerStatusPanel) {
-            Layer l = ((LayerStatusPanel) context).getLayer();
-            if(l != null) topicMap = l.getTopicMap();
-        }
-        else {
-            topicMap = wandora.getTopicMap();
-        }
-        if(topicMap != null) {
-            boolean anotherSearch = false;
-            do {
-                anotherSearch = false;
-                if(dialog == null) {
-                    dialog = new SearchTopicsDialog(wandora, this, true);
-                }
-                dialog.setVisible(true);
-
-                // Now user has closed the dialog
-                if(dialog.wasAccepted()) {
-                    int searchType = dialog.getSearchType();
-
-                    if(searchType == SearchTopicsDialog.SEARCH) {
-                        String query = dialog.getSearchQuery();
-                        if(query==null || query.length() == 0) return;
-                        try {
-                            Collection<Topic> results = topicMap.search(query, dialog.getSearchOptions());
-                            SearchTopicsResults resultDialog = new SearchTopicsResults(wandora, results);
-                            resultDialog.setVisible(true);
-                            anotherSearch = resultDialog.doSearchAgain();
-                        }
-                        catch(Exception e){
-                            wandora.handleError(e);
-                            return;
-                        }
-                    }
-
-                    // ***** DO SIMILARITY SEARCH *****
-                    else if(searchType == SearchTopicsDialog.SIMILARITY) {
-                        try {
-                            //setDefaultLogger();
-                            //setState(EXECUTE);
-                            //log("Searching for similar topics.");
-                            Collection<Topic> results = dialog.getSimilarTopics(topicMap, this);
-                            setState(CLOSE);
-                            
-                            SearchTopicsResults resultDialog = new SearchTopicsResults(wandora, results);
-                            resultDialog.setVisible(true);
-                            anotherSearch = resultDialog.doSearchAgain();
-                        }
-                        catch(Exception e){
-                            wandora.handleError(e);
-                            return;
-                        }
-                    }
-
-                    // ***** QUERY SEARCH ******
-                    else if(searchType == SearchTopicsDialog.QUERY ) {
-                        java.awt.Component focusOwner=wandora.getFocusOwner();
-                        try {
-                            //setDefaultLogger();
-                            //setState(EXECUTE);
-                            //log("Searching topics by query.");
-                            MixedTopicTable resultsTable = dialog.getTopicsByQuery(context.getContextObjects());
-                            if(resultsTable != null) {
-                                SearchTopicsResults resultDialog = new SearchTopicsResults(wandora, resultsTable);
-                                resultDialog.setVisible(true);
-                                anotherSearch = resultDialog.doSearchAgain();
-                            }
-                            else {
-                                WandoraOptionPane.showMessageDialog(wandora, "No search results.");
-                                anotherSearch = true;
-                            }
-                        }
-                        catch(Exception e){
-                            wandora.handleError(e);
-                            return;
-                        }
-                        finally{
-                            wandora.gainFocus(focusOwner);
-                        }
-                    }
-                    else if(searchType == SearchTopicsDialog.TMQL ){
-                        java.awt.Component focusOwner=wandora.getFocusOwner();
-                        try {
-                            MixedTopicTable resultsTable = dialog.getTopicsByTMQL();
-                            if(resultsTable != null) {
-                                SearchTopicsResults resultDialog = new SearchTopicsResults(wandora, resultsTable);
-                                resultDialog.setVisible(true);
-                                anotherSearch = resultDialog.doSearchAgain();
-                            }
-                            else {
-                                WandoraOptionPane.showMessageDialog(wandora, "No search results.");
-                                anotherSearch = true;
-                            }
-                        }
-                        catch(Exception e){
-                            wandora.handleError(e);
-                            return;
-                        }
-                        finally{
-                            wandora.gainFocus(focusOwner);
-                        }
-                    }
-                }
-            }
-            while(anotherSearch);
+            System.out.println("Unable in instantiate SearchTopicsFrame.");
         }
     }
 

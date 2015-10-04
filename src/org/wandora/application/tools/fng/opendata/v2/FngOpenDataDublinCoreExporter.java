@@ -166,7 +166,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
                     out.flush();
                     out.close();
                 }
-                log("Done");
+                log("Ready.");
                 
                 if(fileName.toLowerCase().endsWith(".json")) {
                     try {

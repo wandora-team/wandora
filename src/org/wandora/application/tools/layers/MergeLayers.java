@@ -163,7 +163,7 @@ public class MergeLayers extends AbstractLayerTool implements WandoraTool {
             log("Merge took " + ((int)((endTime-startTime)/1000)) + " seconds.");
         }
 
-        log("Done");
+        log("Ready.");
         admin.layerTree.resetLayers();
         setState(WAIT);
     }

@@ -114,6 +114,7 @@ public class TopicImpl extends Topic {
     
     @Override
     public String getSortName(String lang) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(sortNameCache.containsKey(lang)) return (String)sortNameCache.get(lang);
         String name=super.getSortName(lang);
         sortNameCache.put(lang,name);
@@ -132,6 +133,7 @@ public class TopicImpl extends Topic {
     
     @Override
     public void setData(Topic type, Topic version, String value) throws TopicMapException {
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(removed) throw new TopicRemovedException();
         if(value==null) {
             System.out.println("WRN setData called with null value, redirecting to removeData");
@@ -158,6 +160,7 @@ public class TopicImpl extends Topic {
     @Override
     public void setData(Topic type, Hashtable<Topic,String> versionData) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         ((TopicImpl)type).addedAsDataType(this);
         Hashtable t=(Hashtable)data.get(type);
         if(t==null){
@@ -183,6 +186,7 @@ public class TopicImpl extends Topic {
     @Override
     public void addSubjectIdentifier(Locator l) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Topic t=topicMap.getTopic(l);
         boolean changed=false;
         if(t!=null && t!=this){
@@ -199,6 +203,7 @@ public class TopicImpl extends Topic {
     @Override
     public void addType(Topic t) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         ((TopicImpl)t).addedAsTopicType(this);
         topicMap.addTopicType(this,t);
         boolean changed=types.add(t);
@@ -291,6 +296,7 @@ public class TopicImpl extends Topic {
     @Override
     public void removeData(Topic type) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Hashtable t=(Hashtable)data.remove(type);
         ((TopicImpl)type).removedFromDataType(this);
         if(t!=null){
@@ -310,6 +316,7 @@ public class TopicImpl extends Topic {
     @Override
     public void removeData(Topic type, Topic version) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Hashtable t=(Hashtable)data.get(type);
         if(t==null) {
             return;
@@ -330,6 +337,7 @@ public class TopicImpl extends Topic {
     @Override
     public void removeSubjectIdentifier(Locator l) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         topicMap.removeTopicSubjectIdentifier(this,l);
         boolean changed=subjectIdentifiers.remove(l);
         updateEditTime();
@@ -339,6 +347,7 @@ public class TopicImpl extends Topic {
     @Override
     public void removeType(Topic t) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         topicMap.removeTopicType(this,t);
         boolean changed=types.remove(t);
         ((TopicImpl)t).removedFromTopicType(this);
@@ -350,6 +359,7 @@ public class TopicImpl extends Topic {
     @Override
     public void setBaseName(String name) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Topic t=null;
         if(name!=null) t=topicMap.getTopicWithBaseName(name);
         String old=baseName;
@@ -367,6 +377,7 @@ public class TopicImpl extends Topic {
     @Override
     public void setSubjectLocator(Locator l)  throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Topic t=null;
         if(l!=null) t=topicMap.getTopicBySubjectLocator(l);
         Locator old=subjectLocator;
@@ -394,6 +405,7 @@ public class TopicImpl extends Topic {
     @Override
     public void remove() throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(!isDeleteAllowed()) {
             if(!topicTypeIndex.isEmpty()) throw new TopicInUseException(this,TopicInUseException.USEDIN_TOPICTYPE);
             if(!dataTypeIndex.isEmpty()) throw new TopicInUseException(this,TopicInUseException.USEDIN_DATATYPE);
@@ -453,6 +465,7 @@ public class TopicImpl extends Topic {
     @Override
     public void removeVariant(Set<Topic> scope)  throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Object o=variants.remove(scope);
         boolean changed=(o!=null);
         HashSet allscopes=new HashSet();
@@ -474,6 +487,7 @@ public class TopicImpl extends Topic {
     @Override
     public void setVariant(Set<Topic> scope, String name)  throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(name==null){
             System.out.println("WRN setVariant called with null value, redirecting to removeVariant");
             removeVariant(scope); 
@@ -509,6 +523,9 @@ public class TopicImpl extends Topic {
     
     @Override
     public boolean isDeleteAllowed() throws TopicMapException {
+        if(isRemoved()) return false;
+        if(topicMap.isReadOnly()) return false;
+        
         if(!topicTypeIndex.isEmpty()) return false;
         if(!dataTypeIndex.isEmpty()) return false;
         if(!dataVersionIndex.isEmpty()) return false;
@@ -668,6 +685,7 @@ public class TopicImpl extends Topic {
     
     public void mergeIn(Topic t) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         TopicImpl ti=(TopicImpl)t;
         topicMap.topicsMerged(this,ti);
         // add data
@@ -873,6 +891,8 @@ public class TopicImpl extends Topic {
     
     
     void removeDuplicateAssociations() throws TopicMapException {
+        if(removed) throw new TopicMapException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         removeDuplicateAssociations(null);
     }
     
@@ -885,6 +905,9 @@ public class TopicImpl extends Topic {
      * of the equal associations, then the one that remains in topic map is chosen arbitrarily
      */
     void removeDuplicateAssociations(Association notThis) throws TopicMapException {
+        if(removed) throw new TopicMapException();
+        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         Hashtable as=new Hashtable();
         ArrayList tobeDeleted=new ArrayList();
         Iterator iter=associations.iterator();
