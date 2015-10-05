@@ -167,12 +167,14 @@ public class AssociationImpl implements Association {
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         
         TopicImpl t=(TopicImpl)players.get(role);
-        if(t!=null){
+        if(t!=null) {
             players.remove(role);        
             t.removeFromAssociation(this,role,players.values().contains(t));
             ((TopicImpl)role).removedFromRoleType(this);
             topicMap.associationPlayerChanged(this,role,null,t);
-            if(!removed) if(topicMap.getConsistencyCheck()) checkRedundancy();
+            if(!removed) {
+                if(topicMap.getConsistencyCheck()) checkRedundancy();
+            }
         }
     }
     
@@ -180,20 +182,30 @@ public class AssociationImpl implements Association {
     public void remove()  throws TopicMapException {
         if(removed) throw new TopicMapException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        
+
         removed=true;
+
+        ArrayList<Topic> roles = new ArrayList(players.keySet());
+        for(Topic role : roles) {
+            TopicImpl t=(TopicImpl)players.get(role);
+            if(t!=null) {
+                players.remove(role);        
+                t.removeFromAssociation(this,role,players.values().contains(t));
+                ((TopicImpl)role).removedFromRoleType(this);
+                topicMap.associationPlayerChanged(this,role,null,t);
+            }
+        }
+        
+        // set type null
+        topicMap.setAssociationType(this, null, type);
+        Topic oldType=type;
+        if(type != null) ((TopicImpl)type).removedFromAssociationType(this);
+        type = null;
+        if(oldType != null){
+            topicMap.associationTypeChanged(this, null, oldType);
+        }
+        
         topicMap.associationRemoved(this);
-/*        Iterator iter=players.entrySet().iterator();
-        while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
-            ((TopicImpl)e.getValue()).removeFromAssociation(this,(Topic)e.getKey(),false);
-        }
-        if(type!=null) topicMap.setAssociationType(this,null,type);*/
-        Iterator iter=new ArrayList(players.keySet()).iterator();
-        while(iter.hasNext()){
-            removePlayer((Topic)iter.next());
-        }
-        setType(null);
     }
     
     @Override
