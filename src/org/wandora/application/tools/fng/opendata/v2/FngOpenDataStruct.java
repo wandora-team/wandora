@@ -286,7 +286,7 @@ public class FngOpenDataStruct {
     private String ARTWORK_CLASS_TYPE_SI = "http://www.wandora.net/generic_type_carrier";
     
     private String AUTHOR_SI = "http://www.wandora.net/author";
-    private String AUTHOR_ROLE_SI = "http://www.muusa.net/P14.Production_carried_out_by_role_3";
+    private String AUTHOR_ROLE_SI = "http://kansallisgalleria.fi/P14.Production_carried_out_by_role_3";
     private String ARTIST_SI = "http://www.wandora.org/artists";
     
     private String TECHNIQUE_SI = "http://www.wandora.net/technique";
@@ -321,49 +321,49 @@ public class FngOpenDataStruct {
     
     
     private String[] languages = new String[] {
-        "http://www.muusa.net/E55.Type_teosnimi_tanska",                "dn",
-        "http://www.muusa.net/E55.Type_teosnimi__ru",                   "ru",
-        "http://www.muusa.net/E55.Type_teosnimi_ru",                    "ru",
-        "http://www.muusa.net/E55.Type_teosnimi_ve",                    "ru",
-        "http://www.muusa.net/E55.Type_teosnimi_it",                    "it",
-        "http://www.muusa.net/E55.Type_teosnimi_italia",                "it",
-        "http://www.muusa.net/E55.Type_teosnimi_ra",                    "fr",
-        "http://www.muusa.net/E55.Type_teosnimi_ransk",                 "fr",
-        "http://www.muusa.net/E55.Type_teosnimi_ranska",                "fr",
-        "http://www.muusa.net/E55.Type_teosnimi_alkuperainen_fr",       "fr",
-        "http://www.muusa.net/E55.Type_teosnimi_unkari",                "hu",
-        "http://www.muusa.net/E55.Type_teosnimi_portugal",              "pr",
-        "http://www.muusa.net/E55.Type_teosnimi_saks_",                 "ge",
-        "http://www.muusa.net/E55.Type_teosnimi_saksa",                 "ge",
-        "http://www.muusa.net/E55.Type_teosnimi_norja",                 "no",
-        "http://www.muusa.net/E55.Type_teosnimi_puola",                 "po",
-        "http://www.muusa.net/E55.Type_teosnimi_esp_",                  "sp",
-        "http://www.muusa.net/E55.Type_teosnimi_sp",                    "sp",
-        "http://www.muusa.net/E55.Type_teosnimi_sp",                    "sp",
-        "http://www.muusa.net/E55.Type_teosnimi_espanja",               "sp",
-        "http://www.muusa.net/E55.Type_teosnimi_latina",                "la",
-        "http://www.muusa.net/E55.Type_teosnimi__muu_se",               "se",
-        "http://www.muusa.net/E55.Type_teosnimi__muu_fr",               "fr",
-        "http://www.muusa.net/E55.Type_teosnimi__entinen_se",           "se",
-        "http://www.muusa.net/E55.Type_teosnimi_hollanti",              "de"
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_tanska",                "dn",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi__ru",                   "ru",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_ru",                    "ru",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_ve",                    "ru",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_it",                    "it",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_italia",                "it",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_ra",                    "fr",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_ransk",                 "fr",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_ranska",                "fr",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_alkuperainen_fr",       "fr",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_unkari",                "hu",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_portugal",              "pr",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_saks_",                 "ge",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_saksa",                 "ge",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_norja",                 "no",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_puola",                 "po",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_esp_",                  "sp",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_sp",                    "sp",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_sp",                    "sp",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_espanja",               "sp",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_latina",                "la",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi__muu_se",               "se",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi__muu_fr",               "fr",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi__entinen_se",           "se",
+        "http://kansallisgalleria.fi/E55.Type_teosnimi_hollanti",              "de"
     };
     
     
     
     public String[] subjectMapping = new String[] {
-        "http://www.muusa.net/P71_lists_aihe",              "subject",
-        "http://www.muusa.net/P71_lists_Kuvauksen_kohde",   "subject-person",
-        "http://www.muusa.net/P71_lists_kohdehenkilo",      "subject-person",
-        "http://www.muusa.net/P71_lists_aiheesta",          "about-the-subject",
-        "http://www.muusa.net/P71_lists_Musiikki",          "about-the-music",
-        "http://www.muusa.net/P71_lists_teosteksti",        "text-in-work",
-        "http://www.muusa.net/P71_lists_yso_aihe",          "yso-subject",
-        "http://www.muusa.net/P71_lists_kuvauksen_kohde",   "depicts-subject",
-        "http://www.muusa.net/P71_lists_lisatieto",         "additional-info",
-        "http://www.muusa.net/P71_lists_iconclass",         "iconclass-subject",
-        "http://www.muusa.net/P71_lists_asiasanat",         "keyword",
-        "http://www.muusa.net/P71_lists_malli",             "model",
-        "http://www.muusa.net/P71_lists_mallit",            "model",
+        "http://kansallisgalleria.fi/P71_lists_aihe",              "subject",
+        "http://kansallisgalleria.fi/P71_lists_Kuvauksen_kohde",   "subject-person",
+        "http://kansallisgalleria.fi/P71_lists_kohdehenkilo",      "subject-person",
+        "http://kansallisgalleria.fi/P71_lists_aiheesta",          "about-the-subject",
+        "http://kansallisgalleria.fi/P71_lists_Musiikki",          "about-the-music",
+        "http://kansallisgalleria.fi/P71_lists_teosteksti",        "text-in-work",
+        "http://kansallisgalleria.fi/P71_lists_yso_aihe",          "yso-subject",
+        "http://kansallisgalleria.fi/P71_lists_kuvauksen_kohde",   "depicts-subject",
+        "http://kansallisgalleria.fi/P71_lists_lisatieto",         "additional-info",
+        "http://kansallisgalleria.fi/P71_lists_iconclass",         "iconclass-subject",
+        "http://kansallisgalleria.fi/P71_lists_asiasanat",         "keyword",
+        "http://kansallisgalleria.fi/P71_lists_malli",             "model",
+        "http://kansallisgalleria.fi/P71_lists_mallit",            "model",
     };
     
     
@@ -553,7 +553,7 @@ public class FngOpenDataStruct {
     
     private String getNameForDimensionType(Topic t) throws TopicMapException {
         String s = t.getDisplayName("fi");
-        s = s.replaceAll("http://www.muusa.net/", "");
+        s = s.replaceAll("http://kansallisgalleria.fi/", "");
         s = s.replaceAll("E55.Type_", "");
         s = s.replaceAll("_", " ");
         s = s.replaceAll("(Dimension unit)", "");
@@ -563,7 +563,7 @@ public class FngOpenDataStruct {
     
     private String getNameForDimensionValue(Topic t) throws TopicMapException {
         String s = t.getDisplayName("fi");
-        s = s.replaceAll("http://www.muusa.net/", "");
+        s = s.replaceAll("http://kansallisgalleria.fi/", "");
         s = s.replaceAll("Number_", "");
         s = s.replaceAll("Number", "");
         s = s.replaceAll("_", ",");

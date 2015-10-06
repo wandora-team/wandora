@@ -52,8 +52,8 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
     private String GROUP_SI = BASE_SI+"group"; // A-TYPE
     private String ARTIST_GROUP_SI = BASE_SI+"artist_group"; // ROLE
     
-    private String IDENTIFIED_SI = "http://www.muusa.net/P131.is_identified_by"; // A-TYPE
-    private String IDENTIFIED_ROLE_SI = "http://www.muusa.net/P131.is_identified_by_role_1"; // ROLE
+    private String IDENTIFIED_SI = "http://kansallisgalleria.fi/P131.is_identified_by"; // A-TYPE
+    private String IDENTIFIED_ROLE_SI = "http://kansallisgalleria.fi/P131.is_identified_by_role_1"; // ROLE
     
     private String AUTHOR_SI = BASE_SI+"author"; // A-TYPE
     private String ARTWORK_SI = BASE_SI+"artwork"; // ROLE
@@ -75,7 +75,7 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
             addIdentifier(getResourceURIBase()+urlEncode(t.getBaseName()), "uri");
             for( Locator si : t.getSubjectIdentifiers() ) {
                 String sis = si.toExternalForm();
-                if(sis.indexOf("http://www.muusa.net/E39.Actor") != -1) {
+                if(sis.indexOf("http://kansallisgalleria.fi/E39.Actor") != -1) {
                     addIdentifier(si.toExternalForm(), "si");
                 }
             }

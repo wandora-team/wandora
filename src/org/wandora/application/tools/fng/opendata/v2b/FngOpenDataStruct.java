@@ -42,8 +42,8 @@ public class FngOpenDataStruct implements FngOpenDataHandlerInterface {
     
     protected String[] getHandlers() {
         return new String[] {
-            "http://www.muusa.net/Teos", "org.wandora.application.tools.fng.opendata.v2b.FngOpenDataArtworkHandler",
-            "http://www.muusa.net/taiteilija", "org.wandora.application.tools.fng.opendata.v2b.FngOpenDataArtistHandler",
+            "http://kansallisgalleria.fi/Teos", "org.wandora.application.tools.fng.opendata.v2b.FngOpenDataArtworkHandler",
+            "http://kansallisgalleria.fi/taiteilija", "org.wandora.application.tools.fng.opendata.v2b.FngOpenDataArtistHandler",
         };
     }
     

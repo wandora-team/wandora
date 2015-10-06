@@ -75,7 +75,7 @@ public class VttkOpenDataArtworkHandler extends FngOpenDataArtworkHandler implem
             addIdentifier(getResourceURIBase()+urlEncode(t.getBaseName()), "uri");
             for( Locator si : t.getSubjectIdentifiers() ) {
                 String sis = si.toExternalForm();
-                if(sis.startsWith("http://www.muusa.net/")) {
+                if(sis.startsWith("http://kansallisgalleria.fi/")) {
                     addIdentifier(si.toExternalForm(), "si");
                 }
             }

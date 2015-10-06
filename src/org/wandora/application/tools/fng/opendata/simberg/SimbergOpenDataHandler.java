@@ -64,29 +64,29 @@ public class SimbergOpenDataHandler {
     
     
 
-    public static final String VALOKUVA_SI = "http://www.muusa.net/Valokuva";
+    public static final String VALOKUVA_SI = "http://kansallisgalleria.fi/Valokuva";
     
-    public static final String IS_ABOUT_SI = "http://www.muusa.net/P129.is_about";
-    public static final String IS_ABOUT_ROLE_SI = "http://www.muusa.net/P129.is_about_role_0";
+    public static final String IS_ABOUT_SI = "http://kansallisgalleria.fi/P129.is_about";
+    public static final String IS_ABOUT_ROLE_SI = "http://kansallisgalleria.fi/P129.is_about_role_0";
     
-    public static final String AUTHOR_SI = "http://www.muusa.net/P14.Production_carried_out_by";
-    public static final String AUTHOR_ROLE_SI = "http://www.muusa.net/P14.Production_carried_out_by_role_1";
+    public static final String AUTHOR_SI = "http://kansallisgalleria.fi/P14.Production_carried_out_by";
+    public static final String AUTHOR_ROLE_SI = "http://kansallisgalleria.fi/P14.Production_carried_out_by_role_1";
 
-    public static final String TYPE_SI = "http://www.muusa.net/P2.has_type";
-    public static final String TYPE_ROLE_SI = "http://www.muusa.net/P2.has_type_role_0";
+    public static final String TYPE_SI = "http://kansallisgalleria.fi/P2.has_type";
+    public static final String TYPE_ROLE_SI = "http://kansallisgalleria.fi/P2.has_type_role_0";
 
-    public static final String MATERIAL_SI = "http://www.muusa.net/P45.consists_of";
-    public static final String MATERIAL_ROLE_SI = "http://www.muusa.net/P45.consists_of_role_0";
+    public static final String MATERIAL_SI = "http://kansallisgalleria.fi/P45.consists_of";
+    public static final String MATERIAL_ROLE_SI = "http://kansallisgalleria.fi/P45.consists_of_role_0";
 
-    public static final String TIME_SI = "http://www.muusa.net/P4.1.Production_has_time-span";
-    public static final String TIME_ROLE_SI = "http://www.muusa.net/P4.1.Production_has_time-span_role_1";
+    public static final String TIME_SI = "http://kansallisgalleria.fi/P4.1.Production_has_time-span";
+    public static final String TIME_ROLE_SI = "http://kansallisgalleria.fi/P4.1.Production_has_time-span_role_1";
     
-    public static final String KEEPER_SI = "http://www.muusa.net/P50.has_current_keeper";
-    public static final String KEEPER_ROLE_SI = "http://www.muusa.net/P50.has_current_keeper_role_1";
+    public static final String KEEPER_SI = "http://kansallisgalleria.fi/P50.has_current_keeper";
+    public static final String KEEPER_ROLE_SI = "http://kansallisgalleria.fi/P50.has_current_keeper_role_1";
     
-    public static final String IMAGE_SI = "http://www.muusa.net/P62.depicts";
-    public static final String IMAGE_TYPE_ROLE_SI = "http://www.muusa.net/P62.depicts_role_2";
-    public static final String IMAGE_ROLE_SI = "http://www.muusa.net/Source";
+    public static final String IMAGE_SI = "http://kansallisgalleria.fi/P62.depicts";
+    public static final String IMAGE_TYPE_ROLE_SI = "http://kansallisgalleria.fi/P62.depicts_role_2";
+    public static final String IMAGE_ROLE_SI = "http://kansallisgalleria.fi/Source";
     
     
     
@@ -243,7 +243,7 @@ public class SimbergOpenDataHandler {
                         
                         if(imageTypeTopic != null) {
                             String imageTypeSI = imageTypeTopic.getFirstSubjectIdentifier().toExternalForm();
-                            if("http://www.muusa.net/P62_1_mode_of_depiction_kuvan_originaali".equals(imageTypeSI)) {
+                            if("http://kansallisgalleria.fi/P62_1_mode_of_depiction_kuvan_originaali".equals(imageTypeSI)) {
                                 simbergImage.type = "negative";
                             }
                             else {

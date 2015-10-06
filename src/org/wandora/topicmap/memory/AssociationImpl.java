@@ -184,7 +184,8 @@ public class AssociationImpl implements Association {
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
 
         removed=true;
-
+        topicMap.associationRemoved(this);
+        
         ArrayList<Topic> roles = new ArrayList(players.keySet());
         for(Topic role : roles) {
             TopicImpl t=(TopicImpl)players.get(role);
@@ -204,8 +205,6 @@ public class AssociationImpl implements Association {
         if(oldType != null){
             topicMap.associationTypeChanged(this, null, oldType);
         }
-        
-        topicMap.associationRemoved(this);
     }
     
     @Override

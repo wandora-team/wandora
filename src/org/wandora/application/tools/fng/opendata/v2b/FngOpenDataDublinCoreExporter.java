@@ -266,8 +266,8 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
     // -------------------------------------------------------------------------
     
 
-    private String ARTWORK_SI = "http://www.muusa.net/Teos";
-    private String ARTIST_SI = "http://www.muusa.net/taiteilija";
+    private String ARTWORK_SI = "http://kansallisgalleria.fi/Teos";
+    private String ARTIST_SI = "http://kansallisgalleria.fi/taiteilija";
 
     
     public Collection<Topic> make(TopicMap tm, WandoraToolLogger logger) throws TopicMapException {

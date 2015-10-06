@@ -57,25 +57,25 @@ import org.wandora.utils.velocity.GenericVelocityHelper;
 
 public class FNGAPIAction extends CachedAction {
     
-    protected String ARTIST_SI="http://www.muusa.net/taiteilija";
-    protected String ARTWORK_SI="http://www.muusa.net/Teos";
-    protected String ARTWORK_PARTIAL_SI="http://www.muusa.net/Teososa";
-    protected String COLLECTION_SI="http://www.muusa.net/E78.Collection"; // used as association type, role type and topic type
+    protected String ARTIST_SI="http://kansallisgalleria.fi/taiteilija";
+    protected String ARTWORK_SI="http://kansallisgalleria.fi/Teos";
+    protected String ARTWORK_PARTIAL_SI="http://kansallisgalleria.fi/Teososa";
+    protected String COLLECTION_SI="http://kansallisgalleria.fi/E78.Collection"; // used as association type, role type and topic type
     
-    protected String AUTHOR_SI="http://www.muusa.net/P14.Production_carried_out_by"; // association type, roles artist and artwork
-    protected String KEYWORD_SI="http://www.muusa.net/keyword";
+    protected String AUTHOR_SI="http://kansallisgalleria.fi/P14.Production_carried_out_by"; // association type, roles artist and artwork
+    protected String KEYWORD_SI="http://kansallisgalleria.fi/keyword";
 
-    protected String TIME_SI="http://www.muusa.net/E52.Time-Span";
-    protected String IS_IDENTIFIED_BY_SI = "http://www.muusa.net/P131.is_identified_by";
-    protected String IS_IDENTIFIED_BY_ROLE1_SI = "http://www.muusa.net/P131.is_identified_by_role_1";
+    protected String TIME_SI="http://kansallisgalleria.fi/E52.Time-Span";
+    protected String IS_IDENTIFIED_BY_SI = "http://kansallisgalleria.fi/P131.is_identified_by";
+    protected String IS_IDENTIFIED_BY_ROLE1_SI = "http://kansallisgalleria.fi/P131.is_identified_by_role_1";
             
     protected String BIRTH_SI = "http://wandora.org/si/fng/person_birth";
     protected String DEATH_SI = "http://wandora.org/si/fng/person_death";
-    protected String PERSON_SI = "http://www.muusa.net/person";
-    protected String LOCATION_SI = "http://www.muusa.net/paikka";
+    protected String PERSON_SI = "http://kansallisgalleria.fi/person";
+    protected String LOCATION_SI = "http://kansallisgalleria.fi/paikka";
     
-    protected String ACQUISITION_SI = "http://www.muusa.net/P24.transferred_title_of";
-    protected String TECHNIQUE_SI = "http://www.muusa.net/P32.used_general_technique";
+    protected String ACQUISITION_SI = "http://kansallisgalleria.fi/P24.transferred_title_of";
+    protected String TECHNIQUE_SI = "http://kansallisgalleria.fi/P32.used_general_technique";
 
     
     

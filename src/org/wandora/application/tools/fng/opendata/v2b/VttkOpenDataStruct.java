@@ -42,8 +42,8 @@ public class VttkOpenDataStruct extends FngOpenDataStruct implements FngOpenData
     
     protected String[] getHandlers() {
         return new String[] {
-            "http://www.muusa.net/Teos", "org.wandora.application.tools.fng.opendata.v2b.VttkOpenDataArtworkHandler",
-            "http://www.muusa.net/taiteilija", "org.wandora.application.tools.fng.opendata.v2b.VttkOpenDataArtistHandler",
+            "http://kansallisgalleria.fi/Teos", "org.wandora.application.tools.fng.opendata.v2b.VttkOpenDataArtworkHandler",
+            "http://kansallisgalleria.fi/taiteilija", "org.wandora.application.tools.fng.opendata.v2b.VttkOpenDataArtistHandler",
         };
     }
     
