@@ -523,10 +523,8 @@ public class TopicImpl extends Topic {
     
 
     /**
-     * IsDeleteAllowed should return true if the topic map is write protected
-     * or deleted. IsDeleteAllowed should return false if the topic is a
-     * class, occurrence type or scope, variant name scope, association role or
-     * type.
+     * Notice, isDeleteAllowed doesn't return true if the topic map is
+     * write protected or if the topic is already deleted.
      * 
      * @return
      * @throws TopicMapException 
