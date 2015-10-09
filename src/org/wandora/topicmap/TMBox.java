@@ -1063,6 +1063,7 @@ public class TMBox {
         return new ArrayList();
     }
     
+    
     /**
      * Associations must be sorted first for this to work!
      */
@@ -1098,6 +1099,7 @@ public class TMBox {
         }
         return associations;
     }
+    
     
     public static void clearTopicMap(TopicMap topicMap) throws TopicMapException {
         Iterator iter=topicMap.getAssociations();
@@ -1281,8 +1283,9 @@ public class TMBox {
             if(desc) return -c;
             else return c;
         }
-
     }
+    
+    
     
     public static class TopicBNAndSIComparator implements Comparator {
 
@@ -1320,8 +1323,32 @@ public class TMBox {
                 return 0;
             }
         }
-        
     }
+    
+
+    
+    public static class TopicSIComparator implements Comparator {
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            try{
+                Topic t1=(Topic)o1;
+                Topic t2=(Topic)o2;
+
+                Locator l1=t1.getFirstSubjectIdentifier();
+                Locator l2=t2.getFirstSubjectIdentifier();
+                if(l2==null && l1!=null) return -1;
+                else if(l1==null && l2!=null) return 1;
+                else if(l1==null && l2==null) return 0;
+                else return l1.compareTo(l2);
+            }
+            catch(TopicMapException tme){
+                tme.printStackTrace();
+                return 0;
+            }
+        }
+    }
+    
     
     /**
      * Sorts associations by 

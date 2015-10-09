@@ -49,17 +49,22 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  */
 public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     public static final boolean OUTPUT_LOG = false;
+    public static String NEW_LINE_SUBSTITUTE_STRING = "\\n";
+    public static String TAB_SUBSTITUTE_STRING = "\\t";
+    public static String NO_BASENAME_STRING = "[no basename found]";
   
     public static final int COPY_BASENAMES = 100;
     public static final int COPY_SIS = 101;
     
     public static final int INCLUDE_NOTHING = 1000;
     public static final int INCLUDE_NAMES = 1001;
+    public static final int INCLUDE_NAMES_AND_SCOPES = 1901;
     public static final int INCLUDE_SLS = 1002;
     public static final int INCLUDE_SIS = 1003;
     public static final int INCLUDE_CLASSES = 1004;
     public static final int INCLUDE_INSTANCES = 1005;
     public static final int INCLUDE_PLAYERS = 1006;
+    public static final int INCLUDE_PLAYED_ROLES = 1904;
     public static final int INCLUDE_OCCURRENCES = 1007;
     public static final int INCLUDE_ALL_OCCURRENCES = 1008;
     public static final int INCLUDE_OCCURRENCE_TYPES = 1009;
@@ -70,6 +75,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     public static final int INCLUDE_INSTANCE_COUNT = 1105;
     public static final int INCLUDE_ASSOCIATION_COUNT = 1106;
     public static final int INCLUDE_TYPED_ASSOCIATION_COUNT = 1107;
+    public static final int INCLUDE_OCCURRENCE_COUNT = 1108;
     
     public static final int INCLUDE_LAYER_DISTRIBUTION = 1200;
     public static final int INCLUDE_CLUSTER_COEFFICIENT = 1400;
@@ -82,7 +88,8 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     Topic role = null;
     Topic occurrenceType = null;
     ArrayList<Topic> allOccurrenceTypes = null;
-    Wandora admin = null;
+    LinkedHashSet<Topic> scopeMemory = null;
+    Wandora wandora = null;
     Iterator topics = null;
     
     
@@ -128,7 +135,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     }
     
     
-    public void initialize(int copyOrders, int includeOrders) {
+    protected void initialize(int copyOrders, int includeOrders) {
         this.copyOrders = copyOrders;
         this.includeOrders = includeOrders;
     }
@@ -147,7 +154,30 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
 
     @Override
     public String getDescription() {
-        return "Copies selected topics (basenames or SIs) to clipboard.";
+        StringBuilder sb = new StringBuilder("Copy selected topics to the clipboard.");
+        switch(includeOrders) {
+            case INCLUDE_SLS: sb.append(" Include subject locators."); break;
+            case INCLUDE_SIS: sb.append(" Include subject indentifiers."); break;
+            case INCLUDE_NAMES: sb.append(" Include variant names."); break;
+            case INCLUDE_NAMES_AND_SCOPES: sb.append(" Include variant names and name scopes."); break;
+            case INCLUDE_INSTANCES: sb.append(" Include instance topics."); break;
+            case INCLUDE_CLASSES: sb.append(" Include class topics."); break;
+            case INCLUDE_PLAYERS: sb.append(" Include player topics."); break;
+            case INCLUDE_PLAYED_ROLES: sb.append(" Include played roles."); break;
+            case INCLUDE_OCCURRENCES: sb.append(" Include occurrences."); break;
+            case INCLUDE_OCCURRENCE_TYPES: sb.append(" Include occurrence types."); break;
+            case INCLUDE_ALL_OCCURRENCES: sb.append(" Include all occurrences."); break;
+            case INCLUDE_ASSOCIATION_TYPES: sb.append(" Include association types."); break;
+            case INCLUDE_SI_COUNT: sb.append(" Include subject identifier count."); break;
+            case INCLUDE_CLASS_COUNT: sb.append(" Include class count."); break;
+            case INCLUDE_INSTANCE_COUNT: sb.append(" Include instance count."); break;
+            case INCLUDE_ASSOCIATION_COUNT: sb.append(" Include association count."); break;
+            case INCLUDE_TYPED_ASSOCIATION_COUNT: sb.append(" Include association count of specific type."); break;
+            case INCLUDE_OCCURRENCE_COUNT: sb.append(" Include occurrence count."); break;
+            case INCLUDE_LAYER_DISTRIBUTION: sb.append(" Include topic's distribution over topic map layers."); break;
+            case INCLUDE_CLUSTER_COEFFICIENT: sb.append(" Include topic's clustering coefficient."); break;
+        };
+        return sb.toString();
     }
     
     
@@ -178,33 +208,35 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    public void execute(Wandora admin, Context context) {
-        this.admin = admin;
+    @Override
+    public void execute(Wandora wandora, Context context) {
+        this.wandora = wandora;
         try {
-            if(admin != null) {
+            if(wandora != null) {
+                scopeMemory = new LinkedHashSet();
                 associationType = null;
                 role = null;
                 if(includeOrders == INCLUDE_TYPED_ASSOCIATION_COUNT) {
-                    associationType=admin.showTopicFinder("Select association type...");                
+                    associationType=wandora.showTopicFinder("Select association type...");                
                     if(associationType == null) return;
                 }
                 
                 if(includeOrders == INCLUDE_PLAYERS) {
-                    associationType=admin.showTopicFinder("Select association type...");                
+                    associationType=wandora.showTopicFinder("Select association type...");                
                     if(associationType == null) return;
-                    role=admin.showTopicFinder("Select role...");                
+                    role=wandora.showTopicFinder("Select role...");                
                     if(role == null) return;
                 }
 
                 occurrenceType = null;
                 if(includeOrders == INCLUDE_OCCURRENCES) {
-                    occurrenceType=admin.showTopicFinder("Select occurrence type...");                
+                    occurrenceType=wandora.showTopicFinder("Select occurrence type...");                
                     if(occurrenceType == null) return;
                 }
                 
                 allOccurrenceTypes = new ArrayList<Topic>();
                 if(includeOrders == INCLUDE_ALL_OCCURRENCES) {
-                    allOccurrenceTypes = getOccurrenceTypes(admin.getTopicMap());
+                    allOccurrenceTypes = getOccurrenceTypes(wandora.getTopicMap());
                 }
             }
             work();
@@ -225,7 +257,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
         
         try {
             Collection countCollection = null;
-            Vector lines = new Vector();
+            ArrayList<String> lines = new ArrayList();
             if(OUTPUT_LOG) log("Copying "+ getTopicTypeName() +" to clipboard...");
             Topic topic = null;
             if(topics == null) {
@@ -244,10 +276,17 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                     String topicName = null;
                     if(topic != null) {
                         topicName = TopicToString.toString(topic);
-                        if(OUTPUT_LOG) hlog("Copying from '" + topicName + "'.");
+                        if(OUTPUT_LOG) {
+                            hlog("Copying from '" + topicName + "'.");
+                        }
                         switch(copyOrders) {
                             case COPY_BASENAMES: {
-                                sb.append(topic.getBaseName());
+                                if(topic.getBaseName() != null) {
+                                    sb.append(topic.getBaseName());
+                                }
+                                else {
+                                    sb.append(NO_BASENAME_STRING);
+                                }
                                 break;
                             }
                             case COPY_SIS: {
@@ -283,10 +322,8 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             }
                             
                             case INCLUDE_CLASSES: {
-                                Collection types = topic.getTypes();
-                                Topic type = null;
-                                for(Iterator iter = types.iterator(); iter.hasNext(); ) {
-                                    type = (Topic) iter.next();
+                                Collection<Topic> types = topic.getTypes();
+                                for(Topic type : types) {
                                     if(type != null) {
                                         sb.append("\t").append(TopicToString.toString(type));
                                     }
@@ -305,10 +342,8 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             }
                             
                             case INCLUDE_INSTANCES: {
-                                Collection instances = topic.getTopicMap().getTopicsOfType(topic);
-                                Topic instance = null;
-                                for(Iterator iter = instances.iterator(); iter.hasNext(); ) {
-                                    instance = (Topic) iter.next();
+                                Collection<Topic> instances = topic.getTopicMap().getTopicsOfType(topic);
+                                for(Topic instance : instances) {
                                     if(instance != null) {
                                         sb.append("\t").append(TopicToString.toString(instance));
                                     }
@@ -328,30 +363,49 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             }
                             
                             case INCLUDE_NAMES: {
-                                Collection scopes = topic.getVariantScopes();
-                                if(scopes != null && scopes.size() > 0) {
-                                    Iterator scopeIterator = scopes.iterator();
-                                    Set scope = null;
-                                    while(scopeIterator.hasNext()) {
-                                        try {
-                                            scope = (Set) scopeIterator.next();
-                                            if(scope != null && scope.size() > 0) {
-                                                sb.append("\t").append(topic.getVariant(scope));
-                                            }
-                                        }
-                                        catch(Exception e) {
-                                            e.printStackTrace();
+                                Set<Set<Topic>> scopes = topic.getVariantScopes();
+                                if(scopes != null && !scopes.isEmpty()) {
+                                    for(Set<Topic> scope : scopes) {
+                                        if(scope != null && !scope.isEmpty()) {
+                                            sb.append("\t").append(topic.getVariant(scope));
                                         }
                                     }
                                 }
                                 break;
                             }
+                            
+                            case INCLUDE_NAMES_AND_SCOPES: {
+                                Set<Set<Topic>> scopes = topic.getVariantScopes();
+                                if(scopes != null && !scopes.isEmpty()) {
+                                    for(Set<Topic> scope : scopes) {
+                                        if(scope != null && !scope.isEmpty()) {
+                                            sb.append("\t").append(topic.getVariant(scope));
+                                            for(Topic scopeTopic : scope) {
+                                                sb.append("\t").append(TopicToString.toString(scopeTopic));
+                                            }
+                                        }
+                                        sb.append("\n");
+                                    }
+                                    sb.deleteCharAt(sb.length()-1);
+                                }
+                                break;
+                            }
+                            
                             case INCLUDE_OCCURRENCES: {
                                 Hashtable<Topic,String> occurrence = topic.getData(occurrenceType);
-                                for(Topic scope : occurrence.keySet()) {
+                                scopeMemory.addAll(occurrence.keySet());
+                                for(Topic scope : scopeMemory) {
                                     String occurrenceStr = occurrence.get(scope);
-                                    if(occurrenceStr != null) occurrenceStr = occurrenceStr.replace('\t', ' ');
-                                    sb.append("\t").append(occurrenceStr);
+                                    sb.append("\t");
+                                    if(occurrenceStr != null && occurrenceStr.length() > 0) {
+                                        occurrenceStr = occurrenceStr.replace("\t", TAB_SUBSTITUTE_STRING);
+                                        occurrenceStr = occurrenceStr.replace("\n", NEW_LINE_SUBSTITUTE_STRING);
+                                        sb.append(occurrenceStr);
+                                    }
+                                }
+                                if(OUTPUT_LOG) {
+                                    log("Replaced all tab characters with '"+TAB_SUBSTITUTE_STRING+"'.");
+                                    log("Replaced all new line characters with '"+NEW_LINE_SUBSTITUTE_STRING+"'.");
                                 }
                                 break;
                             }
@@ -359,30 +413,56 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             case INCLUDE_ALL_OCCURRENCES: {
                                 if(allOccurrenceTypes != null && !allOccurrenceTypes.isEmpty()) {
                                     for(Topic occurrenceType : allOccurrenceTypes) {
-                                        sb.append("\t");
-                                        Hashtable<Topic,String> occurrence = topic.getData(occurrenceType);
-                                        boolean isFirst = true;
-                                        for(Topic scope : occurrence.keySet()) {
-                                            String occurrenceStr = occurrence.get(scope);
-                                            if(occurrenceStr != null) occurrenceStr = occurrenceStr.replace('\t', ' ');
-                                            if(!isFirst) sb.append("||||");
-                                            sb.append(occurrenceStr);
-                                            if(isFirst) isFirst = false;
+                                        if(occurrenceType != null && !occurrenceType.isRemoved()) {
+                                            Hashtable<Topic,String> occurrence = topic.getData(occurrenceType);
+                                            if(occurrence != null && !occurrence.keySet().isEmpty()) {
+                                                scopeMemory.addAll(occurrence.keySet());
+                                                sb.append("\t");
+                                                sb.append(TopicToString.toString(occurrenceType));
+                                                for(Topic scope : scopeMemory) {
+                                                    sb.append("\t");
+                                                    String occurrenceStr = occurrence.get(scope);
+                                                    if(occurrenceStr != null && occurrenceStr.length() > 0) {
+                                                        occurrenceStr = occurrenceStr.replace("\t", TAB_SUBSTITUTE_STRING);
+                                                        occurrenceStr = occurrenceStr.replace("\n", NEW_LINE_SUBSTITUTE_STRING);
+                                                        sb.append(occurrenceStr);
+                                                    }
+                                                }
+                                                sb.append("\n");
+                                            }
                                         }
+                                    }
+                                    // Trim last new line character.
+                                    sb.deleteCharAt(sb.length()-1);
+                                    if(OUTPUT_LOG) {
+                                        log("Replaced all tab characters with '"+TAB_SUBSTITUTE_STRING+"'.");
+                                        log("Replaced all new line characters with '"+NEW_LINE_SUBSTITUTE_STRING+"'.");
                                     }
                                 }
                                 break;
                             }
                                 
                             case INCLUDE_OCCURRENCE_TYPES: {
-                                Collection<Topic> occurrenceTypes = topic.getDataTypes();
-                                TreeSet<Topic> sortedOccurrenceTypes = new TreeSet<Topic>(occurrenceTypes);
-                                for(Topic t : sortedOccurrenceTypes) {
+                                ArrayList<Topic> occurrenceTypes = new ArrayList(topic.getDataTypes());
+                                Collections.sort(occurrenceTypes, new TMBox.TopicBNAndSIComparator());
+                                for(Topic t : occurrenceTypes) {
                                     sb.append("\t").append(TopicToString.toString(t));
                                 }
                                 break;
                             }
-                                
+                            
+                            case INCLUDE_OCCURRENCE_COUNT: {
+                                Collection<Topic> occurrenceTypes = topic.getDataTypes();
+                                int occurrenceCount = 0;
+                                for(Topic occurrenceType : occurrenceTypes) {
+                                    Hashtable<Topic,String> scopedOccurrences = topic.getData(occurrenceType);
+                                    occurrenceCount = occurrenceCount + scopedOccurrences.size();
+                                }
+                                sb.append("\t");
+                                sb.append(occurrenceCount);
+                                break;
+                            }
+                            
                             case INCLUDE_ASSOCIATION_TYPES: {
                                 Collection<Association> associations = topic.getAssociations();
                                 HashSet<String> associationTypes = new LinkedHashSet();
@@ -397,16 +477,34 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                                 
                             case INCLUDE_PLAYERS: {
                                 if(associationType != null && role != null) {
-                                    Collection players = topic.getAssociations(associationType);
-                                    Association association = null;
-                                    Topic player = null;
-                                    for(Iterator iter = players.iterator(); iter.hasNext(); ) {
-                                        association = (Association) iter.next();
+                                    Collection<Association> associations = topic.getAssociations(associationType);
+                                    for(Association association : associations) {
                                         if(association != null) {
-                                            player = association.getPlayer(role);
+                                            Topic player = association.getPlayer(role);
                                             if(player != null) {
-                                                //log("player ==" + player.getBaseName());
                                                 sb.append("\t").append(TopicToString.toString(player));
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            
+                            case INCLUDE_PLAYED_ROLES: {
+                                Collection<Association> associations = topic.getAssociations();
+                                HashSet<Topic> usedRoles = new HashSet();
+                                for(Association association : associations) {
+                                    if(association != null) {
+                                        Collection<Topic> roles = association.getRoles();
+                                        for(Topic role : roles) {
+                                            Topic player = association.getPlayer(role);
+                                            if(player != null) {
+                                                if(player.mergesWithTopic(topic)) {
+                                                    if(!usedRoles.contains(role)) {
+                                                        usedRoles.add(role);
+                                                        sb.append("\t").append(TopicToString.toString(role));
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -439,15 +537,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
 
                             case INCLUDE_LAYER_DISTRIBUTION: {
                                 if(topic instanceof LayeredTopic) {
-/*                                    LayeredTopic layeredTopic = (LayeredTopic) topic;
-                                    java.util.List<Layer> layers = admin.layerControlPanel.layerStack.getLayers();
-                                    Layer layer = null;
-                                    Iterator<Layer> layerIterator = layers.iterator();
-                                    while(layerIterator.hasNext()) {
-                                        layer = layerIterator.next();
-                                        sb.append("\t" + layeredTopic.getTopicsForLayer(layer).size());
-                                    }*/
-                                    String s=makeDistributionVector((LayeredTopic)topic, admin.getTopicMap());
+                                    String s = makeDistributionVector((LayeredTopic)topic, wandora.getTopicMap());
                                     sb.append("\t").append(s);
                                 }
                                 break;
@@ -467,7 +557,8 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                 }
             }
             if(OUTPUT_LOG) log("Sorting clipboard text.");
-            ClipboardBox.setClipboard(Textbox.sortStringVector(lines));
+            Collections.sort(lines);
+            ClipboardBox.setClipboard(stringSerialize(lines));
             if(OUTPUT_LOG) log("Total " + count + " topics copied.");
             if(OUTPUT_LOG) log("Ready.");
             if(OUTPUT_LOG) setState(WAIT);
@@ -482,7 +573,18 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    public String makeDistributionVector(LayeredTopic topic,ContainerTopicMap tm) throws TopicMapException {
+    private String stringSerialize(ArrayList<String> lines) {
+        StringBuilder sb = new StringBuilder("");
+        for(String line : lines) {
+            sb.append(line);
+            sb.append("\n");
+        }
+        return sb.toString();
+    };
+    
+    
+    
+    private String makeDistributionVector(LayeredTopic topic,ContainerTopicMap tm) throws TopicMapException {
         StringBuilder sb=new StringBuilder();
         for(Layer l : tm.getLayers()){
 //            if(sb.length()!=0) sb.append(":");
@@ -504,7 +606,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    public String getDisplayName(Topic t, String lang)  throws TopicMapException {
+    private String getDisplayName(Topic t, String lang)  throws TopicMapException {
         String langsi=XTMPSI.getLang(lang);
         Topic langT =t.getTopicMap().getTopic(langsi);
         String dispsi=XTMPSI.DISPLAY;
@@ -517,7 +619,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     }
     
     
-    public String getTextData(Topic t, Topic type, String versions)  throws TopicMapException {
+    private String getTextData(Topic t, Topic type, String versions)  throws TopicMapException {
         String langsi=XTMPSI.getLang(versions);
         Topic version=t.getTopicMap().getTopic(langsi);
         String textData = t.getData(type, version);

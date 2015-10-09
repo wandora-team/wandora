@@ -35,7 +35,7 @@ import org.wandora.application.gui.*;
 
 import java.util.*;
 import javax.swing.*;
-import org.wandora.utils.Tuples.T2;
+
 
 /**
  *
@@ -47,7 +47,7 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
     public boolean confirm = true;
     public boolean shouldContinue = true;
     
-    protected Wandora admin = null;
+    protected Wandora wandora = null;
     private String topicName = null;
        
     public DeleteTopics() {
@@ -73,8 +73,8 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
-        this.admin = admin;
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+        this.wandora = wandora;
         ArrayList<Topic> topicsToDelete = new ArrayList<Topic>();
         Iterator topics = context.getContextObjects();
         Topic topic = null;
@@ -92,7 +92,11 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
                     if(topic instanceof LayeredTopic) {
                         ltopic = ((LayeredTopic) topic).getTopicForSelectedLayer();
                         if(ltopic == null || ltopic.isRemoved()) {
-                            int answer = WandoraOptionPane.showConfirmDialog(admin,"Topic '"+getTopicName(topic)+"' doesn't exist in selected layer. Would you like to proceed deleting other topics?", "Topic not in selected layer", WandoraOptionPane.OK_CANCEL_OPTION);
+                            int answer = WandoraOptionPane.showConfirmDialog(wandora, 
+                                    "Topic '"+getTopicName(topic)+"' doesn't exist in selected layer. "+
+                                    "Would you like to proceed deleting other topics?", 
+                                    "Topic not in selected layer", 
+                                    WandoraOptionPane.OK_CANCEL_OPTION);
                             if(answer == WandoraOptionPane.CANCEL_OPTION) shouldContinue = false;
                             continue;
                         }
@@ -105,7 +109,7 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
                     if(topic.isDeleteAllowed()) {
                         if(shouldDelete(topic)) {
                             try {
-                                if(r_all == null) r = TMBox.checkTopicRemove(admin,topic);
+                                if(r_all == null) r = TMBox.checkTopicRemove(wandora, topic);
                                 else r = r_all;
 
                                 if(r == ConfirmResult.cancel) break;
@@ -122,9 +126,13 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
                         }
                     }
                     else {
-                        int answer = WandoraOptionPane.showConfirmDialog(admin,"Unable to delete topic '"+getTopicName(topic)+"'. Topic is an occurrent type or association role or association type or has instances. Would you like to remove related occurrences, associations and instances to ensure that the topic can be deleted?", "Ensure topic deletion", WandoraOptionPane.YES_NO_CANCEL_OPTION);
+                        int answer = WandoraOptionPane.showConfirmDialog(wandora,
+                                "Unable to delete topic '"+getTopicName(topic)+"'. "+
+                                "The topic may be an occurrent type, variant name type, association role or association type or has instances. "+
+                                "Would you like to remove related occurrences, variant names, associations and instances and try deletion again?",
+                                "Prepare topic deletion", WandoraOptionPane.YES_NO_CANCEL_OPTION);
                         if(answer == WandoraOptionPane.YES_OPTION) {
-                            prepareTopicRemove(topic, admin);
+                            prepareTopicRemove(topic, wandora);
                             topicsToDelete.add(topic);
                             count++;
                         }
@@ -146,11 +154,19 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
                             if((i % 100) == 0) hlog((count-i) + " topics to delete.");
                         }
                     }
+                    catch(TopicMapReadOnlyException tmroe) {
+                        log("Selected topic map is write protected.");
+                        log("Unlock selected topic map layer and try again.");
+                        break;
+                    }
                     catch(Exception e) {
                         log(e);
                     }
                 }
-                log("Total " + rcount + " topics deleted!");
+                if(rcount == 0) log("No topics deleted.");
+                else if(rcount == 1) log("One topic deleted.");
+                else log(rcount + " topics deleted.");
+                log("Ready.");
                 setState(WAIT);
             }
         }
@@ -179,7 +195,7 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
             //if(topicName == null) topicName = topic.getOneSubjectIdentifier().toExternalForm();
 
             String confirmMessage = "Would you like delete topic '" + topicName + "' in selected layer?";
-            int answer = WandoraOptionPane.showConfirmDialog(admin, confirmMessage,"Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+            int answer = WandoraOptionPane.showConfirmDialog(wandora, confirmMessage,"Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
             setState(VISIBLE);
             if(answer == WandoraOptionPane.YES_OPTION) {
                 return true;

@@ -159,14 +159,24 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
             while(topics.hasNext()){
                 Topic t=topics.next();
                 ArrayList<Locator> sis=new ArrayList<Locator>(t.getSubjectIdentifiers());
-                if(sis.size()>1){
-                    for(Locator si : sis){
-                        if(si.toExternalForm().startsWith(temporarySI))
-                            t.removeSubjectIdentifier(si);
+                int sisSize = sis.size();
+                for(Locator si : sis) {
+                    if(si.toExternalForm().startsWith(temporarySI)) {
+                        if(sisSize < 2) {
+                            // Adjusting the temporary subject identifier as it is only identifier 
+                            // in the topic. Adjustment prevents accidental merges later on when 
+                            // the topic map has been saved and is parsed again.
+                            t.addSubjectIdentifier(new Locator( si.toExternalForm() + "-" + System.currentTimeMillis() ));
+                        }
+                        t.removeSubjectIdentifier(si);
                     }
                 }
+
             }
-        }catch(TopicMapException tme){logger.log(tme);}        
+        }
+        catch(TopicMapException tme){
+            logger.log(tme);
+        }        
     }
     
     protected ParsedTopic parsedTopic;

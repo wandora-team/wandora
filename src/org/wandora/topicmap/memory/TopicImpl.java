@@ -404,7 +404,7 @@ public class TopicImpl extends Topic {
 
     @Override
     public void remove() throws TopicMapException {
-        if(removed) throw new TopicRemovedException();
+        if(removed) return;
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(!isDeleteAllowed()) {
             if(!topicTypeIndex.isEmpty()) throw new TopicInUseException(this,TopicInUseException.USEDIN_TOPICTYPE);
@@ -521,10 +521,18 @@ public class TopicImpl extends Topic {
         return removed;
     }
     
+
+    /**
+     * IsDeleteAllowed should return true if the topic map is write protected
+     * or deleted. IsDeleteAllowed should return false if the topic is a
+     * class, occurrence type or scope, variant name scope, association role or
+     * type.
+     * 
+     * @return
+     * @throws TopicMapException 
+     */
     @Override
     public boolean isDeleteAllowed() throws TopicMapException {
-        if(isRemoved()) return false;
-        if(topicMap.isReadOnly()) return false;
         
         if(!topicTypeIndex.isEmpty()) return false;
         if(!dataTypeIndex.isEmpty()) return false;
