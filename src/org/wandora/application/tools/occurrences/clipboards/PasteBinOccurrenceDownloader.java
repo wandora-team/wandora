@@ -147,7 +147,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements
             else {
                 log("Found no Pastebin URLs. No Pastebin data restored.");
             }
-            log("Ok.");
+            log("Ready.");
             setState(WAIT);
         }
     }

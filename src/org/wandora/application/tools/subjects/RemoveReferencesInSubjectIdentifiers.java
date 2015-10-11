@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * SIReferenceRemover.java
+ * RemoveReferencesInSubjectIdentifiers.java
  *
  * Created on 28. toukokuuta 2006, 21:15
  *
@@ -38,7 +38,7 @@ import java.util.*;
 
 
 /**
- * <code>SIReferenceRemover</code> implements a tool that removes URL
+ * <code>RemoveReferencesInSubjectIdentifiers</code> implements a tool that removes URL
  * reference of each subject identifier in context topics. URL reference of
  * subject identifier is a part of URL that begins with a hash (#) character.
  * Generally the URL reference is used to address anchors in web pages. This tool
@@ -46,14 +46,14 @@ import java.util.*;
  *
  * @author akivela
  */
-public class SIReferenceRemover extends AbstractWandoraTool implements WandoraTool {
+public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
 
     
 
-    public SIReferenceRemover() {
+    public RemoveReferencesInSubjectIdentifiers() {
         setContext(new TopicContext());
     }
-    public SIReferenceRemover(Context preferredContext) {
+    public RemoveReferencesInSubjectIdentifiers(Context preferredContext) {
         setContext(preferredContext);
     }
     

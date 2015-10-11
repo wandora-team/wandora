@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * SubjectLocatorChecker.java
+ * CheckSubjectLocator.java
  *
  * Created on November 4, 2004, 5:48 PM
  */
@@ -49,7 +49,7 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  * @author  akivela
  */
 
-public class SubjectLocatorChecker extends AbstractWandoraTool implements WandoraTool {
+public class CheckSubjectLocator extends AbstractWandoraTool implements WandoraTool {
 
     
     /**
@@ -69,14 +69,14 @@ public class SubjectLocatorChecker extends AbstractWandoraTool implements Wandor
     private Iterator topicsToCheck;
     
     
-    public SubjectLocatorChecker() {}
-    public SubjectLocatorChecker(Context context) {
+    public CheckSubjectLocator() {}
+    public CheckSubjectLocator(Context context) {
         setContext(context);
     }
-    public SubjectLocatorChecker(Collection topics) {
+    public CheckSubjectLocator(Collection topics) {
         topicsToCheck = topics.iterator();
     }
-    public SubjectLocatorChecker(Iterator topics) {
+    public CheckSubjectLocator(Iterator topics) {
         topicsToCheck = topics;
     }
     

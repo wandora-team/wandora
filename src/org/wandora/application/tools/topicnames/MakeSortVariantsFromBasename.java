@@ -51,15 +51,15 @@ import java.util.*;
 
 
 
-public class MakeDisplayVariantsWithBasename extends AbstractWandoraTool implements WandoraTool {
+public class MakeSortVariantsFromBasename extends AbstractWandoraTool implements WandoraTool {
     boolean overWrite = false;
     
     /**
-     * Creates a new instance of MakeDisplayVariantsWithBasename
+     * Creates a new instance of MakeSortVariantsWithBasename
      */
-    public MakeDisplayVariantsWithBasename() {
+    public MakeSortVariantsFromBasename() {
     }
-    public MakeDisplayVariantsWithBasename(Context preferredContext) {
+    public MakeSortVariantsFromBasename(Context preferredContext) {
         setContext(preferredContext);
     }
     
@@ -67,7 +67,7 @@ public class MakeDisplayVariantsWithBasename extends AbstractWandoraTool impleme
 
     @Override
     public String getName() {
-        return "Makes display variant names using topic's base name.";
+        return "Makes sort variant names using topic's base name.";
     }
 
     @Override
@@ -93,7 +93,7 @@ public class MakeDisplayVariantsWithBasename extends AbstractWandoraTool impleme
             Topic language = null;
             Set<Topic> scope = null;
             Collection languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
-            Topic displayScope = wandora.getTopicMap().getTopic(XTMPSI.DISPLAY);
+            Topic displayScope = wandora.getTopicMap().getTopic(XTMPSI.SORT);
             int progress = 0;
             
             while(topics.hasNext() && !forceStop()) {
@@ -126,7 +126,7 @@ public class MakeDisplayVariantsWithBasename extends AbstractWandoraTool impleme
                     log(e);
                 }
             }
-            log("OK.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

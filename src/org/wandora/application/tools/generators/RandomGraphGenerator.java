@@ -248,7 +248,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
             searchWord = searchWord.trim();
             log("You'll find created topics and associations by searching with a '"+searchWord+"'.");
         }
-        log("Ok.");
+        log("Ready.");
         
         setState(WAIT);
     }

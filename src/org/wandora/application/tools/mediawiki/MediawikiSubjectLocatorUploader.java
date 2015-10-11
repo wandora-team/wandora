@@ -131,7 +131,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler implements
             if(config != null) {
                 logoutOfWiki();
             }
-            log("Ok.");
+            log("Ready.");
         }
         catch(Exception e) {
             log(e);

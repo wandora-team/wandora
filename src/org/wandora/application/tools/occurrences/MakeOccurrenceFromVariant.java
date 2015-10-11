@@ -106,7 +106,7 @@ public class MakeOccurrenceFromVariant extends AbstractWandoraTool implements Wa
                     log(e);
                 }
             }
-            log("OK.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

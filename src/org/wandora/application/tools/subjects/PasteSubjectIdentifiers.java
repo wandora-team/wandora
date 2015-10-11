@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * PasteSIs.java
+ * PasteSubjectIdentifiers.java
  *
  * Created on 6. tammikuuta 2005, 15:12
  */
@@ -46,13 +46,13 @@ import java.net.*;
  *
  * @author akivela
  */
-public class PasteSIs extends AbstractWandoraTool implements WandoraTool {
+public class PasteSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
     public boolean confirm = true;
     
     
-    public PasteSIs() {}
-    public PasteSIs(Context context) {
+    public PasteSubjectIdentifiers() {}
+    public PasteSubjectIdentifiers(Context context) {
         setContext(context);
     }
     

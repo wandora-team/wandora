@@ -45,7 +45,7 @@ import org.wandora.application.tools.NewTopicExtended;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.application.tools.subjects.*;
 import org.wandora.application.tools.subjects.AddSubjectIdentifier;
-import org.wandora.application.tools.subjects.PasteSIs;
+import org.wandora.application.tools.subjects.PasteSubjectIdentifiers;
 import org.wandora.application.tools.topicnames.*;
 
 import org.wandora.topicmap.*;
@@ -1092,14 +1092,14 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     @Override
     public JPopupMenu getSubjectMenu() {
         Object[] menuStructure = new Object[] {
-            "Check subject locator...", new SubjectLocatorChecker(new ApplicationContext()),
+            "Check subject locator...", new CheckSubjectLocator(new ApplicationContext()),
             "Download subject locator...", new DownloadSubjectLocators(new ApplicationContext()),
-            "Remove subject locator...", new SubjectLocatorRemover(new ApplicationContext()),
+            "Remove subject locator...", new RemoveSubjectLocator(new ApplicationContext()),
             "---",
             "Add subject identifier...", new AddSubjectIdentifier(new ApplicationContext()),
-            "Copy subject identifiers", new CopySIs(new ApplicationContext()),
-            "Paste subject identifiers", new PasteSIs(new ApplicationContext()),
-            "Flatten identity...", new FlattenSIs(new ApplicationContext()),
+            "Copy subject identifiers", new CopySubjectIdentifiers(new ApplicationContext()),
+            "Paste subject identifiers", new PasteSubjectIdentifiers(new ApplicationContext()),
+            "Flatten identity...", new FlattenSubjectIdentifiers(new ApplicationContext()),
         };
         return UIBox.makePopupMenu(menuStructure, wandora);
     }

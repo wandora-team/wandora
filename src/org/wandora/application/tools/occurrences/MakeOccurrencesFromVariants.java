@@ -122,7 +122,7 @@ public class MakeOccurrencesFromVariants extends AbstractWandoraTool implements 
                     log(e);
                 }
             }
-            log("OK.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

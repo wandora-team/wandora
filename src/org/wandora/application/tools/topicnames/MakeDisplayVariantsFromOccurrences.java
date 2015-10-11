@@ -37,15 +37,15 @@ import java.util.*;
  *
  * @author akivela
  */
-public class MakeDisplayVariantsWithOccurrences extends AbstractWandoraTool implements WandoraTool {
+public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool implements WandoraTool {
     boolean overWrite = false;
     
     /**
      * Creates a new instance of MakeDisplayVariantsWithOccurrences
      */
-    public MakeDisplayVariantsWithOccurrences() {
+    public MakeDisplayVariantsFromOccurrences() {
     }
-    public MakeDisplayVariantsWithOccurrences(Context preferredContext) {
+    public MakeDisplayVariantsFromOccurrences(Context preferredContext) {
         setContext(preferredContext);
     }
     

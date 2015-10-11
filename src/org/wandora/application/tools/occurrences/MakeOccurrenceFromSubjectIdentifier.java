@@ -150,7 +150,7 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool imp
                     log(e);
                 }
             }
-            log("OK.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

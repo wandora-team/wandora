@@ -42,7 +42,7 @@ import java.util.*;
 
 
 /**
- * <code>SIFixer2</code> iterates through all subject identifiers in context
+ * <code>FixSubjectIdentifiers2</code> iterates through all subject identifiers in context
  * topics and replaces all invalid characters in SI's with underline
  * character (_). Invalid characters in subject identifiers may cause
  * problems if subject identifiers are used to aquire topics within
@@ -52,13 +52,13 @@ import java.util.*;
  *
  * @author  akivela
  */
-public class SIFixer2 extends AbstractWandoraTool implements WandoraTool {
+public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements WandoraTool {
 
     boolean quiet = false;
 
-    public SIFixer2() {
+    public FixSubjectIdentifiers2() {
     }
-    public SIFixer2(Context context) {
+    public FixSubjectIdentifiers2(Context context) {
         setContext(context);
     }
 

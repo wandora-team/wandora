@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * MakeSLWithSI.java
+ * MakeSubjectLocatorFromSubjectIdentifier.java
  *
  * Created on 23. lokakuuta 2007, 17:34
  *
@@ -33,49 +33,53 @@ import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import static org.wandora.application.gui.ConfirmResult.*;
 import org.wandora.application.tools.*;
-import org.wandora.*;
 
 import java.util.*;
 
 
 /**
- * Adds selected subject identifier to topic as a subject locator.
+ * Copies topic's subject identifier to topic's subject locator.
  *
  * @author akivela
  */
-public class MakeSLWithSI extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
 
 
-    public MakeSLWithSI() {
+    public MakeSubjectLocatorFromSubjectIdentifier() {
     }
-    public MakeSLWithSI(Context preferredContext) {
+    public MakeSubjectLocatorFromSubjectIdentifier(Context preferredContext) {
         setContext(preferredContext);
     }
     
 
     @Override
     public String getName() {
-        return "Make SL with SI";
+        return "Copy subject identifier to subject locator";
     }
 
     @Override
     public String getDescription() {
-        return "Adds selected subject identifier to topic as a subject locator.";
+        return "Adds selected subject identifier to the topic as a subject locator.";
     }
     
   
-    public void execute(Wandora admin, Context context) {
+    @Override
+    public void execute(Wandora wandora, Context context) {
+        
+        
         if(context instanceof SIContext) {
             Iterator sis = context.getContextObjects();
             if(sis.hasNext()) {
                 try {
                     Locator si = (Locator) sis.next();
-                    TopicMap topicmap = admin.getTopicMap();
+                    TopicMap topicmap = wandora.getTopicMap();
                     Topic t = topicmap.getTopic(si);
                     t.setSubjectLocator(si);
                     if(sis.hasNext()) {
                         setDefaultLogger();
-                        log("Only one subject identifier was added to the topic as a subject locator!");
+                        log("First subject identifier was added to the topic as a subject locator.");
+                        log("Skipping rest of the subject identifiers.");
+                        log("Ready.");
                         setState(WAIT);
                     }
                 }
@@ -85,15 +89,31 @@ public class MakeSLWithSI extends AbstractWandoraTool implements WandoraTool {
             }
         }
         
+        else if(context instanceof ApplicationContext) {
+            Iterator<Topic> topics = context.getContextObjects();
+            if(topics == null || !topics.hasNext()) return;
+            
+            try {
+                while(topics.hasNext()) {
+                    Topic topic = topics.next();
+                    Locator subjectIdentifier = topic.getFirstSubjectIdentifier();
+                    topic.setSubjectLocator(subjectIdentifier);
+                }
+            }
+            catch(Exception e) {
+                log(e);
+            }
+
+        }
         
         else if(context instanceof LayeredTopicContext) {
-            Iterator topics = context.getContextObjects();
+            Iterator<Topic> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             setDefaultLogger();
             try {
-                log("Adding topics subject identifier to topic as a subject locator.");
+                log("Copying subject identifier to subject locator.");
 
-                Collection subjectIdentifiers = null;
+                Collection<Locator> subjectIdentifiers = null;
                 Topic topic = null;
                 Locator subjectLocator = null;
                 String subjectLocatorString = null;
@@ -103,20 +123,20 @@ public class MakeSLWithSI extends AbstractWandoraTool implements WandoraTool {
 
                 while(topics.hasNext() && !forceStop(result)) {
                     try {
-                        topic = (Topic) topics.next();
+                        topic = topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             setProgress(progress++);
 
                             subjectIdentifiers = topic.getSubjectIdentifiers();
                             if(subjectIdentifiers.size() > 0) {
-                                subjectLocator = (Locator) subjectIdentifiers.iterator().next();
+                                subjectLocator = subjectIdentifiers.iterator().next();
                                 if(subjectLocator != null) {
                                     subjectLocatorString = subjectLocator.toExternalForm();
                                     if(subjectLocatorString != null) {
-                                        log("Adding topic '"+getTopicName(topic)+"' new subject locator\n"+subjectLocatorString +"");
+                                        log("Adding topic '"+getTopicName(topic)+"' subject locator\n"+subjectLocatorString);
                                         locator = new Locator(subjectLocatorString);
                                         if(result != yestoall) {
-                                            result = TMBox.checkSubjectIdentifierChange(admin,topic,locator,true, true);
+                                            result = TMBox.checkSubjectIdentifierChange(wandora,topic,locator,true, true);
                                         }
                                         if(result == yes || result == yestoall) {
                                             topic.setSubjectLocator(locator);
@@ -134,6 +154,7 @@ public class MakeSLWithSI extends AbstractWandoraTool implements WandoraTool {
             catch (Exception e) {
                 log(e);
             }
+            log("Ready.");
             setState(WAIT);
         }
     }

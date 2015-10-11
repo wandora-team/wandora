@@ -179,7 +179,7 @@ public class MakeOccurrenceFromAssociation extends AbstractWandoraTool implement
                     log(e);
                 }
             }
-            log("OK.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

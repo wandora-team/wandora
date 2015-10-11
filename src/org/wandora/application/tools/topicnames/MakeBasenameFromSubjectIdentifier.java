@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * MakeBasenameWithSI.java
+ * MakeBasenameFromSubjectIdentifier.java
  *
  * Created on 25. toukokuuta 2006, 10:43
  *
@@ -47,17 +47,17 @@ import java.net.*;
  */
 
 
-public class MakeBasenameWithSI extends AbstractWandoraTool implements WandoraTool {
+public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
     boolean overWrite = false;
     
     
     /**
      * Creates a new instance of MakeBasenameWithSI
      */
-    public MakeBasenameWithSI() {
+    public MakeBasenameFromSubjectIdentifier() {
     }
     
-    public MakeBasenameWithSI(Context preferredContext) {
+    public MakeBasenameFromSubjectIdentifier(Context preferredContext) {
         setContext(preferredContext);
     }
     

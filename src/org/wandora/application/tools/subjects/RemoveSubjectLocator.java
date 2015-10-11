@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * SubjectLocatorRemover.java
+ * RemoveSubjectLocator.java
  *
  * Created on 25. toukokuuta 2006, 11:17
  *
@@ -45,13 +45,13 @@ import java.util.*;
  */
 
 
-public class SubjectLocatorRemover extends AbstractWandoraTool implements WandoraTool {
+public class RemoveSubjectLocator extends AbstractWandoraTool implements WandoraTool {
 
 
-    public SubjectLocatorRemover() {
+    public RemoveSubjectLocator() {
         setContext(new TopicContext());
     }
-    public SubjectLocatorRemover(Context preferredContext) {
+    public RemoveSubjectLocator(Context preferredContext) {
         setContext(preferredContext);
     }
     

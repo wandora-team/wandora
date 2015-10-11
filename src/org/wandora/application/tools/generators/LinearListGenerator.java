@@ -194,7 +194,7 @@ public class LinearListGenerator extends AbstractGenerator implements WandoraToo
             searchWord = searchWord.trim();
             log("You'll find created topics and associations by searching '"+searchWord+"'.");
         }
-        log("Ok.");
+        log("Ready.");
         setState(WAIT);
     }
 

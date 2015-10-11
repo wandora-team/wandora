@@ -246,7 +246,7 @@ public class LatticeGenerator extends AbstractGenerator implements WandoraTool {
             searchWord = searchWord.trim();
             log("You'll find created topics and associations by searching '"+searchWord+"'.");
         }
-        log("Ok.");
+        log("Ready.");
         
         setState(WAIT);
     }

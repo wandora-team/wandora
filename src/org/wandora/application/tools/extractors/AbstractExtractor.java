@@ -467,7 +467,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
                 log("No URLs extracted.");
             }
             else {
-                //log("Ok.");
+                //log("Ready.");
             }
         }
      }

@@ -152,6 +152,13 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
             postProcessTopicMap();
         }
     }
+    
+    /**
+     * Remove temporary subject identifiers created during parse. This is
+     * necessary as temporary identifiers are reused during next parse.
+     * If a topic has only temporary subject identifier, a permanent
+     * subject identifier is created for the topic.
+     */
     protected void postProcessTopicMap(){
         try{
             // remove temporary subject identifiers
@@ -163,10 +170,9 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                 for(Locator si : sis) {
                     if(si.toExternalForm().startsWith(temporarySI)) {
                         if(sisSize < 2) {
-                            // Adjusting the temporary subject identifier as it is only identifier 
-                            // in the topic. Adjustment prevents accidental merges later on when 
-                            // the topic map has been saved and is parsed again.
-                            t.addSubjectIdentifier(new Locator( si.toExternalForm() + "-" + System.currentTimeMillis() ));
+                            // create permanent subject identifier before temporary can be removed.
+                            String permanentSI = "http://wandora.org/si/xtm2/permanent/" + System.currentTimeMillis() + "-" + Math.round(Math.random()*999999);
+                            t.addSubjectIdentifier(new Locator( permanentSI ));
                         }
                         t.removeSubjectIdentifier(si);
                     }
@@ -702,7 +708,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     /*
      * TemporarySI should *NOT* be same as the default temporary subject identifier
      * path. XTMParser2 removes subject identifiers based on the temporarySI 
-     * after parse.
+     * after parse. Wandora removes temporary subject identifiers after parse.
+     * Look at the method postProcessTopicMap above.
      */
     protected String temporarySI="http://wandora.org/si/xtm2/temp/";
     

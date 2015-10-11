@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * SubjectLocatorRegexReplacer.java
+ * ModifySubjectIdentifiersWithRegex.java
  *
- * Created on 19. toukokuuta 2006, 13:34
+ * Created on 19. toukokuuta 2006, 13:48
  *
  */
 
@@ -30,6 +30,7 @@ package org.wandora.application.tools.subjects;
 
 
 import org.wandora.application.contexts.*;
+
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -37,38 +38,34 @@ import org.wandora.application.tools.*;
 import java.util.*;
 
 
-
 /**
- * Tool class iterates through given context topics and modifies subject locators
- * with given regular expression. Tool execution may result topic merges.
  *
  * @author akivela
  */
-public class SubjectLocatorRegexReplacer extends AbstractWandoraTool implements WandoraTool {
+public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool implements WandoraTool {
     RegularExpressionEditor editor = null;
 
     
-    /** Creates a new instance of SubjectLocatorRegexReplacer */
-    public SubjectLocatorRegexReplacer() {
+
+    public ModifySubjectIdentifiersWithRegex() {
+        setContext(new TopicContext());
     }
-    public SubjectLocatorRegexReplacer(Context preferredContext) {
+    public ModifySubjectIdentifiersWithRegex(Context preferredContext) {
         setContext(preferredContext);
     }
     
     
-
     @Override
     public String getName() {
-        return "Subject locator regular expression replacer";
+        return "SI regular expression replacer";
     }
 
     @Override
     public String getDescription() {
-        return "Iterates through selected topics and applies given regular expression to subject locators.";
+        return "Iterates through selected topics and applies given regular expression to subject identifiers.";
     }
     
   
-    @Override
     public void execute(Wandora admin, Context context) {   
         Iterator topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
@@ -79,15 +76,19 @@ public class SubjectLocatorRegexReplacer extends AbstractWandoraTool implements 
             if(editor.approve == true) {
 
                 setDefaultLogger();
-                setLogTitle("Subject locator regex replacer");
-                log("Transforming subject locators with regular expression.");
+                setLogTitle("SI regex replacer");
+                log("Transforming subject identifiers with regular expression.");
 
                 Topic topic = null;
-                Locator subjectLocator = null;
-                String newSubjectLocatorString = null;
-                String subjectLocatorString = null;
+                String newSIString = null;
+                String SIString = null;
                 int progress = 0;
                 int changed = 0;
+                Collection sis = null;
+                Locator l = null;
+                
+                ArrayList<Locator> lv = null;
+                Iterator<Locator> it = null;
 
                 ArrayList<Object> dt = new ArrayList<Object>();
                 while(topics.hasNext() && !forceStop()) {
@@ -97,20 +98,37 @@ public class SubjectLocatorRegexReplacer extends AbstractWandoraTool implements 
                 
                 while(topics.hasNext() && !forceStop()) {
                     try {
-                        topic = (Topic) topics.next();
                         progress++;
+                        topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            subjectLocator = topic.getSubjectLocator();
-                            if(subjectLocator != null) {
-                                subjectLocatorString = subjectLocator.toExternalForm();
-                                newSubjectLocatorString = editor.replace(subjectLocatorString);
-                                if(newSubjectLocatorString != null && !newSubjectLocatorString.equalsIgnoreCase(subjectLocatorString)) {
-                                    log("Applying regular expression. New subject locator is '"+newSubjectLocatorString +"'.");
-                                    topic.setSubjectLocator(new Locator(newSubjectLocatorString));
-                                    changed++;
+                            sis = topic.getSubjectIdentifiers();
+                            
+                            // First copy sis to safe vector
+                            lv = new ArrayList<Locator>();
+                            it=sis.iterator();
+                            while(it.hasNext()) {
+                                l = (Locator) it.next();
+                                if(l != null) {
+                                    lv.add(l);
                                 }
-                                else {
-                                    hlog("Investigating subject locator '" + subjectLocatorString +"'.");
+                            }
+                            int s = lv.size();
+                            
+                            // Them iterate through sis and do what is supposed
+                            for(int i=0; i<s; i++) {
+                                l = lv.get(i);
+                                if(l != null) {
+                                    SIString = l.toExternalForm();
+                                    newSIString = editor.replace(SIString);
+                                    if(newSIString != null && !newSIString.equalsIgnoreCase(SIString)) {
+                                        log("Applying regular expression. New SI is '"+newSIString + "'.");
+                                        topic.addSubjectIdentifier(new Locator(newSIString));
+                                        topic.removeSubjectIdentifier(l);
+                                        changed++;
+                                    }
+                                    else {
+                                        hlog("Investigating SI '" + SIString + "'.");
+                                    }
                                 }
                             }
                         }
@@ -119,7 +137,7 @@ public class SubjectLocatorRegexReplacer extends AbstractWandoraTool implements 
                         log(e);
                     }
                 }
-                log("Total "+changed+" subject locators changed!");
+                log("Total " + changed + " SIs changed.");
             }
         }
         catch (Exception e) {
@@ -127,6 +145,7 @@ public class SubjectLocatorRegexReplacer extends AbstractWandoraTool implements 
         }
         setState(WAIT);
     }
+    
     
 
 }

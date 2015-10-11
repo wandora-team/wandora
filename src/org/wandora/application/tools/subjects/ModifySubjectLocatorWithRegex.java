@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * SIRegexReplacer.java
+ * ModifySubjectLocatorWithRegex.java
  *
- * Created on 19. toukokuuta 2006, 13:48
+ * Created on 19. toukokuuta 2006, 13:34
  *
  */
 
@@ -30,7 +30,6 @@ package org.wandora.application.tools.subjects;
 
 
 import org.wandora.application.contexts.*;
-
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -38,34 +37,38 @@ import org.wandora.application.tools.*;
 import java.util.*;
 
 
+
 /**
+ * Tool class iterates through given context topics and modifies subject locators
+ * with given regular expression. Tool execution may result topic merges.
  *
  * @author akivela
  */
-public class SIRegexReplacer extends AbstractWandoraTool implements WandoraTool {
+public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool implements WandoraTool {
     RegularExpressionEditor editor = null;
 
     
-
-    public SIRegexReplacer() {
-        setContext(new TopicContext());
+    /** Creates a new instance of SubjectLocatorRegexReplacer */
+    public ModifySubjectLocatorWithRegex() {
     }
-    public SIRegexReplacer(Context preferredContext) {
+    public ModifySubjectLocatorWithRegex(Context preferredContext) {
         setContext(preferredContext);
     }
     
     
+
     @Override
     public String getName() {
-        return "SI regular expression replacer";
+        return "Subject locator regular expression replacer";
     }
 
     @Override
     public String getDescription() {
-        return "Iterates through selected topics and applies given regular expression to subject identifiers.";
+        return "Iterates through selected topics and applies given regular expression to subject locators.";
     }
     
   
+    @Override
     public void execute(Wandora admin, Context context) {   
         Iterator topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
@@ -76,19 +79,15 @@ public class SIRegexReplacer extends AbstractWandoraTool implements WandoraTool 
             if(editor.approve == true) {
 
                 setDefaultLogger();
-                setLogTitle("SI regex replacer");
-                log("Transforming subject identifiers with regular expression.");
+                setLogTitle("Subject locator regex replacer");
+                log("Transforming subject locators with regular expression.");
 
                 Topic topic = null;
-                String newSIString = null;
-                String SIString = null;
+                Locator subjectLocator = null;
+                String newSubjectLocatorString = null;
+                String subjectLocatorString = null;
                 int progress = 0;
                 int changed = 0;
-                Collection sis = null;
-                Locator l = null;
-                
-                ArrayList<Locator> lv = null;
-                Iterator<Locator> it = null;
 
                 ArrayList<Object> dt = new ArrayList<Object>();
                 while(topics.hasNext() && !forceStop()) {
@@ -98,37 +97,20 @@ public class SIRegexReplacer extends AbstractWandoraTool implements WandoraTool 
                 
                 while(topics.hasNext() && !forceStop()) {
                     try {
-                        progress++;
                         topic = (Topic) topics.next();
+                        progress++;
                         if(topic != null && !topic.isRemoved()) {
-                            sis = topic.getSubjectIdentifiers();
-                            
-                            // First copy sis to safe vector
-                            lv = new ArrayList<Locator>();
-                            it=sis.iterator();
-                            while(it.hasNext()) {
-                                l = (Locator) it.next();
-                                if(l != null) {
-                                    lv.add(l);
+                            subjectLocator = topic.getSubjectLocator();
+                            if(subjectLocator != null) {
+                                subjectLocatorString = subjectLocator.toExternalForm();
+                                newSubjectLocatorString = editor.replace(subjectLocatorString);
+                                if(newSubjectLocatorString != null && !newSubjectLocatorString.equalsIgnoreCase(subjectLocatorString)) {
+                                    log("Applying regular expression. New subject locator is '"+newSubjectLocatorString +"'.");
+                                    topic.setSubjectLocator(new Locator(newSubjectLocatorString));
+                                    changed++;
                                 }
-                            }
-                            int s = lv.size();
-                            
-                            // Them iterate through sis and do what is supposed
-                            for(int i=0; i<s; i++) {
-                                l = lv.get(i);
-                                if(l != null) {
-                                    SIString = l.toExternalForm();
-                                    newSIString = editor.replace(SIString);
-                                    if(newSIString != null && !newSIString.equalsIgnoreCase(SIString)) {
-                                        log("Applying regular expression. New SI is '"+newSIString + "'.");
-                                        topic.addSubjectIdentifier(new Locator(newSIString));
-                                        topic.removeSubjectIdentifier(l);
-                                        changed++;
-                                    }
-                                    else {
-                                        hlog("Investigating SI '" + SIString + "'.");
-                                    }
+                                else {
+                                    hlog("Investigating subject locator '" + subjectLocatorString +"'.");
                                 }
                             }
                         }
@@ -137,7 +119,7 @@ public class SIRegexReplacer extends AbstractWandoraTool implements WandoraTool 
                         log(e);
                     }
                 }
-                log("Total " + changed + " SIs changed.");
+                log("Total "+changed+" subject locators changed!");
             }
         }
         catch (Exception e) {
@@ -145,7 +127,6 @@ public class SIRegexReplacer extends AbstractWandoraTool implements WandoraTool 
         }
         setState(WAIT);
     }
-    
     
 
 }

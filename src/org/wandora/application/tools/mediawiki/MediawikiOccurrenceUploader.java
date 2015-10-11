@@ -123,7 +123,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
                     log("Occurrence resource is not an URL or a file.");
                     log("No occurrences uploaded.");
                 }
-                log("Ok.");
+                log("Ready.");
             }
             else {
                 
@@ -217,7 +217,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
                 if(config != null) {
                     logoutOfWiki();
                 }
-                log("Ok.");
+                log("Ready.");
             }
         }
         catch(Exception e) {

@@ -35,12 +35,12 @@ import java.util.*;
  *
  * @author  akivela
  */
-public class SIChecker extends AbstractWandoraTool implements WandoraTool {
+public class CheckSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
 
-    public SIChecker() {
+    public CheckSubjectIdentifiers() {
         super();
     }
-    public SIChecker(Context context) {
+    public CheckSubjectIdentifiers(Context context) {
         setContext(context);
     }
 

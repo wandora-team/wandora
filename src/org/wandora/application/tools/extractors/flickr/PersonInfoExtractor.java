@@ -166,7 +166,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
             }
         }
         
-        log("Ok.");
+        log("Ready.");
         return people.size() > 0;
     }
     

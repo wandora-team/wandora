@@ -178,7 +178,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
             log(e);
         }
 
-        log("Ok.");
+        log("Ready.");
         setState(WAIT);
     }
     

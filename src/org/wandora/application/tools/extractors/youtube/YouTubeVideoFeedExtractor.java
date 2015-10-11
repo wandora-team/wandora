@@ -71,7 +71,7 @@ public class YouTubeVideoFeedExtractor extends YouTubeExtractor {
             if(feedSelector.isAccepted()) {
                 counter = feedSelector.processVideoFeeds(admin, context, service, this);
                 log("Total "+counter+" videos found and extracted from feed.");
-                log("Ok.");
+                log("Ready.");
             }
             if(!feedSelector.isAccepted() || forceStop()) {
                 log("Break!");

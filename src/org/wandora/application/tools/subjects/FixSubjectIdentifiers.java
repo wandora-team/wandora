@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * SIFixer.java
+ * FixSubjectIdentifiers.java
  *
  * Created on 6. tammikuuta 2005, 13:38
  */
@@ -39,7 +39,7 @@ import java.util.*;
 
 
 /**
- * <code>SIFixer</code> iterates through all subject identifiers in context
+ * <code>FixSubjectIdentifiers</code> iterates through all subject identifiers in context
  * topics and replaces all invalid characters in SI's with underline
  * character (_). Invalid characters in subject identifiers may cause
  * problems if subject identifiers are used to aquire topics within
@@ -49,13 +49,13 @@ import java.util.*;
  *
  * @author  akivela
  */
-public class SIFixer extends AbstractWandoraTool implements WandoraTool {
+public class FixSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
     boolean quiet = false;
 
-    public SIFixer() {
+    public FixSubjectIdentifiers() {
     }
-    public SIFixer(Context context) {
+    public FixSubjectIdentifiers(Context context) {
         setContext(context);
     }
     

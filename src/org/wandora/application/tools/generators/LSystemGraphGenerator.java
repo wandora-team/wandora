@@ -180,7 +180,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
         if(forceStop()) log("User has stopped the L-system generator.");
         log("Total "+topicCounter+" topics created.");
         log("Total "+associationCounter+" associations created.");
-        log("Ok.");
+        log("Ready.");
         setState(WAIT);
     }
     

@@ -201,7 +201,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
         if(cylinders.isEmpty()) {
             log("No cylinder selected.");
         }
-        log("Ok.");
+        log("Ready.");
         setState(WAIT);
     }
 

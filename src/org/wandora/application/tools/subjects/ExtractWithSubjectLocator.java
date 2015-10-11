@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * SubjectLocatorExtractor.java
+ * ExtractWithSubjectLocator.java
  *
  * Created on 12. lokakuuta 2007, 14:45
  *
@@ -41,15 +41,15 @@ import java.util.*;
  *
  * @author akivela
  */
-public class SubjectLocatorExtractor extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class ExtractWithSubjectLocator extends AbstractWandoraTool implements WandoraTool, Runnable {
     private AbstractExtractor enclosedExtractor = null;
     
     
     /** Creates a new instance of SubjectLocatorExtractor */
-    public SubjectLocatorExtractor(AbstractExtractor extractor) {
+    public ExtractWithSubjectLocator(AbstractExtractor extractor) {
         enclosedExtractor = extractor;
     }
-    public SubjectLocatorExtractor(AbstractExtractor extractor, Context proposedContext) {
+    public ExtractWithSubjectLocator(AbstractExtractor extractor, Context proposedContext) {
         enclosedExtractor = extractor;
         setContext(proposedContext);
     }

@@ -105,7 +105,7 @@ public class HelmetJSONExtractor extends AbstractExtractor {
                             log(e);
                         }
                     }
-                    log("Ok.");
+                    log("Ready.");
                 }
             }
             else {

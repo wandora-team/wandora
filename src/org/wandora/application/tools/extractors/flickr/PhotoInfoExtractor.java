@@ -119,7 +119,7 @@ public class PhotoInfoExtractor extends FlickrExtractor {
             }
         }
         
-        log("Ok.");
+        log("Ready.");
         return photoTopics.size() > 0;
     }
     

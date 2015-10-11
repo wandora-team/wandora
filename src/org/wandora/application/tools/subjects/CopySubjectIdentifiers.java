@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * CopySIs.java
+ * CopySubjectIdentifiers.java
  *
  * Created on 22. huhtikuuta 2006, 16:03
  *
@@ -46,12 +46,12 @@ import java.util.*;
  *
  * @author akivela
  */
-public class CopySIs extends AbstractWandoraTool implements WandoraTool {
+public class CopySubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
     /** Creates a new instance of CopySIs */
-    public CopySIs() {
+    public CopySubjectIdentifiers() {
     }
-    public CopySIs(Context context) {
+    public CopySubjectIdentifiers(Context context) {
         setContext(context);
     }
 
@@ -75,7 +75,7 @@ public class CopySIs extends AbstractWandoraTool implements WandoraTool {
         int progress = 0;
 
         if(context instanceof SIContext) {
-            //System.out.println("CopySIs & SIContext");
+            //System.out.println("CopySubjectIdentifiers & SIContext");
             SIIterator = context.getContextObjects();
             while(SIIterator.hasNext()) {
                 SI = (Locator) SIIterator.next();

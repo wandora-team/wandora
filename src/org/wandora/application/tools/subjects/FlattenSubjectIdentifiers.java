@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * FlattenSIs.java
+ * FlattenSubjectIdentifiers.java
  *
  * Created on 6. tammikuuta 2005, 13:38
  */
@@ -41,7 +41,7 @@ import java.util.*;
 /**
  * Playing with topics and subject identifiers gradually accumulates
  * subject identifiers. This slows down the topic map implementation little
- * by little. <code>FlattenSIs</code> offers very brutal solution to the
+ * by little. <code>FlattenSubjectIdentifiers</code> offers very brutal solution to the
  * accumulation problem. Class implements a tool that removes all
  * but one subject identifier of context topics. User can not decide which
  * subject identifier remains which is usually undesirable.
@@ -49,12 +49,12 @@ import java.util.*;
  * 
  * @author akivela
  */
-public class FlattenSIs extends AbstractWandoraTool implements WandoraTool {
+public class FlattenSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
-    public FlattenSIs() {
+    public FlattenSubjectIdentifiers() {
         setContext(new TopicContext());
     }
-    public FlattenSIs(Context context) {
+    public FlattenSubjectIdentifiers(Context context) {
         setContext(context);
     }
     
@@ -70,6 +70,7 @@ public class FlattenSIs extends AbstractWandoraTool implements WandoraTool {
     }
 
 
+    @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException  {
         Iterator contextTopics = getContext().getContextObjects();
         if(contextTopics == null || !contextTopics.hasNext()) return;
@@ -115,7 +116,7 @@ public class FlattenSIs extends AbstractWandoraTool implements WandoraTool {
                                         }
                                         if(result == yes || result == yestoall) {
                                             topic.removeSubjectIdentifier(l);
-                                            hlog("Removing SI '" + l.toExternalForm()+"'.");
+                                            hlog("Removing subject identifier '" + l.toExternalForm()+"'.");
                                             sc++;
                                         }
                                     }
@@ -131,9 +132,10 @@ public class FlattenSIs extends AbstractWandoraTool implements WandoraTool {
                     }
                 }
             }
-            log("Total "+ic+" topics inspected.");
-            log("Identity flattened total "+tc+" topics modified.");
-            log("Total "+sc+" subject identifiers removed.");
+            log("Inspected "+ic+" topics.");
+            log("Flattened "+tc+" topics.");
+            log("Removed "+sc+" subject identifiers.");
+            log("Ready.");
             setState(WAIT);
         }
     }

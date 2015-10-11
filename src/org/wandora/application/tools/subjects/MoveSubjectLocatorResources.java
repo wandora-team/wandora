@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * MoveSubjectLocators.java
+ * MoveSubjectLocatorResources.java
  *
  * Created on 27. heinäkuuta 2006, 14:47
  *
@@ -45,7 +45,7 @@ import org.wandora.utils.fileserver.*;
  *
  * @author olli
  */
-public class MoveSubjectLocators extends AbstractWandoraTool {
+public class MoveSubjectLocatorResources extends AbstractWandoraTool {
 
     private String host;
     private int port;
@@ -54,13 +54,13 @@ public class MoveSubjectLocators extends AbstractWandoraTool {
     boolean useSSL;
     private String filePrefix;
     
-    public MoveSubjectLocators(Context preferredContext) {
+    public MoveSubjectLocatorResources(Context preferredContext) {
         this();
         setContext(preferredContext);
     }
     
     /** Creates a new instance of UploadFile */
-    public MoveSubjectLocators() {
+    public MoveSubjectLocatorResources() {
         host="127.0.0.1";
         port=8898;
         user=null;

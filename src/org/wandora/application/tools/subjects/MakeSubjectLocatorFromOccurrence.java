@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * MakeSLWithOccurrence.java
+ * MakeSubjectLocatorFromOccurrence.java
  *
  * Created on 4. heinäkuuta 2006, 11:07
  *
@@ -47,7 +47,7 @@ import org.wandora.*;
  * 
  * @author akivela
  */
-public class MakeSLWithOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool implements WandoraTool {
     private static int MAXLEN = 256;
     private String replacement = "";
     private String SLTemplate = "http://wandora.org/si/%OCCURRENCE%";
@@ -56,10 +56,10 @@ public class MakeSLWithOccurrence extends AbstractWandoraTool implements Wandora
     private boolean overWrite = true;
     
 
-    public MakeSLWithOccurrence() {
+    public MakeSubjectLocatorFromOccurrence() {
     }
     
-    public MakeSLWithOccurrence(Context preferredContext) {
+    public MakeSubjectLocatorFromOccurrence(Context preferredContext) {
         setContext(preferredContext);
     }
     

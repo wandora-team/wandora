@@ -211,7 +211,7 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
         }
         String rootTopicName = basenamePattern.replaceAll("__n__", "0");
         log("Root of the tree is topic '"+rootTopicName+"'.");
-        log("Ok.");
+        log("Ready.");
         setState(WAIT);
     }
     

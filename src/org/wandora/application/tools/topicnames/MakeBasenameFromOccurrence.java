@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * MakeBasenameWithOccurrence.java
+ * MakeBasenameFromOccurrence.java
  *
  * Created on 25. toukokuuta 2006, 10:57
  *
@@ -56,7 +56,7 @@ import org.wandora.*;
 
 
 
-public class MakeBasenameWithOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class MakeBasenameFromOccurrence extends AbstractWandoraTool implements WandoraTool {
     public static int MAXLEN = 256;
     public String replacement = "";
     public String template = "%OCCURRENCE%";
@@ -68,10 +68,10 @@ public class MakeBasenameWithOccurrence extends AbstractWandoraTool implements W
     
     
     /** Creates a new instance of MakeBasenameWithOccurrence */
-    public MakeBasenameWithOccurrence() {
+    public MakeBasenameFromOccurrence() {
     }
     
-    public MakeBasenameWithOccurrence(Context preferredContext) {
+    public MakeBasenameFromOccurrence(Context preferredContext) {
         setContext(preferredContext);
     }
     

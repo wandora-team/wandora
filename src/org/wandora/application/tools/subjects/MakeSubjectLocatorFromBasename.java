@@ -46,7 +46,7 @@ import org.wandora.*;
  * 
  * @author akivela
  */
-public class MakeSLWithBasename extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool implements WandoraTool {
     private static int MAXLEN = 256;
     private String replacement = "";
     private String SLTemplate = "http://wandora.org/si/%BASENAME%";
@@ -56,10 +56,10 @@ public class MakeSLWithBasename extends AbstractWandoraTool implements WandoraTo
     
     
     /** Creates a new instance of CopyTextdataToSL */
-    public MakeSLWithBasename() {
+    public MakeSubjectLocatorFromBasename() {
     }
     
-    public MakeSLWithBasename(Context preferredContext) {
+    public MakeSubjectLocatorFromBasename(Context preferredContext) {
         setContext(preferredContext);
     }
     

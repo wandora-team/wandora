@@ -163,7 +163,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
                             e.printStackTrace();
                         }
                     }
-                    log("Ok.");
+                    log("Ready.");
                 }
                 log("Total "+associationCount+" associations created out of given variants.");
             }

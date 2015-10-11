@@ -177,7 +177,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements W
                 else if(uploadCounter == 0) {
                     log("No occurrences uploaded to Pastebin.");
                 }
-                log("Ok.");
+                log("Ready.");
             }
         }
         catch(Exception e) {

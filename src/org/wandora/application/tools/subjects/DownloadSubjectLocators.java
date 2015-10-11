@@ -34,8 +34,6 @@ import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
-
 import org.wandora.utils.*;
 
 import java.io.*;
@@ -45,18 +43,18 @@ import java.util.*;
 
 
 /**
- * Tool copies subject locator resources to local file system and optionally updates
- * subject locators to the copies. Tool can be used with extraction tools
- * to rip web resources for example.
+ * Saves subject locator resources to local file system and optionally updates
+ * subject locators.
  *
  * @author  akivela
  */
 public class DownloadSubjectLocators extends AbstractWandoraTool implements  WandoraTool {
 
    
-    public boolean changeSubjectLocator = false;
-    public boolean overWriteAll = false;
-
+    private boolean changeSubjectLocator = false;
+    private boolean overWriteAll = false;
+    private Wandora wandora = null;
+    private boolean isCancelled = false;
     
     
     public DownloadSubjectLocators() {
@@ -78,36 +76,38 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
-        setDefaultLogger();
-        
-        Iterator topics = context.getContextObjects();
+    public void execute(Wandora wandora, Context context) {
+        this.wandora = wandora;
+        Iterator<Topic> topics = context.getContextObjects();
         File targetPath = null;
         
         if(topics != null && topics.hasNext()) {
+            targetPath = selectDirectory("Select download directory", wandora);
+            if(targetPath == null) return;
+        }
+        
+        if(topics != null && topics.hasNext()) {
             try {
-                setLogTitle("Download subject locators...");
+                
                 Topic topic = null;
                 int total = 0;
                 int count = 0;
-                boolean cont = true;
                 overWriteAll = false;
+                isCancelled = false;
 
-                while(cont && topics.hasNext() && !forceStop()) {
+                setDefaultLogger();
+                setLogTitle("Download subject locators...");
+                
+                while(topics.hasNext() && !isCancelled && !forceStop()) {
                     try {
                         total++;
-                        topic = (Topic) topics.next();
+                        topic = topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            Locator l =topic.getSubjectLocator();
+                            Locator l = topic.getSubjectLocator();
                             if(l != null) {
-                                if(targetPath == null) {
-                                    setState(INVISIBLE);
-                                    targetPath = selectDirectory("Select download directory", admin);
-                                    setState(VISIBLE);
-                                    if(targetPath == null) break;
+                                if(download(topic, l, targetPath)) {
+                                    count++;
                                 }
-                                cont = download(admin, topic, l, targetPath);
-                                count++;
                             }
                         }
                     }
@@ -115,8 +115,9 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
                         log(e);
                     }
                 }
-                log("Total " + total + " topics browsed.");
-                log("Total " + count + " subject locators downloaded.");
+                log("Inspected " + total + " topics.");
+                log("Downloaded " + count + " subject locators.");
+                log("Ready.");
             }
             catch (Exception e) {
                 log(e);
@@ -127,47 +128,82 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
 
     
     
-    public boolean download(Wandora admin, Topic topic, Locator l, File target) {
+    protected boolean download(Topic topic, Locator l, File target) {
+        boolean successfulDownload = false;
+        
         try {
-            URL subjectUrl = new URL(l.toExternalForm());
-            String filename = subjectUrl.getPath();
-            String filenameWithoutExtension = filename;
-            String filenameExtension = "";
-            if(filename.indexOf('/') > -1) filename = filename.substring(filename.lastIndexOf('/'));
-            if(filename.indexOf('.') > 0) {
-                filenameWithoutExtension = filename.substring(0, filename.lastIndexOf('.')-1);
-                filenameExtension = filename.substring(filename.lastIndexOf('.'));
-            }
-            File targetFile = new File(target.getPath() + "/" + filename);
-            if(!overWriteAll && targetFile.exists()) {
-                int c = 1;
-                File newFile = null;
-                do {
-                    c++;
-                    newFile = new File(target.getPath()+"/"+filenameWithoutExtension+"_"+c+filenameExtension);
+            String locatorString = l.toExternalForm();
+            
+            if(DataURL.isDataURL(locatorString)) {
+                DataURL dataUrl = new DataURL(locatorString);
+                String mimetype = dataUrl.getMimetype();
+                String filenameExtension = MimeTypes.getExtension(mimetype);
+                String filename = topic.getBaseName();
+                if(filename == null) filename = topic.getID();
+                File targetFile = new File(target.getPath() + "/" + filename + "." + filenameExtension);
+                if(useFile(targetFile)) {
+                    log("Saving subject locator content to "+targetFile.getPath());
+                    dataUrl.saveToFile(targetFile);
+                    successfulDownload = true;
+                    if(changeSubjectLocator) {
+                        String newLocator = makeFileLocator(targetFile);
+                        topic.setSubjectLocator(new Locator(newLocator));
+                        log("Changed topic's subject locator to "+newLocator);
+                    }
                 }
-                while(newFile.exists() && c < 999);
-                int a = WandoraOptionPane.showConfirmDialog(admin, "File '"+filename+"' already exists. Overwrite file? Selecting no renames file to "+newFile.getPath()+".", "Overwrite existing file?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
-                if(a == WandoraOptionPane.NO_OPTION) targetFile = newFile;
-                else if(a == WandoraOptionPane.CANCEL_OPTION) return false;
-                else if(a == WandoraOptionPane.YES_TO_ALL_OPTION) overWriteAll = true;
             }
-            log("Downloading subject locator content from "+subjectUrl.toExternalForm()+" to "+targetFile.getPath());
-            IObox.moveUrl(subjectUrl, targetFile);
-            if(changeSubjectLocator) {
-                String newLocator = makeFileLocator(targetFile);
-                topic.setSubjectLocator(new Locator(newLocator));
-                log("Topic's subject locator has been updated to "+newLocator);
+            else {
+                URL subjectUrl = new URL(locatorString);
+                String filename = subjectUrl.getPath();
+                if(filename.indexOf('/') > -1) {
+                    filename = filename.substring(filename.lastIndexOf('/'));
+                }
+                if(filename.length() == 0) {
+                    filename = topic.getBaseName();
+                    if(filename == null) filename = topic.getID();
+                }
+                File targetFile = new File(target.getPath() + "/" + filename);
+                
+                if(useFile(targetFile)) {
+                    log("Downloading subject locator content from "+subjectUrl.toExternalForm()+" to "+targetFile.getPath());
+                    IObox.moveUrl(subjectUrl, targetFile);
+                    successfulDownload = true;
+                    if(changeSubjectLocator) {
+                        String newLocator = makeFileLocator(targetFile);
+                        topic.setSubjectLocator(new Locator(newLocator));
+                        log("Changed topic's subject locator to "+newLocator);
+                    }
+                }
             }
         }
         catch (Exception e) {
             log(e);
         }
-        return true;
+        return successfulDownload;
     }
     
     
     
+    private boolean useFile(File target) {
+        if(!overWriteAll && target.exists()) {
+            String filename = target.getPath();
+            int a = WandoraOptionPane.showConfirmDialog(wandora, 
+                    "File '"+filename+"' already exists. Overwrite file?", 
+                    "Overwrite existing file?", 
+                    WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+            if(a == WandoraOptionPane.NO_OPTION) {
+                return false;
+            }
+            else if(a == WandoraOptionPane.CANCEL_OPTION) {
+                isCancelled = true;
+                return false;
+            }
+            else if(a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                overWriteAll = true;
+            }
+        }
+        return true;
+    }
     
     
     private File selectDirectory(String directoryDialogTitle, Wandora admin) {
@@ -175,7 +211,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
         try {
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setDialogTitle(directoryDialogTitle);
-            chooser.setApproveButtonText("Select directory");
+            chooser.setApproveButtonText("Select");
             chooser.setFileSelectionMode(SimpleFileChooser.DIRECTORIES_ONLY);
 
             if(chooser.open(admin, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
@@ -199,7 +235,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
 
     @Override
     public String getDescription() {
-        return "Downloads subject locators to local directory selected by user.";
+        return "Downloads and saves subject locators resouces to a local directory selected by user.";
     }
     
 
@@ -209,9 +245,8 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
     
 
 
-    public String makeFileLocator(File f) {
+    private String makeFileLocator(File f) {
         return f.toURI().toString();
-//        return "file://" + f.getPath().replace('\\', '/');
     }
 
 
@@ -223,25 +258,4 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
         return "";
     }
 
-
-    private String croppedFilename(File file) {
-        if(file != null) { return croppedFilename(file.getPath()); }
-        return "";
-    }
-
-
-    private String croppedUrlString(String urlString) {
-        return (urlString.length() > 60 ? urlString.substring(0,59) + "..." : urlString);
-    }
-
-
-
-    
-    // -------------------------------------------------------------------------
-    
-        
-
-    
-
-   
 }

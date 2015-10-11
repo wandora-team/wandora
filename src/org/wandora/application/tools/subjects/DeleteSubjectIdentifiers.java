@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * DeleteSIs.java
+ * DeleteSubjectIdentifiers.java
  *
  * Created on 21. heinäkuuta 2006, 16:57
  *
@@ -53,7 +53,7 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  *
  * @author akivela
  */
-public class DeleteSIs extends AbstractWandoraTool implements WandoraTool {
+public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
     protected boolean forceDelete = true;
     protected boolean confirm = true;
@@ -63,9 +63,9 @@ public class DeleteSIs extends AbstractWandoraTool implements WandoraTool {
        
     
     
-    public DeleteSIs() {
+    public DeleteSubjectIdentifiers() {
     }
-    public DeleteSIs(Context context) {
+    public DeleteSubjectIdentifiers(Context context) {
         setContext(context);
     }
     

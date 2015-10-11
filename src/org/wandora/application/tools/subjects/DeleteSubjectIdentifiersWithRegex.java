@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * DeleteSIsWithRegex.java
+ * DeleteSubjectIdentifiersWithRegex.java
  *
  * Created on 21. heinäkuuta 2006, 16:54
  *
@@ -45,13 +45,13 @@ import java.util.*;
  *
  * @author akivela
  */
-public class DeleteSIsWithRegex extends DeleteSIs implements WandoraTool {
+public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers implements WandoraTool {
     private RegularExpressionEditor editor;    
     
     
-    public DeleteSIsWithRegex() {
+    public DeleteSubjectIdentifiersWithRegex() {
     }
-    public DeleteSIsWithRegex(Context context) {
+    public DeleteSubjectIdentifiersWithRegex(Context context) {
         setContext(context);
     }
     

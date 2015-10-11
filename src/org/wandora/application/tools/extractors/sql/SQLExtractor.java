@@ -138,7 +138,7 @@ public class SQLExtractor extends AbstractExtractor {
                         }
                     }
                     if(c == 0) log("No valid query given. Aborting.");
-                    log("Ok.");
+                    log("Ready.");
                 }
             }
             else {

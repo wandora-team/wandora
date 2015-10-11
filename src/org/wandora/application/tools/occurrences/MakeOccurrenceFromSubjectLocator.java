@@ -110,7 +110,7 @@ public class MakeOccurrenceFromSubjectLocator extends AbstractWandoraTool implem
             }
             if(count == 0) log("No subject locators copied to occurrences.");
             else log("Total "+count+" subject locators copied to occurrences.");
-            log("OK.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

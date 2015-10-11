@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * PickFileSL.java
+ * MakeSubjectLocatorFromFilename.java
  *
  */
 
@@ -41,12 +41,12 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
  *
  * @author akivela
  */
-public class PickFileSI extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class MakeSubjectLocatorFromFilename extends AbstractWandoraTool implements WandoraTool, Runnable {
     
 
-    public PickFileSI() {
+    public MakeSubjectLocatorFromFilename() {
     }
-    public PickFileSI(Context proposedContext) {
+    public MakeSubjectLocatorFromFilename(Context proposedContext) {
         setContext(proposedContext);
     }
     
@@ -58,7 +58,7 @@ public class PickFileSI extends AbstractWandoraTool implements WandoraTool, Runn
 
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setDialogTitle("Select resource");
- 
+
             if(chooser.open(wandora, "Select")==SimpleFileChooser.APPROVE_OPTION) {
                 File f = chooser.getSelectedFile();
                 if(f == null) return;
@@ -66,7 +66,7 @@ public class PickFileSI extends AbstractWandoraTool implements WandoraTool, Runn
                 while(contextTopics.hasNext() && !forceStop()) {
                     Topic t = (Topic) (contextTopics.next());
                     if(t != null && !t.isRemoved()) {
-                        t.addSubjectIdentifier(new Locator(subject));
+                        t.setSubjectLocator(new Locator(subject));
                     }
                 }
             }
@@ -79,12 +79,12 @@ public class PickFileSI extends AbstractWandoraTool implements WandoraTool, Runn
     
     @Override
     public String getName() {
-        return "Pick a file as subject identifier";
+        return "Copy filename to subject locator";
     }
 
     @Override
     public String getDescription() {
-        return "Pick a file and make a subject identifier out of it.";
+        return "Pick a file and make a subject locator out of it's filename.";
     }
     
 }

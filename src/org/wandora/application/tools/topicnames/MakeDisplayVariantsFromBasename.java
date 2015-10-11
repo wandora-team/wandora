@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * MakeDisplayVariantsWithBasename.java
+ * MakeDisplayVariantsFromBasename.java
  *
  * Created on 22. toukokuuta 2006, 14:55
  *
@@ -38,7 +38,7 @@ import java.util.*;
 
 
 /**
- * <code>MakeDisplayVariantsWithBasename</code> copies topics base name to
+ * <code>MakeDisplayVariantsFromBasename</code> copies topics base name to
  * topic's variant names. If topic already contain variant name, boolean
  * variable <code>overWrite</code> defines if the existing variant name
  * is over written. Tool solves available variant name scopes and types using
@@ -51,15 +51,15 @@ import java.util.*;
 
 
 
-public class MakeSortVariantsWithBasename extends AbstractWandoraTool implements WandoraTool {
+public class MakeDisplayVariantsFromBasename extends AbstractWandoraTool implements WandoraTool {
     boolean overWrite = false;
     
     /**
-     * Creates a new instance of MakeSortVariantsWithBasename
+     * Creates a new instance of MakeDisplayVariantsWithBasename
      */
-    public MakeSortVariantsWithBasename() {
+    public MakeDisplayVariantsFromBasename() {
     }
-    public MakeSortVariantsWithBasename(Context preferredContext) {
+    public MakeDisplayVariantsFromBasename(Context preferredContext) {
         setContext(preferredContext);
     }
     
@@ -67,7 +67,7 @@ public class MakeSortVariantsWithBasename extends AbstractWandoraTool implements
 
     @Override
     public String getName() {
-        return "Makes sort variant names using topic's base name.";
+        return "Makes display variant names using topic's base name.";
     }
 
     @Override
@@ -93,7 +93,7 @@ public class MakeSortVariantsWithBasename extends AbstractWandoraTool implements
             Topic language = null;
             Set<Topic> scope = null;
             Collection languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
-            Topic displayScope = wandora.getTopicMap().getTopic(XTMPSI.SORT);
+            Topic displayScope = wandora.getTopicMap().getTopic(XTMPSI.DISPLAY);
             int progress = 0;
             
             while(topics.hasNext() && !forceStop()) {
@@ -126,7 +126,7 @@ public class MakeSortVariantsWithBasename extends AbstractWandoraTool implements
                     log(e);
                 }
             }
-            log("OK.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

@@ -339,4 +339,11 @@ public class DataURL {
         fos.write(bytes);
         fos.close();
     }
+    
+    public void saveToFile(File file) throws MalformedURLException, IOException {
+        byte[] bytes = getData();
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(bytes);
+        fos.close();
+    }
 }

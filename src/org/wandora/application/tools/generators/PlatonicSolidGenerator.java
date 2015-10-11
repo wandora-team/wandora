@@ -167,7 +167,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
                 log(e);
             }
         }
-        log("Ok.");
+        log("Ready.");
     }
     
 
@@ -228,7 +228,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
                 log(e);
             }
         }
-        log("Ok.");
+        log("Ready.");
     }
     
     
@@ -286,7 +286,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
                 log(e);
             }
         }
-        log("Ok.");
+        log("Ready.");
     }
     
     
@@ -362,7 +362,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
                 log(e);
             }
         }
-        log("Ok.");
+        log("Ready.");
     }
     
     
@@ -438,7 +438,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
                 log(e);
             }
         }
-        log("Ok.");
+        log("Ready.");
     }
     
     

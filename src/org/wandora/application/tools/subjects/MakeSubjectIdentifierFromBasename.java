@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * MakeSIWithOccurrence.java
+ * MakeSubjectIdentifierFromBasename.java
  *
  * Created on 4. heinäkuuta 2006, 11:07
  *
@@ -27,8 +27,8 @@
 
 package org.wandora.application.tools.subjects;
 
-
 import java.util.*;
+
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.*;
@@ -39,24 +39,26 @@ import org.wandora.*;
 
 
 /**
- * Add context topics a subject identifier created using topic's occurrence.
- * Each added subject identifier is created by injecting topic's occurrence string 
- * into a subject identifier template string.
- * 
+ * Add context topics a subject identifier created using topic's basename.
+ * Each added subject identifier is created by injecting topic's basename string 
+ * into a subject identifier template string. Tool asks the subject identifier template
+ * string from the user.
+ *
  * @author akivela
  */
-public class MakeSIWithOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool implements WandoraTool {
     private static int MAXLEN = 256;
     private String replacement = "";
-    private String SITemplate = "http://wandora.org/si/%OCCURRENCE%";
+    private String SITemplate = "http://wandora.org/si/%BASENAME%";
     
     private boolean askTemplate = true;
     
-
-    public MakeSIWithOccurrence() {
+    
+    /** Creates a new instance of MakeSIWithBasename */
+    public MakeSubjectIdentifierFromBasename() {
     }
     
-    public MakeSIWithOccurrence(Context preferredContext) {
+    public MakeSubjectIdentifierFromBasename(Context preferredContext) {
         setContext(preferredContext);
     }
     
@@ -64,12 +66,12 @@ public class MakeSIWithOccurrence extends AbstractWandoraTool implements Wandora
 
     @Override
     public String getName() {
-        return "Make subject identifier with an occurrence";
+        return "Make SI from base name";
     }
 
     @Override
     public String getDescription() {
-        return "Iterates through selected topics and adds each topic new subject identifier made with given occurrence.";
+        return "Iterates through selected topics and adds each topic new subject identifier made with base name.";
     }
 
     
@@ -79,32 +81,24 @@ public class MakeSIWithOccurrence extends AbstractWandoraTool implements Wandora
             Iterator topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
-            Topic occurrenceType=admin.showTopicFinder("Select occurrence type...");                
-            if(occurrenceType == null) return;
-            Locator occurrenceTypeLocator = occurrenceType.getSubjectIdentifiers().iterator().next();
-            
-            Topic occurrenceScope=admin.showTopicFinder("Select occurrence scope...");                
-            if(occurrenceScope == null) return;
-            Locator occurrenceScopeLocator = occurrenceScope.getSubjectIdentifiers().iterator().next();
-
             if(SITemplate == null || SITemplate.length() == 0) {
-                SITemplate = "http://wandora.org/si/%OCCURRENCE%";
+                SITemplate = "http://wandora.org/si/%BASENAME%";
             }
             if(askTemplate) {
-                SITemplate = WandoraOptionPane.showInputDialog(admin, "Make subject identifier using following template. String '%OCCURRENCE%' is replaced with topic's occurrence.", SITemplate);
+                SITemplate = WandoraOptionPane.showInputDialog(admin, "Make subject identifier using following template. String '%BASENAME%' is replaced with topic's base name.", SITemplate);
                 if(SITemplate == null) return;
-                if(SITemplate.length() == 0 || !SITemplate.contains("%OCCURRENCE%")) {
-                    int a = WandoraOptionPane.showConfirmDialog(admin, "Your template string '"+ SITemplate +"' does not contain '%OCCURRENCE%'. This results identical subject identifiers and topic merges. Are you sure you want to continue?", "Invalid template given", WandoraOptionPane.YES_NO_CANCEL_OPTION);
+                if(SITemplate.length() == 0 || !SITemplate.contains("%BASENAME%")) {
+                    int a = WandoraOptionPane.showConfirmDialog(admin, "Your template string '"+ SITemplate +"' does not contain '%BASENAME%'. This results identical subject identifiers and topic merges. Are you sure you want to continue?", "Invalid template given", WandoraOptionPane.YES_NO_CANCEL_OPTION);
                     if(a != WandoraOptionPane.YES_OPTION) return;
                 }
             }
             
             setDefaultLogger();
-            setLogTitle("Making subject identifier with an occurrence");
-            log("Making subject identifier with an occurrence");
+            setLogTitle("Making SI from base name");
+            log("Making subject identifier from base name");
             
             Topic topic = null;
-            String occurrence = null;
+            String basename = null;
             String SIString = null;
             int progress = 0;
             int progressMax = 0;
@@ -114,7 +108,6 @@ public class MakeSIWithOccurrence extends AbstractWandoraTool implements Wandora
                 dt.add(topics.next());
                 progressMax++;
             }
-            
             topics = dt.iterator();
             setProgressMax(progressMax);
             
@@ -126,27 +119,24 @@ public class MakeSIWithOccurrence extends AbstractWandoraTool implements Wandora
                         progress++;
                         setProgress(progress);
                         
-                        occurrenceType = topic.getTopicMap().getTopic(occurrenceTypeLocator);
-                        occurrenceScope = topic.getTopicMap().getTopic(occurrenceScopeLocator);
-                        occurrence = topic.getData(occurrenceType, occurrenceScope);
-
-                        // Ok, if topic has sufficient occurrence descent deeper...
-                        if(occurrence != null && occurrence.length() > 0) {
-                            // First occurrence is modified to suit as the SI and base name... 
-                            if(occurrence.length() > MAXLEN) {
-                                occurrence.substring(0, MAXLEN);
+                        basename = topic.getBaseName();
+                        
+                        // Ok, if topic has sufficient base name descent deeper...
+                        if(basename != null && basename.length() > 0) {                          
+                            if(basename.length() > MAXLEN) {
+                                basename.substring(0, MAXLEN);
                             }
-                            if(occurrence.indexOf("\n") != -1 || occurrence.indexOf("\r") != -1) {
-                                occurrence = occurrence.replaceAll("\r", replacement);
-                                occurrence = occurrence.replaceAll("\n", replacement);
+                            if(basename.indexOf("\n") != -1 || basename.indexOf("\r") != -1) {
+                                basename = basename.replaceAll("\r", replacement);
+                                basename = basename.replaceAll("\n", replacement);
                             }
-                            occurrence = occurrence.trim();
+                            basename = basename.trim();
                             
                             SIString = SITemplate;
-                            SIString = SIString.replaceAll("%OCCURRENCE%", occurrence);
+                            SIString = SIString.replaceAll("%BASENAME%", basename);
                             SIString = TopicTools.cleanDirtyLocator(SIString);
                             
-                            log("Adding topic '"+getTopicName(topic)+"' subject identifier '"+SIString+"'.");
+                            log("Adding topic '"+basename+"' SI '"+SIString+"'.");
                             topic.addSubjectIdentifier(new Locator(SIString));
                         }
                     }

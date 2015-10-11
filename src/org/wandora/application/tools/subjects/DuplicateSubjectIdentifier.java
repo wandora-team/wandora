@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * DuplicateSI.java
+ * DuplicateSubjectIdentifier.java
  *
  * Created on 2012-01-18
  *
@@ -54,16 +54,16 @@ import java.util.*;
 
 
 
-public class DuplicateSI extends AbstractWandoraTool implements WandoraTool {
+public class DuplicateSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
     
     
     protected Wandora wandora = null;
        
     
     
-    public DuplicateSI() {
+    public DuplicateSubjectIdentifier() {
     }
-    public DuplicateSI(Context context) {
+    public DuplicateSubjectIdentifier(Context context) {
         setContext(context);
     }
     

@@ -195,7 +195,7 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
             catch(Exception e) {
                 log(e);
             }
-            log("Ok.");
+            log("Ready.");
             setState(WAIT);
         }
     }

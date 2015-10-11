@@ -104,7 +104,7 @@ public class MakeOccurrenceFromBasename extends AbstractWandoraTool implements W
                     log(e);
                 }
             }
-            log("OK.");
+            log("Ready.");
             setState(WAIT);
         }
         catch (Exception e) {

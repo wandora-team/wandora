@@ -111,7 +111,7 @@ public class RedditExtractor extends AbstractWandoraTool{
                             log(e);
                         }
                     }
-                    log("Ok.");
+                    log("Ready.");
                 }
                 else {
                     log("Couldn't find a suitable subextractor to perform or "

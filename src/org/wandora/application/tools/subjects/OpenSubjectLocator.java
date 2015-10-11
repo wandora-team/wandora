@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * OpenSL.java
+ * OpenSubjectLocator.java
  *
  * Created on 12. lokakuuta 2007, 12:31
  *
@@ -46,12 +46,12 @@ import java.net.*;
  *
  * @author akivela
  */
-public class OpenSL extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class OpenSubjectLocator extends AbstractWandoraTool implements WandoraTool, Runnable {
     
 
-    public OpenSL() {
+    public OpenSubjectLocator() {
     }
-    public OpenSL(Context proposedContext) {
+    public OpenSubjectLocator(Context proposedContext) {
         setContext(proposedContext);
     }
     

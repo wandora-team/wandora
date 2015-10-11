@@ -115,7 +115,7 @@ public class ZemantaExtractor extends AbstractZemantaExtractor implements Browse
                     if(parserHandler.articleCount > 0) {
                         log("Zemanta found " + parserHandler.articleCount + " articles.");
                     }
-                    log("Ok.");
+                    log("Ready.");
                 }
             }
             else {

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * OpenSI.java
+ * OpenSubjectIdentifier.java
  *
  * Created on 23. lokakuuta 2007, 16:15
  *
@@ -48,12 +48,12 @@ import java.net.*;
  *
  * @author akivela
  */   
-public class OpenSI extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class OpenSubjectIdentifier extends AbstractWandoraTool implements WandoraTool, Runnable {
     
 
-    public OpenSI() {
+    public OpenSubjectIdentifier() {
     }
-    public OpenSI(Context proposedContext) {
+    public OpenSubjectIdentifier(Context proposedContext) {
         setContext(proposedContext);
     }
     
