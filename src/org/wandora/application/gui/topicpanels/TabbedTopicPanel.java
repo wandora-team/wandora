@@ -1094,7 +1094,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         Object[] menuStructure = new Object[] {
             "Check subject locator...", new CheckSubjectLocator(new ApplicationContext()),
             "Download subject locator...", new DownloadSubjectLocators(new ApplicationContext()),
-            "Remove subject locator...", new RemoveSubjectLocator(new ApplicationContext()),
+            "Remove subject locator...", new DeleteSubjectLocator(new ApplicationContext()),
             "---",
             "Add subject identifier...", new AddSubjectIdentifier(new ApplicationContext()),
             "Copy subject identifiers", new CopySubjectIdentifiers(new ApplicationContext()),

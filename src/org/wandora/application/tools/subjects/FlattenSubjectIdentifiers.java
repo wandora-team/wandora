@@ -75,7 +75,7 @@ public class FlattenSubjectIdentifiers extends AbstractWandoraTool implements Wa
         Iterator contextTopics = getContext().getContextObjects();
         if(contextTopics == null || !contextTopics.hasNext()) return;
         
-        if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to delete all but one subject identifiers of ALL context topics?","Delete subject identifiers", WandoraOptionPane.YES_NO_OPTION)== WandoraOptionPane.YES_OPTION){
+        if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to delete all but one subject identifiers of context topics?","Delete subject identifiers", WandoraOptionPane.YES_NO_OPTION)== WandoraOptionPane.YES_OPTION){
             setDefaultLogger();
             Topic topic = null;
             Collection tsis = null;

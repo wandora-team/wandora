@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 
- * RemoveSubjectLocator.java
+ * DeleteSubjectLocator.java
  *
  * Created on 25. toukokuuta 2006, 11:17
  *
@@ -45,13 +45,13 @@ import java.util.*;
  */
 
 
-public class RemoveSubjectLocator extends AbstractWandoraTool implements WandoraTool {
+public class DeleteSubjectLocator extends AbstractWandoraTool implements WandoraTool {
 
 
-    public RemoveSubjectLocator() {
+    public DeleteSubjectLocator() {
         setContext(new TopicContext());
     }
-    public RemoveSubjectLocator(Context preferredContext) {
+    public DeleteSubjectLocator(Context preferredContext) {
         setContext(preferredContext);
     }
     
@@ -74,9 +74,6 @@ public class RemoveSubjectLocator extends AbstractWandoraTool implements Wandora
             Iterator topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
-            setDefaultLogger();
-            setLogTitle("Removing subject locators");
-
             Topic topic = null;
             int progress = 0;
             int locatorCount = 0;
@@ -96,17 +93,21 @@ public class RemoveSubjectLocator extends AbstractWandoraTool implements Wandora
                             locatorCount++;
                             removeNext = false;
                             if(!removeAll) {
-                                setState(INVISIBLE);
-                                int a = WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to remove subject locator\n"+l.toExternalForm()+"?","Confirm SL remove", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
-                                setState(VISIBLE);
+                                int a = WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to remove subject locator\n"+l.toExternalForm()+"?","Confirm subject locator remove", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
                                 if(a == WandoraOptionPane.YES_OPTION) removeNext = true;
                                 else if(a == WandoraOptionPane.YES_TO_ALL_OPTION) removeAll = true;
                                 else if(a == WandoraOptionPane.CLOSED_OPTION) break;
                                 else if(a == WandoraOptionPane.CANCEL_OPTION) break;
                             }
+                            if(removeAll) {
+                                if(deleteCount==0) {
+                                    setDefaultLogger();
+                                    setLogTitle("Removing subject locators");
+                                }
+                                log("Removing subject locator '"+l.toExternalForm()+"'");
+                            }
                             if(removeAll || removeNext) {
                                 deleteCount++;
-                                log("Removing subject locator '"+l.toExternalForm()+"'");
                                 topic.setSubjectLocator(null);
                             }
                         }
@@ -116,14 +117,20 @@ public class RemoveSubjectLocator extends AbstractWandoraTool implements Wandora
                     log(e);
                 }
             }
-            if(progress == 0) {
-                log("Context didn't contain topics. Nothing removed.");
+            if(removeAll) {
+                if(deleteCount==1) {
+                    log("Removed one subject locator.");
+                }
+                else {
+                    log("Removed "+deleteCount+" subject locators.");
+                }
+                log("Ready.");
             }
-            else if(locatorCount == 0) {
-                log("Context didn't contain valid subject locators. Nothing removed.");
+            else {
+                if(progress > 1) {
+                    log("Inspected "+progress+" topics and removed "+deleteCount+" subject locators.");
+                }
             }
-            log("Ready.");
-            setState(WAIT);
         }
         catch (Exception e) {
             log(e);

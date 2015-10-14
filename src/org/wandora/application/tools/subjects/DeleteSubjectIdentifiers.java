@@ -36,8 +36,6 @@ import org.wandora.application.tools.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 
-import org.wandora.*;
-
 import java.util.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
 
