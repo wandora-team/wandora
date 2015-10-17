@@ -42,24 +42,16 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 
 /**
  * Deletes subject identifiers. Exact behavior depends on given context. If
- * context is <code>SIContext</code> then tools class deletes all context subject
- * identifiers of owner topics (unless the subject identifier is the only subject
- * identifier in the topic). If context contains topics then tool deletes all 
- * subject identifiers of context topics but confirms all deletions from the
- * user. Again, only or last subject identifier of topic is never deleted. 
- * Topic must always have at least one subject identifier.
+ * context is <code>SIContext</code> the tools deletes all subject
+ * identifiers in their topics (unless the subject identifier is the only subject
+ * identifier in the topic). If context contains topics the tool deletes all but one 
+ * subject identifiers of context topics.
  *
  * @author akivela
  */
 public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
-    protected boolean forceDelete = true;
-    protected boolean confirm = true;
-    protected boolean shouldContinue = true;
-    
-    protected Wandora wandora = null;
-       
-    
+
     
     public DeleteSubjectIdentifiers() {
     }
@@ -81,92 +73,97 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements Wan
     
     
     @Override
-    public void execute(Wandora w, Context context) throws TopicMapException {
-        this.wandora = w;
-        setDefaultLogger();
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        TopicMap topicmap = wandora.getTopicMap();
+        
         if(context instanceof SIContext) {
-            Iterator sii = context.getContextObjects();
-            if(sii.hasNext()) {
-                int count = 0;
-                Locator si = (Locator) sii.next();
-                TopicMap topicmap = wandora.getTopicMap();
-                Topic topic = topicmap.getTopic(si);
-                if(topic.getSubjectIdentifiers().size() > 1) {
-                    if(shouldDelete(topic, si)) {
-                        topic.removeSubjectIdentifier(si);
-                        count++;
-                    }
-                    while(sii.hasNext() && shouldContinue && !forceStop()) {
-                        si = (Locator) sii.next();
-                        if(topic.getSubjectIdentifiers().size() > 1) {
-                            if(shouldDelete(topic, si)) {
-                                topic.removeSubjectIdentifier((Locator) si);
-                                count++;
+            Iterator<Locator> subjectIdentifiers = context.getContextObjects();
+            Collection<Locator> subjectIdentifiersToDelete = getSubjectIdentifiers(subjectIdentifiers);
+            if(subjectIdentifiersToDelete != null && !subjectIdentifiersToDelete.isEmpty()) {
+                int deleteCount = 0;
+                int siCount = 0;
+                int shouldDelete = WandoraOptionPane.NO_OPTION;
+                for(Locator si : subjectIdentifiersToDelete) {
+                    if(si != null) {
+                        siCount++;
+                        Topic topic = topicmap.getTopic(si);
+                        if(topic != null && !topic.isRemoved()) {
+                            if(topic.getSubjectIdentifiers().size() > 1) {
+                                if(shouldDelete != WandoraOptionPane.YES_TO_ALL_OPTION) {
+                                    shouldDelete = WandoraOptionPane.showConfirmDialog(wandora, getConfirmMessage(topic, si), "Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                                }
+                                if(shouldDelete == WandoraOptionPane.YES_TO_ALL_OPTION || shouldDelete == WandoraOptionPane.YES_OPTION) {
+                                    topic.removeSubjectIdentifier(si);
+                                    deleteCount++;
+                                }
+                                if(shouldDelete == WandoraOptionPane.CANCEL_OPTION || shouldDelete == WandoraOptionPane.CLOSED_OPTION) {
+                                    break;
+                                }
                             }
                         }
-                        else {
-                            log("Topic has one subject identifier left. Deletion not allowed!");
-                        }
                     }
-                    log("Total " + count + " subject identifiers deleted.");
+                }
+                if(siCount == deleteCount) {
+                    log("Deleted " + deleteCount + " subject identifiers.");
                 }
                 else {
-                    log("Topic has only one subject identifier. Deletion not allowed!");
+                    log("Deleted " + deleteCount + " subject identifiers out of "+siCount+" inspected.");
                 }
             }
             else {
-                log("No subject identifiers found in context.");
+                log("Found no subject identifiers to delete.");
             }
         }
         
         // ***** HANDLE OTHER CONTEXTS *****
         else {
-            Iterator topics = getContext().getContextObjects();
+            Iterator<Topic> topics = getContext().getContextObjects();
             Topic topic = null;
-            Topic ltopic = null;
-            int count = 0;
-            int tcount = 0;
-            int icount = 0;
+            Topic topicInSelectedLayer = null;
+            int deleteCount = 0;
+            int inspectionCount = 0;
             ConfirmResult r_all = null;
             ConfirmResult r = null;
-            yesToAll = false;
-            shouldContinue = true;
             String topicName = null;
+            int shouldDelete = WandoraOptionPane.NO_OPTION;
 
-            if(topics != null && topics.hasNext()) {
-                while(topics.hasNext() && shouldContinue && !forceStop()) {
-                    topic = (Topic) topics.next();
+            if(topics != null) {
+                do {
+                    topic = topics.next();
                     if(topic != null && !topic.isRemoved()) {
+                        // First solve local topic in selected layer. If there is
+                        // no local topic, ask user if she wishes to cancel to deletion.
                         if(topic instanceof LayeredTopic) {
-                            ltopic = ((LayeredTopic) topic).getTopicForSelectedLayer();
-                            if(ltopic == null || ltopic.isRemoved()) {
-                                setState(INVISIBLE);
-                                int answer = WandoraOptionPane.showConfirmDialog(wandora,"Topic '"+TopicToString.toString(topic)+"' doesn't exist in selected layer.", "Topic not in selected layer", WandoraOptionPane.OK_CANCEL_OPTION);
-                                setState(VISIBLE);
-                                if(answer == WandoraOptionPane.CANCEL_OPTION) shouldContinue = false;
+                            topicInSelectedLayer = ((LayeredTopic) topic).getTopicForSelectedLayer();
+                            if(topicInSelectedLayer == null || topicInSelectedLayer.isRemoved()) {
+                                int a = WandoraOptionPane.showConfirmDialog(wandora, "Topic '"+TopicToString.toString(topic)+"' doesn't exist in selected layer.", "Topic not in selected layer", WandoraOptionPane.OK_CANCEL_OPTION);
+                                if(a == WandoraOptionPane.CANCEL_OPTION) break;
                                 continue;
                             }
                             else {
-                                topic = ltopic;
+                                topic = topicInSelectedLayer;
                             }
                         }
-                        topicName = topic.getBaseName();
-                        if(topicName == null) topicName = topic.getOneSubjectIdentifier().toExternalForm();
-                        hlog("Investigating topic '" + topicName + "'.");
-                        icount++;
-
-                        Collection<Locator> sis = collectSubjectIdentifiers(topic);
-                        Iterator<Locator> sii = sis.iterator();
-
-                        if(sii.hasNext()) {
-                            Locator l = null;
-                            ArrayList sisToDelete = new ArrayList();
-
-                            while(sii.hasNext()) {
-                                l = sii.next();
-                                if(shouldDelete(topic, l)) {
+                        
+                        // Local topic exists and Wandora can continue with the
+                        // topic. First Wandora creates a collection of topic's
+                        // subject identifiers and then iterates the collection
+                        // in order to delete subject identifiers in the collection.
+                        // Notice, we check if the topic has more than one subject
+                        // identifier and prevent deletion if there is only one
+                        // subject locator.
+                        inspectionCount++;
+                        Collection<Locator> sis = new ArrayList(getSubjectIdentifiers(topic));
+                        int localDeleteCount = 0;
+                        
+                        for(Locator si : sis) {
+                            if(topic.getSubjectIdentifiers().size() > 1) {
+                                if(shouldDelete != WandoraOptionPane.YES_TO_ALL_OPTION) {
+                                    shouldDelete = WandoraOptionPane.showConfirmDialog(wandora, getConfirmMessage(topic, si), "Delete subject identifier?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                                }
+                                if(shouldDelete == WandoraOptionPane.YES_TO_ALL_OPTION || shouldDelete == WandoraOptionPane.YES_OPTION) {
                                     try {
-                                        if(r_all == null) r = TMBox.checkSubjectIdentifierChange(wandora,topic,l, false);
+                                        if(r_all == null) r = TMBox.checkSubjectIdentifierChange(wandora, topic, si, false);
                                         else r = r_all;
 
                                         if(r == ConfirmResult.cancel) break;
@@ -174,99 +171,99 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements Wan
                                         else if(r == ConfirmResult.notoall) { r_all = r; continue; }
                                         else if(r == ConfirmResult.yestoall) { r_all = r; }
 
-                                        sisToDelete.add(l);
-                                        count++;
+                                        topic.removeSubjectIdentifier(si);
+                                        localDeleteCount++;
+                                        deleteCount++;
                                     }
                                     catch(Exception e2) {
                                         log(e2);
                                     }
                                 }
                             }
-
-                            if(sisToDelete.size() > 0) {
-                                tcount++;
-                                sii = sisToDelete.iterator();
-                                while(sii.hasNext()) {
-                                    if(topic.getSubjectIdentifiers().size() > 1) {
-                                        topic.removeSubjectIdentifier(sii.next());
-                                    }
-                                    else {
-                                        log("Topic '"+TopicToString.toString(topic)+"' has only one subject identifier. Skipping deletion.");
-                                    }
-                                }
+                        }
+                        
+                        // Progress is logged only if the user has selected to 
+                        // delete all subject identifiers.
+                        if(shouldDelete == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                            topicName = TopicToString.toString(topic);
+                            setDefaultLogger();
+                            if(localDeleteCount == 0) {
+                                log("Deleted no subject identifiers in topic '" + topicName + "'.");
+                            }
+                            else if(localDeleteCount == 1) {
+                                log("Deleted one subject identifiers in topic '" + topicName + "'.");
+                            }
+                            else {
+                                log("Deleted "+localDeleteCount+" subject identifiers in topic '" + topicName + "'.");
                             }
                         }
                     }
                 }
+                while(topics.hasNext() && !forceStop() && 
+                        shouldDelete != WandoraOptionPane.CANCEL_OPTION && 
+                        shouldDelete != WandoraOptionPane.CLOSED_OPTION);
             }
-            log("Total " + icount + " topics investigated.");
-            log("Total " + count + " subject identifiers deleted in "+tcount+" topics.");
+            setDefaultLogger();
+            log("Investigated " + inspectionCount + " topics.");
+            log("Deleted " + deleteCount + " subject identifiers.");
+            log("Ready.");
+            setState(WAIT);
         }
         
-        setState(WAIT);
+        
     }
     
     
     
     
-    
-    public Collection<Locator> collectSubjectIdentifiers(Topic topic) throws TopicMapException {
-        ArrayList<Locator> sis = new ArrayList();
-        Iterator<Locator> sii = topic.getSubjectIdentifiers().iterator();
-        sii.next(); // Hop over == save first locator
-        while(sii.hasNext()) {
-            sis.add(sii.next());
+    /**
+     * Method is used to get a collection of subject identifier out of topic
+     * that should be deleted.
+     * Extending class implementing a specific subject identifier remover should
+     * override this method.
+     * 
+     * @param topic
+     * @return Collection of locators
+     * @throws TopicMapException 
+     */
+    protected Collection<Locator> getSubjectIdentifiers(Topic topic) throws TopicMapException {
+        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList();
+        Iterator<Locator> subjectIdentifiersOfTopic = topic.getSubjectIdentifiers().iterator();
+        subjectIdentifiersOfTopic.next(); // Hop over == save first locator
+        while(subjectIdentifiersOfTopic.hasNext()) {
+            subjectIdentifiersToDelete.add(subjectIdentifiersOfTopic.next());
         }
-        return sis;
+        return subjectIdentifiersToDelete;
     }
     
     
-    public boolean shouldDelete(Topic topic, Locator si)  throws TopicMapException {
-        if(confirm) {
-            return confirmDelete(topic, si);
+    /**
+     * If tool context is SIContext the tool can narrow the set of deleted subject
+     * identifiers here. Method takes the context objects as argument and returns
+     * a collection of locators i.e. subject identifiers that should be deleted.
+     * Extending class implementing a specific subject identifier remover should
+     * override this method.
+     * 
+     * @param subjectIdentifiers
+     * @return
+     * @throws TopicMapException 
+     */
+    protected Collection<Locator> getSubjectIdentifiers(Iterator<Locator> subjectIdentifiers) throws TopicMapException {
+        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList();
+        while(subjectIdentifiers.hasNext()) {
+            subjectIdentifiersToDelete.add(subjectIdentifiers.next());
         }
-        else {
-            return true;
-        }
+        return subjectIdentifiersToDelete;
     }
     
-    public boolean yesToAll = false;
-    public boolean confirmDelete(Topic topic, Locator si) throws TopicMapException  {
+    
+    
+    
+    protected String getConfirmMessage(Topic topic, Locator si) {
         String topicName = TopicToString.toString(topic);
-        
-        if(yesToAll) {
-            if(topicName != null) {
-                hlog("Deleting topic's '"+ topicName +"' subject identifier '"+si.toExternalForm()+"'.");
-            }
-            else {
-                hlog("Deleting subject identifier '"+si.toExternalForm()+"'.");
-            }
-            return true;
-        }
-        else {
-            //setState(INVISIBLE);
-
-            String confirmMessage;
-            if(topicName != null) {
-                confirmMessage = "Would you like delete topic's '" + topicName + "' subject identifier '"+si.toExternalForm()+"'?";
-            }
-            else {
-                confirmMessage = "Would you like delete subject identifier '"+si.toExternalForm()+"'?";
-            }
-            int answer = WandoraOptionPane.showConfirmDialog(wandora, confirmMessage, "Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
-            //setState(VISIBLE);
-            if(answer == WandoraOptionPane.YES_OPTION) {
-                return true;
-            }
-            if(answer == WandoraOptionPane.YES_TO_ALL_OPTION) {
-                yesToAll = true;
-                return true;
-            }
-            else if(answer == WandoraOptionPane.CANCEL_OPTION) {
-                shouldContinue = false;
-            }
-            return false;
-        }
+        String confirmMessage = "Delete topic's '" + topicName + "' subject identifier '"+si.toExternalForm()+"'?";
+        return confirmMessage;
     }
+
     
 }

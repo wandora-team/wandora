@@ -38,6 +38,7 @@ import static org.wandora.application.gui.ConfirmResult.*;
 import org.wandora.*;
 
 import java.util.*;
+import org.wandora.utils.DataURL;
 
 
 
@@ -65,49 +66,55 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
 
     @Override
     public String getName() {
-        return "SI Fixer v2";
+        return "Subject identifier fixer v2";
     }
 
     @Override
     public String getDescription() {
-        return "Fixes all subject identifiers of context topics. "+
-               "Fix includes illegal character removal.";
+        return "Encodes all illegal charatcers in the subject locator URL. "+
+               "Leaves data URLs untouched.";
     }
 
+    @Override
     public void execute(Wandora admin, Context context)  throws TopicMapException {
-        Iterator contextTopics = context.getContextObjects();
+        Iterator<Topic> contextTopics = context.getContextObjects();
         TopicMap tm = admin.getTopicMap();
         if(contextTopics != null && contextTopics.hasNext()) {
-            if(WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to fix subject identifiers?","Confirm SI fix", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
+            if(WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to fix subject identifiers?","Fix subject identifiers?", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
                 setDefaultLogger();
-                setLogTitle("Fixing SIs");
+                setLogTitle("Fixing subject identifiers");
                 Topic topic = null;
-                Locator nl = null;
-                Locator l = null;
-                Collection sis = null;
-                ConfirmResult result = yes;
+                Collection<Locator> subjectIdentifiers = null;
                 int progress = 0;
-                int fixed = 0;
-                int checked = 0;
+                int fixCount = 0;
+                int checkCount = 0;
+                int dataURLCounter = 0;
+                int addCounter = 0;
 
-                while(contextTopics.hasNext() && !forceStop(result)) {
+                while(contextTopics.hasNext() && !forceStop()) {
                     try {
-                        topic = (Topic) contextTopics.next();
+                        topic = contextTopics.next();
                         if(topic != null  && !topic.isRemoved()) {
                             setProgress(progress++);
-                            sis = topic.getSubjectIdentifiers();
-                            if(sis.isEmpty()) {
-                                log("Adding SI " + nl.toExternalForm());
-                                topic.addSubjectIdentifier(TopicTools.createDefaultLocator());
+                            subjectIdentifiers = topic.getSubjectIdentifiers();
+                            if(subjectIdentifiers.isEmpty()) {
+                                Locator defaultSubjectIdentifier = TopicTools.createDefaultLocator();
+                                log("Topic has no subject identifiers at all. Adding subject identifier " + defaultSubjectIdentifier.toExternalForm());
+                                topic.addSubjectIdentifier(defaultSubjectIdentifier);
+                                addCounter++;
                             }
                             else {
-                                for(Iterator siIterator = sis.iterator(); siIterator.hasNext(); ) {
-                                    l = (Locator) siIterator.next();
-                                    if(l != null) {
-                                        checked++;
-                                        hlog("Investigating SI\n"+l.toExternalForm());
+                                subjectIdentifiers = new ArrayList(subjectIdentifiers);
+                                for(Locator subjectIdentifier : subjectIdentifiers) {
+                                    if(subjectIdentifier != null) {
+                                        checkCount++;
+                                        hlog("Investigating subject identifier \n"+getPrintable(subjectIdentifier.toExternalForm()));
                                         try {
-                                            String si = l.toExternalForm();
+                                            String si = subjectIdentifier.toExternalForm();
+                                            if(DataURL.isDataURL(si)) {
+                                                dataURLCounter++;
+                                                continue;
+                                            }
                                             String osi = si;
                                             String reference = null;
                                             int referenceIndex = si.indexOf('#');
@@ -143,18 +150,18 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
                                                         e.printStackTrace();
                                                     }
                                                     try {
-                                                        topic.removeSubjectIdentifier(l);
+                                                        topic.removeSubjectIdentifier(subjectIdentifier);
                                                     }
                                                     catch(Exception e) {
                                                         e.printStackTrace();
                                                     }
-                                                    log("Fixed SI " + encodedsistr);
-                                                    fixed++;
+                                                    log("Fixed subject identifier " + encodedsistr);
+                                                    fixCount++;
                                                 }
                                             }
                                         }
                                         catch(Exception e) {
-                                            e.printStackTrace();
+                                            log(e);
                                         }
                                     }
                                 }
@@ -165,8 +172,13 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
                         log(e);
                     }
                 }
-                log("Checked "+checked+" subject identifiers.");
-                log("Fixed "+fixed+" subject identifiers that are not valid URIs.");
+                log("Checked "+checkCount+" subject identifiers.");
+                log("Fixed "+fixCount+" subject identifiers.");
+                if(addCounter == 1) log("Added "+addCounter+" missing subject identifier.");
+                if(addCounter > 1) log("Added "+addCounter+" missing subject identifiers.");
+                if(dataURLCounter == 1) log("Found "+dataURLCounter+" data URL subject identifier.");
+                if(dataURLCounter > 1) log("Found "+dataURLCounter+" data URL subject identifiers.");
+                log("Ready.");
                 setState(WAIT);
             }
         }
@@ -175,7 +187,7 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
 
     private static final String chars = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_-!.~'()*";
 
-    private String URLEncode(String str) {
+    protected String URLEncode(String str) {
         try {
             if(str != null && str.length() > 0) {
                 StringBuilder sb = new StringBuilder("");
@@ -199,4 +211,13 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
     }
 
 
+    /**
+     * Used to trim long subject identifiers shorter for prettier printing. 
+     */
+    private String getPrintable(String str) {
+        if(str.length() > 128) {
+            return str.substring(0, 127) + "...";
+        }
+        return str;
+    }
 }

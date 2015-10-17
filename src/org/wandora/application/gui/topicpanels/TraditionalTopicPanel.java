@@ -44,6 +44,7 @@ import javax.swing.*;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleToggleButton;
 import org.wandora.application.gui.simple.SimpleURIField;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.navigate.OpenTopic;
@@ -413,6 +414,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
         try {
             boolean viewPreview = options.getBoolean(OPTIONS_VIEW_PREFIX+"previewPanel", false);
+            subjectLocatorViewButton.setSelected(viewPreview);
             if(viewPreview && previewWrapper != null) {
                 previewWrapper.setURL(topic.getSubjectLocator());
             }
@@ -597,6 +599,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         baseNameField = new SimpleField();
         subjectLocatorLabel = new org.wandora.application.gui.simple.SimpleLabel();
         subjectLocatorField = new SimpleURIField();
+        subjectLocatorViewButton = new SimpleToggleButton("gui/icons/view2.png","gui/icons/view2_no.png",false);
         subjectIdentifierLabel = new org.wandora.application.gui.simple.SimpleLabel();
         subjectIdentifierRootPanel = new org.wandora.application.gui.simple.SimplePanel();
         subjectIdentifierPanel = new javax.swing.JPanel();
@@ -663,6 +666,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
@@ -699,6 +703,19 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         idPanel.add(subjectLocatorField, gridBagConstraints);
 
+        subjectLocatorViewButton.setText("view");
+        subjectLocatorViewButton.setBorderPainted(false);
+        subjectLocatorViewButton.setContentAreaFilled(false);
+        subjectLocatorViewButton.setMargin(new java.awt.Insets(2, 10, 2, 0));
+        subjectLocatorViewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subjectLocatorViewButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        idPanel.add(subjectLocatorViewButton, gridBagConstraints);
+
         subjectIdentifierLabel.setForeground(new java.awt.Color(51, 51, 51));
         subjectIdentifierLabel.setText("Subject identifiers");
         subjectIdentifierLabel.setComponentPopupMenu(getSIMenu());
@@ -719,6 +736,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
@@ -877,6 +895,10 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         });
     }//GEN-LAST:event_baseNameFieldFocusLost
 
+    private void subjectLocatorViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subjectLocatorViewButtonActionPerformed
+        toggleVisibility("View subject locators");
+    }//GEN-LAST:event_subjectLocatorViewButtonActionPerformed
+
     
     
 
@@ -996,6 +1018,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     private javax.swing.JPanel subjectIdentifierRootPanel;
     private javax.swing.JTextField subjectLocatorField;
     private javax.swing.JLabel subjectLocatorLabel;
+    private javax.swing.JToggleButton subjectLocatorViewButton;
     private javax.swing.JPanel typedAssociationsPanel;
     private javax.swing.JPanel typedAssociationsRootPanel;
     private javax.swing.JPanel variantRootPanel;

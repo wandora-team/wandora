@@ -36,6 +36,7 @@ import org.wandora.application.gui.*;
 import org.wandora.utils.*;
 import java.util.*;
 import java.net.*;
+import org.wandora.application.gui.topicstringify.TopicToString;
 
 
 
@@ -57,79 +58,6 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool implements Wand
     }
     
     
-    
-    public void execute(Wandora admin, Context context) {
-        Iterator topics = null;
-        if(context instanceof SIContext) {
-            Iterator sis = context.getContextObjects();
-            TopicMap topicmap = admin.getTopicMap();
-            ArrayList l = new ArrayList();
-            Locator si = null;
-            Topic t = null;
-            while(sis.hasNext()) {
-                try {
-                    si = (Locator) sis.next();
-                    t = topicmap.getTopic(si);
-                    if(!l.contains(t)) {
-                        l.add(t);
-                    }
-                }
-                catch(Exception e) {
-                    log(e);
-                }
-            }
-            topics = l.iterator();
-        }
-        else {
-            topics = context.getContextObjects();
-        }
-        
-        if(topics == null || !topics.hasNext()) return;
-        
-        
-        
-        Collection<Locator> SIs = solveSIs(admin);
-        if(SIs == null) return;
-
-        Topic topic = null;
-        Topic existingTopic = null;
-        Iterator<Locator> SIIterator = SIs.iterator();
-        Locator locator = null;
-        int answer = 0;
-        boolean shouldAdd = true;
-
-        ArrayList<Object> dt = new ArrayList<>();
-        while(topics.hasNext() && !forceStop()) {
-            dt.add(topics.next());
-        }
-        topics = dt.iterator();
-        
-        while(topics.hasNext() && !forceStop()) {
-            topic = (Topic) topics.next();
-            try {
-                if(topic != null && !topic.isRemoved()) {
-                    while(SIIterator.hasNext()) {
-                        locator = SIIterator.next();
-                        existingTopic = topic.getTopicMap().getTopic(locator);
-                        shouldAdd = true;
-                        if(confirm && existingTopic != null && !existingTopic.equals(topic)) {
-                            answer = WandoraOptionPane.showConfirmDialog(admin,"There exists another topic with subject identifier '" + locator.toExternalForm() + "'. Merge occurs if subject identifier is added to the topic. Do you want to add the subject identifier to the topic?","Confirm merge", WandoraOptionPane.YES_NO_OPTION);
-                            if(answer != WandoraOptionPane.YES_OPTION) shouldAdd = false;
-                        }
-                        if(shouldAdd) {
-                            topic.addSubjectIdentifier(locator);
-                        }
-                    }
-                }
-            }
-            catch (Exception e) {
-                answer = WandoraOptionPane.showConfirmDialog(admin,"Exception '" + e.getMessage() + "' occurred while adding subject identifier '" + locator.toExternalForm() + "'. Would you like to continue with the operation?","Continue?", WandoraOptionPane.YES_NO_OPTION);
-                if(answer != WandoraOptionPane.YES_OPTION) return;
-            }
-        }
-    }
-    
-
 
     @Override
     public String getName() {
@@ -142,33 +70,141 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool implements Wand
                "to current topics. If same subject identifier is added to many topics, the "+
                "topics are merged automatically by Wandora.";
     }
+
     
     
-    public Collection<Locator> solveSIs(Wandora admin) {
-        ArrayList<Locator> SIs = new ArrayList<>();
-        String text = ClipboardBox.getClipboard();
-        StringTokenizer st = new StringTokenizer(text, "\n");
-        String sis = null;
-        Locator sil = null;
-        while(st.hasMoreTokens()) {
-            try {
-                sis = st.nextToken();
-                sis = Textbox.trimExtraSpaces(sis);
-                sil = new Locator(sis);
-                URL siurl = new URL(sis); // throws an exception if sis malformed!
-                SIs.add(sil);
+    @Override
+    public void execute(Wandora wandora, Context context) {
+        
+        try {
+            Collection<Topic> targetTopics = getTargetTopics(context);
+            if(targetTopics == null || targetTopics.isEmpty()) {
+                log("Found no topics to add subject identifiers to. Select at least one topic and try again.");
+                return;
             }
-            catch(java.net.MalformedURLException mue){
-                int answer = WandoraOptionPane.showConfirmDialog(admin,"Malformed subject identifier given: '" + sis + "'. Would you like to continue with the operation?", "Malformed subject identifier", WandoraOptionPane.YES_NO_OPTION);
-                if(answer != WandoraOptionPane.YES_OPTION) return null;
+
+            Collection<Locator> subjectIdentifiers = getSubjectIdentifiersToPaste();
+            if(subjectIdentifiers == null || subjectIdentifiers.isEmpty()) {
+                log("Found no subject identifiers to paste. Copy URLs to system clipboard and try again.");
+                return;
             }
-            catch(Exception e) {
-                log(e);
+
+            for(Topic topic : targetTopics) {
+                try {
+                    if(topic != null && !topic.isRemoved()) {
+                        for(Locator subjectIdentifier : subjectIdentifiers) {
+                            if(isValidSubjectIdentifier(subjectIdentifier)) {
+                                Topic existingTopic = topic.getTopicMap().getTopic(subjectIdentifier);
+                                int shouldAdd = WandoraOptionPane.YES_OPTION;
+                                if(confirm && existingTopic != null && !existingTopic.equals(topic)) {
+                                    shouldAdd = WandoraOptionPane.showConfirmDialog(wandora,"Another topic named as '"+TopicToString.toString(existingTopic)+"' already contains subject identifier '" + subjectIdentifier.toExternalForm() + "'. Merge occurs if subject identifier is added. Do you want to add the subject identifier?",
+                                            "Add subject identifier?", 
+                                            WandoraOptionPane.YES_NO_CANCEL_OPTION);
+                                    if(shouldAdd == WandoraOptionPane.CANCEL_OPTION || shouldAdd == WandoraOptionPane.CLOSED_OPTION) {
+                                        return;
+                                    }
+                                }
+                                if(shouldAdd == WandoraOptionPane.YES_OPTION) {
+                                    topic.addSubjectIdentifier(subjectIdentifier);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (CancelledException ce) {
+                    break;
+                }
+                catch (Exception e) {
+                    int shouldContinue = WandoraOptionPane.showConfirmDialog(wandora,"Exception '" + e.getMessage() + "' occurred while adding subject identifier to topic '"+TopicToString.toString(topic)+"'. Would you like to continue adding subject indentifiers?","Continue?", WandoraOptionPane.YES_NO_OPTION);
+                    if(shouldContinue != WandoraOptionPane.YES_OPTION) return;
+                }
             }
         }
-        return SIs;
+        catch(Exception e) {
+            log(e);
+        }
+    }
+    
+
+
+    protected Collection<Topic> getTargetTopics(Context context) {
+        ArrayList topics = new ArrayList();
+        if(context instanceof SIContext) {
+            Iterator<Locator> sis = context.getContextObjects();
+            TopicMap topicmap = Wandora.getWandora().getTopicMap();
+            Locator si = null;
+            Topic t = null;
+            while(sis.hasNext()) {
+                try {
+                    si = sis.next();
+                    t = topicmap.getTopic(si);
+                    if(!topics.contains(t)) {
+                        topics.add(t);
+                    }
+                }
+                catch(Exception e) {
+                    log(e);
+                }
+            }
+        }
+        else {
+            Iterator<Topic> topicIterator = context.getContextObjects();
+            while(topicIterator.hasNext()) {
+                topics.add(topicIterator.next());
+            }
+        }
+        return topics;
     }
     
     
+    public Collection<Locator> getSubjectIdentifiersToPaste() {
+        ArrayList<Locator> subjectIdentifiers = new ArrayList<>();
+        String text = ClipboardBox.getClipboard();
+        StringTokenizer tokenizer = new StringTokenizer(text, "\n");
+        while(tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if(token != null) {
+                token = token.trim();
+                Locator subjectIdentifier = new Locator(token);
+                subjectIdentifiers.add(subjectIdentifier);
+            }
+        }
+        return subjectIdentifiers;
+    }
+    
+    
+    protected boolean isValidSubjectIdentifier(Locator locator) throws CancelledException {
+        boolean isValid = false;
+        
+        if(locator != null) {
+            String str = locator.toExternalForm();
+            if(str != null) {
+                if(str.length() > 0) {
+                    if(DataURL.isDataURL(str)) {
+                        isValid = true;
+                    }
+                    else {
+                        try {
+                            new URL(str);
+                            isValid = true;
+                        }
+                        catch(java.net.MalformedURLException mue) {
+                            
+                        }
+                    }
+                }
+            }
+        }
+        if(!isValid && confirm) {
+            int shouldContinue = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(),
+                    "Invalid subject identifier '" + locator + "' given. Would you like to continue?", 
+                    "Invalid subject identifier", 
+                    WandoraOptionPane.YES_NO_OPTION);
+            if(shouldContinue != WandoraOptionPane.YES_OPTION) {
+                throw new CancelledException();
+            };
+        }
+        return isValid;
+    }
     
 }

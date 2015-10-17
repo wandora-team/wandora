@@ -32,6 +32,7 @@ package org.wandora.topicmap;
 
 import java.util.*;
 import org.wandora.topicmap.layered.*;
+import org.wandora.utils.DataURL;
 
 /**
  *
@@ -697,6 +698,7 @@ public class TopicTools {
 
     public static boolean isDirtyLocator(Locator l) {
         String s = l.toExternalForm();
+        if(DataURL.isDataURL(s)) return false;
         for(int k=0; k<s.length(); k++) {
             if(isDirtyLocatorCharacter(s.charAt(k))) return true;
         }
@@ -714,23 +716,32 @@ public class TopicTools {
     public static String dchars = "AAAAAAOOOOOooooAaaaoaaaaeuuuuuUUUUYYyyZzCCccEEEEeeeeiiiiIIIIDdNnxfOottsSs";
     public static char repacementLocatorCharacterFor(char c) {
         int i = schars.indexOf(c);
-        if(i == -1) return '_';
+        if(i == -1) {
+            if(c < 32) return 0;
+            return '_';
+        }
         else return dchars.charAt(i);
     }
     
     
     public static String cleanDirtyLocator(String s) {
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-        for(int k=0; k<s.length() && ++i<99999; k++) {
-            char c = s.charAt(k);
-            if(isDirtyLocatorCharacter(c)) {
-                sb.append(repacementLocatorCharacterFor(c));
-            }
-            else sb.append(c);
+        if(DataURL.isDataURL(s)) {
+            return s;
         }
-        return sb.toString();
-    } 
+        else {
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            for(int k=0; k<s.length(); k++) {
+                char c = s.charAt(k);
+                if(isDirtyLocatorCharacter(c)) {
+                    c = repacementLocatorCharacterFor(c);
+                    if(c != 0) sb.append(c);
+                }
+                else sb.append(c);
+            }
+            return sb.toString();
+        }
+    }
     
     public static Locator cleanDirtyLocator(Locator l) {
         if(l != null) {

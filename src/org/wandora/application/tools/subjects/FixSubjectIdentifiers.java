@@ -32,7 +32,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import static org.wandora.application.gui.ConfirmResult.*;
-import org.wandora.*;
 
 import java.util.*;
 
@@ -40,9 +39,8 @@ import java.util.*;
 
 /**
  * <code>FixSubjectIdentifiers</code> iterates through all subject identifiers in context
- * topics and replaces all invalid characters in SI's with underline
- * character (_). Invalid characters in subject identifiers may cause
- * problems if subject identifiers are used to aquire topics within
+ * topics and replaces all invalid characters. Invalid characters in subject identifiers may cause
+ * problems if subject identifiers are used to acquire topics within
  * web application.
  *
  * Subject identifier changes may cause topic merges.
@@ -50,9 +48,8 @@ import java.util.*;
  * @author  akivela
  */
 public class FixSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
-    
-    boolean quiet = false;
 
+    
     public FixSubjectIdentifiers() {
     }
     public FixSubjectIdentifiers(Context context) {
@@ -62,54 +59,49 @@ public class FixSubjectIdentifiers extends AbstractWandoraTool implements Wandor
 
     @Override
     public String getName() {
-        return "SI Fixer";
+        return "Fix subject identifiers";
     }
 
     @Override
     public String getDescription() {
-        return "Fixes all subject identifiers of context topics. "+
-               "Fix includes illegal character removal.";
+        return "Clean up all illegal characters in subject identifiers.";
     }
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
-        Iterator contextTopics = context.getContextObjects();
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+        Iterator<Topic> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
-            if(WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to clean subject identifiers?","Confirm SI clean", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
+            if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to fix subject identifiers?","Fix subject identifiers?", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
                 setDefaultLogger();
-                setLogTitle("Cleaning SIs");
-                Topic topic = null;
-                Locator nl = null;
-                Locator l = null;
-                Collection sis = null;
-                ConfirmResult result = yes;
+                setLogTitle("Fixing subject identifiers");
+                Collection<Locator> subjectIdentifiers = null;
                 int progress = 0;
 
-                ArrayList<Object> dt = new ArrayList<Object>();
+                ArrayList<Topic> topics = new ArrayList<>();
                 while(contextTopics.hasNext() && !forceStop()) {
-                    dt.add(contextTopics.next());
+                    topics.add(contextTopics.next());
                 }
-                contextTopics = dt.iterator();
-                        
-                while(contextTopics.hasNext() && !forceStop(result)) {
+  
+                for(Topic topic : topics) {
                     try {
-                        topic = (Topic) contextTopics.next();
+                        if(forceStop()) break;
                         if(topic != null  && !topic.isRemoved()) {
                             setProgress(progress++);
-                            sis = topic.getSubjectIdentifiers();
-                            if(sis.isEmpty()) {
-                                log("Adding SI " + nl.toExternalForm());
-                                topic.addSubjectIdentifier(TopicTools.createDefaultLocator());
+                            subjectIdentifiers = topic.getSubjectIdentifiers();
+                            if(subjectIdentifiers.isEmpty()) {
+                                Locator newSubjectIdentifier = TopicTools.createDefaultLocator();
+                                log("Topic has no subject identifiers at all. Adding subject identifier " + newSubjectIdentifier.toExternalForm());
+                                topic.addSubjectIdentifier(newSubjectIdentifier);
                             }
                             else {
-                                for(Iterator siIterator = sis.iterator(); siIterator.hasNext(); ) {
-                                    l = (Locator) siIterator.next();
-                                    if(l != null) {
-                                        hlog("Investigating SI\n"+l.toExternalForm());
-                                        if(TopicTools.isDirtyLocator(l)) {
-                                            nl = fixSI(topic, l, admin);
-                                            if(nl != null) {
-                                                log("Fixed SI\n" + nl.toExternalForm());
+                                for(Locator subjectIdentifier : subjectIdentifiers) {
+                                    if(forceStop()) break;
+                                    if(subjectIdentifier != null) {
+                                        hlog("Investigating subject identifier \n"+getPrintable(subjectIdentifier.toExternalForm()));
+                                        if(TopicTools.isDirtyLocator(subjectIdentifier)) {
+                                            Locator newSubjectIdentifier = fixSI(topic, subjectIdentifier);
+                                            if(newSubjectIdentifier != null) {
+                                                log("Fixed subject identifier \n" + newSubjectIdentifier.toExternalForm());
                                             }
                                         }
                                     }
@@ -121,6 +113,7 @@ public class FixSubjectIdentifiers extends AbstractWandoraTool implements Wandor
                         log(e);
                     }
                 }
+                log("Ready.");
                 setState(WAIT);
             }
         }
@@ -129,26 +122,35 @@ public class FixSubjectIdentifiers extends AbstractWandoraTool implements Wandor
 
     
     
-    public Locator fixSI(Topic topic, Locator l, Wandora admin)  throws TopicMapException {
-        boolean addNewSI = true;
-        boolean removeOldSI = true;
-        Locator newl = TopicTools.cleanDirtyLocator(l);
-
-        int counter = 1;
-        Topic anotherTopic = topic.getTopicMap().getTopic(newl);
-        while(anotherTopic != null && !anotherTopic.equals(topic)) {
-            String newls = newl.toExternalForm();
-            newl = new Locator(newls + "_" + counter);
-            anotherTopic = topic.getTopicMap().getTopic(newl);
+    protected Locator fixSI(Topic topic, Locator locator)  throws TopicMapException {
+        if(locator != null) {
+            Locator cleanedLocator = TopicTools.cleanDirtyLocator(locator);
+            if(topic != null && !topic.isRemoved()) {
+                int counter = 1;
+                Topic anotherTopic = topic.getTopicMap().getTopic(cleanedLocator);
+                while(anotherTopic != null && !anotherTopic.equals(topic)) {
+                    String cleanedLocatorString = cleanedLocator.toExternalForm();
+                    cleanedLocator = new Locator(cleanedLocatorString + "_" + counter);
+                    anotherTopic = topic.getTopicMap().getTopic(cleanedLocator);
+                }
+                if(!cleanedLocator.equals(locator)) {
+                    topic.addSubjectIdentifier(cleanedLocator);
+                    topic.removeSubjectIdentifier(locator);
+                }
+            }
+            return cleanedLocator;
         }
-        //System.out.println("new si: "+newl);
-        //System.out.println("old si: "+l);
-        if(!newl.equals(l)) {
-            topic.addSubjectIdentifier(newl);
-            topic.removeSubjectIdentifier(l);
-        }
-        return newl;
+        return null;
     }
 
-    
+
+    /**
+     * Used to trim long subject identifiers shorter for prettier printing. 
+     */
+    private String getPrintable(String str) {
+        if(str.length() > 128) {
+            return str.substring(0, 127) + "...";
+        }
+        return str;
+    }
 }

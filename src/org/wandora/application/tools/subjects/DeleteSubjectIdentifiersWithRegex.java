@@ -80,34 +80,32 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     
     
     @Override
-    public Collection<Locator> collectSubjectIdentifiers(Topic topic) throws TopicMapException {
-        ArrayList sisToDelete = new ArrayList();
-        Collection<Locator> sis = topic.getSubjectIdentifiers();
-        if(sis.size() > 1) {
-            for(Locator l : sis) {
-                String ls = l.toExternalForm();
-                if(editor.matches(ls)) {
-                    sisToDelete.add(l);
+    protected Collection<Locator> getSubjectIdentifiers(Iterator<Locator> subjectIdentifiers) throws TopicMapException {
+        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList();
+        while(subjectIdentifiers.hasNext()) {
+            Locator subjectIdentifier = subjectIdentifiers.next();
+            if(subjectIdentifier != null) {
+                String subjectIdetifierString = subjectIdentifier.toExternalForm();
+                if(editor.matches(subjectIdetifierString)) {
+                    subjectIdentifiersToDelete.add(subjectIdentifier);
                 }
             }
         }
-        return sisToDelete;
+        return subjectIdentifiersToDelete;
     }
-    
     
     
     @Override
-    public boolean shouldDelete(Topic topic, Locator si)  throws TopicMapException {
-        String ls = si.toExternalForm();
-        if(editor.matches(ls)) {
-            if(confirm) {
-                return confirmDelete(topic, si);
-            }
-            else {
-                return true;
+    protected Collection<Locator> getSubjectIdentifiers(Topic topic) throws TopicMapException {
+        ArrayList subjectIdentifiersToDelete = new ArrayList();
+        Collection<Locator> subjectIdentifiersOfTopic = topic.getSubjectIdentifiers();
+        for(Locator subjectIdentifier : subjectIdentifiersOfTopic) {
+            String subjectIdentifierString = subjectIdentifier.toExternalForm();
+            if(editor.matches(subjectIdentifierString)) {
+                subjectIdentifiersToDelete.add(subjectIdentifier);
             }
         }
-        return false;
+        return subjectIdentifiersToDelete;
     }
-    
+
 }
