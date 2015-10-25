@@ -101,7 +101,8 @@ import org.wandora.topicmap.TopicMapListener;
 import org.wandora.topicmap.TopicMap;
 import processing.core.*;
 
-import jsyntaxpane.DefaultSyntaxKit;
+//import jsyntaxpane.DefaultSyntaxKit;
+import de.sciss.syntaxpane.DefaultSyntaxKit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jdt.core.compiler.CompilationProgress;
@@ -253,11 +254,19 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
             }
         }
         tm = wandora.getTopicMap();
+
         initComponents();
         this.addComponentListener(this);
-        DefaultSyntaxKit.initKit();
-        processingEditor.setContentType("text/java");
-        
+        try {
+            // JavaSyntaxKit syntaxKit = new JavaSyntaxKit();
+            // syntaxKit.install(processingEditor);
+            DefaultSyntaxKit.initKit();
+            processingEditor.setContentType("text/java");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+                
         /*
         EditorKit ek=processingEditor.getEditorKit();
         if(ek instanceof DefaultSyntaxKit){
@@ -268,7 +277,6 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
             sk.setProperty("Action.double-quotes", null);
             sk.setProperty("Action.close-curly", null);
         }*/
-
         readOptions();
 
         KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
@@ -279,7 +287,6 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
                 saveCurrentSketch();
             }
         };
-
         processingEditor.getActionMap().put("saveOperation", saveOperation);
         innerPanel.addComponentListener(
             new ComponentListener() {
@@ -308,6 +315,7 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
                 }
             }
         );
+
         if(currentSketch != null) {
             processingEditor.setText(currentSketch);
         }
@@ -353,25 +361,25 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
     private void autorun() {
         String autorunSketch = null;
         switch(autorun) {
-             case AUTORUN_OCCURRENCE: {
-                 autorunSketch = getProcessingSketchOccurrence();
-                 break; 
-             }
-             case AUTORUN_SKETCH_IN_EDITOR: { 
-                 autorunSketch = processingEditor.getText();
-                 break; 
-             }
-             case AUTORUN_FILE: {
-                 try {
-                     if(autorunSketchFile != null && autorunSketchFile.length() > 0) {
-                        autorunSketch = IObox.loadFile(autorunSketchFile);
-                     }
-                 }
-                 catch(Exception e) {
-                     e.printStackTrace();
-                 }
-                 break; 
-             }
+            case AUTORUN_OCCURRENCE: {
+                autorunSketch = getProcessingSketchOccurrence();
+                break; 
+            }
+            case AUTORUN_SKETCH_IN_EDITOR: { 
+                autorunSketch = processingEditor.getText();
+                break; 
+            }
+            case AUTORUN_FILE: {
+                try {
+                    if(autorunSketchFile != null && autorunSketchFile.length() > 0) {
+                       autorunSketch = IObox.loadFile(autorunSketchFile);
+                    }
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+                break; 
+            }
         }
         if(autorunSketch != null) {
             execute(autorunSketch);
@@ -791,19 +799,19 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
 	}
         
         String classPath = System.getProperty("java.class.path");
-        //System.out.println("classPath == "+classPath);
+        // System.out.println("classPath == "+classPath);
 
 	// TODO: Here a chance to optimize the compilation process greatly. 
 	// Compilation includes in all the classpaths used by Wandora, which
 	// increase the compilation time greatly. So only the necessary
 	// classpaths should included here. The ones that the SketchTemplate needs.
 	String baseCommand[] = new String[] {
-	  "-Xemacs",
-	  "-source", "1.6",
-	  "-target", "1.6",
-	  "-classpath", classPath, 
-	  "-nowarn", "-noExit",
-	  "-d", buildPath // output the classes in the buildPath
+            "-Xemacs",
+            "-source", "1.7",
+            "-target", "1.7",
+            "-classpath", classPath, 
+            "-nowarn", "-noExit",
+            "-d", buildPath // output the classes in the buildPath
 	};
 
 	String[] sourceFiles = new String[1];
@@ -813,48 +821,48 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
 	
 	try {
 
-          StringWriter errorWriter=new StringWriter();
+            StringWriter errorWriter=new StringWriter();
 
-	  // Wrap as a PrintWriter since that's what compile() wants
-	  PrintWriter printErrorWriter = new PrintWriter(errorWriter);
+            // Wrap as a PrintWriter since that's what compile() wants
+            PrintWriter printErrorWriter = new PrintWriter(errorWriter);
 
-	  //result = com.sun.tools.javac.Main.compile(command, writer);
-	  CompilationProgress progress = null;
-	  PrintWriter outWriter = new PrintWriter(System.out);
-	  success = BatchCompiler.compile(command, outWriter, printErrorWriter, progress);
+            //result = com.sun.tools.javac.Main.compile(command, writer);
+            CompilationProgress progress = null;
+            PrintWriter outWriter = new PrintWriter(System.out);
+            success = BatchCompiler.compile(command, outWriter, printErrorWriter, progress);
 
-	  // Close out the stream for good measure
-	  printErrorWriter.close();
+            // Close out the stream for good measure
+            printErrorWriter.close();
 
-	  BufferedReader reader = new BufferedReader(new StringReader(errorWriter.toString()));
-	  //System.err.println(errorBuffer.toString());
+            BufferedReader reader = new BufferedReader(new StringReader(errorWriter.toString()));
+            //System.err.println(errorBuffer.toString());
 
-	  String line = null;
-	  while ((line = reader.readLine()) != null) {
-	    //System.out.println("got line " + line);  // debug
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                //System.out.println("got line " + line);  // debug
 
-	    // get first line, which contains file name, line number,
-	    // and at least the first line of the error message
-	    String errorFormat = "([\\w\\d_]+.java):(\\d+):\\s*(.*):\\s*(.*)\\s*";
-	    String[] pieces = PApplet.match(line, errorFormat);
+                // get first line, which contains file name, line number,
+                // and at least the first line of the error message
+                String errorFormat = "([\\w\\d_]+.java):(\\d+):\\s*(.*):\\s*(.*)\\s*";
+                String[] pieces = PApplet.match(line, errorFormat);
 
-	    // if it's something unexpected, die and print the mess to the console
-	    if(pieces == null) {
-		// Send out the rest of the error message to the console.
-		
-		if(!line.startsWith("invalid Class-Path header") && line.length() > 3) {
-		    line = replaceLineNumber(line);
-		    errors.add(line);
-		}
-		
-		while ((line = reader.readLine()) != null) {
-		    if(!line.startsWith("invalid Class-Path header") && line.length() > 3) {
-			line = replaceLineNumber(line);
-			errors.add(line);
-		    }
-		}
-	    }
-	  }
+                // if it's something unexpected, die and print the mess to the console
+                if(pieces == null) {
+                    // Send out the rest of the error message to the console.
+
+                    if(!line.startsWith("invalid Class-Path header") && line.length() > 3) {
+                        line = replaceLineNumber(line);
+                        errors.add(line);
+                    }
+
+                    while ((line = reader.readLine()) != null) {
+                        if(!line.startsWith("invalid Class-Path header") && line.length() > 3) {
+                            line = replaceLineNumber(line);
+                            errors.add(line);
+                        }
+                    }
+                }
+            }
 	} 
         catch (IOException e) {
 	    e.printStackTrace();

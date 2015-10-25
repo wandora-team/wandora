@@ -49,7 +49,8 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
-import jsyntaxpane.DefaultSyntaxKit;
+//import jsyntaxpane.DefaultSyntaxKit;
+import de.sciss.syntaxpane.DefaultSyntaxKit;
 import org.apache.commons.io.FileUtils;
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
@@ -173,8 +174,10 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
 
         initComponents();
         this.addComponentListener(this);
-        //DefaultSyntaxKit.initKit();
-        //rEditor.setContentType("text/java");
+        
+        DefaultSyntaxKit.initKit();
+        rEditor.setContentType("text/plain");
+        
         KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
         rEditor.getInputMap().put(key, "saveOperation");
         Action saveOperation = new AbstractAction() {

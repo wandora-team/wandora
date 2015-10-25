@@ -27,6 +27,9 @@ package org.wandora.application.gui.previews;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -45,8 +48,11 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.topicpanels.TopicPanel;
+import org.wandora.topicmap.Locator;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.Functional.Fn0;
 import org.wandora.utils.Functional.Fn1;
@@ -371,10 +377,13 @@ public class PreviewUtils {
     
     
 
-    public static JPanel previewNoPreview(JPanel parent) {
+    public static JPanel previewNoPreview(final PreviewWrapper previewWrapper, final Locator locator) {
         JPanel messagePanel = new JPanel();
-        messagePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+        messagePanel.setLayout(new BorderLayout());
 
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new FlowLayout(FlowLayout.CENTER,20,20));
+        
         StringBuilder labelText = new StringBuilder("<html><center>");
         labelText.append("Don't know how to view the locator.");
         labelText.append("</center></html>");
@@ -383,14 +392,41 @@ public class PreviewUtils {
         label.setText(labelText.toString());
         label.setHorizontalAlignment(SimpleLabel.CENTER);
         label.setIcon(UIBox.getIcon(0xf071));
-        messagePanel.add(label);
+        label.setBounds(20,20,20,20);
+        labelPanel.add(label);
+        
+        messagePanel.add(labelPanel, BorderLayout.NORTH);
 
-        if(parent != null) {
-            parent.removeAll();
-            parent.add(messagePanel, BorderLayout.CENTER);
+        if(hasJavaFX()) {
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
 
-            parent.revalidate();
-            parent.repaint();
+            SimpleButton button = new SimpleButton("Try webview any way");
+            button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            mimetypeCache.put(locator.toExternalForm(), "text/html");
+                            previewWrapper.forceSetURL(locator);
+                        }
+                        catch(Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            );
+            buttonPanel.add(button);
+
+            messagePanel.add(buttonPanel, BorderLayout.SOUTH);
+        }
+        
+        if(previewWrapper != null) {
+            previewWrapper.removeAll();
+            previewWrapper.add(messagePanel, BorderLayout.CENTER);
+
+            previewWrapper.revalidate();
+            previewWrapper.repaint();
         }
         return messagePanel;
     }
@@ -398,13 +434,13 @@ public class PreviewUtils {
     
     
     
-    private static HashMap<String,String> tikaDetections = new HashMap();
-    private static int tikeDetectionsMaxSize = 999;
+    private static HashMap<String,String> mimetypeCache = new HashMap();
+    private static int mimetypeCacheMaxSize = 9999;
     
     public static boolean isOfType(String url, String[] mimeTypes, String[] extensions) {
         if(url != null) {
             if(DataURL.isDataURL(url)) {
-                // The url is a data-url and has an explicit mimetype.
+                // The url is a data-url and has explicit mimetype.
                 try {
                     DataURL dataURL = new DataURL(url);
                     String mimeType = dataURL.getMimetype();
@@ -445,18 +481,18 @@ public class PreviewUtils {
                         URL realUrl = new URL(urlDecoded);
                         if(realUrl != null) {
                             String lowerCaseMimeType = null;
-                            if(tikaDetections.containsKey(url)) {
-                                lowerCaseMimeType = tikaDetections.get(url);
+                            if(mimetypeCache.containsKey(url)) {
+                                lowerCaseMimeType = mimetypeCache.get(url);
                                 
                             }
                             else {
                                 Tika tika = new Tika();
                                 String mimeType = tika.detect(realUrl);
                                 lowerCaseMimeType = mimeType.toLowerCase();
-                                if(tikaDetections.size() > tikeDetectionsMaxSize) {
-                                    tikaDetections.clear();
+                                if(mimetypeCache.size() > mimetypeCacheMaxSize) {
+                                    mimetypeCache.clear();
                                 }
-                                tikaDetections.put(url, lowerCaseMimeType);
+                                mimetypeCache.put(url, lowerCaseMimeType);
                             }
                             if(lowerCaseMimeType != null) {
                                 // System.out.println("Tika detected mimetype: "+lowerCaseMimeType);
@@ -469,15 +505,15 @@ public class PreviewUtils {
                         }
                     }
                     catch(ConnectException ce) {
-                        tikaDetections.put(url, null);
+                        mimetypeCache.put(url, null);
                         System.out.println("ConnectException occurred while detecting preview's type: "+ce.toString());
                     }
                     catch(FileNotFoundException fnfe) {
-                        tikaDetections.put(url, null);
+                        mimetypeCache.put(url, null);
                         System.out.println("FileNotFoundException occurred while detecting preview's type: "+fnfe.toString());
                     }
                     catch(IllegalArgumentException iae) {
-                        tikaDetections.put(url, null);
+                        mimetypeCache.put(url, null);
                         System.out.println("IllegalArgumentException occurred while detecting preview's type: "+iae.toString());
                     }
                     catch(Exception e) {
@@ -490,5 +526,17 @@ public class PreviewUtils {
             }
         }
         return false;
+    }
+    
+    
+    
+    public static boolean hasJavaFX() {
+        try {
+            Class jfxPanel = Class.forName("javafx.embed.swing.JFXPanel");
+            return true;
+        } 
+        catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 }

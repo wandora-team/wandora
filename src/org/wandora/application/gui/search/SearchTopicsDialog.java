@@ -817,7 +817,7 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
             ScriptEngine engine = sm.getScriptEngine(engineName);
             String scriptStr =  scriptTextPane.getText();
             Directive query = null;
-            if(engine != null && engineName.toLowerCase().indexOf("nashorn") != -1) {
+            if(engine != null && engineName != null && engineName.toLowerCase().contains("nashorn")) {
                 try {
                     // https://bugs.openjdk.java.net/browse/JDK-8025132
                     engine.eval("load('nashorn:mozilla_compat.js');");

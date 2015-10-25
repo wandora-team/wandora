@@ -47,7 +47,8 @@ import static org.wandora.application.gui.topicpanels.CustomTopicPanel.QueryInfo
 
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.InputEvent.*;
-import jsyntaxpane.DefaultSyntaxKit;
+//import jsyntaxpane.DefaultSyntaxKit;
+import de.sciss.syntaxpane.DefaultSyntaxKit;
 /**
  *
  * @author  olli

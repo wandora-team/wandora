@@ -10,16 +10,11 @@ set WANDORACLASSES=%WANDORACLASSES%;lib/jmbox/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/jtidy/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/gdata/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/jetty/*
-set WANDORACLASSES=%WANDORACLASSES%;lib/jdic/*
-set WANDORACLASSES=%WANDORACLASSES%;lib/jdic/windows/*
-set WANDORACLASSES=%WANDORACLASSES%;lib/jdicplus/*
-set WANDORACLASSES=%WANDORACLASSES%;lib/jdicplus/windows/x86/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/poi/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/musicbrainz/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/axis2/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/pdfbox/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/any23/*
-set WANDORACLASSES=%WANDORACLASSES%;lib/sesame/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/stanford-ner/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/gate/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/gate/lib/*
@@ -31,4 +26,6 @@ set WANDORACLASSES=%WANDORACLASSES%;lib/unirest/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/tmql4j/*
 set WANDORACLASSES=%WANDORACLASSES%;lib/*
 REM  To use the Webview Panel with Java 7 fix next line to address the location of JavaFX jar jfxrt.jar .
-set WANDORACLASSES=%WANDORACLASSES%;C:\Program Files\Java\jre7\lib\jfxrt.jar
+REM  Uncomment next line if you are using Java 7. 
+REM  Keep next line commented if you are using Java 8.
+REM set WANDORACLASSES=%WANDORACLASSES%;C:\Program Files\Java\jre7\lib\jfxrt.jar

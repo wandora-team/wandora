@@ -77,7 +77,12 @@ public class PreviewWrapper extends JPanel {
     
     public static void removePreviewWrapper(Object owner) {
         if(previewWrappers != null) {
-            previewWrappers.remove(owner);
+            if(previewWrappers.containsKey(owner)) {
+                previewWrappers.remove(owner);
+            }
+            else {
+                System.out.println("Found no preview wrapper "+owner);
+            }
         }
     }
     
@@ -104,10 +109,19 @@ public class PreviewWrapper extends JPanel {
     }
     
     
+    
+    
     public void setURL(final Locator subjectLocator) {
         if(subjectLocator != null && subjectLocator.equals(currentLocator)) {
             return;
         }
+        forceSetURL(subjectLocator);
+    }
+    
+    
+    
+
+    public void forceSetURL(final Locator subjectLocator) {
         
         if(currentPanel != null) {
             currentPanel.stop();
@@ -136,7 +150,9 @@ public class PreviewWrapper extends JPanel {
     }
     
     
+    
     // -------------------------------------------------------------------------
+    
     
     
     @Override
@@ -205,7 +221,7 @@ public class PreviewWrapper extends JPanel {
                             System.out.println("Created preview "+currentPanel.getClass()+" for "+locatorString);
                         }
                         else {
-                            currentUI = PreviewUtils.previewNoPreview(previewWrapper);
+                            currentUI = PreviewUtils.previewNoPreview(previewWrapper, subjectLocator);
                         }
                     }
                 }
@@ -231,6 +247,7 @@ public class PreviewWrapper extends JPanel {
             }
             
             revalidate();
+            repaint();
         }
     
         

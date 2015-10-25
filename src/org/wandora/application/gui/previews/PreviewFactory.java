@@ -73,7 +73,7 @@ public class PreviewFactory {
         else if(AudioMP3v2.canView(urlString)) {
             previewPanel = new AudioMP3v2(urlString);
         }
-        else if(hasJavaFX() && VideoMp4.canView(urlString)) {
+        else if(PreviewUtils.hasJavaFX() && VideoMp4.canView(urlString)) {
             previewPanel = new VideoMp4(urlString);
         }
         else if(Image.canView(urlString)) {
@@ -107,16 +107,4 @@ public class PreviewFactory {
         }
     }
     
-    
-    
-    
-    private static boolean hasJavaFX() {
-        try {
-            Class jfxPanel = Class.forName("javafx.embed.swing.JFXPanel");
-            return true;
-        } 
-        catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
 }

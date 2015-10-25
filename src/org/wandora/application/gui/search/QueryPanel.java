@@ -26,6 +26,8 @@
 
 package org.wandora.application.gui.search;
 
+import de.sciss.syntaxpane.DefaultSyntaxKit;
+import de.sciss.syntaxpane.syntaxkits.JavaScriptSyntaxKit;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -289,7 +291,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         WandoraScriptManager sm = new WandoraScriptManager();
         ScriptEngine engine = sm.getScriptEngine(engineName);
         Directive query = null;
-        if(engine != null && engineName.toLowerCase().contains("nashorn")) {
+        if(engine != null && engineName != null && engineName.toLowerCase().contains("nashorn")) {
             try {
                 // https://bugs.openjdk.java.net/browse/JDK-8025132
                 engine.eval("load('nashorn:mozilla_compat.js');");
@@ -639,13 +641,27 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
 
     
-    
+    // ------------------------------------------------------- QueryTextPane ---
     
     
     private class QueryTextPane extends SimpleTextPaneResizeable {
     
         private int scriptQueryPanelWidth = 100;
         private int scriptQueryPanelHeight = scriptQueryPanel.getHeight();
+        
+        
+        public QueryTextPane() {
+            super();
+            try {
+                //JavaScriptSyntaxKit syntaxKit = new JavaScriptSyntaxKit();
+                //syntaxKit.install(this);
+                //DefaultSyntaxKit.initKit();
+                //setContentType("text/javascript");
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
         
         
         @Override

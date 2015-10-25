@@ -50,8 +50,8 @@ public class QueryRunner {
     protected ScriptEngine scriptEngine;
     
     /**
-     * Initialise the runner with the specified scripting engine. Give the
-     * string "none" as scripting engine name to not initialise any engine. In 
+     * Initialize the runner with the specified scripting engine. Give the
+     * string "none" as scripting engine name to not initialize any engine. In 
      * this case, you may only use the runQuery methods that take a directive
      * directly instead of a query script.
      * 
@@ -59,15 +59,20 @@ public class QueryRunner {
      */
     public QueryRunner(String scriptEngineName){
         this.scriptEngineName=scriptEngineName;
-        if(this.scriptEngineName==null || !this.scriptEngineName.trim().equals("none")){
+        if(this.scriptEngineName==null || !this.scriptEngineName.trim().equals("none")) {
             if(scriptEngineName==null) this.scriptEngine=scriptManager.getScriptEngine(ScriptManager.getDefaultScriptEngine());
             else this.scriptEngine=scriptManager.getScriptEngine(scriptEngineName);
             if(this.scriptEngine==null) throw new RuntimeException("Couldn't find a suitable script engine");
         }
+        try {
+            // https://bugs.openjdk.java.net/browse/JDK-8025132
+            scriptEngine.eval("load('nashorn:mozilla_compat.js');");
+        }
+        catch(Exception e) {}
     }
     
     /**
-     * Initialise the runner with the default scripting engine.
+     * Initialize the runner with the default scripting engine.
      */
     public QueryRunner(){
         this(null);
