@@ -84,16 +84,16 @@ public class AdjacencyMatrixImport extends AbstractWandoraTool implements Wandor
         setDefaultLogger();
         setLogTitle("Adjacency matrix import");
 
-        log("Reading adjacency matrix!");
+        log("Reading adjacency matrix.");
         String matrixData = matrixSourceDialog.getContent();
 
-        log("Parsing adjacency matrix!");
+        log("Parsing...");
         MatrixParser matrixParser = new MatrixParser(matrixData, topicmap);
         cellValueToPlayer = matrixSourceDialog.cellValueToPlayer();
         matrixParser.parse();
-        log("Total "+matrixParser.counter+" associations created!");
+        log("Created "+matrixParser.counter+" associations.");
 
-        log("Ok!");
+        log("Ready.");
         setState(WAIT);
     }
 

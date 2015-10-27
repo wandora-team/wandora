@@ -50,7 +50,7 @@ public class IncidenceMatrixImport extends AbstractWandoraTool implements Wandor
 
 
 
-    /** Creates a new instance of AdjacencyMatrixImport */
+    /** Creates a new instance of IncidenceMatrixImport */
     public IncidenceMatrixImport() {
     }
 
@@ -80,15 +80,15 @@ public class IncidenceMatrixImport extends AbstractWandoraTool implements Wandor
         setDefaultLogger();
         setLogTitle("Incidence matrix import");
 
-        log("Reading incidence matrix!");
+        log("Reading incidence matrix.");
         String matrixData = matrixSourceDialog.getContent();
 
-        log("Parsing incidence matrix!");
+        log("Parsing...");
         MatrixParser matrixParser = new MatrixParser(matrixData, topicmap);
         matrixParser.parse();
-        log("Total "+matrixParser.counter+" associations created!");
+        log("Created "+matrixParser.counter+" associations.");
 
-        log("Ok!");
+        log("Ready.");
         setState(WAIT);
     }
 

@@ -476,6 +476,53 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
       </set>
       <set>
+         <name>import-merge</name>
+         <item>
+            <name>Topic map import...</name>
+            <class>org.wandora.application.tools.importers.TopicMapImport</class>
+         </item>
+         <item>
+            <name>XML transform and merge...</name>
+            <class>org.wandora.application.tools.importers.XSLImport</class>
+         </item>
+         <item>
+            <name>--- RDF FORMATS ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Simple RDF XML import...</name>
+            <class>org.wandora.application.tools.importers.SimpleRDFImport</class>
+         </item>
+         <item>
+            <name>Simple RDF N3 import...</name>
+            <class>org.wandora.application.tools.importers.SimpleN3Import</class>
+         </item>
+         <item>
+            <name>Simple RDF Turtle import...</name>
+            <class>org.wandora.application.tools.importers.SimpleRDFTurtleImport</class>
+         </item>
+         <item>
+            <name>Simple RDF JSON-LD import...</name>
+            <class>org.wandora.application.tools.importers.SimpleRDFJsonLDImport</class>
+         </item>
+         <item>
+            <name>--- MATRIXS AND LISTS ---</name>
+            <class>org.wandora.application.tools.DummyTool</class>
+         </item>
+         <item>
+            <name>Adjacency list import...</name>
+            <class>org.wandora.application.tools.importers.graphs.AdjacencyListImport</class>
+         </item>
+         <item>
+            <name>Adjacency matrix import...</name>
+            <class>org.wandora.application.tools.importers.graphs.AdjacencyMatrixImport</class>
+         </item>
+         <item>
+            <name>Incidence matrix import...</name>
+            <class>org.wandora.application.tools.importers.graphs.IncidenceMatrixImport</class>
+         </item>
+      </set>
+      <set>
          <name>extract</name>
          <item>
             <name>Topics</name>

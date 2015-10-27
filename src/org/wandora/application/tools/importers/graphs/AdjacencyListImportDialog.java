@@ -28,7 +28,6 @@
 package org.wandora.application.tools.importers.graphs;
 
 
-import org.wandora.application.tools.extractors.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.*;
@@ -36,7 +35,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.utils.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.io.*;
@@ -97,10 +95,10 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
         }
         else if(filePanel.equals(selectedComponent)) {
             File[] files = getFileSources();
-            StringBuffer sb = new StringBuffer("");
-            for(int i=0; i<files.length; i++) {
+            StringBuilder sb = new StringBuilder("");
+            for(File file : files) {
                 try {
-                    sb.append(IObox.loadFile(files[i]));
+                    sb.append(IObox.loadFile(file));
                 }
                 catch(Exception e) {
                     parentTool.log(e);
@@ -109,10 +107,10 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
         }
         else if(urlPanel.equals(selectedComponent)) {
             String[] urls = getURLSources();
-            StringBuffer sb = new StringBuffer("");
-            for(int i=0; i<urls.length; i++) {
+            StringBuilder sb = new StringBuilder("");
+            for(String url : urls) {
                 try {
-                    sb.append(IObox.doUrl(new URL(urls[i])));
+                    sb.append(IObox.doUrl(new URL(url)));
                 }
                 catch(Exception e) {
                     parentTool.log(e);
@@ -133,11 +131,15 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
         String[] filenames = splitText(input);
         ArrayList<File> files = new ArrayList<File>();
         File f = null;
-        for(int i=0; i<filenames.length; i++) {
-            f = new File(filenames[i]);
-            if(f.exists()) files.add(f);
+        for(String filename : filenames) {
+            f = new File(filename);
+            if(f.exists()) {
+                files.add(f);
+            } 
             else {
-                if(parentTool != null) parentTool.log("File '"+filenames[i]+"' not found!");
+                if (parentTool != null) {
+                    parentTool.log("File '" + filename + "' not found!");
+                }
             }
         }
         return files.toArray( new File[] {} );
@@ -156,7 +158,7 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
     
     private String[] splitText(String str) {
         if(str == null) return null;
-        if(str.indexOf("\n") != -1) {
+        if(str.contains("\n")) {
             String[] s = str.split("\n");
             for(int i=0; i<s.length; i++) {
                 s[i] = s[i].trim();
@@ -206,7 +208,7 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
         Object o = null;
         Topic t = null;
         Locator locator = null;
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         while(iter.hasNext()) {
             try {
                 o = iter.next();
@@ -219,7 +221,7 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
                             String locatorStr = locator.toExternalForm();
                             if(locatorStr.startsWith("file:")) {
                                 locatorStr = IObox.getFileFromURL(locatorStr);
-                                sb.append(locatorStr + "\n");
+                                sb.append(locatorStr).append("\n");
                             }
                         }
                     }
@@ -243,7 +245,7 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
         Object o = null;
         Topic t = null;
         Locator locator = null;
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         while(iter.hasNext()) {
             try {
                 o = iter.next();
@@ -278,7 +280,7 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
         Object o = null;
         Topic t = null;
         Locator locator = null;
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         while(iter.hasNext()) {
             try {
                 o = iter.next();
@@ -292,7 +294,7 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
                             locator = ils.next();
                             if(locator != null) {
                                 String locatorStr = locator.toExternalForm();
-                                sb.append(locatorStr + "\n");
+                                sb.append(locatorStr).append("\n");
                             }
                         }
                     }

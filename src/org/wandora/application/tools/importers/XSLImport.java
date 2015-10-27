@@ -29,7 +29,6 @@ package org.wandora.application.tools.importers;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
@@ -142,24 +141,10 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
                             }
                             
                             map.importXTM(pin);
-                            
-                            
+
                             if(!directMerge) {
                                 if(newLayer) {
-                                    LayerStack layerStack = (LayerStack) fadmin.getTopicMap();
-                                    String layerName = filename;
-                                    int c = 2;
-                                    if(layerStack.getLayer(layerName) != null) {
-                                        do {
-                                            layerName = filename + " " + c;
-                                            c++;
-                                        }
-                                        while(layerStack.getLayer(layerName) != null);
-                                    }
-                                    thisf.log("Creating new layer for transformed " + layerName + ".");
-                                    layerStack.addLayer(new Layer(map,layerName,layerStack));
-                                    layerStack.addLayer(new Layer(map, filename, layerStack));
-                                    fadmin.layerTree.resetLayers();
+                                    createNewLayer(map, filename, fadmin);
                                 }
                                 else {
                                     thisf.log("Merging '" + filename + "'.");
@@ -170,7 +155,7 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
                             thisf.log("Ready.");
                         }
                         catch(TopicMapReadOnlyException tmroe) {
-                            thisf.log("Topic map is write protected. Merge failed.");
+                            thisf.log("Topic map is write protected. Import failed.");
                         }
                         catch(Exception e){
                             thisf.log(e);
@@ -203,6 +188,7 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
     }
     
     
+    @Override
     public void importStream(Wandora admin, String streamName, InputStream inputStream) {
         // --- XSL IMPORT HAS NO STREAM IMPORT! --------------------------------
     }

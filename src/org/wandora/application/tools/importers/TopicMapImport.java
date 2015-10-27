@@ -29,7 +29,6 @@ package org.wandora.application.tools.importers;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import java.io.*;
@@ -83,7 +82,7 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
     
 
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
     }
     
     @Override
@@ -92,9 +91,9 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
     }
     
     @Override
-    public void configure(Wandora w,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         //System.out.println(prefix);
-        TopicMapImportConfiguration dialog=new TopicMapImportConfiguration(w);
+        TopicMapImportConfiguration dialog=new TopicMapImportConfiguration(wandora);
         dialog.openDialog();
         if(!dialog.wasAccepted()){
             dialog.saveConfiguration();
@@ -102,7 +101,7 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
     }
     
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
     }
     
 
@@ -112,10 +111,10 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
     
     
     @Override
-    public void importStream(Wandora admin, String streamName, InputStream inputStream) {
+    public void importStream(Wandora wandora, String streamName, InputStream inputStream) {
         try {
             try {
-                admin.getTopicMap().clearTopicMapIndexes();
+                wandora.getTopicMap().clearTopicMapIndexes();
             }
             catch(Exception e) {
                 log(e);
@@ -123,7 +122,7 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
             
             TopicMap map = null;
             if(directMerge) {
-                map = solveContextTopicMap(admin, getContext());
+                map = solveContextTopicMap(wandora, getContext());
             }
             else {
                 map = new org.wandora.topicmap.memory.TopicMapImpl();
@@ -141,23 +140,11 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
 
             if(!directMerge) {
                 if(newLayer) {
-                    LayerStack layerStack = admin.getTopicMap();
-                    String layerName = streamName;
-                    int c = 2;
-                    if(layerStack.getLayer(layerName) != null) {
-                        do {
-                            layerName = streamName + " " + c;
-                            c++;
-                        }
-                        while(layerStack.getLayer(layerName) != null);
-                    }
-                    log("Creating new layer for '" + layerName + "'.");
-                    layerStack.addLayer(new Layer(map,layerName,layerStack));
-                    admin.layerTree.resetLayers();
+                    createNewLayer(map, streamName, wandora);
                 }
                 else {
                     log("Merging '" + streamName + "'.");
-                    solveContextTopicMap(admin, getContext()).mergeIn(map);
+                    solveContextTopicMap(wandora, getContext()).mergeIn(map);
                 }
             }
         }

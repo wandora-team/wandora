@@ -83,15 +83,15 @@ public class AdjacencyListImport extends AbstractWandoraTool implements WandoraT
         setDefaultLogger();
         setLogTitle("Adjacency list import");
         
-        log("Reading adjacency list!");
+        log("Reading adjacency list.");
         String edgeData = edgeSourceDialog.getContent();
         
-        log("Parsing adjacency list!");
+        log("Parsing...");
         EdgeParser edgeParser = new EdgeParser(edgeData, topicmap);
         edgeParser.parse();
-        log("Total "+edgeParser.counter+" associations created!");
+        log("Created "+edgeParser.counter+" associations.");
         
-        log("Ok!");
+        log("Ready.");
         setState(WAIT);
     }
     
@@ -223,7 +223,7 @@ public class AdjacencyListImport extends AbstractWandoraTool implements WandoraT
         
         
         private String parseNode() {
-            StringBuffer node = new StringBuffer("");
+            StringBuilder node = new StringBuilder("");
             while(index < len && Character.isLetterOrDigit(data.charAt(index)) && !forceStop()) {
                 node.append(data.charAt((index)));
                 index++;

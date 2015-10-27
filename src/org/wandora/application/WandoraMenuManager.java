@@ -223,7 +223,7 @@ public class WandoraMenuManager {
     
     public void refreshImportMenu() {
         toolManager.getImportMenu( importMenu );
-        toolManager.getImportMenu( importToLayerMenu );
+        toolManager.getImportMergeMenu( importToLayerMenu );
     }
     
     

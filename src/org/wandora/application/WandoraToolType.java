@@ -42,6 +42,7 @@ public class WandoraToolType {
 
     public static final String GENERIC_TYPE = "generic";
     public static final String IMPORT_TYPE = "import";
+    public static final String IMPORT_MERGE_TYPE = "import-merge";
     public static final String EXPORT_TYPE = "export";
     public static final String EXTRACT_TYPE = "extract";
     public static final String GENERATOR_TYPE = "generator";

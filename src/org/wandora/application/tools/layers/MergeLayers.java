@@ -96,20 +96,21 @@ public class MergeLayers extends AbstractLayerTool implements WandoraTool {
     
     
     
-    public void execute(Wandora admin, Context context) {
-        mergeLayers(admin, options, context);
+    @Override
+    public void execute(Wandora wandora, Context context) {
+        mergeLayers(wandora, options, context);
     }
     
     
-    public void mergeLayers(Wandora admin, int options, Context context) {
-        Layer targetLayer = solveContextLayer(admin, context);
+    public void mergeLayers(Wandora wandora, int options, Context context) {
+        Layer targetLayer = solveContextLayer(wandora, context);
         
         if(targetLayer == null) {
-            WandoraOptionPane.showMessageDialog(admin, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
+            WandoraOptionPane.showMessageDialog(wandora, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        if(WandoraOptionPane.YES_OPTION != WandoraOptionPane.showConfirmDialog(admin, message, title, WandoraOptionPane.YES_NO_OPTION)) {
+        if(WandoraOptionPane.YES_OPTION != WandoraOptionPane.showConfirmDialog(wandora, message, title, WandoraOptionPane.YES_NO_OPTION)) {
             return;
         }
         
@@ -123,13 +124,13 @@ public class MergeLayers extends AbstractLayerTool implements WandoraTool {
             log("Merge couldn't finish as there exists no suitable layers to merge to...");
         }
         else {
-            LayerTree layerTree=admin.layerTree;
+            LayerTree layerTree=wandora.layerTree;
             for(Layer l : layerTree.getRootStack().getTreeLayers()){
                 TopicMap tm=l.getTopicMap();
                 if(tm instanceof LinkedTopicMap){
                     for(Layer l2 : sourceLayers){
                         if(((LinkedTopicMap)tm).getLinkedTopicMap()==l2.getTopicMap()){
-                            WandoraOptionPane.showMessageDialog(admin, "One of the merged layers is used in the linked topic layer \""+l.getName()+"\" and cannot be merged.","Merge layers",WandoraOptionPane.ERROR_MESSAGE);
+                            WandoraOptionPane.showMessageDialog(wandora, "One of the merged layers is used in the linked topic layer \""+l.getName()+"\" and cannot be merged.","Merge layers",WandoraOptionPane.ERROR_MESSAGE);
                             return;
                         }                        
                     }
@@ -139,7 +140,7 @@ public class MergeLayers extends AbstractLayerTool implements WandoraTool {
             
             long startTime = System.currentTimeMillis();
             try {
-                admin.getTopicMap().clearTopicMapIndexes();
+                wandora.getTopicMap().clearTopicMapIndexes();
             }
             catch(Exception e) {
                 log(e);
@@ -153,18 +154,21 @@ public class MergeLayers extends AbstractLayerTool implements WandoraTool {
                         layerStack.removeLayer(sourceLayer);
                     }
                     sourceLayers.remove(sourceLayer);
-                    admin.layerTree.resetLayers();
+                    wandora.layerTree.resetLayers();
                 }
                 catch (Exception e) {
                     log("Merging topic map layers\n"+sourceLayer.getName()+" and "+targetLayer.getName()+" failed!", e);
                 }
             }
             long endTime = System.currentTimeMillis();
-            log("Merge took " + ((int)((endTime-startTime)/1000)) + " seconds.");
+            long duration = (endTime-startTime)/1000;
+            if(duration > 5) {
+                log("Merge took " + duration + " seconds.");
+            }
         }
 
         log("Ready.");
-        admin.layerTree.resetLayers();
+        wandora.layerTree.resetLayers();
         setState(WAIT);
     }
     

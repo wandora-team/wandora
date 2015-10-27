@@ -27,26 +27,19 @@ package org.wandora.application.tools.maiana;
 
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import javax.swing.Icon;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.WandoraOptionPane;
-import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.AbstractWandoraTool;
-import org.wandora.application.tools.GenericOptionsDialog;
-import org.wandora.application.tools.exporters.AbstractExportTool;
-import org.wandora.application.tools.importers.AbstractImportTool;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.layered.LayerStack;
-import org.wandora.utils.IObox;
+
 
 /**
  *
@@ -184,8 +177,10 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
                             while(layerStack.getLayer(layerName) != null);
                         }
                         log("Creating new layer '" + layerName + "' for the topic map.");
-                        layerStack.addLayer(new Layer(map,layerName,layerStack));
+                        Layer importedLayer = new Layer(map,layerName,layerStack);
+                        layerStack.addLayer(importedLayer);
                         wandora.layerTree.resetLayers();
+                        wandora.layerTree.selectLayer(importedLayer);
                     }
                     else {
                         log("Invalid topic map serialization for '"+n+"'.");

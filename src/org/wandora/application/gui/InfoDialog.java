@@ -84,6 +84,11 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                 setVisible(true);
             }
         });
+    }
+    
+    
+    
+    public void waitUntilVisible() {
         int c = 0;
         do {
             c++;
@@ -92,7 +97,6 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         }
         while(!isVisible() && c < 100);
     }
-    
     
     
    
@@ -194,47 +198,69 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         this.state = state;
         switch(state) {
             case EXECUTE: {
-                startTime = System.currentTimeMillis();
-                textArea.setText("");
-                progressBar.setIndeterminate(true);
-                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                containerPanel.removeAll();
-                containerPanel.add(processPanel, BorderLayout.CENTER);
-                containerPanel.revalidate();
-                forceStop = false;
-                open();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        startTime = System.currentTimeMillis();
+                        textArea.setText("");
+                        progressBar.setIndeterminate(true);
+                        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        containerPanel.removeAll();
+                        containerPanel.add(processPanel, BorderLayout.CENTER);
+                        containerPanel.revalidate();
+                        forceStop = false;
+                        open();
+                    }
+                });
+                waitUntilVisible();
                 return;
             }
             case WAIT: {
-                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                endTime = System.currentTimeMillis();
-                try {
-                    containerPanel.removeAll();
-                }
-                catch(Exception e) {
-                    // e.printStackTrace();
-                }
-                containerPanel.add(waitPanel, BorderLayout.CENTER);
-                String historyString = getHistory();
-                //history = new StringBuffer();
-                logTextPane.setText(historyString);
-                logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
-                containerPanel.revalidate();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                        endTime = System.currentTimeMillis();
+                        try {
+                            containerPanel.removeAll();
+                        }
+                        catch(Exception e) {
+                            // e.printStackTrace();
+                        }
+                        containerPanel.add(waitPanel, BorderLayout.CENTER);
+                        String historyString = getHistory();
+                        //history = new StringBuffer();
+                        logTextPane.setText(historyString);
+                        logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
+                        containerPanel.revalidate();
+                    }
+                });
                 return;
             }
             case CLOSE: {
-                setVisible(false);
-                logTextPane.setText("");
-                //history = new StringBuffer();
-                forceStop = false;
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        setVisible(false);
+                        logTextPane.setText("");
+                        //history = new StringBuffer();
+                        forceStop = false;
+                    }
+                });
                 return;
             }
             case INVISIBLE: {
-                setVisible(false);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        setVisible(false);
+                    }
+                });
                 return;
             }
             case VISIBLE: {
                 open();
+                waitUntilVisible();
                 return;
             }
         }
@@ -384,9 +410,12 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        setVisible(false);
-        //history = new StringBuffer();
-        logTextPane.setText("");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setVisible(false);
+            }
+        });
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed

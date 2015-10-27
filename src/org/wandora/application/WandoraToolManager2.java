@@ -505,6 +505,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
     
     public boolean allowDelete(WandoraToolSet set) {
         if(WandoraToolType.IMPORT_TYPE.equals(set.getName())) return false;
+        if(WandoraToolType.IMPORT_MERGE_TYPE.equals(set.getName())) return false;
         if(WandoraToolType.EXTRACT_TYPE.equals(set.getName())) return false;
         if(WandoraToolType.EXPORT_TYPE.equals(set.getName())) return false;
         if(WandoraToolType.GENERIC_TYPE.equals(set.getName())) return false;
@@ -746,6 +747,25 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
     }
     public JMenu getExtractMenu(JMenu toolMenu){
         return getMenu(toolMenu, WandoraToolType.EXTRACT_TYPE);
+    }
+    
+    public JMenu getImportMergeMenu(JMenu toolMenu) {
+        toolMenu.removeAll();
+        WandoraToolSet toolSet = getToolSet(WandoraToolType.IMPORT_MERGE_TYPE);
+        if(toolSet == null) return toolMenu;
+        ArrayList toolItems = toolSet.getTools();
+        for(Object toolItem : toolItems) {
+            if(toolItem != null) {
+                if(toolItem instanceof WandoraToolSet.ToolItem) {
+                    WandoraTool tool = ((WandoraToolSet.ToolItem) toolItem).getTool();
+                    if(tool instanceof AbstractImportTool) {
+                        AbstractImportTool aiTool = (AbstractImportTool) tool;
+                        aiTool.setOptions(AbstractImportTool.TOPICMAP_DIRECT_MERGE);
+                    }
+                }
+            }
+        }
+        return toolSet.getMenu(toolMenu, toolSet);
     }
     
     public JMenu getImportMenu(){

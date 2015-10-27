@@ -37,6 +37,10 @@ import java.io.*;
 import java.net.*;
 import org.wandora.utils.*;
 import javax.swing.*;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.topicmap.layered.LayerStack;
 
 
 /**
@@ -55,11 +59,11 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
     
     
     
-    public static final int TOPICMAP_RESET_FIRST = 1;
-    public static final int TOPICMAP_DIRECT_MERGE = 2;
-    public static final int TOPICMAP_MAKE_NEW_LAYER = 4;
+    public static final int TOPICMAP_RESET_FIRST = 1; // First bit
+    public static final int TOPICMAP_DIRECT_MERGE = 2; // Second bit
+    public static final int TOPICMAP_MAKE_NEW_LAYER = 4; // Third bit
     
-    public static final int WEB_IMPORT = 256;
+    public static final int WEB_IMPORT = 256; // Eight bit
     public static final int ASK_SOURCE = 512; // SOURCE == INTERNET | LOCAL FILE SYSTEM
    
     public static final int CLOSE_LOGS = 1024;
@@ -68,10 +72,23 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
     public static final int FILE_DIALOG_TITLE_TEXT = 100;
     public static final int URL_DIALOG_MESSAGE_TEXT = 110;
     
-    
+    /**
+     * Should the application reset everything before the import takes place.
+     */
     protected boolean resetWandoraFirst = false;
-    protected boolean directMerge = true;
-    protected boolean newLayer = false;
+    
+    /**
+     * Are imported topics and associations added directly into the current topic map.
+     * If not, imported topics and associations are added into a temporary topic
+     * map first, and the temporary topic map is then merged into the current
+     * topic map.
+     */
+    protected boolean directMerge = false;
+    
+    /**
+     * Should the application create a new layer for the imported topic map.
+     */
+    protected boolean newLayer = true;
     
     
     protected boolean webImport = false;
@@ -130,6 +147,7 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
  
     
         
+    @Override
     public void execute(Wandora wandora, Context context) {
         if(forceFiles != null && forceFiles instanceof File) {
             importFile(wandora, (File) forceFiles);
@@ -334,7 +352,9 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
                 }
             }
         }
-        log("Total " + count + " files imported!");
+        if(count > 1) {
+            log("Imported " + count + " files.");
+        }
         finalizeImport(wandora);
     }
     
@@ -380,4 +400,51 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
         return "";
     }
     
+    
+    
+    
+    protected void createNewLayer(TopicMap topicMap, String streamName, Wandora wandora) throws TopicMapException {
+        if(topicMap != null) {
+            if(wandora != null) {
+                LayerStack layerStack = wandora.getTopicMap();
+                String layerName = getLayerNameFor(streamName, wandora);
+                log("Creating new layer '" + layerName + "'.");
+                Layer importedLayer = new Layer(topicMap,layerName,layerStack);
+                layerStack.addLayer(importedLayer);
+                wandora.layerTree.resetLayers();
+                wandora.layerTree.selectLayer(importedLayer);
+            }
+        }
+    }
+    
+    
+    
+    
+    protected String getLayerNameFor(String streamName, Wandora wandora) {
+        String layerName = ""+System.currentTimeMillis();
+        if(streamName != null) {
+            if(streamName.contains("/")) {
+                String streamNamePart = streamName.substring(streamName.lastIndexOf("/")+1);
+                if(streamNamePart.length() > 0) layerName = streamNamePart;
+            }
+            else if(streamName.contains("\\")) {
+                String streamNamePart = streamName.substring(streamName.lastIndexOf("\\")+1);
+                if(streamNamePart.length() > 0) layerName = streamNamePart;
+            }
+        }
+        
+        LayerStack layerStack = wandora.getTopicMap();
+        if(layerStack.getLayer(layerName) != null) {
+            int c = 2;
+            String nextLayerName;
+            do {
+                nextLayerName = layerName + " " + c;
+                c++;
+            }
+            while(layerStack.getLayer(nextLayerName) != null);
+            layerName = nextLayerName;
+        }
+
+        return layerName;
+    }
 }

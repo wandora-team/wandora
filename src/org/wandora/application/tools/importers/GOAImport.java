@@ -66,10 +66,10 @@ public class GOAImport extends AbstractImportTool implements WandoraTool {
 
 
     @Override
-    public void importStream(Wandora admin, String streamName, InputStream inputStream) {
+    public void importStream(Wandora wandora, String streamName, InputStream inputStream) {
         try {
             try {
-                admin.getTopicMap().clearTopicMapIndexes();
+                wandora.getTopicMap().clearTopicMapIndexes();
             }
             catch(Exception e) {
                 log(e);
@@ -77,7 +77,7 @@ public class GOAImport extends AbstractImportTool implements WandoraTool {
             
             TopicMap map = null;
             if(directMerge) {
-                map = solveContextTopicMap(admin, getContext());
+                map = solveContextTopicMap(wandora, getContext());
             }
             else {
                 map = new org.wandora.topicmap.memory.TopicMapImpl();
@@ -87,28 +87,16 @@ public class GOAImport extends AbstractImportTool implements WandoraTool {
             
             if(!directMerge) {
                 if(newLayer) {
-                    LayerStack layerStack = (LayerStack) admin.getTopicMap();
-                    String layerName = streamName;
-                    int c = 2;
-                    if(layerStack.getLayer(layerName) != null) {
-                        do {
-                            layerName = streamName + " " + c;
-                            c++;
-                        }
-                        while(layerStack.getLayer(layerName) != null);
-                    }
-                    log("Creating new layer for '" + layerName + "'.");
-                    layerStack.addLayer(new Layer(map,layerName,layerStack));
-                    admin.layerTree.resetLayers();
+                    createNewLayer(map, streamName, wandora);
                 }
                 else {
                     log("Merging '" + streamName + "'.");
-                    solveContextTopicMap(admin, getContext()).mergeIn(map);
+                    solveContextTopicMap(wandora, getContext()).mergeIn(map);
                 }
             }
         }
         catch(TopicMapReadOnlyException tmroe) {
-            log("Topic map is write protected. Merge failed.");
+            log("Topic map is write protected. Import failed.");
         }
         catch(Exception e) {
             log("Reading '" + streamName + "' failed!", e);

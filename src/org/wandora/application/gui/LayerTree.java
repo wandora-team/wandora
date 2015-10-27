@@ -318,7 +318,7 @@ public class LayerTree extends DragJTree {
         JMenu importToLayerMenu = new SimpleMenu("Merge to layer", null);
         JMenu generateLayerMenu = new SimpleMenu("Generate to layer", null);
         JMenu exportLayerMenu = new SimpleMenu("Export layer", null);
-        wandora.toolManager.getImportMenu(importToLayerMenu);
+        wandora.toolManager.getImportMergeMenu(importToLayerMenu);
         wandora.toolManager.getGeneratorMenu(generateLayerMenu);
         wandora.toolManager.getExportMenu(exportLayerMenu);
         
