@@ -678,7 +678,11 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     }
     public WandoraToolLogger getDefaultLogger() {
         if(logger != null) return logger;
-        if(runAdmin != null) return new InfoDialog(runAdmin);
+        if(runAdmin != null) {
+            InfoDialog infoDialog = new InfoDialog(runAdmin);
+            infoDialog.setState(InfoDialog.EXECUTE);
+            return infoDialog;
+        }
         return null;
     }
     public WandoraToolLogger getCurrentLogger() {

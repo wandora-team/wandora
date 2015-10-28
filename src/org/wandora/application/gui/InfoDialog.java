@@ -45,8 +45,8 @@ import org.wandora.application.gui.simple.*;
 public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLogger, ActionListener, MouseListener {
     
     private Wandora wandora;
-    public boolean locked = false;
-    public boolean forceStop = false;
+    private boolean locked = false;
+    private boolean forceStop = false;
     private int state = 0;
     
     private StringBuilder history = null;
@@ -55,7 +55,9 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
     private long endTime = 0;
     private int maximumProgress = 100;
 
-
+    private Thread dialogThread;
+    
+    
 
 
     /**
@@ -73,29 +75,31 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         textArea.setText("<html></html>");
         textArea.setText("");
         iconLabel.setIcon(UIBox.getIcon("gui/icons/dialog/cogwheel.gif"));
-        setState(EXECUTE);
     }
     
     
-    public void open() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                setVisible(true);
-            }
-        });
+    private void open() {
+        if(!isVisible()) {
+            dialogThread = new Thread() {
+                @Override
+                public void run() {
+                    setVisible(true);
+                }
+            };
+            dialogThread.start();
+        }
     }
     
     
     
-    public void waitUntilVisible() {
+    private void waitUntilVisible() {
         int c = 0;
         do {
             c++;
-            try { Thread.sleep(40); }
+            try { Thread.sleep(200); }
             catch(Exception e) {};
         }
-        while(!isVisible() && c < 100);
+        while(!isVisible() && c < 20);
     }
     
     
@@ -164,6 +168,7 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         if(n > maximumProgress) n = n % maximumProgress;
         progressBar.setValue(n);
     }
+    
     @Override
     public void setProgressMax(int maxn) {
         maximumProgress = Math.max(1, maxn);
@@ -198,20 +203,15 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         this.state = state;
         switch(state) {
             case EXECUTE: {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        startTime = System.currentTimeMillis();
-                        textArea.setText("");
-                        progressBar.setIndeterminate(true);
-                        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                        containerPanel.removeAll();
-                        containerPanel.add(processPanel, BorderLayout.CENTER);
-                        containerPanel.revalidate();
-                        forceStop = false;
-                        open();
-                    }
-                });
+                startTime = System.currentTimeMillis();
+                textArea.setText("");
+                progressBar.setIndeterminate(true);
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                containerPanel.removeAll();
+                containerPanel.add(processPanel, BorderLayout.CENTER);
+                containerPanel.revalidate();
+                forceStop = false;
+                open();
                 waitUntilVisible();
                 return;
             }
