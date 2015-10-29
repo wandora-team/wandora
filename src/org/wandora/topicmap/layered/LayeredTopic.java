@@ -1278,12 +1278,13 @@ public class LayeredTopic extends Topic {
         public String invoke(LayeredTopic t){
             String min=null;
             try{
-                for(Locator l : t.getSubjectIdentifiers()){
+                for(Locator l : t.getSubjectIdentifiers()) {
                     String s=l.toExternalForm();
                     if(min==null) min=s;
                     else if(s.compareTo(min)<0) min=s;
                 }
-            }catch(TopicMapException tme){
+            }
+            catch(TopicMapException tme){
                 tme.printStackTrace(); // TODO EXCEPTION
             }
             return min;

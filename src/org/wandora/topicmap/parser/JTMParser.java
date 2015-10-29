@@ -54,6 +54,9 @@ import org.json.*;
 
 public class JTMParser {
 
+    private static String STATIC_SI_BODY = "http://wandora.org/si/jtm-parser/generated/"; 
+    
+    
     private static boolean ASSOCIATION_TO_TYPE = true;
     
     private TopicMap topicMap = null;
@@ -110,6 +113,7 @@ public class JTMParser {
 
             in.close();
             parse(new JSONObject(input.toString()));
+            postProcess();
         }
         catch(Exception e) {
             logger.log(e);
@@ -125,6 +129,32 @@ public class JTMParser {
     
 
 
+    public void postProcess() throws Exception {
+        Iterator<Topic> topics = topicMap.getTopics();
+        Topic t;
+        HashMap<Topic,Locator> toBeRemoved = new HashMap();
+        while(topics.hasNext()) {
+            t = topics.next();
+            if(t != null && !t.isRemoved()) {
+                Collection<Locator> subjectIdentifiers = t.getSubjectIdentifiers();
+                for(Locator subjectIdentifier : t.getSubjectIdentifiers()) {
+                    if(subjectIdentifier.toExternalForm().startsWith(STATIC_SI_BODY)) {
+                        if(subjectIdentifiers.size() > 1) {
+                            toBeRemoved.put(t, subjectIdentifier);
+                        }
+                        else {
+                            log("Warning: Can't remove temporary subject identifier. Probably the topic had no subject identifier in jtm.");
+                        }
+                    }
+                }
+            }
+        }
+        for(Topic topic : toBeRemoved.keySet()) {
+            topic.removeSubjectIdentifier(toBeRemoved.get(topic));
+        }
+    }
+    
+    
     
     public void parse(JSONObject inputJSON) throws Exception {
         if(topicMap == null) {
@@ -189,12 +219,15 @@ public class JTMParser {
     }
     
 
+    
 
     public void parseTopic(JSONObject topicJSON) throws Exception {
         Iterator keys = topicJSON.keys();
         Object key = null;
         Object value = null;
-        Topic t = null;
+        Topic t = topicMap.createTopic();
+        t.addSubjectIdentifier(new Locator(STATIC_SI_BODY+System.currentTimeMillis()+"-"+Math.floor(Math.random()*9999999)));
+        
         while(keys.hasNext()) {
             key = keys.next();
             if(key != null) {
@@ -209,7 +242,6 @@ public class JTMParser {
                             if(si != null) {
                                 String sis = si.toString();
                                 if(sis != null && sis.length() > 0) {
-                                    if(t == null) t = topicMap.createTopic();
                                     t.addSubjectIdentifier(new Locator(sis));
                                 }
                             }
@@ -227,7 +259,6 @@ public class JTMParser {
                                 String sls = sl.toString();
                                 if(sls != null && sls.length() > 0) {
                                     if(i<1) {
-                                        if(t == null) t = topicMap.createTopic();
                                         t.setSubjectLocator(new Locator(sls));
                                     }
                                     else {
@@ -249,7 +280,6 @@ public class JTMParser {
                                 String iis = ii.toString();
                                 if(iis != null && iis.length() > 0) {
                                     log("Warning: Wandora doesn't support item identifiers. Making subject identifier out of item identifier '"+ii+"'.");
-                                    if(t == null) t = topicMap.createTopic();
                                     t.addSubjectIdentifier(new Locator(iis));
                                 }
                             }
@@ -301,24 +331,20 @@ public class JTMParser {
         Iterator keys = topicNameJSON.keys();
         Object key = null;
         Object value = null;
+        boolean hasSetBasename = false; 
         while(keys.hasNext()) {
             key = keys.next();
             if(key != null) {
                 value = topicNameJSON.get(key.toString());
                 if("value".equals(key)) {
-                    if(t == null) {
-                        t = topicMap.createTopic();
-                        Locator l = TopicTools.createDefaultLocator();
-                        log("Warning: Adding topic default subject identifier '"+l.toExternalForm()+"'.");
-                        t.addSubjectIdentifier(l);
-                    }
-                    if(t.getBaseName() != null) {
+                    if(hasSetBasename) {
                         log("Warning: Wandora supports only one base name. Skipping name '"+value+"'.");
                     }
                     else {
                         String bn = value.toString();
                         if(bn != null && bn.length() > 0) {
                             t.setBaseName(fixString(bn));
+                            hasSetBasename = true;
                         }
                     }
                 }
@@ -708,7 +734,7 @@ public class JTMParser {
             logCount++;
             logger.log(str);
             if(logCount>=maxLogs) {
-                logger.log("Silently passing rest logs...");
+                logger.log("Silently ignoring rest of the logs...");
             }
         }
     }

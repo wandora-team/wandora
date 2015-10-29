@@ -85,6 +85,7 @@ public class LTMParser {
     public static String DEFAULT_SCOPE_FOR_VARIANTS = TMBox.LANGINDEPENDENT_SI;
     public static String DEFAULT_TYPE_FOR_VARIANTS = "http://www.topicmaps.org/xtm/1.0/core.xtm#display";
 
+    public static String STATIC_BASE_URI = "http://wandora.org/si/ltm-import/generated/";
     public static String DEFAULT_BASE_URI = "http://wandora.org/si/ltm-import/";
     public static String TEMP_SI_PREFIX = "http://wandora.org/si/temp/ltm-import/";
     
@@ -525,7 +526,8 @@ public class LTMParser {
             }
             else {
                 if(topic != null && topic.getOneSubjectIdentifier() == null) {
-                    topic.addSubjectIdentifier(TopicTools.createDefaultLocator());
+                    topic.addSubjectIdentifier(new Locator(STATIC_BASE_URI+System.currentTimeMillis()+"-"+Math.floor(Math.random()*999999)));
+                    logger.log("Warning: Missing subject identifier. Adding temporary subject identifier to topic.");
                 }
             }
 
