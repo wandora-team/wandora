@@ -779,7 +779,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             Transferable tr = e.getTransferable();
             if(tr.isDataFlavorSupported(fileListFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
+                final java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
                 String fileName = null;
                 boolean CTRLPressed = ((e.getDropAction() & DnDConstants.ACTION_COPY) != 0);
                 if(DROP_FILE_NAMES_INSTEAD_FILE_CONTENT && !CTRLPressed || (!DROP_FILE_NAMES_INSTEAD_FILE_CONTENT  && CTRLPressed)) {
@@ -796,9 +796,22 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                     setText(text);
                 }
                 else {
-                    for( File file : files ) {
-                        load(file);
-                    }
+                    Thread dropThread = new Thread() {
+                        public void run() {
+                            try {
+                                for( File file : files ) {
+                                    load(file);
+                                }
+                            }
+                            catch(Exception e) {
+                                e.printStackTrace();
+                            }
+                            catch(Error err) {
+                                err.printStackTrace();
+                            }
+                        }
+                    };
+                    dropThread.start();
                 }
                 e.dropComplete(true);
             }
@@ -812,7 +825,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                 
                 String[] split=data.split("\n");
                 boolean allFiles=true;
-                ArrayList<URI> uris=new ArrayList<>();
+                final ArrayList<URI> uris=new ArrayList<>();
                 for(int i=0;i<split.length;i++) {
                     try {
                         URI u=new URI(split[i].trim());
@@ -838,14 +851,22 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                             setText(text);
                         }
                         else {
-                            for(URI u : uris){
-                                try {
-                                    load(new File(u));
+                            Thread dropThread = new Thread() {
+                                public void run() {
+                                    for(URI u : uris){
+                                        try {
+                                            load(new File(u));
+                                        }
+                                        catch(IllegalArgumentException iae){
+                                            iae.printStackTrace();
+                                        }
+                                        catch(Error err) {
+                                            err.printStackTrace();
+                                        }
+                                    }
                                 }
-                                catch(IllegalArgumentException iae){
-                                    iae.printStackTrace();
-                                }
-                            }
+                            };
+                            dropThread.start();
                         }
                     }
                     else {
@@ -879,6 +900,9 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         }
         catch(Exception ex) {
             ex.printStackTrace();
+        }
+        catch(Error err) {
+            err.printStackTrace();
         }
         this.setBorder(defaultBorder);
     }

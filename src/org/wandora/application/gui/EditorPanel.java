@@ -146,19 +146,35 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
     
     @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
-        java.util.List<File> files=DnDBox.acceptFileList(e);
+        final java.util.List<File> files = DnDBox.acceptFileList(e);
         if(files==null) {
             System.out.println("Drop rejected! Wrong data flavor!");
             e.rejectDrop();
         }
         else {
-            try{
+            try {
                 if(!files.isEmpty()) {
-                    acceptFileList(files);
+                    Thread dropThread = new Thread() {
+                        public void run() {
+                            try {
+                                acceptFileList(files);
+                            }
+                            catch(Exception e) {
+                                e.printStackTrace();
+                            }
+                            catch(Error err) {
+                                err.printStackTrace();
+                            }
+                        }
+                    };
+                    dropThread.start();
                 }
             }
             catch(Exception ex){
                 ex.printStackTrace();
+            }
+            catch(Error err) {
+                err.printStackTrace();
             }
         }
         this.setBorder(null);

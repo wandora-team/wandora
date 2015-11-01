@@ -158,13 +158,14 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
 
         centerDialog(parent, dialog);
         answer = CLOSED_OPTION;
-        dialog.setVisible(true);
+        openDialogAndWait(parent, dialog);
+        
         return answer;
     }
     
     
     
-    public static void initConfirmPanel(Component parent, String message) {
+    protected static void initConfirmPanel(Component parent, String message) {
         if(parent instanceof JDialog) {
             dialog = new JDialog((JDialog) parent, true);
         }
@@ -191,6 +192,8 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         dialog.toFront();
     }
     
+    
+
     
     
     // -------------------------------------------------------------------------
@@ -250,12 +253,12 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
             }
         }
         centerDialog(parent, dialog);
-        dialog.setVisible(true);
+        openDialogAndWait(parent, dialog);
     }
     
     
        
-    public static void initMessagePanel(Component parent, String message) {
+    protected static void initMessagePanel(Component parent, String message) {
         if(parent instanceof JDialog) {
             dialog = new JDialog((JDialog) parent, true);
         }
@@ -307,12 +310,12 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         initInputPanel(parent, message, title, initialText);
         centerDialog(parent, dialog);
         inputAnswer = null;
-        dialog.setVisible(true);
+        openDialogAndWait(parent, dialog);
         return inputAnswer;
     }
 
     
-    public static void initInputPanel(Component parent, String message, String title, String initialText) {
+    protected static void initInputPanel(Component parent, String message, String title, String initialText) {
         if(parent instanceof JDialog) {
             dialog = new JDialog((JDialog) parent, true);
         }
@@ -352,7 +355,7 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         initOptionPanel(parent, message, title, options, initialValue);
         centerDialog(parent, dialog);
         optionAnswer = null;
-        dialog.setVisible(true);
+        openDialogAndWait(parent, dialog);
         return (String)optionAnswer;
      }
      
@@ -360,12 +363,12 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         initOptionPanel(parent, message, title, options, initialValue);
         centerDialog(parent, dialog);
         optionAnswer = null;
-        dialog.setVisible(true);
+        openDialogAndWait(parent, dialog);
         return optionAnswer;
      }
 
     
-    public static void initOptionPanel(Component parent, String message, String title, Object[] options, Object initialValue) {
+    protected static void initOptionPanel(Component parent, String message, String title, Object[] options, Object initialValue) {
         if(parent instanceof JDialog) {
             dialog = new JDialog((JDialog) parent, true);
         }
@@ -558,6 +561,11 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         confirmYesButton.setMaximumSize(new java.awt.Dimension(70, 23));
         confirmYesButton.setMinimumSize(new java.awt.Dimension(70, 23));
         confirmYesButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        confirmYesButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                confirmYesButtonMouseReleased(evt);
+            }
+        });
         confirmYesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 confirmYesButtonActionPerformed(evt);
@@ -577,6 +585,11 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         confirmNoButton.setMaximumSize(new java.awt.Dimension(70, 23));
         confirmNoButton.setMinimumSize(new java.awt.Dimension(70, 23));
         confirmNoButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        confirmNoButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                confirmNoButtonMouseReleased(evt);
+            }
+        });
         confirmNoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 confirmNoButtonActionPerformed(evt);
@@ -957,6 +970,16 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
             dialog.setVisible(false);
         }
     }//GEN-LAST:event_optionsComboBoxKeyReleased
+
+    private void confirmNoButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmNoButtonMouseReleased
+        answer = NO_OPTION;
+        dialog.setVisible(false);
+    }//GEN-LAST:event_confirmNoButtonMouseReleased
+
+    private void confirmYesButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmYesButtonMouseReleased
+        answer = YES_OPTION;
+        dialog.setVisible(false);
+    }//GEN-LAST:event_confirmYesButtonMouseReleased
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1044,6 +1067,21 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
     
+    
+    /**
+     * Set the dialog visible and blocks. Current implementation relies on
+     * dialog's own setVisible method. It may be necessary to handle the blocking
+     * other ways in future releases. Current implementation has problems if the
+     * dialog is opened during a drop event, for example. See SimpleURIField for
+     * an example code how to overcome the thread problems. Thread problems occur
+     * in single-swing-threaded systems such as Mac OS.
+     * 
+     * @param parent
+     * @param dialog 
+     */
+    public static void openDialogAndWait(Component parent, final JDialog dialog) {
+        dialog.setVisible(true);
+    }
     
     
 }

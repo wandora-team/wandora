@@ -152,34 +152,44 @@ public class SimpleURIField extends SimpleField {
     
     
     @Override
-    public void drop(java.awt.dnd.DropTargetDropEvent e) {
+    public void drop(final java.awt.dnd.DropTargetDropEvent e) {
         try {
             DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             Transferable tr = e.getTransferable();
             if(e.isDataFlavorSupported(fileListFlavor)) {
-                int ret=WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Make DataURI out of given file content? Answering no uses filename as an URI.","Make DataURI?", WandoraOptionPane.YES_NO_OPTION);
-                if(ret==WandoraOptionPane.YES_OPTION) {
-                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
-                    for( File file : files ) {
-                        DataURL dataURL = new DataURL(file);
-                        this.setText(dataURL.toExternalForm(Base64.DONT_BREAK_LINES));
-                        break; // CAN'T HANDLE MULTIPLE FILES. ONLY FIRST IS USED.
+                e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                final SimpleURIField uriField = this;
+                final java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
+                
+                Thread dropThread = new Thread() {
+                    public void run() {
+                        try {
+                            int ret=WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Make DataURI out of given file content? Answering no uses filename as an URI.","Make DataURI?", WandoraOptionPane.YES_NO_OPTION);
+                            if(ret==WandoraOptionPane.YES_OPTION) {
+                                for( File file : files ) {
+                                    DataURL dataURL = new DataURL(file);
+                                    uriField.setText(dataURL.toExternalForm(Base64.DONT_BREAK_LINES));
+                                    break; // CAN'T HANDLE MULTIPLE FILES. ONLY FIRST IS USED.
+                                }
+                            }
+                            else if(ret==WandoraOptionPane.NO_OPTION) {
+                                String text="";
+                                for( File file : files ) {
+                                    if(text.length()>0) text+=";";
+                                    text+=file.toURI().toString();
+                                }
+                                uriField.setText(text);
+                            }
+                            
+                            e.dropComplete(true);
+                        }
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    e.dropComplete(true);
-                }
-                else if(ret==WandoraOptionPane.NO_OPTION) {
-                    e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
-                    String text="";
-                    for( File file : files ) {
-                        if(text.length()>0) text+=";";
-                        text+=file.toURI().toString();
-                    }
-                    this.setText(text);
-                    e.dropComplete(true);
-                }
+                };
+                dropThread.start();
             }
             else if(e.isDataFlavorSupported(stringFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);

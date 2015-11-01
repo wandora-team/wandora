@@ -451,6 +451,9 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
         catch(Exception ex) {
             ex.printStackTrace();
         }
+        catch(Error err) {
+            err.printStackTrace();
+        }
         this.setBorder(defaultBorder);
     }
     

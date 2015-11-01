@@ -1161,32 +1161,59 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
-        Image image = DnDBox.acceptImage(e);
-        if(image != null) {
-            try {
-                processImage(image);
+
+        try {
+            final Image image = DnDBox.acceptImage(e);
+            if(image != null) {
+                Thread dropThread = new Thread() {
+                    public void run() {
+                        try {
+                            processImage(image);
+                        }
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                        catch(Error err) {
+                            err.printStackTrace();
+                        }
+                    }
+                };
+                dropThread.start(); 
             }
-            catch(Exception ex){
-                ex.printStackTrace();
-            }
-        }
-        else {
-            java.util.List<File> files = DnDBox.acceptFileList(e);
-            if(files != null) {
-                try {
+
+            else {
+                final java.util.List<File> files = DnDBox.acceptFileList(e);
+                if(files != null) {
                     if(!files.isEmpty()) {
-                        processFileList(files);
+                        Thread dropThread = new Thread() {
+                            public void run() {
+                                try {
+                                    processFileList(files);
+                                }
+                                catch(Exception e) {
+                                    e.printStackTrace();
+                                }
+                                catch(Error err) {
+                                    err.printStackTrace();
+                                }
+                            }
+                        };
+                        dropThread.start();
                     }
                 }
-                catch(Exception ex){
-                    ex.printStackTrace();
+                else {
+                    System.out.println("Drop rejected! Wrong data flavor!");
+                    e.rejectDrop();
                 }
             }
-            else {
-                System.out.println("Drop rejected! Wrong data flavor!");
-                e.rejectDrop();
-            } 
         }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        catch(Error err) {
+            err.printStackTrace();
+        }
+
         this.setBorder(null);
     }
     

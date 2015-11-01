@@ -76,6 +76,9 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         updateMenu();
         dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
         String toolName = wandora.options.get("dropExtractor.currentTool");
+        if(toolName == null) {
+            toolName = "Simple File Extractor";
+        }
         if(toolName != null) {
             setTool(toolName);
         }
@@ -331,90 +334,7 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
 
     }
     
-    
-    private void dropExtractFiles(java.util.List<File> files) throws Exception {
-        if(tool != null) {
-            if(files != null && files.size() > 0) {
-                setLogger(tool);
-                if(tool instanceof DropExtractor) {
-                    try {
-                        ((DropExtractor) tool).dropExtract(files.toArray(new File[files.size()]));
-                    }
-                    catch(Exception exx) { 
-                        exx.printStackTrace();
-                    }
-                }
-                else {
-                    WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
-                }
-            }
-        }
-        else {
-            WandoraOptionPane.showMessageDialog(wandora, "You have not selected extractor. Can't extract. Select extractor first.", "No extractor selected", WandoraOptionPane.WARNING_MESSAGE);
-        }
-    }
-    
-    
-    private void dropExtractUrls(java.util.List<String> urls) throws Exception {
-        if(tool != null) {
-            if(urls != null && urls.size() > 0) {
-                setLogger(tool);
-                if(tool instanceof DropExtractor) {
-                    try {
-                        ((DropExtractor) tool).dropExtract(urls.toArray(new String[urls.size()]));
-                    }
-                    catch(Exception exx) { 
-                        exx.printStackTrace();
-                    }
-                }
-                else {
-                    WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
-                }        
-            }
-        }
-    }
-    
-    
-    private void dropExtractString(String content) throws Exception {
-        if(tool != null) {
-            if(content != null) {
-                setLogger(tool);
-                if(tool instanceof DropExtractor) {
-                    try {
-                        ((DropExtractor) tool).dropExtract(content);
-                    }
-                    catch(Exception exx) { 
-                        exx.printStackTrace();
-                    }
-                }
-                else {
-                    WandoraOptionPane.showMessageDialog(wandora, "Selected tool doesn't support drop feature!", "Drop not supported", WandoraOptionPane.WARNING_MESSAGE);
-                }
-            }
-        }
-    }
-    
-        
-    private void dropExtractHTMLString(String htmlContent) throws Exception {
-        if(tool != null) {
-            if(htmlContent != null) {
-                setLogger(tool);
-                if(tool instanceof DropExtractor) {
-                    try {
-                        System.out.println("PROCESSING HTML CONTENT!:" + htmlContent);
-                        ((DropExtractor) tool).dropExtract(htmlContent);
-                    }
-                    catch(Exception exx) { 
-                        exx.printStackTrace();
-                    }
-                }
-                else {
-                    WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
-                }
-            }
-        }
-    }
-    
+ 
     
     private void setLogger(WandoraTool tool) {
         tool.setToolLogger(this);
@@ -423,125 +343,119 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     
     
     @Override
-    public void drop(java.awt.dnd.DropTargetDropEvent e) {
+    public void drop(final java.awt.dnd.DropTargetDropEvent e) {
         try {
-            if(tool != null) {
-                System.out.println("Drop!");
-                forceStop = false;
-                DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
-                DataFlavor stringFlavor = DataFlavor.stringFlavor;
-                DataFlavor uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String");
-                Transferable tr = e.getTransferable();
-                boolean handled=false;
 
-                e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                DataFlavor[] flavors=tr.getTransferDataFlavors();
-    /*
-                for(int i=0;i<flavors.length;i++){
-                    System.out.println("Flavor: "+flavors[i].toString());
-                    try{
-                        System.out.println("  "+tr.getTransferData(flavors[i]).toString());
-                    }catch(Exception ex){
+            final DropExtractPanel dropExtractPanel = this;
+            DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
+            DataFlavor stringFlavor = DataFlavor.stringFlavor;
+            DataFlavor uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String");
+            DataFlavor htmlFlavor = new DataFlavor("text/html; class=java.lang.String");
+            
+            e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+            Transferable tr = e.getTransferable();
+            
+            java.util.List<File> fileListTransfer = null;
+            if(tr.isDataFlavorSupported(fileListFlavor)) {
+                fileListTransfer = (java.util.List<File>) tr.getTransferData(fileListFlavor);
+            }
+            final java.util.List<File> files = fileListTransfer;
+            
+            Collection<URI> uriListTransfer = null;
+            if(tr.isDataFlavorSupported(uriListFlavor)) {
+                String urisString = (String) tr.getTransferData(uriListFlavor);
+                uriListTransfer = getURIs(urisString);
+            }
+            final Collection<URI> uris = uriListTransfer;
+            
+            String stringTransfer = null;
+            if(tr.isDataFlavorSupported(stringFlavor)) {
+                stringTransfer = (String) tr.getTransferData(stringFlavor);
+            }
+            final String string = stringTransfer;
+            
+            
+            String htmlTransfer = null;
+            if(tr.isDataFlavorSupported(htmlFlavor)) {
+                htmlTransfer = (String) tr.getTransferData(htmlFlavor);
+            }
+            final String html = htmlTransfer;
+            
+            byte[] dataTransfer = null;
+            if(tool instanceof AbstractExtractor) {
+                AbstractExtractor atool = (AbstractExtractor) tool;
+                String[] contentTypes = atool.getContentTypes();
+                for(String contentType : contentTypes) {
+                    DataFlavor contentTypeFlavor = new DataFlavor(contentType+"; class=java.lang.String");
+                    if(tr.isDataFlavorSupported(contentTypeFlavor)) {
+                        dataTransfer = (byte[]) tr.getTransferData(contentTypeFlavor);
+                        break;
+                    }
+                }
+            }
+            final byte[] data = dataTransfer;
+            
+            
+            /**
+             * Actual drop extraction is handled in a separate thread. Thread
+             * is required because drop-thread can't use blocking swing
+             * dialogs properly (in single-thread systems).
+             */
+            Thread dropThread = new Thread() {
+                
+                public void run() {
+                    try {
+                        if(tool != null) {
+                            setLogger(tool);
+                            if(tool instanceof DropExtractor) {
+                                System.out.println("Drop!");
+                                
+                                DropExtractor dropTool = (DropExtractor) tool;
+                                
+                                forceStop = false;
+
+                                if(files != null) {
+                                    dropTool.dropExtract(files.toArray(new File[files.size()]));
+                                }
+                                else if(uris != null) {
+                                    Collection<File> fileURIs = substractFileURIs(uris);
+                                    if(fileURIs != null) {
+                                        dropTool.dropExtract(files.toArray(new File[files.size()]));
+                                    }
+                                    dropTool.dropExtract(getURIStrings(uris).toArray(new String[uris.size()]));
+                                }
+                                else if(data != null) {
+                                    // dropTool.dropExtract(data);
+                                }
+                                else if(html != null) {
+                                    dropTool.dropExtract(html);
+                                }
+                                else if(string != null) {
+                                    dropTool.dropExtract(string);
+                                }
+                            }
+                            else {
+                                WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                        else {
+                            WandoraOptionPane.showMessageDialog(wandora, "No extractor selected. Can't extract. Select extractor first.", "No extractor selected", WandoraOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+
+                    catch(Exception ex) {
                         ex.printStackTrace();
                     }
+                    catch(Error err) {
+                        err.printStackTrace();
+                    }
+                    extractorNameLabel.setForeground(mouseOutColor);
+                    iconLabel.setIcon(UIBox.getIcon("gui/drop_extract.gif"));
+                    dropExtractPanel.revalidate();
                 }
-                */
-
-                if(tool instanceof AbstractExtractor) {
-                    AbstractExtractor atool = (AbstractExtractor) tool;
-                    String[] contentTypes = atool.getContentTypes();
-                    String contentType = null;
-                    for(int i=0; i<contentTypes.length; i++) {
-                        contentType = contentTypes[i];
-                        System.out.println("Checking content type: "+contentType);
-                        if(contentType.equalsIgnoreCase("text/html")) {
-                            DataFlavor contentTypeFlavor = new DataFlavor("text/html; class=java.lang.String");
-                            System.out.println("Checking: "+contentTypeFlavor);
-                            if(tr.isDataFlavorSupported(contentTypeFlavor)) {
-                                System.out.println("FOUND TEXT/HTML AS A DATA FLAVOR!!!!");
-                                String data = (String)tr.getTransferData(contentTypeFlavor);
-                                dropExtractHTMLString(data);
-                                handled=true;
-                                e.dropComplete(true);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if(!handled) {
-                    if(tr.isDataFlavorSupported(fileListFlavor)) {
-                        //e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                        java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
-                        if(tool != null) {
-                            dropExtractFiles(files);
-                            e.dropComplete(true);
-                        }
-                    }
-                    else if(tr.isDataFlavorSupported(stringFlavor) || tr.isDataFlavorSupported(uriListFlavor)) {
-                        if(tool != null) {
-                            //e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                            String data = null;
-                            if(e.isDataFlavorSupported(uriListFlavor)) data=(String)tr.getTransferData(uriListFlavor);
-                            else data=(String)tr.getTransferData(stringFlavor);
-
-                            System.out.println("Trying string data flavor. Data="+data);
-
-                            System.out.println("Trying url");
-                            String[] split=data.split("\n");
-                            boolean allFiles=true;
-                            ArrayList<URI> uris=new ArrayList<URI>();
-                            for(int i=0;i<split.length;i++){
-                                try {
-                                    URI u=new URI(split[i].trim());
-                                    if(u.getScheme()==null) continue;
-                                    if(!u.getScheme().toLowerCase().equals("file")) allFiles=false;
-                                    uris.add(u);
-                                } 
-                                catch(java.net.URISyntaxException ue){}
-                            }
-                            if(!uris.isEmpty()) {
-                                if(allFiles) {
-                                    java.util.List<File> files=new java.util.ArrayList<File>();
-                                    for(URI u : uris){
-                                        try{
-                                            files.add(new File(u));
-                                        }
-                                        catch(IllegalArgumentException iae){iae.printStackTrace();}
-                                    }
-                                    dropExtractFiles(files);
-                                }
-                                else{
-                                    java.util.List<String> urls=new java.util.ArrayList<String>();
-                                    for(URI u : uris){
-                                        try {
-                                            urls.add(u.toString());
-                                        }
-                                        catch(IllegalArgumentException iae){iae.printStackTrace();}
-                                    }
-                                    dropExtractUrls(urls);                            
-                                }
-                                handled=true;
-                            }
-
-                            if(!handled){
-                                System.out.println("Trying extractor");
-                                dropExtractString(data);    
-                                handled=true;
-                            }
-
-                            e.dropComplete(true);
-                        }
-                    }
-                    else {
-                        //System.out.println("Drop rejected! Wrong data flavor!");
-                        //e.rejectDrop();
-                    }
-                }
-            }
-            else {
-                WandoraOptionPane.showMessageDialog(wandora, "No extractor selected. Can't extract. Select extractor first.", "No extractor selected", WandoraOptionPane.WARNING_MESSAGE);
-            }
+            };
+            dropThread.start();
+            e.dropComplete(true);
         }
         catch(IOException ioe) {
             ioe.printStackTrace();
@@ -552,9 +466,9 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         catch(Exception ex) {
             ex.printStackTrace();
         }
-        extractorNameLabel.setForeground(mouseOutColor);
-        iconLabel.setIcon(UIBox.getIcon("gui/drop_extract.gif"));
-        this.revalidate();
+        catch(Error err) {
+            err.printStackTrace();
+        }
     }
     
     @Override
@@ -565,6 +479,51 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
     }    
     
+    
+    
+    public Collection<URI> getURIs(String urisString) {
+        String[] split = urisString.split("\n");
+        Collection<URI> uris = new ArrayList<URI>();
+        for (String splitPart : split) {
+            try {
+                URI u = new URI(splitPart.trim());
+                if(u.getScheme()==null) continue;
+                uris.add(u);
+            }
+            catch(java.net.URISyntaxException ue) {}
+        }
+        return uris;
+    }
+    
+    
+    public Collection<String> getURIStrings(Collection<URI> uris) {
+        if(uris == null) return null;
+        Collection<String> uriStrings = new ArrayList<String>();
+        for(URI uri : uris) {
+            try {
+                uriStrings.add(uri.toURL().toExternalForm());
+            }
+            catch(Exception e) {}
+        }
+        return uriStrings;
+    }
+
+    public Collection<File> substractFileURIs(Collection<URI> uris) {
+        if(uris == null) return null;
+        Collection<File> files = new ArrayList<>();
+        Collection<URI> urisCopy = new ArrayList<>();
+        urisCopy.addAll(uris);
+        for(URI uri : urisCopy) {
+            try {
+                if("file".equals(uri.getScheme())) {
+                    files.add(new File(uri.toURL().getFile()));
+                    uris.remove(uri);
+                }
+            }
+            catch(Exception e) {}
+        }
+        return files.isEmpty() ? null : files;
+    }
     
     // --------------------------------------------------------- tool logger ---
     
