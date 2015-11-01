@@ -103,22 +103,18 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
         ArrayList<WandoraTool> importTools = new ArrayList<>();
         boolean yesToAll = false;
         
-        System.out.println("processing files: "+ files.size());
         for(File file : files) {
-            System.out.println("processing file: "+ file);
             ArrayList<WandoraTool> importToolsForFile = WandoraToolManager.getImportTools(file, orders);
             if(importToolsForFile != null && !importToolsForFile.isEmpty()) {
                 importTools.addAll(importToolsForFile);
             }
             else {
-                System.out.println("processing file 2: "+ file);
                 if(yesToAll) {
                     SimpleFileExtractor extractor = new SimpleFileExtractor();
                     extractor.setForceFiles(new File[] { file } );
                     importTools.add(extractor);
                 }
                 else {
-                    System.out.println("processing file 3: "+ file);
                     int a = WandoraOptionPane.showConfirmDialog(parent, 
                         "Extract the dropped file with Simple File Extractor?",
                         "Extract instead of import?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);

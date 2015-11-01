@@ -110,6 +110,9 @@ public class DnDBox {
         catch(Exception ex) {
             ex.printStackTrace();
         }
+        catch(Error err) {
+            err.printStackTrace();
+        }
         return null;
     }
     
