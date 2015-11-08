@@ -168,7 +168,7 @@ public class LoggingModule extends AbstractModule {
         }
 
         public void info(Object arg0, Throwable arg1) {
-            if(logLevel>=LOG_INFO) log.info(prefix+arg0,arg1);
+            if(logLevel<=LOG_INFO) log.info(prefix+arg0,arg1);
         }
 
         public boolean isDebugEnabled() {
