@@ -94,6 +94,7 @@ public class VelocityTemplate extends AbstractTemplate {
     @Override
     public void stop(ModuleManager manager) {
         engineModule=null;
+        vTemplate=null;
         super.stop(manager);
     }
 
@@ -112,9 +113,13 @@ public class VelocityTemplate extends AbstractTemplate {
         org.apache.velocity.Template vTemplate=this.vTemplate;
         if(vTemplate==null || !templateCaching){
             String templatePath=getFullTemplatePath();
-            try{
-                if(engineModule!=null) vTemplate=engineModule.getEngine().getTemplate(templatePath,templateEncoding);
-                else vTemplate=Velocity.getTemplate(templatePath,templateEncoding);
+            try {
+                if(engineModule!=null) {
+                    vTemplate=engineModule.getEngine().getTemplate(templatePath,templateEncoding);
+                }
+                else {
+                    vTemplate=Velocity.getTemplate(templatePath,templateEncoding);
+                }
             }catch(ResourceNotFoundException rnfe){
                 logging.warn("Velocity template "+templatePath+" not found.",rnfe);
             }catch(ParseErrorException pee){

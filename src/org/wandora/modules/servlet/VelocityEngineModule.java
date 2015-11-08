@@ -67,7 +67,8 @@ public class VelocityEngineModule extends AbstractModule {
 
     @Override
     public void start(ModuleManager manager) throws ModuleException {
-        engine=new VelocityEngine(engineProperties);
+        engine=new VelocityEngine();
+        engine.init(engineProperties);
         super.start(manager);
     }
 

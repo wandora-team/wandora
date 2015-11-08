@@ -42,8 +42,9 @@ import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.description.AxisService;
 import org.apache.axis2.transport.http.AxisServlet;
 import org.apache.axis2.transport.http.SimpleHTTPServer;
-import org.mortbay.jetty.servlet.*;
-import org.mortbay.jetty.*;
+import org.eclipse.jetty.server.handler.ContextHandler.Context;
+import org.eclipse.jetty.servlet.ServletHolder;
+
 
 import org.wandora.application.server.topicmapservice.TopicMapService;
 
@@ -102,10 +103,10 @@ public class Axis2Handler implements WebAppHandler {
                 }
             };
 
-            ServletHolder holder=new ServletHolder(axisServlet);
-            jettyContext=new Context(server.getJetty(),"/"+app.getName(),Context.SESSIONS);
-            jettyContext.getServletContext().setAttribute(AxisServlet.CONFIGURATION_CONTEXT, context);
-            jettyContext.addServlet(holder,"/*");
+//            ServletHolder holder=new ServletHolder(axisServlet);
+//            jettyContext=new Context(server.getJetty(),"/"+app.getName(),Context.SESSIONS);
+//            jettyContext.getServletContext().setAttribute(AxisServlet.CONFIGURATION_CONTEXT, context);
+//            jettyContext.addServlet(holder,"/*");
 
 //            SimpleHTTPServer simple=new SimpleHTTPServer(context,8900);
 //            simple.start();
@@ -193,7 +194,11 @@ public class Axis2Handler implements WebAppHandler {
     public void stop(WandoraWebApp app, WandoraWebAppServer server){
         boolean running=server.getJetty().isRunning();
         if(running) try{server.getJetty().stop();}catch(Exception e){e.printStackTrace();}
-        server.getJetty().removeHandler(jettyContext);
+        
+        
+//        server.getJetty().removeHandler(jettyContext);
+        
+        
         if(running) try{server.getJetty().start();}catch(Exception e){e.printStackTrace();}
     }
 

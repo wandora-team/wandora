@@ -33,9 +33,9 @@ import org.apache.axis2.context.ConfigurationContextFactory;
 import org.apache.axis2.description.AxisService;
 import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.transport.http.AxisServlet;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler.Context;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.wandora.application.Wandora;
 import org.wandora.application.server.topicmapservice.TopicMapService;
 import org.wandora.modules.AbstractModule;
@@ -72,7 +72,9 @@ public class Axis2Service extends AbstractModule {
         Server server=jetty.getJetty();
         boolean running=server.isRunning();
         if(running) try{server.stop();}catch(Exception e){e.printStackTrace();}
-        server.removeHandler(jettyContext);
+        
+//        server.removeHandler(jettyContext);
+        
         if(running) try{server.start();}catch(Exception e){e.printStackTrace();}
         
         jetty=null;
@@ -120,12 +122,15 @@ public class Axis2Service extends AbstractModule {
             }
 
             ServletHolder holder=new ServletHolder(axisServlet);
-            jettyContext=new Context(jetty.getJetty(),"/"+appName,Context.SESSIONS);
-            jettyContext.getServletContext().setAttribute(AxisServlet.CONFIGURATION_CONTEXT, context);
-            jettyContext.addServlet(holder,"/*");
+            
+            
+//            jettyContext=new Context(jetty.getJetty(),"/"+appName,Context.SESSIONS);
+//            jettyContext.getServletContext().setAttribute(AxisServlet.CONFIGURATION_CONTEXT, context);
+//            jettyContext.addServlet(holder,"/*");
 
 
-        }catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
         

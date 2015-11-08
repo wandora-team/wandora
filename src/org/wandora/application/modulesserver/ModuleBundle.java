@@ -30,8 +30,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wandora.modules.Module;
-import org.wandora.modules.ModuleGroup;
-import org.wandora.modules.ModuleManager.ModuleSettings;
 import org.wandora.modules.ScopedModuleManager;
 
 /**

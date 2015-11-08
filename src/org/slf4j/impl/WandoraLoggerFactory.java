@@ -27,9 +27,9 @@ package org.slf4j.impl;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.ILoggerFactory;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.Logger;
+import org.wandora.application.Wandora;
+import org.wandora.utils.Options;
 
 /**
  *
@@ -41,20 +41,78 @@ public class WandoraLoggerFactory implements ILoggerFactory {
 
     private Map<String, WandoraLoggerAdapter> loggerMap;
     
+    private Map<String, Integer> loggingLevels = new HashMap();  
+
+    
+    
     public WandoraLoggerFactory() {
+        loggingLevels = new HashMap();
         loggerMap = new HashMap<String, WandoraLoggerAdapter>();
+        initializeLoggerFactory();
     }
+    
+    
     
     
     @Override
     public Logger getLogger(String name) {
         synchronized (loggerMap) {
             if (!loggerMap.containsKey(name)) {
-                loggerMap.put(name, new WandoraLoggerAdapter(name));
+                // System.out.println("Creating logger for '"+name+"' with level "+getLoggingLevel(name));
+                WandoraLoggerAdapter logger = new WandoraLoggerAdapter(name);
+                logger.setLogLevel(getLoggingLevel(name));
+                loggerMap.put(name, logger);
             }
  
             return loggerMap.get(name);
         }
     }
+    
+    
+    private int getLoggingLevel(String name) {
+        if(name != null) {
+            for(String logRegex : loggingLevels.keySet()) {
+                if(name.matches(logRegex)) {
+                    Integer i = loggingLevels.get(logRegex);
+                    if(i != null) {
+                        return i.intValue();
+                    }
+                    else {
+                        // System.out.println("Warning, log level is null");
+                    }
+                }
+            }
+        }
+        
+        return WandoraLoggerAdapter.LOG_INFO;
+    }
+    
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    private void initializeLoggerFactory() {
+        Wandora wandora = Wandora.getWandora();
+        if(wandora != null) {
+            Options options = wandora.getOptions();
+            if(options != null) {
+                int i = 0;
+                String regex;
+                int level;
+                do {
+                    regex = options.get("loggerRules.loggerRule["+i+"].nameRegex");
+                    level = options.getInt("loggerRules.loggerRule["+i+"].logLevel", 9999);
+                    
+                    if(regex != null && level != 9999) {
+                        loggingLevels.put(regex, level);
+                    }
+                    i++;
+                }
+                while(regex != null && i < 1000);
+            }
+        }
+    }
+    
     
 }

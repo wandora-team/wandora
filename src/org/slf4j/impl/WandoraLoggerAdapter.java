@@ -39,89 +39,136 @@ import org.slf4j.Marker;
 public class WandoraLoggerAdapter implements Logger {
 
     
-    StringBuilder logData = null;
+    
+    public static final int LOG_ALL=0;
+    public static final int LOG_TRACE=0;
+    public static final int LOG_DEBUG=1;
+    public static final int LOG_INFO=2;
+    public static final int LOG_WARN=3;
+    public static final int LOG_ERROR=4;
+    public static final int LOG_FATAL=5;
+    public static final int LOG_NONE=6;
+    
+    
+    private StringBuilder logData = null;
+    private int logLevel = LOG_ERROR;
+    
     
     
     public WandoraLoggerAdapter(String name) {
         logData = new StringBuilder();
     }
-    
+    public WandoraLoggerAdapter(String name, int level) {
+        logData = new StringBuilder();
+        logLevel = level;
+    }
     
     @Override
     public String getName() {
         return "Wandora logger";
     }
     
+    
+    // -------------------------------------------------------------------------
+    
+    
+    
+    public void setLogLevel(int logLevel) {
+        this.logLevel = logLevel;
+    }
+    
+    
+    
     // -------------------------------------------------------------------------
 
     @Override
     public boolean isTraceEnabled() {
-        return true;
+        return logLevel <= LOG_TRACE;
     }
 
     @Override
     public void trace(String string) {
-        log(string);
+        if(isTraceEnabled()) {
+            log(string);
+        }
     }
 
     @Override
     public void trace(String string, Object o) {
-        log(string);
-        log(o);
+        if(isTraceEnabled()) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void trace(String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isTraceEnabled()) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void trace(String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isTraceEnabled()) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void trace(String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isTraceEnabled()) {
+            log(string);
+            log(thrwbl);
+        }
     }
 
     @Override
     public boolean isTraceEnabled(Marker marker) {
-        return false;
+        return logLevel <= LOG_TRACE;
     }
 
     @Override
     public void trace(Marker marker, String string) {
-        log(string);
+        if(isTraceEnabled(marker)) {
+            log(string);
+        }
     }
 
     @Override
     public void trace(Marker marker, String string, Object o) {
-        log(string);
-        log(o);
+        if(isTraceEnabled(marker)) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void trace(Marker marker, String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isTraceEnabled(marker)) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void trace(Marker marker, String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isTraceEnabled(marker)) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void trace(Marker marker, String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isTraceEnabled(marker)) {
+            log(string);
+            log(thrwbl);
+        }
     }
 
     
@@ -129,287 +176,367 @@ public class WandoraLoggerAdapter implements Logger {
     
     @Override
     public boolean isDebugEnabled() {
-        return false;
+        return logLevel <= LOG_DEBUG;
     }
 
     @Override
     public void debug(String string) {
-        log(string);
+        if(isDebugEnabled()) {
+            log(string);
+        }
     }
 
     @Override
     public void debug(String string, Object o) {
-        log(string);
-        log(o);
+        if(isDebugEnabled()) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void debug(String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isDebugEnabled()) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void debug(String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isDebugEnabled()) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void debug(String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isDebugEnabled()) {
+            log(string);
+            log(thrwbl);
+        }
     }
 
     @Override
     public boolean isDebugEnabled(Marker marker) {
-        return false;
+        return logLevel <= LOG_DEBUG;
     }
 
     @Override
     public void debug(Marker marker, String string) {
-        log(string);
+        if(isDebugEnabled(marker)) {
+            log(string);
+        }
     }
 
     @Override
     public void debug(Marker marker, String string, Object o) {
-        log(string);
-        log(o);
+        if(isDebugEnabled(marker)) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void debug(Marker marker, String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isDebugEnabled(marker)) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void debug(Marker marker, String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isDebugEnabled(marker)) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void debug(Marker marker, String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isDebugEnabled(marker)) {
+            log(string);
+            log(thrwbl);
+        }
     }
 
     // -------------------------------------------------------------------------
     
     @Override
     public boolean isInfoEnabled() {
-        return true;
+        return logLevel <= LOG_INFO;
     }
 
     @Override
     public void info(String string) {
-        log(string);
+        if(isInfoEnabled()) {
+            log(string);
+        }
     }
 
     @Override
     public void info(String string, Object o) {
-        log(string);
-        log(o);
+        if(isInfoEnabled()) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void info(String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isInfoEnabled()) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void info(String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isInfoEnabled()) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void info(String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isInfoEnabled()) {
+            log(string);
+            log(thrwbl);
+        }
     }
 
     @Override
     public boolean isInfoEnabled(Marker marker) {
-        return true;
+        return logLevel <= LOG_INFO;
     }
 
     @Override
     public void info(Marker marker, String string) {
-        log(string);
+        if(isInfoEnabled(marker)) {
+            log(string);
+        }
     }
 
     @Override
     public void info(Marker marker, String string, Object o) {
-        log(string);
-        log(o);
+        if(isInfoEnabled(marker)) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void info(Marker marker, String string, Object o, Object o1) {
-        log(string);
-        log(o1);
+        if(isInfoEnabled(marker)) {
+            log(string);
+            log(o1);
+        }
     }
 
     @Override
     public void info(Marker marker, String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isInfoEnabled(marker)) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void info(Marker marker, String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isInfoEnabled(marker)) {
+            log(string);
+            log(thrwbl);
+        }
     }
 
     // -------------------------------------------------------------------------
     
     @Override
     public boolean isWarnEnabled() {
-        return true;
+        return logLevel <= LOG_WARN;
     }
 
     @Override
     public void warn(String string) {
-        log(string);
+        if(isWarnEnabled()) {
+            log(string);
+        }
     }
 
     @Override
     public void warn(String string, Object o) {
-        log(string);
-        log(o);
+        if(isWarnEnabled()) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void warn(String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isWarnEnabled()) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void warn(String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isWarnEnabled()) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void warn(String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isWarnEnabled()) {
+            log(string);
+            log(thrwbl);
+        }
     }
 
     @Override
     public boolean isWarnEnabled(Marker marker) {
-        return true;
+        return logLevel <= LOG_WARN;
     }
 
     @Override
     public void warn(Marker marker, String string) {
-        log(string);
+        if(isWarnEnabled(marker)) {
+            log(string);
+        }
     }
 
     @Override
     public void warn(Marker marker, String string, Object o) {
-        log(string);
-        log(o);
+        if(isWarnEnabled(marker)) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void warn(Marker marker, String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isWarnEnabled(marker)) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void warn(Marker marker, String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isWarnEnabled(marker)) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void warn(Marker marker, String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isWarnEnabled(marker)) {
+            log(string);
+            log(thrwbl);
+        }
     }
     
     // -------------------------------------------------------------------------
 
     @Override
     public boolean isErrorEnabled() {
-        return true;
+        return logLevel <= LOG_ERROR;
     }
 
     @Override
     public void error(String string) {
-        log(string);
+        if(isErrorEnabled()) {
+            log(string);
+        }
     }
 
     @Override
     public void error(String string, Object o) {
-        log(string);
-        log(o);
+        if(isErrorEnabled()) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void error(String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isErrorEnabled()) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void error(String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isErrorEnabled()) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void error(String string, Throwable thrwbl) {
-        log(string);
-        log(thrwbl);
+        if(isErrorEnabled()) {
+            log(string);
+            log(thrwbl);
+        }
     }
 
     @Override
     public boolean isErrorEnabled(Marker marker) {
-        return true;
+        return logLevel <= LOG_ERROR;
     }
 
     @Override
     public void error(Marker marker, String string) {
-        log(string);
+        if(isErrorEnabled(marker)) {
+            log(string);
+        }
     }
 
     @Override
     public void error(Marker marker, String string, Object o) {
-        log(string);
-        log(o);
+        if(isErrorEnabled(marker)) {
+            log(string);
+            log(o);
+        }
     }
 
     @Override
     public void error(Marker marker, String string, Object o, Object o1) {
-        log(string);
-        log(o);
-        log(o1);
+        if(isErrorEnabled(marker)) {
+            log(string);
+            log(o);
+            log(o1);
+        }
     }
 
     @Override
     public void error(Marker marker, String string, Object[] os) {
-        log(string);
-        log(os);
+        if(isErrorEnabled(marker)) {
+            log(string);
+            log(os);
+        }
     }
 
     @Override
     public void error(Marker marker, String string, Throwable thrwbl) {
-       log(string);
-       log(thrwbl);
+        if(isErrorEnabled(marker)) {
+            log(string);
+            log(thrwbl);
+        }
     }
     
     // -------------------------------------------------------------------------

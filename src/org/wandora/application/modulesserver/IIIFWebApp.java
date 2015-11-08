@@ -22,10 +22,9 @@
  */
 package org.wandora.application.modulesserver;
 
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,9 +41,7 @@ import org.wandora.modules.servlet.ActionException;
 import org.wandora.modules.servlet.ModulesServlet;
 import org.wandora.modules.usercontrol.User;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.memory.TopicMapImpl;
+
 
 /**
  *

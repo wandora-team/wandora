@@ -20,6 +20,8 @@
  *
  */
 package org.wandora.application.server;
+
+
 import org.wandora.application.*;
 import org.wandora.utils.Options;
 
@@ -28,25 +30,32 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.velocity.VelocityContext;
-
-import org.apache.velocity.app.VelocityEngine;
-
 import org.wandora.topicmap.*;
 import org.wandora.piccolo.utils.*;
 import org.wandora.application.gui.UIBox;
 import org.wandora.utils.Base64;
-
-import org.mortbay.jetty.*;
-import org.mortbay.jetty.handler.AbstractHandler;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mortbay.jetty.security.*;
-import org.mortbay.jetty.nio.*;
+import org.eclipse.jetty.http.MimeTypes;
+import org.eclipse.jetty.server.ConnectionFactory;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+
 
 
 /**
- *
+ * @see WandoraModulesServer
+ * @deprecated 
  * @author olli
  */
 public class WandoraWebAppServer {
@@ -57,12 +66,17 @@ public class WandoraWebAppServer {
     public static final String OPTION_LOCALONLY="httpserver.localonly";
     public static final String OPTION_SERVERPATH="httpserver.serverpath";
     public static final String OPTION_USESSL="httpserver.usessl";
+    public static final String OPTION_KEYSTORE_FILE="httpserver.keystore.file";
+    public static final String OPTION_KEYSTORE_PASSWORD="httpserver.keystore.password";
 
+    private Wandora wandora;
+    
     private int port;
     private boolean useSSL;
-    private Wandora wandora;
+    private String keystoreFile;
+    private String keystorePassword;
+
     private String serverPath;
-    private VelocityEngine velocityEngine;
     private boolean localOnly=true;
     private boolean autoStart=false;
 
@@ -75,8 +89,9 @@ public class WandoraWebAppServer {
     private long lastHit;
 
     private Server jettyServer;
+    private ServerConnector serverConnector;
     private Handler requestHandler;
-    private org.mortbay.jetty.MimeTypes mimeTypes;
+    private MimeTypes mimeTypes;
 
     private HashMap<String,WandoraWebApp> webApps;
 
@@ -88,25 +103,29 @@ public class WandoraWebAppServer {
         readOptions(options);
         requestHandler=new JettyHandler();
 
-        mimeTypes=new org.mortbay.jetty.MimeTypes();
+        mimeTypes=new MimeTypes();
 
         webApps=new HashMap<String,WandoraWebApp>();
         ArrayList<WandoraWebApp> apps=scanWebApps();
         for(WandoraWebApp app : apps){
             webApps.put(app.getName(),app);
         }
-
     }
+    
 
     public void returnNotFound(HttpServletResponse response){
         returnNotFound(response,"");
     }
+    
+    
     public void returnNotFound(HttpServletResponse response,String message){
         writeResponse(response,HttpServletResponse.SC_NOT_FOUND,"404 Not Found<br />"+message);
     }
+    
 
     private class JettyHandler extends AbstractHandler {
-        public void handle(String target,HttpServletRequest request,HttpServletResponse response, int dispatch) throws IOException,ServletException {
+        @Override
+        public void handle(String target,Request rqst, HttpServletRequest request,HttpServletResponse response) throws IOException,ServletException {
             System.out.println("Jettyrequest");
             if(localOnly && !request.getRemoteAddr().equals("127.0.0.1")) {
                 ((Request)request).setHandled(true);
@@ -168,51 +187,75 @@ public class WandoraWebAppServer {
         }
     }
 
+    
     public HashMap<String,WandoraWebApp> getWebApps(){
         return webApps;
     }
+    
+    
     public void setWebApp(WandoraWebApp app){
         webApps.put(app.name,app);
     }
+    
+    
     public boolean removeWebApp(String key){
         return webApps.remove(key)!=null;
     }
 
+    
     public void log(String s){
         System.out.println(s);
     }
+    
+    
     public void log(Throwable t){
         t.printStackTrace();
     }
+    
+    
     public void log(String s,Throwable t){
         log(s);
         log(t);
     }
 
+    
     public Server getJetty(){
         return jettyServer;
     }
 
+    
     public Wandora getWandora(){
         return wandora;
     }
 
+    
     public void readOptions(Options options){
         localOnly=!options.isFalse(OPTION_LOCALONLY);
         autoStart=options.isTrue(OPTION_AUTOSTART);
         port=options.getInt(OPTION_PORT);
         serverPath=options.get(OPTION_SERVERPATH,"resources/server/");
         useSSL=options.isTrue(OPTION_USESSL);
+        keystoreFile = options.get(OPTION_KEYSTORE_FILE, "resources/conf/keystore/keystore");
+        try {
+            keystoreFile = new File(keystoreFile).getCanonicalPath();
+        } catch (IOException ex) {
+            log("Couldn't resolve canonical file for keystore",ex);
+        }
+        keystorePassword = options.get(OPTION_KEYSTORE_PASSWORD, "wandora");
     }
 
+    
     public void writeOptions(Options options){
         options.put(OPTION_LOCALONLY, ""+localOnly);
         options.put(OPTION_AUTOSTART, ""+autoStart);
         options.put(OPTION_PORT, ""+port);
         options.put(OPTION_SERVERPATH, serverPath);
         options.put(OPTION_USESSL, ""+useSSL);
+        options.put(OPTION_KEYSTORE_FILE, ""+keystoreFile);
+        options.put(OPTION_KEYSTORE_PASSWORD, ""+keystorePassword);
     }
 
+    
     private void updateStatusIcon(){
         if(jettyServer!=null && jettyServer.isRunning()) {
             statusButton.setIcon(this.onIcon);
@@ -225,6 +268,7 @@ public class WandoraWebAppServer {
 
     }
 
+    
     public void setStatusComponent(javax.swing.JButton button,String onIcon,String offIcon,String hitIcon){
         this.statusButton=button;
         this.onIcon=UIBox.getIcon(onIcon);
@@ -232,48 +276,57 @@ public class WandoraWebAppServer {
         this.hitIcon=UIBox.getIcon(hitIcon);
         updateStatusIcon();
     }
+    
 
-    public boolean isRunning(){
+    public boolean isRunning() {
         return jettyServer!=null && jettyServer.isRunning();
     }
 
-    public void start(){
-        try{
-            Connector c;
-/*            if(useSSL) c=new SslSocketConnector();
-            else c=new SocketConnector();*/
-            if(useSSL) c=new SslSelectChannelConnector();
-            else c=new SelectChannelConnector();
-            c.setPort(port);
-            jettyServer.setConnectors(new Connector[]{c});
+    
+    public void start() {
+        try {
+            if(useSSL) {
+                SslContextFactory sslCtxFactory = new SslContextFactory();
 
-/*            Handler[] oldHandlers=null;
-            if(jettyServer.getHandlers()!=null) oldHandlers=jettyServer.getHandlers();
-            else if(jettyServer.getHandler()!=null) oldHandlers=new Handler[]{jettyServer.getHandler()};
-            else oldHandlers=new Handler[0];
-            Handler[] handlers=new Handler[oldHandlers.length+1];
-            System.arraycopy(oldHandlers, 0, handlers, 1, oldHandlers.length);
-            handlers[0]=requestHandler;
-            jettyServer.setHandlers(handlers);*/
+                sslCtxFactory.setKeyStorePath(keystoreFile);
+                sslCtxFactory.setKeyStorePassword(keystorePassword);
+                SslConnectionFactory https = new SslConnectionFactory(sslCtxFactory, "http/1.1");
+                
+                HttpConfiguration httpConfiguration = new HttpConfiguration();
+                httpConfiguration.setSecurePort(port);
+                httpConfiguration.setSecureScheme("https");
+                httpConfiguration.addCustomizer(new SecureRequestCustomizer());
+                ConnectionFactory http = new HttpConnectionFactory(httpConfiguration);
+                
+                serverConnector = new ServerConnector(jettyServer, https, http);
+                serverConnector.setPort(port);
+            }
+            else {
+                HttpConfiguration httpConfiguration = new HttpConfiguration();
+                ConnectionFactory http = new HttpConnectionFactory(httpConfiguration);
+                
+                serverConnector = new ServerConnector(jettyServer, http);
+                serverConnector.setPort(port);
+            }
 
-            jettyServer.setHandler(null);
-            
-            jettyServer.addHandler(requestHandler);
+            jettyServer.setConnectors(new Connector[] { serverConnector });
+            jettyServer.setHandler(requestHandler);
             for(WandoraWebApp app : webApps.values()){
                 app.start(this);
             }
-
             jettyServer.start();
 
-            if(statusButton!=null){
+            if(statusButton!=null) {
                 updateStatusIcon();
                 iconThread=new IconThread();
                 iconThread.start();
             }
-        }catch(Exception e){
+        }
+        catch(Exception e){
             wandora.handleError(e);
         }
     }
+    
 
     public void stopServer(){
         try{
@@ -281,7 +334,16 @@ public class WandoraWebAppServer {
                 app.stop(this);
             }
 
-            if(jettyServer!=null) jettyServer.stop();
+            if(jettyServer!=null) {
+                jettyServer.stop();
+                jettyServer.setHandler(null);
+                if(serverConnector != null) {
+                    jettyServer.removeConnector(serverConnector);
+                    serverConnector.close();
+                    serverConnector.stop();
+                }
+                jettyServer.setConnectors(null);
+            }
             while(iconThread!=null && iconThread.isAlive()){
                 iconThread.interrupt();
                 try{
@@ -290,10 +352,12 @@ public class WandoraWebAppServer {
             }
             if(statusButton!=null) updateStatusIcon();
             iconThread=null;
-        }catch(Exception e){
+        }
+        catch(Exception e){
             wandora.handleError(e);
         }
     }
+    
     public void setPort(int p){port=p;}
     public int getPort(){return port;}
     public void setUseSSL(boolean b){useSSL=b;}
@@ -304,11 +368,32 @@ public class WandoraWebAppServer {
     public void setLocalOnly(boolean b){localOnly=b;}
     public boolean isAutoStart(){return autoStart;}
     public void setAutoStart(boolean b){autoStart=b;}
-
+    
+    public void setKeystoreFile(String filename) {
+        keystoreFile = filename;
+    }
+    
+    
+    public String getKeystoreFile() {
+        return keystoreFile;
+    }
+    
+    
+    public void setKeystorePassword(String password) {
+        keystorePassword = password;
+    }
+    
+    
+    public String getKeystorePassword() {
+        return keystorePassword;
+    }
+    
+    
     public static int resolvePort(Wandora wandora){
         return wandora.getOptions().getInt(OPTION_PORT,defaultPort);
     }
 
+    
     protected void getDefaultContext(VelocityContext context,WandoraWebApp app){
         try{
             context.put("collectionmaker",new InstanceMaker("java.util.HashSet"));
@@ -333,10 +418,13 @@ public class WandoraWebAppServer {
             e.printStackTrace();
         }
     }
+    
 
     public void writeResponse(HttpServletResponse response,int code,String message){
         writeResponse(response,code,message,null);
     }
+    
+    
     public void writeResponse(HttpServletResponse response,int code,String message,Throwable e){
         response.setStatus(code);
         response.setContentType("text/html");
@@ -358,6 +446,7 @@ public class WandoraWebAppServer {
         }catch(IOException ioe){ioe.printStackTrace();}
     }
 
+    
     public boolean getStatic(String target,String staticPath,WandoraWebApp app,HttpServletRequest request,HttpServletResponse response) {
         try{
             String file=URLDecoder.decode(target,"UTF-8");
@@ -376,10 +465,13 @@ public class WandoraWebAppServer {
         }
         return false;        
     }
+    
+    
     public boolean getStatic(String target,WandoraWebApp app,HttpServletRequest request,HttpServletResponse response) {
         return getStatic(target,app.getStaticPath(),app,request,response);
     }
 
+    
     public void returnFile(HttpServletResponse response,File f) throws IOException {
         if(!f.exists() || f.isDirectory()){
             writeResponse(response,HttpServletResponse.SC_NOT_FOUND,"404 Not Found");
@@ -400,6 +492,7 @@ public class WandoraWebAppServer {
         in.close();
     }
 
+    
     protected ArrayList<WandoraWebApp> scanWebApps(){
         ArrayList<WandoraWebApp> ret=new ArrayList<WandoraWebApp>();
         File webAppDir=new File(serverPath);
@@ -419,6 +512,7 @@ public class WandoraWebAppServer {
         return ret;
     }
 
+    
     public class IconThread extends Thread {
         public static final int hitTime=1000;
         @Override
@@ -439,30 +533,18 @@ public class WandoraWebAppServer {
         }
     }
 
+    
     public Map<String,String> getOpenUrls() {
         Map<String,String> urlMap = new LinkedHashMap();
         WandoraWebApp app = null;
         for(String appName : webApps.keySet()) {
             app = webApps.get(appName);
             if(!app.isEnabled()) appName = "["+appName+"]";
-            String url = "http://127.0.0.1:"+getPort()+"/"+appName;
+            String url = (isUseSSL() ? "https" : "http")+"://127.0.0.1:"+getPort()+"/"+appName;
             String openPath = app.getOpenPath();
             if(openPath != null) url = url + "/" + openPath;
             urlMap.put(appName, url);
         }
         return urlMap;
     }
-    
-
-/*    public class MockupRequest {
-        public String[] params;
-        public MockupRequest(String[] params){
-            this.params=params;
-        }
-        public String getParameter(String name){
-            return getParamValue(name,params);
-        }
-    }*/
-    
-
 }

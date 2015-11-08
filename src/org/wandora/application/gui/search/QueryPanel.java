@@ -58,7 +58,6 @@ import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.simple.SimpleTextPaneResizeable;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.application.gui.tree.TopicTreePanel;
-import static org.wandora.application.server.topicmapservice.TopicMapService.tm;
 import org.wandora.query2.Directive;
 import org.wandora.query2.QueryContext;
 import org.wandora.query2.QueryException;

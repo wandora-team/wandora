@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.eclipse.jetty.http.MimeTypes;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
@@ -53,7 +54,7 @@ public class StaticContentAction extends AbstractAction {
     protected ArrayList<Pattern> forbidden=new ArrayList<Pattern>();
     protected String urlPrefix="";
     
-    private org.mortbay.jetty.MimeTypes mimeTypes;
+    private MimeTypes mimeTypes;
 
     @Override
     public Collection<Module> getDependencies(ModuleManager manager) throws ModuleException {
@@ -116,7 +117,7 @@ public class StaticContentAction extends AbstractAction {
             forbidden.add(Pattern.compile(s));
         }
         
-        mimeTypes=new org.mortbay.jetty.MimeTypes();
+        mimeTypes=new MimeTypes();
         
         super.init(manager, settings);
     }

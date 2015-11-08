@@ -26,7 +26,6 @@ package org.wandora.application.server;
 import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.wandora.application.Wandora;
 import org.wandora.application.tools.exporters.RDFExport;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;

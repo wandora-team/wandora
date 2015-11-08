@@ -15,7 +15,7 @@ a:active {
 }
 
 a:after {
-    content:" »";
+    content:"...";
 } 
 
 h1{

@@ -128,9 +128,10 @@ public class HTTPServerTool extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
+        
         if((mode&CONFIGURE) != 0) {
 
-            WandoraModulesServer s=wandora.getHTTPServer();
+            WandoraModulesServer server = wandora.getHTTPServer();
             
             String u=null; //s.getLoginUser();
             String p=null; //s.getLoginPassword();
@@ -140,53 +141,66 @@ public class HTTPServerTool extends AbstractWandoraTool {
             String[] logLevels={"trace","debug","info","warn","error","fatal","none"};
             
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Wandora HTTP server settings","Wandora HTTP server settings",true,new String[][]{
-                new String[]{"Auto start","boolean",""+s.isAutoStart(),"Start server automatically when you start Wandora"},
-                new String[]{"Port","string",""+s.getPort(),"Port the server is listening to"},
-                new String[]{"Local only","boolean",""+s.isLocalOnly(),"Allow only local connections"},
-                new String[]{"Use SSL","boolean",""+s.isUseSSL(),"Should server use SSL"},
+                new String[]{"Auto start","boolean",""+server.isAutoStart(),"Start server automatically when you start Wandora"},
+                new String[]{"Port","string",""+server.getPort(),"Port the server is listening to"},
+                new String[]{"Local only","boolean",""+server.isLocalOnly(),"Allow only local connections"},
+                new String[]{"Use SSL","boolean",""+server.isUseSSL(),"Should server use SSL"},
+                new String[]{"Keystore location","string",""+server.getKeystoreFile(),"Where SSL keystore file locates? Keystore is used only if you have selected to use SLL."},
+                new String[]{"Keystore password","string",""+server.getKeystorePassword(),"Keystore's password. Keystore is used only if you have selected to use SLL."},
 //                new String[]{"User name","string",u,"User name. Leave empty for anonymous login"},
 //                new String[]{"Password","password",p,"Password for the user if user name field is used"},
-                new String[]{"Server path","string",s.getServerPath(),"Path where Wandora web apps are deployed"},
+                new String[]{"Server path","string",server.getServerPath(),"Path where Wandora web apps are deployed"},
 //                new String[]{"Static content path","string",s.getStaticPath(),"Path where static files are located"},
 //                new String[]{"Template path","string",s.getTemplatePath(),"Path where Velocity templates are located"},
 //                new String[]{"Template","string",s.getTemplateFile(),"Template file used to create a topic page"},
-                new String[]{"Log level","combo:"+StringUtils.join(logLevels,";"),logLevels[s.getLogLevel()],"Lowest level of log messages that are printed"},
+                new String[]{"Log level","combo:"+StringUtils.join(logLevels,";"),logLevels[server.getLogLevel()],"Lowest level of log messages that are printed"},
             },wandora);
-            god.setSize(800, 300);
+            god.setSize(800, 400);
             if(wandora != null) wandora.centerWindow(god);
             god.setVisible(true);
+            
             if(god.wasCancelled()) return;
 
-            boolean running=s.isRunning();
-            if(running) s.stopServer();
+            boolean running = server.isRunning();
+            if(running) server.stopServer();
 
             Map<String,String> values = god.getValues();
             
-            s.setAutoStart(Boolean.parseBoolean(values.get("Auto start")));
-            s.setPort(Integer.parseInt(values.get("Port")));
-            s.setLocalOnly(Boolean.parseBoolean(values.get("Local only")));
-            s.setUseSSL(Boolean.parseBoolean(values.get("Use SSL")));
-//            s.setLogin(values.get("User name"),values.get("Password"));
-//            s.setStaticPath(values.get("Static content path"));
-//            s.setTemplatePath(values.get("Template path"));
-//            s.setTemplateFile(values.get("Template"));
-            s.setServerPath(values.get("Server path"));
-            s.setLogLevel(ArrayUtils.indexOf(logLevels, values.get("Log level")));
+            server.setAutoStart(Boolean.parseBoolean(values.get("Auto start")));
+            server.setPort(Integer.parseInt(values.get("Port")));
+            server.setLocalOnly(Boolean.parseBoolean(values.get("Local only")));
+            server.setUseSSL(Boolean.parseBoolean(values.get("Use SSL")));
+            server.setKeystoreFile(values.get("Keystore location"));
+            server.setKeystorePassword(values.get("Keystore password"));
+//            server.setLogin(values.get("User name"),values.get("Password"));
+//            server.setStaticPath(values.get("Static content path"));
+//            server.setTemplatePath(values.get("Template path"));
+//            server.setTemplateFile(values.get("Template"));
+            server.setServerPath(values.get("Server path"));
+            server.setLogLevel(ArrayUtils.indexOf(logLevels, values.get("Log level")));
 
-            s.writeOptions(wandora.getOptions());
+            server.writeOptions(wandora.getOptions());
 
-            if(running) s.start();
+            server.initModuleManager();
+            server.readBundleDirectories();
             
+            if(running) server.start();
+
+            wandora.menuManager.refreshServerMenu();
         }
+        
         if((mode&START) != 0) {
             wandora.startHTTPServer();
         }
+
         else if((mode&STOP) != 0) {
             wandora.stopHTTPServer();            
         }
+        
         if((mode&UPDATE_MENU) != 0) {
             wandora.menuManager.refreshServerMenu();
         }
+        
         if((mode&OPEN_PAGE) !=0) {
             try {
                 if(!wandora.getHTTPServer().isRunning()) {
@@ -199,13 +213,14 @@ public class HTTPServerTool extends AbstractWandoraTool {
                         return;
                     }
                 }
-                WandoraModulesServer s=wandora.getHTTPServer();
-                String uri = "http://127.0.0.1:"+s.getPort()+"/topic";
+                WandoraModulesServer s = wandora.getHTTPServer();
+                
+                String uri = (s.isUseSSL() ? "https" : "http")+"://127.0.0.1:"+s.getPort()+"/topic";
                 if(forceUrl != null) uri = forceUrl;
-                else if(webApp!=null){
+                else if(webApp!=null) {
                     uri=webApp.getAppStartPage();
                     if(uri==null) {
-                        WandoraOptionPane.showMessageDialog(wandora, "Selected webapp cannot be launched.");
+                        WandoraOptionPane.showMessageDialog(wandora, "Can't launch selected webapp. Webapp says it's URI is null.");
                         return;
                     }
                 }
@@ -222,6 +237,7 @@ public class HTTPServerTool extends AbstractWandoraTool {
                 wandora.handleError(e);
             }            
         }
+        
         if((mode&OPEN_PAGE_IN_BROWSER_TOPIC_PANEL)!=0){
             try {
                 if(!wandora.getHTTPServer().isRunning()) {
@@ -232,12 +248,12 @@ public class HTTPServerTool extends AbstractWandoraTool {
                     }
                 }
                 WandoraModulesServer s=wandora.getHTTPServer();
-                String uri = "http://127.0.0.1:"+s.getPort()+"/topic";
+                String uri = (s.isUseSSL() ? "https" : "http")+"://127.0.0.1:"+s.getPort()+"/topic";
                 if(forceUrl != null) uri = forceUrl;
-                else if(webApp!=null){
+                else if(webApp!=null) {
                     uri=webApp.getAppStartPage();
                     if(uri==null) {
-                        WandoraOptionPane.showMessageDialog(wandora, "Selected webapp cannot be launched.");
+                        WandoraOptionPane.showMessageDialog(wandora, "Can't launch selected webapp. Webapp says it's URI is null.");
                         return;
                     }
                 }
@@ -259,12 +275,5 @@ public class HTTPServerTool extends AbstractWandoraTool {
             }            
         }
     }
-
-
-
-
-
-
-
 
 }

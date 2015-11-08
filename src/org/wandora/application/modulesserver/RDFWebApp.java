@@ -27,7 +27,6 @@ import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.wandora.application.server.WebAppHelper;
 import org.wandora.application.tools.exporters.RDFExport;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;

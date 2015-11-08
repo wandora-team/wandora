@@ -113,7 +113,10 @@ public class RequestForwarder extends CachedAction {
     protected LinkedHashMap<String,String> getSendParams(HttpServletRequest req){
         LinkedHashMap<String,String> params=new LinkedHashMap<String,String>();
         if(forwardAllParams){
-            params.putAll(req.getParameterMap());            
+            for(String s : forwardParams){
+                String v=req.getParameter(s);
+                params.put(s,v);
+            }            
         }
         else {
             for(String s : forwardParams){

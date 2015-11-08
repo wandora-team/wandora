@@ -21,7 +21,8 @@
  */
 package org.wandora.application.modulesserver;
 
-import org.mortbay.jetty.Server;
+
+import org.eclipse.jetty.server.Server;
 import org.wandora.modules.AbstractModule;
 
 /**
@@ -44,4 +45,6 @@ public class JettyModule extends AbstractModule {
     public Server getJetty(){
         return jettyServer;
     }
+    
+    
 }

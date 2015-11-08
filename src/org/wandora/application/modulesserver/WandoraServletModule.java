@@ -25,8 +25,9 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.handler.AbstractHandler;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.wandora.modules.AbstractModule;
 import org.wandora.modules.servlet.ActionException;
 import org.wandora.modules.servlet.ModulesServlet;
@@ -68,7 +69,12 @@ public class WandoraServletModule extends AbstractModule implements ServletModul
 
     @Override
     public String getServletURL() {
-        return "http://127.0.0.1:"+server.getPort()+"/";
+        if(server.isUseSSL()) {
+            return "https://127.0.0.1:"+server.getPort()+"/";
+        }
+        else {
+            return "http://127.0.0.1:"+server.getPort()+"/";
+        }
     }
 
     @Override
@@ -80,34 +86,34 @@ public class WandoraServletModule extends AbstractModule implements ServletModul
     private class JettyHandler extends AbstractHandler {
 
         @Override
-        public void handle(String target, final HttpServletRequest request, final HttpServletResponse response, int dispatch) throws IOException, ServletException {
+        public void handle(String target, Request rqst, final HttpServletRequest request, final HttpServletResponse response) throws IOException, ServletException {
 
-            try{
-                final ServletException[] se=new ServletException[1];
-                final IOException[] ioe=new IOException[1];
-                final ActionException[] ae=new ActionException[1];
-                final boolean[] handledA=new boolean[]{false};
+            try {
+                final ServletException[] se = new ServletException[1];
+                final IOException[] ioe = new IOException[1];
+                final ActionException[] ae = new ActionException[1];
+                final boolean[] handledA = new boolean[]{false};
 
-                final ModulesServlet.HttpMethod method=ModulesServlet.HttpMethod.valueOf(request.getMethod());
+                final ModulesServlet.HttpMethod method = ModulesServlet.HttpMethod.valueOf(request.getMethod());
 
-                requestListeners.forEach(new ListenerList.EachDelegate<ServletModule.RequestListener>(){
+                requestListeners.forEach(new ListenerList.EachDelegate<ServletModule.RequestListener>() {
                     private boolean handled=false;
                     @Override
                     public void run(ServletModule.RequestListener listener, Object... params) {
                         if(handled) return;
-                        try{
+                        try {
                             handled=listener.handleRequest(request, response, method, null);
                             if(handled) handledA[0]=true;
                         }
-                        catch(ServletException ex){
+                        catch(ServletException ex) {
                             handled=true;
                             se[0]=ex;
                         }
-                        catch(IOException ex){
+                        catch(IOException ex) {
                             handled=true;
                             ioe[0]=ex;
                         }
-                        catch(ActionException ex){
+                        catch(ActionException ex) {
                             handled=true;
                             ae[0]=ex;
                         }

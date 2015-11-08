@@ -31,11 +31,8 @@ import de.topicmapslab.tmql4j.path.components.processor.runtime.TmqlRuntime2007;
 import de.topicmapslab.tmql4j.query.IQuery;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import org.tmapi.core.DatatypeAware;
 import org.tmapi.core.Name;
-import org.wandora.application.gui.table.MixedTopicTable;
-import static org.wandora.application.server.topicmapservice.TopicMapService.wandora;
 import org.wandora.topicmap.wandora2tmapi.W2TRole;
 import org.wandora.topicmap.wandora2tmapi.W2TTopic;
 

@@ -40,15 +40,19 @@ import org.wandora.topicmap.*;
 import org.wandora.piccolo.utils.*;
 import org.wandora.application.gui.UIBox;
 import org.wandora.utils.Base64;
-import org.wandora.application.tools.extractors.*;
-
-import org.mortbay.jetty.*;
-import org.mortbay.jetty.handler.AbstractHandler;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mortbay.jetty.security.SslSocketConnector;
-import org.mortbay.jetty.bio.SocketConnector;
+import org.eclipse.jetty.http.MimeTypes;
+import org.eclipse.jetty.server.ConnectionFactory;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 
 
@@ -56,13 +60,14 @@ import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
  * <p>
  * WandoraJettyServer implements Wandora's embedded HTTP server used to
  * browse Wandora stored topics and associations with external WWW browser.
- * Implementation uses Jetty HTTP server (see http://www.mortbay.org/jetty-6/).
+ * Implementation uses Jetty HTTP server.
  * </p>
  * <p>
  * Firefox plugin communicates with Wandora using the WandorJettyServer
  * implementation too.
  * </p>
  * 
+ * @deprecated 
  * @see WandoraHttpServer
  * @author olli
  */
@@ -76,12 +81,10 @@ public class WandoraJettyServer {
     public static final String OPTION_STATICPATH="httpserver.staticpath";
     public static final String OPTION_TEMPLATEPATH="httpserver.templatepath";
     public static final String OPTION_TEMPLATEFILE="httpserver.templatefile";
-    public static final String OPTION_USESSL="httpserver.usessl";
     public static final String OPTION_USERNAME="httpserver.username";
     public static final String OPTION_PASSWORD="httpserver.password";
     
     private int port;
-    private boolean useSSL;
     private String loginUser;
     private String loginPass;
     private Wandora wandora;
@@ -102,9 +105,10 @@ public class WandoraJettyServer {
     
     private Server jettyServer;
     private Handler requestHandler;
-    private org.mortbay.jetty.MimeTypes mimeTypes;
+    private MimeTypes mimeTypes;
     
     private BrowserExtractorManager extractorManager;
+    
     
     public WandoraJettyServer(Wandora wandora){
         this.wandora=wandora;
@@ -113,14 +117,14 @@ public class WandoraJettyServer {
         readOptions(options);
         requestHandler=new JettyHandler();
         
-        mimeTypes=new org.mortbay.jetty.MimeTypes();
+        mimeTypes=new MimeTypes();
         
-        extractorManager=new BrowserExtractorManager(wandora);
-        
+        extractorManager=new BrowserExtractorManager(wandora);  
     }
     
+    
     private class JettyHandler extends AbstractHandler {
-        public void handle(String target,HttpServletRequest request,HttpServletResponse response, int dispatch) throws IOException,ServletException {
+        public void handle(String target, Request rqst, HttpServletRequest request, HttpServletResponse response) throws IOException,ServletException {
             if(localOnly && !request.getRemoteAddr().equals("127.0.0.1")) {
                 ((Request)request).setHandled(true);
                 return;
@@ -155,6 +159,7 @@ public class WandoraJettyServer {
         }
     }
     
+    
     public void readOptions(Options options){
         localOnly=!options.isFalse(OPTION_LOCALONLY);
         autoStart=options.isTrue(OPTION_AUTOSTART);
@@ -162,11 +167,11 @@ public class WandoraJettyServer {
         staticPath=options.get(OPTION_STATICPATH,"resources/gui/server/");
         templatePath=options.get(OPTION_TEMPLATEPATH,"resources/gui/server/templates/");
         templateFile=options.get(OPTION_TEMPLATEFILE,"viewtopic.vhtml");
-        useSSL=options.isTrue(OPTION_USESSL);
         loginUser=options.get(OPTION_USERNAME);
         loginPass=options.get(OPTION_PASSWORD);
         if(loginUser!=null && loginUser.length()==0) loginUser=null;
     }
+    
     
     public void writeOptions(Options options){
         options.put(OPTION_LOCALONLY, ""+localOnly);
@@ -175,10 +180,10 @@ public class WandoraJettyServer {
         options.put(OPTION_STATICPATH, staticPath);
         options.put(OPTION_TEMPLATEPATH, templatePath);
         options.put(OPTION_TEMPLATEFILE, templateFile);
-        options.put(OPTION_USESSL, ""+useSSL);
         options.put(OPTION_USERNAME, (loginUser==null?"":loginUser));
         options.put(OPTION_PASSWORD, (loginPass==null?"":loginPass));
     }
+    
     
     private void updateStatusIcon(){
         if(jettyServer!=null && jettyServer.isRunning()) {
@@ -189,8 +194,8 @@ public class WandoraJettyServer {
             statusButton.setIcon(this.offIcon);
             statusButton.setToolTipText("Http server is not running. Click to start.");
         }
-        
     }
+    
     
     public void setStatusComponent(javax.swing.JButton button,String onIcon,String offIcon,String hitIcon){
         this.statusButton=button;
@@ -200,19 +205,24 @@ public class WandoraJettyServer {
         updateStatusIcon();
     }
     
+    
     public boolean isRunning(){
         return jettyServer!=null && jettyServer.isRunning();
     }
     
+    
     public void start(){
         try{
-            jettyServer=new Server();
-            Connector c;
-            if(useSSL) c=new SslSocketConnector();
-            else c=new SocketConnector();
-            c.setPort(port);
-            jettyServer.setConnectors(new Connector[]{c});
+            jettyServer=new Server(port);
+
+            HttpConfiguration httpConfiguration = new HttpConfiguration();
+            ConnectionFactory c = new HttpConnectionFactory(httpConfiguration);
+
+            ServerConnector serverConnector = new ServerConnector(jettyServer, c);
+            serverConnector.setPort(port);
             
+            jettyServer.setConnectors(new Connector[] { serverConnector });
+
             jettyServer.setHandler(requestHandler);
             jettyServer.start();
         
@@ -221,14 +231,18 @@ public class WandoraJettyServer {
                 iconThread=new IconThread();
                 iconThread.start();
             }
-        }catch(Exception e){
+        }
+        catch(Exception e){
             wandora.handleError(e);
         }
     }
     
+    
     public void stopServer(){
         try{
-            if(jettyServer!=null) jettyServer.stop();
+            if(jettyServer!=null) {
+                jettyServer.stop();
+            }
             while(iconThread!=null && iconThread.isAlive()){
                 iconThread.interrupt();
                 try{
@@ -241,6 +255,8 @@ public class WandoraJettyServer {
             wandora.handleError(e);
         }
     }
+    
+    
     public void setLoginUser(String s){loginUser=s;}
     public String getLoginUser(){return loginUser;}
     public void setLoginPassword(String s){loginPass=s;}
@@ -248,8 +264,6 @@ public class WandoraJettyServer {
     public void setLogin(String u,String p){loginUser=u;loginPass=p;}
     public void setPort(int p){port=p;}
     public int getPort(){return port;}
-    public void setUseSSL(boolean b){useSSL=b;}
-    public boolean isUseSSL(){return useSSL;}
     public void setStaticPath(String p){staticPath=p;}
     public String getStaticPath(){return staticPath;}
     public void setTemplateFile(String p){templateFile=p;}
@@ -261,9 +275,11 @@ public class WandoraJettyServer {
     public boolean isAutoStart(){return autoStart;}
     public void setAutoStart(boolean b){autoStart=b;}
     
+    
     public static int resolvePort(Wandora wandora){
         return wandora.getOptions().getInt(OPTION_PORT,defaultPort);
     }
+    
     
     protected void getDefaultContext(VelocityContext context){
         try{
@@ -283,14 +299,18 @@ public class WandoraJettyServer {
             context.put("vhelper",new org.wandora.utils.velocity.GenericVelocityHelper());
             context.put("helper", new org.wandora.topicmap.TopicTools());
             context.put("topicmap",wandora.getTopicMap());
-        }catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
     }
     
+    
     protected void writeResponse(HttpServletResponse response,int code,String message){
         writeResponse(response,code,message,null);
     }
+    
+    
     protected void writeResponse(HttpServletResponse response,int code,String message,Throwable e){
         response.setStatus(code);
         response.setContentType("text/html");
@@ -312,6 +332,7 @@ public class WandoraJettyServer {
         }catch(IOException ioe){ioe.printStackTrace();}
     }
     
+    
     protected PrintWriter startPluginResponse(HttpServletResponse response,int code,String text){
         try{
             PrintWriter writer=new PrintWriter(new OutputStreamWriter(response.getOutputStream(),"UTF-8"));
@@ -322,6 +343,7 @@ public class WandoraJettyServer {
             return writer;
         } catch(IOException ioe){ioe.printStackTrace(); return null;}
     }
+    
     
     protected boolean getPage(String target,HttpServletRequest request,HttpServletResponse response) {
         try{
@@ -516,6 +538,7 @@ public class WandoraJettyServer {
         return false;
     }
     
+    
     public void returnFile(HttpServletResponse response,File f) throws IOException {
         if(!f.exists() || f.isDirectory()){
             writeResponse(response,HttpServletResponse.SC_NOT_FOUND,"404 Not Found");                    
@@ -535,6 +558,7 @@ public class WandoraJettyServer {
         }
         in.close();
     }    
+    
     
     public class IconThread extends Thread {
         public static final int hitTime=1000;
@@ -556,16 +580,7 @@ public class WandoraJettyServer {
         }
     }
 
-/*    public class MockupRequest {
-        public String[] params;
-        public MockupRequest(String[] params){
-            this.params=params;
-        }
-        public String getParameter(String name){
-            return getParamValue(name,params);
-        }
-    }*/
-    
+
     public class TopicFilter {
         public boolean topicVisible(Topic t) {return true;}
         public boolean associationVisible(Association a) {return true;}

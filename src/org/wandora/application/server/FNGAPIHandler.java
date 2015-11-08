@@ -23,16 +23,10 @@
 
 package org.wandora.application.server;
 
-import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.wandora.modules.fng.FNGAPIAction;
-import org.wandora.modules.servlet.CachedAction;
 import org.wandora.modules.servlet.ModulesServlet;
-import org.wandora.modules.usercontrol.User;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.utils.Options;
 
 /**

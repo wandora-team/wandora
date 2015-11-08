@@ -55,7 +55,6 @@ import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.tree.TopicTreeTabManager;
 import org.wandora.application.modulesserver.WandoraModulesServer;
-import org.wandora.application.server.*;
 import org.wandora.application.tools.importers.*;
 import org.wandora.application.tools.navigate.Back;
 import org.wandora.application.tools.navigate.Forward;

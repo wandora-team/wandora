@@ -147,6 +147,7 @@ public class Options {
         else return v;
     }
     
+    
     /**
      * Returns value for the given key. If key has no prefix "options." it is
      * added to the key. Also, key is modified by fixIndexes method.
@@ -169,6 +170,7 @@ public class Options {
         return null;
     }
     
+    
     /**
      * Shortcut method that returns options value as integer or 0 (zero) if
      * value can not be parsed to an integer.
@@ -179,6 +181,7 @@ public class Options {
     public int getInt(String key) {
         return getInt(key, 0);
     }
+    
     
     /**
      * Shortcut method that returns options value as integer or defaultValue if
@@ -197,9 +200,13 @@ public class Options {
         }
         return defaultValue;
     }
+    
+    
     public double getDouble(String key) {
         return getDouble(key, 0.0);
     }
+    
+    
     public double getDouble(String key, double defaultValue) {
         String sd = get(key);
         if(sd != null) {
@@ -208,9 +215,13 @@ public class Options {
         }
         return defaultValue;
     }
+    
+    
     public float getFloat(String key) {
         return getFloat(key, 0.0f);
     }
+    
+    
     public float getFloat(String key, float defaultValue) {
         String sd = get(key);
         if(sd != null) {
@@ -219,6 +230,8 @@ public class Options {
         }
         return defaultValue;
     }
+    
+    
     public boolean getBoolean(String key, boolean defaultValue) {
         String s = get(key);
         if(s != null) {
@@ -241,6 +254,7 @@ public class Options {
         put(key, "" + value);
     }
     
+    
     /**
      * Shortcut method to store double numbers to options.
      * @param key
@@ -249,6 +263,7 @@ public class Options {
     public void put(String key, double value) {
         put(key, "" + value);
     }
+    
     
     /**
      * Shortcut method to store float numbers to options.
@@ -259,6 +274,7 @@ public class Options {
     public void put(String key, float value) {
         put(key, "" + value);
     }
+    
     
     /**
      * This is the actual put method every other put method uses. If key has no
@@ -388,6 +404,7 @@ public class Options {
         parseOptions(content, null);
     }
     
+    
     /**
      * Parses given XML string and sets options to parsed content.
      * @param content String containing valid XML document.
@@ -396,6 +413,7 @@ public class Options {
     public synchronized void parseOptions(String content, String encoding) {
         options = XMLbox.getAsHashMapTree(content, encoding);
     }
+    
     
     public synchronized void parseOptions(BufferedReader reader) throws IOException {
         String line=null;
@@ -421,12 +439,14 @@ public class Options {
         }
     }
 
+    
     public void save(Writer out) throws IOException{
         String optionsXML = XMLbox.wrapHashMap2XML(options);
         out.write(optionsXML);
         out.flush();
     }
 
+    
     public void save() {
         if(resource.startsWith("http:")) { return; }
         else if(resource.startsWith("file:")) { 
@@ -448,6 +468,7 @@ public class Options {
         }
     }
 
+    
     public Collection<String> keySet(){
         ArrayList<String> copy=new ArrayList<String>();
         copy.addAll(options.keySet());

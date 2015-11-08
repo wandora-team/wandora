@@ -5,13 +5,21 @@
 var tm, svg, zoomWrapper, force, linkAll, linkEnter, nodeAll, nodeEnter,
 	pseudoAll, pseudoEnter;
 
+
+
+
+var myAddress = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '');
+
+
+
+
 /**
  * Global config
  * @type {Object}
  */
 var conf = {
 	debug: false, //log stuff?
-	serviceAddr: 'http://127.0.0.1:8898/jtm/', //wheres data?
+	serviceAddr: myAddress+'/jtm/', //wheres data?
 	//#SVG size
 	w: 900,
 	h: 900,

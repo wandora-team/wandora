@@ -184,10 +184,10 @@ public class ModulesWandoraWebAppHandler implements WebAppHandler {
     public void start(WandoraWebApp app, WandoraWebAppServer server) {
         moduleManager=new ModuleManager();
         
-        try{
+        try {
             String home=new java.io.File( app.getServerPath()+app.getName() ).getCanonicalPath();
             moduleManager.setVariable("home", home);
-        }catch(IOException ioe){server.log(ioe);}
+        } catch(IOException ioe){ server.log(ioe); }
         moduleManager.setVariable("port", ""+server.getPort());
         moduleManager.setVariable("urlbase","/"+app.getName()+"/");
         moduleManager.setVariable("staticbase","/"+app.getName()+"/");
@@ -283,7 +283,7 @@ public class ModulesWandoraWebAppHandler implements WebAppHandler {
 
         @Override
         public String getServletURL() {
-            return "http://127.0.0.1:"+server.getPort()+"/"+app.getName();
+            return (server.isUseSSL() ? "https" : "http" )+"://127.0.0.1:"+server.getPort()+"/"+app.getName();
         }
 
         @Override
