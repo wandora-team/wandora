@@ -93,13 +93,16 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
     
     
     private void waitUntilVisible() {
-        int c = 0;
-        do {
-            c++;
-            try { Thread.sleep(200); }
-            catch(Exception e) {};
+        try {
+            int c = 0;
+            do {
+                c++;
+                try { Thread.sleep(250); }
+                catch(Exception e) {};
+            }
+            while(!isVisible() && c < 10);
         }
-        while(!isVisible() && c < 20);
+        catch(Exception e) {}
     }
     
     
@@ -203,36 +206,42 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         this.state = state;
         switch(state) {
             case EXECUTE: {
-                startTime = System.currentTimeMillis();
-                textArea.setText("");
-                progressBar.setIndeterminate(true);
-                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                containerPanel.removeAll();
-                containerPanel.add(processPanel, BorderLayout.CENTER);
-                containerPanel.revalidate();
-                forceStop = false;
-                open();
-                waitUntilVisible();
+                try {
+                    startTime = System.currentTimeMillis();
+                    textArea.setText("");
+                    progressBar.setIndeterminate(true);
+                    setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    containerPanel.removeAll();
+                    containerPanel.add(processPanel, BorderLayout.CENTER);
+                    containerPanel.revalidate();
+                    forceStop = false;
+                    open();
+                    waitUntilVisible();
+                }
+                catch(Exception e) {}
                 return;
             }
             case WAIT: {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                        endTime = System.currentTimeMillis();
                         try {
-                            containerPanel.removeAll();
+                            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                            endTime = System.currentTimeMillis();
+                            try {
+                                containerPanel.removeAll();
+                            }
+                            catch(Exception e) {
+                                // e.printStackTrace();
+                            }
+                            containerPanel.add(waitPanel, BorderLayout.CENTER);
+                            String historyString = getHistory();
+                            //history = new StringBuffer();
+                            logTextPane.setText(historyString);
+                            logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
+                            containerPanel.revalidate();
                         }
-                        catch(Exception e) {
-                            // e.printStackTrace();
-                        }
-                        containerPanel.add(waitPanel, BorderLayout.CENTER);
-                        String historyString = getHistory();
-                        //history = new StringBuffer();
-                        logTextPane.setText(historyString);
-                        logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
-                        containerPanel.revalidate();
+                        catch(Exception e) {}
                     }
                 });
                 return;
@@ -241,10 +250,13 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        setVisible(false);
-                        logTextPane.setText("");
-                        //history = new StringBuffer();
-                        forceStop = false;
+                        try {
+                            setVisible(false);
+                            logTextPane.setText("");
+                            //history = new StringBuffer();
+                            forceStop = false;
+                        }
+                        catch(Exception e) {}
                     }
                 });
                 return;
@@ -253,7 +265,10 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        setVisible(false);
+                        try {
+                            setVisible(false);
+                        }
+                        catch(Exception e) {}
                     }
                 });
                 return;
@@ -413,7 +428,10 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                setVisible(false);
+                try {
+                    setVisible(false);
+                }
+                catch(Exception e) {}
             }
         });
     }//GEN-LAST:event_closeButtonActionPerformed

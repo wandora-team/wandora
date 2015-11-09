@@ -35,6 +35,6 @@ select menu option File &gt; Open Project... in Netbeans and select Wandora's in
 folder. Once you have successfully opened Wandora project, you can compile Wandora project 
 to test whether or not you have everything in order.
 
-To compile Wandora, a Java JDK 7 is required.
+To compile and run Wandora, a Java JDK 7 or later is required.
 
 
