@@ -14,4 +14,4 @@ source SetProcessing.sh
 source SetTesseract.sh
 
 cd ../build
-java -Xms1000m -Xmx1436m -Xdock:icon=resources/gui/appicon/wandora.icns -Djava.library.path=$WANDORALIB -Dorg.wandora.mediafw="GST" -classpath $WANDORACLASSES org.wandora.application.Wandora $1
+java -Xms1000m -Xmx1436m -Xdock:icon=resources/gui/appicon/wandora.icns -Djava.library.path=$WANDORALIB -classpath $WANDORACLASSES org.wandora.application.Wandora $1
