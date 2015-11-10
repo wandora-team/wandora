@@ -703,10 +703,10 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         idPanel.add(subjectLocatorField, gridBagConstraints);
 
-        subjectLocatorViewButton.setText("view");
+        subjectLocatorViewButton.setToolTipText("View subject locator resource");
         subjectLocatorViewButton.setBorderPainted(false);
         subjectLocatorViewButton.setContentAreaFilled(false);
-        subjectLocatorViewButton.setMargin(new java.awt.Insets(2, 10, 2, 0));
+        subjectLocatorViewButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         subjectLocatorViewButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 subjectLocatorViewButtonActionPerformed(evt);

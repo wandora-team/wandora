@@ -201,9 +201,12 @@ public class TMBox {
         return message;
     }
     
+    
     public static ConfirmResult checkBaseNameChange(java.awt.Component parent,Topic topic,String value) throws TopicMapException{
         return checkBaseNameChange(parent,topic,value,false);
     }
+    
+    
     /**
      * Checks if the base name of the given topic can be changed to the given value.
      * Checks if the change will result in merges or splits and in such a case
@@ -230,9 +233,13 @@ public class TMBox {
         }
         return ConfirmResult.yes;
     }
+    
+    
     public static ConfirmResult checkSubjectLocatorChange(java.awt.Component parent,Topic topic,String value) throws TopicMapException{
         return checkSubjectLocatorChange(parent,topic,value,false);
     }
+    
+    
     /**
      * Like checkBaseNameChange, checks if the subject locator of the topic can be changed.
      */
@@ -255,9 +262,13 @@ public class TMBox {
         }
         return ConfirmResult.yes;
     }
+    
+    
     public static ConfirmResult checkSubjectIdentifierChange(java.awt.Component parent,Topic topic,Locator value,boolean add) throws TopicMapException{
         return checkSubjectIdentifierChange(parent,topic,value,add,false);
     }
+    
+    
     /**
      * Checks if a subject identifier can be added or removed from a topic. If the
      * operation results in merges or splits, warns the user with a dialog like in
@@ -268,17 +279,25 @@ public class TMBox {
         int a=checkSubjectIdentifierMerge(topic,value,add);
         if(a!=0){
             String message="";
-            if(add) message="New subject identifier \""+value.toExternalForm()+"\" will cause following:\n";
-            else message="Removing subject identifier \""+value.toExternalForm()+"\" will cause following:\n";
+            String valueString = value.toExternalForm();
+            if(valueString.length() > 256) {
+                valueString = valueString.substring(0, 256) + "...";
+            }
+            if(add) message="New subject identifier \""+valueString+"\" will cause following:\n";
+            else message="Removing subject identifier \""+valueString+"\" will cause following:\n";
             message+=buildMergeMessage(a);
             ConfirmResult res=ConfirmDialog.showConfirmDialog(parent,"Merge/split confirmation",message,!multiple);
             return res;
         }
         return ConfirmResult.yes;        
     }
+    
+    
     public static ConfirmResult checkTopicRemove(java.awt.Component parent,Topic topic) throws TopicMapException {
         return checkTopicRemove(parent,topic,false);
     }
+    
+    
     /**
      * Checks if removing a topic will result in a split and warns the user in that case.
      * Like checkBaseNameChange, if multiple parameter is true, warning dialog will
@@ -294,7 +313,7 @@ public class TMBox {
     
     
     
-    //--------
+    // --------
     
     
     

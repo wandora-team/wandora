@@ -92,8 +92,12 @@ public class DeleteSubjectLocator extends AbstractWandoraTool implements Wandora
                         if(l != null) {
                             locatorCount++;
                             removeNext = false;
+                            String locatorString = l.toExternalForm();
+                            if(locatorString.length() > 256) {
+                                locatorString = locatorString.substring(0, 256) + "...";
+                            }
                             if(!removeAll) {
-                                int a = WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to remove subject locator\n"+l.toExternalForm()+"?","Confirm subject locator remove", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                                int a = WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to remove subject locator\n"+locatorString+"?","Confirm subject locator remove", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
                                 if(a == WandoraOptionPane.YES_OPTION) removeNext = true;
                                 else if(a == WandoraOptionPane.YES_TO_ALL_OPTION) removeAll = true;
                                 else if(a == WandoraOptionPane.CLOSED_OPTION) break;
@@ -104,7 +108,7 @@ public class DeleteSubjectLocator extends AbstractWandoraTool implements Wandora
                                     setDefaultLogger();
                                     setLogTitle("Removing subject locators");
                                 }
-                                log("Removing subject locator '"+l.toExternalForm()+"'");
+                                log("Removing subject locator '"+locatorString+"'");
                             }
                             if(removeAll || removeNext) {
                                 deleteCount++;

@@ -261,7 +261,11 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements Wan
     
     protected String getConfirmMessage(Topic topic, Locator si) {
         String topicName = TopicToString.toString(topic);
-        String confirmMessage = "Delete topic's '" + topicName + "' subject identifier '"+si.toExternalForm()+"'?";
+        String siString = si.toExternalForm();
+        if(siString.length() > 256) {
+            siString = siString.substring(0, 256) + "...";
+        }
+        String confirmMessage = "Delete topic's '" + topicName + "' subject identifier '" + siString + "'?";
         return confirmMessage;
     }
 

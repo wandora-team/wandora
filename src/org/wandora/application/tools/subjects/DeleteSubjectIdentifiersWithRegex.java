@@ -32,7 +32,6 @@ import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.*;
 
 import java.util.*;
 

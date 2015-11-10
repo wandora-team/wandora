@@ -27,7 +27,6 @@
 package org.wandora.application.gui.simple;
 
 
-import org.wandora.application.*;
 import java.awt.event.*;
 
 

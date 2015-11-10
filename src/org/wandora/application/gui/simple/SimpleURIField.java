@@ -28,11 +28,15 @@
 package org.wandora.application.gui.simple;
 
 
+import java.awt.AWTException;
 import java.awt.Color;
+import java.awt.Robot;
 import java.io.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
+import java.awt.event.KeyEvent;
 import java.net.URI;
+import java.util.HashSet;
 import javax.swing.JPopupMenu;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
@@ -181,7 +185,7 @@ public class SimpleURIField extends SimpleField {
                                 }
                                 uriField.setText(text);
                             }
-                            
+                            triggerChangeAction();
                             e.dropComplete(true);
                         }
                         catch(Exception e) {
@@ -252,4 +256,22 @@ public class SimpleURIField extends SimpleField {
         }
         super.paste();
     }
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    
+    protected void triggerChangeAction() {
+        this.requestFocusInWindow();
+
+        try { 
+            Robot robot = new Robot(); 
+            robot.keyPress(KeyEvent.VK_ENTER); 
+        } 
+        catch (AWTException e) { 
+            e.printStackTrace(); 
+        } 
+    }
+
 }

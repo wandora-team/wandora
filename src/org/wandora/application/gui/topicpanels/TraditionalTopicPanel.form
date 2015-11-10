@@ -148,11 +148,11 @@
             </Component>
             <Component class="javax.swing.JToggleButton" name="subjectLocatorViewButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="view"/>
+                <Property name="toolTipText" type="java.lang.String" value="View subject locator resource"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 10, 2, 0]"/>
+                  <Insets value="[2, 6, 2, 6]"/>
                 </Property>
               </Properties>
               <Events>
