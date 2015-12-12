@@ -339,7 +339,10 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                     t.setData(getOrCreateTopicRef(o.type), version, o.data);
                 }
             }
-        }catch(TopicMapException tme){logger.log(tme);}
+        }
+        catch(TopicMapException tme){
+            logger.log(tme);
+        }
     }
 
     protected ParsedName parsedName;

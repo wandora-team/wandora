@@ -122,7 +122,8 @@
 #*   *##set($temp = $topicHashMap.put( $topic.getID(), $i ) )
 #*   *#{ 
 #*     *#"name" : "$urlencoder.encode($topicName)",
-#*     *#"id" : "node$i"
+#*     *#"id" : "node$i",
+#*     *#"url" : "/topic/?topic=$urlencoder.encode($topic.getFirstSubjectIdentifier().toExternalForm())"
 #*   *#}
 #*   *##set($i = $i + 1)
 #*   *##set($temp = $ntopics.add($topic))

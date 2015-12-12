@@ -44,6 +44,13 @@ import javax.swing.text.*;
  *
  * This class was designed to be used as a component added to the row header of
  * a JScrollPane.
+ * 
+ * Simple usage:
+ *   JTextPane textPane = new JTextPane();
+ *   JScrollPane scrollPane = new JScrollPane(textPane);
+ *   TextLineNumber tln = new TextLineNumber(textPane);
+ *   scrollPane.setRowHeaderView( tln );
+ * 
  */
 public class TextLineNumber extends JPanel implements CaretListener, DocumentListener, PropertyChangeListener {
 

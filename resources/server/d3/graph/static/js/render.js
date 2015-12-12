@@ -122,7 +122,11 @@ function draw(json,amount) {
             )
             .call(force.drag)
             .on("mouseover", nodeMouseover)
-            .on("mouseout", nodeMouseout);
+            .on("mouseout", nodeMouseout)
+            .on("click", function(d) {
+                //location.href = d.url;
+                window.open(d.url);
+            });
 
         // Enter any new nodes.
         node.append("svg:circle")
