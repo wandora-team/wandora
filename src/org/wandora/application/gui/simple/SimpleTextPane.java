@@ -171,6 +171,12 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
         DROP_FILE_NAMES_INSTEAD_FILE_CONTENT = flag;
     }
     
+
+    
+    public void setSuperText(String str) {
+        super.setText(str);
+    }
+    
     
     @Override
     public void setText(String str) {

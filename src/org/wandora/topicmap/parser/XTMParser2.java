@@ -85,6 +85,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     public static boolean CONVERT_OCCURRENCE_RESOURCE_REF_TO_RESOURCE_DATA = true;
     public static boolean ENSURE_UNIQUE_BASENAMES = false;
+    public static boolean USE_XTM_ID_ATTRIBUTES = true;
+    
     
     protected TopicMap tm;
     
@@ -98,6 +100,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     protected int associationCount;
     protected int occurrenceCount;
     protected int elementCount;
+    
     
     public XTMParser2(TopicMap tm,TopicMapLogger logger){
         this.tm=tm;
@@ -125,13 +128,18 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
         else logger.log("Expecting root element "+E_TOPICMAP+", got "+qName);
     }
+    
+    
     protected void endRoot(String uri, String localName, String qName){
     }
+    
     
     protected void startTopicMap(){
         stateStack.push(state);
         state=STATE_TOPICMAP;
     }
+    
+    
     protected void handleTopicMap(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_VERSION)){
             logger.log("Encountered "+E_VERSION+", ignoring");
@@ -147,11 +155,14 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
         else logger.log("Expecting one of "+E_VERSION+", "+E_MERGEMAP+", "+E_TOPIC+", "+E_ASSOCIATION+", got "+qName);
     }
+    
+    
     protected void endTopicMap(String uri, String localName, String qName){
         if(qName.equals(E_TOPICMAP)){
             postProcessTopicMap();
         }
     }
+    
     
     /**
      * Remove temporary subject identifiers created during parse. This is
@@ -185,6 +196,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }        
     }
     
+    
     protected ParsedTopic parsedTopic;
     protected void startTopic(Attributes atts){
         stateStack.push(state);
@@ -193,6 +205,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         parsedTopic.id=atts.getValue("id");
         topicCount++;
     }
+    
+    
     protected void handleTopic(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_ITEMIDENTITY)) {
             String href=handleHRef(qName, atts);
@@ -212,17 +226,25 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         else if(qName.equals(E_OCCURRENCE)) startOccurrence();
         else logger.log("Expecting one of "+E_ITEMIDENTITY+", "+E_SUBJECTLOCATOR+", "+E_SUBJECTIDENTIFIER+", "+E_INSTANCEOF+", "+E_NAME+", "+E_OCCURRENCE+", got "+qName);
     }
+    
+    
     protected void endTopic(String uri, String localName, String qName){
         if(qName.equals(E_TOPIC)){
             state=stateStack.pop();
             processTopic();
         }
     }
+    
+    
     protected void processTopic(){
         try{
             Topic t=null;
-            if(parsedTopic.id!=null) t=getOrCreateTopicID("#"+parsedTopic.id);
-            else t=tm.createTopic();
+            if(parsedTopic.id!=null) {
+                t=getOrCreateTopicID("#"+parsedTopic.id);
+            }
+            else {
+                t=tm.createTopic();
+            }
 
             if(parsedTopic.types!=null){
                 ArrayList<Topic> types=processTopicRefs(parsedTopic.types);
@@ -345,12 +367,15 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
 
+    
     protected ParsedName parsedName;
     protected void startName(){
         stateStack.push(state);
         state=STATE_NAME;
         parsedName=new ParsedName();
     }
+    
+    
     protected void handleName(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TYPE)) startType();
         else if(qName.equals(E_SCOPE)) startScope();
@@ -361,12 +386,15 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         else if(qName.equals(E_VARIANT)) startVariant();
         else logger.log("Expecting one of "+E_TYPE+", "+E_SCOPE+", "+E_RESOURCEDATA+", "+E_RESOURCEREF+", got "+qName);
     }
+    
+    
     protected void endName(String uri, String localName, String qName){
         if(qName.equals(E_NAME)){
             state=stateStack.pop();
             if(state==STATE_TOPIC) parsedTopic.names.add(parsedName);
         }
     }
+    
     
     protected String parsedCharacters;
     protected String parsedValue;
@@ -376,8 +404,12 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         parsedCharacters="";
         parsedValue=null;        
     }
+    
+    
     protected void handleValue(String uri, String localName, String qName, Attributes atts){
     }
+    
+    
     protected void endValue(String uri, String localName, String qName){
         if(qName.equals(E_VALUE)){
             parsedValue=parsedCharacters;
@@ -386,12 +418,15 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
 
+    
     protected ParsedVariant parsedVariant;
     protected void startVariant(){
         stateStack.push(state);
         state=STATE_VARIANT;
         parsedVariant=new ParsedVariant();
     }
+    
+    
     protected void handleVariant(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_SCOPE)) startScope();
         else if(qName.equals(E_RESOURCEREF)){
@@ -400,6 +435,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         else if(qName.equals(E_RESOURCEDATA)) startResourceData();
         else logger.log("Expecting one of "+E_SCOPE+", "+E_RESOURCEREF+", "+E_RESOURCEDATA+", got "+qName);
     }
+    
+    
     protected void endVariant(String uri, String localName, String qName){
         if(qName.equals(E_VARIANT)){
             state=stateStack.pop();
@@ -407,11 +444,13 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
     
+    
     protected String handleHRef(String qName, Attributes atts) {
         String href=atts.getValue("href");
         if(href==null) logger.log("Expecting attribute href in "+qName);
         return href;
     }
+    
     
 //    protected ArrayList<Topic> parsedScope;
     protected ArrayList<String> parsedScope;
@@ -421,6 +460,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
 //        parsedScope=new ArrayList<Topic>();
         parsedScope=new ArrayList<String>();
     }
+    
+    
     protected void handleScope(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TOPICREF)){
 //            try{
@@ -434,6 +475,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
         else logger.log("Expecting "+E_TOPICREF+", got "+qName);
     }
+    
+    
     protected void endScope(String uri, String localName, String qName){
         if(qName.equals(E_SCOPE)){
             state=stateStack.pop();
@@ -444,6 +487,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
     
+    
+    
 //    protected ArrayList<Topic> parsedInstances;
     protected ArrayList<String> parsedInstances;
     protected void startInstanceOf(){
@@ -452,6 +497,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
 //        parsedInstances=new ArrayList<Topic>();
         parsedInstances=new ArrayList<String>();
     }
+    
+    
     protected void handleInstanceOf(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TOPICREF)){
 //            try{
@@ -465,12 +512,15 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
         else logger.log("Expecting "+E_TOPICREF+", got "+qName);        
     }
+    
+    
     protected void endInstanceOf(String uri, String localName, String qName){
         if(qName.equals(E_INSTANCEOF)){
             state=stateStack.pop();
             if(state==STATE_TOPIC) parsedTopic.types=parsedInstances;
         }
     }
+    
     
 //    protected Topic parsedType;
     protected String parsedType;
@@ -479,6 +529,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         state=STATE_TYPE;
         parsedType=null;        
     }
+    
+    
     protected void handleType(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TOPICREF)){
             if(parsedType!=null) logger.log("Encountered another topicRef in type, overwriting previous.");
@@ -492,6 +544,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
         else logger.log("Expecting "+E_TOPICREF+", got "+qName);                
     }
+    
+    
     protected void endType(String uri, String localName, String qName){
         if(qName.equals(E_TYPE)){
             state=stateStack.pop();
@@ -502,6 +556,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
     
+    
     protected ParsedOccurrence parsedOccurrence;
     protected void startOccurrence(){
         stateStack.push(state);
@@ -509,6 +564,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         parsedOccurrence=new ParsedOccurrence();
         occurrenceCount++;
     }
+    
+    
     protected void handleOccurrence(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TYPE)) startType();
         else if(qName.equals(E_SCOPE)) startScope();
@@ -519,12 +576,15 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         else if(qName.equals(E_RESOURCEDATA)) startResourceData();
         else logger.log("Expecting one of "+E_TYPE+", "+E_SCOPE+", "+E_RESOURCEREF+", "+E_RESOURCEDATA+", got "+qName);
     }
+    
+    
     protected void endOccurrence(String uri, String localName, String qName){
         if(qName.equals(E_OCCURRENCE)){
             state=stateStack.pop();
             if(state==STATE_TOPIC) parsedTopic.occurrences.add(parsedOccurrence);
         }
     }
+    
     
     protected String parsedResourceData;
     protected void startResourceData(){
@@ -533,8 +593,12 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         parsedCharacters="";
         parsedResourceData=null;
     }
+    
+    
     protected void handleResourceData(String uri, String localName, String qName, Attributes atts){
     }
+    
+    
     protected void endResourceData(String uri, String localName, String qName){
         if(qName.equals(E_RESOURCEDATA)){
             parsedResourceData=parsedCharacters;
@@ -544,6 +608,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
 
+    
     protected ParsedAssociation parsedAssociation;
     protected void startAssociation(){
         stateStack.push(state);
@@ -551,6 +616,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         parsedAssociation=new ParsedAssociation();
         associationCount++;
     }
+    
+    
     protected void handleAssociation(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TYPE)) startType();
         else if(qName.equals(E_SCOPE)) {
@@ -560,33 +627,41 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         else if(qName.equals(E_ROLE)) startRole();
         else logger.log("Expecting one of "+E_TYPE+", "+E_SCOPE+", "+E_ROLE+", got "+qName);
     }
+    
+    
     protected void endAssociation(String uri, String localName, String qName){
         if(qName.equals(E_ASSOCIATION)){
             state=stateStack.pop();
             processAssociation();
         }
     }
-    protected void processAssociation(){
+    
+    
+    protected void processAssociation() {
         if(parsedAssociation.type==null) logger.log("No type in association");
         else if(parsedAssociation.roles.isEmpty()) logger.log("No players in association");
         else {
-            try{
+            try {
 //                Association a=tm.createAssociation(parsedAssociation.type);
                 Association a=tm.createAssociation(getOrCreateTopicRef(parsedAssociation.type));
-                for(ParsedRole r : parsedAssociation.roles){
+                for(ParsedRole r : parsedAssociation.roles) {
 //                    a.addPlayer(r.topic,r.type);
                     a.addPlayer(getOrCreateTopicRef(r.topic),getOrCreateTopicRef(r.type));
                 }
-            }catch(TopicMapException tme){logger.log(tme);}
+            }
+            catch(TopicMapException tme){logger.log(tme);}
         }        
     }
     
+    
     protected ParsedRole parsedRole;
-    protected void startRole(){
+    protected void startRole() {
         stateStack.push(state);
         state=STATE_ROLE;
         parsedRole=new ParsedRole();
     }
+    
+    
     protected void handleRole(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TYPE)){
             startType();
@@ -603,12 +678,15 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
         else logger.log("Expecting one of "+E_TYPE+", "+E_TOPICREF+", got "+qName);
     }
+    
+    
     protected void endRole(String uri, String localName, String qName){
-        if(qName.equals(E_ROLE)){
+        if(qName.equals(E_ROLE)) {
             state=stateStack.pop();
             if(state==STATE_ASSOCIATION) parsedAssociation.roles.add(parsedRole);
         }
     }
+    
     
     protected static class ParsedTopic{
         public String id;
@@ -628,6 +706,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
 
+    
     protected static class ParsedAssociation{
         public ArrayList<ParsedRole> roles;
 //        public ArrayList<Topic> scope;
@@ -639,6 +718,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
 
+    
     protected static class ParsedName{
 //        public Topic type;
         public String type;
@@ -651,6 +731,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
     
+    
     protected static class ParsedOccurrence{
 //        public Topic type;
         public String type;
@@ -661,6 +742,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         public ParsedOccurrence(){
         }
     }
+    
+    
     protected static class ParsedVariant{
 //        public ArrayList<Topic> scope;
         public ArrayList<String> scope;
@@ -669,7 +752,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         }
     }
     
-    protected static class ParsedRole{
+    
+    protected static class ParsedRole {
 //        public Topic type;
         public String type;
 //        public Topic topic;
@@ -683,11 +767,12 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     protected ArrayList<Topic> processTopicRefs(ArrayList<String> hrefs) throws TopicMapException {
         if(hrefs==null) return null;
         ArrayList<Topic> ret=new ArrayList<Topic>();
-        for(String href : hrefs){
+        for(String href : hrefs) {
             ret.add(getOrCreateTopicRef(href));
         }
         return ret;
     }
+    
     
     protected Topic getOrCreateTopicRef(String ref) throws TopicMapException {
         String si=idmapping.get(ref);
@@ -696,17 +781,44 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         if(t!=null) return t;
         si=temporarySI+ref;
         idmapping.put(ref,si);
-        return getOrCreateTopic(si);        
+        return getOrCreateTopic(si, hrefToId(ref));        
     }
+    
+    
+    protected String hrefToId(String ref) {
+        if(ref != null) {
+            if(ref.startsWith("#")) {
+                return ref.substring(1);
+            }
+        }
+        return ref;
+    }
+    
     
     protected Topic getOrCreateTopic(String si) throws TopicMapException {
         Topic t=tm.getTopic(si);
-        if(t==null){
+        if(t==null) {
             t=tm.createTopic();
             t.addSubjectIdentifier(tm.createLocator(si));
         }
         return t;
     }
+    
+    
+    protected Topic getOrCreateTopic(String si, String id) throws TopicMapException {
+        Topic t=tm.getTopic(si);
+        if(t==null) {
+            if(id != null && USE_XTM_ID_ATTRIBUTES) {
+                t = tm.createTopic(hrefToId(id));
+            }
+            else {
+                t = tm.createTopic();
+            }
+            t.addSubjectIdentifier(tm.createLocator(si));
+        }
+        return t;
+    }
+    
     
     /*
      * TemporarySI should *NOT* be same as the default temporary subject identifier
@@ -718,11 +830,13 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     protected Topic getOrCreateTopicID(String id) throws TopicMapException {
         String si=idmapping.get(id);
-        if(si!=null) return getOrCreateTopic(si);
+        if(si!=null) {
+            return getOrCreateTopic(si, hrefToId(id));
+        }
         
         si=temporarySI+id;
         idmapping.put(id,si);
-        return getOrCreateTopic(si);
+        return getOrCreateTopic(si, hrefToId(id));
     }
     
     

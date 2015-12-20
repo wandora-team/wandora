@@ -154,6 +154,14 @@ public class UndoTopicMap extends TopicMap {
     }
 
     @Override
+    public Topic createTopic(String id) throws TopicMapException {
+        // Create topic operation is not done here because the topic doesn't have
+        // a subject identifier yet. UndoTopic does it when the first subject
+        // identifier is added.
+        return wrapTopic(wrapped.createTopic(id));
+    }
+    
+    @Override
     public Topic createTopic() throws TopicMapException {
         // Create topic operation is not done here because the topic doesn't have
         // a subject identifier yet. UndoTopic does it when the first subject

@@ -1500,7 +1500,7 @@ public class LTMParser {
         }
 
         if(t==null) {
-            t=topicMap.createTopic();
+            t=topicMap.createTopic(qname);
             t.addSubjectIdentifier(buildTempLocator(qname));
             if(MAKE_SUBJECT_IDENTIFIER_FROM_ID) t.addSubjectIdentifier(buildLocator(qname));
             if(MAKE_BASENAME_FROM_ID && t.getBaseName() == null) t.setBaseName(qname);

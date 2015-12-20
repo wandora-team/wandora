@@ -49,23 +49,23 @@ public class TopicMapImpl extends TopicMap {
     /**
      * Indexes topics according to their type.
      */
-    private Hashtable<Topic,Collection<Topic>> typeIndex;
+    private HashMap<Topic,Collection<Topic>> typeIndex;
     /**
      * Indexes topics according to subject identifiers.
      */
-    private Hashtable<Locator,Topic> subjectIdentifierIndex;
+    private HashMap<Locator,Topic> subjectIdentifierIndex;
     /**
      * Indexes topics according to subject locators.
      */
-    private Hashtable<Locator,Topic> subjectLocatorIndex;
+    private HashMap<Locator,Topic> subjectLocatorIndex;
     /**
      * Indexes topics according to base names.
      */
-    private Hashtable<String,Topic> nameIndex;
+    private HashMap<String,Topic> nameIndex;
     /**
      * Indexes associations according to their type.
      */
-    private Hashtable<Topic,Collection<Association>> associationTypeIndex;
+    private HashMap<Topic,Collection<Association>> associationTypeIndex;
     
     /**
      * All topics in this topic map.
@@ -95,11 +95,11 @@ public class TopicMapImpl extends TopicMap {
     
     public TopicMapImpl() {
         topicMapID=topicMapCounter++;
-        typeIndex=new Hashtable<Topic,Collection<Topic>>();
-        subjectIdentifierIndex=new Hashtable<Locator,Topic>();
-        subjectLocatorIndex=new Hashtable<Locator,Topic>();
-        nameIndex=new Hashtable<String,Topic>();
-        associationTypeIndex=new Hashtable<Topic,Collection<Association>>();
+        typeIndex=new LinkedHashMap<Topic,Collection<Topic>>();
+        subjectIdentifierIndex=new LinkedHashMap<Locator,Topic>();
+        subjectLocatorIndex=new LinkedHashMap<Locator,Topic>();
+        nameIndex=new LinkedHashMap<String,Topic>();
+        associationTypeIndex=new LinkedHashMap<Topic,Collection<Association>>();
         topics=(Set<Topic>) Collections.synchronizedSet(new LinkedHashSet<Topic>());
         associations=(Set<Association>) Collections.synchronizedSet(new LinkedHashSet<Association>());
         trackDependent=false;
@@ -110,11 +110,11 @@ public class TopicMapImpl extends TopicMap {
     @Override
     public void clearTopicMap() throws TopicMapException{
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        typeIndex=new Hashtable<Topic,Collection<Topic>>();
-        subjectIdentifierIndex=new Hashtable<Locator,Topic>();
-        subjectLocatorIndex=new Hashtable<Locator,Topic>();
-        nameIndex=new Hashtable<String,Topic>();
-        associationTypeIndex=new Hashtable<Topic,Collection<Association>>();
+        typeIndex=new LinkedHashMap<Topic,Collection<Topic>>();
+        subjectIdentifierIndex=new LinkedHashMap<Locator,Topic>();
+        subjectLocatorIndex=new LinkedHashMap<Locator,Topic>();
+        nameIndex=new LinkedHashMap<String,Topic>();
+        associationTypeIndex=new LinkedHashMap<Topic,Collection<Association>>();
         topics=new LinkedHashSet<Topic>();
         associations=new LinkedHashSet<Association>();
         topicMapChanged=true;
@@ -196,8 +196,20 @@ public class TopicMapImpl extends TopicMap {
         return old;
     }*/
     
+    protected TopicImpl constructTopic(String id) throws TopicMapException {
+        return new TopicImpl(id, this);
+    }
+    
     protected TopicImpl constructTopic() throws TopicMapException {
         return new TopicImpl(this);
+    }
+    
+    @Override
+    public Topic createTopic(String id) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
+        TopicImpl t=constructTopic(id);
+        topics.add(t);
+        return t;
     }
     
     @Override

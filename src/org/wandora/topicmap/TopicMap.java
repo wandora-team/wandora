@@ -107,6 +107,10 @@ public abstract class TopicMap implements TopicMapLogger {
     /**
      * Creates a new topic without base name, subject identifier, data or any associations.
      */
+    public abstract Topic createTopic(String id) throws TopicMapException ;
+    /**
+     * Creates a new topic without base name, subject identifier, data or any associations.
+     */
     public abstract Topic createTopic() throws TopicMapException ;
     /**
      * Creates a new association of the given type without any members.

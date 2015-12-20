@@ -638,10 +638,10 @@ public class JTMParser {
                 String ii = i.substring(3);
                 t = topicMap.getTopic(ii);
                 if(t == null) {
-                    t = topicMap.createTopic();
-                    if(t != null) {
-                        t.addSubjectIdentifier(new Locator(ii));
-                    }
+                    t = topicMap.createTopic(ii);
+                    //if(t != null) {
+                    //    t.addSubjectIdentifier(new Locator(ii));
+                    //}
                 }
             }
             else {

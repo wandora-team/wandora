@@ -1269,8 +1269,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.exporters.ExportSite</class>
          </item>
          <item>
-            <name>XTM round trip...</name>
-            <class>org.wandora.application.tools.exporters.XTMRoundTrip</class>
+            <name>Topic map round trip...</name>
+            <class>org.wandora.application.tools.exporters.TopicMapRoundTrip</class>
          </item>
          <item>
             <name>Export schema as topic map...</name>

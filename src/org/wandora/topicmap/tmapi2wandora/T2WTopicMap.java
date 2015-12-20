@@ -110,6 +110,11 @@ public class T2WTopicMap extends TopicMap {
     }
 
     @Override
+    public Topic createTopic(String id) throws TopicMapException {
+        throw new UnsupportedOperationException("Editing not supported");
+    }
+    
+    @Override
     public Topic createTopic() throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }

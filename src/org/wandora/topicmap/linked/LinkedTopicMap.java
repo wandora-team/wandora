@@ -226,6 +226,13 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
     }
 
     @Override
+    public Topic createTopic(String id) throws TopicMapException {
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
+        if(linkedMap==null && !findLinkedMap()) return null;
+        return getLinkedTopic(linkedMap.createTopic(id));
+    }
+    
+    @Override
     public Topic createTopic() throws TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(linkedMap==null && !findLinkedMap()) return null;

@@ -154,6 +154,11 @@ public class WebServiceTopicMap extends TopicMap {
     }
 
     @Override
+    public Topic createTopic(String id) throws TopicMapException {
+        throw new TopicMapReadOnlyException();
+    }
+    
+    @Override
     public Topic createTopic() throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }

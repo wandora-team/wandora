@@ -42,14 +42,14 @@ public class TopicImpl extends Topic {
     
     private TopicMapImpl topicMap;
     
-    private Hashtable<Topic,Hashtable<Topic,String>> data;
+    private HashMap<Topic,HashMap<Topic,String>> data;
     private Set<Topic> types;
     private Set<Association> associations;
-    private Hashtable<Topic,Hashtable<Topic,String>> associationIndex;
+    private HashMap<Topic,HashMap<Topic,String>> associationIndex;
     private String baseName;
     private Locator subjectLocator;
     private Set<Locator> subjectIdentifiers;
-    private Hashtable<Set<Topic>,String> variants;
+    private HashMap<Set<Topic>,String> variants;
     
     private Set<Topic> dataTypeIndex;
     private Set<DataVersionIndexWrapper> dataVersionIndex;
@@ -68,24 +68,38 @@ public class TopicImpl extends Topic {
     private long editTime;
     private long dependentEditTime;
     
-    private Hashtable dispNameCache;
-    private Hashtable sortNameCache;
+    private HashMap dispNameCache;
+    private HashMap sortNameCache;
+    
+    
+    /** Creates a new instance of TopicImpl */
+    public TopicImpl(String id, TopicMapImpl topicMap) {
+        this.topicMap=topicMap;
+        this.id=id;
+        initializeTopicImpl();
+    }
+    
     
     /** Creates a new instance of TopicImpl */
     public TopicImpl(TopicMapImpl topicMap) {
         this.topicMap=topicMap;
         id=getUniqueID();
-        data=new Hashtable();
+        initializeTopicImpl();
+    }
+    
+    
+    private void initializeTopicImpl() {
+        data=new LinkedHashMap();
         types=Collections.synchronizedSet(new LinkedHashSet());
         associations=Collections.synchronizedSet(new LinkedHashSet());
-        associationIndex=new Hashtable();
+        associationIndex=new LinkedHashMap();
         baseName=null;
         subjectLocator=null;
         subjectIdentifiers=Collections.synchronizedSet(new LinkedHashSet());
-        variants=new Hashtable();
+        variants=new LinkedHashMap();
         
-        dispNameCache=new Hashtable();
-        sortNameCache=new Hashtable();
+        dispNameCache=new LinkedHashMap();
+        sortNameCache=new LinkedHashMap();
         
         dataTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
         dataVersionIndex=Collections.synchronizedSet(new LinkedHashSet());
@@ -96,6 +110,8 @@ public class TopicImpl extends Topic {
         
         removed=false;
     }
+    
+    
     
     public void clearNameCaches(){
         dispNameCache.clear();
@@ -121,15 +137,18 @@ public class TopicImpl extends Topic {
         return name;
     }
     
+    
     private static long idcounter=0;
     public static synchronized String getUniqueID(){
-        return "topic"+(idcounter++);
+        return "topic"+(idcounter++)+"."+System.currentTimeMillis();
     }
+    
     
     @Override
     public String getID() throws TopicMapException {
         return id;
     }
+    
     
     @Override
     public void setData(Topic type, Topic version, String value) throws TopicMapException {
@@ -144,9 +163,9 @@ public class TopicImpl extends Topic {
         }
         ((TopicImpl)type).addedAsDataType(this);
         ((TopicImpl)version).addedAsDataVersion(this,type);
-        Hashtable t=(Hashtable)data.get(type);
+        HashMap t=data.get(type);
         if(t==null){
-            t=new Hashtable();
+            t=new LinkedHashMap();
             data.put(type,t);
         }
         Object o=t.put(version,value);
@@ -162,9 +181,9 @@ public class TopicImpl extends Topic {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         ((TopicImpl)type).addedAsDataType(this);
-        Hashtable t=(Hashtable)data.get(type);
+        HashMap t=data.get(type);
         if(t==null){
-            t=new Hashtable();
+            t=new LinkedHashMap();
             data.put(type,t);
         }
         Iterator iter=versionData.entrySet().iterator();
@@ -200,6 +219,7 @@ public class TopicImpl extends Topic {
         if(changed) topicMap.topicSubjectIdentifierChanged(this,l,null);
     }
     
+    
     @Override
     public void addType(Topic t) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
@@ -212,14 +232,16 @@ public class TopicImpl extends Topic {
         if(changed) topicMap.topicTypeChanged(this,t,null);        
     }
     
+    
     @Override
     public Collection<Association> getAssociations()  throws TopicMapException {
         return associations;
     }
     
+    
     @Override
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
-        Hashtable s=(Hashtable)associationIndex.get(type);
+        HashMap s = associationIndex.get(type);
         if(s==null) return new HashSet();
 //        else return s.values();
         else{
@@ -233,9 +255,10 @@ public class TopicImpl extends Topic {
         }
     }
     
+    
     @Override
     public Collection<Association> getAssociations(Topic type, Topic role) throws TopicMapException {
-        Hashtable s=(Hashtable)associationIndex.get(type);
+        HashMap s=associationIndex.get(type);
         if(s==null) return new HashSet();
         else {
             Collection s2=(Collection)s.get(role);
@@ -244,60 +267,76 @@ public class TopicImpl extends Topic {
         }
     }
     
+    
     @Override
     public String getBaseName() throws TopicMapException {
         return baseName;
     }
     
+    
     @Override
     public String getData(Topic type, Topic version) throws TopicMapException {
-        Hashtable t=(Hashtable)data.get(type);
+        HashMap t=data.get(type);
         if(t==null) return null;
         else return (String)t.get(version);
     }
     
+    
     @Override
     public Hashtable getData(Topic type) throws TopicMapException {
-        Hashtable t=(Hashtable)data.get(type);
-        if(t==null) return new Hashtable();
-        else return t;
+        HashMap t=data.get(type);
+        if(t==null) {
+            return new Hashtable();
+        }
+        else {
+            Hashtable ht = new Hashtable();
+            ht.putAll(t);
+            return ht;
+        }
     }
+    
     
     @Override
     public Locator getSubjectLocator() throws TopicMapException {
         return subjectLocator;
     }
     
+    
     @Override
     public Collection getSubjectIdentifiers() throws TopicMapException {
         return subjectIdentifiers;
     }
+    
     
     @Override
     public TopicMap getTopicMap(){
         return topicMap;
     }
     
+    
     @Override
     public Collection<Topic> getTypes() throws TopicMapException {
         return types;
     }
+    
     
     @Override
     public String getVariant(Set<Topic> scope) throws TopicMapException {
         return (String)variants.get(scope);
     }
     
+    
     @Override
     public boolean isOfType(Topic t) throws TopicMapException {
         return types.contains(t);
     }
     
+    
     @Override
     public void removeData(Topic type) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        Hashtable t=(Hashtable)data.remove(type);
+        HashMap t=data.remove(type);
         ((TopicImpl)type).removedFromDataType(this);
         if(t!=null){
             Iterator iter=t.entrySet().iterator();
@@ -317,7 +356,7 @@ public class TopicImpl extends Topic {
     public void removeData(Topic type, Topic version) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        Hashtable t=(Hashtable)data.get(type);
+        HashMap t=data.get(type);
         if(t==null) {
             return;
         }
@@ -344,6 +383,7 @@ public class TopicImpl extends Topic {
         if(changed) topicMap.topicSubjectIdentifierChanged(this,null,l);
     }
     
+    
     @Override
     public void removeType(Topic t) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
@@ -355,6 +395,7 @@ public class TopicImpl extends Topic {
         updateEditTime();
         if(changed) topicMap.topicTypeChanged(this,null,t);
     }
+    
     
     @Override
     public void setBaseName(String name) throws TopicMapException {
@@ -374,6 +415,7 @@ public class TopicImpl extends Topic {
         if(changed) topicMap.topicBaseNameChanged(this,name,old);
     }
     
+    
     @Override
     public void setSubjectLocator(Locator l)  throws TopicMapException {
         if(removed) throw new TopicRemovedException();
@@ -391,10 +433,12 @@ public class TopicImpl extends Topic {
         if(changed) topicMap.topicSubjectLocatorChanged(this,l,old);
     }
     
+    
     @Override
     public long getEditTime()  throws TopicMapException {
         return editTime;
     }
+    
     
     @Override
     public void setEditTime(long time)  throws TopicMapException {
@@ -462,6 +506,7 @@ public class TopicImpl extends Topic {
         removed=true;
     }
     
+    
     @Override
     public void removeVariant(Set<Topic> scope)  throws TopicMapException {
         if(removed) throw new TopicRemovedException();
@@ -483,6 +528,7 @@ public class TopicImpl extends Topic {
         updateEditTime();
         if(changed) topicMap.topicVariantChanged(this,scope,null,(String)o);
     }
+    
     
     @Override
     public void setVariant(Set<Topic> scope, String name)  throws TopicMapException {
@@ -506,15 +552,18 @@ public class TopicImpl extends Topic {
         if(changed) topicMap.topicVariantChanged(this,scope,name,(String)o);
     }
     
+    
     @Override
     public Set<Set<Topic>> getVariantScopes() throws TopicMapException {
         return variants.keySet();
     }
     
+    
     @Override
     public Collection<Topic> getDataTypes() throws TopicMapException {
         return data.keySet();
     }
+    
     
     @Override
     public boolean isRemoved() throws TopicMapException {
@@ -586,7 +635,7 @@ public class TopicImpl extends Topic {
 
     @Override
     public Collection<Topic> getTopicsWithDataVersion() throws TopicMapException {
-        ArrayList dataVersionTopics = new ArrayList<Topic>();
+        Collection<Topic> dataVersionTopics = new ArrayList<Topic>();
         for(DataVersionIndexWrapper dviw : dataVersionIndex) {
             dataVersionTopics.add(dviw.topic);
         }
@@ -698,7 +747,10 @@ public class TopicImpl extends Topic {
         Iterator iter=new ArrayList(ti.data.entrySet()).iterator();
         while(iter.hasNext()){
             Map.Entry e=(Map.Entry)iter.next();
-            setData((Topic)e.getKey(),(Hashtable)e.getValue());
+            HashMap hm = (HashMap) e.getValue();
+            Hashtable ht = new Hashtable();
+            ht.putAll(hm);
+            setData((Topic)e.getKey(),ht);
             ti.removeData((Topic)e.getKey());
         }
         // set base name
@@ -714,17 +766,13 @@ public class TopicImpl extends Topic {
             this.setSubjectLocator(l);
         }
         // set types
-        iter=ti.getTypes().iterator();
-        while(iter.hasNext()){
-            Topic type=(Topic)iter.next();
+        for(Topic type : ti.getTypes()){
             if(type==ti) this.addType(this);
             else this.addType(type);
         }
         // set variant names
-        iter=ti.getVariantScopes().iterator();
-        while(iter.hasNext()){
-            Set scope=(Set)iter.next();
-            String name=ti.getVariant(scope);
+        for(Set scope : ti.getVariantScopes()){
+            String name = ti.getVariant(scope);
             this.setVariant(scope,name);
         }
 
@@ -734,7 +782,7 @@ public class TopicImpl extends Topic {
         iter=ti.associationIndex.entrySet().iterator();
         while(iter.hasNext()){
             Map.Entry e=(Map.Entry)iter.next();
-            Iterator iter2=((Hashtable)e.getValue()).entrySet().iterator();
+            Iterator iter2=((HashMap)e.getValue()).entrySet().iterator();
             while(iter2.hasNext()){
                 Map.Entry e2=(Map.Entry)iter2.next();
                 Topic role=(Topic)e2.getKey();
@@ -914,7 +962,7 @@ public class TopicImpl extends Topic {
         if(removed) throw new TopicMapException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         
-        Hashtable as=new Hashtable();
+        HashMap as=new LinkedHashMap();
         ArrayList tobeDeleted=new ArrayList();
         Iterator iter=associations.iterator();
         Association remaining=notThis;
@@ -944,12 +992,12 @@ public class TopicImpl extends Topic {
     void addInAssociation(Association a,Topic role) throws TopicMapException {
         associations.add(a);
         Topic type=a.getType();
-        Hashtable t = null;
+        HashMap t = null;
         if(type != null) {
-            t=(Hashtable)associationIndex.get(type);
+            t=associationIndex.get(type);
         }
         if(t==null){
-            t=new Hashtable();
+            t=new LinkedHashMap();
             associationIndex.put(type,t);
         }
         HashSet s=(HashSet)t.get(role);
@@ -967,7 +1015,7 @@ public class TopicImpl extends Topic {
             associations.remove(a);
         }
         Topic type=a.getType();
-        Hashtable t=(Hashtable)associationIndex.get(type);
+        HashMap t=associationIndex.get(type);
         HashSet s=(HashSet)t.get(role);
         s.remove(a);
         if(s.isEmpty()) t.remove(role);
@@ -977,16 +1025,16 @@ public class TopicImpl extends Topic {
     
     
     void associationTypeChanged(Association a,Topic type,Topic oldType,Topic role){
-        Hashtable t=(Hashtable)associationIndex.get(oldType);
+        HashMap t=associationIndex.get(oldType);
         HashSet s=(HashSet)t.get(role);
         s.remove(a);
         if(s.isEmpty()) t.remove(role);
         if(t.isEmpty()) associationIndex.remove(oldType);
         
         if(type!=null){
-            t=(Hashtable)associationIndex.get(type);
+            t=associationIndex.get(type);
             if(t==null){
-                t=new Hashtable();
+                t=new LinkedHashMap();
                 associationIndex.put(type,t);
             }
             s=(HashSet)t.get(role);

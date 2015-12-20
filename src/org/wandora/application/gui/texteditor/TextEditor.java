@@ -74,17 +74,19 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     public TextEditor(Wandora wandora, boolean modal, String initText) {
         this(wandora,modal,initText,null);
     }
+    
+    
     public TextEditor(Wandora wandora, boolean modal, String initText, String contentType) {
         super(wandora, modal);
         this.wandora = wandora;
         initComponents();
         simpleTextPane = (SimpleTextPane) textPane;
-        if(contentType!=null) textPane.setContentType(contentType);
-        textPane.setForeground(Color.BLACK);
-        textPane.setBackground(Color.WHITE);
-        textPane.setText(initText);
-        textPane.setCaretPosition(0);
-        textPane.setFocusTraversalKeysEnabled(false);
+        if(contentType!=null) simpleTextPane.setContentType(contentType);
+        simpleTextPane.setForeground(Color.BLACK);
+        simpleTextPane.setBackground(Color.WHITE);
+        simpleTextPane.setSuperText(initText);
+        simpleTextPane.setCaretPosition(0);
+        simpleTextPane.setFocusTraversalKeysEnabled(false);
         initWindow(wandora);
         infoLabel.setText("Editing text");
     }
@@ -93,6 +95,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     /** Creates new form TextEditor */
     public TextEditor(Wandora wandora, boolean modal) {
         super(wandora, modal);
+        this.wandora = wandora;
         initComponents();
         initWindow(wandora);
     }
@@ -114,10 +117,9 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
         menuBar.add(getFormatMenu());
         JMenu[] userMenus = getUserMenus();
         if(userMenus != null) {
-            for(int i=0; i<userMenus.length; i++) {
-                JMenu m = userMenus[i];
-                if(m != null) {
-                    menuBar.add(userMenus[i]);
+            for (JMenu m : userMenus) {
+                if (m != null) {
+                    menuBar.add(m);
                 }
             }
         }
@@ -301,7 +303,15 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
     public String getSelectedText() {
         return this.textPane.getSelectedText();
     }
-    
+    public void setText(String text) {
+        textPane.setText(text);
+    }
+    public void setSuperText(String text) {
+        ((SimpleTextPane) textPane).setSuperText(text);
+    }
+    public void setContentType(String contentType) {
+        textPane.setContentType(contentType);
+    }
     
     
     // -------------------------------------------------------------------------

@@ -111,6 +111,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
         DiffToolConfigPanel configPanel=new DiffToolConfigPanel(admin,dialog);
         dialog.getContentPane().add(configPanel);
         dialog.setSize(440, 350);
+        configPanel.addFormat("Plain text format");
         configPanel.addFormat("HTML format");
         configPanel.addFormat("Patch format");
         GuiTools.centerWindow(dialog, admin);
@@ -184,24 +185,35 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
             ToolDiffOutput output=null;
             String format=configPanel.getFormat();
             boolean html=true;
-            if(format.equalsIgnoreCase("Patch Format")){
+            if(format.equalsIgnoreCase("Patch format")){
                 html=false;
                 output=new ToolDiffOutput(new PatchDiffEntryFormatter());
+            }
+            else if(format.equalsIgnoreCase("Plain text format")){
+                html=false;
+                output=new ToolDiffOutput(new PlainTextDiffEntryFormatter());
             }
             else{
                 output=new ToolDiffOutput(new HTMLDiffEntryFormatter());
             }
-            log("Comparing topic maps");
+            log("Comparing topic maps.");
             if(diffMaker.makeDiff(tm1,tm2,output)){
-                log("Comparison ready");
-                TextEditor e=null;
-                if(html) e=new TextEditor(admin,true,"<html>"+output.getResult()+"</html>","text/html");
-                else e=new TextEditor(admin,true,output.getResult());
+                log("Comparison ready. Opening results...");
+                TextEditor e = new TextEditor(admin, true);
+                String result = output.getResult();
+                if(html) {
+                    e.setContentType("text/html");
+                    e.setSuperText("<html>"+result+"</html>");
+                    //=new TextEditor(admin,true,"<html>"+result+"</html>","text/html");
+                }
+                else {
+                    e.setSuperText(result);
+                }
                 e.setCancelButtonVisible(false);
                 setState(INVISIBLE);
                 e.setVisible(true);
                 setState(VISIBLE);
-                setState(WAIT);
+                setState(CLOSE);
             }
             else{
                 setState(WAIT);
@@ -215,17 +227,21 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
         }
     }    
     
+    
     private class ToolDiffOutput extends BasicDiffOutput {
         private int counter=0;
         private StringWriter sw;
+        
         public ToolDiffOutput(DiffEntryFormatter formatter){
             super(formatter,new StringWriter());
             this.sw=(StringWriter)writer;
         }
+        
         private void increaseCounter(){
             counter++;
             setProgress(counter);
         }
+        
         @Override
         public boolean outputDiffEntry(TopicMapDiff.DiffEntry d){
             if(forceStop()) return false;
@@ -238,18 +254,21 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
             }
             return true;
         }
+        
         @Override
         public boolean noDifferences(Topic t){
             if(forceStop()) return false;
             increaseCounter();
             return true;
         }
+        
         @Override
         public boolean noDifferences(Association a){
             if(forceStop()) return false;
             increaseCounter();
             return true;
         }
+        
         public String getResult(){
             return sw.toString();
         }

@@ -953,6 +953,20 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     }
     
     @Override
+    public Topic createTopic(String id) throws TopicMapException {
+        if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
+        if(selectedLayer!=null){
+            Topic t=selectedLayer.getTopicMap().createTopic(id);
+            return new LayeredTopic(t,this);
+        }
+        else{
+            // TODO: some other exception
+            throw new RuntimeException("No selected layer");
+        }
+    }
+    
+    
+    @Override
     public Topic createTopic() throws TopicMapException {
         if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
         if(selectedLayer!=null){

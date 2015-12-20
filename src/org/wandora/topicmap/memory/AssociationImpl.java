@@ -39,37 +39,42 @@ import java.util.*;
 public class AssociationImpl implements Association {
     private TopicMapImpl topicMap;
     private Topic type;
-    private Hashtable players;
+    private HashMap players;
     private boolean removed;
     
     
     /** Creates a new instance of AssociationImpl */
-    public AssociationImpl(TopicMapImpl topicMap,Topic type)  throws TopicMapException {
+    public AssociationImpl(TopicMapImpl topicMap, Topic type)  throws TopicMapException {
         this.topicMap=topicMap;
-        players=new Hashtable();
+        players=new LinkedHashMap();
         setType(type);
         removed=false;
     }
+    
     
     @Override
     public Topic getPlayer(Topic role) {
         return (Topic)players.get(role);
     }
     
+    
     @Override
     public Collection getRoles() {
         return players.keySet();
     }
+    
     
     @Override
     public TopicMap getTopicMap() {
         return topicMap;
     }
     
+    
     @Override
     public Topic getType() {
         return type;
     }
+    
     
     @Override
     public void setType(Topic t) throws TopicMapException {
@@ -84,15 +89,16 @@ public class AssociationImpl implements Association {
         if(t!=null)
             ((TopicImpl)t).addedAsAssociationType(this);
         Iterator iter=players.entrySet().iterator();
-        while(iter.hasNext()){
+        while(iter.hasNext()) {
             Map.Entry e=(Map.Entry)iter.next();
             ((TopicImpl)e.getValue()).associationTypeChanged(this,t,oldType,(Topic)e.getKey());
         }
-        if(changed){
+        if(changed) {
             topicMap.associationTypeChanged(this,t,oldType);
             if(topicMap.getConsistencyCheck()) checkRedundancy();
         }
     }
+    
     
     @Override
     public void addPlayer(Topic player, Topic role)  throws TopicMapException {
@@ -105,7 +111,7 @@ public class AssociationImpl implements Association {
 //        ((TopicImpl)player).addInAssociation(this,role);
 //        ((TopicImpl)role).addedAsRoleType(this);
         TopicImpl oldPlayer=null;
-        if(players.containsKey(role)){
+        if(players.containsKey(role)) {
             oldPlayer=(TopicImpl)players.get(role);
             if(oldPlayer.equals(player)) return; // don't need to do anything
             
@@ -125,13 +131,14 @@ public class AssociationImpl implements Association {
         }
     }
     
+    
     @Override
     public void addPlayers(Map<Topic,Topic> newPlayers) throws TopicMapException {
         if(removed) throw new TopicMapException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         
         boolean changed=false;
-        for(Map.Entry<Topic,Topic> e : newPlayers.entrySet()){
+        for(Map.Entry<Topic,Topic> e : newPlayers.entrySet()) {
             TopicImpl role=(TopicImpl)e.getKey();
             TopicImpl player=(TopicImpl)e.getValue();
             
@@ -139,7 +146,7 @@ public class AssociationImpl implements Association {
 //            player.addInAssociation(this,role);
 //            role.addedAsRoleType(this);
             TopicImpl oldPlayer=null;
-            if(players.containsKey(role)){
+            if(players.containsKey(role)) {
                 oldPlayer=(TopicImpl)players.get(role);
                 if(oldPlayer.equals(player)) continue;
                 
@@ -161,6 +168,7 @@ public class AssociationImpl implements Association {
         if(topicMap.getConsistencyCheck()) checkRedundancy();
     }
     
+    
     @Override
     public void removePlayer(Topic role)  throws TopicMapException {
         if(removed) throw new TopicMapException();
@@ -177,6 +185,7 @@ public class AssociationImpl implements Association {
             }
         }
     }
+    
     
     @Override
     public void remove()  throws TopicMapException {
@@ -202,15 +211,17 @@ public class AssociationImpl implements Association {
         Topic oldType=type;
         if(type != null) ((TopicImpl)type).removedFromAssociationType(this);
         type = null;
-        if(oldType != null){
+        if(oldType != null) {
             topicMap.associationTypeChanged(this, null, oldType);
         }
     }
+    
     
     @Override
     public boolean isRemoved(){
         return removed;
     }
+    
     
     void checkRedundancy() throws TopicMapException {
         if(removed) throw new TopicMapException();
@@ -220,7 +231,7 @@ public class AssociationImpl implements Association {
         if(type==null) return;
         Collection smallest=null;
         Iterator iter=players.keySet().iterator();
-        while(iter.hasNext()){
+        while(iter.hasNext()) {
             Topic role=(Topic)iter.next();
             Topic player=(Topic)players.get(role);
             Collection c=player.getAssociations(type,role);
@@ -228,7 +239,7 @@ public class AssociationImpl implements Association {
         }
         HashSet delete=new HashSet();
         iter=smallest.iterator();
-        while(iter.hasNext()){
+        while(iter.hasNext()) {
             AssociationImpl a=(AssociationImpl)iter.next();
             if(a==this) continue;
             if(a._equals(this)){
@@ -236,17 +247,20 @@ public class AssociationImpl implements Association {
             }
         }
         iter=delete.iterator();
-        while(iter.hasNext()){ 
+        while(iter.hasNext()) { 
             Association a=(Association)iter.next();
             topicMap.duplicateAssociationRemoved(this,a);
             a.remove();
         }
     }
     
-    int _hashCode(){
+    
+    int _hashCode() {
         return players.hashCode()+type.hashCode();
     }
-    boolean _equals(AssociationImpl a){
+    
+    
+    boolean _equals(AssociationImpl a) {
         if(a == null) return false;
         return (players.equals(a.players)&&(type==a.type));
     }

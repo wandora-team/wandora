@@ -382,6 +382,11 @@ public class QueryTopicMap extends ContainerTopicMap implements TopicMapListener
     }
     
     @Override
+    public Topic createTopic(String id) throws TopicMapException {
+        throw new TopicMapReadOnlyException();
+    }
+    
+    @Override
     public Topic createTopic() throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }

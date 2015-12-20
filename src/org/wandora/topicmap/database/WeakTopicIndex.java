@@ -374,6 +374,24 @@ public class WeakTopicIndex implements Runnable {
     /**
      * Creates a new topic and adds it to the index.
      */
+    public synchronized DatabaseTopic newTopic(String id, DatabaseTopicMap tm) throws TopicMapException {
+        if(topicIDIndex.containsKey(id)) {
+            WeakReference<DatabaseTopic> ref = topicIDIndex.get(id);
+            return topicAccessed(ref.get());
+        }
+        else {
+            DatabaseTopic t=new DatabaseTopic(id,tm);
+            t.create();
+            WeakReference<DatabaseTopic> ref=new WeakReference<DatabaseTopic>(t,topicRefQueue);
+            topicIDIndex.put(t.getID(),ref);
+            if(useRefQueue) topicInvIDIndex.put(ref,t.getID());
+            return topicAccessed(t);
+        }
+    }
+    
+    /**
+     * Creates a new topic and adds it to the index.
+     */
     public synchronized DatabaseTopic newTopic(DatabaseTopicMap tm) throws TopicMapException {
         DatabaseTopic t=new DatabaseTopic(tm);
         t.create();

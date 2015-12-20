@@ -763,6 +763,14 @@ public class DatabaseTopicMap extends TopicMap {
     }
     
     @Override
+    public Topic createTopic(String id) throws TopicMapException {
+        if(unconnected) return null;
+        if(isReadOnly()) throw new TopicMapReadOnlyException();
+        DatabaseTopic t=topicIndex.newTopic(id, this);
+        return t;
+    }
+    
+    @Override
     public Topic createTopic() throws TopicMapException {
         if(unconnected) return null;
         if(isReadOnly()) throw new TopicMapReadOnlyException();
