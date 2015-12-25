@@ -37,11 +37,8 @@ import org.wandora.application.gui.*;
 
 /**
  * <p>
- * Wandora tries to merge all identical associations. However, there are
- * occasions when a topic map ends up to contain two or more identical
- * associations. This tool is used to merge all identical associations
- * in selected topic map. As a result, the number of associations may
- * decrease.
+ * Merge all identical associations in selected topic map. As a result 
+ * the number of associations may decrease.
  * </p>
  *
  * @author olli
@@ -55,13 +52,13 @@ public class MakeAssociationConsistentTool extends AbstractLayerTool implements 
     
     
     
-    /** Creates a new instance of MakeConsistentTool */
+    /** Creates a new instance of MakeAssociationConsistentTool */
     public MakeAssociationConsistentTool() {
     }
 
     @Override
     public String getName() {
-        return "Make Association Consistent";
+        return "Make association consistent";
     }
 
     @Override
@@ -97,17 +94,18 @@ public class MakeAssociationConsistentTool extends AbstractLayerTool implements 
         
         try {
             requiresRefresh = true;
-            long st = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
             TopicMap tm = contextLayer.getTopicMap();
             int an = tm.getNumAssociations();
             log("Layer's topic map contains " + an + " associations.");
             log("Checking association consistency of layer '"+contextLayer.getName()+"'.");
             tm.checkAssociationConsistency(getCurrentLogger());
             int ana = tm.getNumAssociations();
-            long et = System.currentTimeMillis();
-            log("Consistency check took " + ((int)((et-st)/1000)) + " seconds.");
+            long endTime = System.currentTimeMillis();
+            int executionDuration = ((int)((endTime-startTime)/1000));
+            if(executionDuration > 1) log("Consistency check took " + executionDuration + " seconds.");
             log("After association consistency check the topic map contains " + ana + " associations.");
-            log("Total " + (ana -an) + " associations removed.");
+            log("Removed " + (an-ana) + " associations.");
             log("Ready.");
         }
         catch(Exception e) {

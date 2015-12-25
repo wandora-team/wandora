@@ -115,6 +115,7 @@ public class TopicMapImpl extends TopicMap {
     @Override
     public void clearTopicMap() throws TopicMapException{
         if(isReadOnly()) throw new TopicMapReadOnlyException();
+        idIndex = new LinkedHashMap<String,Topic>(); 
         typeIndex = new LinkedHashMap<Topic,Collection<Topic>>();
         subjectIdentifierIndex = new LinkedHashMap<Locator,Topic>();
         subjectLocatorIndex = new LinkedHashMap<Locator,Topic>();
@@ -639,6 +640,7 @@ public class TopicMapImpl extends TopicMap {
     
     public void topicRemoved(Topic t) throws TopicMapException {
         topicMapChanged=true;
+        idIndex.remove(t.getID());
         topics.remove(t);
         for(TopicMapListener listener : topicMapListeners){
             listener.topicRemoved(t);        

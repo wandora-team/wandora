@@ -127,7 +127,6 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     
     public void setImportXmlIdentifiers(boolean f) {
-        System.out.println("Set IMPORT_XML_IDENTIFIERS="+f);
         IMPORT_XML_IDENTIFIERS = f;
     }
     

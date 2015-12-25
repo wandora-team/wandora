@@ -306,6 +306,7 @@ public class LayeredTopic extends Topic {
         return t;
     }
     
+    
     @Override
     public void addSubjectIdentifier(Locator l) throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
@@ -332,6 +333,7 @@ public class LayeredTopic extends Topic {
         }
     }
     
+    
     @Override
     public void removeSubjectIdentifier(Locator l) throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
@@ -357,6 +359,7 @@ public class LayeredTopic extends Topic {
         if(changed!=null) remakeLayered(changed);
     }
     
+    
     /**
      * Returns the layer that is being used to get the base name for this topic.
      * That is the first layer that contains a topic in this layered topic that has
@@ -372,6 +375,7 @@ public class LayeredTopic extends Topic {
         return null;
     }
         
+    
     @Override
     public String getBaseName() throws TopicMapException {
         for(Topic t : topics){
@@ -381,12 +385,13 @@ public class LayeredTopic extends Topic {
         return null;
     }
     
+    
     @Override
     public void setBaseName(String name) throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         Collection<Topic> ts=getTopicsForSelectedLayer();
         Topic t=null;
-        if(ts.size()==0) {
+        if(ts.isEmpty()) {
             AmbiguityResolution res=resolveAmbiguity("setBaseName.noSelected","No topic in selected layer");
             if(res==AmbiguityResolution.addToSelected){
                 t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
@@ -405,6 +410,7 @@ public class LayeredTopic extends Topic {
         remakeLayered(t);
     }
     
+    
     @Override
     public Collection<Topic> getTypes() throws TopicMapException {
         Vector<Topic> v=new Vector<Topic>();
@@ -413,6 +419,7 @@ public class LayeredTopic extends Topic {
         }
         return layerStack.makeLayeredTopics(v);
     }
+    
     
     @Override
     public void addType(Topic type) throws TopicMapException {
@@ -455,24 +462,26 @@ public class LayeredTopic extends Topic {
         t.addType(stype);
     }
     
+    
     @Override
     public void removeType(Topic type) throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
         LayeredTopic lt=(LayeredTopic)type;
         Collection<Topic> types=lt.getTopicsForSelectedLayer();
-        if(types.size()==0){
+        if(types.isEmpty()){
             ambiguity("No type in selected layer, nothing done (removeType)");
             return;
         }
         else if(types.size()>1) ambiguity("Several types in selected layer (removeType)");
         Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts.size()==0){
+        if(ts.isEmpty()){
             ambiguity("No topic in selected layer, nothing done (removeType)");
             return;
         }
         else if(ts.size()>1) ambiguity("Several topics in selected layer (removeType)");
         ts.iterator().next().removeType(types.iterator().next());
     }
+    
     
     @Override
     public boolean isOfType(Topic type) throws TopicMapException {
@@ -488,6 +497,7 @@ public class LayeredTopic extends Topic {
         return false;
     }
 
+    
     /**
      * Creates a scope from a collection of LayeredTopics that can be used for the
      * given layer. Note that the given layer might not contain all topics needed
@@ -496,6 +506,7 @@ public class LayeredTopic extends Topic {
     protected Set<Topic> createScope(Set<Topic> layeredScope,Layer l) throws TopicMapException {
         return createScope(layeredScope,l,false);
     }
+    
     
     /**
      * Creates a scope from a collection of LayeredTopics that can be used for the
@@ -511,7 +522,7 @@ public class LayeredTopic extends Topic {
             LayeredTopic lt=(LayeredTopic)t;
             Collection<Topic> ts=lt.getTopicsForLayer(l);
             Topic t2=null;
-            if(ts.size()==0){
+            if(ts.isEmpty()){
                 if(copyTopics){
                     t2=lt.copyStubTo(l.getTopicMap());
                     if(t2==null) {
@@ -532,6 +543,7 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
 
     /**
      * Tries to find a variant scope in the given (non layered) topic that matches
@@ -567,6 +579,7 @@ public class LayeredTopic extends Topic {
         return null;
     }
     
+    
     /**
      * Returns the layer that is used to get the variant for the given scope.
      */
@@ -580,6 +593,7 @@ public class LayeredTopic extends Topic {
         }
         return null;
     }
+    
     
     @Override
     public String getVariant(Set<Topic> scope) throws TopicMapException {
@@ -597,6 +611,7 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
     
     @Override
     public void setVariant(Set<Topic> scope,String name) throws TopicMapException {
@@ -636,6 +651,7 @@ public class LayeredTopic extends Topic {
         selectedTopic.setVariant(s,name);
     }
     
+    
     @Override
     public Set<Set<Topic>> getVariantScopes() throws TopicMapException {
         // TODO: doesn't handle correctly theoretical case where scope topics get merged
@@ -660,6 +676,7 @@ public class LayeredTopic extends Topic {
         return ret;
     }
     
+    
     @Override
     public void removeVariant(Set<Topic> scope) throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
@@ -677,6 +694,7 @@ public class LayeredTopic extends Topic {
             }
         }
     }
+    
     
     /**
      * Returns the topic that is used to get data with specified type and version and
@@ -702,6 +720,7 @@ public class LayeredTopic extends Topic {
         return null;
     }
     
+    
     @Override
     public String getData(Topic type,Topic version) throws TopicMapException {
         LayeredTopic lt=(LayeredTopic)type;
@@ -725,6 +744,7 @@ public class LayeredTopic extends Topic {
         }
         return found;
     }
+    
     
     @Override
     public Hashtable<Topic,String> getData(Topic type) throws TopicMapException {
@@ -750,6 +770,7 @@ public class LayeredTopic extends Topic {
         return ret;
     }
     
+    
     @Override
     public Collection<Topic> getDataTypes() throws TopicMapException {
         HashSet<Topic> used=new LinkedHashSet<Topic>();
@@ -767,6 +788,7 @@ public class LayeredTopic extends Topic {
         
     }
     
+    
     @Override
     public void setData(Topic type,Hashtable<Topic,String> versionData) throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
@@ -774,6 +796,7 @@ public class LayeredTopic extends Topic {
             setData(type,e.getKey(),e.getValue());
         }
     }
+    
     
     @Override
     public void setData(Topic type,Topic version,String value) throws TopicMapException {
@@ -834,6 +857,7 @@ public class LayeredTopic extends Topic {
         t.setData(stype,sversion,value);
     }
     
+    
     @Override
     public void removeData(Topic type,Topic version) throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
@@ -857,6 +881,7 @@ public class LayeredTopic extends Topic {
         }
     }
     
+    
     @Override
     public void removeData(Topic type) throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
@@ -877,6 +902,7 @@ public class LayeredTopic extends Topic {
         }        
     }
     
+    
     public Topic getSubjectLocatorSource() throws TopicMapException {
         for(Topic t : topics){
             Locator l=t.getSubjectLocator();
@@ -887,6 +913,7 @@ public class LayeredTopic extends Topic {
         }
         return null;
     }
+    
     
     @Override
     public Locator getSubjectLocator() throws TopicMapException {
@@ -903,6 +930,7 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
     
     @Override
     public void setSubjectLocator(Locator l) throws TopicMapException {
@@ -930,14 +958,17 @@ public class LayeredTopic extends Topic {
         }
     }
     
+    
     @Override
     public TopicMap getTopicMap(){
         return layerStack;
     }
     
+    
     public LayerStack getLayerStack(){
         return layerStack;
     }
+    
     
     /**
      * Adds LayeredAssociations into associations set based on the possible players
@@ -982,6 +1013,7 @@ public class LayeredTopic extends Topic {
             }
         }
     }
+    
     
     /**
      * Returns associations of this topic. Note that because roles may get
@@ -1059,6 +1091,7 @@ public class LayeredTopic extends Topic {
         return associations;
     }
     
+    
     /**
      * See notes in getAssociations().
      */
@@ -1099,6 +1132,7 @@ public class LayeredTopic extends Topic {
         return associations;
     }
     
+    
     @Override
     public void remove() throws TopicMapException {
         if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
@@ -1112,6 +1146,7 @@ public class LayeredTopic extends Topic {
         ts.iterator().next().remove();
     }
     
+    
     @Override
     public long getEditTime() throws TopicMapException {
         long max=-1;
@@ -1122,6 +1157,7 @@ public class LayeredTopic extends Topic {
         return max;
     }
     
+    
     @Override
     public void setEditTime(long time) throws TopicMapException {
         // TODO: edit time of what?
@@ -1129,6 +1165,7 @@ public class LayeredTopic extends Topic {
             t.setEditTime(time);
         }
     }
+    
     
     @Override
     public long getDependentEditTime() throws TopicMapException {
@@ -1140,6 +1177,7 @@ public class LayeredTopic extends Topic {
         return max;        
     }
     
+    
     @Override
     public void setDependentEditTime(long time) throws TopicMapException {
         // TODO: edit time of what?
@@ -1147,6 +1185,7 @@ public class LayeredTopic extends Topic {
             t.setDependentEditTime(time);
         }        
     }
+    
     
     @Override
     public boolean isRemoved() throws TopicMapException {
@@ -1161,6 +1200,7 @@ public class LayeredTopic extends Topic {
         return ts.iterator().next().isRemoved();
     }
     
+    
     @Override
     public boolean isDeleteAllowed() throws TopicMapException {
         Collection<Topic> ts=getTopicsForSelectedLayer();
@@ -1171,6 +1211,7 @@ public class LayeredTopic extends Topic {
         else if(ts.size()>1) ambiguity("several topics in selected layer (isDeleteAllowed)");
         return ts.iterator().next().isDeleteAllowed();
     }
+    
     
     @Override
     public Collection<Topic> getTopicsWithDataType() throws TopicMapException {
@@ -1185,6 +1226,7 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
     
     @Override
     public Collection<Association> getAssociationsWithType() throws TopicMapException {
@@ -1208,6 +1250,7 @@ public class LayeredTopic extends Topic {
         return associations;
     }
     
+    
     @Override
     public Collection<Association> getAssociationsWithRole() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
@@ -1230,6 +1273,7 @@ public class LayeredTopic extends Topic {
         return associations;
     }
 
+    
     @Override
     public Collection<Topic> getTopicsWithDataVersion() throws TopicMapException {
         KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
@@ -1243,6 +1287,7 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
+    
 
     @Override
     public Collection<Topic> getTopicsWithVariantScope() throws TopicMapException {
@@ -1273,6 +1318,7 @@ public class LayeredTopic extends Topic {
         }
         return false;
     }
+    
     
     public static class TopicKeyMaker implements Delegate<String,LayeredTopic> {
         public String invoke(LayeredTopic t){
