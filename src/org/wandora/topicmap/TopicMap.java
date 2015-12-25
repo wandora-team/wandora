@@ -724,11 +724,12 @@ public abstract class TopicMap implements TopicMapLogger {
     public String makeLTMTopicId(Topic t) {
         if(t == null) return "null";
         try {
-            int h = t.getID().hashCode();
-            int sign = h / Math.abs(h);
-            h = Math.abs( 2 * h );
-            if(sign == -1) h = h + 1;
-            return "t"+h;
+            return t.getID();
+            // int h = t.getID().hashCode();
+            // int sign = h / Math.abs(h);
+            // h = Math.abs( 2 * h );
+            // if(sign == -1) h = h + 1;
+            // return "t"+h;
         }
         catch(Exception e) {
             return "null";
@@ -1061,11 +1062,7 @@ public abstract class TopicMap implements TopicMapLogger {
     public String makeJTMTopicId(Topic t) {
         if(t == null) return "null";
         try {
-            int h = t.getID().hashCode();
-            int sign = h / Math.abs(h);
-            h = Math.abs( 2 * h );
-            if(sign == -1) h = h + 1;
-            return "t"+h;
+            return t.getID();
         }
         catch(Exception e) {
             return "null";
@@ -1367,7 +1364,7 @@ public abstract class TopicMap implements TopicMapLogger {
             logger.log("Changing consistency check to '"+checkConsistency +"'.");
             setConsistencyCheck(checkConsistency);
         }
-        try{
+        try {
             javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             factory.setValidating(false);

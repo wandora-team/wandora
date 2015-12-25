@@ -58,6 +58,10 @@ public class JTMParser {
     
     
     private static boolean ASSOCIATION_TO_TYPE = true;
+    private static boolean MAKE_TOPIC_ID_WITH_II = false;
+    private static boolean MAKE_SUBJECT_IDENTIFIER_WITH_II = true;
+    
+    
     
     private TopicMap topicMap = null;
     private TopicMapLogger logger = null;
@@ -176,7 +180,7 @@ public class JTMParser {
                 }
                 else if("item_type".equals(key)) {
                     if(areEqual("topicmap", value)) {
-                        // PASS SILENTY
+                        // IGNORE SILENTY
                     }
                     else if(areEqual("topic", value)) {
                         parseTopic(inputJSON);
@@ -638,16 +642,28 @@ public class JTMParser {
                 String ii = i.substring(3);
                 t = topicMap.getTopic(ii);
                 if(t == null) {
-                    t = topicMap.createTopic(ii);
-                    //if(t != null) {
-                    //    t.addSubjectIdentifier(new Locator(ii));
-                    //}
+                    if(MAKE_TOPIC_ID_WITH_II) {
+                        t = topicMap.createTopic(ii);
+                    }
+                    if(MAKE_SUBJECT_IDENTIFIER_WITH_II) {
+                        if(t == null) {
+                            t = topicMap.createTopic();
+                        }
+                        if(t != null) {
+                            t.addSubjectIdentifier(new Locator(ii));
+                        }
+                    }
                 }
             }
             else {
                 t = topicMap.getTopic(i);
                 if(t == null) {
-                    t = topicMap.createTopic();
+                    if(MAKE_TOPIC_ID_WITH_II) {
+                        t = topicMap.createTopic(i);
+                    }
+                    else {
+                        t = topicMap.createTopic();
+                    }
                     if(t != null) {
                         t.addSubjectIdentifier(new Locator(i));
                     }

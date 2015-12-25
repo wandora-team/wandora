@@ -1,502 +1,502 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.0">
-	<topic id="topic84230">
+	<topic id="core--role-class">
 		<subjectIdentifier href="http://wandora.org/si/core/role-class"/>
 		<subjectIdentifier href="http://www.wandora.org/core/roleclass"/>
 		<instanceOf>
-			<topicRef href="#topic84244"/>
-			<topicRef href="#topic84237"/>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--association-type"/>
+			<topicRef href="#core--role"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Role class</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Role class</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84229">
+	<topic id="core--content-type">
 		<subjectIdentifier href="http://wandora.org/si/core/content-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/contenttype"/>
 		<instanceOf>
-			<topicRef href="#topic84237"/>
-			<topicRef href="#topic84229"/>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--role"/>
+			<topicRef href="#core--content-type"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Content type</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Content type</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84232">
+	<topic id="xtm--1.0--core.xtm--display">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#display"/>
 		<instanceOf>
-			<topicRef href="#topic84240"/>
+			<topicRef href="#core--variant-name-version"/>
 		</instanceOf>
 		<name>
 			<value>Scope Display</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Display name</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84235">
+	<topic id="core--wandora-class">
 		<subjectIdentifier href="http://wandora.org/si/core/wandora-class"/>
 		<subjectIdentifier href="http://www.wandora.org/core/wandoraclass"/>
 		<instanceOf>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Wandora class</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Wandora class</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84259">
+	<topic id="xtm--1.0--language.xtm--es">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#es"/>
 		<instanceOf>
-			<topicRef href="#topic84242"/>
+			<topicRef href="#core--language"/>
 		</instanceOf>
 		<name>
 			<value>Spanish language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84249"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--sv"/>
 				</scope>
 				<resourceData>spanska</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84260"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--de"/>
 				</scope>
 				<resourceData>Spanisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84259"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--es"/>
 				</scope>
 				<resourceData>español</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Spanish</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84254"/>
-					<topicRef href="#topic84232"/>
+					<topicRef href="#xtm--1.0--language.xtm--fr"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
 				</scope>
 				<resourceData>espagnol</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84241"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--fi"/>
 				</scope>
 				<resourceData>espanja</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84244">
+	<topic id="core--association-type">
 		<subjectIdentifier href="http://wandora.org/si/core/association-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/associationtype"/>
 		<instanceOf>
-			<topicRef href="#topic84244"/>
-			<topicRef href="#topic84237"/>
-			<topicRef href="#topic84229"/>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--association-type"/>
+			<topicRef href="#core--role"/>
+			<topicRef href="#core--content-type"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Association type</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Association type</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84228">
+	<topic id="core--schema-type">
 		<subjectIdentifier href="http://wandora.org/si/core/schema-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/schema-type"/>
 		<instanceOf>
-			<topicRef href="#topic84230"/>
-			<topicRef href="#topic84229"/>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--role-class"/>
+			<topicRef href="#core--content-type"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Schema type</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Schema type</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84249">
+	<topic id="xtm--1.0--language.xtm--sv">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#sv"/>
 		<instanceOf>
-			<topicRef href="#topic84242"/>
+			<topicRef href="#core--language"/>
 		</instanceOf>
 		<name>
 			<value>Swedish language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84249"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--sv"/>
 				</scope>
 				<resourceData>svenska</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84260"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--de"/>
 				</scope>
 				<resourceData>Schwedisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84259"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--es"/>
 				</scope>
 				<resourceData>sueco</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Swedish</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84254"/>
-					<topicRef href="#topic84232"/>
+					<topicRef href="#xtm--1.0--language.xtm--fr"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
 				</scope>
 				<resourceData>suédois</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84241"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--fi"/>
 				</scope>
 				<resourceData>ruotsi</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84227">
+	<topic id="core--default-occurrence">
 		<subjectIdentifier href="http://wandora.org/si/core/default-occurrence"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-occurrence"/>
 		<instanceOf>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</instanceOf>
 		<name>
 			<value>Default occurrence</value>
 		</name>
 	</topic>
-	<topic id="topic84233">
+	<topic id="core--lang-independent">
 		<subjectIdentifier href="http://wandora.org/si/core/lang-independent"/>
 		<subjectIdentifier href="http://www.wandora.org/core/langindependent"/>
 		<instanceOf>
-			<topicRef href="#topic84242"/>
+			<topicRef href="#core--language"/>
 		</instanceOf>
 		<name>
 			<value>Language independent</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Language independent</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84250">
+	<topic id="xtm--1.0--core.xtm--sort">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#sort"/>
 		<instanceOf>
-			<topicRef href="#topic84240"/>
+			<topicRef href="#core--variant-name-version"/>
 		</instanceOf>
 		<name>
 			<value>Scope Sort</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Sort name</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84234">
+	<topic id="core--hide-level">
 		<subjectIdentifier href="http://wandora.org/si/core/hidelevel"/>
 		<subjectIdentifier href="http://wandora.org/si/core/hide-level"/>
 		<instanceOf>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</instanceOf>
 		<name>
 			<value>Hide level</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Hide level</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84242">
+	<topic id="core--language">
 		<subjectIdentifier href="http://www.wandora.org/core/language"/>
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
 		<subjectIdentifier href="http://wandora.org/si/core/language"/>
 		<instanceOf>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Wandora language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Wandora language</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84260">
+	<topic id="xtm--1.0--language.xtm--de">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#de"/>
 		<instanceOf>
-			<topicRef href="#topic84242"/>
+			<topicRef href="#core--language"/>
 		</instanceOf>
 		<name>
 			<value>German language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84249"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--sv"/>
 				</scope>
 				<resourceData>tysk</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84260"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--de"/>
 				</scope>
 				<resourceData>Deutsche</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84259"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--es"/>
 				</scope>
 				<resourceData>alemán</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>German</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84254"/>
-					<topicRef href="#topic84232"/>
+					<topicRef href="#xtm--1.0--language.xtm--fr"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
 				</scope>
 				<resourceData>allemand</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84241"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--fi"/>
 				</scope>
 				<resourceData>saksa</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84239">
+	<topic id="www--r-project--org">
 		<subjectIdentifier href="http://www.r-project.org"/>
 		<instanceOf>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</instanceOf>
 		<name>
 			<value>R language type</value>
 		</name>
 	</topic>
-	<topic id="topic84246">
+	<topic id="xtm--1.0--core.xtm--superclass">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"/>
 		<instanceOf>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</instanceOf>
 		<name>
 			<value>Superclass</value>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84238">
+	<topic id="xtm--1.0--core.xtm--subclass">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"/>
 		<instanceOf>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</instanceOf>
 		<name>
 			<value>Subclass</value>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84240">
+	<topic id="core--variant-name-version">
 		<subjectIdentifier href="http://wandora.org/si/core/variant-name-version"/>
 		<subjectIdentifier href="http://www.wandora.org/core/variant-name-version"/>
 		<instanceOf>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Wandora variant name version</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Wandora variant name version</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84243">
+	<topic id="core--default-role-2">
 		<subjectIdentifier href="http://wandora.org/si/core/default-role-2"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-role-2"/>
 		<instanceOf>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</instanceOf>
 		<name>
 			<value>Default role 2</value>
 		</name>
 	</topic>
-	<topic id="topic84237">
+	<topic id="core--role">
 		<subjectIdentifier href="http://wandora.org/si/core/role"/>
 		<subjectIdentifier href="http://www.wandora.org/core/role"/>
 		<instanceOf>
-			<topicRef href="#topic84244"/>
-			<topicRef href="#topic84237"/>
-			<topicRef href="#topic84229"/>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--association-type"/>
+			<topicRef href="#core--role"/>
+			<topicRef href="#core--content-type"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Role</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Role</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84245">
+	<topic id="core--edittime">
 		<subjectIdentifier href="http://wandora.org/si/core/edittime"/>
 		<subjectIdentifier href="http://www.wandora.org/core/edittime"/>
 		<name>
@@ -504,564 +504,564 @@
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84231">
+	<topic id="xtm--1.0--language.xtm--en">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#en"/>
 		<instanceOf>
-			<topicRef href="#topic84242"/>
+			<topicRef href="#core--language"/>
 		</instanceOf>
 		<name>
 			<value>English language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84249"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--sv"/>
 				</scope>
 				<resourceData>engelska</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84260"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--de"/>
 				</scope>
 				<resourceData>Englisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84259"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--es"/>
 				</scope>
 				<resourceData>inglés</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>English</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84254"/>
-					<topicRef href="#topic84232"/>
+					<topicRef href="#xtm--1.0--language.xtm--fr"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
 				</scope>
 				<resourceData>anglais</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84241"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--fi"/>
 				</scope>
 				<resourceData>englanti</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84254">
+	<topic id="xtm--1.0--language.xtm--fr">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#fr"/>
 		<instanceOf>
-			<topicRef href="#topic84242"/>
+			<topicRef href="#core--language"/>
 		</instanceOf>
 		<name>
 			<value>French language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84249"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--sv"/>
 				</scope>
 				<resourceData>franska</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84260"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--de"/>
 				</scope>
 				<resourceData>Französisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84259"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--es"/>
 				</scope>
 				<resourceData>francés</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>French</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84254"/>
-					<topicRef href="#topic84232"/>
+					<topicRef href="#xtm--1.0--language.xtm--fr"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
 				</scope>
 				<resourceData>français</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84241"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--fi"/>
 				</scope>
 				<resourceData>ranska</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84225">
+	<topic id="processing.org">
 		<subjectIdentifier href="http://processing.org"/>
 		<instanceOf>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</instanceOf>
 		<name>
 			<value>Processing type</value>
 		</name>
 	</topic>
-	<topic id="topic84247">
+	<topic id="core--default-association">
 		<subjectIdentifier href="http://wandora.org/si/core/default-association"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-association"/>
 		<instanceOf>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</instanceOf>
 		<name>
 			<value>Default association</value>
 		</name>
 	</topic>
-	<topic id="topic84236">
+	<topic id="core--default-role-1">
 		<subjectIdentifier href="http://wandora.org/si/core/default-role-1"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-role-1"/>
 		<instanceOf>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</instanceOf>
 		<name>
 			<value>Default role 1</value>
 		</name>
 	</topic>
-	<topic id="topic84226">
+	<topic id="core-occurrence-type">
 		<subjectIdentifier href="http://wandora.org/si/core/occurrence-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/occurrencetype"/>
 		<instanceOf>
-			<topicRef href="#topic84244"/>
-			<topicRef href="#topic84237"/>
-			<topicRef href="#topic84229"/>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--association-type"/>
+			<topicRef href="#core--role"/>
+			<topicRef href="#core--content-type"/>
+			<topicRef href="#core--schema-type"/>
 		</instanceOf>
 		<name>
 			<value>Occurrence type</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Occurrence type</resourceData>
 			</variant>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
-	<topic id="topic84241">
+	<topic id="xtm--1.0--language.xtm--fi">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#fi"/>
 		<instanceOf>
-			<topicRef href="#topic84242"/>
+			<topicRef href="#core--language"/>
 		</instanceOf>
 		<name>
 			<value>Finnish language</value>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84249"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--sv"/>
 				</scope>
 				<resourceData>finska</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84260"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--de"/>
 				</scope>
 				<resourceData>Finnisch</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84259"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--es"/>
 				</scope>
 				<resourceData>finlandés</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84231"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--en"/>
 				</scope>
 				<resourceData>Finnish</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84254"/>
-					<topicRef href="#topic84232"/>
+					<topicRef href="#xtm--1.0--language.xtm--fr"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
 				</scope>
 				<resourceData>finnois</resourceData>
 			</variant>
 			<variant>
 				<scope>
-					<topicRef href="#topic84232"/>
-					<topicRef href="#topic84241"/>
+					<topicRef href="#xtm--1.0--core.xtm--display"/>
+					<topicRef href="#xtm--1.0--language.xtm--fi"/>
 				</scope>
 				<resourceData>suomi</resourceData>
 			</variant>
 		</name>
 	</topic>
-	<topic id="topic84248">
+	<topic id="xtm--1.0--core.xml--superclass-subclass">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"/>
 		<instanceOf>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</instanceOf>
 		<name>
 			<value>Superclass-Subclass</value>
 		</name>
 		<occurrence>
 			<type>
-				<topicRef href="#topic84234"/>
+				<topicRef href="#core--hide-level"/>
 			</type>
 			<scope>
-				<topicRef href="#topic84233"/>
+				<topicRef href="#core--lang-independent"/>
 			</scope>
 			<resourceData>1</resourceData>
 		</occurrence>
 	</topic>
 	<association>
 		<type>
-			<topicRef href="#topic84230"/>
+			<topicRef href="#core--role-class"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84238"/>
+			<topicRef href="#xtm--1.0--core.xtm--subclass"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84230"/>
+				<topicRef href="#core--role-class"/>
 			</type>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--schema-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84248"/>
+			<topicRef href="#xtm--1.0--core.xml--superclass-subclass"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84246"/>
+			<topicRef href="#xtm--1.0--core.xtm--superclass"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84248"/>
+			<topicRef href="#xtm--1.0--core.xml--superclass-subclass"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84229"/>
+				<topicRef href="#core--content-type"/>
 			</type>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--schema-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84229"/>
+				<topicRef href="#core--content-type"/>
 			</type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84248"/>
+			<topicRef href="#xtm--1.0--core.xml--superclass-subclass"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84238"/>
+			<topicRef href="#xtm--1.0--core.xtm--subclass"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84229"/>
+				<topicRef href="#core--content-type"/>
 			</type>
-			<topicRef href="#topic84229"/>
+			<topicRef href="#core--content-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84248"/>
+			<topicRef href="#xtm--1.0--core.xml--superclass-subclass"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84238"/>
+				<topicRef href="#xtm--1.0--core.xtm--subclass"/>
 			</type>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--schema-type"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84246"/>
+				<topicRef href="#xtm--1.0--core.xtm--superclass"/>
 			</type>
-			<topicRef href="#topic84235"/>
+			<topicRef href="#core--wandora-class"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84230"/>
+			<topicRef href="#core--role-class"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84246"/>
+			<topicRef href="#xtm--1.0--core.xtm--superclass"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84230"/>
+				<topicRef href="#core--role-class"/>
 			</type>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--schema-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84229"/>
+			<topicRef href="#core--content-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84226"/>
+				<topicRef href="#core-occurrence-type"/>
 			</type>
-			<topicRef href="#topic84234"/>
+			<topicRef href="#core--hide-level"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84229"/>
+				<topicRef href="#core--content-type"/>
 			</type>
-			<topicRef href="#topic84228"/>
+			<topicRef href="#core--schema-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84230"/>
+			<topicRef href="#core--role-class"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84230"/>
+			<topicRef href="#core--role-class"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84230"/>
+			<topicRef href="#core--role-class"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84230"/>
+			<topicRef href="#core--role-class"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84229"/>
+				<topicRef href="#core--content-type"/>
 			</type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84229"/>
+			<topicRef href="#core--content-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84237"/>
+			<topicRef href="#core--role"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84237"/>
+				<topicRef href="#core--role"/>
 			</type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</role>
 	</association>
 	<association>
 		<type>
-			<topicRef href="#topic84244"/>
+			<topicRef href="#core--association-type"/>
 		</type>
 		<role>
 			<type>
-				<topicRef href="#topic84244"/>
+				<topicRef href="#core--association-type"/>
 			</type>
-			<topicRef href="#topic84226"/>
+			<topicRef href="#core-occurrence-type"/>
 		</role>
 		<role>
 			<type>
-				<topicRef href="#topic84229"/>
+				<topicRef href="#core--content-type"/>
 			</type>
-			<topicRef href="#topic84229"/>
+			<topicRef href="#core--content-type"/>
 		</role>
 	</association>
 </topicMap>

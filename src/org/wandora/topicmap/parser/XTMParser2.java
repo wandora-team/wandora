@@ -46,6 +46,8 @@ import org.xml.sax.*;
 public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.ErrorHandler {
 
     public static final String OCCURRENCE_RESOURCE_REF_KEY = "topicmap.xtm2.convertOccurrenceResourceRefsToResourceDatas";
+    public static final String IMPORT_XML_IDENTIFIERS_KEY = "topicmap.xtm2.importIdentifiers";
+    public static final String ENSURE_UNIQUE_BASENAMES_KEY = "topicmap.xtm2.ensureUniqueBasenames";
     
     public static final int STATE_ROOT=0;
     public static final int STATE_TOPICMAP=1;
@@ -85,7 +87,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     public static boolean CONVERT_OCCURRENCE_RESOURCE_REF_TO_RESOURCE_DATA = true;
     public static boolean ENSURE_UNIQUE_BASENAMES = false;
-    public static boolean USE_XTM_ID_ATTRIBUTES = true;
+    public static boolean IMPORT_XML_IDENTIFIERS = false;
     
     
     protected TopicMap tm;
@@ -113,12 +115,25 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         if(w != null) {
             Options options = w.getOptions();
             setOccurrenceResourceRef2ResourceData(options.getBoolean(OCCURRENCE_RESOURCE_REF_KEY, CONVERT_OCCURRENCE_RESOURCE_REF_TO_RESOURCE_DATA));
+            setImportXmlIdentifiers(options.getBoolean(IMPORT_XML_IDENTIFIERS_KEY, IMPORT_XML_IDENTIFIERS));
+            setEnsureUniqueBasenames(options.getBoolean(ENSURE_UNIQUE_BASENAMES_KEY, ENSURE_UNIQUE_BASENAMES));
         }
     }
     
     
     public void setOccurrenceResourceRef2ResourceData(boolean f) {
         CONVERT_OCCURRENCE_RESOURCE_REF_TO_RESOURCE_DATA = f;
+    }
+    
+    
+    public void setImportXmlIdentifiers(boolean f) {
+        System.out.println("Set IMPORT_XML_IDENTIFIERS="+f);
+        IMPORT_XML_IDENTIFIERS = f;
+    }
+    
+    
+    public void setEnsureUniqueBasenames(boolean f) {
+        ENSURE_UNIQUE_BASENAMES = f;
     }
     
     
@@ -808,7 +823,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     protected Topic getOrCreateTopic(String si, String id) throws TopicMapException {
         Topic t=tm.getTopic(si);
         if(t==null) {
-            if(id != null && USE_XTM_ID_ATTRIBUTES) {
+            if(id != null && IMPORT_XML_IDENTIFIERS) {
                 t = tm.createTopic(hrefToId(id));
             }
             else {

@@ -71,8 +71,8 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         if(myDialog == null) {
             myDialog = new JDialog(wandora, true);
             myDialog.add(this);
-            myDialog.setSize(400,400);
-            myDialog.setTitle("Topic map import configuration");
+            myDialog.setSize(440,440);
+            myDialog.setTitle("Topic map import options");
             UIBox.centerWindow(myDialog, wandora);
         }
         loadConfiguration();
@@ -85,6 +85,8 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         
         // XTM2
         xtm2OccurrenceCheckBox.setSelected(o.getBoolean(XTMParser2.OCCURRENCE_RESOURCE_REF_KEY, false));
+        xtm2ImportIdentifiersCheckBox.setSelected(o.getBoolean(XTMParser2.IMPORT_XML_IDENTIFIERS_KEY, false));
+        xtm2EnsureUniqueBasenamesCheckBox.setSelected(o.getBoolean(XTMParser2.ENSURE_UNIQUE_BASENAMES_KEY, false));
         
         // LTM
         ltmAllowSpecialCharsInQNamesCheckBox.setSelected(o.getBoolean(LTMParser.OPTIONS_KEY_ALLOW_SPECIAL_CHARS_IN_QNAMES, LTMParser.ALLOW_SPECIAL_CHARS_IN_QNAMES));
@@ -97,6 +99,7 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         ltmOverwriteBasenamesCheckBox.setSelected(o.getBoolean(LTMParser.OPTIONS_KEY_OVERWRITE_BASENAME, LTMParser.OVERWRITE_BASENAME));
         ltmDebugCheckBox.setSelected(o.getBoolean(LTMParser.OPTIONS_KEY_DEBUG, LTMParser.debug));
         ltmMakeSIfromIDCheckBox.setSelected(o.getBoolean(LTMParser.OPTIONS_KEY_MAKE_SUBJECT_IDENTIFIER_FROM_ID, LTMParser.MAKE_SUBJECT_IDENTIFIER_FROM_ID));
+        ltmMakeTopicIDfromIDCheckBox.setSelected(o.getBoolean(LTMParser.OPTIONS_KEY_MAKE_TOPIC_ID_FROM_ID, LTMParser.MAKE_TOPIC_ID_FROM_ID));
     }
 
     
@@ -105,6 +108,8 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         
         // XTM2
         o.put(XTMParser2.OCCURRENCE_RESOURCE_REF_KEY, boxVal(xtm2OccurrenceCheckBox));
+        o.put(XTMParser2.IMPORT_XML_IDENTIFIERS_KEY, boxVal(xtm2ImportIdentifiersCheckBox));
+        o.put(XTMParser2.ENSURE_UNIQUE_BASENAMES_KEY, boxVal(xtm2EnsureUniqueBasenamesCheckBox));
         
         // LTM
         o.put(LTMParser.OPTIONS_KEY_ALLOW_SPECIAL_CHARS_IN_QNAMES, boxVal(ltmAllowSpecialCharsInQNamesCheckBox));
@@ -117,7 +122,7 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         o.put(LTMParser.OPTIONS_KEY_OVERWRITE_BASENAME, boxVal(ltmOverwriteBasenamesCheckBox));
         o.put(LTMParser.OPTIONS_KEY_DEBUG, boxVal(ltmDebugCheckBox));
         o.put(LTMParser.OPTIONS_KEY_MAKE_SUBJECT_IDENTIFIER_FROM_ID, boxVal(ltmMakeSIfromIDCheckBox));
-        
+        o.put(LTMParser.OPTIONS_KEY_MAKE_TOPIC_ID_FROM_ID, boxVal(ltmMakeTopicIDfromIDCheckBox));
     }
     
     
@@ -138,13 +143,15 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         formatTabbedPane = new SimpleTabbedPane();
-        xtm1Panel = new javax.swing.JPanel();
-        xtm1PanelInner = new javax.swing.JPanel();
-        xtm1Label = new SimpleLabel();
         xtm2Panel = new javax.swing.JPanel();
         xtm2PanelInner = new javax.swing.JPanel();
         xtm2Label = new SimpleLabel();
         xtm2OccurrenceCheckBox = new SimpleCheckBox();
+        xtm2ImportIdentifiersCheckBox = new SimpleCheckBox();
+        xtm2EnsureUniqueBasenamesCheckBox = new SimpleCheckBox();
+        xtm1Panel = new javax.swing.JPanel();
+        xtm1PanelInner = new javax.swing.JPanel();
+        xtm1Label = new SimpleLabel();
         ltmPanel = new javax.swing.JPanel();
         ltmPanelInner = new javax.swing.JPanel();
         ltmLabel = new SimpleLabel();
@@ -158,6 +165,7 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         ltmTrimBasenamesCheckBox = new SimpleCheckBox();
         ltmDebugCheckBox = new SimpleCheckBox();
         ltmMakeSIfromIDCheckBox = new SimpleCheckBox();
+        ltmMakeTopicIDfromIDCheckBox = new SimpleCheckBox();
         jtmPanel = new javax.swing.JPanel();
         jtmPanelInner = new javax.swing.JPanel();
         jtmLabel = new SimpleLabel();
@@ -167,6 +175,54 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         cancelButton = new SimpleButton();
 
         setLayout(new java.awt.GridBagLayout());
+
+        xtm2Panel.setLayout(new java.awt.GridBagLayout());
+
+        xtm2PanelInner.setLayout(new java.awt.GridBagLayout());
+
+        xtm2Label.setText("<html>XTM 2.0 format configuration options.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        xtm2PanelInner.add(xtm2Label, gridBagConstraints);
+
+        xtm2OccurrenceCheckBox.setText("<html>Convert resource reference occurrences to resource data occurrences. If unchecked Wandora converts resource reference occurrences to topics and associations.</html>");
+        xtm2OccurrenceCheckBox.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        xtm2PanelInner.add(xtm2OccurrenceCheckBox, gridBagConstraints);
+
+        xtm2ImportIdentifiersCheckBox.setText("<html>Import XML identifiers. If checked the parser injects XML id attributes into the topic's identifiers.</html>");
+        xtm2ImportIdentifiersCheckBox.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        xtm2PanelInner.add(xtm2ImportIdentifiersCheckBox, gridBagConstraints);
+
+        xtm2EnsureUniqueBasenamesCheckBox.setText("<html>Ensure unique basenames. If checked the parser adjusts topic's basename if the basename already exists in the topic map.</html>");
+        xtm2EnsureUniqueBasenamesCheckBox.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        xtm2PanelInner.add(xtm2EnsureUniqueBasenamesCheckBox, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 8);
+        xtm2Panel.add(xtm2PanelInner, gridBagConstraints);
+
+        formatTabbedPane.addTab("XTM2", xtm2Panel);
 
         xtm1Panel.setLayout(new java.awt.GridBagLayout());
 
@@ -182,35 +238,6 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         xtm1Panel.add(xtm1PanelInner, gridBagConstraints);
 
         formatTabbedPane.addTab("XTM1", xtm1Panel);
-
-        xtm2Panel.setLayout(new java.awt.GridBagLayout());
-
-        xtm2PanelInner.setLayout(new java.awt.GridBagLayout());
-
-        xtm2Label.setText("<html>XTM 2.0 format configuration options</html>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        xtm2PanelInner.add(xtm2Label, gridBagConstraints);
-
-        xtm2OccurrenceCheckBox.setText("<html>Convert resource reference occurrences to resource data occurrences. If unchecked Wandora converts resource reference occurrences to topics and associations.</html>");
-        xtm2OccurrenceCheckBox.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        xtm2PanelInner.add(xtm2OccurrenceCheckBox, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 8);
-        xtm2Panel.add(xtm2PanelInner, gridBagConstraints);
-
-        formatTabbedPane.addTab("XTM2", xtm2Panel);
 
         ltmPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -254,7 +281,7 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         ltmPanelInner.add(ltmOverwriteVariantNamesCheckBox, gridBagConstraints);
 
-        ltmOverwriteBasenamesCheckBox.setText("Overwrite existing base names.");
+        ltmOverwriteBasenamesCheckBox.setText("Overwrite existing basenames.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -278,11 +305,17 @@ public class TopicMapImportConfiguration extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         ltmPanelInner.add(ltmDebugCheckBox, gridBagConstraints);
 
-        ltmMakeSIfromIDCheckBox.setText("Make SI from ID");
+        ltmMakeSIfromIDCheckBox.setText("Make subject identifier from QName.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         ltmPanelInner.add(ltmMakeSIfromIDCheckBox, gridBagConstraints);
+
+        ltmMakeTopicIDfromIDCheckBox.setText("Make topic ID from QName.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        ltmPanelInner.add(ltmMakeTopicIDfromIDCheckBox, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -378,6 +411,7 @@ private void okButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
     private javax.swing.JCheckBox ltmForceUniqueBaseNamesCheckBox;
     private javax.swing.JLabel ltmLabel;
     private javax.swing.JCheckBox ltmMakeSIfromIDCheckBox;
+    private javax.swing.JCheckBox ltmMakeTopicIDfromIDCheckBox;
     private javax.swing.JCheckBox ltmNewOccurrenceForEachScopeTopicCheckBox;
     private javax.swing.JCheckBox ltmOverwriteBasenamesCheckBox;
     private javax.swing.JCheckBox ltmOverwriteVariantNamesCheckBox;
@@ -390,6 +424,8 @@ private void okButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:e
     private javax.swing.JLabel xtm1Label;
     private javax.swing.JPanel xtm1Panel;
     private javax.swing.JPanel xtm1PanelInner;
+    private javax.swing.JCheckBox xtm2EnsureUniqueBasenamesCheckBox;
+    private javax.swing.JCheckBox xtm2ImportIdentifiersCheckBox;
     private javax.swing.JLabel xtm2Label;
     private javax.swing.JCheckBox xtm2OccurrenceCheckBox;
     private javax.swing.JPanel xtm2Panel;

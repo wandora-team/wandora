@@ -47,6 +47,10 @@ public class TopicMapImpl extends TopicMap {
     private static int topicMapCounter=0; // for debugging (not thread safe)
     
     /**
+     * Indexes topics according to their id.
+     */
+    private HashMap<String, Topic> idIndex;
+    /**
      * Indexes topics according to their type.
      */
     private HashMap<Topic,Collection<Topic>> typeIndex;
@@ -94,30 +98,31 @@ public class TopicMapImpl extends TopicMap {
     }
     
     public TopicMapImpl() {
-        topicMapID=topicMapCounter++;
-        typeIndex=new LinkedHashMap<Topic,Collection<Topic>>();
-        subjectIdentifierIndex=new LinkedHashMap<Locator,Topic>();
-        subjectLocatorIndex=new LinkedHashMap<Locator,Topic>();
-        nameIndex=new LinkedHashMap<String,Topic>();
-        associationTypeIndex=new LinkedHashMap<Topic,Collection<Association>>();
-        topics=(Set<Topic>) Collections.synchronizedSet(new LinkedHashSet<Topic>());
-        associations=(Set<Association>) Collections.synchronizedSet(new LinkedHashSet<Association>());
-        trackDependent=false;
-        topicMapChanged=false;
-        topicMapListeners=new ArrayList<TopicMapListener>();
+        topicMapID = topicMapCounter++;
+        idIndex = new LinkedHashMap<String,Topic>(); 
+        typeIndex = new LinkedHashMap<Topic,Collection<Topic>>();
+        subjectIdentifierIndex = new LinkedHashMap<Locator,Topic>();
+        subjectLocatorIndex = new LinkedHashMap<Locator,Topic>();
+        nameIndex = new LinkedHashMap<String,Topic>();
+        associationTypeIndex = new LinkedHashMap<Topic,Collection<Association>>();
+        topics = (Set<Topic>) Collections.synchronizedSet(new LinkedHashSet<Topic>());
+        associations = (Set<Association>) Collections.synchronizedSet(new LinkedHashSet<Association>());
+        trackDependent = false;
+        topicMapChanged = false;
+        topicMapListeners = new ArrayList<TopicMapListener>();
     }
         
     @Override
     public void clearTopicMap() throws TopicMapException{
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        typeIndex=new LinkedHashMap<Topic,Collection<Topic>>();
-        subjectIdentifierIndex=new LinkedHashMap<Locator,Topic>();
-        subjectLocatorIndex=new LinkedHashMap<Locator,Topic>();
-        nameIndex=new LinkedHashMap<String,Topic>();
-        associationTypeIndex=new LinkedHashMap<Topic,Collection<Association>>();
-        topics=new LinkedHashSet<Topic>();
-        associations=new LinkedHashSet<Association>();
-        topicMapChanged=true;
+        typeIndex = new LinkedHashMap<Topic,Collection<Topic>>();
+        subjectIdentifierIndex = new LinkedHashMap<Locator,Topic>();
+        subjectLocatorIndex = new LinkedHashMap<Locator,Topic>();
+        nameIndex = new LinkedHashMap<String,Topic>();
+        associationTypeIndex = new LinkedHashMap<Topic,Collection<Association>>();
+        topics = new LinkedHashSet<Topic>();
+        associations = new LinkedHashSet<Association>();
+        topicMapChanged = true;
     }
     
     @Override
@@ -207,8 +212,15 @@ public class TopicMapImpl extends TopicMap {
     @Override
     public Topic createTopic(String id) throws TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        TopicImpl t=constructTopic(id);
-        topics.add(t);
+        Topic t = null;
+        if(idIndex.get(id) == null) {
+            t = constructTopic(id);
+            topics.add(t);
+            idIndex.put(t.getID(), t);
+        }
+        else {
+            t = idIndex.get(id);
+        }
         return t;
     }
     
@@ -217,6 +229,7 @@ public class TopicMapImpl extends TopicMap {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         TopicImpl t=constructTopic();
         topics.add(t);
+        idIndex.put(t.getID(), t);
 //        if(topicMapListener!=null) topicMapListener.topicChanged(t);
         return t;
     }

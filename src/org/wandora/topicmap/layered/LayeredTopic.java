@@ -267,7 +267,7 @@ public class LayeredTopic extends Topic {
         if(topics==null || topics.isEmpty()) return null;
         Topic t=topics.get(0);
         Layer l=layerStack.getLayer(t);
-        return "ID"+l.getName().hashCode()+"-"+t.getID();
+        return "L"+l.getName().hashCode()+"---"+t.getID();
     }
     
     /**

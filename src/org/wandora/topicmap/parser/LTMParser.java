@@ -39,8 +39,7 @@ import java.util.regex.*;
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.*;
 import org.wandora.utils.Options;
-import org.wandora.utils.UnicodeBOMInputStream;
-import org.wandora.utils.UnicodeBOMInputStream.BOM;
+
 
 
 
@@ -62,6 +61,7 @@ public class LTMParser {
     public static final String OPTIONS_KEY_OVERWRITE_BASENAME = OPTIONS_BASE_KEY+"overwriteBasename";
     public static final String OPTIONS_KEY_DEBUG = OPTIONS_BASE_KEY+"debug";
     public static final String OPTIONS_KEY_MAKE_SUBJECT_IDENTIFIER_FROM_ID = OPTIONS_BASE_KEY+"makeSIfromID";
+    public static final String OPTIONS_KEY_MAKE_TOPIC_ID_FROM_ID = OPTIONS_BASE_KEY+"makeTopicIDfromID";
     
     public static boolean ALLOW_SPECIAL_CHARS_IN_QNAMES = false;
     public static boolean NEW_OCCURRENCE_FOR_EACH_SCOPE = true;
@@ -75,6 +75,9 @@ public class LTMParser {
     public static boolean OVERWRITE_VARIANTS = true;
     public static boolean OVERWRITE_BASENAME = true;
     public static boolean OVERWRITE_SUBJECT_LOCATORS = false;
+    public static boolean MAKE_TOPIC_ID_FROM_ID = true;
+    
+    
 
     public static int MAX_SI_LEN = 99999;
     public static int MAX_NAME_LEN = 99999;
@@ -152,8 +155,8 @@ public class LTMParser {
         TRIM_BASENAMES = o.getBoolean(OPTIONS_KEY_TRIM_BASENAMES, TRIM_BASENAMES);
         OVERWRITE_VARIANTS = o.getBoolean(OPTIONS_KEY_OVERWRITE_VARIANTS, OVERWRITE_VARIANTS);
         OVERWRITE_BASENAME = o.getBoolean(OPTIONS_KEY_OVERWRITE_BASENAME, OVERWRITE_BASENAME);
-        debug = o.getBoolean(OPTIONS_KEY_DEBUG, debug);
         MAKE_SUBJECT_IDENTIFIER_FROM_ID = o.getBoolean(OPTIONS_KEY_MAKE_SUBJECT_IDENTIFIER_FROM_ID, MAKE_SUBJECT_IDENTIFIER_FROM_ID);
+        debug = o.getBoolean(OPTIONS_KEY_DEBUG, debug);
     }
     
 
@@ -177,7 +180,7 @@ public class LTMParser {
             if(file != null) {
                 if(!(file.exists() || file.canRead()) && currentFile != null) {
                     String absParentPath = currentFile.getParentFile().getAbsolutePath();
-                    logger.log("Using path from previous file: " + absParentPath + File.separator + file.getName());
+                    log("Using path from previous file: " + absParentPath + File.separator + file.getName());
                     file = new File(absParentPath + File.separator + file.getName());
                 }
                 if(file.exists() && file.canRead()) {
@@ -196,16 +199,16 @@ public class LTMParser {
                     if(previousFile != null) currentFile = previousFile;
                 }
                 else {
-                    logger.log("Warning: LTM import is unable to read file: " + file.getAbsolutePath());
+                    log("Warning: LTM import is unable to read file: " + file.getAbsolutePath());
                 }
             }
         }
         catch(Exception e) {
-            logger.log(e);
+            log(e);
         }
         long endTime = System.currentTimeMillis();
         long duration = endTime-startTime;
-        if(duration > 1000) logger.log("LTM import of '"+file.getAbsolutePath()+"' took "+duration+" ms.");
+        if(duration > 1000) log("LTM import of '"+file.getAbsolutePath()+"' took "+duration+" ms.");
     }
 
 
@@ -227,7 +230,7 @@ public class LTMParser {
 
         if(encoding != null) {
             if(!"utf-8".equalsIgnoreCase(encoding)) {
-                logger.log("Warning: Wandora's LTM import supports UTF-8 encoding only! Imported LTM document has '"+encoding+"' as encoding.");
+                log("Warning: Wandora's LTM import supports UTF-8 encoding only! Imported LTM document has '"+encoding+"' as encoding.");
             }
         }
 
@@ -238,7 +241,7 @@ public class LTMParser {
         postProcess();
         
         if(logger.forceStop()) {
-            logger.log("User has stopped LTM import!");
+            log("User has stopped LTM import!");
         }
     }
 
@@ -255,7 +258,7 @@ public class LTMParser {
         eatMeaningless();
         if(eat("#VERSION")) {
             version = parseString();
-            logger.log("Found LTM version info: "+version);
+            log("Found LTM version info: "+version);
         }
     }
 
@@ -265,16 +268,16 @@ public class LTMParser {
         while(directiveFound) {
             eatMeaningless();
             if(eat("#TOPICMAP")) {
-                logger.log("Warning: Wandora's LTM import does not handle #TOPICMAP directives!");
+                log("Warning: Wandora's LTM import does not handle #TOPICMAP directives!");
             }
             else if(eat("#MERGEMAP")) {
-                logger.log("Warning: Wandora's LTM import does not handle #MERGEMAP directives!");
+                log("Warning: Wandora's LTM import does not handle #MERGEMAP directives!");
             }
             else if(eat("#BASEURI")) {
                 eatMeaningless();
                 String uri = parseString();
                 if(uri != null && uri.length()>0) {
-                    logger.log("Base URI found '"+uri+"'.");
+                    log("Base URI found '"+uri+"'.");
                     baseuri = uri;
                 }
             }
@@ -283,13 +286,13 @@ public class LTMParser {
                 String filename = parseString();
                 if(! includes.contains(filename) ) {
                     includes.add(filename);
-                    if(debug) System.out.println("Including '" + filename + "' starts.");
+                    debug("Including '" + filename + "' starts.");
                     int oldLineCounter = lineCounter;
                     lineCounter = 1;
                     parse(new File(filename));
                     proceed = true;
                     lineCounter = oldLineCounter;
-                    if(debug) System.out.println("Including '" + filename + "' ends.");
+                    debug("Including '" + filename + "' ends.");
                 }
             }
             else if(eat("#PREFIX")) {
@@ -299,12 +302,12 @@ public class LTMParser {
                 if(eat('@')) {
                     String locator = parseString();
                     indicatorPrefixes.put(name, locator);
-                    logger.log("Prefix found '" + name + "' = '" + locator + "'");
+                    log("Prefix found '" + name + "' = '" + locator + "'");
                 }
                 else if(eat('%')) {
                     String identier = parseString();
                     locatorPrefixes.put(name, identier);
-                    logger.log("Prefix found '" + name + "' = '" + identier + "'");
+                    log("Prefix found '" + name + "' = '" + identier + "'");
                 }
             }
             else {
@@ -313,7 +316,7 @@ public class LTMParser {
         }
         if(baseuri == null) {
             baseuri = DEFAULT_BASE_URI;
-            logger.log("Found no base URI for topic map. Using default base '"+baseuri+"'.");
+            log("Found no base URI for topic map. Using default base '"+baseuri+"'.");
         }
     }
 
@@ -341,7 +344,7 @@ public class LTMParser {
                 if(eat('[')) {
                     Topic topic = parseTopic();
                     if(eat(']') == false) {
-                        if(debug) logger.log("Warning: Parse error while processing topic '"+ topic +"'!");
+                        debug("Warning: Parse error while processing topic '"+ topic +"'!");
                         parseUntil(']');
                     }
                     if(topic != null) {
@@ -385,11 +388,11 @@ public class LTMParser {
             eatMeaningless();
             if(n++ % 1000 == 0) logger.hlog("Importing LTM topic map. Imported " + numberOfTopics + " topics, " + numberOfAssociations + " associations and " + numberOfOccurrences +" occurrences.");
         }
-        logger.log("Found total " + numberOfTopics + " topics, " + numberOfAssociations + " associations and " + numberOfOccurrences +" occurrences.");
-        logger.log("Real number of topics, associations and occurrences in topic map may be smaller due to merges.");
-        if(numberOfFailedTopics > 0) logger.log("Found also " + numberOfFailedTopics + " broken topics.");
-        if(numberOfFailedAssociations > 0) logger.log("Found also " + numberOfFailedAssociations + " broken associations.");
-        if(numberOfFailedOccurrences > 0) logger.log("Found also " + numberOfFailedOccurrences + " broken occurrences.");
+        log("Found total " + numberOfTopics + " topics, " + numberOfAssociations + " associations and " + numberOfOccurrences +" occurrences.");
+        log("Real number of topics, associations and occurrences in topic map may be smaller due to merges.");
+        if(numberOfFailedTopics > 0) log("Found also " + numberOfFailedTopics + " broken topics.");
+        if(numberOfFailedAssociations > 0) log("Found also " + numberOfFailedAssociations + " broken associations.");
+        if(numberOfFailedOccurrences > 0) log("Found also " + numberOfFailedOccurrences + " broken occurrences.");
     }
 
 
@@ -399,7 +402,7 @@ public class LTMParser {
         try {
             String unrecognized = parseUntil('\n');
             eatMeaningless();
-            logger.log("Warning: Unrecognized element: \"" + unrecognized + "\" near line number "+lineCounter+", after topic number "+numberOfTopics+" and association number " + numberOfAssociations);
+            log("Warning: Unrecognized element: \"" + unrecognized + "\" near line number "+lineCounter+", after topic number "+numberOfTopics+" and association number " + numberOfAssociations);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -408,7 +411,7 @@ public class LTMParser {
 
     
     private void postProcess() {
-        if(debug) logger.log("Post processing topics. Removing temporary subject identifiers.");
+        debug("Post processing topics. Removing temporary subject identifiers.");
         if(topicMap != null) {
             try {
                 Iterator<Topic> topics = topicMap.getTopics();
@@ -451,7 +454,7 @@ public class LTMParser {
             boolean foundWithSL = false;
             boolean foundWithQName = false;
 
-            if(debug) logger.log("Topic found: " + topicQName.qname);
+            debug("Topic found: " + topicQName.qname);
             ArrayList<Topic> topicTypes = null;
             ArrayList<Locator> topicTypeSIs = null;
             if(eat(':')) { 
@@ -474,7 +477,7 @@ public class LTMParser {
                 if(baseNames.size() > 0) {
                     basename = (Basename) baseNames.iterator().next();
                     if(baseNames.size() > 1) {
-                        if(debug) logger.log("Warning: Wandora supports only one base name per topic!");
+                        debug("Warning: Wandora supports only one base name per topic!");
                     }
                     if(basename != null) {
                         if(basename.basename != null) {
@@ -527,7 +530,7 @@ public class LTMParser {
             else {
                 if(topic != null && topic.getOneSubjectIdentifier() == null) {
                     topic.addSubjectIdentifier(new Locator(STATIC_BASE_URI+System.currentTimeMillis()+"-"+Math.floor(Math.random()*999999)));
-                    logger.log("Warning: Missing subject identifier. Adding temporary subject identifier to topic.");
+                    log("Warning: Missing subject identifier. Adding temporary subject identifier to topic.");
                 }
             }
 
@@ -581,7 +584,7 @@ public class LTMParser {
                             topicType = topicMap.getTopic(topicTypeSI);
                             if(topicType != null && !topic.isOfType(topicType)) {
                                 topic.addType(topicType);
-                                if(debug) logger.log("Found type for " + topic);
+                                debug("Found type for " + topic);
                             }
                         }
                     }
@@ -851,6 +854,9 @@ public class LTMParser {
 
 
     private boolean parseOccurrence() throws IOException, TopicMapException {
+        
+        debug("Parsing occurrence");
+        
         Topic occurrenceTopic = null;
         ArrayList scope = null;
         Topic occurrenceType = null;
@@ -858,12 +864,15 @@ public class LTMParser {
         boolean occurrenceSucceed = false;
 
         occurrenceTopic = parseQTopic();
+        debug("Parsed occurrence topic: "+occurrenceTopic);
         eat(',');
         occurrenceType = parseQTopic();
+        debug("Parsed occurrence type: "+occurrenceType);
         eat(',');
         String resource = parseResource();
         eat('}');
         scope = parseScope();
+        debug("Parsed occurrence scope: "+scope);
         if(eat('~')) {
             reifyId = parseQName();
             // TODO: Handler for reifiers!
@@ -998,7 +1007,7 @@ public class LTMParser {
             qname = parseQName();
             if(qname != null) qnames.add(qname);
             else ready = true;
-            if(debug) logger.log("Found qname \"" + qname.qname + "\"");
+            debug("Found qname \"" + qname.qname + "\"");
         }
         while(!ready);
         return qnames;
@@ -1063,8 +1072,8 @@ public class LTMParser {
                 }
             } while(!ready && len < MAX_NAME_LEN);
         }
-        if(sb.length() > 0) if(debug) logger.log("Name found \"" + sb.toString() + "\"");
-        if(len >= MAX_NAME_LEN) logger.log("Warning: Name length > "+ MAX_NAME_LEN);
+        if(sb.length() > 0) debug("Name found \"" + sb.toString() + "\"");
+        if(len >= MAX_NAME_LEN) log("Warning: Name length > "+ MAX_NAME_LEN);
 
         return sb.toString();
     }
@@ -1078,7 +1087,7 @@ public class LTMParser {
         if(proceed) {
             boolean ready = false;
             int c = 0;
-            eatMeaningless(true);
+            eatMeaningless(false);
             do {
                 in.mark(1);
                 c = in.read();
@@ -1097,8 +1106,8 @@ public class LTMParser {
             }
             while(!ready && len < MAX_NAME_LEN);
         }
-        if(sb.length() > 0) if(debug) logger.log("Name found \"" + sb.toString() + "\"");
-        if(len >= MAX_NAME_LEN) logger.log("Warning: Name length > "+ MAX_NAME_LEN);
+        if(sb.length() > 0) debug("Name found \"" + sb.toString() + "\"");
+        if(len >= MAX_NAME_LEN) log("Warning: Name length > "+ MAX_NAME_LEN);
 
         return sb.toString();
     }
@@ -1159,8 +1168,8 @@ public class LTMParser {
                 }
             }
         }
-        if(debug) logger.log("String found \"" + sb.toString() + "\"");
-        if(len >= MAX_STRING_LEN) logger.log("Warning: String length > "+ MAX_STRING_LEN);
+        debug("String found \"" + sb.toString() + "\"");
+        if(len >= MAX_STRING_LEN) log("Warning: String length > "+ MAX_STRING_LEN);
 
         return sb.toString();
     }
@@ -1216,7 +1225,7 @@ public class LTMParser {
         }
         while(!ready && c != -1);
         if(c == -1) {
-            if(debug) logger.log("Warning: Unexpected end of occurrence data!");
+            debug("Warning: Unexpected end of occurrence data.");
             proceed = false;
         }
         return sb.toString();
@@ -1243,7 +1252,7 @@ public class LTMParser {
                 return true;
             }
             catch(Exception e) {
-                if(debug) logger.log("Warning: Unexpected end of comment! Missing ending!");
+                debug("Warning: Unexpected end of comment. Missing ending.");
                 proceed = false;
                 return true;
             }
@@ -1398,7 +1407,7 @@ public class LTMParser {
             }
         }
         while(cont);
-        // if(debug) if(n>0) logger.log("  Number of eaten meaningless: " + n);
+        // if(n>0) debug("  Number of eaten meaningless: " + n);
         in.reset();
         return spacesFound;
     }
@@ -1453,6 +1462,7 @@ public class LTMParser {
 
         if(locatorString.charAt(0) == '#' && ltmuri != null) {
             locatorString = ltmuri + locatorString;
+            locator = new Locator(locatorString);
         }
         else {
             Matcher prefixPatternMatcher = prefixPattern.matcher(locatorString);
@@ -1472,10 +1482,15 @@ public class LTMParser {
                 locator = new Locator(locatorString);
             }
         }
-        if(locator.toExternalForm().length() > MAX_SI_LEN) {
-            locator = new Locator(locator.toExternalForm().substring(0, MAX_SI_LEN));
+        if(locator != null) {
+            if(locator.toExternalForm().length() > MAX_SI_LEN) {
+                locator = new Locator(locator.toExternalForm().substring(0, MAX_SI_LEN));
+            }
+            debug("New locator: "+locator.toExternalForm());
         }
-        if(debug) logger.log("New locator: "+locator.toExternalForm());
+        else {
+            debug("Warning: Returning null as a locator.");
+        }
         return locator;
     }
 
@@ -1500,19 +1515,51 @@ public class LTMParser {
         }
 
         if(t==null) {
-            t=topicMap.createTopic(qname);
+            if(MAKE_TOPIC_ID_FROM_ID) {
+                t=topicMap.createTopic(qname);
+            }
+            else {
+                t=topicMap.createTopic();
+            }
+            
             t.addSubjectIdentifier(buildTempLocator(qname));
-            if(MAKE_SUBJECT_IDENTIFIER_FROM_ID) t.addSubjectIdentifier(buildLocator(qname));
-            if(MAKE_BASENAME_FROM_ID && t.getBaseName() == null) t.setBaseName(qname);
-            if(debug) logger.log("New topic created: " +t);
+            
+            if(MAKE_SUBJECT_IDENTIFIER_FROM_ID) {
+                t.addSubjectIdentifier(buildLocator(qname));
+            }
+            if(MAKE_BASENAME_FROM_ID && t.getBaseName() == null) {
+                t.setBaseName(qname);
+            }
+            debug("New topic created: " +t);
         }
         return t;
     }
 
+    
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------- LOGS AND DEBUGGING ---
+    // ---------------------------------------------------------------------
+    
+
+    protected void debug(String msg) {
+        if(debug && logger != null) {
+            logger.log(msg);
+        }
+    }
+    
+    
+    protected void log(String msg) {
+        if(logger != null) {
+            logger.log(msg);
+        }
+    }
 
 
-
-
+    protected void log(Exception e) {
+        if(logger != null) {
+            logger.log(e);
+        }
+    }
 
 
     // ---------------------------------------------------------------------
