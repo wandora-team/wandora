@@ -118,14 +118,14 @@ public class RDFExport extends AbstractExportTool {
         PrintStream writer = new PrintStream(out);
         exportHeader(writer);
 
-        logger.log("Exporting topics");
+        logger.log("Exporting topics.");
 
         Iterator<Topic> topics=tm.getTopics();
         while(topics.hasNext()){
             Topic t=topics.next();
             exportTopic(writer,t);
         }
-        logger.log("Exporting associations");
+        logger.log("Exporting associations.");
         Iterator<Association> associations=tm.getAssociations();
         while(associations.hasNext()){
             Association a=associations.next();

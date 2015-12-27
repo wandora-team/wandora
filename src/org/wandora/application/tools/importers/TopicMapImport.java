@@ -121,8 +121,11 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
             }
             
             TopicMap map = null;
+            boolean checkConsistency = false;
+            
             if(directMerge) {
                 map = solveContextTopicMap(wandora, getContext());
+                checkConsistency = true;
             }
             else {
                 map = new org.wandora.topicmap.memory.TopicMapImpl();
@@ -135,7 +138,7 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
                 map.importJTM(inputStream, getCurrentLogger());
             }
             else {
-                map.importXTM(inputStream, getCurrentLogger());
+                map.importXTM(inputStream, getCurrentLogger(), checkConsistency);
             }
 
             if(!directMerge) {
@@ -143,8 +146,9 @@ public class TopicMapImport extends AbstractImportTool implements WandoraTool {
                     createNewLayer(map, streamName, wandora);
                 }
                 else {
-                    log("Merging '" + streamName + "'.");
-                    solveContextTopicMap(wandora, getContext()).mergeIn(map);
+                    TopicMap contextTopicMap = solveContextTopicMap(wandora, getContext());
+                    log("Merging '"+ streamName +"'.");
+                    contextTopicMap.mergeIn(map);
                 }
             }
         }

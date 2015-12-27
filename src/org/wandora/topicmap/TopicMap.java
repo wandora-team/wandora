@@ -187,6 +187,7 @@ public abstract class TopicMap implements TopicMapLogger {
      * map using copyAssociationIn.
      */ 
     public abstract void copyTopicAssociationsIn(Topic t) throws TopicMapException ;
+    
     /**
      * Merges the contents of the given topic map in this topic map. At least one of
      * mergeIn(TopicMap) or mergeIn(TopicMap,TopicMapLogger) must be overridden as
@@ -195,6 +196,7 @@ public abstract class TopicMap implements TopicMapLogger {
     public void mergeIn(TopicMap tm) throws TopicMapException {
         mergeIn(tm,this);
     }
+    
     /**
      * Merges the contents of the given topic map in this topic map. At least one of
      * mergeIn(TopicMap) or mergeIn(TopicMap,TopicMapLogger) must be overridden as
@@ -325,6 +327,7 @@ public abstract class TopicMap implements TopicMapLogger {
     public void checkAssociationConsistency() throws TopicMapException {
         checkAssociationConsistency(getLogger());
     }
+    
     /**
      * Checks association consistency and fixes any inconsistencies. Two
      * associations are said to be inconsistent if they have the same type and

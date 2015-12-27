@@ -431,6 +431,9 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
                 String streamNamePart = streamName.substring(streamName.lastIndexOf("\\")+1);
                 if(streamNamePart.length() > 0) layerName = streamNamePart;
             }
+            else if(streamName.length() > 0) {
+                layerName = streamName;
+            }
         }
         
         LayerStack layerStack = wandora.getTopicMap();

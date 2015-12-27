@@ -40,8 +40,8 @@ import java.util.regex.*;
 public class TopicMapImpl extends TopicMap {
     
 //    private TopicMapListener topicMapListener;
-    private ArrayList<TopicMapListener> topicMapListeners;
-    private ArrayList<TopicMapListener> disabledListeners;
+    private List<TopicMapListener> topicMapListeners;
+    private List<TopicMapListener> disabledListeners;
     
     private int topicMapID; // for debugging;
     private static int topicMapCounter=0; // for debugging (not thread safe)
@@ -49,27 +49,27 @@ public class TopicMapImpl extends TopicMap {
     /**
      * Indexes topics according to their id.
      */
-    private HashMap<String, Topic> idIndex;
+    private Map<String, Topic> idIndex;
     /**
      * Indexes topics according to their type.
      */
-    private HashMap<Topic,Collection<Topic>> typeIndex;
+    private Map<Topic,Collection<Topic>> typeIndex;
     /**
      * Indexes topics according to subject identifiers.
      */
-    private HashMap<Locator,Topic> subjectIdentifierIndex;
+    private Map<Locator,Topic> subjectIdentifierIndex;
     /**
      * Indexes topics according to subject locators.
      */
-    private HashMap<Locator,Topic> subjectLocatorIndex;
+    private Map<Locator,Topic> subjectLocatorIndex;
     /**
      * Indexes topics according to base names.
      */
-    private HashMap<String,Topic> nameIndex;
+    private Map<String,Topic> nameIndex;
     /**
      * Indexes associations according to their type.
      */
-    private HashMap<Topic,Collection<Association>> associationTypeIndex;
+    private Map<Topic,Collection<Association>> associationTypeIndex;
     
     /**
      * All topics in this topic map.
@@ -121,8 +121,8 @@ public class TopicMapImpl extends TopicMap {
         subjectLocatorIndex = new LinkedHashMap<Locator,Topic>();
         nameIndex = new LinkedHashMap<String,Topic>();
         associationTypeIndex = new LinkedHashMap<Topic,Collection<Association>>();
-        topics = new LinkedHashSet<Topic>();
-        associations = new LinkedHashSet<Association>();
+        topics = (Set<Topic>) Collections.synchronizedSet(new LinkedHashSet<Topic>());
+        associations = (Set<Association>) Collections.synchronizedSet(new LinkedHashSet<Association>());
         topicMapChanged = true;
     }
     
@@ -147,22 +147,24 @@ public class TopicMapImpl extends TopicMap {
     public void checkAssociationConsistency(TopicMapLogger logger) throws TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         ArrayList<Association> clonedAssociations = new ArrayList<Association>();
-        for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
-            clonedAssociations.add(iter.next());
+        clonedAssociations.addAll(associations);
+        if(logger != null) {
+            System.out.println("associations.size=="+associations.size());
+            int s = clonedAssociations.size();
+            logger.setProgressMax(s);
         }
-        int s = clonedAssociations.size();
-        logger.setProgressMax(s);
-        Association a = null;
         AssociationImpl ai = null;
-        logger.log("Checking association consistency of memory topic map.");
-        for(int i=0; i<s; i++) {
-            logger.setProgress(i);
-            a = clonedAssociations.get(i);
+        int i=0;
+        for(Association a : clonedAssociations) {
+            if(logger != null) {
+                logger.setProgress(i++);
+            }
             if(a != null && !a.isRemoved() && a instanceof AssociationImpl) {
                 ai = (AssociationImpl) a;
                 ai.checkRedundancy();
             }
         }
+        System.out.println("associations.size=="+associations.size());
     }
     
     @Override
@@ -327,7 +329,7 @@ public class TopicMapImpl extends TopicMap {
     @Override
     public Collection getAssociationsOfType(Topic type) throws TopicMapException {
         if(type == null) return new ArrayList();
-        Collection s=associationTypeIndex.get(type);
+        Collection<Association> s=associationTypeIndex.get(type);
         if(s==null) return new HashSet();
         else return s;
     }    
@@ -365,8 +367,9 @@ public class TopicMapImpl extends TopicMap {
         Topic nt=getTopic(t.getSubjectIdentifiers());
         if(nt==null && t.getBaseName()!=null) nt=getTopicWithBaseName(t.getBaseName());
         if(nt==null && t.getSubjectLocator()!=null) nt=getTopicBySubjectLocator(t.getSubjectLocator());
+        if(nt==null && idIndex.containsKey(t.getID())) nt=idIndex.get(t.getID());
         if(nt==null) {
-            nt=createTopic();
+            nt=createTopic(t.getID());
         }
 
         boolean newer=(t.getEditTime()>=nt.getEditTime());
@@ -448,11 +451,9 @@ public class TopicMapImpl extends TopicMap {
         
         Association na=createAssociation(ntype);
         
-        HashMap<Topic,Topic> players=new HashMap<Topic,Topic>();
+        HashMap<Topic,Topic> players = new LinkedHashMap<Topic,Topic>();
         
-        Iterator iter=a.getRoles().iterator();
-        while(iter.hasNext()){
-            Topic role=(Topic)iter.next();
+        for(Topic role : a.getRoles()) {
             Topic nrole = null;
             if(role.getSubjectIdentifiers().isEmpty()) {
                 System.out.println("Warning, topic has no subject identifiers. Creating default SI!");
@@ -461,7 +462,9 @@ public class TopicMapImpl extends TopicMap {
             else {
                 nrole=getTopic((Locator)role.getSubjectIdentifiers().iterator().next());
             }
-            if(nrole==null) nrole=copyTopicIn(role,false);
+            if(nrole==null) {
+                nrole=copyTopicIn(role,false);
+            }
             Topic player=a.getPlayer(role);
             Topic nplayer = null;
             if(player.getSubjectIdentifiers().isEmpty()) {
@@ -551,14 +554,14 @@ public class TopicMapImpl extends TopicMap {
                 e.printStackTrace();
             }
         }
-//        System.out.println("merged "+tcount+" topics and "+acount+" associations");
+        // System.out.println("merged "+tcount+" topics and "+acount+" associations");
         iter=endpoints.iterator();
         while(iter.hasNext()){
             TopicImpl t=(TopicImpl)iter.next();
             if(t != null) t.removeDuplicateAssociations();
         }
-        
     }
+    
     
     @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
@@ -619,13 +622,13 @@ public class TopicMapImpl extends TopicMap {
     public void setAssociationType(Association a,Topic type,Topic oldtype) throws TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         if(oldtype!=null) { // note: old type can be null only when setting the initial type
-            Collection s=associationTypeIndex.get(oldtype);
+            Collection<Association> s=associationTypeIndex.get(oldtype);
             if(s!=null){
                 s.remove(a);
             }
         }
         if(type!=null){ // note: type can be null only when destroying association
-            Collection s=associationTypeIndex.get(type);
+            Collection<Association> s=associationTypeIndex.get(type);
             if(s==null) {
                 s=new LinkedHashSet();
                 associationTypeIndex.put(type,s);

@@ -32,6 +32,7 @@ package org.wandora.topicmap.memory;
 import org.wandora.topicmap.*;
 import java.util.*;
 import org.wandora.utils.Tuples;
+import org.wandora.utils.Tuples.T2;
 
 
 /**
@@ -42,14 +43,14 @@ public class TopicImpl extends Topic {
     
     private TopicMapImpl topicMap;
     
-    private HashMap<Topic,HashMap<Topic,String>> data;
+    private Map<Topic,Map<Topic,String>> data;
     private Set<Topic> types;
     private Set<Association> associations;
-    private HashMap<Topic,HashMap<Topic,String>> associationIndex;
+    private Map<Topic,Map<Topic,Collection<Association>>> associationIndex;
     private String baseName;
     private Locator subjectLocator;
     private Set<Locator> subjectIdentifiers;
-    private HashMap<Set<Topic>,String> variants;
+    private Map<Set<Topic>,String> variants;
     
     private Set<Topic> dataTypeIndex;
     private Set<DataVersionIndexWrapper> dataVersionIndex;
@@ -58,7 +59,7 @@ public class TopicImpl extends Topic {
     private Set<Association> roleTypeIndex;
     private Set<Topic> variantScopeIndex;
     
-    private Set dependentTopics;
+    private Set<Topic> dependentTopics;
     
     private String id;
     
@@ -68,8 +69,8 @@ public class TopicImpl extends Topic {
     private long editTime;
     private long dependentEditTime;
     
-    private HashMap dispNameCache;
-    private HashMap sortNameCache;
+    private Map<String,String> dispNameCache;
+    private Map<String,String> sortNameCache;
     
     
     /** Creates a new instance of TopicImpl */
@@ -121,7 +122,7 @@ public class TopicImpl extends Topic {
     
     @Override
     public String getDisplayName(String lang) throws TopicMapException {
-        if(dispNameCache.containsKey(lang)) return (String)dispNameCache.get(lang);
+        if(dispNameCache.containsKey(lang)) return dispNameCache.get(lang);
         String name=super.getDisplayName(lang);
         dispNameCache.put(lang,name);
         return name;
@@ -131,7 +132,7 @@ public class TopicImpl extends Topic {
     @Override
     public String getSortName(String lang) throws TopicMapException {
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        if(sortNameCache.containsKey(lang)) return (String)sortNameCache.get(lang);
+        if(sortNameCache.containsKey(lang)) return sortNameCache.get(lang);
         String name=super.getSortName(lang);
         sortNameCache.put(lang,name);
         return name;
@@ -163,7 +164,7 @@ public class TopicImpl extends Topic {
         }
         ((TopicImpl)type).addedAsDataType(this);
         ((TopicImpl)version).addedAsDataVersion(this,type);
-        HashMap t=data.get(type);
+        Map<Topic,String> t=data.get(type);
         if(t==null){
             t=new LinkedHashMap();
             data.put(type,t);
@@ -172,7 +173,9 @@ public class TopicImpl extends Topic {
         boolean changed=( o==null || !o.equals(value) );
         dependentTopics=null;
         updateEditTime();
-        if(changed) topicMap.topicDataChanged(this,type,version,value,(String)o);
+        if(changed) {
+            topicMap.topicDataChanged(this,type,version,value,(String)o);
+        }
     }
     
     
@@ -181,7 +184,7 @@ public class TopicImpl extends Topic {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         ((TopicImpl)type).addedAsDataType(this);
-        HashMap t=data.get(type);
+        Map<Topic,String> t=data.get(type);
         if(t==null){
             t=new LinkedHashMap();
             data.put(type,t);
@@ -195,7 +198,9 @@ public class TopicImpl extends Topic {
             ((TopicImpl)version).addedAsDataVersion(this,type);
             Object o=t.put(version,value);
             boolean changed=( o==null || !o.equals(value) );
-            if(changed) topicMap.topicDataChanged(this,type,version,value,(String)o);
+            if(changed) {
+                topicMap.topicDataChanged(this,type,version,value,(String)o);
+            }
         }
         dependentTopics=null;
         updateEditTime();
@@ -208,15 +213,17 @@ public class TopicImpl extends Topic {
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         Topic t=topicMap.getTopic(l);
         boolean changed=false;
-        if(t!=null && t!=this){
+        if(t!=null && t!=this) {
             mergeIn(t);
         }
-        else{
+        else {
             topicMap.addTopicSubjectIdentifier(this,l);
             changed=subjectIdentifiers.add(l);
         }
         updateEditTime();
-        if(changed) topicMap.topicSubjectIdentifierChanged(this,l,null);
+        if(changed) {
+            topicMap.topicSubjectIdentifierChanged(this,l,null);
+        }
     }
     
     
@@ -229,7 +236,9 @@ public class TopicImpl extends Topic {
         boolean changed=types.add(t);
         dependentTopics=null;
         updateEditTime();
-        if(changed) topicMap.topicTypeChanged(this,t,null);        
+        if(changed) {
+            topicMap.topicTypeChanged(this,t,null);
+        }        
     }
     
     
@@ -241,15 +250,14 @@ public class TopicImpl extends Topic {
     
     @Override
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
-        HashMap s = associationIndex.get(type);
-        if(s==null) return new HashSet();
-//        else return s.values();
-        else{
-            Set as=Collections.synchronizedSet(new LinkedHashSet());
-            Iterator iter=s.entrySet().iterator();
-            while(iter.hasNext()){
-                Map.Entry e=(Map.Entry)iter.next();
-                as.addAll((Collection)e.getValue());
+        Map<Topic,Collection<Association>> s = associationIndex.get(type);
+        if(s==null) {
+            return new HashSet();
+        }
+        else {
+            Set as = Collections.synchronizedSet(new LinkedHashSet());
+            for(Topic role : s.keySet()) {
+                as.addAll(s.get(role));
             }
             return as;
         }
@@ -258,12 +266,18 @@ public class TopicImpl extends Topic {
     
     @Override
     public Collection<Association> getAssociations(Topic type, Topic role) throws TopicMapException {
-        HashMap s=associationIndex.get(type);
-        if(s==null) return new HashSet();
+        Map<Topic,Collection<Association>> s = associationIndex.get(type);
+        if(s==null) {
+            return new HashSet();
+        }
         else {
-            Collection s2=(Collection)s.get(role);
-            if(s2==null) return new HashSet();
-            else return s2;
+            Collection<Association> s2 = s.get(role);
+            if(s2==null) {
+                return new HashSet();
+            }
+            else {
+                return s2;
+            }
         }
     }
     
@@ -276,20 +290,20 @@ public class TopicImpl extends Topic {
     
     @Override
     public String getData(Topic type, Topic version) throws TopicMapException {
-        HashMap t=data.get(type);
+        Map<Topic,String> t=data.get(type);
         if(t==null) return null;
-        else return (String)t.get(version);
+        else return t.get(version);
     }
     
     
     @Override
     public Hashtable getData(Topic type) throws TopicMapException {
-        HashMap t=data.get(type);
+        Map<Topic,String> t = data.get(type);
         if(t==null) {
             return new Hashtable();
         }
         else {
-            Hashtable ht = new Hashtable();
+            Hashtable<Topic,String> ht = new Hashtable();
             ht.putAll(t);
             return ht;
         }
@@ -336,15 +350,12 @@ public class TopicImpl extends Topic {
     public void removeData(Topic type) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        HashMap t=data.remove(type);
+        Map<Topic,String> t = data.remove(type);
         ((TopicImpl)type).removedFromDataType(this);
-        if(t!=null){
-            Iterator iter=t.entrySet().iterator();
-            while(iter.hasNext()){
-                Map.Entry e=(Map.Entry)iter.next();
-                Topic version=(Topic)e.getKey();
+        if(t != null) {
+            for(Topic version : t.keySet()) {
                 ((TopicImpl)version).removedFromDataVersion(this,type);
-                topicMap.topicDataChanged(this,type,version,null,(String)e.getValue());
+                topicMap.topicDataChanged(this, type, version, null, t.get(version));
             }
         }
         dependentTopics=null;
@@ -356,8 +367,8 @@ public class TopicImpl extends Topic {
     public void removeData(Topic type, Topic version) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        HashMap t=data.get(type);
-        if(t==null) {
+        Map<Topic,String> t = data.get(type);
+        if(t == null) {
             return;
         }
         ((TopicImpl)version).removedFromDataVersion(this,type);
@@ -367,7 +378,9 @@ public class TopicImpl extends Topic {
             ((TopicImpl)type).removedFromDataType(this);
         }
         boolean changed=(o!=null);
-        if(changed) topicMap.topicDataChanged(this,type,version,null,(String)o);
+        if(changed) {
+            topicMap.topicDataChanged(this,type,version,null,(String)o);
+        }
         dependentTopics=null;
         updateEditTime();
     }
@@ -378,9 +391,11 @@ public class TopicImpl extends Topic {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         topicMap.removeTopicSubjectIdentifier(this,l);
-        boolean changed=subjectIdentifiers.remove(l);
+        boolean changed = subjectIdentifiers.remove(l);
         updateEditTime();
-        if(changed) topicMap.topicSubjectIdentifierChanged(this,null,l);
+        if(changed) {
+            topicMap.topicSubjectIdentifierChanged(this,null,l);
+        }
     }
     
     
@@ -393,7 +408,9 @@ public class TopicImpl extends Topic {
         ((TopicImpl)t).removedFromTopicType(this);
         dependentTopics=null;
         updateEditTime();
-        if(changed) topicMap.topicTypeChanged(this,null,t);
+        if(changed) {
+            topicMap.topicTypeChanged(this,null,t);
+        }
     }
     
     
@@ -405,14 +422,16 @@ public class TopicImpl extends Topic {
         if(name!=null) t=topicMap.getTopicWithBaseName(name);
         String old=baseName;
         topicMap.setTopicName(this,name,baseName);
-        boolean changed=( (baseName!=null || name!=null) && ( baseName==null || name==null || !baseName.equals(name) ) );
+        boolean changed = ( (baseName!=null || name!=null) && ( baseName==null || name==null || !baseName.equals(name) ) );
         baseName=name;
-        if(t!=null && t!=this){
+        if(t!=null && t!=this) {
             mergeIn(t);
         }
         updateEditTime();
         clearNameCaches();
-        if(changed) topicMap.topicBaseNameChanged(this,name,old);
+        if(changed) {
+            topicMap.topicBaseNameChanged(this,name,old);
+        }
     }
     
     
@@ -430,7 +449,9 @@ public class TopicImpl extends Topic {
             mergeIn(t);
         }
         updateEditTime();
-        if(changed) topicMap.topicSubjectLocatorChanged(this,l,old);
+        if(changed) {
+            topicMap.topicSubjectLocatorChanged(this,l,old);
+        }
     }
     
     
@@ -461,21 +482,17 @@ public class TopicImpl extends Topic {
 
         removed=true;
         
-        ArrayList temp=new ArrayList();
-        temp.addAll(associations);
-        Iterator iter=temp.iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
+        ArrayList<Association> tempAssociations=new ArrayList();
+        tempAssociations.addAll(associations);
+        for(Association a : tempAssociations) {
             a.remove();
         }
         
         topicMap.topicRemoved(this);
 
         removed=false; // need to be false so we can clear the topic
-        
-        iter=subjectIdentifiers.iterator();
-        while(iter.hasNext()){
-            Locator l=(Locator)iter.next();
+
+        for(Locator l : subjectIdentifiers) {
             // don't actully remove subject identifiers because in many places they are needed to identify the deleted topic
             topicMap.removeTopicSubjectIdentifier(this,l);            
 //            this.removeSubjectIdentifier(l);
@@ -483,24 +500,22 @@ public class TopicImpl extends Topic {
         if(subjectLocator!=null) this.setSubjectLocator(null);
         if(baseName!=null) this.setBaseName(null);
         
-        temp=new ArrayList();
-        temp.addAll(types);
-        iter=temp.iterator();
-        while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
+        ArrayList<Topic> tempTypes = new ArrayList();
+        tempTypes.addAll(types);
+        for(Topic t : tempTypes) {
             this.removeType(t);
         }
-        temp=new ArrayList();
-        temp.addAll(getVariantScopes());
-        iter=temp.iterator();
-        while(iter.hasNext()){
-            this.removeVariant((Set)iter.next());
+        
+        ArrayList<Set<Topic>> tempVariantScopes = new ArrayList();
+        tempVariantScopes.addAll(getVariantScopes());
+        for(Set<Topic> scope : tempVariantScopes) {
+            this.removeVariant(scope);
         }
-        temp=new ArrayList();
-        temp.addAll(getDataTypes());
-        iter=temp.iterator();
-        while(iter.hasNext()){
-            this.removeData((Topic)iter.next());
+
+        ArrayList<Topic> tempDataTypes = new ArrayList();
+        tempDataTypes.addAll(getDataTypes());
+        for(Topic dataType : tempDataTypes) {
+            this.removeData(dataType);
         }
         updateEditTime();
         removed=true;
@@ -511,22 +526,23 @@ public class TopicImpl extends Topic {
     public void removeVariant(Set<Topic> scope)  throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+
         Object o=variants.remove(scope);
         boolean changed=(o!=null);
         HashSet allscopes=new HashSet();
-        Iterator iter=variants.keySet().iterator();
-        while(iter.hasNext()){
-            Collection c=(Collection)iter.next();
+        for(Collection c : variants.keySet()) {
             allscopes.addAll(c);
         }
-        iter=scope.iterator();
-        while(iter.hasNext()){
-            TopicImpl t=(TopicImpl)iter.next();
-            if(!allscopes.contains(t)) t.removedFromVariantScope(this);
+        for(Topic t : scope){
+            if(!allscopes.contains(t)) {
+                ((TopicImpl) t).removedFromVariantScope(this);
+            }
         }
         clearNameCaches();
         updateEditTime();
-        if(changed) topicMap.topicVariantChanged(this,scope,null,(String)o);
+        if(changed) {
+            topicMap.topicVariantChanged(this,scope,null,(String)o);
+        }
     }
     
     
@@ -534,22 +550,23 @@ public class TopicImpl extends Topic {
     public void setVariant(Set<Topic> scope, String name)  throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        if(name==null){
+
+        if(name == null){
             System.out.println("WRN setVariant called with null value, redirecting to removeVariant");
             removeVariant(scope); 
             return;
         }
-        Iterator iter=scope.iterator();
-        while(iter.hasNext()){
-            TopicImpl t=(TopicImpl)iter.next();
-            t.addedAsVariantScope(this);
+        for(Topic t : scope) {
+            ((TopicImpl) t).addedAsVariantScope(this);
         }
         Object o = null;
         o = variants.put(scope,name);
         boolean changed=( o==null || !o.equals(name));
         clearNameCaches();
         updateEditTime();
-        if(changed) topicMap.topicVariantChanged(this,scope,name,(String)o);
+        if(changed) {
+            topicMap.topicVariantChanged(this,scope,name,(String)o);
+        }
     }
     
     
@@ -589,18 +606,13 @@ public class TopicImpl extends Topic {
         if(!variantScopeIndex.isEmpty()) return false;
         
         if(denyRemoveIfCoreTopic) {
-            Iterator i = subjectIdentifiers.iterator();
-            if(i != null) {
-                Locator l = null;
-                while(i.hasNext()) {
-                    try {
-                        l = (Locator) i.next();
-                        if(l.toExternalForm().startsWith("http://www.topicmaps.org/xtm/1.0/core.xtm"))
-                            return false;
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            for(Locator l : subjectIdentifiers) {
+                try {
+                    if(l != null && l.toExternalForm().startsWith("http://www.topicmaps.org/xtm/1.0/core.xtm"))
+                        return false;
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -656,180 +668,153 @@ public class TopicImpl extends Topic {
     
     private void makeDependentTopicsSet() throws TopicMapException {
         // ### = might not be needed, depends on what should actually be called dependent
-        dependentTopics=new HashSet();
-        Iterator iter=topicTypeIndex.iterator();
-        while(iter.hasNext()){
-            dependentTopics.add(iter.next());
-        }
-        iter=dataTypeIndex.iterator();
-        while(iter.hasNext()){
-            dependentTopics.add(iter.next());
-        }
-        iter=variantScopeIndex.iterator();
-        while(iter.hasNext()){
-            dependentTopics.add(iter.next());
-        }
-        iter=dataVersionIndex.iterator();
-        while(iter.hasNext()){
-            DataVersionIndexWrapper ts=(DataVersionIndexWrapper)iter.next();
-//            Topic[] ts=(Topic[])iter.next();
+        dependentTopics = new HashSet();
+        
+        dependentTopics.addAll(topicTypeIndex);
+
+        dependentTopics.addAll(dataTypeIndex);
+
+        dependentTopics.addAll(variantScopeIndex);
+
+        for(DataVersionIndexWrapper ts : dataVersionIndex) {
             dependentTopics.add(ts.topic);
             dependentTopics.add(ts.type); // ###
         }
-        iter=associationTypeIndex.iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
-            Iterator iter2=a.getRoles().iterator();
-            while(iter2.hasNext()){
-                Topic role=(Topic)iter2.next();
+        
+        for(Association a : associationTypeIndex) {
+            for(Topic role : a.getRoles()) {
                 dependentTopics.add(role); // ###
                 dependentTopics.add(a.getPlayer(role));
             }
-            if(a.getType()!=null)
+            if(a.getType() != null)
                 dependentTopics.add(a.getType()); // ###
         }
-        iter=roleTypeIndex.iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
-            Iterator iter2=a.getRoles().iterator();
-            while(iter2.hasNext()){
-                Topic role=(Topic)iter2.next();
+        
+        for(Association a : roleTypeIndex) {
+            for(Topic role : a.getRoles()) {
                 dependentTopics.add(role); // ###
                 dependentTopics.add(a.getPlayer(role));
             }
             dependentTopics.add(a.getType()); // ###
         }
-        iter=associations.iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
-            Iterator iter2=a.getRoles().iterator();
-            while(iter2.hasNext()){
-                Topic role=(Topic)iter2.next();
+
+        for(Association a : associations) {
+            for(Topic role : a.getRoles()) {
                 dependentTopics.add(role); // ###
                 dependentTopics.add(a.getPlayer(role));
             }
             dependentTopics.add(a.getType()); // ###
         }
-        iter=types.iterator();
-        while(iter.hasNext()){
-            dependentTopics.add(iter.next());
+
+        for(Topic type : types) {
+            dependentTopics.add(type);
         }
-        iter=data.keySet().iterator();
-        while(iter.hasNext()){
-            dependentTopics.add(iter.next());
+        
+        for(Topic dataType : data.keySet()) {
+            dependentTopics.add(dataType);
         }
     }
+    
     
     private void updateEditTime() throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         editTime=System.currentTimeMillis();
-        if(topicMap.trackingDependent()){
+        if(topicMap.trackingDependent()) {
             updateDependentEditTime();
-            if(dependentTopics==null) makeDependentTopicsSet();
-            Iterator iter=dependentTopics.iterator();
-            while(iter.hasNext()){
-                ((TopicImpl)iter.next()).updateDependentEditTime();
+            if(dependentTopics==null) {
+                makeDependentTopicsSet();
+            }
+            for(Topic dependentTopic : dependentTopics) {
+                ((TopicImpl) dependentTopic).updateDependentEditTime();
             }
         }
     }
+    
     
     private void updateDependentEditTime() throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         dependentEditTime=System.currentTimeMillis();        
     }
     
+    
     public void mergeIn(Topic t) throws TopicMapException {
         if(removed) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         TopicImpl ti=(TopicImpl)t;
         topicMap.topicsMerged(this,ti);
-        // add data
-        Iterator iter=new ArrayList(ti.data.entrySet()).iterator();
-        while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
-            HashMap hm = (HashMap) e.getValue();
+        // ----- add data ----- 
+        for(Topic otype : ti.data.keySet()) {
+            Map<Topic,String> hm = ti.data.get(otype);
             Hashtable ht = new Hashtable();
             ht.putAll(hm);
-            setData((Topic)e.getKey(),ht);
-            ti.removeData((Topic)e.getKey());
+            this.setData(otype, ht);
+            ti.removeData(otype);
         }
-        // set base name
-        if(ti.getBaseName()!=null) {
-            String name=ti.getBaseName();
+        // ----- set base name ----- 
+        if(ti.getBaseName() != null) {
+            String name = ti.getBaseName();
             ti.setBaseName(null);
             this.setBaseName(name);
         }
-        // set subject locator
-        if(ti.getSubjectLocator()!=null){
-            Locator l=ti.getSubjectLocator();
+        // ----- set subject locator ----- 
+        if(ti.getSubjectLocator() != null){
+            Locator l = ti.getSubjectLocator();
             ti.setSubjectLocator(null);
             this.setSubjectLocator(l);
         }
-        // set types
+        // ----- set types ----- 
         for(Topic type : ti.getTypes()){
-            if(type==ti) this.addType(this);
+            if(type == ti) this.addType(this);
             else this.addType(type);
         }
-        // set variant names
+        // ----- set variant names ----- 
         for(Set scope : ti.getVariantScopes()){
             String name = ti.getVariant(scope);
             this.setVariant(scope,name);
         }
 
-        // in many cases, can't map while iterating, would cause ConcurrentModificationException
-        ArrayList tobeMapped=new ArrayList();
-        // change association players
-        iter=ti.associationIndex.entrySet().iterator();
-        while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
-            Iterator iter2=((HashMap)e.getValue()).entrySet().iterator();
-            while(iter2.hasNext()){
-                Map.Entry e2=(Map.Entry)iter2.next();
-                Topic role=(Topic)e2.getKey();
-                Set set=(Set)e2.getValue();
-                Iterator iter3=set.iterator();
-                while(iter3.hasNext()){
-                    Association a=(Association)iter3.next();
-                    tobeMapped.add(a);
-                    tobeMapped.add(role);
+        // To prevent ConcurrentModificationException, next changes copy
+        // data into a toBeMapped... ArrayLists first.
+        
+        // ----- change association players ----- 
+        ArrayList<T2<Association,Topic>> tobeMappedAssociationRoles = new ArrayList();
+        for(Map<Topic,Collection<Association>> roledAssociations : ti.associationIndex.values()) {
+            for(Topic role : roledAssociations.keySet()) {
+                Collection<Association> as =  roledAssociations.get(role);
+                for(Association a : as) {
+                    tobeMappedAssociationRoles.add( new T2(a, role) );
                 }
             }
         }
-        for(int i=0;i<tobeMapped.size();i+=2){
-            Association a=(Association)tobeMapped.get(i);
+        for(T2<Association,Topic> associationAndRole : tobeMappedAssociationRoles) {
+            Association a = associationAndRole.e1;
             if(a.isRemoved()) continue;
-            Topic role=(Topic)tobeMapped.get(i+1);
+            Topic role = associationAndRole.e2;
 //            a.removePlayer(role);
 //            a.addPlayer(this,role);
             // this replaces the old player and is atomic so that there cannot
             // be an unintended merge between the remove and add
             a.addPlayer(this,role); 
         }
-        // change association types
-        tobeMapped=new ArrayList();
-        iter=ti.associationTypeIndex.iterator();
-        while(iter.hasNext()){
-            tobeMapped.add(iter.next());
+        
+        // ----- change association types ----- 
+        ArrayList<Association> tobeMappedTypedAssociations = new ArrayList();
+        tobeMappedTypedAssociations.addAll(ti.associationTypeIndex);
+        for(Association a : tobeMappedTypedAssociations) {
+            a.setType(this);
         }
-        for(int i=0;i<tobeMapped.size();i++){
-            ((Association)tobeMapped.get(i)).setType(this);
+        
+        // ----- change topic types ----- 
+        ArrayList<Topic> tobeMappedTopicTypes = new ArrayList();
+        tobeMappedTopicTypes.addAll(ti.topicTypeIndex);
+        for(Topic type : tobeMappedTopicTypes){
+            type.removeType(t);
+            type.addType(this);
         }
-        // change topic types
-        tobeMapped=new ArrayList();
-        iter=ti.topicTypeIndex.iterator();
-        while(iter.hasNext()){
-            tobeMapped.add(iter.next());
-        }
-        for(int i=0;i<tobeMapped.size();i++){
-            ((Topic)tobeMapped.get(i)).removeType(t);
-            ((Topic)tobeMapped.get(i)).addType(this);
-        }
-        // change data types
-        tobeMapped=new ArrayList();
-        iter=ti.dataTypeIndex.iterator();
-        while(iter.hasNext()){
-            tobeMapped.add(iter.next());
-        }
+        
+        // ----- change data types ----- 
+        ArrayList<Topic> tobeMappedDataTypes = new ArrayList();
+        tobeMappedDataTypes.addAll(ti.dataTypeIndex);
         
         final TopicComparator topicComparator=new TopicComparator();
         final ScopeComparator scopeComparator=new ScopeComparator();
@@ -838,67 +823,58 @@ public class TopicImpl extends Topic {
         // when types of several collide is undefined but is deterministic
         // with the sorted array. For same rason the array is sorted for
         // some other cases down below, but not all of them need it.
-        Collections.sort(tobeMapped,topicComparator);
+        Collections.sort(tobeMappedDataTypes,topicComparator);
         
-        for(int i=0;i<tobeMapped.size();i++){
-            Hashtable val=((Topic)tobeMapped.get(i)).getData(t);
-            ((Topic)tobeMapped.get(i)).removeData(t);
-            ((Topic)tobeMapped.get(i)).setData(this,val);
+        for(Topic dataType : tobeMappedDataTypes) {
+            Hashtable val = dataType.getData(t);
+            dataType.removeData(t);
+            dataType.setData(this, val);
         }
-        // change data versions
-        tobeMapped=new ArrayList();
-        iter=ti.dataVersionIndex.iterator();
-        while(iter.hasNext()){
-            tobeMapped.add(iter.next());
-        }        
-        Collections.sort(tobeMapped,new Comparator<DataVersionIndexWrapper>(){
+        
+        // ----- change data versions ----- 
+        ArrayList<DataVersionIndexWrapper> tobeMappedDataVersions = new ArrayList();
+        tobeMappedDataVersions.addAll(ti.dataVersionIndex);      
+        Collections.sort(tobeMappedDataVersions, new Comparator<DataVersionIndexWrapper>(){
             @Override
             public int compare(DataVersionIndexWrapper o1, DataVersionIndexWrapper o2) {
                 int c=topicComparator.compare(o1.topic, o2.topic);
                 if(c!=0) return c;
-                return topicComparator.compare(o1.type,o2.type);
+                return topicComparator.compare(o1.type, o2.type);
             }
         });
-        for(int i=0;i<tobeMapped.size();i++){
-//            Topic[] info=(Topic[])tobeMapped.get(i);
-            DataVersionIndexWrapper info=(DataVersionIndexWrapper)tobeMapped.get(i);
+        for(DataVersionIndexWrapper info : tobeMappedDataVersions) {
             String val=info.topic.getData(info.type,t);
             info.topic.removeData(info.type,t);
             info.topic.setData(info.type,this,val);
         }
-        // change role types
-        tobeMapped=new ArrayList();
-        tobeMapped.addAll(ti.roleTypeIndex);
-        for(int i=0;i<tobeMapped.size();i++){
-            Association a=((Association)tobeMapped.get(i));
-            Topic p=a.getPlayer(t);
-//            a.removePlayer(t);
-//            if(p!=null) a.addPlayer(p,this);
+        
+        // ----- change role types ----- 
+        ArrayList<Association> tobeMappedRoleTypes = new ArrayList();
+        tobeMappedRoleTypes.addAll(ti.roleTypeIndex);
+        for(Association a : tobeMappedRoleTypes) {
+            Topic p = a.getPlayer(t);
             // Doing these in this order guarantees that we don't lose anything
             // to unintended merges. There might be a merge after the add, but
             // if that is the case, the two associations would merge in the end
             // anyway, so we still end up with the correct result.
-            if(p!=null) a.addPlayer(p,this);
+            if(p != null) {
+                a.addPlayer(p, this);
+            }
             a.removePlayer(t);
         }
-        // change variant scopes
-        tobeMapped=new ArrayList();
-        iter=ti.variantScopeIndex.iterator();
-        while(iter.hasNext()){
-            Topic topic=(Topic)iter.next();
-            Collection scopes=new LinkedHashSet();
+        
+        // ----- change variant scopes ----- 
+        ArrayList<T2<Topic,Set<Topic>>> tobeMappedVariantScopes = new ArrayList();
+        for(Topic topic : ti.variantScopeIndex) {
+            Set<Set<Topic>> scopes = new LinkedHashSet();
             scopes.addAll(topic.getVariantScopes());
-            Iterator iter2=scopes.iterator();
-            while(iter2.hasNext()){
-                Collection c=(Collection)iter2.next();
-                if(c.contains(t)){
-                    tobeMapped.add(Tuples.t2(topic,c));
-//                    tobeMapped.add(topic);
-//                    tobeMapped.add(c);
+            for(Set<Topic> c : scopes) {
+                if(c.contains(t)) {
+                    tobeMappedVariantScopes.add(Tuples.t2(topic,c));
                 }
             }
         }
-        Collections.sort(tobeMapped,new Comparator<Tuples.T2<Topic,Set<Topic>>>(){
+        Collections.sort(tobeMappedVariantScopes,new Comparator<Tuples.T2<Topic,Set<Topic>>>(){
             @Override
             public int compare(Tuples.T2<Topic,Set<Topic>> t1, Tuples.T2<Topic,Set<Topic>> t2) {
                 int c=topicComparator.compare(t1.e1, t2.e1);
@@ -906,28 +882,23 @@ public class TopicImpl extends Topic {
                 return scopeComparator.compare(t1.e2, t2.e2);
             }
         });
-        for(int i=0;i<tobeMapped.size();i++){
-            Tuples.T2 t2=(Tuples.T2)tobeMapped.get(i);
-            Topic topic=(Topic)t2.e1;
-            Set c=(Set)t2.e2;
-//            Topic topic=(Topic)tobeMapped.get(i);
-//            Set c=(Set)tobeMapped.get(i+1);
-            Set newscope=Collections.synchronizedSet(new LinkedHashSet());
+        for(T2<Topic,Set<Topic>> t2 : tobeMappedVariantScopes) {
+            Topic topic = t2.e1;
+            Set c = t2.e2;
+            Set newscope = Collections.synchronizedSet(new LinkedHashSet());
             newscope.addAll(c);
             newscope.remove(t);
             newscope.add(this);
-            String name=topic.getVariant(c);
+            String name = topic.getVariant(c);
             topic.removeVariant(c);
             topic.setVariant(newscope,name);
         }
         
         // set subject identifiers, do this last as some other things rely
         // on topics still having subject identifiers
-        HashSet copied=new LinkedHashSet();
+        HashSet<Locator> copied=new LinkedHashSet();
         copied.addAll(ti.getSubjectIdentifiers());
-        iter=copied.iterator();
-        while(iter.hasNext()){
-            Locator l=(Locator)iter.next();
+        for(Locator l : copied) {
             ti.removeSubjectIdentifier(l);
             this.addSubjectIdentifier(l);
         }        
@@ -935,9 +906,10 @@ public class TopicImpl extends Topic {
         // check for duplicate associations
         removeDuplicateAssociations();
         // remove merged topic
-        try{
+        try {
             t.remove();
-        }catch(TopicInUseException e){
+        }
+        catch(TopicInUseException e){
             System.out.println("ERROR couldn't delete merged topic, topic in use. There is a bug in the code if this happens. "+e.getReason());
         }
         topicMap.topicChanged(this);
@@ -962,37 +934,36 @@ public class TopicImpl extends Topic {
         if(removed) throw new TopicMapException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         
-        HashMap as=new LinkedHashMap();
-        ArrayList tobeDeleted=new ArrayList();
-        Iterator iter=associations.iterator();
-        Association remaining=notThis;
-        while(iter.hasNext()){
-            AssociationImpl a=(AssociationImpl)iter.next();
-            EqualAssociationWrapper eaw=new EqualAssociationWrapper(a);
-            if(as.containsKey(eaw)){
+        HashMap<EqualAssociationWrapper,Association> as = new HashMap();
+        ArrayList<Association> tobeDeleted = new ArrayList();
+        Association remaining = notThis;
+        for(Association a : associations) {
+            EqualAssociationWrapper eaw = new EqualAssociationWrapper((AssociationImpl) a);
+            if(as.containsKey(eaw)) {
                 if(notThis!=null && notThis==a){
                     tobeDeleted.add(as.get(eaw));
                     as.put(eaw,a);
                 }
-                else tobeDeleted.add(a);
+                else {
+                    tobeDeleted.add(a);
+                }
             }
             else {
                 if(remaining!=null) remaining=a;
                 as.put(eaw,a);
             }
         }
-        iter=tobeDeleted.iterator();
-        while(iter.hasNext()){
-            AssociationImpl a=(AssociationImpl)iter.next();
+        for(Association a : tobeDeleted){
             topicMap.duplicateAssociationRemoved(remaining,a);
             a.remove();
         }
     }
     
+    
     void addInAssociation(Association a,Topic role) throws TopicMapException {
         associations.add(a);
         Topic type=a.getType();
-        HashMap t = null;
+        Map<Topic,Collection<Association>> t = null;
         if(type != null) {
             t=associationIndex.get(type);
         }
@@ -1000,7 +971,7 @@ public class TopicImpl extends Topic {
             t=new LinkedHashMap();
             associationIndex.put(type,t);
         }
-        HashSet s=(HashSet)t.get(role);
+        Collection<Association> s = t.get(role);
         if(s==null){
             s=new LinkedHashSet();
             t.put(role,s);
@@ -1015,8 +986,8 @@ public class TopicImpl extends Topic {
             associations.remove(a);
         }
         Topic type=a.getType();
-        HashMap t=associationIndex.get(type);
-        HashSet s=(HashSet)t.get(role);
+        Map<Topic,Collection<Association>> t = associationIndex.get(type);
+        Collection<Association> s = t.get(role);
         s.remove(a);
         if(s.isEmpty()) t.remove(role);
         if(t.isEmpty()) associationIndex.remove(type);
@@ -1024,22 +995,22 @@ public class TopicImpl extends Topic {
     }
     
     
-    void associationTypeChanged(Association a,Topic type,Topic oldType,Topic role){
-        HashMap t=associationIndex.get(oldType);
-        HashSet s=(HashSet)t.get(role);
+    void associationTypeChanged(Association a, Topic type, Topic oldType, Topic role){
+        Map<Topic,Collection<Association>> t = associationIndex.get(oldType);
+        Collection<Association> s = t.get(role);
         s.remove(a);
         if(s.isEmpty()) t.remove(role);
         if(t.isEmpty()) associationIndex.remove(oldType);
         
-        if(type!=null){
-            t=associationIndex.get(type);
-            if(t==null){
-                t=new LinkedHashMap();
+        if(type != null){
+            t = associationIndex.get(type);
+            if(t == null){
+                t = new LinkedHashMap();
                 associationIndex.put(type,t);
             }
-            s=(HashSet)t.get(role);
-            if(s==null){
-                s=new LinkedHashSet();
+            s = t.get(role);
+            if(s == null){
+                s = new LinkedHashSet();
                 t.put(role,s);
             }
             s.add(a);
@@ -1117,17 +1088,19 @@ public class TopicImpl extends Topic {
         }
     }
     
+    
     private static class TopicComparator implements Comparator<Topic> {
         @Override
         public int compare(Topic o1, Topic o2) {
-            try{
+            try {
                 Locator l1=o1.getFirstSubjectIdentifier();
                 Locator l2=o2.getFirstSubjectIdentifier();
                 if(l1==null && l2==null) return 0;
                 else if(l1==null) return -1;
                 else if(l2==null) return 1;
                 else return l1.compareTo(l2);
-            }catch(TopicMapException tme){
+            }
+            catch(TopicMapException tme){
                 tme.printStackTrace();
                 return 0;
             }
@@ -1145,11 +1118,11 @@ public class TopicImpl extends Topic {
                 return topicComparator.compare(o1.iterator().next(),o2.iterator().next());
             }
 
-            ArrayList<Topic> l1=new ArrayList<Topic>(o1);
-            ArrayList<Topic> l2=new ArrayList<Topic>(o2);
+            List<Topic> l1=new ArrayList<Topic>(o1);
+            List<Topic> l2=new ArrayList<Topic>(o2);
             Collections.sort(l1,topicComparator);
             Collections.sort(l2,topicComparator);
-            for(int i=0;i<l1.size();i++){
+            for(int i=0;i<l1.size();i++) {
                 int c=topicComparator.compare(l1.get(i),l2.get(i));
                 if(c!=0) return c;
             }

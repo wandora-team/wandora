@@ -104,7 +104,7 @@ public class MakeAssociationConsistentTool extends AbstractLayerTool implements 
             long endTime = System.currentTimeMillis();
             int executionDuration = ((int)((endTime-startTime)/1000));
             if(executionDuration > 1) log("Consistency check took " + executionDuration + " seconds.");
-            log("After association consistency check the topic map contains " + ana + " associations.");
+            // log("After association consistency check the topic map contains " + ana + " associations.");
             log("Removed " + (an-ana) + " associations.");
             log("Ready.");
         }

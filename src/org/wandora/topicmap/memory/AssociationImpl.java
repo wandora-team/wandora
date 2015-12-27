@@ -39,7 +39,7 @@ import java.util.*;
 public class AssociationImpl implements Association {
     private TopicMapImpl topicMap;
     private Topic type;
-    private HashMap players;
+    private Map<Topic,Topic> players;
     private boolean removed;
     
     
@@ -54,7 +54,7 @@ public class AssociationImpl implements Association {
     
     @Override
     public Topic getPlayer(Topic role) {
-        return (Topic)players.get(role);
+        return players.get(role);
     }
     
     
@@ -229,26 +229,20 @@ public class AssociationImpl implements Association {
         
         if(players.isEmpty()) return;
         if(type==null) return;
-        Collection smallest=null;
-        Iterator iter=players.keySet().iterator();
-        while(iter.hasNext()) {
-            Topic role=(Topic)iter.next();
-            Topic player=(Topic)players.get(role);
-            Collection c=player.getAssociations(type,role);
+        Collection<AssociationImpl> smallest=null;
+        for(Topic role : players.keySet()) {
+            Topic player = players.get(role);
+            Collection c = player.getAssociations(type,role);
             if(smallest==null || c.size()<smallest.size()) smallest=c;
         }
-        HashSet delete=new HashSet();
-        iter=smallest.iterator();
-        while(iter.hasNext()) {
-            AssociationImpl a=(AssociationImpl)iter.next();
+        HashSet<Association> delete=new HashSet();
+        for(AssociationImpl a : smallest) {
             if(a==this) continue;
             if(a._equals(this)){
                 delete.add(a);
             }
         }
-        iter=delete.iterator();
-        while(iter.hasNext()) { 
-            Association a=(Association)iter.next();
+        for(Association a : delete) { 
             topicMap.duplicateAssociationRemoved(this,a);
             a.remove();
         }
@@ -262,6 +256,17 @@ public class AssociationImpl implements Association {
     
     boolean _equals(AssociationImpl a) {
         if(a == null) return false;
-        return (players.equals(a.players)&&(type==a.type));
+        if((players == null && a.players != null) || (players != null && a.players == null)) return false;
+        if(players != null && a.players != null && players.size() != a.players.size()) return false;
+        if(type != a.type) return false;
+        
+        if(players != null && a.players != null) {
+            for(Topic r : players.keySet()) {
+                if(players.get(r) != a.players.get(r)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
