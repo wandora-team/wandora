@@ -1,49 +1,49 @@
 create table TOPIC(
-TOPICID varchar(50) collate SQL_Latin1_General_Cp1_CS_AS primary key,
-BASENAME varchar(900) collate SQL_Latin1_General_Cp1_CS_AS ,
-SUBJECTLOCATOR varchar(900) collate SQL_Latin1_General_Cp1_CS_AS 
+TOPICID varchar(256) collate SQL_Latin1_General_Cp1_CS_AS primary key,
+BASENAME text,
+SUBJECTLOCATOR text 
 );
 
 create table TOPICTYPE(
-TOPIC varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
-TYPE varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+TOPIC varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+TYPE varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
 primary key(TOPIC,TYPE)
 );
 
 create table DATA(
-TOPIC varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
-TYPE varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
-VERSION varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+TOPIC varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+TYPE varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+VERSION varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
 DATA text,
 primary key(TOPIC,TYPE,VERSION)
 );
 
 create table VARIANT(
-VARIANTID varchar(50) collate SQL_Latin1_General_Cp1_CS_AS primary key,
-TOPIC varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+VARIANTID varchar(256) collate SQL_Latin1_General_Cp1_CS_AS primary key,
+TOPIC varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
 VALUE text
 );
 
 create table VARIANTSCOPE(
-VARIANT varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references VARIANT(VARIANTID),
-TOPIC varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+VARIANT varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references VARIANT(VARIANTID),
+TOPIC varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
 primary key(VARIANT,TOPIC)
 );
 
 create table SUBJECTIDENTIFIER(
-SI varchar(255) collate SQL_Latin1_General_Cp1_CS_AS primary key,
-TOPIC varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID)
+SI varchar(max) collate SQL_Latin1_General_Cp1_CS_AS primary key,
+TOPIC varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID)
 );
 
 create table ASSOCIATION(
-ASSOCIATIONID varchar(50) collate SQL_Latin1_General_Cp1_CS_AS primary key,
-TYPE varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID)
+ASSOCIATIONID varchar(256) collate SQL_Latin1_General_Cp1_CS_AS primary key,
+TYPE varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID)
 );
 
 create table MEMBER(
-ASSOCIATION varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references ASSOCIATION(ASSOCIATIONID),
-PLAYER varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
-ROLE varchar(50) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+ASSOCIATION varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references ASSOCIATION(ASSOCIATIONID),
+PLAYER varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
+ROLE varchar(256) collate SQL_Latin1_General_Cp1_CS_AS not null references TOPIC(TOPICID),
 primary key(ASSOCIATION,ROLE)
 );
 

@@ -1,22 +1,22 @@
 create table TOPIC(
-TOPICID varchar(50) primary key,
-BASENAME varchar(900) ,
+TOPICID varchar(256) primary key,
+BASENAME text ,
 SUBJECTLOCATOR varchar(900) 
 );
 
 create table TOPICTYPE(
-TOPIC varchar(50) not null,
-TYPE varchar(50) not null,
+TOPIC varchar(256) not null,
+TYPE varchar(256) not null,
 foreign key (TOPIC) references TOPIC(TOPICID),
 foreign key (TYPE) references TOPIC(TOPICID),
 primary key(TOPIC,TYPE)
 );
 
 create table DATA(
-TOPIC varchar(50) not null,
-TYPE varchar(50) not null,
-VERSION varchar(50) not null,
-DATA longvarchar,
+TOPIC varchar(256) not null,
+TYPE varchar(256) not null,
+VERSION varchar(256) not null,
+DATA text,
 foreign key (TOPIC) references TOPIC(TOPICID),
 foreign key (TYPE) references TOPIC(TOPICID),
 foreign key (VERSION) references TOPIC(TOPICID),
@@ -24,36 +24,36 @@ primary key(TOPIC,TYPE,VERSION)
 );
 
 create table VARIANT(
-VARIANTID varchar(50) primary key,
-TOPIC varchar(50) not null,
-VALUE longvarchar,
+VARIANTID varchar(256) primary key,
+TOPIC varchar(256) not null,
+VALUE text,
 foreign key (TOPIC) references TOPIC(TOPICID)
 );
 
 create table VARIANTSCOPE(
-VARIANT varchar(50) not null,
-TOPIC varchar(50) not null,
+VARIANT varchar(256) not null,
+TOPIC varchar(256) not null,
 foreign key (VARIANT) references VARIANT(VARIANTID),
 foreign key (TOPIC) references TOPIC(TOPICID),
 primary key(VARIANT,TOPIC)
 );
 
 create table SUBJECTIDENTIFIER(
-SI varchar(255) primary key,
-TOPIC varchar(50) not null,
+SI varchar(65535) primary key,
+TOPIC varchar(256) not null,
 foreign key (TOPIC) references TOPIC(TOPICID)
 );
 
 create table ASSOCIATION(
-ASSOCIATIONID varchar(50) primary key,
-TYPE varchar(50) not null,
+ASSOCIATIONID varchar(256) primary key,
+TYPE varchar(256) not null,
 foreign key (TYPE) references TOPIC(TOPICID)
 );
 
 create table MEMBER(
-ASSOCIATION varchar(50) not null,
-PLAYER varchar(50) not null,
-ROLE varchar(50) not null,
+ASSOCIATION varchar(256) not null,
+PLAYER varchar(256) not null,
+ROLE varchar(256) not null,
 foreign key (ASSOCIATION) references ASSOCIATION(ASSOCIATIONID),
 foreign key (PLAYER) references TOPIC(TOPICID),
 foreign key (ROLE) references TOPIC(TOPICID),

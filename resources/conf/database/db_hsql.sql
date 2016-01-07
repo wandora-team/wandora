@@ -1,21 +1,21 @@
 create cached table TOPIC(
-TOPICID varchar(50) primary key,
-BASENAME varchar(900) ,
-SUBJECTLOCATOR varchar(900) 
+TOPICID varchar(256) primary key,
+BASENAME longvarchar,
+SUBJECTLOCATOR longvarchar 
 );
 
 create cached table TOPICTYPE(
-TOPIC varchar(50) not null,
-TYPE varchar(50) not null,
+TOPIC varchar(256) not null,
+TYPE varchar(256) not null,
 foreign key (TOPIC) references TOPIC(TOPICID),
 foreign key (TYPE) references TOPIC(TOPICID),
 primary key(TOPIC,TYPE)
 );
 
 create cached table DATA(
-TOPIC varchar(50) not null,
-TYPE varchar(50) not null,
-VERSION varchar(50) not null,
+TOPIC varchar(256) not null,
+TYPE varchar(256) not null,
+VERSION varchar(256) not null,
 DATA longvarchar,
 foreign key (TOPIC) references TOPIC(TOPICID),
 foreign key (TYPE) references TOPIC(TOPICID),
@@ -24,36 +24,36 @@ primary key(TOPIC,TYPE,VERSION)
 );
 
 create cached table VARIANT(
-VARIANTID varchar(50) primary key,
-TOPIC varchar(50) not null,
+VARIANTID varchar(256) primary key,
+TOPIC varchar(256) not null,
 VALUE longvarchar,
 foreign key (TOPIC) references TOPIC(TOPICID)
 );
 
 create cached table VARIANTSCOPE(
-VARIANT varchar(50) not null,
-TOPIC varchar(50) not null,
+VARIANT varchar(256) not null,
+TOPIC varchar(256) not null,
 foreign key (VARIANT) references VARIANT(VARIANTID),
 foreign key (TOPIC) references TOPIC(TOPICID),
 primary key(VARIANT,TOPIC)
 );
 
 create cached table SUBJECTIDENTIFIER(
-SI varchar(255) primary key,
-TOPIC varchar(50) not null,
+SI varchar(1000000) primary key,
+TOPIC varchar(256) not null,
 foreign key (TOPIC) references TOPIC(TOPICID)
 );
 
 create cached table ASSOCIATION(
-ASSOCIATIONID varchar(50) primary key,
-TYPE varchar(50) not null,
+ASSOCIATIONID varchar(256) primary key,
+TYPE varchar(256) not null,
 foreign key (TYPE) references TOPIC(TOPICID)
 );
 
 create cached table MEMBER(
-ASSOCIATION varchar(50) not null,
-PLAYER varchar(50) not null,
-ROLE varchar(50) not null,
+ASSOCIATION varchar(256) not null,
+PLAYER varchar(256) not null,
+ROLE varchar(256) not null,
 foreign key (ASSOCIATION) references ASSOCIATION(ASSOCIATIONID),
 foreign key (PLAYER) references TOPIC(TOPICID),
 foreign key (ROLE) references TOPIC(TOPICID),
