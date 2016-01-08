@@ -236,6 +236,14 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <pass></pass>
          <driver>org.sqlite.JDBC</driver>
       </connection>
+      <connection>
+         <user>user</user>
+         <name>Mariadb testdb</name>
+         <type>Other</type>
+         <constring>jdbc:mariadb://localhost:3306/wandora</constring>
+         <pass>password</pass>
+         <driver>org.mariadb.jdbc.Driver</driver>
+      </connection>
    </dbconnections>
    <remoteconnections>
       <connection>
