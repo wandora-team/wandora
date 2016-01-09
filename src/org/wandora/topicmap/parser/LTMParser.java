@@ -415,6 +415,13 @@ public class LTMParser {
         if(topicMap != null) {
             try {
                 Iterator<Topic> topics = topicMap.getTopics();
+                Collection topicCollection = new ArrayList<Topic>();
+                while(topics.hasNext()) {
+                    Topic t=topics.next();
+                    topicCollection.add(t);
+                }
+                topics = topicCollection.iterator();
+                
                 Topic t = null;
                 while(topics.hasNext()) {
                     t = topics.next();

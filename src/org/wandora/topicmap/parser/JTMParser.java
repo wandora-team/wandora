@@ -135,6 +135,13 @@ public class JTMParser {
 
     public void postProcess() throws Exception {
         Iterator<Topic> topics = topicMap.getTopics();
+        Collection topicCollection = new ArrayList<Topic>();
+        while(topics.hasNext()) {
+            Topic t=topics.next();
+            topicCollection.add(t);
+        }
+
+        topics = topicCollection.iterator();
         Topic t;
         HashMap<Topic,Locator> toBeRemoved = new HashMap();
         while(topics.hasNext()) {

@@ -135,16 +135,23 @@ public class DatabaseTopicMap extends TopicMap {
 //    protected LinkedHashMap<Locator,Topic> siIndex;
 //    protected LinkedHashMap<String,Topic> bnIndex;
     
+    
     /** Creates a new instance of DatabaseTopicMap */
     public DatabaseTopicMap(String dbDriver,String dbConnectionString, String dbUser, String dbPassword) throws SQLException {
         this(dbDriver,dbConnectionString,dbUser,dbPassword,null);
     }
+    
+    
     public DatabaseTopicMap(String dbDriver,String dbConnectionString, String dbUser, String dbPassword,Object connectionParams) throws SQLException {
         this(dbDriver,dbConnectionString,dbUser,dbPassword,null,connectionParams);
     }
+    
+    
     public DatabaseTopicMap(String dbDriver,String dbConnectionString, String dbUser, String dbPassword,String initScript) throws SQLException {
         this(dbDriver,dbConnectionString,dbUser,dbPassword,initScript,null);
     }
+    
+    
     public DatabaseTopicMap(String dbDriver,String dbConnectionString, String dbUser, String dbPassword,String initScript,Object connectionParams) throws SQLException {
         this.dbDriver=dbDriver;
         this.dbConnectionString=dbConnectionString;
@@ -190,9 +197,11 @@ public class DatabaseTopicMap extends TopicMap {
         changed=false;
     }
     
+    
     String getDatabaseFlavour() {
         return databaseFlavour;
     }
+    
     
     /**
      * Does the topic map only allow reading or both reading and writing.
@@ -205,6 +214,7 @@ public class DatabaseTopicMap extends TopicMap {
     public boolean isReadOnly() {
         return isDBReadOnly && isReadOnly;
     }
+    
     
     /**
      * Tests if the connection allows modifying the topic map. The test is done
@@ -227,6 +237,7 @@ public class DatabaseTopicMap extends TopicMap {
         }
     }
 
+    
     /**
      * Deletes everything in the topic map by clearing the database tables.
      */
@@ -247,6 +258,7 @@ public class DatabaseTopicMap extends TopicMap {
         changed=true;
     }
     
+    
     /**
      * Clears the topic index (cache) containing recently accessed database topics.
      * Any topic found in the index is not retrieved from the database and it is
@@ -260,6 +272,7 @@ public class DatabaseTopicMap extends TopicMap {
         topicIndex = new WeakTopicIndex();
     }
     
+    
     /**
      * Checks if the database connection is active.  
      */
@@ -267,6 +280,7 @@ public class DatabaseTopicMap extends TopicMap {
     public boolean isConnected(){
         return !unconnected;
     }
+    
     
     public void printIndexDebugInfo(){
         topicIndex.printDebugInfo();
@@ -360,6 +374,7 @@ public class DatabaseTopicMap extends TopicMap {
         if(logger != null) logger.log("Association consistency deleted "+deleted+" associations!");
     }
 
+    
     /**
      * Closes the topic map. This closes the topic index freeing some resources
      * and closes the database connection. Topic map cannot be used or reopened
@@ -379,27 +394,34 @@ public class DatabaseTopicMap extends TopicMap {
         }
     }
     
+    
     // the default stored connection
     protected Connection connection=null;
+    
+    
     /**
      * Gets the connection used with database queries. If the old stored connection
      * has been closed for any reason, tries to create a new connection.
      */
     public Connection getConnection(){
-        if(sqlProxy!=null) return null;
+        if(sqlProxy!=null) {
+            return null;
+        }
         synchronized(queryLock){
-            if(unconnected) return null;
+            if(unconnected) {
+                return null;
+            }
             if(connection==null) {
                 connection=createConnection(true);
-                storedStatement=null;
                 isDBReadOnly=testReadOnly();
             }
-            if(connection==null) {unconnected=true; return null;}
+            if(connection==null) {
+                unconnected=true; 
+                return null;}
             try {
                 if(connection.isClosed()) {
                     System.out.println("SQL connection closed. Opening new connection!");
                     connection=createConnection(true);
-                    storedStatement=null;
                     isDBReadOnly=testReadOnly();
                 }
             }
@@ -414,6 +436,7 @@ public class DatabaseTopicMap extends TopicMap {
         }
     }
     
+    
     /**
      * Creates a new database connection using the connection parameters given
      * to the constructor.
@@ -422,12 +445,14 @@ public class DatabaseTopicMap extends TopicMap {
         if(sqlProxy!=null) return null;
         try {
             Class.forName(dbDriver);
-            Connection con=DriverManager.getConnection(dbConnectionString,dbUser,dbPassword);        
-            if(!autocommit){
+            Connection con = DriverManager.getConnection(dbConnectionString,dbUser,dbPassword);        
+            if(autocommit) {
+                con.setAutoCommit(true);
+            }
+            else {
                 con.setAutoCommit(false);
             }
             // System.out.println("Database connection created");
-            
             return con;
         }
         catch(Exception e){
@@ -441,8 +466,10 @@ public class DatabaseTopicMap extends TopicMap {
         }
     }
     
+    
     private int queryCounter=1;
 
+    
     /**
      * Turns a collection of strings into sql syntax representing a collection of strings
      * that can be used with 'in' clauses. The returned string contains each string
@@ -459,45 +486,58 @@ public class DatabaseTopicMap extends TopicMap {
         return sb.toString();
     }
     
+    
+    // ------------------------------------------------------- EXECUTE QUERY ---
+    
+    
+    
     // A stored statement that can be reused instead of always creating new statement objects
-    private Statement storedStatement=null;
-    private Object queryLock=new Object();
+    // private Statement storedStatement=null;
+    private final Object queryLock = new Object();
+    
     
     public boolean executeUpdate(String query)  throws TopicMapException{
-        return executeUpdate(query,getConnection());
+        return executeUpdate(query, getConnection());
     }
     
+    
     public boolean executeUpdate(String query,Connection con) throws TopicMapException {
-        synchronized(queryLock){
+        synchronized(queryLock) {
             queryCounter++;
     //        /*if((queryCounter%10)==0)*/ System.out.println("DBG execute update "+queryCounter+" "+query);
-            if(sqlProxy!=null){
+            if(sqlProxy!=null) {
                 try{
                     sqlProxy.executeUpdate(query);
                     return true;
                 }
-                catch(Exception e){
+                catch(Exception e) {
                     e.printStackTrace(); 
                     throw new TopicMapSQLException(e);
                 }
             }
-            try{
-                Statement stmt=null;
-                if(con==connection){
-                    if(storedStatement==null) storedStatement=con.createStatement();
-                    stmt=storedStatement;
-                }
-                else stmt=con.createStatement();
+            Statement stmt = null;
+            try {
+                stmt = con.createStatement();
+                System.out.println(query);
                 stmt.executeUpdate(query);
-                if(stmt!=storedStatement) stmt.close();
+                stmt.close();
                 return true;
             }
-            catch(SQLException sqle){
+            catch(SQLException sqle) {
+                if(stmt != null) {
+                    try {
+                        stmt.close();
+                        con.close();
+                    } catch(Exception e) { 
+                        e.printStackTrace(); 
+                    }
+                }
                 sqle.printStackTrace(); 
                 throw new TopicMapSQLException(sqle);
             }
         }
     }
+    
     
     /**
      * Executes a database query and returns the results as a collection. Each
@@ -508,54 +548,52 @@ public class DatabaseTopicMap extends TopicMap {
         return executeQuery(query,getConnection());
     }
     
-    public Collection<Map<String,Object>> executeQuery(String query,Connection con) throws TopicMapException {
-        synchronized(queryLock){
+    
+    public Collection<Map<String,Object>> executeQuery(String query, Connection con) throws TopicMapException {
+        synchronized(queryLock) {
             try{
                 queryCounter++;
-                
-                if(sqlProxy!=null){
-                    try{
+                if(sqlProxy!=null) {
+                    try {
                         return sqlProxy.executeQuery(query);
                     }
-                    catch(Exception e){
+                    catch(Exception e) {
                         e.printStackTrace(); 
                         throw new TopicMapSQLException(e);
                     }
                 }
                 
     //            /*if((queryCounter%10)==0)*/ System.out.println("DBG execute query "+queryCounter+" "+query);
-                Statement stmt=null;
-                if(con==connection){
-                    if(storedStatement==null) storedStatement=con.createStatement();
-                    stmt=storedStatement;
-                }
-                else stmt=con.createStatement();
+                Statement stmt=con.createStatement();
                 ResultSet rs=stmt.executeQuery(query);
                 ResultSetMetaData metaData=rs.getMetaData();
                 int columns=metaData.getColumnCount();
                 String[] columnNames=new String[columns];
-                for(int i=0;i<columns;i++){
+                for(int i=0;i<columns;i++) {
                     columnNames[i]=metaData.getColumnName(i+1);
                 }
 
-                Vector<Map<String,Object>> rows=new Vector<Map<String,Object>>();
-                while(rs.next()){
-                    HashMap<String,Object> row=new LinkedHashMap<String,Object>();
-                    for(int i=0;i<columns;i++){
+                ArrayList<Map<String,Object>> rows=new ArrayList<Map<String,Object>>();
+                while(rs.next()) {
+                    Map<String,Object> row=new LinkedHashMap<String,Object>();
+                    for(int i=0;i<columns;i++) {
                         row.put(columnNames[i],rs.getObject(i+1));
                     }
                     rows.add(row);
                 }
                 rs.close();
-                if(stmt!=storedStatement) stmt.close();
+                stmt.close();
                 return rows;
             }
-            catch(SQLException sqle){
+            catch(SQLException sqle) {
                 sqle.printStackTrace();
                 throw new TopicMapSQLException(sqle);
             }
         }
     }
+    
+    
+    // --------------------------------------------------------- BUILD TOPIC ---
     
     /**
      * Builds a database topic from a database query result row. The row should contain
@@ -566,12 +604,14 @@ public class DatabaseTopicMap extends TopicMap {
         return buildTopic(row.get("TOPICID"),row.get("BASENAME"),row.get("SUBJECTLOCATOR"));
     }
     
+    
     /**
      * Builds a database topic when given the topic id, basename and subject locator.
      */
     public DatabaseTopic buildTopic(Object id,Object baseName,Object subjectLocator) throws TopicMapException {
         return buildTopic((String)id,(String)baseName,(String)subjectLocator);
     }
+    
     
     /**
      * Builds a database topic when given the topic id, basename and subject locator.
@@ -585,8 +625,11 @@ public class DatabaseTopicMap extends TopicMap {
         return dbt;
     }
     
+    
+    // --------------------------------------------------- BUILD ASSOCIATION ---
+    
     /**
-     * Builds a database association from a datbase query result row. The row should contain
+     * Builds a database association from a database query result row. The row should contain
      * (at least) four columns with names "ASSOCIATIONID", "TOPICID", "BASENAME" and "SUBJECTLOCATOR"
      * where all but the "ASSOCIATIONID" are the core properties of the association type topic.
      */
@@ -594,9 +637,11 @@ public class DatabaseTopicMap extends TopicMap {
         return buildAssociation(row.get("ASSOCIATIONID"),row.get("TOPICID"),row.get("BASENAME"),row.get("SUBJECTLOCATOR"));
     }
     
+    
     public DatabaseAssociation buildAssociation(Object associationId,Object typeId,Object typeName,Object typeSL) throws TopicMapException {
         return buildAssociation((String)associationId,(String)typeId,(String)typeName,(String)typeSL);
     }
+    
     
     public DatabaseAssociation buildAssociation(String associationId,String typeId,String typeName,String typeSL) throws TopicMapException {
         DatabaseAssociation dba=topicIndex.getAssociation(associationId,this);
@@ -604,6 +649,7 @@ public class DatabaseTopicMap extends TopicMap {
         DatabaseTopic type=buildTopic(typeId,typeName,typeSL);
         return buildAssociation(associationId,type);
     }
+    
     
     public DatabaseAssociation buildAssociation(String associationId,DatabaseTopic type){
         DatabaseAssociation dba=topicIndex.getAssociation(associationId,this);
@@ -614,6 +660,10 @@ public class DatabaseTopicMap extends TopicMap {
         return dba;
     }
     
+    
+    // --------------------------------------------------------- QUERY TOPIC ---
+    
+    
     /**
      * Executes a database query and returns results as a collection of topics.
      * The result set must have the same columns used by buildTopic method.
@@ -622,14 +672,16 @@ public class DatabaseTopicMap extends TopicMap {
         return queryTopic(query,getConnection());
     }
     
+    
     public Collection<Topic> queryTopic(String query,Connection con)  throws TopicMapException {
         Collection<Map<String,Object>> res=executeQuery(query,con);
-        Vector<Topic> ret=new Vector<Topic>();
+        Collection<Topic> ret=new ArrayList<Topic>();
         for(Map<String,Object> row : res){
             ret.add(buildTopic(row));
         }
         return ret;
     }
+    
     
     /**
      * Same as queryTopic but only returns the first topic in the result set or
@@ -641,6 +693,7 @@ public class DatabaseTopicMap extends TopicMap {
         else return c.iterator().next();
     }
     
+    
     /**
      * Executes a database query and returns results as a collection of associations.
      * The result set must have the same columns used by buildAssociation method.
@@ -648,6 +701,7 @@ public class DatabaseTopicMap extends TopicMap {
     public Collection<Association> queryAssociation(String query) throws TopicMapException {
         return queryAssociation(query,getConnection());
     }
+    
     
     public Collection<Association> queryAssociation(String query,Connection con) throws TopicMapException {
         Collection<Map<String,Object>> res=executeQuery(query,con);
@@ -657,6 +711,8 @@ public class DatabaseTopicMap extends TopicMap {
         }
         return ret;
     }
+    
+    
     /**
      * Escapes a string so that it can be used in an sql query.
      */
@@ -666,6 +722,7 @@ public class DatabaseTopicMap extends TopicMap {
         return s;
     }
     
+    
     public Topic getTopic(Collection<Locator> SIs) throws TopicMapException {
         for(Locator l : SIs){
             Topic t=getTopic(l);
@@ -673,6 +730,8 @@ public class DatabaseTopicMap extends TopicMap {
         }
         return null;
     }
+    
+    
 /*    
     protected void clearSiQueue(){
         synchronized(indexLock){
@@ -729,13 +788,16 @@ public class DatabaseTopicMap extends TopicMap {
         }
     }*/
     
+    
     public void topicSIChanged(DatabaseTopic t,Locator deleted,Locator added){
         topicIndex.topicSIChanged(t,deleted,added);
     }
     
+    
     public void topicBNChanged(Topic t,String old) throws TopicMapException {
         topicIndex.topicBNChanged(t,old);
     }
+    
     
     @Override
     public Topic getTopic(Locator si) throws TopicMapException {
@@ -745,22 +807,32 @@ public class DatabaseTopicMap extends TopicMap {
             // may return null if, A) has mapping that no topic with si exists or
             // B) there is a mapping but the weak referenc has been cleared
             if(t!=null) return t; // clear case, return
-            else if(topicIndex.isNullSI(si)) return null; // if no topic exists, return null, otherwise refetch the topic
+            else if(topicIndex.isNullSI(si)) {
+                // if no topic exists, return null, otherwise refetch the topic
+                return null;
+            }
         }
         else if(completeIndexes) return null; // index is complete so if nothing is mentioned then there is no such topic
         
-        Topic t=querySingleTopic("select TOPIC.* from TOPIC,SUBJECTIDENTIFIER where TOPIC=TOPICID and "+
-                            "SI='"+escapeSQL(si.toExternalForm())+"'");
-        if(t==null) topicIndex.addNullSI(si);
+        Topic t=querySingleTopic("select TOPIC.* "
+                + "from TOPIC,SUBJECTIDENTIFIER "
+                + "where TOPIC=TOPICID "
+                + "and SI='"+escapeSQL(si.toExternalForm())+"'");
+        if(t==null) {
+            topicIndex.addNullSI(si);
+        }
         return t;
     }
+    
     
     @Override
     public Topic getTopicBySubjectLocator(Locator sl) throws TopicMapException {
         if(unconnected) return null;
-        return querySingleTopic("select * from TOPIC where SUBJECTLOCATOR='"+
-                                escapeSQL(sl.toExternalForm())+"'");
+        return querySingleTopic("select * from TOPIC "
+                +"where SUBJECTLOCATOR='"
+                +escapeSQL(sl.toExternalForm())+"'");
     }
+    
     
     @Override
     public Topic createTopic(String id) throws TopicMapException {
@@ -770,6 +842,7 @@ public class DatabaseTopicMap extends TopicMap {
         return t;
     }
     
+    
     @Override
     public Topic createTopic() throws TopicMapException {
         if(unconnected) return null;
@@ -777,6 +850,7 @@ public class DatabaseTopicMap extends TopicMap {
         DatabaseTopic t=topicIndex.newTopic(this);
         return t;
     }
+    
     
     @Override
     public Association createAssociation(Topic type) throws TopicMapException {
@@ -786,22 +860,29 @@ public class DatabaseTopicMap extends TopicMap {
         return a;
     }
     
+    
     @Override
     public Collection<Topic> getTopicsOfType(Topic type) throws TopicMapException {
-        if(unconnected) return new Vector<Topic>();
-        Collection<Topic> res=queryTopic("select TOPIC.* from TOPIC,TOPICTYPE where "+
-                          "TOPIC=TOPICID and TYPE='"+escapeSQL(type.getID())+"'");
-        HashMap<String,DatabaseTopic> collected=new LinkedHashMap<String,DatabaseTopic>();
+        if(unconnected) return new ArrayList<Topic>();
+        Collection<Topic> res=queryTopic("select TOPIC.* "
+                +"from TOPIC,TOPICTYPE "
+                +"where TOPIC=TOPICID "
+                +"and TYPE='"+escapeSQL(type.getID())+"'");
+        Map<String,DatabaseTopic> collected=new LinkedHashMap<String,DatabaseTopic>();
         for(Topic t : res){
             collected.put(t.getID(),(DatabaseTopic)t);
         }
         DatabaseTopic.fetchAllSubjectIdentifiers(
-                executeQuery("select SUBJECTIDENTIFIER.* from SUBJECTIDENTIFIER,TOPIC,TOPICTYPE "+
-                             "where SUBJECTIDENTIFIER.TOPIC=TOPIC.TOPICID and TOPIC.TOPICID=TOPICTYPE.TOPIC and "+
-                             "TOPICTYPE.TYPE='"+escapeSQL(type.getID())+"' order by SUBJECTIDENTIFIER.TOPIC"),
+                executeQuery("select SUBJECTIDENTIFIER.* "
+                        +"from SUBJECTIDENTIFIER,TOPIC,TOPICTYPE "
+                        +"where SUBJECTIDENTIFIER.TOPIC=TOPIC.TOPICID "
+                        +"and TOPIC.TOPICID=TOPICTYPE.TOPIC "
+                        +"and TOPICTYPE.TYPE='"+escapeSQL(type.getID())+"' "
+                        +"order by SUBJECTIDENTIFIER.TOPIC"),
                              collected, this);
         return res;
     }
+    
     
     @Override
     public Topic getTopicWithBaseName(String name) throws TopicMapException {
@@ -820,20 +901,31 @@ public class DatabaseTopicMap extends TopicMap {
     
     
     @Override
-    public Iterator<Topic> getTopics(){
-        if(unconnected) return new TopicIterator(){
+    public Iterator<Topic> getTopics() {
+        if(unconnected) {
+            return new TopicIterator(){
+                @Override
                 public boolean hasNext(){return false;} 
+                @Override
                 public Topic next(){throw new NoSuchElementException();} 
+                @Override
                 public void remove(){throw new UnsupportedOperationException();}
+                @Override
                 public void dispose(){}
             };
-
+        }
+        
         try {
-            if(sqlProxy!=null) throw new UnsupportedOperationException();
+            if(sqlProxy!=null) {
+                throw new UnsupportedOperationException();
+            }
             
             final Connection con=createConnection(true);
             final Statement stmt=con.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-            if(databaseFlavour.equals("mysql")) stmt.setFetchSize(Integer.MIN_VALUE); // A signal to mysql not to fetch all rows but stream them instead http://dev.mysql.com/doc/connector/j/en/cj-implementation-notes.html
+            if(databaseFlavour.equals("mysql")) {
+                // A signal to mysql not to fetch all rows but stream them instead http://dev.mysql.com/doc/connector/j/en/cj-implementation-notes.html
+                stmt.setFetchSize(Integer.MIN_VALUE);
+            }
             final ResultSet rs=stmt.executeQuery("select * from TOPIC");
             ResultSetMetaData metaData=rs.getMetaData();
             final int columns=metaData.getColumnCount();
@@ -845,55 +937,74 @@ public class DatabaseTopicMap extends TopicMap {
             // NOTE: You must iterate through all rows because statement and result set
             //       will only be closed after last row has been fetched. Or alternatively
             //       call dispose when you're done with the iterator.
-            return new TopicIterator(){
+            return new TopicIterator() {
                 boolean calledNext=false;
                 boolean hasNext=false;
                 boolean end=false;
                 boolean disposed=false;
                 
-                public void dispose(){
+                @Override
+                public void dispose() {
                     if(disposed) return;
-                    
                     disposed=true;
                     end=true;
-                    try{
+                    try {
                         rs.close();
                         stmt.close();
                         con.close();
-                    }catch(SQLException sqle){sqle.printStackTrace();}
+                    }
+                    catch(SQLException sqle) {
+                        sqle.printStackTrace();
+                    }
                 }
 
-                public boolean hasNext(){
+                @Override
+                public boolean hasNext() {
                     if(end) return false;
                     if(calledNext) return hasNext;
                     else {
-                        try{
+                        try {
                             hasNext=rs.next();
                             calledNext=true;
                             if(hasNext==false){
                                 dispose();
                             }
                             return hasNext;
-                        }catch(SQLException sqle){sqle.printStackTrace();return false;}
+                        } 
+                        catch(SQLException sqle) {
+                            sqle.printStackTrace();
+                            return false;
+                        }
                     }
                 }
-                public Topic next(){
-                    if(!hasNext()) throw new NoSuchElementException();
-                    HashMap<String,Object> row=new LinkedHashMap<String,Object>();
-                    try{
-                        for(int i=0;i<columns;i++){
+                
+                @Override
+                public Topic next() {
+                    if(!hasNext()) {
+                        throw new NoSuchElementException();
+                    }
+                    Map<String,Object> row=new LinkedHashMap<String,Object>();
+                    try {
+                        for(int i=0;i<columns;i++) {
                             row.put(columnNames[i],rs.getObject(i+1));
                         }
-                    }catch(SQLException sqle){sqle.printStackTrace();return null;}
+                    }
+                    catch(SQLException sqle) {
+                        sqle.printStackTrace();
+                        return null;
+                    }
                     calledNext=false;
-                    try{
+                    try {
                         return buildTopic(row);
-                    }catch(TopicMapException tme){
+                    }
+                    catch(TopicMapException tme) {
                         tme.printStackTrace(); // TODO EXCEPTION
                         return null;
                     }
                 }
-                public void remove(){
+                
+                @Override
+                public void remove() {
                     throw new UnsupportedOperationException();
                 }
             };
@@ -904,9 +1015,12 @@ public class DatabaseTopicMap extends TopicMap {
         }
     }
     
+    
     @Override
     public Topic[] getTopics(String[] sis) throws TopicMapException {
-        if(unconnected) return new Topic[0];
+        if(unconnected) {
+            return new Topic[0];
+        }
         Topic[] ret=new Topic[sis.length];
         for(int i=0;i<sis.length;i++){
             ret[i]=getTopic(sis[i]);
@@ -921,11 +1035,22 @@ public class DatabaseTopicMap extends TopicMap {
      */
     @Override
     public Iterator<Association> getAssociations(){
-        if(unconnected) return new Iterator<Association>(){
-                public boolean hasNext(){return false;} 
-                public Association next(){throw new NoSuchElementException();} 
-                public void remove(){throw new UnsupportedOperationException();}};
-                
+        if(unconnected) {
+            return new Iterator<Association>(){
+                @Override
+                public boolean hasNext(){
+                    return false;
+                } 
+                @Override
+                public Association next(){
+                    throw new NoSuchElementException();
+                } 
+                @Override
+                public void remove(){
+                    throw new UnsupportedOperationException();
+                }
+            };
+        }     
         try{
             if(sqlProxy!=null) throw new UnsupportedOperationException();
             
@@ -945,6 +1070,7 @@ public class DatabaseTopicMap extends TopicMap {
                 boolean hasNext=false;
                 boolean end=false;
 
+                @Override
                 public boolean hasNext(){
                     if(end) return false;
                     if(calledNext) return hasNext;
@@ -962,6 +1088,8 @@ public class DatabaseTopicMap extends TopicMap {
                         }catch(SQLException sqle){sqle.printStackTrace();return false;}
                     }
                 }
+                
+                @Override
                 public Association next(){
                     if(!hasNext()) throw new NoSuchElementException();
                     HashMap<String,Object> row=new LinkedHashMap<String,Object>();
@@ -978,6 +1106,8 @@ public class DatabaseTopicMap extends TopicMap {
                         return null;
                     }
                 }
+                
+                @Override
                 public void remove(){
                     throw new UnsupportedOperationException();
                 }
@@ -993,9 +1123,12 @@ public class DatabaseTopicMap extends TopicMap {
     @Override
     public Collection<Association> getAssociationsOfType(Topic type) throws TopicMapException {
         if(unconnected) return new Vector<Association>();
-        return queryAssociation("select * from ASSOCIATION,TOPIC where "+
-                                "TYPE=TOPICID and TOPICID='"+escapeSQL(type.getID())+"'");
+        return queryAssociation("select * "
+                + "from ASSOCIATION,TOPIC "
+                + "where TYPE=TOPICID "
+                + "and TOPICID='"+escapeSQL(type.getID())+"'");
     }
+    
     
     @Override
     public int getNumTopics(){
@@ -1029,20 +1162,20 @@ public class DatabaseTopicMap extends TopicMap {
     
     
     @Override
-    public int getNumAssociations(){
+    public int getNumAssociations() {
         if(unconnected) return 0;
-        if(sqlProxy!=null){
-            try{
+        if(sqlProxy!=null) {
+            try {
                 Collection<Map<String,Object>> res=sqlProxy.executeQuery("select count(*) from ASSOCIATION");
                 Map<String,Object> row=res.iterator().next();
                 return ((Number)row.get(row.keySet().iterator().next())).intValue();
             }
-            catch(Exception e){
+            catch(Exception e) {
                 e.printStackTrace(); 
                 return 0;
             }
         }        
-        try{
+        try {
             Connection con=getConnection();
             Statement stmt=con.createStatement();
             ResultSet rs=stmt.executeQuery("select count(*) from ASSOCIATION");
@@ -1052,15 +1185,20 @@ public class DatabaseTopicMap extends TopicMap {
             stmt.close();
             return count;        
         }
-        catch(SQLException sqle){
+        catch(SQLException sqle) {
             sqle.printStackTrace(); 
             return 0;
         }        
     }
     
+    
+    // ---------------------------------------- COPY TOPICIN / ASSOCIATIONIN ---
+    
+    
     private Topic _copyTopicIn(Topic t,boolean deep,Hashtable copied) throws TopicMapException {
         return _copyTopicIn(t,deep,false,copied);
     }
+    
     
     private Topic _copyTopicIn(Topic t,boolean deep,boolean stub,Hashtable<Topic,Locator> copied) throws TopicMapException {
         
@@ -1099,14 +1237,14 @@ public class DatabaseTopicMap extends TopicMap {
             nt.setBaseName(t.getBaseName());
         }
         
-        if( (!stub) || deep){
+        if( (!stub) || deep) {
 
             for(Topic type : t.getTypes()){
                 Topic ntype=_copyTopicIn(type,deep,true,copied);
                 nt.addType(ntype);
             }
 
-            for(Set<Topic> scope : t.getVariantScopes()){
+            for(Set<Topic> scope : t.getVariantScopes()) {
                 Set<Topic> nscope=new LinkedHashSet();
                 for(Topic st : scope){
                     Topic nst=_copyTopicIn(st,deep,true,copied);
@@ -1115,7 +1253,7 @@ public class DatabaseTopicMap extends TopicMap {
                 nt.setVariant(nscope, t.getVariant(scope));
             }
 
-            for(Topic type : t.getDataTypes()){
+            for(Topic type : t.getDataTypes()) {
                 Topic ntype=_copyTopicIn(type,deep,true,copied);
                 Hashtable<Topic,String> versiondata=t.getData(type);
                 for(Map.Entry<Topic,String> e : versiondata.entrySet()){
@@ -1144,7 +1282,7 @@ public class DatabaseTopicMap extends TopicMap {
         
         Association na=createAssociation(ntype);
         
-        for(Topic role : a.getRoles()){
+        for(Topic role : a.getRoles()) {
             Topic nrole = null;
             if(role.getSubjectIdentifiers().isEmpty()) {
                 System.out.println("Warning, topic has no subject identifiers. Creating default SI!");
@@ -1178,7 +1316,7 @@ public class DatabaseTopicMap extends TopicMap {
         Association n=_copyAssociationIn(a);
         Topic minTopic=null;
         int minCount=Integer.MAX_VALUE;
-        for(Topic role : n.getRoles()){
+        for(Topic role : n.getRoles()) {
             Topic t=n.getPlayer(role);
             if(t.getAssociations().size()<minCount){
                 minCount=t.getAssociations().size();
@@ -1189,6 +1327,7 @@ public class DatabaseTopicMap extends TopicMap {
         return n;
     }
     
+    
     @Override
     public Topic copyTopicIn(Topic t, boolean deep)  throws TopicMapException {
         if(unconnected) return null;
@@ -1196,17 +1335,23 @@ public class DatabaseTopicMap extends TopicMap {
         return _copyTopicIn(t,deep,false,new Hashtable());
     }
     
+    
     @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
         if(unconnected) return;
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         Topic nt=getTopic((Locator)t.getSubjectIdentifiers().iterator().next());
         if(nt==null) nt=copyTopicIn(t,false);
-        for(Association a : t.getAssociations()){
+        for(Association a : t.getAssociations()) {
             _copyAssociationIn(a);
         }
         ((DatabaseTopic)nt).removeDuplicateAssociations();        
     }
+    
+    
+    
+    // ------------------------------------------------------ IMPORT / MERGE ---
+    
     
     @Override
     public void importXTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
@@ -1233,6 +1378,7 @@ public class DatabaseTopicMap extends TopicMap {
         setConsistencyCheck(old);
     }
     
+    
     @Override
     public void importLTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
         if(unconnected) return;
@@ -1258,27 +1404,6 @@ public class DatabaseTopicMap extends TopicMap {
         setConsistencyCheck(old);
     }  
     
-    /**
-     * Tries to set complete index attribute. This is only possible if the topic map is
-     * empty (getNumTopics returns 0). If this is the case, will stop index cleaner
-     * thread and set the completeIndexes attribute to true.
-     * @see #completeIndexes
-     */
-    public void setCompleteIndex(){
-        if(getNumTopics()==0) {
-            topicIndex.stopCleanerThread();
-            completeIndexes=topicIndex.isFullIndex();
-        }
-    }
-    /**
-     * Restarts the topic index cleaner thread. You need to call this at some point
-     * if you stopped it with setCompleteIndex.
-     */
-    public void resetCompleteIndex(){
-        topicIndex.clearTopicCache();
-        topicIndex.startCleanerThread();
-        completeIndexes=false;
-    }
     
     @Override
     public void importLTM(java.io.File in) throws java.io.IOException,TopicMapException {
@@ -1305,7 +1430,7 @@ public class DatabaseTopicMap extends TopicMap {
         setConsistencyCheck(old);
     }    
     
-    
+   
     @Override
     public void mergeIn(TopicMap tm,TopicMapLogger tmLogger) throws TopicMapException {
         if(unconnected) return;
@@ -1380,16 +1505,53 @@ public class DatabaseTopicMap extends TopicMap {
         completeIndexes=false;
     }
     
+    
+    
+    // --------------------------------------------------------------- INDEX ---
+    
+
+    /**
+     * Tries to set complete index attribute. This is only possible if the topic map is
+     * empty (getNumTopics returns 0). If this is the case, will stop index cleaner
+     * thread and set the completeIndexes attribute to true.
+     * @see #completeIndexes
+     */
+    public void setCompleteIndex(){
+        if(getNumTopics()==0) {
+            topicIndex.stopCleanerThread();
+            completeIndexes=topicIndex.isFullIndex();
+        }
+    }
+    
+    
+    /**
+     * Restarts the topic index cleaner thread. You need to call this at some point
+     * if you stopped it with setCompleteIndex.
+     */
+    public void resetCompleteIndex(){
+        topicIndex.clearTopicCache();
+        topicIndex.startCleanerThread();
+        completeIndexes=false;
+    }
+    
+    
+    // ------------------------------------------------------------ TRACKING ---
+    
+    
     @Override
     public boolean trackingDependent(){
         return false;
     }
+    
     
     @Override
     public void setTrackDependent(boolean v){
         // TODO: dependent times and tracking dependent
     }
 
+    
+    // --------------------------------------------------- TOPICMAP LISTENER ---
+    
     
     @Override
     public List<TopicMapListener> getTopicMapListeners(){
@@ -1446,6 +1608,10 @@ public class DatabaseTopicMap extends TopicMap {
         return old;
     }
     
+    
+    // ----------------------------------------- TOPICMAP LISTENER INTERFACE ---
+    
+    
     void topicRemoved(Topic t) throws TopicMapException {
         topicIndex.topicRemoved(t);
         changed=true;
@@ -1453,66 +1619,88 @@ public class DatabaseTopicMap extends TopicMap {
             listener.topicRemoved(t);        
         }
     }
+    
+    
     void associationRemoved(Association a) throws TopicMapException {
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.associationRemoved(a);        
         }
     }
+    
+    
     public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException{
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.topicSubjectIdentifierChanged(t,added,removed);
         }
     }
+    
+    
     public void topicBaseNameChanged(Topic t,String newName,String oldName) throws TopicMapException{
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.topicBaseNameChanged(t,newName,oldName);
         }
     }
+    
+    
     public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.topicTypeChanged(t,added,removed);
         }
     }
+    
+    
     public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.topicVariantChanged(t,scope,newName,oldName);
         }
     }
+    
+    
     public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.topicDataChanged(t,type,version,newValue,oldValue);
         }
     }
+    
+    
     public void topicSubjectLocatorChanged(Topic t,Locator newLocator,Locator oldLocator) throws TopicMapException {
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.topicSubjectLocatorChanged(t,newLocator,oldLocator);
         }
     }
+    
+    
     public void topicChanged(Topic t) throws TopicMapException {
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.topicChanged(t);
         }
     }
+    
+    
     public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.associationTypeChanged(a,newType,oldType);        
         }
     }
+    
+    
     public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
             listener.associationPlayerChanged(a,role,newPlayer,oldPlayer);        
         }
     }
+    
+    
     public void associationChanged(Association a) throws TopicMapException{
         changed=true;
         for(TopicMapListener listener : topicMapListeners){
@@ -1520,6 +1708,8 @@ public class DatabaseTopicMap extends TopicMap {
         }
     }
     
+    
+    // -------------------------------------------------------------- SEARCH ---
     
    
     @Override
@@ -1588,7 +1778,7 @@ public class DatabaseTopicMap extends TopicMap {
     }
  
     
-    // -------------------------------------------------------------------------
+    // ---------------------------------------------------------- STATISTICS ---
     
     
     @Override

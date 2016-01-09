@@ -61,6 +61,7 @@ public class DatabaseTopic extends Topic {
     protected WeakReference<Hashtable<Topic,Hashtable<Topic,Collection<Association>>>> storedAssociations;
     protected boolean removed=false;
     
+    
     /** Creates a new instance of DatabaseTopic */
     public DatabaseTopic(DatabaseTopicMap tm) {
         this.topicMap=tm;
@@ -69,13 +70,18 @@ public class DatabaseTopic extends Topic {
         dataFetched=false;
         variantsFetched=false;
         typesFetched=false;
+        id=null;
 //        associationsFetched=false;
     }
-    public DatabaseTopic(String id,DatabaseTopicMap tm) {
+    
+    
+    public DatabaseTopic(String id, DatabaseTopicMap tm) {
         this(tm);
         this.id=id;
     }
-    public DatabaseTopic(Map<String,Object> row,DatabaseTopicMap tm)  throws TopicMapException {
+    
+    
+    public DatabaseTopic(Map<String,Object> row, DatabaseTopicMap tm)  throws TopicMapException {
         this(tm);
         Object o=row.get("BASENAME");
         if(o!=null) internalSetBaseName(o.toString());
@@ -84,6 +90,8 @@ public class DatabaseTopic extends Topic {
         o=row.get("TOPICID");
         if(o!=null) id=o.toString();
     }
+    
+    
     public DatabaseTopic(Object baseName,Object subjectLocator,Object id,DatabaseTopicMap tm) throws TopicMapException {
         this(tm);
         if(baseName!=null) internalSetBaseName(baseName.toString());
@@ -91,9 +99,12 @@ public class DatabaseTopic extends Topic {
         if(id!=null) this.id=id.toString();
     }
     
+    
     void initialize(Object baseName,Object subjectLocator) throws TopicMapException {
         initialize((String)baseName,(String)subjectLocator);
     }
+    
+    
     /**
      * Initializes this DatabaseTopic object setting the basename and subject locator
      * but does not modify the actual database.
@@ -102,6 +113,8 @@ public class DatabaseTopic extends Topic {
         internalSetBaseName(baseName);
         if(subjectLocator!=null) this.subjectLocator=topicMap.createLocator(subjectLocator);
     }
+    
+    
     /**
      * Sets the base name in this DatabaseTopic object but does not modify the database.
      */
@@ -110,6 +123,7 @@ public class DatabaseTopic extends Topic {
         baseName=bn;
         topicMap.topicBNChanged(this, old);
     }
+    
     
     private static int idcounter=0;    
     /**
@@ -122,6 +136,7 @@ public class DatabaseTopic extends Topic {
         if(idcounter>=100000) idcounter=0;
         return "T"+System.currentTimeMillis()+"-"+(idcounter++);
     }
+    
     
     /**
      * Inserts a new topic in the database with the data currently set in this
@@ -140,18 +155,24 @@ public class DatabaseTopic extends Topic {
         dataFetched=true;
         variantsFetched=true;
         typesFetched=true;
-        id=makeID();
+        if(id == null) {
+            id=makeID();
+        }
         topicMap.executeUpdate("insert into TOPIC (TOPICID) values ('"+escapeSQL(id)+"')");
     }
+    
+    
 /*
     void setFull(boolean full){
         // what should we do about sisFetched, typesFetched etc.
         this.full=full;        
     }*/
     
+    
     protected String escapeSQL(String s){
         return topicMap.escapeSQL(s);
     }
+    
     
     /**
      * Sets subject identifiers in this DatabaseTopic but does not modify
@@ -181,6 +202,10 @@ public class DatabaseTopic extends Topic {
         }
     }
     
+    
+    // --------------------------------------------------------------- FETCH ---
+    
+    
     protected void fetchSubjectIdentifiers() throws TopicMapException {
         Collection<Map<String,Object>> res=topicMap.executeQuery("select * from SUBJECTIDENTIFIER where TOPIC='"+escapeSQL(id)+"'");
         HashSet<Locator> newSIs=new LinkedHashSet<Locator>();
@@ -190,6 +215,7 @@ public class DatabaseTopic extends Topic {
         setSubjectIdentifiers(newSIs);
         sisFetched=true;
     }
+    
     
     protected void fetchData() throws TopicMapException {
         Collection<Map<String,Object>> res=topicMap.executeQuery(
@@ -212,6 +238,7 @@ public class DatabaseTopic extends Topic {
         }
         dataFetched=true;
     }
+    
     
     protected void fetchVariants() throws TopicMapException {
         Collection<Map<String,Object>> res=topicMap.executeQuery(
@@ -239,6 +266,7 @@ public class DatabaseTopic extends Topic {
         variantsFetched=true;
     }
     
+    
     protected void fetchTypes() throws TopicMapException {
         Collection<Map<String,Object>> res=topicMap.executeQuery(
                 "select TOPIC.* from TOPIC,TOPICTYPE where TYPE=TOPICID and "+
@@ -250,7 +278,8 @@ public class DatabaseTopic extends Topic {
         typesFetched=true;
     }
     
-    static void fetchAllSubjectIdentifiers(Collection<Map<String,Object>> res,HashMap<String,DatabaseTopic> topics,DatabaseTopicMap topicMap) throws TopicMapException {
+    
+    static void fetchAllSubjectIdentifiers(Collection<Map<String,Object>> res, Map<String,DatabaseTopic> topics,DatabaseTopicMap topicMap) throws TopicMapException {
         String topicID=null;
         HashSet<Locator> subjectIdentifiers=new LinkedHashSet<Locator>();
         for(Map<String,Object> row : res) {
@@ -275,6 +304,7 @@ public class DatabaseTopic extends Topic {
             }
         }
     }
+    
     
     protected Hashtable<Topic,Hashtable<Topic,Collection<Association>>> fetchAssociations() throws TopicMapException {
         if(storedAssociations!=null){
@@ -362,8 +392,10 @@ public class DatabaseTopic extends Topic {
         return associations;
     }
     
+    
+    
     /**
-     * Fetch all information from database that hasn't allready been fetched.
+     * Fetch all information from database that hasn't already been fetched.
      */
     void makeFull()  throws TopicMapException {
         if(!sisFetched) fetchSubjectIdentifiers();
@@ -374,10 +406,15 @@ public class DatabaseTopic extends Topic {
         full=true;
     }
     
+    
+    // -------------------------------------------------------------------------
+    
+    
     @Override
     public String getID(){
         return id;
     }
+    
     
     @Override
     public Collection<Locator> getSubjectIdentifiers() throws TopicMapException {
@@ -385,21 +422,22 @@ public class DatabaseTopic extends Topic {
         return subjectIdentifiers;
     }
     
+    
     @Override
     public void addSubjectIdentifier(Locator l) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        if( topicMap.isReadOnly() ) throw new TopicMapReadOnlyException();
         if( l == null ) return; 
         if(!sisFetched) fetchSubjectIdentifiers();
-        if(!subjectIdentifiers.contains(l)){
+        if(!subjectIdentifiers.contains(l)) {
             Topic t=topicMap.getTopic(l);
-            if(t!=null){
+            if(t!=null) {
                 mergeIn(t);
             }
-            else{
+            else {
                 subjectIdentifiers.add(l);
 //                System.out.println("Inserting si "+l.toExternalForm());
-                boolean ok=topicMap.executeUpdate("insert into SUBJECTIDENTIFIER (TOPIC,SI) values ('"+
+                boolean ok = topicMap.executeUpdate("insert into SUBJECTIDENTIFIER (TOPIC,SI) values ('"+
                     escapeSQL(id)+"','"+escapeSQL(l.toExternalForm())+"')");
                 if(!ok) System.out.println("Failed to add si "+l.toExternalForm());
                 topicMap.topicSIChanged(this, null,l);
@@ -408,6 +446,7 @@ public class DatabaseTopic extends Topic {
         }
 //        topicMap.topicChanged(this);
     }
+    
     
     public void mergeIn(Topic t)  throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
@@ -575,7 +614,7 @@ public class DatabaseTopic extends Topic {
             if(scope!=null){
                 if(scopes.contains(scope)) delete.add(oldVariant);
             }
-            if(delete.size()>0){
+            if(!delete.isEmpty()){
                 String col=topicMap.collectionToSQL(delete);
                 topicMap.executeUpdate("delete from VARIANTSCOPE where VARIANT in "+col);
                 topicMap.executeUpdate("delete from VARIANT where VARIANTID in "+col);
@@ -607,10 +646,12 @@ public class DatabaseTopic extends Topic {
         topicMap.topicSIChanged(this, l,null);
     }
     
+    
     @Override
     public String getBaseName(){
         return baseName;
     }
+    
     
     @Override
     public void setBaseName(String name) throws TopicMapException {
@@ -620,7 +661,9 @@ public class DatabaseTopic extends Topic {
             if(baseName!=null){
                 String old=baseName;
                 internalSetBaseName(null);
-                topicMap.executeUpdate("update TOPIC set BASENAME=null where TOPICID='"+escapeSQL(id)+"'");
+                topicMap.executeUpdate("update TOPIC "
+                        +"set BASENAME=null "
+                        +"where TOPICID='"+escapeSQL(id)+"'");
                 topicMap.topicBaseNameChanged(this,null,old);
             }
             return;
@@ -632,16 +675,20 @@ public class DatabaseTopic extends Topic {
             }
             String old=baseName;
             internalSetBaseName(name);
-            topicMap.executeUpdate("update TOPIC set BASENAME='"+escapeSQL(name)+"' where TOPICID='"+escapeSQL(id)+"'");
+            topicMap.executeUpdate("update TOPIC "
+                    +"set BASENAME='"+escapeSQL(name)+"' "
+                    +"where TOPICID='"+escapeSQL(id)+"'");
             topicMap.topicBaseNameChanged(this,name,old);
         }        
     }
+    
     
     @Override
     public Collection<Topic> getTypes() throws TopicMapException {
         if(!full) makeFull();
         return types;
     }
+    
     
     @Override
     public void addType(Topic t) throws TopicMapException {
@@ -657,6 +704,7 @@ public class DatabaseTopic extends Topic {
         }
     }
     
+    
     @Override
     public void removeType(Topic t) throws TopicMapException  {
         if( removed ) throw new TopicRemovedException();
@@ -665,10 +713,13 @@ public class DatabaseTopic extends Topic {
         if(!full) makeFull();
         if(types.contains(t)){
             types.remove(t);
-            topicMap.executeUpdate("delete from TOPICTYPE where TOPIC='"+escapeSQL(id)+"' and TYPE='"+escapeSQL(t.getID())+"'");
+            topicMap.executeUpdate("delete from TOPICTYPE "
+                    +"where TOPIC='"+escapeSQL(id)+"' "
+                    +"and TYPE='"+escapeSQL(t.getID())+"'");
             topicMap.topicTypeChanged(this,null,t);
         }        
     }
+    
     
     @Override
     public boolean isOfType(Topic t)  throws TopicMapException {
@@ -677,6 +728,7 @@ public class DatabaseTopic extends Topic {
         return types.contains(t);
     }
     
+    
     @Override
     public String getVariant(Set<Topic> scope) throws TopicMapException {
         if(!full) makeFull();
@@ -684,6 +736,7 @@ public class DatabaseTopic extends Topic {
         if(variant != null) return variant.e1;
         return null;
     }
+    
     
     @Override
     public void setVariant(Set<Topic> scope,String name) throws TopicMapException {
@@ -709,11 +762,13 @@ public class DatabaseTopic extends Topic {
         topicMap.topicVariantChanged(this,scope,name,old);
     }
     
+    
     @Override
     public Set<Set<Topic>> getVariantScopes() throws TopicMapException {
         if(!full) makeFull();
         return variants.keySet();
     }
+    
     
     @Override
     public void removeVariant(Set<Topic> scope) throws TopicMapException {
@@ -729,6 +784,7 @@ public class DatabaseTopic extends Topic {
         }
     }
     
+    
     @Override
     public String getData(Topic type,Topic version) throws TopicMapException {
         if(type == null || version == null) return null;
@@ -738,17 +794,20 @@ public class DatabaseTopic extends Topic {
         return td.get(version);
     }
     
+    
     @Override
     public Hashtable<Topic,String> getData(Topic type) throws TopicMapException {
         if(!full) makeFull();
         return data.get(type);
     }
     
+    
     @Override
     public Collection<Topic> getDataTypes() throws TopicMapException {
         if(!full) makeFull();
         return data.keySet();
     }
+    
     
     @Override
     public void setData(Topic type,Hashtable<Topic,String> versionData) throws TopicMapException {
@@ -759,15 +818,17 @@ public class DatabaseTopic extends Topic {
         }
     }
     
+    
     @Override
     public void setData(Topic type,Topic version,String value) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(!dataFetched) fetchData();
         if(getData(type,version)!=null){
-            topicMap.executeUpdate("update DATA set DATA='"+escapeSQL(value)+"' where "+
-                    "TOPIC='"+escapeSQL(id)+"' and TYPE='"+escapeSQL(type.getID())+"' and "+
-                    "VERSION='"+escapeSQL(version.getID())+"'");
+            topicMap.executeUpdate("update DATA set DATA='"+escapeSQL(value)+"' "
+                    +"where TOPIC='"+escapeSQL(id)+"' "
+                    +"and TYPE='"+escapeSQL(type.getID())+"' "
+                    +"and VERSION='"+escapeSQL(version.getID())+"'");
         }
         else{
             topicMap.executeUpdate("insert into DATA (DATA,TOPIC,TYPE,VERSION) values ("+
@@ -784,6 +845,7 @@ public class DatabaseTopic extends Topic {
         topicMap.topicDataChanged(this,type,version,value,old);
     }
     
+    
     @Override
     public void removeData(Topic type,Topic version)  throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
@@ -791,13 +853,15 @@ public class DatabaseTopic extends Topic {
         if(type == null || version == null) return;
         if(!full) makeFull();
         if(getData(type,version)!=null){
-            topicMap.executeUpdate("delete from DATA where "+
-                "TOPIC='"+escapeSQL(id)+"' and TYPE='"+escapeSQL(type.getID())+"' and "+
-                "VERSION='"+escapeSQL(version.getID())+"'");
+            topicMap.executeUpdate("delete from DATA "
+                    +"where TOPIC='"+escapeSQL(id)+"' "
+                    +"and TYPE='"+escapeSQL(type.getID())+"' "
+                    +"and VERSION='"+escapeSQL(version.getID())+"'");
             String old=data.get(type).remove(version);
             topicMap.topicDataChanged(this,type,version,null,old);
         }        
     }
+    
     
     @Override
     public void removeData(Topic type) throws TopicMapException {
@@ -806,8 +870,9 @@ public class DatabaseTopic extends Topic {
         if(type == null) return;
         if(!full) makeFull();
         if(getData(type)!=null){
-            topicMap.executeUpdate("delete from DATA where "+
-                "TOPIC='"+escapeSQL(id)+"' and TYPE='"+escapeSQL(type.getID())+"'");
+            topicMap.executeUpdate("delete from DATA "
+                    +"where TOPIC='"+escapeSQL(id)+"' "
+                    +"and TYPE='"+escapeSQL(type.getID())+"'");
             Hashtable<Topic,String> old=data.remove(type);
             for(Map.Entry<Topic,String> e : old.entrySet()){
                 topicMap.topicDataChanged(this,type,e.getKey(),null,e.getValue());
@@ -815,10 +880,12 @@ public class DatabaseTopic extends Topic {
         }
     }
     
+    
     @Override
     public Locator getSubjectLocator(){
         return subjectLocator;
     }
+    
     
     @Override
     public void setSubjectLocator(Locator l) throws TopicMapException {
@@ -845,15 +912,17 @@ public class DatabaseTopic extends Topic {
         }
     }
     
+    
     @Override
     public TopicMap getTopicMap(){
         return topicMap;
     }
     
+    
     @Override
     public Collection<Association> getAssociations() throws TopicMapException {
 //        if(!full) makeFull();
-        HashSet<Association> ret=new LinkedHashSet();
+        Set<Association> ret=new LinkedHashSet();
         Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
         for(Map.Entry<Topic,Hashtable<Topic,Collection<Association>>> e : associations.entrySet()){
             for(Map.Entry<Topic,Collection<Association>> e2 : e.getValue().entrySet()){
@@ -865,13 +934,16 @@ public class DatabaseTopic extends Topic {
         return ret;
     }
     
+    
     @Override
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
         if(type == null) return null;
 //        if(!full) makeFull();
-        HashSet<Association> ret=new LinkedHashSet();
+        Set<Association> ret=new LinkedHashSet();
         Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
-        if(associations.get(type)==null) return new Vector<Association>();
+        if(associations.get(type)==null) {
+            return new Vector<Association>();
+        }
         for(Map.Entry<Topic,Collection<Association>> e2 : associations.get(type).entrySet()){
             for(Association a : e2.getValue()){
                 ret.add(a);
@@ -880,17 +952,23 @@ public class DatabaseTopic extends Topic {
         return ret;        
     }
     
+    
     @Override
     public Collection<Association> getAssociations(Topic type,Topic role) throws TopicMapException {
         if(type == null || role == null) return null;
 //        if(!full) makeFull();
         Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
         Hashtable<Topic,Collection<Association>> as=associations.get(type);
-        if(as==null) return new Vector<Association>();
+        if(as==null) {
+            return new ArrayList<Association>();
+        }
         Collection<Association> ret=as.get(role);
-        if(ret==null) return new Vector<Association>();
+        if(ret==null) {
+            return new ArrayList<Association>();
+        }
         return ret;
     }
+    
     
     @Override
     public void remove()  throws TopicMapException {
@@ -904,7 +982,10 @@ public class DatabaseTopic extends Topic {
         topicMap.executeUpdate("delete from TOPICTYPE where TOPIC='"+eid+"'");
         topicMap.executeUpdate("delete from SUBJECTIDENTIFIER where TOPIC='"+eid+"'");
         
-        Collection<Map<String,Object>> res=topicMap.executeQuery("select distinct ASSOCIATIONID from ASSOCIATION,MEMBER where MEMBER.PLAYER='"+eid+"' and MEMBER.ASSOCIATION=ASSOCIATION.ASSOCIATIONID");
+        Collection<Map<String,Object>> res=topicMap.executeQuery("select distinct ASSOCIATIONID "
+                +"from ASSOCIATION,MEMBER "
+                +"where MEMBER.PLAYER='"+eid+"' "
+                +"and MEMBER.ASSOCIATION=ASSOCIATION.ASSOCIATIONID");
         String[] aid=new String[res.size()];
         int counter=0;
         for(Map<String,Object> row : res){
@@ -925,28 +1006,34 @@ public class DatabaseTopic extends Topic {
         topicMap.topicRemoved(this);
     }
     
+    
     @Override
     public long getEditTime(){
         return 0; // TODO: what to do with edittimes? store in db?
     }
     
+    
     @Override
     public void setEditTime(long time){
     }
+    
     
     @Override
     public long getDependentEditTime(){
         return 0;
     }
     
+    
     @Override
     public void setDependentEditTime(long time){
     }
+    
     
     @Override
     public boolean isRemoved(){
         return removed;
     }
+    
     
     @Override
     public boolean isDeleteAllowed() throws TopicMapException {
@@ -963,32 +1050,51 @@ public class DatabaseTopic extends Topic {
         return true;
     }
     
+    
     @Override
     public Collection<Topic> getTopicsWithDataType() throws TopicMapException {
-        return topicMap.queryTopic("select TOPIC.* from TOPIC,DATA where TOPICID=TOPIC and TYPE='"+escapeSQL(id)+"'");
+        return topicMap.queryTopic("select TOPIC.* "
+                + "from TOPIC,DATA "
+                + "where TOPICID=TOPIC "
+                + "and TYPE='"+escapeSQL(id)+"'");
     }
+    
     
     @Override
     public Collection<Association> getAssociationsWithType() throws TopicMapException {
-        return topicMap.queryAssociation("select ASSOCIATION.* from ASSOCIATION where TYPE='"+escapeSQL(id)+"'");
+        return topicMap.queryAssociation("select ASSOCIATION.* "
+                + "from ASSOCIATION "
+                + "where TYPE='"+escapeSQL(id)+"'");
     }
+    
     
     @Override
     public Collection<Association> getAssociationsWithRole() throws TopicMapException {
-        return topicMap.queryAssociation("select ASSOCIATION.* from ASSOCIATION,MEMBER where ASSOCIATION=ASSOCIATIONID and ROLE='"+escapeSQL(id)+"'");
+        return topicMap.queryAssociation("select ASSOCIATION.* "
+                +"from ASSOCIATION,MEMBER "
+                +"where ASSOCIATION=ASSOCIATIONID "
+                +"and ROLE='"+escapeSQL(id)+"'");
     }
 
+    
     @Override
     public Collection<Topic> getTopicsWithDataVersion() throws TopicMapException {
-        return topicMap.queryTopic("select TOPIC.* from TOPIC,DATA where TOPICID=TOPIC and VERSION='"+escapeSQL(id)+"'");
+        return topicMap.queryTopic("select TOPIC.* "
+                +"from TOPIC,DATA "
+                +"where TOPICID=TOPIC "
+                +"and VERSION='"+escapeSQL(id)+"'");
     }
 
+    
     @Override
     public Collection<Topic> getTopicsWithVariantScope() throws TopicMapException {
-        return topicMap.queryTopic("select distinct TOPIC.* from TOPIC,VARIANT,VARIANTSCOPE "+
-                                   "where TOPIC.TOPICID=VARIANT.TOPIC and VARIANT.VARIANTID=VARIANTSCOPE.VARIANT "+
-                                   "and VARIANTSCOPE.TOPIC='"+escapeSQL(id)+"'");
+        return topicMap.queryTopic("select distinct TOPIC.* "
+                +"from TOPIC,VARIANT,VARIANTSCOPE "
+                +"where TOPIC.TOPICID=VARIANT.TOPIC "
+                +"and VARIANT.VARIANTID=VARIANTSCOPE.VARIANT "
+                +"and VARIANTSCOPE.TOPIC='"+escapeSQL(id)+"'");
     }
+    
     
     void associationChanged(DatabaseAssociation a,Topic type,Topic oldType,Topic role,Topic oldRole){
         Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=null;
@@ -1022,17 +1128,19 @@ public class DatabaseTopic extends Topic {
         storedAssociations=new WeakReference(associations);
     }
     
+    
     void removeDuplicateAssociations() throws TopicMapException {
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        HashSet<EqualAssociationWrapper> as=new LinkedHashSet<EqualAssociationWrapper>();
-        HashSet<Association> delete=new LinkedHashSet<Association>();
-        for(Association a : getAssociations()){
+        Set<EqualAssociationWrapper> as=new LinkedHashSet<EqualAssociationWrapper>();
+        Set<Association> delete=new LinkedHashSet<Association>();
+        for(Association a : getAssociations()) {
             if(!as.add(new EqualAssociationWrapper((DatabaseAssociation)a))){
                 delete.add(a);
             }
         }
         for(Association a : delete) a.remove();
     }
+    
     
     /*
     public int hashCode(){
@@ -1045,17 +1153,20 @@ public class DatabaseTopic extends Topic {
         else return false;
     }*/
     
+    
     private class EqualAssociationWrapper {
         public DatabaseAssociation a;
         private int hashCode=0;
         public EqualAssociationWrapper(DatabaseAssociation a){
             this.a=a;
         }
+        @Override
         public boolean equals(Object o){
             if(o==null) return false;
             if(hashCode()!=o.hashCode()) return false;
             return a._equals(((EqualAssociationWrapper)o).a);
         }
+        @Override
         public int hashCode(){
             if(hashCode!=0) return hashCode;
             else {

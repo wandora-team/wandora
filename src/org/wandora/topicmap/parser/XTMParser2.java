@@ -144,7 +144,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     }
     
     
-    protected void endRoot(String uri, String localName, String qName){
+    protected void endRoot(String uri, String localName, String qName) {
     }
     
     
@@ -185,24 +185,32 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
      * subject identifier is created for the topic.
      */
     protected void postProcessTopicMap(){
-        try{
+        try {
             // remove temporary subject identifiers
             Iterator<Topic> topics=tm.getTopics();
-            while(topics.hasNext()){
+            Collection topicCollection = new ArrayList<Topic>();
+            while(topics.hasNext()) {
                 Topic t=topics.next();
-                ArrayList<Locator> sis=new ArrayList<Locator>(t.getSubjectIdentifiers());
+                topicCollection.add(t);
+            }
+            
+            topics = topicCollection.iterator();
+            while(topics.hasNext()) {
+                Topic t=topics.next();
+                ArrayList<Locator> sis = new ArrayList<Locator>(t.getSubjectIdentifiers());
                 int sisSize = sis.size();
                 for(Locator si : sis) {
                     if(si.toExternalForm().startsWith(temporarySI)) {
                         if(sisSize < 2) {
                             // create permanent subject identifier before temporary can be removed.
                             String permanentSI = "http://wandora.org/si/xtm2/permanent/" + System.currentTimeMillis() + "-" + Math.round(Math.random()*999999);
+                            System.out.println("adding si "+permanentSI);
                             t.addSubjectIdentifier(new Locator( permanentSI ));
                         }
+                        System.out.println("Removing si "+si.toExternalForm());
                         t.removeSubjectIdentifier(si);
                     }
                 }
-
             }
         }
         catch(TopicMapException tme){
@@ -212,7 +220,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     
     protected ParsedTopic parsedTopic;
-    protected void startTopic(Attributes atts){
+    protected void startTopic(Attributes atts) {
         stateStack.push(state);
         state=STATE_TOPIC;
         parsedTopic=new ParsedTopic();
