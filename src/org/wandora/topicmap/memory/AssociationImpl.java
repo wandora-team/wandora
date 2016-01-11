@@ -46,7 +46,7 @@ public class AssociationImpl implements Association {
     /** Creates a new instance of AssociationImpl */
     public AssociationImpl(TopicMapImpl topicMap, Topic type)  throws TopicMapException {
         this.topicMap=topicMap;
-        players=new LinkedHashMap();
+        players=Collections.synchronizedMap(new LinkedHashMap());
         setType(type);
         removed=false;
     }
@@ -127,7 +127,9 @@ public class AssociationImpl implements Association {
         players.put(role,player);
         if(oldPlayer==null || !oldPlayer.equals(player)) {
             topicMap.associationPlayerChanged(this,role,player,oldPlayer);
-            if(topicMap.getConsistencyCheck()) checkRedundancy();
+            if(topicMap.getConsistencyCheck()) {
+                checkRedundancy();
+            }
         }
     }
     
@@ -233,12 +235,14 @@ public class AssociationImpl implements Association {
         for(Topic role : players.keySet()) {
             Topic player = players.get(role);
             Collection c = player.getAssociations(type,role);
-            if(smallest==null || c.size()<smallest.size()) smallest=c;
+            if(smallest==null || c.size()<smallest.size()) {
+                smallest=c;
+            }
         }
-        HashSet<Association> delete=new HashSet();
+        Set<Association> delete = new HashSet();
         for(AssociationImpl a : smallest) {
             if(a==this) continue;
-            if(a._equals(this)){
+            if(a._equals(this)) {
                 delete.add(a);
             }
         }

@@ -90,17 +90,17 @@ public class TopicImpl extends Topic {
     
     
     private void initializeTopicImpl() {
-        data=new LinkedHashMap();
+        data=Collections.synchronizedMap(new LinkedHashMap());
         types=Collections.synchronizedSet(new LinkedHashSet());
         associations=Collections.synchronizedSet(new LinkedHashSet());
-        associationIndex=new LinkedHashMap();
+        associationIndex=Collections.synchronizedMap(new LinkedHashMap());
         baseName=null;
         subjectLocator=null;
         subjectIdentifiers=Collections.synchronizedSet(new LinkedHashSet());
-        variants=new LinkedHashMap();
+        variants=Collections.synchronizedMap(new LinkedHashMap());
         
-        dispNameCache=new LinkedHashMap();
-        sortNameCache=new LinkedHashMap();
+        dispNameCache=Collections.synchronizedMap(new LinkedHashMap());
+        sortNameCache=Collections.synchronizedMap(new LinkedHashMap());
         
         dataTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
         dataVersionIndex=Collections.synchronizedSet(new LinkedHashSet());
@@ -743,7 +743,7 @@ public class TopicImpl extends Topic {
         TopicImpl ti=(TopicImpl)t;
         topicMap.topicsMerged(this,ti);
         // ----- add data ----- 
-        for(Topic otype : ti.data.keySet()) {
+        for(Topic otype : new ArrayList<Topic>(ti.data.keySet())) {
             Map<Topic,String> hm = ti.data.get(otype);
             Hashtable ht = new Hashtable();
             ht.putAll(hm);
@@ -860,7 +860,9 @@ public class TopicImpl extends Topic {
             if(p != null) {
                 a.addPlayer(p, this);
             }
-            a.removePlayer(t);
+            if(!a.isRemoved()) {
+                a.removePlayer(t);
+            }
         }
         
         // ----- change variant scopes ----- 

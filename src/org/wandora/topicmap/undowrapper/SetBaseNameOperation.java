@@ -61,7 +61,7 @@ public class SetBaseNameOperation extends UndoOperation {
     @Override
     public void undo() throws UndoException {
         try{
-            if(merge!=null){
+            if(merge!=null) {
                 merge.undo();
             }
             else {
@@ -73,7 +73,10 @@ public class SetBaseNameOperation extends UndoOperation {
                 }
                 t.setBaseName(oldName);
             }
-        }catch(TopicMapException tme){throw new UndoException(tme);}
+        }
+        catch(TopicMapException tme){
+            throw new UndoException(tme);
+        }
     }
 
     
@@ -81,7 +84,7 @@ public class SetBaseNameOperation extends UndoOperation {
     
     @Override
     public void redo() throws UndoException {
-        try{
+        try {
             Topic t=tm.getTopic(si);
             if(t==null) throw new UndoException();
             /*
@@ -92,7 +95,7 @@ public class SetBaseNameOperation extends UndoOperation {
             */
             t.setBaseName(newName);
         }
-        catch(TopicMapException tme){
+        catch(TopicMapException tme) {
             throw new UndoException(tme);
         }
     }

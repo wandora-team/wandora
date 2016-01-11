@@ -354,6 +354,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       <path>org/wandora/application/tools/iot</path>
       <path>org/wandora/application/tools/extractors/yle/elavaarkisto</path>
       <path>org/wandora/application/tools/exporters/iiifexport</path>
+      <path>org/wandora/topicmap/undowrapper/tests</path>
+      <path>org/wandora/application/tools/testing</path>
       <set>
          <name>generator</name>
          <item>
@@ -635,7 +637,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>Stanford Named Entity Recognizer...</name>
                <class>org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier</class>
             </item>
-<item>
+            <item>
                <name>--- ALCHEMY EXTRACTORS ---</name>
                <class>org.wandora.application.tools.DummyTool</class>
             </item>
@@ -1586,6 +1588,17 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Add web view</name>
             <class>org.wandora.application.tools.docking.add.AddWebView</class>
+         </item>
+      </set>
+      <set>
+         <name>Testing</name>
+         <item>
+            <name>Test undo/redo</name>
+            <class>org.wandora.topicmap.undowrapper.tests.TestRunner</class>
+         </item>
+         <item>
+            <name>Test topic</name>
+            <class>org.wandora.application.tools.testing.TopicTest</class>
          </item>
       </set>
    </tool>

@@ -4,18 +4,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
-import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.memory.TopicMapImpl;
+
 
 /**
  *
@@ -113,6 +106,7 @@ public class TestRunner extends AbstractWandoraTool {
         return "Runs some undo and redo test cases";
     }
     
+    @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
         this.setupTests(200);
         this.runTests();

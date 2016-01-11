@@ -501,7 +501,7 @@ public class DatabaseTopicMap extends TopicMap {
     }
     
     
-    public boolean executeUpdate(String query,Connection con) throws TopicMapException {
+    public boolean executeUpdate(String query, Connection con) throws TopicMapException {
         synchronized(queryLock) {
             queryCounter++;
     //        /*if((queryCounter%10)==0)*/ System.out.println("DBG execute update "+queryCounter+" "+query);
@@ -545,7 +545,7 @@ public class DatabaseTopicMap extends TopicMap {
      * The Map maps column names to the objects returned by query.
      */
     public Collection<Map<String,Object>> executeQuery(String query) throws TopicMapException {
-        return executeQuery(query,getConnection());
+        return executeQuery(query, getConnection());
     }
     
     
