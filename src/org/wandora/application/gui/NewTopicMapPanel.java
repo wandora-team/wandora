@@ -31,16 +31,16 @@ import java.awt.event.KeyEvent;
 import org.wandora.utils.Delegate;
 import org.wandora.topicmap.*;
 import org.wandora.application.Wandora;
-import org.wandora.utils.*;
 import org.wandora.application.gui.simple.*;
-import javax.swing.*;
+
+
 /**
  *
  * @author  olli
  */
 public class NewTopicMapPanel extends javax.swing.JPanel {
     
-    private Wandora admin;
+    private Wandora wandora;
     private Delegate<Object,NewTopicMapPanel> okDelegate;
     private Delegate<Object,NewTopicMapPanel> cancelDelegate;
     private TopicMapConfigurationPanel confPanel=null;
@@ -48,19 +48,22 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
     
     
     /** Creates new form NewTopicMapPanel */
-    public NewTopicMapPanel(Wandora admin,Delegate<Object,NewTopicMapPanel> okDelegate,Delegate<Object,NewTopicMapPanel> cancelDelegate) {
-        this.admin=admin;
+    public NewTopicMapPanel(Wandora wandora,Delegate<Object,NewTopicMapPanel> okDelegate,Delegate<Object,NewTopicMapPanel> cancelDelegate) {
+        this.wandora=wandora;
         this.okDelegate=okDelegate;
         this.cancelDelegate=cancelDelegate;
         initComponents();
+        
         typeComboBox.setEditable(false);
         typeComboBox.addItem(new org.wandora.topicmap.memory.MemoryTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.database.DatabaseTopicMapType());
+        typeComboBox.addItem(new org.wandora.topicmap.database2.DatabaseTopicMapType());
         //typeComboBox.addItem(new org.wandora.topicmap.remote.RemoteTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.query.QueryTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.linked.LinkedTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.layered.LayeredTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.webservice.WebServiceTopicMapType());
+        
         if(okDelegate==null) okButton.setVisible(false);
         if(cancelDelegate==null) cancelButton.setVisible(false);
         //this.setName("NewTopicMapPanel");
@@ -230,7 +233,7 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
     private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
         TopicMapType type=(TopicMapType)typeComboBox.getSelectedItem();
         confContainerPanel.removeAll();
-        confPanel=type.getConfigurationPanel(admin, admin.getOptions());
+        confPanel=type.getConfigurationPanel(wandora, wandora.getOptions());
         confContainerPanel.add(confPanel);
         confContainerPanel.revalidate();
         confContainerPanel.repaint();

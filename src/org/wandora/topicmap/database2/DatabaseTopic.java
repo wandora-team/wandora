@@ -26,7 +26,7 @@
  * Created on 7. marraskuuta 2005, 11:28
  */
 
-package org.wandora.topicmap.database;
+package org.wandora.topicmap.database2;
 import org.wandora.topicmap.*;
 import static org.wandora.utils.Tuples.*;
 import java.util.*;
@@ -162,12 +162,7 @@ public class DatabaseTopic extends Topic {
     }
     
     
-/*
-    void setFull(boolean full){
-        // what should we do about sisFetched, typesFetched etc.
-        this.full=full;        
-    }*/
-    
+
     
     protected String escapeSQL(String s){
         return topicMap.escapeSQL(s);
@@ -179,22 +174,22 @@ public class DatabaseTopic extends Topic {
      * the underlying database.
      */
     protected void setSubjectIdentifiers(HashSet<Locator> sis) {
-        HashSet<Locator> oldSIs=subjectIdentifiers;
-        subjectIdentifiers=sis;
-        if(oldSIs!=null && oldSIs.size()>0){
-            HashSet<Locator> removed=new LinkedHashSet<Locator>();
+        HashSet<Locator> oldSIs = subjectIdentifiers;
+        subjectIdentifiers = sis;
+        if(oldSIs!=null && !oldSIs.isEmpty()) {
+            HashSet<Locator> removed = new LinkedHashSet<Locator>();
             removed.addAll(oldSIs);
             removed.removeAll(subjectIdentifiers);
             for(Locator l : removed){
                 topicMap.topicSIChanged(this,l,null);
             }
-            HashSet<Locator> added=new LinkedHashSet<Locator>();
+            HashSet<Locator> added = new LinkedHashSet<Locator>();
             added.addAll(subjectIdentifiers);
             added.removeAll(oldSIs);
             for(Locator l : added){
                 topicMap.topicSIChanged(this,null,l);
             }
-        }        
+        }
         else{
             for(Locator l : subjectIdentifiers){
                 topicMap.topicSIChanged(this,null,l);
@@ -203,7 +198,10 @@ public class DatabaseTopic extends Topic {
     }
     
     
+    // -------------------------------------------------------------------------
     // --------------------------------------------------------------- FETCH ---
+    // -------------------------------------------------------------------------
+    
     
     
     protected void fetchSubjectIdentifiers() throws TopicMapException {
@@ -249,7 +247,7 @@ public class DatabaseTopic extends Topic {
         HashSet<Topic> scope=null;
         String lastVariant=null;
         String lastName=null;
-        for(Map<String,Object> row : res){
+        for(Map<String,Object> row : res) {
             if(lastVariant==null || !lastVariant.equals(row.get("VARIANTID"))){
                 if(lastVariant!=null){
                     variants.put(scope,t2(lastName,lastVariant));
@@ -397,7 +395,7 @@ public class DatabaseTopic extends Topic {
     /**
      * Fetch all information from database that hasn't already been fetched.
      */
-    void makeFull()  throws TopicMapException {
+    void makeFull() throws TopicMapException {
         if(!sisFetched) fetchSubjectIdentifiers();
         if(!dataFetched) fetchData();
         if(!variantsFetched) fetchVariants();
@@ -427,6 +425,7 @@ public class DatabaseTopic extends Topic {
     public void addSubjectIdentifier(Locator l) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if( topicMap.isReadOnly() ) throw new TopicMapReadOnlyException();
+        
         if( l == null ) return; 
         if(!sisFetched) fetchSubjectIdentifiers();
         if(!subjectIdentifiers.contains(l)) {
@@ -451,6 +450,7 @@ public class DatabaseTopic extends Topic {
     public void mergeIn(Topic t)  throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if( t == null ) return;
         Collection<Map<String,Object>> tempRes;
         DatabaseTopic ti=(DatabaseTopic)t;
@@ -639,6 +639,7 @@ public class DatabaseTopic extends Topic {
     public void removeSubjectIdentifier(Locator l) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(l == null) return;
         subjectIdentifiers.remove(l);
         topicMap.executeUpdate("delete from SUBJECTIDENTIFIER where SI='"+escapeSQL(l.toExternalForm())+"'");
@@ -657,6 +658,7 @@ public class DatabaseTopic extends Topic {
     public void setBaseName(String name) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(name==null){
             if(baseName!=null){
                 String old=baseName;
@@ -694,6 +696,7 @@ public class DatabaseTopic extends Topic {
     public void addType(Topic t) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(t == null) return;
         if(!full) makeFull();
         if(!types.contains(t)){
@@ -709,6 +712,7 @@ public class DatabaseTopic extends Topic {
     public void removeType(Topic t) throws TopicMapException  {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(t == null) return;
         if(!full) makeFull();
         if(types.contains(t)){
@@ -742,6 +746,7 @@ public class DatabaseTopic extends Topic {
     public void setVariant(Set<Topic> scope,String name) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(!full) makeFull();
         String old=null;
         if(variants.get(scope)!=null){
@@ -774,6 +779,7 @@ public class DatabaseTopic extends Topic {
     public void removeVariant(Set<Topic> scope) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(!full) makeFull();
         T2<String,String> v=variants.get(scope);
         if(v!=null){
@@ -817,7 +823,7 @@ public class DatabaseTopic extends Topic {
     @Override
     public void setData(Topic type,Hashtable<Topic,String> versionData) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        if( topicMap.isReadOnly() ) throw new TopicMapReadOnlyException();
         for(Map.Entry<Topic,String> e : versionData.entrySet()){
             setData(type,e.getKey(),e.getValue());
         }
@@ -828,7 +834,11 @@ public class DatabaseTopic extends Topic {
     public void setData(Topic type,Topic version,String value) throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        if(!dataFetched) fetchData();
+        
+        if(!dataFetched) {
+            fetchData();
+        }
+        
         if(getData(type,version)!=null){
             topicMap.executeUpdate("update DATA set DATA='"+escapeSQL(value)+"' "
                     +"where TOPIC='"+escapeSQL(id)+"' "
@@ -855,6 +865,7 @@ public class DatabaseTopic extends Topic {
     public void removeData(Topic type,Topic version)  throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        
         if(type == null || version == null) return;
         if(!full) makeFull();
         if(getData(type,version)!=null){

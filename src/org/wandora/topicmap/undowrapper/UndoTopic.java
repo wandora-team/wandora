@@ -240,14 +240,15 @@ public class UndoTopic extends Topic {
     public void removeData(Topic type) throws TopicMapException {
         Topic wtype=((UndoTopic)type).getWrapped();
         Hashtable<Topic,String> oldData=getWrapped().getData(type);
-        for(Map.Entry<Topic,String> e : oldData.entrySet()){
-            Topic wversion=((UndoTopic)e.getKey()).getWrapped();
-            try {
-                if(undoCreated()) topicMap.addUndoOperation(new SetOccurrenceOperation(wrapped,wtype,wversion,null));
-            } catch(UndoException ue){ topicMap.handleUndoException(ue); }            
+        if(oldData != null) {
+            for(Map.Entry<Topic,String> e : oldData.entrySet()){
+                Topic wversion=((UndoTopic)e.getKey()).getWrapped();
+                try {
+                    if(undoCreated()) topicMap.addUndoOperation(new SetOccurrenceOperation(wrapped,wtype,wversion,null));
+                } catch(UndoException ue){ topicMap.handleUndoException(ue); }            
+            }
+            wrapped.removeData(wtype);
         }
-        
-        wrapped.removeData(wtype);
     }
 
     @Override

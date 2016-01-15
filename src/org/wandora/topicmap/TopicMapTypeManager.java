@@ -73,6 +73,7 @@ public class TopicMapTypeManager {
     public static TopicMapType getType(Class<? extends TopicMap> c){
         if(c==LayerStack.class) return new LayeredTopicMapType();
         else if(c==DatabaseTopicMap.class) return new DatabaseTopicMapType();
+        else if(c==org.wandora.topicmap.database2.DatabaseTopicMap.class) return new org.wandora.topicmap.database2.DatabaseTopicMapType();
         else if(c==TopicMapImpl.class) return new MemoryTopicMapType();
         else if(c==RemoteTopicMap.class) return new RemoteTopicMapType();
         else if(c==QueryTopicMap.class) return new QueryTopicMapType();

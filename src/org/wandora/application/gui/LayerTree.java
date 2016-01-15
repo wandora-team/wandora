@@ -309,11 +309,18 @@ public class LayerTree extends DragJTree {
     
     
     protected JPopupMenu getContextMenuFor(TopicMap tm){
-        TopicMapType type=TopicMapTypeManager.getType(tm);
-        javax.swing.JMenuItem[] m=type.getTopicMapMenu(tm, wandora);
         Object[] menuStructure = WandoraMenuManager.getLayerTreeMenu();
+        Object[] menu = null;
         
-        Object[] menu=UIBox.fillMenuTemplate("___TOPICMAPMENU___",m, menuStructure);
+        TopicMapType type=TopicMapTypeManager.getType(tm);
+        if(type != null) {
+            javax.swing.JMenuItem[] m = type.getTopicMapMenu(tm, wandora);
+            menu=UIBox.fillMenuTemplate("___TOPICMAPMENU___",m, menuStructure);
+        }
+        else {
+            System.out.println("Warning. LayerTree didn't find layer type (getContextMenuFor).");
+            menu=UIBox.fillMenuTemplate("___TOPICMAPMENU___",null, menuStructure);
+        }
         
         JMenu importToLayerMenu = new SimpleMenu("Merge to layer", null);
         JMenu generateLayerMenu = new SimpleMenu("Generate to layer", null);
@@ -491,7 +498,7 @@ public class LayerTree extends DragJTree {
         });
 
         jd.getContentPane().add(p);
-        jd.setSize(400,350);
+        jd.setSize(600,550);
         if(wandora != null) wandora.centerWindow(jd);
         jd.setTitle("Create new layer");
         jd.setVisible(true);

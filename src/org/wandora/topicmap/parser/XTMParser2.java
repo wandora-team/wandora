@@ -204,10 +204,10 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                         if(sisSize < 2) {
                             // create permanent subject identifier before temporary can be removed.
                             String permanentSI = "http://wandora.org/si/xtm2/permanent/" + System.currentTimeMillis() + "-" + Math.round(Math.random()*999999);
-                            System.out.println("adding si "+permanentSI);
+                            // System.out.println("adding si "+permanentSI);
                             t.addSubjectIdentifier(new Locator( permanentSI ));
                         }
-                        System.out.println("Removing si "+si.toExternalForm());
+                        // System.out.println("Removing si "+si.toExternalForm());
                         t.removeSubjectIdentifier(si);
                     }
                 }
