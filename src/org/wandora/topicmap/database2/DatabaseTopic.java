@@ -51,11 +51,11 @@ public class DatabaseTopic extends Topic {
     protected String baseName;
     protected String id;
     protected Locator subjectLocator;
-    protected HashSet<Locator> subjectIdentifiers;
-    protected Hashtable<Topic,Hashtable<Topic,String>> data;
+    protected Set<Locator> subjectIdentifiers;
+    protected Map<Topic,Map<Topic,String>> data;
     //                  scope                value ,variantid
     protected Hashtable<Set<Topic>,T2<String,String>> variants;
-    protected HashSet<Topic> types;
+    protected Set<Topic> types;
     //                  type ,          role of this topic
     //protected Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations;
     protected WeakReference<Hashtable<Topic,Hashtable<Topic,Collection<Association>>>> storedAssociations;
@@ -144,10 +144,10 @@ public class DatabaseTopic extends Topic {
      * until this method is called.
      */
     void create() throws TopicMapException {
-        subjectIdentifiers=new LinkedHashSet<Locator>();
-        data=new Hashtable<Topic,Hashtable<Topic,String>>();
+        subjectIdentifiers=Collections.synchronizedSet(new LinkedHashSet<Locator>());
+        data=Collections.synchronizedMap(new LinkedHashMap<Topic,Map<Topic,String>>());
         variants=new Hashtable<Set<Topic>,T2<String,String>>();
-        types=new LinkedHashSet<Topic>();
+        types=Collections.synchronizedSet(new LinkedHashSet<Topic>());
 //        associations=new Hashtable<Topic,Hashtable<Topic,Collection<Association>>>();
         
         full=true;
@@ -174,16 +174,16 @@ public class DatabaseTopic extends Topic {
      * the underlying database.
      */
     protected void setSubjectIdentifiers(HashSet<Locator> sis) {
-        HashSet<Locator> oldSIs = subjectIdentifiers;
+        Set<Locator> oldSIs = subjectIdentifiers;
         subjectIdentifiers = sis;
         if(oldSIs!=null && !oldSIs.isEmpty()) {
-            HashSet<Locator> removed = new LinkedHashSet<Locator>();
+            Set<Locator> removed = new LinkedHashSet<Locator>();
             removed.addAll(oldSIs);
             removed.removeAll(subjectIdentifiers);
             for(Locator l : removed){
                 topicMap.topicSIChanged(this,l,null);
             }
-            HashSet<Locator> added = new LinkedHashSet<Locator>();
+            Set<Locator> added = new LinkedHashSet<Locator>();
             added.addAll(subjectIdentifiers);
             added.removeAll(oldSIs);
             for(Locator l : added){
@@ -223,13 +223,13 @@ public class DatabaseTopic extends Topic {
                 "from DATA,TOPIC as Y,TOPIC as V where "+
                 "DATA.TYPE=Y.TOPICID and DATA.VERSION=V.TOPICID and "+
                 "DATA.TOPIC='"+escapeSQL(id)+"'");
-        data=new Hashtable<Topic,Hashtable<Topic,String>>();
+        data=new LinkedHashMap<Topic,Map<Topic,String>>();
         for(Map<String,Object> row : res){
             Topic type=topicMap.buildTopic(row.get("TYPEID"),row.get("TYPEBN"),row.get("TYPESL"));
             Topic version=topicMap.buildTopic(row.get("VERSIONID"),row.get("VERSIONBN"),row.get("VERSIONSL"));
-            Hashtable<Topic,String> td=data.get(type);
+            Map<Topic,String> td=data.get(type);
             if(td==null){
-                td=new Hashtable<Topic,String>();
+                td=new LinkedHashMap<Topic,String>();
                 data.put(type,td);
             }
             td.put(version,row.get("DATA").toString());
@@ -795,7 +795,7 @@ public class DatabaseTopic extends Topic {
     public String getData(Topic type,Topic version) throws TopicMapException {
         if(type == null || version == null) return null;
         if(!full) makeFull();
-        Hashtable<Topic,String> td=data.get(type);
+        Map<Topic,String> td=data.get(type);
         if(td==null) return null;
         return td.get(version);
     }
@@ -804,8 +804,11 @@ public class DatabaseTopic extends Topic {
     @Override
     public Hashtable<Topic,String> getData(Topic type) throws TopicMapException {
         if(!full) makeFull();
-        if(data.contains(type)) {
-            return data.get(type);
+        if(data.containsKey(type)) {
+            Hashtable<Topic,String> ht = new Hashtable();
+            Map<Topic,String> m = data.get(type);
+            ht.putAll(m);
+            return ht;
         }
         else {
             return new Hashtable();
@@ -851,9 +854,9 @@ public class DatabaseTopic extends Topic {
                     escapeSQL(version.getID())+"')");            
         }
             
-        Hashtable<Topic,String> dt=data.get(type);
+        Map<Topic,String> dt=data.get(type);
         if(dt==null) {
-            dt=new Hashtable<Topic,String>();
+            dt=new LinkedHashMap<Topic,String>();
             data.put(type,dt);
         }
         String old=dt.put(version,value);
@@ -864,16 +867,21 @@ public class DatabaseTopic extends Topic {
     @Override
     public void removeData(Topic type,Topic version)  throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        if( topicMap.isReadOnly() ) throw new TopicMapReadOnlyException();
         
         if(type == null || version == null) return;
         if(!full) makeFull();
-        if(getData(type,version)!=null){
+        if(getData(type,version) != null) {
             topicMap.executeUpdate("delete from DATA "
                     +"where TOPIC='"+escapeSQL(id)+"' "
                     +"and TYPE='"+escapeSQL(type.getID())+"' "
                     +"and VERSION='"+escapeSQL(version.getID())+"'");
             String old=data.get(type).remove(version);
+            
+            Map<Topic,String> datas = data.get(type);
+            if(datas != null && datas.isEmpty()) {
+                data.remove(type);
+            }
             topicMap.topicDataChanged(this,type,version,null,old);
         }        
     }
@@ -885,11 +893,11 @@ public class DatabaseTopic extends Topic {
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(type == null) return;
         if(!full) makeFull();
-        if(getData(type)!=null){
+        if(getData(type) != null) {
             topicMap.executeUpdate("delete from DATA "
                     +"where TOPIC='"+escapeSQL(id)+"' "
                     +"and TYPE='"+escapeSQL(type.getID())+"'");
-            Hashtable<Topic,String> old=data.remove(type);
+            Map<Topic,String> old = data.remove(type);
             for(Map.Entry<Topic,String> e : old.entrySet()){
                 topicMap.topicDataChanged(this,type,e.getKey(),null,e.getValue());
             }

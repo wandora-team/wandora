@@ -34,6 +34,9 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import java.io.*;
 import java.sql.*;
+import org.wandora.application.gui.LayerTree;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 
 
@@ -70,8 +73,12 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
         if(topicMap instanceof DatabaseTopicMap) {
             super.execute(admin, context);
         }
+        else if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
+            super.execute(admin, context);
+        }
         else {
             log("Selected topic map is not a database topic map! Unable to import SQL file.");
+            System.out.println("topicMap:"+topicMap);
         }
     }
     
@@ -106,12 +113,39 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
             catch(Exception e) {
                 log(e);
             }
-            log("Total " + count + " SQL lines injected into the database topic map.");
-            if(errorCount > 0) log("Total " + errorCount + " errors encountered during inject.");
+            log("Injected " + count + " SQL lines into the database topic map.");
+            if(errorCount > 0) log("Encountered " + errorCount + " errors during inject.");
+            setState(WAIT);
+        }
+        else if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
+            setDefaultLogger();
+            int count = 0;
+            int errorCount = 0;
+            try {
+                org.wandora.topicmap.database2.DatabaseTopicMap dbTopicMap = 
+                        (org.wandora.topicmap.database2.DatabaseTopicMap) topicMap;
+                String query = reader.readLine();
+                while(query != null && query.length() > 0 && !forceStop()) {
+                    try {
+                        dbTopicMap.executeUpdate(query);
+                        query = reader.readLine();
+                        count++;
+                    }
+                    catch(Exception e) {
+                        log(e);
+                        errorCount++;
+                    }
+                }
+            }
+            catch(Exception e) {
+                log(e);
+            }
+            log("Injected " + count + " SQL lines into the database topic map.");
+            if(errorCount > 0) log("Encountered " + errorCount + " errors during the inject.");
             setState(WAIT);
         }
         else {
-           log("Selected topic map is not a database topic map! Unable to import SQL file."); 
+           log("Selected topic map is not a database topic map. Can't import SQL file."); 
         }
     }
 
@@ -127,6 +161,19 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
             }
         }
         return "";
+    }
+
+    
+    
+    
+    @Override
+    public TopicMap solveContextTopicMap(Wandora wandora, Context context) {
+        LayerTree layerTree = wandora.layerTree;
+        TopicMap topicMap = layerTree.getSelectedLayer().getTopicMap();
+        if(topicMap instanceof UndoTopicMap) {
+            return ((UndoTopicMap) topicMap).getWrappedTopicMap();
+        }
+        return topicMap;
     }
 
 }

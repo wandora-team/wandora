@@ -34,9 +34,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.wandora.topicmap.TopicMap;
@@ -342,7 +344,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     
     
     
-    protected boolean executeUpdate(String query) throws TopicMapException{
+    public boolean executeUpdate(String query) throws TopicMapException{
         try {
             return updateQueue.queue(query);
         }
@@ -388,7 +390,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
      * element in the collection is a Map and represents a row of the result. 
      * The Map maps column names to the objects returned by query.
      */
-    protected Collection<Map<String,Object>> executeQuery(String query) throws TopicMapException {
+    public Collection<Map<String,Object>> executeQuery(String query) throws TopicMapException {
         return executeQuery(query, getConnection());
     }
     
@@ -402,10 +404,13 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
         }
         
         synchronized(queryLock) {
-            try{
+            Statement stmt = null;
+            ResultSet rs = null;
+            try {
                 queryCounter++;
-                Statement stmt=con.createStatement();
-                ResultSet rs=stmt.executeQuery(query);
+                System.out.println(query);
+                stmt=con.createStatement();
+                rs=stmt.executeQuery(query);
                 ResultSetMetaData metaData=rs.getMetaData();
                 int columns=metaData.getColumnCount();
                 String[] columnNames=new String[columns];
@@ -426,6 +431,13 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 return rows;
             }
             catch(SQLException sqle) {
+                try {
+                    if(rs != null) rs.close();
+                } catch(Exception e) { e.printStackTrace(); }
+                try {
+                    if(stmt != null) stmt.close();
+                } catch(Exception e) { e.printStackTrace(); }
+
                 sqle.printStackTrace();
                 throw new TopicMapSQLException(sqle);
             }
@@ -442,20 +454,39 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
         catch(TopicMapException | SQLException e) {
             e.printStackTrace();
         }
-        
         int count = 0;
-        if(!unconnected) {
-            try {
-                Connection con=getConnection();
-                Statement stmt=con.createStatement();
-                ResultSet rs=stmt.executeQuery(query);
-                rs.next();
-                count=rs.getInt(1);
-                rs.close();
-                stmt.close();
-            }
-            catch(SQLException sqle) {
-                sqle.printStackTrace();
+        
+        synchronized(queryLock) {
+            if(!unconnected) {
+                Statement stmt = null;
+                ResultSet rs = null;
+                try {
+                    queryCounter++;
+                    System.out.println(query);
+                    Connection con=getConnection();
+                    stmt=con.createStatement();
+                    rs=stmt.executeQuery(query);
+                    rs.next();
+                    count=rs.getInt(1);
+                    rs.close();
+                    stmt.close();
+                    return count;
+                }
+                catch(SQLException sqle) {
+                    sqle.printStackTrace();
+                }
+                finally {
+                    if(rs != null) {
+                        try {
+                            rs.close();
+                        } catch(Exception e) { e.printStackTrace(); }
+                    }
+                    if(stmt != null) {
+                        try {
+                            stmt.close();
+                        } catch(Exception e) { e.printStackTrace(); }
+                    }
+                }
             }
         }
         return count;
@@ -463,8 +494,90 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     
     
     
+
+    public Iterator<Map<String,Object>> getRowIterator(final String query, final String orderby) {
+
+        if(unconnected) {
+            return new Iterator() {
+                @Override
+                public boolean hasNext() {
+                    return false;
+                } 
+                @Override
+                public Map<String,Object> next() {
+                    throw new NoSuchElementException();
+                } 
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
+        }
+        else {
+
+            return new Iterator() {
+                boolean hasNext = false;
+                int offset = 0;
+                int limit = 1000;
+                List<Map<String,Object>> rows = null;
+                int rowIndex = 0;
+
+                private void prepare() {
+                    try {
+                        String newQuery = query +" order by "+orderby+ " limit "+limit+" offset "+offset;
+                        rows = new ArrayList(executeQuery(newQuery));
+                        offset += limit;
+                        rowIndex = 0;
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                        hasNext = false;
+                    }
+                }
+
+                @Override
+                public boolean hasNext() {
+                    if(rows == null || rowIndex >= rows.size()) {
+                        prepare();
+                    }
+
+                    if(rows != null && rowIndex < rows.size()) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                @Override
+                public Map<String,Object> next() {
+                    if(!hasNext()) {
+                        throw new NoSuchElementException();
+                    }
+                    Map<String,Object> row = rows.get(rowIndex++);
+                    return row;
+                }
+
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
+        }
+    }
+    
+    
+    
+    
+    
+    
     // -------------------------------------------------------------------------
 
+    
+    public void commit() throws SQLException, TopicMapException {
+        updateQueue.commit();
+    }
+    
+    
+    
     // -------------------------------------------------------------------------
     
 
@@ -505,12 +618,16 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     class QueryQueue {
         
         private final List<String> queryQueue = Collections.synchronizedList(new ArrayList<String>());
-        private int autoCommitQueueSize = 5;
-        
+        private int autoCommitQueueSize = 50;
+
         
         public boolean queue(String query) throws SQLException, TopicMapException {
-            queryQueue.add(query);
-            if(queryQueue.size() > autoCommitQueueSize) {
+            boolean autoCommit = false;
+            synchronized(queryQueue) {
+                queryQueue.add(query);
+                autoCommit = (queryQueue.size() > autoCommitQueueSize);
+            }
+            if(autoCommit) {
                 commit();
             }
             return true;
@@ -518,21 +635,22 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
         
         
         public void commit() throws SQLException, TopicMapException {
-            if(!queryQueue.isEmpty()) {
-                Connection connection = getConnection();
-                // Savepoint savePoint = connection.setSavepoint();
-                try {
-                    StringBuilder queryBuilder = new StringBuilder("");
-                    for(String query : queryQueue) {
-                        queryBuilder.append(query).append(";");
+            synchronized(queryQueue) {
+                if(!queryQueue.isEmpty()) {
+                    Connection connection = getConnection();
+                    // Savepoint savePoint = connection.setSavepoint();
+                    try {
+                        for(String query : queryQueue) {
+                            executeUpdate(query, connection);
+                        }
+                        connection.commit();
+                        // connection.releaseSavepoint(savePoint);
+                        queryQueue.clear();
                     }
-                    executeUpdate(queryBuilder.toString(), connection);
-                    // connection.releaseSavepoint(savePoint);
-                    queryQueue.clear();
-                }
-                catch(Exception e) {
-                    // connection.rollback(savePoint);
-                    throw e;
+                    catch(Exception e) {
+                        // connection.rollback(savePoint);
+                        throw e;
+                    }
                 }
             }
         }

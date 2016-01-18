@@ -514,114 +514,37 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     
     @Override
     public Iterator<Topic> getTopics() {
-        if(unconnected) {
-            return new TopicIterator(){
-                @Override
-                public boolean hasNext(){return false;} 
-                @Override
-                public Topic next(){throw new NoSuchElementException();} 
-                @Override
-                public void remove(){throw new UnsupportedOperationException();}
-                @Override
-                public void dispose(){}
-            };
-        }
-        
-        try {
-            final Connection con=createConnection(true);
-            final Statement stmt=con.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-            if(databaseFlavour.equals("mysql")) {
-                // A signal to mysql not to fetch all rows but stream them instead http://dev.mysql.com/doc/connector/j/en/cj-implementation-notes.html
-                stmt.setFetchSize(Integer.MIN_VALUE);
-            }
-            final ResultSet rs=stmt.executeQuery("select * from TOPIC");
-            ResultSetMetaData metaData=rs.getMetaData();
-            final int columns=metaData.getColumnCount();
-            final String[] columnNames=new String[columns];
-            for(int i=0; i<columns; i++) {
-                columnNames[i]=metaData.getColumnName(i+1);
+        final Iterator<Map<String,Object>> rowIterator = getRowIterator("select * from TOPIC", "TOPICID");
+
+        return new Iterator<Topic>() {
+            
+            @Override
+            public boolean hasNext() {
+                return rowIterator.hasNext();
             }
 
-            // NOTE: You must iterate through all rows because statement and result set
-            //       will only be closed after last row has been fetched. Or alternatively
-            //       call dispose when you're done with the iterator.
-            return new TopicIterator() {
-                boolean calledNext=false;
-                boolean hasNext=false;
-                boolean end=false;
-                boolean disposed=false;
-                
-                @Override
-                public void dispose() {
-                    if(disposed) return;
-                    disposed=true;
-                    end=true;
-                    try {
-                        rs.close();
-                        stmt.close();
-                        con.close();
-                    }
-                    catch(SQLException sqle) {
-                        sqle.printStackTrace();
-                    }
+            @Override
+            public Topic next() {
+                if(!hasNext()) {
+                    throw new NoSuchElementException();
                 }
+                Map<String,Object> row = rowIterator.next();
+                try {
+                    return buildTopic(row);
+                }
+                catch(TopicMapException tme) {
+                    tme.printStackTrace(); // TODO EXCEPTION
+                    return null;
+                }
+            }
 
-                @Override
-                public boolean hasNext() {
-                    if(end) return false;
-                    if(calledNext) return hasNext;
-                    else {
-                        try {
-                            hasNext=rs.next();
-                            calledNext=true;
-                            if(hasNext==false){
-                                dispose();
-                            }
-                            return hasNext;
-                        } 
-                        catch(SQLException sqle) {
-                            sqle.printStackTrace();
-                            return false;
-                        }
-                    }
-                }
-                
-                @Override
-                public Topic next() {
-                    if(!hasNext()) {
-                        throw new NoSuchElementException();
-                    }
-                    Map<String,Object> row = new LinkedHashMap<String,Object>();
-                    try {
-                        for(int i=0; i<columns; i++) {
-                            row.put(columnNames[i],rs.getObject(i+1));
-                        }
-                    }
-                    catch(SQLException sqle) {
-                        sqle.printStackTrace();
-                        return null;
-                    }
-                    calledNext=false;
-                    try {
-                        return buildTopic(row);
-                    }
-                    catch(TopicMapException tme) {
-                        tme.printStackTrace(); // TODO EXCEPTION
-                        return null;
-                    }
-                }
-                
-                @Override
-                public void remove() {
-                    throw new UnsupportedOperationException();
-                }
-            };
-        }
-        catch(SQLException sqle){
-            sqle.printStackTrace(); 
-            return null;
-        }
+            @Override
+            public void remove() {
+                rowIterator.remove();
+            }
+        };
     }
+    
     
     
     @Override
@@ -642,98 +565,45 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
      * will only be closed after last row has been fetched.
      */
     @Override
-    public Iterator<Association> getAssociations(){
-        if(unconnected) {
-            return new Iterator<Association>(){
-                @Override
-                public boolean hasNext(){
-                    return false;
-                } 
-                @Override
-                public Association next(){
-                    throw new NoSuchElementException();
-                } 
-                @Override
-                public void remove(){
-                    throw new UnsupportedOperationException();
-                }
-            };
-        }     
-        try {
-            final Connection con=createConnection(true);
-            final Statement stmt=con.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-            if(databaseFlavour.equals("mysql")) stmt.setFetchSize(Integer.MIN_VALUE);
-            final ResultSet rs=stmt.executeQuery("select * from ASSOCIATION,TOPIC where TOPICID=TYPE");
-            ResultSetMetaData metaData=rs.getMetaData();
-            final int columns=metaData.getColumnCount();
-            final String[] columnNames=new String[columns];
-            for(int i=0;i<columns;i++){
-                columnNames[i]=metaData.getColumnName(i+1);
+    public Iterator<Association> getAssociations() {
+
+        final Iterator<Map<String,Object>> rowIterator = getRowIterator("select * from ASSOCIATION,TOPIC where TOPICID=TYPE", "TOPIC.TOPICID");
+
+        return new Iterator<Association>() {
+            
+            @Override
+            public boolean hasNext() {
+                return rowIterator.hasNext();
             }
 
-            return new Iterator<Association>(){
-                boolean calledNext=false;
-                boolean hasNext=false;
-                boolean end=false;
+            @Override
+            public Association next() {
+                if(!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                Map<String,Object> row = rowIterator.next();
+                try {
+                    return buildAssociation(row);
+                }
+                catch(TopicMapException tme) {
+                    tme.printStackTrace(); // TODO EXCEPTION
+                    return null;
+                }
+            }
 
-                @Override
-                public boolean hasNext() {
-                    if(end) return false;
-                    if(calledNext) return hasNext;
-                    else {
-                        try{
-                            hasNext=rs.next();
-                            calledNext=true;
-                            if(hasNext==false){
-                                rs.close();
-                                stmt.close();
-                                con.close();
-                                end=true;
-                            }
-                            return hasNext;
-                        }catch(SQLException sqle){sqle.printStackTrace();return false;}
-                    }
-                }
-                
-                @Override
-                public Association next() {
-                    if(!hasNext()) throw new NoSuchElementException();
-                    HashMap<String,Object> row=new LinkedHashMap<String,Object>();
-                    try {
-                        for(int i=0;i<columns;i++) {
-                            row.put(columnNames[i],rs.getObject(i+1));
-                        }
-                    }
-                    catch(SQLException sqle) {
-                        sqle.printStackTrace();
-                        return null;
-                    }
-                    calledNext=false;
-                    try {
-                        return buildAssociation(row);
-                    }
-                    catch(TopicMapException tme) {
-                        tme.printStackTrace(); // TODO EXCEPTION
-                        return null;
-                    }
-                }
-                
-                @Override
-                public void remove(){
-                    throw new UnsupportedOperationException();
-                }
-            };
-        }
-        catch(SQLException sqle){
-            sqle.printStackTrace(); 
-            return null;
-        }        
+            @Override
+            public void remove() {
+                rowIterator.remove();
+            }
+        };
     }
     
     
     @Override
     public Collection<Association> getAssociationsOfType(Topic type) throws TopicMapException {
-        if(unconnected) return new ArrayList<Association>();
+        if(unconnected) {
+            return new ArrayList<Association>();
+        }
         return queryAssociation("select * "
                 + "from ASSOCIATION,TOPIC "
                 + "where TYPE=TOPICID "
@@ -743,7 +613,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     
     
     @Override
-    public int getNumTopics(){
+    public int getNumTopics() {
         int count = executeCountQuery("select count(*) from TOPIC");
         return count;
     }
@@ -1442,5 +1312,12 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     }
     
 
+    
+    // -------------------------------------------------------------------------
+    
+    
+    public void commit() throws SQLException, TopicMapException {
+        super.commit();
+    }
     
 }

@@ -1357,9 +1357,9 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     public int getNumTopics() throws TopicMapException {
         Set<Topic> processed=new KeyedHashSet<Topic>(new TopicAndLayerKeyMaker());
         int count=0;
-        for(Layer l : visibleLayers){
-            Iterator<Topic> c=l.getTopicMap().getTopics();
-            while(c.hasNext()){
+        for(Layer l : visibleLayers) {
+            Iterator<Topic> c = l.getTopicMap().getTopics();
+            while(c.hasNext()) {
                 Topic t=c.next();
                 if(processed.contains(t)) continue;
                 Set<Topic> collected=collectTopics(t);

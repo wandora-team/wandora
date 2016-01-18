@@ -180,7 +180,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         
         setProgressMax(n);
         for(int i=0; i<n && !forceStop(); i++) {
-            setProgress(n);
+            setProgress(i);
             int nodeCounter = nodeCounterOffset+i;
             topics[i] = getOrCreateTopic(topicmap, nodeCounter, graphIdentifier);
         }

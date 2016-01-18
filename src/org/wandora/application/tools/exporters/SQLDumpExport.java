@@ -90,6 +90,7 @@ public class SQLDumpExport extends AbstractExportTool {
                     out[i]=new PrintStream(tempFiles[i]);
                 }                
                 
+                log("Exporting database topic map as SQL.");
                 Iterator<Topic> iter=tm.getTopics();
                 while(iter.hasNext()){
                     Topic t=iter.next();

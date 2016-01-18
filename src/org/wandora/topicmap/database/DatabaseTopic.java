@@ -854,7 +854,7 @@ public class DatabaseTopic extends Topic {
     @Override
     public void removeData(Topic type,Topic version)  throws TopicMapException {
         if( removed ) throw new TopicRemovedException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        if( topicMap.isReadOnly() ) throw new TopicMapReadOnlyException();
         if(type == null || version == null) return;
         if(!full) makeFull();
         if(getData(type,version)!=null){
@@ -863,6 +863,12 @@ public class DatabaseTopic extends Topic {
                     +"and TYPE='"+escapeSQL(type.getID())+"' "
                     +"and VERSION='"+escapeSQL(version.getID())+"'");
             String old=data.get(type).remove(version);
+            
+            Hashtable<Topic,String> datas = data.get(type);
+            if(datas != null && datas.isEmpty()) {
+                data.remove(type);
+            }
+            
             topicMap.topicDataChanged(this,type,version,null,old);
         }        
     }

@@ -66,6 +66,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             ArrayList<String> sis = new ArrayList();
             int numberOfTestTopics = 200;
             int numberOfFails = 0;
+            int numberOfRepeats = 1;
             
             log("Number of test topics is "+numberOfTestTopics+".");
             
@@ -74,11 +75,14 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 hlog("Topic creation test.");
                 long startTime = System.currentTimeMillis();
                 int topicCount = tm.getNumTopics();
+                setProgress(0);
+                setProgressMax(numberOfTestTopics);
                 for(int i=0; i<numberOfTestTopics; i++) {
                     String si = "http://wandora.org/si/test-topic/"+System.currentTimeMillis()+"/"+i;
                     Topic t = tm.createTopic();
                     t.addSubjectIdentifier(new Locator(si));
                     sis.add(si);
+                    setProgress(i);
                     if(forceStop()) break; 
                 }
                 int newTopicCount = tm.getNumTopics();
@@ -98,21 +102,29 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 hlog("Topic find test.");
                 long startTime = System.currentTimeMillis();
                 boolean success = true;
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
                         log("Can't find topic for subject identifier "+si);
                         success = false;
                     }
+                    setProgress(p++);
                     if(forceStop()) break; 
                 }
-                for(int i=0; i<200; i++) {
+                p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
+                for(int i=0; i<numberOfTestTopics; i++) {
                     String si = sis.get((int) Math.floor(Math.random()*sis.size()));
                     Topic t = tm.getTopic(si);
                     if(t == null) {
                         log("Can't find topic for subject identifier "+si);
                         success = false;
                     }
+                    setProgress(p++);
                     if(forceStop()) break; 
                 }
                 long testTime = System.currentTimeMillis() - startTime; 
@@ -131,6 +143,9 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 hlog("Topic set basename test.");
                 long startTime = System.currentTimeMillis();
                 boolean success = true;
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
@@ -138,7 +153,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                         success = false;
                     }
                     else {
-                        for(int i=0; i<100; i++) {
+                        for(int i=0; i<numberOfRepeats; i++) {
                             String basename = getRandomString();
                             t.setBaseName(basename);
 
@@ -147,8 +162,10 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                                 success = false;
                                 log("Failed to restore basename "+basename);
                             }
+                            if(forceStop()) break;
                         }
                     }
+                    setProgress(p++);
                     if(forceStop()) break;
                 }
                 long testTime = System.currentTimeMillis() - startTime; 
@@ -167,6 +184,9 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 hlog("Topic variant name test.");
                 long startTime = System.currentTimeMillis();
                 boolean success = true;
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
@@ -183,6 +203,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                             log("Failed to restore name "+name);
                         }
                     }
+                    setProgress(p++);
                     if(forceStop()) break;
                 }
                 long testTime = System.currentTimeMillis() - startTime; 
@@ -203,6 +224,9 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 long startTime = System.currentTimeMillis();
                 boolean success = true;
                 List<String> sis2 = new ArrayList<String>(sis);
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
@@ -210,7 +234,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                         success = false;
                     }
                     else {
-                        for(int j=0; j<100; j++) {
+                        for(int j=0; j<numberOfRepeats; j++) {
                             Set<Topic> scope = new HashSet();
                             for(int i=0; i<1+Math.round(Math.random()*Math.min(10, numberOfTestTopics)); i++) {
                                 scope.add(tm.getTopic(sis2.get((int) Math.floor(Math.random() * sis2.size()))));
@@ -228,6 +252,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                             }
                             if(forceStop()) break;
                         }
+                        setProgress(p++);
                         if(forceStop()) break;
                     }
                 }
@@ -247,6 +272,9 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 hlog("Topic delete variant name test.");
                 long startTime = System.currentTimeMillis();
                 boolean success = true;
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
@@ -263,6 +291,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                             success = false;
                             log("Failed to delete all variant names.");
                         }
+                        setProgress(p++);
                         if(forceStop()) break;
                     }
                 }
@@ -283,6 +312,9 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 long startTime = System.currentTimeMillis();
                 boolean success = true;
                 List<String> sis2 = new ArrayList<String>(sis);
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
@@ -290,7 +322,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                         success = false;
                     }
                     else {
-                        for(int j=0; j<100; j++) {
+                        for(int j=0; j<numberOfRepeats; j++) {
                             Topic type = tm.getTopic(sis2.get((int) Math.floor(Math.random() * sis2.size())));
                             Topic version = tm.getTopic(sis2.get((int) Math.floor(Math.random() * sis2.size())));
 
@@ -304,6 +336,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                             }
                             if(forceStop()) break;
                         }
+                        setProgress(p++);
                         if(forceStop()) break;
                     }
                 }
@@ -323,6 +356,9 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 hlog("Topic occurrence delete test.");
                 long startTime = System.currentTimeMillis();
                 boolean success = true;
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
@@ -347,6 +383,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                             success = false;
                             log("Failed to delete all occurrences.");
                         }
+                        setProgress(p++);
                         if(forceStop()) break;
                     }
                 }
@@ -366,6 +403,9 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 hlog("Topic delete basename test.");
                 long startTime = System.currentTimeMillis();
                 boolean success = true;
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
@@ -381,6 +421,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                             log("Failed to delete basename "+basename);
                         }
                     }
+                    setProgress(p++);
                     if(forceStop()) break;
                 }
                 long testTime = System.currentTimeMillis() - startTime; 
@@ -399,6 +440,9 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 hlog("Topic delete test.");
                 long startTime = System.currentTimeMillis();
                 int topicCount = tm.getNumTopics();
+                int p=0;
+                setProgress(p);
+                setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
                     if(t == null) {
@@ -407,6 +451,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                     else {
                         t.remove();
                     }
+                    setProgress(p++);
                     if(forceStop()) break;
                 }
                 int newTopicCount = tm.getNumTopics();
@@ -416,6 +461,8 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 }
                 else {
                     log("Topic delete test failed in "+testTime+"ms.");
+                    log("Number of topics before delete was "+topicCount);
+                    log("Number of topics after delete was "+newTopicCount);
                     numberOfFails++;
                 }
             }
