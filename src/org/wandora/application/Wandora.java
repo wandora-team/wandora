@@ -1247,6 +1247,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         resetTopicPanels();
         clearHistory();
         saveOptions();
+        topicMap.close();
         exitCode = RESTART_APPLICATION;
     }
     
@@ -1289,6 +1290,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         try {
             stopHTTPServer();
             saveOptions();
+            topicMap.close();
         }
         catch(Exception e) {
         }
@@ -2251,25 +2253,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }
     }
     
-    
-    // ---------------------------------------------- TOPIC MAP TRANSACTIONS ---
-    
-    
-    public void startTransaction() {
-        if(topicMap != null) {
-            topicMap.startTransaction();
-        }
-    }
-    
-    public void endTransaction() {
-        if(topicMap != null) {
-            topicMap.endTransaction();
-        }
-    }
-    
-    
-    
-    
+
     
     
     // -------------------------------------------------------------------------

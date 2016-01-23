@@ -30,16 +30,11 @@ package org.wandora.topicmap.database2;
 
 
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -48,7 +43,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import org.wandora.topicmap.*;
-
+import java.util.Hashtable;
 
 
 

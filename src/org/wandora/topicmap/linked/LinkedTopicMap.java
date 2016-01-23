@@ -51,6 +51,10 @@ public class LinkedTopicMap extends TopicMap implements TopicMapListener, Contai
     
     // -------------------------------------------------------------------------
     
+    @Override
+    public void close() {
+    }
+    
     public TopicMap getLinkedTopicMap(){
         if(linkedMap==null && !findLinkedMap()) return null;
         return linkedMap;

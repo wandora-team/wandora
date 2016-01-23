@@ -21,6 +21,8 @@
  */
 
 package org.wandora.topicmap.tmapi2wandora;
+
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -29,6 +31,8 @@ import org.tmapi.index.LiteralIndex;
 import org.tmapi.index.ScopedIndex;
 import org.tmapi.index.TypeInstanceIndex;
 import org.wandora.topicmap.*;
+
+
 /**
  * This is a Wandora TopicMap that wraps inside it a TMAPI topic map.
  * This is a read-only implementation, you cannot edit the TMAPI topic map
@@ -57,6 +61,11 @@ public class T2WTopicMap extends TopicMap {
         typeIndex=tm.getIndex(TypeInstanceIndex.class);
         literalIndex=tm.getIndex(LiteralIndex.class);
         scopedIndex=tm.getIndex(ScopedIndex.class);
+    }
+    
+    
+    @Override
+    public void close() {
     }
     
     public TypeInstanceIndex getTypeIndex(){

@@ -227,7 +227,7 @@ public class SQLDumpExport extends AbstractExportTool {
         closeStream(variantScopeCount,out[I_VARIANTSCOPE]);
         closeStream(variantCount,out[I_VARIANT]);
     }
-    protected int writeLimit=5000;
+    protected int writeLimit=1;
     protected int topicCount=0;
     public void writeTopic(String topicid,String baseName,org.wandora.topicmap.Locator subjectLocator,PrintStream[] out) throws IOException{
         writeTopic(topicid, baseName, subjectLocator, out[I_TOPIC]);
@@ -239,7 +239,7 @@ public class SQLDumpExport extends AbstractExportTool {
         writeTopic(topicid,baseName,(subjectLocator==null)?null:(subjectLocator.toString()),out);
     }
     public void writeTopic(String topicid,String baseName,String subjectLocator,PrintStream out) throws IOException{
-        if(topicCount==0) out.print("insert into TOPIC (TOPICID,BASENAME,SUBJECTLOCATOR) values\n");
+        if(topicCount==0) out.print("insert into TOPIC (TOPICID,BASENAME,SUBJECTLOCATOR) values ");
         else out.print(",\n");
         out.print("("+sqlEscape(topicid)+","+sqlEscape(baseName)+","+sqlEscape(subjectLocator)+")");
         topicCount++;
@@ -253,7 +253,7 @@ public class SQLDumpExport extends AbstractExportTool {
         writeTopicType(topicid, typeid, out[I_TOPICTYPE]);
     }
     public void writeTopicType(String topicid,String typeid,PrintStream out) throws IOException {
-        if(topicTypeCount==0) out.print("insert into TOPICTYPE (TOPIC,TYPE) values\n");        
+        if(topicTypeCount==0) out.print("insert into TOPICTYPE (TOPIC,TYPE) values ");        
         else out.print(",\n");
         out.print("("+sqlEscape(topicid)+","+sqlEscape(typeid)+")");        
         topicTypeCount++;
@@ -267,7 +267,7 @@ public class SQLDumpExport extends AbstractExportTool {
         writeAssociation(associationid, typeid, out[I_ASSOCIATION]);
     }
     public void writeAssociation(String associationid,String typeid,PrintStream out) throws IOException {
-        if(associationCount==0) out.print("insert into ASSOCIATION (ASSOCIATIONID,TYPE) values\n");        
+        if(associationCount==0) out.print("insert into ASSOCIATION (ASSOCIATIONID,TYPE) values ");        
         else out.print(",\n");
         out.print("("+sqlEscape(associationid)+","+sqlEscape(typeid)+")");
         associationCount++;
@@ -281,7 +281,7 @@ public class SQLDumpExport extends AbstractExportTool {
         writeMember(associationid, playerid, roleid, out[I_MEMBER]);
     }
     public void writeMember(String associationid,String playerid,String roleid,PrintStream out) throws IOException {
-        if(memberCount==0) out.print("insert into MEMBER (ASSOCIATION,PLAYER,ROLE) values\n");        
+        if(memberCount==0) out.print("insert into MEMBER (ASSOCIATION,PLAYER,ROLE) values ");        
         else out.print(",\n");
         out.print("("+sqlEscape(associationid)+","+sqlEscape(playerid)+","+sqlEscape(roleid)+")");
         memberCount++;
@@ -295,7 +295,7 @@ public class SQLDumpExport extends AbstractExportTool {
         writeSubjectIdentifier(topicid, si, out[I_SUBJECTIDENTIFIER]);
     }
     public void writeSubjectIdentifier(String topicid,String si,PrintStream out) throws IOException {
-        if(subjectIdentifierCount==0) out.print("insert into SUBJECTIDENTIFIER (TOPIC,SI) values\n");        
+        if(subjectIdentifierCount==0) out.print("insert into SUBJECTIDENTIFIER (TOPIC,SI) values ");        
         else out.print(",\n");
         out.print("("+sqlEscape(topicid)+","+sqlEscape(si)+")");
         subjectIdentifierCount++;
@@ -309,7 +309,7 @@ public class SQLDumpExport extends AbstractExportTool {
         writeData(topicid, typeid, versionid, data, out[I_DATA]);
     }
     public void writeData(String topicid,String typeid,String versionid,String data,PrintStream out) throws IOException {
-        if(dataCount==0) out.print("insert into DATA (TOPIC,TYPE,VERSION,DATA) values\n");        
+        if(dataCount==0) out.print("insert into DATA (TOPIC,TYPE,VERSION,DATA) values ");        
         else out.print(",\n");
         out.print("("+sqlEscape(topicid)+","+sqlEscape(typeid)+","+sqlEscape(versionid)+","+sqlEscape(data)+")");
         dataCount++;
@@ -323,7 +323,7 @@ public class SQLDumpExport extends AbstractExportTool {
         writeVariantScope(variantid, topicid, out[I_VARIANTSCOPE]);
     }
     public void writeVariantScope(String variantid,String topicid,PrintStream out) throws IOException {
-        if(variantScopeCount==0) out.print("insert into VARIANTSCOPE (VARIANT,TOPIC) values\n");        
+        if(variantScopeCount==0) out.print("insert into VARIANTSCOPE (VARIANT,TOPIC) values ");        
         else out.print(",\n");
         out.print("("+sqlEscape(variantid)+","+sqlEscape(topicid)+")");
         variantScopeCount++;
@@ -337,7 +337,7 @@ public class SQLDumpExport extends AbstractExportTool {
         writeVariant(variantid, topicid, value, out[I_VARIANT]);
     }
     public void writeVariant(String variantid,String topicid,String value,PrintStream out) throws IOException {
-        if(variantCount==0) out.print("insert into VARIANT (VARIANTID,TOPIC,VALUE) values\n");        
+        if(variantCount==0) out.print("insert into VARIANT (VARIANTID,TOPIC,VALUE) values ");        
         else out.print(",\n");
         out.print("("+sqlEscape(variantid)+","+sqlEscape(topicid)+","+sqlEscape(value)+")");
         variantCount++;

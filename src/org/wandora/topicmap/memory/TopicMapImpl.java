@@ -140,6 +140,11 @@ public class TopicMapImpl extends TopicMap {
     }
     
     
+    @Override
+    public void close() {
+    }
+    
+    
     /**
      * Checks association consistency and fixes any inconsistencies. Two
      * associations are said to be inconsistent if they have the same type and

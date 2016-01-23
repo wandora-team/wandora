@@ -362,6 +362,10 @@ public class QueryTopicMap extends ContainerTopicMap implements TopicMapListener
     }
     
     @Override
+    public void close() {
+    }
+    
+    @Override
     public Association copyAssociationIn(Association a) throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }

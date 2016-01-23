@@ -376,6 +376,14 @@ public abstract class TopicMap implements TopicMapLogger {
         return true;
     }
     
+    
+    /**
+     * Close the topic map. Free resources used by the topic map,
+     * the database connection, for example.
+     */
+    public abstract void close();
+    
+    
     /**
      * Gets topics with the subject identifiers in the collection given as
      * parameter. The parameter collection may contain subject identifiers as 
@@ -458,22 +466,7 @@ public abstract class TopicMap implements TopicMapLogger {
         }
         return set;
     }
-    
-    
-    // ---------------------------------------------- TOPIC MAP TRANSACTIONS ---
-    
-    
-    public void startTransaction() {
-        // By default topic map doesn't support transactions. Each topic map
-        // implementation must override this method to add support for
-        // transactions.
-    }
-    
-    public void endTransaction() {
-        // By default topic map doesn't support transactions. Each topic map
-        // implementation must override this method to add support for
-        // transactions.
-    }
+
     
     
     // ---------------------------------------------------- TOPIC MAP LOGGER ---

@@ -380,6 +380,7 @@ public class DatabaseTopicMap extends TopicMap {
      * and closes the database connection. Topic map cannot be used or reopened
      * after it has been closed.
      */
+    @Override
     public void close(){
         topicIndex.destroy();
         if(sqlProxy!=null){

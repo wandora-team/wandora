@@ -70,7 +70,8 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             
             log("Number of test topics is "+numberOfTestTopics+".");
             
-            // ----- CREATION -----
+            
+            // -------------------------------------------------- CREATION -----
             if(!forceStop()) {
                 hlog("Topic creation test.");
                 long startTime = System.currentTimeMillis();
@@ -97,7 +98,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             }
             
             
-            // ----- FIND BY SUBJECT IDENTIFIER -----
+            // -------------------------------- FIND BY SUBJECT IDENTIFIER -----
             if(!forceStop()) {
                 hlog("Topic find test.");
                 long startTime = System.currentTimeMillis();
@@ -138,7 +139,59 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             }
             
             
-            // ----- SET BASENAME-----
+            
+            // -------------------- SUBJECT IDENTIFIER ADDITION AND REMOVE -----
+            if(!forceStop()) {
+                hlog("Topic add and remove subject identifier test.");
+                long startTime = System.currentTimeMillis();
+                boolean success = true;
+                int p=0;
+                setProgress(0);
+                setProgressMax(1);
+                
+                String si = sis.get(0);
+                Topic t = tm.getTopic(si);
+                
+                Locator testsi = new Locator("http://wandora.org/si/test-subject-identifiers/"+System.currentTimeMillis());
+                t.addSubjectIdentifier(testsi);
+                
+                Collection<Locator> tsis = t.getSubjectIdentifiers();
+                if(!tsis.contains(testsi)) {
+                    log("Topic doesn't contain added subject identifier.");
+                    success = false;
+                }
+                if(!tsis.contains(new Locator(si))) {
+                    log("Topic doesn't contain original subject identifier after another subject identifier is added.");
+                    success = false;
+                }
+                
+                Topic t0 = tm.getTopic(si);
+                Topic t1 = tm.getTopic(testsi.toExternalForm());
+                
+                if(!t0.mergesWithTopic(t1)) {
+                    log("Two subject identifiers added to a topic resolve different topic. Shouldn't.");
+                    success = false;
+                }
+                
+                t.removeSubjectIdentifier(testsi);
+                tsis = t.getSubjectIdentifiers();
+                if(tsis.contains(testsi)) {
+                    log("Topic contains a subject identifier even when it is removed.");
+                    success = false;
+                }
+                
+                long testTime = System.currentTimeMillis() - startTime; 
+                if(success) {
+                    log("Topic add and remove subject identifier test passed in "+testTime+"ms.");
+                }
+                else {
+                    log("Topic add and remove subject identifier test failed in "+testTime+"ms.");
+                    numberOfFails++;
+                }
+            }
+            
+            
+            // ----------------------------------------------- SET BASENAME-----
             if(!forceStop()) {
                 hlog("Topic set basename test.");
                 long startTime = System.currentTimeMillis();
@@ -179,7 +232,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             }
             
             
-            // ----- SET VARIANT NAME -----
+            // ------------------------------------------ SET VARIANT NAME -----
             if(!forceStop()) {
                 hlog("Topic variant name test.");
                 long startTime = System.currentTimeMillis();
@@ -200,7 +253,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                         String name2 = t.getDisplayName("en");
                         if(!name.equals(name2)) {
                             success = false;
-                            log("Failed to restore name "+name);
+                            log("Failed to restore topic's variant name "+name);
                         }
                     }
                     setProgress(p++);
@@ -218,7 +271,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             
 
 
-            // ----- SET VARIANT NAME -----
+            // ------------------------------------------ SET VARIANT NAME -----
             if(!forceStop()) {
                 hlog("Topic variant name test 2.");
                 long startTime = System.currentTimeMillis();
@@ -248,7 +301,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                             String name2 = t.getVariant(scope2);
                             if(!name.equals(name2)) {
                                 success = false;
-                                log("Failed to restore name "+name);
+                                log("Failed to restore topic's variant name "+name);
                             }
                             if(forceStop()) break;
                         }
@@ -267,7 +320,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             }
             
             
-            // ----- DELETE VARIANT NAME -----
+            // --------------------------------------- DELETE VARIANT NAME -----
             if(!forceStop()) {
                 hlog("Topic delete variant name test.");
                 long startTime = System.currentTimeMillis();
@@ -289,7 +342,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                         scopes = t.getVariantScopes();
                         if(!scopes.isEmpty()) {
                             success = false;
-                            log("Failed to delete all variant names.");
+                            log("Failed to delete all variant names of a topic.");
                         }
                         setProgress(p++);
                         if(forceStop()) break;
@@ -306,7 +359,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             }
             
 
-            // ----- SET OCCURRENCE -----
+            // -------------------------------------------- SET OCCURRENCE -----
             if(!forceStop()) {
                 hlog("Topic occurrence test.");
                 long startTime = System.currentTimeMillis();
@@ -351,7 +404,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             }
             
 
-            // ----- DELETE OCCURRENCE -----
+            // ----------------------------------------- DELETE OCCURRENCE -----
             if(!forceStop()) {
                 hlog("Topic occurrence delete test.");
                 long startTime = System.currentTimeMillis();
@@ -381,7 +434,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                         dataTypes = t.getDataTypes();
                         if(!dataTypes.isEmpty()) {
                             success = false;
-                            log("Failed to delete all occurrences.");
+                            log("Failed to delete all occurrences of a topic.");
                         }
                         setProgress(p++);
                         if(forceStop()) break;
@@ -398,7 +451,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             }
 
             
-            // ----- DELETE BASENAME -----
+            // ------------------------------------------- DELETE BASENAME -----
             if(!forceStop()) {
                 hlog("Topic delete basename test.");
                 long startTime = System.currentTimeMillis();
@@ -418,7 +471,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                         String basename = t.getBaseName();
                         if(basename != null) {
                             success = false;
-                            log("Failed to delete basename "+basename);
+                            log("Failed to delete topic's basename "+basename);
                         }
                     }
                     setProgress(p++);
@@ -435,28 +488,266 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
             }
             
             
-            // ----- DELETE TOPIC -----
+            // ---------------------------------------------- MERGE TOPICS -----
+            if(!forceStop()) {
+                hlog("Topic merge test.");
+                boolean success = true;
+                long startTime = System.currentTimeMillis();
+                int topicCount = tm.getNumTopics();
+                int p=0;
+                setProgress(p);
+                setProgressMax(1);
+                String si0 = sis.get(0);
+                String si1 = sis.get(1);
+                
+                Topic t0 = tm.getTopic(si0);
+                Topic t1 = tm.getTopic(si1);
+                
+                t0.addSubjectIdentifier(new Locator(si1));
+                
+                if(!t1.isRemoved()) {
+                    log("Merged topic is not marked removed. Should be marked removed.");
+                    success = false;
+                }
+                if(t0.isRemoved()) {
+                    log("Merging topic is marked removed. Shouldn't be marked removed.");
+                    success = false;
+                }
+                
+                t0 = tm.getTopic(si0);
+                t1 = tm.getTopic(si1);
+                
+                if(t0 == null || !t0.mergesWithTopic(t1)) {
+                    log("Subject identifiers don't return same topic after merge. Should return.");
+                    success = false;
+                }
+                
+                int topicCountAfterMerge = tm.getNumTopics();
+                
+                if(topicCountAfterMerge >= topicCount) {
+                    log("Number of topics hasn't decreased during the merge. Should have decreased by one.");
+                    success = false;
+                }
+                
+                long testTime = System.currentTimeMillis() - startTime; 
+                if(success) {
+                    log("Topic merge test passed in "+testTime+"ms.");
+                }
+                else {
+                    log("Topic merge test failed in "+testTime+"ms.");
+                    numberOfFails++;
+                }
+            }
+            
+            
+            // -------------------------------------------- MERGE TOPICS 2 -----
+            if(!forceStop()) {
+                hlog("Topic merge test 2.");
+                boolean success = true;
+                long startTime = System.currentTimeMillis();
+                int topicCount = tm.getNumTopics();
+                int p=0;
+                setProgress(p);
+                setProgressMax(1);
+                String si0 = sis.get(2);
+                String si1 = sis.get(3);
+                
+                Topic t0 = tm.getTopic(si0);
+                Topic t1 = tm.getTopic(si1);
+                
+                String randomBasename = getRandomString();
+                t1.setBaseName(randomBasename);
+                t0.setBaseName(randomBasename); // Merges t1 into t0.
+
+                if(!t1.isRemoved()) {
+                    log("Merged topic is not marked removed. Should be removed.");
+                    success = false;
+                }
+                if(t0.isRemoved()) {
+                    log("Merging topic is marked removed. Shouldn't be removed.");
+                    success = false;
+                }
+                
+                t0 = tm.getTopic(si0);
+                t1 = tm.getTopic(si1);
+                Topic t2 = tm.getTopicWithBaseName(randomBasename);
+                
+                if(t0 == null || !t0.mergesWithTopic(t1)) {
+                    log("Subject identifiers don't return same topic after merge. Should return.");
+                    success = false;
+                }
+                if(t2 == null || !t2.mergesWithTopic(t0)) {
+                    log("Basename doesn't return same topic as the subject identifier. Should return.");
+                    success = false;
+                }
+                if(t2 == null || !t2.mergesWithTopic(t1)) {
+                    log("Basename doesn't return same topic as the subject identifier. Should return.");
+                    success = false;
+                }
+                
+                int topicCountAfterMerge = tm.getNumTopics();
+                
+                if(topicCountAfterMerge >= topicCount) {
+                    log("Number of topics hasn't decreased during the merge. Should have decreased by one.");
+                    success = false;
+                }
+                
+                long testTime = System.currentTimeMillis() - startTime; 
+                if(success) {
+                    log("Topic merge test 2 passed in "+testTime+"ms.");
+                }
+                else {
+                    log("Topic merge test 2 failed in "+testTime+"ms.");
+                    numberOfFails++;
+                }
+            }
+            
+            
+            // -------------------------------------------- MERGE TOPICS 3 -----
+            if(!forceStop()) {
+                hlog("Topic merge test 3.");
+                boolean success = true;
+                long startTime = System.currentTimeMillis();
+                int topicCount = tm.getNumTopics();
+                int p=0;
+                setProgress(p);
+                setProgressMax(1);
+                String si0 = sis.get(4);
+                String si1 = sis.get(5);
+                
+                Topic t0 = tm.getTopic(si0);
+                Topic t1 = tm.getTopic(si1);
+                
+                String bn0 = getRandomString();
+                String bn1 = getRandomString();
+                
+                t1.setBaseName(bn1);
+                t0.setBaseName(bn0);
+                
+                Locator sl = new Locator("http://wandora.org/si/test-subject-locator-merging/"+System.currentTimeMillis());
+                
+                t1.setSubjectLocator(sl);
+                t0.setSubjectLocator(sl); // Merges t1 into t0.
+
+                if(!t1.isRemoved()) {
+                    log("Merged topic is not marked removed. Should be removed.");
+                    success = false;
+                }
+                if(t0.isRemoved()) {
+                    log("Merging topic is marked removed. Shouldn't be removed.");
+                    success = false;
+                }
+                
+                String bna = t0.getBaseName();
+                
+                if(bn0.equals(bna)) {
+                    log("After merge the basename of the merged topic is the name of the merging topic. Shouldn't be.");
+                    success = false;
+                }
+                if(!bn1.equals(bna)) {
+                    log("After merge the basename of the merged topic is not the name of the removed topic. Should be.");
+                    success = false;
+                }
+                
+                t0 = tm.getTopic(si0);
+                t1 = tm.getTopic(si1);
+                
+                if(!t0.mergesWithTopic(t1)) {
+                    log("Subject identifiers don't return same topic after the merge. Should return.");
+                    success = false;
+                }
+
+                int topicCountAfterMerge = tm.getNumTopics();
+                
+                if(topicCountAfterMerge >= topicCount) {
+                    log("Number of topics hasn't decreased during the merge. Should have decreased by one.");
+                    success = false;
+                }
+                
+                long testTime = System.currentTimeMillis() - startTime; 
+                if(success) {
+                    log("Topic merge test 3 passed in "+testTime+"ms.");
+                }
+                else {
+                    log("Topic merge test 3 failed in "+testTime+"ms.");
+                    numberOfFails++;
+                }
+            }
+            
+            // ------------------------------------------------ TEST TYPES -----
+            if(!forceStop()) {
+                hlog("Topic type test.");
+                boolean success = true;
+                long startTime = System.currentTimeMillis();
+                int p=0;
+                setProgress(p);
+                setProgressMax(1);
+                String si0 = sis.get(6);
+                String si1 = sis.get(7);
+                
+                Topic t0 = tm.getTopic(si0);
+                Topic t1 = tm.getTopic(si1);
+                
+                t0.addType(t1);
+                
+                if(!t0.isOfType(t1)) {
+                    log("Failed to retrieve type with isOfType.");
+                    success = false;
+                }
+                
+                Collection<Topic> types = t0.getTypes();
+                if(types == null || !types.contains(t1)) {
+                    log("Failed to retrieve type with getTypes.");
+                    success = false;
+                }
+                
+                t0.removeType(t1);
+                
+                if(t0.isOfType(t1)) {
+                    log("IsOfType still gets the type even if removed.");
+                    success = false;
+                }
+                
+                types = t0.getTypes();
+                if(types != null && types.contains(t1)) {
+                    log("GetTypes still gets the type even if removed.");
+                    success = false;
+                }
+                
+                long testTime = System.currentTimeMillis() - startTime; 
+                if(success) {
+                    log("Topic type test passed in "+testTime+"ms.");
+                }
+                else {
+                    log("Topic type test failed in "+testTime+"ms.");
+                    numberOfFails++;
+                }
+            }
+            
+            // ---------------------------------------------- DELETE TOPIC -----
             if(!forceStop()) {
                 hlog("Topic delete test.");
                 long startTime = System.currentTimeMillis();
                 int topicCount = tm.getNumTopics();
+                int deleteCount = 0;
                 int p=0;
                 setProgress(p);
                 setProgressMax(numberOfTestTopics);
                 for(String si : sis) {
                     Topic t = tm.getTopic(si);
-                    if(t == null) {
-                        log("Can't find topic for subject identifier "+si);
-                    }
-                    else {
+                    if(t != null) {
+                        if(!t.isRemoved()) {
+                            deleteCount++;
+                        }
                         t.remove();
                     }
                     setProgress(p++);
                     if(forceStop()) break;
                 }
                 int newTopicCount = tm.getNumTopics();
-                long testTime = System.currentTimeMillis() - startTime; 
-                if(topicCount-numberOfTestTopics == newTopicCount) {
+                long testTime = System.currentTimeMillis() - startTime;
+
+                if(deleteCount > 0 && topicCount-deleteCount == newTopicCount) {
                     log("Topic delete test passed in "+testTime+"ms.");
                 }
                 else {
@@ -467,7 +758,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 }
             }
             
-            // ----- END OF TESTS -----
+            // ---------------------------------------------- END OF TESTS -----
             if(numberOfFails > 0) {
                 log("Failed "+numberOfFails+" tests.");
             }

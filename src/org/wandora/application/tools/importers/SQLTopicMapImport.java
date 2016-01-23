@@ -35,7 +35,6 @@ import org.wandora.application.*;
 import java.io.*;
 import java.sql.*;
 import org.wandora.application.gui.LayerTree;
-import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 

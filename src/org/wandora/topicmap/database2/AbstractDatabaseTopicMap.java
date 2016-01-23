@@ -39,8 +39,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
@@ -318,9 +316,12 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
      * Topic map cannot be used or reopened
      * after it has been closed.
      */
-    protected void close() {
+    @Override
+    public void close() {
+        log("at close of database topicmap******");
         if(connection!=null){
             try {
+                log("Close database connection ******");
                 connection.close();
             }
             catch(SQLException sqle) {

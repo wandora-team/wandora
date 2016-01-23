@@ -718,9 +718,18 @@ public class RemoteTopicMap extends TopicMapImpl {
         if(server==null) return false;
         else return server.needLogin();
     }
-    public void close() throws ServerException{
-        if(server!=null) server.close();
+    @Override
+    public void close() {
+        if(server!=null) {
+            try {
+                server.close();
+            }
+            catch(ServerException se) {
+                throw new RuntimeException(se);
+            }
+        }
     }
+    
     public void connect() throws java.io.IOException {
         if(server!=null) server.connect();
     }

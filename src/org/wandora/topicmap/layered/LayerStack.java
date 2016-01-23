@@ -161,6 +161,18 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
         };
     }
+    
+    
+    @Override
+    public void close() {
+        for(int i=layers.size()-1;i>=0; i--) {
+            Layer layer = layers.elementAt(i);
+            layer.topicMap.close();
+            log("Closing layer "+layer.getName());
+        }
+    }
+    
+
 
     public boolean isUseUndo(){
         return this.useUndo;
@@ -560,7 +572,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
     }
     
-
+    
     /**
      * Checks if the selected layer is in read only mode.
      */
@@ -727,9 +739,11 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             layerIndex.remove(l);
             if(selectedLayer==l) selectedLayer=(layers.size()>0?layers.elementAt(0):null);
             l.getTopicMap().removeTopicMapListener(this);
-            if(l.getTopicMap() instanceof ContainerTopicMap)
+            if(l.getTopicMap() instanceof ContainerTopicMap) {
                 ((ContainerTopicMap)l.getTopicMap()).removeContainerListener(containerListener);
+            }
             l.getTopicMap().setParentTopicMap(null);
+            l.getTopicMap().close();
             notifyLayersChanged();
 //            visibilityChanged(l);
             fireLayerRemoved(l);
@@ -1511,25 +1525,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return false;
     }
     
-    
-    // ---------------------------------------------- TOPIC MAP TRANSACTIONS ---
-    
-    @Override
-    public void startTransaction() {
-        for(Layer l : visibleLayers){
-            l.getTopicMap().startTransaction();
-        }
-    }
-    
-    @Override
-    public void endTransaction() {
-        for(Layer l : visibleLayers){
-            l.getTopicMap().endTransaction();
-        }
-    }
-    
-    
-    
+
     // -------------------------------------------------------------------------
     
     

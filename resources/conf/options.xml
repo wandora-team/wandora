@@ -1597,8 +1597,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.topicmap.undowrapper.tests.TestRunner</class>
          </item>
          <item>
-            <name>Test topic</name>
+            <name>Various topic tests</name>
             <class>org.wandora.application.tools.testing.TopicTest</class>
+         </item>
+         <item>
+            <name>Various association tests</name>
+            <class>org.wandora.application.tools.testing.AssociationTest</class>
          </item>
       </set>
    </tool>

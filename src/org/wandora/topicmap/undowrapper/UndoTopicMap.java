@@ -54,6 +54,12 @@ public class UndoTopicMap extends TopicMap {
         this.undoBuffer=new UndoBuffer();
     }
     
+    
+    public void close() {
+        this.wrapped.close();
+    }
+    
+    
     public void setUndoDisabled(boolean value){
         this.undoDisabled=value;
     }
@@ -414,18 +420,6 @@ public class UndoTopicMap extends TopicMap {
     }
     
     
-    
-    // ---------------------------------------------- TOPIC MAP TRANSACTIONS ---
-    
-    @Override
-    public void startTransaction() {
-        wrapped.startTransaction();
-    }
-    
-    @Override
-    public void endTransaction() {
-        wrapped.endTransaction();
-    }
     
     // -------------------------------------------------------------------------
     

@@ -114,7 +114,9 @@ public class WebServiceTopicMap extends TopicMap {
         return true;
     }
 
-
+    @Override
+    public void close() {
+    }
 
     @Override
     public void addTopicMapListener(TopicMapListener listener) {
