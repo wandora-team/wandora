@@ -31,6 +31,7 @@ import org.wandora.application.gui.simple.*;
 import org.wandora.application.contexts.*;
 import java.io.*;
 import java.util.*;
+import org.wandora.topicmap.layered.Layer;
 import org.xml.sax.*;
 
 /**
@@ -50,12 +51,14 @@ public class SQLDumpExport extends AbstractExportTool {
     
     @Override
     public String getName() {
-        return "SQL Dump Export";
+        return "Topic map SQL export";
     }
     
     @Override
     public String getDescription() {
-        return "Export topic map as a series of SQL insert statements.";
+        return "Export topic map as a series of SQL insert statements. "+
+                "Exported SQL statements can be imported into an empty SQL database and "+
+                "Wandora can use the SQL database as a database topic map.";
     }
 
     @Override
@@ -77,7 +80,7 @@ public class SQLDumpExport extends AbstractExportTool {
             setDefaultLogger();        
             File file = chooser.getSelectedFile();
 //            TopicMap tm=admin.getTopicMap();
-            TopicMap tm=solveContextTopicMap(admin,context);
+            TopicMap tm = solveContextTopicMap(admin,context);
             
             try{
                 String filePath=file.getAbsolutePath();
@@ -91,8 +94,13 @@ public class SQLDumpExport extends AbstractExportTool {
                 }                
                 
                 log("Exporting database topic map as SQL.");
+                log("Exporting topics.");
+                int progress = 0;
+                setProgressMax(tm.getNumTopics());
+                
                 Iterator<Topic> iter=tm.getTopics();
-                while(iter.hasNext()){
+                while(iter.hasNext()) {
+                    setProgress(progress++);
                     Topic t=iter.next();
                     writeTopic(t.getID(), t.getBaseName(), t.getSubjectLocator(), out);
                     
@@ -119,7 +127,12 @@ public class SQLDumpExport extends AbstractExportTool {
                 }
                 
                 Iterator<Association> iter2=tm.getAssociations();
-                while(iter2.hasNext()){
+                log("Exporting associations.");
+                progress = 0;
+                setProgressMax(tm.getNumAssociations());
+                
+                while(iter2.hasNext()) {
+                    setProgress(progress++);
                     Association a=iter2.next();
                     String associationid=makeID("A");
                     writeAssociation(associationid, a.getType().getID(), out);
@@ -130,28 +143,38 @@ public class SQLDumpExport extends AbstractExportTool {
                 }
                 
                 closeStreams(out);
-                for(int i=0;i<out.length;i++) out[i].close();
+                for(PrintStream outStream : out) {
+                    outStream.close();
+                }
                 
+                log("Creating output file.");
                 OutputStream outs=new FileOutputStream(file);
-                for(int i=0;i<tempFiles.length;i++){
-                    appendFile(outs,tempFiles[i]);
-                    tempFiles[i].delete();
+                for(File tempFile : tempFiles) {
+                    appendFile(outs, tempFile);
+                    tempFile.delete();
                 }
                 outs.close();       
                 log("Ready.");
                 setState(SQLDumpExport.WAIT);
             }
-            catch(Exception e){
+            catch(Exception e) {
                 e.printStackTrace();
+                log(e);
             }
         }
     }
+    
+    
+    
+    
     
     public void appendFile(OutputStream out,File in) throws IOException {
         InputStream ins=new FileInputStream(in);
         appendFile(out,ins);
         ins.close();
     }
+    
+    
     public void appendFile(OutputStream out,InputStream in) throws IOException {
         byte[] buf=new byte[4096];
         int read=-1;
@@ -160,10 +183,12 @@ public class SQLDumpExport extends AbstractExportTool {
         }
     }
     
+    
     public String sqlEscape(String s){
         if(s==null) return "null";
         return "'"+s.replaceAll("'", "''")+"'";
     }
+    
     
     public void disableForeignKeys(PrintStream out) throws IOException {
         // not tested, mysql on default settings doesn't seem to care about foreign keys anyway
@@ -175,6 +200,8 @@ public class SQLDumpExport extends AbstractExportTool {
         out.print("alter table ASSOCIATION disable keys;\n");
         out.print("alter table SUBJECTIDENTIFIER disabl keys;\n");
     }
+    
+    
     public void enableForeignKeys(PrintStream out) throws IOException {
         // not tested, mysql on default settings doesn't seem to care about foreign keys anyway
         out.print("alter table TOPICTYPE enable keys;\n");
@@ -185,6 +212,8 @@ public class SQLDumpExport extends AbstractExportTool {
         out.print("alter table ASSOCIATION enable keys;\n");
         out.print("alter table SUBJECTIDENTIFIER enable keys;\n");
     }
+    
+    
 /*    
     public void writeTopic(String topicid,String baseName,org.wandora.topicmap.Locator subjectLocator,PrintStream out) throws IOException{
         writeTopic(topicid,baseName,(subjectLocator==null)?null:(subjectLocator.toString()),out);
@@ -214,9 +243,12 @@ public class SQLDumpExport extends AbstractExportTool {
         out.print("insert into VARIANT (VARIANTID,TOPIC,VALUE) values ("+sqlEscape(variantid)+","+sqlEscape(topicid)+","+sqlEscape(value)+");\n");        
     }*/
     
+    
     public void closeStream(int count,PrintStream out) throws IOException {
         if(count!=0) out.print(";\n");
     }
+    
+    
     public void closeStreams(PrintStream[] out) throws IOException {
         closeStream(topicCount,out[I_TOPIC]);
         closeStream(topicTypeCount,out[I_TOPICTYPE]);
@@ -227,7 +259,11 @@ public class SQLDumpExport extends AbstractExportTool {
         closeStream(variantScopeCount,out[I_VARIANTSCOPE]);
         closeStream(variantCount,out[I_VARIANT]);
     }
+    
+    
     protected int writeLimit=1;
+    
+    
     protected int topicCount=0;
     public void writeTopic(String topicid,String baseName,org.wandora.topicmap.Locator subjectLocator,PrintStream[] out) throws IOException{
         writeTopic(topicid, baseName, subjectLocator, out[I_TOPIC]);
@@ -248,6 +284,8 @@ public class SQLDumpExport extends AbstractExportTool {
             out.print(";\n");
         }
     }
+    
+    
     protected int topicTypeCount=0;
     public void writeTopicType(String topicid,String typeid,PrintStream[] out) throws IOException {
         writeTopicType(topicid, typeid, out[I_TOPICTYPE]);
@@ -262,6 +300,8 @@ public class SQLDumpExport extends AbstractExportTool {
             out.print(";\n");
         }
     }
+    
+    
     protected int associationCount=0;
     public void writeAssociation(String associationid,String typeid,PrintStream[] out) throws IOException {
         writeAssociation(associationid, typeid, out[I_ASSOCIATION]);
@@ -276,6 +316,8 @@ public class SQLDumpExport extends AbstractExportTool {
             out.print(";\n");
         }
     }
+    
+    
     protected int memberCount=0;
     public void writeMember(String associationid,String playerid,String roleid,PrintStream[] out) throws IOException {
         writeMember(associationid, playerid, roleid, out[I_MEMBER]);
@@ -290,6 +332,8 @@ public class SQLDumpExport extends AbstractExportTool {
             out.print(";\n");
         }
     }
+    
+    
     protected int subjectIdentifierCount=0;
     public void writeSubjectIdentifier(String topicid,String si,PrintStream[] out) throws IOException {
         writeSubjectIdentifier(topicid, si, out[I_SUBJECTIDENTIFIER]);
@@ -304,6 +348,8 @@ public class SQLDumpExport extends AbstractExportTool {
             out.print(";\n");
         }
     }
+    
+    
     protected int dataCount=0;
     public void writeData(String topicid,String typeid,String versionid,String data,PrintStream[] out) throws IOException {
         writeData(topicid, typeid, versionid, data, out[I_DATA]);
@@ -318,6 +364,8 @@ public class SQLDumpExport extends AbstractExportTool {
             out.print(";\n");
         }
     }
+    
+    
     protected int variantScopeCount=0;
     public void writeVariantScope(String variantid,String topicid,PrintStream[] out) throws IOException {
         writeVariantScope(variantid, topicid, out[I_VARIANTSCOPE]);
@@ -332,6 +380,8 @@ public class SQLDumpExport extends AbstractExportTool {
             out.print(";\n");
         }
     }
+    
+    
     protected int variantCount=0;
     public void writeVariant(String variantid,String topicid,String value,PrintStream[] out) throws IOException {
         writeVariant(variantid, topicid, value, out[I_VARIANT]);
@@ -347,6 +397,11 @@ public class SQLDumpExport extends AbstractExportTool {
         }
     }
 
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
     
     public void convertXTM2ToSQL(InputStream in,PrintStream outs,TopicMapLogger logger){
         try{
@@ -395,11 +450,13 @@ public class SQLDumpExport extends AbstractExportTool {
         
     }
     
+    
     public static void main(String[] args) throws Exception {
         TopicMapLogger logger=new SimpleTopicMapLogger(System.err);
         SQLDumpExport d=new SQLDumpExport();
         d.convertXTM2ToSQL(System.in, System.out, logger);
     }
+    
     
     public class XTM2toSQL extends XTMParser2 {
         protected PrintStream[] out;

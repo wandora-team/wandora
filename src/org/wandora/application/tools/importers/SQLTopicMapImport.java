@@ -56,7 +56,8 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
     
     @Override
     public String getDescription() {
-        return "Injects SQL file(s) into a database topic map layer.";
+        return "Injects SQL statements in given file(s) into a database topic map. "+
+                "The statements should respect the schema of Wandora's database topic map.";
     }  
     @Override
     public String getName() {
@@ -85,16 +86,16 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
     
     
     @Override
-    public void importStream(Wandora admin, String streamName, InputStream inputStream) {
+    public void importStream(Wandora wandora, String streamName, InputStream inputStream) {
         BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream) );
         
-        TopicMap topicMap = solveContextTopicMap(admin, getContext());
+        TopicMap topicMap = solveContextTopicMap(wandora, getContext());
         if(topicMap instanceof DatabaseTopicMap) {
             setDefaultLogger();
             int count = 0;
             int errorCount = 0;
+            DatabaseTopicMap dbTopicMap = (DatabaseTopicMap) topicMap;
             try {
-                DatabaseTopicMap dbTopicMap = (DatabaseTopicMap) topicMap;
                 Connection connection = dbTopicMap.getConnection();
                 String query = reader.readLine();
                 while(query != null && query.length() > 0 && !forceStop()) {
@@ -112,6 +113,8 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
             catch(Exception e) {
                 log(e);
             }
+            dbTopicMap.clearTopicMapIndexes();
+            wandora.getTopicMap().clearTopicIndex();
             log("Injected " + count + " SQL lines into the database topic map.");
             if(errorCount > 0) log("Encountered " + errorCount + " errors during inject.");
             setState(WAIT);
@@ -120,9 +123,9 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
             setDefaultLogger();
             int count = 0;
             int errorCount = 0;
+            org.wandora.topicmap.database2.DatabaseTopicMap dbTopicMap = 
+                    (org.wandora.topicmap.database2.DatabaseTopicMap) topicMap;
             try {
-                org.wandora.topicmap.database2.DatabaseTopicMap dbTopicMap = 
-                        (org.wandora.topicmap.database2.DatabaseTopicMap) topicMap;
                 String query = reader.readLine();
                 while(query != null && query.length() > 0 && !forceStop()) {
                     try {
@@ -139,6 +142,8 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
             catch(Exception e) {
                 log(e);
             }
+            dbTopicMap.clearTopicMapIndexes();
+            wandora.getTopicMap().clearTopicIndex();
             log("Injected " + count + " SQL lines into the database topic map.");
             if(errorCount > 0) log("Encountered " + errorCount + " errors during the inject.");
             setState(WAIT);
@@ -175,4 +180,10 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
         return topicMap;
     }
 
+    
+    @Override
+    public boolean requiresRefresh() {
+        return true;
+    }
+    
 }
