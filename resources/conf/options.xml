@@ -125,41 +125,39 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
    </httpserver>
    <dbconnections>
       <connection>
+         <name>MySQL generic</name>
+         <type>Generic</type>
          <user>wandora</user>
-         <name>MS SQL Server test</name>
-         <type>Microsoft SQL Server</type>
          <pass>wandora</pass>
-         <database>wandora</database>
-         <server>192.168.1.48</server>
+         <constring>jdbc:mysql://localhost:3306/wandora?useOldAliasMetadataBehavior=true</constring>
+         <driver>com.mysql.jdbc.Driver</driver>
       </connection>
       <connection>
-         <user>wandora</user>
-         <name>MySQL test</name>
-         <type>MySQL</type>
-         <pass>wandora</pass>
-         <database>wandora</database>
-         <server>127.0.0.1</server>
-      </connection>
-      <connection>
+         <name>HSQL memory</name>
+         <type>Generic</type>
          <user>sa</user>
-         <script>create table TOPIC(
-TOPICID varchar(256) primary key,
+         <pass></pass>
+         <constring>jdbc:hsqldb:mem:wandora</constring>
+         <driver>org.hsqldb.jdbcDriver</driver>
+         <script>
+create cached table TOPIC(
+TOPICID varchar(255) primary key,
 BASENAME longvarchar,
 SUBJECTLOCATOR longvarchar 
 );
 
-create table TOPICTYPE(
-TOPIC varchar(256) not null,
-TYPE varchar(256) not null,
+create cached table TOPICTYPE(
+TOPIC varchar(255) not null,
+TYPE varchar(255) not null,
 foreign key (TOPIC) references TOPIC(TOPICID),
 foreign key (TYPE) references TOPIC(TOPICID),
 primary key(TOPIC,TYPE)
 );
 
-create table DATA(
-TOPIC varchar(256) not null,
-TYPE varchar(256) not null,
-VERSION varchar(256) not null,
+create cached table DATA(
+TOPIC varchar(255) not null,
+TYPE varchar(255) not null,
+VERSION varchar(255) not null,
 DATA longvarchar,
 foreign key (TOPIC) references TOPIC(TOPICID),
 foreign key (TYPE) references TOPIC(TOPICID),
@@ -167,37 +165,37 @@ foreign key (VERSION) references TOPIC(TOPICID),
 primary key(TOPIC,TYPE,VERSION)
 );
 
-create table VARIANT(
-VARIANTID varchar(256) primary key,
-TOPIC varchar(256) not null,
+create cached table VARIANT(
+VARIANTID varchar(255) primary key,
+TOPIC varchar(255) not null,
 VALUE longvarchar,
 foreign key (TOPIC) references TOPIC(TOPICID)
 );
 
-create table VARIANTSCOPE(
-VARIANT varchar(256) not null,
-TOPIC varchar(256) not null,
+create cached table VARIANTSCOPE(
+VARIANT varchar(255) not null,
+TOPIC varchar(255) not null,
 foreign key (VARIANT) references VARIANT(VARIANTID),
 foreign key (TOPIC) references TOPIC(TOPICID),
 primary key(VARIANT,TOPIC)
 );
 
-create table SUBJECTIDENTIFIER(
+create cached table SUBJECTIDENTIFIER(
 SI longvarchar primary key,
-TOPIC varchar(256) not null,
+TOPIC varchar(255) not null,
 foreign key (TOPIC) references TOPIC(TOPICID)
 );
 
-create table ASSOCIATION(
-ASSOCIATIONID varchar(256) primary key,
-TYPE varchar(256) not null,
+create cached table ASSOCIATION(
+ASSOCIATIONID varchar(255) primary key,
+TYPE varchar(255) not null,
 foreign key (TYPE) references TOPIC(TOPICID)
 );
 
-create table MEMBER(
-ASSOCIATION varchar(256) not null,
-PLAYER varchar(256) not null,
-ROLE varchar(256) not null,
+create cached table MEMBER(
+ASSOCIATION varchar(255) not null,
+PLAYER varchar(255) not null,
+ROLE varchar(255) not null,
 foreign key (ASSOCIATION) references ASSOCIATION(ASSOCIATIONID),
 foreign key (PLAYER) references TOPIC(TOPICID),
 foreign key (ROLE) references TOPIC(TOPICID),
@@ -214,35 +212,30 @@ create index VARIANTTOPIC_INDEX on VARIANT(TOPIC);
 create index DATATOPIC_INDEX on DATA(TOPIC);
 create index DATATYPE_INDEX on DATA(TYPE);
 create index DATAVERSION_INDEX on DATA(VERSION);</script>
-         <name>HSQL Memory</name>
-         <type>Other</type>
-         <pass></pass>
-         <constring>jdbc:hsqldb:mem:aname</constring>
-         <driver>org.hsqldb.jdbcDriver</driver>
       </connection>
       <connection>
+         <name>HSQL file</name>
+         <type>Generic</type>
          <user>sa</user>
-         <name>HSQL testdb</name>
-         <type>Other</type>
+         <pass></pass>
+         <driver>org.hsqldb.jdbcDriver</driver>
          <constring>jdbc:hsqldb:file:C:\wandora\testdb</constring>
-         <pass></pass>
-         <driver>org.hsqldb.jdbcDriver</driver>
       </connection>
       <connection>
+         <name>SQLite file</name>
+         <type>Generic</type>
          <user>sa</user>
-         <name>SQLite testdb</name>
-         <type>Other</type>
-         <constring>jdbc:sqlite:C:\\wandora\testdb</constring>
          <pass></pass>
          <driver>org.sqlite.JDBC</driver>
+         <constring>jdbc:sqlite:C:\\wandora\testdb</constring>
       </connection>
       <connection>
+         <name>Mariadb generic</name>
+         <type>Generic</type>
          <user>user</user>
-         <name>Mariadb testdb</name>
-         <type>Other</type>
-         <constring>jdbc:mariadb://localhost:3306/wandora</constring>
          <pass>password</pass>
          <driver>org.mariadb.jdbc.Driver</driver>
+         <constring>jdbc:mariadb://localhost:3306/wandora</constring>
       </connection>
    </dbconnections>
    <remoteconnections>

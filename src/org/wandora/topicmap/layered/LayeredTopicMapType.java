@@ -32,6 +32,8 @@ import org.wandora.application.Wandora;
 import org.wandora.topicmap.*;
 import org.wandora.utils.Options;
 import java.io.*;
+import javax.swing.Icon;
+import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 /**
  *
@@ -260,8 +262,8 @@ public class LayeredTopicMapType implements TopicMapType {
         return null;
     }
     @Override
-    public String getTypeIcon(){
-        return "gui/icons/layerinfo/layer_type_layered.png";
+    public Icon getTypeIcon(){
+        return UIBox.getIcon("gui/icons/layerinfo/layer_type_layered.png");
     }
     
 }

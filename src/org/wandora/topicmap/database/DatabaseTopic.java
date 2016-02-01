@@ -60,8 +60,7 @@ public class DatabaseTopic extends Topic {
     //protected Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations;
     protected WeakReference<Hashtable<Topic,Hashtable<Topic,Collection<Association>>>> storedAssociations;
     protected boolean removed=false;
-    
-    
+
     /** Creates a new instance of DatabaseTopic */
     public DatabaseTopic(DatabaseTopicMap tm) {
         this.topicMap=tm;
@@ -83,20 +82,35 @@ public class DatabaseTopic extends Topic {
     
     public DatabaseTopic(Map<String,Object> row, DatabaseTopicMap tm)  throws TopicMapException {
         this(tm);
+        
         Object o=row.get("BASENAME");
-        if(o!=null) internalSetBaseName(o.toString());
+        if(o!=null) {
+            internalSetBaseName(o.toString());
+        }
+        
         o=row.get("SUBJECTLOCATOR");
-        if(o!=null) subjectLocator=topicMap.createLocator(o.toString());
+        if(o!=null) {
+            subjectLocator=topicMap.createLocator(o.toString());
+        }
+        
         o=row.get("TOPICID");
-        if(o!=null) id=o.toString();
+        if(o!=null) {
+            id=o.toString();
+        }
     }
     
     
-    public DatabaseTopic(Object baseName,Object subjectLocator,Object id,DatabaseTopicMap tm) throws TopicMapException {
+    public DatabaseTopic(Object baseName, Object subjectLocator, Object id, DatabaseTopicMap tm) throws TopicMapException {
         this(tm);
-        if(baseName!=null) internalSetBaseName(baseName.toString());
-        if(subjectLocator!=null) this.subjectLocator=topicMap.createLocator(subjectLocator.toString());
-        if(id!=null) this.id=id.toString();
+        if(baseName!=null) {
+            internalSetBaseName(baseName.toString());
+        }
+        if(subjectLocator!=null) {
+            this.subjectLocator=topicMap.createLocator(subjectLocator.toString());
+        }
+        if(id!=null) {
+            this.id=id.toString();
+        }
     }
     
     
@@ -111,7 +125,9 @@ public class DatabaseTopic extends Topic {
      */
     void initialize(String baseName,String subjectLocator) throws TopicMapException {
         internalSetBaseName(baseName);
-        if(subjectLocator!=null) this.subjectLocator=topicMap.createLocator(subjectLocator);
+        if(subjectLocator!=null) {
+            this.subjectLocator=topicMap.createLocator(subjectLocator);
+        }
     }
     
     

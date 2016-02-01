@@ -33,6 +33,8 @@ import org.wandora.application.*;
 import org.wandora.utils.*;
 import java.util.*;
 import java.util.regex.*;
+import javax.swing.Icon;
+import org.wandora.application.gui.UIBox;
 
 /**
  *
@@ -125,8 +127,9 @@ public class MemoryTopicMapType implements TopicMapType {
         return null;
     }
     @Override
-    public String getTypeIcon(){
-        return "gui/icons/layerinfo/layer_type_memory.png";
+    public Icon getTypeIcon(){
+        // return UIBox.getIcon("gui/icons/layerinfo/layer_type_memory.png");
+        return UIBox.getIcon(0xf1b2);
     }
     
 }

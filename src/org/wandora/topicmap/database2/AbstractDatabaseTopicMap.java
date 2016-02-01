@@ -366,7 +366,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             Statement stmt = null;
             try {
                 stmt = con.createStatement();
-                System.out.println(query);
+                logQuery(query);
                 stmt.executeUpdate(query);
                 stmt.close();
                 return true;
@@ -409,7 +409,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             ResultSet rs = null;
             try {
                 queryCounter++;
-                System.out.println(query);
+                logQuery(query);
                 stmt=con.createStatement();
                 rs=stmt.executeQuery(query);
                 ResultSetMetaData metaData=rs.getMetaData();
@@ -424,7 +424,9 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                     Map<String,Object> row=new LinkedHashMap<String,Object>();
                     for(int i=0;i<columns;i++) {
                         row.put(columnNames[i],rs.getObject(i+1));
+                        //System.out.println("  "+columnNames[i]+"="+rs.getObject(i+1));
                     }
+                    //System.out.println("---");
                     rows.add(row);
                 }
                 rs.close();
@@ -463,7 +465,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 ResultSet rs = null;
                 try {
                     queryCounter++;
-                    System.out.println(query);
+                    logQuery(query);
                     Connection con=getConnection();
                     stmt=con.createStatement();
                     rs=stmt.executeQuery(query);
@@ -491,6 +493,16 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             }
         }
         return count;
+    }
+    
+    
+    
+    
+    
+    private void logQuery(String query) {
+        if(query != null) {
+            System.out.println(query.substring(0, query.length() > 512 ? 512 : query.length()));
+        }
     }
     
     
@@ -605,9 +617,13 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     /**
      * Escapes a string so that it can be used in an sql query.
      */
-    protected String escapeSQL(String s){
-        s=s.replace("'","''");
-        if(databaseFlavour.equals("mysql")) s=s.replace("\\","\\\\");
+    protected String escapeSQL(String s) {
+        if(s != null) {
+            s=s.replace("'","''");
+            if(databaseFlavour.equals("mysql")) {
+                s=s.replace("\\","\\\\");
+            }
+        }
         return s;
     }
     

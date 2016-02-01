@@ -609,19 +609,19 @@ public class DatabaseTopicMap extends TopicMap {
     /**
      * Builds a database topic when given the topic id, basename and subject locator.
      */
-    public DatabaseTopic buildTopic(Object id,Object baseName,Object subjectLocator) throws TopicMapException {
-        return buildTopic((String)id,(String)baseName,(String)subjectLocator);
+    public DatabaseTopic buildTopic(Object id, Object baseName, Object subjectLocator) throws TopicMapException {
+        return buildTopic((String) id, (String) baseName, (String) subjectLocator);
     }
     
     
     /**
      * Builds a database topic when given the topic id, basename and subject locator.
      */
-    public DatabaseTopic buildTopic(String id,String baseName,String subjectLocator) throws TopicMapException {
+    public DatabaseTopic buildTopic(String id, String baseName, String subjectLocator) throws TopicMapException {
         DatabaseTopic dbt=topicIndex.getTopicWithID(id);
-        if(dbt==null){
-            dbt=topicIndex.createTopic(id,this);
-            dbt.initialize(baseName,subjectLocator);
+        if(dbt==null) {
+            dbt=topicIndex.createTopic(id, this);
+            dbt.initialize(baseName, subjectLocator);
         }
         return dbt;
     }

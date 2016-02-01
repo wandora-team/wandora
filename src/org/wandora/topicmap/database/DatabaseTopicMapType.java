@@ -99,7 +99,14 @@ public class DatabaseTopicMapType implements TopicMapType {
         DatabaseTopicMap dtm=(DatabaseTopicMap)tm;
         Object params=dtm.getConnectionParams();
         if(params==null){
-            params=DatabaseConfigurationPanel.StoredConnection.other("Unknown connection","Other",dtm.getDBDriver(),dtm.getDBConnectionString(),dtm.getDBUser(),dtm.getDBPassword());
+            params=DatabaseConfigurationPanel.StoredConnection.generic(
+                    "Unknown connection",
+                    DatabaseConfigurationPanel.GENERIC_TYPE,
+                    dtm.getDBDriver(),
+                    dtm.getDBConnectionString(),
+                    dtm.getDBUser(),
+                    dtm.getDBPassword()
+            );
         }
         return dcp.getEditConfigurationPanel(params);
     }    
@@ -116,7 +123,7 @@ public class DatabaseTopicMapType implements TopicMapType {
         DatabaseTopicMap dtm=(DatabaseTopicMap)tm;
         Options options=new Options();
         Object params=dtm.getConnectionParams();
-        if(params!=null){
+        if(params!=null) {
             DatabaseConfigurationPanel.StoredConnection p=(DatabaseConfigurationPanel.StoredConnection)params;
             p.writeOptions(options,"params.");
         }
@@ -206,7 +213,7 @@ public class DatabaseTopicMapType implements TopicMapType {
     }
     
     @Override
-    public String getTypeIcon(){
-        return "gui/icons/layerinfo/layer_type_database.png";
+    public Icon getTypeIcon(){
+        return UIBox.getIcon("gui/icons/layerinfo/layer_type_database.png");
     }
 }

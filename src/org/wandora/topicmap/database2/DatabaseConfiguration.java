@@ -23,7 +23,6 @@
  *
  * DatabaseConfiguration.java
  *
- * Created on 21. marraskuuta 2005, 13:47
  */
 
 package org.wandora.topicmap.database2;
@@ -67,11 +66,11 @@ public class DatabaseConfiguration extends TopicMapConfigurationPanel {
             String name=options.get(prefix+"["+counter+"].name");
             String user=options.get(prefix+"["+counter+"].user");
             String pass=options.get(prefix+"["+counter+"].pass");
-            if(type.equals("Other")){
+            if(type.equals(DatabaseConfigurationPanel.GENERIC_TYPE)){
                 String driver=options.get(prefix+"["+counter+"].driver");
                 String conString=options.get(prefix+"["+counter+"].constring");
                 String script=options.get(prefix+"["+counter+"].script");
-                connections.add(DatabaseConfigurationPanel.StoredConnection.other(name,type,driver,conString,user,pass,script));
+                connections.add(DatabaseConfigurationPanel.StoredConnection.generic(name,type,driver,conString,user,pass,script));
             }
             else{
                 String server=options.get(prefix+"["+counter+"].server");
@@ -120,7 +119,7 @@ public class DatabaseConfiguration extends TopicMapConfigurationPanel {
             options.put(prefix+"["+counter+"].name",sc.name);
             options.put(prefix+"["+counter+"].user",sc.user);
             options.put(prefix+"["+counter+"].pass",sc.pass);
-            if(sc.type.equals("Other")){
+            if(sc.type.equals(DatabaseConfigurationPanel.GENERIC_TYPE)){
                 options.put(prefix+"["+counter+"].driver",sc.driver);
                 options.put(prefix+"["+counter+"].constring",sc.conString);
                 options.put(prefix+"["+counter+"].script",sc.script);

@@ -286,8 +286,8 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
      * Builds a database topic when given the topic id, basename and subject locator.
      */
     public DatabaseTopic buildTopic(String id, String baseName, String subjectLocator) throws TopicMapException {
-        DatabaseTopic dbt=topicIndex.getTopicWithID(id);
-        if(dbt == null){
+        DatabaseTopic dbt = topicIndex.getTopicWithID(id);
+        if(dbt == null) {
             dbt = topicIndex.createTopic(id,this);
             dbt.initialize(baseName,subjectLocator);
         }
@@ -321,9 +321,9 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     
     
     public DatabaseAssociation buildAssociation(String associationId, String typeId, String typeName, String typeSL) throws TopicMapException {
-        DatabaseAssociation dba=topicIndex.getAssociation(associationId,this);
+        DatabaseAssociation dba = topicIndex.getAssociation(associationId,this);
         if(dba!=null) return dba;
-        DatabaseTopic type=buildTopic(typeId,typeName,typeSL);
+        DatabaseTopic type = buildTopic(typeId,typeName,typeSL);
         return buildAssociation(associationId,type);
     }
     

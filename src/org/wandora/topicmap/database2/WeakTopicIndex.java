@@ -418,11 +418,14 @@ public class WeakTopicIndex implements Runnable {
     /**
      * Constructs a DatabaseTopic with the given ID.
      */
-    public synchronized DatabaseTopic createTopic(String id,DatabaseTopicMap tm){
+    public synchronized DatabaseTopic createTopic(String id, DatabaseTopicMap tm) {
+        if(id == null) {
+            System.out.println("Warning: DatabaseTopic's id will be null. This will cause problems.");
+        }
         DatabaseTopic t=getTopicWithID(id);
         if(t!=null) return topicAccessed(t);
-        
-        t=new DatabaseTopic(id,tm); 
+        t = new DatabaseTopic(id, tm);
+        id = t.getID();
         WeakReference<DatabaseTopic> ref=new WeakReference<DatabaseTopic>(t,topicRefQueue);
         topicIDIndex.put(id,ref);
         if(useRefQueue) topicInvIDIndex.put(ref,id);

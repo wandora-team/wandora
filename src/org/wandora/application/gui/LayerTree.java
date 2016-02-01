@@ -1351,10 +1351,10 @@ public class LayerTree extends DragJTree {
 
             TopicMapType type=TopicMapTypeManager.getType(topicMap);
             if(type!=null){
-                String icon=type.getTypeIcon();
+                Icon icon=type.getTypeIcon();
                 //String name=type.getTypeName();
                 if(icon!=null){
-                    iconLabel = new JLabel(UIBox.getIcon(icon));
+                    iconLabel = new JLabel(icon);
                     // tooltip doesn't work in a JTree
                     //if(name!=null) iconLabel.setToolTipText("Layer contains a "+name.toLowerCase()+" topic map!");
                     infoPanel.add(iconLabel);                    

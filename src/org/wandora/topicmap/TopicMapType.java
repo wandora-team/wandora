@@ -89,5 +89,5 @@ public interface TopicMapType {
     /**
      * Get an icon that can be used to represent this type of topic map.
      */
-    public String getTypeIcon();
+    public Icon getTypeIcon();
 }

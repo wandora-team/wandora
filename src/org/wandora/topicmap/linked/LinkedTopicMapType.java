@@ -26,6 +26,8 @@ import javax.swing.JMenuItem;
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.*;
 import java.util.*;
+import javax.swing.Icon;
+import org.wandora.application.gui.UIBox;
 import org.wandora.utils.Options;
 import org.wandora.topicmap.layered.*;
 
@@ -116,8 +118,8 @@ public class LinkedTopicMapType implements TopicMapType {
         return unpackageTopicMap(in,path,logger,wandora);
     }
     @Override
-    public String getTypeIcon(){
-        return "gui/icons/layerinfo/layer_type_linked.png";
+    public Icon getTypeIcon(){
+        return UIBox.getIcon("gui/icons/layerinfo/layer_type_linked.png");
     }
 
 }

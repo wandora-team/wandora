@@ -27,6 +27,8 @@
  */
 
 package org.wandora.topicmap.database2;
+
+
 import org.wandora.topicmap.*;
 import java.util.*;
 

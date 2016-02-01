@@ -38,7 +38,6 @@ import static org.wandora.utils.Tuples.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.topicmap.*;
-import org.wandora.utils.*;
 import org.wandora.topicmap.database.*;
 
 /**
@@ -46,8 +45,10 @@ import org.wandora.topicmap.database.*;
  * @author  olli
  */
 public class DatabaseConfigurationPanel extends javax.swing.JPanel {
+    public final static String GENERIC_TYPE = "Generic";
     
-    private Wandora admin;
+    
+    private Wandora wandora;
     protected JDialog newConDialog;
     protected DefaultListModel listModel;
     protected int editingIndex=-1;
@@ -55,15 +56,15 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     
     
     /** Creates new form ConfigurationPanel */
-    public DatabaseConfigurationPanel(Wandora admin) {
-        this.admin = admin;
+    public DatabaseConfigurationPanel(Wandora wandora) {
+        this.wandora = wandora;
         listModel=new DefaultListModel();
         initComponents();
         connectionsList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loadSaveButtonPanel.setVisible(false);
-        dbtypeComboBox.addItem("Microsoft SQL Server");
-        dbtypeComboBox.addItem("MySQL");
-        dbtypeComboBox.addItem("Other");
+        // dbtypeComboBox.addItem("Microsoft SQL Server");
+        // dbtypeComboBox.addItem("MySQL");
+        dbtypeComboBox.addItem(GENERIC_TYPE);
         setDbConfPanel();
     }
     
@@ -518,11 +519,11 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     private void deleteConnectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteConnectionButtonActionPerformed
         StoredConnection sc=(StoredConnection)connectionsList.getSelectedValue();
         if(sc==null){
-            WandoraOptionPane.showMessageDialog(admin, "Select connection to be deleted!");
+            WandoraOptionPane.showMessageDialog(wandora, "Select connection to be deleted!");
             return;
         }
         else {
-            if(WandoraOptionPane.showConfirmDialog(admin,"Are you sure you want to delete selected layer configuration '" + sc.name + "'?") == WandoraOptionPane.YES_OPTION) {
+            if(WandoraOptionPane.showConfirmDialog(wandora,"Are you sure you want to delete selected layer configuration '" + sc.name + "'?") == WandoraOptionPane.YES_OPTION) {
                 listModel.remove(connectionsList.getSelectedIndex());
                 connectionsList.clearSelection();
             }
@@ -553,33 +554,25 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_loadCancelButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-/*        
-        String name="";
-        while(name.trim().length()==0){
-            name = WandoraOptionPane.showInputDialog(admin,"Enter connection name");            
-        }
-        */
         StoredConnection sc=makeNewStoredConnection();
         if(sc==null) return;
 
-        setConnections(DatabaseConfiguration.parseConnections(admin.getOptions()));
+        setConnections(DatabaseConfiguration.parseConnections(wandora.getOptions()));
         listModel.addElement(sc);
-        DatabaseConfiguration.writeOptions(admin.getOptions(),DatabaseConfigurationPanel.this);
+        DatabaseConfiguration.writeOptions(wandora.getOptions(),DatabaseConfigurationPanel.this);
         
-        WandoraOptionPane.showMessageDialog(admin,"Connection settings saved!");
-        
-        
-        
+        WandoraOptionPane.showMessageDialog(wandora,"Connection settings saved!");
     }//GEN-LAST:event_saveButtonActionPerformed
 
+    
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
 
-        DatabaseConfiguration dc=new DatabaseConfiguration(admin,admin.getOptions());
+        DatabaseConfiguration dc=new DatabaseConfiguration(wandora, wandora.getOptions());
         loadContainerPanel.removeAll();
         loadContainerPanel.add(dc);
         
-        loadDialog.setSize(400,400);
-        GuiTools.centerWindow(loadDialog,admin);
+        loadDialog.setSize(600,550);
+        GuiTools.centerWindow(loadDialog,wandora);
         loadCancelled=true;
         loadDialog.setVisible(true);
         
@@ -588,17 +581,16 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         Object params=dc.getParameters();
         
         initNewConPanel((StoredConnection)params);
-        
-        
     }//GEN-LAST:event_loadButtonActionPerformed
 
+    
     public TopicMapConfigurationPanel getEditConfigurationPanel(Object params){
         newConButtonsPanel.setVisible(false);
         loadSaveButtonPanel.setVisible(true);
         final StoredConnection sc=(StoredConnection)params;
         initNewConPanel(sc);
         
-        return new TopicMapConfigurationPanel(){
+        return new TopicMapConfigurationPanel() {
             {
                 this.setLayout(new java.awt.BorderLayout());
                 this.add(newConPanel);
@@ -619,7 +611,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         clearNewConPanel();
         dbtypeComboBox.setSelectedItem(sc.type);
         setDbConfPanel();
-        if(sc.type.equals("Other")){
+        if(sc.type.equals(GENERIC_TYPE)){
             nameGenTextField.setText(sc.name);
             driverTextField.setText(sc.driver);
             conTextField.setText(sc.conString);
@@ -658,7 +650,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
         StoredConnection sc=(StoredConnection)connectionsList.getSelectedValue();
         if(sc==null) {
-            WandoraOptionPane.showMessageDialog(admin, "Select connection first!");
+            WandoraOptionPane.showMessageDialog(wandora, "Select connection first!");
             return;
         }
         initNewConPanel(sc);
@@ -668,7 +660,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
 
     public static T2<String,String> getConnectionDriverAndString(StoredConnection sc){
         if(sc == null) return null;
-        if(sc.type.equals("Other")){
+        if(sc.type.equals(GENERIC_TYPE)){
             return t2(sc.driver,sc.conString);
         }
         else if(sc.type.equals("MySQL")){
@@ -683,7 +675,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     
     private StoredConnection makeNewStoredConnection(){
         StoredConnection sc=null;
-        if(dbtypeComboBox.getSelectedItem().toString().equals("Other")){
+        if(dbtypeComboBox.getSelectedItem().toString().equals(GENERIC_TYPE)){
             String name=nameGenTextField.getText().trim();
             String driver=driverTextField.getText().trim();
             String conString=conTextField.getText().trim();
@@ -692,11 +684,11 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
             String script=scriptTextArea.getText().trim();
             //if(rememberPassGenCheckBox.isSelected()) pass=passwordGenTextField.getText().trim();
             pass=passwordGenTextField.getText().trim();
-            if(name.length()==0) {WandoraOptionPane.showMessageDialog(admin,"Enter connection name"); return null;}
-            if(driver.length()==0) {WandoraOptionPane.showMessageDialog(admin,"Enter connection driver"); return null;}
-            if(conString.length()==0) {WandoraOptionPane.showMessageDialog(admin,"Enter connection string"); return null;}
-            if(user.length()==0) {WandoraOptionPane.showMessageDialog(admin,"Enter user name"); return null;}
-            sc=StoredConnection.other(name,"Other", driver, conString, user, pass, script);
+            if(name.length()==0) {WandoraOptionPane.showMessageDialog(wandora,"Enter connection name"); return null;}
+            if(driver.length()==0) {WandoraOptionPane.showMessageDialog(wandora,"Enter connection driver"); return null;}
+            if(conString.length()==0) {WandoraOptionPane.showMessageDialog(wandora,"Enter connection string"); return null;}
+            if(user.length()==0) {WandoraOptionPane.showMessageDialog(wandora,"Enter user name"); return null;}
+            sc=StoredConnection.generic(name,GENERIC_TYPE, driver, conString, user, pass, script);
         }
         else{
             String name=nameTextField.getText().trim();
@@ -706,10 +698,10 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
             String pass="";
             //if(rememberPassCheckBox.isSelected()) pass=passwordTextField.getText().trim();
             pass=passwordTextField.getText().trim();
-            if(name.length()==0) {WandoraOptionPane.showMessageDialog(admin,"Enter connection name"); return null;}
-            if(server.length()==0) {WandoraOptionPane.showMessageDialog(admin,"Enter server address"); return null;}
-            if(database.length()==0) {WandoraOptionPane.showMessageDialog(admin,"Enter database name"); return null;}
-            if(user.length()==0) {WandoraOptionPane.showMessageDialog(admin,"Enter user name"); return null;}            
+            if(name.length()==0) {WandoraOptionPane.showMessageDialog(wandora,"Enter connection name"); return null;}
+            if(server.length()==0) {WandoraOptionPane.showMessageDialog(wandora,"Enter server address"); return null;}
+            if(database.length()==0) {WandoraOptionPane.showMessageDialog(wandora,"Enter database name"); return null;}
+            if(user.length()==0) {WandoraOptionPane.showMessageDialog(wandora,"Enter user name"); return null;}            
             sc=StoredConnection.known(name, dbtypeComboBox.getSelectedItem().toString(), server, database, user, pass);
         }
         return sc;
@@ -755,8 +747,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         else if(parent instanceof java.awt.Frame) newConDialog=new JDialog((java.awt.Frame)parent,true);
         else newConDialog=new JDialog((java.awt.Dialog)parent,true);
         newConDialog.getContentPane().add(newConPanel);
-        newConDialog.setSize(400,350);
-        if(admin != null) admin.centerWindow(newConDialog, 0, +20);
+        newConDialog.setSize(600,550);
+        if(wandora != null) wandora.centerWindow(newConDialog, 0, +30);
         newConDialog.setTitle("Edit database layer configuration");
         newConDialog.setVisible(true);
     }
@@ -770,7 +762,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     protected void setDbConfPanel(){
         String type=dbtypeComboBox.getSelectedItem().toString();
         dbConfContainerPanel.removeAll();
-        if(type.equals("Other")){
+        if(type.equals(GENERIC_TYPE)){
             dbConfContainerPanel.add(generalDBPanel);
         }
         else if(type.equals("MySQL") || type.equals("Microsoft SQL Server")){
@@ -783,14 +775,18 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         dbConfContainerPanel.repaint();
     }
     
+    
     private void dbtypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbtypeComboBoxActionPerformed
         setDbConfPanel();
     }//GEN-LAST:event_dbtypeComboBoxActionPerformed
+    
     
     public StoredConnection getSelectedConnection(){
         StoredConnection sc=(StoredConnection)connectionsList.getSelectedValue();
         return sc; // can be null if nothing selected
     }
+    
+    
     public Collection<StoredConnection> getAllConnections(){
         Vector<StoredConnection> ret=new Vector<StoredConnection>();
         for(int i=0;i<listModel.getSize();i++){
@@ -806,9 +802,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         }
     }
     
-    public static void main(String[] args){
-   
-    }
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField conTextField;
@@ -862,6 +856,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     private javax.swing.JTextField userTextField;
     // End of variables declaration//GEN-END:variables
 
+    
     public static class StoredConnection {
         public String name;
         public String type;
@@ -872,9 +867,13 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         public String user;
         public String pass;
         public String script;
+        
+        
         public StoredConnection(){
 
         }
+        
+        
         public static StoredConnection known(String name,String type,String server,String database,String user,String password){
             StoredConnection c=new StoredConnection();
             c.name=name;
@@ -885,10 +884,14 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
             c.pass=password;
             return c;
         }
-        public static StoredConnection other(String name,String type,String driver,String conString,String user,String password){
-            return other(name,type,driver,conString,user,password,"");
+        
+        
+        public static StoredConnection generic(String name,String type,String driver,String conString,String user,String password){
+            return generic(name,type,driver,conString,user,password,"");
         }
-        public static StoredConnection other(String name,String type,String driver,String conString,String user,String password,String script){
+        
+        
+        public static StoredConnection generic(String name,String type,String driver,String conString,String user,String password,String script){
             StoredConnection c=new StoredConnection();
             c.name=name;
             c.type=type;
@@ -899,18 +902,25 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
             c.script=script;
             return c;
         }
-        public String toString(){return name;}
+        
+        
+        public String toString(){
+            return name;
+        }
+        
+        
         public void writeOptions(Options options,String prefix){
             if(name!=null) options.put(prefix+"name",name);
             if(type!=null) options.put(prefix+"type",type);
+            if(user!=null) options.put(prefix+"user",user);
+            if(pass!=null) options.put(prefix+"pass",pass);
             if(server!=null) options.put(prefix+"server",server);
             if(database!=null) options.put(prefix+"database",database);
             if(driver!=null) options.put(prefix+"driver",driver);
             if(conString!=null) options.put(prefix+"conString",conString);
-            if(user!=null) options.put(prefix+"user",user);
-            if(pass!=null) options.put(prefix+"pass",pass);
             if(script!=null) options.put(prefix+"script",script);
         }
+        
         
         public void readOptions(Options options,String prefix){
             name=options.get(prefix+"name");

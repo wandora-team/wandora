@@ -20,8 +20,10 @@
  */
 package org.wandora.topicmap.webservice;
 import java.io.*;
+import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.*;
 import org.wandora.utils.Options;
 
@@ -52,8 +54,8 @@ public class WebServiceTopicMapType implements TopicMapType {
         return null;
     }
 
-    public String getTypeIcon() {
-        return "gui/icons/layerinfo/layer_type_webservice.png";
+    public Icon getTypeIcon() {
+        return UIBox.getIcon("gui/icons/layerinfo/layer_type_webservice.png");
     }
 
     public String getTypeName() {

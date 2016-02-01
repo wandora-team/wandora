@@ -27,6 +27,8 @@
  */
 
 package org.wandora.topicmap.database2;
+
+
 import org.wandora.topicmap.*;
 import static org.wandora.utils.Tuples.*;
 import java.util.*;
@@ -84,24 +86,41 @@ public class DatabaseTopic extends Topic {
     public DatabaseTopic(Map<String,Object> row, DatabaseTopicMap tm)  throws TopicMapException {
         this(tm);
         Object o=row.get("BASENAME");
-        if(o!=null) internalSetBaseName(o.toString());
+        if(o!=null) {
+            internalSetBaseName(o.toString());
+        }
+        
         o=row.get("SUBJECTLOCATOR");
-        if(o!=null) subjectLocator=topicMap.createLocator(o.toString());
+        if(o!=null) {
+            subjectLocator=topicMap.createLocator(o.toString());
+        }
+        
         o=row.get("TOPICID");
-        if(o!=null) id=o.toString();
+        if(o!=null) {
+            id=o.toString();
+        }
     }
     
     
-    public DatabaseTopic(Object baseName,Object subjectLocator,Object id,DatabaseTopicMap tm) throws TopicMapException {
+    public DatabaseTopic(Object baseName, Object subjectLocator, Object id, DatabaseTopicMap tm) throws TopicMapException {
         this(tm);
-        if(baseName!=null) internalSetBaseName(baseName.toString());
-        if(subjectLocator!=null) this.subjectLocator=topicMap.createLocator(subjectLocator.toString());
-        if(id!=null) this.id=id.toString();
+        if(baseName!=null) {
+            internalSetBaseName(baseName.toString());
+        }
+        if(subjectLocator!=null) {
+            this.subjectLocator=topicMap.createLocator(subjectLocator.toString());
+        }
+        if(id!=null) {
+            this.id=id.toString();
+        }
+        else {
+            System.out.println("Warning: DatabaseTopic id is not set: "+this.id+" != "+id);
+        }
     }
     
     
-    void initialize(Object baseName,Object subjectLocator) throws TopicMapException {
-        initialize((String)baseName,(String)subjectLocator);
+    void initialize(Object baseName, Object subjectLocator) throws TopicMapException {
+        initialize((String)baseName, (String)subjectLocator);
     }
     
     
@@ -109,9 +128,11 @@ public class DatabaseTopic extends Topic {
      * Initializes this DatabaseTopic object setting the basename and subject locator
      * but does not modify the actual database.
      */
-    void initialize(String baseName,String subjectLocator) throws TopicMapException {
+    void initialize(String baseName, String subjectLocator) throws TopicMapException {
         internalSetBaseName(baseName);
-        if(subjectLocator!=null) this.subjectLocator=topicMap.createLocator(subjectLocator);
+        if(subjectLocator!=null) {
+            this.subjectLocator=topicMap.createLocator(subjectLocator);
+        }
     }
     
     
@@ -205,6 +226,12 @@ public class DatabaseTopic extends Topic {
     
     
     protected void fetchSubjectIdentifiers() throws TopicMapException {
+        if(id == null) {
+            System.out.println("topic's id is null.");
+            System.out.println(this.baseName);
+            //System.out.println(this);
+        }
+        
         Collection<Map<String,Object>> res=topicMap.executeQuery("select * from SUBJECTIDENTIFIER where TOPIC='"+escapeSQL(id)+"'");
         HashSet<Locator> newSIs=new LinkedHashSet<Locator>();
         for(Map<String,Object> row : res){
@@ -305,7 +332,7 @@ public class DatabaseTopic extends Topic {
     
     
     protected Hashtable<Topic,Hashtable<Topic,Collection<Association>>> fetchAssociations() throws TopicMapException {
-        if(storedAssociations!=null){
+        if(storedAssociations!=null) {
             Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=storedAssociations.get();
             if(associations!=null) return associations;
         }
@@ -396,10 +423,18 @@ public class DatabaseTopic extends Topic {
      * Fetch all information from database that hasn't already been fetched.
      */
     void makeFull() throws TopicMapException {
-        if(!sisFetched) fetchSubjectIdentifiers();
-        if(!dataFetched) fetchData();
-        if(!variantsFetched) fetchVariants();
-        if(!typesFetched) fetchTypes();
+        if(!sisFetched) {
+            fetchSubjectIdentifiers();
+        }
+        if(!dataFetched) {
+            fetchData();
+        }
+        if(!variantsFetched) {
+            fetchVariants();
+        }
+        if(!typesFetched) {
+            fetchTypes();
+        }
 //        if(!associationsFetched) fetchAssociations();
         full=true;
     }
@@ -409,14 +444,16 @@ public class DatabaseTopic extends Topic {
     
     
     @Override
-    public String getID(){
+    public String getID() {
         return id;
     }
     
     
     @Override
     public Collection<Locator> getSubjectIdentifiers() throws TopicMapException {
-        if(!sisFetched) fetchSubjectIdentifiers();
+        if(!sisFetched) {
+            fetchSubjectIdentifiers();
+        }
         return subjectIdentifiers;
     }
     

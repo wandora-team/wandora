@@ -96,7 +96,9 @@ public class RemoteTopicMapType implements TopicMapType {
         return rcp.getEditConfigurationPanel(sc);
     }    
     
-    public String toString(){return getTypeName();}
+    public String toString(){
+        return getTypeName();
+    }
 
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) {
     }
@@ -107,10 +109,12 @@ public class RemoteTopicMapType implements TopicMapType {
     public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) {
         return null;
     }
+    @Override
     public JMenuItem[] getTopicMapMenu(final TopicMap tm,Wandora admin){
         return null;
     }
-    public String getTypeIcon(){
-        return "gui/icons/layerinfo/layer_type_remote.png";
+    @Override
+    public Icon getTypeIcon(){
+        return UIBox.getIcon("gui/icons/layerinfo/layer_type_remote.png");
     }
 }

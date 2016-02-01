@@ -322,7 +322,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             }
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize associations!");
+            System.out.println("Failed to initialize associationss!");
             e.printStackTrace();
         }
     }
