@@ -305,26 +305,30 @@ public class DatabaseTopic extends Topic {
     
     
     static void fetchAllSubjectIdentifiers(Collection<Map<String,Object>> res, Map<String,DatabaseTopic> topics,DatabaseTopicMap topicMap) throws TopicMapException {
-        String topicID=null;
-        HashSet<Locator> subjectIdentifiers=new LinkedHashSet<Locator>();
+        String topicID = null;
+        HashSet<Locator> subjectIdentifiers = new LinkedHashSet<Locator>();
         for(Map<String,Object> row : res) {
-            if(topicID==null || !topicID.equals(row.get("TOPIC"))){
-                if(topicID!=null){
+            if(topicID == null || !topicID.equals(row.get("TOPIC"))) {
+                if(topicID != null) {
                     DatabaseTopic dbt=topics.get(topicID);
-                    if(dbt!=null && !dbt.sisFetched){
-                        dbt.sisFetched=true;
+                    if(dbt != null && !dbt.sisFetched){
+                        dbt.sisFetched = true;
                         dbt.setSubjectIdentifiers(subjectIdentifiers);
                     }
                 }
-                subjectIdentifiers=new LinkedHashSet<Locator>();
-                topicID=row.get("TOPIC").toString();
+                subjectIdentifiers = new LinkedHashSet<Locator>();
+                if(row.get("TOPIC") != null) {
+                    topicID = row.get("TOPIC").toString();
+                }
             }
-            subjectIdentifiers.add(topicMap.createLocator(row.get("SI").toString()));
+            if(row.get("SI") != null) {
+                subjectIdentifiers.add(topicMap.createLocator(row.get("SI").toString()));
+            }
         }
-        if(topicID!=null){
+        if(topicID != null) {
             DatabaseTopic dbt=topics.get(topicID);
-            if(dbt!=null && !dbt.sisFetched){
-                dbt.sisFetched=true;
+            if(dbt != null && !dbt.sisFetched) {
+                dbt.sisFetched = true;
                 dbt.setSubjectIdentifiers(subjectIdentifiers);
             }
         }
@@ -332,11 +336,11 @@ public class DatabaseTopic extends Topic {
     
     
     protected Hashtable<Topic,Hashtable<Topic,Collection<Association>>> fetchAssociations() throws TopicMapException {
-        if(storedAssociations!=null) {
-            Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=storedAssociations.get();
-            if(associations!=null) return associations;
+        if(storedAssociations != null) {
+            Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations = storedAssociations.get();
+            if(associations != null) return associations;
         }
-        Collection<Map<String,Object>> res=topicMap.executeQuery(
+        Collection<Map<String,Object>> res = topicMap.executeQuery(
                 "select R.TOPICID as ROLEID,R.BASENAME as ROLEBN,R.SUBJECTLOCATOR as ROLESL," +
                 "T.TOPICID as TYPEID,T.BASENAME as TYPEBN,T.SUBJECTLOCATOR as TYPESL,ASSOCIATIONID " +
                 "from MEMBER,ASSOCIATION,TOPIC as T,TOPIC as R where "+
@@ -344,27 +348,30 @@ public class DatabaseTopic extends Topic {
                 "ASSOCIATION.TYPE=T.TOPICID and MEMBER.PLAYER='"+escapeSQL(id)+"' "+
                 "order by R.TOPICID"
                 );
-        Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=new Hashtable<Topic,Hashtable<Topic,Collection<Association>>>();
-        HashMap<String,DatabaseTopic> collectedTopics=new LinkedHashMap<String,DatabaseTopic>();
-        HashMap<String,DatabaseAssociation> collectedAssociations=new LinkedHashMap<String,DatabaseAssociation>();
+        Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations = new Hashtable<Topic,Hashtable<Topic,Collection<Association>>>();
+        HashMap<String,DatabaseTopic> collectedTopics = new LinkedHashMap<String,DatabaseTopic>();
+        HashMap<String,DatabaseAssociation> collectedAssociations = new LinkedHashMap<String,DatabaseAssociation>();
         for(Map<String,Object> row : res) {
             DatabaseTopic type=topicMap.buildTopic(row.get("TYPEID"),row.get("TYPEBN"),row.get("TYPESL"));
             DatabaseTopic role=topicMap.buildTopic(row.get("ROLEID"),row.get("ROLEBN"),row.get("ROLESL"));
-            Hashtable<Topic,Collection<Association>> as=associations.get(type);
-            if(as==null) {
-                as=new Hashtable<Topic,Collection<Association>>();
+            Hashtable<Topic,Collection<Association>> as = associations.get(type);
+            if(as == null) {
+                as = new Hashtable<Topic,Collection<Association>>();
                 associations.put(type,as);
             }
-            Collection<Association> c=as.get(role);
-            if(c==null){
-                c=new Vector<Association>();
+            Collection<Association> c = as.get(role);
+            if(c == null) {
+                c = new ArrayList<Association>();
                 as.put(role,c);
             }
-            DatabaseAssociation da=topicMap.buildAssociation(row.get("ASSOCIATIONID").toString(),type);
-            c.add(da);            
-            collectedAssociations.put(da.getID(),da);
-            collectedTopics.put(type.getID(),type);
-            collectedTopics.put(role.getID(),role);
+            Object associationId = row.get("ASSOCIATIONID");
+            if(associationId != null) {
+                DatabaseAssociation da = topicMap.buildAssociation(associationId.toString(),type);
+                c.add(da);            
+                collectedAssociations.put(da.getID(),da);
+                collectedTopics.put(type.getID(),type);
+                collectedTopics.put(role.getID(),role);
+            }
         }
         {
             collectedTopics.putAll(DatabaseAssociation.makeFullAll(topicMap.executeQuery(
@@ -1003,7 +1010,7 @@ public class DatabaseTopic extends Topic {
         Set<Association> ret=new LinkedHashSet();
         Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
         if(associations.get(type)==null) {
-            return new Vector<Association>();
+            return new ArrayList<Association>();
         }
         for(Map.Entry<Topic,Collection<Association>> e2 : associations.get(type).entrySet()){
             for(Association a : e2.getValue()){

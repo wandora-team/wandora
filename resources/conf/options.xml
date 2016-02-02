@@ -237,6 +237,14 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <driver>org.mariadb.jdbc.Driver</driver>
          <constring>jdbc:mariadb://localhost:3306/wandora</constring>
       </connection>
+      <connection>
+         <name>PostgreSQL generic</name>
+         <type>Generic</type>
+         <user>postgres</user>
+         <pass>password</pass>
+         <driver>org.postgresql.Driver</driver>
+         <constring>jdbc:postgresql://localhost/wandora</constring>
+      </connection>
    </dbconnections>
    <remoteconnections>
       <connection>

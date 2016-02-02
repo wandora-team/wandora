@@ -421,9 +421,10 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
 
                 ArrayList<Map<String,Object>> rows=new ArrayList<Map<String,Object>>();
                 while(rs.next()) {
-                    Map<String,Object> row=new LinkedHashMap<String,Object>();
+                    Map<String,Object> row = new LinkedHashMap<String,Object>();
                     for(int i=0;i<columns;i++) {
-                        row.put(columnNames[i],rs.getObject(i+1));
+                        // Column names are transformed to uppercase.
+                        row.put(columnNames[i].toUpperCase(), rs.getObject(i+1));
                         //System.out.println("  "+columnNames[i]+"="+rs.getObject(i+1));
                     }
                     //System.out.println("---");

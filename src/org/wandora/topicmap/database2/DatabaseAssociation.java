@@ -94,20 +94,22 @@ public class DatabaseAssociation implements Association {
     }
 
     static HashMap<String,DatabaseTopic> makeFullAll(Collection<Map<String,Object>> res,HashMap<String,DatabaseAssociation> associations,DatabaseTopicMap topicMap) throws TopicMapException {
-        HashMap<String,DatabaseTopic> collected=new LinkedHashMap<String,DatabaseTopic>();
-        String associationID=null;
-        Map<Topic,Topic> players=null;
-        for(Map<String,Object> row : res){
-            if(associationID==null || !associationID.equals(row.get("ASSOCIATION"))){
-                if(associationID!=null){
-                    DatabaseAssociation dba=associations.get(associationID);
+        HashMap<String,DatabaseTopic> collected = new LinkedHashMap<String,DatabaseTopic>();
+        String associationID = null;
+        Map<Topic,Topic> players = null;
+        for(Map<String,Object> row : res) {
+            if(associationID==null || !associationID.equals(row.get("ASSOCIATION"))) {
+                if(associationID != null) {
+                    DatabaseAssociation dba = associations.get(associationID);
                     if(dba!=null && !dba.full){
                         dba.full=true;
                         dba.players=players;
                     }
                 }
-                players=new LinkedHashMap<Topic,Topic>();
-                associationID=row.get("ASSOCIATION").toString();
+                players = new LinkedHashMap<Topic,Topic>();
+                if(row.get("ASSOCIATION") != null) {
+                    associationID = row.get("ASSOCIATION").toString();
+                }
             }
             DatabaseTopic player=topicMap.buildTopic(row.get("PLAYERID"),row.get("PLAYERBN"),row.get("PLAYERSL"));
             DatabaseTopic role=topicMap.buildTopic(row.get("ROLEID"),row.get("ROLEBN"),row.get("ROLESL"));            
@@ -115,7 +117,7 @@ public class DatabaseAssociation implements Association {
             collected.put(role.getID(),role);
             players.put(role,player);
         }
-        if(associationID!=null){
+        if(associationID != null) {
             DatabaseAssociation dba=associations.get(associationID);
             if(dba!=null && !dba.full){
                 dba.full=true;
