@@ -1344,9 +1344,9 @@ public class LayerTree extends DragJTree {
             }
 
             if(changed) {
-                iconLabel = new JLabel(UIBox.getIcon(TOPICMAP_CHANGED));
-                iconLabel.setToolTipText("Layer's topic map has changed!");
-                infoPanel.add(iconLabel);
+                //iconLabel = new JLabel(UIBox.getIcon(TOPICMAP_CHANGED));
+                //iconLabel.setToolTipText("Layer's topic map has changed!");
+                //infoPanel.add(iconLabel);
             }
 
             TopicMapType type=TopicMapTypeManager.getType(topicMap);

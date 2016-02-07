@@ -208,9 +208,6 @@ public class MaianaExportPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 4);
         contentPanel.add(apiKeyLabel, gridBagConstraints);
-
-        apiKeyTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        apiKeyTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -224,9 +221,6 @@ public class MaianaExportPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 4);
         contentPanel.add(nameLabel, gridBagConstraints);
-
-        nameTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        nameTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -242,9 +236,6 @@ public class MaianaExportPanel extends javax.swing.JPanel {
         contentPanel.add(shortNameLabel, gridBagConstraints);
 
         shortNamePanel.setLayout(new java.awt.GridBagLayout());
-
-        shortNameTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        shortNameTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -254,7 +245,7 @@ public class MaianaExportPanel extends javax.swing.JPanel {
 
         addDateStampButton.setText("add date stamp");
         addDateStampButton.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        addDateStampButton.setPreferredSize(new java.awt.Dimension(87, 19));
+        addDateStampButton.setPreferredSize(new java.awt.Dimension(87, 25));
         addDateStampButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addDateStampButtonActionPerformed(evt);

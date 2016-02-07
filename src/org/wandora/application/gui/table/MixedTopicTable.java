@@ -26,8 +26,8 @@ package org.wandora.application.gui.table;
 
 
 
+import java.awt.Dimension;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import java.awt.Point;
 import org.wandora.application.tools.navigate.OpenTopic;
 
 import java.awt.event.*;
@@ -39,6 +39,7 @@ import org.wandora.application.*;
 import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.UIBox;
+import static org.wandora.application.gui.simple.SimpleTable.DEFAULT_ROW_HEIGHT;
 import org.wandora.topicmap.*;
 import org.wandora.utils.swing.*;
 import org.wandora.application.tools.*;
@@ -55,9 +56,6 @@ public class MixedTopicTable extends TopicTable implements MouseListener, Action
     
     public Wandora wandora = null;
     public TableSorter sorter;
-
-    private Object[] popupStruct;
-    private Object[] rolePopupStruct;
 
 
 
@@ -147,6 +145,7 @@ public class MixedTopicTable extends TopicTable implements MouseListener, Action
 
             this.addMouseListener(this);
 
+            this.getTableHeader().setPreferredSize(new Dimension(100, DEFAULT_ROW_HEIGHT));
             this.getTableHeader().addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {

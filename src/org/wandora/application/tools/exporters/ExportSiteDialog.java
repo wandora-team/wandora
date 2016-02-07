@@ -138,6 +138,8 @@ public class ExportSiteDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Export site");
+        setMinimumSize(new java.awt.Dimension(400, 300));
+        setPreferredSize(new java.awt.Dimension(640, 300));
         getContentPane().setLayout(new java.awt.BorderLayout(10, 0));
 
         dialogPanel.setMinimumSize(new java.awt.Dimension(400, 200));
@@ -145,12 +147,10 @@ public class ExportSiteDialog extends javax.swing.JDialog {
 
         exportDirectoryPanel.setLayout(new java.awt.GridBagLayout());
 
-        exportDirectoryLabel.setText("Export directory");
-        exportDirectoryLabel.setMinimumSize(new java.awt.Dimension(100, 14));
-        exportDirectoryLabel.setPreferredSize(new java.awt.Dimension(100, 14));
-        exportDirectoryPanel.add(exportDirectoryLabel, new java.awt.GridBagConstraints());
-
-        exportDirectoryField.setPreferredSize(new java.awt.Dimension(220, 20));
+        exportDirectoryLabel.setText("Export into a directory");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
+        exportDirectoryPanel.add(exportDirectoryLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -158,8 +158,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         exportDirectoryPanel.add(exportDirectoryField, gridBagConstraints);
 
         browseExportDirectoryButton.setText("Browse");
-        browseExportDirectoryButton.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        browseExportDirectoryButton.setPreferredSize(new java.awt.Dimension(75, 19));
+        browseExportDirectoryButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         browseExportDirectoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browseExportDirectoryButtonActionPerformed(evt);
@@ -200,9 +199,6 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         pageTemplatePanel.add(pageTemplateLabel, gridBagConstraints);
-
-        pageTemplateField.setMinimumSize(new java.awt.Dimension(200, 20));
-        pageTemplateField.setPreferredSize(new java.awt.Dimension(200, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -210,9 +206,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         pageTemplatePanel.add(pageTemplateField, gridBagConstraints);
 
         browsePageTemplateButton.setLabel("Browse");
-        browsePageTemplateButton.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        browsePageTemplateButton.setMinimumSize(new java.awt.Dimension(75, 19));
-        browsePageTemplateButton.setPreferredSize(new java.awt.Dimension(75, 19));
+        browsePageTemplateButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         browsePageTemplateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browsePageTemplateButtonActionPerformed(evt);
@@ -235,9 +229,6 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         indexTemplatePanel.add(indexTemplateLabel, gridBagConstraints);
-
-        indexTemplateField.setMinimumSize(new java.awt.Dimension(200, 20));
-        indexTemplateField.setPreferredSize(new java.awt.Dimension(200, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -245,9 +236,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         indexTemplatePanel.add(indexTemplateField, gridBagConstraints);
 
         browseIndexTemplateButton.setLabel("Browse");
-        browseIndexTemplateButton.setMargin(new java.awt.Insets(0, 14, 0, 14));
-        browseIndexTemplateButton.setMinimumSize(new java.awt.Dimension(75, 19));
-        browseIndexTemplateButton.setPreferredSize(new java.awt.Dimension(75, 19));
+        browseIndexTemplateButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         browseIndexTemplateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browseIndexTemplateButtonActionPerformed(evt);
@@ -274,7 +263,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         templateEncodingComboBox.setEditable(true);
         templateEncodingComboBox.setModel(getEncodings());
         templateEncodingComboBox.setMinimumSize(new java.awt.Dimension(200, 20));
-        templateEncodingComboBox.setPreferredSize(new java.awt.Dimension(200, 20));
+        templateEncodingComboBox.setPreferredSize(new java.awt.Dimension(200, 25));
         templateEncodingPanel.add(templateEncodingComboBox, new java.awt.GridBagConstraints());
 
         jPanel5.setPreferredSize(new java.awt.Dimension(75, 10));
@@ -307,7 +296,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         newWidthLabel.setText("New width");
         jPanel7.add(newWidthLabel);
 
-        newWidthField.setPreferredSize(new java.awt.Dimension(50, 20));
+        newWidthField.setPreferredSize(new java.awt.Dimension(50, 25));
         jPanel7.add(newWidthField);
 
         jPanel10.add(jPanel7, new java.awt.GridBagConstraints());
@@ -317,7 +306,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         newHeightLabel.setText("New height");
         jPanel8.add(newHeightLabel);
 
-        newHeightField.setPreferredSize(new java.awt.Dimension(50, 20));
+        newHeightField.setPreferredSize(new java.awt.Dimension(50, 25));
         jPanel8.add(newHeightField);
 
         jPanel10.add(jPanel8, new java.awt.GridBagConstraints());

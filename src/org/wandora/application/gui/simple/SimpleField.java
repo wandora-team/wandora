@@ -66,6 +66,7 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
     protected DropTarget dt;
     protected Wandora wandora = null;
     protected UndoManager undoManager = null;
+    protected Insets defaultMargins = new Insets(3,3,3,3);
     
     
     protected String[] options = new String[] {};
@@ -114,6 +115,8 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
         // Document document = this.getDocument();
         // document.addUndoableEditListener(undoManager);
  
+        this.setMargin(defaultMargins);
+        
         this.setDragEnabled(true);
         dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
         

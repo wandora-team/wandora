@@ -38,6 +38,7 @@ import org.wandora.utils.sqlproxy.*;
 /**
  *
  * @author olli
+ * @deprecated
  */
 public class DatabaseTopicMap extends TopicMap {
     

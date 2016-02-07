@@ -227,7 +227,6 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         selectQueryPanel1.setLayout(new java.awt.GridBagLayout());
 
         tmqlComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        tmqlComboBox.setPreferredSize(new java.awt.Dimension(57, 21));
         tmqlComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tmqlComboBoxActionPerformed(evt);
@@ -240,8 +239,8 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         selectQueryPanel1.add(tmqlComboBox, gridBagConstraints);
 
         addTmqlButton.setText("Add");
-        addTmqlButton.setMargin(new java.awt.Insets(1, 4, 1, 4));
-        addTmqlButton.setPreferredSize(new java.awt.Dimension(50, 21));
+        addTmqlButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        addTmqlButton.setPreferredSize(new java.awt.Dimension(50, 25));
         addTmqlButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addTmqlButtonActionPerformed(evt);
@@ -252,8 +251,8 @@ public class TMQLPanel extends javax.swing.JPanel implements TopicSelector {
         selectQueryPanel1.add(addTmqlButton, gridBagConstraints);
 
         delTmqlButton.setText("Del");
-        delTmqlButton.setMargin(new java.awt.Insets(1, 4, 1, 4));
-        delTmqlButton.setPreferredSize(new java.awt.Dimension(50, 21));
+        delTmqlButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        delTmqlButton.setPreferredSize(new java.awt.Dimension(50, 25));
         delTmqlButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delTmqlButtonActionPerformed(evt);

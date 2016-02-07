@@ -73,7 +73,7 @@ public class AdjacencyListImportDialog extends javax.swing.JDialog {
         ((SimpleTextPane) urlTextPane).setLineWrap(false);
 
         setTitle("Import adjacency list");
-        setSize(500,300);
+        setSize(640,400);
         if(parent != null) parent.centerWindow(this);
     }
     

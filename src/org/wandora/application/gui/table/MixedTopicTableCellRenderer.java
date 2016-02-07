@@ -30,21 +30,15 @@ package org.wandora.application.gui.table;
 
 
 import java.awt.*;
-import java.awt.image.*;
-import java.net.*;
-import java.util.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.*;
-
-
-import org.wandora.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.gui.MixedTopicGuiWrapper;
 import org.wandora.application.gui.UIBox;
-import org.wandora.utils.swing.*;
-import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.UIConstants;
+
 
 
 
@@ -58,14 +52,12 @@ public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer implem
     private Topic topic;
     private MixedTopicTable topicTable;
     private int topicRenders;
-    private Wandora wandora = null;
     private static MixedTopicGuiWrapper defaultWrapper = null;
-    
+
 
     public MixedTopicTableCellRenderer(MixedTopicTable table) {
         topicTable = table;
-        wandora = Wandora.getWandora();
-        topicRenders = wandora.options.getInt(MixedTopicGuiWrapper.TOPIC_RENDERS_OPTION_KEY);
+        topicRenders = Wandora.getWandora().options.getInt(MixedTopicGuiWrapper.TOPIC_RENDERS_OPTION_KEY);
         defaultWrapper = new MixedTopicGuiWrapper(null);
     }
 
@@ -135,6 +127,7 @@ public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer implem
                 try {
                     String topicName = wrapper.toString(topicRenders);
                     label.setText(topicName);
+                    label.setBorder(UIConstants.defaultTableCellLabelBorder);
 
                     if(MixedTopicGuiWrapper.TOPIC_RENDERS_BASENAME_WITH_SL_ICON == topicRenders) {
                         if(topic!=null && topic.getSubjectLocator() != null) {

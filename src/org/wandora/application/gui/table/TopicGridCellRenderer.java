@@ -33,11 +33,13 @@ package org.wandora.application.gui.table;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.*;
 
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.gui.TopicGuiWrapper;
+import org.wandora.application.gui.UIConstants;
 
 
 
@@ -54,7 +56,6 @@ public class TopicGridCellRenderer extends DefaultTableCellRenderer implements T
     private Topic topic;
     private TopicGrid topicGrid;
 
-    
     
     public TopicGridCellRenderer(TopicGrid grid) {
         topicGrid = grid;
@@ -89,20 +90,14 @@ public class TopicGridCellRenderer extends DefaultTableCellRenderer implements T
                 c.setForeground(Color.RED);
             }
 
-
             if(c instanceof JLabel) {
                 JLabel label = (JLabel) c;
-                try {
-                    if(topic != null) {
-                        String topicName = TopicToString.toString(topic);
-                        label.setText(topicName);
-                    }
-                    else {
-                        label.setText("");
-                    }
+                label.setBorder(UIConstants.defaultTableCellLabelBorder);
+                if(topic != null) {
+                    String topicName = TopicToString.toString(topic);
+                    label.setText(topicName);
                 }
-                catch(Exception tme){
-                    tme.printStackTrace(); // TODO EXCEPTION;
+                else {
                     label.setText("");
                 }
             }

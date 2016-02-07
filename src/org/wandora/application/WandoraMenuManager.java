@@ -1834,7 +1834,7 @@ public class WandoraMenuManager {
     
     public static Object[] getOccurrenceTableMenu(OccurrenceTable ot, Options options) {
         String viewType = OccurrenceTable.VIEW_SCHEMA;
-        int rowHeight = 1;
+        int rowHeight = 0;
         try {
             if(options != null) {
                 viewType = options.get(OccurrenceTable.VIEW_OPTIONS_KEY, OccurrenceTable.VIEW_SCHEMA);
@@ -1879,6 +1879,7 @@ public class WandoraMenuManager {
                 "View used scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_USED, options), (OccurrenceTable.VIEW_USED.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "View schema and used scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_USED_AND_SCHEMA, options), (OccurrenceTable.VIEW_USED_AND_SCHEMA.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "---",
+                "Auto row height", new ChangeOccurrenceTableRowHeight(0, options), (rowHeight == 0 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "View single row", new ChangeOccurrenceTableRowHeight(1, options), (rowHeight == 1 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "View 5 rows", new ChangeOccurrenceTableRowHeight(5, options), (rowHeight == 5 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "View 10 rows", new ChangeOccurrenceTableRowHeight(10, options), (rowHeight == 10 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
@@ -2184,7 +2185,7 @@ public class WandoraMenuManager {
     
     public static Object[] getOccurrencesLabelPopupStruct(Options options) {
         String viewType = OccurrenceTable.VIEW_SCHEMA;
-        int rowHeight = 1;
+        int rowHeight = 0;
         try {
             if(options != null) {
                 viewType = options.get(OccurrenceTable.VIEW_OPTIONS_KEY, OccurrenceTable.VIEW_SCHEMA);
@@ -2202,6 +2203,7 @@ public class WandoraMenuManager {
                 "View used scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_USED, options), (OccurrenceTable.VIEW_USED.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "View schema and used scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_USED_AND_SCHEMA, options), (OccurrenceTable.VIEW_USED_AND_SCHEMA.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "---",
+                "Auto row height", new ChangeOccurrenceTableRowHeight(0, options), (rowHeight == 0 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "View single row", new ChangeOccurrenceTableRowHeight(1, options), (rowHeight == 1 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "View 5 rows", new ChangeOccurrenceTableRowHeight(5, options), (rowHeight == 5 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
                 "View 10 rows", new ChangeOccurrenceTableRowHeight(10, options), (rowHeight == 10 ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),

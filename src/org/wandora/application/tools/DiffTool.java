@@ -110,7 +110,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
         JDialog dialog=new JDialog(admin,"Compare topic maps",true);
         DiffToolConfigPanel configPanel=new DiffToolConfigPanel(admin,dialog);
         dialog.getContentPane().add(configPanel);
-        dialog.setSize(440, 350);
+        dialog.setSize(500, 350);
         configPanel.addFormat("Plain text format");
         configPanel.addFormat("HTML format");
         configPanel.addFormat("Patch format");

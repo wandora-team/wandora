@@ -498,12 +498,12 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
             e.printStackTrace();
         }
 
-        buildAssociationsPanel(associationPanel, topic, options, wandora);
-        buildClassesPanel(classesPanel, topic, options, wandora);
+        buildAssociationsPanel(associationPanel, null, topic, options, wandora);
+        buildClassesPanel(classesPanel, null, topic, options, wandora);
         buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
-        buildInstancesPanel(instancesPanel, topic, options, wandora);
-        buildAllNamesPanel(variantPanel, topic, this, options, wandora);
-        buildOccurrencesPanel(dataPanel, topic, options, wandora);
+        buildInstancesPanel(instancesPanel, null, topic, options, wandora);
+        buildAllNamesPanel(variantPanel, null, topic, this, options, wandora);
+        buildOccurrencesPanel(dataPanel, null, topic, options, wandora);
 
         refreshTabs();
         
@@ -661,8 +661,6 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         subjectPanelContainer.add(subjectLocatorLabel, gridBagConstraints);
 
-        subjectLocatorField.setMinimumSize(new java.awt.Dimension(6, 21));
-        subjectLocatorField.setPreferredSize(new java.awt.Dimension(6, 21));
         subjectLocatorField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 subjectLocatorFieldKeyReleased(evt);
@@ -743,8 +741,6 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         basenamePanel.add(basenameLabel, gridBagConstraints);
 
-        baseNameField.setMinimumSize(new java.awt.Dimension(6, 21));
-        baseNameField.setPreferredSize(new java.awt.Dimension(6, 21));
         baseNameField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 baseNameFieldKeyReleased(evt);

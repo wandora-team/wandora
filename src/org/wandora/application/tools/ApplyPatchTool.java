@@ -65,7 +65,7 @@ public class ApplyPatchTool extends AbstractWandoraTool implements WandoraTool {
         JDialog dialog=new JDialog(admin,"Apply topic map patch",true);
         ApplyPatchToolConfigPanel configPanel=new ApplyPatchToolConfigPanel(admin,dialog);
         dialog.getContentPane().add(configPanel);
-        dialog.setSize(440, 240);
+        dialog.setSize(500, 280);
         GuiTools.centerWindow(dialog, admin);
         dialog.setVisible(true);
         

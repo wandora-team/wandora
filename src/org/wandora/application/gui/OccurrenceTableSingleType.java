@@ -39,16 +39,14 @@ import java.net.URI;
 import java.net.URL;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.wandora.application.*;
-import org.wandora.application.contexts.ApplicationContext;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.occurrences.*;
-import org.wandora.application.tools.occurrences.DeleteOccurrence;
 import org.wandora.topicmap.*;
 import static org.wandora.topicmap.TMBox.LANGUAGE_SI;
 import org.wandora.utils.*;
@@ -71,11 +69,11 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     private Topic type;
     private String[] data;
     private Color[] colors;
-    private TableSorter sorter;
+    private TableRowSorter sorter;
     private Wandora wandora;    
 
     private String[] originalData;
-    private int defaultRowHeight = 1;
+    private int defaultRowHeight = 0;
     
     private Object[] popupStruct;
     private MouseEvent mouseEvent;
@@ -95,7 +93,6 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 if(tableType == null || tableType.length() == 0) tableType = VIEW_SCHEMA;
                 
                 defaultRowHeight = opts.getInt(ROW_HEIGHT_OPTIONS_KEY);
-                if(defaultRowHeight < 1) defaultRowHeight = 1;
             }
         }
         catch(Exception e) {
@@ -133,29 +130,32 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             }
         }
 
-        this.setColumnSelectionAllowed(false);
-        this.setRowSelectionAllowed(false);
-        sorter=new TableSorter(new DataTableModel());
-        
+        dataModel = new DataTableModel();
+        sorter = new TableRowSorter(dataModel);
+
         final TableCellRenderer oldRenderer=this.getTableHeader().getDefaultRenderer();
+        
+        this.getTableHeader().setPreferredSize(new Dimension(100, 23));
         this.getTableHeader().setDefaultRenderer(new TableCellRenderer(){
             @Override
             public Component getTableCellRendererComponent(JTable table,Object value,boolean isSelected,boolean hasFocus, int row, int column){
                 Component c=oldRenderer.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
-                column=convertColumnIndexToModel(column);
                 return c;
             }
         });
         
         this.setAutoCreateColumnsFromModel(false);
-        this.setModel(sorter);
+        
         TableColumn column=new TableColumn(0,40,new TopicCellRenderer(),new TopicCellEditor());
         this.addColumn(column);
         column = new TableColumn(1,500,new DataCellRenderer(),new DataCellEditor());
         this.addColumn(column);
-        sorter.setTableHeader(this.getTableHeader());
+        this.setTableHeader(this.getTableHeader());
 
-        this.setRowHeight(getDefaultRowHeightInPixels());
+        this.setModel(dataModel);
+        this.setRowSorter(sorter);
+        sorter.setSortsOnUpdates(true);
+        
         updateRowHeights();
         
         popupStruct = WandoraMenuManager.getOccurrenceTableMenu(this, options);
@@ -163,31 +163,30 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         this.setComponentPopupMenu(popup);
         this.addMouseListener(this);
         
+        this.setColumnSelectionAllowed(false);
+        this.setRowSelectionAllowed(false);
         this.setDragEnabled(true);
         this.setTransferHandler(new OccurrencesTableTransferHandler());
         this.setDropMode(DropMode.ON);
         this.createDefaultTableSelectionModel();
     }
     
-    
-    protected int getDefaultRowHeightInPixels() {
-        return 2+defaultRowHeight*16;
-    }
+
     
     
     protected void updateRowHeights() {
-        for(int i=0; i<data.length; i++) {
+        for(int row=0; row<data.length; row++) {
             try {
-                String occurrenceData = data[i];
-                if(DataURL.isDataURL(occurrenceData)) {
-                    Component preview = UIBox.getPreview(new DataURL(occurrenceData));
-                    if(preview != null) {
-                        setRowHeight(i, Math.max(getDefaultRowHeightInPixels(), preview.getHeight()+10));
-                    }
+                int rowHeight = 16;
+                if(defaultRowHeight == 0) {
+                    Component comp = this.prepareRenderer(this.getCellRenderer(row, 1), row, 1);
+                    rowHeight = Math.min(2000, Math.max(rowHeight, comp.getPreferredSize().height));
                 }
                 else {
-                    setRowHeight(i, getDefaultRowHeightInPixels());
+                    rowHeight = rowHeight * defaultRowHeight + 6;
                 }
+
+                setRowHeight(row, rowHeight+2);
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -275,11 +274,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public String getPointedOccurrence() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                return topic.getData(type, langs[realRow]);
+            Point p = getTableModelPoint();
+            if(p != null) {
+                return topic.getData(type, langs[p.y]);
             }
         }
         catch(Exception e) {
@@ -300,10 +297,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public Topic getPointedOccurrenceLang() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realRow < langs.length) {
-                return langs[realRow];
+            Point p = getTableModelPoint();
+            if(p != null) {
+                return langs[p.y];
             }
         }
         catch(Exception e) {
@@ -320,11 +316,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     public void cut() {
         try {
             copy();
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                topic.removeData(type, langs[realRow]);
+            Point p = getTableModelPoint();
+            if(p != null) {
+                topic.removeData(type, langs[p.y]);
             }
         }
         catch(Exception e) {
@@ -341,11 +335,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void paste() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                topic.setData(type, langs[realRow], ClipboardBox.getClipboard());
+            Point p = getTableModelPoint();
+            if(p != null) {
+                topic.setData(type, langs[p.y], ClipboardBox.getClipboard());
             }
         }
         catch(Exception e) {
@@ -358,13 +350,11 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void append() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                String oldOccurrence = topic.getData(type, langs[realRow]);
+            Point p = getTableModelPoint();
+            if(p != null) {
+                String oldOccurrence = topic.getData(type, langs[p.y]);
                 if(oldOccurrence == null) oldOccurrence = "";
-                topic.setData(type, langs[realRow], oldOccurrence + ClipboardBox.getClipboard());
+                topic.setData(type, langs[p.y], oldOccurrence + ClipboardBox.getClipboard());
             }
         }
         catch(Exception e) {
@@ -384,11 +374,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public String getCopyString() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                return topic.getData(type, langs[realRow]);
+            Point p = getTableModelPoint();
+            if(p != null) {
+                return topic.getData(type, langs[p.y]);
             }
         }
         catch(Exception e) {}
@@ -400,11 +388,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void delete() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                topic.removeData(type, langs[realRow]);
+            Point p = getTableModelPoint();
+            if(p != null) {
+                topic.removeData(type, langs[p.y]);
             }
         }
         catch(Exception e) {
@@ -417,11 +403,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void changeType() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                Topic selectedScope = langs[realRow];
+            Point p = getTableModelPoint();
+            if(p != null) {
+                Topic selectedScope = langs[p.y];
                 if(type != null && !type.isRemoved()) {
                     Topic newType = wandora.showTopicFinder("Select new occurrence type");
                     if(newType != null && !newType.isRemoved()) {
@@ -460,11 +444,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void duplicateType() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                Topic selectedScope = langs[realRow];
+            Point p = getTableModelPoint();
+            if(p != null) {
+                Topic selectedScope = langs[p.y];
                 if(type != null && !type.isRemoved()) {
                     Topic newType = wandora.showTopicFinder("Select new occurrence type");
                     if(newType != null && !newType.isRemoved()) {
@@ -498,11 +480,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     public void openURLOccurrence() {
         try {
             String errorMessage = null;
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                String occurrence = topic.getData(type, langs[realRow]);
+            Point p = getTableModelPoint();
+            if(p != null) {
+                String occurrence = topic.getData(type, langs[p.y]);
                 if(occurrence != null) {
                     occurrence = occurrence.trim();
                     if(occurrence.length() > 0) {
@@ -541,11 +521,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void downloadURLOccurrence() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                String occurrence = topic.getData(type, langs[realRow]);
+            Point p = getTableModelPoint();
+            if(p != null) {
+                String occurrence = topic.getData(type, langs[p.y]);
                 if(occurrence != null) {
                     occurrence = occurrence.trim();
                     if(occurrence.length() > 0) {
@@ -563,11 +541,11 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                                 
                                 byte[] dataBytes = IOUtils.toByteArray(is);
                                 DataURL dataURL = new DataURL(contentType, dataBytes);
-                                topic.setData(type, langs[realCol-1], dataURL.toExternalForm());
+                                topic.setData(type, langs[p.y], dataURL.toExternalForm());
                             }
                             else {
                                 String occurrenceContent = IObox.doUrl(url);
-                                topic.setData(type, langs[realCol-1], occurrenceContent);
+                                topic.setData(type, langs[p.y], occurrenceContent);
                             }
                         }
                         catch(MalformedURLException mue) {
@@ -596,15 +574,13 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void spread() {
         try {
-            Point p = getTablePoint(mouseEvent);
-            boolean overrideAll = false;
-            if(mouseEvent != null && mouseEvent.isAltDown()) overrideAll = true;
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                String occurrenceText = topic.getData(type, langs[realRow]);
+            Point p = getTableModelPoint();
+            if(p != null) {
+                boolean overrideAll = false;
+                if(mouseEvent != null && mouseEvent.isAltDown()) overrideAll = true;
+                String occurrenceText = topic.getData(type, langs[p.y]);
                 for(int i=0; i<langs.length; i++) {
-                    if(i != realRow) {
+                    if(i != p.y) {
                         int override = WandoraOptionPane.YES_OPTION;
                         if(!overrideAll && topic.getData(type, langs[i]) != null) {
                             override = WandoraOptionPane.showConfirmDialog(wandora, "Override existing "+langs[i].getDisplayName()+" occurrence?", "Override existing occurrence?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
@@ -627,18 +603,16 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void translate(int translationService) {
         try {
-            Point p = getTablePoint(mouseEvent);
-            boolean markTranslation = true;
-            boolean overrideAll = false;
-            if(mouseEvent != null && mouseEvent.isShiftDown()) markTranslation = false;
-            if(mouseEvent != null && mouseEvent.isAltDown()) overrideAll = true;
-            int realCol=convertColumnIndexToModel(p.y);
-            int realRow=sorter.modelIndex(p.x);
-            if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
-                Topic sourceLangTopic = langs[realRow];
+            Point p = getTableModelPoint();
+            if(p != null) {
+                boolean markTranslation = true;
+                boolean overrideAll = false;
+                if(mouseEvent != null && mouseEvent.isShiftDown()) markTranslation = false;
+                if(mouseEvent != null && mouseEvent.isAltDown()) overrideAll = true;
+                Topic sourceLangTopic = langs[p.y];
                 String occurrenceText = topic.getData(type, sourceLangTopic);
                 for(int i=0; i<langs.length; i++) {
-                    if(i != realCol-1) {
+                    if(i != p.y) {
                         Topic targetLangTopic = langs[i];
                         String translatedOccurrenceText = null;
                         if(translationService == GOOGLE_TRANSLATE) {
@@ -675,17 +649,51 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     
     // -------------------------------------------------------------------------
     
+    public Point getTableModelPoint(Point coords) {
+        try {
+            int col = columnAtPoint(coords);
+            int row = rowAtPoint(coords);
+            int modelCol = convertColumnIndexToModel(columnAtPoint(coords));
+            int modelRow = convertRowIndexToModel(rowAtPoint(coords));
+            
+            System.out.println("getTableModelPoint: "+col+","+row+" -> "+modelCol+","+modelRow);
+            
+            return new Point(modelCol, modelRow);
+        }
+        catch(Exception ex) {
+            return null;
+        }
+    }
+    
+    
+    
+    public Point getTableModelPoint(java.awt.event.MouseEvent event) {
+        try {
+            Point coords = event.getPoint();
+            return getTableModelPoint(coords);
+        }
+        catch(Exception ex) {
+            return null;
+        }
+    }
+    
+    
+    public Point getTableModelPoint() {
+        return getTableModelPoint(mouseEvent);
+    }
+    
     
     public Point getTablePoint() {
         return getTablePoint(mouseEvent);
     }
+    
+    
     public Point getTablePoint(java.awt.event.MouseEvent e) {
         try {
-            java.awt.Point p=e.getPoint();
-            int row=rowAtPoint(p);
-            int col=columnAtPoint(p);
-            //int realCol=convertColumnIndexToModel(col);
-            return new Point(row, col);
+            java.awt.Point p = e.getPoint();
+            int row = rowAtPoint(p);
+            int col = columnAtPoint(p);
+            return new Point(col, row);
         }
         catch (Exception ex) {
             wandora.handleError(ex);
@@ -693,16 +701,27 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         }
     }
 
+    
     public Object getValueAt(MouseEvent e) {
         return getValueAt(getTablePoint(e));
     }
+    
+    
     public Object getValueAt(Point p) {
-        return getValueAt(p.x, p.y);
+        return getValueAt(p.y, p.x);
     }
+    
+    
     @Override
-    public Object getValueAt(int x, int y) {
-        try { return getModel().getValueAt(x, convertColumnIndexToModel(y)); }
-        catch (Exception e) { e.printStackTrace(); }
+    public Object getValueAt(int y, int x) {
+        try { 
+            int cx = convertColumnIndexToModel(x);
+            int cy = convertRowIndexToModel(y);
+            return dataModel.getValueAt(cy, cx);
+        }
+        catch (Exception e) { 
+            e.printStackTrace(); 
+        }
         return null;
     }
     
@@ -752,12 +771,12 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         private SimpleTextPane occurrenceTextField = null;
         private SimpleLabel occurrenceInfoLabel = null;
         private JPanel occurrencePanel = null;
-        
+
         private Color noOccurrenceColor = UIConstants.noContentBackgroundColor;
         private Color occurrenceInfoTextColor = new Color(150,150,150);
         private Color dataOccurrenceColor = new Color(240,255,250);
         
-        public DataCellRenderer(){
+        public DataCellRenderer() {
             occurrenceTextField = new SimpleTextPane();
             occurrenceTextField.setOpaque(true);
             occurrenceTextField.setMargin(new Insets(0,0,0,0));
@@ -765,6 +784,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             occurrenceTextField.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
             occurrenceTextField.setBackground(Color.WHITE);
             occurrenceTextField.putClientProperty("html.disable", Boolean.TRUE);
+            occurrenceTextField.setBorder(UIConstants.defaultTableCellLabelBorder);
             
             occurrenceInfoLabel = new SimpleLabel();
             occurrenceInfoLabel.setOpaque(true);
@@ -854,9 +874,6 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         private Topic scope;
         private SimpleTextPane label;
         private String editedText;
-        int realCol,realRow;
-        
-
         
         
         public DataCellEditor(){
@@ -866,6 +883,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
             label.addMouseListener(this);
             label.putClientProperty("html.disable", Boolean.TRUE);
+            label.setBorder(UIConstants.defaultTableCellLabelBorder);
         }
         
         
@@ -881,10 +899,6 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
             if(value == null) value="";
             
-            realCol=convertColumnIndexToModel(column);
-            realRow=sorter.modelIndex(row);
-            scope=langs[realRow];
-            
             String viewedOccurrenceText = value.toString();
             if(viewedOccurrenceText.length() > 9999) {
                 viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
@@ -895,19 +909,22 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             return label;
         }
         
+        
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
-            if(label.contains(e.getPoint())){
+            Point p = getTableModelPoint();
+            if(p != null && label.contains(e.getPoint())) {
                 OccurrenceTextEditor ed = new OccurrenceTextEditor(wandora, true, editedText, topic, type, scope);
-                String typeName = wandora.getTopicGUIName(type);
-                String topicName = wandora.getTopicGUIName(topic);
-                ed.setTitle("Edit occurrence text of '"+typeName+"' attached to '"+topicName+"'");
+                String typeName = TopicToString.toString(type);
+                String topicName = TopicToString.toString(topic);
+                String scopeName = TopicToString.toString(langs[p.y]);
+                ed.setTitle("Edit occurrence text of '"+typeName+"' and '"+scopeName+"' attached to '"+topicName+"'");
                 ed.setVisible(true);
                 
                 if(ed.acceptChanges()) {
                     if(ed.getText() != null) {
                         editedText=ed.getText();
-                        data[realRow]=editedText;
+                        data[p.y]=editedText;
                     }
                     try {
                         boolean changed = applyChanges(topic, wandora);
@@ -946,18 +963,21 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     
     private class TopicCellRenderer implements TableCellRenderer {
         private JLabel label;
+
         
         public TopicCellRenderer(){
             label=new JLabel("");
             label.setOpaque(true);
             Font f=label.getFont();
             label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
+            label.setVerticalAlignment(JLabel.TOP);
+            label.setBorder(UIConstants.defaultTableCellLabelBorder);
         }
         
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            int realRow = sorter.modelIndex(row);
-            Topic scope = langs[realRow];
+            int modelRow = convertRowIndexToModel(row);
+            Topic scope = langs[modelRow];
             label.setText(TopicToString.toString(scope));
             
             Color c=wandora.topicHilights.get(scope);
@@ -973,7 +993,6 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     
     
     private class TopicCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
-        private Topic scope;
         private JLabel label;
         
         public TopicCellEditor(){
@@ -991,8 +1010,8 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            int realRow = sorter.modelIndex(row);
-            scope = langs[realRow];
+            int modelRow = convertRowIndexToModel(row);
+            Topic scope = langs[modelRow];
             label.setText(TopicToString.toString(scope));
             Color c=wandora.topicHilights.get(scope);
             if(c==null) c=wandora.topicHilights.getLayerColor(scope);
@@ -1007,8 +1026,10 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
             fireEditingStopped();
-            if(label.contains(e.getPoint()) && scope!=null)
-                wandora.openTopic(scope);
+            Point p = getTableModelPoint();
+            if(p != null && label.contains(e.getPoint())) {
+                wandora.openTopic(langs[p.y]);
+            }
         }
         
         @Override
@@ -1100,11 +1121,9 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         protected Transferable createTransferable(JComponent c) {
             String occurrenceText = null;
             try {
-                Point p = getTablePoint(mouseEvent);
-                int realCol=convertColumnIndexToModel(p.y);
-                int realRow=sorter.modelIndex(p.x);
-                if(realRow >= 0 && realCol > 0 && realRow < langs.length && realCol < 2) {
-                    Topic sourceLangTopic = langs[realRow];
+                Point p = getTableModelPoint();
+                if(p != null) {
+                    Topic sourceLangTopic = langs[p.y];
                     occurrenceText = topic.getData(type, sourceLangTopic);
                 }
             }
@@ -1130,17 +1149,15 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             if(!support.isDrop()) return false;
             try {
                 Transferable transferable = support.getTransferable();
-                Point p = support.getDropLocation().getDropPoint();
-                int realRow=rowAtPoint(p);
-                int realCol=columnAtPoint(p);
-                if(realRow >= 0 && realCol >= 0 && realRow < langs.length && realCol < 2) {
+                Point p = getTableModelPoint(support.getDropLocation().getDropPoint());
+                if(p != null) {
                     if(transferable.isDataFlavorSupported(DnDHelper.topicDataFlavor)) {
                         TopicMap tm=wandora.getTopicMap();
                         ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                         if(topics==null) return false;
                         
                         // DROP ON TYPE COLUMN ==> DUPLICATE/CHANGE TYPE
-                        if(realCol == 0 && realRow == 0) {
+                        if(p.x == 0 && p.y == 0) {
                             if(type != null && !type.isRemoved()) {
                                 Hashtable<Topic,String> os = topic.getData(type);
                                 if(os != null && !os.isEmpty()) {
@@ -1158,8 +1175,8 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                             }
                         }
                                 
-                        else if(realCol > 0) {
-                            Topic scope = langs[realRow];
+                        else if(p.x > 0) {
+                            Topic scope = langs[p.y];
                             
                             if(type != null && scope != null && !type.isRemoved() && !scope.isRemoved()) {
                                 for(Topic t : topics) {
@@ -1185,7 +1202,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                                 for( File occurrenceFile : fileList ) {
                                     if(makeDataURLOccurrence) {
                                         DataURL dataUrl = new DataURL(occurrenceFile);
-                                        topic.setData(type, langs[realRow], dataUrl.toExternalForm());
+                                        topic.setData(type, langs[p.y], dataUrl.toExternalForm());
                                     }
                                     else {
                                         String content = null;
@@ -1236,7 +1253,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                                         }
                                         
                                         if(content != null) {
-                                            topic.setData(type, langs[realRow], content);
+                                            topic.setData(type, langs[p.y], content);
                                         }
 
                                     }
@@ -1251,7 +1268,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                         try {
                             Object occurrenceText = support.getTransferable().getTransferData(DataFlavor.stringFlavor);
                             if(occurrenceText != null) {
-                                topic.setData(type, langs[realRow], occurrenceText.toString());
+                                topic.setData(type, langs[p.y], occurrenceText.toString());
                             }
                         }
                         catch(Exception e) {

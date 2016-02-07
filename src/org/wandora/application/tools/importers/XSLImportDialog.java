@@ -107,8 +107,6 @@ public class XSLImportDialog extends javax.swing.JDialog {
         setTitle("Transform and merge XML");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jPanel2.setMinimumSize(new java.awt.Dimension(600, 22));
-        jPanel2.setPreferredSize(new java.awt.Dimension(600, 22));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -120,25 +118,25 @@ public class XSLImportDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel2.add(jLabel1, gridBagConstraints);
 
-        xmlTextField.setMinimumSize(new java.awt.Dimension(450, 20));
-        xmlTextField.setPreferredSize(new java.awt.Dimension(450, 20));
+        xmlTextField.setMinimumSize(new java.awt.Dimension(450, 25));
+        xmlTextField.setPreferredSize(new java.awt.Dimension(450, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(xmlTextField, gridBagConstraints);
 
-        xmlBrowseButton.setFont(org.wandora.application.gui.UIConstants.miniButtonLabel);
+        xmlBrowseButton.setFont(org.wandora.application.gui.UIConstants.buttonLabelFont);
         xmlBrowseButton.setText("Browse");
         xmlBrowseButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        xmlBrowseButton.setMinimumSize(new java.awt.Dimension(50, 20));
-        xmlBrowseButton.setPreferredSize(new java.awt.Dimension(50, 20));
+        xmlBrowseButton.setMinimumSize(new java.awt.Dimension(70, 25));
+        xmlBrowseButton.setPreferredSize(new java.awt.Dimension(70, 25));
         xmlBrowseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 xmlBrowseButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 0);
         jPanel2.add(xmlBrowseButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -148,8 +146,6 @@ public class XSLImportDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
         getContentPane().add(jPanel2, gridBagConstraints);
 
-        jPanel3.setMinimumSize(new java.awt.Dimension(600, 22));
-        jPanel3.setPreferredSize(new java.awt.Dimension(600, 22));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -161,32 +157,32 @@ public class XSLImportDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel3.add(jLabel2, gridBagConstraints);
 
-        xslTextField.setMinimumSize(new java.awt.Dimension(450, 20));
-        xslTextField.setPreferredSize(new java.awt.Dimension(450, 20));
+        xslTextField.setMinimumSize(new java.awt.Dimension(450, 25));
+        xslTextField.setPreferredSize(new java.awt.Dimension(450, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         jPanel3.add(xslTextField, gridBagConstraints);
 
-        xslBrowseButton.setFont(org.wandora.application.gui.UIConstants.miniButtonLabel);
+        xslBrowseButton.setFont(org.wandora.application.gui.UIConstants.buttonLabelFont);
         xslBrowseButton.setText("Browse");
         xslBrowseButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        xslBrowseButton.setMinimumSize(new java.awt.Dimension(50, 20));
-        xslBrowseButton.setPreferredSize(new java.awt.Dimension(50, 20));
+        xslBrowseButton.setMinimumSize(new java.awt.Dimension(70, 25));
+        xslBrowseButton.setPreferredSize(new java.awt.Dimension(70, 25));
         xslBrowseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 xslBrowseButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 0);
         jPanel3.add(xslBrowseButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 0, 10);
         getContentPane().add(jPanel3, gridBagConstraints);
 
         jPanel1.setMinimumSize(new java.awt.Dimension(165, 27));
@@ -217,7 +213,7 @@ public class XSLImportDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 0, 5);
         getContentPane().add(jPanel1, gridBagConstraints);
 
-        setSize(new java.awt.Dimension(595, 135));
+        setSize(new java.awt.Dimension(631, 165));
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed

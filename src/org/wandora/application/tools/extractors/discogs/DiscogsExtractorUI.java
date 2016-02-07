@@ -250,7 +250,6 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
 
         searchTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "release", "master", "artist", "label" }));
         searchTypeComboBox.setFocusable(false);
-        searchTypeComboBox.setPreferredSize(new java.awt.Dimension(90, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -269,9 +268,6 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         searchPanel.add(headlineLabel, gridBagConstraints);
-
-        searchTextField.setMinimumSize(new java.awt.Dimension(20, 20));
-        searchTextField.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -296,11 +292,6 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         releaseSearchPanel.add(releaseLabel, gridBagConstraints);
-
-        releaseTextField.setMaximumSize(new java.awt.Dimension(2147483647, 20));
-        releaseTextField.setMinimumSize(new java.awt.Dimension(20, 20));
-        releaseTextField.setName(""); // NOI18N
-        releaseTextField.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -334,9 +325,6 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         masterSearchPanel.add(masterLabel, gridBagConstraints);
-
-        masterTextField.setMinimumSize(new java.awt.Dimension(20, 20));
-        masterTextField.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -372,9 +360,6 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         artistSearchPanel.add(artistLabel, gridBagConstraints);
-
-        artistTextField.setMinimumSize(new java.awt.Dimension(20, 20));
-        artistTextField.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -409,9 +394,6 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         labelSearchPanel.add(labelLabel, gridBagConstraints);
-
-        labelTextField.setMinimumSize(new java.awt.Dimension(20, 20));
-        labelTextField.setPreferredSize(new java.awt.Dimension(20, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;

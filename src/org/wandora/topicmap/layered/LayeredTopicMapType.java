@@ -28,6 +28,8 @@
  */
 
 package org.wandora.topicmap.layered;
+
+
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.*;
 import org.wandora.utils.Options;
@@ -35,6 +37,8 @@ import java.io.*;
 import javax.swing.Icon;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
+
+
 /**
  *
  * @author olli
@@ -65,7 +69,9 @@ public class LayeredTopicMapType implements TopicMapType {
             options.put("layer"+lcounter+".visiblity", l.isVisible() ? "true" : "false");
             options.put("layer"+lcounter+".readonly", l.isReadOnly() ? "true" : "false");
 
-            if(selectedLayer == l) options.put("layer"+lcounter+".selected", "true");
+            if(selectedLayer == l) {
+                options.put("layer"+lcounter+".selected", "true");
+            }
             lcounter++;
         }
         out.nextEntry(pathpre+"options.xml");
@@ -94,11 +100,11 @@ public class LayeredTopicMapType implements TopicMapType {
     }
     
     
-    
     @Override
     public TopicMap createTopicMap(Object params) {
         return new LayerStack();
     }
+    
     
     @Override
     public TopicMap modifyTopicMap(TopicMap tm,Object params) throws TopicMapException {
@@ -112,10 +118,12 @@ public class LayeredTopicMapType implements TopicMapType {
         if(topicmap == null) topicmap = new LayerStack();
         
         String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        if(!in.gotoEntry(pathpre+"options.xml")){
-            logger.log("Couldn't find options.xml in package.");
-            logger.log("Aborting load.");
+        if(path.length()>0) {
+            pathpre=path+"/";
+        }
+        if(!in.gotoEntry(pathpre+"options.xml")) {
+            logger.log("Can't find options.xml in the package.");
+            logger.log("Aborting.");
             return null;
         }
         Options options=new Options();
@@ -139,15 +147,10 @@ public class LayeredTopicMapType implements TopicMapType {
 
             String typeClass=options.get("layer"+counter+".type");
             
-            // ENSURING BACKWARD COMPATABILITY!
-            if("com.gripstudios.applications.wandora.topicmap.memory.TopicMapImpl".equals(typeClass)) {
-                typeClass = "org.wandora.topicmap.memory.TopicMapImpl";
-            }
-            
             try {
                 Class c=Class.forName(typeClass);
                 TopicMapType type=TopicMapTypeManager.getType((Class<? extends TopicMap>)c);
-                logger.log("Loading layer '" + layerName + "'.");
+                logger.log("Preparing layer '" + layerName + "'.");
                 TopicMap tm=type.unpackageTopicMap(in,pathpre+"layer"+counter, logger,wandora);
                 Layer l = new Layer(tm,layerName,ls); 
                 ls.addLayer(l);
@@ -178,15 +181,17 @@ public class LayeredTopicMapType implements TopicMapType {
     @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException,TopicMapException {
         String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        if(!in.gotoEntry(pathpre+"options.xml")){
+        if(path.length()>0) {
+            pathpre=path+"/";
+        }
+        if(!in.gotoEntry(pathpre+"options.xml")) {
             if(logger != null) {
-                logger.log("Couldn't find options.xml in package.");
-                logger.log("Aborting load.");
+                logger.log("Can't find options.xml in the package.");
+                logger.log("Aborting.");
             }
             else {
-                System.out.println("Couldn't find options.xml in package.");
-                System.out.println("Aborting load.");
+                System.out.println("Can't find options.xml in the package.");
+                System.out.println("Aborting.");
             }
             return null;
         }
@@ -201,12 +206,7 @@ public class LayeredTopicMapType implements TopicMapType {
         while(true && counter < 9999) {
             String layerName=options.get("layer"+counter+".name");
             if(layerName==null) break;
-            
             String typeClass=options.get("layer"+counter+".type");
-            // ENSURING BACKWARD COMPATABILITY!
-            if("com.gripstudios.applications.wandora.topicmap.memory.TopicMapImpl".equals(typeClass)) {
-                typeClass = "org.wandora.topicmap.memory.TopicMapImpl";
-            }
             try {
                 Class c=Class.forName(typeClass);
                 TopicMapType type=TopicMapTypeManager.getType((Class<? extends TopicMap>)c);
@@ -236,34 +236,46 @@ public class LayeredTopicMapType implements TopicMapType {
         return ls;
     }
 
+    
     @Override
     public String getTypeName() {
         return "Layered";
     }
     
+    
     @Override
-    public String toString(){return getTypeName();}
+    public String toString() {
+        return getTypeName();
+    }
 
+    
     @Override
-    public TopicMapConfigurationPanel getConfigurationPanel(Wandora admin, Options options) {
-        return new TopicMapConfigurationPanel(){
+    public TopicMapConfigurationPanel getConfigurationPanel(Wandora wandora, Options options) {
+        return new TopicMapConfigurationPanel() {
             @Override
             public Object getParameters() {
                 return new Object();
             }
         };
     }
+    
+    
     @Override
-    public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora admin, Options options,TopicMap tm) {
+    public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora wandora, Options options, TopicMap tm) {
         return null;
     }
+    
+    
     @Override
-    public javax.swing.JMenuItem[] getTopicMapMenu(TopicMap tm,Wandora admin){
+    public javax.swing.JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora wandora) {
         return null;
     }
+    
+    
     @Override
-    public Icon getTypeIcon(){
-        return UIBox.getIcon("gui/icons/layerinfo/layer_type_layered.png");
+    public Icon getTypeIcon() {
+        //return UIBox.getIcon("gui/icons/layerinfo/layer_type_layered.png");
+        return UIBox.getIcon(0xf1b3);
     }
     
 }

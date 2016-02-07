@@ -366,7 +366,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         selectQueryPanel.setLayout(new java.awt.GridBagLayout());
 
         queryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        queryComboBox.setPreferredSize(new java.awt.Dimension(57, 21));
+        queryComboBox.setPreferredSize(new java.awt.Dimension(56, 25));
         queryComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 queryComboBoxActionPerformed(evt);
@@ -380,7 +380,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
         addQueryButton.setText("Add");
         addQueryButton.setMargin(new java.awt.Insets(1, 4, 1, 4));
-        addQueryButton.setPreferredSize(new java.awt.Dimension(50, 21));
+        addQueryButton.setPreferredSize(new java.awt.Dimension(50, 25));
         addQueryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addQueryButtonActionPerformed(evt);
@@ -392,7 +392,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
         delQueryButton.setText("Del");
         delQueryButton.setMargin(new java.awt.Insets(1, 4, 1, 4));
-        delQueryButton.setPreferredSize(new java.awt.Dimension(50, 21));
+        delQueryButton.setPreferredSize(new java.awt.Dimension(50, 25));
         delQueryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delQueryButtonActionPerformed(evt);
@@ -423,7 +423,6 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         scriptQueryPanel.add(engineLabel, gridBagConstraints);
 
         engineComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        engineComboBox.setPreferredSize(new java.awt.Dimension(57, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

@@ -355,9 +355,6 @@ public class MaianaImportPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         namePanel.add(apiKeyLabel, gridBagConstraints);
-
-        apiKeyTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        apiKeyTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

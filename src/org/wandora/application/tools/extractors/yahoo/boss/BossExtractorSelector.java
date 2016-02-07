@@ -264,8 +264,8 @@ public class BossExtractorSelector extends javax.swing.JDialog {
         searchOptsPanel.add(searchTextField, gridBagConstraints);
 
         searchTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "web", "images", "news" }));
-        searchTypeComboBox.setMinimumSize(new java.awt.Dimension(80, 20));
-        searchTypeComboBox.setPreferredSize(new java.awt.Dimension(80, 20));
+        searchTypeComboBox.setMinimumSize(new java.awt.Dimension(80, 23));
+        searchTypeComboBox.setPreferredSize(new java.awt.Dimension(80, 23));
         searchOptsPanel.add(searchTypeComboBox, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();

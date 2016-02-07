@@ -53,6 +53,7 @@ public class LinkedTopicMapType implements TopicMapType {
         return c;
     }
 
+    
     @Override
     public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora wandora, Options options, TopicMap tm) {
         TopicMap linked = ((LinkedTopicMap)tm).getLinkedTopicMap();
@@ -64,19 +65,25 @@ public class LinkedTopicMapType implements TopicMapType {
         return c;        
     }
 
+    
     @Override
     public JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora admin) {
         return null;
     }
 
+    
     @Override
-    public String toString(){return getTypeName();}
+    public String toString(){
+        return getTypeName();
+    }
+    
     
     @Override
     public String getTypeName() {
         return "Linked";
     }
 
+    
     @Override
     public TopicMap modifyTopicMap(TopicMap tm, Object params) throws TopicMapException {
         TopicMap ret=createTopicMap(params);
@@ -84,6 +91,7 @@ public class LinkedTopicMapType implements TopicMapType {
         return ret;
     }
 
+    
     @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws IOException, TopicMapException {
         String pathpre="";
@@ -101,6 +109,7 @@ public class LinkedTopicMapType implements TopicMapType {
         options.save(new java.io.OutputStreamWriter(out.getOutputStream()));        
     }
 
+    
     @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException, TopicMapException {
         String pathpre="";
@@ -113,13 +122,17 @@ public class LinkedTopicMapType implements TopicMapType {
         return new LinkedTopicMap(wrappedMap);
     }
 
+    
     @Override
     public TopicMap unpackageTopicMap(TopicMap tm, PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException, TopicMapException {
         return unpackageTopicMap(in,path,logger,wandora);
     }
+    
+    
     @Override
     public Icon getTypeIcon(){
-        return UIBox.getIcon("gui/icons/layerinfo/layer_type_linked.png");
+        //return UIBox.getIcon("gui/icons/layerinfo/layer_type_linked.png");
+        return UIBox.getIcon(0xf0c1);
     }
 
 }

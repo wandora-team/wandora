@@ -75,7 +75,7 @@ public class AdjacencyMatrixImportDialog extends javax.swing.JDialog {
         ((SimpleTextPane) urlTextPane).setLineWrap(false);
 
         setTitle("Import adjacency matrix");
-        setSize(500,300);
+        setSize(640,400);
         if(parent != null) parent.centerWindow(this);
     }
     

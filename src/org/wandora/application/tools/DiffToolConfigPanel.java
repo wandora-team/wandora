@@ -75,27 +75,27 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
         map1Group = new javax.swing.ButtonGroup();
         map2Group = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        map1FileButton = new SimpleRadioButton();
-        map1LayerButton = new SimpleRadioButton();
-        map1ProjectButton = new SimpleRadioButton();
-        layerComboBox1 = new SimpleComboBox();
+        map1FileButton = new org.wandora.application.gui.simple.SimpleRadioButton();
+        map1LayerButton = new org.wandora.application.gui.simple.SimpleRadioButton();
+        map1ProjectButton = new org.wandora.application.gui.simple.SimpleRadioButton();
+        layerComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox();
         layerComboBox1.setEditable(false);
-        fileTextField1 = new SimpleField();
-        fileButton1 = new SimpleButton();
+        fileTextField1 = new org.wandora.application.gui.simple.SimpleField();
+        fileButton1 = new org.wandora.application.gui.simple.SimpleButton();
         jPanel2 = new javax.swing.JPanel();
-        map2FileButton = new SimpleRadioButton();
-        map2LayerButton = new SimpleRadioButton();
-        map2ProjectButton = new SimpleRadioButton();
-        layerComboBox2 = new SimpleComboBox();
+        map2FileButton = new org.wandora.application.gui.simple.SimpleRadioButton();
+        map2LayerButton = new org.wandora.application.gui.simple.SimpleRadioButton();
+        map2ProjectButton = new org.wandora.application.gui.simple.SimpleRadioButton();
+        layerComboBox2 = new org.wandora.application.gui.simple.SimpleComboBox();
         layerComboBox2.setEditable(false);
-        fileTextField2 = new SimpleField();
-        fileButton2 = new SimpleButton();
-        formatComboBox = new SimpleComboBox();
+        fileTextField2 = new org.wandora.application.gui.simple.SimpleField();
+        fileButton2 = new org.wandora.application.gui.simple.SimpleButton();
+        formatComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
         formatComboBox.setEditable(false);
-        jLabel1 = new SimpleLabel();
+        jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
         buttonsPanel = new javax.swing.JPanel();
-        okButton = new SimpleButton();
-        cancelButton = new SimpleButton();
+        okButton = new org.wandora.application.gui.simple.SimpleButton();
+        cancelButton = new org.wandora.application.gui.simple.SimpleButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -143,7 +143,7 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 3);
         jPanel1.add(map1ProjectButton, gridBagConstraints);
 
-        layerComboBox1.setPreferredSize(new java.awt.Dimension(29, 20));
+        layerComboBox1.setPreferredSize(new java.awt.Dimension(29, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -158,7 +158,7 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
 
         fileButton1.setText("Browse");
         fileButton1.setMargin(new java.awt.Insets(0, 7, 0, 7));
-        fileButton1.setPreferredSize(new java.awt.Dimension(69, 20));
+        fileButton1.setPreferredSize(new java.awt.Dimension(69, 25));
         fileButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fileButton1ActionPerformed(evt);
@@ -221,7 +221,7 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 3);
         jPanel2.add(map2ProjectButton, gridBagConstraints);
 
-        layerComboBox2.setPreferredSize(new java.awt.Dimension(29, 20));
+        layerComboBox2.setPreferredSize(new java.awt.Dimension(29, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -238,7 +238,7 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
 
         fileButton2.setText("Browse");
         fileButton2.setMargin(new java.awt.Insets(0, 7, 0, 7));
-        fileButton2.setPreferredSize(new java.awt.Dimension(69, 20));
+        fileButton2.setPreferredSize(new java.awt.Dimension(69, 25));
         fileButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fileButton2ActionPerformed(evt);
@@ -260,7 +260,7 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(jPanel2, gridBagConstraints);
 
-        formatComboBox.setPreferredSize(new java.awt.Dimension(29, 20));
+        formatComboBox.setPreferredSize(new java.awt.Dimension(29, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -280,9 +280,9 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
 
         okButton.setText("Compare");
         okButton.setMargin(new java.awt.Insets(2, 5, 2, 5));
-        okButton.setMaximumSize(new java.awt.Dimension(70, 23));
-        okButton.setMinimumSize(new java.awt.Dimension(70, 23));
-        okButton.setPreferredSize(new java.awt.Dimension(4970, 23));
+        okButton.setMaximumSize(new java.awt.Dimension(70, 25));
+        okButton.setMinimumSize(new java.awt.Dimension(70, 25));
+        okButton.setPreferredSize(new java.awt.Dimension(70, 25));
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -292,9 +292,9 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
 
         cancelButton.setText("Cancel");
         cancelButton.setMargin(new java.awt.Insets(2, 5, 2, 5));
-        cancelButton.setMaximumSize(new java.awt.Dimension(70, 23));
-        cancelButton.setMinimumSize(new java.awt.Dimension(70, 23));
-        cancelButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        cancelButton.setMaximumSize(new java.awt.Dimension(70, 25));
+        cancelButton.setMinimumSize(new java.awt.Dimension(70, 25));
+        cancelButton.setPreferredSize(new java.awt.Dimension(70, 25));
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);

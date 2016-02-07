@@ -20,13 +20,11 @@
  */
 
 package org.wandora.application.tools;
+
+
 import org.wandora.application.gui.filechooser.TopicMapFileChooser;
-import org.wandora.*;
-import org.wandora.topicmap.diff.*;
-import org.wandora.topicmap.*;
 import org.wandora.topicmap.layered.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
 
@@ -73,22 +71,22 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         mapGroup = new javax.swing.ButtonGroup();
-        map1ProjectButton = new SimpleRadioButton();
+        map1ProjectButton = new org.wandora.application.gui.simple.SimpleRadioButton();
         jPanel1 = new javax.swing.JPanel();
-        map1FileButton = new SimpleRadioButton();
-        map1LayerButton = new SimpleRadioButton();
-        layerComboBox1 = new SimpleComboBox();
+        map1FileButton = new org.wandora.application.gui.simple.SimpleRadioButton();
+        map1LayerButton = new org.wandora.application.gui.simple.SimpleRadioButton();
+        layerComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox();
         layerComboBox1.setEditable(false);
-        fileTextField1 = new SimpleField();
-        fileButton1 = new SimpleButton();
+        fileTextField1 = new org.wandora.application.gui.simple.SimpleField();
+        fileButton1 = new org.wandora.application.gui.simple.SimpleButton();
         jPanel2 = new javax.swing.JPanel();
-        patchTextField = new SimpleField();
-        patchButton = new SimpleButton();
-        jLabel1 = new SimpleLabel();
-        reverseCheckBox = new SimpleCheckBox();
+        patchTextField = new org.wandora.application.gui.simple.SimpleField();
+        patchButton = new org.wandora.application.gui.simple.SimpleButton();
+        jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
+        reverseCheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
         buttonsPanel = new javax.swing.JPanel();
-        okButton = new SimpleButton();
-        cancelButton = new SimpleButton();
+        okButton = new org.wandora.application.gui.simple.SimpleButton();
+        cancelButton = new org.wandora.application.gui.simple.SimpleButton();
 
         mapGroup.add(map1ProjectButton);
         map1ProjectButton.setText("Layer stack");
@@ -130,13 +128,15 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 3);
         jPanel1.add(map1LayerButton, gridBagConstraints);
 
-        layerComboBox1.setPreferredSize(new java.awt.Dimension(29, 20));
+        layerComboBox1.setPreferredSize(new java.awt.Dimension(29, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 3);
         jPanel1.add(layerComboBox1, gridBagConstraints);
+
+        fileTextField1.setPreferredSize(new java.awt.Dimension(6, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -145,7 +145,7 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
         fileButton1.setText("Browse");
         fileButton1.setMargin(new java.awt.Insets(0, 7, 0, 7));
-        fileButton1.setPreferredSize(new java.awt.Dimension(69, 20));
+        fileButton1.setPreferredSize(new java.awt.Dimension(69, 25));
         fileButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fileButton1ActionPerformed(evt);
@@ -164,6 +164,8 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Patch", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, UIConstants.plainFont));
         jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        patchTextField.setPreferredSize(new java.awt.Dimension(6, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -174,7 +176,7 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
         patchButton.setText("Browse");
         patchButton.setMargin(new java.awt.Insets(0, 7, 0, 7));
-        patchButton.setPreferredSize(new java.awt.Dimension(69, 20));
+        patchButton.setPreferredSize(new java.awt.Dimension(69, 25));
         patchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 patchButtonActionPerformed(evt);
@@ -217,9 +219,7 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
         okButton.setText("Patch");
         okButton.setMargin(new java.awt.Insets(2, 5, 2, 5));
-        okButton.setMaximumSize(new java.awt.Dimension(70, 23));
-        okButton.setMinimumSize(new java.awt.Dimension(70, 23));
-        okButton.setPreferredSize(new java.awt.Dimension(4970, 23));
+        okButton.setPreferredSize(new java.awt.Dimension(70, 25));
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -229,9 +229,7 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
         cancelButton.setText("Cancel");
         cancelButton.setMargin(new java.awt.Insets(2, 5, 2, 5));
-        cancelButton.setMaximumSize(new java.awt.Dimension(70, 23));
-        cancelButton.setMinimumSize(new java.awt.Dimension(70, 23));
-        cancelButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        cancelButton.setPreferredSize(new java.awt.Dimension(70, 25));
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);

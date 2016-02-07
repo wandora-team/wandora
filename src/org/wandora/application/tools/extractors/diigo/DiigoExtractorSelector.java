@@ -581,8 +581,8 @@ public class DiigoExtractorSelector extends JDialog {
 
         rowNumberTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         rowNumberTextField.setText("50");
-        rowNumberTextField.setMinimumSize(new java.awt.Dimension(30, 20));
-        rowNumberTextField.setPreferredSize(new java.awt.Dimension(30, 20));
+        rowNumberTextField.setMinimumSize(new java.awt.Dimension(30, 23));
+        rowNumberTextField.setPreferredSize(new java.awt.Dimension(30, 23));
         buttonPanel.add(rowNumberTextField, new java.awt.GridBagConstraints());
 
         entriesLabel.setText("bookmarks");

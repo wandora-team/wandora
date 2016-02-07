@@ -157,8 +157,6 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         optionsPanel.add(typeLabel, gridBagConstraints);
 
         typeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Single email file", "MBOX email repository" }));
-        typeComboBox.setMinimumSize(new java.awt.Dimension(127, 23));
-        typeComboBox.setPreferredSize(new java.awt.Dimension(130, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
@@ -173,9 +171,6 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         optionsPanel.add(resourceLabel, gridBagConstraints);
-
-        resourceTextField.setMinimumSize(new java.awt.Dimension(6, 23));
-        resourceTextField.setPreferredSize(new java.awt.Dimension(6, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -185,9 +180,9 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
 
         fileButton.setText("Browse");
         fileButton.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        fileButton.setMaximumSize(new java.awt.Dimension(70, 21));
-        fileButton.setMinimumSize(new java.awt.Dimension(70, 21));
-        fileButton.setPreferredSize(new java.awt.Dimension(70, 21));
+        fileButton.setMaximumSize(new java.awt.Dimension(70, 23));
+        fileButton.setMinimumSize(new java.awt.Dimension(70, 23));
+        fileButton.setPreferredSize(new java.awt.Dimension(70, 23));
         fileButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 fileButtonMouseReleased(evt);

@@ -32,9 +32,10 @@ package org.wandora.application.gui.table;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.*;
+import org.wandora.application.gui.UIConstants;
 
-import org.wandora.application.gui.simple.SimpleURILabel;
 import org.wandora.topicmap.Locator;
 import org.wandora.utils.DataURL;
 
@@ -46,8 +47,10 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class LocatorTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+    
     private LocatorTable locatorTable;
 
+    
     
     public LocatorTableCellRenderer(LocatorTable table) {
         this.locatorTable = table;
@@ -65,11 +68,13 @@ public class LocatorTableCellRenderer extends DefaultTableCellRenderer implement
             }
             
             if(c instanceof JLabel) {
+                JLabel label = (JLabel) c;
+                label.setBorder(UIConstants.defaultTableCellLabelBorder);
                 Locator l = (Locator) value;
                 String locatorString = l.toExternalForm();
                 if(DataURL.isDataURL(locatorString)) {
                     String locatorFragment = locatorString.substring(0, Math.min(locatorString.length(), 64)) + "... ("+locatorString.length()+")";
-                    ((JLabel) c).setText(locatorFragment);
+                    label.setText(locatorFragment);
                 }
             }
         }

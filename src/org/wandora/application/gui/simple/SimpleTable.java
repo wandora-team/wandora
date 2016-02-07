@@ -47,11 +47,15 @@ import org.wandora.utils.swing.anyselectiontable.AnySelectionTable;
  */
 public class SimpleTable extends AnySelectionTable implements SimpleComponent {
     
+    public static final int DEFAULT_ROW_HEIGHT = 21;
+    
+    
     /** Creates a new instance of SimpleTable */
     public SimpleTable() {
         this.setFocusable(true);
         this.addFocusListener(this);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        this.setRowHeight(DEFAULT_ROW_HEIGHT);
     }
     
     

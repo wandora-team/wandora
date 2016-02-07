@@ -536,7 +536,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
 
         similarityTypePanel.setLayout(new java.awt.GridBagLayout());
 
-        similarityTypeComboBox.setPreferredSize(new java.awt.Dimension(29, 20));
+        similarityTypeComboBox.setPreferredSize(new java.awt.Dimension(28, 25));
         similarityTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 similarityTypeComboBoxActionPerformed(evt);
@@ -592,8 +592,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
 
         similarityThresholdTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         similarityThresholdTextField.setText("50");
-        similarityThresholdTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        similarityThresholdTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        similarityThresholdTextField.setMinimumSize(new java.awt.Dimension(40, 24));
+        similarityThresholdTextField.setPreferredSize(new java.awt.Dimension(40, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         thresholdInnerPanel.add(similarityThresholdTextField, gridBagConstraints);
@@ -629,8 +629,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         tokenizerPanel.add(similarityTokenizerLabel, gridBagConstraints);
 
-        similarityTokenizerComboBox.setMinimumSize(new java.awt.Dimension(130, 20));
-        similarityTokenizerComboBox.setPreferredSize(new java.awt.Dimension(130, 20));
+        similarityTokenizerComboBox.setMinimumSize(new java.awt.Dimension(130, 24));
+        similarityTokenizerComboBox.setPreferredSize(new java.awt.Dimension(130, 24));
         similarityTokenizerComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 similarityTokenizerComboBoxActionPerformed(evt);
@@ -654,8 +654,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
 
         gapCostTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         gapCostTextField.setText("0.5");
-        gapCostTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        gapCostTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        gapCostTextField.setMinimumSize(new java.awt.Dimension(40, 24));
+        gapCostTextField.setPreferredSize(new java.awt.Dimension(40, 24));
         similaritygapCostPanel.add(gapCostTextField, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();

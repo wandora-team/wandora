@@ -46,6 +46,11 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="userTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -69,6 +74,11 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="passwordTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -88,6 +98,11 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
         </Container>
         <Component class="javax.swing.JTextField" name="serverTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -98,6 +113,11 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="databaseTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -121,6 +141,11 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="nameTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -176,6 +201,11 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="userGenTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -186,6 +216,11 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="driverTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -196,6 +231,11 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="conTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -219,6 +259,11 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="nameGenTextField">
+          <Properties>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[3, 3, 3, 3]"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
           </AuxValues>
@@ -238,6 +283,11 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
             <Component class="javax.swing.JTextArea" name="scriptTextArea">
+              <Properties>
+                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                  <Insets value="[3, 3, 3, 3]"/>
+                </Property>
+              </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleTextArea();"/>
               </AuxValues>
@@ -280,6 +330,11 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
           <SubComponents>
             <Component class="javax.swing.JTextField" name="passwordGenTextField">
+              <Properties>
+                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                  <Insets value="[3, 3, 3, 3]"/>
+                </Property>
+              </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.wandora.application.gui.simple.SimpleField();"/>
               </AuxValues>
@@ -311,14 +366,6 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JComboBox" name="dbtypeComboBox">
-          <Properties>
-            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[32767, 20]"/>
-            </Property>
-            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[25, 20]"/>
-            </Property>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dbtypeComboBoxActionPerformed"/>
           </Events>

@@ -48,19 +48,27 @@ public class UIConstants {
     public static boolean ANTIALIASING = true;
     
     
+    public static Border defaultTableCellLabelBorder = BorderFactory.createEmptyBorder(3, 3, 3, 3);
+    public static Border defaultLabelBorder = BorderFactory.createEmptyBorder(2, 2, 2, 2);
+    
+    
     public static Font smallButtonLabelFont = new Font("SansSerif", Font.PLAIN, 10);
     public static Font buttonLabelFont = new Font("SansSerif", Font.PLAIN, 11);
+    public static Font comboBoxFont = new Font("SansSerif", Font.PLAIN, 12);
     public static Font labelFont = new Font("SansSerif", Font.PLAIN, 12);
     public static Font largeLabelFont = new Font("SansSerif", Font.PLAIN, 14);
     public static Font panelTitleFont = new Font("SansSerif", Font.BOLD, 12);
     //public static Font wandoraBigLabelFont = new Font("SansSerif", Font.BOLD, 12);
     public static Font plainFont = new Font("SansSerif", Font.PLAIN, 11);
-    public static Font titleFont = new Font("SansSerif", Font.PLAIN, 10);
+    public static Font titleFont = new Font("SansSerif", Font.PLAIN, 14);
     public static Font menuFont = new Font("SansSerif", Font.PLAIN, 11);
     public static Font tabFont = new Font("SansSerif", Font.PLAIN, 11);
     public static Font miniButtonLabel = new Font("SansSerif", Font.BOLD, 7);
     
-    
+    public static Font h3Font = new Font("SansSerif", Font.PLAIN, 14);
+    public static Font h2Font = new Font("SansSerif", Font.PLAIN, 16);
+    public static Font h1Font = new Font("SansSerif", Font.PLAIN, 20);
+
     public static Border dragBorder = BorderFactory.createLineBorder(Color.GRAY);
 
     private static SimpleFileChooser fileChooser = null;

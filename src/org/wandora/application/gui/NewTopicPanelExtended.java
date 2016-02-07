@@ -32,7 +32,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.Iterator;
 import org.wandora.application.gui.simple.*;
-import org.wandora.utils.*;
 import javax.swing.*;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -93,7 +92,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         if(basename != null && basename.length() > 0) {
             newTopic=topicmap.createTopic();
 
-            if(TMBox.checkBaseNameChange(wandora,newTopic,basename)!=ConfirmResult.yes){
+            if(TMBox.checkBaseNameChange(wandora,newTopic,basename) != ConfirmResult.yes){
                 newTopic.remove();
                 return null;
             }
@@ -101,21 +100,29 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
             newTopic.setBaseName(basename);
         }
         else {
-            WandoraOptionPane.showMessageDialog(wandora, "No basename was given. No topic created!", "No topic created", WandoraOptionPane.WARNING_MESSAGE);
+            WandoraOptionPane.showMessageDialog(
+                    wandora, 
+                    "Basename is missing. No topic created.", 
+                    "No topic created", 
+                    WandoraOptionPane.WARNING_MESSAGE);
             if(newTopic != null) newTopic.remove();
             return null;
         }
         
         String si = getSI();
         if(si != null && si.length() > 0) {
-            if(TMBox.checkSubjectIdentifierChange(wandora,newTopic,topicmap.createLocator(si),true)!=ConfirmResult.yes){
+            if(TMBox.checkSubjectIdentifierChange(wandora, newTopic, topicmap.createLocator(si),true) != ConfirmResult.yes){
                 newTopic.remove();
                 return null;
             }
             newTopic.addSubjectIdentifier(new Locator(si));
         }
         else {
-            WandoraOptionPane.showMessageDialog(wandora, "No subject identifier was given. No topic created!", "No topic created", WandoraOptionPane.WARNING_MESSAGE);
+            WandoraOptionPane.showMessageDialog(
+                    wandora, 
+                    "Subject identifier is missing. No topic created.", 
+                    "No topic created", 
+                    WandoraOptionPane.WARNING_MESSAGE);
             newTopic.remove();
             return null;
         }
@@ -169,14 +176,24 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         String si = SITextField.getText().trim();
         if(si.length() == 0) {
             si = topicmap.makeSubjectIndicator();
-            WandoraOptionPane.showMessageDialog(wandora, "Valid subject identifier was not available. Topic will be given a default subject identifier '"+si+"'.", "Default SI given to new topic", WandoraOptionPane.INFORMATION_MESSAGE);
+            WandoraOptionPane.showMessageDialog(
+                    wandora, 
+                    "Subject identifier is missing. Creating subject identifier '"+si+"' for the topic.", 
+                    "Created subject identifier for the topic", 
+                    WandoraOptionPane.INFORMATION_MESSAGE
+            );
         }
         try {
             URL siUrl = new URL(si);
         }
         catch(Exception e) {
             si = topicmap.makeSubjectIndicator();
-            WandoraOptionPane.showMessageDialog(wandora, "Valid subject identifier was not available. Topic will be given a default subject identifier '"+si+"'.", "Default SI given to new topic", WandoraOptionPane.INFORMATION_MESSAGE);
+            WandoraOptionPane.showMessageDialog(
+                    wandora, 
+                    "Subject identifier is not valid. Creating subject identifier '"+si+"' for the topic.", 
+                    "Created subject identifier for the topic", 
+                    WandoraOptionPane.INFORMATION_MESSAGE
+            );
         }
         return si;
     }
@@ -189,7 +206,11 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
             URL slUrl = new URL(sl);
         }
         catch(Exception e) {
-            WandoraOptionPane.showMessageDialog(wandora, "Given subject locator was invalid. Rejecting subject locator.", "Rejecting subject locator", WandoraOptionPane.INFORMATION_MESSAGE);
+            WandoraOptionPane.showMessageDialog(
+                    wandora, 
+                    "Subject locator is invalid. Rejecting subject locator.", 
+                    "Rejecting subject locator", 
+                    WandoraOptionPane.INFORMATION_MESSAGE);
             return null;
         }
         return sl;
@@ -267,8 +288,6 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         identityPanel.add(basenameLabel, gridBagConstraints);
 
-        basenameTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        basenameTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         basenameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 basenameTextFieldKeyReleased(evt);
@@ -289,8 +308,6 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         identityPanel.add(SILabel, gridBagConstraints);
 
-        SITextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        SITextField.setPreferredSize(new java.awt.Dimension(6, 21));
         SITextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 SITextFieldKeyReleased(evt);
@@ -311,7 +328,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         identityPanel.add(SLLabel, gridBagConstraints);
 
         pickSIFile.setText("pick file");
-        pickSIFile.setMargin(new java.awt.Insets(0, 8, 0, 8));
+        pickSIFile.setMargin(new java.awt.Insets(2, 8, 2, 8));
         pickSIFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pickSIFileActionPerformed(evt);
@@ -329,7 +346,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         identityPanel.add(SLTextField, gridBagConstraints);
 
         pickSLFile.setText("pick file");
-        pickSLFile.setMargin(new java.awt.Insets(0, 8, 0, 8));
+        pickSLFile.setMargin(new java.awt.Insets(2, 8, 2, 8));
         pickSLFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pickSLFileActionPerformed(evt);

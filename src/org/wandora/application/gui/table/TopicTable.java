@@ -120,6 +120,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
 
             this.addMouseListener(this);
 
+            this.getTableHeader().setPreferredSize(new Dimension(100, DEFAULT_ROW_HEIGHT));
             this.getTableHeader().addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {

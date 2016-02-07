@@ -75,7 +75,7 @@ public class SimilarityMatrixExportDialog extends javax.swing.JPanel {
     public void open() {
         myDialog = new JDialog(Wandora.getWandora(), true);
         myDialog.add(this);
-        myDialog.setSize(600,300);
+        myDialog.setSize(600,320);
         myDialog.setTitle("Similarity matrix export options");
         UIBox.centerWindow(myDialog, Wandora.getWandora());
         wasAccepted = false;
@@ -193,16 +193,16 @@ public class SimilarityMatrixExportDialog extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         optionsPanel.add(infoLabel, gridBagConstraints);
 
-        similarityTypeComboBox.setMinimumSize(new java.awt.Dimension(300, 20));
-        similarityTypeComboBox.setPreferredSize(new java.awt.Dimension(300, 20));
+        similarityTypeComboBox.setMinimumSize(new java.awt.Dimension(300, 23));
+        similarityTypeComboBox.setPreferredSize(new java.awt.Dimension(300, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         optionsPanel.add(similarityTypeComboBox, gridBagConstraints);
 
-        outputFormatComboBox.setMinimumSize(new java.awt.Dimension(300, 20));
-        outputFormatComboBox.setPreferredSize(new java.awt.Dimension(300, 20));
+        outputFormatComboBox.setMinimumSize(new java.awt.Dimension(300, 23));
+        outputFormatComboBox.setPreferredSize(new java.awt.Dimension(300, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
@@ -218,8 +218,8 @@ public class SimilarityMatrixExportDialog extends javax.swing.JPanel {
 
         noDecimalsTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         noDecimalsTextField.setText("3");
-        noDecimalsTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        noDecimalsTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        noDecimalsTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        noDecimalsTextField.setPreferredSize(new java.awt.Dimension(40, 23));
         additionsPanel.add(noDecimalsTextField, new java.awt.GridBagConstraints());
 
         filterBelowLabel.setText("Filter values below");
@@ -227,8 +227,8 @@ public class SimilarityMatrixExportDialog extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 4);
         additionsPanel.add(filterBelowLabel, gridBagConstraints);
 
-        filterBelowTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        filterBelowTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        filterBelowTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        filterBelowTextField.setPreferredSize(new java.awt.Dimension(40, 23));
         additionsPanel.add(filterBelowTextField, new java.awt.GridBagConstraints());
 
         maximizeAboveLabel.setText("Maximize values above");
@@ -236,8 +236,8 @@ public class SimilarityMatrixExportDialog extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 4);
         additionsPanel.add(maximizeAboveLabel, gridBagConstraints);
 
-        maximizeAboveTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        maximizeAboveTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        maximizeAboveTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        maximizeAboveTextField.setPreferredSize(new java.awt.Dimension(40, 23));
         additionsPanel.add(maximizeAboveTextField, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();

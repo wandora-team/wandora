@@ -58,7 +58,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     /** Creates new form ConfigurationPanel */
     public DatabaseConfigurationPanel(Wandora wandora) {
         this.wandora = wandora;
-        listModel=new DefaultListModel();
+        listModel = new DefaultListModel();
         initComponents();
         connectionsList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loadSaveButtonPanel.setVisible(false);
@@ -152,6 +152,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         knownDBPanel.add(jLabel5, gridBagConstraints);
+
+        userTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -167,6 +169,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         knownDBPanel.add(jLabel6, gridBagConstraints);
+
+        passwordTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -179,6 +183,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.weighty = 1.0;
         knownDBPanel.add(jPanel2, gridBagConstraints);
+
+        serverTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -186,6 +192,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 7);
         knownDBPanel.add(serverTextField, gridBagConstraints);
+
+        databaseTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -199,6 +207,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         knownDBPanel.add(jLabel1, gridBagConstraints);
+
+        nameTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -230,6 +240,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         generalDBPanel.add(jLabel9, gridBagConstraints);
+
+        userGenTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -237,6 +249,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 7);
         generalDBPanel.add(userGenTextField, gridBagConstraints);
+
+        driverTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -244,6 +258,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 7);
         generalDBPanel.add(driverTextField, gridBagConstraints);
+
+        conTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -257,12 +273,15 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         generalDBPanel.add(jLabel2, gridBagConstraints);
+
+        nameGenTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 7);
         generalDBPanel.add(nameGenTextField, gridBagConstraints);
 
+        scriptTextArea.setMargin(new java.awt.Insets(3, 3, 3, 3));
         jScrollPane2.setViewportView(scriptTextArea);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -291,6 +310,8 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         generalDBPanel.add(jLabel10, gridBagConstraints);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        passwordGenTextField.setMargin(new java.awt.Insets(3, 3, 3, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -314,8 +335,6 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 7, 5, 5);
         newConPanel.add(jLabel11, gridBagConstraints);
 
-        dbtypeComboBox.setMaximumSize(new java.awt.Dimension(32767, 20));
-        dbtypeComboBox.setPreferredSize(new java.awt.Dimension(25, 20));
         dbtypeComboBox.setEditable(false);
         dbtypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

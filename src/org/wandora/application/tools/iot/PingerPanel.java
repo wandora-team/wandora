@@ -473,6 +473,7 @@ public class PingerPanel extends javax.swing.JPanel {
 
         delayField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         delayField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        delayField.setPreferredSize(new java.awt.Dimension(6, 23));
         delayField.setValue(new Integer(10));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -519,7 +520,7 @@ public class PingerPanel extends javax.swing.JPanel {
         yearField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         yearField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         yearField.setMinimumSize(new java.awt.Dimension(30, 20));
-        yearField.setPreferredSize(new java.awt.Dimension(30, 20));
+        yearField.setPreferredSize(new java.awt.Dimension(30, 23));
         yearField.setValue(new Integer(5));
         yearField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -545,7 +546,7 @@ public class PingerPanel extends javax.swing.JPanel {
         monthField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         monthField.setMaximumSize(new java.awt.Dimension(10, 20));
         monthField.setMinimumSize(new java.awt.Dimension(10, 20));
-        monthField.setPreferredSize(new java.awt.Dimension(10, 20));
+        monthField.setPreferredSize(new java.awt.Dimension(10, 23));
         monthField.setValue(new Integer(5));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -566,7 +567,7 @@ public class PingerPanel extends javax.swing.JPanel {
         dayField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         dayField.setMaximumSize(new java.awt.Dimension(10, 20));
         dayField.setMinimumSize(new java.awt.Dimension(10, 20));
-        dayField.setPreferredSize(new java.awt.Dimension(10, 20));
+        dayField.setPreferredSize(new java.awt.Dimension(10, 23));
         dayField.setValue(new Integer(5));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -587,7 +588,7 @@ public class PingerPanel extends javax.swing.JPanel {
         hoursField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         hoursField.setMaximumSize(new java.awt.Dimension(10, 20));
         hoursField.setMinimumSize(new java.awt.Dimension(10, 20));
-        hoursField.setPreferredSize(new java.awt.Dimension(10, 20));
+        hoursField.setPreferredSize(new java.awt.Dimension(10, 23));
         hoursField.setValue(new Integer(5));
         hoursField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -613,7 +614,7 @@ public class PingerPanel extends javax.swing.JPanel {
         minutesField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         minutesField.setMaximumSize(new java.awt.Dimension(10, 20));
         minutesField.setMinimumSize(new java.awt.Dimension(10, 20));
-        minutesField.setPreferredSize(new java.awt.Dimension(10, 20));
+        minutesField.setPreferredSize(new java.awt.Dimension(10, 23));
         minutesField.setValue(new Integer(5));
         minutesField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -639,7 +640,7 @@ public class PingerPanel extends javax.swing.JPanel {
         secondsField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         secondsField.setMaximumSize(new java.awt.Dimension(10, 20));
         secondsField.setMinimumSize(new java.awt.Dimension(10, 20));
-        secondsField.setPreferredSize(new java.awt.Dimension(10, 20));
+        secondsField.setPreferredSize(new java.awt.Dimension(10, 23));
         secondsField.setValue(new Integer(5));
         secondsField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -674,6 +675,7 @@ public class PingerPanel extends javax.swing.JPanel {
         setupPane.add(saveToggle, gridBagConstraints);
 
         saveFolderField.setEditable(false);
+        saveFolderField.setPreferredSize(new java.awt.Dimension(6, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -684,6 +686,7 @@ public class PingerPanel extends javax.swing.JPanel {
 
         saveButton.setText("Browse");
         saveButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
+        saveButton.setPreferredSize(new java.awt.Dimension(60, 23));
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);

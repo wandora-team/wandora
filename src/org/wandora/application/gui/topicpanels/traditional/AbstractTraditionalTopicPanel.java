@@ -163,12 +163,12 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
 
 
-    public void buildAssociationsPanel(JPanel associationPanel, Topic topic, Options options, Wandora wandora) {
-        buildAssociationsPanel(associationPanel, topic, ASSOCIATIONS_WHERE_PLAYER, options, wandora);
+    public void buildAssociationsPanel(JPanel associationPanel, JLabel numberLabel, Topic topic, Options options, Wandora wandora) {
+        buildAssociationsPanel(associationPanel, numberLabel, topic, ASSOCIATIONS_WHERE_PLAYER, options, wandora);
 
     }
 
-    public void buildAssociationsPanel(JPanel associationPanel, Topic topic, int option, Options options, Wandora wandora) {
+    public void buildAssociationsPanel(JPanel associationPanel, JLabel numberLabel, Topic topic, int option, Options options, Wandora wandora) {
         java.awt.GridBagConstraints gbc;
         try {
             Map<Association,ArrayList<Topic>> selectedAssociationWithRoles = new HashMap<Association,ArrayList<Topic>>();
@@ -221,6 +221,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     if(acounter!=1) gbc.insets=new java.awt.Insets(10,0,0,0);
                     AssociationTable table=new AssociationTable(sameTypes, wandora, topic);
                     AssociationTypeLink label=new AssociationTypeLink(table, lastType, wandora);
+                    label.setFont(UIConstants.h3Font);
                     label.setLimitLength(false);
                     JPopupMenu popup = this.getAssociationTypeMenu();
                     label.setComponentPopupMenu(popup);
@@ -259,6 +260,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 if(acounter!=1) gbc.insets=new java.awt.Insets(10,0,0,0);
                 AssociationTable table=new AssociationTable(sameTypes, wandora, topic);
                 AssociationTypeLink label=new AssociationTypeLink(table, lastType, wandora);
+                label.setFont(UIConstants.h3Font);
                 label.setLimitLength(false);
                 JPopupMenu popup = this.getAssociationTypeMenu();
                 label.setComponentPopupMenu(popup);
@@ -279,11 +281,10 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
             // ----
 
-            int n = associations.size();
-            String s = "Associations";
-            if((option & ASSOCIATIONS_WHERE_PLAYER) != 0) s = "Associations";
-            if((option & ASSOCIATIONS_WHERE_TYPE) != 0) s = "Associations where type";
-            setPanelTitle(associationPanel, s+" ("+n+")");
+            if(numberLabel != null) {
+                int n = associations.size();
+                numberLabel.setText(""+n);
+            }
             
             // Finally select all previously selected association.
             for(int i=0; i<associationPanel.getComponentCount(); i++) {
@@ -330,7 +331,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
 
 
-    public void buildClassesPanel(JPanel classesPanel, Topic topic, Options options, Wandora wandora) {
+    public void buildClassesPanel(JPanel classesPanel, JLabel numberLabel, Topic topic, Options options, Wandora wandora) {
         GridBagConstraints gbc;
         try {
             Topic[] selectedClasses = null;
@@ -351,8 +352,10 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             ClassTable ct = new ClassTable(topic, wandora);
             classesPanel.add(ct, gbc);
 
-            int n = ct.getRowCount();
-            setPanelTitle(classesPanel, "Classes ("+n+")");
+            if(numberLabel != null) {
+                int n = ct.getRowCount();
+                numberLabel.setText(""+n);
+            }
            
             {
                 for(Topic t : topic.getTypes()){
@@ -410,7 +413,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
 
 
-    public void buildInstancesPanel(JPanel instancesPanel, Topic topic, Options options, Wandora wandora) {
+    public void buildInstancesPanel(JPanel instancesPanel, JLabel numberLabel, Topic topic, Options options, Wandora wandora) {
         try {
             Topic[] selectedInstances = null;
             if(instancesPanel.getComponentCount() > 0) {
@@ -431,9 +434,11 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             InstanceTable it = new InstanceTable(topic, wandora);
             instancesPanel.add(it,gbc);
 
-            int n = it.getRowCount();
-            setPanelTitle(instancesPanel, "Instances ("+n+")");
-
+            if(numberLabel != null) {
+                int n = it.getRowCount();
+                numberLabel.setText(""+n);
+            }
+            
             {
                 for(Topic t : topic.getTopicMap().getTopicsOfType(topic)){
                     visibleTopics.addAll(t.getSubjectIdentifiers());
@@ -452,7 +457,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
 
     
-    public void buildOccurrencesPanel(JPanel dataPanel, Topic topic, Options options, Wandora wandora) {
+    public void buildOccurrencesPanel(JPanel dataPanel, JLabel numberLabel, Topic topic, Options options, Wandora wandora) {
         try {
             GridBagConstraints gbc;
             dataPanel.removeAll();
@@ -465,6 +470,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 OccurrenceTableSingleType occurrenceTableSingle = new OccurrenceTableSingleType(topic, occurrenceType, options, wandora);
                 if(occurrenceTableSingle.getRowCount() > 0) {
                     OccurrenceTypeLink label = new OccurrenceTypeLink(occurrenceTableSingle, occurrenceType, wandora);
+                    label.setFont(UIConstants.h3Font);
                     label.setLimitLength(false);
                     JPopupMenu popup = this.getOccurrenceTypeMenu(occurrenceType);
                     label.setComponentPopupMenu(popup);
@@ -497,7 +503,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 }
             }
 
-            setPanelTitle(dataPanel, "Occurrences ("+n+")");
+            if(numberLabel != null) {
+                numberLabel.setText(""+n);
+            }
         }
         catch(Exception e) {
             System.out.println("Failed to initialize occurrences!");
@@ -507,7 +515,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
 
 
-    public void buildOccurrencesPanelOld(JPanel dataPanel, Topic topic, Options options, Wandora wandora) {
+    public void buildOccurrencesPanelOld(JPanel dataPanel, JLabel numberLabel, Topic topic, Options options, Wandora wandora) {
         try {
             GridBagConstraints gbc;
             dataPanel.removeAll();
@@ -538,8 +546,10 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 }
             }
             else occurrenceTable=null;
-
-            setPanelTitle(dataPanel, "Occurrences ("+n+")");
+            
+            if(numberLabel != null) {
+                numberLabel.setText(""+n);
+            }
         }
         catch(Exception e) {
             System.out.println("Failed to initialize occurrences!");
@@ -551,20 +561,20 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
 
 
-    public void buildNamePanel(JPanel variantPanel, Topic topic, TopicPanel topicPanel, Options options, Wandora wandora) {
-        buildAllNamesPanel(variantPanel, topic, topicPanel, options, wandora);
+    public void buildNamePanel(JPanel variantPanel, JLabel numberLabel, Topic topic, TopicPanel topicPanel, Options options, Wandora wandora) {
+        buildAllNamesPanel(variantPanel, numberLabel, topic, topicPanel, options, wandora);
         //buildHorizontalNamePanel(variantPanel, parent, topic);
     }
 
 
 
 
-    public void buildHorizontalNamePanel(JPanel variantPanel, Topic topic, final TopicPanel topicPanel, Options options, Wandora wandora) {
+    public void buildHorizontalNamePanel(JPanel variantPanel, JLabel numberLabel, Topic topic, final TopicPanel topicPanel, Options options, Wandora wandora) {
         try {
             TopicMap tm = wandora.getTopicMap();
             GridBagConstraints gbc = new java.awt.GridBagConstraints();
-            nameTable=new HashMap<Set<Topic>,SimpleField>();
-            invNameTable=new HashMap<SimpleField,Set<Topic>>();
+            nameTable=new LinkedHashMap<Set<Topic>,SimpleField>();
+            invNameTable=new LinkedHashMap<SimpleField,Set<Topic>>();
             originalNameTable=new IteratedMap<Collection<Topic>,String>();
             variantPanel.removeAll();
 
@@ -607,7 +617,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                             String name=topic.getVariant(s);
                             SimpleField field = new SimpleField(name==null ? "" : name);
                             field.setCaretPosition(0);
-                            field.setPreferredSize(new java.awt.Dimension(130,21));
+                            //field.setPreferredSize(new java.awt.Dimension(130,21));
                             field.addKeyListener( new KeyAdapter() {
                                 @Override
                                 public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -666,8 +676,11 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     y++;
                 }
             }
-            int n = topic.getVariantScopes().size();
-            setPanelTitle(variantPanel, "Variant names ("+n+")");
+            
+            if(numberLabel != null) {
+                int n = topic.getVariantScopes().size();
+                numberLabel.setText(""+n);
+            }
         }
         catch(Exception e) {
             System.out.println("Failed to initialize names!");
@@ -679,7 +692,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
 
 
-    public void buildVerticalNamePanel(JPanel variantPanel, Topic topic, final TopicPanel topicPanel, Options options, Wandora wandora) {
+    public void buildVerticalNamePanel(JPanel variantPanel, JLabel numberLabel, Topic topic, final TopicPanel topicPanel, Options options, Wandora wandora) {
         if(wandora == null) return;
         if(variantPanel == null) return;
         if(topic == null) return;
@@ -735,7 +748,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                             String name = topic.getVariant(s);
                             SimpleField field = new SimpleField(name==null ? "" : name);
                             field.setCaretPosition(0);
-                            field.setPreferredSize(defaultFieldSize);
+                            //field.setPreferredSize(defaultFieldSize);
                             field.addKeyListener( new KeyAdapter() {
                                 @Override
                                 public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -794,8 +807,10 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 }
             }
 
-            int n = topic.getVariantScopes().size();
-            setPanelTitle(variantPanel, "Variant names ("+n+")");
+            if(numberLabel != null) {
+                int n = topic.getVariantScopes().size();
+                numberLabel.setText(""+n);
+            }
         }
         catch(Exception e) {
             System.out.println("Failed to initialize names!");
@@ -809,7 +824,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
 
 
-    public void buildAllNamesPanel(JPanel variantPanel, final Topic topic, final TopicPanel topicPanel, Options options, final Wandora wandora) {
+    public void buildAllNamesPanel(JPanel variantPanel, JLabel numberLabel, final Topic topic, final TopicPanel topicPanel, Options options, final Wandora wandora) {
         if(topic != null) {
             try {
                 nameTable=new LinkedHashMap<Set<Topic>,SimpleField>();
@@ -842,8 +857,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                             catch(Exception e) {}
                         }
                     });
-                    nf.setPreferredSize(new Dimension(100,23));
-                    nf.setMinimumSize(new Dimension(100,23));
+                    // nf.setPreferredSize(new Dimension(100,23));
+                    // nf.setMinimumSize(new Dimension(100,23));
                     String variant = topic.getVariant(scope);
                     nf.setText(variant);
                     scopeNamePanel.add(nf, gbcs);
@@ -974,9 +989,10 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 pgbc.weightx=1.0;
                 //variantPanel.add(myVariantPanel, pgbc);
 
-
-                int n = topic.getVariantScopes().size();
-                setPanelTitle(variantPanel, "Variant names ("+n+")");
+                if(numberLabel != null) {
+                    int n = topic.getVariantScopes().size();
+                    numberLabel.setText(""+n);
+                }
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -999,6 +1015,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 }
                 if(border != null && border instanceof TitledBorder) {
                     ((TitledBorder) border).setTitle(title);
+                    ((TitledBorder) border).setTitleFont(UIConstants.h2Font.deriveFont(Font.BOLD));
                 }
             }
         }
@@ -1068,7 +1085,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             return changed;
         }
         catch(TopicMapReadOnlyException roe) {
-            int button = wandora.displayExceptionYesNo("Layer is read only. You can either discard changes and proceed with current operation or cancel.",null,"Discard changes","Cancel");
+            int button = wandora.displayExceptionYesNo("The layer is read only. You can either discard changes and proceed with current operation or cancel.",null,"Discard changes","Cancel");
             if(button==0) return false;
             else {
                 roe.fillInStackTrace();

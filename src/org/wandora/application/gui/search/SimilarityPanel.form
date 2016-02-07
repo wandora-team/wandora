@@ -58,7 +58,7 @@
                           <StringArray count="0"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[29, 20]"/>
+                          <Dimension value="[28, 25]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -164,10 +164,10 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="text" type="java.lang.String" value="50"/>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[40, 20]"/>
+                                  <Dimension value="[40, 24]"/>
                                 </Property>
                                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[40, 20]"/>
+                                  <Dimension value="[40, 24]"/>
                                 </Property>
                               </Properties>
                               <AuxValues>
@@ -247,10 +247,10 @@
                                   <StringArray count="0"/>
                                 </Property>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[130, 20]"/>
+                                  <Dimension value="[130, 24]"/>
                                 </Property>
                                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[130, 20]"/>
+                                  <Dimension value="[130, 24]"/>
                                 </Property>
                               </Properties>
                               <Events>
@@ -298,10 +298,10 @@
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                                 <Property name="text" type="java.lang.String" value="0.5"/>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[40, 20]"/>
+                                  <Dimension value="[40, 24]"/>
                                 </Property>
                                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[40, 20]"/>
+                                  <Dimension value="[40, 24]"/>
                                 </Property>
                               </Properties>
                               <AuxValues>

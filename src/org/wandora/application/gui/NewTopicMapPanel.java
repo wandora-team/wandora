@@ -142,7 +142,6 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 7, 5, 5);
         add(layerTypeLabel, gridBagConstraints);
 
-        typeComboBox.setPreferredSize(new java.awt.Dimension(29, 20));
         typeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 typeComboBoxActionPerformed(evt);

@@ -100,8 +100,6 @@ public class NewTopicPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 2, 5);
         fieldPanel.add(basenameLabel, gridBagConstraints);
 
-        basenameTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        basenameTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         basenameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 basenameTextFieldKeyReleased(evt);
@@ -124,8 +122,6 @@ public class NewTopicPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         fieldPanel.add(SILabel, gridBagConstraints);
 
-        SITextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        SITextField.setPreferredSize(new java.awt.Dimension(6, 21));
         SITextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 SITextFieldKeyReleased(evt);

@@ -117,17 +117,13 @@ public class PasswordPrompt extends javax.swing.JDialog {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         passwordFieldPanel.add(passwordLabel2, gridBagConstraints);
-
-        usernameField.setMinimumSize(new java.awt.Dimension(200, 20));
-        usernameField.setPreferredSize(new java.awt.Dimension(200, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 2, 0);
         passwordFieldPanel.add(usernameField, gridBagConstraints);
 
-        passwordField.setMinimumSize(new java.awt.Dimension(200, 20));
-        passwordField.setPreferredSize(new java.awt.Dimension(200, 20));
+        passwordField.setMargin(new java.awt.Insets(2, 2, 2, 3));
         passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 passwordFieldKeyPressed(evt);
@@ -195,7 +191,7 @@ public class PasswordPrompt extends javax.swing.JDialog {
 
         okButton.setText("OK");
         okButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        okButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        okButton.setPreferredSize(new java.awt.Dimension(70, 25));
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -207,7 +203,7 @@ public class PasswordPrompt extends javax.swing.JDialog {
 
         cancelButton.setText("Cancel");
         cancelButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        cancelButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        cancelButton.setPreferredSize(new java.awt.Dimension(70, 25));
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -224,7 +220,7 @@ public class PasswordPrompt extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(passwordButtonPanel, gridBagConstraints);
 
-        setBounds(0, 0, 422, 188);
+        setBounds(0, 0, 437, 187);
     }// </editor-fold>//GEN-END:initComponents
 
     private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed

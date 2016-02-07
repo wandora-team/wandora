@@ -33,10 +33,12 @@ package org.wandora.application.gui.table;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.gui.TopicGuiWrapper;
+import org.wandora.application.gui.UIConstants;
 
 
 
@@ -52,7 +54,7 @@ public class TopicTableCellRenderer extends DefaultTableCellRenderer implements 
     private Wandora wandora = null;
     private Topic topic;
     private TopicTable topicTable;
-
+    
     
     
     public TopicTableCellRenderer(TopicTable table) {
@@ -91,29 +93,11 @@ public class TopicTableCellRenderer extends DefaultTableCellRenderer implements 
                 c.setForeground(Color.RED);
             }
 
-
             if(c instanceof JLabel) {
                 JLabel label = (JLabel) c;
-                try {
-                    String topicName = TopicToString.toString(topic);
-                    label.setText(topicName);
-
-                    /*
-                    if(TopicToString.isStringType(TopicToString.TOPIC_RENDERS_BASENAME_WITH_SL_ICON)) {
-                        if(topic != null && topic.getSubjectLocator() != null) {
-                            String iconUrl = topic.getSubjectLocator().toExternalForm();
-                            label.setIcon(UIBox.getCachedIconThumbForLocator(iconUrl, 24, 24));
-                        }
-                        else {
-                            label.setIcon(null);
-                        }
-                    }
-                    */
-                }
-                catch(Exception tme){
-                    tme.printStackTrace(); // TODO EXCEPTION;
-                    label.setText("Exception retrieving name");
-                }
+                String topicName = TopicToString.toString(topic);
+                label.setText(topicName);
+                label.setBorder(UIConstants.defaultTableCellLabelBorder);
             }
         }
         catch(Exception e) {

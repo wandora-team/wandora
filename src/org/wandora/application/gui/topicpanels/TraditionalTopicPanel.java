@@ -287,9 +287,9 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         
         if("View All".equalsIgnoreCase(componentName)) {
             JPanel panel;
-            for(int i=0; i<panelStruct.length; i++) {
-                panel = (JPanel) panelStruct[i][0];
-                setVisibitilityOption(panelStruct[i][2].toString(), true);
+            for (Object[] panelStruct1 : panelStruct) {
+                panel = (JPanel) panelStruct1[0];
+                setVisibitilityOption(panelStruct1[2].toString(), true);
                 //panel.setVisible(true);
             }
             setVisibitilityOption("subjectLocatorIcons", true);
@@ -298,9 +298,9 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         
         if("Hide All".equalsIgnoreCase(componentName)) {
             JPanel panel;
-            for(int i=0; i<panelStruct.length; i++) {
-                panel = (JPanel) panelStruct[i][0];
-                setVisibitilityOption(panelStruct[i][2].toString(), false);
+            for (Object[] panelStruct1 : panelStruct) {
+                panel = (JPanel) panelStruct1[0];
+                setVisibitilityOption(panelStruct1[2].toString(), false);
                 //panel.setVisible(false);
             }
             setVisibitilityOption("subjectLocatorIcons", false);
@@ -426,31 +426,31 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             e.printStackTrace();
         }
             
-        if(associationRootPanel.isVisible())        buildAssociationsPanel(associationPanel, topic, ASSOCIATIONS_WHERE_PLAYER, options, wandora);
-        if(typedAssociationsRootPanel.isVisible())  buildAssociationsPanel(typedAssociationsPanel, topic, ASSOCIATIONS_WHERE_TYPE, options, wandora);
-        if(classesRootPanel.isVisible())            buildClassesPanel(classesPanel, topic, options, wandora);
+        if(associationRootPanel.isVisible())        buildAssociationsPanel(associationPanel, associationsNumber, topic, ASSOCIATIONS_WHERE_PLAYER, options, wandora);
+        if(typedAssociationsRootPanel.isVisible())  buildAssociationsPanel(typedAssociationsPanel, typedAssociationNumber, topic, ASSOCIATIONS_WHERE_TYPE, options, wandora);
+        if(classesRootPanel.isVisible())            buildClassesPanel(classesPanel, classesNumber, topic, options, wandora);
         if(subjectIdentifierRootPanel.isVisible())  buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
-        if(instancesRootPanel.isVisible())          buildInstancesPanel(instancesRootPanel, topic, options, wandora);
+        if(instancesRootPanel.isVisible())          buildInstancesPanel(instancesPanel, instancesNumber, topic, options, wandora);
          
 
         variantGUIType = options.get(VARIANT_GUITYPE_OPTIONS_KEY);
         if(variantGUIType == null || variantGUIType.length() == 0) variantGUIType = VARIANT_GUITYPE_SCHEMA;
         if(VARIANT_GUITYPE_SCHEMA.equalsIgnoreCase(variantGUIType)) {
             if("vertical".equals(options.get(OPTIONS_PREFIX + "namePanelOrientation"))) {
-                buildVerticalNamePanel(variantRootPanel, topic, this, options, wandora);
+                buildVerticalNamePanel(variantPanel, variantNumber, topic, this, options, wandora);
             }
             else {
-                buildHorizontalNamePanel(variantRootPanel, topic, this, options, wandora);
+                buildHorizontalNamePanel(variantPanel, variantNumber, topic, this, options, wandora);
             }
         }
         else {
-            buildAllNamesPanel(variantRootPanel, topic, this, options, wandora);
+            buildAllNamesPanel(variantPanel, variantNumber, topic, this, options, wandora);
         }
         
         
         // Always create occurrences panel as data in the panel is updated to topic map
         // in apply changes. See applyChanges below.
-        buildOccurrencesPanel(dataPanel, topic, options, wandora);
+        buildOccurrencesPanel(dataPanel, dataNumber, topic, options, wandora);
 
         try {
             if(topic.getBaseName()!=null) {
@@ -604,15 +604,41 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         subjectIdentifierRootPanel = new org.wandora.application.gui.simple.SimplePanel();
         subjectIdentifierPanel = new javax.swing.JPanel();
         variantRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        variantTitlePanel = new javax.swing.JPanel();
+        variantTitle = new javax.swing.JLabel();
+        variantNumber = new javax.swing.JLabel();
+        variantTitleFiller = new javax.swing.JPanel();
+        variantPanel = new javax.swing.JPanel();
         occurrencesRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        dataTitlePanel = new javax.swing.JPanel();
+        dataTitle = new javax.swing.JLabel();
+        dataNumber = new javax.swing.JLabel();
+        dataTitleFiller = new javax.swing.JPanel();
         dataPanel = new javax.swing.JPanel();
         classesRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        classesTitlePanel = new javax.swing.JPanel();
+        classesTitle = new javax.swing.JLabel();
+        classesNumber = new javax.swing.JLabel();
+        classesTitleFiller = new javax.swing.JPanel();
         classesPanel = new javax.swing.JPanel();
         associationRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        associationsTitlePanel = new javax.swing.JPanel();
+        associationsTitle = new javax.swing.JLabel();
+        associationsNumber = new javax.swing.JLabel();
+        associationsTitleFiller = new javax.swing.JPanel();
         associationPanel = new javax.swing.JPanel();
         typedAssociationsRootPanel = new org.wandora.application.gui.simple.SimplePanel();
         typedAssociationsPanel = new javax.swing.JPanel();
+        typedAssociationsTitlePanel = new javax.swing.JPanel();
+        typedAssociationTitle = new javax.swing.JLabel();
+        typedAssociationNumber = new javax.swing.JLabel();
+        typedAssociationTitleFiller = new javax.swing.JPanel();
         instancesRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        instancesTitlePanel = new javax.swing.JPanel();
+        instancesTitle = new javax.swing.JLabel();
+        instancesNumber = new javax.swing.JLabel();
+        instancesTitleFiller = new javax.swing.JPanel();
+        instancesPanel = new javax.swing.JPanel();
         removedTopicMessage = new javax.swing.JPanel();
         removedTopicMessageLabel = new SimpleLabel();
         buttonWrapperPanel = new javax.swing.JPanel();
@@ -638,7 +664,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 15, 5, 15);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
         containerPanel.add(previewContainerPanel, gridBagConstraints);
 
         idPanel.setLayout(new java.awt.GridBagLayout());
@@ -653,6 +679,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
         baseNameField.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         baseNameField.setForeground(new java.awt.Color(33, 33, 33));
+        baseNameField.setMargin(new java.awt.Insets(0, 0, 0, 0));
         baseNameField.setPreferredSize(new java.awt.Dimension(6, 29));
         baseNameField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -685,6 +712,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
         subjectLocatorField.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         subjectLocatorField.setForeground(new java.awt.Color(33, 33, 33));
+        subjectLocatorField.setMargin(new java.awt.Insets(0, 0, 0, 0));
         subjectLocatorField.setPreferredSize(new java.awt.Dimension(6, 29));
         subjectLocatorField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -746,14 +774,39 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 15, 7, 15);
+        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(idPanel, gridBagConstraints);
 
-        variantRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Variant names", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         variantRootPanel.setComponentPopupMenu(getNamesMenu());
         variantRootPanel.setName("variantRootPanel"); // NOI18N
         variantRootPanel.addMouseListener(wandora);
-        variantRootPanel.setLayout(new java.awt.GridLayout(1, 0));
+        variantRootPanel.setLayout(new java.awt.BorderLayout());
+
+        variantTitlePanel.setLayout(new java.awt.GridBagLayout());
+
+        variantTitle.setFont(UIConstants.h2Font);
+        variantTitle.setText("Variant names");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
+        variantTitlePanel.add(variantTitle, gridBagConstraints);
+
+        variantNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        variantNumber.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        variantTitlePanel.add(variantNumber, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        variantTitlePanel.add(variantTitleFiller, gridBagConstraints);
+
+        variantRootPanel.add(variantTitlePanel, java.awt.BorderLayout.PAGE_START);
+
+        variantPanel.setLayout(new java.awt.GridLayout());
+        variantRootPanel.add(variantPanel, java.awt.BorderLayout.CENTER);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -761,11 +814,35 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(variantRootPanel, gridBagConstraints);
 
-        occurrencesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Occurrences", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         occurrencesRootPanel.setComponentPopupMenu(getOccurrencesMenu());
         occurrencesRootPanel.setName("occurrencesRootPanel"); // NOI18N
         occurrencesRootPanel.addMouseListener(wandora);
         occurrencesRootPanel.setLayout(new java.awt.BorderLayout(0, 3));
+
+        dataTitlePanel.setLayout(new java.awt.GridBagLayout());
+
+        dataTitle.setFont(UIConstants.h2Font);
+        dataTitle.setText("Occurrences");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
+        dataTitlePanel.add(dataTitle, gridBagConstraints);
+
+        dataNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        dataNumber.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 4);
+        dataTitlePanel.add(dataNumber, gridBagConstraints);
+
+        dataTitleFiller.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        dataTitlePanel.add(dataTitleFiller, gridBagConstraints);
+
+        occurrencesRootPanel.add(dataTitlePanel, java.awt.BorderLayout.PAGE_START);
+
+        dataPanel.setLayout(new java.awt.BorderLayout());
         occurrencesRootPanel.add(dataPanel, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -775,11 +852,31 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(occurrencesRootPanel, gridBagConstraints);
 
-        classesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Classes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         classesRootPanel.setComponentPopupMenu(getClassesMenu());
         classesRootPanel.setName("classesRootPanel"); // NOI18N
         classesRootPanel.addMouseListener(wandora);
         classesRootPanel.setLayout(new java.awt.BorderLayout(0, 3));
+
+        classesTitlePanel.setLayout(new java.awt.GridBagLayout());
+
+        classesTitle.setFont(UIConstants.h2Font);
+        classesTitle.setText("Classes");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
+        classesTitlePanel.add(classesTitle, gridBagConstraints);
+
+        classesNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        classesNumber.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        classesTitlePanel.add(classesNumber, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        classesTitlePanel.add(classesTitleFiller, gridBagConstraints);
+
+        classesRootPanel.add(classesTitlePanel, java.awt.BorderLayout.PAGE_START);
         classesRootPanel.add(classesPanel, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -789,11 +886,31 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(classesRootPanel, gridBagConstraints);
 
-        associationRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         associationRootPanel.setComponentPopupMenu(getAssociationsMenu());
         associationRootPanel.setName("associationRootPanel"); // NOI18N
         associationRootPanel.addMouseListener(wandora);
         associationRootPanel.setLayout(new java.awt.BorderLayout(0, 3));
+
+        associationsTitlePanel.setLayout(new java.awt.GridBagLayout());
+
+        associationsTitle.setFont(UIConstants.h2Font);
+        associationsTitle.setText("Associations");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
+        associationsTitlePanel.add(associationsTitle, gridBagConstraints);
+
+        associationsNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        associationsNumber.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        associationsTitlePanel.add(associationsNumber, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        associationsTitlePanel.add(associationsTitleFiller, gridBagConstraints);
+
+        associationRootPanel.add(associationsTitlePanel, java.awt.BorderLayout.PAGE_START);
         associationRootPanel.add(associationPanel, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -803,10 +920,30 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(associationRootPanel, gridBagConstraints);
 
-        typedAssociationsRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Associations where type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         typedAssociationsRootPanel.setName("typedAssociationsRootPanel"); // NOI18N
         typedAssociationsRootPanel.setLayout(new java.awt.BorderLayout());
         typedAssociationsRootPanel.add(typedAssociationsPanel, java.awt.BorderLayout.CENTER);
+
+        typedAssociationsTitlePanel.setLayout(new java.awt.GridBagLayout());
+
+        typedAssociationTitle.setFont(UIConstants.h2Font);
+        typedAssociationTitle.setText("Associations where type");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
+        typedAssociationsTitlePanel.add(typedAssociationTitle, gridBagConstraints);
+
+        typedAssociationNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        typedAssociationNumber.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        typedAssociationsTitlePanel.add(typedAssociationNumber, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        typedAssociationsTitlePanel.add(typedAssociationTitleFiller, gridBagConstraints);
+
+        typedAssociationsRootPanel.add(typedAssociationsTitlePanel, java.awt.BorderLayout.PAGE_START);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -815,11 +952,33 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         containerPanel.add(typedAssociationsRootPanel, gridBagConstraints);
 
-        instancesRootPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Instances", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), javax.swing.UIManager.getDefaults().getColor("activeCaptionBorder"))); // NOI18N
         instancesRootPanel.setComponentPopupMenu(getInstancesMenu());
         instancesRootPanel.setName("instancesRootPanel"); // NOI18N
         instancesRootPanel.addMouseListener(wandora);
-        instancesRootPanel.setLayout(new java.awt.GridLayout(1, 0));
+        instancesRootPanel.setLayout(new java.awt.BorderLayout());
+
+        instancesTitlePanel.setLayout(new java.awt.GridBagLayout());
+
+        instancesTitle.setFont(UIConstants.h2Font);
+        instancesTitle.setText("Instances");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
+        instancesTitlePanel.add(instancesTitle, gridBagConstraints);
+
+        instancesNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        instancesNumber.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        instancesTitlePanel.add(instancesNumber, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        instancesTitlePanel.add(instancesTitleFiller, gridBagConstraints);
+
+        instancesRootPanel.add(instancesTitlePanel, java.awt.BorderLayout.NORTH);
+        instancesRootPanel.add(instancesPanel, java.awt.BorderLayout.CENTER);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -999,15 +1158,32 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel associationPanel;
     private javax.swing.JPanel associationRootPanel;
+    private javax.swing.JLabel associationsNumber;
+    private javax.swing.JLabel associationsTitle;
+    private javax.swing.JPanel associationsTitleFiller;
+    private javax.swing.JPanel associationsTitlePanel;
     private javax.swing.JTextField baseNameField;
     private javax.swing.JLabel baseNameLabel;
     private javax.swing.JPanel buttonWrapperPanel;
+    private javax.swing.JLabel classesNumber;
     private javax.swing.JPanel classesPanel;
     private javax.swing.JPanel classesRootPanel;
+    private javax.swing.JLabel classesTitle;
+    private javax.swing.JPanel classesTitleFiller;
+    private javax.swing.JPanel classesTitlePanel;
     private javax.swing.JPanel containerPanel;
+    private javax.swing.JLabel dataNumber;
     private javax.swing.JPanel dataPanel;
+    private javax.swing.JLabel dataTitle;
+    private javax.swing.JPanel dataTitleFiller;
+    private javax.swing.JPanel dataTitlePanel;
     private javax.swing.JPanel idPanel;
+    private javax.swing.JLabel instancesNumber;
+    private javax.swing.JPanel instancesPanel;
     private javax.swing.JPanel instancesRootPanel;
+    private javax.swing.JLabel instancesTitle;
+    private javax.swing.JPanel instancesTitleFiller;
+    private javax.swing.JPanel instancesTitlePanel;
     private javax.swing.JPanel occurrencesRootPanel;
     private javax.swing.JPanel previewContainerPanel;
     private javax.swing.JPanel previewPanel;
@@ -1019,9 +1195,18 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     private javax.swing.JTextField subjectLocatorField;
     private javax.swing.JLabel subjectLocatorLabel;
     private javax.swing.JToggleButton subjectLocatorViewButton;
+    private javax.swing.JLabel typedAssociationNumber;
+    private javax.swing.JLabel typedAssociationTitle;
+    private javax.swing.JPanel typedAssociationTitleFiller;
     private javax.swing.JPanel typedAssociationsPanel;
     private javax.swing.JPanel typedAssociationsRootPanel;
+    private javax.swing.JPanel typedAssociationsTitlePanel;
+    private javax.swing.JLabel variantNumber;
+    private javax.swing.JPanel variantPanel;
     private javax.swing.JPanel variantRootPanel;
+    private javax.swing.JLabel variantTitle;
+    private javax.swing.JPanel variantTitleFiller;
+    private javax.swing.JPanel variantTitlePanel;
     // End of variables declaration//GEN-END:variables
 
 
