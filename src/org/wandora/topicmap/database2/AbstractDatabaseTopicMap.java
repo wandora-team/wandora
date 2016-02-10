@@ -39,6 +39,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
@@ -360,6 +362,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     
     
     
+    /*
     private boolean executeUpdate(String query, Connection con) throws TopicMapException {
         synchronized(queryLock) {
             queryCounter++;
@@ -368,22 +371,25 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 stmt = con.createStatement();
                 logQuery(query);
                 stmt.executeUpdate(query);
-                stmt.close();
-                return true;
             }
             catch(SQLException sqle) {
+                sqle.printStackTrace();
+                throw new TopicMapException(sqle);
+            }
+            finally {
                 if(stmt != null) {
                     try {
                         stmt.close();
-                    } catch(Exception e) { 
-                        e.printStackTrace(); 
+                    } 
+                    catch(SQLException sqle) {
+                        throw new TopicMapException(sqle);
                     }
                 }
-                sqle.printStackTrace(); 
-                throw new TopicMapSQLException(sqle);
             }
         }
+        return true;
     }
+    */
     
     
     /**
@@ -656,18 +662,35 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             synchronized(queryQueue) {
                 if(!queryQueue.isEmpty()) {
                     Connection connection = getConnection();
-                    // Savepoint savePoint = connection.setSavepoint();
-                    try {
-                        for(String query : queryQueue) {
-                            executeUpdate(query, connection);
+                    while(!queryQueue.isEmpty()) {
+                        String query = queryQueue.remove(0);
+                        synchronized(queryLock) {
+                            boolean committed = false;
+                            do {
+                                queryCounter++;
+                                Statement stmt = null;
+                                try {
+                                    stmt = connection.createStatement();
+                                    logQuery(query);
+                                    stmt.executeUpdate(query);
+                                    stmt.close();
+                                    connection.commit();
+                                    committed = true;
+                                }
+                                catch(SQLException sqle) {
+                                    sqle.printStackTrace();
+                                    stmt.close();
+                                    connection.rollback();
+                                    try {
+                                        Thread.sleep(100);
+                                    } 
+                                    catch (InterruptedException ex) {
+                                        // OK. Wakeup.
+                                    }
+                                }
+                            }
+                            while(!committed);
                         }
-                        connection.commit();
-                        // connection.releaseSavepoint(savePoint);
-                        queryQueue.clear();
-                    }
-                    catch(Exception e) {
-                        // connection.rollback(savePoint);
-                        throw e;
                     }
                 }
             }
