@@ -538,10 +538,7 @@ public class Subj3ctSelector extends JDialog {
         byIdentifierButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         getContextButton2Identifiers.setText("Context to identifiers");
-        getContextButton2Identifiers.setMargin(new java.awt.Insets(0, 2, 1, 2));
-        getContextButton2Identifiers.setMaximumSize(new java.awt.Dimension(150, 20));
-        getContextButton2Identifiers.setMinimumSize(new java.awt.Dimension(150, 20));
-        getContextButton2Identifiers.setPreferredSize(new java.awt.Dimension(150, 20));
+        getContextButton2Identifiers.setMargin(new java.awt.Insets(2, 6, 2, 6));
         getContextButton2Identifiers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 getContextButton2IdentifiersMouseReleased(evt);
@@ -553,10 +550,7 @@ public class Subj3ctSelector extends JDialog {
         byIdentifierButtonPanel.add(getContextButton2Identifiers, gridBagConstraints);
 
         getContextButton2Provenance.setText("Context to provenance");
-        getContextButton2Provenance.setMargin(new java.awt.Insets(0, 2, 1, 2));
-        getContextButton2Provenance.setMaximumSize(new java.awt.Dimension(150, 20));
-        getContextButton2Provenance.setMinimumSize(new java.awt.Dimension(150, 20));
-        getContextButton2Provenance.setPreferredSize(new java.awt.Dimension(150, 20));
+        getContextButton2Provenance.setMargin(new java.awt.Insets(2, 6, 2, 6));
         getContextButton2Provenance.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 getContextButton2ProvenanceMouseReleased(evt);
@@ -622,10 +616,7 @@ public class Subj3ctSelector extends JDialog {
         byResourceButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         getContextButton2Resources.setText("Context to resources");
-        getContextButton2Resources.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        getContextButton2Resources.setMaximumSize(new java.awt.Dimension(140, 20));
-        getContextButton2Resources.setMinimumSize(new java.awt.Dimension(140, 20));
-        getContextButton2Resources.setPreferredSize(new java.awt.Dimension(140, 20));
+        getContextButton2Resources.setMargin(new java.awt.Insets(2, 6, 2, 6));
         getContextButton2Resources.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 getContextButton2ResourcesMouseReleased(evt);
@@ -642,8 +633,8 @@ public class Subj3ctSelector extends JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         byResourceButtonPanel.add(takeLabel, gridBagConstraints);
 
-        resourcesSkipTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        resourcesSkipTextField.setPreferredSize(new java.awt.Dimension(50, 20));
+        resourcesSkipTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        resourcesSkipTextField.setPreferredSize(new java.awt.Dimension(50, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         byResourceButtonPanel.add(resourcesSkipTextField, gridBagConstraints);
@@ -653,8 +644,8 @@ public class Subj3ctSelector extends JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         byResourceButtonPanel.add(skipLabel, gridBagConstraints);
 
-        resourcesTakeTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        resourcesTakeTextField.setPreferredSize(new java.awt.Dimension(50, 20));
+        resourcesTakeTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        resourcesTakeTextField.setPreferredSize(new java.awt.Dimension(50, 23));
         byResourceButtonPanel.add(resourcesTakeTextField, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -713,10 +704,7 @@ public class Subj3ctSelector extends JDialog {
         byURIButtonPanel.setLayout(new java.awt.GridBagLayout());
 
         getContextButton2URIs.setText("Context to resources");
-        getContextButton2URIs.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        getContextButton2URIs.setMaximumSize(new java.awt.Dimension(140, 20));
-        getContextButton2URIs.setMinimumSize(new java.awt.Dimension(140, 20));
-        getContextButton2URIs.setPreferredSize(new java.awt.Dimension(140, 20));
+        getContextButton2URIs.setMargin(new java.awt.Insets(2, 6, 2, 6));
         getContextButton2URIs.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 getContextButton2URIsMouseReleased(evt);
@@ -734,7 +722,7 @@ public class Subj3ctSelector extends JDialog {
         byURIButtonPanel.add(takeLabel1, gridBagConstraints);
 
         urisSkipTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        urisSkipTextField.setPreferredSize(new java.awt.Dimension(50, 20));
+        urisSkipTextField.setPreferredSize(new java.awt.Dimension(50, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         byURIButtonPanel.add(urisSkipTextField, gridBagConstraints);
@@ -745,7 +733,7 @@ public class Subj3ctSelector extends JDialog {
         byURIButtonPanel.add(skipLabel1, gridBagConstraints);
 
         urisTakeTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        urisTakeTextField.setPreferredSize(new java.awt.Dimension(50, 20));
+        urisTakeTextField.setPreferredSize(new java.awt.Dimension(50, 23));
         byURIButtonPanel.add(urisTakeTextField, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -779,10 +767,7 @@ public class Subj3ctSelector extends JDialog {
         searchInnerPanel.add(searchField, gridBagConstraints);
 
         searchGetButton.setLabel("Get context");
-        searchGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
-        searchGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
-        searchGetButton.setMinimumSize(new java.awt.Dimension(90, 20));
-        searchGetButton.setPreferredSize(new java.awt.Dimension(90, 20));
+        searchGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         searchGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 searchGetButtonMouseReleased(evt);
@@ -820,10 +805,7 @@ public class Subj3ctSelector extends JDialog {
         urlInnerPanel.add(urlField, gridBagConstraints);
 
         urlGetButton.setLabel("Get context");
-        urlGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
-        urlGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
-        urlGetButton.setMinimumSize(new java.awt.Dimension(90, 20));
-        urlGetButton.setPreferredSize(new java.awt.Dimension(90, 20));
+        urlGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         urlGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 urlGetButtonMouseReleased(evt);

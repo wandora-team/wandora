@@ -206,7 +206,7 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Get context"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[0, 6, 0, 6]"/>
+                      <Insets value="[2, 6, 2, 6]"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -249,7 +249,7 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Get context"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[0, 6, 0, 6]"/>
+                      <Insets value="[2, 6, 2, 6]"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -293,7 +293,7 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Get context"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[0, 6, 0, 6]"/>
+                      <Insets value="[2, 6, 2, 6]"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -337,7 +337,7 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Get context"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[0, 6, 0, 6]"/>
+                      <Insets value="[2, 6, 2, 6]"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -449,7 +449,7 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Get context"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[0, 6, 0, 6]"/>
+                      <Insets value="[2, 6, 2, 6]"/>
                     </Property>
                   </Properties>
                   <Events>

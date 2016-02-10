@@ -537,8 +537,6 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         optionalArticleSearchFieldsPanel.add(sortLabel, gridBagConstraints);
 
         sortComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "newest", "oldest" }));
-        sortComboBox.setMinimumSize(new java.awt.Dimension(120, 20));
-        sortComboBox.setPreferredSize(new java.awt.Dimension(120, 20));
         sortComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sortComboBoxActionPerformed(evt);
@@ -949,6 +947,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.6;
         eventSearchInnerPanel.add(eventDateRangePanel, gridBagConstraints);
 
         eventOffsetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Offset"));
@@ -962,8 +961,6 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         eventOffsetPanel.add(evtOffset, gridBagConstraints);
 
         evtOffsetTextField.setText("0");
-        evtOffsetTextField.setMinimumSize(new java.awt.Dimension(50, 20));
-        evtOffsetTextField.setPreferredSize(new java.awt.Dimension(50, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -981,8 +978,6 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         eventOffsetPanel.add(evtLimitLabel, gridBagConstraints);
 
         evtLimitTextField.setText("20");
-        evtLimitTextField.setMinimumSize(new java.awt.Dimension(50, 20));
-        evtLimitTextField.setPreferredSize(new java.awt.Dimension(50, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -994,6 +989,8 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.4;
         eventSearchInnerPanel.add(eventOffsetPanel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

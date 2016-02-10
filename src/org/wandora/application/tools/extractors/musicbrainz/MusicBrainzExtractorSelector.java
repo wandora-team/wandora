@@ -255,8 +255,8 @@ public class MusicBrainzExtractorSelector extends javax.swing.JDialog {
 
         pageTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         pageTextField.setText("1");
-        pageTextField.setMinimumSize(new java.awt.Dimension(30, 20));
-        pageTextField.setPreferredSize(new java.awt.Dimension(30, 20));
+        pageTextField.setMinimumSize(new java.awt.Dimension(30, 23));
+        pageTextField.setPreferredSize(new java.awt.Dimension(30, 23));
         jPanel1.add(pageTextField, new java.awt.GridBagConstraints());
 
         buttonPanel.add(jPanel1, new java.awt.GridBagConstraints());

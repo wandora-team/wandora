@@ -398,9 +398,6 @@
                     <Component class="javax.swing.JTextField" name="genericURLTextField">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=__QUERY__&amp;debug=on&amp;timeout=&amp;format=application%2Fsparql-results%2Bjson&amp;save=display&amp;fname="/>
-                        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                          <Insets value="[4, 4, 4, 4]"/>
-                        </Property>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleField();"/>

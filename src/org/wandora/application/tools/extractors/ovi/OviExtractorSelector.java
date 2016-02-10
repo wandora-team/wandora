@@ -498,10 +498,7 @@ public class OviExtractorSelector extends JDialog {
         tagInnerPanel.add(tagField, gridBagConstraints);
 
         tagGetButton.setLabel("Get context");
-        tagGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        tagGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
-        tagGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
-        tagGetButton.setPreferredSize(new java.awt.Dimension(80, 20));
+        tagGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         tagGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tagGetButtonMouseReleased(evt);
@@ -535,8 +532,6 @@ public class OviExtractorSelector extends JDialog {
         locationInnerPanel.add(locationLabel, gridBagConstraints);
 
         locationComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Location", "City", "Country", "State or province", "Postal code" }));
-        locationComboBox.setMinimumSize(new java.awt.Dimension(105, 19));
-        locationComboBox.setPreferredSize(new java.awt.Dimension(109, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
@@ -548,9 +543,7 @@ public class OviExtractorSelector extends JDialog {
         locationInnerPanel.add(locationField, gridBagConstraints);
 
         locationGetButton.setLabel("Get context");
-        locationGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        locationGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
-        locationGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
+        locationGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         locationGetButton.setPreferredSize(new java.awt.Dimension(80, 20));
         locationGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -586,8 +579,6 @@ public class OviExtractorSelector extends JDialog {
         ownerInnerPanel.add(ownerLabel, gridBagConstraints);
 
         ownerComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Owner", "Author" }));
-        ownerComboBox.setMinimumSize(new java.awt.Dimension(100, 19));
-        ownerComboBox.setPreferredSize(new java.awt.Dimension(100, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
@@ -599,10 +590,7 @@ public class OviExtractorSelector extends JDialog {
         ownerInnerPanel.add(ownerField, gridBagConstraints);
 
         ownerGetButton.setLabel("Get context");
-        ownerGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        ownerGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
-        ownerGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
-        ownerGetButton.setPreferredSize(new java.awt.Dimension(80, 20));
+        ownerGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         ownerGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 ownerGetButtonMouseReleased(evt);
@@ -637,8 +625,6 @@ public class OviExtractorSelector extends JDialog {
         titleInnerPanel.add(titleLabel, gridBagConstraints);
 
         titleComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Title", "Description" }));
-        titleComboBox.setMinimumSize(new java.awt.Dimension(100, 19));
-        titleComboBox.setPreferredSize(new java.awt.Dimension(100, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
@@ -650,10 +636,7 @@ public class OviExtractorSelector extends JDialog {
         titleInnerPanel.add(titleField, gridBagConstraints);
 
         titleGetButton.setLabel("Get context");
-        titleGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        titleGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
-        titleGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
-        titleGetButton.setPreferredSize(new java.awt.Dimension(80, 20));
+        titleGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         titleGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 titleGetButtonMouseReleased(evt);
@@ -692,10 +675,7 @@ public class OviExtractorSelector extends JDialog {
         channelInnerPanel.add(channelField, gridBagConstraints);
 
         channelGetButton.setLabel("Get context");
-        channelGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        channelGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
-        channelGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
-        channelGetButton.setPreferredSize(new java.awt.Dimension(80, 20));
+        channelGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         channelGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 channelGetButtonMouseReleased(evt);
@@ -733,10 +713,7 @@ public class OviExtractorSelector extends JDialog {
         dateInnerPanel.add(dateField, gridBagConstraints);
 
         dateGetButton.setLabel("Get context");
-        dateGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        dateGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
-        dateGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
-        dateGetButton.setPreferredSize(new java.awt.Dimension(80, 20));
+        dateGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         dateGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 dateGetButtonMouseReleased(evt);
@@ -774,10 +751,7 @@ public class OviExtractorSelector extends JDialog {
         urlInnerPanel.add(urlField, gridBagConstraints);
 
         urlGetButton.setLabel("Get context");
-        urlGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
-        urlGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
-        urlGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
-        urlGetButton.setPreferredSize(new java.awt.Dimension(80, 20));
+        urlGetButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         urlGetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 urlGetButtonMouseReleased(evt);
@@ -813,8 +787,8 @@ public class OviExtractorSelector extends JDialog {
 
         entriesNumberTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         entriesNumberTextField.setText("50");
-        entriesNumberTextField.setMinimumSize(new java.awt.Dimension(30, 20));
-        entriesNumberTextField.setPreferredSize(new java.awt.Dimension(30, 20));
+        entriesNumberTextField.setMinimumSize(new java.awt.Dimension(30, 23));
+        entriesNumberTextField.setPreferredSize(new java.awt.Dimension(30, 23));
         buttonPanel.add(entriesNumberTextField, new java.awt.GridBagConstraints());
 
         entriesLabel.setText("entries");

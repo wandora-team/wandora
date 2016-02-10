@@ -391,8 +391,6 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
         optionalSearchFieldsPanel.add(orderByLabel, gridBagConstraints);
 
         rankComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "newest", "oldest", "relevance" }));
-        rankComboBox.setMinimumSize(new java.awt.Dimension(120, 20));
-        rankComboBox.setPreferredSize(new java.awt.Dimension(120, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -400,7 +398,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         optionalSearchFieldsPanel.add(rankComboBox, gridBagConstraints);
 
-        fieldToReturnPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Additional properties to return", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.black));
+        fieldToReturnPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Additional properties to return"));
         fieldToReturnPanel.setLayout(new java.awt.GridBagLayout());
 
         FieldsToReturnLabel.setText("Fields");

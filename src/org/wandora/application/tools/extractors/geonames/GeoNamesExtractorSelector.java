@@ -820,8 +820,6 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 5);
         searchFilterPanel.add(searchContinentLabel, gridBagConstraints);
 
-        searchContinentComboBox.setMinimumSize(new java.awt.Dimension(25, 19));
-        searchContinentComboBox.setPreferredSize(new java.awt.Dimension(29, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -836,8 +834,6 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 5);
         searchFilterPanel.add(searchCountryLabel, gridBagConstraints);
 
-        searchCountryComboBox.setMinimumSize(new java.awt.Dimension(25, 19));
-        searchCountryComboBox.setPreferredSize(new java.awt.Dimension(29, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -852,8 +848,6 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 5);
         searchFilterPanel.add(searchFeatureLabel, gridBagConstraints);
 
-        searchFeatureClassComboBox.setMinimumSize(new java.awt.Dimension(25, 19));
-        searchFeatureClassComboBox.setPreferredSize(new java.awt.Dimension(29, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -983,8 +977,6 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         findNearByFilterPanel.add(findNearByFeatureLabel, gridBagConstraints);
 
-        findNearByFeatureComboBox.setMinimumSize(new java.awt.Dimension(25, 19));
-        findNearByFeatureComboBox.setPreferredSize(new java.awt.Dimension(29, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1019,9 +1011,6 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         countryInfoPanelInner.add(countryInfoLabel, gridBagConstraints);
 
         countryInfoComboBox.setEditable(true);
-        countryInfoComboBox.setMaximumSize(new java.awt.Dimension(32767, 19));
-        countryInfoComboBox.setMinimumSize(new java.awt.Dimension(120, 19));
-        countryInfoComboBox.setPreferredSize(new java.awt.Dimension(124, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1030,10 +1019,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         countryInfoPanelInner.add(countryInfoComboBox, gridBagConstraints);
 
         countryInfoButton.setText("Get context");
-        countryInfoButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        countryInfoButton.setMaximumSize(new java.awt.Dimension(80, 21));
-        countryInfoButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        countryInfoButton.setPreferredSize(new java.awt.Dimension(80, 21));
+        countryInfoButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         countryInfoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 countryInfoButtonActionPerformed(evt);
@@ -1069,8 +1055,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         citiesNorthTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         citiesNorthTextField.setText("north");
-        citiesNorthTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        citiesNorthTextField.setPreferredSize(new java.awt.Dimension(100, 20));
+        citiesNorthTextField.setMinimumSize(new java.awt.Dimension(100, 23));
+        citiesNorthTextField.setPreferredSize(new java.awt.Dimension(100, 23));
         citiesNorthTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 citiesNorthTextFieldFocusGained(evt);
@@ -1083,8 +1069,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         citiesSouthTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         citiesSouthTextField.setText("south");
-        citiesSouthTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        citiesSouthTextField.setPreferredSize(new java.awt.Dimension(100, 20));
+        citiesSouthTextField.setMinimumSize(new java.awt.Dimension(100, 23));
+        citiesSouthTextField.setPreferredSize(new java.awt.Dimension(100, 23));
         citiesSouthTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 citiesSouthTextFieldFocusGained(evt);
@@ -1097,8 +1083,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         citiesEastTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         citiesEastTextField.setText("east");
-        citiesEastTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        citiesEastTextField.setPreferredSize(new java.awt.Dimension(100, 20));
+        citiesEastTextField.setMinimumSize(new java.awt.Dimension(100, 23));
+        citiesEastTextField.setPreferredSize(new java.awt.Dimension(100, 23));
         citiesEastTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 citiesEastTextFieldFocusGained(evt);
@@ -1111,8 +1097,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         citiesWestTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         citiesWestTextField.setText("west");
-        citiesWestTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        citiesWestTextField.setPreferredSize(new java.awt.Dimension(100, 20));
+        citiesWestTextField.setMinimumSize(new java.awt.Dimension(100, 23));
+        citiesWestTextField.setPreferredSize(new java.awt.Dimension(100, 23));
         citiesWestTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 citiesWestTextFieldFocusGained(evt);
@@ -1129,10 +1115,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         citiesPanelInner.add(citiesCoordinatesPanel, gridBagConstraints);
 
         citiesGetContextButton.setText("Get context");
-        citiesGetContextButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        citiesGetContextButton.setMaximumSize(new java.awt.Dimension(80, 21));
-        citiesGetContextButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        citiesGetContextButton.setPreferredSize(new java.awt.Dimension(80, 21));
+        citiesGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         citiesGetContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 citiesGetContextButtonActionPerformed(evt);
@@ -1170,10 +1153,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         childrenPanelInner.add(childrenTextField, gridBagConstraints);
 
         childrenGetContextButton.setText("Get context");
-        childrenGetContextButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        childrenGetContextButton.setMaximumSize(new java.awt.Dimension(80, 21));
-        childrenGetContextButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        childrenGetContextButton.setPreferredSize(new java.awt.Dimension(80, 21));
+        childrenGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         childrenGetContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 childrenGetContextButtonActionPerformed(evt);
@@ -1211,10 +1191,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         hierarchyPanelInner.add(hierarchyTextField, gridBagConstraints);
 
         hierarchyGetContextButton.setLabel("Get context");
-        hierarchyGetContextButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        hierarchyGetContextButton.setMaximumSize(new java.awt.Dimension(80, 21));
-        hierarchyGetContextButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        hierarchyGetContextButton.setPreferredSize(new java.awt.Dimension(80, 21));
+        hierarchyGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         hierarchyGetContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hierarchyGetContextButtonActionPerformed(evt);
@@ -1252,10 +1229,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         neighboursPanelInner.add(neighboursTextField, gridBagConstraints);
 
         neighboursGetContextButton.setText("Get context");
-        neighboursGetContextButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        neighboursGetContextButton.setMaximumSize(new java.awt.Dimension(80, 21));
-        neighboursGetContextButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        neighboursGetContextButton.setPreferredSize(new java.awt.Dimension(80, 21));
+        neighboursGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         neighboursGetContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 neighboursGetContextButtonActionPerformed(evt);
@@ -1293,10 +1267,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         siblingsPanelInner.add(siblingsTextField, gridBagConstraints);
 
         siblingsGetContextButton.setText("Get context");
-        siblingsGetContextButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        siblingsGetContextButton.setMaximumSize(new java.awt.Dimension(80, 21));
-        siblingsGetContextButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        siblingsGetContextButton.setPreferredSize(new java.awt.Dimension(80, 21));
+        siblingsGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         siblingsGetContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 siblingsGetContextButtonActionPerformed(evt);
@@ -1362,10 +1333,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         weatherCoordinatesPanel.add(weatherLonTextField, gridBagConstraints);
 
         weatherGetContextButton.setText("Get context");
-        weatherGetContextButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        weatherGetContextButton.setMaximumSize(new java.awt.Dimension(80, 21));
-        weatherGetContextButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        weatherGetContextButton.setPreferredSize(new java.awt.Dimension(80, 21));
+        weatherGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         weatherGetContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 weatherGetContextButtonActionPerformed(evt);
@@ -1439,8 +1407,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         wikiBoxNorthTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         wikiBoxNorthTextField.setText("north");
-        wikiBoxNorthTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        wikiBoxNorthTextField.setPreferredSize(new java.awt.Dimension(100, 20));
+        wikiBoxNorthTextField.setMinimumSize(new java.awt.Dimension(100, 23));
+        wikiBoxNorthTextField.setPreferredSize(new java.awt.Dimension(100, 23));
         wikiBoxNorthTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 wikiBoxNorthTextFieldFocusGained(evt);
@@ -1453,8 +1421,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         wikiBoxSouthTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         wikiBoxSouthTextField.setText("south");
-        wikiBoxSouthTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        wikiBoxSouthTextField.setPreferredSize(new java.awt.Dimension(100, 20));
+        wikiBoxSouthTextField.setMinimumSize(new java.awt.Dimension(100, 23));
+        wikiBoxSouthTextField.setPreferredSize(new java.awt.Dimension(100, 23));
         wikiBoxSouthTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 wikiBoxSouthTextFieldFocusGained(evt);
@@ -1467,8 +1435,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         wikiBoxEastTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         wikiBoxEastTextField.setText("east");
-        wikiBoxEastTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        wikiBoxEastTextField.setPreferredSize(new java.awt.Dimension(100, 20));
+        wikiBoxEastTextField.setMinimumSize(new java.awt.Dimension(100, 23));
+        wikiBoxEastTextField.setPreferredSize(new java.awt.Dimension(100, 23));
         wikiBoxEastTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 wikiBoxEastTextFieldFocusGained(evt);
@@ -1481,8 +1449,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         wikiBoxWestTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         wikiBoxWestTextField.setText("west");
-        wikiBoxWestTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        wikiBoxWestTextField.setPreferredSize(new java.awt.Dimension(100, 20));
+        wikiBoxWestTextField.setMinimumSize(new java.awt.Dimension(100, 23));
+        wikiBoxWestTextField.setPreferredSize(new java.awt.Dimension(100, 23));
         wikiBoxWestTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 wikiBoxWestTextFieldFocusGained(evt);
@@ -1499,10 +1467,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         wikiBoxPanelInner.add(wikiBoxCoordinatesPanel, gridBagConstraints);
 
         wikiBoxGetContextButton.setText("Get context");
-        wikiBoxGetContextButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        wikiBoxGetContextButton.setMaximumSize(new java.awt.Dimension(80, 21));
-        wikiBoxGetContextButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        wikiBoxGetContextButton.setPreferredSize(new java.awt.Dimension(80, 21));
+        wikiBoxGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         wikiBoxGetContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 wikiBoxGetContextButtonActionPerformed(evt);
@@ -1534,8 +1499,8 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
         langTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         langTextField.setText("en");
-        langTextField.setMinimumSize(new java.awt.Dimension(30, 20));
-        langTextField.setPreferredSize(new java.awt.Dimension(30, 20));
+        langTextField.setMinimumSize(new java.awt.Dimension(30, 23));
+        langTextField.setPreferredSize(new java.awt.Dimension(30, 23));
         langPanel.add(langTextField, new java.awt.GridBagConstraints());
 
         langLabel.setText("request language");

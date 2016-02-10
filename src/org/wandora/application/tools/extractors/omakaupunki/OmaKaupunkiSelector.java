@@ -579,7 +579,7 @@ public class OmaKaupunkiSelector extends javax.swing.JPanel {
         singleEventPanel.add(eventIdTextField, gridBagConstraints);
 
         getEventContextButton.setText("get context");
-        getEventContextButton.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        getEventContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         getEventContextButton.setMinimumSize(new java.awt.Dimension(75, 19));
         getEventContextButton.setPreferredSize(new java.awt.Dimension(75, 19));
         getEventContextButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -684,9 +684,7 @@ public class OmaKaupunkiSelector extends javax.swing.JPanel {
         singleServicePanel.add(singleServiceTextField, gridBagConstraints);
 
         getServiceContextButton.setText("get context");
-        getServiceContextButton.setMargin(new java.awt.Insets(0, 3, 0, 3));
-        getServiceContextButton.setMinimumSize(new java.awt.Dimension(75, 19));
-        getServiceContextButton.setPreferredSize(new java.awt.Dimension(75, 19));
+        getServiceContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         getServiceContextButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 getServiceContextButtonMouseReleased(evt);
@@ -760,7 +758,7 @@ public class OmaKaupunkiSelector extends javax.swing.JPanel {
 
         pageTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         pageTextField.setText("1");
-        pageTextField.setPreferredSize(new java.awt.Dimension(50, 20));
+        pageTextField.setPreferredSize(new java.awt.Dimension(50, 23));
         paginationPanel.add(pageTextField, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();

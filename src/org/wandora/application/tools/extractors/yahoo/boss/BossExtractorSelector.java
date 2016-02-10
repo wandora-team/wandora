@@ -298,8 +298,8 @@ public class BossExtractorSelector extends javax.swing.JDialog {
 
         offsetTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         offsetTextField.setText("0");
-        offsetTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        offsetTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        offsetTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        offsetTextField.setPreferredSize(new java.awt.Dimension(40, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
         buttonPanel.add(offsetTextField, gridBagConstraints);
@@ -311,8 +311,8 @@ public class BossExtractorSelector extends javax.swing.JDialog {
 
         numberTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         numberTextField.setText("20");
-        numberTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        numberTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        numberTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        numberTextField.setPreferredSize(new java.awt.Dimension(40, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
         buttonPanel.add(numberTextField, gridBagConstraints);

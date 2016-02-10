@@ -196,9 +196,6 @@ public class TwitterExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
         searchPanelInner.add(searchLabel, gridBagConstraints);
-
-        queryTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        queryTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -213,12 +210,11 @@ public class TwitterExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 4);
         searchOptionsPanel.add(numberLabel, gridBagConstraints);
-
-        numberTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        numberTextField.setPreferredSize(new java.awt.Dimension(100, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         searchOptionsPanel.add(numberTextField, gridBagConstraints);
 
@@ -228,12 +224,11 @@ public class TwitterExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 4);
         searchOptionsPanel.add(langLabel, gridBagConstraints);
-
-        langTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        langTextField.setPreferredSize(new java.awt.Dimension(100, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         searchOptionsPanel.add(langTextField, gridBagConstraints);
 
@@ -243,12 +238,11 @@ public class TwitterExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 4);
         searchOptionsPanel.add(untilLabel, gridBagConstraints);
-
-        untilTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        untilTextField.setPreferredSize(new java.awt.Dimension(100, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         searchOptionsPanel.add(untilTextField, gridBagConstraints);
 
@@ -258,12 +252,11 @@ public class TwitterExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 4);
         searchOptionsPanel.add(sinceLabel, gridBagConstraints);
-
-        sinceTextField.setMinimumSize(new java.awt.Dimension(100, 20));
-        sinceTextField.setPreferredSize(new java.awt.Dimension(100, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         searchOptionsPanel.add(sinceTextField, gridBagConstraints);
 
@@ -275,25 +268,25 @@ public class TwitterExtractorUI extends javax.swing.JPanel {
         searchOptionsPanel.add(geoLocationLabel, gridBagConstraints);
 
         geoLocationPanel.setLayout(new java.awt.GridBagLayout());
-
-        latTextField.setMinimumSize(new java.awt.Dimension(60, 20));
-        latTextField.setPreferredSize(new java.awt.Dimension(60, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.33;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
         geoLocationPanel.add(latTextField, gridBagConstraints);
-
-        longTextField.setMinimumSize(new java.awt.Dimension(60, 20));
-        longTextField.setPreferredSize(new java.awt.Dimension(60, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.33;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
         geoLocationPanel.add(longTextField, gridBagConstraints);
-
-        distanceTextField.setMinimumSize(new java.awt.Dimension(60, 20));
-        distanceTextField.setPreferredSize(new java.awt.Dimension(60, 20));
-        geoLocationPanel.add(distanceTextField, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.33;
+        geoLocationPanel.add(distanceTextField, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         searchOptionsPanel.add(geoLocationPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -119,6 +119,12 @@ public class UClassifierAddDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         formPanel.add(uClassifierAuthorLabel, gridBagConstraints);
+
+        uClassifierAuthorTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uClassifierAuthorTextFieldActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -180,6 +186,10 @@ public class UClassifierAddDialog extends javax.swing.JDialog {
         isAccepted = true;
         setVisible(false);
     }//GEN-LAST:event_createButtonMouseReleased
+
+    private void uClassifierAuthorTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uClassifierAuthorTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_uClassifierAuthorTextFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

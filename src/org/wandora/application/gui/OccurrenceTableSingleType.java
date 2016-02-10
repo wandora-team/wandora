@@ -148,7 +148,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         
         TableColumn column=new TableColumn(0,40,new TopicCellRenderer(),new TopicCellEditor());
         this.addColumn(column);
-        column = new TableColumn(1,500,new DataCellRenderer(),new DataCellEditor());
+        column = new TableColumn(1,400,new DataCellRenderer(),new DataCellEditor());
         this.addColumn(column);
         this.setTableHeader(this.getTableHeader());
 

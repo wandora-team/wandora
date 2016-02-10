@@ -545,7 +545,7 @@ public class PalvelukarttaSelector extends javax.swing.JPanel {
         inPanelInner1.add(orgTextField, gridBagConstraints);
 
         orgGetContextButton.setText("Get context");
-        orgGetContextButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        orgGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         orgGetContextButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 orgGetContextButtonMouseReleased(evt);
@@ -577,7 +577,7 @@ public class PalvelukarttaSelector extends javax.swing.JPanel {
         inPanelInner1.add(areaTextField, gridBagConstraints);
 
         areaGetContextButton.setText("Get context");
-        areaGetContextButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        areaGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         areaGetContextButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 areaGetContextButtonMouseReleased(evt);
@@ -614,7 +614,7 @@ public class PalvelukarttaSelector extends javax.swing.JPanel {
         inPanelInner1.add(serviceTextField, gridBagConstraints);
 
         serviceGetContextButton.setText("Get context");
-        serviceGetContextButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        serviceGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         serviceGetContextButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 serviceGetContextButtonMouseReleased(evt);
@@ -651,7 +651,7 @@ public class PalvelukarttaSelector extends javax.swing.JPanel {
         inPanelInner1.add(depTextField, gridBagConstraints);
 
         depGetContextButton.setText("Get context");
-        depGetContextButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        depGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         depGetContextButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 depGetContextButtonMouseReleased(evt);
@@ -733,7 +733,7 @@ public class PalvelukarttaSelector extends javax.swing.JPanel {
         inPanelInner1.add(distanceTextField, gridBagConstraints);
 
         distanceGetContextButton.setText("Get context");
-        distanceGetContextButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        distanceGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         distanceGetContextButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 distanceGetContextButtonMouseReleased(evt);

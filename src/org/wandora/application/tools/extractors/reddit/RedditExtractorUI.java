@@ -442,8 +442,6 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         commentSearchTab.setLayout(new java.awt.GridBagLayout());
 
-        threadSearchField.setMinimumSize(new java.awt.Dimension(6, 24));
-        threadSearchField.setPreferredSize(new java.awt.Dimension(6, 24));
         threadSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 threadSearchFieldKeyPressed(evt);
@@ -508,8 +506,6 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         subredditSearchTab.setLayout(new java.awt.GridBagLayout());
 
-        subredditSearchField.setMinimumSize(new java.awt.Dimension(6, 24));
-        subredditSearchField.setPreferredSize(new java.awt.Dimension(6, 24));
         subredditSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 subredditSearchFieldKeyPressed(evt);
@@ -583,8 +579,6 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         linkSearchTab.setLayout(new java.awt.GridBagLayout());
 
-        linkField.setMinimumSize(new java.awt.Dimension(6, 24));
-        linkField.setPreferredSize(new java.awt.Dimension(6, 24));
         linkField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 linkFieldKeyPressed(evt);
@@ -622,7 +616,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         linkSearchTab.add(linkScrollpane, gridBagConstraints);
 
         linkAddUrlButton.setText("Add URL");
-        linkAddUrlButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
+        linkAddUrlButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         linkAddUrlButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 linkAddUrlButtonActionPerformed(evt);
@@ -634,10 +628,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         linkSearchTab.add(linkAddUrlButton, gridBagConstraints);
 
         linkAddSLsButton.setText("Add Context SLs");
-        linkAddSLsButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
-        linkAddSLsButton.setMaximumSize(new java.awt.Dimension(110, 23));
-        linkAddSLsButton.setMinimumSize(new java.awt.Dimension(110, 23));
-        linkAddSLsButton.setPreferredSize(new java.awt.Dimension(110, 23));
+        linkAddSLsButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         linkAddSLsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 linkAddSLsButtonActionPerformed(evt);
@@ -650,7 +641,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         linkSearchTab.add(linkAddSLsButton, gridBagConstraints);
 
         linkClearButton.setText("Clear All");
-        linkClearButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
+        linkClearButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         linkClearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 linkClearButtonActionPerformed(evt);
@@ -666,8 +657,6 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
         accountSearchTab.setLayout(new java.awt.GridBagLayout());
 
-        accountSearchField.setMinimumSize(new java.awt.Dimension(6, 24));
-        accountSearchField.setPreferredSize(new java.awt.Dimension(6, 24));
         accountSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 accountSearchFieldKeyPressed(evt);

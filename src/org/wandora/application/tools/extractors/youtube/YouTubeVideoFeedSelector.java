@@ -467,7 +467,6 @@ public class YouTubeVideoFeedSelector extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         defaultFeeds.add(defaultDescription, gridBagConstraints);
 
-        feedComboBox.setPreferredSize(new java.awt.Dimension(200, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -483,7 +482,6 @@ public class YouTubeVideoFeedSelector extends javax.swing.JDialog {
         defaultTimePanel.add(defaultTimeLabel, gridBagConstraints);
 
         defaultTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All time", "This month", "This week", "Today" }));
-        defaultTimeComboBox.setPreferredSize(new java.awt.Dimension(78, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -613,7 +611,7 @@ public class YouTubeVideoFeedSelector extends javax.swing.JDialog {
         searchSizePanel1.add(searchSizeLabel, new java.awt.GridBagConstraints());
 
         searchSizeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "10", "25", "50", "100", "250", "500" }));
-        searchSizeComboBox.setPreferredSize(new java.awt.Dimension(50, 20));
+        searchSizeComboBox.setPreferredSize(new java.awt.Dimension(50, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.ipadx = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
@@ -641,7 +639,7 @@ public class YouTubeVideoFeedSelector extends javax.swing.JDialog {
         buttonPanel.add(fillerPanel, gridBagConstraints);
 
         okButton.setText("OK");
-        okButton.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        okButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         okButton.setPreferredSize(new java.awt.Dimension(70, 23));
         okButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -653,7 +651,7 @@ public class YouTubeVideoFeedSelector extends javax.swing.JDialog {
         buttonPanel.add(okButton, gridBagConstraints);
 
         cancelButton.setText("Cancel");
-        cancelButton.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        cancelButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         cancelButton.setPreferredSize(new java.awt.Dimension(70, 23));
         cancelButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {

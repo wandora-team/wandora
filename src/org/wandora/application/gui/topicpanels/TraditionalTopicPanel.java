@@ -604,41 +604,54 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         subjectIdentifierRootPanel = new org.wandora.application.gui.simple.SimplePanel();
         subjectIdentifierPanel = new javax.swing.JPanel();
         variantRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        variantWrapperPanel = new javax.swing.JPanel();
         variantTitlePanel = new javax.swing.JPanel();
         variantTitle = new javax.swing.JLabel();
         variantNumber = new javax.swing.JLabel();
         variantTitleFiller = new javax.swing.JPanel();
+        variantPanelMargin = new javax.swing.JPanel();
         variantPanel = new javax.swing.JPanel();
         occurrencesRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        occurrencesWrapperPanel = new javax.swing.JPanel();
         dataTitlePanel = new javax.swing.JPanel();
         dataTitle = new javax.swing.JLabel();
         dataNumber = new javax.swing.JLabel();
         dataTitleFiller = new javax.swing.JPanel();
+        dataPanelMargin = new javax.swing.JPanel();
         dataPanel = new javax.swing.JPanel();
         classesRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        classesWrapperPanel = new javax.swing.JPanel();
         classesTitlePanel = new javax.swing.JPanel();
         classesTitle = new javax.swing.JLabel();
         classesNumber = new javax.swing.JLabel();
         classesTitleFiller = new javax.swing.JPanel();
+        classesPanelMargin = new javax.swing.JPanel();
         classesPanel = new javax.swing.JPanel();
         associationRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        associationWrapperPanel = new javax.swing.JPanel();
         associationsTitlePanel = new javax.swing.JPanel();
         associationsTitle = new javax.swing.JLabel();
         associationsNumber = new javax.swing.JLabel();
         associationsTitleFiller = new javax.swing.JPanel();
+        associationPanelMargin = new javax.swing.JPanel();
         associationPanel = new javax.swing.JPanel();
         typedAssociationsRootPanel = new org.wandora.application.gui.simple.SimplePanel();
-        typedAssociationsPanel = new javax.swing.JPanel();
+        typedAssociationsWrapperPanel = new javax.swing.JPanel();
         typedAssociationsTitlePanel = new javax.swing.JPanel();
         typedAssociationTitle = new javax.swing.JLabel();
         typedAssociationNumber = new javax.swing.JLabel();
         typedAssociationTitleFiller = new javax.swing.JPanel();
+        typesAssociationPanelMargin = new javax.swing.JPanel();
+        typedAssociationsPanel = new javax.swing.JPanel();
         instancesRootPanel = new org.wandora.application.gui.simple.SimplePanel();
+        instancesWrapperPanel = new javax.swing.JPanel();
         instancesTitlePanel = new javax.swing.JPanel();
         instancesTitle = new javax.swing.JLabel();
         instancesNumber = new javax.swing.JLabel();
         instancesTitleFiller = new javax.swing.JPanel();
+        instancesPanelMargin = new javax.swing.JPanel();
         instancesPanel = new javax.swing.JPanel();
+        fillerPanel = new javax.swing.JPanel();
         removedTopicMessage = new javax.swing.JPanel();
         removedTopicMessageLabel = new SimpleLabel();
         buttonWrapperPanel = new javax.swing.JPanel();
@@ -782,56 +795,75 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         variantRootPanel.addMouseListener(wandora);
         variantRootPanel.setLayout(new java.awt.BorderLayout());
 
+        variantWrapperPanel.setLayout(new java.awt.GridBagLayout());
+
         variantTitlePanel.setLayout(new java.awt.GridBagLayout());
 
         variantTitle.setFont(UIConstants.h2Font);
         variantTitle.setText("Variant names");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
         variantTitlePanel.add(variantTitle, gridBagConstraints);
 
         variantNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         variantNumber.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         variantTitlePanel.add(variantNumber, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         variantTitlePanel.add(variantTitleFiller, gridBagConstraints);
 
-        variantRootPanel.add(variantTitlePanel, java.awt.BorderLayout.PAGE_START);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 10, 0);
+        variantWrapperPanel.add(variantTitlePanel, gridBagConstraints);
 
-        variantPanel.setLayout(new java.awt.GridLayout());
-        variantRootPanel.add(variantPanel, java.awt.BorderLayout.CENTER);
+        variantPanelMargin.setPreferredSize(new java.awt.Dimension(30, 10));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        variantWrapperPanel.add(variantPanelMargin, gridBagConstraints);
+
+        variantPanel.setLayout(new java.awt.GridLayout(1, 0));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        variantWrapperPanel.add(variantPanel, gridBagConstraints);
+
+        variantRootPanel.add(variantWrapperPanel, java.awt.BorderLayout.PAGE_END);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         containerPanel.add(variantRootPanel, gridBagConstraints);
 
         occurrencesRootPanel.setComponentPopupMenu(getOccurrencesMenu());
         occurrencesRootPanel.setName("occurrencesRootPanel"); // NOI18N
         occurrencesRootPanel.addMouseListener(wandora);
-        occurrencesRootPanel.setLayout(new java.awt.BorderLayout(0, 3));
+        occurrencesRootPanel.setLayout(new java.awt.BorderLayout());
+
+        occurrencesWrapperPanel.setLayout(new java.awt.GridBagLayout());
 
         dataTitlePanel.setLayout(new java.awt.GridBagLayout());
 
         dataTitle.setFont(UIConstants.h2Font);
         dataTitle.setText("Occurrences");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
-        dataTitlePanel.add(dataTitle, gridBagConstraints);
+        dataTitlePanel.add(dataTitle, new java.awt.GridBagConstraints());
 
         dataNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         dataNumber.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         dataTitlePanel.add(dataNumber, gridBagConstraints);
 
         dataTitleFiller.setLayout(new java.awt.BorderLayout());
@@ -840,116 +872,190 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.weightx = 1.0;
         dataTitlePanel.add(dataTitleFiller, gridBagConstraints);
 
-        occurrencesRootPanel.add(dataTitlePanel, java.awt.BorderLayout.PAGE_START);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 10, 0);
+        occurrencesWrapperPanel.add(dataTitlePanel, gridBagConstraints);
+
+        dataPanelMargin.setPreferredSize(new java.awt.Dimension(30, 10));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        occurrencesWrapperPanel.add(dataPanelMargin, gridBagConstraints);
 
         dataPanel.setLayout(new java.awt.BorderLayout());
-        occurrencesRootPanel.add(dataPanel, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        occurrencesWrapperPanel.add(dataPanel, gridBagConstraints);
+
+        occurrencesRootPanel.add(occurrencesWrapperPanel, java.awt.BorderLayout.PAGE_END);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         containerPanel.add(occurrencesRootPanel, gridBagConstraints);
 
         classesRootPanel.setComponentPopupMenu(getClassesMenu());
         classesRootPanel.setName("classesRootPanel"); // NOI18N
         classesRootPanel.addMouseListener(wandora);
-        classesRootPanel.setLayout(new java.awt.BorderLayout(0, 3));
+        classesRootPanel.setLayout(new java.awt.BorderLayout());
+
+        classesWrapperPanel.setLayout(new java.awt.GridBagLayout());
 
         classesTitlePanel.setLayout(new java.awt.GridBagLayout());
 
         classesTitle.setFont(UIConstants.h2Font);
         classesTitle.setText("Classes");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
-        classesTitlePanel.add(classesTitle, gridBagConstraints);
+        classesTitlePanel.add(classesTitle, new java.awt.GridBagConstraints());
 
         classesNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         classesNumber.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         classesTitlePanel.add(classesNumber, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         classesTitlePanel.add(classesTitleFiller, gridBagConstraints);
 
-        classesRootPanel.add(classesTitlePanel, java.awt.BorderLayout.PAGE_START);
-        classesRootPanel.add(classesPanel, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 10, 0);
+        classesWrapperPanel.add(classesTitlePanel, gridBagConstraints);
+
+        classesPanelMargin.setPreferredSize(new java.awt.Dimension(30, 10));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        classesWrapperPanel.add(classesPanelMargin, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        classesWrapperPanel.add(classesPanel, gridBagConstraints);
+
+        classesRootPanel.add(classesWrapperPanel, java.awt.BorderLayout.PAGE_END);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         containerPanel.add(classesRootPanel, gridBagConstraints);
 
         associationRootPanel.setComponentPopupMenu(getAssociationsMenu());
         associationRootPanel.setName("associationRootPanel"); // NOI18N
         associationRootPanel.addMouseListener(wandora);
-        associationRootPanel.setLayout(new java.awt.BorderLayout(0, 3));
+        associationRootPanel.setLayout(new java.awt.BorderLayout());
+
+        associationWrapperPanel.setLayout(new java.awt.GridBagLayout());
 
         associationsTitlePanel.setLayout(new java.awt.GridBagLayout());
 
         associationsTitle.setFont(UIConstants.h2Font);
         associationsTitle.setText("Associations");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
-        associationsTitlePanel.add(associationsTitle, gridBagConstraints);
+        associationsTitlePanel.add(associationsTitle, new java.awt.GridBagConstraints());
 
         associationsNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         associationsNumber.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         associationsTitlePanel.add(associationsNumber, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         associationsTitlePanel.add(associationsTitleFiller, gridBagConstraints);
 
-        associationRootPanel.add(associationsTitlePanel, java.awt.BorderLayout.PAGE_START);
-        associationRootPanel.add(associationPanel, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 10, 0);
+        associationWrapperPanel.add(associationsTitlePanel, gridBagConstraints);
+
+        associationPanelMargin.setPreferredSize(new java.awt.Dimension(30, 10));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        associationWrapperPanel.add(associationPanelMargin, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        associationWrapperPanel.add(associationPanel, gridBagConstraints);
+
+        associationRootPanel.add(associationWrapperPanel, java.awt.BorderLayout.PAGE_END);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         containerPanel.add(associationRootPanel, gridBagConstraints);
 
         typedAssociationsRootPanel.setName("typedAssociationsRootPanel"); // NOI18N
         typedAssociationsRootPanel.setLayout(new java.awt.BorderLayout());
-        typedAssociationsRootPanel.add(typedAssociationsPanel, java.awt.BorderLayout.CENTER);
+
+        typedAssociationsWrapperPanel.setLayout(new java.awt.GridBagLayout());
 
         typedAssociationsTitlePanel.setLayout(new java.awt.GridBagLayout());
 
         typedAssociationTitle.setFont(UIConstants.h2Font);
         typedAssociationTitle.setText("Associations where type");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
-        typedAssociationsTitlePanel.add(typedAssociationTitle, gridBagConstraints);
+        typedAssociationsTitlePanel.add(typedAssociationTitle, new java.awt.GridBagConstraints());
 
         typedAssociationNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         typedAssociationNumber.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         typedAssociationsTitlePanel.add(typedAssociationNumber, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         typedAssociationsTitlePanel.add(typedAssociationTitleFiller, gridBagConstraints);
 
-        typedAssociationsRootPanel.add(typedAssociationsTitlePanel, java.awt.BorderLayout.PAGE_START);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 10, 0);
+        typedAssociationsWrapperPanel.add(typedAssociationsTitlePanel, gridBagConstraints);
+
+        typesAssociationPanelMargin.setPreferredSize(new java.awt.Dimension(30, 10));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        typedAssociationsWrapperPanel.add(typesAssociationPanelMargin, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        typedAssociationsWrapperPanel.add(typedAssociationsPanel, gridBagConstraints);
+
+        typedAssociationsRootPanel.add(typedAssociationsWrapperPanel, java.awt.BorderLayout.PAGE_END);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         containerPanel.add(typedAssociationsRootPanel, gridBagConstraints);
 
         instancesRootPanel.setComponentPopupMenu(getInstancesMenu());
@@ -957,34 +1063,60 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         instancesRootPanel.addMouseListener(wandora);
         instancesRootPanel.setLayout(new java.awt.BorderLayout());
 
+        instancesWrapperPanel.setLayout(new java.awt.GridBagLayout());
+
         instancesTitlePanel.setLayout(new java.awt.GridBagLayout());
 
         instancesTitle.setFont(UIConstants.h2Font);
         instancesTitle.setText("Instances");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
-        instancesTitlePanel.add(instancesTitle, gridBagConstraints);
+        instancesTitlePanel.add(instancesTitle, new java.awt.GridBagConstraints());
 
         instancesNumber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         instancesNumber.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(6, 4, 6, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         instancesTitlePanel.add(instancesNumber, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         instancesTitlePanel.add(instancesTitleFiller, gridBagConstraints);
 
-        instancesRootPanel.add(instancesTitlePanel, java.awt.BorderLayout.NORTH);
-        instancesRootPanel.add(instancesPanel, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 10, 0);
+        instancesWrapperPanel.add(instancesTitlePanel, gridBagConstraints);
+
+        instancesPanelMargin.setPreferredSize(new java.awt.Dimension(30, 10));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        instancesWrapperPanel.add(instancesPanelMargin, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        instancesWrapperPanel.add(instancesPanel, gridBagConstraints);
+
+        instancesRootPanel.add(instancesWrapperPanel, java.awt.BorderLayout.PAGE_END);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         containerPanel.add(instancesRootPanel, gridBagConstraints);
+
+        fillerPanel.setPreferredSize(new java.awt.Dimension(10, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        containerPanel.add(fillerPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1157,7 +1289,9 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel associationPanel;
+    private javax.swing.JPanel associationPanelMargin;
     private javax.swing.JPanel associationRootPanel;
+    private javax.swing.JPanel associationWrapperPanel;
     private javax.swing.JLabel associationsNumber;
     private javax.swing.JLabel associationsTitle;
     private javax.swing.JPanel associationsTitleFiller;
@@ -1167,24 +1301,31 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     private javax.swing.JPanel buttonWrapperPanel;
     private javax.swing.JLabel classesNumber;
     private javax.swing.JPanel classesPanel;
+    private javax.swing.JPanel classesPanelMargin;
     private javax.swing.JPanel classesRootPanel;
     private javax.swing.JLabel classesTitle;
     private javax.swing.JPanel classesTitleFiller;
     private javax.swing.JPanel classesTitlePanel;
+    private javax.swing.JPanel classesWrapperPanel;
     private javax.swing.JPanel containerPanel;
     private javax.swing.JLabel dataNumber;
     private javax.swing.JPanel dataPanel;
+    private javax.swing.JPanel dataPanelMargin;
     private javax.swing.JLabel dataTitle;
     private javax.swing.JPanel dataTitleFiller;
     private javax.swing.JPanel dataTitlePanel;
+    private javax.swing.JPanel fillerPanel;
     private javax.swing.JPanel idPanel;
     private javax.swing.JLabel instancesNumber;
     private javax.swing.JPanel instancesPanel;
+    private javax.swing.JPanel instancesPanelMargin;
     private javax.swing.JPanel instancesRootPanel;
     private javax.swing.JLabel instancesTitle;
     private javax.swing.JPanel instancesTitleFiller;
     private javax.swing.JPanel instancesTitlePanel;
+    private javax.swing.JPanel instancesWrapperPanel;
     private javax.swing.JPanel occurrencesRootPanel;
+    private javax.swing.JPanel occurrencesWrapperPanel;
     private javax.swing.JPanel previewContainerPanel;
     private javax.swing.JPanel previewPanel;
     private javax.swing.JPanel removedTopicMessage;
@@ -1201,12 +1342,16 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     private javax.swing.JPanel typedAssociationsPanel;
     private javax.swing.JPanel typedAssociationsRootPanel;
     private javax.swing.JPanel typedAssociationsTitlePanel;
+    private javax.swing.JPanel typedAssociationsWrapperPanel;
+    private javax.swing.JPanel typesAssociationPanelMargin;
     private javax.swing.JLabel variantNumber;
     private javax.swing.JPanel variantPanel;
+    private javax.swing.JPanel variantPanelMargin;
     private javax.swing.JPanel variantRootPanel;
     private javax.swing.JLabel variantTitle;
     private javax.swing.JPanel variantTitleFiller;
     private javax.swing.JPanel variantTitlePanel;
+    private javax.swing.JPanel variantWrapperPanel;
     // End of variables declaration//GEN-END:variables
 
 

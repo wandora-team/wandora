@@ -615,7 +615,6 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         urlPanel.setLayout(new java.awt.BorderLayout(4, 0));
 
         genericURLTextField.setText("http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=__QUERY__&debug=on&timeout=&format=application%2Fsparql-results%2Bjson&save=display&fname=");
-        genericURLTextField.setMargin(new java.awt.Insets(4, 4, 4, 4));
         urlPanel.add(genericURLTextField, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

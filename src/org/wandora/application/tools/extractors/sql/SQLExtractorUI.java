@@ -165,7 +165,7 @@ public class SQLExtractorUI extends javax.swing.JPanel {
 
         urlPanel.setLayout(new java.awt.BorderLayout(4, 0));
 
-        genericURLTextField.setText("jdbc:derby://localhost:1527/database;user=user;password=pass");
+        genericURLTextField.setText("jdbc:mysql://localhost:3306/database;user=user;password=pass");
         urlPanel.add(genericURLTextField, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

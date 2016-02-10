@@ -611,7 +611,7 @@ public class UClassifierDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         classifierPanel.add(classifierLabel, gridBagConstraints);
 
-        classifierComboBox.setPreferredSize(new java.awt.Dimension(150, 20));
+        classifierComboBox.setPreferredSize(new java.awt.Dimension(150, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         classifierPanel.add(classifierComboBox, gridBagConstraints);
@@ -623,8 +623,8 @@ public class UClassifierDialog extends javax.swing.JDialog {
 
         thresholdTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         thresholdTextField.setText("0.01");
-        thresholdTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        thresholdTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        thresholdTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        thresholdTextField.setPreferredSize(new java.awt.Dimension(40, 23));
         classifierPanel.add(thresholdTextField, new java.awt.GridBagConstraints());
 
         buttonPanel.add(classifierPanel, new java.awt.GridBagConstraints());

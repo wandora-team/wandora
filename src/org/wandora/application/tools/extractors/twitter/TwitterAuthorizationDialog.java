@@ -126,9 +126,6 @@ public class TwitterAuthorizationDialog extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         authorizationURLPanel.add(authorizationURLLabel, gridBagConstraints);
-
-        authorizationURLTextField.setMinimumSize(new java.awt.Dimension(6, 21));
-        authorizationURLTextField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -136,7 +133,7 @@ public class TwitterAuthorizationDialog extends javax.swing.JPanel {
         authorizationURLPanel.add(authorizationURLTextField, gridBagConstraints);
 
         copyButton.setText("copy");
-        copyButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        copyButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         copyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 copyButtonActionPerformed(evt);
@@ -147,7 +144,7 @@ public class TwitterAuthorizationDialog extends javax.swing.JPanel {
         authorizationURLPanel.add(copyButton, gridBagConstraints);
 
         forkButton.setText("open");
-        forkButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        forkButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         forkButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 forkButtonActionPerformed(evt);
@@ -169,10 +166,10 @@ public class TwitterAuthorizationDialog extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         pinPanel.add(pinLabel, gridBagConstraints);
-
-        pinTextField.setMinimumSize(new java.awt.Dimension(200, 21));
-        pinTextField.setPreferredSize(new java.awt.Dimension(200, 21));
-        pinPanel.add(pinTextField, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.5;
+        pinPanel.add(pinTextField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;

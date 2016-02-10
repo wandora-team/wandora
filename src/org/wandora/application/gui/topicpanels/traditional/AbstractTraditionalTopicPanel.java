@@ -281,10 +281,11 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
             // ----
 
+            int n = associations.size();
             if(numberLabel != null) {
-                int n = associations.size();
                 numberLabel.setText(""+n);
             }
+            setParentVisibility(associationPanel, n);
             
             // Finally select all previously selected association.
             for(int i=0; i<associationPanel.getComponentCount(); i++) {
@@ -352,11 +353,12 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             ClassTable ct = new ClassTable(topic, wandora);
             classesPanel.add(ct, gbc);
 
+            int n = ct.getRowCount();
             if(numberLabel != null) {
-                int n = ct.getRowCount();
                 numberLabel.setText(""+n);
             }
-           
+            setParentVisibility(classesPanel, n);
+            
             {
                 for(Topic t : topic.getTypes()){
                     visibleTopics.addAll(t.getSubjectIdentifiers());
@@ -434,10 +436,11 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             InstanceTable it = new InstanceTable(topic, wandora);
             instancesPanel.add(it,gbc);
 
+            int n = it.getRowCount();
             if(numberLabel != null) {
-                int n = it.getRowCount();
                 numberLabel.setText(""+n);
             }
+            setParentVisibility(instancesPanel, n);
             
             {
                 for(Topic t : topic.getTopicMap().getTopicsOfType(topic)){
@@ -506,6 +509,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             if(numberLabel != null) {
                 numberLabel.setText(""+n);
             }
+            setParentVisibility(dataPanel, n);
         }
         catch(Exception e) {
             System.out.println("Failed to initialize occurrences!");
@@ -550,6 +554,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             if(numberLabel != null) {
                 numberLabel.setText(""+n);
             }
+            setParentVisibility(dataPanel, n);
         }
         catch(Exception e) {
             System.out.println("Failed to initialize occurrences!");
@@ -677,10 +682,11 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 }
             }
             
+            int n = topic.getVariantScopes().size();
             if(numberLabel != null) {
-                int n = topic.getVariantScopes().size();
                 numberLabel.setText(""+n);
             }
+            setParentVisibility(variantPanel, n);
         }
         catch(Exception e) {
             System.out.println("Failed to initialize names!");
@@ -702,7 +708,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             GridBagConstraints gbc = new java.awt.GridBagConstraints();
             Insets rightGapInsets = new Insets(0,0,0,10);
             Insets noGapsInsets = new Insets(0,0,0,0);
-            Dimension defaultFieldSize = new java.awt.Dimension(130,21);
+            Dimension defaultFieldSize = new java.awt.Dimension(100,27);
             
             nameTable = new HashMap<Set<Topic>,SimpleField>();
             invNameTable = new HashMap<SimpleField,Set<Topic>>();
@@ -748,7 +754,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                             String name = topic.getVariant(s);
                             SimpleField field = new SimpleField(name==null ? "" : name);
                             field.setCaretPosition(0);
-                            //field.setPreferredSize(defaultFieldSize);
+                            field.setPreferredSize(defaultFieldSize);
+                            
                             field.addKeyListener( new KeyAdapter() {
                                 @Override
                                 public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -807,10 +814,11 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 }
             }
 
+            int n = topic.getVariantScopes().size();
             if(numberLabel != null) {
-                int n = topic.getVariantScopes().size();
                 numberLabel.setText(""+n);
             }
+            setParentVisibility(variantPanel, n);
         }
         catch(Exception e) {
             System.out.println("Failed to initialize names!");
@@ -857,8 +865,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                             catch(Exception e) {}
                         }
                     });
-                    // nf.setPreferredSize(new Dimension(100,23));
-                    // nf.setMinimumSize(new Dimension(100,23));
+                    nf.setPreferredSize(new Dimension(100,27));
+                    nf.setMinimumSize(new Dimension(100,27));
                     String variant = topic.getVariant(scope);
                     nf.setText(variant);
                     scopeNamePanel.add(nf, gbcs);
@@ -989,10 +997,11 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 pgbc.weightx=1.0;
                 //variantPanel.add(myVariantPanel, pgbc);
 
+                int n = topic.getVariantScopes().size();
                 if(numberLabel != null) {
-                    int n = topic.getVariantScopes().size();
                     numberLabel.setText(""+n);
                 }
+                setParentVisibility(variantPanel, n);
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -1094,6 +1103,19 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
         }
     }
 
+    
+    
+    private void setParentVisibility(JComponent component, int n) {
+        Container parentComponent = component.getParent();
+        if(parentComponent != null) {
+            if(n == 0) {
+                parentComponent.setVisible(false);
+            }
+            else {
+                parentComponent.setVisible(true);
+            }
+        }
+    }
 
 
 

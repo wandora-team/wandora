@@ -284,7 +284,7 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
         mqlSearchQueryPanel.add(searchQueryScrollPane, gridBagConstraints);
 
         searchQuerySubmitButton.setText("Search");
-        searchQuerySubmitButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
+        searchQuerySubmitButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         searchQuerySubmitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchQuerySubmitButtonActionPerformed(evt);
@@ -317,7 +317,7 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
         mqlIDQueryPanel.add(mqlQueryTextField, gridBagConstraints);
 
         mqlQueryContextButton.setText("Get context");
-        mqlQueryContextButton.setMargin(new java.awt.Insets(1, 6, 1, 6));
+        mqlQueryContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         mqlQueryContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mqlQueryContextButtonActionPerformed(evt);
@@ -373,8 +373,8 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
         mqlDepthTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         mqlDepthTextField.setText("1");
         mqlDepthTextField.setMaximumSize(new java.awt.Dimension(20, 2147483647));
-        mqlDepthTextField.setMinimumSize(new java.awt.Dimension(20, 20));
-        mqlDepthTextField.setPreferredSize(new java.awt.Dimension(20, 20));
+        mqlDepthTextField.setMinimumSize(new java.awt.Dimension(20, 23));
+        mqlDepthTextField.setPreferredSize(new java.awt.Dimension(20, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -393,8 +393,8 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
         mqlMaxCountTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         mqlMaxCountTextField.setText("1500");
         mqlMaxCountTextField.setMaximumSize(new java.awt.Dimension(40, 2147483647));
-        mqlMaxCountTextField.setMinimumSize(new java.awt.Dimension(40, 20));
-        mqlMaxCountTextField.setPreferredSize(new java.awt.Dimension(40, 20));
+        mqlMaxCountTextField.setMinimumSize(new java.awt.Dimension(40, 23));
+        mqlMaxCountTextField.setPreferredSize(new java.awt.Dimension(40, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;

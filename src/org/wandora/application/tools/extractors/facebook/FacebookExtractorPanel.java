@@ -536,11 +536,11 @@ public class FacebookExtractorPanel extends javax.swing.JPanel {
         searchGetPanel.add(typeLabel, gridBagConstraints);
 
         searchComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "anything", "achievement", "album", "application", "checkin", "comment", "domain", "event", "friendlist", "group", "insights", "link", "location", "message", "note", "offer", "order", "page", "photo", "place", "post", "question", "question_option", "review", "status", "subscription", "thread", "user", "video", " " }));
-        searchComboBox.setMinimumSize(new java.awt.Dimension(120, 20));
-        searchComboBox.setPreferredSize(new java.awt.Dimension(120, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         searchGetPanel.add(searchComboBox, gridBagConstraints);
 
@@ -553,11 +553,11 @@ public class FacebookExtractorPanel extends javax.swing.JPanel {
 
         offsetTextField.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         offsetTextField.setText("0");
-        offsetTextField.setMinimumSize(new java.awt.Dimension(60, 20));
-        offsetTextField.setPreferredSize(new java.awt.Dimension(60, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         searchGetPanel.add(offsetTextField, gridBagConstraints);
 
@@ -570,11 +570,11 @@ public class FacebookExtractorPanel extends javax.swing.JPanel {
 
         limitTextField.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         limitTextField.setText("25");
-        limitTextField.setMinimumSize(new java.awt.Dimension(60, 20));
-        limitTextField.setPreferredSize(new java.awt.Dimension(60, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         searchGetPanel.add(limitTextField, gridBagConstraints);
 
@@ -584,12 +584,11 @@ public class FacebookExtractorPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 5);
         searchGetPanel.add(untilLabel, gridBagConstraints);
-
-        untilTextField.setMinimumSize(new java.awt.Dimension(150, 20));
-        untilTextField.setPreferredSize(new java.awt.Dimension(150, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         searchGetPanel.add(untilTextField, gridBagConstraints);
 
@@ -599,12 +598,11 @@ public class FacebookExtractorPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 5);
         searchGetPanel.add(sinceLabel, gridBagConstraints);
-
-        sinceTextField.setMinimumSize(new java.awt.Dimension(150, 20));
-        sinceTextField.setPreferredSize(new java.awt.Dimension(150, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         searchGetPanel.add(sinceTextField, gridBagConstraints);
 
@@ -715,8 +713,8 @@ public class FacebookExtractorPanel extends javax.swing.JPanel {
 
         depthTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         depthTextField.setText("1");
-        depthTextField.setMinimumSize(new java.awt.Dimension(30, 20));
-        depthTextField.setPreferredSize(new java.awt.Dimension(30, 20));
+        depthTextField.setMinimumSize(new java.awt.Dimension(30, 23));
+        depthTextField.setPreferredSize(new java.awt.Dimension(30, 23));
         jPanel1.add(depthTextField, new java.awt.GridBagConstraints());
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
