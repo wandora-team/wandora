@@ -643,7 +643,9 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
         
         private final List<String> queryQueue = Collections.synchronizedList(new ArrayList<String>());
         private int autoCommitQueueSize = 50;
-
+        private int maxTries = 10;
+        
+        
         
         public boolean queue(String query) throws SQLException, TopicMapException {
             boolean autoCommit = false;
@@ -662,35 +664,34 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             synchronized(queryQueue) {
                 if(!queryQueue.isEmpty()) {
                     Connection connection = getConnection();
-                    while(!queryQueue.isEmpty()) {
-                        String query = queryQueue.remove(0);
-                        synchronized(queryLock) {
-                            boolean committed = false;
-                            do {
-                                queryCounter++;
-                                Statement stmt = null;
-                                try {
-                                    stmt = connection.createStatement();
+                    int tries = 0;
+                    while(!queryQueue.isEmpty() && ++tries < maxTries) {
+                        try {
+                            for(String query : queryQueue) {
+                                synchronized(queryLock) {
+                                    queryCounter++;
+                                    Statement stmt = connection.createStatement();
                                     logQuery(query);
                                     stmt.executeUpdate(query);
                                     stmt.close();
-                                    connection.commit();
-                                    committed = true;
-                                }
-                                catch(SQLException sqle) {
-                                    sqle.printStackTrace();
-                                    stmt.close();
-                                    connection.rollback();
-                                    try {
-                                        Thread.sleep(100);
-                                    } 
-                                    catch (InterruptedException ex) {
-                                        // OK. Wakeup.
-                                    }
                                 }
                             }
-                            while(!committed);
+                            connection.commit();
+                            queryQueue.clear();
                         }
+                        catch(SQLException sqle) {
+                            sqle.printStackTrace();
+                            connection.rollback();
+                            try {
+                                Thread.sleep(100);
+                            } 
+                            catch (InterruptedException ex) {
+                                // OK. Wakeup.
+                            }
+                        }
+                    }
+                    if(tries >= maxTries) {
+                        throw new TopicMapException(new SQLException());
                     }
                 }
             }

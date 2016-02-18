@@ -331,7 +331,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
                 statString = "n.a.";
                 try {
                     if(map != null) {
-                        statString = map.getStatistics(new TopicMapStatOptions(statOptions[i])).toString();
+                        statString = map.getStatistics(new TopicMapStatOptions(statOptions[i])) + "";
                         if(fillOriginalValues) {
                             originalValues.put(statOptions[i], statString);
                         }
@@ -342,7 +342,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
                 }
                 
                 if(trackChanges) {
-                    originalStatString = originalValues.get(statOptions[i]).toString();
+                    originalStatString = originalValues.get(statOptions[i]) + "";
                     stats.append("\t").append(originalStatString);
                     SimpleLabel originalValue = fieldLabels.get("o"+statOptions[i]);
                     if(originalValue != null) {
