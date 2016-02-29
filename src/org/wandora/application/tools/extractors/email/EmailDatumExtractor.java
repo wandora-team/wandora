@@ -94,19 +94,6 @@ public class EmailDatumExtractor implements DatumExtractor {
         }
         return scaled;
     }
-    
-    public static String uploadImage(BufferedImage img,WandoraAdminManager manager,String filename,String format) throws IOException,ServerException {
-        ByteArrayOutputStream baos=new ByteArrayOutputStream();
-        javax.imageio.ImageIO.write(img,format,baos);
-        byte[] bytes=baos.toByteArray();
-        String url=manager.upload(new java.io.ByteArrayInputStream(bytes), 
-                                        filename,
-                                        bytes.length,true);
-        
-        if(url==null) return filename; // this only for testing !!!!
-        
-        return url;
-    }
 
     private static final SimpleDateFormat sdfDate=new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat sdfTime=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

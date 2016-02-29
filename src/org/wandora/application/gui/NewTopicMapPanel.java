@@ -56,8 +56,8 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
         
         typeComboBox.setEditable(false);
         typeComboBox.addItem(new org.wandora.topicmap.memory.MemoryTopicMapType());
-        typeComboBox.addItem(new org.wandora.topicmap.database.DatabaseTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.database2.DatabaseTopicMapType());
+        typeComboBox.addItem(new org.wandora.topicmap.database.DatabaseTopicMapType());
         //typeComboBox.addItem(new org.wandora.topicmap.remote.RemoteTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.query.QueryTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.linked.LinkedTopicMapType());

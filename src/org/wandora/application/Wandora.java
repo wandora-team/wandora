@@ -104,12 +104,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
      */
     public WandoraMenuManager menuManager;
     
-    /*
-     * Manager is a deprecated application manager that has no real meaning
-     * any more. It is here for historical reasons and ensure backward 
-     * compatability. Yes, it will disappear sometime in future.
-     */
-    private WandoraAdminManager manager;
     
     /*
      * The main topic map in Wandora is a layer stack. Notice that layer stack
@@ -359,6 +353,12 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     public void doRefresh() {
         if(!alreadyRefreshing) {
             alreadyRefreshing = true;
+            try {
+                topicMap.clearTopicMapIndexes();
+            }
+            catch(Exception e) {
+                // IGNORE
+            }
             Collection<RefreshListener> duplicate=new ArrayList<RefreshListener>();
             duplicate.addAll(refreshListeners); // refresh may result in closeTopic which modifies refreshListeners
             for(RefreshListener l : duplicate){
@@ -479,7 +479,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             this.topicPanelManager = new TopicPanelManager(this);
             this.toolManager = new WandoraToolManager2(this);
             
-            manager = new WandoraAdminManager(this);
             initializeTopicMap();
             topicMapObjectChanged(); // this also initializes topic trees
             placeWindow();
@@ -1052,13 +1051,14 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         topicLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         topicLabel.setText("topic name");
         topicLabel.setToolTipText("Name or subject identifier of current topic in panel.");
-        topicLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        topicLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 1, 0, 1));
         topicLabel.setMaximumSize(new java.awt.Dimension(300, 14));
         topicLabel.setMinimumSize(new java.awt.Dimension(53, 14));
         topicLabel.setPreferredSize(new java.awt.Dimension(300, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.weightx = 1.0;
         infobarPanel.add(topicLabel, gridBagConstraints);
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -1071,6 +1071,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         topicDistributionLabel.setForeground(new java.awt.Color(51, 51, 51));
         topicDistributionLabel.setText("0");
         topicDistributionLabel.setToolTipText("Layer distribution of current topic.");
+        topicDistributionLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 1, 0, 1));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
         infobarPanel.add(topicDistributionLabel, gridBagConstraints);
@@ -1085,6 +1086,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         layerLabel.setForeground(new java.awt.Color(51, 51, 51));
         layerLabel.setText("layer name");
         layerLabel.setToolTipText("Name of selected topic map layer.");
+        layerLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 1, 0, 1));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
@@ -1374,13 +1376,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      */
     public Options getOptions(){
         return options;
-    }
-    
-    /**
-     * @deprecated
-     */
-    public WandoraAdminManager getManager() {
-        return manager;
     }
     
     /**

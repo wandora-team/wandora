@@ -31,7 +31,7 @@ new Union(
   .join(new Identity().as(XTMPSI.CLASS))
 );</script>
                <name>Instances</name>
-               <engine>Mozilla Rhino ; ECMAScript ; 1.8</engine>
+               <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
             </query>
             <query>
                <script>importPackage(org.wandora.query2);
@@ -49,7 +49,7 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
   ))
 );</script>
                <name>Super classes</name>
-               <engine>Mozilla Rhino ; ECMAScript ; 1.8</engine>
+               <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
             </query>
          </group>
       </customTopicPanel>
@@ -1755,7 +1755,7 @@ k --> ekz</system>
    <scriptQueries>
       <query>
          <name>Instances recursively with subclasses</name>
-         <engine>Mozilla Rhino ; ECMAScript ; 1.8</engine>
+         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
          <script>importPackage(org.wandora.query2);
 importPackage(org.wandora.topicmap);
 new Unique(
@@ -1774,7 +1774,7 @@ new Unique(
       </query>
       <query>
          <name>Topics that have no type nor super class</name>
-         <engine>Mozilla Rhino ; ECMAScript ; 1.8</engine>
+         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
          <script>importPackage(org.wandora.query2);
 importPackage(org.wandora.topicmap);
 new Count(
@@ -1788,14 +1788,14 @@ new Count(
       </query>
       <query>
          <name>Topics that do not have a base name</name>
-         <engine>Mozilla Rhino ; ECMAScript ; 1.8</engine>
+         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
          <script>importPackage(org.wandora.query2);
 new BaseName().from(new AllTopics().as("#topic"))
 .where(new Of("#DEFAULT"),"=",null);</script>
       </query>
       <query>
          <name>Number of instances in topic map</name>
-         <engine>Mozilla Rhino ; ECMAScript ; 1.8</engine>
+         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
          <script>importPackage(org.wandora.query2);
 new Count(
    new Instances().from( new AllTopics() )
@@ -1804,7 +1804,7 @@ new Count(
       </query>
       <query>
          <name>Find topics that don't have a base name</name>
-         <engine>Mozilla Rhino ; ECMAScript ; 1.8</engine>
+         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
          <script>importPackage(org.wandora.query2);
 new BaseName().from(
    new AllTopics().as("#topic")
@@ -1813,7 +1813,7 @@ new BaseName().from(
       </query>
       <query>
          <name>Find topics with four character base names</name>
-         <engine>Mozilla Rhino ; ECMAScript ; 1.8</engine>
+         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
          <script>importPackage(org.wandora.query2);
 new BaseName().from(
    new AllTopics()

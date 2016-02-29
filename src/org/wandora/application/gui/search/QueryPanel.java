@@ -98,8 +98,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         engineComboBox.setEditable(false);
         ArrayList<String> engines=WandoraScriptManager.getAvailableEngines();
         engineComboBox.removeAllItems();
-        for(int i=0;i<engines.size();i++){
-            String e=engines.get(i);
+        for(String e : engines) {
             if(e != null && e.length() > 0) {
                 engineComboBox.addItem(e);
             }
@@ -234,7 +233,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
         QueryContext context=new QueryContext(tm, "en");
 
-        System.out.println("Query: "+query.debugString());
+        // System.out.println("Query: "+query.debugString());
 
         if(res.isEmpty()){}
         else if(res.size()==1){
@@ -290,13 +289,6 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         WandoraScriptManager sm = new WandoraScriptManager();
         ScriptEngine engine = sm.getScriptEngine(engineName);
         Directive query = null;
-        if(engine != null && engineName != null && engineName.toLowerCase().contains("nashorn")) {
-            try {
-                // https://bugs.openjdk.java.net/browse/JDK-8025132
-                engine.eval("load('nashorn:mozilla_compat.js');");
-            }
-            catch(Exception e) {}
-        }
         Object o=engine.eval(scriptStr);
         if(o==null) o=engine.get("query");
         if(o!=null && o instanceof Directive) {

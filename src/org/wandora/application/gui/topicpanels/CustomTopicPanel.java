@@ -224,7 +224,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         String command = e.getActionCommand();
         if(command == null) return;
             
-        if(command.equals("Configure panel")){
+        if(command.startsWith("Configure")){
             showConfigureDialog();            
         }
         else if(command.equals("View subject locator resources")) {
@@ -234,8 +234,10 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         }
         else{
             boolean found=false;
-            for(int i=0;i<queryGroups.size();i++){
-                if(queryGroups.get(i).name.equals(command)) found=true;
+            for(QueryGroupInfo queryGroup : queryGroups) {
+                if(queryGroup.name.equals(command)) {
+                    found=true;
+                }
             }
             if(found){
                 boolean old=options.isFalse(getGroupOptionsKey(command));

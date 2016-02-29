@@ -39,7 +39,7 @@ public class ScriptManager {
     
     private HashMap<String,ScriptEngineFactory> engines;
     
-    /** Creates a new instance of WandoraScriptManager */
+    /** Creates a new instance of ScriptManager */
     public ScriptManager() {
         engines=new LinkedHashMap<String,ScriptEngineFactory>();
     }
@@ -51,7 +51,7 @@ public class ScriptManager {
      * language but different engine name or matching language and engine but different
      * version.
      */
-    public int matchEngine(String key,ScriptEngineFactory f){
+    public int matchEngine(String key, ScriptEngineFactory f) {
         String[] info=key.split("\\s*;\\s*");
         String e=f.getEngineName().replace(";","_");
         if(e==null) e="";
@@ -73,7 +73,7 @@ public class ScriptManager {
     }
     
     public static String getDefaultScriptEngine(){
-        return "Mozilla Rhino ; ECMAScript ; 1.6";
+        return "Oracle Nashhorn ; ECMAScript ; 1.0";
     }
     
     public static String makeEngineKey(ScriptEngineFactory f){
@@ -116,13 +116,26 @@ public class ScriptManager {
             engines.put(engineInfo,factory);
         }
         if(factory==null) return null;
-        return factory.getScriptEngine();
+        
+        ScriptEngine engine = factory.getScriptEngine();
+        
+        if(engine != null) {
+            try {
+                String engineName = factory.getEngineName();
+                if(engineName != null && engineName.toLowerCase().contains("nashorn")) {
+                    // https://bugs.openjdk.java.net/browse/JDK-8025132
+                    engine.eval("load('nashorn:mozilla_compat.js');");
+                }
+            }
+            catch(Exception e) {}
+        }
+        return engine;
     }
     
     public Object executeScript(String script) throws ScriptException {
         return executeScript(script,getScriptEngine(getDefaultScriptEngine()));
     }
-    public Object executeScript(String script,ScriptEngine engine) throws ScriptException {
+    public Object executeScript(String script, ScriptEngine engine) throws ScriptException {
         Object o=engine.eval(script);
         return o;
     }

@@ -53,7 +53,7 @@ public class DatabaseTopicMapType implements TopicMapType {
     
     @Override
     public String getTypeName(){
-        return "Database2";
+        return "Database";
     }
     
     

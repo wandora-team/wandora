@@ -43,6 +43,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
 
 
 /**
@@ -78,7 +79,7 @@ public class VariantNameEditor extends javax.swing.JPanel {
         
         myDialog = new JDialog(wandora, true);
         myDialog.add(this);
-        myDialog.setSize(500,300);
+        myDialog.setSize(800,300);
         myDialog.setTitle(title);
         wandora.centerWindow(myDialog);
 
@@ -104,6 +105,24 @@ public class VariantNameEditor extends javax.swing.JPanel {
     }
 
 
+    private void setScope(String[] scopeLocators) {
+        TopicMap tm = Wandora.getWandora().getTopicMap();
+        Topic t;
+        for(String l : scopeLocators) {
+            try {
+                if(l != null) {
+                    t = tm.getTopic(l);
+                    if(t != null && !t.isRemoved()) {
+                        scopeTopics.add(t);
+                    }
+                }
+            } 
+            catch (TopicMapException ex) {
+                Logger.getLogger(VariantNameEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        scopeTopicList.setModel(new VariantScopeListModel());
+    }
 
 
 
@@ -126,6 +145,8 @@ public class VariantNameEditor extends javax.swing.JPanel {
         scopeButtonPanel = new javax.swing.JPanel();
         addScopeTopicButton = new SimpleButton();
         removeScopeTopicButton = new SimpleButton();
+        addEnglishDisplayButton = new SimpleButton();
+        addLangndepDisplayButton = new SimpleButton();
         addSameAsPreviousButton = new SimpleButton();
         buttonPanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -144,6 +165,7 @@ public class VariantNameEditor extends javax.swing.JPanel {
         innerPanel.add(nameLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
@@ -171,41 +193,76 @@ public class VariantNameEditor extends javax.swing.JPanel {
 
         scopeButtonPanel.setLayout(new java.awt.GridBagLayout());
 
-        addScopeTopicButton.setText("Add scope topic");
-        addScopeTopicButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
-        addScopeTopicButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                addScopeTopicButtonMouseReleased(evt);
+        addScopeTopicButton.setText("Add scope topic...");
+        addScopeTopicButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        addScopeTopicButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addScopeTopicButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         scopeButtonPanel.add(addScopeTopicButton, gridBagConstraints);
 
-        removeScopeTopicButton.setText("Remove scope topic(s)");
-        removeScopeTopicButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
-        removeScopeTopicButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                removeScopeTopicButtonMouseReleased(evt);
+        removeScopeTopicButton.setText("Remove selected scope topics");
+        removeScopeTopicButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        removeScopeTopicButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeScopeTopicButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 8, 0);
         scopeButtonPanel.add(removeScopeTopicButton, gridBagConstraints);
 
-        addSameAsPreviousButton.setText("Add same scope topics");
-        addSameAsPreviousButton.setMargin(new java.awt.Insets(0, 6, 0, 6));
-        addSameAsPreviousButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                addSameAsPreviousButtonMouseReleased(evt);
+        addEnglishDisplayButton.setText("Set English display scope");
+        addEnglishDisplayButton.setActionCommand("Set English display scope");
+        addEnglishDisplayButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        addEnglishDisplayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEnglishDisplayButtonActionPerformed(evt);
             }
         });
-        scopeButtonPanel.add(addSameAsPreviousButton, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
+        scopeButtonPanel.add(addEnglishDisplayButton, gridBagConstraints);
+
+        addLangndepDisplayButton.setText("Set lang independent display scope");
+        addLangndepDisplayButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        addLangndepDisplayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addLangndepDisplayButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
+        scopeButtonPanel.add(addLangndepDisplayButton, gridBagConstraints);
+
+        addSameAsPreviousButton.setText("Set previous scope topics");
+        addSameAsPreviousButton.setActionCommand("Add previous scope topics");
+        addSameAsPreviousButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        addSameAsPreviousButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addSameAsPreviousButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        scopeButtonPanel.add(addSameAsPreviousButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         innerPanel.add(scopeButtonPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -234,12 +291,10 @@ public class VariantNameEditor extends javax.swing.JPanel {
         buttonPanel.add(jPanel3, gridBagConstraints);
 
         okButton.setText("OK");
-        okButton.setMaximumSize(new java.awt.Dimension(70, 23));
-        okButton.setMinimumSize(new java.awt.Dimension(70, 23));
-        okButton.setPreferredSize(new java.awt.Dimension(70, 23));
-        okButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                okButtonMouseReleased(evt);
+        okButton.setMargin(new java.awt.Insets(2, 24, 2, 24));
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -247,12 +302,9 @@ public class VariantNameEditor extends javax.swing.JPanel {
         buttonPanel.add(okButton, gridBagConstraints);
 
         cancelButton.setText("Cancel");
-        cancelButton.setMaximumSize(new java.awt.Dimension(70, 23));
-        cancelButton.setMinimumSize(new java.awt.Dimension(70, 23));
-        cancelButton.setPreferredSize(new java.awt.Dimension(70, 23));
-        cancelButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                cancelButtonMouseReleased(evt);
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
             }
         });
         buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
@@ -265,12 +317,14 @@ public class VariantNameEditor extends javax.swing.JPanel {
         add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cancelButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelButtonMouseReleased
+
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         wasAccepted = false;
         if(myDialog != null) myDialog.setVisible(false);
-    }//GEN-LAST:event_cancelButtonMouseReleased
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
-    private void okButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okButtonMouseReleased
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         if(scopeTopics != null && !scopeTopics.isEmpty()) {
             lastScopeSubjects = new ArrayList<Locator>();
             for(Topic t : scopeTopics) {
@@ -286,39 +340,17 @@ public class VariantNameEditor extends javax.swing.JPanel {
         }
         wasAccepted = true;
         if(myDialog != null) myDialog.setVisible(false);
-    }//GEN-LAST:event_okButtonMouseReleased
+    }//GEN-LAST:event_okButtonActionPerformed
 
-    private void addScopeTopicButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addScopeTopicButtonMouseReleased
-        try {
-            Topic addedScope = wandora.showTopicFinder("Select variant scope topic...");
-            if(addedScope != null) {
-                scopeTopics.add(addedScope);
-                scopeTopicList.setModel(new VariantScopeListModel());
+    private void addEnglishDisplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEnglishDisplayButtonActionPerformed
+        setScope( new String[] {
+                XTMPSI.DISPLAY,
+                XTMPSI.getLang("en")
             }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_addScopeTopicButtonMouseReleased
+        );
+    }//GEN-LAST:event_addEnglishDisplayButtonActionPerformed
 
-
-
-    private void removeScopeTopicButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeScopeTopicButtonMouseReleased
-        try {
-            int[] selection = scopeTopicList.getSelectedIndices();
-            ArrayList<Topic> removeScopeTopics = new ArrayList();
-            for(int i=0; i<selection.length; i++) {
-                removeScopeTopics.add(scopeTopics.get(selection[i]));
-            }
-            scopeTopics.removeAll(removeScopeTopics);
-            scopeTopicList.setModel(new VariantScopeListModel());
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_removeScopeTopicButtonMouseReleased
-
-    private void addSameAsPreviousButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addSameAsPreviousButtonMouseReleased
+    private void addSameAsPreviousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSameAsPreviousButtonActionPerformed
         if(lastScopeSubjects != null && !lastScopeSubjects.isEmpty()) {
             TopicMap tm = Wandora.getWandora().getTopicMap();
             Topic t;
@@ -335,10 +367,48 @@ public class VariantNameEditor extends javax.swing.JPanel {
             }
             scopeTopicList.setModel(new VariantScopeListModel());
         }
-    }//GEN-LAST:event_addSameAsPreviousButtonMouseReleased
+    }//GEN-LAST:event_addSameAsPreviousButtonActionPerformed
+
+    private void removeScopeTopicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeScopeTopicButtonActionPerformed
+        try {
+            int[] selection = scopeTopicList.getSelectedIndices();
+            ArrayList<Topic> removeScopeTopics = new ArrayList();
+            for(int i=0; i<selection.length; i++) {
+                removeScopeTopics.add(scopeTopics.get(selection[i]));
+            }
+            scopeTopics.removeAll(removeScopeTopics);
+            scopeTopicList.setModel(new VariantScopeListModel());
+        }
+        catch(Exception e) {
+            Logger.getLogger(VariantNameEditor.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }//GEN-LAST:event_removeScopeTopicButtonActionPerformed
+
+    private void addScopeTopicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addScopeTopicButtonActionPerformed
+        try {
+            Topic addedScope = wandora.showTopicFinder("Select variant scope topic...");
+            if(addedScope != null) {
+                scopeTopics.add(addedScope);
+                scopeTopicList.setModel(new VariantScopeListModel());
+            }
+        }
+        catch(Exception e) {
+            Logger.getLogger(VariantNameEditor.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }//GEN-LAST:event_addScopeTopicButtonActionPerformed
+
+    private void addLangndepDisplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLangndepDisplayButtonActionPerformed
+        setScope( new String[] {
+                XTMPSI.DISPLAY,
+                XTMPSI.LANG_INDEPENDENT
+            }
+        );
+    }//GEN-LAST:event_addLangndepDisplayButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addEnglishDisplayButton;
+    private javax.swing.JButton addLangndepDisplayButton;
     private javax.swing.JButton addSameAsPreviousButton;
     private javax.swing.JButton addScopeTopicButton;
     private javax.swing.JPanel buttonPanel;
@@ -383,9 +453,5 @@ public class VariantNameEditor extends javax.swing.JPanel {
         }
 
     }
-
-
-
-
 
 }

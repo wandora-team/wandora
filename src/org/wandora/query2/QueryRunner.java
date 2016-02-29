@@ -64,11 +64,6 @@ public class QueryRunner {
             else this.scriptEngine=scriptManager.getScriptEngine(scriptEngineName);
             if(this.scriptEngine==null) throw new RuntimeException("Couldn't find a suitable script engine");
         }
-        try {
-            // https://bugs.openjdk.java.net/browse/JDK-8025132
-            scriptEngine.eval("load('nashorn:mozilla_compat.js');");
-        }
-        catch(Exception e) {}
     }
     
     /**

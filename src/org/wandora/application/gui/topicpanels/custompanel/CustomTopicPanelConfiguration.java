@@ -49,6 +49,7 @@ import static java.awt.event.KeyEvent.*;
 import static java.awt.event.InputEvent.*;
 //import jsyntaxpane.DefaultSyntaxKit;
 import de.sciss.syntaxpane.DefaultSyntaxKit;
+import javax.script.ScriptEngine;
 /**
  *
  * @author  olli
@@ -204,23 +205,23 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         scriptToolPanel = new javax.swing.JPanel();
-        checkButton = new SimpleButton();
+        checkButton = new org.wandora.application.gui.simple.SimpleButton();
         jSeparator1 = new javax.swing.JSeparator();
         groupsPanel = new javax.swing.JPanel();
         editorToolPanel = new javax.swing.JPanel();
-        nameLabel = new SimpleLabel();
-        nameField = new SimpleField();
-        engineLabel = new SimpleLabel();
-        engineComboBox = new SimpleComboBox();
+        nameLabel = new org.wandora.application.gui.simple.SimpleLabel();
+        nameField = new org.wandora.application.gui.simple.SimpleField();
+        engineLabel = new org.wandora.application.gui.simple.SimpleLabel();
+        engineComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
         engineComboBox.setEditable(false);
-        addGroupButton = new SimpleButton();
-        removeGroupButton = new SimpleButton();
-        editButton = new SimpleButton();
+        addGroupButton = new org.wandora.application.gui.simple.SimpleButton();
+        removeGroupButton = new org.wandora.application.gui.simple.SimpleButton();
+        editButton = new org.wandora.application.gui.simple.SimpleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         groupsTree = new DraggableTree();
-        addQueryButton = new SimpleButton();
-        removeQueryButton = new SimpleButton();
-        duplicateQueryButton = new SimpleButton();
+        addQueryButton = new org.wandora.application.gui.simple.SimpleButton();
+        removeQueryButton = new org.wandora.application.gui.simple.SimpleButton();
+        duplicateQueryButton = new org.wandora.application.gui.simple.SimpleButton();
 
         scriptToolPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -263,8 +264,6 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         editorToolPanel.add(engineLabel, gridBagConstraints);
 
         engineComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        engineComboBox.setMaximumSize(new java.awt.Dimension(32767, 20));
-        engineComboBox.setPreferredSize(new java.awt.Dimension(57, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -285,8 +284,9 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 0);
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 2, 0);
         add(addGroupButton, gridBagConstraints);
 
         removeGroupButton.setText("Remove group");
@@ -298,6 +298,7 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 7, 7, 0);
         add(removeGroupButton, gridBagConstraints);
@@ -313,8 +314,9 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 7, 7, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 7, 2, 0);
         add(editButton, gridBagConstraints);
 
         groupsTree.setEditable(true);
@@ -352,8 +354,9 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 0);
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 2, 0);
         add(addQueryButton, gridBagConstraints);
 
         removeQueryButton.setText("Remove query");
@@ -365,8 +368,9 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 7, 7, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 7, 2, 0);
         add(removeQueryButton, gridBagConstraints);
 
         duplicateQueryButton.setText("Copy query");
@@ -380,9 +384,10 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 7, 7, 0);
         add(duplicateQueryButton, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -614,38 +619,57 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         protected JMenu scriptMenu;
         
         
-        public ScriptEditor(QueryInfo queryInfo){
+        public ScriptEditor(QueryInfo queryInfo) {
             super(CustomTopicPanelConfiguration.this.wandora,true,queryInfo.script);
             this.setTitle("Edit query script");
             this.wrapLines(false);
-            ArrayList<String> engines=WandoraScriptManager.getAvailableEngines();
+            
+            WandoraScriptManager sm=new WandoraScriptManager();
+            ArrayList<String> engines = WandoraScriptManager.getAvailableEngines();
             engineComboBox.removeAllItems();
-            for(int i=0;i<engines.size();i++){
-                String e=engines.get(i);
+            for (String e : engines) {
                 engineComboBox.addItem(e);
-            }   
-            engineComboBox.setSelectedItem(queryInfo.scriptEngine);
+            }
+            engineComboBox.setSelectedItem(
+                    WandoraScriptManager.makeEngineKey(
+                        sm.getScriptEngine(queryInfo.scriptEngine).getFactory()
+                    )
+            );
             nameField.setText(queryInfo.name);
             
             centerPanel.add(editorToolPanel,BorderLayout.NORTH);
             ActionListener[] ls=checkButton.getActionListeners();
-            for(int i=0;i<ls.length;i++) checkButton.removeActionListener(ls[i]);
+            for(ActionListener l : ls) {
+                checkButton.removeActionListener(l);
+            }
             checkButton.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
                     checkScript();
                 }
             });
             setCustomButtons(scriptToolPanel);
+            this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         }
         
         
         public void checkScript(){
-            String message=CustomTopicPanel.checkScript(wandora, engineComboBox.getSelectedItem().toString(), simpleTextPane.getText());
+            String message=CustomTopicPanel.checkScript(
+                    wandora, 
+                    engineComboBox.getSelectedItem().toString(), 
+                    simpleTextPane.getText());
             if(message!=null){
-                WandoraOptionPane.showMessageDialog(wandora, message, "Check syntax", WandoraOptionPane.ERROR_MESSAGE);        
+                WandoraOptionPane.showMessageDialog(
+                        wandora, 
+                        message, 
+                        "Check syntax", 
+                        WandoraOptionPane.ERROR_MESSAGE);        
             }
             else{
-                WandoraOptionPane.showMessageDialog(wandora, "No errors", "Check syntax", WandoraOptionPane.INFORMATION_MESSAGE);                    
+                WandoraOptionPane.showMessageDialog(
+                        wandora, 
+                        "No errors", 
+                        "Check syntax", 
+                        WandoraOptionPane.INFORMATION_MESSAGE);                    
             }        
         }
         
@@ -659,10 +683,18 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         @Override
         public void exitTextEditor(boolean acceptingChanges) {
             if(acceptingChanges){
-                String message=CustomTopicPanel.checkScript(wandora, engineComboBox.getSelectedItem().toString(), simpleTextPane.getText());
+                String message=CustomTopicPanel.checkScript(
+                        wandora, 
+                        engineComboBox.getSelectedItem().toString(), 
+                        simpleTextPane.getText());
                 if(message!=null){
-                    int c=WandoraOptionPane.showConfirmDialog(wandora, "Unabled to evaluate script. Do you want continue?<br><br>"+message, "Check syntax.");
-                    if(c!=WandoraOptionPane.YES_OPTION) return;
+                    int c=WandoraOptionPane.showConfirmDialog(
+                            wandora, 
+                            "Unabled to evaluate script. Do you want continue?<br><br>"+message, 
+                            "Check syntax.");
+                    if(c!=WandoraOptionPane.YES_OPTION) {
+                        return;
+                    }
                 }
             }
             super.exitTextEditor(acceptingChanges);
@@ -673,7 +705,7 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
             scriptMenu = new SimpleMenu("Script", (Icon) null);
 
             Object[] menuStructure = new Object[] {
-                "Check script", UIBox.getIcon("gui/icons/check.png"), KeyStroke.getKeyStroke(VK_F5, 0),
+                "Check script", UIBox.getIcon(0xf00c), KeyStroke.getKeyStroke(VK_F5, 0),
             };
             scriptMenu.removeAll();
             UIBox.attachMenu( scriptMenu, menuStructure, this );

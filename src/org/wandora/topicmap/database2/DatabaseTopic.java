@@ -56,11 +56,11 @@ public class DatabaseTopic extends Topic {
     protected Set<Locator> subjectIdentifiers;
     protected Map<Topic,Map<Topic,String>> data;
     //                  scope                value ,variantid
-    protected Hashtable<Set<Topic>,T2<String,String>> variants;
+    protected HashMap<Set<Topic>,T2<String,String>> variants;
     protected Set<Topic> types;
     //                  type ,          role of this topic
     //protected Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations;
-    protected WeakReference<Hashtable<Topic,Hashtable<Topic,Collection<Association>>>> storedAssociations;
+    protected WeakReference<HashMap<Topic,HashMap<Topic,Collection<Association>>>> storedAssociations;
     protected boolean removed=false;
     
     
@@ -167,7 +167,7 @@ public class DatabaseTopic extends Topic {
     void create() throws TopicMapException {
         subjectIdentifiers=Collections.synchronizedSet(new LinkedHashSet<Locator>());
         data=Collections.synchronizedMap(new LinkedHashMap<Topic,Map<Topic,String>>());
-        variants=new Hashtable<Set<Topic>,T2<String,String>>();
+        variants=new HashMap<Set<Topic>,T2<String,String>>();
         types=Collections.synchronizedSet(new LinkedHashSet<Topic>());
 //        associations=new Hashtable<Topic,Hashtable<Topic,Collection<Association>>>();
         
@@ -270,7 +270,7 @@ public class DatabaseTopic extends Topic {
                 "select TOPIC.*,VARIANT.* from TOPIC,VARIANT,VARIANTSCOPE where "+
                 "TOPICID=VARIANTSCOPE.TOPIC and VARIANTSCOPE.VARIANT=VARIANTID and "+
                 "VARIANT.TOPIC='"+escapeSQL(id)+"' order by VARIANTID");
-        variants=new Hashtable<Set<Topic>,T2<String,String>>();
+        variants=new HashMap<Set<Topic>,T2<String,String>>();
         HashSet<Topic> scope=null;
         String lastVariant=null;
         String lastName=null;
@@ -335,9 +335,9 @@ public class DatabaseTopic extends Topic {
     }
     
     
-    protected Hashtable<Topic,Hashtable<Topic,Collection<Association>>> fetchAssociations() throws TopicMapException {
+    protected HashMap<Topic,HashMap<Topic,Collection<Association>>> fetchAssociations() throws TopicMapException {
         if(storedAssociations != null) {
-            Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations = storedAssociations.get();
+            HashMap<Topic,HashMap<Topic,Collection<Association>>> associations = storedAssociations.get();
             if(associations != null) return associations;
         }
         Collection<Map<String,Object>> res = topicMap.executeQuery(
@@ -348,15 +348,15 @@ public class DatabaseTopic extends Topic {
                 "ASSOCIATION.TYPE=T.TOPICID and MEMBER.PLAYER='"+escapeSQL(id)+"' "+
                 "order by R.TOPICID"
                 );
-        Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations = new Hashtable<Topic,Hashtable<Topic,Collection<Association>>>();
+        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations = new HashMap<Topic,HashMap<Topic,Collection<Association>>>();
         HashMap<String,DatabaseTopic> collectedTopics = new LinkedHashMap<String,DatabaseTopic>();
         HashMap<String,DatabaseAssociation> collectedAssociations = new LinkedHashMap<String,DatabaseAssociation>();
         for(Map<String,Object> row : res) {
             DatabaseTopic type=topicMap.buildTopic(row.get("TYPEID"),row.get("TYPEBN"),row.get("TYPESL"));
             DatabaseTopic role=topicMap.buildTopic(row.get("ROLEID"),row.get("ROLEBN"),row.get("ROLESL"));
-            Hashtable<Topic,Collection<Association>> as = associations.get(type);
+            HashMap<Topic,Collection<Association>> as = associations.get(type);
             if(as == null) {
-                as = new Hashtable<Topic,Collection<Association>>();
+                as = new HashMap<Topic,Collection<Association>>();
                 associations.put(type,as);
             }
             Collection<Association> c = as.get(role);
@@ -991,8 +991,8 @@ public class DatabaseTopic extends Topic {
     public Collection<Association> getAssociations() throws TopicMapException {
 //        if(!full) makeFull();
         Set<Association> ret=new LinkedHashSet();
-        Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
-        for(Map.Entry<Topic,Hashtable<Topic,Collection<Association>>> e : associations.entrySet()){
+        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations=fetchAssociations();
+        for(Map.Entry<Topic,HashMap<Topic,Collection<Association>>> e : associations.entrySet()){
             for(Map.Entry<Topic,Collection<Association>> e2 : e.getValue().entrySet()){
                 for(Association a : e2.getValue()){
                     ret.add(a);
@@ -1008,7 +1008,7 @@ public class DatabaseTopic extends Topic {
         if(type == null) return null;
 //        if(!full) makeFull();
         Set<Association> ret=new LinkedHashSet();
-        Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
+        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations=fetchAssociations();
         if(associations.get(type)==null) {
             return new ArrayList<Association>();
         }
@@ -1025,8 +1025,8 @@ public class DatabaseTopic extends Topic {
     public Collection<Association> getAssociations(Topic type,Topic role) throws TopicMapException {
         if(type == null || role == null) return null;
 //        if(!full) makeFull();
-        Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=fetchAssociations();
-        Hashtable<Topic,Collection<Association>> as=associations.get(type);
+        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations=fetchAssociations();
+        HashMap<Topic,Collection<Association>> as=associations.get(type);
         if(as==null) {
             return new ArrayList<Association>();
         }
@@ -1044,11 +1044,6 @@ public class DatabaseTopic extends Topic {
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         if(!isDeleteAllowed()) throw new TopicInUseException(this);
         String eid=escapeSQL(id);
-        topicMap.executeUpdate("delete from VARIANTSCOPE where VARIANT in (select VARIANTID from VARIANT where TOPIC='"+eid+"')");
-        topicMap.executeUpdate("delete from VARIANT where VARIANTID='"+eid+"'");
-        topicMap.executeUpdate("delete from DATA where TOPIC='"+eid+"'");
-        topicMap.executeUpdate("delete from TOPICTYPE where TOPIC='"+eid+"'");
-        topicMap.executeUpdate("delete from SUBJECTIDENTIFIER where TOPIC='"+eid+"'");
         
         Collection<Map<String,Object>> res=topicMap.executeQuery("select distinct ASSOCIATIONID "
                 +"from ASSOCIATION,MEMBER "
@@ -1059,6 +1054,13 @@ public class DatabaseTopic extends Topic {
         for(Map<String,Object> row : res){
             aid[counter++]=row.get("ASSOCIATIONID").toString();
         }
+        
+        topicMap.executeUpdate("delete from VARIANTSCOPE where VARIANT in (select VARIANTID from VARIANT where TOPIC='"+eid+"')");
+        topicMap.executeUpdate("delete from VARIANT where VARIANTID='"+eid+"'");
+        topicMap.executeUpdate("delete from DATA where TOPIC='"+eid+"'");
+        topicMap.executeUpdate("delete from TOPICTYPE where TOPIC='"+eid+"'");
+        topicMap.executeUpdate("delete from SUBJECTIDENTIFIER where TOPIC='"+eid+"'");
+        
         for(int i=0;i<aid.length;i+=50){
             String c="";
             for(int j=i;j<aid.length && j<i+50;j++){
@@ -1165,13 +1167,13 @@ public class DatabaseTopic extends Topic {
     
     
     void associationChanged(DatabaseAssociation a,Topic type,Topic oldType,Topic role,Topic oldRole){
-        Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations=null;
+        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations=null;
         if(storedAssociations!=null){
             associations=storedAssociations.get();
             if(associations==null) return;
         }
         else return;
-        Hashtable<Topic,Collection<Association>> t=null;
+        HashMap<Topic,Collection<Association>> t=null;
         Collection<Association> c=null;
         if(oldType!=null){
             t=associations.get(oldType);
@@ -1183,7 +1185,7 @@ public class DatabaseTopic extends Topic {
         if(type!=null){
             t=associations.get(type);
             if(t==null){
-                t=new Hashtable<Topic,Collection<Association>>();
+                t=new HashMap<Topic,Collection<Association>>();
                 associations.put(type,t);
             }
             c=t.get(role);

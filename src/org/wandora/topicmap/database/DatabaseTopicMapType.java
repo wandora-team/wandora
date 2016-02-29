@@ -55,7 +55,7 @@ public class DatabaseTopicMapType implements TopicMapType {
     
     @Override
     public String getTypeName(){
-        return "Database";
+        return "Database (deprecated)";
     }
     
     
