@@ -682,7 +682,6 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         subjectPanelContainer.add(subjectIdentifierLabel, gridBagConstraints);
 
-        subjectIdentifierRootPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         subjectIdentifierRootPanel.setComponentPopupMenu(getSIMenu());
         subjectIdentifierRootPanel.setName("subjectIdentifierRootPanel"); // NOI18N
         subjectIdentifierRootPanel.setLayout(new java.awt.BorderLayout());
@@ -868,7 +867,6 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         classesPanelContainer.setName("classesPanelContainer"); // NOI18N
         classesPanelContainer.setLayout(new java.awt.GridBagLayout());
 
-        classesRootPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         classesRootPanel.setComponentPopupMenu(getClassesMenu());
         classesRootPanel.setName("classesRootPanel"); // NOI18N
         classesRootPanel.addMouseListener(wandora);
@@ -905,7 +903,6 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         instancesPanelContainer.setName("instancesPanelContainer"); // NOI18N
         instancesPanelContainer.setLayout(new java.awt.GridBagLayout());
 
-        instancesPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         instancesPanel.setComponentPopupMenu(getInstancesMenu());
         instancesPanel.setName("instancesPanel"); // NOI18N
         instancesPanel.addMouseListener(wandora);

@@ -598,8 +598,8 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         baseNameLabel = new org.wandora.application.gui.simple.SimpleLabel();
         baseNameField = new SimpleField();
         subjectLocatorLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        subjectLocatorField = new SimpleURIField();
         subjectLocatorViewButton = new SimpleToggleButton("gui/icons/view2.png","gui/icons/view2_no.png",false);
+        subjectLocatorField = new SimpleURIField();
         subjectIdentifierLabel = new org.wandora.application.gui.simple.SimpleLabel();
         subjectIdentifierRootPanel = new org.wandora.application.gui.simple.SimplePanel();
         subjectIdentifierPanel = new javax.swing.JPanel();
@@ -686,6 +686,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         baseNameLabel.setText("Base name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         idPanel.add(baseNameLabel, gridBagConstraints);
@@ -705,11 +706,10 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         idPanel.add(baseNameField, gridBagConstraints);
 
         subjectLocatorLabel.setForeground(new java.awt.Color(51, 51, 51));
@@ -722,6 +722,19 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         idPanel.add(subjectLocatorLabel, gridBagConstraints);
+
+        subjectLocatorViewButton.setToolTipText("View subject locator resource");
+        subjectLocatorViewButton.setBorderPainted(false);
+        subjectLocatorViewButton.setContentAreaFilled(false);
+        subjectLocatorViewButton.setMargin(new java.awt.Insets(2, 6, 2, 2));
+        subjectLocatorViewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subjectLocatorViewButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        idPanel.add(subjectLocatorViewButton, gridBagConstraints);
 
         subjectLocatorField.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         subjectLocatorField.setForeground(new java.awt.Color(33, 33, 33));
@@ -738,24 +751,11 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         idPanel.add(subjectLocatorField, gridBagConstraints);
-
-        subjectLocatorViewButton.setToolTipText("View subject locator resource");
-        subjectLocatorViewButton.setBorderPainted(false);
-        subjectLocatorViewButton.setContentAreaFilled(false);
-        subjectLocatorViewButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        subjectLocatorViewButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subjectLocatorViewButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        idPanel.add(subjectLocatorViewButton, gridBagConstraints);
 
         subjectIdentifierLabel.setForeground(new java.awt.Color(51, 51, 51));
         subjectIdentifierLabel.setText("Subject identifiers");
@@ -763,12 +763,12 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         subjectLocatorLabel.addMouseListener(wandora);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
         idPanel.add(subjectIdentifierLabel, gridBagConstraints);
 
-        subjectIdentifierRootPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         subjectIdentifierRootPanel.setName("subjectIdentifierRootPanel"); // NOI18N
         subjectIdentifierRootPanel.setLayout(new java.awt.BorderLayout());
 
@@ -776,11 +776,10 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         subjectIdentifierRootPanel.add(subjectIdentifierPanel, java.awt.BorderLayout.NORTH);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 1);
         idPanel.add(subjectIdentifierRootPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

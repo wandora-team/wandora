@@ -83,6 +83,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
     public static final String OPTIONS_VIEW_PREFIX = OPTIONS_PREFIX + "view.";
     public static final String VARIANT_GUITYPE_OPTIONS_KEY = OPTIONS_PREFIX + "nameUI";
 
+    public static final Color tableBorderColor = new Color(153,153,153);
+    public static final Border leftTableBorder = BorderFactory.createMatteBorder(0, 1, 0, 0, tableBorderColor);
+    public static final Border leftTopTableBorder = BorderFactory.createMatteBorder(1, 1, 0, 0, tableBorderColor);
 
     public int ASSOCIATIONS_WHERE_PLAYER = 1;
     public int ASSOCIATIONS_WHERE_TYPE = 2;
@@ -211,7 +214,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     if(lastType==null) lastType=a.getType();
                     sameTypes.add(a);
                 }
-                else{
+                else {
                     gbc=new java.awt.GridBagConstraints();
                     gbc.gridy=acounter++;
                     gbc.gridx=0;
@@ -220,6 +223,10 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     gbc.fill=GridBagConstraints.HORIZONTAL;
                     if(acounter!=1) gbc.insets=new java.awt.Insets(10,0,0,0);
                     AssociationTable table=new AssociationTable(sameTypes, wandora, topic);
+                    
+                    table.setBorder(leftTableBorder);
+                    table.getTableHeader().setBorder(leftTopTableBorder);
+                    
                     AssociationTypeLink label=new AssociationTypeLink(table, lastType, wandora);
                     label.setFont(UIConstants.h3Font);
                     label.setLimitLength(false);
@@ -250,7 +257,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     }
                 }
             }
-            if(!sameTypes.isEmpty()){
+            if(!sameTypes.isEmpty()) {
                 gbc=new java.awt.GridBagConstraints();
                 gbc.gridy=acounter++;
                 gbc.gridx=0;
@@ -270,6 +277,10 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 gbc.gridx=0;
                 gbc.weightx=1.0;
                 gbc.fill=GridBagConstraints.HORIZONTAL;
+                
+                table.getTableHeader().setBorder(leftTopTableBorder);
+                table.setBorder(leftTableBorder);
+                
                 associationPanel.add(table.getTableHeader(),gbc);
                 gbc=new java.awt.GridBagConstraints();
                 gbc.gridy=acounter++;
@@ -351,6 +362,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             gbc.fill=GridBagConstraints.HORIZONTAL;
             gbc.weightx=1.0;
             ClassTable ct = new ClassTable(topic, wandora);
+            ct.setBorder(leftTopTableBorder);
+            
             classesPanel.add(ct, gbc);
 
             int n = ct.getRowCount();
@@ -397,6 +410,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             gbc.fill=GridBagConstraints.HORIZONTAL;
             gbc.weightx=1.0;
             SITable sit = new SITable(topic, wandora);
+            sit.setBorder(leftTopTableBorder);
             subjectIdentifierPanel.add(sit,gbc);
 
             visibleTopics.addAll(topic.getSubjectIdentifiers());
@@ -434,6 +448,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             gbc.fill=GridBagConstraints.HORIZONTAL;
             gbc.weightx=1.0;
             InstanceTable it = new InstanceTable(topic, wandora);
+            it.setBorder(leftTopTableBorder);
             instancesPanel.add(it,gbc);
 
             int n = it.getRowCount();
@@ -471,6 +486,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             gbc=new java.awt.GridBagConstraints();
             for(Topic occurrenceType : topic.getDataTypes()) {
                 OccurrenceTableSingleType occurrenceTableSingle = new OccurrenceTableSingleType(topic, occurrenceType, options, wandora);
+                occurrenceTableSingle.setBorder(leftTableBorder);
+                occurrenceTableSingle.getTableHeader().setBorder(leftTopTableBorder);
                 if(occurrenceTableSingle.getRowCount() > 0) {
                     OccurrenceTypeLink label = new OccurrenceTypeLink(occurrenceTableSingle, occurrenceType, wandora);
                     label.setFont(UIConstants.h3Font);

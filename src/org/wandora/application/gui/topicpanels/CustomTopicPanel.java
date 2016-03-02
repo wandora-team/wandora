@@ -857,7 +857,6 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
         idPanel.add(subjectIdentifierLabel, gridBagConstraints);
 
-        subjectIdentifierRootPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         subjectIdentifierRootPanel.setName("subjectIdentifierRootPanel"); // NOI18N
         subjectIdentifierRootPanel.setLayout(new java.awt.BorderLayout());
 
@@ -868,7 +867,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
         idPanel.add(subjectIdentifierRootPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

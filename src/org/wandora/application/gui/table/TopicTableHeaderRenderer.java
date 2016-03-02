@@ -31,6 +31,7 @@ package org.wandora.application.gui.table;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
+import org.wandora.application.gui.UIConstants;
 import org.wandora.topicmap.*;
 
 
