@@ -103,6 +103,7 @@ import processing.core.*;
 
 //import jsyntaxpane.DefaultSyntaxKit;
 import de.sciss.syntaxpane.DefaultSyntaxKit;
+import javax.swing.text.DefaultEditorKit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jdt.core.compiler.CompilationProgress;
@@ -288,6 +289,8 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
             }
         };
         processingEditor.getActionMap().put("saveOperation", saveOperation);
+        processingEditor.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
+        
         innerPanel.addComponentListener(
             new ComponentListener() {
                 @Override
@@ -1095,9 +1098,7 @@ public class ProcessingTopicPanel extends JPanel implements TopicMapListener, Re
         autoRunStoredPanel.add(autoRunFileTextField, gridBagConstraints);
 
         autorunFileButton.setText("Browse");
-        autorunFileButton.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        autorunFileButton.setMinimumSize(new java.awt.Dimension(55, 19));
-        autorunFileButton.setPreferredSize(new java.awt.Dimension(55, 19));
+        autorunFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
         autorunFileButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 autorunFileButtonMouseReleased(evt);

@@ -51,6 +51,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 //import jsyntaxpane.DefaultSyntaxKit;
 import de.sciss.syntaxpane.DefaultSyntaxKit;
+import javax.swing.text.DefaultEditorKit;
 import org.apache.commons.io.FileUtils;
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
@@ -187,6 +188,7 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
             }
         };
         rEditor.getActionMap().put("saveOperation", saveOperation);
+        rEditor.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
 
         rBridge = RBridge.getRBridge();
         rBridge.addRBridgeListener(this);
@@ -325,9 +327,7 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
         jPanel1.add(autoRunFileTextField, gridBagConstraints);
 
         autoRunFileBrowseButton.setText("Browse");
-        autoRunFileBrowseButton.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        autoRunFileBrowseButton.setMinimumSize(new java.awt.Dimension(55, 19));
-        autoRunFileBrowseButton.setPreferredSize(new java.awt.Dimension(55, 19));
+        autoRunFileBrowseButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
         autoRunFileBrowseButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 autoRunFileBrowseButtonMouseReleased(evt);
@@ -708,25 +708,25 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
     private void autorun() {
         String autorunScript = null;
         switch(autorun) {
-             case AUTORUN_OCCURRENCE: {
-                 autorunScript = getROccurrence();
-                 break; 
-             }
-             case AUTORUN_SCRIPT_IN_EDITOR: { 
-                 autorunScript = rEditor.getText();
-                 break; 
-             }
-             case AUTORUN_FILE: {
-                 try {
-                     if(autorunScriptFile != null && autorunScriptFile.length() > 0) {
-                        autorunScript = IObox.loadFile(autorunScriptFile);
-                     }
-                 }
-                 catch(Exception e) {
-                     e.printStackTrace();
-                 }
-                 break; 
-             }
+            case AUTORUN_OCCURRENCE: {
+                autorunScript = getROccurrence();
+                break; 
+            }
+            case AUTORUN_SCRIPT_IN_EDITOR: { 
+                autorunScript = rEditor.getText();
+                break; 
+            }
+            case AUTORUN_FILE: {
+                try {
+                    if(autorunScriptFile != null && autorunScriptFile.length() > 0) {
+                       autorunScript = IObox.loadFile(autorunScriptFile);
+                    }
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+                break; 
+            }
         }
         if(autorunScript != null) {
             executeScript(autorunScript);
@@ -941,10 +941,13 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
             if(script.trim().length() > 0) {
                 String newline = "\n";
                 //String commands[] = script.split(newline);
-                script = script.replaceAll("(?m)^[ \t]*\r?\n","");
-                script = script.replace("'","\'").replaceAll("#.*\r?\n","");
-                script = script.replaceAll("\r?\n", ";");
-                String out = "eval(parse(text='" + script + "'))";
+                //script = script.replaceAll("(?m)^[ \t]*\r?\n","");
+                script = script.replace("'","\'");
+                //script = script.replaceAll("\r\n", ";");
+                script = script.replace("\n", "\\n");
+                script = script.replace("\r", "\\r");
+                script = script.replace("\t", "\\t");
+                String out = "source(textConnection('" + script + "'),print.eval=TRUE)";
                 SimpleTextConsole console = (SimpleTextConsole) rConsoleTextPane;
                 tabPanel.setSelectedComponent(consolePanel);
                 console.output(console.handleInput(out));

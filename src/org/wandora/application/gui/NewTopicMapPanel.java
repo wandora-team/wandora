@@ -62,7 +62,7 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
         typeComboBox.addItem(new org.wandora.topicmap.query.QueryTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.linked.LinkedTopicMapType());
         typeComboBox.addItem(new org.wandora.topicmap.layered.LayeredTopicMapType());
-        typeComboBox.addItem(new org.wandora.topicmap.webservice.WebServiceTopicMapType());
+        //typeComboBox.addItem(new org.wandora.topicmap.webservice.WebServiceTopicMapType());
         
         if(okDelegate==null) okButton.setVisible(false);
         if(cancelDelegate==null) cancelButton.setVisible(false);
