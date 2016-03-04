@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2015 Wandora Team
+ * Copyright (C) 2004-2016 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import org.wandora.utils.Delegate;
 import org.wandora.topicmap.*;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.*;
+import org.wandora.utils.Options;
 
 
 /**
@@ -55,14 +56,33 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
         initComponents();
         
         typeComboBox.setEditable(false);
-        typeComboBox.addItem(new org.wandora.topicmap.memory.MemoryTopicMapType());
-        typeComboBox.addItem(new org.wandora.topicmap.database2.DatabaseTopicMapType());
-        typeComboBox.addItem(new org.wandora.topicmap.database.DatabaseTopicMapType());
-        //typeComboBox.addItem(new org.wandora.topicmap.remote.RemoteTopicMapType());
-        typeComboBox.addItem(new org.wandora.topicmap.query.QueryTopicMapType());
-        typeComboBox.addItem(new org.wandora.topicmap.linked.LinkedTopicMapType());
-        typeComboBox.addItem(new org.wandora.topicmap.layered.LayeredTopicMapType());
-        //typeComboBox.addItem(new org.wandora.topicmap.webservice.WebServiceTopicMapType());
+        
+        Options options = wandora.getOptions();
+        if(options != null) {
+            int i=0;
+            while(options.get("layers.layer["+i+"]") != null) {
+                String layerTypeClassName = options.get("layers.layer["+i+"]");
+                try {
+                    if(layerTypeClassName != null) {
+                        layerTypeClassName = layerTypeClassName.trim();
+                        if(layerTypeClassName.length() > 0) {
+                            Class layerTypeClass = Class.forName(layerTypeClassName);
+                            if(layerTypeClass != null) {
+                                Object layerType = layerTypeClass.newInstance();
+                                if(layerType instanceof TopicMapType) {
+                                    typeComboBox.addItem(layerType);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch(Exception e) {
+                    System.out.println("Warning: Can't create topic map layer type with class name '"+layerTypeClassName+"'.");
+                    e.printStackTrace();
+                }
+                i++;
+            }
+        }
         
         if(okDelegate==null) okButton.setVisible(false);
         if(cancelDelegate==null) cancelButton.setVisible(false);

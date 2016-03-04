@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://www.wandora.org/
  *
- * Copyright (C) 2004-2015 Wandora Team
+ * Copyright (C) 2004-2016 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

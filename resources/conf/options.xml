@@ -257,7 +257,16 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       </connection>
    </remoteconnections>
    <helpviewer>http://wandora.org/wiki/__HELP__</helpviewer>
-   <copycommand></copycommand>
+   <layers>
+       <layer>org.wandora.topicmap.memory.MemoryTopicMapType</layer>
+       <layer>org.wandora.topicmap.database2.DatabaseTopicMapType</layer>
+       <layer>org.wandora.topicmap.database.DatabaseTopicMapType</layer>
+       <!-- <layer>org.wandora.topicmap.remote.RemoteTopicMapType</layer> -->
+       <layer>org.wandora.topicmap.query.QueryTopicMapType</layer>
+       <layer>org.wandora.topicmap.linked.LinkedTopicMapType</layer>
+       <layer>org.wandora.topicmap.layered.LayeredTopicMapType</layer>
+       <!-- <layer>org.wandora.topicmap.webservice.WebServiceTopicMapType</layer> -->
+   </layers>
    <tool>
       <path>org/wandora/application/tools</path>
       <path>org/wandora/application/tools/exporters</path>

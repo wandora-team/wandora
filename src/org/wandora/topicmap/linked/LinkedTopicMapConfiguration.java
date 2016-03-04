@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2015 Wandora Team
+ * Copyright (C) 2004-2016 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,8 +97,8 @@ public class LinkedTopicMapConfiguration extends TopicMapConfigurationPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new SimpleLabel();
-        linkedMapComboBox = new SimpleComboBox();
+        jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
+        linkedMapComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
         linkedMapComboBox.setEditable(false);
         jPanel1 = new javax.swing.JPanel();
 
@@ -110,7 +110,6 @@ public class LinkedTopicMapConfiguration extends TopicMapConfigurationPanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 0);
         add(jLabel1, gridBagConstraints);
 
-        linkedMapComboBox.setPreferredSize(new java.awt.Dimension(29, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;

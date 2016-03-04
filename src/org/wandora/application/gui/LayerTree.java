@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2015 Wandora Team
+ * Copyright (C) 2004-2016 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public class LayerTree extends DragJTree {
     private static Color bgColor=UIConstants.defaultInactiveBackground; // new Color(238,238,238);
     private static Color selectedColor=UIConstants.defaultActiveBackground; // new Color(197,197,197);
     private static Color selectedColor2=UIConstants.defaultActiveBackground; // new Color(220,220,220);
-    private static Color brokenColor=new Color(160,96,96);
+    private static Color brokenColor=new Color(250,106,106);
     
     private ContainerTopicMap rootStack;
     private LayerTreeModel model;
