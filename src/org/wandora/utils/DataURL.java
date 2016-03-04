@@ -24,9 +24,11 @@ package org.wandora.utils;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -154,6 +156,10 @@ public class DataURL {
     
     public byte[] getData() {
         return data;
+    }
+    
+    public InputStream getDataStream() {
+        return new ByteArrayInputStream(data);
     }
     
     public String getEncoding() {

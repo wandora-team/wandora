@@ -97,6 +97,10 @@ public class PreviewFactory {
         else if(Text.canView(urlString)) {
             previewPanel = new Text(urlString); 
         }
+        else if(ArchiveZip.canView(urlString)) {
+            previewPanel = new ArchiveZip(urlString);
+        }
+        
         
         // If created panel is heavy-weight, wrap it into an AWRWrapper.
         if(previewPanel != null && previewPanel.isHeavy()) {
