@@ -53,7 +53,7 @@ import org.wandora.utils.swing.TextLineNumber;
  *
  * @author akivela
  */
-public class ArchiveZip implements PreviewPanel, ActionListener {
+public class ApplicationZip implements PreviewPanel, ActionListener {
     
     
     private final String locator;
@@ -62,7 +62,7 @@ public class ArchiveZip implements PreviewPanel, ActionListener {
     
     
     
-    public ArchiveZip(String zipLocator) {
+    public ApplicationZip(String zipLocator) {
         this.locator = zipLocator;
     }
 
@@ -201,7 +201,7 @@ public class ArchiveZip implements PreviewPanel, ActionListener {
     public static boolean canView(String url) {
         return PreviewUtils.isOfType(url, 
                 new String[] { 
-                    "zip",                   
+                    "application/zip",                   
                 },
                 new String[] { 
                     "zip"

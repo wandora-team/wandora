@@ -97,8 +97,8 @@ public class PreviewFactory {
         else if(Text.canView(urlString)) {
             previewPanel = new Text(urlString); 
         }
-        else if(ArchiveZip.canView(urlString)) {
-            previewPanel = new ArchiveZip(urlString);
+        else if(ApplicationZip.canView(urlString)) {
+            previewPanel = new ApplicationZip(urlString);
         }
         
         
