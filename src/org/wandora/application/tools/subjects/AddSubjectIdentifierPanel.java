@@ -29,7 +29,6 @@ import javax.swing.JDialog;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleButton;
-import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleURIField;
@@ -105,9 +104,6 @@ public class AddSubjectIdentifierPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 12, 0);
         formPanel.add(locatorLabel, gridBagConstraints);
-
-        locatorField.setMinimumSize(new java.awt.Dimension(6, 21));
-        locatorField.setPreferredSize(new java.awt.Dimension(6, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
