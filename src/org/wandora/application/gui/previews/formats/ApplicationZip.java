@@ -25,12 +25,17 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -38,16 +43,20 @@ import java.util.zip.ZipInputStream;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.application.gui.simple.SimpleScrollPane;
+import org.wandora.application.gui.table.TopicTableRowSorter;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
-import org.wandora.utils.IObox;
-import org.wandora.utils.swing.TextLineNumber;
+
 
 /**
  *
@@ -58,7 +67,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
     
     private final String locator;
     JPanel ui = null;
-    JEditorPane textPane = null;
+    JTable table = null;
     
     
     
@@ -82,28 +91,23 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
             ui = new JPanel();
             ui.setLayout(new BorderLayout(8,8));
             
-            JPanel textPaneWrapper = new JPanel();
-            textPaneWrapper.setLayout(new BorderLayout());
+            JPanel tablePaneWrapper = new JPanel();
+            tablePaneWrapper.setLayout(new BorderLayout());
         
-            textPaneWrapper.setPreferredSize(new Dimension(640, 400));
-            textPaneWrapper.setMaximumSize(new Dimension(640, 400));
-            textPaneWrapper.setSize(new Dimension(640, 400));
+            tablePaneWrapper.setPreferredSize(new Dimension(640, 300));
+            tablePaneWrapper.setMaximumSize(new Dimension(640, 300));
+            tablePaneWrapper.setSize(new Dimension(640, 300));
             
             try {
-                textPane = (JEditorPane) getTextComponent(locator);
-                JScrollPane scrollPane = new SimpleScrollPane(textPane);
-                TextLineNumber tln = new TextLineNumber(textPane);
-                scrollPane.setRowHeaderView( tln );
-                textPaneWrapper.add(scrollPane);
+                table = new ZipTable(locator);
+                JScrollPane scrollPane = new SimpleScrollPane(table);
+                tablePaneWrapper.add(scrollPane, BorderLayout.CENTER);
 
                 JPanel toolbarWrapper = new JPanel();
                 toolbarWrapper.add(getJToolBar());
 
-                ui.add(textPaneWrapper, BorderLayout.CENTER);
+                ui.add(tablePaneWrapper, BorderLayout.CENTER);
                 ui.add(toolbarWrapper, BorderLayout.SOUTH);
-            }
-            catch(FileNotFoundException fnfe) {
-                PreviewUtils.previewError(ui, "Can't find locator resource.", fnfe);
             }
             catch(Exception e) {
                 PreviewUtils.previewError(ui, "Can't initialize text viewer. Exception occurred.", e);
@@ -112,49 +116,8 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
         }
         return ui;
     }
-    
-    
-    
-    protected JComponent getTextComponent(String locator) throws Exception {
-        JTextPane textComponent = new JTextPane();
-        textComponent.setText(getContent(locator));
-        textComponent.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-        textComponent.setEditable(false);
-        textComponent.setCaretPosition(0);
-        return textComponent;
-    }
-    
-    
-    
-    protected String getContent(String locator) throws Exception {
-        try {
-            ZipInputStream zipInputStream = null;
 
-            if(DataURL.isDataURL(locator)) {
-                DataURL dataUrl = new DataURL(locator);
-                zipInputStream = new ZipInputStream(dataUrl.getDataStream());
-            }
-            else {
-                zipInputStream = new ZipInputStream(new URL(locator).openStream());
-            }
-            StringBuilder content = new StringBuilder("");
-            ZipEntry zipEntry = null;
-            do {
-                zipEntry = zipInputStream.getNextEntry();
-                if(zipEntry != null) {
-                    String fname = zipEntry.getName();
-                    content.append(fname);
-                    content.append("\n");
-                }
-            }
-            while(zipEntry != null);
-
-            return content.toString();
-        }
-        catch(Exception e) {
-            throw e;
-        }
-    }
+    
 
     @Override
     public boolean isHeavy() {
@@ -207,5 +170,181 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                     "zip"
                 }
         );
+    }
+    
+    
+    // -------------------------------------------------------------------------
+    // ------------------------------------------------------------ ZipTable ---
+    // -------------------------------------------------------------------------
+    
+    
+    
+    public class ZipTable extends JTable implements ActionListener {
+        
+
+        public ZipTable(String locator) {
+            super();
+            ZipTableModel model = new ZipTableModel(locator);
+            this.setModel(model);
+            TableRowSorter rowSorter = new TableRowSorter(model);
+            this.setRowSorter(rowSorter);
+            rowSorter.setSortsOnUpdates(true);
+            
+            JPopupMenu popup = UIBox.makePopupMenu(getPopupStruct(), this);
+            setComponentPopupMenu(popup);
+            
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+
+        
+        public Object[] getPopupStruct() {
+            return new Object[] {
+                "Save to file...",
+                "Save to occurrence..."    
+            };
+        }
+        
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+            if(command != null) {
+                if(command.startsWith("Save to file")) {
+                    
+                }
+                else if(command.startsWith("Save to occurrence")) {
+                    
+                }
+                else if(command.startsWith("Create topic for files")) {
+                    
+                }
+            }
+        }
+        
+        
+        // ---------------------------------------------------------------------
+        
+        
+        public class ZipTableModel extends DefaultTableModel {
+            ArrayList<ZipTableRow> zipData;
+            int numberOfFields = 6;
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            
+            
+            public ZipTableModel(String locator) {
+                zipData = createModel(locator);
+            }
+            
+            @Override
+            public int getColumnCount() {
+                return numberOfFields;
+            }
+
+            @Override
+            public Class getColumnClass(int col) {
+                switch(col) {
+                    case 0: return String.class;
+                    case 1: return String.class;
+                    case 2: return Long.class;
+                    case 3: return Long.class;
+                    case 4: return String.class;
+                    case 5: return String.class;
+                }
+                return String.class;
+            }
+
+            @Override
+            public int getRowCount() {
+                if(zipData != null) return zipData.size();
+                return 0;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                try {
+                    if(zipData != null && rowIndex >= 0 && columnIndex >= 0 && columnIndex < getColumnCount() && rowIndex < getRowCount()) {
+                        ZipTableRow zipDataRow = zipData.get(rowIndex);
+                        
+                        switch(columnIndex) {
+                            case 0: return zipDataRow.filename;
+                            case 1: return zipDataRow.isFolder ? "Folder" : "File";
+                            case 2: return zipDataRow.compressedSize;
+                            case 3: return zipDataRow.size;
+                            case 4: return zipDataRow.creationTime == 0 ? "" : dateFormatter.format(new Date(zipDataRow.creationTime));
+                            case 5: return zipDataRow.modifiedTime == 0 ? "" : dateFormatter.format(new Date(zipDataRow.modifiedTime));
+                        }
+                    }
+                }
+                catch (Exception e) {}
+                return "";
+            }
+
+            @Override
+            public String getColumnName(int columnIndex) {
+                switch(columnIndex) {
+                    case 0: return "Filename";
+                    case 1: return "Type";
+                    case 2: return "Compressed size";
+                    case 3: return "Size";
+                    case 4: return "Creation time";
+                    case 5: return "Modified time";
+                }
+                return "";
+            }
+
+            @Override
+            public boolean isCellEditable(int row,int col){
+                return false;
+            }
+            
+            private ArrayList<ZipTableRow> createModel(String locator) {
+                ArrayList<ZipTableRow> zipModel = new ArrayList<ZipTableRow>();
+                try {
+                    ZipInputStream zipInputStream = null;
+
+                    if(DataURL.isDataURL(locator)) {
+                        DataURL dataUrl = new DataURL(locator);
+                        zipInputStream = new ZipInputStream(dataUrl.getDataStream());
+                    }
+                    else {
+                        zipInputStream = new ZipInputStream(new URL(locator).openStream());
+                    }
+                    ZipEntry zipEntry = null;
+                    do {
+                        zipEntry = zipInputStream.getNextEntry();
+                        if(zipEntry != null) {
+                            ZipTableRow zipTableRow = new ZipTableRow();
+                            zipTableRow.filename = zipEntry.getName();
+                            zipTableRow.compressedSize = zipEntry.getCompressedSize();
+                            zipTableRow.size = zipEntry.getSize();
+                            zipTableRow.time = zipEntry.getTime();
+                            if(zipEntry.getCreationTime() != null) {
+                                zipTableRow.creationTime = zipEntry.getCreationTime().toMillis();
+                            }
+                            if(zipEntry.getLastModifiedTime() != null) {
+                                zipTableRow.modifiedTime = zipEntry.getLastModifiedTime().toMillis();
+                            }
+                            zipTableRow.isFolder = zipEntry.isDirectory();
+                            zipModel.add(zipTableRow);
+                        }
+                    }
+                    while(zipEntry != null);
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+                return zipModel;
+            }
+
+            public class ZipTableRow {
+                public String filename = null; 
+                public long compressedSize = 0;
+                public long size = 0;
+                public long time = 0;
+                public long creationTime = 0;
+                public long modifiedTime = 0;
+                public boolean isFolder = false;
+            }
+        }
     }
 }
