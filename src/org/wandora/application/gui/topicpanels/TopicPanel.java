@@ -45,81 +45,85 @@ import org.wandora.exceptions.OpenTopicNotSupportedException;
 public interface TopicPanel extends TopicMapListener {
    
     
-    /*
+    /**
      * Initialize the TopicPanel. Called always before the topic panel is used
      */
     public void init();
     
     
     
-    /*
+    /**
      * Does the topic panel support topic open? In other words can one call the
      * open method with a topic.
      */
     public boolean supportsOpenTopic();
     
     
-    /*
+    /**
      * Open a topic in the topic panel. Usually opening means that
      * the topic is being visualized in some way.
      */
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException;
     
     
-    /*
+    /**
      * A topic panel should stop all threads and close all (shared) resources. 
      * Stopping preceedes closing the topic panel.
      */
     public void stop();
     
-    /*
+    /**
      * Request topic panel UI refresh. The topic panel should refresh it's
      * content and trigger repaint.
      */
     public void refresh() throws TopicMapException;
     
-    /*
+    /**
      * Topic panel should store all pending changes immediately.
      * Especially topic and association changes are important and should
      * be stored during applyChanges.
      */
     public boolean applyChanges() throws CancelledException,TopicMapException;
     
-    /*
+    /**
      * Return the UI element for the topic panel. Wandora gets topic panel's
      * UI element here.
      */
     public JPanel getGui();
     
-    /*
+    /**
      * Return the active topic in topic panel. Usually the returned
      * topic is the same topic that was opened with open methed.
      */
     public Topic getTopic() throws TopicMapException;
     
     
-    /*
+    /**
      * Return name of the topic panel. Name is viewed in Wandora's UI.
      */
     public String getName();
     
-    /*
+    /**
      * Return title of the topic panel. Name is viewed in the title bar of dockable.
      */
     public String getTitle();
     
-    /*
+    /**
      * Return icon image of the topic panel. Icon is viewed in Wandora's UI. 
      */
     public Icon getIcon();
     
-    /*
+    /**
      * Return integer number that specifies topic panel's order. Order is used
-     * to sort topic panel sets.
+     * to sort topic panel sets. Order number is not used anymore as available
+     * panels are read from options.xml and the order in options is the order
+     * Wandora views the panels.
+     * 
+     * @deprecated
      */
     public int getOrder();
     
-    /*
+    /**
      * Topic panel can provide a menu structure that Wandora views in UI.
      * This method returns a plain object array of menu objects. Plain object
      * array is transformed into a menu using UIBox.
@@ -128,13 +132,13 @@ public interface TopicPanel extends TopicMapListener {
     public JMenu getViewMenu();
     public JPopupMenu getViewPopupMenu();
    
-    /*
+    /**
      * If this returns true, then the topic panel will not be wrapped inside
      * a scroll pane. Useful if the panel provides its own scrolling.
      */
     public boolean noScroll();
     
-    /*
+    /**
      * A topic panel can store it's own topic history. Topic history is used
      * to navigate backward and forward in Wandora. However, this is a hidden 
      * feature and has NOT been taken into production yet! Thus, Wandora

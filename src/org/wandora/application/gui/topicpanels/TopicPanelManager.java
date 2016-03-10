@@ -50,10 +50,10 @@ import org.wandora.exceptions.OpenTopicNotSupportedException;
  */
 public class TopicPanelManager implements ActionListener {
 
-    private HashSet<String> topicPanelsSupportingOpenTopic = new HashSet();
-    private HashMap<String,String> topicPanelMap = new HashMap();
-    private HashMap<String,Integer> topicPanelOrder = new HashMap();
-    private HashMap<String,Icon> topicPanelIcon = new HashMap();
+    private Set<String> topicPanelsSupportingOpenTopic = new LinkedHashSet();
+    private Map<String,String> topicPanelMap = new LinkedHashMap();
+    private Map<String,Integer> topicPanelOrder = new LinkedHashMap();
+    private Map<String,Icon> topicPanelIcon = new LinkedHashMap();
     private Wandora wandora;
     private TopicPanel oldTopicPanel = null;
     private TopicPanel currentTopicPanel;
@@ -199,64 +199,36 @@ public class TopicPanelManager implements ActionListener {
     
     // -------------------------------------------------------------------------
     
-
+    
     public void initialize() {
         try {
-            boolean continueSearch = true;
-            int pathCounter = -1;
-            ArrayList<String> paths = new ArrayList<String>();
-            while(continueSearch) {
-                pathCounter++;
-                String topicPanelResourcePath = options.get("gui.topicPanels.path["+pathCounter+"]");
-                if(topicPanelResourcePath == null || topicPanelResourcePath.length() == 0) {
-                    topicPanelResourcePath = "org/wandora/application/gui/topicpanels";
-                    //System.out.println("Using default topicpanel resource path: " + topicPanelResourcePath);
-                    continueSearch = false;
-                }
-                if(paths.contains(topicPanelResourcePath)) continue;
-                paths.add(topicPanelResourcePath);
-                String classPath = topicPanelResourcePath.replace('/', '.');
-                Enumeration topicPanelResources = ClassLoader.getSystemResources(topicPanelResourcePath);
-                
-                while(topicPanelResources.hasMoreElements()) {
-                    URL topicPanelBaseUrl = (URL) topicPanelResources.nextElement();
-                    if(topicPanelBaseUrl.toExternalForm().startsWith("file:")) {
-                        String baseDir = URLDecoder.decode(topicPanelBaseUrl.toExternalForm().substring(6), "UTF-8");
-                        if(!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1)!=':') 
-                            baseDir="/"+baseDir;
-                        //System.out.println("Basedir: " + baseDir);
-                        HashSet<String> topicPanelFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 1000);
-                        for(String classFileName : topicPanelFileNames) {
-                            try {
-                                File classFile = new File(classFileName);
-                                String className = classPath + "." + classFile.getName().replaceFirst(".class", "");
-                                TopicPanel topicPanel = getTopicPanelWithClassName(className);
-                                if(topicPanel != null) {
-                                    //System.out.println("TopicPanel class found: " + className);
-                                    String panelName = topicPanel.getName();
-                                    topicPanelMap.put(panelName, className);
-                                    topicPanelOrder.put(panelName, topicPanel.getOrder());
-                                    topicPanelIcon.put(panelName, topicPanel.getIcon());
-                                    if(topicPanel.supportsOpenTopic()) {
-                                        topicPanelsSupportingOpenTopic.add(className);
-                                    }
-                                }
-                                else {
-                                     //System.out.println("NOT A TopicPanel!!! " + className);
-                                }
-                            }
-                            catch(Exception ex) {
-                                ex.printStackTrace();
-                            }
+            int panelCounter = 0;
+            String className = null;
+            do {
+                className = options.get("gui.topicPanels.panel["+panelCounter+"]");
+                if(className != null) {
+                    TopicPanel topicPanel = getTopicPanelWithClassName(className);
+                    if(topicPanel != null) {
+                        //System.out.println("TopicPanel class found: " + className);
+                        String panelName = topicPanel.getName();
+                        topicPanelMap.put(panelName, className);
+                        topicPanelOrder.put(panelName, topicPanel.getOrder());
+                        topicPanelIcon.put(panelName, topicPanel.getIcon());
+                        if(topicPanel.supportsOpenTopic()) {
+                            topicPanelsSupportingOpenTopic.add(className);
                         }
                     }
                 }
+                panelCounter++;
             }
+            while(className != null);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    
     
     
     public ArrayList<ArrayList> getAvailableTopicPanels() {
@@ -355,6 +327,7 @@ public class TopicPanelManager implements ActionListener {
         ArrayList<String> sortedPanels = new ArrayList();
         sortedPanels.addAll(topicPanelOrder.keySet());
 
+        /*
         Collections.sort(sortedPanels, new Comparator() {
             @Override
             public int compare(Object o1, Object o2) {
@@ -365,6 +338,7 @@ public class TopicPanelManager implements ActionListener {
                 else return -1;
             }
         });
+        */
         return sortedPanels;
     }
     

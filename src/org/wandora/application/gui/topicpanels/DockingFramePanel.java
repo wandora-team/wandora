@@ -50,6 +50,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -100,6 +101,7 @@ import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.DnDBox;
+import org.wandora.utils.Options;
 
 
 
@@ -248,7 +250,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         }
         if(currentDockable == null) {
             // Ensure there is at least one dockable when topic is opened.
-            addDockable((TopicPanel) new TraditionalTopicPanel(), topic);
+            addDockable(getDefaultPanel(), topic);
         }
         else {
             control.setFocusedDockable(currentDockable, true);
@@ -269,7 +271,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                     }
                     // Easy. No suitable topic panels available. Create one.
                     if(availableTopicPanels.isEmpty()) {
-                        addDockable((TopicPanel) new TraditionalTopicPanel(), topic);
+                        addDockable(getDefaultPanel(), topic);
                     }
                     // Easy. Only one suitable topic panel available. Use it.
                     else if(availableTopicPanels.size() == 1) {
@@ -1225,5 +1227,30 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
     }
     
+    
+    // -------------------------------------------------------------------------
+    
+    
+    
+    protected TopicPanel getDefaultPanel() {
+        try {
+            Options options = wandora.getOptions();
+            String defaultPanelClassName = options.get("gui.topicPanels.defaultPanel");
+            if(defaultPanelClassName != null) {
+                Class topicPanelClass = Class.forName(defaultPanelClassName);
+                if(TopicPanel.class.isAssignableFrom(topicPanelClass) &&
+                        !Modifier.isAbstract(topicPanelClass.getModifiers()) &&
+                        !Modifier.isInterface(topicPanelClass.getModifiers()) ){
+                    return (TopicPanel) topicPanelClass.newInstance();
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        // Backup plan if default panel fails.
+        return new TraditionalTopicPanel();
+    }
     
 }

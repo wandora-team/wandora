@@ -55,7 +55,21 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
       </customTopicPanel>
       <topicPanels>
          <current>Dockable frame panel</current>
-         <path>org/wandora/application/gui/topicpanels</path>
+         <panel>org.wandora.application.gui.topicpanels.DropExtractor</panel>
+         <panel>org.wandora.application.gui.topicpanels.TraditionalTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.TabbedTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.CustomTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.TreeTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.GraphTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.TreeMapTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.SketchGridPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.RTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.ProcessingTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.WebViewTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.SearchTopicPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.LayerInfoPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.DockingFramePanel</panel>
+         <defaultPanel>org.wandora.application.gui.topicpanels.TraditionalTopicPanel</defaultPanel>
       </topicPanels>
       <processingTopicPanel>
          <useOccurrenceProcessingCode>false</useOccurrenceProcessingCode>
