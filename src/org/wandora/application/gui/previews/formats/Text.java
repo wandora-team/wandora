@@ -184,7 +184,8 @@ public class Text implements ActionListener, PreviewPanel {
     public static boolean canView(String url) {
         return PreviewUtils.isOfType(url, 
                 new String[] { 
-                    "text",                   
+                    "text",
+                    "application/x-sh"
                 },
                 new String[] { 
                     "txt", 

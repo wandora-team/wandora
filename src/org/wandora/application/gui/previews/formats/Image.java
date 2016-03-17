@@ -37,7 +37,6 @@ import org.wandora.application.gui.simple.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.*;
-import java.net.*;
 import java.io.*;
 import javax.imageio.*;
 import java.awt.event.*;
@@ -48,8 +47,7 @@ import static java.awt.event.KeyEvent.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.*;
 import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
-import org.wandora.utils.DataURL;
+
 
 
 
