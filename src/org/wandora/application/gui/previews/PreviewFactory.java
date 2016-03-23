@@ -85,6 +85,9 @@ public class PreviewFactory {
         else if(ApplicationPDF.canView(urlString)) {
             previewPanel = new ApplicationPDF(urlString);
         }
+        else if(ApplicationZ80.canView(urlString)) {
+            previewPanel = new ApplicationZ80(urlString);
+        }
         else if(TextRTF.canView(urlString)) {
             previewPanel = new TextRTF(urlString); 
         }

@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -144,6 +145,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
             "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
             "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
             "Save", PreviewUtils.ICON_SAVE, this,
+            "Unzip", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
     
@@ -166,8 +168,83 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
         else if(c.startsWith("Save")) {
             PreviewUtils.saveToFile(locator);
         }
+        else if(c.startsWith("Unzip")) {
+            unzip(locator);
+        }
     }
     
+    // -------------------------------------------------------------------------
+    
+    
+    private void unzip(String locator) {
+        
+        byte[] buffer = new byte[1024];
+
+        try {
+            String savePath = getSavePath();
+            if(savePath == null) return;
+            
+            ZipInputStream zipInputStream = null;
+            if(DataURL.isDataURL(locator)) {
+                DataURL dataUrl = new DataURL(locator);
+                zipInputStream = new ZipInputStream(dataUrl.getDataStream());
+            }
+            else {
+                zipInputStream = new ZipInputStream(new URL(locator).openStream());
+            }
+            
+            //create output directory is not exists
+            File folder = new File(savePath);
+            if(!folder.exists()){
+                folder.mkdir();
+            }
+
+            //get the zipped file list entry
+            ZipEntry zipEntry = zipInputStream.getNextEntry();
+            while(zipEntry != null) {
+                String fileName = zipEntry.getName();
+                File newFile = new File(savePath + File.separator + fileName);
+
+                System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+
+                //create all non exists folders
+                //else you will hit FileNotFoundException for compressed folder
+                new File(newFile.getParent()).mkdirs();
+                FileOutputStream fos = new FileOutputStream(newFile);             
+                int len;
+                while ((len = zipInputStream.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();   
+                zipEntry = zipInputStream.getNextEntry();
+            }
+
+            zipInputStream.closeEntry();
+            zipInputStream.close();
+
+            System.out.println("Done");
+        }
+        catch(Exception ex) {
+            ex.printStackTrace(); 
+        } 
+    }
+    
+    
+    protected String getSavePath() {
+        SimpleFileChooser chooser = UIConstants.getFileChooser();
+        chooser.setDialogTitle("Select folder");
+        chooser.setApproveButtonText("Select");
+        if(chooser.open(Wandora.getWandora(),SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+            File selected = chooser.getSelectedFile();
+            if(selected != null) {
+                if(!selected.isDirectory()) {
+                    selected = selected.getParentFile();
+                }
+                return selected.getAbsolutePath();
+            }
+        }
+        return null;
+    }
     
     
 
@@ -215,7 +292,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
             return new Object[] {
                 "Save to file...",
                 "Save to occurrence...",
-                "Save to document topic..."
+                "Save to topic..."
             };
         }
         
@@ -233,7 +310,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                     int[] selectedRows = this.getSelectedRows();
                     saveToOccurrence(selectedRows);
                 }
-                else if("Save to document topic...".equalsIgnoreCase(command)) {
+                else if("Save to topic...".equalsIgnoreCase(command)) {
                     int[] selectedRows = this.getSelectedRows();
                     saveToTopic(selectedRows);
                 }
@@ -294,21 +371,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
         
         
         
-        private String getSavePath() {
-            SimpleFileChooser chooser = UIConstants.getFileChooser();
-            chooser.setDialogTitle("Select folder");
-            chooser.setApproveButtonText("Select");
-            if(chooser.open(Wandora.getWandora(),SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
-                File selected = chooser.getSelectedFile();
-                if(selected != null) {
-                    if(!selected.isDirectory()) {
-                        selected = selected.getParentFile();
-                    }
-                    return selected.getAbsolutePath();
-                }
-            }
-            return null;
-        }
+
         
         
         

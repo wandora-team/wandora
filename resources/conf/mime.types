@@ -1598,3 +1598,11 @@ application/x-zmachine-7				z7
 application/x-zmachine-8				z8
 application/x-blorb					zblorb
 audio/x-sidtune				sid
+application/x.zx.tap		tap
+application/x.zx.z80		z80
+application/x.zx.sna		sna
+application/x.zx.slt		slt
+application/x-spectrum-tap		tap
+application/x-spectrum-z80		z80
+application/x-spectrum-sna		sna
+application/x-spectrum-slt		slt

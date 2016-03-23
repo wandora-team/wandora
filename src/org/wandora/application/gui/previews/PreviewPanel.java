@@ -55,7 +55,7 @@ public interface PreviewPanel {
     public Component getGui();
     
     /**
-     * This is a little deprecated method to tell the preview is a heavy weight
+     * This is a deprecated method to tell the preview is a heavy weight
      * AWT component. These days Java can mix heavy weight and swing component,
      * and the isHeavy is not that important any more. Notice, returning a true
      * value actually triggers some additional wrapping for the component returned
