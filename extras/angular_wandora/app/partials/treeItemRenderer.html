@@ -1,7 +1,0 @@
-<a href="{{data.t.url}}"  ng-click="add(data)">
-	<i class="{{data.icon}}"></i>{{t(data.t)}}
-</a>
-<ul class="nav nav-list">
-    <li ng-repeat="data in data.subs" ng-include="'partials/treeItemRenderer.html'"></li>
-    <li ng-repeat="data in data.ins" ng-include="'partials/treeItemRenderer.html'"></li>
-</ul>

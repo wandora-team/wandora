@@ -1,5 +1,0 @@
-content wandora chrome/content/
-skin wandora classic/1.0 skin/classic/
-style chrome://global/content/customizeToolbar.xul chrome://wandora/skin/toolbar-button.css
-overlay chrome://browser/content/browser.xul chrome://wandora/content/wandora.xul
-overlay chrome://messenger/content/messenger.xul chrome://wandora/content/wandora.xul
