@@ -54,7 +54,7 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          </group>
       </customTopicPanel>
       <topicPanels>
-         <current>Dockable frame panel</current>
+         <base>Dockable frame panel</base>
          <panel>org.wandora.application.gui.topicpanels.DropExtractor</panel>
          <panel>org.wandora.application.gui.topicpanels.TraditionalTopicPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.TabbedTopicPanel</panel>

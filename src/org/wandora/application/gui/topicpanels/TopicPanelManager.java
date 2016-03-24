@@ -56,8 +56,8 @@ public class TopicPanelManager implements ActionListener {
     private Map<String,Icon> topicPanelIcon = new LinkedHashMap();
     private Wandora wandora;
     private TopicPanel oldTopicPanel = null;
-    private TopicPanel currentTopicPanel;
-    private String currentTopicPanelName;
+    private TopicPanel baseTopicPanel;
+    private String baseTopicPanelName;
     private Options options;
 
     
@@ -81,7 +81,7 @@ public class TopicPanelManager implements ActionListener {
         this.wandora = w;
         this.options = w.options;
         try {
-            currentTopicPanelName = options.get("gui.topicPanels.current");
+            baseTopicPanelName = options.get("gui.topicPanels.base");
             initialize();
         }
         catch (Exception e) {
@@ -106,10 +106,10 @@ public class TopicPanelManager implements ActionListener {
     
 
     public void setTopicPanel(String topicPanelName)  throws TopicMapException {
-        if(topicPanelName != null && !topicPanelName.equals(currentTopicPanelName)) {
-            currentTopicPanelName = topicPanelName;
-            options.put("gui.topicPanels.current", currentTopicPanelName);
-            currentTopicPanel = getTopicPanel();
+        if(topicPanelName != null && !topicPanelName.equals(baseTopicPanelName)) {
+            baseTopicPanelName = topicPanelName;
+            options.put("gui.topicPanels.base", baseTopicPanelName);
+            baseTopicPanel = getTopicPanel();
         }
     }
 
@@ -117,7 +117,7 @@ public class TopicPanelManager implements ActionListener {
     
     
     public TopicPanel getCurrentTopicPanel() {
-        return currentTopicPanel;
+        return baseTopicPanel;
     }
 
     
@@ -126,27 +126,27 @@ public class TopicPanelManager implements ActionListener {
     public TopicPanel getTopicPanel() {
         try {
             boolean reuse=false;
-            if(currentTopicPanel!=null) {
-                if(currentTopicPanel.getClass().getName().equals(topicPanelMap.get(currentTopicPanelName))) {
+            if(baseTopicPanel!=null) {
+                if(baseTopicPanel.getClass().getName().equals(topicPanelMap.get(baseTopicPanelName))) {
                     reuse=true;
                 }
             }
             if(!reuse) {
-                if(currentTopicPanel != null) {
-                    currentTopicPanel.stop();
+                if(baseTopicPanel != null) {
+                    baseTopicPanel.stop();
                 }
-                currentTopicPanel = getTopicPanel(currentTopicPanelName);
-                currentTopicPanel.init();
+                baseTopicPanel = getTopicPanel(baseTopicPanelName);
+                baseTopicPanel.init();
             }
-            if(currentTopicPanel == null) {
-                currentTopicPanel = new DockingFramePanel();
-                currentTopicPanel.init();
+            if(baseTopicPanel == null) {
+                baseTopicPanel = new DockingFramePanel();
+                baseTopicPanel.init();
             }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        return currentTopicPanel;
+        return baseTopicPanel;
     }
     
     
@@ -273,9 +273,9 @@ public class TopicPanelManager implements ActionListener {
     
     
     public Object[] getViewMenuStruct() {
-        if(currentTopicPanel != null) {
-            return currentTopicPanel.getViewMenuStruct();
-            // Current configuration of Wandora sets currentTopicPanel to 
+        if(baseTopicPanel != null) {
+            return baseTopicPanel.getViewMenuStruct();
+            // Current configuration of Wandora sets baseTopicPanel to 
             // DockingFramePanel. See getViewMenuStruct method in DockingFramePanel.
         }
         else {
@@ -344,8 +344,8 @@ public class TopicPanelManager implements ActionListener {
     
     
     public HashMap getDockedTopicPanels() {
-        if(currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel) {
-            return ((DockingFramePanel) currentTopicPanel).getDockedTopicPanels();
+        if(baseTopicPanel != null && baseTopicPanel instanceof DockingFramePanel) {
+            return ((DockingFramePanel) baseTopicPanel).getDockedTopicPanels();
         }
         return null;
     }
@@ -359,7 +359,7 @@ public class TopicPanelManager implements ActionListener {
         if(actionCommand != null) {
             //WAS: setTopicPanel(actionCommand);
             try {
-                DockingFramePanel dockingPanel = (DockingFramePanel) currentTopicPanel;
+                DockingFramePanel dockingPanel = (DockingFramePanel) baseTopicPanel;
                 String dockableClassName = topicPanelMap.get(actionCommand);
                 Class dockableClass = Class.forName(dockableClassName);
                 if(dockableClass != null && dockingPanel != null) {
@@ -390,10 +390,12 @@ public class TopicPanelManager implements ActionListener {
     
 
 
-    
+    /**
+     * Open the topic again in the base topic panel.
+     */
     public void reopenTopic() throws TopicMapException, OpenTopicNotSupportedException {
-        if(currentTopicPanel != null) {
-            openTopic(currentTopicPanel.getTopic());
+        if(baseTopicPanel != null) {
+            openTopic(baseTopicPanel.getTopic());
         }
     }
     
@@ -401,13 +403,13 @@ public class TopicPanelManager implements ActionListener {
     
     
     
-    /*
-     * Enforces current topic panel to save all changes. 
+    /**
+     * Enforces base topic panel to save all changes. 
      */
     public boolean applyChanges() {
         try {
-            if(currentTopicPanel != null) {
-                currentTopicPanel.applyChanges();
+            if(baseTopicPanel != null) {
+                baseTopicPanel.applyChanges();
                 return true;
             }
             else {
@@ -438,9 +440,9 @@ public class TopicPanelManager implements ActionListener {
     
     
     
-    /*
-     * Opens an argument topic in current TopicPanel. Notice, DockingFramePanel
-     * opens topic in current dockable.
+    /**
+     * Opens the argument topic in the base topic panel. DockingFramePanel
+     * opens the topic in current dockable.
      */
     public void openTopic(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
         if(topic == null || topic.isRemoved()) return;
@@ -449,14 +451,14 @@ public class TopicPanelManager implements ActionListener {
             topic.addSubjectIdentifier(TopicTools.createDefaultLocator());
         }
         
-        if(currentTopicPanel == null || !currentTopicPanel.equals(oldTopicPanel)) {
+        if(baseTopicPanel == null || !baseTopicPanel.equals(oldTopicPanel)) {
             deactivateTopicPanel();
         }
         getTopicPanel().open(topic);
-        if(!currentTopicPanel.equals(oldTopicPanel)) {
+        if(!baseTopicPanel.equals(oldTopicPanel)) {
             activateTopicPanel();
         }
-        oldTopicPanel = currentTopicPanel;
+        oldTopicPanel = baseTopicPanel;
 
         wandora.topicPanelsChanged(); 
     }
@@ -466,38 +468,38 @@ public class TopicPanelManager implements ActionListener {
     
     
     
-    /*
+    /**
      * This method is called always before topic panel changes. It removes the
-     * panel from Wandora's UI and deattaches used listeners.
+     * panel from Wandora's UI and removes listeners.
      */
     protected void deactivateTopicPanel() {
         wandora.editorPanel.removeAll();
         
-        if(currentTopicPanel != null) {
-            if(currentTopicPanel instanceof TopicMapListener) {
-                wandora.removeTopicMapListener((TopicMapListener)currentTopicPanel);
+        if(baseTopicPanel != null) {
+            if(baseTopicPanel instanceof TopicMapListener) {
+                wandora.removeTopicMapListener((TopicMapListener)baseTopicPanel);
             }
-            if(currentTopicPanel instanceof RefreshListener) {
-                wandora.removeRefreshListener((RefreshListener)currentTopicPanel);
+            if(baseTopicPanel instanceof RefreshListener) {
+                wandora.removeRefreshListener((RefreshListener)baseTopicPanel);
             }
         }
     }
     
     
     
-    /*
+    /**
      * This method is called always after topic panel changes. It attaches
      * the topic panel to Wandora's main window.
      */
     protected void activateTopicPanel() {
-        if(currentTopicPanel instanceof TopicMapListener) {
-            wandora.addTopicMapListener((TopicMapListener)currentTopicPanel);
+        if(baseTopicPanel instanceof TopicMapListener) {
+            wandora.addTopicMapListener((TopicMapListener)baseTopicPanel);
         }
-        if(currentTopicPanel instanceof RefreshListener) {
-            wandora.addRefreshListener((RefreshListener)currentTopicPanel);
+        if(baseTopicPanel instanceof RefreshListener) {
+            wandora.addRefreshListener((RefreshListener)baseTopicPanel);
         }
 
-        ((EditorPanel)wandora.editorPanel).addTopicPanel(currentTopicPanel);
+        ((EditorPanel)wandora.editorPanel).addTopicPanel(baseTopicPanel);
         ((EditorPanel)wandora.editorPanel).revalidate();
         ((EditorPanel)wandora.editorPanel).repaint();
     }
@@ -509,13 +511,13 @@ public class TopicPanelManager implements ActionListener {
     
     
     /**
-     * Returns a topic that is open in current topic panel. Notice, 
-     * DockingFramePanel returns a topic for current dockable.
+     * Returns a topic that is open in base topic panel. 
+     * DockingFramePanel returns the topic in current dockable.
      */
     public Topic getOpenTopic() {
-        if(currentTopicPanel!=null) {
+        if(baseTopicPanel!=null) {
             try {
-                return currentTopicPanel.getTopic();
+                return baseTopicPanel.getTopic();
             }
             catch(Exception e) {
                 e.printStackTrace();
@@ -528,13 +530,13 @@ public class TopicPanelManager implements ActionListener {
     
     
     /**
-     * Returns an icon for current topic panel. Notice, DockingFramePanel 
-     * returns an icon for current dockable.
+     * Returns an icon for base topic panel. DockingFramePanel 
+     * returns the icon for current dockable.
      */
     public Icon getIcon() {
-        if(currentTopicPanel!=null) {
+        if(baseTopicPanel!=null) {
             try {
-                return currentTopicPanel.getIcon();
+                return baseTopicPanel.getIcon();
             }
             catch(Exception e) {
                 e.printStackTrace();
