@@ -57,7 +57,7 @@ public class TopicPanelManager implements ActionListener {
     private Wandora wandora;
     private TopicPanel oldTopicPanel = null;
     private TopicPanel baseTopicPanel;
-    private String baseTopicPanelName;
+    private String baseTopicPanelClassName;
     private Options options;
 
     
@@ -81,7 +81,7 @@ public class TopicPanelManager implements ActionListener {
         this.wandora = w;
         this.options = w.options;
         try {
-            baseTopicPanelName = options.get("gui.topicPanels.base");
+            baseTopicPanelClassName = options.get("gui.topicPanels.base");
             initialize();
         }
         catch (Exception e) {
@@ -106,10 +106,13 @@ public class TopicPanelManager implements ActionListener {
     
 
     public void setTopicPanel(String topicPanelName)  throws TopicMapException {
-        if(topicPanelName != null && !topicPanelName.equals(baseTopicPanelName)) {
-            baseTopicPanelName = topicPanelName;
-            options.put("gui.topicPanels.base", baseTopicPanelName);
-            baseTopicPanel = getTopicPanel();
+        if(topicPanelName != null) {
+            String topicPanelClassName = topicPanelMap.get(topicPanelName);
+            if(topicPanelClassName != null && !topicPanelClassName.equals(baseTopicPanelClassName)) {
+                baseTopicPanelClassName = topicPanelClassName;
+                options.put("gui.topicPanels.base", baseTopicPanelClassName);
+                baseTopicPanel = getTopicPanel();
+            }
         }
     }
 
@@ -127,7 +130,7 @@ public class TopicPanelManager implements ActionListener {
         try {
             boolean reuse=false;
             if(baseTopicPanel!=null) {
-                if(baseTopicPanel.getClass().getName().equals(topicPanelMap.get(baseTopicPanelName))) {
+                if(baseTopicPanel.getClass().getName().equals(baseTopicPanelClassName)) {
                     reuse=true;
                 }
             }
@@ -135,8 +138,10 @@ public class TopicPanelManager implements ActionListener {
                 if(baseTopicPanel != null) {
                     baseTopicPanel.stop();
                 }
-                baseTopicPanel = getTopicPanel(baseTopicPanelName);
-                baseTopicPanel.init();
+                baseTopicPanel = getTopicPanelWithClassName(baseTopicPanelClassName);
+                if(baseTopicPanel != null) {
+                    baseTopicPanel.init();
+                }
             }
             if(baseTopicPanel == null) {
                 baseTopicPanel = new DockingFramePanel();
@@ -298,8 +303,6 @@ public class TopicPanelManager implements ActionListener {
         
         int numberOfTopicPanels = 0;
         for( String topicPanelName : sortedTopicPanels() ) {
-            // As the base topic panel in dockable topic panel, next line is there to prevent recursive dockable panels.
-            if(topicPanelName.startsWith("Dockable")) continue;
             try {
                 TopicPanel topicPanel = getTopicPanel(topicPanelName);
                 if(topicPanel != null) {
@@ -323,6 +326,11 @@ public class TopicPanelManager implements ActionListener {
 
     
     
+    /**
+     * Returns topic panels in the same order as they were read from
+     * options. Old deprecated implementation used to sort topic panels
+     * using a special sort value returned by a topic panel.
+     */
     private Collection<String> sortedTopicPanels() {
         ArrayList<String> sortedPanels = new ArrayList();
         sortedPanels.addAll(topicPanelOrder.keySet());

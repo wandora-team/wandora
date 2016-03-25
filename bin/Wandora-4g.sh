@@ -13,6 +13,6 @@ source SetR.sh
 source SetProcessing.sh
 source SetTesseract.sh
 
-cd ../build
+cd ..
 # java -Xms3000m -Xmx3500m -Xdock:icon=resources/gui/appicon/wandora.icns -Djava.library.path=$WANDORALIB -classpath $WANDORACLASSES org.wandora.application.Wandora $1
 java -Xms3000m -Xmx3500m -Djava.library.path=$WANDORALIB -classpath $WANDORACLASSES org.wandora.application.Wandora $1

@@ -72,6 +72,7 @@
 
     -->
 
+    <!--
     <target name="-post-compile">
         <copy todir="${build.dir}/lib">
             <fileset dir="lib" excludes="CVS"/>
@@ -82,6 +83,28 @@
         <copy todir="${build.dir}/resources">
             <fileset dir="resources" excludes="CVS"/>
         </copy>
+    </target>
+    -->
+    
+    <target name="-post-jar">
+        <copy todir="dist/lib">
+            <fileset dir="lib"/>
+        </copy>
+        <copy todir="dist/resources">
+            <fileset dir="resources"/>
+        </copy>
+        <copy todir="dist/bin">
+            <fileset dir="bin"/>
+        </copy>
+        <copy tofile="dist/license.txt">
+            <file file="license.txt"/>
+        </copy>
+        <copy tofile="lib/wandora.jar" overwrite="true">
+            <file file="dist/wandora.jar"/>
+        </copy>
+        <move tofile="dist/lib/wandora.jar" overwrite="true">
+            <file file="dist/wandora.jar"/>
+        </move>
     </target>
 
 </project>

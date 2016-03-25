@@ -1,0 +1,15 @@
+==========
+Change log
+==========
+
+2009-10-19
+----------
+- XTM 1.0 -> CTM 1.0
+- XTM 1.0 -> XTM 2.0 / XTM 2.1
+- XTM 2.0 / XTM 2.1 -> CTM 1.0
+- XTM 2.0 / XTM 2.1 -> JTM 1.0
+- XTM 2.0 / XTM 2.1 -> XTM 1.0 / XTM 1.1
+- TM/XML 1.0 -> CTM 1.0
+- TM/XML 1.0 -> Snello
+- TM/XML 1.0 -> XTM 1.0 / XTM 1.1
+- TM/XML 1.0 -> XTM 2.0 / XTM 2.1
