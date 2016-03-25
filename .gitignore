@@ -2,6 +2,7 @@
 *.class
 build/*
 dist/*
+temp/*
 lib/wandora.jar
  
 # netbeans ignore personal stuff
