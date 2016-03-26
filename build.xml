@@ -85,7 +85,18 @@
         </copy>
     </target>
     -->
-    
+
+
+
+    <target name="-pre-jar">
+        <propertyfile file="${build.classes.dir}/info.properties">
+            <entry key="program.NAME" default="Wandora" />
+            <entry key="program.VERSION" type="date" value="now" pattern="yyyy-MM-dd" />
+            <entry key="program.AUTHOR" default="Wandora Team" />
+        </propertyfile>
+    </target>
+
+
     <target name="-post-jar">
         <copy todir="dist/lib">
             <fileset dir="lib"/>
@@ -105,6 +116,9 @@
         <move tofile="dist/lib/wandora.jar" overwrite="true">
             <file file="dist/wandora.jar"/>
         </move>
+        <copy tofile="dist/readme.txt" overwrite="true">
+            <file file="other/dist-readme.txt"/>
+        </copy>
     </target>
 
 </project>
