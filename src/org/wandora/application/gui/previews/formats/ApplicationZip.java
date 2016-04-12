@@ -22,34 +22,25 @@
 package org.wandora.application.gui.previews.formats;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import javax.swing.JComponent;
-import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import org.wandora.application.Wandora;
@@ -60,9 +51,7 @@ import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleScrollPane;
-import org.wandora.application.gui.table.TopicTableRowSorter;
 import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.ClipboardBox;
@@ -123,7 +112,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                 ui.add(toolbarWrapper, BorderLayout.SOUTH);
             }
             catch(Exception e) {
-                PreviewUtils.previewError(ui, "Can't initialize text viewer. Exception occurred.", e);
+                PreviewUtils.previewError(ui, "Can't initialize zip viewer. Exception occurred.", e);
             }
 
         }
@@ -594,12 +583,15 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                 }
                 catch(Exception e) {
                     e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
-                if(zipInputStream != null) {
-                    try {
-                        zipInputStream.close();
+                finally {
+                    if(zipInputStream != null) {
+                        try {
+                            zipInputStream.close();
+                        }
+                        catch(Exception e) {}
                     }
-                    catch(Exception e) {}
                 }
                 return zipModel;
             }

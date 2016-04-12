@@ -712,6 +712,12 @@ public class UIBox {
                         }
                         button = null;
                     }
+                    else if(struct[i] instanceof JPopupMenu) {
+                        if(button != null) {
+                            JPopupMenu menu = (JPopupMenu) struct[i];
+                            button.setComponentPopupMenu(menu);
+                        }
+                    }
                     else if(struct[i] instanceof ActionListener) {
                         if(button != null) {
                             ActionListener[] listeners = button.getActionListeners();
@@ -728,12 +734,6 @@ public class UIBox {
                             button.setComponentPopupMenu(buttonMenu);
                         }
                     }
-                    else if(struct[i] instanceof JPopupMenu) {
-                        if(button != null) {
-                            JPopupMenu menu = (JPopupMenu) struct[i];
-                            button.setComponentPopupMenu(menu);
-                        }
-                    }
                 }
             }
         }
@@ -741,7 +741,7 @@ public class UIBox {
     }
     
     
-    private static SimpleButton makeDefaultButton() {
+    public static SimpleButton makeDefaultButton() {
         SimpleButton button = new SimpleButton();
         button.setOpaque(true);
         button.setFocusPainted(false);

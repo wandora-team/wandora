@@ -377,17 +377,17 @@ public class WandoraMenuManager {
                 ModulesWebApp wa=webAppsMap.get(appName);
 
                 if(wa.isRunning()) {
-                     String url=wa.getAppStartPage();
-                     if(url==null) continue;
+                    String url=wa.getAppStartPage();
+                    if(url==null) continue;
 
-                     browseServices.add(appName);
-                     browseServices.add(UIBox.getIcon("gui/icons/open_browser.png"));
-                     browseServices.add(new HTTPServerTool(HTTPServerTool.OPEN_PAGE, wa));
+                    browseServices.add(appName);
+                    browseServices.add(UIBox.getIcon("gui/icons/open_browser.png"));
+                    browseServices.add(new HTTPServerTool(HTTPServerTool.OPEN_PAGE, wa));
                 }
                 else {
-                     browseServices.add(appName);
-                     browseServices.add(UIBox.getIcon("gui/icons/open_browser.png"));
-                     browseServices.add(new HTTPServerTool(HTTPServerTool.OPEN_PAGE, wa));
+                    browseServices.add(appName);
+                    browseServices.add(UIBox.getIcon("gui/icons/open_browser.png"));
+                    browseServices.add(new HTTPServerTool(HTTPServerTool.OPEN_PAGE, wa));
                 }
             }
 
@@ -413,16 +413,16 @@ public class WandoraMenuManager {
     
     public void refreshHelpMenu() {
         Object[] menuStructure = new Object[] {
-           "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, CTRL_MASK), new ExecBrowser("http://www.wandora.org"),
-           "---",
-           "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/wiki/Documentation"),
-           "Forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/forum/index.php"),
-           "YouTube channel", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/tv/"),
-           "Github repository", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://github.com/wandora-team/wandora"),
-           "Twitter", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://twitter.com/wandora_app"),
-           "---",
-           "About Wandora...", UIBox.getIcon("gui/icons/info.png"),new AboutWandora(),
-           "Wandora credits...", UIBox.getIcon("gui/icons/info.png"),new AboutCredits(),
+            "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, CTRL_MASK), new ExecBrowser("http://www.wandora.org"),
+            "---",
+            "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/wiki/Documentation"),
+            "Forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/forum/index.php"),
+            "YouTube channel", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/tv/"),
+            "Github repository", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://github.com/wandora-team/wandora"),
+            "Twitter", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://twitter.com/wandora_app"),
+            "---",
+            "About Wandora...", UIBox.getIcon("gui/icons/info.png"),new AboutWandora(),
+            "Wandora credits...", UIBox.getIcon("gui/icons/info.png"),new AboutCredits(),
         };
         helpMenu.removeAll();
         UIBox.attachMenu( helpMenu, menuStructure, wandora );

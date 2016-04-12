@@ -33,11 +33,12 @@ import org.wandora.application.gui.UIBox;
 
 
 
+
 public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener, ComponentListener, MouseListener {
 
     protected Spectrum spectrum;
     protected Map params;
-    
+    private int screenScaler = 1;
     
     
     public Qaop(Map params) {
@@ -75,7 +76,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
         a = param("rom");
         if (a == null) {
-            InputStream in = resource("/roms/spectrum48.rom");
+            InputStream in = resource("/org/wandora/application/gui/previews/formats/applicationz80/roms/spectrum48.rom");
             if (in != null) {
                 int l = tomem(s.rom48k, 0, 16384, in);
                 if(l != 0) {
@@ -163,9 +164,13 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(Spectrum.W, Spectrum.H);
+        return new Dimension(spectrum.width, spectrum.height);
     }
 
+    
+
+    
+    
     /* javascript interface */
     public void reset() {
         synchronized (queue) {
@@ -222,6 +227,12 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         return spectrum.volume(v);
     }
 
+    public void setScreenSize(int scaler) {
+        screenScaler = scaler;
+        this.setSize(352*scaler, 272*scaler);
+    }
+    
+    
     private int state;
 
     // bit 0:paused, 1:loading, 2:muted
@@ -257,7 +268,10 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
     private void resized(Dimension d) {
         size = d;
-        int s = d.width >= 512 && d.height >= 384 ? 2 : 1;
+        int s1 = d.width / 256;
+        int s2 = d.height / 192;
+        int s = Math.min(s1, s2);
+        // Although the s can be bigger than 2, the spectrum doesn't support s > 2.
         if (spectrum.scale() != s) {
             img = null;
             spectrum.scale(s);
@@ -269,6 +283,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         buf_image = null;
     }
 
+    
     @Override
     public void paint(Graphics g) {
         update(g);
@@ -289,7 +304,8 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
             return;
         }
 
-        int sw = spectrum.width, sh = spectrum.height;
+        int sw = spectrum.width; 
+        int sh = spectrum.height;
         if (dl_text_current == null ? t != null : !dl_text_current.equals(t)) {
             dl_img = dl_mk_image(t, sw);
         }
@@ -877,6 +893,7 @@ class Loader extends Thread {
         return new ByteArrayInputStream(b);
     }
 
+
     static byte[] base64decode(String s) throws IOException {
         int l = s.length();
         l = l / 4 * 3;
@@ -905,6 +922,7 @@ class Loader extends Thread {
         }
         return o;
     }
+
 
     private void check_type(String mime, String name) {
         int tk = 0, nk = 0;
@@ -1249,7 +1267,9 @@ class Loader extends Thread {
 
     private static String to_data(String t, byte[] b) {
         return "data:" + MIME + t + ";base64," + base64encode(b);
+        //return "data:" + MIME + t + ";base64," + Base64.encodeBytes(b);
     }
+
 
     private static String base64encode(byte[] b) {
         int l = b.length;
@@ -1289,6 +1309,8 @@ class Loader extends Thread {
         return s.toString();
     }
 
+    
+    
     private static OutputStream put16(OutputStream o, int v) throws IOException {
         o.write(v);
         o.write(v >> 8);

@@ -40,6 +40,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
@@ -282,6 +284,9 @@ public class PreviewUtils {
             try {
                 if(DataURL.isDataURL(locator)) {
                     DataURL.saveToFile(locator, file);
+                }
+                else if(locator.startsWith("file:")) {
+                    Files.copy(new File(new URL(URLDecoder.decode(locator, "UTF-8")).getFile()).toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
                 else {
                     IObox.moveUrl(new URL(locator), file);

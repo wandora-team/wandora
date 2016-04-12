@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>50</x>
-      <y>50</y>
-      <width>1200</width>
-      <height>700</height>
+      <x>36</x>
+      <y>13</y>
+      <width>1041</width>
+      <height>759</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>532</verticalsplitter>
+      <verticalsplitter>600</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -124,6 +124,9 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
       <toolPanel>
          <currentToolSet>Default buttons</currentToolSet>
       </toolPanel>
+      <imagePreviewPanel>
+         <imageSize>1.0</imageSize>
+      </imagePreviewPanel>
    </gui>
    <httpserver>
       <autostart>false</autostart>

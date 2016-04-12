@@ -97,7 +97,8 @@ public class AudioSid extends AudioAbstract {
                 "audio/x-psid",
                 "audio/psid",
                 "audio/prs.sid",
-                "audio/x-sid"
+                "audio/x-sid",
+                "application/sid-commodore-64"
             }, 
             new String[] { 
                 "sid"

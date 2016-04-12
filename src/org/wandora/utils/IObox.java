@@ -32,6 +32,7 @@ package org.wandora.utils;
 
 
 
+import gate.util.Files;
 import java.net.*;
 import java.io.*;
 import java.util.*;
@@ -387,6 +388,9 @@ public class IObox extends java.lang.Object {
             dir.mkdirs();
         }
     }
+    
+    
+ 
     
     
     //----------------------------------------------------------------------------
