@@ -48,9 +48,9 @@ import org.wandora.utils.velocity.GenericVelocityHelper;
 public class VttkOpenDataArtworkHandler extends FngOpenDataArtworkHandler implements FngOpenDataHandlerInterface {
     
     
-    protected String ARTWORK_CLASS_TYPE_SI = "http://www.wandora.net/generic_type_carrier";
+    protected String ARTWORK_CLASS_TYPE_SI = "http://wandora.org/si/fng/generic_type";
+
     
-        
     @Override
     public String getResourceURIBase() {
         return "http://kokoelmat.fng.fi/vttk/app?si=";
@@ -144,7 +144,7 @@ public class VttkOpenDataArtworkHandler extends FngOpenDataArtworkHandler implem
                 HashMap properties = new HashMap();
                 for( Locator si : author.getSubjectIdentifiers() ) {
                     String sis = si.toExternalForm();
-                    if(!sis.startsWith("http://www.wandora.net/defaultSI")) {
+                    if(!sis.startsWith("http://wandora.org/si/defaultSI")) {
                         properties.put("si", si.toExternalForm());
                         break;
                     }
