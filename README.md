@@ -17,24 +17,23 @@ Wandora's license is [GNU GPL](http://www.gnu.org/licenses/gpl-3.0.txt).
 
 [Download](http://wandora.org/www/download), 
 [install](http://wandora.org/wiki/How_to_install_Wandora) and 
-[run](http://wandora.org/wiki/Running_Wandora) Wandora on your computer. 
+[run](http://wandora.org/wiki/Running_Wandora) Wandora on your computer.
 
 Read the [quick start](http://wandora.org/wiki/Quickstart) and 
-browse the [documentation](http://wandora.org/wiki/Main_Page). We also provide several
-silent [screen cast videos](http://wandora.org/tv/) that help new users.
+browse the [documentation](http://wandora.org/wiki/Main_Page). We also provide 
+[screen cast videos](http://wandora.org/tv/) that may help new users.
 
-If you run into any trouble or have questions consult our [forum](http://wandora.org/forum/).
+If you run into any trouble or have questions consult our [forum](http://wandora.org/forum/)
+or drop a line.
 
 ## Developer Introduction
 
 We develop Wandora with the [Netbeans IDE](https://netbeans.org/). To start
-working with Wandora's source code, download and install Netbeans IDE.
-Wandora's source code package and the GitHub repository contain both all 
-required project files for the Netbeans IDE. To open the Wandora in Netbeans,
-select menu option File &gt; Open Project... in Netbeans and select Wandora's installation
-folder. Once you have successfully opened Wandora project, you can compile Wandora project 
-to test whether or not you have everything in order.
+working with Wandora's source code, download and install Netbeans IDE, preferably version 8.1.
+Wandora's GitHub repository contains all required project files for the Netbeans IDE. 
+To open the project in Netbeans, select menu option File &gt; Open Project... in the Netbeans and 
+select Wandora's folder. Once you have successfully opened Wandora project, 
+you can compile Wandora project to test whether or not you have everything in order. GitHub
+repository needs to be compiled before Wandora can be ran.
 
-To compile and run Wandora, a Java JDK 7 or later is required.
-
-
+To compile and run Wandora, a Java JDK 8 or later is required.

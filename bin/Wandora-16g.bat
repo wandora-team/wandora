@@ -13,7 +13,7 @@ call SetR.bat
 call SetProcessing.bat
 call SetTesseract.bat
 
-cd ..\build
+cd ..
 
 "java" -Xms12000m -Xmx15000m "-Djava.library.path=%WANDORALIB%" -classpath "%WANDORACLASSES%" org.wandora.application.Wandora %*
 

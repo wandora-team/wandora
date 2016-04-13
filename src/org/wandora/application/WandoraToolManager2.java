@@ -38,6 +38,8 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+import org.reflections.Reflections;
 
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
@@ -119,9 +121,12 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
         allTools.add(toolInfo.tool);
         toolInfos.put(toolInfo.tool,toolInfo);
     }
-    public void addTool(WandoraTool tool,String sourceType,String source){
+    
+    
+    public void addTool(WandoraTool tool, String sourceType, String source) {
         addTool(new ToolInfo(tool,sourceType,source));
     }
+    
     
     public WandoraTool findTool(String cls){
         for(WandoraTool tool : allTools){
@@ -221,6 +226,64 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
     public void scanAllTools() {
         readToolPaths();
         readJarPaths();
+    
+        allTools=new ArrayList<WandoraTool>();
+        toolInfos=new HashMap<WandoraTool,ToolInfo>();
+
+        for(String path : toolPaths) {
+            try {
+                String classPath = path.replace('/', '.');
+                Reflections reflections = new Reflections(classPath);
+
+                Set<Class<? extends WandoraTool>> toolClasses = reflections.getSubTypesOf(WandoraTool.class);
+                for(Class toolClass : toolClasses) {
+                    try {
+                        if(isValidWandoraToolClass(toolClass)) {
+                            WandoraTool tool = (WandoraTool) toolClass.newInstance();
+                            if(tool != null) {
+                                addTool(tool, "path", path);
+                            }
+                        }
+                    }
+                    catch(Exception e) {
+                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + e.toString() + "' occurred while investigating class '" + toolClass + "'.");
+                        //e.printStackTrace();
+                    }
+                }
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        for(String jarPath : jarPaths){
+            File f=new File(jarPath);
+            scanJarPath(f);
+        }
+    }
+    
+    
+    private boolean isValidWandoraToolClass(Class c) {
+        try {
+            if(!c.isInterface() && !Modifier.isAbstract( c.getModifiers() )) {
+                // throws exception if class has no argumentless constructor.
+                c.getConstructors(); 
+                return true;
+            }
+        }
+        catch(Exception e) {
+            
+        }
+        return false;
+    }
+    
+    
+    
+    
+    /*
+    public void scanAllTools() {
+        readToolPaths();
+        readJarPaths();
         
         allTools=new ArrayList<WandoraTool>();
         toolInfos=new HashMap<WandoraTool,ToolInfo>();
@@ -288,6 +351,10 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
             scanJarPath(f);
         }
     }
+    */
+    
+    
+    
     
     public void scanJarPath(File f){
         if(!f.exists()) return;

@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
+Signature-Title: Wandora
+Signature-Vendor: Wandora Team
+Built-By: Wandora Team
 X-COMMENT: Main-Class will be added automatically by build
-

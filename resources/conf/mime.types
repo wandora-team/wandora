@@ -1606,3 +1606,7 @@ application/x-spectrum-tap		tap
 application/x-spectrum-z80		z80
 application/x-spectrum-sna		sna
 application/x-spectrum-slt		slt
+application/x-d64       d64 
+application/x-t64       t64
+application/x-prg       prg
+application/x-p00       p00

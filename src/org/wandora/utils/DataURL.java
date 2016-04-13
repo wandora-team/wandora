@@ -56,8 +56,8 @@ public class DataURL {
     }
     
     
-    public DataURL(String url) throws MalformedURLException {
-        parseDataURL(url);
+    public DataURL(String dataUrl) throws MalformedURLException {
+        parseDataURL(dataUrl);
     }
     
     
@@ -72,7 +72,18 @@ public class DataURL {
     }
     
     
-    public DataURL(Image image) throws MalformedURLException {        
+    public DataURL(URL url) throws MalformedURLException {
+        if(url != null) {
+            mimetype = MimeTypes.getMimeType(url);
+            setData(url);
+        }
+        else {
+            throw new MalformedURLException();
+        }
+    }
+    
+    
+    public DataURL(Image image) throws MalformedURLException {
         File tempFile = null;
         try {
             if(image != null) {
@@ -90,7 +101,7 @@ public class DataURL {
         }
     }
     
-    
+        
     public DataURL(byte[] data) {
         this.data = data;
     }

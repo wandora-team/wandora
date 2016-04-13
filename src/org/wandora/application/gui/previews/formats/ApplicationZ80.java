@@ -24,19 +24,32 @@
 package org.wandora.application.gui.previews.formats;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
 import java.util.HashMap;
+import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.application.gui.previews.formats.applicationz80.Qaop;
+import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.Base64;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.DataURL;
 
 /**
  *
@@ -46,8 +59,13 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
 
     private String locator = null;
     private Qaop qaop = null;
+    private JPanel qaopWrapper = null;
     private JPanel ui = null;
     
+    
+    private boolean isPaused = false;
+    private boolean isMuted = false;
+    private int sizeScaler = 1;
     
     
 
@@ -85,17 +103,25 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
             ui.addComponentListener(this);
 
             try {
+                qaopWrapper = new JPanel();
                 if(qaop == null) {
                     HashMap params = new HashMap();
-                    params.put("load", locator);
+                    if(DataURL.isDataURL(locator)) {
+                        params.put("load", new DataURL(locator).toExternalForm(Base64.DONT_BREAK_LINES));
+                    }
+                    else {
+                        params.put("load", locator);
+                    }
                     params.put("focus", "1");
                     qaop = new Qaop(params);
+                    qaop.addComponentListener(this);
+                    qaopWrapper.add(qaop);
                 }
 
                 JPanel toolbarWrapper = new JPanel();
                 toolbarWrapper.add(getJToolBar());
 
-                ui.add(qaop, BorderLayout.CENTER);
+                ui.add(qaopWrapper, BorderLayout.CENTER);
                 ui.add(toolbarWrapper, BorderLayout.SOUTH);
             }
             catch(Exception e) {
@@ -107,13 +133,61 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
 
     
 
+
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Save", PreviewUtils.ICON_SAVE, this,
+            getMenuButton(),
         }, this);
     }
+    
+    
+    
+    
+    public JButton getMenuButton() {
+        JButton button = UIBox.makeDefaultButton();
+        button.setIcon(UIBox.getIcon(0xf0c9));
+        button.setToolTipText("Sinclair ZX preview options.");
+        button.setBorder(null);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                getOptionsMenu().show(button, e.getX(), e.getY());
+            }
+
+        });
+        return button;
+    }
+    
+    
+    
+    
+    private static final Icon selectedIcon = UIBox.getIcon("gui/icons/checked2.png");
+    private static final Icon unselectedIcon = UIBox.getIcon("gui/icons/empty.png");
+    
+    public JPopupMenu getOptionsMenu() {
+        Object[] menuStruct = new Object[] {
+            "Open subject locator in ext", PreviewUtils.ICON_OPEN_EXT,
+            "Copy subject locator", PreviewUtils.ICON_COPY_LOCATION,
+            "Save subject locator resource...", PreviewUtils.ICON_SAVE,
+            "---",
+            "Reify snapshot",
+            "Reify screen capture",
+            "---",
+            "Display size", new Object[] {
+                "1x", sizeScaler == 1 ? selectedIcon : unselectedIcon,
+                "2x", sizeScaler == 2 ? selectedIcon : unselectedIcon,
+            },
+            "Mute", isMuted ? selectedIcon : unselectedIcon,
+            "---",
+            "Pause", isPaused ? selectedIcon : unselectedIcon,
+            "Reset",
+            "---",
+            "About"
+        };
+        JPopupMenu optionsPopup = UIBox.makePopupMenu(menuStruct, this);
+        return optionsPopup;
+    }
+
     
     
     
@@ -122,19 +196,149 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
         String c = actionEvent.getActionCommand();
         if(c == null) return;
         
-        
-        if(c.startsWith("Open ext")) {
+        if("Open subject locator in ext".equalsIgnoreCase(c)) {
             PreviewUtils.forkExternalPlayer(locator);
         }
-        else if(c.equalsIgnoreCase("Copy location")) {
+        else if("Copy subject locator".equalsIgnoreCase(c)) {
             if(locator != null) {
                 ClipboardBox.setClipboard(locator);
             }
         }
-        else if(c.startsWith("Save")) {
+        else if("Save subject locator resource...".equalsIgnoreCase(c)) {
             PreviewUtils.saveToFile(locator);
         }
+        
+        
+        
+        else if("Reify snapshot".equalsIgnoreCase(c)) {
+            DataURL snapshot = makeSnapshot();
+            if(snapshot != null) {
+                saveToTopic(snapshot);
+            }
+        }
+        else if("Reify screen capture".equalsIgnoreCase(c)) {
+            DataURL screenCapture = makeScreenCapture();
+            if(screenCapture != null) {
+                saveToTopic(screenCapture);
+            }
+        }     
+
+        else if("Type text...".equalsIgnoreCase(c)) {
+
+        }    
+
+        
+        else if("Enter a special key...".equalsIgnoreCase(c)) {
+
+        }
+        
+        
+        
+        else if("1x".equalsIgnoreCase(c)) {
+            setScaling(1);
+        }
+        else if("2x".equalsIgnoreCase(c)) {
+            setScaling(2);
+        }
+        else if("Display size".equalsIgnoreCase(c)) {
+            sizeScaler += 1;
+            if(sizeScaler > 2) sizeScaler = 1;
+            setScaling(sizeScaler);
+        }
+        
+        
+        else if("Mute".equalsIgnoreCase(c)) {
+            isMuted = !isMuted;
+            qaop.mute(isMuted);
+        }
+
+        
+        else if("Reset".equalsIgnoreCase(c)) {
+            qaop.reset();
+        }
+        
+        else if("Pause".equalsIgnoreCase(c)) {
+            isPaused = !isPaused;
+            qaop.pause(isPaused);
+        }
+        else if("Resume".equalsIgnoreCase(c)) {
+            isPaused = false;
+            qaop.pause(isPaused);
+        }
+        
+        else if("About".equalsIgnoreCase(c)) {
+            StringBuilder aboutBuilder = new StringBuilder("");
+            aboutBuilder.append("Wandora's Sinclair ZX emulation support is based on Qaop - ZX Spectrum emulator by Jan Bobrowski ");
+            aboutBuilder.append("distributed under the license of GNU GPL.");
+
+            qaop.pause(true);
+            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), aboutBuilder.toString(), "About Sinclair ZX emulation");
+            qaop.pause(false);
+        }
     }
+    
+    
+    
+    
+    
+    private void setScaling(int scale) {
+        sizeScaler = scale;
+        qaop.setScreenSize(scale);
+        qaop.validate();
+        qaop.repaint();
+    }
+    
+    
+
+    // -------------------------------------------------------------------------
+    
+    
+    
+    private DataURL makeSnapshot() {
+        try {
+            return new DataURL(qaop.save());
+        } 
+        catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    
+    
+    private DataURL makeScreenCapture() {
+        try {
+            BufferedImage screenCaptureImage = new BufferedImage(qaop.getPreferredSize().width, qaop.getPreferredSize().height, BufferedImage.TYPE_INT_RGB); 
+            Graphics screenCaptureGraphics = screenCaptureImage.createGraphics();
+            qaop.paintAll(screenCaptureGraphics);
+            DataURL screenCaptureDataUrl = null;
+            screenCaptureDataUrl = new DataURL(screenCaptureImage);
+            return screenCaptureDataUrl;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    
+    
+    private void saveToTopic(DataURL dataUrl) {
+        Wandora wandora = Wandora.getWandora();
+        try {
+            TopicMap topicMap = wandora.getTopicMap();
+
+            SimpleFileExtractor simpleFileExtractor = new SimpleFileExtractor();
+            simpleFileExtractor._extractTopicsFrom(dataUrl.toExternalForm(), topicMap);
+
+            wandora.doRefresh();
+        }
+        catch(Exception e) {
+            wandora.handleError(e);
+        }
+    }
+    
+    
+    // -------------------------------------------------------------------------
     
     
     
@@ -171,26 +375,29 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
     
     // -------------------------------------------------------------------------
     
-
+    private void refreshSize() {
+        if(qaopWrapper != null) {
+            qaopWrapper.setPreferredSize(qaop.getPreferredSize());
+            qaopWrapper.setSize(qaop.getPreferredSize());
+            qaopWrapper.revalidate();
+            ui.validate();
+        }
+    }
+    
+    
     @Override
     public void componentResized(ComponentEvent e) {
-        if(ui != null) {
-            ui.repaint();
-        }
+        refreshSize();
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
-        if(ui != null) {
-            ui.repaint();
-        }
+        refreshSize();
     }
 
     @Override
     public void componentShown(ComponentEvent e) {
-        if(ui != null) {
-            ui.repaint();
-        }
+        refreshSize();
     }
 
     @Override
