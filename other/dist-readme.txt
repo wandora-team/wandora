@@ -54,3 +54,8 @@ http://wandora.org/wiki/Main_Page
 
 Wandora forum
 http://wandora.org/forum
+
+
+Thank you for using Wandora.
+
+Wandora Team
