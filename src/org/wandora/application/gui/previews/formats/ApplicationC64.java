@@ -155,13 +155,6 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
                     
                     setDriveEmulation(C1541.COMPATIBLE_EMULATION);
                     setMouseUsage(C64Canvas.MOUSE_AS_FIRE_BUTTON);
-                    
-                    // start the emulation
-                    new Thread(this.c64).start();
-                    
-                    attach(locator);
-                    autoloadProgram();
-                    runProgram();
                 }
 
                 JPanel toolbarWrapper = new JPanel();
@@ -171,6 +164,13 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
                 
                 ui.add(c64wrapper, BorderLayout.CENTER);
                 ui.add(toolbarWrapper, BorderLayout.SOUTH);
+                
+                // start the emulation
+                new Thread(this.c64).start();
+
+                attach(locator);
+                autoloadProgram();
+                runProgram();
             }
             catch(Exception e) {
                 PreviewUtils.previewError(ui, "Can't initialize text viewer. Exception occurred.", e);

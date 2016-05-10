@@ -2,12 +2,14 @@
 <topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.0">
 	<topic id="core--variant-name-version">
 		<subjectIdentifier href="http://wandora.org/si/core/variant-name-version"/>
+		<subjectIdentifier href="http://www.wandora.org/core/variant-name-version"/>
 		<name>
 			<value>Wandora variant name version</value>
 		</name>
 	</topic>
 	<topic id="core--wandora-class">
 		<subjectIdentifier href="http://wandora.org/si/core/wandora-class"/>
+		<subjectIdentifier href="http://www.wandora.org/core/wandoraclass"/>
 		<name>
 			<value>Wandora class</value>
 		</name>
@@ -93,6 +95,7 @@
 	<topic id="core--language">
 		<subjectIdentifier href="http://wandora.org/si/core/language"/>
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
+		<subjectIdentifier href="http://www.wandora.org/core/language"/>
 		<name>
 			<value>Wandora language</value>
 		</name>
@@ -122,12 +125,14 @@
 	</topic>
 	<topic id="core--edittime">
 		<subjectIdentifier href="http://wandora.org/si/core/edittime"/>
+		<subjectIdentifier href="http://www.wandora.org/core/edittime"/>
 		<name>
 			<value>Topic edit time</value>
 		</name>
 	</topic>
 	<topic id="core--lang-independent">
 		<subjectIdentifier href="http://wandora.org/si/core/lang-independent"/>
+		<subjectIdentifier href="http://www.wandora.org/core/langindependent"/>
 		<instanceOf>
 			<topicRef href="#core--language"/>
 		</instanceOf>

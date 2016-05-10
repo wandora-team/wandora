@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * SQLExtractorUI.java
+ * SQLExtractor.java
  *
  */
 
@@ -27,9 +27,7 @@ package org.wandora.application.tools.extractors.sql;
 
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
@@ -37,16 +35,9 @@ import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.TopicTools;
-import org.wandora.topicmap.XTMPSI;
-import org.wandora.utils.Tuples.T2;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
