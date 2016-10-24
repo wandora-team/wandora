@@ -29,7 +29,8 @@
  * and open the template in the editor.
  */
 
-package org.wandora.topicmap;
+package org.wandora.topicmap.packageio;
+import org.wandora.topicmap.packageio.PackageInput;
 import java.util.zip.*;
 import java.io.*;
 import java.util.*;
@@ -58,10 +59,10 @@ public class ZipPackageInput implements PackageInput {
     
     /** Creates a new instance of ZipPackageInput */
     public ZipPackageInput(File file) throws IOException {
-        this(file.toURL());
+        this(file.toURI().toURL());
     }
     public ZipPackageInput(String file) throws IOException {
-        this(new File(file));
+        this(new File(file).toURI().toURL());
     }
     
     public ZipPackageInput(URL url) throws IOException {

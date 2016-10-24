@@ -25,6 +25,8 @@
 package org.wandora.application.tools;
 
 
+import org.wandora.topicmap.packageio.ZipPackageInput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.application.gui.texteditor.TextEditor;
 import org.wandora.topicmap.diff.*;
 import org.wandora.topicmap.*;

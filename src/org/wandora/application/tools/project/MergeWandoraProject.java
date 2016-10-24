@@ -27,6 +27,8 @@
 
 package org.wandora.application.tools.project;
 
+import org.wandora.topicmap.packageio.ZipPackageInput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.layered.*;
 import org.wandora.topicmap.*;
@@ -34,11 +36,10 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
-import org.wandora.*;
 import java.io.*;
 
-import java.util.*;
 import javax.swing.*;
+import org.wandora.topicmap.packageio.DirectoryPackageInput;
 
 
 /**
@@ -63,6 +64,7 @@ public class MergeWandoraProject extends AbstractWandoraTool implements WandoraT
 
     
     
+    @Override
     public void execute(Wandora wandora, Context context) {
         if(forceFile == null) {
             SimpleFileChooser chooser = UIConstants.getWandoraProjectFileChooser();
@@ -70,7 +72,7 @@ public class MergeWandoraProject extends AbstractWandoraTool implements WandoraT
             chooser.setDialogTitle("Merge Wandora project");
             chooser.setApproveButtonText("Merge");
             if(chooser.open(wandora)==SimpleFileChooser.APPROVE_OPTION) {
-                File f=chooser.getSelectedFile();
+                File f = chooser.getSelectedFile();
                 mergeProject(f, wandora);
             }
         }
@@ -82,13 +84,19 @@ public class MergeWandoraProject extends AbstractWandoraTool implements WandoraT
     
     
     public void mergeProject(File f, Wandora wandora) {
-        if(!f.getName().toUpperCase().endsWith(".WPR")) {
-            int a = WandoraOptionPane.showConfirmDialog(wandora, "Your project file doesn't end with Wandora project suffix WPR.\nDo you still want to open given file as Wandora project?", "Wrong file suffix", WandoraOptionPane.YES_NO_OPTION);
+        if(f == null) {
+            return;
+        }
+        
+        if(f.exists() && !f.isDirectory() && !f.getName().toUpperCase().endsWith(".WPR")) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "The project file doesn't end with Wandora project suffix WPR.\nDo you want to open the file as a Wandora project?", "Wrong file suffix", WandoraOptionPane.YES_NO_OPTION);
             if(a == WandoraOptionPane.NO_OPTION) return;
         }
+        
         setDefaultLogger();
-        setLogTitle("Merging Wandora Project");
+        setLogTitle("Merging Wandora project");
         log("Merging Wandora project '" + f.getPath() + "'.");
+        
         wandora.options.put("current.directory", f.getPath());
         try {
             wandora.getTopicMap().clearTopicMapIndexes();
@@ -97,9 +105,16 @@ public class MergeWandoraProject extends AbstractWandoraTool implements WandoraT
             log(e);
         }
         try {
-            PackageInput in=new ZipPackageInput(f);
-            TopicMapType type=TopicMapTypeManager.getType(org.wandora.topicmap.layered.LayerStack.class);
-            TopicMap tm=wandora.getTopicMap();
+            PackageInput in = null;
+            if(!f.isDirectory()) {
+                in = new ZipPackageInput(f);
+            }
+            else {
+                in = new DirectoryPackageInput(f);
+            }
+            
+            TopicMapType type = TopicMapTypeManager.getType(org.wandora.topicmap.layered.LayerStack.class);
+            TopicMap tm = wandora.getTopicMap();
             TopicMap results = type.unpackageTopicMap(tm,in,"",getCurrentLogger(),wandora);
             in.close();
 
@@ -110,8 +125,8 @@ public class MergeWandoraProject extends AbstractWandoraTool implements WandoraT
                     setState(CLOSE);
                 }
                 else {
-                    log("Merging interrupted!");
-                    log("Project was only partially merged to Wandora!");
+                    log("Merging interrupted.");
+                    log("Project was only partially merged to Wandora.");
                     setState(WAIT);
                 }
             }
@@ -138,7 +153,7 @@ public class MergeWandoraProject extends AbstractWandoraTool implements WandoraT
     }
     @Override
     public String getDescription() {
-        return "Merges Wandora project file (wpr) to the current project in Wandora. Wandora imports topic map layers in merged project file.";
+        return "Merges Wandora project to the current project in Wandora. Wandora imports topic map layers in merged project file.";
     }
     @Override
     public boolean runInOwnThread() {

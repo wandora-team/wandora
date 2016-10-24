@@ -21,6 +21,8 @@
  */
 package org.wandora.modules.topicmap;
 
+import org.wandora.topicmap.packageio.ZipPackageOutput;
+import org.wandora.topicmap.packageio.PackageOutput;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

@@ -27,7 +27,7 @@
  *
  */
 
-package org.wandora.topicmap;
+package org.wandora.topicmap.packageio;
 import java.io.*;
 /**
  * A package is a collection of data consisting of entries. Each entry has a name

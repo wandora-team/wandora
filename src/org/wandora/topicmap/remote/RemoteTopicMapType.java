@@ -30,6 +30,8 @@ package org.wandora.topicmap.remote;
 
 
 
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.remote.server.SocketServerInterface;
 import org.wandora.utils.Options;
 import org.wandora.topicmap.*;

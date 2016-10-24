@@ -49,5 +49,6 @@ public class WPRFileChooser extends SimpleFileChooser {
     private void initialize() {
         setFileFilter(new WPRFileFilter());
         setFileView(new WPRFileView());
+        setFileSelectionMode(WPRFileChooser.FILES_AND_DIRECTORIES);
     }
 }

@@ -30,6 +30,8 @@
 package org.wandora.topicmap.layered;
 
 
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.*;
 import org.wandora.utils.Options;

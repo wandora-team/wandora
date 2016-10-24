@@ -29,6 +29,8 @@ package org.wandora.application.tools.project;
 
 
 
+import org.wandora.topicmap.packageio.ZipPackageInput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.layered.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
@@ -36,10 +38,10 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
-import org.wandora.*;
 
 import javax.swing.Icon;
 import java.io.*;
+import org.wandora.topicmap.packageio.DirectoryPackageInput;
 
 
 
@@ -78,6 +80,7 @@ public class LoadWandoraProject extends AbstractWandoraTool implements WandoraTo
     
     
     
+    @Override
     public void execute(Wandora wandora, Context context) {
         if(forceFile == null) {
             SimpleFileChooser chooser=UIConstants.getWandoraProjectFileChooser();
@@ -102,15 +105,17 @@ public class LoadWandoraProject extends AbstractWandoraTool implements WandoraTo
      */
     public void loadProject(File f, Wandora wandora) {
         if(f == null) return;
-        if(!f.getName().toUpperCase().endsWith(".WPR")) {
-            int a = WandoraOptionPane.showConfirmDialog(wandora, "Your project file doesn't end with Wandora project suffix WPR.\nDo you still want to open given file as Wandora project?", "Wrong file suffix", WandoraOptionPane.YES_NO_OPTION);
+
+        if(f.exists() && !f.isDirectory() && !f.getName().toUpperCase().endsWith(".WPR")) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "The project file doesn't end with Wandora project suffix WPR.\nDo you want to open the file as a Wandora project?", "Wrong file suffix", WandoraOptionPane.YES_NO_OPTION);
             if(a == WandoraOptionPane.NO_OPTION) return;
         }
+        
         setDefaultLogger();
-        setLogTitle("Loading Wandora Project");
+        setLogTitle("Loading Wandora project");
 
         if(!f.exists()) {
-            log("File '"+f.getName()+"' not found error!");
+            log("Project '"+f.getName()+"' not found error!");
             setState(WAIT);
             return;
         }
@@ -124,9 +129,15 @@ public class LoadWandoraProject extends AbstractWandoraTool implements WandoraTo
             log(e);
         }
         try {
-            PackageInput in=new ZipPackageInput(f);
-            TopicMapType type=TopicMapTypeManager.getType(LayerStack.class);
-            TopicMap tm=type.unpackageTopicMap(in,"",getCurrentLogger(),wandora);
+            PackageInput in = null;
+            if(!f.isDirectory()) {
+                in = new ZipPackageInput(f);
+            }
+            else {
+                in = new DirectoryPackageInput(f);
+            }
+            TopicMapType type = TopicMapTypeManager.getType(LayerStack.class);
+            TopicMap tm = type.unpackageTopicMap(in, "", getCurrentLogger(), wandora);
             in.close();
             if(tm != null) {
                 wandora.setTopicMap((LayerStack)tm);
@@ -136,8 +147,8 @@ public class LoadWandoraProject extends AbstractWandoraTool implements WandoraTo
                     setState(CLOSE);
                 }
                 else {
-                    log("Loading interrupted!");
-                    log("Project was only partially loaded!");
+                    log("Loading interrupted.");
+                    log("Project was only partially loaded.");
                     setState(WAIT);
                 }
             }
@@ -162,7 +173,7 @@ public class LoadWandoraProject extends AbstractWandoraTool implements WandoraTo
     }
     @Override
     public String getDescription() {
-        return "Open Wandora project file (wpr).";
+        return "Open Wandora project.";
     }
     @Override
     public boolean runInOwnThread() {

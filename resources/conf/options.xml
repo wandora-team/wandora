@@ -1531,7 +1531,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </shortcuts>
    <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
    <current>
-      <directory>/home/</directory>
+      <directory></directory>
       <port></port>
       <user></user>
       <host></host>

@@ -27,6 +27,8 @@
  */
 
 package org.wandora.topicmap.memory;
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.utils.Options;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;

@@ -20,6 +20,8 @@
  */
 
 package org.wandora.topicmap.diff;
+import org.wandora.topicmap.packageio.ZipPackageInput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.*;
 import org.wandora.topicmap.memory.*;
 import org.wandora.topicmap.layered.*;

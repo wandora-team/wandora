@@ -19,6 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.query;
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.PackageInput;
 import java.io.*;
 import java.util.*;
 import javax.swing.Icon;

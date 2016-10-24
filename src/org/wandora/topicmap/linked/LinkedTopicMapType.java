@@ -21,6 +21,8 @@
  */
 
 package org.wandora.topicmap.linked;
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.PackageInput;
 import java.io.*;
 import javax.swing.JMenuItem;
 import org.wandora.application.Wandora;

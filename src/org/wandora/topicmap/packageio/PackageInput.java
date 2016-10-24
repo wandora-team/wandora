@@ -27,7 +27,7 @@
  *
  */
 
-package org.wandora.topicmap;
+package org.wandora.topicmap.packageio;
 import java.io.*;
 import java.util.*;
 /**

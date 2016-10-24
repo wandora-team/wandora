@@ -29,7 +29,8 @@
  * and open the template in the editor.
  */
 
-package org.wandora.topicmap;
+package org.wandora.topicmap.packageio;
+import org.wandora.topicmap.packageio.PackageOutput;
 import java.util.zip.*;
 import java.io.*;
 /**

@@ -29,16 +29,18 @@
 
 package org.wandora.application.tools.project;
 
+import org.wandora.topicmap.packageio.ZipPackageInput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.layered.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.*;
 
 import javax.swing.Icon;
 import java.io.*;
+import org.wandora.topicmap.packageio.DirectoryPackageInput;
 
 
 /**
@@ -56,6 +58,7 @@ public class RevertWandoraProject extends AbstractWandoraTool implements Wandora
 
     
     
+    @Override
     public void execute(Wandora wandora, Context context) {
         String recentProject = wandora.getCurrentProjectFileName();
         if(recentProject != null && recentProject.length() > 0) {
@@ -80,15 +83,15 @@ public class RevertWandoraProject extends AbstractWandoraTool implements Wandora
      */
     public void loadProject(File f, Wandora wandora) {
         if(f == null) return;
-        if(!f.getName().toUpperCase().endsWith(".WPR")) {
-            int a = WandoraOptionPane.showConfirmDialog(wandora, "Your project file doesn't end with Wandora project suffix WPR.\nDo you still want to open given file as Wandora project?", "Wrong file suffix", WandoraOptionPane.YES_NO_OPTION);
+        if(f.exists() && !f.isDirectory() && !f.getName().toUpperCase().endsWith(".WPR")) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "The project file doesn't end with Wandora project suffix WPR.\nDo you want to open given the file as a Wandora project?", "Wrong file suffix", WandoraOptionPane.YES_NO_OPTION);
             if(a == WandoraOptionPane.NO_OPTION) return;
         }
         setDefaultLogger();
         setLogTitle("Reverting Wandora Project");
 
         if(!f.exists()) {
-            log("File '"+f.getName()+"' not found error!");
+            log("Project '"+f.getName()+"' not found error!");
             setState(WAIT);
             return;
         }
@@ -102,9 +105,15 @@ public class RevertWandoraProject extends AbstractWandoraTool implements Wandora
             log(e);
         }
         try {
-            PackageInput in=new ZipPackageInput(f);
-            TopicMapType type=TopicMapTypeManager.getType(LayerStack.class);
-            TopicMap tm=type.unpackageTopicMap(in,"",getCurrentLogger(),wandora);
+            PackageInput in = null;
+            if(!f.isDirectory()) {
+                in = new ZipPackageInput(f);
+            }
+            else {
+                in = new DirectoryPackageInput(f);
+            }
+            TopicMapType type = TopicMapTypeManager.getType(LayerStack.class);
+            TopicMap tm = type.unpackageTopicMap(in,"",getCurrentLogger(),wandora);
             in.close();
             if(tm != null) {
                 wandora.setTopicMap((LayerStack)tm);
@@ -114,8 +123,8 @@ public class RevertWandoraProject extends AbstractWandoraTool implements Wandora
                     setState(CLOSE);
                 }
                 else {
-                    log("Revert interrupted!");
-                    log("Project was only partially loaded!");
+                    log("Revert interrupted.");
+                    log("Project was only partially loaded.");
                     setState(WAIT);
                 }
             }
@@ -141,7 +150,7 @@ public class RevertWandoraProject extends AbstractWandoraTool implements Wandora
     }
     @Override
     public String getDescription() {
-        return "Reverts to recently opened Wandora project file (wpr).";
+        return "Reverts to recently opened Wandora project.";
     }
     @Override
     public boolean runInOwnThread() {

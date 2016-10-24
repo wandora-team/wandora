@@ -29,6 +29,8 @@
 package org.wandora.topicmap.database;
 
 
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.utils.Options;
 import org.wandora.application.tools.layers.*;
 import org.wandora.topicmap.*;

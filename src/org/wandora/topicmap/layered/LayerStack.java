@@ -27,6 +27,8 @@
  */
 
 package org.wandora.topicmap.layered;
+import org.wandora.topicmap.packageio.ZipPackageInput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
 import java.util.*;

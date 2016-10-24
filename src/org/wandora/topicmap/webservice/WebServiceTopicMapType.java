@@ -19,6 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.webservice;
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.PackageInput;
 import java.io.*;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
