@@ -160,15 +160,12 @@ public class ErrorDialog extends javax.swing.JDialog {
 
         errorTabbedPane.addTab("Message", messagePanel);
 
-        stacktracePanel.setLayout(new java.awt.GridBagLayout());
+        stacktracePanel.setBackground(new java.awt.Color(255, 255, 255));
+        stacktracePanel.setLayout(new java.awt.BorderLayout());
 
         stacktraceScrollPane.setViewportView(stacktraceTextPane);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        stacktracePanel.add(stacktraceScrollPane, gridBagConstraints);
+        stacktracePanel.add(stacktraceScrollPane, java.awt.BorderLayout.CENTER);
 
         errorTabbedPane.addTab("Stacktrace", stacktracePanel);
 

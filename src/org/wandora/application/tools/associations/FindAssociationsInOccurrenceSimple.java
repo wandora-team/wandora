@@ -145,7 +145,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
             Locator occurrenceScopeLocator = null;
             
             Object source = getContext().getContextSource();
-            if(source instanceof OccurrenceTextEditor) {
+            if(source != null && source instanceof OccurrenceTextEditor) {
                 OccurrenceTextEditor editor = (OccurrenceTextEditor) source;
                 occurrenceType = editor.getOccurrenceType();
                 occurrenceScope = editor.getOccurrenceVersion();
@@ -200,40 +200,47 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
 
                         occurrenceType = occurrenceTopic.getTopicMap().getTopic(occurrenceTypeLocator);
                         occurrenceScope = occurrenceTopic.getTopicMap().getTopic(occurrenceScopeLocator);
-                        occurrence = occurrenceTopic.getData(occurrenceType, occurrenceScope);
+                        
+                        if(occurrenceType != null && occurrenceScope != null) {
 
-                        // Ok, if topic has sufficient occurrence descent deeper...
-                        if(occurrence != null && occurrence.length() > 0) {
-                            Iterator<Topic> allTopics = map.getTopics();
-                            requiresRefresh = false;
-                            while(allTopics.hasNext() && !forceStop()) {
-                                oldTopic = allTopics.next();
-                                if(oldTopic != null && !oldTopic.isRemoved()) {
-                                    if(isMatch(occurrence, oldTopic)) {
-                                        requiresRefresh = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(requiresRefresh) {
-                                Topic associationType = getOrCreateTopic(map, "Occurrence association", BASE_SI+"occurrence-association");
-                                Topic topicInOccurrenceRole = getOrCreateTopic(map, "Topic in occurrence", BASE_SI+"topic-in-occurrence");
-                                Topic occurrenceContainerRole = getOrCreateTopic(map, "Occurrence container", BASE_SI+"occurrence-container");
-                                allTopics = map.getTopics();
+                            occurrence = occurrenceTopic.getData(occurrenceType, occurrenceScope);
+
+                            // Ok, if topic has sufficient occurrence descent deeper...
+                            if(occurrence != null && occurrence.length() > 0) {
+                                Iterator<Topic> allTopics = map.getTopics();
+                                requiresRefresh = false;
                                 while(allTopics.hasNext() && !forceStop()) {
                                     oldTopic = allTopics.next();
                                     if(oldTopic != null && !oldTopic.isRemoved()) {
                                         if(isMatch(occurrence, oldTopic)) {
-                                            // Creating new association between occurrencce container and found topic
-                                            log("Creating association between '"+getTopicName(occurrenceTopic)+"' and '"+getTopicName(oldTopic)+"'.");
-                                            a = map.createAssociation(associationType);
-                                            a.addPlayer(oldTopic, topicInOccurrenceRole);
-                                            a.addPlayer(occurrenceTopic, occurrenceContainerRole);
-                                            associationCount++;
+                                            requiresRefresh = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if(requiresRefresh) {
+                                    Topic associationType = getOrCreateTopic(map, "Occurrence association", BASE_SI+"occurrence-association");
+                                    Topic topicInOccurrenceRole = getOrCreateTopic(map, "Topic in occurrence", BASE_SI+"topic-in-occurrence");
+                                    Topic occurrenceContainerRole = getOrCreateTopic(map, "Occurrence container", BASE_SI+"occurrence-container");
+                                    allTopics = map.getTopics();
+                                    while(allTopics.hasNext() && !forceStop()) {
+                                        oldTopic = allTopics.next();
+                                        if(oldTopic != null && !oldTopic.isRemoved()) {
+                                            if(isMatch(occurrence, oldTopic)) {
+                                                // Creating new association between occurrencce container and found topic
+                                                log("Creating association between '"+getTopicName(occurrenceTopic)+"' and '"+getTopicName(oldTopic)+"'.");
+                                                a = map.createAssociation(associationType);
+                                                a.addPlayer(oldTopic, topicInOccurrenceRole);
+                                                a.addPlayer(occurrenceTopic, occurrenceContainerRole);
+                                                associationCount++;
+                                            }
                                         }
                                     }
                                 }
                             }
+                        }
+                        else {
+                            log("Can't find occurrence type or scope topic in the occurrence topic.");
                         }
                     }
                 }

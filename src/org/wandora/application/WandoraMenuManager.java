@@ -56,6 +56,9 @@ import org.wandora.application.tools.associations.AddSchemalessAssociation;
 import org.wandora.application.tools.associations.ModifySchemalessAssociation;
 import org.wandora.application.tools.exporters.*;
 import org.wandora.application.tools.extractors.*;
+import org.wandora.application.tools.git.Clone;
+import org.wandora.application.tools.git.Commit;
+import org.wandora.application.tools.git.Push;
 import org.wandora.application.tools.layers.*;
 import org.wandora.application.tools.layers.ClearTopicMap;
 import org.wandora.application.tools.maiana.MaianaExport;
@@ -706,9 +709,19 @@ public class WandoraMenuManager {
             "Compare topic maps...", UIBox.getIcon("gui/icons/compare_topicmaps.png"), new DiffTool(),
             "Apply topic map patch...", UIBox.getIcon("gui/icons/patch_topicmap.png"), new ApplyPatchTool(),
         };
-        JMenu patchMenu =  new SimpleMenu("Compare and patch", UIBox.getIcon("gui/icons/compare_patch_topicmaps.png"));
+        JMenu patchMenu = new SimpleMenu("Compare and patch", UIBox.getIcon("gui/icons/compare_patch_topicmaps.png"));
         patchMenu.removeAll();
         UIBox.attachMenu( patchMenu, patchMenuStruct, wandora );
+        
+        Object[] teamMenuStruct = new Object[] {
+            "Git clone...", UIBox.getIcon(0xf1d3), new Clone(),
+            "Git fetch", UIBox.getIcon(0xf1d3), new Clone(),
+            "Git commit", UIBox.getIcon(0xf1d3), new Commit(),
+            "Git push", UIBox.getIcon(0xf1d3), new Push()
+        };
+        JMenu teamMenu = new SimpleMenu("Git", UIBox.getIcon(0xf1d2));
+        teamMenu.removeAll();
+        UIBox.attachMenu( teamMenu, teamMenuStruct, wandora );
         
         Object[] menuStructure = new Object[] {
             "New project...", KeyStroke.getKeyStroke(VK_N, CTRL_MASK | SHIFT_MASK), UIBox.getIcon("gui/icons/new_project.png"), new ResetWandora(),
@@ -727,6 +740,8 @@ public class WandoraMenuManager {
             
             "---",
             patchMenu,
+            "---",
+            teamMenu,
             "---",
             "Print...", new PrintTopic(), KeyStroke.getKeyStroke(VK_P, CTRL_MASK), UIBox.getIcon("gui/icons/print.png"),
             "---",
