@@ -67,6 +67,12 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
                     log("Saving...");
                     saveWandoraProject();
                     
+                    log("Adding...");
+                    Git.open(currentProjectFile)
+                            .add()
+                            .addFilepattern(".")
+                            .call();
+                    
                     log("Committing...");
                     Git.open(currentProjectFile)
                             .commit()

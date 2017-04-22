@@ -87,7 +87,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     public static boolean CONVERT_OCCURRENCE_RESOURCE_REF_TO_RESOURCE_DATA = true;
     public static boolean ENSURE_UNIQUE_BASENAMES = false;
-    public static boolean IMPORT_XML_IDENTIFIERS = false;
+    public static boolean IMPORT_XML_IDENTIFIERS = true;
     
     
     protected TopicMap tm;

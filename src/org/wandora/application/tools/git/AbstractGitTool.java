@@ -32,7 +32,7 @@ import org.wandora.topicmap.TopicMapType;
 import org.wandora.topicmap.TopicMapTypeManager;
 import org.wandora.topicmap.packageio.DirectoryPackageOutput;
 import org.wandora.topicmap.packageio.PackageOutput;
-import org.wandora.topicmap.packageio.ZipPackageOutput;
+
 
 /**
  *

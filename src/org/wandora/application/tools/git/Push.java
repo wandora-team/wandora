@@ -22,6 +22,8 @@ package org.wandora.application.tools.git;
 
 import java.io.File;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
@@ -54,15 +56,26 @@ public class Push extends AbstractGitTool implements WandoraTool {
                 setDefaultLogger();
                 setLogTitle("Pushing");
 
+                String username = pushUI.getUsername();
+                String password = pushUI.getPassword();
+                
                 String currentProject = wandora.getCurrentProjectFileName();
-
                 File currentProjectFile = new File(currentProject);
 
                 if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
                     log("Pushing ");
-                    Git.open(currentProjectFile)
-                            .push()
-                            .call();
+                    if(username != null && username.length() > 0) {
+                        CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
+                        Git.open(currentProjectFile)
+                                .push()
+                                .setCredentialsProvider(credentialsProvider)
+                                .call();
+                    }
+                    else {
+                        Git.open(currentProjectFile)
+                                .push()
+                                .call();
+                    }
                     log("Ready.");
                 }
                 else {

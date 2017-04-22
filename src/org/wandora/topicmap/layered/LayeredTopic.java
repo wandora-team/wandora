@@ -403,7 +403,7 @@ public class LayeredTopic extends Topic {
             else throw new RuntimeException("Not implemented");
         }
         else {
-            if(ts.size()>1) ambiguity("Several topics in selected layer (setBaseName");
+            if(ts.size()>1) ambiguity("Several topics in selected layer (setBaseName)");
             t=ts.iterator().next();
         }
         t.setBaseName(name);

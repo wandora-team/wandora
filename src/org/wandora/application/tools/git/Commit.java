@@ -57,8 +57,15 @@ public class Commit extends AbstractGitTool implements WandoraTool {
                 if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
                     log("Saving...");
                     saveWandoraProject();
+                    log("Adding...");
+                    Git.open(currentProjectFile)
+                            .add()
+                            .call();
                     log("Committing...");
-                    Git.open(currentProjectFile).commit().setMessage(commitMessage).call();
+                    Git.open(currentProjectFile)
+                            .commit()
+                            .setMessage(commitMessage)
+                            .call();
                     log("Ready.");
                 }
                 else {
