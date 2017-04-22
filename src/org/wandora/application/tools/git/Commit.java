@@ -20,13 +20,11 @@
  */
 package org.wandora.application.tools.git;
 
-import java.io.File;
-import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.UIBox;
+
 
 
 /**
@@ -50,21 +48,24 @@ public class Commit extends AbstractGitTool implements WandoraTool {
             
             if(commitUI.wasAccepted()) {
                 setDefaultLogger();
-                setLogTitle("Commit");
+                setLogTitle("Git commit");
                 Git git = getGit();
                 
                 if(git != null) {
-                    String commitMessage = commitUI.getMessage();
-
-                    log("Saving...");
+                    log("Saving project.");
                     saveWandoraProject();
                     
-                    log("Adding...");
+                    log("Adding new files to local repository.");
                     git.add()
                             .addFilepattern(".")
                             .call();
                     
-                    log("Committing...");
+                    log("Committing changes to local repository.");
+                    String commitMessage = commitUI.getMessage();
+                    if(commitMessage == null || commitMessage.length() == 0) {
+                        commitMessage = getDefaultCommitMessage();
+                        log("No commit message provided. Using default message.");
+                    }
                     git.commit()
                             .setMessage(commitMessage)
                             .call();

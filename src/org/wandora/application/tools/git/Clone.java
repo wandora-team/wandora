@@ -21,7 +21,7 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
-import javax.swing.Icon;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -30,7 +30,6 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.project.LoadWandoraProject;
 
 

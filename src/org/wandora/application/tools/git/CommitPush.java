@@ -20,8 +20,6 @@
  */
 package org.wandora.application.tools.git;
 
-import java.io.File;
-import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -29,7 +27,6 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.UIBox;
 
 /**
  *
@@ -56,36 +53,39 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
             
             if(commitPushUI.wasAccepted()) {
                 setDefaultLogger();
-                setLogTitle("Commit and push");
+                setLogTitle("Git commit and push");
                 Git git = getGit();
                 
                 if(git != null) {
-                    String commitMessage = commitPushUI.getMessage();
-                    String username = commitPushUI.getUsername();
-                    String password = commitPushUI.getPassword();
-                
-                    log("Saving...");
+                    log("Saving project.");
                     saveWandoraProject();
                     
-                    log("Adding...");
+                    log("Adding new files to the local repository.");
                     git.add()
                             .addFilepattern(".")
                             .call();
                     
-                    log("Committing...");
+                    log("Committing changes to the local repository.");
+                    String commitMessage = commitPushUI.getMessage();
+                    if(commitMessage == null || commitMessage.length() == 0) {
+                        commitMessage = getDefaultCommitMessage();
+                        log("No commit message provided. Using default message.");
+                    }
                     git.commit()
                             .setMessage(commitMessage)
                             .call();
                     
+                    String username = commitPushUI.getUsername();
+                    String password = commitPushUI.getPassword();
                     if(username != null && username.length() > 0) {
-                        log("Pushing with credentials.");
+                        log("Pushing upstream with credentials.");
                         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
                         git.push()
                                 .setCredentialsProvider(credentialsProvider)
                                 .call();
                     }
                     else {
-                        log("Pushing without credentials.");
+                        log("Pushing upstream without credentials.");
                         git.push()
                                 .call();
                     }

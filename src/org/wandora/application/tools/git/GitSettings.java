@@ -25,10 +25,7 @@ package org.wandora.application.tools.git;
  * @author akikivela
  */
 public class GitSettings {
-    
-    private static GitSettings currentGitSettings = null;
-    
-    
+
     private String remotePath; // == cloneUrl
     private String localPath;
     

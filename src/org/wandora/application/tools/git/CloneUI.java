@@ -135,13 +135,12 @@ public class CloneUI extends javax.swing.JPanel {
         remotePanel = new javax.swing.JPanel();
         cloneURLLabel = new SimpleLabel();
         cloneURLField = new SimpleField();
-        authenticationPanel = new javax.swing.JPanel();
         usernameLabel = new SimpleLabel();
         usernameField = new SimpleField();
         passwordLabel = new SimpleLabel();
         passwordField = new SimpleField();
-        destinationPanel = new javax.swing.JPanel();
         destinationDirectoryLabel = new SimpleLabel();
+        destinationPanel = new javax.swing.JPanel();
         destinationDirectoryField = new SimpleField();
         selectDestinationButton = new SimpleButton();
         confPanel = new javax.swing.JPanel();
@@ -168,62 +167,51 @@ public class CloneUI extends javax.swing.JPanel {
         cloneURLLabel.setText("Remote URL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         remotePanel.add(cloneURLLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
         remotePanel.add(cloneURLField, gridBagConstraints);
-
-        authenticationPanel.setLayout(new java.awt.GridBagLayout());
 
         usernameLabel.setText("User name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        authenticationPanel.add(usernameLabel, gridBagConstraints);
+        remotePanel.add(usernameLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        authenticationPanel.add(usernameField, gridBagConstraints);
+        remotePanel.add(usernameField, gridBagConstraints);
 
         passwordLabel.setText("Password");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        authenticationPanel.add(passwordLabel, gridBagConstraints);
+        remotePanel.add(passwordLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        authenticationPanel.add(passwordField, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 24, 0, 0);
-        remotePanel.add(authenticationPanel, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        cloneConfPanel.add(remotePanel, gridBagConstraints);
-
-        destinationPanel.setLayout(new java.awt.GridBagLayout());
+        remotePanel.add(passwordField, gridBagConstraints);
 
         destinationDirectoryLabel.setText("Destination directory");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        destinationPanel.add(destinationDirectoryLabel, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        remotePanel.add(destinationDirectoryLabel, gridBagConstraints);
+
+        destinationPanel.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         destinationPanel.add(destinationDirectoryField, gridBagConstraints);
@@ -236,18 +224,23 @@ public class CloneUI extends javax.swing.JPanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         destinationPanel.add(selectDestinationButton, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(16, 0, 0, 0);
-        cloneConfPanel.add(destinationPanel, gridBagConstraints);
+        remotePanel.add(destinationPanel, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        cloneConfPanel.add(remotePanel, gridBagConstraints);
 
         confPanel.setLayout(new java.awt.GridBagLayout());
 
+        openProjectCheckBox.setSelected(true);
         openProjectCheckBox.setText("Open project to Wandora");
         confPanel.add(openProjectCheckBox, new java.awt.GridBagConstraints());
 
@@ -329,7 +322,6 @@ public class CloneUI extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel authenticationPanel;
     private javax.swing.JPanel buttonPanelFiller;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel cloneButtonPanel;

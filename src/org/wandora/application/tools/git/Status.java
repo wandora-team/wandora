@@ -38,11 +38,11 @@ public class Status extends AbstractGitTool implements WandoraTool {
 
         try {
             setDefaultLogger();
-            setLogTitle("Status");
+            setLogTitle("Git status");
 
             Git git = getGit();
             if(git != null) {
-                log("Getting status...");
+                log("Getting git status...");
                 org.eclipse.jgit.api.Status status = git.status().call();
                 log("Added: " + status.getAdded());
                 log("Changed: " + status.getChanged());

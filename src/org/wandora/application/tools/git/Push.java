@@ -20,8 +20,7 @@
  */
 package org.wandora.application.tools.git;
 
-import java.io.File;
-import javax.swing.Icon;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -29,7 +28,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.UIBox;
+
 
 /**
  *
@@ -56,13 +55,13 @@ public class Push extends AbstractGitTool implements WandoraTool {
             
             if(pushUI.wasAccepted()) {
                 setDefaultLogger();
-                setLogTitle("Pushing");
+                setLogTitle("Git push");
                 Git git = getGit();
                 if(git != null) {
                     String username = pushUI.getUsername();
                     String password = pushUI.getPassword();
 
-                    log("Pushing ");
+                    log("Pushing local changes to upstream.");
                     if(username != null && username.length() > 0) {
                         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
                         git.push()

@@ -41,11 +41,11 @@ public class Pull extends AbstractGitTool implements WandoraTool {
 
         try {
             setDefaultLogger();
-            setLogTitle("Pulling");
+            setLogTitle("Git pull");
 
             Git git = getGit();
             if(git != null) {
-                log("Pulling ");
+                log("Pulling changes from remote repository...");
                 git.pull().call();
                 
                 int a = WandoraOptionPane.showConfirmDialog(wandora, "Reload Wandora project after pull?", "Reload Wandora project after pull?", WandoraOptionPane.YES_NO_OPTION);

@@ -135,7 +135,13 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
     }
     
     
-        
+    
+
+    public String getDefaultCommitMessage() {
+        return "Wandora project changes.";
+    }
+    
+    
     // -------------------------------------------------------------------------
     
     

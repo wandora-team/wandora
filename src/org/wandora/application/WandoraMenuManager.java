@@ -726,7 +726,7 @@ public class WandoraMenuManager {
             "---",
             "Status", UIBox.getIcon(0xf1d3), new Status()
         };
-        JMenu teamMenu = new SimpleMenu("Git", UIBox.getIcon(0xf1d2));
+        JMenu teamMenu = new SimpleMenu("Git", UIBox.getIcon(0xf1d3)); // alt 0xf1d2
         teamMenu.removeAll();
         UIBox.attachMenu( teamMenu, teamMenuStruct, wandora );
         
