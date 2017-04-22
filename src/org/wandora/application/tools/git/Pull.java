@@ -31,43 +31,27 @@ import org.wandora.application.contexts.Context;
  *
  * @author akikivela
  */
-public class Push extends AbstractGitTool implements WandoraTool {
-    
-    private static PushUI pushUI = null;
+public class Pull extends AbstractGitTool implements WandoraTool {
     
     
     @Override
     public void execute(Wandora wandora, Context context) {
-        
+
         try {
-            if(pushUI == null) {
-                pushUI = new PushUI();
+            setDefaultLogger();
+            setLogTitle("Pulling");
+
+            String currentProject = wandora.getCurrentProjectFileName();
+
+            File currentProjectFile = new File(currentProject);
+
+            if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
+                log("Pulling ");
+                Git.open(currentProjectFile).pull().call();
+                log("Ready.");
             }
-            
-            GitSettings gitSettings = getGitSettings();
-            
-            pushUI.setPassword(gitSettings.getPassword());
-            pushUI.setUsername(gitSettings.getUsername());
-            pushUI.openInDialog();
-            
-            if(pushUI.wasAccepted()) {
-                setDefaultLogger();
-                setLogTitle("Pushing");
-
-                String currentProject = wandora.getCurrentProjectFileName();
-
-                File currentProjectFile = new File(currentProject);
-
-                if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
-                    log("Pushing ");
-                    Git.open(currentProjectFile)
-                            .push()
-                            .call();
-                    log("Ready.");
-                }
-                else {
-                    log("Current project is not a git directory. Can't push.");
-                }
+            else {
+                log("Current project is not a git directory. Can't pull.");
             }
         }
         catch(Exception e) {
@@ -75,5 +59,5 @@ public class Push extends AbstractGitTool implements WandoraTool {
         }
         setState(WAIT);
     }
-    
+
 }

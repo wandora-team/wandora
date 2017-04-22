@@ -21,12 +21,14 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Repository;
+
 
 /**
  *
@@ -59,7 +61,7 @@ public class GitUtils {
     
     
     public static void commit() throws IOException, GitAPIException, JGitInternalException {
-        git.commit().setMessage("Added myfile").call();
+        git.commit().setMessage("Committed changes from wandora").call();
     }
     
     public static void pull() throws IOException, GitAPIException {
@@ -69,4 +71,8 @@ public class GitUtils {
     public static void push() throws IOException, GitAPIException {
         git.push().call();
     }
+    
+    
+    
+
 }

@@ -56,6 +56,7 @@ public class CloneUI extends javax.swing.JPanel {
             dialog.add(this);
             dialog.setSize(600,300);
             wandora.centerWindow(dialog);
+            dialog.setTitle("Git clone options");
         }
         wasAccepted = false;
         dialog.setVisible(true);

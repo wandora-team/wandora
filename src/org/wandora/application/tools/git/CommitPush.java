@@ -22,6 +22,8 @@ package org.wandora.application.tools.git;
 
 import java.io.File;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
@@ -31,42 +33,65 @@ import org.wandora.application.contexts.Context;
  *
  * @author akikivela
  */
-public class Push extends AbstractGitTool implements WandoraTool {
+public class CommitPush extends AbstractGitTool implements WandoraTool {
     
-    private static PushUI pushUI = null;
+    private CommitPushUI commitPushUI = null;
     
     
     @Override
     public void execute(Wandora wandora, Context context) {
-        
+
         try {
-            if(pushUI == null) {
-                pushUI = new PushUI();
+            if(commitPushUI == null) {
+                commitPushUI = new CommitPushUI();
             }
             
             GitSettings gitSettings = getGitSettings();
             
-            pushUI.setPassword(gitSettings.getPassword());
-            pushUI.setUsername(gitSettings.getUsername());
-            pushUI.openInDialog();
+            commitPushUI.setPassword(gitSettings.getPassword());
+            commitPushUI.setUsername(gitSettings.getUsername());
+            commitPushUI.openInDialog();
             
-            if(pushUI.wasAccepted()) {
+            if(commitPushUI.wasAccepted()) {
                 setDefaultLogger();
-                setLogTitle("Pushing");
+                setLogTitle("Commit and push");
 
+                String commitMessage = commitPushUI.getMessage();
+                String username = commitPushUI.getUsername();
+                String password = commitPushUI.getPassword();
+                
                 String currentProject = wandora.getCurrentProjectFileName();
-
                 File currentProjectFile = new File(currentProject);
 
                 if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
-                    log("Pushing ");
+                    log("Saving...");
+                    saveWandoraProject();
+                    
+                    log("Committing...");
                     Git.open(currentProjectFile)
-                            .push()
+                            .commit()
+                            .setMessage(commitMessage)
                             .call();
+                    
+                    if(username != null && username.length() > 0) {
+                        log("Pushing with credentials.");
+                        CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
+                        Git.open(currentProjectFile)
+                                .push()
+                                .setCredentialsProvider(credentialsProvider)
+                                .call();
+                    }
+                    else {
+                        log("Pushing without credentials.");
+                        Git.open(currentProjectFile)
+                                .push()
+                                .call();
+                    }
+                    
                     log("Ready.");
                 }
                 else {
-                    log("Current project is not a git directory. Can't push.");
+                    log("Current project is not a git directory. Can't commit.");
                 }
             }
         }
@@ -75,5 +100,6 @@ public class Push extends AbstractGitTool implements WandoraTool {
         }
         setState(WAIT);
     }
+    
     
 }

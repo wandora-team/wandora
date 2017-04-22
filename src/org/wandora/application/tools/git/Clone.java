@@ -37,7 +37,7 @@ import org.wandora.application.tools.project.LoadWandoraProject;
  *
  * @author akikivela
  */
-public class Clone extends AbstractWandoraTool implements WandoraTool {
+public class Clone extends AbstractGitTool implements WandoraTool {
 
     
     private CloneUI cloneUI = null;
@@ -68,6 +68,9 @@ public class Clone extends AbstractWandoraTool implements WandoraTool {
             String destinationDirectory = cloneUI.getDestinationDirectory();
             String username = cloneUI.getUsername();
             String password = cloneUI.getPassword();
+            
+            setGitSettings(cloneUrl, destinationDirectory, username, password);
+            
             
             log("Cloning git repository from "+cloneUrl);
             

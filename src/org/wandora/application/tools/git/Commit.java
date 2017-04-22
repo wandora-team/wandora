@@ -25,13 +25,13 @@ import org.eclipse.jgit.api.Git;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.tools.AbstractWandoraTool;
+
 
 /**
  *
  * @author akikivela
  */
-public class Commit extends AbstractWandoraTool implements WandoraTool {
+public class Commit extends AbstractGitTool implements WandoraTool {
     
     private CommitUI commitUI = null;
     
@@ -55,7 +55,9 @@ public class Commit extends AbstractWandoraTool implements WandoraTool {
                 File currentProjectFile = new File(currentProject);
 
                 if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
-                    log("Committing");
+                    log("Saving...");
+                    saveWandoraProject();
+                    log("Committing...");
                     Git.open(currentProjectFile).commit().setMessage(commitMessage).call();
                     log("Ready.");
                 }
