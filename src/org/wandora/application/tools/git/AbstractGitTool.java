@@ -23,15 +23,27 @@ package org.wandora.application.tools.git;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.Repository;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
+import static org.wandora.application.WandoraToolLogger.CLOSE;
+import static org.wandora.application.WandoraToolLogger.WAIT;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapType;
 import org.wandora.topicmap.TopicMapTypeManager;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.topicmap.packageio.DirectoryPackageInput;
 import org.wandora.topicmap.packageio.DirectoryPackageOutput;
+import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.ZipPackageInput;
 
 
 /**
@@ -63,7 +75,69 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
     }
     
     
+    public void reloadWandoraProject() {
+        Wandora wandora = Wandora.getWandora();
+        String fname = wandora.getCurrentProjectFileName();
+        if(fname != null) {
+            File f = new File(fname);
+            log("Reloading Wandora project '" + f.getPath() + "'.");
+
+            try {
+                wandora.getTopicMap().clearTopicMapIndexes();
+            }
+            catch(Exception e) {
+                log(e);
+            }
+            try {
+                PackageInput in = null;
+                if(!f.isDirectory()) {
+                    in = new ZipPackageInput(f);
+                }
+                else {
+                    in = new DirectoryPackageInput(f);
+                }
+                TopicMapType type = TopicMapTypeManager.getType(LayerStack.class);
+                TopicMap tm = type.unpackageTopicMap(in,"",getCurrentLogger(),wandora);
+                in.close();
+                if(tm != null) {
+                    wandora.setTopicMap((LayerStack)tm);
+                    wandora.setCurrentProjectFileName(f.getAbsolutePath());
+                }
+            }
+            catch(Exception e){
+                log(e);
+            }
+        }
+    }
+    
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    
+    public Git getGit() {
+        String currentProject = null;
+        try {
+            Wandora wandora = Wandora.getWandora();
+            currentProject = wandora.getCurrentProjectFileName();
+            if(currentProject == null) return null;
+            File currentProjectFile = new File(currentProject);
+            if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
+                Git git = Git.open(currentProjectFile);
+                return git;
+            }
+        } 
+        catch (IOException ex) {
+            log("Can't read git repository in '"+currentProject+"'.");
+        }
+        return null;
+    }
+    
+    
         
+    // -------------------------------------------------------------------------
+    
     
     public GitSettings getGitSettings() {
         if(gitSettings == null) {
@@ -76,7 +150,7 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
     
     
     public void setGitSettings(GitSettings gitSettings) {
-        gitSettings = gitSettings;
+        this.gitSettings = gitSettings;
     }
     
     
@@ -92,4 +166,14 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
         gitSettings = null;
     }
     
+    
+    
+    // -------------------------------------------------------------------------
+    
+    
+    
+    @Override
+    public Icon getIcon() {
+        return UIBox.getIcon(0xf1d3);
+    }
 }

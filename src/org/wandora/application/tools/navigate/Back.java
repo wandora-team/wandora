@@ -30,7 +30,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
-import org.wandora.*;
 import javax.swing.*;
 
 

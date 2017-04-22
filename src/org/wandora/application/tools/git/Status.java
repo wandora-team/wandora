@@ -20,20 +20,17 @@
  */
 package org.wandora.application.tools.git;
 
-import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.WandoraOptionPane;
 
 /**
  *
  * @author akikivela
  */
-public class Pull extends AbstractGitTool implements WandoraTool {
+public class Status extends AbstractGitTool implements WandoraTool {
     
     
     @Override
@@ -41,22 +38,26 @@ public class Pull extends AbstractGitTool implements WandoraTool {
 
         try {
             setDefaultLogger();
-            setLogTitle("Pulling");
+            setLogTitle("Status");
 
             Git git = getGit();
             if(git != null) {
-                log("Pulling ");
-                git.pull().call();
-                
-                int a = WandoraOptionPane.showConfirmDialog(wandora, "Reload Wandora project after pull?", "Reload Wandora project after pull?", WandoraOptionPane.YES_NO_OPTION);
-                if(a == WandoraOptionPane.YES_OPTION) {
-                    reloadWandoraProject();
-                }
-                
+                log("Getting status...");
+                org.eclipse.jgit.api.Status status = git.status().call();
+                log("Added: " + status.getAdded());
+                log("Changed: " + status.getChanged());
+                log("Conflicting: " + status.getConflicting());
+                log("ConflictingStageState: " + status.getConflictingStageState());
+                log("IgnoredNotInIndex: " + status.getIgnoredNotInIndex());
+                log("Missing: " + status.getMissing());
+                log("Modified: " + status.getModified());
+                log("Removed: " + status.getRemoved());
+                log("Untracked: " + status.getUntracked());
+                log("UntrackedFolders: " + status.getUntrackedFolders());
                 log("Ready.");
             }
             else {
-                log("Current project is not a git directory. Can't pull.");
+                log("Current project is not a git directory. Can't print status.");
             }
         }
         catch(Exception e) {
@@ -65,20 +66,17 @@ public class Pull extends AbstractGitTool implements WandoraTool {
         setState(WAIT);
     }
 
+          
     
-    
-    
-    
-      
     @Override
     public String getName() {
-        return "Git pull";
+        return "Git status";
     }
     
     
     @Override
     public String getDescription() {
-        return "Pulls changes from upstream and optionally reloads current project.";
+        return "Prints git status to log window.";
     }
     
     

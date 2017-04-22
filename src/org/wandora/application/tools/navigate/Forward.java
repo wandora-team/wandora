@@ -31,7 +31,6 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
 
-import org.wandora.*;
 import javax.swing.*;
 
 /**
@@ -45,8 +44,8 @@ public class Forward extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora admin, Context context) {
-        admin.forward();
+    public void execute(Wandora wandora, Context context) {
+        wandora.forward();
     }
 
     @Override

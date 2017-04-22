@@ -20,14 +20,7 @@
  */
 package org.wandora.application.tools.git;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.lib.Repository;
+
 
 
 /**
@@ -35,44 +28,6 @@ import org.eclipse.jgit.lib.Repository;
  * @author akikivela
  */
 public class GitUtils {
-    
-    private static String localPath = "";
-    private static String remotePath = "git@github.com:me/mytestrepo.git";
-    private static Repository localRepo = null;
-    private static Git git;
-    
-    
-    public static void initialize() throws IOException {
-        
-        localRepo = new FileRepository(localPath + "/.git");
-        git = new Git(localRepo);
-    }
-    
-    
-    public static Git getGit() {
-        return git;
-    }
-    
-    
-    public static void cloneRepository() throws IOException, GitAPIException {
-        Git.cloneRepository().setURI(remotePath)
-                .setDirectory(new File(localPath)).call();
-    }
-    
-    
-    public static void commit() throws IOException, GitAPIException, JGitInternalException {
-        git.commit().setMessage("Committed changes from wandora").call();
-    }
-    
-    public static void pull() throws IOException, GitAPIException {
-        git.pull().call();
-    }
-    
-    public static void push() throws IOException, GitAPIException {
-        git.push().call();
-    }
-    
-    
     
 
 }

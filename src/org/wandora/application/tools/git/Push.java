@@ -21,6 +21,7 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
+import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -28,6 +29,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 
 /**
  *
@@ -55,25 +57,20 @@ public class Push extends AbstractGitTool implements WandoraTool {
             if(pushUI.wasAccepted()) {
                 setDefaultLogger();
                 setLogTitle("Pushing");
+                Git git = getGit();
+                if(git != null) {
+                    String username = pushUI.getUsername();
+                    String password = pushUI.getPassword();
 
-                String username = pushUI.getUsername();
-                String password = pushUI.getPassword();
-                
-                String currentProject = wandora.getCurrentProjectFileName();
-                File currentProjectFile = new File(currentProject);
-
-                if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
                     log("Pushing ");
                     if(username != null && username.length() > 0) {
                         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
-                        Git.open(currentProjectFile)
-                                .push()
+                        git.push()
                                 .setCredentialsProvider(credentialsProvider)
                                 .call();
                     }
                     else {
-                        Git.open(currentProjectFile)
-                                .push()
+                        git.push()
                                 .call();
                     }
                     log("Ready.");
@@ -89,4 +86,21 @@ public class Push extends AbstractGitTool implements WandoraTool {
         setState(WAIT);
     }
     
+    
+    
+    
+      
+    @Override
+    public String getName() {
+        return "Git push";
+    }
+    
+    
+    @Override
+    public String getDescription() {
+        return "Pushes changes to upstream.";
+    }
+    
+    
+
 }

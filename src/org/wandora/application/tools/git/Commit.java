@@ -21,10 +21,12 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
+import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 
 
 /**
@@ -49,21 +51,21 @@ public class Commit extends AbstractGitTool implements WandoraTool {
             if(commitUI.wasAccepted()) {
                 setDefaultLogger();
                 setLogTitle("Commit");
+                Git git = getGit();
+                
+                if(git != null) {
+                    String commitMessage = commitUI.getMessage();
 
-                String commitMessage = commitUI.getMessage();
-                String currentProject = wandora.getCurrentProjectFileName();
-                File currentProjectFile = new File(currentProject);
-
-                if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
                     log("Saving...");
                     saveWandoraProject();
+                    
                     log("Adding...");
-                    Git.open(currentProjectFile)
-                            .add()
+                    git.add()
+                            .addFilepattern(".")
                             .call();
+                    
                     log("Committing...");
-                    Git.open(currentProjectFile)
-                            .commit()
+                    git.commit()
                             .setMessage(commitMessage)
                             .call();
                     log("Ready.");
@@ -78,5 +80,21 @@ public class Commit extends AbstractGitTool implements WandoraTool {
         }
         setState(WAIT);
     }
+    
+    
+    
+    
+    
+    @Override
+    public String getName() {
+        return "Git commit";
+    }
+    
+    
+    @Override
+    public String getDescription() {
+        return "Saves current project and commits changes to local git repository.";
+    }
+    
     
 }

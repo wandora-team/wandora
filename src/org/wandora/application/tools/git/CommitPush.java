@@ -21,6 +21,7 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
+import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -28,6 +29,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 
 /**
  *
@@ -55,42 +57,36 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
             if(commitPushUI.wasAccepted()) {
                 setDefaultLogger();
                 setLogTitle("Commit and push");
-
-                String commitMessage = commitPushUI.getMessage();
-                String username = commitPushUI.getUsername();
-                String password = commitPushUI.getPassword();
+                Git git = getGit();
                 
-                String currentProject = wandora.getCurrentProjectFileName();
-                File currentProjectFile = new File(currentProject);
-
-                if(currentProjectFile.exists() && currentProjectFile.isDirectory()) {
+                if(git != null) {
+                    String commitMessage = commitPushUI.getMessage();
+                    String username = commitPushUI.getUsername();
+                    String password = commitPushUI.getPassword();
+                
                     log("Saving...");
                     saveWandoraProject();
                     
                     log("Adding...");
-                    Git.open(currentProjectFile)
-                            .add()
+                    git.add()
                             .addFilepattern(".")
                             .call();
                     
                     log("Committing...");
-                    Git.open(currentProjectFile)
-                            .commit()
+                    git.commit()
                             .setMessage(commitMessage)
                             .call();
                     
                     if(username != null && username.length() > 0) {
                         log("Pushing with credentials.");
                         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
-                        Git.open(currentProjectFile)
-                                .push()
+                        git.push()
                                 .setCredentialsProvider(credentialsProvider)
                                 .call();
                     }
                     else {
                         log("Pushing without credentials.");
-                        Git.open(currentProjectFile)
-                                .push()
+                        git.push()
                                 .call();
                     }
                     
@@ -105,6 +101,22 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
             log(e);
         }
         setState(WAIT);
+    }
+    
+    
+    
+    
+    
+      
+    @Override
+    public String getName() {
+        return "Git commit and push";
+    }
+    
+    
+    @Override
+    public String getDescription() {
+        return "Saves current project, commits changes to local git repository and pushes commits to upstream.";
     }
     
     

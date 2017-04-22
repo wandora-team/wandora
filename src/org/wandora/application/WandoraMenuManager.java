@@ -61,6 +61,7 @@ import org.wandora.application.tools.git.Commit;
 import org.wandora.application.tools.git.CommitPush;
 import org.wandora.application.tools.git.Pull;
 import org.wandora.application.tools.git.Push;
+import org.wandora.application.tools.git.Status;
 import org.wandora.application.tools.layers.*;
 import org.wandora.application.tools.layers.ClearTopicMap;
 import org.wandora.application.tools.maiana.MaianaExport;
@@ -718,10 +719,12 @@ public class WandoraMenuManager {
         Object[] teamMenuStruct = new Object[] {
             "Clone...", UIBox.getIcon(0xf1d3), new Clone(),
             "Commit and push...", UIBox.getIcon(0xf1d3), new CommitPush(),
-            "---",         
+            "---",
             "Pull", UIBox.getIcon(0xf1d3), new Pull(),
             "Commit", UIBox.getIcon(0xf1d3), new Commit(),
-            "Push...", UIBox.getIcon(0xf1d3), new Push()
+            "Push...", UIBox.getIcon(0xf1d3), new Push(),
+            "---",
+            "Status", UIBox.getIcon(0xf1d3), new Status()
         };
         JMenu teamMenu = new SimpleMenu("Git", UIBox.getIcon(0xf1d2));
         teamMenu.removeAll();
