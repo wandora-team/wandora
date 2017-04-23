@@ -60,6 +60,9 @@ public class Push extends AbstractGitTool implements WandoraTool {
                 if(git != null) {
                     String username = pushUI.getUsername();
                     String password = pushUI.getPassword();
+                    
+                    gitSettings.setUsername(username);
+                    gitSettings.setPassword(password);
 
                     log("Pushing local changes to upstream.");
                     if(username != null && username.length() > 0) {

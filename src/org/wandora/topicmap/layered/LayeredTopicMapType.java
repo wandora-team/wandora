@@ -83,10 +83,13 @@ public class LayeredTopicMapType implements TopicMapType {
         lcounter=0;
         for(Layer l : ls.getLayers()) {
             TopicMap ltm = getWrappedTopicMap(l.getTopicMap());
-            TopicMapType tmtype=TopicMapTypeManager.getType(ltm);
+            TopicMapType tmtype = TopicMapTypeManager.getType(ltm);
             logger.log("Saving layer '" + l.getName() + "'.");
             tmtype.packageTopicMap(ltm,out,pathpre+"layer"+lcounter, logger);
             lcounter++;
+        }
+        for(int i=lcounter; i<lcounter+99; i++) {
+            out.removeEntry(pathpre+"layer"+lcounter);
         }
     }
 

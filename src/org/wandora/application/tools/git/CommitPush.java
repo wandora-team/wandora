@@ -20,6 +20,7 @@
  */
 package org.wandora.application.tools.git;
 
+import java.util.Set;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -60,6 +61,17 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
                     log("Saving project.");
                     saveWandoraProject();
                     
+                    log("Removing missing files.");
+                    org.eclipse.jgit.api.Status status = git.status().call();
+                    Set<String> missing = status.getMissing();
+                    if(missing != null && !missing.isEmpty()) {
+                        for(String missingFile : missing) {
+                            git.rm()
+                                    .addFilepattern(missingFile)
+                                    .call();
+                        }
+                    }
+                    
                     log("Adding new files to the local repository.");
                     git.add()
                             .addFilepattern(".")
@@ -77,6 +89,10 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
                     
                     String username = commitPushUI.getUsername();
                     String password = commitPushUI.getPassword();
+                    
+                    gitSettings.setUsername(username);
+                    gitSettings.setPassword(password);
+                    
                     if(username != null && username.length() > 0) {
                         log("Pushing upstream with credentials.");
                         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );

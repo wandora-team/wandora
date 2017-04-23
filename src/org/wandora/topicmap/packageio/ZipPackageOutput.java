@@ -30,9 +30,9 @@
  */
 
 package org.wandora.topicmap.packageio;
-import org.wandora.topicmap.packageio.PackageOutput;
 import java.util.zip.*;
 import java.io.*;
+
 /**
  * <p>
  * This class provides methods to write a ZIP file. Each entry is started with
@@ -56,12 +56,19 @@ public class ZipPackageOutput implements PackageOutput {
     /**
      * Starts next entry with the specified name.
      */
+    @Override
     public void nextEntry(String name) throws IOException{
         zos.putNextEntry(new ZipEntry(name));
     }
+
+    @Override
+    public void removeEntry(String name) throws IOException {
+    }
+    
     /**
      * Gets the output stream for current entry.
      */
+    @Override
     public OutputStream getOutputStream() throws IOException {
         return new OutputStream(){
             public void write(int b) throws IOException {
@@ -77,9 +84,11 @@ public class ZipPackageOutput implements PackageOutput {
             }
         };
     }
+    
     /**
      * Closes the file.
      */
+    @Override
     public void close() throws IOException{
         zos.finish();
         out.close();

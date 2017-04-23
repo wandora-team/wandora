@@ -21,6 +21,7 @@
 package org.wandora.topicmap.packageio;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -52,7 +53,30 @@ public class DirectoryPackageOutput implements PackageOutput {
         IObox.createPathFor(file.getParentFile());
         out = new FileOutputStream(file);
     }
+    
+    @Override
+    public void removeEntry(String name) throws IOException {
+        String entryName = this.directory + File.separator + name;
+        File file = new File(entryName);
+        if(file.exists()) {
+            deleteRecursive(file);
+        }
+    }
 
+    private boolean deleteRecursive(File path) throws FileNotFoundException{
+        if(!path.exists()) return false;
+        boolean ret = true;
+        if(path.isDirectory()){
+            for (File f : path.listFiles()){
+                ret = ret && deleteRecursive(f);
+            }
+        }
+        return ret && path.delete();
+    }
+    
+    
+    
+    
     @Override
     public void close() throws IOException {
         if(out != null) {

@@ -41,6 +41,7 @@ import java.io.*;
  */
 public interface PackageOutput {
     
+    
     /**
      * Start a new entry in the package with the given name.
      */
@@ -53,5 +54,8 @@ public interface PackageOutput {
      * Gets the output stream for current entry.
      */
     public OutputStream getOutputStream() throws IOException;
-    
+    /**
+     * Ensure entry will be removed.
+     */
+    public void removeEntry(String name) throws IOException;
 }

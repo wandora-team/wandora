@@ -20,6 +20,7 @@
  */
 package org.wandora.application.tools.git;
 
+import java.util.Set;
 import org.eclipse.jgit.api.Git;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -54,6 +55,17 @@ public class Commit extends AbstractGitTool implements WandoraTool {
                 if(git != null) {
                     log("Saving project.");
                     saveWandoraProject();
+                    
+                    log("Removing missing files.");
+                    org.eclipse.jgit.api.Status status = git.status().call();
+                    Set<String> missing = status.getMissing();
+                    if(missing != null && !missing.isEmpty()) {
+                        for(String missingFile : missing) {
+                            git.rm()
+                                    .addFilepattern(missingFile)
+                                    .call();
+                        }
+                    }
                     
                     log("Adding new files to local repository.");
                     git.add()
