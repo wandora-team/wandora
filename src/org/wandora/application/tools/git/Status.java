@@ -37,11 +37,11 @@ public class Status extends AbstractGitTool implements WandoraTool {
     public void execute(Wandora wandora, Context context) {
 
         try {
-            setDefaultLogger();
-            setLogTitle("Git status");
-
             Git git = getGit();
             if(git != null) {
+                setDefaultLogger();
+                setLogTitle("Git status");
+                
                 log("Getting git status...");
                 org.eclipse.jgit.api.Status status = git.status().call();
                 log("Added: " + status.getAdded());
@@ -57,7 +57,7 @@ public class Status extends AbstractGitTool implements WandoraTool {
                 log("Ready.");
             }
             else {
-                log("Current project is not a git directory. Can't print status.");
+                logAboutMissingGitRepository();
             }
         }
         catch(Exception e) {

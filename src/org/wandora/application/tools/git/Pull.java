@@ -20,14 +20,24 @@
  */
 package org.wandora.application.tools.git;
 
-import javax.swing.Icon;
+
+import java.io.IOException;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.MergeResult;
+import org.eclipse.jgit.api.MergeResult.MergeStatus;
+import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.api.PullResult;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.FetchResult;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *
@@ -35,29 +45,76 @@ import org.wandora.application.gui.WandoraOptionPane;
  */
 public class Pull extends AbstractGitTool implements WandoraTool {
     
+    private PullUI pullUI = null;
+    
     
     @Override
     public void execute(Wandora wandora, Context context) {
 
         try {
-            setDefaultLogger();
-            setLogTitle("Git pull");
-
             Git git = getGit();
             if(git != null) {
-                log("Pulling changes from remote repository...");
-                git.pull().call();
-                
-                int a = WandoraOptionPane.showConfirmDialog(wandora, "Reload Wandora project after pull?", "Reload Wandora project after pull?", WandoraOptionPane.YES_NO_OPTION);
-                if(a == WandoraOptionPane.YES_OPTION) {
-                    reloadWandoraProject();
+                PullCommand pull = git.pull();
+                GitSettings gitSettings = getGitSettings();
+                String url = getGitRemoteUrl();
+                if(url == null) {
+                    if(pullUI == null) {
+                        pullUI = new PullUI();
+                    }
+                    pullUI.setUsername(gitSettings.getUsername());
+                    pullUI.setPassword(gitSettings.getPassword());
+
+                    pullUI.openInDialog();
+                    
+                    if(pullUI.wasAccepted()) {
+                        gitSettings.setUsername(pullUI.getUsername());
+                        gitSettings.setPassword(pullUI.getPassword());
+
+                        setGitRemoteUrl(pullUI.getRemoteUrl());                    
+                        pull.setRemote(pullUI.getRemoteUrl());
+                        if(isValid(gitSettings.getUsername())) {
+                            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( gitSettings.getUsername(), gitSettings.getPassword() );
+                            pull.setCredentialsProvider(credentialsProvider);
+                        }
+                    }
+                    else {
+                        return;
+                    }
                 }
                 
+                setDefaultLogger();
+                setLogTitle("Git pull");
+                
+                log("Pulling changes from remote repository...");
+                PullResult result = pull.call();
+                
+                FetchResult fetchResult = result.getFetchResult();
+                MergeResult mergeResult = result.getMergeResult();
+                MergeStatus mergeStatus = mergeResult.getMergeStatus();
+                
+                String fetchResultMessages = fetchResult.getMessages();
+                if(isValid(fetchResultMessages)) {
+                    log(fetchResult.getMessages());
+                }
+                log(mergeStatus.toString());
+                
+                if(mergeStatus.equals(MergeStatus.MERGED)) {
+                    int a = WandoraOptionPane.showConfirmDialog(wandora, "Reload Wandora project after pull?", "Reload Wandora project after pull?", WandoraOptionPane.YES_NO_OPTION);
+                    if(a == WandoraOptionPane.YES_OPTION) {
+                        reloadWandoraProject();
+                    }
+                }
                 log("Ready.");
             }
             else {
-                log("Current project is not a git directory. Can't pull.");
+                logAboutMissingGitRepository();
             }
+        }
+        catch(GitAPIException gae) {
+            log(gae.toString());
+        }
+        catch(NoWorkTreeException nwte) {
+            log(nwte.toString());
         }
         catch(Exception e) {
             log(e);

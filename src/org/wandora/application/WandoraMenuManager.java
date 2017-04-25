@@ -59,6 +59,7 @@ import org.wandora.application.tools.extractors.*;
 import org.wandora.application.tools.git.Clone;
 import org.wandora.application.tools.git.Commit;
 import org.wandora.application.tools.git.CommitPush;
+import org.wandora.application.tools.git.Init;
 import org.wandora.application.tools.git.Pull;
 import org.wandora.application.tools.git.Push;
 import org.wandora.application.tools.git.Status;
@@ -708,6 +709,24 @@ public class WandoraMenuManager {
         refreshExportMenu();
         refreshGeneratorMenu();
         
+        // ***** GIT *****
+        Object[] teamMenuStruct = new Object[] {
+            "Initialize repository...", UIBox.getIcon(0xf1d3), new Init(),
+            "Clone remote repository...", UIBox.getIcon(0xf1d3), new Clone(),
+            "---",
+            "Commit and push to remote...", UIBox.getIcon(0xf1d3), new CommitPush(),
+            "Pull from remote...", UIBox.getIcon(0xf1d3), new Pull(),
+            "---",
+            "Commit...", UIBox.getIcon(0xf1d3), new Commit(),
+            "Push...", UIBox.getIcon(0xf1d3), new Push(),
+            "---",
+            "Status...", UIBox.getIcon(0xf1d3), new Status()
+        };
+        JMenu teamMenu = new SimpleMenu("Git", UIBox.getIcon(0xf1d3)); // alt 0xf1d2
+        teamMenu.removeAll();
+        UIBox.attachMenu( teamMenu, teamMenuStruct, wandora );
+        
+        // ***** PATCH ******
         Object[] patchMenuStruct = new Object[] {
             "Compare topic maps...", UIBox.getIcon("gui/icons/compare_topicmaps.png"), new DiffTool(),
             "Apply topic map patch...", UIBox.getIcon("gui/icons/patch_topicmap.png"), new ApplyPatchTool(),
@@ -715,21 +734,7 @@ public class WandoraMenuManager {
         JMenu patchMenu = new SimpleMenu("Compare and patch", UIBox.getIcon("gui/icons/compare_patch_topicmaps.png"));
         patchMenu.removeAll();
         UIBox.attachMenu( patchMenu, patchMenuStruct, wandora );
-        
-        Object[] teamMenuStruct = new Object[] {
-            "Clone...", UIBox.getIcon(0xf1d3), new Clone(),
-            "Commit and push...", UIBox.getIcon(0xf1d3), new CommitPush(),
-            "---",
-            "Pull", UIBox.getIcon(0xf1d3), new Pull(),
-            "Commit", UIBox.getIcon(0xf1d3), new Commit(),
-            "Push...", UIBox.getIcon(0xf1d3), new Push(),
-            "---",
-            "Status", UIBox.getIcon(0xf1d3), new Status()
-        };
-        JMenu teamMenu = new SimpleMenu("Git", UIBox.getIcon(0xf1d3)); // alt 0xf1d2
-        teamMenu.removeAll();
-        UIBox.attachMenu( teamMenu, teamMenuStruct, wandora );
-        
+
         Object[] menuStructure = new Object[] {
             "New project...", KeyStroke.getKeyStroke(VK_N, CTRL_MASK | SHIFT_MASK), UIBox.getIcon("gui/icons/new_project.png"), new ResetWandora(),
             "Open project...", KeyStroke.getKeyStroke(VK_L, CTRL_MASK), UIBox.getIcon("gui/icons/load_project.png"), new LoadWandoraProject(),
@@ -743,12 +748,11 @@ public class WandoraMenuManager {
             importMenu, 
             extractMenu,
             generatorMenu,
-            exportMenu, 
+            exportMenu,
             
+            teamMenu,
             "---",
             patchMenu,
-            "---",
-            teamMenu,
             "---",
             "Print...", new PrintTopic(), KeyStroke.getKeyStroke(VK_P, CTRL_MASK), UIBox.getIcon("gui/icons/print.png"),
             "---",

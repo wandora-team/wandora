@@ -20,11 +20,15 @@
  */
 package org.wandora.application.tools.git;
 
+import java.io.IOException;
 import java.util.Set;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
+import org.wandora.topicmap.TopicMapException;
 
 
 
@@ -41,22 +45,22 @@ public class Commit extends AbstractGitTool implements WandoraTool {
     public void execute(Wandora wandora, Context context) {
 
         try {
-            if(commitUI == null) {
-                commitUI = new CommitUI();
-            }
-            
-            commitUI.openInDialog();
-            
-            if(commitUI.wasAccepted()) {
-                setDefaultLogger();
-                setLogTitle("Git commit");
-                Git git = getGit();
-                
-                if(git != null) {
+            Git git = getGit();
+            if(git != null) {
+                if(commitUI == null) {
+                    commitUI = new CommitUI();
+                }
+
+                commitUI.openInDialog();
+
+                if(commitUI.wasAccepted()) {
+                    setDefaultLogger();
+                    setLogTitle("Git commit");
+                    
                     log("Saving project.");
                     saveWandoraProject();
                     
-                    log("Removing missing files.");
+                    log("Removing deleted files from local repository.");
                     org.eclipse.jgit.api.Status status = git.status().call();
                     Set<String> missing = status.getMissing();
                     if(missing != null && !missing.isEmpty()) {
@@ -81,12 +85,25 @@ public class Commit extends AbstractGitTool implements WandoraTool {
                     git.commit()
                             .setMessage(commitMessage)
                             .call();
+                    
                     log("Ready.");
                 }
-                else {
-                    log("Current project is not a git directory. Can't commit.");
-                }
             }
+            else {
+                logAboutMissingGitRepository();
+            }
+        }
+        catch(GitAPIException gae) {
+            log(gae.toString());
+        }
+        catch(NoWorkTreeException nwte) {
+            log(nwte.toString());
+        }
+        catch(IOException ioe) {
+            log(ioe.toString());
+        }
+        catch(TopicMapException tme) {
+            log(tme.toString());
         }
         catch(Exception e) {
             log(e);
@@ -106,7 +123,7 @@ public class Commit extends AbstractGitTool implements WandoraTool {
     
     @Override
     public String getDescription() {
-        return "Saves current project and commits changes to local git repository.";
+        return "Saves current project and commits changes to local git repository. Changes include deletions and additions.";
     }
     
     

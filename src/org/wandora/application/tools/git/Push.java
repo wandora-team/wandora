@@ -22,6 +22,9 @@ package org.wandora.application.tools.git;
 
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
@@ -43,44 +46,49 @@ public class Push extends AbstractGitTool implements WandoraTool {
     public void execute(Wandora wandora, Context context) {
         
         try {
-            if(pushUI == null) {
-                pushUI = new PushUI();
-            }
-            
-            GitSettings gitSettings = getGitSettings();
-            
-            pushUI.setPassword(gitSettings.getPassword());
-            pushUI.setUsername(gitSettings.getUsername());
-            pushUI.openInDialog();
-            
-            if(pushUI.wasAccepted()) {
-                setDefaultLogger();
-                setLogTitle("Git push");
-                Git git = getGit();
-                if(git != null) {
+            Git git = getGit();
+            if(git != null) {
+                if(pushUI == null) {
+                    pushUI = new PushUI();
+                }
+                
+                GitSettings gitSettings = getGitSettings();
+
+                pushUI.setPassword(gitSettings.getPassword());
+                pushUI.setUsername(gitSettings.getUsername());
+                pushUI.openInDialog();
+
+                if(pushUI.wasAccepted()) {
+                    setDefaultLogger();
+                    setLogTitle("Git push");
+
                     String username = pushUI.getUsername();
                     String password = pushUI.getPassword();
                     
                     gitSettings.setUsername(username);
                     gitSettings.setPassword(password);
 
+                    PushCommand push = git.push();
+                    
                     log("Pushing local changes to upstream.");
                     if(username != null && username.length() > 0) {
                         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
-                        git.push()
-                                .setCredentialsProvider(credentialsProvider)
-                                .call();
+                        push.setCredentialsProvider(credentialsProvider);
                     }
-                    else {
-                        git.push()
-                                .call();
-                    }
+                    
+                    push.call();
                     log("Ready.");
                 }
-                else {
-                    log("Current project is not a git directory. Can't push.");
-                }
             }
+            else {
+                logAboutMissingGitRepository();
+            }
+        }
+        catch(GitAPIException gae) {
+            log(gae.toString());
+        }
+        catch(NoWorkTreeException nwte) {
+            log(nwte.toString());
         }
         catch(Exception e) {
             log(e);

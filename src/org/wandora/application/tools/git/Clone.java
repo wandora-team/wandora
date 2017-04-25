@@ -21,6 +21,7 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
+import org.eclipse.jgit.api.CloneCommand;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -70,26 +71,20 @@ public class Clone extends AbstractGitTool implements WandoraTool {
             String password = cloneUI.getPassword();
             
             setGitSettings(cloneUrl, destinationDirectory, username, password);
-            
-            
+
             log("Cloning git repository from "+cloneUrl);
             
             try {
-                if(username == null) {
-                    Git.cloneRepository()
-                            .setURI(cloneUrl)
-                            .setDirectory(new File(destinationDirectory))
-                            .call();
-                }
-                else {
+                CloneCommand clone = Git.cloneRepository();
+                clone.setURI(cloneUrl);
+                clone.setDirectory(new File(destinationDirectory));
+                
+                if(isValid(username)) {
                     CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
-                    
-                    Git.cloneRepository()
-                            .setURI(cloneUrl)
-                            .setCredentialsProvider(credentialsProvider)
-                            .setDirectory(new File(destinationDirectory))
-                            .call();
+                    clone.setCredentialsProvider(credentialsProvider);
                 }
+                
+                clone.call();
                 
                 if(cloneUI.getOpenProject()) {
                     log("Opening project.");
@@ -100,7 +95,10 @@ public class Clone extends AbstractGitTool implements WandoraTool {
                 log("Ready.");
             } 
             catch (GitAPIException ex) {
-                log(ex);
+                log(ex.toString());
+            }
+            catch (Exception e) {
+                log(e);
             }
             setState(WAIT);
         }

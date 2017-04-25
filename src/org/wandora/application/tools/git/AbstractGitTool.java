@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.CLOSE;
@@ -55,6 +56,16 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
     private static GitSettings gitSettings;
     
     
+    
+    public File getCurrentProjectFile() {
+        Wandora wandora = Wandora.getWandora();
+        String fname = wandora.getCurrentProjectFileName();
+        if(fname != null) {
+            File f = new File(fname);
+            return f;
+        }
+        return null;
+    }
     
     
     public void saveWandoraProject() throws IOException, TopicMapException {
@@ -129,9 +140,49 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
             }
         } 
         catch (IOException ex) {
-            log("Can't read git repository in '"+currentProject+"'.");
+            // log("Can't read git repository in '"+currentProject+"'.");
         }
         return null;
+    }
+    
+    
+    public String getGitRemoteUrl() {
+        try {
+            return getGit().getRepository().getConfig().getString( "remote", "origin", "url" );
+        }
+        catch(Exception e) {}
+        return null;
+    }
+    
+    
+    
+    public void setGitRemoteUrl(String remoteUrl) {
+        try {
+            StoredConfig config = getGit().getRepository().getConfig();
+            config.setString("remote", "origin", "url", remoteUrl);
+            config.save();
+        }
+        catch(Exception e) {}
+    }
+    
+    
+    
+    public StoredConfig getGitConfig() {
+        try {
+            return getGit().getRepository().getConfig();
+        }
+        catch(Exception e) {}
+        return null;
+    }
+    
+    
+    
+    public void logAboutMissingGitRepository() {
+        setDefaultLogger();
+        setLogTitle("Git repository is missing");
+        log("Current project is not a git repository.");
+        log("Initialize the git repository first.");
+        log("Ready.");
     }
     
     
@@ -139,6 +190,13 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
 
     public String getDefaultCommitMessage() {
         return "Wandora project changes.";
+    }
+    
+    
+    public boolean isValid(String str) {
+        if(str == null) return false;
+        if(str.length() == 0) return false;
+        return true;
     }
     
     

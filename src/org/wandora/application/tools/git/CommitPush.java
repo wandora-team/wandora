@@ -20,14 +20,19 @@
  */
 package org.wandora.application.tools.git;
 
+import java.io.IOException;
 import java.util.Set;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *
@@ -42,26 +47,26 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
     public void execute(Wandora wandora, Context context) {
 
         try {
-            if(commitPushUI == null) {
-                commitPushUI = new CommitPushUI();
-            }
-            
-            GitSettings gitSettings = getGitSettings();
-            
-            commitPushUI.setPassword(gitSettings.getPassword());
-            commitPushUI.setUsername(gitSettings.getUsername());
-            commitPushUI.openInDialog();
-            
-            if(commitPushUI.wasAccepted()) {
-                setDefaultLogger();
-                setLogTitle("Git commit and push");
-                Git git = getGit();
+            Git git = getGit();    
+            if(git != null) {
                 
-                if(git != null) {
-                    log("Saving project.");
+                if(commitPushUI == null) {
+                    commitPushUI = new CommitPushUI();
+                }
+
+                GitSettings gitSettings = getGitSettings();
+
+                commitPushUI.setPassword(gitSettings.getPassword());
+                commitPushUI.setUsername(gitSettings.getUsername());
+                commitPushUI.openInDialog();
+
+                if(commitPushUI.wasAccepted()) {
+                    setDefaultLogger();
+                    setLogTitle("Git commit and push");
+
                     saveWandoraProject();
                     
-                    log("Removing missing files.");
+                    log("Removing deleted files from local repository.");
                     org.eclipse.jgit.api.Status status = git.status().call();
                     Set<String> missing = status.getMissing();
                     if(missing != null && !missing.isEmpty()) {
@@ -93,25 +98,33 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
                     gitSettings.setUsername(username);
                     gitSettings.setPassword(password);
                     
-                    if(username != null && username.length() > 0) {
-                        log("Pushing upstream with credentials.");
+                    PushCommand push = git.push();
+                    if(isValid(username)) {
+                        log("Setting push credentials.");
                         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
-                        git.push()
-                                .setCredentialsProvider(credentialsProvider)
-                                .call();
+                        push.setCredentialsProvider(credentialsProvider);
                     }
-                    else {
-                        log("Pushing upstream without credentials.");
-                        git.push()
-                                .call();
-                    }
+                    log("Pushing upstream.");
+                    push.call();
                     
                     log("Ready.");
                 }
-                else {
-                    log("Current project is not a git directory. Can't commit.");
-                }
             }
+            else {
+                logAboutMissingGitRepository();
+            }
+        }
+        catch(GitAPIException gae) {
+            log(gae.toString());
+        }
+        catch(NoWorkTreeException nwte) {
+            log(nwte.toString());
+        }
+        catch(IOException ioe) {
+            log(ioe.toString());
+        }
+        catch(TopicMapException tme) {
+            log(tme.toString());
         }
         catch(Exception e) {
             log(e);

@@ -23,23 +23,24 @@ package org.wandora.application.tools.git;
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
-import org.wandora.application.gui.simple.SimpleTextArea;
+
 
 /**
  *
  * @author akikivela
  */
-public class CommitUI extends javax.swing.JPanel {
+public class PullUI extends javax.swing.JPanel {
 
     private JDialog dialog = null;
     private boolean wasAccepted = false;
     
     
     /**
-     * Creates new form CommitUI
+     * Creates new form PullUI
      */
-    public CommitUI() {
+    public PullUI() {
         initComponents();
     }
     
@@ -49,10 +50,11 @@ public class CommitUI extends javax.swing.JPanel {
             Wandora wandora = Wandora.getWandora();
             dialog = new JDialog(wandora, true);
             dialog.add(this);
-            dialog.setSize(600,200);
-            dialog.setTitle("Commit message");
+            dialog.setSize(600,170);
+            dialog.setTitle("Git pull options");
             wandora.centerWindow(dialog);
         }
+        
         wasAccepted = false;
         dialog.setVisible(true);
     }
@@ -62,20 +64,40 @@ public class CommitUI extends javax.swing.JPanel {
     
     // -------------------------------------------------------------------------
     
-    
-    public String getMessage() {
-        return messageTextArea.getText();
-    }
-    
-    
-    public void setText(String text) {
-        messageTextArea.setText(text);
-    }
-    
+
     
     public boolean wasAccepted() {
         return wasAccepted;
     }
+    
+    
+    public String getRemoteUrl() {
+        return remoteUrlTextField.getText();
+    }
+    
+    
+    public void setRemoteUrl(String username) {
+        remoteUrlTextField.setText(username);
+    }
+    
+    
+    public String getUsername() {
+        return usernameTextField.getText();
+    }
+    
+    public void setUsername(String username) {
+        usernameTextField.setText(username);
+    }
+    
+    public String getPassword() {
+        return passwordTextField.getText();
+    }
+    
+    public void setPassword(String password) {
+        passwordTextField.setText(password);
+    }
+    
+    
     
     
     // -------------------------------------------------------------------------
@@ -93,10 +115,14 @@ public class CommitUI extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         messagePanel = new javax.swing.JPanel();
-        messageScrollPane = new javax.swing.JScrollPane();
-        messageTextArea = new SimpleTextArea();
+        remoteUrl = new SimpleLabel();
+        remoteUrlTextField = new SimpleField();
+        usernameLabel = new SimpleLabel();
+        usernameTextField = new SimpleField();
+        passwordLabel = new SimpleLabel();
+        passwordTextField = new SimpleField();
         buttonPanel = new javax.swing.JPanel();
-        messagePanelFiller = new javax.swing.JPanel();
+        panelFiller = new javax.swing.JPanel();
         okButton = new SimpleButton();
         cancelButton = new SimpleButton();
 
@@ -104,16 +130,39 @@ public class CommitUI extends javax.swing.JPanel {
 
         messagePanel.setLayout(new java.awt.GridBagLayout());
 
-        messageTextArea.setColumns(20);
-        messageTextArea.setRows(5);
-        messageScrollPane.setViewportView(messageTextArea);
+        remoteUrl.setText("Remote URL");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        messagePanel.add(remoteUrl, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        messagePanel.add(remoteUrlTextField, gridBagConstraints);
 
+        usernameLabel.setText("Username");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        messagePanel.add(usernameLabel, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        messagePanel.add(messageScrollPane, gridBagConstraints);
+        messagePanel.add(usernameTextField, gridBagConstraints);
+
+        passwordLabel.setText("Password");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        messagePanel.add(passwordLabel, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        messagePanel.add(passwordTextField, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -124,23 +173,23 @@ public class CommitUI extends javax.swing.JPanel {
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
-        javax.swing.GroupLayout messagePanelFillerLayout = new javax.swing.GroupLayout(messagePanelFiller);
-        messagePanelFiller.setLayout(messagePanelFillerLayout);
-        messagePanelFillerLayout.setHorizontalGroup(
-            messagePanelFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelFillerLayout = new javax.swing.GroupLayout(panelFiller);
+        panelFiller.setLayout(panelFillerLayout);
+        panelFillerLayout.setHorizontalGroup(
+            panelFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        messagePanelFillerLayout.setVerticalGroup(
-            messagePanelFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelFillerLayout.setVerticalGroup(
+            panelFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        buttonPanel.add(messagePanelFiller, gridBagConstraints);
+        buttonPanel.add(panelFiller, gridBagConstraints);
 
-        okButton.setText("Commit");
+        okButton.setText("Pull");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -185,9 +234,13 @@ public class CommitUI extends javax.swing.JPanel {
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel messagePanel;
-    private javax.swing.JPanel messagePanelFiller;
-    private javax.swing.JScrollPane messageScrollPane;
-    private javax.swing.JTextArea messageTextArea;
     private javax.swing.JButton okButton;
+    private javax.swing.JPanel panelFiller;
+    private javax.swing.JLabel passwordLabel;
+    private javax.swing.JTextField passwordTextField;
+    private javax.swing.JLabel remoteUrl;
+    private javax.swing.JTextField remoteUrlTextField;
+    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 }

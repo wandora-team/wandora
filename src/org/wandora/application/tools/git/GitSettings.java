@@ -26,9 +26,6 @@ package org.wandora.application.tools.git;
  */
 public class GitSettings {
 
-    private String remotePath; // == cloneUrl
-    private String localPath;
-    
     private String username;
     private String password;
     
@@ -40,32 +37,11 @@ public class GitSettings {
     
     
     public GitSettings(String remotePath, String localPath, String username, String password) {
-        this.remotePath = remotePath;
-        this.localPath = localPath;
         this.username = username;
         this.password = password;
     }
     
-    
-    public String getRemotePath() {
-        return remotePath;
-    }
-    
-    public void setRemotePath(String remotePath) {
-        this.remotePath = remotePath;
-    }
-    
-    
-    
-    
-    public String getLocalPath() {
-        return localPath;
-    }
-    
-    public void setLocalPath(String localPath) {
-        this.localPath = localPath;
-    }
-    
+
     
     
     
