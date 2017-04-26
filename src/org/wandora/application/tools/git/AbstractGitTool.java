@@ -53,7 +53,9 @@ import org.wandora.topicmap.packageio.ZipPackageInput;
  */
 public abstract class AbstractGitTool extends AbstractWandoraTool implements WandoraTool {
     
-    private static GitSettings gitSettings;
+
+    private static String username = null;
+    private static String password = null;
     
     
     
@@ -203,31 +205,31 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
     // -------------------------------------------------------------------------
     
     
-    public GitSettings getGitSettings() {
-        if(gitSettings == null) {
-            gitSettings = new GitSettings();
-        }
-        return gitSettings;
+    
+    
+    
+    
+    public String getUsername() {
+        return username;
     }
     
     
     
     
-    public void setGitSettings(GitSettings gitSettings) {
-        this.gitSettings = gitSettings;
+    public void setUsername(String u) {
+        username = u;
     }
     
     
     
-    public void setGitSettings(String remotePath, String localPath, String username, String password) {
-        gitSettings = new GitSettings(remotePath, localPath, username, password);
+    public String getPassword() {
+        return password;
     }
     
     
     
-    
-    public void clearCurrentGitSettings() {
-        gitSettings = null;
+    public void setPassword(String p) {
+        password = p;
     }
     
     

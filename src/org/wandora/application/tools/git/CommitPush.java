@@ -54,10 +54,8 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
                     commitPushUI = new CommitPushUI();
                 }
 
-                GitSettings gitSettings = getGitSettings();
-
-                commitPushUI.setPassword(gitSettings.getPassword());
-                commitPushUI.setUsername(gitSettings.getUsername());
+                commitPushUI.setPassword(getPassword());
+                commitPushUI.setUsername(getUsername());
                 commitPushUI.openInDialog();
 
                 if(commitPushUI.wasAccepted()) {
@@ -95,8 +93,8 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
                     String username = commitPushUI.getUsername();
                     String password = commitPushUI.getPassword();
                     
-                    gitSettings.setUsername(username);
-                    gitSettings.setPassword(password);
+                    setUsername(username);
+                    setPassword(password);
                     
                     PushCommand push = git.push();
                     if(isValid(username)) {

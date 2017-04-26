@@ -26,6 +26,7 @@ import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -51,11 +52,9 @@ public class Push extends AbstractGitTool implements WandoraTool {
                 if(pushUI == null) {
                     pushUI = new PushUI();
                 }
-                
-                GitSettings gitSettings = getGitSettings();
 
-                pushUI.setPassword(gitSettings.getPassword());
-                pushUI.setUsername(gitSettings.getUsername());
+                pushUI.setPassword(getPassword());
+                pushUI.setUsername(getUsername());
                 pushUI.openInDialog();
 
                 if(pushUI.wasAccepted()) {
@@ -65,8 +64,8 @@ public class Push extends AbstractGitTool implements WandoraTool {
                     String username = pushUI.getUsername();
                     String password = pushUI.getPassword();
                     
-                    gitSettings.setUsername(username);
-                    gitSettings.setPassword(password);
+                    setUsername(username);
+                    setPassword(password);
 
                     PushCommand push = git.push();
                     
@@ -76,7 +75,14 @@ public class Push extends AbstractGitTool implements WandoraTool {
                         push.setCredentialsProvider(credentialsProvider);
                     }
                     
-                    push.call();
+                    Iterable<PushResult> pushResults = push.call();
+                    
+                    for(PushResult pushResult : pushResults) {
+                        String pushResultMessage = pushResult.getMessages();
+                        if(isValid(pushResultMessage)) {
+                            log(pushResultMessage);
+                        }
+                    }
                     log("Ready.");
                 }
             }

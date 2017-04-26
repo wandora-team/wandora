@@ -55,25 +55,24 @@ public class Pull extends AbstractGitTool implements WandoraTool {
             Git git = getGit();
             if(git != null) {
                 PullCommand pull = git.pull();
-                GitSettings gitSettings = getGitSettings();
                 String url = getGitRemoteUrl();
                 if(url == null) {
                     if(pullUI == null) {
                         pullUI = new PullUI();
                     }
-                    pullUI.setUsername(gitSettings.getUsername());
-                    pullUI.setPassword(gitSettings.getPassword());
+                    pullUI.setUsername(getUsername());
+                    pullUI.setPassword(getPassword());
 
                     pullUI.openInDialog();
                     
                     if(pullUI.wasAccepted()) {
-                        gitSettings.setUsername(pullUI.getUsername());
-                        gitSettings.setPassword(pullUI.getPassword());
+                        setUsername(pullUI.getUsername());
+                        setPassword(pullUI.getPassword());
 
                         setGitRemoteUrl(pullUI.getRemoteUrl());                    
                         pull.setRemote(pullUI.getRemoteUrl());
-                        if(isValid(gitSettings.getUsername())) {
-                            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( gitSettings.getUsername(), gitSettings.getPassword() );
+                        if(isValid(getUsername())) {
+                            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( getUsername(), getPassword() );
                             pull.setCredentialsProvider(credentialsProvider);
                         }
                     }

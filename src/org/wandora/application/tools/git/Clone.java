@@ -59,6 +59,8 @@ public class Clone extends AbstractGitTool implements WandoraTool {
             cloneUI = new CloneUI();
         }
         
+        cloneUI.setUsername(getUsername());
+        cloneUI.setPassword(getPassword());
         cloneUI.openInDialog();
         
         if(cloneUI.wasAccepted()) {
@@ -70,7 +72,8 @@ public class Clone extends AbstractGitTool implements WandoraTool {
             String username = cloneUI.getUsername();
             String password = cloneUI.getPassword();
             
-            setGitSettings(cloneUrl, destinationDirectory, username, password);
+            setUsername(username);
+            setPassword(password);
 
             log("Cloning git repository from "+cloneUrl);
             
