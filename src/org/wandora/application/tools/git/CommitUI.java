@@ -92,7 +92,9 @@ public class CommitUI extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        messagePanel = new javax.swing.JPanel();
+        commitPanel = new javax.swing.JPanel();
+        infoLabel = new SimpleLabel();
+        messageLabel = new SimpleLabel();
         messageScrollPane = new javax.swing.JScrollPane();
         messageTextArea = new SimpleTextArea();
         buttonPanel = new javax.swing.JPanel();
@@ -102,25 +104,39 @@ public class CommitUI extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        messagePanel.setLayout(new java.awt.GridBagLayout());
+        commitPanel.setLayout(new java.awt.GridBagLayout());
+
+        infoLabel.setText("<html>Save project and commit all changes to a local git repository. Commit fails if current project is not a valid git repository.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        commitPanel.add(infoLabel, gridBagConstraints);
+
+        messageLabel.setText("Commit message");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        commitPanel.add(messageLabel, gridBagConstraints);
 
         messageTextArea.setColumns(20);
         messageTextArea.setRows(5);
         messageScrollPane.setViewportView(messageTextArea);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        messagePanel.add(messageScrollPane, gridBagConstraints);
+        commitPanel.add(messageScrollPane, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        add(messagePanel, gridBagConstraints);
+        add(commitPanel, gridBagConstraints);
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -184,7 +200,9 @@ public class CommitUI extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JPanel messagePanel;
+    private javax.swing.JPanel commitPanel;
+    private javax.swing.JLabel infoLabel;
+    private javax.swing.JLabel messageLabel;
     private javax.swing.JPanel messagePanelFiller;
     private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextArea messageTextArea;

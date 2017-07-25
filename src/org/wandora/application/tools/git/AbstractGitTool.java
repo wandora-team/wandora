@@ -21,18 +21,12 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.CLOSE;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMap;

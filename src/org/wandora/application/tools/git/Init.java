@@ -117,7 +117,9 @@ public class Init extends AbstractGitTool implements WandoraTool {
     
     @Override
     public String getDescription() {
-        return "Initialize git repository.";
+        return "Initialize local git repository. Initialization is usual method to start "
+                + "your own repository. If you wish to use remote repository, consider "
+                + "using Clone instead.";
     }
     
     

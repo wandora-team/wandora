@@ -18,7 +18,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="cloneLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;Clone git repository. Enter remote repository URL, destination directory and credentials. Leave username empty for anonymous clone.&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;Clone remote git repository. Enter remote repository URL, destination directory and credentials. Leave username empty for anonymous clone.&lt;/html&gt;"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new SimpleLabel();"/>

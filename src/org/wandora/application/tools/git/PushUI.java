@@ -105,7 +105,8 @@ public class PushUI extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        messagePanel = new javax.swing.JPanel();
+        pushPanel = new javax.swing.JPanel();
+        infoLabel = new javax.swing.JLabel();
         credentialsPanel = new javax.swing.JPanel();
         usernameLabel = new SimpleLabel();
         usernameTextField = new SimpleField();
@@ -118,7 +119,14 @@ public class PushUI extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        messagePanel.setLayout(new java.awt.GridBagLayout());
+        pushPanel.setLayout(new java.awt.GridBagLayout());
+
+        infoLabel.setText("<html>Push local changes to a remote git repository.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 2, 6, 2);
+        pushPanel.add(infoLabel, gridBagConstraints);
 
         credentialsPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -148,14 +156,14 @@ public class PushUI extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        messagePanel.add(credentialsPanel, gridBagConstraints);
+        pushPanel.add(credentialsPanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        add(messagePanel, gridBagConstraints);
+        add(pushPanel, gridBagConstraints);
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -220,11 +228,12 @@ public class PushUI extends javax.swing.JPanel {
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel credentialsPanel;
-    private javax.swing.JPanel messagePanel;
+    private javax.swing.JLabel infoLabel;
     private javax.swing.JButton okButton;
     private javax.swing.JPanel panelFiller;
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JTextField passwordTextField;
+    private javax.swing.JPanel pushPanel;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables

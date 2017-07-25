@@ -114,11 +114,11 @@ public class CommitPushUI extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        messagePanel = new javax.swing.JPanel();
+        commitPanel = new javax.swing.JPanel();
+        infoLabel = new SimpleLabel();
         messageLabel = new SimpleLabel();
         messageScrollPane = new javax.swing.JScrollPane();
         messageTextArea = new SimpleTextArea();
-        credentialsPanel = new javax.swing.JPanel();
         usernameLabel = new SimpleLabel();
         usernameTextField = new SimpleField();
         passwordLabel = new SimpleLabel();
@@ -130,66 +130,67 @@ public class CommitPushUI extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        messagePanel.setLayout(new java.awt.GridBagLayout());
+        commitPanel.setLayout(new java.awt.GridBagLayout());
+
+        infoLabel.setText("<html>Save project, commit all local changes and push changes to a remote repository. \nPush fails if the repository has no remote origin. Commit fails if the project is not valid\ngit repository. Remote repository access may require username and password.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
+        commitPanel.add(infoLabel, gridBagConstraints);
 
         messageLabel.setText("Commit message");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        messagePanel.add(messageLabel, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 2);
+        commitPanel.add(messageLabel, gridBagConstraints);
 
         messageTextArea.setColumns(20);
         messageTextArea.setRows(5);
         messageScrollPane.setViewportView(messageTextArea);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        messagePanel.add(messageScrollPane, gridBagConstraints);
-
-        credentialsPanel.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        commitPanel.add(messageScrollPane, gridBagConstraints);
 
         usernameLabel.setText("Username");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
-        credentialsPanel.add(usernameLabel, gridBagConstraints);
+        commitPanel.add(usernameLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        credentialsPanel.add(usernameTextField, gridBagConstraints);
+        commitPanel.add(usernameTextField, gridBagConstraints);
 
         passwordLabel.setText("Password");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
-        credentialsPanel.add(passwordLabel, gridBagConstraints);
+        commitPanel.add(passwordLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        credentialsPanel.add(passwordTextField, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        messagePanel.add(credentialsPanel, gridBagConstraints);
+        commitPanel.add(passwordTextField, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        add(messagePanel, gridBagConstraints);
+        add(commitPanel, gridBagConstraints);
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -253,9 +254,9 @@ public class CommitPushUI extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JPanel credentialsPanel;
+    private javax.swing.JPanel commitPanel;
+    private javax.swing.JLabel infoLabel;
     private javax.swing.JLabel messageLabel;
-    private javax.swing.JPanel messagePanel;
     private javax.swing.JPanel messagePanelFiller;
     private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextArea messageTextArea;

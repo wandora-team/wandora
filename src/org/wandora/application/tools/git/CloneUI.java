@@ -152,7 +152,7 @@ public class CloneUI extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        cloneLabel.setText("<html>Clone git repository. Enter remote repository URL, destination directory and credentials. Leave username empty for anonymous clone.</html>");
+        cloneLabel.setText("<html>Clone remote git repository. Enter remote repository URL, destination directory and credentials. Leave username empty for anonymous clone.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;

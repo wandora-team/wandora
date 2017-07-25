@@ -118,7 +118,9 @@ public class Clone extends AbstractGitTool implements WandoraTool {
     
     @Override
     public String getDescription() {
-        return "Clones remote git repository.";
+        return "Clones remote git repository. Clone creates local git repository and copies "
+                + "remote repository to a local repository. Cloning is the usual method "
+                + "to start developing project created by somebody else.";
     }
     
     

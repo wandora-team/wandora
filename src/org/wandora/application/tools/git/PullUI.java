@@ -114,7 +114,8 @@ public class PullUI extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        messagePanel = new javax.swing.JPanel();
+        pullPanel = new javax.swing.JPanel();
+        infoLabel = new javax.swing.JLabel();
         remoteUrl = new SimpleLabel();
         remoteUrlTextField = new SimpleField();
         usernameLabel = new SimpleLabel();
@@ -128,48 +129,58 @@ public class PullUI extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        messagePanel.setLayout(new java.awt.GridBagLayout());
+        pullPanel.setLayout(new java.awt.GridBagLayout());
+
+        infoLabel.setText("<html>Pull data from remote git repository and update current project.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 6, 4);
+        pullPanel.add(infoLabel, gridBagConstraints);
 
         remoteUrl.setText("Remote URL");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
-        messagePanel.add(remoteUrl, gridBagConstraints);
+        pullPanel.add(remoteUrl, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        messagePanel.add(remoteUrlTextField, gridBagConstraints);
+        pullPanel.add(remoteUrlTextField, gridBagConstraints);
 
         usernameLabel.setText("Username");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
-        messagePanel.add(usernameLabel, gridBagConstraints);
+        pullPanel.add(usernameLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        messagePanel.add(usernameTextField, gridBagConstraints);
+        pullPanel.add(usernameTextField, gridBagConstraints);
 
         passwordLabel.setText("Password");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
-        messagePanel.add(passwordLabel, gridBagConstraints);
+        pullPanel.add(passwordLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        messagePanel.add(passwordTextField, gridBagConstraints);
+        pullPanel.add(passwordTextField, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        add(messagePanel, gridBagConstraints);
+        add(pullPanel, gridBagConstraints);
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -233,11 +244,12 @@ public class PullUI extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JPanel messagePanel;
+    private javax.swing.JLabel infoLabel;
     private javax.swing.JButton okButton;
     private javax.swing.JPanel panelFiller;
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JTextField passwordTextField;
+    private javax.swing.JPanel pullPanel;
     private javax.swing.JLabel remoteUrl;
     private javax.swing.JTextField remoteUrlTextField;
     private javax.swing.JLabel usernameLabel;
