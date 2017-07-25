@@ -21,6 +21,8 @@
 package org.wandora.application.tools.git;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import static org.wandora.application.WandoraToolLogger.WAIT;
@@ -42,7 +44,13 @@ public class Status extends AbstractGitTool implements WandoraTool {
                 setDefaultLogger();
                 setLogTitle("Git status");
                 
-                log("Getting git status...");
+                Repository repository = git.getRepository();
+                StoredConfig config = repository.getConfig();
+                
+                log("Git conf:");
+                log(config.toText());
+                
+                log("Git status:");
                 org.eclipse.jgit.api.Status status = git.status().call();
                 log("Added: " + status.getAdded());
                 log("Changed: " + status.getChanged());

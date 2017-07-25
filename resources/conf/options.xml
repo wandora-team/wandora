@@ -476,10 +476,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.dbpedia.DbpediaExtractor</class>
             </item>
             <item>
-               <name>OpenCyc extractor...</name>
-               <class>org.wandora.application.tools.extractors.opencyc.OpenCycExtractor</class>
-            </item>
-            <item>
                <name>--- UMBEL ---</name>
                <class>org.wandora.application.tools.DummyTool</class>
             </item>
@@ -1454,14 +1450,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>GeoNames</name>
             <class>org.wandora.application.tools.extractors.geonames.GeoNamesExtractor</class>
-         </item>
-         <item>
-            <name>OpenCalais</name>
-            <class>org.wandora.application.tools.extractors.opencalais.OpenCalaisClassifier</class>
-         </item>
-         <item>
-            <name>OpenCyc</name>
-            <class>org.wandora.application.tools.extractors.opencyc.OpenCycExtractor</class>
          </item>
          <item>
             <name>Last.fm</name>

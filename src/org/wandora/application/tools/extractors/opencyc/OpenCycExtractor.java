@@ -32,7 +32,6 @@ package org.wandora.application.tools.extractors.opencyc;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 
 import javax.swing.*;
@@ -40,6 +39,10 @@ import javax.swing.*;
 
 
 /**
+ * OpenCyc API has been closed and this extractor (and all other OpenCyc
+ * extractors are more or less deprecated. However, the code is still
+ * kept in safe if the API opens up later on or somebody publishes
+ * similar API.
  *
  * @author akivela
  */
