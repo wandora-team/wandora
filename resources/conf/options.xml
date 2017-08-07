@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>36</x>
-      <y>13</y>
-      <width>1041</width>
-      <height>759</height>
+      <x>11</x>
+      <y>32</y>
+      <width>1047</width>
+      <height>687</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>600</verticalsplitter>
+      <verticalsplitter>528</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -73,6 +73,48 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
       <processingTopicPanel>
          <useOccurrenceProcessingCode>false</useOccurrenceProcessingCode>
          <autorun>false</autorun>
+         <currentSketch>/* 
+ * Welcome to Wandora's Processing topic panel!
+ * 
+ * Processing topic panel is used to write and run Processing scripts.
+ * Processing script can access the topic map in Wandora via Wandora's Java API.
+ * Topic panel suits best for topic and topic map visualizations.
+ * Writing a Processing script requires programming skills.
+ * 
+ * You might want to begin by trying one of our demo sketches. We have
+ * prepared three example scripts to inspire you. These sketces, titled as
+ * AssociationArches, TopicBoxes and TopicRing can be opened by clicking
+ * the Open button and selecting option Open sketch from file...
+ * To run a script press Run button down under.
+ * 
+ * Learn Processing and Wandora API here
+ *    http://processing.org/
+ *    http://wandora.org/api/ 
+ */
+
+package processing;
+
+import org.wandora.application.gui.topicpanels.processing.SketchTemplate;
+import org.wandora.topicmap.*;
+
+public class Sketch extends SketchTemplate {
+
+	public void setup() {
+		size(920,640);
+		frameRate(10);
+	}
+
+	public void draw() {
+		background(255);
+		Topic t = getCurrentTopic();
+		if( t != null ) {
+			try{
+				fill(0xff000000);
+				text(t.getBaseName(),100,100);
+			} catch(TopicMapException tme){tme.printStackTrace();}
+		}
+	}
+}</currentSketch>
       </processingTopicPanel>
       <tabbedTopicPanel>
          <view>
@@ -101,9 +143,9 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          <namePanelOrientation>vertical</namePanelOrientation>
       </traditionalTopicPanel>
       <graphTopicPanel>
-         <labelEdges>1</labelEdges>
-         <antialized>1</antialized>
-         <animated>1</animated>
+         <labelEdges>true</labelEdges>
+         <antialized>true</antialized>
+         <animated>true</animated>
          <filterSets>
             <filterSet>
                <name>Filterset1</name>
@@ -113,6 +155,9 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          </filterSets>
          <graphStyle>org.wandora.application.gui.topicpanels.graphpanel.DefaultGraphStyle</graphStyle>
          <antialized>0</antialized>
+         <freezeForMouseOver>false</freezeForMouseOver>
+         <cropNodeBoxes>false</cropNodeBoxes>
+         <viewFilterInfo>false</viewFilterInfo>
       </graphTopicPanel>
       <topicRenders>130</topicRenders>
       <topicTable>

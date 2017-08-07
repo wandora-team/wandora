@@ -37,8 +37,8 @@ import javax.swing.*;
 
 
 /**
- * Class implements <code>AbstractWandoraTool</code> used to open a simple dialog
- * panel viewing general information about Wandora authors.
+ * Class implements <code>AbstractWandoraTool</code> and opens simple dialog
+ * panel viewing general information about authors of the Wandora application.
  *
  * @author  akivela
  */
@@ -71,14 +71,13 @@ public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
             aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
 
             String text =
-                    "Copyright (C) 2004-2016 Wandora Team\n"+
-                    "Wandora Team members are Aki Kivelä, Olli Lyytinen \n"+
-                    "and Eero Lehtonen.\n"+
+                    "Copyright (C) 2004-2017 Wandora Team\n"+
                     " \n"+
-                    "Wandora Team would like to thank Elias Tertsunen, \n"+
-                    "Niko Laitinen, Antti Tuppurainen, Pasi Hytönen, \n"+
-                    "Marko Wallgren, Jaakko Lyytinen and Jarno Wallgren \n"+
-                    "for their contribution to the Wandora project.\n"+
+                    "Wandora Team would like to thank Olli Lyytinen, \n" +
+                    "Eero Lehtonen, Elias Tertsunen, Niko Laitinen, \n"+
+                    "Antti Tuppurainen, Pasi Hytönen, Marko Wallgren, \n"+
+                    "Jaakko Lyytinen and Jarno Wallgren for their contribution \n"+
+                    "to the Wandora project.\n"+
                     " \n"+
                     "Wandora uses numerous third party libraries made by \n"+
                     "talented people around the world. Wandora Team would like to\n"+

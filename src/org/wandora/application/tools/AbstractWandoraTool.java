@@ -45,7 +45,6 @@ import javax.swing.*;
 import java.util.*;
 import java.io.*;
 import java.net.*;
-import org.wandora.topicmap.undowrapper.UndoException;
 
 
 

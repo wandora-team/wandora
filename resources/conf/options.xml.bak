@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>36</x>
-      <y>13</y>
-      <width>1041</width>
-      <height>759</height>
+      <x>461</x>
+      <y>27</y>
+      <width>950</width>
+      <height>809</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>600</verticalsplitter>
+      <verticalsplitter>650</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -73,6 +73,49 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
       <processingTopicPanel>
          <useOccurrenceProcessingCode>false</useOccurrenceProcessingCode>
          <autorun>false</autorun>
+         <currentSketch>/* 
+ * Welcome to Wandora's Processing topic panel!
+ * 
+ * Processing topic panel is used to write and run Processing scripts.
+ * Processing script can access the topic map in Wandora via Wandora's Java API.
+ * Topic panel suits best for topic and topic map visualizations.
+ * Writing a Processing script requires programming skills.
+ * 
+ * You might want to begin by trying one of our demo sketches. We have
+ * prepared three example scripts to inspire you. These sketces, titled as
+ * AssociationArches, TopicBoxes and TopicRing can be opened by clicking
+ * the Open button and selecting option Open sketch from file...
+ * To run a script press Run button down under.
+ * 
+ * Learn Processing and Wandora API here
+ *    http://processing.org/
+ *    http://wandora.org/api/ 
+ */
+
+package processing;
+
+import org.wandora.application.gui.topicpanels.processing.SketchTemplate;
+import org.wandora.topicmap.*;
+
+public class Sketch extends SketchTemplate {
+
+	public void setup() {
+		size(920,640);
+		frameRate(10);
+	}
+
+	public void draw() {
+		background(255);
+		Topic t = getCurrentTopic();
+		if( t != null ) {
+			try{
+				fill(0xff000000);
+				text(t.getBaseName(),100,100);
+			} catch(TopicMapException tme){tme.printStackTrace();}
+		}
+	}
+}
+</currentSketch>
       </processingTopicPanel>
       <tabbedTopicPanel>
          <view>
@@ -101,9 +144,9 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          <namePanelOrientation>vertical</namePanelOrientation>
       </traditionalTopicPanel>
       <graphTopicPanel>
-         <labelEdges>1</labelEdges>
-         <antialized>1</antialized>
-         <animated>1</animated>
+         <labelEdges>true</labelEdges>
+         <antialized>true</antialized>
+         <animated>true</animated>
          <filterSets>
             <filterSet>
                <name>Filterset1</name>
@@ -113,6 +156,9 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          </filterSets>
          <graphStyle>org.wandora.application.gui.topicpanels.graphpanel.DefaultGraphStyle</graphStyle>
          <antialized>0</antialized>
+         <freezeForMouseOver>false</freezeForMouseOver>
+         <cropNodeBoxes>false</cropNodeBoxes>
+         <viewFilterInfo>false</viewFilterInfo>
       </graphTopicPanel>
       <topicRenders>130</topicRenders>
       <topicTable>
@@ -282,103 +328,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </layers>
    <tool>
       <path>org/wandora/application/tools</path>
-      <path>org/wandora/application/tools/exporters</path>
-      <path>org/wandora/application/tools/exporters/simberg</path>
-      <path>org/wandora/application/tools/extractors</path>
-      <path>org/wandora/application/tools/importers</path>
-      <path>org/wandora/application/tools/importers/graphs</path>
-      <path>org/wandora/application/tools/maiana</path>
-      <path>org/wandora/application/tools/layers</path>
-      <path>org/wandora/application/tools/subjects</path>
-      <path>org/wandora/application/tools/selections</path>
-      <path>org/wandora/application/tools/associations</path>
-      <path>org/wandora/application/tools/generators</path>
-      <path>org/wandora/application/tools/server</path>
-      <path>org/wandora/application/tools/som</path>
-      <path>org/wandora/application/tools/occurrences</path>
-      <path>org/wandora/application/tools/navigate</path>
-      <path>org/wandora/application/tools/project</path>
-      <path>org/wandora/application/tools/subjects</path>
-      <path>org/wandora/application/tools/topicnames</path>
-      <path>org/wandora/application/tools/extractors/audioscrobbler</path>
-      <path>org/wandora/application/tools/statistics</path>
-      <path>org/wandora/application/tools/extractors/table</path>
-      <path>org/wandora/application/tools/extractors/list</path>
-      <path>org/wandora/application/tools/extractors/microformats</path>
-      <path>org/wandora/application/tools/extractors/ris</path>
-      <path>org/wandora/application/tools/extractors/email</path>
-      <path>org/wandora/application/tools/extractors/flickr</path>
-      <path>org/wandora/application/tools/extractors/youtube</path>
-      <path>org/wandora/application/tools/extractors/opencyc</path>
-      <path>org/wandora/application/tools/extractors/opencalais</path>
-      <path>org/wandora/application/tools/browserextractors</path>
-      <path>org/wandora/application/tools/extractors/geonames</path>
-      <path>org/wandora/application/tools/extractors/ovi</path>
-      <path>org/wandora/application/tools/extractors/diigo</path>
-      <path>org/wandora/application/tools/extractors/rdf</path>
-      <path>org/wandora/application/tools/extractors/subj3ct</path>
-      <path>org/wandora/application/tools/extractors/musicbrainz</path>
-      <path>org/wandora/application/tools/extractors/gedcom</path>
-      <path>org/wandora/application/tools/extractors/dbpedia</path>
-      <path>org/wandora/application/tools/extractors/alchemy</path>
-      <path>org/wandora/application/tools/extractors/bing</path>
-      <path>org/wandora/application/tools/extractors/bighugethesaurus</path>
-      <path>org/wandora/application/tools/extractors/yahoo</path>
-      <path>org/wandora/application/tools/extractors/yahoo/boss</path>
-      <path>org/wandora/application/tools/extractors/yahoo/yql</path>
-      <path>org/wandora/application/tools/extractors/yahoo/termextraction</path>
-      <path>org/wandora/application/tools/extractors/tagthe</path>
-      <path>org/wandora/application/tools/extractors/dublincore</path>
-      <path>org/wandora/application/tools/extractors/files</path>
-      <path>org/wandora/application/tools/extractors/zemanta</path>
-      <path>org/wandora/application/tools/extractors/any23</path>
-      <path>org/wandora/application/tools/extractors/hsopen</path>
-      <path>org/wandora/application/tools/extractors/helmet</path>
-      <path>org/wandora/application/tools/extractors/sparql</path>
-      <path>org/wandora/application/tools/extractors/sql</path>
-      <path>org/wandora/application/tools/extractors/uclassify</path>
-      <path>org/wandora/application/tools/extractors/twitter</path>
-      <path>org/wandora/application/tools/extractors/csv</path>
-      <path>org/wandora/application/tools/extractors/nyt</path>
-      <path>org/wandora/application/tools/extractors/gate</path>
-      <path>org/wandora/application/tools/extractors/stanfordner</path>
-      <path>org/wandora/application/tools/extractors/textwise</path>
-      <path>org/wandora/application/tools/extractors/stands4</path>
-      <path>org/wandora/application/tools/extractors/marcxml</path>
-      <path>org/wandora/application/tools/extractors/facebook</path>
-      <path>org/wandora/application/tools/extractors/facebook/v2</path>
-      <path>org/wandora/application/tools/extractors/omakaupunki</path>
-      <path>org/wandora/application/tools/extractors/palvelukartta</path>
-      <path>org/wandora/application/tools/extractors/palvelukartta_v2</path>
-      <path>org/wandora/application/tools/extractors/guardian</path>
-      <path>org/wandora/application/tools/extractors/freebase</path>
-      <path>org/wandora/application/tools/extractors/europeana</path>
-      <path>org/wandora/application/tools/extractors/ocr</path>
-      <path>org/wandora/application/tools/extractors/reddit</path>
-      <path>org/wandora/application/tools/extractors/mashape</path>
-      <path>org/wandora/application/tools/extractors/bookmark</path>
-      <path>org/wandora/application/tools/fng/opendata/v2</path>
-      <path>org/wandora/application/tools/fng/opendata/v2b</path>
-      <path>org/wandora/application/tools/fng/opendata/simberg</path>
-      <path>org/wandora/application/tools/extractors/excel</path>
-      <path>org/wandora/application/tools/extractors/duckduckgo</path>
-      <path>org/wandora/application/tools/extractors/mediawikiapi</path>
-      <path>org/wandora/application/tools/extractors/britishlibrary</path>
-      <path>org/wandora/application/tools/extractors/rekognition</path>
-      <path>org/wandora/application/tools/extractors/umbel</path>
-      <path>org/wandora/application/tools/server</path>
-      <path>org/wandora/application/tools/webview</path>
-      <path>org/wandora/application/tools/r</path>
-      <path>org/wandora/application/tools/extractors/watson</path>
-      <path>org/wandora/application/tools/docking/add</path>
-      <path>org/wandora/application/tools/docking</path>
-      <path>org/wandora/application/tools/solr</path>
-      <path>org/wandora/application/tools/extractors/word</path>
-      <path>org/wandora/application/tools/iot</path>
-      <path>org/wandora/application/tools/extractors/yle/elavaarkisto</path>
-      <path>org/wandora/application/tools/exporters/iiifexport</path>
       <path>org/wandora/topicmap/undowrapper/tests</path>
-      <path>org/wandora/application/tools/testing</path>
       <set>
          <name>generator</name>
          <item>
@@ -570,10 +520,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>DBpedia extractor...</name>
                <class>org.wandora.application.tools.extractors.dbpedia.DbpediaExtractor</class>
-            </item>
-            <item>
-               <name>OpenCyc extractor...</name>
-               <class>org.wandora.application.tools.extractors.opencyc.OpenCycExtractor</class>
             </item>
             <item>
                <name>--- UMBEL ---</name>
@@ -1552,14 +1498,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.extractors.geonames.GeoNamesExtractor</class>
          </item>
          <item>
-            <name>OpenCalais</name>
-            <class>org.wandora.application.tools.extractors.opencalais.OpenCalaisClassifier</class>
-         </item>
-         <item>
-            <name>OpenCyc</name>
-            <class>org.wandora.application.tools.extractors.opencyc.OpenCycExtractor</class>
-         </item>
-         <item>
             <name>Last.fm</name>
             <class>org.wandora.application.tools.extractors.audioscrobbler.AudioScrobblerExtractor</class>
          </item>
@@ -1627,7 +1565,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </shortcuts>
    <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
    <current>
-      <directory>/home/</directory>
+      <directory></directory>
       <port></port>
       <user></user>
       <host></host>

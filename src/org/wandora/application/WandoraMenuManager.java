@@ -754,7 +754,7 @@ public class WandoraMenuManager {
             "---",
             patchMenu,
             "---",
-            "Print...", new PrintTopic(), KeyStroke.getKeyStroke(VK_P, CTRL_MASK), UIBox.getIcon("gui/icons/print.png"),
+            "Print...", new Print(), KeyStroke.getKeyStroke(VK_P, CTRL_MASK), UIBox.getIcon("gui/icons/print.png"),
             "---",
             "Exit", KeyStroke.getKeyStroke(VK_Q, CTRL_MASK), UIBox.getIcon("gui/icons/exit.png"), new ExitWandora(),
         };

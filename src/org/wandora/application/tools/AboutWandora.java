@@ -37,8 +37,8 @@ import javax.swing.*;
 
 
 /**
- * Class implements <code>WandoraAdminTool</code> used to open a simple dialog
- * panel viewing general information about Wandora.
+ * Class implements <code>WandoraAdminTool</code> and opens simple dialog
+ * panel viewing general information about Wandora application.
  *
  * @author  akivela
  */
@@ -71,7 +71,7 @@ public class AboutWandora extends AbstractWandoraTool implements WandoraTool {
 
             String text =
                     "Wandora is a general purpose knowledge editor application.\n"+
-                    "Copyright (C) 2004-2016 Wandora Team\n \n"+
+                    "Copyright (C) 2004-2017 Wandora Team\n \n"+
 
                     "This program is free software: you can redistribute it\n" +
                     "and/or modify it under the terms of the GNU General Public\n"+
