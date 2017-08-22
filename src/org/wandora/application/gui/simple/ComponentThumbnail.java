@@ -58,6 +58,11 @@ public class ComponentThumbnail extends JPanel implements Runnable {
     
     
     public void run() {
+        /*
+         This is problematic as the thread runs for ever and consumes resources.
+         The thread should end when ever the original component becomes
+         redundant.
+        */
         while(true) {               
             if(original.getWidth() > 0 && original.getHeight() > 0) {
                 

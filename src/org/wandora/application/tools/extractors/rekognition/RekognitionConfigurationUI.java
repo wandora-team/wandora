@@ -66,8 +66,7 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
         }
         
         faceCelebrityTresholdLabel.setFont(UIConstants.buttonLabelFont);
-        UIConstants.setFancyFont(faceCelebrityTresholdLabel);
-                
+      
         //Hook up checkboxes
         faceJobs = new HashMap<>();
         faceJobs.put("age",            faceJobCheckAge);

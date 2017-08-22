@@ -36,7 +36,6 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.awt.event.KeyEvent;
 import java.net.URI;
-import java.util.HashSet;
 import javax.swing.JPopupMenu;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;

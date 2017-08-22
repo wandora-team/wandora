@@ -31,7 +31,6 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.text.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

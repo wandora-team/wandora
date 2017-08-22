@@ -29,11 +29,7 @@ package org.wandora.application.gui.simple;
 
 import org.wandora.application.gui.table.AssociationTable;
 import org.wandora.topicmap.*;
-import javax.swing.*;
-import java.util.*;
-import java.awt.event.*;
 import org.wandora.application.*;
-import org.wandora.application.gui.*;
 
 
 /**
@@ -46,8 +42,8 @@ public class AssociationTypeLinkBasename extends TopicLinkBasename {
     
     
     /** Creates a new instance of AssociationTypeLinkBasename */
-    public AssociationTypeLinkBasename(AssociationTable at, Topic t, Wandora parent) {
-        super(t, parent);
+    public AssociationTypeLinkBasename(AssociationTable at, Topic t, Wandora wandora) {
+        super(t, wandora);
         associationTable = at;
     }
     

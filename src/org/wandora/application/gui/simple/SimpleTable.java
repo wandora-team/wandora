@@ -28,10 +28,8 @@ package org.wandora.application.gui.simple;
 
 
 import java.awt.*;
-import javax.swing.*;
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.TableModelEvent;
-import javax.swing.table.*;
 
 
 import org.wandora.application.*;

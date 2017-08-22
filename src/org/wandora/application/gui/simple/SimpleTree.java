@@ -30,7 +30,6 @@ package org.wandora.application.gui.simple;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.tree.*;
 import org.wandora.application.gui.*;
 
 

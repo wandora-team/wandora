@@ -30,9 +30,6 @@ package org.wandora.application.gui.simple;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import javax.swing.*;
 import org.wandora.application.gui.*;
 

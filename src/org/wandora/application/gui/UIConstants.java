@@ -195,7 +195,12 @@ public class UIConstants {
     
     
     
-    
+    /**
+     * Used to set rendering hints for given graphics before actual
+     * painting is done. At the moment this method doesn't do anything at all!
+     * 
+     * @param g 
+     */
     public static void preparePaint(Graphics g) {
         /*
         if(UIConstants.ANTIALIASING && g instanceof Graphics2D) {
@@ -213,7 +218,6 @@ public class UIConstants {
             ((Graphics2D) g).addRenderingHints(antialiasHints);
             //((Graphics2D) g).addRenderingHints(metricsHints);
         }
-         *
         */
     }
     
@@ -222,6 +226,11 @@ public class UIConstants {
     
     //private static Font fancyBaseFont = null;
     
+    /**
+     * Used to set a font of a component. Doesn't do anything at all at the moment. 
+     * 
+     * @param component 
+     */
     public static void setFancyFont(Component component) {
         /*
         try {
@@ -237,8 +246,7 @@ public class UIConstants {
         catch(Exception e) {
             e.printStackTrace();
         }
-         * 
-         */
+        */
     }
     
     

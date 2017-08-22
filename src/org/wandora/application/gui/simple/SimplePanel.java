@@ -28,7 +28,6 @@ package org.wandora.application.gui.simple;
 
 
 import org.wandora.application.gui.*;
-import org.wandora.application.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;

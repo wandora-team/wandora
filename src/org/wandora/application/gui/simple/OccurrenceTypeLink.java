@@ -27,7 +27,6 @@ package org.wandora.application.gui.simple;
 
 import org.wandora.application.*;
 import org.wandora.application.gui.OccurrenceTable;
-import org.wandora.application.gui.table.AssociationTable;
 import org.wandora.topicmap.*;
 
 
