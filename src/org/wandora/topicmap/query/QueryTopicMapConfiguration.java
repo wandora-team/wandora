@@ -71,7 +71,7 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
         editDialog=new javax.swing.JDialog(wandora,"Edit query",true);
         
         currentItem=info;
-        ArrayList<String> engines=WandoraScriptManager.getAvailableEngines();
+        List<String> engines=WandoraScriptManager.getAvailableEngines();
         engineComboBox.removeAllItems();
         for(int i=0;i<engines.size();i++){
             String e=engines.get(i);

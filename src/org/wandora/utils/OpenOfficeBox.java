@@ -37,6 +37,8 @@ import org.odftoolkit.simple.table.Row;
 import org.odftoolkit.simple.table.Table;
 
 /**
+ * Simple collection of methods used to access and extract Open Office
+ * documents.
  *
  * @author akivela
  */

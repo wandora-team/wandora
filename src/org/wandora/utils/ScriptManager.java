@@ -21,10 +21,11 @@
  */
 package org.wandora.utils;
 
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
@@ -37,11 +38,11 @@ import javax.script.ScriptException;
 
 public class ScriptManager {
     
-    private HashMap<String,ScriptEngineFactory> engines;
+    private Map<String,ScriptEngineFactory> engines;
     
     /** Creates a new instance of ScriptManager */
     public ScriptManager() {
-        engines=new LinkedHashMap<String,ScriptEngineFactory>();
+        engines = new LinkedHashMap<String,ScriptEngineFactory>();
     }
     
     /**
@@ -86,8 +87,8 @@ public class ScriptManager {
         return e+" ; "+l+" ; "+v;
     }
     
-    public static ArrayList<String> getAvailableEngines(){
-        ArrayList<String> ret=new ArrayList<String>();
+    public static List<String> getAvailableEngines(){
+        List<String> ret=new ArrayList<String>();
         javax.script.ScriptEngineManager manager=new javax.script.ScriptEngineManager();
         List<ScriptEngineFactory> fs=manager.getEngineFactories();
         for(ScriptEngineFactory f : fs){

@@ -18,16 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *
- *
  */
+
+
 package org.wandora.utils;
+
 import java.util.*;
 import java.io.File;
 import java.net.URL;
+
+
 /**
- *
  * This class contains mappings from common file extensions to their mime types.
+ * Loads mimetypes from a class path file conf/mime.types. See one in Wandora's
+ * conf folder for an example.
  *
  * @author olli
  */

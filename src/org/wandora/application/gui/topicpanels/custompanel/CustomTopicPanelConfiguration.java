@@ -625,7 +625,7 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
             this.wrapLines(false);
             
             WandoraScriptManager sm=new WandoraScriptManager();
-            ArrayList<String> engines = WandoraScriptManager.getAvailableEngines();
+            java.util.List<String> engines = WandoraScriptManager.getAvailableEngines();
             engineComboBox.removeAllItems();
             for (String e : engines) {
                 engineComboBox.addItem(e);

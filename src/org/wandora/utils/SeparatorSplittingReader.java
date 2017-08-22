@@ -41,6 +41,7 @@ import gnu.regexp.*;
  *
  * @author  pasi
  */
+
 public class SeparatorSplittingReader extends java.io.PushbackReader {
     private java.util.Hashtable myseps = new java.util.Hashtable();
     private int pushbackbufsize = 1;

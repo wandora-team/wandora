@@ -30,11 +30,7 @@ package org.wandora.utils;
 
 
 import gnu.regexp.*;
-import java.lang.*;
-import java.net.*;
-import java.io.*;
 import java.util.*;
-import java.text.*;
 
 
 
@@ -109,7 +105,9 @@ public class Rexbox extends Object {
     }
     
     
-   // ---------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    
+    
     public static boolean anyMatch(String word, Vector regularExpressions) {
         if (whichMatch(word, regularExpressions) >= 0) return true;
         else return false;

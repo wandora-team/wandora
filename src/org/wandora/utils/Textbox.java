@@ -29,7 +29,6 @@ package org.wandora.utils;
 
 
 import java.util.*;
-import java.util.regex.*;
 import gnu.regexp.*;
 import java.awt.*;
 import java.io.*;
@@ -38,7 +37,13 @@ import javax.swing.text.*;
 
 
 
-
+/**
+ * Textbox is an utility class providing useful text manipulation and processing
+ * services as static methods. Some methods here are reserved for historical
+ * reasons.
+ * 
+ * @author akikivela
+ */
 public class Textbox {
     
     /** Creates a new instance of TextTools */
@@ -48,6 +53,7 @@ public class Textbox {
     
     /**
      * Makes a String representation of a map. Useful for debugging.
+     * 
      */
     public static String mapToString(Map map){
         StringBuilder buf=new StringBuilder();
@@ -220,6 +226,8 @@ public class Textbox {
     }
     
     
+    
+    
     public static String toLowerCase(String string) {
         StringBuilder newString = new StringBuilder();
         char c;
@@ -274,7 +282,13 @@ public class Textbox {
     
     
     
-    
+    /**
+     * Transforms all XML specific characters to character entities and
+     * Windows new line characters to simple unix style new line characters.
+     * 
+     * @param s
+     * @return Encoded XML string.
+     */
     public static String encodeXML(String s) {
         s = Rexbox.replace(s, "&", "&amp;");
         s = Rexbox.replace(s, ">", "&gt;");
@@ -285,21 +299,32 @@ public class Textbox {
 
     
     
-    
+    /**
+     * Reverses a name such as "Doe, John" to "John Doe".
+     * 
+     * @param name
+     * @return Reversed name.
+     */
     public static String firstNameFirst(String name) {
-        int commaIndex = name.indexOf(",");
-        if(commaIndex > -1) {
-            String fname = name.substring(commaIndex+1);
-            String lname = name.substring(0, commaIndex);
-            return fname.trim() + " " + lname.trim();
+        if(name != null) {
+            int commaIndex = name.indexOf(",");
+            if(commaIndex > -1) {
+                String fname = name.substring(commaIndex+1);
+                String lname = name.substring(0, commaIndex);
+                
+                return fname.trim() + " " + lname.trim();
+            }
         }
-        else {
-            return name;
-        }
+        return name;
     }
 
     
-    
+    /**
+     * Reverses a name such as "John Doe" to "Doe, John".
+     * 
+     * @param name
+     * @return Reversed name.
+     */
     public static String reverseName(String name) {
         String reversedName = name;
         try {
@@ -333,7 +358,14 @@ public class Textbox {
     
     
     
-    
+    /**
+     * Checks if a string has any other characters than white space characters.
+     * If the string has only white space characters, method returns true. The
+     * String is "meaningless". Otherwise method returns false.
+     * 
+     * @param string
+     * @return true if the string has only white space characters. Otherwise false.
+     */
     public static boolean meaningless(String string) {
         if (string != null) {
             if (string.length() > 0) {
@@ -403,7 +435,7 @@ public class Textbox {
     
     
     
-        
+
     public static String sortStringVector(Vector v) {
         String[] a = new String[v.size()];
         String t = null;
@@ -417,7 +449,7 @@ public class Textbox {
                 }
             }
         }
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         for(int i=0; i<a.length; i++) {
             sb.append(a[i] + "\n");
         }
@@ -428,6 +460,7 @@ public class Textbox {
     
     /**
      * Method creates a string array from objects in given vector.
+     * 
      * @param v The vector containing strings to be attached to the generated string.
      * @return Method returns an array containing string picked out of given vector.
      * If vector contains no strings null is returned.
@@ -450,17 +483,39 @@ public class Textbox {
     // -------------------------------------------------------------------------
 
     
+    
+    
+    /**
+     * Trims both starting and ending white space characters of a string.
+     * This method is here for historical reasons.
+     * 
+     * @param string
+     * @return 
+     */
     public static String trimExtraSpaces(String string) {
         return trimEndingSpaces(trimStartingSpaces(string));
     }
     
 
+    /**
+     * Trims all ending white space characters of a string. Delegates the
+     * action to method trimEndingSpaces.
+     * 
+     * @param text
+     * @return 
+     */
     public static String chop(String text) {
         return trimEndingSpaces(text);
     }
     
     
-    
+    /**
+     * Trims all ending white space characters of a string. This method is
+     * here for historical reasons.
+     * 
+     * @param string
+     * @return 
+     */
     public static String trimEndingSpaces(String string) {
         if (string != null) {
             int i = string.length()-1;
@@ -470,7 +525,14 @@ public class Textbox {
         return string;
     }
 
-   
+    
+    /**
+     * Trims all starting white space characters of a string. This method is
+     * here for historical reasons.
+     * 
+     * @param string
+     * @return 
+     */
     public static String trimStartingSpaces(String string) {
         if (string != null) {
             int i = 0;
@@ -486,7 +548,15 @@ public class Textbox {
     // -------------------------------------------------------------------------
     
     
-    
+    /**
+     * Returns hexadecimal string representing a color. Color is given as
+     * an argument. Hexadecimal string resembles color codes used in HTML and
+     * CSS but doesn't contain the hash prefix. For example, this method returns
+     * string "ffffff" for the white color and "ff0000" for the red color.
+     * 
+     * @param color is the color we want the HTML code.
+     * @return String representing color's HTML code.
+     */
     public static String getColorHTMLCode(Color color) {
         StringBuilder colorName = new StringBuilder("");
         int red = color.getRed();
@@ -508,15 +578,25 @@ public class Textbox {
     
     
     
-    
+    /**
+     * Reads RTF text from an input stream and returns plain text.
+     * Method uses Java's RTFEditorKit for the transformation.
+     * 
+     * @param in is input stream to be transformed.
+     * @return String that contains the RTF text as a plain text.
+     * @throws IOException if the input stream doesn't resolve RTF document.
+     */
     public static String RTF2PlainText(InputStream in) throws IOException {
         StyledDocument doc=new DefaultStyledDocument();
         RTFEditorKit kit=new RTFEditorKit();
-        try{
+        try {
             kit.read(in,doc,0);
             return doc.getText(0,doc.getLength());
         }
-        catch(BadLocationException e){e.printStackTrace();return null;}
+        catch(BadLocationException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     

@@ -96,7 +96,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
         scriptTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         engineComboBox.setEditable(false);
-        ArrayList<String> engines=WandoraScriptManager.getAvailableEngines();
+        List<String> engines=WandoraScriptManager.getAvailableEngines();
         engineComboBox.removeAllItems();
         for(String e : engines) {
             if(e != null && e.length() > 0) {

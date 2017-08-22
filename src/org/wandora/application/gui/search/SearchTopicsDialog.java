@@ -149,7 +149,7 @@ public class SearchTopicsDialog extends javax.swing.JDialog {
 
 
         engineComboBox.setEditable(false);
-        ArrayList<String> engines=WandoraScriptManager.getAvailableEngines();
+        java.util.List<String> engines=WandoraScriptManager.getAvailableEngines();
         engineComboBox.removeAllItems();
         for(int i=0;i<engines.size();i++){
             String e=engines.get(i);
