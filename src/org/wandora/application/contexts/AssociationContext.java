@@ -31,7 +31,6 @@ package org.wandora.application.contexts;
 
 import org.wandora.application.gui.table.AssociationTable;
 import org.wandora.application.gui.topicpanels.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.topicmap.*;
 import java.util.*;
@@ -70,7 +69,7 @@ public class AssociationContext extends LayeredTopicContext implements Context {
     
     public Iterator getAssociationsOf(Iterator topics) {
         if(topics == null) return null;
-        ArrayList contextAssociations = new ArrayList();
+        List contextAssociations = new ArrayList();
         Collection<Association> associations = null;
         Topic topic = null;
         Association association = null;

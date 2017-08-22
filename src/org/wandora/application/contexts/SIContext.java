@@ -59,8 +59,8 @@ public class SIContext implements Context {
     /** Creates a new instance of SIContext */
     public SIContext() {
     }
-    public SIContext(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner) {
-        initialize(admin, actionEvent, contextOwner);
+    public SIContext(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
+        initialize(wandora, actionEvent, contextOwner);
     }
     
     

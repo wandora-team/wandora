@@ -37,12 +37,16 @@ public class WandoraException extends Exception {
     /** Creates a new instance of WandoraException */
     public WandoraException() {
     }
+    
+    
     public WandoraException(String s) {
         super(s);
     }
+    
     public WandoraException(Throwable cause){
         super(cause);
     }
+    
     public WandoraException(String s,Throwable cause){
         super(s,cause);
     }

@@ -59,13 +59,13 @@ public class InstanceContextCollected extends LayeredTopicContext implements Con
     
     public Iterator collectInstancesOf(Iterator topics) {
         if(topics == null) return null;
-        ArrayList contextTopics = new ArrayList();
+        List contextTopics = new ArrayList();
         Collection<Topic> instanceTopics = null;
         Topic topic = null;
         Topic instance = null;
         TopicMap topicmap = null;
         if(gatherStyle == GATHER_TOPICS_FROM_LAYERSTACK) {
-            topicmap = this.admin.getTopicMap();
+            topicmap = this.wandora.getTopicMap();
         }
         while(topics.hasNext()) {
             try {

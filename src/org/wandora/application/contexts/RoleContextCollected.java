@@ -55,7 +55,7 @@ public class RoleContextCollected extends AssociationContext implements Context 
     
     public Iterator getRolesOf(Iterator associations) {
         if(associations == null) return null;
-        ArrayList contextTopics = new ArrayList();
+        List contextTopics = new ArrayList();
         
         Association association = null;
         Collection<Topic> roleTopics = null;

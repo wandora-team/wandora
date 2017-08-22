@@ -49,8 +49,8 @@ public class ApplicationlessContext extends LayeredTopicContext {
     
     
     @Override
-    public void initialize(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner) {
-        this.admin = admin;
+    public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
+        this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
         

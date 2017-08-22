@@ -26,8 +26,7 @@
 
 package org.wandora.application.gui.search;
 
-import de.sciss.syntaxpane.DefaultSyntaxKit;
-import de.sciss.syntaxpane.syntaxkits.JavaScriptSyntaxKit;
+
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -40,6 +39,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import javax.swing.JScrollPane;
@@ -79,7 +79,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
     private Wandora wandora = null;
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
-    private ArrayList<Tuples.T3<String,String,String>> storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();
+    private List<Tuples.T3<String,String,String>> storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();
     private MixedTopicTable resultsTable = null;
     private SimpleLabel message = null;
     

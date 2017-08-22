@@ -43,7 +43,8 @@ public class ClassIterator extends TopicIterator {
         if(topic != null) {
             try{
                 collection = topic.getTypes();
-            }catch(TopicMapException tme){
+            }
+            catch(TopicMapException tme){
                 tme.printStackTrace(); // TODO EXCEPTION
             }
             if(collection != null) it = collection.iterator();

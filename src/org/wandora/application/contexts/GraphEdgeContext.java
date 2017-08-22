@@ -89,7 +89,7 @@ public class GraphEdgeContext implements Context {
     public Iterator getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
-        ArrayList contextEdges = new ArrayList();
+        List contextEdges = new ArrayList();
         if(contextSource instanceof Wandora) {
             try {
                 Wandora w = (Wandora) contextSource;

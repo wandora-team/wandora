@@ -27,8 +27,10 @@
  */
 
 package org.wandora.exceptions;
-import org.wandora.*;
+
+
 import java.util.*;
+
 /**
  *
  * @author  olli
@@ -37,20 +39,23 @@ public class ConcurrentEditingException extends WandoraException {
     
     private Set failedTopics;
     private Set removedTopics;
-    public ConcurrentEditingException(Set failedTopics,Set removedTopics){
+    
+    
+    public ConcurrentEditingException(Set failedTopics, Set removedTopics) {
         this.failedTopics=failedTopics;
         this.removedTopics=removedTopics;
     }
-    public Set getFailedTopics(){
+    
+    public Set getFailedTopics() {
         return failedTopics;
     }
-    public Set getRemovedTopics(){
+    public Set getRemovedTopics() {
         return removedTopics;
     }
-    public void setFailedTopics(Set s){
+    public void setFailedTopics(Set s) {
         failedTopics=s;
     }
-    public void setRemovedTopics(Set s){
+    public void setRemovedTopics(Set s) {
         removedTopics=s;
     }
 }

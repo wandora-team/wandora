@@ -41,7 +41,7 @@ public class ClassContext extends LayeredTopicContext implements Context {
     @Override
     public Iterator getContextObjects() {
         ClassIterator iterator = new ClassIterator();
-        iterator.initialize(super.getContextObjects(), admin);
+        iterator.initialize(super.getContextObjects(), wandora);
         return iterator;
     }
     

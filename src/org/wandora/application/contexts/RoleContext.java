@@ -42,7 +42,7 @@ public class RoleContext extends LayeredTopicContext implements Context {
     @Override
     public Iterator getContextObjects() {
         RoleIterator iterator = new RoleIterator();
-        iterator.initialize(super.getContextObjects(), admin);
+        iterator.initialize(super.getContextObjects(), wandora);
         return iterator;
     }
     

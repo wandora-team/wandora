@@ -46,7 +46,8 @@ public class InstanceIterator extends TopicIterator {
         if(topic != null && topicmap != null) {
             try{
                 collection = topicmap.getTopicsOfType(topic);
-            }catch(TopicMapException tme){
+            }
+            catch(TopicMapException tme){
                 tme.printStackTrace(); // TODO EXCEPTION
                 collection=null;
             }

@@ -54,9 +54,9 @@ public abstract class TopicIterator implements Iterator {
     }
 
     
-    public void initialize(Iterator source, Wandora admin) {
+    public void initialize(Iterator source, Wandora wandora) {
         this.source = source;
-        this.topicmap = admin.getTopicMap();
+        this.topicmap = wandora.getTopicMap();
 
         if(removeDuplicates) {
             cache = new ArrayList();

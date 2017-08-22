@@ -57,7 +57,8 @@ public class AssociationTypeIterator extends TopicIterator {
                         associationTypeTopics.add(association.getType());
                     }
                 }
-            }catch(TopicMapException tme){
+            }
+            catch(TopicMapException tme){
                 tme.printStackTrace(); // TODO EXCEPTION
             }
         }

@@ -57,11 +57,13 @@ public class TopicIteratorForCurrentLayer extends TopicIterator {
                     //collection = null;
                 }
             }
-            catch(Exception e){
+            catch(Exception e) {
                 e.printStackTrace();
                 collection=null;
             }
-            if(collection != null) it = collection.iterator();
+            if(collection != null) {
+                it = collection.iterator();
+            }
         }
         return it;
     }

@@ -41,7 +41,7 @@ public class PlayerContext extends LayeredTopicContext implements Context {
     @Override
     public Iterator getContextObjects() {
         PlayerIterator iterator = new PlayerIterator();
-        iterator.initialize(super.getContextObjects(), admin);
+        iterator.initialize(super.getContextObjects(), wandora);
         return iterator;
     }
 

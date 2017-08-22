@@ -59,7 +59,7 @@ public class ClassContextCollected extends LayeredTopicContext implements Contex
     
     public Iterator getClassesOf(Iterator topics) {
         if(topics == null) return null;
-        ArrayList contextTopics = new ArrayList();
+        List contextTopics = new ArrayList();
         Collection<Topic> classTopics = null;
         Topic topic = null;
         Topic classTopic = null;

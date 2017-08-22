@@ -236,7 +236,7 @@ public class TopicPanelManager implements ActionListener {
     
     
     
-    public ArrayList<ArrayList> getAvailableTopicPanels() {
+    public List<List> getAvailableTopicPanels() {
         ArrayList availablePanels = new ArrayList<ArrayList>();
         for(String panelName : sortedTopicPanels()) {
             ArrayList panelData = new ArrayList();
@@ -253,7 +253,7 @@ public class TopicPanelManager implements ActionListener {
     
     
     
-    public ArrayList<ArrayList> getAvailableTopicPanelsSupportingOpenTopic() {
+    public List<List> getAvailableTopicPanelsSupportingOpenTopic() {
         ArrayList availablePanels = new ArrayList<ArrayList>();
         for(String panelName : sortedTopicPanels()) {
             ArrayList panelData = new ArrayList();
@@ -451,6 +451,8 @@ public class TopicPanelManager implements ActionListener {
     /**
      * Opens the argument topic in the base topic panel. DockingFramePanel
      * opens the topic in current dockable.
+     * 
+     * @param topic to be opened in the current topic panel.
      */
     public void openTopic(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
         if(topic == null || topic.isRemoved()) return;
@@ -521,6 +523,8 @@ public class TopicPanelManager implements ActionListener {
     /**
      * Returns a topic that is open in base topic panel. 
      * DockingFramePanel returns the topic in current dockable.
+     * 
+     * @return Current topic opened in the panel.
      */
     public Topic getOpenTopic() {
         if(baseTopicPanel!=null) {
@@ -540,6 +544,8 @@ public class TopicPanelManager implements ActionListener {
     /**
      * Returns an icon for base topic panel. DockingFramePanel 
      * returns the icon for current dockable.
+     * 
+     * @return Topic panel's icon.
      */
     public Icon getIcon() {
         if(baseTopicPanel!=null) {

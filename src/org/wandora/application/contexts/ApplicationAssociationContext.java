@@ -42,7 +42,7 @@ public class ApplicationAssociationContext implements Context {
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
-    protected Wandora admin = null;  
+    protected Wandora wandora = null;  
     
     
     
@@ -52,7 +52,7 @@ public class ApplicationAssociationContext implements Context {
 
     @Override
     public Iterator getContextObjects() {
-        ArrayList contextAssociations = new ArrayList();
+        List contextAssociations = new ArrayList();
         try {
             Wandora w = (Wandora) contextSource;
             Topic currentTopic = w.getOpenTopic();
@@ -76,12 +76,12 @@ public class ApplicationAssociationContext implements Context {
     
     
     @Override
-    public void initialize(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner) {
-        this.admin = admin;
+    public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
+        this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
         
-        setContextSource( admin );
+        setContextSource( wandora );
     }
     
     

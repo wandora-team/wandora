@@ -47,7 +47,7 @@ public class PreContext implements Context {
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
-    protected Wandora admin = null;
+    protected Wandora wandora = null;
     
     private Collection contextObjects;
     
@@ -82,8 +82,8 @@ public class PreContext implements Context {
     
     
     @Override
-    public void initialize(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner) {
-        this.admin = admin;
+    public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
+        this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
     }
@@ -129,7 +129,7 @@ public class PreContext implements Context {
                             return o;
                         }
                         if(o instanceof Locator) {
-                            return admin.getTopicMap().getTopic((Locator) o);
+                            return wandora.getTopicMap().getTopic((Locator) o);
                         }
                     }
                     catch(Exception e) {

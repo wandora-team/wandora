@@ -41,7 +41,7 @@ public class AssociationTypeContext extends LayeredTopicContext implements Conte
     @Override
     public Iterator getContextObjects() {
         AssociationTypeIterator iterator = new AssociationTypeIterator();
-        iterator.initialize(super.getContextObjects(), admin);
+        iterator.initialize(super.getContextObjects(), wandora);
         return iterator;
     }
     

@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -470,9 +471,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     @Override
     public Object[] getViewMenuStruct() {
         JMenu addMenu =  new SimpleMenu("New panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
-        ArrayList<ArrayList> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
+        List<List> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
         ArrayList addTopicPanelMenuStruct = new ArrayList();
-        for(ArrayList panelData : availableTopicPanels) {
+        for(List panelData : availableTopicPanels) {
             try {
                 Class panelClass = Class.forName((String) panelData.get(0));
                 if(!this.getClass().equals(panelClass)) {

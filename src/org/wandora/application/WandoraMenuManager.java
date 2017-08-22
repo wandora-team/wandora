@@ -2011,8 +2011,9 @@ public class WandoraMenuManager {
                 struct.add("[No panels open]");
             }
             struct.add("---");
-            ArrayList<ArrayList> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanelsSupportingOpenTopic();
-            for(ArrayList panelData : availableTopicPanels) {
+
+            java.util.List<java.util.List> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanelsSupportingOpenTopic();
+            for(java.util.List panelData : availableTopicPanels) {
                 try {
                     Class panelClass = Class.forName((String) panelData.get(0));
                     if(!DockingFramePanel.class.equals(panelClass)) {

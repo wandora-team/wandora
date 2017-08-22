@@ -54,7 +54,7 @@ public interface Context {
      * - ActionEvent: Event that triggered the execution of tool.
      * - AdminTool: The Tool to be executed. Note that Context _is not_ executing the tool!
      */
-    public void initialize(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner);
+    public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner);
     
     /**
      * Returns Iterator for accessible object in context ie. object the tool may

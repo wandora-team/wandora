@@ -56,7 +56,7 @@ public class PlayerContextCollected extends AssociationContext implements Contex
     
     public Iterator getPlayersOf(Iterator associations) {
         if(associations == null) return null;
-        ArrayList contextTopics = new ArrayList();
+        List contextTopics = new ArrayList();
         
         Association association = null;
         Collection<Topic> roleTopics = null;

@@ -70,7 +70,7 @@ public class RoleIterator extends TopicIterator {
                     }
                 }
             }
-            catch(TopicMapException tme){
+            catch(TopicMapException tme) {
                 tme.printStackTrace();// TODO EXCEPTION
             }
         }

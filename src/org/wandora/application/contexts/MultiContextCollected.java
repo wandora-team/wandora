@@ -37,7 +37,7 @@ import java.util.*;
  * @author akivela
  */
 public class MultiContextCollected implements Context {
-    private ArrayList<Context> multiContext = new ArrayList();
+    private List<Context> multiContext = new ArrayList();
     public boolean removeDuplicates = true;
     private Object contextSource;
     private ActionEvent contextEvent;
@@ -133,13 +133,13 @@ public class MultiContextCollected implements Context {
 
     
     @Override
-    public void initialize(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner) {
+    public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         contextEvent = actionEvent;
         Context context = null;
         for(Iterator<Context> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {
             context = contextIterator.next();
             if(context != null) {
-                context.initialize(admin, actionEvent, contextOwner);
+                context.initialize(wandora, actionEvent, contextOwner);
             }
         }
     }

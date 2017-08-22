@@ -59,7 +59,7 @@ public class LayeredTopicContext implements Context {
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
-    protected Wandora admin = null;
+    protected Wandora wandora = null;
     
     
     
@@ -69,24 +69,24 @@ public class LayeredTopicContext implements Context {
     public LayeredTopicContext() {
         // Nothing here
     }
-    public LayeredTopicContext(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner) {
-        initialize(admin, actionEvent, contextOwner);
+    public LayeredTopicContext(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
+        initialize(wandora, actionEvent, contextOwner);
     }
     
     
     
     
     @Override
-    public void initialize(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner) {
-        this.admin = admin;
+    public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
+        this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
         
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
         if( !isContextSource(proposedContextSource) ) {
-            proposedContextSource = admin.getFocusOwner();
+            proposedContextSource = wandora.getFocusOwner();
             if( !isContextSource(proposedContextSource) ) {
-                proposedContextSource = admin;
+                proposedContextSource = wandora;
             }
         }
         
@@ -213,12 +213,16 @@ public class LayeredTopicContext implements Context {
         
         // ***** LayerTree *****
         else if(contextSource instanceof LayerTree) {
-            TopicMap atm = admin.getTopicMap();
+            TopicMap atm = wandora.getTopicMap();
             LayerTree layerTree=(LayerTree)contextSource;
             Layer l=layerTree.getLastClickedLayer();
-            TopicMap tm=null;
-            if(l==null) tm=admin.getTopicMap();
-            else tm=l.getTopicMap();
+            TopicMap tm = null;
+            if(l==null) {
+                tm = wandora.getTopicMap();
+            }
+            else {
+                tm = l.getTopicMap();
+            }
             try {
                 Iterator<Topic> topics = tm.getTopics();
                 Topic t = null;
@@ -241,7 +245,7 @@ public class LayeredTopicContext implements Context {
         else if(contextSource instanceof Layer){
             TopicMap topicmap = ((Layer)contextSource).getTopicMap();
             try {
-                TopicMap tm = admin.getTopicMap();
+                TopicMap tm = wandora.getTopicMap();
                 Iterator<Topic> topics = topicmap.getTopics();
                 Topic t = null;
                 while(topics.hasNext()) {
@@ -263,7 +267,7 @@ public class LayeredTopicContext implements Context {
         // ***** SITable *****
         else if(contextSource instanceof SITable) {
             Locator[] locators = ((SITable) contextSource).getSelectedLocators();
-            TopicMap topicmap = admin.getTopicMap();           
+            TopicMap topicmap = wandora.getTopicMap();           
             Topic t = null;
             for(int i=0; i<locators.length; i++) {
                 try {
@@ -282,7 +286,7 @@ public class LayeredTopicContext implements Context {
         else if(contextSource instanceof TopicMap) {
             TopicMap topicmap = (TopicMap) contextSource;
             try {
-                TopicMap tm = admin.getTopicMap();
+                TopicMap tm = wandora.getTopicMap();
                 Iterator<Topic> topics = topicmap.getTopics();
                 Topic t = null;
                 while(topics.hasNext()) {

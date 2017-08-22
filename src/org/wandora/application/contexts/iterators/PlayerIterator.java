@@ -69,7 +69,8 @@ public class PlayerIterator extends TopicIterator {
                         }
                     }
                 }
-            }catch(TopicMapException tme){
+            }
+            catch(TopicMapException tme){
                 tme.printStackTrace(); // TODO EXCEPTION
             }
         }
