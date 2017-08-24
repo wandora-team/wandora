@@ -68,7 +68,7 @@ public interface TopicPanel extends TopicMapListener {
     
     /**
      * A topic panel should stop all threads and close all (shared) resources. 
-     * Stopping preceedes closing the topic panel.
+     * Stopping closes the topic panel too.
      */
     public void stop();
     

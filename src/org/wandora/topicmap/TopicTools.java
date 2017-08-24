@@ -35,10 +35,16 @@ import org.wandora.topicmap.layered.*;
 import org.wandora.utils.DataURL;
 
 /**
+ * This class is a collection of static helpers for accessing
+ * topics and associations.
+ * 
  *
  * @author akivela
  */
 public class TopicTools {
+    
+    
+    
     
     /** Creates a new instance of TopicTools */
     public TopicTools() {
@@ -46,12 +52,18 @@ public class TopicTools {
     
     
     /**
-     * Gets one player of given role in the associations of the topic.
+     * Returns one player of given role in the associations of the topic.
+     * 
+     * @param topic
+     * @param roleSI
+     * @return 
      */
     public static Topic getFirstPlayerWithRole(Topic topic, String roleSI) {
         try {
-            Vector<Topic> players = getPlayersWithRole(topic, roleSI);
-            if(players.size() > 0) return players.elementAt(0);
+            List<Topic> players = getPlayersWithRole(topic, roleSI);
+            if(players != null && !players.isEmpty()) {
+                return players.get(0);
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -62,22 +74,28 @@ public class TopicTools {
     
     /**
      * Get all players of given role in the associations of the topic. 
+     * 
+     * @param topic
+     * @param roleSI
+     * @return 
+     * @throws org.wandora.topicmap.TopicMapException
      */
-    
-    public static Vector<Topic> getPlayersWithRole(Topic topic, String roleSI) throws TopicMapException  {
-        Vector<Topic> players = new Vector<Topic>();
+    public static List<Topic> getPlayersWithRole(Topic topic, String roleSI) throws TopicMapException  {
+        List<Topic> players = new ArrayList<Topic>();
         if(topic != null && roleSI != null) {
             Topic role = topic.getTopicMap().getTopic(roleSI);
 
             if(role != null) {
                 Collection associations = topic.getAssociations();
-                for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
-                    try {
-                        Association a = (Association) iter.next();
-                        if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
+                if(associations != null) {
+                    for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+                        try {
+                            Association a = (Association) iter.next();
+                            if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -88,30 +106,41 @@ public class TopicTools {
     
     /**
      * Get all players of given role in the associations of a collection of topics.
-     * The returned collection may contain same
-     * topic several times. (TODO: is this intended???)
+     * Returned topic list may contain same
+     * topic several times (TODO: is this intended?).
+     * 
+     * @param topics
+     * @param roleSI
+     * @return 
      */
-    public static Vector<Topic> getPlayersWithRole(Collection topics, String roleSI) {
-        Vector<Topic> players = new Vector<Topic>();
+    public static List<Topic> getPlayersWithRole(Collection topics, String roleSI) {
+        List<Topic> players = new ArrayList<Topic>();
         
-        for(Iterator i = topics.iterator(); i.hasNext(); ) {
-            try {
-                Topic topic = (Topic) i.next();
-                players.addAll(getPlayersWithRole(topic, roleSI));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
+        if(topics != null) {
+            for(Iterator i = topics.iterator(); i.hasNext(); ) {
+                try {
+                    Topic topic = (Topic) i.next();
+                    players.addAll(getPlayersWithRole(topic, roleSI));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return players;
     }
     
+    
     /**
      * Get all players with one of specified roles in the associations of the topic.
+     * 
+     * @param topic
+     * @param roleSIs
+     * @return 
      */
-    public static Vector<Topic> getPlayersWithRoles(Topic topic, String[] roleSIs) {
-        Vector<Topic> players = new Vector<Topic>();
-        if(topic != null) {
+    public static List<Topic> getPlayersWithRoles(Topic topic, String[] roleSIs) {
+        List<Topic> players = new ArrayList<Topic>();
+        if(topic != null && roleSIs != null) {
             String roleSI = null;
             for(int i=0; i<roleSIs.length; i++) {
                 try {
@@ -130,9 +159,13 @@ public class TopicTools {
 
     /**
      * Get all players with one of specified roles in the associations of the topic.
+     * 
+     * @param topic
+     * @param roleSIs
+     * @return 
      */
-    public static Vector<Topic> getPlayersWithRoles(Topic topic, Collection roleSIs) {
-        Vector<Topic> players = new Vector<Topic>();
+    public static List<Topic> getPlayersWithRoles(Topic topic, Collection roleSIs) {
+        List<Topic> players = new ArrayList<Topic>();
         if(topic != null) {
             String roleSI = null;
             for(Iterator i=roleSIs.iterator(); i.hasNext(); ) {
@@ -153,17 +186,23 @@ public class TopicTools {
     /**
      * Get all players with one of specified roles in the associations of topics
      * in the collection.
+     * 
+     * @param topics
+     * @param roleSIs
+     * @return 
      */
-    public static Vector<Topic> getPlayersWithRoles(Collection topics, Collection roleSIs) {
-        Vector<Topic> players = new Vector<Topic>();
+    public static List<Topic> getPlayersWithRoles(Collection topics, Collection roleSIs) {
+        List<Topic> players = new ArrayList<Topic>();
         
-        for(Iterator i = topics.iterator(); i.hasNext(); ) {
-            try {
-                Topic topic = (Topic) i.next();
-                players.addAll(getPlayersWithRoles(topic, roleSIs));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
+        if(topics != null) {
+            for(Iterator i = topics.iterator(); i.hasNext(); ) {
+                try {
+                    Topic topic = (Topic) i.next();
+                    players.addAll(getPlayersWithRoles(topic, roleSIs));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return players;
@@ -174,17 +213,23 @@ public class TopicTools {
     /**
      * Get all players with one of specified roles in the associations of topics
      * in the collection.
+     * 
+     * @param topics
+     * @param roleSIs
+     * @return 
      */
-    public static Vector<Topic> getPlayersWithRoles(Collection topics, String[] roleSIs) {
-        Vector<Topic> players = new Vector<Topic>();
+    public static List<Topic> getPlayersWithRoles(Collection topics, String[] roleSIs) {
+        List<Topic> players = new ArrayList<Topic>();
         
-        for(Iterator i = topics.iterator(); i.hasNext(); ) {
-            try {
-                Topic topic = (Topic) i.next();
-                players.addAll(getPlayersWithRoles(topic, roleSIs));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
+        if(topics != null) {
+            for(Iterator i = topics.iterator(); i.hasNext(); ) {
+                try {
+                    Topic topic = (Topic) i.next();
+                    players.addAll(getPlayersWithRoles(topic, roleSIs));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return players;
@@ -193,9 +238,14 @@ public class TopicTools {
     
     /**
      * Get all players of all associations of a given type in the topic.
+     * 
+     * @param topic
+     * @param associationTypeSI
+     * @return 
+     * @throws org.wandora.topicmap.TopicMapException
      */
-    public static Vector<Topic> getPlayers(Topic topic, String associationTypeSI) throws TopicMapException  {
-        Vector<Topic> players = new Vector<Topic>();
+    public static List<Topic> getPlayers(Topic topic, String associationTypeSI) throws TopicMapException  {
+        List<Topic> players = new ArrayList<Topic>();
         if(topic != null && associationTypeSI != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
 
@@ -223,11 +273,16 @@ public class TopicTools {
     
     /**
      * Get one player in the associations of given type in the topic that is of given role.
+     * 
+     * @param topic
+     * @param associationTypeSI
+     * @param roleSI
+     * @return 
      */
     public static Topic getFirstPlayer(Topic topic, String associationTypeSI, String roleSI) {
         try {
-            Vector players = getPlayers(topic, associationTypeSI, roleSI);
-            if(players.size() > 0) return (Topic) players.elementAt(0);
+            List<Topic> players = getPlayers(topic, associationTypeSI, roleSI);
+            if(!players.isEmpty()) return players.get(0);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -236,9 +291,18 @@ public class TopicTools {
     }
     
     
-    
-    public static Vector<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI)  throws TopicMapException {
-        Vector<Topic> players = new Vector<Topic>();
+    /**
+     * Get all player topics within associations of a given topic. Associations
+     * are limited to a given association type and player to a given role.
+     * 
+     * @param topic
+     * @param associationTypeSI
+     * @param roleSI
+     * @return
+     * @throws TopicMapException 
+     */
+    public static List<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI)  throws TopicMapException {
+        List<Topic> players = new ArrayList<Topic>();
         if(topic != null && associationTypeSI != null && roleSI != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
@@ -260,20 +324,28 @@ public class TopicTools {
     }
     
 
-    public static Vector<Topic> getPlayers(Topic topic, Topic associationType, Topic role)  throws TopicMapException {
-        Vector<Topic> players = new Vector<Topic>();
+    /**
+     * Return a list of topics. List contains player topics within associations
+     * of a given topic. Associations are limited with an association type 
+     * and player with a role topic.
+     * 
+     * @param topic
+     * @param associationType
+     * @param role
+     * @return
+     * @throws TopicMapException 
+     */
+    public static List<Topic> getPlayers(Topic topic, Topic associationType, Topic role)  throws TopicMapException {
+        List<Topic> players = new ArrayList<Topic>();
         if(topic != null && associationType != null && role != null) {
-
-            if(associationType != null && role != null) {
-                Collection associations = topic.getAssociations(associationType);
-                for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
-                    try {
-                        Association a = (Association) iter.next();
-                        if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            Collection associations = topic.getAssociations(associationType);
+            for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+                try {
+                    Association a = (Association) iter.next();
+                    if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -281,25 +353,50 @@ public class TopicTools {
     }
     
     
-    public static Vector<Topic> getPlayers(Collection topics, String associationTypeSI, String roleSI) {
-        Vector<Topic> players = new Vector<Topic>();
+    /**
+     * Get all players of associations of a given topics. Associations are
+     * limited to a given type. Players are limited to a given role.
+     * 
+     * @param topics
+     * @param associationTypeSI
+     * @param roleSI
+     * @return 
+     */
+    public static List<Topic> getPlayers(Collection topics, String associationTypeSI, String roleSI) {
+        List<Topic> players = new ArrayList<Topic>();
         
-        for(Iterator i = topics.iterator(); i.hasNext(); ) {
-            try {
-                Topic topic = (Topic) i.next();
-                players.addAll(getPlayers(topic, associationTypeSI, roleSI));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
+        if(topics != null) {
+            for(Iterator i = topics.iterator(); i.hasNext(); ) {
+                try {
+                    Topic topic = (Topic) i.next();
+                    players.addAll(getPlayers(topic, associationTypeSI, roleSI));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return players;
     }
     
     
-    
-    public static Vector<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI, String hasRole, String hasPlayer) throws TopicMapException  {
-        Vector<Topic> players = new Vector<Topic>();
+    /**
+     * Get all players of a topic if next conditions apply:
+     * Association type must be same as argument associationTypeSI.
+     * Player's role must be same as argument roleSI.
+     * Association must contain role-player pair that specified with arguments
+     * hasRole and hasPlayer.
+     * 
+     * @param topic
+     * @param associationTypeSI
+     * @param roleSI
+     * @param hasRole
+     * @param hasPlayer
+     * @return
+     * @throws TopicMapException
+     */
+    public static List<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI, String hasRole, String hasPlayer) throws TopicMapException  {
+        List<Topic> players = new ArrayList<Topic>();
         if(topic != null && associationTypeSI != null && roleSI != null && hasRole != null && hasPlayer != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
@@ -326,10 +423,23 @@ public class TopicTools {
         return players;
     }
     
-    
-    
-    public static Vector<Topic> getPlayers(Topic topic, Topic type, Topic role, Topic hasRole, Topic hasPlayer)  throws TopicMapException {
-        Vector<Topic> players = new Vector<Topic>();
+    /**
+     * Get all players of a topic if next conditions apply:
+     * Association type must be same as argument type.
+     * Player's role must be same as argument role.
+     * Association must contain role-player pair that specified with arguments
+     * hasRole and hasPlayer.
+     * 
+     * @param topic
+     * @param type
+     * @param role
+     * @param hasRole
+     * @param hasPlayer
+     * @return
+     * @throws TopicMapException
+     */
+    public static List<Topic> getPlayers(Topic topic, Topic type, Topic role, Topic hasRole, Topic hasPlayer)  throws TopicMapException {
+        List<Topic> players = new ArrayList<Topic>();
         if(topic != null && type != null && role != null && hasRole != null && hasPlayer != null) {
             Collection associations = topic.getAssociations(type);
             for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
@@ -351,8 +461,23 @@ public class TopicTools {
     
     
     
-    public static Vector<Topic> getPlayers(Collection topics, String associationTypeSI, String roleSI, String hasRole, String hasPlayer)  throws TopicMapException {
-        Vector<Topic> players = new Vector<Topic>();
+    /**
+     * Get all players of topics if next conditions apply:
+     * Association type must be same as argument associationTypeSI.
+     * Player's role must be same as argument roleSI.
+     * Association must contain role-player pair that specified with arguments
+     * hasRole and hasPlayer.
+     * 
+     * @param topics
+     * @param associationTypeSI
+     * @param roleSI
+     * @param hasRole
+     * @param hasPlayer
+     * @return
+     * @throws TopicMapException
+     */
+    public static List<Topic> getPlayers(Collection topics, String associationTypeSI, String roleSI, String hasRole, String hasPlayer)  throws TopicMapException {
+        List<Topic> players = new ArrayList<Topic>();
         
         for(Iterator i = topics.iterator(); i.hasNext(); ) {
             try {
@@ -366,11 +491,22 @@ public class TopicTools {
         return players;
     }
     
-    
-    
-    public static Vector<Topic> getSortedPlayers(Topic topic, String associationTypeSI, String roleSI, String sortRole, String lang)  throws TopicMapException {
-        Vector players = new Vector();
-        Vector<Topic> sortedPlayers = new Vector<Topic>();
+    /**
+     * Gets a sorted list of player topics of a given topic and association type
+     * and role. Argument sortRole is used to pick up sorting player topic.
+     * Argument lang is used to get sort name out of sorting player topic.
+     *
+     * @param topic
+     * @param associationTypeSI
+     * @param roleSI
+     * @param sortRole
+     * @param lang
+     * @return
+     * @throws TopicMapException
+     */
+    public static List<Topic> getSortedPlayers(Topic topic, String associationTypeSI, String roleSI, String sortRole, String lang) throws TopicMapException {
+        List players = new ArrayList();
+        List<Topic> sortedPlayers = new ArrayList<Topic>();
         if(topic != null && associationTypeSI != null && roleSI != null && sortRole != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
@@ -387,7 +523,7 @@ public class TopicTools {
                             if(sortPlayer != null) {
                                 int i=0;
                                 while(i<players.size()) {
-                                    Topic[] tc = (Topic[]) players.elementAt(i);
+                                    Topic[] tc = (Topic[]) players.get(i);
                                     Topic anotherSortPlayer = tc[0];
                                     if(anotherSortPlayer != null) {
                                         String sortName = sortPlayer.getSortName(lang);
@@ -415,7 +551,7 @@ public class TopicTools {
         }
         //System.out.println("players.size() == " + players.size());
         for(int i=0; i<players.size(); i++) {
-            Topic[] tc = (Topic[]) players.elementAt(i);
+            Topic[] tc = (Topic[]) players.get(i);
             if(tc != null && tc.length == 2) {
                 Topic player = tc[1];
                 if(player != null) {
@@ -428,13 +564,23 @@ public class TopicTools {
     }
     
     
-
-  
     
-    
-    public static Vector<Topic> getSortedPlayers(Topic topic, Collection associationTypesSI, Collection rolesSI, String sortRole, String lang)  throws TopicMapException {
-        Vector players = new Vector();
-        Vector<Topic> sortedPlayers = new Vector<Topic>();
+    /**
+     * Gets a sorted list of player topics of a given topic and association types
+     * and roles. Argument sortRole is used to pick up sorting player topic.
+     * Argument lang is used to get sort name out of sorting player topic.
+     * 
+     * @param topic
+     * @param associationTypesSI
+     * @param rolesSI
+     * @param sortRole
+     * @param lang
+     * @return
+     * @throws TopicMapException
+     */
+    public static List<Topic> getSortedPlayers(Topic topic, Collection associationTypesSI, Collection rolesSI, String sortRole, String lang)  throws TopicMapException {
+        List players = new ArrayList();
+        List<Topic> sortedPlayers = new ArrayList<Topic>();
         
         Iterator ai = associationTypesSI.iterator();
         Iterator ri = rolesSI.iterator();
@@ -458,7 +604,7 @@ public class TopicTools {
                                 if(sortPlayer != null) {
                                     int i=0;
                                     while(i<players.size()) {
-                                        Topic[] tc = (Topic[]) players.elementAt(i);
+                                        Topic[] tc = (Topic[]) players.get(i);
                                         Topic anotherSortPlayer = tc[0];
                                         if(anotherSortPlayer != null) {
                                             String sortName = sortPlayer.getSortName(lang);
@@ -487,7 +633,7 @@ public class TopicTools {
         }
         //System.out.println("players.size() == " + players.size());
         for(int i=0; i<players.size(); i++) {
-            Topic[] tc = (Topic[]) players.elementAt(i);
+            Topic[] tc = (Topic[]) players.get(i);
             if(tc != null && tc.length == 2) {
                 Topic player = tc[1];
                 if(player != null) {
@@ -501,8 +647,16 @@ public class TopicTools {
     
     
     
-    public static Vector<Topic> getTypesOfRequiredType(Topic topic, String requiredTypeSI) {
-        Vector<Topic> selectedTypes = new Vector<Topic>();
+    /**
+     * Returns a list of type topics of a given topic. List of type topics
+     * is limited to topics that have them selves typed with requiredTypeSi.
+     * 
+     * @param topic
+     * @param requiredTypeSI
+     * @return
+     */
+    public static List<Topic> getTypesOfRequiredType(Topic topic, String requiredTypeSI) {
+        List<Topic> selectedTypes = new ArrayList<Topic>();
         if(topic != null && requiredTypeSI != null) {
             try {
                 Collection types = topic.getTypes();
@@ -525,13 +679,18 @@ public class TopicTools {
     
     
     
-    public static Vector getSLsOfPlayers(Topic topic, String associationTypeSI, String roleSI)  throws TopicMapException {
-        Vector players = getPlayers(topic, associationTypeSI, roleSI);
-        Vector locators = new Vector();
+    public static List<String> getSLsOfPlayers(Topic topic, String associationTypeSI, String roleSI) throws TopicMapException {
+        return getSubjectLocatorsOfPlayers(topic, associationTypeSI, roleSI);
+    }
+
+    
+    public static List<String> getSubjectLocatorsOfPlayers(Topic topic, String associationTypeSI, String roleSI) throws TopicMapException {
+        List<Topic> players = getPlayers(topic, associationTypeSI, roleSI);
+        List<String> locators = new ArrayList<String>();
         
         for(int i=0; i<players.size(); i++) {
-            if(players.elementAt(i) != null) {
-                String sl = ((Topic) players.elementAt(i)).getSubjectLocator().toExternalForm();
+            if(players.get(i) != null) {
+                String sl = players.get(i).getSubjectLocator().toExternalForm();
                 if(sl != null && sl.length() > 0) {
                     locators.add(sl);
                 }
@@ -542,19 +701,38 @@ public class TopicTools {
 
     
     
+    /**
+     * Returns a list subject locators of given topics. Delegates
+     * operation to method getSubjectLocatorsOfTopics.
+     * 
+     * @param topics
+     * @return
+     */
+    public static List<String> getSLsOfTopics(Collection topics) {
+        return getSubjectLocatorsOfTopics(topics);
+    }
     
-    public static Vector getSLsOfTopics(Collection topics) {
-        Vector locators = new Vector();
-        for(Iterator iter=topics.iterator(); iter.hasNext(); ) {
-            try {
-                Topic topic = (Topic) iter.next();
-                String sl = topic.getSubjectLocator().toExternalForm();
-                if(sl != null && sl.length() > 0) {
-                    locators.add(sl);
+    /**
+     * Returns a list subject locators of given topics. If a topic
+     * has no subject locator, the list has no element for the topic.
+     * 
+     * @param topics
+     * @return
+     */
+    public static List<String> getSubjectLocatorsOfTopics(Collection topics) {
+        List<String> locators = new ArrayList<String>();
+        if(topics != null) {
+            for(Iterator iter=topics.iterator(); iter.hasNext(); ) {
+                try {
+                    Topic topic = (Topic) iter.next();
+                    String sl = topic.getSubjectLocator().toExternalForm();
+                    if(sl != null && sl.length() > 0) {
+                        locators.add(sl);
+                    }
                 }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return locators;
@@ -562,8 +740,20 @@ public class TopicTools {
     
     
     
+    /**
+     * Return a collection of topics. Returned topics are edges of an association
+     * chain. Association chain is topic path where one travels from a given topic
+     * through given associations (association type, in-role and out-role). Edge
+     * topic is found whenever one can not travel any further.
+     * 
+     * @param source
+     * @param associationType
+     * @param baseRole
+     * @param outRole
+     * @return 
+     */
     public static Collection<Topic> getEdgeTopics(Collection<Topic> source, Topic associationType, Topic baseRole, Topic outRole) {
-        ArrayList<Topic> rootTopics = new ArrayList<Topic>();
+        List<Topic> rootTopics = new ArrayList<Topic>();
         Iterator<Topic> sourceIterator = source.iterator();
         while(sourceIterator.hasNext()) {
             Topic base = sourceIterator.next();
@@ -576,9 +766,17 @@ public class TopicTools {
     }
     
     
-    
+    /**
+     * Return one edge topic.
+     * 
+     * @param base
+     * @param associationType
+     * @param baseRole
+     * @param outRole
+     * @return 
+     */
     public static Topic getEdgeTopic(Topic base, Topic associationType, Topic baseRole, Topic outRole) {
-        ArrayList<Topic> pathTopics = new ArrayList<Topic>();
+        List<Topic> pathTopics = new ArrayList<Topic>();
         int MAXDEPTH = 9999;
                 
         while(true && --MAXDEPTH > 0) {
@@ -612,8 +810,20 @@ public class TopicTools {
     }
     
     
-    public static ArrayList<Topic> getSinglePath(Topic base, Topic associationType, Topic baseRole, Topic outRole) {
-        ArrayList<Topic> pathTopics = new ArrayList<Topic>();
+    
+    
+    /**
+     * Returns one path (a list of topics) that is created traversing associations 
+     * from a given start point to the end point.
+     *
+     * @param base
+     * @param associationType
+     * @param baseRole
+     * @param outRole
+     * @return
+     */
+    public static List<Topic> getSinglePath(Topic base, Topic associationType, Topic baseRole, Topic outRole) {
+        List<Topic> pathTopics = new ArrayList<Topic>();
         int MAXDEPTH = 9999;
                 
         while(true && --MAXDEPTH > 0) {
@@ -646,11 +856,21 @@ public class TopicTools {
         return pathTopics;
     }
 
-
-
-    public static ArrayList<ArrayList<Topic>> getCyclePaths(Topic base, Topic associationType, Topic baseRole, Topic outRole) {
-        ArrayList<ArrayList<Topic>> cycles = new ArrayList<ArrayList<Topic>>();
-        ArrayList<Topic> path = new ArrayList<Topic>();
+    
+    
+    /**
+     * Returns possible paths where one can traverse given associations 
+     * back to the starting topic. 
+     * 
+     * @param base
+     * @param associationType
+     * @param baseRole
+     * @param outRole
+     * @return
+     */
+    public static List<List<Topic>> getCyclePaths(Topic base, Topic associationType, Topic baseRole, Topic outRole) {
+        List<List<Topic>> cycles = new ArrayList<List<Topic>>();
+        List<Topic> path = new ArrayList<Topic>();
         path.add(base);
         getCyclePaths(cycles, path, base, associationType, baseRole, outRole);
         return cycles;
@@ -659,7 +879,7 @@ public class TopicTools {
 
 
     
-    private static void getCyclePaths(ArrayList<ArrayList<Topic>> cycles, ArrayList<Topic> path, Topic base, Topic associationType, Topic baseRole, Topic outRole) {
+    private static void getCyclePaths(List<List<Topic>> cycles, List<Topic> path, Topic base, Topic associationType, Topic baseRole, Topic outRole) {
         try {
             Collection<Association> associations = base.getAssociations(associationType, baseRole);
             if(associations.size() > 0) {
@@ -670,7 +890,7 @@ public class TopicTools {
                     Topic pathTopic = association.getPlayer(outRole);
                     if(pathTopic != null) {
                         if(path.contains(pathTopic)) {
-                           ArrayList<Topic> cycle = new ArrayList<Topic>();
+                           List<Topic> cycle = new ArrayList<Topic>();
                            int index = path.indexOf(pathTopic);
                            for(int i=index; i<path.size(); i++) {
                                cycle.add(path.get(i));
@@ -681,7 +901,9 @@ public class TopicTools {
                         else {
                             path.add(pathTopic);
                             base = pathTopic;
-                            getCyclePaths(cycles, (ArrayList<Topic>) path.clone(), base, associationType, baseRole, outRole);
+                            List<Topic> clonedPath = new ArrayList<Topic>();
+                            clonedPath.addAll(path);
+                            getCyclePaths(cycles, clonedPath, base, associationType, baseRole, outRole);
                         }
                     }
                 }
@@ -695,7 +917,16 @@ public class TopicTools {
     
     //----------------------------------------------------- LOCATOR CLEANING ---
     
-
+    
+    
+    
+    /**
+     * Checks if given locator contains unwanted characters that make
+     * the locator "dirty".
+     *
+     * @param l
+     * @return
+     */
     public static boolean isDirtyLocator(Locator l) {
         String s = l.toExternalForm();
         if(DataURL.isDataURL(s)) return false;
@@ -706,6 +937,13 @@ public class TopicTools {
     }
     
  
+    /**
+     * Method isDirtyLocator uses this method to decide whether or not
+     * a character is "dirty".
+     * 
+     * @param c
+     * @return 
+     */
     public static boolean isDirtyLocatorCharacter(char c) {
         if("1234567890poiuytrewqasdfghjklmnbvcxzPOIUYTREWQASDFGHJKLMNBVCXZ$-_.+!*'(),/?:=&#~;%".indexOf(c) != -1) return false;
         else return true;
@@ -714,6 +952,13 @@ public class TopicTools {
     
     public static String schars = "ƒ¿¡¬√∆’‘”“÷ÚÛÙı≈Ê„‰ˆ‚Â‡·È¸˘˙˚¸‹€⁄Ÿ›ü˝ˇéûå«úÁ»… ÀËÈÍÎÏÌÓÔÃÕŒœ–—Ò◊Éÿ¯ﬁ˛ﬂäö";
     public static String dchars = "AAAAAAOOOOOooooAaaaoaaaaeuuuuuUUUUYYyyZzCCccEEEEeeeeiiiiIIIIDdNnxfOottsSs";
+    
+    /**
+     * Finds a suitable replacement character for some "dirty" characters.
+     * 
+     * @param c
+     * @return 
+     */
     public static char repacementLocatorCharacterFor(char c) {
         int i = schars.indexOf(c);
         if(i == -1) {
@@ -724,6 +969,13 @@ public class TopicTools {
     }
     
     
+    
+    /**
+     * Removes or replaces all "dirty" characters in the string.
+     * 
+     * @param s
+     * @return 
+     */
     public static String cleanDirtyLocator(String s) {
         if(DataURL.isDataURL(s)) {
             return s;
@@ -753,6 +1005,14 @@ public class TopicTools {
     
     
     public static int locatorCounter = 0;
+    /**
+     * Returns a default locator that can be given to a topic and it
+     * is very likely (but not sure) that the subject identifier doesn't
+     * cause accidental merge. Default locator is created with a prefix
+     * "http://wandora.org/si/temp/", timestamp and locator counter.
+     * 
+     * @return 
+     */
     public static Locator createDefaultLocator() {
         locatorCounter++;
         long stamp = System.currentTimeMillis();
@@ -774,7 +1034,13 @@ public class TopicTools {
     public static final String nameOfTypeType = "type";
     
     
-    
+    /**
+     * Returns topic's base name if base name exists. Otherwise returns
+     * topic's first subject identifier.
+     * 
+     * @param t
+     * @return 
+     */
     public static String getTopicName(Topic t) {
         if(t == null) return null;
         String name = null;
@@ -791,9 +1057,21 @@ public class TopicTools {
     }
     
     
+    
+    /**
+     * Returns a flat string array that contains associations (including 
+     * classes and instances) of a given topic. Every n*3:th element of
+     * the string array is argument topic's name. Every n*3+1:th
+     * element of the array is association type's name and
+     * every n*3+2:th element of the array is associated topic's name.
+     * Role topic's are not included in the array.
+     * 
+     * @param t
+     * @return 
+     */
     public static String[] getAssociationsAsTriplets(Topic t) {
         if(t == null) return null;
-        ArrayList<String> triplets = new ArrayList<String>();
+        List<String> triplets = new ArrayList<String>();
         String tstr = getTopicName(t);
                 
         try {
@@ -835,9 +1113,19 @@ public class TopicTools {
     
     
 
+    /**
+     * Returns a flat string array that contains associations (including classes
+     * and instances) of a given topic. Associations are stored as type-player
+     * pairs. Every odd element of the string array is type topic's name. Every
+     * even element of the string array is player topic's name. Role topics
+     * are not stored in the string array.
+     * 
+     * @param t
+     * @return 
+     */
     public static String[] getAssociationsAsTypePlayerTuples(Topic t) {
         if(t == null) return null;
-        ArrayList<String> tuples = new ArrayList<String>();
+        List<String> tuples = new ArrayList<String>();
    
         try {
             Collection<Topic> types = t.getTypes();
@@ -875,10 +1163,17 @@ public class TopicTools {
     
     
     
-    
+    /**
+     * Returns given association as a string array where first element
+     * is association type and next elements association player topics.
+     * Returned string array doesn't contain role topics.
+     * 
+     * @param a
+     * @return 
+     */
     public static String[] getAsTriplet(Association a) {
         if(a == null) return null;
-        ArrayList<String> triplet = new ArrayList<String>();
+        List<String> triplet = new ArrayList<String>();
  
         try {
             Topic type = a.getType();
@@ -895,15 +1190,25 @@ public class TopicTools {
         return triplet.toArray( new String[] {} );
     }
     
+    
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     
-    public static ArrayList<Layer> getLayers(ContainerTopicMap tm) {
+    
+    /**
+     * Returns a list of topic map layers of given container topic map.
+     * For example, Wandora's layer stack is a container topic map and
+     * the method returns all topic maps in the layer stack.
+     * 
+     * @param tm
+     * @return 
+     */
+    public static List<Layer> getLayers(ContainerTopicMap tm) {
         if (tm == null) return null;
-        ArrayList<Layer> layers = new ArrayList<Layer>();
+        List<Layer> layers = new ArrayList<Layer>();
         
-        for (Layer l : tm.getLayers()){
+        for (Layer l : tm.getLayers()) {
             TopicMap ltm = l.getTopicMap();
             if(ltm instanceof ContainerTopicMap){
              layers.addAll(getLayers((ContainerTopicMap)ltm));   
@@ -913,7 +1218,22 @@ public class TopicTools {
         return layers;
     }
     
-    public static boolean isTopicMapContainer(TopicMap tm){
-        return tm instanceof ContainerTopicMap;
+    
+    
+    /**
+     * Checks if a given topic map is a container topic map. Container
+     * topic map can contain other topics maps. For example, Wandora's
+     * layer stack is a container topic map.
+     * 
+     * @param tm
+     * @return 
+     */
+    public static boolean isTopicMapContainer(TopicMap tm) {
+        if(tm == null) {
+            return false;
+        }
+        else {
+            return tm instanceof ContainerTopicMap;
+        }
     }
 }
