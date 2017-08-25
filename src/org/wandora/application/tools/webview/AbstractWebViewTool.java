@@ -33,7 +33,8 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 
 /**
- *
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * 
  * @author akivela
  */
 

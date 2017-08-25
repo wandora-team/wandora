@@ -35,6 +35,11 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 
 /**
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * Create topic using the web location and add web location to the created topic
+ * as a subject identifier. Depending on the configuration, the tool associates
+ * the created topic with the current topic. Association may be 
+ * instance-class, subclass-superclass or document-relation.
  *
  * @author akivela
  */
@@ -167,4 +172,9 @@ public class CreateWebLocationTopic extends AbstractWebViewTool {
            (ASSOCIATE_WITH_CURRENT ? " Associate the topic with current topic." : "");
     }
     
+    
+    @Override
+    public String getName() {
+        return "Create topic using the web location";
+    }
 }

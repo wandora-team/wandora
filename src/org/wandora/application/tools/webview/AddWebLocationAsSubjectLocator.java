@@ -30,6 +30,8 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
 /**
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * Adds current web location as a subject locator to the current topic.
  *
  * @author akivela
  */
@@ -59,4 +61,9 @@ public class AddWebLocationAsSubjectLocator extends AbstractWebViewTool {
         return "Adds current web location as a subject locator to the current topic.";
     }
     
+    
+    @Override
+    public String getName() {
+        return "Create subject locator out of web location";
+    }
 }

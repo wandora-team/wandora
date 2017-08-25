@@ -29,7 +29,11 @@ import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.TopicMapException;
 
 /**
- *
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * Executes some Javascript code in WebViewPanel. This tool is abstract and
+ * provides an extension point for a tool that wishes to run Javascript code
+ * in the WebViewPanel. For an example, see OpenFirebugInWebView.
+ * 
  * @author akivela
  */
 
@@ -49,6 +53,11 @@ public abstract class ExecuteJavascript extends AbstractWebViewTool {
     @Override
     public String getDescription() {
         return "Executes some Javascript code in WebViewPanel.";
+    }
+    
+    @Override
+    public String getName() {
+        return "Execute Javascript";
     }
     
     protected abstract String getJavascript();

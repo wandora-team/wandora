@@ -32,7 +32,11 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
 /**
- *
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * Create occurrence out of selection. If USE_SELECTION_SOURCE is set the
+ * tool creates occurrence out of selection's HTML source code instead of
+ * visible text.
+ * 
  * @author akivela
  */
 
@@ -105,5 +109,12 @@ public class AddWebSourceAsOccurrence extends AbstractWebViewTool {
         else {
             return "Add source to the current topic as an occurrence.";
         }
+    }
+    
+    
+    
+    @Override
+    public String getName() {
+        return "Create occurrence out of selection";
     }
 }

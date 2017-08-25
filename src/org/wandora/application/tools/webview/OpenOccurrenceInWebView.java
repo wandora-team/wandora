@@ -30,7 +30,10 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
 /**
- *
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * View occurrence in the WebView. Occurrence type and scope are
+ * set with the constructor arguments.
+ * 
  * @author akivela
  */
 
@@ -74,5 +77,11 @@ public class OpenOccurrenceInWebView extends AbstractWebViewTool {
         return "View occurrence in the WebView.";
     }
     
+    
+        
+    @Override
+    public String getName() {
+        return "View occurrence in the WebView";
+    }
 }
 

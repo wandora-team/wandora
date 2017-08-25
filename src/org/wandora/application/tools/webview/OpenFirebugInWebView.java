@@ -24,7 +24,10 @@
 package org.wandora.application.tools.webview;
 
 /**
- *
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * Executes Javascript code in the WebView. The code loads and views
+ * Firebug Javascript debugger.
+ * 
  * @author akivela
  */
 
@@ -41,4 +44,9 @@ public class OpenFirebugInWebView extends ExecuteJavascript {
         return "Open Firebug Javascript and HTML debugging tool from http://getfirebug.com.";
     }
     
+    
+    @Override
+    public String getName() {
+        return "Open Firebug";
+    }
 }

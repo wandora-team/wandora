@@ -32,6 +32,8 @@ import org.wandora.topicmap.TopicMapException;
 
 
 /**
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * Adds selected text as a basename to the current topic.
  *
  * @author akivela
  */
@@ -68,4 +70,9 @@ public class AddWebSelectionAsBasename extends AbstractWebViewTool {
         return "Adds selected text as a basename to the current topic.";
     }
     
+    
+    @Override
+    public String getName() {
+        return "Create basename out of selection";
+    }
 }

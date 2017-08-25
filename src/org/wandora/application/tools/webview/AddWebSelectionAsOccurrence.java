@@ -32,6 +32,8 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
 /**
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * Adds selected text as an occurrence to the current topic.
  *
  * @author akivela
  */
@@ -83,5 +85,12 @@ public class AddWebSelectionAsOccurrence extends AbstractWebViewTool {
     @Override
     public String getDescription() {
         return "Adds selected text as an occurrence to the current topic.";
+    }
+    
+    
+        
+    @Override
+    public String getName() {
+        return "Create occurrence out of selection";
     }
 }

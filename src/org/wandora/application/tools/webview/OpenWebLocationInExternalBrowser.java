@@ -31,6 +31,8 @@ import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.TopicMapException;
 
 /**
+ * This tool should be executed in context of the WebViewTopicPanel.
+ * Open current web location in external web browser application.
  *
  * @author akivela
  */
@@ -57,5 +59,12 @@ public class OpenWebLocationInExternalBrowser extends AbstractWebViewTool {
    @Override
     public String getDescription() {
         return "Open current web location in external web browser application.";
+    }
+    
+    
+    
+    @Override
+    public String getName() {
+        return "Open web location in external browser.";
     }
 }
