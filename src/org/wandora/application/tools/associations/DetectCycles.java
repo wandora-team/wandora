@@ -103,7 +103,7 @@ public class DetectCycles extends AbstractWandoraTool implements WandoraTool {
                                             log("Seeking cycles in associations of type '"+TopicToString.toString(a.getType())+"'.");
                                             log("Seeking direction is from role '"+TopicToString.toString(role)+"' to role '"+TopicToString.toString(outRole)+"'.");
                                             log("Starting from player '"+TopicToString.toString(player)+"'.");
-                                            ArrayList<ArrayList<Topic>> cycles = TopicTools.getCyclePaths(player, a.getType(), role, outRole);
+                                            List<List<Topic>> cycles = TopicTools.getCyclePaths(player, a.getType(), role, outRole);
                                             if(cycles.isEmpty()) {
                                                 log("Found no cycles in addressed association path.");
                                             }
@@ -111,7 +111,7 @@ public class DetectCycles extends AbstractWandoraTool implements WandoraTool {
                                                 if(cycles.size() == 1) log("Found at least "+cycles.size()+" cycle in addressed association path.");
                                                 else log("Found at least "+cycles.size()+" cycles in addressed association path.");
                                                 for(int i=0;i<cycles.size(); i++) {
-                                                    ArrayList<Topic> cycle = cycles.get(i);
+                                                    List<Topic> cycle = cycles.get(i);
                                                     log("Cycle "+(i+1)+", length "+(cycle.size()-1)+":");
                                                     for(Topic t : cycle) {
                                                         log("  "+TopicToString.toString(t));

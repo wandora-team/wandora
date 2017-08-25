@@ -101,10 +101,10 @@ public class MuusaKeywordSplitter extends AbstractWandoraTool implements Wandora
         Iterator iter=tm.getTopicsOfType(work).iterator();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
-            Vector<Topic> keywords = TopicTools.getPlayers(t, isAboutType, isAboutRole, requiredRole, requiredPlayer);
+            List<Topic> keywords = TopicTools.getPlayers(t, isAboutType, isAboutRole, requiredRole, requiredPlayer);
             int s = keywords.size();
             for(int i=0; i<s; i++) {
-                Topic keywordTopic = keywords.elementAt(i);
+                Topic keywordTopic = keywords.get(i);
                 if(keywordTopic != null) {
                     hlog("Splitting topic '"+ getTopicName(keywordTopic) +"'.");                    
                     StringTokenizer st = new StringTokenizer(keywordTopic.getBaseName(), ",;");

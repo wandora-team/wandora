@@ -130,7 +130,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
                                         Topic outRole = findOtherRole(a, role, admin);
                                         if(outRole != null) {
                                             Topic player = a.getPlayer(role);
-                                            ArrayList<Topic> topicPath = TopicTools.getSinglePath(player, a.getType(), role, outRole);
+                                            List<Topic> topicPath = TopicTools.getSinglePath(player, a.getType(), role, outRole);
                                             Topic pathTopic = null;
                                             pathString.append(player.getBaseName());
                                             for(Iterator<Topic> pathIter=topicPath.iterator(); pathIter.hasNext(); ) {
