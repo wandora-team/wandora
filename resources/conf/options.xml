@@ -1442,24 +1442,16 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
          <item>
-            <name>Import TM</name>
-            <class>org.wandora.application.tools.importers.TopicMapImport</class>
-         </item>
-         <item>
-            <name>Import RDF</name>
-            <class>org.wandora.application.tools.importers.SimpleRDFImport</class>
-         </item>
-         <item>
-            <name>Import OBO</name>
-            <class>org.wandora.application.tools.importers.OBOImport</class>
-         </item>
-         <item>
-            <name>---</name>
-            <class>org.wandora.application.tools.DummyTool</class>
-         </item>
-         <item>
             <name>New topic</name>
             <class>org.wandora.application.tools.NewTopicExtended</class>
+         </item>
+         <item>
+            <name>New panel</name>
+            <class>org.wandora.application.tools.docking.add.AddTraditional</class>
+         </item>
+         <item>
+            <name>Copy</name>
+            <class>org.wandora.application.tools.SystemClipboardCopy</class>
          </item>
          <item>
             <name>Search</name>
@@ -1468,18 +1460,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>---</name>
             <class>org.wandora.application.tools.DummyTool</class>
-         </item>
-         <item>
-            <name>Server</name>
-            <class>org.wandora.application.tools.server.HTTPServerOpenPage</class>
-         </item>
-         <item>
-            <name>R console</name>
-            <class>org.wandora.application.tools.r.OpenRConsole</class>
-         </item>
-         <item>
-            <name>IoT pinger</name>
-            <class>org.wandora.application.tools.iot.Pinger</class>
          </item>
       </set>
       <set>

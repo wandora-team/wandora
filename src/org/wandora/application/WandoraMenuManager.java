@@ -119,7 +119,7 @@ public class WandoraMenuManager {
     public static HashMap SLExtractorMenus = new LinkedHashMap();
     //public static JMenu extractWithSLTableMenu = new SimpleMenu("Extract with SL"); // Here the context is default topic context.
     //public static JMenu extractWithSLTreeMenu = new SimpleMenu("Extract with SL"); // Here the context is default topic context.
-    public JMenu extractWithSLTopicMenu = new SimpleMenu("Extract with SL"); // Here the context is application.
+    public JMenu extractWithSLTopicMenu = new SimpleMenu("Extract with subject locator"); // Here the context is application.
     
     public JMenu fileMenu = new SimpleMenu("File", (Icon) null);
     public JMenu editMenu = new SimpleMenu("Edit", (Icon) null);
@@ -511,8 +511,8 @@ public class WandoraMenuManager {
                 "Delete instances...",new DeleteFromTopics(new ApplicationContext(), DeleteFromTopics.LOOSE_INSTANCES),
                 "Delete classes...",new DeleteFromTopics(new ApplicationContext(), DeleteFromTopics.LOOSE_CLASSES),
                 "---",
-                "Delete all but one SI...", new FlattenSubjectIdentifiers(new ApplicationContext()),
-                "Delete SL...", new DeleteSubjectLocator(new ApplicationContext()),
+                "Delete all but one subject identifier...", new FlattenSubjectIdentifiers(new ApplicationContext()),
+                "Delete subject locator...", new DeleteSubjectLocator(new ApplicationContext()),
             },
             "---",
             
@@ -675,7 +675,7 @@ public class WandoraMenuManager {
                 "Select topics without instances", new SelectTopicIfNoInstances(),
                 "Select topics without A+I", new SelectTopicIfNoAI(),
                 "---",
-                "Select topics with SL", new SelectTopicIfSL(),
+                "Select topics with subject locator", new SelectTopicIfSL(),
                 "Select topics with typed associations", new SelectTopicWithAssociationType(),
                 "---",
                 "Select topics with clipboard identifiers", new SelectTopicWithClipboard(),
@@ -708,21 +708,22 @@ public class WandoraMenuManager {
         refreshExtractMenu();
         refreshExportMenu();
         refreshGeneratorMenu();
+        Icon gitIcon = UIBox.getIcon(0xf1d3); // alt 0xf1d2
         
         // ***** GIT *****
         Object[] teamMenuStruct = new Object[] {
-            "Initialize repository...", UIBox.getIcon(0xf1d3), new Init(),
-            "Clone remote repository...", UIBox.getIcon(0xf1d3), new Clone(),
+            "Initialize repository...", gitIcon, new Init(),
+            "Clone remote repository...", gitIcon, new Clone(),
             "---",
-            "Commit and push to remote...", UIBox.getIcon(0xf1d3), new CommitPush(),
-            "Pull from remote...", UIBox.getIcon(0xf1d3), new Pull(),
+            "Commit and push to remote...", gitIcon, new CommitPush(),
+            "Pull from remote...", gitIcon, new Pull(),
             "---",
-            "Commit...", UIBox.getIcon(0xf1d3), new Commit(),
-            "Push...", UIBox.getIcon(0xf1d3), new Push(),
+            "Commit...", gitIcon, new Commit(),
+            "Push...", gitIcon, new Push(),
             "---",
-            "Status...", UIBox.getIcon(0xf1d3), new Status()
+            "Status...", gitIcon, new Status()
         };
-        JMenu teamMenu = new SimpleMenu("Git", UIBox.getIcon(0xf1d3)); // alt 0xf1d2
+        JMenu teamMenu = new SimpleMenu("Git", gitIcon); 
         teamMenu.removeAll();
         UIBox.attachMenu( teamMenu, teamMenuStruct, wandora );
         
