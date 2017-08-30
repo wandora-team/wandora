@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2016 Wandora Team
+ * Copyright (C) 2004-2017 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
  */
 package org.wandora.application.tools.fng.opendata;
 
+
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.wandora.application.Wandora;
@@ -35,6 +35,11 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 
 /**
+ * Postprocess Finnish National Gallery topic map for Europeana.
+ * Tool removes copyrighted artwork images, copyrighted artworks and
+ * artworks without images. Resulting topic map can exported with
+ * FngOpenDataDublinCoreExporter for Europeana.
+ * 
  *
  * @author akivela
  */
@@ -47,12 +52,13 @@ public class EuropeanaFilter extends AbstractWandoraTool implements WandoraTool 
     
     @Override
     public String getName() {
-        return "Europeana filter";
+        return "FNG Europeana filter";
     }
 
     @Override
     public String getDescription() {
-        return "Europeana filter.";
+        return "Postprocess Finnish National Gallery topic maps for Europeana. "
+                + "Removes copyrighted images and artists.";
     }
     
     @Override
@@ -69,10 +75,10 @@ public class EuropeanaFilter extends AbstractWandoraTool implements WandoraTool 
         Topic imageCreditType = tm.getTopic("http://kansallisgalleria.fi/P3_has_note_creditline");
         Topic langTopic = tm.getTopic("http://wandora.org/si/fng/core/langindependent");
         Topic personDeathType = tm.getTopic("http://wandora.org/si/fng/person_death");
-        Topic personType = tm.getTopic("http://wandora.org/si/fng/person");
         Topic timeType = tm.getTopic("http://wandora.org/si/fng/time");
         
-        {
+        
+        if(imageType != null && imageCreditType != null && langTopic != null) {
             log("Removing images with copyrights...");
             Collection<Topic> images = tm.getTopicsOfType(imageType);
             Set<Topic> imagesToBeRemoved = new LinkedHashSet<Topic>();
@@ -99,9 +105,14 @@ public class EuropeanaFilter extends AbstractWandoraTool implements WandoraTool 
             for( Topic image : imagesToBeRemoved ) {
                 image.remove();
             }
+            log("Removed "+imagesToBeRemoved.size()+" image topics.");
+        }
+        else {
+            log("Missing topics. Can't remove copyrighted image topics.");
         }
         
-        {
+        
+        if(artistType != null && personDeathType != null && timeType != null) {
             log("Removing artists with copyrights...");
             Collection<Topic> artists = tm.getTopicsOfType(artistType);
             Set<Topic> artistsToBeRemoved = new LinkedHashSet<Topic>();
@@ -146,9 +157,15 @@ public class EuropeanaFilter extends AbstractWandoraTool implements WandoraTool 
             for( Topic artist : artistsToBeRemoved ) {
                 artist.remove();
             }
+            log("Removed "+artistsToBeRemoved.size()+" artist topics.");
+        }
+        else {
+            log("Missing topics. Can't remove copyrighted artists.");
         }
         
-        {
+        
+        
+        if(artworkType != null && imageType != null && authorType != null && authorRole != null && artistType != null) {
             log("Removing artworks without images and artists...");
             Collection<Topic> artworks = tm.getTopicsOfType(artworkType);
             Set<Topic> artworksToBeRemoved = new LinkedHashSet<Topic>();
@@ -176,10 +193,14 @@ public class EuropeanaFilter extends AbstractWandoraTool implements WandoraTool 
             for( Topic artwork : artworksToBeRemoved ) {
                 artwork.remove();
             }
+            log("Removed "+artworksToBeRemoved.size()+" artwork topics.");
+        }
+        else {
+            log("Missing topics. Can't remove artworks without images and artists.");
         }
         
         
-        {
+        if(artistType != null && authorType != null) {
             log("Removing artists without artworks...");
             Collection<Topic> artists = tm.getTopicsOfType(artistType);
             Set<Topic> artistsToBeRemoved = new LinkedHashSet<Topic>();
@@ -199,9 +220,13 @@ public class EuropeanaFilter extends AbstractWandoraTool implements WandoraTool 
             for( Topic artist : artistsToBeRemoved ) {
                 artist.remove();
             }
+            log("Removed "+artistsToBeRemoved.size()+" artist topics.");
+        }
+        else {
+            log("Missing topics. Can't remove artists without artworks.");
         }
         
-        log("Ok.");
+        log("Ready.");
         setState(WAIT);
     }
 }
