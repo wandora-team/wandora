@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.query;
+
 import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.topicmap.packageio.PackageInput;
 import java.io.*;
@@ -30,7 +31,7 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.*;
 import org.wandora.topicmap.layered.*;
 import org.wandora.utils.Options;
-import org.wandora.query.*;
+
 
 /**
  *
@@ -42,12 +43,17 @@ public class QueryTopicMapType implements TopicMapType {
     public QueryTopicMapType(){
     }
     
+    
+    @Override
     public TopicMap createTopicMap(Object params) throws TopicMapException {
         QueryTopicMapConfiguration.QueryTopicMapParams p=(QueryTopicMapConfiguration.QueryTopicMapParams)params;
         QueryTopicMap qtm=new QueryTopicMap(p.wandora);
         qtm.setQueries(p.queryInfos);
         return qtm;
     }
+    
+    
+    @Override
     public TopicMap modifyTopicMap(TopicMap tm,Object params) throws TopicMapException {
         QueryTopicMap qtm=(QueryTopicMap)createTopicMap(params);
         qtm.addTopicMapListeners(tm.getTopicMapListeners());
@@ -56,20 +62,28 @@ public class QueryTopicMapType implements TopicMapType {
         return qtm;
     }
 
+    
+    @Override
     public TopicMapConfigurationPanel getConfigurationPanel(Wandora admin, Options options) {
         return new QueryTopicMapConfiguration(admin);
         //return new QueryConfigPanel(admin);
     }
 
+    
+    @Override
     public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora admin, Options options, TopicMap tm) {
         QueryTopicMap qtm=(QueryTopicMap)tm;
         return new QueryTopicMapConfiguration(qtm.getOriginalQueries(),admin);
     }
 
+    
+    @Override
     public JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora admin) {
         return null;
     }
 
+    
+    @Override
     public String getTypeName() {
         return "Query";
     }
@@ -77,9 +91,10 @@ public class QueryTopicMapType implements TopicMapType {
     @Override
     public String toString(){return getTypeName();}
 
+    
+    
+    @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws IOException, TopicMapException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
         QueryTopicMap qtm=(QueryTopicMap)tm;
         Options options=new Options();
         Collection<QueryTopicMap.QueryInfo> queries=qtm.getOriginalQueries();
@@ -96,23 +111,23 @@ public class QueryTopicMapType implements TopicMapType {
             }
         }
         
-        out.nextEntry(pathpre+"queries.xml");
+        out.nextEntry(path, "queries.xml");
         options.save(new java.io.OutputStreamWriter(out.getOutputStream()));
         
         LayerStack ls=((QueryTopicMap)tm).getLayerStack();
         LayeredTopicMapType lttype=new LayeredTopicMapType();
         lttype.packageTopicMap(ls, out, path, logger);
-        
     }
 
+    
+    
+    @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException, TopicMapException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        in.gotoEntry(pathpre+"queries.xml");
-        ArrayList<QueryTopicMap.QueryInfo> queries=new ArrayList<QueryTopicMap.QueryInfo>();
-        Options options=new Options();
+        in.gotoEntry(path, "queries.xml");
+        List<QueryTopicMap.QueryInfo> queries = new ArrayList<QueryTopicMap.QueryInfo>();
+        Options options = new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
-        int counter=1;
+        int counter = 1;
         while(true){
             String engine=options.get("query"+counter+".engine");
             String type=options.get("query"+counter+".type");
@@ -134,19 +149,28 @@ public class QueryTopicMapType implements TopicMapType {
         return qtm;
     }
 
+    
+    
+    @Override
     public TopicMap unpackageTopicMap(TopicMap tm, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException, TopicMapException {
         return unpackageTopicMap(in,path,logger,wandora);
     }
     
+    
+    
+    
     public static class QueryConfigPanel extends TopicMapConfigurationPanel {
         public Object param;
-        public QueryConfigPanel(){}
-        public QueryConfigPanel(Object param){super();this.param=param;}
+        public QueryConfigPanel() { }
+        public QueryConfigPanel(Object param) { 
+            super();
+            this.param=param;
+        }
+        
         @Override
         public Object getParameters() {
             return param;
         }
-        
     }
     
     

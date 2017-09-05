@@ -61,7 +61,9 @@ public class LayeredTopicMapType implements TopicMapType {
         Options options=new Options();
         int lcounter=0;
         String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
+        if(path.length()>0) {
+            pathpre = path + out.getSeparator();
+        }
         Layer selectedLayer = ls.getSelectedLayer();
         for(Layer l : ls.getLayers()) {
             options.put("layer"+lcounter+".name",l.getName());
@@ -119,14 +121,14 @@ public class LayeredTopicMapType implements TopicMapType {
     
     @Override
     public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException,TopicMapException {
-        if(!(topicmap instanceof LayerStack)) return topicmap;
-        if(topicmap == null) topicmap = new LayerStack();
-        
-        String pathpre="";
-        if(path.length()>0) {
-            pathpre=path+"/";
+        if(!(topicmap instanceof LayerStack)) {
+            return topicmap;
         }
-        if(!in.gotoEntry(pathpre+"options.xml")) {
+        if(topicmap == null) {
+            topicmap = new LayerStack();
+        }
+        
+        if(!in.gotoEntry(path, "options.xml")) {
             logger.log("Can't find options.xml in the package.");
             logger.log("Aborting.");
             return null;
@@ -153,10 +155,10 @@ public class LayeredTopicMapType implements TopicMapType {
             String typeClass=options.get("layer"+counter+".type");
             
             try {
-                Class c=Class.forName(typeClass);
-                TopicMapType type=TopicMapTypeManager.getType((Class<? extends TopicMap>)c);
+                Class c = Class.forName(typeClass);
+                TopicMapType type = TopicMapTypeManager.getType((Class<? extends TopicMap>)c);
                 logger.log("Preparing layer '" + layerName + "'.");
-                TopicMap tm=type.unpackageTopicMap(in,pathpre+"layer"+counter, logger,wandora);
+                TopicMap tm = type.unpackageTopicMap(in, in.joinPath(path, "layer"+counter), logger, wandora);
                 Layer l = new Layer(tm,layerName,ls); 
                 ls.addLayer(l);
                 
@@ -185,11 +187,8 @@ public class LayeredTopicMapType implements TopicMapType {
     
     @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException,TopicMapException {
-        String pathpre="";
-        if(path.length()>0) {
-            pathpre=path+"/";
-        }
-        if(!in.gotoEntry(pathpre+"options.xml")) {
+
+        if(!in.gotoEntry(path, "options.xml")) {
             if(logger != null) {
                 logger.log("Can't find options.xml in the package.");
                 logger.log("Aborting.");
@@ -209,14 +208,14 @@ public class LayeredTopicMapType implements TopicMapType {
         
         int counter=0;
         while(true && counter < 9999) {
-            String layerName=options.get("layer"+counter+".name");
+            String layerName = options.get("layer"+counter+".name");
             if(layerName==null) break;
-            String typeClass=options.get("layer"+counter+".type");
+            String typeClass = options.get("layer"+counter+".type");
             try {
-                Class c=Class.forName(typeClass);
-                TopicMapType type=TopicMapTypeManager.getType((Class<? extends TopicMap>)c);
+                Class c = Class.forName(typeClass);
+                TopicMapType type = TopicMapTypeManager.getType((Class<? extends TopicMap>)c);
                 logger.log("Loading layer '" + layerName + "'.");
-                TopicMap tm=type.unpackageTopicMap(in,pathpre+"layer"+counter, logger,wandora);
+                TopicMap tm = type.unpackageTopicMap(in, in.joinPath(path, "layer"+counter), logger, wandora);
                 
                 Layer l = new Layer(tm,layerName,ls); 
                 ls.addLayer(l);

@@ -44,18 +44,79 @@ public interface PackageOutput {
     
     /**
      * Start a new entry in the package with the given name.
+     * 
+     * @param name
+     * @throws java.io.IOException
      */
     public void nextEntry(String name) throws IOException;
+    
+    
+    
+    /**
+     * Start a new entry in the package with the given path and name.
+     * 
+     * @param path
+     * @param name
+     * @throws java.io.IOException
+     */
+    public void nextEntry(String path, String name) throws IOException;
+    
+    
+    
     /**
      * Closes the package.
+     * 
+     * @throws java.io.IOException
      */
     public void close() throws IOException;
+    
+    
+    
     /**
      * Gets the output stream for current entry.
+     * 
+     * @return 
+     * @throws java.io.IOException
      */
     public OutputStream getOutputStream() throws IOException;
+    
+    
     /**
      * Ensure entry will be removed.
+     * 
+     * @param name
+     * @throws java.io.IOException
      */
     public void removeEntry(String name) throws IOException;
+    
+    
+    
+    /**
+     * Ensure entry will be removed.
+     * 
+     * @param path
+     * @param name
+     * @throws java.io.IOException
+     */
+    public void removeEntry(String path, String name) throws IOException;
+    
+    
+    
+    /**
+     * Returns file separator used by the PackageOutput.
+     * 
+     * @return 
+     */
+    public String getSeparator();
+    
+    
+    
+    /**
+     * Joins path and name.
+     * 
+     * @param path
+     * @param name
+     * @return 
+     */
+    public String joinPath(String path, String name);
 }

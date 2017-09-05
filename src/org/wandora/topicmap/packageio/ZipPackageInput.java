@@ -30,12 +30,12 @@
  */
 
 package org.wandora.topicmap.packageio;
-import org.wandora.topicmap.packageio.PackageInput;
+
 import java.util.zip.*;
 import java.io.*;
 import java.util.*;
 import java.net.*;
-import javax.imageio.stream.FileImageInputStream;
+
 /**
  * <p>
  * Reads entries from a zip file. Entries are stored in ZIP file in the same
@@ -53,9 +53,11 @@ public class ZipPackageInput implements PackageInput {
     
     private URL url;
     private ZipInputStream zis;
-    private Vector<String> entries=null;
-    private Vector<String> passedEntries=null;
+    private List<String> entries=null;
+    private List<String> passedEntries=null;
     private int currentEntry=-1;
+
+    
     
     /** Creates a new instance of ZipPackageInput */
     public ZipPackageInput(File file) throws IOException {
@@ -73,45 +75,75 @@ public class ZipPackageInput implements PackageInput {
         if(zis!=null) zis.close();
         zis=new ZipInputStream(url.openStream());
         currentEntry=-1;
-        passedEntries=new Vector<String>();
+        passedEntries=new ArrayList<String>();
     }
+    
+    
+
     
     /**
      * Moves to the entry with the specified name. Returns true if that entry was
      * found, false otherwise.
      */
+    @Override
     public boolean gotoEntry(String name) throws IOException {
         if(zis==null) currentEntry=-1;
         boolean findFromStart=false;
-        if(entries!=null){
+        if(entries!=null) {
             int ind=entries.indexOf(name);
             if(ind==-1) return false;
             if(ind<=currentEntry) findFromStart=true;
         }
-        else if(passedEntries!=null && passedEntries.contains(name)) findFromStart=true;
-        if( (findFromStart && currentEntry>=0) || zis==null) openStream();
+        else if(passedEntries!=null && passedEntries.contains(name)) {
+            findFromStart=true;
+        }
+        if( (findFromStart && currentEntry>=0) || zis==null) {
+            openStream();
+        }
         String e=null;
-        while(true){
+        while(true) {
             e=gotoNextEntry();
             if(e==null) return false;
             if(e.equals(name)) return true;
         }
     }
     
+    
+    @Override
+    public boolean gotoEntry(String path, String name) throws IOException {
+        return gotoEntry(joinPath(path, name));
+    }
+    
+    
+    
     /**
      * Goes to next entry in the file.
+     * 
+     * @return String
+     * @throws java.io.IOException
      */
+    @Override
     public String gotoNextEntry() throws IOException{
-        if(zis==null)  openStream();
+        if(zis==null) {
+            openStream();
+        }
         currentEntry++;
         ZipEntry e=zis.getNextEntry();
-        if(e==null) return null;
+        if(e==null) {
+            return null;
+        }
         passedEntries.add(e.getName());
         return e.getName();
     }
+    
+    
     /**
      * Gets the input stream for current entry.
+     * 
+     * @return InputStream
+     * @throws java.io.IOException
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         return new InputStream(){
             @Override
@@ -135,16 +167,19 @@ public class ZipPackageInput implements PackageInput {
             }
         };
     }
+    
+    
     /**
      * Gets the names of all entries in the file. This requires scanning
      * of the entire file and then reopening the file after the entries
      * are later actually read when gotoEntry or gotoNextEntry is called.
      */
+    @Override
     public Collection<String> getEntries() throws IOException {
         if(entries!=null) return entries;
         if(zis!=null) openStream();
         ZipEntry e=null;
-        entries=new Vector<String>();
+        entries=new ArrayList<String>();
         while( (e=zis.getNextEntry())!=null ){
             entries.add(e.getName());
         }
@@ -153,13 +188,32 @@ public class ZipPackageInput implements PackageInput {
         return entries;
     }
 
+    
     /**
      * Closes the file.
      */
+    @Override
     public void close() throws IOException {
         zis.close();
         zis=null;
     }
 
+    
+    
+    
+    @Override
+    public String getSeparator() {
+        return "/";
+    }
+    
+    @Override
+    public String joinPath(String path, String name) {
+        if(path != null && path.length()>0) {
+            return path + getSeparator() + name;
+        }
+        else {
+            return name;
+        }
+    }
     
 }

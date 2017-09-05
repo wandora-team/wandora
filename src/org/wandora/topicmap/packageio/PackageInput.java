@@ -28,8 +28,12 @@
  */
 
 package org.wandora.topicmap.packageio;
+
+
 import java.io.*;
 import java.util.*;
+
+
 /**
  * <p>
  * A package is a collection of data consisting of entries. Each entry has a name
@@ -47,25 +51,87 @@ import java.util.*;
  * @author olli
  */
 public interface PackageInput {
+    
     /**
      * Moves to the entry that has the given name.
+     * 
+     * @param name
+     * @return 
+     * @throws java.io.IOException
      */
     public boolean gotoEntry(String name) throws IOException;
+    
+    
     /**
-     * Moves to next entry.
+     * Moves to the entry that has the given path and name.
+     * 
+     * @param path
+     * @param name
+     * @return 
+     * @throws java.io.IOException
+     */
+    public boolean gotoEntry(String path, String name) throws IOException;
+    
+ 
+    /**
+     * Moves to next entry and returns it's name.
+     * 
+     * @return 
+     * @throws java.io.IOException
      */
     public String gotoNextEntry() throws IOException;
+    
+    
     /**
      * Gets input stream for current entry.
+     * 
+     * @return 
+     * @throws java.io.IOException
      */
     public InputStream getInputStream() throws IOException;
+    
+    
     /**
      * Closes the package.
+     * 
+     * @throws java.io.IOException
      */
     public void close() throws IOException;
+    
+    
+    
     /**
-     * Get list of entries.
+     * Get list of entries in the package.
+     * 
+     * @return Collection of entries in the package.
+     * @throws java.io.IOException
      */
     public Collection<String> getEntries() throws IOException;
+    
+    
+    
+    
+    /**
+     * Returns file separator used by the PackageInput.
+     * 
+     * @return 
+     */
+    public String getSeparator();
+    
+    
+    
+    /**
+     * Joins path and name, and returns joined resource name. Usually
+     * Package input adds a separator string between the path and the name.
+     * For example, DirectoryPackageInput adds File.separator string
+     * between the path and the name.
+     * 
+     * @param path
+     * @param name
+     * @return 
+     */
+    public String joinPath(String path, String name);
+    
+    
     
 }

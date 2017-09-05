@@ -34,13 +34,10 @@ import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.utils.Options;
 import org.wandora.application.tools.layers.*;
 import org.wandora.topicmap.*;
-import org.wandora.utils.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.DatabaseConfigurationPanel;
 import org.wandora.application.gui.UIBox;
 import static org.wandora.utils.Tuples.*;
-import java.util.*;
-import java.util.regex.*;
 import java.sql.*;
 import java.io.*;
 import javax.swing.*;
@@ -61,8 +58,7 @@ public class DatabaseTopicMapType implements TopicMapType {
     }
     
     
-    
-//    private Pattern paramsPattern=Pattern.compile("([^:]*):([^:]*):([^:]*):(.*)");
+
     @Override
     public TopicMap createTopicMap(Object params){
         DatabaseConfigurationPanel.StoredConnection sc=(DatabaseConfigurationPanel.StoredConnection)params;
@@ -96,8 +92,8 @@ public class DatabaseTopicMapType implements TopicMapType {
     
     
     @Override
-    public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora admin, Options options, TopicMap tm){
-        DatabaseConfigurationPanel dcp=new DatabaseConfigurationPanel(admin);
+    public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora wandora, Options options, TopicMap tm) {
+        DatabaseConfigurationPanel dcp=new DatabaseConfigurationPanel(wandora);
         DatabaseTopicMap dtm=(DatabaseTopicMap)tm;
         Object params=dtm.getConnectionParams();
         if(params==null){
@@ -113,6 +109,8 @@ public class DatabaseTopicMapType implements TopicMapType {
         return dcp.getEditConfigurationPanel(params);
     }    
     
+    
+    
     @Override
     public String toString(){return getTypeName();}
 
@@ -120,8 +118,6 @@ public class DatabaseTopicMapType implements TopicMapType {
     
     @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws IOException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
         DatabaseTopicMap dtm=(DatabaseTopicMap)tm;
         Options options=new Options();
         Object params=dtm.getConnectionParams();
@@ -129,40 +125,51 @@ public class DatabaseTopicMapType implements TopicMapType {
             DatabaseConfigurationPanel.StoredConnection p=(DatabaseConfigurationPanel.StoredConnection)params;
             p.writeOptions(options,"params.");
         }
-        else{
+        else {
             options.put("driver",dtm.getDBDriver());
             options.put("connectionstring",dtm.getDBConnectionString());
             options.put("user",dtm.getDBUser());
             options.put("password",dtm.getDBPassword());
         }
-        out.nextEntry(pathpre+"dboptions.xml");
+        out.nextEntry(path, "dboptions.xml");
         options.save(new java.io.OutputStreamWriter(out.getOutputStream()));
     }
 
+    
     @Override
-    public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        in.gotoEntry(pathpre+"dboptions.xml");
+    public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException {
+        in.gotoEntry(path, "dboptions.xml");
         Options options=new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
         if(options.get("params.name")!=null){
             DatabaseConfigurationPanel.StoredConnection p=new DatabaseConfigurationPanel.StoredConnection();
             p.readOptions(options,"params.");
             T2<String,String> conInfo=DatabaseConfigurationPanel.getConnectionDriverAndString(p);
-            try{
-                return new DatabaseTopicMap(conInfo.e1,conInfo.e2,p.user,p.pass,p.script,p);
-            }catch(SQLException sqle){
+            try {
+                return new DatabaseTopicMap(
+                        conInfo.e1,
+                        conInfo.e2,
+                        p.user,
+                        p.pass,
+                        p.script,
+                        p
+                );
+            }
+            catch(SQLException sqle){
                 logger.log(sqle);
                 return null;
             }
         }
-        else{
-            try{
-                DatabaseTopicMap dtm=new DatabaseTopicMap(options.get("driver"),
-                        options.get("connectionstring"),options.get("user"),options.get("password"));
+        else {
+            try {
+                DatabaseTopicMap dtm=new DatabaseTopicMap(
+                        options.get("driver"),
+                        options.get("connectionstring"),
+                        options.get("user"),
+                        options.get("password"));
                 return dtm;
-            }catch(SQLException sqle){
+            }
+            catch(SQLException sqle){
                 logger.log(sqle);
                 return null;
             }
@@ -173,39 +180,53 @@ public class DatabaseTopicMapType implements TopicMapType {
     
     @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        in.gotoEntry(pathpre+"dboptions.xml");
+        in.gotoEntry(path, "dboptions.xml");
         Options options=new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
         if(options.get("params.name")!=null){
             DatabaseConfigurationPanel.StoredConnection p=new DatabaseConfigurationPanel.StoredConnection();
             p.readOptions(options,"params.");
             T2<String,String> conInfo=DatabaseConfigurationPanel.getConnectionDriverAndString(p);
-            try{
-                return new DatabaseTopicMap(conInfo.e1,conInfo.e2,p.user,p.pass,p.script,p);
-            }catch(SQLException sqle){
+            try {
+                return new DatabaseTopicMap(
+                        conInfo.e1,
+                        conInfo.e2,
+                        p.user,
+                        p.pass,
+                        p.script,
+                        p
+                );
+            }
+            catch(SQLException sqle){
                 logger.log(sqle);
                 return null;
             }
         }
-        else{
-            try{
-                DatabaseTopicMap dtm=new DatabaseTopicMap(options.get("driver"),
-                        options.get("connectionstring"),options.get("user"),options.get("password"));
+        else {
+            try {
+                DatabaseTopicMap dtm=new DatabaseTopicMap(
+                        options.get("driver"),
+                        options.get("connectionstring"),
+                        options.get("user"),
+                        options.get("password"));
                 return dtm;
-            }catch(SQLException sqle){
+            }
+            catch(SQLException sqle){
                 logger.log(sqle);
                 return null;
             }
         }
     }
     
+    
     @Override
-    public JMenuItem[] getTopicMapMenu(TopicMap tm,Wandora admin){
-        JMenu menu=UIBox.makeMenu(new Object[]{
-            "Make SI consistent...", new MakeSIConsistentTool(),
-        },admin);
+    public JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora wandora){
+        JMenu menu=UIBox.makeMenu(
+                new Object[]{
+                    "Make SI consistent...", new MakeSIConsistentTool(),
+                },
+                wandora
+        );
         JMenuItem[] items=new JMenuItem[menu.getItemCount()];
         for(int i=0;i<items.length;i++){
             items[i]=menu.getItem(i);
@@ -213,6 +234,7 @@ public class DatabaseTopicMapType implements TopicMapType {
         }
         return items;
     }
+    
     
     @Override
     public Icon getTypeIcon(){

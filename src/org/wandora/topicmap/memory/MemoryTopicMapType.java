@@ -27,14 +27,12 @@
  */
 
 package org.wandora.topicmap.memory;
+
 import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.utils.Options;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.utils.*;
-import java.util.*;
-import java.util.regex.*;
 import javax.swing.Icon;
 import org.wandora.application.gui.UIBox;
 
@@ -44,13 +42,19 @@ import org.wandora.application.gui.UIBox;
  */
 public class MemoryTopicMapType implements TopicMapType {
     
+    
     /** Creates a new instance of MemoryTopicMapType */
     public MemoryTopicMapType() {
     }
+    
+    
+    
     @Override
     public String getTypeName(){
         return "Memory";
     }
+    
+    
     
     @Override
     public TopicMap createTopicMap(Object params) throws TopicMapException {
@@ -72,62 +76,86 @@ public class MemoryTopicMapType implements TopicMapType {
         return tm;
     }
     
+    
+    
     @Override
-    public TopicMap modifyTopicMap(TopicMap tm,Object params) throws TopicMapException {
+    public TopicMap modifyTopicMap(TopicMap tm, Object params) throws TopicMapException {
         return tm;
     }
     
-    @Override
-    public TopicMapConfigurationPanel getConfigurationPanel(Wandora admin, Options options){
-        MemoryConfiguration mc=new MemoryConfiguration(admin);
-        return mc;
-    }
-    @Override
-    public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora admin, Options options, TopicMap tm){
-        return null;
-    }    
+    
     
     @Override
-    public String toString(){return getTypeName();}
+    public TopicMapConfigurationPanel getConfigurationPanel(Wandora wandora, Options options){
+        MemoryConfiguration mc=new MemoryConfiguration(wandora);
+        return mc;
+    }
+    
+    
+    
+    @Override
+    public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora wandora, Options options, TopicMap tm) {
+        return null;
+    }   
+    
+    
+    
+    @Override
+    public String toString() {
+        return getTypeName();
+    }
 
+    
+    
     @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        out.nextEntry(pathpre+"topicmap.xtm");
+        out.nextEntry(path, "topicmap.xtm");
         tm.exportXTM(out.getOutputStream(), logger);
     }
 
+    
+    
     @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws java.io.IOException,TopicMapException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        TopicMapImpl tm=new TopicMapImpl();
-        boolean found=in.gotoEntry(pathpre+"topicmap.xtm");
-        if(!found){
-            logger.log("Couldn't find topicmap file '"+pathpre+"topicmap.xtm'.");
+        TopicMapImpl tm = new TopicMapImpl();
+        boolean found = in.gotoEntry(path, "topicmap.xtm");
+        if(!found) {
+            logger.log("Couldn't find topicmap file '"+in.joinPath(path,"topicmap.xtm")+"'.");
             return null;
         }
-        tm.importXTM(in.getInputStream(), logger);
+        else {
+            tm.importXTM(in.getInputStream(), logger);
+        }
         return tm;
     }
+    
+    
+    
     @Override
     public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws java.io.IOException,TopicMapException {
-        if(topicmap == null) topicmap = new TopicMapImpl(); 
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        boolean found=in.gotoEntry(pathpre+"topicmap.xtm");
-        if(!found){
-            logger.log("Couldn't find topicmap file '"+pathpre+"topicmap.xtm'.");
+        if(topicmap == null) {
+            topicmap = new TopicMapImpl();
+        } 
+        boolean found = in.gotoEntry(path, "topicmap.xtm");
+        if(!found) {
+            logger.log("Couldn't find topicmap file '"+in.joinPath(path, "topicmap.xtm")+"'.");
             return null;
         }
-        topicmap.importXTM(in.getInputStream(), logger);
+        else {
+            topicmap.importXTM(in.getInputStream(), logger);
+        }
         return topicmap;
     }
+    
+   
+    
     @Override
     public javax.swing.JMenuItem[] getTopicMapMenu(TopicMap tm,Wandora admin){
         return null;
     }
+    
+    
+    
     @Override
     public Icon getTypeIcon(){
         // return UIBox.getIcon("gui/icons/layerinfo/layer_type_memory.png");

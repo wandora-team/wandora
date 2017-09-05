@@ -35,70 +35,89 @@ import org.wandora.utils.Options;
  */
 public class WebServiceTopicMapType implements TopicMapType {
 
+    
+    @Override
     public TopicMap createTopicMap(Object params) throws TopicMapException {
         WebServiceTopicMap wstm=new WebServiceTopicMap();
         wstm.setWebService((String)params);
         return wstm;
     }
 
+    
+    @Override
     public TopicMapConfigurationPanel getConfigurationPanel(Wandora admin, Options options) {
         return new WebServiceConfiguration(admin);
     }
 
+    
+    @Override
     public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora admin, Options options, TopicMap tm) {
         WebServiceConfiguration wsc=new WebServiceConfiguration(admin);
         String endpoint=((WebServiceTopicMap)tm).getWebService()._getServiceClient().getTargetEPR().getAddress();
         wsc.setEndPoint(endpoint);
         return wsc;
     }
+    
 
+    @Override
     public JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora admin) {
         return null;
     }
 
+    
+    @Override
     public Icon getTypeIcon() {
         return UIBox.getIcon("gui/icons/layerinfo/layer_type_webservice.png");
     }
 
+    
+    @Override
     public String getTypeName() {
         return "Web service";
     }
+    
 
+    @Override
     public TopicMap modifyTopicMap(TopicMap tm, Object params) throws TopicMapException {
         ((WebServiceTopicMap)tm).setWebService((String)params);
         return tm;
     }
 
+    
+    @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws IOException, TopicMapException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
         WebServiceTopicMap wstm=(WebServiceTopicMap)tm;
         Options options=new Options();
         String endpoint=wstm.getWebService()._getServiceClient().getTargetEPR().getAddress();
         options.put("endpoint",endpoint);
-        out.nextEntry(pathpre+"wsoptions.xml");
+        out.nextEntry(path, "wsoptions.xml");
         options.save(new java.io.OutputStreamWriter(out.getOutputStream()));
     }
 
+    
+    @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException, TopicMapException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        in.gotoEntry(pathpre+"wsoptions.xml");
+        in.gotoEntry(path, "wsoptions.xml");
         Options options=new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
         String endpoint=options.get("endpoint");
         if(endpoint!=null){
             return new WebServiceTopicMap(endpoint);
         }
-        else{
+        else {
             return new WebServiceTopicMap();
         }
     }
 
+    
+    @Override
     public TopicMap unpackageTopicMap(TopicMap tm, PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException, TopicMapException {
         return unpackageTopicMap(in, path, logger, wandora);
     }
 
+    
     @Override
-    public String toString(){return getTypeName();}
+    public String toString() {
+        return getTypeName();
+    }
 }

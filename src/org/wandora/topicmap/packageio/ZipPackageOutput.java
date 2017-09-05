@@ -47,6 +47,8 @@ public class ZipPackageOutput implements PackageOutput {
     private OutputStream out;
     private ZipOutputStream zos;
     
+    
+    
     /** Creates a new instance of ZipPackageOutput */
     public ZipPackageOutput(OutputStream out) {
         this.out=out;
@@ -57,13 +59,26 @@ public class ZipPackageOutput implements PackageOutput {
      * Starts next entry with the specified name.
      */
     @Override
-    public void nextEntry(String name) throws IOException{
+    public void nextEntry(String name) throws IOException {
         zos.putNextEntry(new ZipEntry(name));
     }
 
+    
+    @Override
+    public void nextEntry(String path, String name) throws IOException {
+        nextEntry(joinPath(path, name));
+    }
+    
+    
     @Override
     public void removeEntry(String name) throws IOException {
     }
+    
+    
+    @Override
+    public void removeEntry(String path, String name) throws IOException {
+    }
+    
     
     /**
      * Gets the output stream for current entry.
@@ -94,4 +109,22 @@ public class ZipPackageOutput implements PackageOutput {
         out.close();
     }
     
+    
+    
+    @Override
+    public String getSeparator() {
+        return "/";
+    }
+    
+    
+    
+    @Override
+    public String joinPath(String path, String name) {
+        if(path != null && path.length()>0) {
+            return path + getSeparator() + name;
+        }
+        else {
+            return name;
+        }
+    }
 }

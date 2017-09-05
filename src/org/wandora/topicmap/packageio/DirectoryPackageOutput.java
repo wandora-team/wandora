@@ -48,19 +48,33 @@ public class DirectoryPackageOutput implements PackageOutput {
             out.flush();
             out.close();
         }
-        String entryName = this.directory + File.separator + name;
+        String entryName = this.directory + getSeparator() + name;
         File file = new File(entryName);
         IObox.createPathFor(file.getParentFile());
         out = new FileOutputStream(file);
     }
     
+    
+    @Override
+    public void nextEntry(String path, String name) throws IOException {
+        nextEntry(joinPath(path, name));
+    }
+    
+    
+    
     @Override
     public void removeEntry(String name) throws IOException {
-        String entryName = this.directory + File.separator + name;
+        String entryName = this.directory + getSeparator() + name;
         File file = new File(entryName);
         if(file.exists()) {
             deleteRecursive(file);
         }
+    }
+    
+    
+    @Override
+    public void removeEntry(String path, String name) throws IOException {
+        removeEntry(joinPath(path, name));
     }
 
     private boolean deleteRecursive(File path) throws FileNotFoundException{
@@ -103,5 +117,24 @@ public class DirectoryPackageOutput implements PackageOutput {
         };
     }
     
+    
+    
+    
+    @Override
+    public String getSeparator() {
+        return File.separator;
+    }
+    
+    
+        
+    @Override
+    public String joinPath(String path, String name) {
+        if(path != null && path.length()>0) {
+            return path + getSeparator() + name;
+        }
+        else {
+            return name;
+        }
+    }
     
 }

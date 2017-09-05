@@ -43,6 +43,7 @@ public class DirectoryPackageInput implements PackageInput {
     private List<String> entries=null;
     private int currentEntry=-1;
     private InputStream inputStream;
+
     
     
     
@@ -98,7 +99,16 @@ public class DirectoryPackageInput implements PackageInput {
         }
         return false;
     }
+    
+    
+    @Override
+    public boolean gotoEntry(String path, String name) throws IOException {
+        return gotoEntry(joinPath(path, name));
+    }
+    
 
+    
+    
     @Override
     public String gotoNextEntry() throws IOException {
         currentEntry++;
@@ -174,6 +184,22 @@ public class DirectoryPackageInput implements PackageInput {
     }
     
 
+    
+    // -------------------------------------------------------------------------
+    
 
-
+    @Override
+    public String getSeparator() {
+        return File.separator;
+    }
+    
+    @Override
+    public String joinPath(String path, String name) {
+        if(path != null && path.length()>0) {
+            return path + getSeparator() + name;
+        }
+        else {
+            return name;
+        }
+    }
 }

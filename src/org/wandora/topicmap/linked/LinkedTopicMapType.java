@@ -27,7 +27,6 @@ import java.io.*;
 import javax.swing.JMenuItem;
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.*;
-import java.util.*;
 import javax.swing.Icon;
 import org.wandora.application.gui.UIBox;
 import org.wandora.utils.Options;
@@ -39,6 +38,7 @@ import org.wandora.topicmap.layered.*;
  */
 public class LinkedTopicMapType implements TopicMapType {
 
+    
     @Override
     public TopicMap createTopicMap(Object params) throws TopicMapException {
         if(params instanceof TopicMap) {
@@ -49,17 +49,19 @@ public class LinkedTopicMapType implements TopicMapType {
         }
     }
 
+    
     @Override
     public TopicMapConfigurationPanel getConfigurationPanel(Wandora admin, Options options) {
-        LinkedTopicMapConfiguration c=new LinkedTopicMapConfiguration(admin);
+        LinkedTopicMapConfiguration c = new LinkedTopicMapConfiguration(admin);
         return c;
     }
 
     
+    
     @Override
     public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora wandora, Options options, TopicMap tm) {
         TopicMap linked = ((LinkedTopicMap)tm).getLinkedTopicMap();
-        ContainerTopicMap root=((ContainerTopicMap)tm.getRootTopicMap());
+        ContainerTopicMap root = ((ContainerTopicMap)tm.getRootTopicMap());
         Layer l = root.getTreeLayer(linked);
         String name = l.getName();
         LinkedTopicMapConfiguration c = new LinkedTopicMapConfiguration(wandora, tm);
@@ -68,11 +70,13 @@ public class LinkedTopicMapType implements TopicMapType {
     }
 
     
+    
     @Override
     public JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora admin) {
         return null;
     }
 
+    
     
     @Override
     public String toString(){
@@ -80,11 +84,13 @@ public class LinkedTopicMapType implements TopicMapType {
     }
     
     
+    
     @Override
     public String getTypeName() {
         return "Linked";
     }
 
+    
     
     @Override
     public TopicMap modifyTopicMap(TopicMap tm, Object params) throws TopicMapException {
@@ -94,36 +100,38 @@ public class LinkedTopicMapType implements TopicMapType {
     }
 
     
+    
     @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws IOException, TopicMapException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        LinkedTopicMap ltm=(LinkedTopicMap)tm;
-        TopicMap linked=ltm.getLinkedTopicMap();
-        ContainerTopicMap rootTopicMap=(ContainerTopicMap)ltm.getRootTopicMap();
-        Layer l=rootTopicMap.getTreeLayer(linked);
-        Options options=new Options();
+        LinkedTopicMap ltm = (LinkedTopicMap) tm;
+        TopicMap linked = ltm.getLinkedTopicMap();
+        ContainerTopicMap rootTopicMap = (ContainerTopicMap) ltm.getRootTopicMap();
+        Layer l = rootTopicMap.getTreeLayer(linked);
+        Options options = new Options();
         options.put("linkedmap",l.getName());
-        if(rootTopicMap.getTreeLayer(l.getName())==null){
+        if(rootTopicMap.getTreeLayer(l.getName()) == null) {
             throw new TopicMapException("Target of linked topic map does not exist. Target layer name is "+l.getName());
         }
-        out.nextEntry(pathpre+"linkedoptions.xml");
+        out.nextEntry(path,"linkedoptions.xml");
         options.save(new java.io.OutputStreamWriter(out.getOutputStream()));        
     }
 
     
+    
     @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException, TopicMapException {
-        String pathpre="";
-        if(path.length()>0) pathpre=path+"/";
-        in.gotoEntry(pathpre+"linkedoptions.xml");
-        Options options=new Options();
+        in.gotoEntry(path, "linkedoptions.xml");
+        Options options = new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
-        String wrappedMap=options.get("linkedmap");
-        if(wrappedMap == null) wrappedMap=options.get("wrappedmap"); // used to be wrappedmap before 2013-07-18
+        String wrappedMap = options.get("linkedmap");
+        if(wrappedMap == null) {
+            // used to be wrappedmap before 2013-07-18
+            wrappedMap=options.get("wrappedmap");
+        } 
         return new LinkedTopicMap(wrappedMap);
     }
 
+    
     
     @Override
     public TopicMap unpackageTopicMap(TopicMap tm, PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException, TopicMapException {
@@ -131,8 +139,9 @@ public class LinkedTopicMapType implements TopicMapType {
     }
     
     
+    
     @Override
-    public Icon getTypeIcon(){
+    public Icon getTypeIcon() {
         //return UIBox.getIcon("gui/icons/layerinfo/layer_type_linked.png");
         return UIBox.getIcon(0xf0c1);
     }

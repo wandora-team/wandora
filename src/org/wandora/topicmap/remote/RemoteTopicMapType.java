@@ -35,12 +35,7 @@ import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.remote.server.SocketServerInterface;
 import org.wandora.utils.Options;
 import org.wandora.topicmap.*;
-import org.wandora.utils.*;
 import org.wandora.application.*;
-import org.wandora.application.gui.DatabaseConfigurationPanel;
-import static org.wandora.utils.Tuples.*;
-import java.util.*;
-import java.util.regex.*;
 import javax.swing.*;
 import org.wandora.application.gui.UIBox;
 
@@ -51,14 +46,18 @@ import org.wandora.application.gui.UIBox;
 public class RemoteTopicMapType implements TopicMapType {
     
     
-    /** Creates a new instance of DatabaseTopicMapType */
+    /** Creates a new instance of RemoteTopicMapType */
     public RemoteTopicMapType() {
     }
     
+    
+    @Override
     public String getTypeName(){
         return "Remote";
     }
 
+    
+    @Override
     public TopicMap createTopicMap(Object params){
         RemoteTopicMapConfiguration.StoredConnection sc=(RemoteTopicMapConfiguration.StoredConnection)params;
         if(sc != null) {
@@ -82,14 +81,21 @@ public class RemoteTopicMapType implements TopicMapType {
         return null;
     }
     
+    
+    @Override
     public TopicMap modifyTopicMap(TopicMap tm,Object params){
         return createTopicMap(params);
     }
     
+    
+    @Override
     public TopicMapConfigurationPanel getConfigurationPanel(Wandora admin, Options options){
         RemoteTopicMapConfiguration rc=new RemoteTopicMapConfiguration(admin, options);
         return rc;
     }
+    
+    
+    @Override
     public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora admin, Options options, TopicMap tm){
         RemoteTopicMapConfiguration rcp=new RemoteTopicMapConfiguration(admin, options);
         RemoteTopicMap rtm=(RemoteTopicMap)tm;
@@ -98,23 +104,37 @@ public class RemoteTopicMapType implements TopicMapType {
         return rcp.getEditConfigurationPanel(sc);
     }    
     
+    
+    @Override
     public String toString(){
         return getTypeName();
     }
 
+    
+    @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) {
     }
 
+    
+    @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger,Wandora wandora) {
         return null;
     }
+    
+    
+    @Override
     public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) {
         return null;
     }
+    
+    
     @Override
     public JMenuItem[] getTopicMapMenu(final TopicMap tm,Wandora admin){
         return null;
     }
+    
+    
+    
     @Override
     public Icon getTypeIcon(){
         return UIBox.getIcon("gui/icons/layerinfo/layer_type_remote.png");

@@ -49,14 +49,19 @@ import javax.swing.*;
  */
 public class DatabaseTopicMapType implements TopicMapType {
     
+    
+    
     /** Creates a new instance of DatabaseTopicMapType */
     public DatabaseTopicMapType() {
     }
+    
+    
     
     @Override
     public String getTypeName(){
         return "Database";
     }
+    
     
     
     @Override
@@ -118,6 +123,7 @@ public class DatabaseTopicMapType implements TopicMapType {
     }    
     
     
+    
     @Override
     public String toString() {
         return getTypeName();
@@ -127,11 +133,7 @@ public class DatabaseTopicMapType implements TopicMapType {
     
     @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws IOException {
-        String pathpre="";
-        if(path.length() > 0) {
-            pathpre = path+"/";
-        }
-        DatabaseTopicMap dtm = (DatabaseTopicMap)tm;
+        DatabaseTopicMap dtm = (DatabaseTopicMap) tm;
         Options options = new Options();
         Object params = dtm.getConnectionParams();
         if(params != null) {
@@ -144,18 +146,15 @@ public class DatabaseTopicMapType implements TopicMapType {
             options.put("user",dtm.getDBUser());
             options.put("password",dtm.getDBPassword());
         }
-        out.nextEntry(pathpre+"dboptions.xml");
+        out.nextEntry(path, "dboptions.xml");
         options.save(new java.io.OutputStreamWriter(out.getOutputStream()));
     }
 
     
+    
     @Override
     public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException {
-        String pathpre = "";
-        if(path.length() > 0) {
-            pathpre=path+"/";
-        }
-        in.gotoEntry(pathpre+"dboptions.xml");
+        in.gotoEntry(path, "dboptions.xml");
         Options options = new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
         if(options.get("params.name") != null) {
@@ -172,7 +171,7 @@ public class DatabaseTopicMapType implements TopicMapType {
                         p
                 );
             }
-            catch(SQLException sqle){
+            catch(SQLException sqle) {
                 logger.log(sqle);
                 return null;
             }
@@ -198,11 +197,7 @@ public class DatabaseTopicMapType implements TopicMapType {
     
     @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException {
-        String pathpre = "";
-        if(path.length()>0) {
-            pathpre = path+"/";
-        }
-        in.gotoEntry(pathpre+"dboptions.xml");
+        in.gotoEntry(path, "dboptions.xml");
         Options options = new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
         if(options.get("params.name") != null) {
@@ -219,13 +214,13 @@ public class DatabaseTopicMapType implements TopicMapType {
                         p
                 );
             }
-            catch(SQLException sqle){
+            catch(SQLException sqle) {
                 logger.log(sqle);
                 return null;
             }
         }
-        else{
-            try{
+        else {
+            try {
                 DatabaseTopicMap dtm=new DatabaseTopicMap(
                         options.get("driver"),
                         options.get("connectionstring"),
@@ -233,12 +228,14 @@ public class DatabaseTopicMapType implements TopicMapType {
                         options.get("password")
                 );
                 return dtm;
-            }catch(SQLException sqle){
+            }
+            catch(SQLException sqle){
                 logger.log(sqle);
                 return null;
             }
         }
     }
+    
     
     
     @Override
@@ -256,6 +253,7 @@ public class DatabaseTopicMapType implements TopicMapType {
         }
         return items;
     }
+    
     
     
     @Override
