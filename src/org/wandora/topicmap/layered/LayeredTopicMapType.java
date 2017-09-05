@@ -57,13 +57,9 @@ public class LayeredTopicMapType implements TopicMapType {
     
     @Override
     public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws IOException,TopicMapException {
-        LayerStack ls=(LayerStack)tm;
-        Options options=new Options();
-        int lcounter=0;
-        String pathpre="";
-        if(path.length()>0) {
-            pathpre = path + out.getSeparator();
-        }
+        LayerStack ls = (LayerStack) tm;
+        Options options = new Options();
+        int lcounter = 0;
         Layer selectedLayer = ls.getSelectedLayer();
         for(Layer l : ls.getLayers()) {
             options.put("layer"+lcounter+".name",l.getName());
@@ -78,20 +74,20 @@ public class LayeredTopicMapType implements TopicMapType {
             }
             lcounter++;
         }
-        out.nextEntry(pathpre+"options.xml");
+        out.nextEntry(path, "options.xml");
         // save options before everything else because we will need it before other files
         options.save(new OutputStreamWriter(out.getOutputStream()));
         
-        lcounter=0;
+        lcounter = 0;
         for(Layer l : ls.getLayers()) {
             TopicMap ltm = getWrappedTopicMap(l.getTopicMap());
             TopicMapType tmtype = TopicMapTypeManager.getType(ltm);
             logger.log("Saving layer '" + l.getName() + "'.");
-            tmtype.packageTopicMap(ltm,out,pathpre+"layer"+lcounter, logger);
+            tmtype.packageTopicMap(ltm,out, out.joinPath(path, "layer"+lcounter), logger);
             lcounter++;
         }
         for(int i=lcounter; i<lcounter+99; i++) {
-            out.removeEntry(pathpre+"layer"+lcounter);
+            out.removeEntry(path, "layer"+lcounter);
         }
     }
 
@@ -121,7 +117,7 @@ public class LayeredTopicMapType implements TopicMapType {
     
     @Override
     public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException,TopicMapException {
-        if(!(topicmap instanceof LayerStack)) {
+        if(topicmap != null && !(topicmap instanceof LayerStack)) {
             return topicmap;
         }
         if(topicmap == null) {
@@ -133,16 +129,16 @@ public class LayeredTopicMapType implements TopicMapType {
             logger.log("Aborting.");
             return null;
         }
-        Options options=new Options();
+        Options options = new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
         
         LayerStack ls = (LayerStack) topicmap;
         Layer selectedLayer = null;
 
-        int counter=0;
+        int counter = 0;
         while(true) {
-            String layerName=options.get("layer"+counter+".name");
-            if(layerName==null) break;
+            String layerName = options.get("layer"+counter+".name");
+            if(layerName == null) break;
             
             String proposedLayerName = layerName;
             int layerCount = 1;
@@ -171,7 +167,7 @@ public class LayeredTopicMapType implements TopicMapType {
                 else l.setReadOnly(false);
                 if("true".equalsIgnoreCase(isSelected)) selectedLayer = l;
             }
-            catch(ClassNotFoundException cnfe){
+            catch(ClassNotFoundException cnfe) {
                 logger.log("Can't find class '"+typeClass+"', skipping layer.");
             }
             
@@ -187,7 +183,6 @@ public class LayeredTopicMapType implements TopicMapType {
     
     @Override
     public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora) throws IOException,TopicMapException {
-
         if(!in.gotoEntry(path, "options.xml")) {
             if(logger != null) {
                 logger.log("Can't find options.xml in the package.");
@@ -199,17 +194,17 @@ public class LayeredTopicMapType implements TopicMapType {
             }
             return null;
         }
-        Options options=new Options();
+        Options options = new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
         
-        LayerStack ls=new LayerStack();
+        LayerStack ls = new LayerStack();
         Layer selectedLayer = null;
         if(logger == null) logger = ls;
         
-        int counter=0;
+        int counter = 0;
         while(true && counter < 9999) {
             String layerName = options.get("layer"+counter+".name");
-            if(layerName==null) break;
+            if(layerName == null) break;
             String typeClass = options.get("layer"+counter+".type");
             try {
                 Class c = Class.forName(typeClass);
