@@ -189,7 +189,7 @@ public abstract class AbstractGitTool extends AbstractWandoraTool implements Wan
     }
     
     
-    public boolean isValid(String str) {
+    public boolean isNotEmpty(String str) {
         if(str == null) return false;
         if(str.length() == 0) return false;
         return true;

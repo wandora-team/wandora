@@ -49,63 +49,69 @@ public class CommitPush extends AbstractGitTool implements WandoraTool {
         try {
             Git git = getGit();    
             if(git != null) {
-                
-                if(commitPushUI == null) {
-                    commitPushUI = new CommitPushUI();
-                }
+                if(isNotEmpty(getGitRemoteUrl())) {
+                    if(commitPushUI == null) {
+                        commitPushUI = new CommitPushUI();
+                    }
 
-                commitPushUI.setPassword(getPassword());
-                commitPushUI.setUsername(getUsername());
-                commitPushUI.openInDialog();
+                    commitPushUI.setPassword(getPassword());
+                    commitPushUI.setUsername(getUsername());
+                    commitPushUI.openInDialog();
 
-                if(commitPushUI.wasAccepted()) {
-                    setDefaultLogger();
-                    setLogTitle("Git commit and push");
+                    if(commitPushUI.wasAccepted()) {
+                        setDefaultLogger();
+                        setLogTitle("Git commit and push");
 
-                    saveWandoraProject();
-                    
-                    log("Removing deleted files from local repository.");
-                    org.eclipse.jgit.api.Status status = git.status().call();
-                    Set<String> missing = status.getMissing();
-                    if(missing != null && !missing.isEmpty()) {
-                        for(String missingFile : missing) {
-                            git.rm()
-                                    .addFilepattern(missingFile)
-                                    .call();
+                        saveWandoraProject();
+
+                        log("Removing deleted files from local repository.");
+                        org.eclipse.jgit.api.Status status = git.status().call();
+                        Set<String> missing = status.getMissing();
+                        if(missing != null && !missing.isEmpty()) {
+                            for(String missingFile : missing) {
+                                git.rm()
+                                        .addFilepattern(missingFile)
+                                        .call();
+                            }
                         }
+
+                        log("Adding new files to the local repository.");
+                        git.add()
+                                .addFilepattern(".")
+                                .call();
+
+                        log("Committing changes to the local repository.");
+                        String commitMessage = commitPushUI.getMessage();
+                        if(commitMessage == null || commitMessage.length() == 0) {
+                            commitMessage = getDefaultCommitMessage();
+                            log("No commit message provided. Using default message.");
+                        }
+                        git.commit()
+                                .setMessage(commitMessage)
+                                .call();
+
+                        String username = commitPushUI.getUsername();
+                        String password = commitPushUI.getPassword();
+
+                        setUsername(username);
+                        setPassword(password);
+
+                        PushCommand push = git.push();
+                        if(isNotEmpty(username)) {
+                            log("Setting push credentials.");
+                            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
+                            push.setCredentialsProvider(credentialsProvider);
+                        }
+                        log("Pushing upstream.");
+                        push.call();
+
+                        log("Ready.");
                     }
-                    
-                    log("Adding new files to the local repository.");
-                    git.add()
-                            .addFilepattern(".")
-                            .call();
-                    
-                    log("Committing changes to the local repository.");
-                    String commitMessage = commitPushUI.getMessage();
-                    if(commitMessage == null || commitMessage.length() == 0) {
-                        commitMessage = getDefaultCommitMessage();
-                        log("No commit message provided. Using default message.");
-                    }
-                    git.commit()
-                            .setMessage(commitMessage)
-                            .call();
-                    
-                    String username = commitPushUI.getUsername();
-                    String password = commitPushUI.getPassword();
-                    
-                    setUsername(username);
-                    setPassword(password);
-                    
-                    PushCommand push = git.push();
-                    if(isValid(username)) {
-                        log("Setting push credentials.");
-                        CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
-                        push.setCredentialsProvider(credentialsProvider);
-                    }
-                    log("Pushing upstream.");
-                    push.call();
-                    
-                    log("Ready.");
+                }
+                else {
+                    log("Repository has no remote origin and can't be pushed. " 
+                            + "Commit changes to the local repository using Commit to local... "
+                            + "To push changes to a remote repository initialize repository by cloning.");
                 }
             }
             else {

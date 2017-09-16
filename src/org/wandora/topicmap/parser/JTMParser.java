@@ -54,7 +54,7 @@ import org.json.*;
 
 public class JTMParser {
 
-    private static String STATIC_SI_BODY = "http://wandora.org/si/jtm-parser/generated/"; 
+    private static final String STATIC_SI_BODY = "http://wandora.org/si/jtm-parser/generated/"; 
     
     
     private static boolean ASSOCIATION_TO_TYPE = true;

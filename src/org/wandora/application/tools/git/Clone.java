@@ -82,7 +82,7 @@ public class Clone extends AbstractGitTool implements WandoraTool {
                 clone.setURI(cloneUrl);
                 clone.setDirectory(new File(destinationDirectory));
                 
-                if(isValid(username)) {
+                if(isNotEmpty(username)) {
                     CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
                     clone.setCredentialsProvider(credentialsProvider);
                 }

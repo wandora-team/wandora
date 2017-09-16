@@ -54,56 +54,63 @@ public class Pull extends AbstractGitTool implements WandoraTool {
         try {
             Git git = getGit();
             if(git != null) {
-                PullCommand pull = git.pull();
-                String url = getGitRemoteUrl();
-                if(url == null) {
-                    if(pullUI == null) {
-                        pullUI = new PullUI();
-                    }
-                    pullUI.setUsername(getUsername());
-                    pullUI.setPassword(getPassword());
+                if(isNotEmpty(getGitRemoteUrl())) {
+                    PullCommand pull = git.pull();
+                    String user = getUsername();
+                    if(user == null) {
+                        if(pullUI == null) {
+                            pullUI = new PullUI();
+                        }
+                        pullUI.setUsername(getUsername());
+                        pullUI.setPassword(getPassword());
+                        pullUI.setRemoteUrl(getGitRemoteUrl());
 
-                    pullUI.openInDialog();
-                    
-                    if(pullUI.wasAccepted()) {
-                        setUsername(pullUI.getUsername());
-                        setPassword(pullUI.getPassword());
+                        pullUI.openInDialog();
 
-                        setGitRemoteUrl(pullUI.getRemoteUrl());                    
-                        pull.setRemote(pullUI.getRemoteUrl());
-                        if(isValid(getUsername())) {
-                            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( getUsername(), getPassword() );
-                            pull.setCredentialsProvider(credentialsProvider);
+                        if(pullUI.wasAccepted()) {
+                            setUsername(pullUI.getUsername());
+                            setPassword(pullUI.getPassword());
+                            // setGitRemoteUrl(pullUI.getRemoteUrl());    
+                            
+                            // pull.setRemote(pullUI.getRemoteUrl());
+                            if(isNotEmpty(getUsername())) {
+                                CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( getUsername(), getPassword() );
+                                pull.setCredentialsProvider(credentialsProvider);
+                            }
+                        }
+                        else {
+                            return;
                         }
                     }
-                    else {
-                        return;
+
+                    setDefaultLogger();
+                    setLogTitle("Git pull");
+
+                    log("Pulling changes from remote repository...");
+                    PullResult result = pull.call();
+
+                    FetchResult fetchResult = result.getFetchResult();
+                    MergeResult mergeResult = result.getMergeResult();
+                    MergeStatus mergeStatus = mergeResult.getMergeStatus();
+
+                    String fetchResultMessages = fetchResult.getMessages();
+                    if(isNotEmpty(fetchResultMessages)) {
+                        log(fetchResult.getMessages());
                     }
-                }
-                
-                setDefaultLogger();
-                setLogTitle("Git pull");
-                
-                log("Pulling changes from remote repository...");
-                PullResult result = pull.call();
-                
-                FetchResult fetchResult = result.getFetchResult();
-                MergeResult mergeResult = result.getMergeResult();
-                MergeStatus mergeStatus = mergeResult.getMergeStatus();
-                
-                String fetchResultMessages = fetchResult.getMessages();
-                if(isValid(fetchResultMessages)) {
-                    log(fetchResult.getMessages());
-                }
-                log(mergeStatus.toString());
-                
-                if(mergeStatus.equals(MergeStatus.MERGED)) {
-                    int a = WandoraOptionPane.showConfirmDialog(wandora, "Reload Wandora project after pull?", "Reload Wandora project after pull?", WandoraOptionPane.YES_NO_OPTION);
-                    if(a == WandoraOptionPane.YES_OPTION) {
-                        reloadWandoraProject();
+                    log(mergeStatus.toString());
+
+                    if(mergeStatus.equals(MergeStatus.MERGED)) {
+                        int a = WandoraOptionPane.showConfirmDialog(wandora, "Reload Wandora project after pull?", "Reload Wandora project after pull?", WandoraOptionPane.YES_NO_OPTION);
+                        if(a == WandoraOptionPane.YES_OPTION) {
+                            reloadWandoraProject();
+                        }
                     }
+                    log("Ready.");
                 }
-                log("Ready.");
+                else {
+                    log("Repository has no remote origin and can't be pulled. " 
+                        + "Initialize repository by cloning remote repository to set the remote origin.");
+                }
             }
             else {
                 logAboutMissingGitRepository();

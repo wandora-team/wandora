@@ -21,10 +21,12 @@
 package org.wandora.application.tools.git;
 
 import javax.swing.JDialog;
+import javax.swing.JPasswordField;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimplePasswordField;
 import org.wandora.application.gui.simple.SimpleTextArea;
 
 /**
@@ -50,7 +52,7 @@ public class CommitPushUI extends javax.swing.JPanel {
             Wandora wandora = Wandora.getWandora();
             dialog = new JDialog(wandora, true);
             dialog.add(this);
-            dialog.setSize(600,200);
+            dialog.setSize(600,300);
             dialog.setTitle("Git commit and push options");
             wandora.centerWindow(dialog);
         }
@@ -90,7 +92,7 @@ public class CommitPushUI extends javax.swing.JPanel {
     }
     
     public String getPassword() {
-        return passwordTextField.getText();
+        return String.valueOf(((JPasswordField) passwordTextField).getPassword());
     }
     
     public void setPassword(String password) {
@@ -122,7 +124,7 @@ public class CommitPushUI extends javax.swing.JPanel {
         usernameLabel = new SimpleLabel();
         usernameTextField = new SimpleField();
         passwordLabel = new SimpleLabel();
-        passwordTextField = new SimpleField();
+        passwordTextField = new SimplePasswordField();
         buttonPanel = new javax.swing.JPanel();
         messagePanelFiller = new javax.swing.JPanel();
         okButton = new SimpleButton();

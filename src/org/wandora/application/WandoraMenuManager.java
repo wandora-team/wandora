@@ -712,14 +712,14 @@ public class WandoraMenuManager {
         
         // ***** GIT *****
         Object[] teamMenuStruct = new Object[] {
-            "Initialize repository...", gitIcon, new Init(),
-            "Clone remote repository...", gitIcon, new Clone(),
-            "---",
+            "Initialize by cloning remote repository...", gitIcon, new Clone(),
             "Commit and push to remote...", gitIcon, new CommitPush(),
+            "Commit to local...", gitIcon, new Commit(),
+            "Push to remote...", gitIcon, new Push(),
             "Pull from remote...", gitIcon, new Pull(),
             "---",
-            "Commit...", gitIcon, new Commit(),
-            "Push...", gitIcon, new Push(),
+            "Initialize local repository...", gitIcon, new Init(),
+            "Commit to local...", gitIcon, new Commit(),
             "---",
             "Status...", gitIcon, new Status()
         };

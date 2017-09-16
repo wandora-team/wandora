@@ -22,6 +22,7 @@ package org.wandora.application.tools.git;
 
 import java.io.File;
 import javax.swing.JDialog;
+import javax.swing.JPasswordField;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -29,6 +30,7 @@ import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimplePasswordField;
 
 /**
  *
@@ -94,7 +96,7 @@ public class CloneUI extends javax.swing.JPanel {
     
     
     public String getPassword() {
-        return passwordField.getText();
+        return String.valueOf(((JPasswordField) passwordField).getPassword());
     }
     public void setPassword(String pw) {
         passwordField.setText(pw);
@@ -138,7 +140,7 @@ public class CloneUI extends javax.swing.JPanel {
         usernameLabel = new SimpleLabel();
         usernameField = new SimpleField();
         passwordLabel = new SimpleLabel();
-        passwordField = new SimpleField();
+        passwordField = new SimplePasswordField();
         destinationDirectoryLabel = new SimpleLabel();
         destinationPanel = new javax.swing.JPanel();
         destinationDirectoryField = new SimpleField();
@@ -195,6 +197,8 @@ public class CloneUI extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         remotePanel.add(passwordLabel, gridBagConstraints);
+
+        passwordField.setMinimumSize(new java.awt.Dimension(10, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

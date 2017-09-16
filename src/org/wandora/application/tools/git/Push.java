@@ -24,6 +24,7 @@ package org.wandora.application.tools.git;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
@@ -49,45 +50,59 @@ public class Push extends AbstractGitTool implements WandoraTool {
         try {
             Git git = getGit();
             if(git != null) {
-                if(pushUI == null) {
-                    pushUI = new PushUI();
-                }
-
-                pushUI.setPassword(getPassword());
-                pushUI.setUsername(getUsername());
-                pushUI.openInDialog();
-
-                if(pushUI.wasAccepted()) {
-                    setDefaultLogger();
-                    setLogTitle("Git push");
-
-                    String username = pushUI.getUsername();
-                    String password = pushUI.getPassword();
-                    
-                    setUsername(username);
-                    setPassword(password);
-
-                    PushCommand push = git.push();
-                    
-                    log("Pushing local changes to upstream.");
-                    if(username != null && username.length() > 0) {
-                        CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
-                        push.setCredentialsProvider(credentialsProvider);
+                if(isNotEmpty(getGitRemoteUrl())) {
+                    if(pushUI == null) {
+                        pushUI = new PushUI();
                     }
-                    
-                    Iterable<PushResult> pushResults = push.call();
-                    
-                    for(PushResult pushResult : pushResults) {
-                        String pushResultMessage = pushResult.getMessages();
-                        if(isValid(pushResultMessage)) {
-                            log(pushResultMessage);
+
+                    pushUI.setPassword(getPassword());
+                    pushUI.setUsername(getUsername());
+                    pushUI.setRemoteUrl(getGitRemoteUrl());
+                    pushUI.openInDialog();
+
+                    if(pushUI.wasAccepted()) {
+                        setDefaultLogger();
+                        setLogTitle("Git push");
+
+                        String username = pushUI.getUsername();
+                        String password = pushUI.getPassword();
+                        String remoteUrl = pushUI.getRemoteUrl();
+
+                        setUsername(username);
+                        setPassword(password);
+                        // setGitRemoteUrl(remoteUrl);
+
+                        PushCommand push = git.push();
+
+                        log("Pushing local changes to upstream.");
+                        if(username != null && username.length() > 0) {
+                            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider( username, password );
+                            push.setCredentialsProvider(credentialsProvider);
                         }
+
+                        Iterable<PushResult> pushResults = push.call();
+
+                        for(PushResult pushResult : pushResults) {
+                            String pushResultMessage = pushResult.getMessages();
+                            if(isNotEmpty(pushResultMessage)) {
+                                log(pushResultMessage);
+                            }
+                        }
+                        log("Ready.");
                     }
-                    log("Ready.");
+                }
+                else {
+                    log("Repository has no remote origin and can't be pushed. " 
+                        +"Initialize repository by cloning remote repository to set the remote origin.");
                 }
             }
             else {
                 logAboutMissingGitRepository();
+            }
+        }
+        catch(TransportException tre) {
+            if(tre.toString().contains("origin: not found.")) {
+                log("Git remote origin is not found. Check the remote url and remote git repository.");
             }
         }
         catch(GitAPIException gae) {

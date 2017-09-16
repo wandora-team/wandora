@@ -21,10 +21,12 @@
 package org.wandora.application.tools.git;
 
 import javax.swing.JDialog;
+import javax.swing.JPasswordField;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimplePasswordField;
 
 
 /**
@@ -72,6 +74,15 @@ public class PushUI extends javax.swing.JPanel {
     
     
     
+    public String getRemoteUrl() {
+        return remoteUrlField.getText();
+    }
+    
+    public void setRemoteUrl(String remoteUrl) {
+        this.remoteUrlField.setText(remoteUrl);
+    }
+    
+    
     public String getUsername() {
         return usernameTextField.getText();
     }
@@ -81,7 +92,7 @@ public class PushUI extends javax.swing.JPanel {
     }
     
     public String getPassword() {
-        return passwordTextField.getText();
+        return String.valueOf(((JPasswordField) passwordTextField).getPassword());
     }
     
     public void setPassword(String password) {
@@ -108,10 +119,12 @@ public class PushUI extends javax.swing.JPanel {
         pushPanel = new javax.swing.JPanel();
         infoLabel = new javax.swing.JLabel();
         credentialsPanel = new javax.swing.JPanel();
+        remoteUrlLabel = new SimpleLabel();
+        remoteUrlField = new SimpleField();
         usernameLabel = new SimpleLabel();
         usernameTextField = new SimpleField();
         passwordLabel = new SimpleLabel();
-        passwordTextField = new SimpleField();
+        passwordTextField = new SimplePasswordField();
         buttonPanel = new javax.swing.JPanel();
         panelFiller = new javax.swing.JPanel();
         okButton = new SimpleButton();
@@ -130,9 +143,23 @@ public class PushUI extends javax.swing.JPanel {
 
         credentialsPanel.setLayout(new java.awt.GridBagLayout());
 
+        remoteUrlLabel.setText("Remote URL");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        credentialsPanel.add(remoteUrlLabel, gridBagConstraints);
+
+        remoteUrlField.setEditable(false);
+        remoteUrlField.setBackground(new java.awt.Color(238, 238, 238));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        credentialsPanel.add(remoteUrlField, gridBagConstraints);
+
         usernameLabel.setText("Username");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
         credentialsPanel.add(usernameLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -144,6 +171,7 @@ public class PushUI extends javax.swing.JPanel {
         passwordLabel.setText("Password");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
         credentialsPanel.add(passwordLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -234,6 +262,8 @@ public class PushUI extends javax.swing.JPanel {
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JTextField passwordTextField;
     private javax.swing.JPanel pushPanel;
+    private javax.swing.JTextField remoteUrlField;
+    private javax.swing.JLabel remoteUrlLabel;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables

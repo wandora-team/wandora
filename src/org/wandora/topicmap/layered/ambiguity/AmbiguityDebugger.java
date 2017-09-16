@@ -43,14 +43,17 @@ public class AmbiguityDebugger implements AmbiguityResolver {
     }
     
     
+    @Override
     public void ambiguity(String s) {
         System.out.println(s);
     }
     
+    @Override
     public AmbiguityResolution resolveAmbiguity(String event) {
         return resolveAmbiguity(event,null);
     }
     
+    @Override
     public AmbiguityResolution resolveAmbiguity(String event,String msg) {
         ambiguity(event+(msg==null?"":(" "+msg)));
         return AmbiguityResolution.addToSelected;

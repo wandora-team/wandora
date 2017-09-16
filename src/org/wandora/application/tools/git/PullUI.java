@@ -21,10 +21,12 @@
 package org.wandora.application.tools.git;
 
 import javax.swing.JDialog;
+import javax.swing.JPasswordField;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimplePasswordField;
 
 
 /**
@@ -90,7 +92,7 @@ public class PullUI extends javax.swing.JPanel {
     }
     
     public String getPassword() {
-        return passwordTextField.getText();
+        return String.valueOf(((JPasswordField) passwordTextField).getPassword());
     }
     
     public void setPassword(String password) {
@@ -121,7 +123,7 @@ public class PullUI extends javax.swing.JPanel {
         usernameLabel = new SimpleLabel();
         usernameTextField = new SimpleField();
         passwordLabel = new SimpleLabel();
-        passwordTextField = new SimpleField();
+        passwordTextField = new SimplePasswordField();
         buttonPanel = new javax.swing.JPanel();
         panelFiller = new javax.swing.JPanel();
         okButton = new SimpleButton();
@@ -145,6 +147,9 @@ public class PullUI extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
         pullPanel.add(remoteUrl, gridBagConstraints);
+
+        remoteUrlTextField.setEditable(false);
+        remoteUrlTextField.setBackground(new java.awt.Color(238, 238, 238));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
