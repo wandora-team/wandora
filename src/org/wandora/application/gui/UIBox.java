@@ -1491,4 +1491,80 @@ public class UIBox {
     }
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    public static void registerClipboardableKeyStrokes(JTable table) {
+
+        try {
+            if(isMac()) {
+                if(table != null) {
+                    table.registerKeyboardAction(
+                            new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    Object source = e.getSource();
+                                    if(source != null && source instanceof Clipboardable) {
+                                        ((Clipboardable) source).copy();
+                                    }
+                                }
+                            },
+                            KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.META_DOWN_MASK), 
+                            JComponent.WHEN_FOCUSED
+                    );
+                    table.registerKeyboardAction(
+                            new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    Object source = e.getSource();
+                                    if(source != null && source instanceof Clipboardable) {
+                                        ((Clipboardable) source).cut();
+                                    }
+                                }
+                            },
+                            KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.META_DOWN_MASK), 
+                            JComponent.WHEN_FOCUSED
+                    );
+                    table.registerKeyboardAction(
+                            new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    Object source = e.getSource();
+                                    if(source != null && source instanceof Clipboardable) {
+                                        ((Clipboardable) source).paste();
+                                    }
+                                }
+                            },
+                            KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_DOWN_MASK), 
+                            JComponent.WHEN_FOCUSED
+                    );
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    public static boolean isMac() {
+        try {
+            String vers = System.getProperty("os.name").toLowerCase();
+            if(vers != null && vers.contains("mac")) {
+                return true;
+            }
+        }
+        catch(Exception e) {
+            // Ignore
+        }
+        return false;
+    }
+    
+    
 }

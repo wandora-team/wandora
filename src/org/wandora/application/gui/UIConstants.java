@@ -29,6 +29,9 @@ package org.wandora.application.gui;
 
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.border.*;
 import javax.swing.*;

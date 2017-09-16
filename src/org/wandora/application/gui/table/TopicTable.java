@@ -69,6 +69,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
     
     
     public TopicTable(Wandora w) {
+        super();
         this.wandora = w;
         this.setUpdateSelectionOnSort(true);
         this.setDragEnabled(true);

@@ -31,11 +31,9 @@ package org.wandora.application.gui.table;
 
 import java.util.*;
 import java.awt.datatransfer.*;
-import java.awt.dnd.*;
 import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
-import javax.swing.border.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;

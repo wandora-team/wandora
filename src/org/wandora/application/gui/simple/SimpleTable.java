@@ -54,7 +54,10 @@ public class SimpleTable extends AnySelectionTable implements SimpleComponent {
         this.addFocusListener(this);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         this.setRowHeight(DEFAULT_ROW_HEIGHT);
+        UIBox.registerClipboardableKeyStrokes(this);
     }
+    
+    
     
     
     

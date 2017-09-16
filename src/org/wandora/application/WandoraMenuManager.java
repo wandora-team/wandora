@@ -142,6 +142,9 @@ public class WandoraMenuManager {
 
     private static WandoraMenuManager menuManager;
     
+    private static int DEF_MASK = UIBox.isMac() ? META_MASK : CTRL_MASK;
+    
+    
     
     /**
      * Creates a new instance of WandoraMenuManager
@@ -359,13 +362,13 @@ public class WandoraMenuManager {
             if(httpServer.isRunning()){
                 menuStructure.add("Stop server");
                 menuStructure.add(UIBox.getIcon("gui/icons/server_stop.png"));
-                //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, CTRL_MASK);
+                //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, DEF_MASK);
                 menuStructure.add(new HTTPServerTool(HTTPServerTool.STOP_AND_MENU));
             }
             else{
                 menuStructure.add("Start server");
                 menuStructure.add(UIBox.getIcon("gui/icons/server_start.png"));
-                //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, CTRL_MASK);
+                //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, DEF_MASK);
                 menuStructure.add(new HTTPServerTool(HTTPServerTool.START_AND_MENU));
             }
 
@@ -420,7 +423,7 @@ public class WandoraMenuManager {
     
     public void refreshHelpMenu() {
         Object[] menuStructure = new Object[] {
-            "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, CTRL_MASK), new ExecBrowser("http://www.wandora.org"),
+            "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, DEF_MASK), new ExecBrowser("http://www.wandora.org"),
             "---",
             "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/wiki/Documentation"),
             "Forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/forum/index.php"),
@@ -466,7 +469,7 @@ public class WandoraMenuManager {
     public void refreshTopicsMenu() {
         
         Object[] splitTopicStructure = new Object[] {
-            "Split topic with subject identifiers", KeyStroke.getKeyStroke(VK_S, CTRL_MASK | SHIFT_MASK), new SplitTopics(new ApplicationContext()), 
+            "Split topic with subject identifiers", KeyStroke.getKeyStroke(VK_S, DEF_MASK | SHIFT_MASK), new SplitTopics(new ApplicationContext()), 
             "Split topic with a base name regex...", new SplitTopicsWithBasename(new ApplicationContext()),
             "---",
             "Split to descending instances with a base name regex...", new SplitToInstancesWithBasename(new ApplicationContext(), true),
@@ -481,12 +484,12 @@ public class WandoraMenuManager {
         
         // ---- THE STRUCTURE ----
         Object[] menuStructure = new Object[] {
-            "Open topic", UIBox.getIcon("gui/icons/topic_open.png"), KeyStroke.getKeyStroke(VK_O, CTRL_MASK), new OpenTopic(OpenTopic.ASK_USER),
-            "Close panel", UIBox.getIcon("gui/icons/topic_close.png"), KeyStroke.getKeyStroke(VK_W, CTRL_MASK), new CloseCurrentTopicPanel(),
+            "Open topic", UIBox.getIcon("gui/icons/topic_open.png"), KeyStroke.getKeyStroke(VK_O, DEF_MASK), new OpenTopic(OpenTopic.ASK_USER),
+            "Close panel", UIBox.getIcon("gui/icons/topic_close.png"), KeyStroke.getKeyStroke(VK_W, DEF_MASK), new CloseCurrentTopicPanel(),
             "---",
-            "New topic...", UIBox.getIcon("gui/icons/new_topic.png"), KeyStroke.getKeyStroke(VK_N, CTRL_MASK), new NewTopicExtended(),
-            "Delete topic...", UIBox.getIcon("gui/icons/topic_delete.png"), KeyStroke.getKeyStroke(VK_DELETE, CTRL_MASK), new DeleteTopics(new ApplicationContext()),
-            "Duplicate topic...", UIBox.getIcon("gui/icons/topic_duplicate.png"), KeyStroke.getKeyStroke(VK_D, CTRL_MASK), new DuplicateTopics(new ApplicationContext()),
+            "New topic...", UIBox.getIcon("gui/icons/new_topic.png"), KeyStroke.getKeyStroke(VK_N, DEF_MASK), new NewTopicExtended(),
+            "Delete topic...", UIBox.getIcon("gui/icons/topic_delete.png"), KeyStroke.getKeyStroke(VK_DELETE, DEF_MASK), new DeleteTopics(new ApplicationContext()),
+            "Duplicate topic...", UIBox.getIcon("gui/icons/topic_duplicate.png"), KeyStroke.getKeyStroke(VK_D, DEF_MASK), new DuplicateTopics(new ApplicationContext()),
             splitTopicMenu,
             
             "---",
@@ -651,16 +654,16 @@ public class WandoraMenuManager {
     
     public void refreshEditMenu() {
         Object[] menuStructure = new Object[] {
-            "Undo",  KeyStroke.getKeyStroke(VK_Z, CTRL_MASK), UIBox.getIcon("gui/icons/undo_undo.png"), new Undo(),
-            "Redo",  KeyStroke.getKeyStroke(VK_Y, CTRL_MASK), UIBox.getIcon("gui/icons/undo_redo.png"), new Redo(),
+            "Undo",  KeyStroke.getKeyStroke(VK_Z, DEF_MASK), UIBox.getIcon("gui/icons/undo_undo.png"), new Undo(),
+            "Redo",  KeyStroke.getKeyStroke(VK_Y, DEF_MASK), UIBox.getIcon("gui/icons/undo_redo.png"), new Redo(),
             "---",
-            "Cut",  KeyStroke.getKeyStroke(VK_X, CTRL_MASK), UIBox.getIcon("gui/icons/cut.png"), new SystemClipboard(SystemClipboard.CUT),
-            "Copy",  KeyStroke.getKeyStroke(VK_C, CTRL_MASK), UIBox.getIcon("gui/icons/copy.png"), new SystemClipboard(SystemClipboard.COPY),
-            "Paste",  KeyStroke.getKeyStroke(VK_V, CTRL_MASK), UIBox.getIcon("gui/icons/paste.png"), new SystemClipboard(SystemClipboard.PASTE),
+            "Cut",  KeyStroke.getKeyStroke(VK_X, DEF_MASK), UIBox.getIcon("gui/icons/cut.png"), new SystemClipboard(SystemClipboard.CUT),
+            "Copy",  KeyStroke.getKeyStroke(VK_C, DEF_MASK), UIBox.getIcon("gui/icons/copy.png"), new SystemClipboard(SystemClipboard.COPY),
+            "Paste",  KeyStroke.getKeyStroke(VK_V, DEF_MASK), UIBox.getIcon("gui/icons/paste.png"), new SystemClipboard(SystemClipboard.PASTE),
             "---",
             "Select",
                 new Object[] {
-                "Select all", KeyStroke.getKeyStroke(VK_A, CTRL_MASK), new SelectAll(),
+                "Select all", KeyStroke.getKeyStroke(VK_A, DEF_MASK), new SelectAll(),
                 /*
                 "Select row(s)", new SelectRows(),
                 "Select column(s)", new SelectColumns(),
@@ -690,8 +693,8 @@ public class WandoraMenuManager {
             "[Save topic clipboard...]", new SaveClipBoard(clipboardtm),
             "---",
              **/
-            "Search...", KeyStroke.getKeyStroke(VK_F, CTRL_MASK), UIBox.getIcon("gui/icons/find_topics.png"), new Search(),
-            // "Go to...", KeyStroke.getKeyStroke(VK_G, CTRL_MASK), UIBox.getIcon("gui/icons/goto2.png"), new OpenTopicWithSX(),
+            "Search...", KeyStroke.getKeyStroke(VK_F, DEF_MASK), UIBox.getIcon("gui/icons/find_topics.png"), new Search(),
+            // "Go to...", KeyStroke.getKeyStroke(VK_G, DEF_MASK), UIBox.getIcon("gui/icons/goto2.png"), new OpenTopicWithSX(),
             // "---",
             // "Locate topic in tree", new LocateSelectTopicInTree(),
         };
@@ -737,12 +740,12 @@ public class WandoraMenuManager {
         UIBox.attachMenu( patchMenu, patchMenuStruct, wandora );
 
         Object[] menuStructure = new Object[] {
-            "New project...", KeyStroke.getKeyStroke(VK_N, CTRL_MASK | SHIFT_MASK), UIBox.getIcon("gui/icons/new_project.png"), new ResetWandora(),
-            "Open project...", KeyStroke.getKeyStroke(VK_L, CTRL_MASK), UIBox.getIcon("gui/icons/load_project.png"), new LoadWandoraProject(),
-            "Merge project...", KeyStroke.getKeyStroke(VK_M, CTRL_MASK), UIBox.getIcon("gui/icons/merge_project.png"), new MergeWandoraProject(),
+            "New project...", KeyStroke.getKeyStroke(VK_N, DEF_MASK | SHIFT_MASK), UIBox.getIcon("gui/icons/new_project.png"), new ResetWandora(),
+            "Open project...", KeyStroke.getKeyStroke(VK_L, DEF_MASK), UIBox.getIcon("gui/icons/load_project.png"), new LoadWandoraProject(),
+            "Merge project...", KeyStroke.getKeyStroke(VK_M, DEF_MASK), UIBox.getIcon("gui/icons/merge_project.png"), new MergeWandoraProject(),
             "---",
-            "Save project", KeyStroke.getKeyStroke(VK_S, CTRL_MASK), UIBox.getIcon("gui/icons/save_project.png"), new SaveWandoraProject(true),
-            "Save project as...", KeyStroke.getKeyStroke(VK_S, CTRL_MASK | SHIFT_MASK), UIBox.getIcon("gui/icons/save_project_as.png"), new SaveWandoraProject(),
+            "Save project", KeyStroke.getKeyStroke(VK_S, DEF_MASK), UIBox.getIcon("gui/icons/save_project.png"), new SaveWandoraProject(true),
+            "Save project as...", KeyStroke.getKeyStroke(VK_S, DEF_MASK | SHIFT_MASK), UIBox.getIcon("gui/icons/save_project_as.png"), new SaveWandoraProject(),
             "Revert", UIBox.getIcon("gui/icons/revert_project.png"), new RevertWandoraProject(),
             "---",
 
@@ -755,9 +758,9 @@ public class WandoraMenuManager {
             "---",
             patchMenu,
             "---",
-            "Print...", new Print(), KeyStroke.getKeyStroke(VK_P, CTRL_MASK), UIBox.getIcon("gui/icons/print.png"),
+            "Print...", new Print(), KeyStroke.getKeyStroke(VK_P, DEF_MASK), UIBox.getIcon("gui/icons/print.png"),
             "---",
-            "Exit", KeyStroke.getKeyStroke(VK_Q, CTRL_MASK), UIBox.getIcon("gui/icons/exit.png"), new ExitWandora(),
+            "Exit", KeyStroke.getKeyStroke(VK_Q, DEF_MASK), UIBox.getIcon("gui/icons/exit.png"), new ExitWandora(),
         };
         
         fileMenu.removeAll();
@@ -1846,7 +1849,7 @@ public class WandoraMenuManager {
     public static Object[] getLogoMenu() {
         if(logoMenuStructure == null) {
             logoMenuStructure = new Object[] {
-               "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, CTRL_MASK), new ExecBrowser("http://www.wandora.org"),
+               "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, DEF_MASK), new ExecBrowser("http://www.wandora.org"),
                "---",
                "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/wiki/Documentation"),
                "Discussion forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/forum/"),

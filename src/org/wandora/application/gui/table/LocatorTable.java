@@ -66,11 +66,11 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
     
     
     /** Creates a new instance of LocatorTable */
-    public LocatorTable(Wandora parent) {
-        this.wandora = parent;
+    public LocatorTable(Wandora wandora) {
+        this.wandora = wandora;
     }
     
-    
+   
     
     // -------------------------------------------------------------------------
     
@@ -212,12 +212,15 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
     
 
     
+    @Override
     public void cut() {
         copy();
     }
+    @Override
     public void paste() {
     }
     
+    @Override
     public void copy() {
         String c = getCopyString();
         ClipboardBox.setClipboard( c );
