@@ -33,7 +33,7 @@ import org.wandora.topicmap.*;
 
 
 /**
- * Interface defines constants and methods for loggers used by <code>AdminTool</code>
+ * Interface defines constants and methods for loggers used by <code>WandoraTool</code>
  * classes.
  *
  * @author akivela
@@ -68,30 +68,45 @@ public interface WandoraToolLogger extends TopicMapLogger {
     
        
     /**
-     * Logs given string but does not add the string to logger's history. The
-     * method is used to log repeative logs such as progress meter that would
+     * Logs given string but doesn't add the string to logger history. The
+     * method is used to log repetitive logs such as progress meter that would
      * choke the history.
+     * 
+     * @param message
      */
+    @Override
     public void hlog(String message); // Historyless log == log is not saved to history!
     
     /**
      * Logs given string and adds the string to log history. History can be
      * browsed later when logging has ended.
+     * 
+     * @param message is the logged string message.
      */
+    @Override
     public void log(String message);
     
     /**
      * Logs given string and exception.
+     * 
+     * @param message is the logged message.
+     * @param e is the exception to be logged.
      */
+    @Override
     public void log(String message, Exception e);
     
     /**
      * Logs given exception.
+     * 
+     * @param e is the logged exception.
      */
+    @Override
     public void log(Exception e);
     
     /**
      * Logs given error.
+     * 
+     * @param e is the logged error.
      */
     public void log(Error e);
 
@@ -100,47 +115,70 @@ public interface WandoraToolLogger extends TopicMapLogger {
      * update current progress information with integer n. By default the 
      * progress information is 0..100 but user may change the value range with
      * <code>setProgressMax</code>.
+     * 
+     * @param n is integer value representing the state of current progress. 
      */
+    @Override
     public void setProgress(int n);
     
     /**
-     * Set the progress point where operation is ready. Normally this is 100.
+     * Set the progress point where operation is ready. Default value is 100.
+     * 
+     * @param maxn is integer value representing progress when the task is ready.
      */
+    @Override
     public void setProgressMax(int maxn);
     
     /**
      * Logging system may have a title. Normally title is the dialog window's
-     * title. Method changes the title. 
+     * title. Method changes the title.
+     * 
+     * @param title is a string viewed as a title of logger window.
      */
+    @Override
     public void setLogTitle(String title);
+    
     
     /**
      * Should the logger change current log message? If true, the log should
      * keep the current message visible although new log data is generated.
      * If false, the logger is free to change the log message whenever new
      * log is generated.
+     * 
+     * @param lock boolean variable that locks or unlocks logger.
      */
     public void lockLog(boolean lock);
     
+    
     /**
      * Returns all collected logs as a string.
+     * 
+     * @return String containing all logged messages.
      */
     public String getHistory();
     
     /**
-     * Sets logger's current state.
+     * Sets logger's current state. Supported logger states are EXECUTE,
+     * WAIT, CLOSE, INVISIBLE, VISIBLE.
+     * 
+     * @param state of logger.
      */
     public void setState(int state);
 
+    
     /**
-     * Returns logger's current state.
+     * Returns logger's current state. Supported logger states are EXECUTE,
+     * WAIT, CLOSE, INVISIBLE, VISIBLE.
+     * 
+     * @return Integer value representing current state of logger.
      */
     public int getState();
+    
     
     /**
      * <p>
      * Logger should have a mechanism to receive user interruption. Typically this
-     * is realized with a Calcel or Stop button. Whenever the user interrupts the
+     * is realized with a Cancel or Stop button. Whenever the user interrupts the
      * operation the logger should return true as the return code of <code>forceStop</code>
      * method.
      * </p>
@@ -149,7 +187,10 @@ public interface WandoraToolLogger extends TopicMapLogger {
      * <code>forceStop</code> method frequently and cancels the operation as soon as
      * true is returned.
      * </p>
+     * 
+     * @return boolean, if true the tool should stop immediately and return.
     */
+    @Override
     public boolean forceStop();
     
     
