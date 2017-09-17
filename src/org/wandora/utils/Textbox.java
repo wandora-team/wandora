@@ -29,7 +29,6 @@ package org.wandora.utils;
 
 
 import java.util.*;
-import gnu.regexp.*;
 import java.awt.*;
 import java.io.*;
 import javax.swing.text.rtf.*;
@@ -54,6 +53,8 @@ public class Textbox {
     /**
      * Makes a String representation of a map. Useful for debugging.
      * 
+     * @param map
+     * @return 
      */
     public static String mapToString(Map map){
         StringBuilder buf=new StringBuilder();
@@ -66,11 +67,11 @@ public class Textbox {
     }
     
     
-    public static Vector capitalizeFirst(Vector words) {
-        Vector newWords = new Vector();
+    public static java.util.List<String> capitalizeFirst(java.util.List<String> words) {
+        java.util.List<String> newWords = new ArrayList<String>();
         if (words != null) {
             for (int i=0; i<words.size(); i++) {
-                newWords.add(capitalizeFirst((String) words.elementAt(i)));
+                newWords.add(capitalizeFirst(words.get(i)));
             }
         }
         return newWords;
@@ -79,22 +80,18 @@ public class Textbox {
     
 
     public static String capitalizeFirst(String word) {
-        StringBuilder newWord = new StringBuilder();
-        boolean shouldCapitalize = true;
-        if (word != null) {
-            for (int i=0; i<word.length(); i++) {
-                if (Character.isLetter(word.charAt(i)) && shouldCapitalize) {
-                    newWord.append(Character.toUpperCase(word.charAt(i)));
-                    shouldCapitalize = false;
+        if(word != null) {
+            if(word.length()>0) {
+                String first = word.substring(0, 1).toUpperCase();
+                if(word.length()>1) {
+                    return first + word.substring(1);
                 }
-                else if (!Character.isLetter(word.charAt(i))) {
-                    newWord.append(word.charAt(i));
-                    shouldCapitalize = true;
+                else {
+                    return first;
                 }
-                else newWord.append(Character.toLowerCase(word.charAt(i)));
             }
         }
-        return newWord.toString();
+        return word;
     }
     
     
@@ -125,9 +122,9 @@ public class Textbox {
     public static String getSlice(String text, String delimiter, int sliceNumber) {
         String slice = "";
         try {
-            Vector slices = slice(text, delimiter);
+            java.util.List<String> slices = slice(text, delimiter);
             if(slices.size() > sliceNumber) {
-                slice = (String) slices.elementAt(sliceNumber);
+                slice = slices.get(sliceNumber);
             }
         }
         catch (Exception e) {}
@@ -139,14 +136,16 @@ public class Textbox {
     
     
     
-    public static Vector slice(String text, String delimiter) {
-        Vector slices = new Vector();
+    
+    
+    public static java.util.List<String> slice(String text, String delimiter) {
+        java.util.List<String> slices = new ArrayList<String>();
         String slice;
         
         if (text != null && delimiter != null) {
             while(text.length() > delimiter.length()) {
                 try {
-                    if (text.indexOf(delimiter) > -1) {
+                    if (text.contains(delimiter)) {
                         slice = text.substring(0, text.indexOf(delimiter));
                         slices.add(slice);
                         text = text.substring(text.indexOf(delimiter) + delimiter.length());
@@ -169,40 +168,28 @@ public class Textbox {
     }
    
 
-    public static Vector sliceWithRE(String text, String regularExpression) {
-        Vector slices = new Vector();
-        String slice;
-        try { 
-            RE re = new RE(regularExpression);
+    
+    
+    
+    public static java.util.List sliceWithRE(String text, String regularExpression) {
+        java.util.List<String> sliceList = new ArrayList<String>();
 
-            if (text != null && re != null) {
-                while(text.length() > 0) {
-                    try {
-                        REMatch match = re.getMatch(text);
-                        if (match != null && match.getEndIndex() != -1) {
-                            slice = text.substring(0, match.getStartIndex());
-                            slices.add(slice);
-                            text = text.substring(match.getEndIndex());
-                        }
-                        else {
-                            //LogWriter.println("No more delimiters found!");
-                            slices.add(text);
-                            text = "";
-                        }
-                    }
-                    catch (Exception e) {
-                        System.out.println("Exception '" + e.toString() + "' occurred while slicing text!");
+        try {
+            if(text != null && regularExpression != null) {
+                String[] slices = text.split(regularExpression);
+
+                for(String slice : slices) {
+                    if(slice != null && slice.length() > 0) {
+                        sliceList.add(slice);
                     }
                 }
             }
-            else {
-                System.out.println("Either text or delimiter is null! Unable to slice given text!");
-            }
         }
-        catch (Exception e) {
-            System.out.println("Illegal regular expression '" + regularExpression + "' used for slicing!");
+        catch(Exception e) {
+            e.printStackTrace();
         }
-        return slices;    
+        
+        return sliceList;
     }
     
     
@@ -215,8 +202,7 @@ public class Textbox {
         if(string != null) {
             for(int i=0; i<string.length(); i++) {
                 c = string.charAt(i);
-                if (c == 's') newString.append('s');
-                else if(Character.isLetterOrDigit(c)) {
+                if(Character.isLetterOrDigit(c)) {
                     newString.append(c);
                 }
                 else newString.append('_');
@@ -229,26 +215,21 @@ public class Textbox {
     
     
     public static String toLowerCase(String string) {
-        StringBuilder newString = new StringBuilder();
-        char c;
         if(string != null) {
-            for(int i=0; i<string.length(); i++) {
-                c = string.charAt(i);
-                newString.append(Character.toLowerCase(c));
-            }
+            return string.toLowerCase();
         }
-        return newString.toString();
+        return null;
     }
     
     
     
     
     
-    public static Vector encode(Vector strings, String charset) {
-        Vector newStrings = new Vector();
+    public static java.util.List<String> encode(java.util.List<String> strings, String charset) {
+        java.util.List<String> newStrings = new ArrayList<String>();
         for (int i=0; i < strings.size(); i++) {
             try {
-                newStrings.add(encode((String) strings.elementAt(i), charset));
+                newStrings.add(encode(strings.get(i), charset));
             }
             catch (Exception e) {
                 System.out.println("Exception '" + e.toString() + "' occurred while encoding vector of strings!");
@@ -261,8 +242,6 @@ public class Textbox {
     
     
     public static String encode(String string, String charset) {
-        StringBuilder newString = new StringBuilder();
-        
         if (charset != null && charset.length()>0) {
             if(charset.equalsIgnoreCase("UTF-8") || charset.equalsIgnoreCase("UNICODE")) {
                 try {
@@ -276,7 +255,6 @@ public class Textbox {
                 return java.net.URLEncoder.encode(string);
             }
         }
-        
         return string;        
     }
     
@@ -290,10 +268,12 @@ public class Textbox {
      * @return Encoded XML string.
      */
     public static String encodeXML(String s) {
-        s = Rexbox.replace(s, "&", "&amp;");
-        s = Rexbox.replace(s, ">", "&gt;");
-        s = Rexbox.replace(s, "<", "&lt;");
-        s = Rexbox.replace(s, "\\n\\r", "\\n");
+        if(s != null) {
+            s = s.replace("&", "&amp;");
+            s = s.replace(">", "&gt;");
+            s = s.replace("<", "&lt;");
+            s = s.replace("\\n\\r", "\\n");
+        }
         return s;
     }
 
@@ -329,15 +309,15 @@ public class Textbox {
         String reversedName = name;
         try {
             if (name != null && name.length() > 0) {
-                Vector nameSlices = Textbox.slice(name, " ");
+                java.util.List<String> nameSlices = Textbox.slice(name, " ");
                 String nameSlice = null;
                 if(nameSlices.size() > 1) {
-                    nameSlice = (String) nameSlices.elementAt(nameSlices.size() - 1);
+                    nameSlice = (String) nameSlices.get(nameSlices.size() - 1);
                     if(Character.isUpperCase(nameSlice.charAt(0))) {
                         reversedName = nameSlice;
                         String firstNames = "";
                         for(int i=0; i<nameSlices.size()-1; i++) {
-                            nameSlice = (String) nameSlices.elementAt(i);
+                            nameSlice = (String) nameSlices.get(i);
                             if(Character.isUpperCase(nameSlice.charAt(0))) {
                                 firstNames = firstNames + " " + nameSlice;
                             }
@@ -370,7 +350,9 @@ public class Textbox {
         if (string != null) {
             if (string.length() > 0) {
                 for (int i=0; i<string.length(); i++) {
-                    if (!Character.isWhitespace(string.charAt(i))) return false;
+                    if (!Character.isWhitespace(string.charAt(i))) {
+                        return false;
+                    }
                 }
             }
         }
@@ -403,15 +385,15 @@ public class Textbox {
     
     
     public static String[][] makeStringTable(String s) {
-        Vector lines = new Vector();
-        Vector linev;
+        java.util.List<java.util.List<String>> lines = new ArrayList();
+        java.util.List<String> linev;
         String line;
         StringTokenizer st = new StringTokenizer(s, "\n");
         StringTokenizer st2;
         int maxc = 0;
         while(st.hasMoreTokens()) {
             line = st.nextToken();
-            linev = new Vector();
+            linev = new ArrayList();
             st2 = new StringTokenizer(line, "\t");
             int c = 0;
             while(st2.hasMoreTokens()) {
@@ -424,9 +406,9 @@ public class Textbox {
         int maxl = lines.size();
         String[][] table = new String[lines.size()][maxc];
         for(int i=0; i<maxl; i++) {
-            Vector v = (Vector) lines.elementAt(i);
+            java.util.List<String> v = lines.get(i);
             for(int j=0; j<maxc; j++) {
-                try { table[i][j] = (String) v.elementAt(j); }
+                try { table[i][j] = v.get(j); }
                 catch (Exception e) { table[i][j] = null; }
             }
         }

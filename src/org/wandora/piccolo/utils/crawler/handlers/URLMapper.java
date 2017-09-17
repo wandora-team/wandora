@@ -27,14 +27,8 @@ package org.wandora.piccolo.utils.crawler.handlers;
 
 
 import java.net.*;
-import java.io.*;
 import java.util.*;
 
-import org.apache.lucene.index.*;
-import org.apache.lucene.document.*;
-
-import org.wandora.utils.*;
-import org.wandora.piccolo.utils.crawler.*;
 import org.wandora.piccolo.*;
 
 import org.w3c.dom.*;
