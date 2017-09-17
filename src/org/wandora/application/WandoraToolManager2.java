@@ -820,7 +820,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
         toolMenu.removeAll();
         WandoraToolSet toolSet = getToolSet(WandoraToolType.IMPORT_MERGE_TYPE);
         if(toolSet == null) return toolMenu;
-        ArrayList toolItems = toolSet.getTools();
+        List toolItems = toolSet.getTools();
         for(Object toolItem : toolItems) {
             if(toolItem != null) {
                 if(toolItem instanceof WandoraToolSet.ToolItem) {

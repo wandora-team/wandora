@@ -34,57 +34,57 @@ import javax.swing.*;
 
 
 /**
- *
+ * ActionListener that passes execution to a given WandoraTool object
+ * whenever the action is performed. More specifically, action event invokes
+ * tool's execute method. 
+ * 
  * @author akivela
  */
 public class WandoraToolActionListener implements java.awt.event.ActionListener {
     
-    private WandoraTool tool;
-    private Wandora wandora;
+    
+    private final WandoraTool tool;
+    private final Wandora wandora;
+    
     
     
     public WandoraToolActionListener(Wandora wandora, WandoraTool tool) {
-        this.wandora=wandora;
-        this.tool=tool;
+        this.wandora = wandora;
+        this.tool = tool;
     }
 
     
     
+    /**
+     * Invokes tool's execute method by SwingUtilities.invokeLater.
+     * 
+     * @param event 
+     */
     @Override
     public void actionPerformed(final java.awt.event.ActionEvent event) {
         if(wandora != null && tool != null) {
-            // Do not execute tool instantly in event thread!
-            if(false) {
-                try {
-                    tool.execute(wandora, event);
-                }
-                catch(TopicMapException tme) {
-                    wandora.handleError(tme);
-                }
-            }
-            else {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{ wandora.applyChanges(); }
-                        catch(CancelledException ce) { return; }
-                        try {
-                            tool.execute(wandora, event);
-                        }
-                        catch(TopicMapException tme) {
-                            wandora.handleError(tme);
-                        }
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    try { 
+                        wandora.applyChanges(); 
                     }
-                });
-            }
+                    catch(CancelledException ce) { 
+                        return; 
+                    }
+
+                    try {
+                        tool.execute(wandora, event);
+                    }
+                    catch(TopicMapException tme) {
+                        wandora.handleError(tme);
+                    }
+                }
+            });
         }
         else {
-            System.out.println("No Wandora object specified in WandoraToolActionListener! Can't execute!");
+            System.out.println("No Wandora or tool object specified in WandoraToolActionListener. Can't execute.");
         }
     }
-
-
-
-   
     
 }

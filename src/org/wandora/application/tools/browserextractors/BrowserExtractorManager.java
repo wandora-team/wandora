@@ -45,7 +45,7 @@ import org.wandora.application.WandoraToolType;
 
 public class BrowserExtractorManager {
     private static boolean USE_TOOL_MANAGER = true;
-    private HashMap<String,BrowserPluginExtractor> browserTools = null;
+    private Map<String,BrowserPluginExtractor> browserTools = null;
     private Wandora wandora;
     
     
@@ -57,7 +57,7 @@ public class BrowserExtractorManager {
 
     
     public String[] getExtractionMethods(BrowserExtractRequest request) {
-        ArrayList<String> methods=new ArrayList<String>();
+        List<String> methods=new ArrayList<String>();
         BrowserPluginExtractor tool = null;
         for(String key : browserTools.keySet()) {
             try {
@@ -102,18 +102,18 @@ public class BrowserExtractorManager {
 
 
 
-    public HashMap<String,BrowserPluginExtractor> getExtractorList(){
+    public Map<String,BrowserPluginExtractor> getExtractorList(){
         return browserTools;
     }
 
-    public HashMap<String,BrowserPluginExtractor> updateExtractorList() {
+    public Map<String,BrowserPluginExtractor> updateExtractorList() {
         if(browserTools == null) browserTools = new LinkedHashMap<String,BrowserPluginExtractor>();
         if(USE_TOOL_MANAGER) {
             WandoraToolSet tools = wandora.toolManager.getToolSet(WandoraToolType.BROWSER_EXTRACTOR_TYPE);
-            HashMap<String,WandoraTool> toolHash = tools.getAsHash();
+            Map<String,WandoraTool> toolMap = tools.getAsMap();
             WandoraTool tool = null;
-            for(String key : toolHash.keySet()) {
-                tool = toolHash.get(key);
+            for(String key : toolMap.keySet()) {
+                tool = toolMap.get(key);
                 if(tool instanceof BrowserPluginExtractor) {
                     browserTools.put(key, (BrowserPluginExtractor) tool);
                 }
@@ -127,12 +127,12 @@ public class BrowserExtractorManager {
 
 
 
-    public HashMap<String,BrowserPluginExtractor> readExtractorList(boolean strictlyBrowserPlugins) {
-        HashMap<String,BrowserPluginExtractor> tools = new LinkedHashMap<String,BrowserPluginExtractor>();
+    public Map<String,BrowserPluginExtractor> readExtractorList(boolean strictlyBrowserPlugins) {
+        Map<String,BrowserPluginExtractor> tools = new LinkedHashMap<String,BrowserPluginExtractor>();
         try {
             int pathCounter = 0;
             boolean continueSearch = true;
-            ArrayList<String> paths = new ArrayList<String>();
+            List<String> paths = new ArrayList<String>();
             while(continueSearch) {
                 String toolResourcePath = wandora.options.get("tool.path["+pathCounter+"]");
                 pathCounter++;
@@ -154,7 +154,7 @@ public class BrowserExtractorManager {
                         if(!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1)!=':') 
                             baseDir="/"+baseDir;
                         //System.out.println("Basedir: " + baseDir);
-                        HashSet<String> toolFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 1000);
+                        Set<String> toolFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 1000);
                         for(String classFileName : toolFileNames) {
                             try {
                                 File classFile = new File(classFileName);

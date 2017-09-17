@@ -60,7 +60,6 @@ import java.net.*;
 
 public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
 
-    private WandoraToolPanel toolPanel = null;
     private Exception toolException;
     private WandoraToolLogger lastLogger = null;
     private WandoraToolLogger logger = null;

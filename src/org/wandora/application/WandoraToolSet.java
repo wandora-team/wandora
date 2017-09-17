@@ -46,7 +46,7 @@ import org.wandora.utils.*;
 public class WandoraToolSet implements Serializable {
     private int index = 0;
     private String name = null;
-    private ArrayList tools = new ArrayList();
+    private List tools = new ArrayList();
     private Wandora wandora = null;
     
     
@@ -107,7 +107,7 @@ public class WandoraToolSet implements Serializable {
     public String getNameForTool(WandoraTool tool) {
         return getNameForTool(tool, tools);
     }
-    public String getNameForTool(WandoraTool tool, ArrayList set) {
+    public String getNameForTool(WandoraTool tool, List set) {
         for(Object o : set) {
             if(o != null) {
                 if(o instanceof ToolItem) {
@@ -150,7 +150,7 @@ public class WandoraToolSet implements Serializable {
     public WandoraTool getToolForRealName(String name) {
         return getToolForRealName(name, tools);
     }
-    public WandoraTool getToolForRealName(String name, ArrayList set) {
+    public WandoraTool getToolForRealName(String name, List set) {
         for(Object o : set) {
             if(o != null) {
                 if(o instanceof ToolItem) {
@@ -174,7 +174,7 @@ public class WandoraToolSet implements Serializable {
     public WandoraTool getToolForName(String name) {
         return getToolForName(name, tools);
     }
-    public WandoraTool getToolForName(String name, ArrayList set) {
+    public WandoraTool getToolForName(String name, List set) {
         for(Object o : set) {
             if(o != null) {
                 if(o instanceof ToolItem) {
@@ -196,7 +196,10 @@ public class WandoraToolSet implements Serializable {
     
     
 
-    public ArrayList getTools() {
+    public List getTools() {
+        if(tools == null) {
+            tools = new ArrayList();
+        }
         return tools;
     }
 
@@ -267,7 +270,7 @@ public class WandoraToolSet implements Serializable {
     }
 
     public Object[] getAsObjectArray(WandoraToolSet toolSet, ToolFilter filter) {
-        ArrayList array = new ArrayList();
+        List array = new ArrayList();
         if(toolSet == null) return array.toArray();
         boolean previousWasSeparator = true;
         for(Object o : toolSet.getTools()) {
@@ -317,27 +320,27 @@ public class WandoraToolSet implements Serializable {
 
 
 
-    public HashMap<String,WandoraTool> getAsHash() {
-        return getAsHash(this, null);
+    public Map<String,WandoraTool> getAsMap() {
+        return getAsMap(this, null);
     }
-    public HashMap<String,WandoraTool> getAsHash(ToolFilter filter) {
-        HashMap<String,WandoraTool> hash = getAsHash(this, filter);
-        return hash;
+    public Map<String,WandoraTool> getAsMap(ToolFilter filter) {
+        Map<String,WandoraTool> map = getAsMap(this, filter);
+        return map;
     }
-    public HashMap<String,WandoraTool> getAsHash(WandoraToolSet toolSet) {
-        return getAsHash(toolSet, null);
+    public Map<String,WandoraTool> getAsMap(WandoraToolSet toolSet) {
+        return getAsMap(toolSet, null);
     }
 
-    public HashMap<String,WandoraTool> getAsHash(WandoraToolSet toolSet, ToolFilter filter) {
-        LinkedHashMap hash = new LinkedHashMap();
-        if(toolSet == null) return hash;
+    public Map<String,WandoraTool> getAsMap(WandoraToolSet toolSet, ToolFilter filter) {
+        Map map = new LinkedHashMap();
+        if(toolSet == null) return map;
         for(Object o : toolSet.getTools()) {
             if(o instanceof WandoraToolSet) {
                 WandoraToolSet subTools = (WandoraToolSet) o;
                 if(subTools.size() > 0) {
-                    HashMap subHash = getAsHash(subTools, filter);
-                    if(subHash != null && !subHash.isEmpty()) {
-                        hash.putAll(subHash);
+                    Map subMap = getAsMap(subTools, filter);
+                    if(subMap != null && !subMap.isEmpty()) {
+                        map.putAll(subMap);
                     }
                 }
             }
@@ -346,11 +349,11 @@ public class WandoraToolSet implements Serializable {
                 WandoraTool tool = toolItem.getTool();
                 if(filter == null || filter.acceptTool(tool)) {
                     String toolName = toolItem.getName();
-                    hash.put(toolName, tool);
+                    map.put(toolName, tool);
                 }
             }
         }
-        return hash;
+        return map;
     }
 
 
