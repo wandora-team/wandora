@@ -60,6 +60,8 @@ public interface Handler {
     /**
      * Returns an array of String containing the content-types this
      * <code>ContentHandler</code> can process.
+     * 
+     * @return String array representing content types.
      */
     public String[] getContentTypes();
 }

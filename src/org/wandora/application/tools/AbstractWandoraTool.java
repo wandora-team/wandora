@@ -313,6 +313,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * while previous execution is unfinished. Doesn't stop nor kill the thread
      * that runs the previous execution.
      * 
+     * @param c Tool class to be released.
      * @return boolean true if a lock was released.
      */
     public static boolean clearToolLock(Class c) {
@@ -468,6 +469,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * the execution of the tool return immediately. If own thread is not allowed
      * the thread entering initial execute method is used. Extending classes should
      * override this method.
+     * 
+     * @return true if the tool should should be ran in separate thread.
      */
     public boolean runInOwnThread() {
         return true;
@@ -528,8 +531,11 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * execution has ended. This is the case if tool for example requires much
      * computing power or locks computing resources. By default tool is not
      * allowed to run multiple parallel instances.
+     * 
+     * @return true if the tool can be executed while previous executions is
+     * still running.
      */
-    public boolean allowMultipleInvocations(){
+    public boolean allowMultipleInvocations() {
         return false;
     }
     

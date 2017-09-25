@@ -45,7 +45,13 @@ public class SQLPattern {
     
     
     
-    /** Creates a new instance of KirjavaPattern */
+    /** Creates a new instance of KirjavaPattern
+     * 
+     * @param n 
+     * @param ps 
+     * @param findInstead 
+     * @param caseInsensitive 
+     */
     public SQLPattern(String n, String ps, boolean findInstead, boolean caseInsensitive) {
         try {
             name = n;

@@ -121,4 +121,13 @@
         </copy>
     </target>
 
+
+
+    <target name="build" depends="clean,compile,jar">
+        <echo message="Directory 'dist' contains now Wandora's distribution package." />
+        <echo message="See startup scripts in 'dist/bin' to run compiled Wandora application." />
+        <echo message="Default startup script is 'dist/bin/Wandora.sh' or 'dist/bin/Wandora.bat'." />
+    </target>
+
+
 </project>

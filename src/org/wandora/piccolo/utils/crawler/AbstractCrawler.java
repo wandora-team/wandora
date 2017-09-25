@@ -322,16 +322,16 @@ public abstract class AbstractCrawler implements CrawlerAccess, Crawler {
 	 *
 	 * For example:
 	 * <code>
-	 		<o class="com.foo.MyObject">
-				<param class="com.foo.MyParam">
-					<param>
-						<a b="1"/>
-						<a b="2"/>
-					</param>
-				</param>
-				<param number="3"/>
-			</o>
-			<o2 class="com.foo.MyObject"/>
+	 *		<o class="com.foo.MyObject">
+	 *			<param class="com.foo.MyParam">
+	 *				<param>
+	 *					<a b="1"/>
+	 *					<a b="2"/>
+	 *				</param>
+	 *			</param>
+	 * 			<param number="3"/>
+	 *		</o>
+	 *		<o2 class="com.foo.MyObject"/>
 	 * </code>
 	 * If this method is called with the 'o' element in the example, an instance of com.foo.MyObject is created using
 	 * a constructor that takes an Object array as a parameter. The array will have two objects. The object with
@@ -339,7 +339,8 @@ public abstract class AbstractCrawler implements CrawlerAccess, Crawler {
 	 * the xml element &lt;param number="3"/>. The com.foo.MyParam is instantiated with one object in the Objects array,
 	 * the xml 'param' element containing two 'a' elements. Calling with the 'o2' element will also produce an instance
 	 * of com.foo.MyObject, but this object is instantiated with the constructor taking no parameters.
-     * @deprecated
+         * 
+         * @deprecated
 	 */ 
     public static Object createObject(org.w3c.dom.Element e) throws Exception {
         NamedNodeMap nnm = e.getAttributes();

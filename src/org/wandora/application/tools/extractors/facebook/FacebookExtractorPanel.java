@@ -67,7 +67,11 @@ public class FacebookExtractorPanel extends javax.swing.JPanel {
 
 
 
-    /** Creates new form FacebookExtractorPanel */
+    /** 
+     * Creates new form FacebookExtractorPanel
+     * 
+     * @param app 
+     */
     public FacebookExtractorPanel(Wandora app) {
         application = app;
         initComponents();

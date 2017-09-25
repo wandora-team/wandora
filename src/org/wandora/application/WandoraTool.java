@@ -54,7 +54,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     /**
      * Return tool's name. 
      * 
-     * @return 
+     * @return String representing tool's name.
      */
     public String getName();
     
@@ -62,7 +62,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     /**
      * Returns description of the tool.
      * 
-     * @return 
+     * @return String representing tool's description.
      */
     public String getDescription();   
     
@@ -101,7 +101,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
      * Returns boolean value true if the tool is running and false if the
      * execution has ended.
      * 
-     * @return 
+     * @return true if the tool is running.
      */
     public boolean isRunning();
 
@@ -120,7 +120,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     /**
      * Get tool's execution context.
      * 
-     * @return 
+     * @return Context object.
      */
     public Context getContext();
 
@@ -213,7 +213,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
      * Sets tools logger. Logger is used to output textual message about
      * the progress of tool execution.
      * 
-     * @param logger 
+     * @param logger is new logger object.
      */
     public void setToolLogger(WandoraToolLogger logger);
     
@@ -221,7 +221,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     /**
      * Shortcut to access tool's logger.
      * 
-     * @param message 
+     * @param message to be logged.
      */
     @Override
     public void hlog(String message);
@@ -230,7 +230,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     /**
      * Shortcut to access tool's logger.
      * 
-     * @param message 
+     * @param message to be logged.
      */
     @Override
     public void log(String message);
@@ -239,8 +239,8 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     /**
      * Shortcut to access tool's logger.
      * 
-     * @param message
-     * @param e 
+     * @param message to be logged.
+     * @param e Exception to be logged.
      */
     @Override
     public void log(String message, Exception e);
@@ -249,7 +249,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     /**
      * Shortcut to access tool's logger.
      * 
-     * @param e 
+     * @param e Exception to be logged.
      */
     @Override
     public void log(Exception e);
@@ -258,7 +258,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     /**
      * Shortcut to access tool's logger.
      * 
-     * @param e 
+     * @param e Error to be logged.
      */
     @Override
     public void log(Error e);

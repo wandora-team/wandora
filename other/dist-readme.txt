@@ -37,6 +37,9 @@ at the output in the shell window if the application window doesn't show up.
 More information
 ================
 
+Wandora's home page
+http://wandora.org
+
 Download Wandora
 http://wandora.org/www/download
  

@@ -72,7 +72,7 @@ public interface WandoraToolLogger extends TopicMapLogger {
      * method is used to log repetitive logs such as progress meter that would
      * choke the history.
      * 
-     * @param message
+     * @param message is the logged text.
      */
     @Override
     public void hlog(String message); // Historyless log == log is not saved to history!
