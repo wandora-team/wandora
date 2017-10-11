@@ -119,6 +119,7 @@
         <copy tofile="dist/readme.txt" overwrite="true">
             <file file="other/dist-readme.txt"/>
         </copy>
+        <chmod dir="dist/bin" perm="a+x" includes="**/*.sh"/>
     </target>
 
 
