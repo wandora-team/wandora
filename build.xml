@@ -107,6 +107,8 @@
         <copy todir="dist/bin">
             <fileset dir="bin"/>
         </copy>
+        <fixcrlf srcdir="bin" destdir="dist/bin" includes="**/*.sh" eol="lf" eof="remove" />
+        <fixcrlf srcdir="bin" destdir="dist/bin" includes="**/*.bat" eol="crlf" />
         <copy tofile="dist/license.txt">
             <file file="license.txt"/>
         </copy>
@@ -130,5 +132,36 @@
         <echo message="Default startup script is 'dist/bin/Wandora.sh' or 'dist/bin/Wandora.bat'." />
     </target>
 
+
+
+    <target name="build-dist-zip" depends="build">
+        <tstamp>
+            <format property="releaseday" pattern="yyyyMMdd"/>
+        </tstamp>
+        <zip destfile="../wandora-${releaseday}.zip">
+            <mappedresources>
+                <fileset dir="dist"/>
+                <globmapper from="*" to="wandora-${releaseday}/*"/>
+            </mappedresources>
+        </zip>
+    </target>
+
+
+    <target name="build-src-zip" depends="build">
+        <tstamp>
+            <format property="releaseday" pattern="yyyyMMdd"/>
+        </tstamp>
+        <zip destfile="../wandora-src-${releaseday}.zip">
+            <mappedresources>
+                <fileset dir="."/>
+                <globmapper from="*" to="wandora-src-${releaseday}/*"/>
+            </mappedresources>
+        </zip>
+    </target>
+
+
+    <target name="build-zips" depends="build-dist-zip,build-src-zip">
+       
+    </target>
 
 </project>
