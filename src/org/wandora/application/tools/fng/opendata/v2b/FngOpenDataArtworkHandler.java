@@ -25,6 +25,7 @@ package org.wandora.application.tools.fng.opendata.v2b;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -70,6 +71,7 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
     protected String DIMENSION_UNIT_SI = BASE_SI+"dimension_unit";
     
     protected String IMAGE_SI = BASE_SI+"imageoccurrence";
+    protected String LICENSE_SI = BASE_SI+"image-license";
     protected String COLLECTION_SI = BASE_SI+"collection";
     
     
@@ -283,9 +285,40 @@ public class FngOpenDataArtworkHandler extends FngOpenDataAbstractHandler implem
             // **** IMAGES ****
             Collection<Topic> images = GenericVelocityHelper.getPlayers(t, IMAGE_SI, IMAGE_SI);
             for( Topic image : images ) {
-                String bn = image.getBaseName();
-                if(bn != null) {
-                    addRelation(bn, "image");
+                if(image != null) {
+                    String bn = image.getBaseName();
+                    HashMap<String,String> imageParams = null;
+                    Collection<Topic> licenses = GenericVelocityHelper.getPlayers(image, LICENSE_SI, LICENSE_SI);
+                    if(licenses != null) {
+                        StringBuilder licenseString = new StringBuilder("");
+                        int i=0;
+                        for( Topic license : licenses ) {
+                            String licenseName = license.getDisplayName("en");
+                            if(licenseName != null && !"".equals(licenseName)) {
+                                if(i > 0) {
+                                    licenseString.append(";");
+                                }
+                                licenseString.append(licenseName);
+                                i++;
+                            }
+                        }
+                        if(i > 0) {
+                            imageParams = new LinkedHashMap<String,String>();
+                            imageParams.put("license", licenseString.toString());
+                            if("CC0".equalsIgnoreCase(licenseString.toString())) {
+                                imageParams.put("url", "http://kokoelmat.fng.fi/app?action=image&profile=CC0&iid="+bn);
+                            }
+                        }
+                    }
+                    
+                    if(bn != null) {
+                        if(imageParams == null) {
+                            addRelation(bn, "image");
+                        }
+                        else {
+                            addRelation(bn, "image", imageParams);
+                        }
+                    }
                 }
             }
             

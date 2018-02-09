@@ -88,7 +88,7 @@ public class Print extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    public void printImage(BufferedImage image) {
+    public void printImage(final BufferedImage image) {
         if(image != null) {
 
             PrinterJob pj = PrinterJob.getPrinterJob();

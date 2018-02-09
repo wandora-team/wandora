@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples;
@@ -656,14 +657,14 @@ public class FngOpenDataAbstractHandler {
     
     
       protected HashMap makeTypeMap(String value, String type) {
-        HashMap map = new HashMap();
+        HashMap map = new LinkedHashMap();
         map.put(VALUE_KEY, value);
         if(type != null) map.put("type", type);
         return map;
     }  
     
     protected HashMap makeLangMap(String value, String lang) {
-        HashMap map = new HashMap();
+        HashMap map = new LinkedHashMap();
         map.put(VALUE_KEY, value);
         if(lang != null) map.put("lang", lang);
         return map;
@@ -671,7 +672,7 @@ public class FngOpenDataAbstractHandler {
     
     
     protected HashMap makeMap(String value, String key, String val) {
-        HashMap map = new HashMap();
+        HashMap map = new LinkedHashMap();
         map.put(VALUE_KEY, value);
         if(key != null && val != null) map.put(key, val);
         return map;
@@ -679,7 +680,7 @@ public class FngOpenDataAbstractHandler {
     
     
     protected HashMap makeMap(String value, String key1, String val1, String key2, String val2) {
-        HashMap map = new HashMap();
+        HashMap map = new LinkedHashMap();
         map.put(VALUE_KEY, value);
         if(key1 != null && val1 != null) map.put(key1, val1);
         if(key2 != null && val2 != null) map.put(key2, val2);
@@ -688,7 +689,7 @@ public class FngOpenDataAbstractHandler {
     
     
     protected HashMap makeMap(String value, String key1, String val1, String key2, String val2, String key3, String val3) {
-        HashMap map = new HashMap();
+        HashMap map = new LinkedHashMap();
         map.put(VALUE_KEY, value);
         if(key1 != null && val1 != null) map.put(key1, val1);
         if(key2 != null && val2 != null) map.put(key2, val2);

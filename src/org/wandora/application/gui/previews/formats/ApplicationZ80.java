@@ -144,7 +144,7 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
     
     
     public JButton getMenuButton() {
-        JButton button = UIBox.makeDefaultButton();
+        final JButton button = UIBox.makeDefaultButton();
         button.setIcon(UIBox.getIcon(0xf0c9));
         button.setToolTipText("Sinclair ZX preview options.");
         button.setBorder(null);
