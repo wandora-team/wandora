@@ -28,8 +28,8 @@ or drop a line.
 
 ## Developer Introduction
 
-We develop Wandora with the [Netbeans IDE](https://netbeans.org/). To start
-working with Wandora's source code, download and install Netbeans IDE, preferably version 8.1.
+We develop Wandora with the [Netbeans IDE](https://netbeans.apache.org/). To start
+working with Wandora's source code, download and install Netbeans IDE, preferably version 9.
 Wandora's GitHub repository contains all required project files for the Netbeans IDE. 
 To open the project in Netbeans, select menu option File &gt; Open Project... in the Netbeans and 
 select Wandora's folder. Once you have successfully opened Wandora project, 
