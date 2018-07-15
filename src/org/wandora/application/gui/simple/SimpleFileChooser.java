@@ -30,10 +30,9 @@ package org.wandora.application.gui.simple;
 import javax.swing.*;
 import java.io.*;
 import java.awt.*;
-import javax.swing.plaf.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
-import com.sun.java.swing.plaf.windows.*;
+
 
 
 

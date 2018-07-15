@@ -93,8 +93,8 @@ public abstract class AbstractAction extends ScriptModule implements ServletModu
     }
     
     @Override
-    public Collection<Module> getDependencies(ModuleManager manager) throws ModuleException {
-        Collection<Module> deps=super.getDependencies(manager);
+    public Collection<org.wandora.modules.Module> getDependencies(ModuleManager manager) throws ModuleException {
+        Collection<org.wandora.modules.Module> deps=super.getDependencies(manager);
         manager.requireModule(this,ServletModule.class, deps);
         return deps;
     }

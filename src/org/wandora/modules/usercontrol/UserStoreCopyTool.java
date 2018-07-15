@@ -47,8 +47,8 @@ public class UserStoreCopyTool extends AbstractModule {
     protected String toStoreName;
     
     @Override
-    public Collection<Module> getDependencies(ModuleManager manager) throws ModuleException {
-        Collection<Module> deps=super.getDependencies(manager);
+    public Collection<org.wandora.modules.Module> getDependencies(ModuleManager manager) throws ModuleException {
+        Collection<org.wandora.modules.Module> deps=super.getDependencies(manager);
         requireLogging(manager, deps);
         
         if(fromStoreName!=null){

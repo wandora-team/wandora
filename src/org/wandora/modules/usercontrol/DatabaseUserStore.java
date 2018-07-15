@@ -84,8 +84,8 @@ public class DatabaseUserStore extends AbstractModule implements ModifyableUserS
     }
     
     @Override
-    public Collection<Module> getDependencies(ModuleManager manager) throws ModuleException {
-        Collection<Module> deps=super.getDependencies(manager);
+    public Collection<org.wandora.modules.Module> getDependencies(ModuleManager manager) throws ModuleException {
+        Collection<org.wandora.modules.Module> deps=super.getDependencies(manager);
         requireLogging(manager, deps);
         manager.requireModule(this, DatabaseInterface.class, deps);
         return deps;
