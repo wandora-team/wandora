@@ -44,6 +44,10 @@ import org.wandora.topicmap.TopicMapException;
 public class AddWebSourceAsOccurrence extends AbstractWebViewTool {
     public boolean USE_SELECTION_SOURCE = false;
     
+    public static final boolean REUSE_TOPIC_SELECTION_DIALOG = true;
+    private static GenericOptionsDialog god = null;
+    
+    
     public AddWebSourceAsOccurrence() {}
     
     public AddWebSourceAsOccurrence(boolean selectionSource) {
@@ -68,16 +72,18 @@ public class AddWebSourceAsOccurrence extends AbstractWebViewTool {
                     Topic otype = null;
                     Topic oversion = null;
                     TopicMap tm = wandora.getTopicMap();
-                    GenericOptionsDialog god = new GenericOptionsDialog(
-                        wandora,
-                        "Select occurrence type and scope","Select occurrence type and scope",
-                        true,
-                        new String[][]{
-                            new String[] { "Occurrence type topic","topic","","Select occurrence type topic." },
-                            new String[] { "Occurrence scope topic","topic","","Select occurrence scope topic ie. language" },
-                        },
-                        wandora
-                    );
+                    if(!REUSE_TOPIC_SELECTION_DIALOG || god == null) {
+                        god = new GenericOptionsDialog(
+                            wandora,
+                            "Select occurrence type and scope","Select occurrence type and scope",
+                            true,
+                            new String[][]{
+                                new String[] { "Occurrence type topic","topic","","Select occurrence type topic." },
+                                new String[] { "Occurrence scope topic","topic","","Select occurrence scope topic ie. language" },
+                            },
+                            wandora
+                        );
+                    }
                     god.setVisible(true);
                     if(god.wasCancelled()) return;
 
