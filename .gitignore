@@ -1,6 +1,7 @@
 # java specific
 *.class
 build/*
+build-auto/*
 dist/*
 temp/*
 lib/wandora.jar
@@ -15,4 +16,6 @@ nbproject/private/
 *.swp
 *.out
 /build/
+/build-auto/
 /dist/
+
