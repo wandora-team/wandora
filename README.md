@@ -1,7 +1,7 @@
 Wandora
 =======
 
-[Wandora](http://wandora.org) is a tool for people who collect and process information, 
+[Wandora](http://wandora.org) is a tool application for people who collect and process information, 
 especially networked knowledge and knowledge about WWW resources. With Wandora you can 
 aggregate and combine information from various different sources. You can manipulate the 
 collected knowledge flexible and efficiently, and without programming skills. More 
@@ -28,13 +28,18 @@ or drop a line.
 
 ## Developer Introduction
 
-We develop Wandora with the [Netbeans IDE](https://netbeans.apache.org/). To start
-working with Wandora's source code, download and install Netbeans IDE, preferably version 9.
-Wandora's GitHub repository contains all required project files for the Netbeans IDE. 
-To open the project in Netbeans, select menu option File &gt; Open Project... in the Netbeans and 
-select Wandora's folder. Once you have successfully opened Wandora project, 
-you can compile Wandora project to test whether or not you have everything in order. GitHub
-repository needs to be compiled before Wandora can be ran.
+Wandora was originally developed with the [Netbeans IDE](https://netbeans.apache.org/).
+Since October 2018 we have started developing Wandora with Eclipse, preferably 
+Eclipse IDE for Java Developers version 4.9.0. Eclipse development has changed
+the library retrieval and build process. Since October 2018 Wandora's Git repository
+doesn't contain jar libraries any more in the lib directory. To retrieve all
+required jar libraries, the developer should run ant task retrieve in the
+build.xml. After retrieval the Eclipse user should refresh package explorer view,
+and the developer is ready to build Wandora with the build task in the build.xml.
+
+Build task creates Wandora's binary distribution package in to the dist directory.
+To run Wandora application enter folder dist/bin and execute startup script Wandora.bat
+or Wandora.sh.
 
 To compile and run Wandora, a Java JDK 8 or later is required.
 
