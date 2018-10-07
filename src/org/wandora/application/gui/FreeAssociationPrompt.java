@@ -21,7 +21,7 @@
  * 
  * FreeAssociationPrompt.java
  *
- * Created on 14. kesäkuuta 2006, 10:08
+ * Created on 14. kesï¿½kuuta 2006, 10:08
  */
 
 package org.wandora.application.gui;
@@ -43,6 +43,10 @@ import java.util.*;
  */
 public class FreeAssociationPrompt extends javax.swing.JDialog {
 
+	
+	private static final long serialVersionUID = 1L;
+	
+	
     private static Topic previousAssociationType = null;
     private static ArrayList<Topic> previousRoles = null;
 

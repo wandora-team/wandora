@@ -41,7 +41,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.util.*;
-import org.wandora.application.gui.table.ClassTable;
 import org.wandora.application.gui.topicstringify.TopicToString;
 
 
@@ -52,6 +51,8 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  * @author olli
  */
 public class GetTopicButton extends SimpleButton {
+	
+	private static final long serialVersionUID = 1L;
 
     protected Topic selectedTopic = null;
     protected String originalSubjectIdentifier = null;
@@ -349,6 +350,8 @@ public class GetTopicButton extends SimpleButton {
     
     
     private class TopicButtonTransferHandler extends TransferHandler {
+    	
+    	private static final long serialVersionUID = 1L;
 
         @Override
         public boolean canImport(TransferHandler.TransferSupport support) {

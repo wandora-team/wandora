@@ -45,7 +45,11 @@ import java.util.*;
 public class BasenameTrimmer extends AbstractWandoraTool implements WandoraTool {
 
 
-    public BasenameTrimmer() {
+
+	private static final long serialVersionUID = 1L;
+
+
+	public BasenameTrimmer() {
     }
     public BasenameTrimmer(Context preferredContext) {
         setContext(preferredContext);
@@ -71,7 +75,7 @@ public class BasenameTrimmer extends AbstractWandoraTool implements WandoraTool 
             setLogTitle("Removing surrounding white space characters in basenames");
             log("Removing surrounding white space characters in basenames");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<Topic> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
@@ -103,7 +107,7 @@ public class BasenameTrimmer extends AbstractWandoraTool implements WandoraTool 
                 }
             }
 
-            ArrayList<Topic> changeList = new ArrayList();
+            List<Topic> changeList = new ArrayList<>();
             changeList.addAll(changeTopics.keySet());
             
             for(Topic t : changeList) {

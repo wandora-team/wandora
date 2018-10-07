@@ -40,6 +40,8 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -175,8 +177,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
         java.awt.GridBagConstraints gbc;
         try {
             Map<Association,ArrayList<Topic>> selectedAssociationWithRoles = new HashMap<Association,ArrayList<Topic>>();
-            Map<Topic,java.util.List<? extends RowSorter.SortKey>> sortKeys = new HashMap();
-            Map<Topic,ArrayList<Integer>> columnProperties = new HashMap();
+            Map<Topic,java.util.List<? extends RowSorter.SortKey>> sortKeys = new HashMap<>();
+            Map<Topic,ArrayList<Integer>> columnProperties = new HashMap<>();
             if(associationPanel.getComponentCount() > 0) {
                 for(int i=0; i<associationPanel.getComponentCount(); i++) {
                     Component associationTableComponent = associationPanel.getComponent(i);
@@ -197,16 +199,16 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             }
             
             associationPanel.removeAll();
-            Collection associations=null;
+            Collection<Association> associations=null;
 
-            associations = new ArrayList();
+            associations = new ArrayList<>();
             if((option & ASSOCIATIONS_WHERE_PLAYER) != 0) associations.addAll(topic.getAssociations());
             if((option & ASSOCIATIONS_WHERE_TYPE) != 0) associations.addAll(topic.getTopicMap().getAssociationsOfType(topic));
             associations = TMBox.sortAssociations(associations, "en");
             associationPanel.setLayout(new java.awt.GridBagLayout());
-            ArrayList sameTypes=new ArrayList();
+            List<Association> sameTypes=new ArrayList<>();
             Topic lastType=null;
-            Iterator iter=associations.iterator();
+            Iterator<Association> iter=associations.iterator();
             int acounter=0;
             while(iter.hasNext()){
                 Association a=(Association)iter.next();
@@ -246,7 +248,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     gbc.fill=GridBagConstraints.HORIZONTAL;
                     associationPanel.add(table,gbc);
                     lastType=a.getType();
-                    sameTypes=new ArrayList();
+                    sameTypes=new ArrayList<>();
                     sameTypes.add(a);
                 }
                 {
@@ -480,7 +482,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             GridBagConstraints gbc;
             dataPanel.removeAll();
             dataPanel.setLayout(new java.awt.GridBagLayout());
-            occurrenceTables = new ArrayList();
+            occurrenceTables = new ArrayList<>();
             int n=0;
             int y=0;
             gbc=new java.awt.GridBagConstraints();
@@ -633,7 +635,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     x = 1;
                     for (Topic langTopic : langTopics) {
                         if (langTopic != null) {
-                            HashSet s=new HashSet();
+                            Set<Topic> s=new LinkedHashSet<>();
                             s.add(verTopic);
                             s.add(langTopic);
                             String name=topic.getVariant(s);
@@ -765,7 +767,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     x = 1;
                     for(Topic verTopic : verTopics) {
                         if(verTopic != null) {
-                            HashSet s = new HashSet();
+                            Set<Topic> s = new LinkedHashSet<>();
                             s.add(verTopic);
                             s.add(langTopic);
                             String name = topic.getVariant(s);
@@ -953,7 +955,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                         scopeTopicLabel.setText(scopeTopic);
                         scopeTopicLabel.setToolTipText(scopeTopic.getOneSubjectIdentifier().toExternalForm());
 
-                        ArrayList addScopeSubmenu = new ArrayList();
+                        ArrayList<Object> addScopeSubmenu = new ArrayList<>();
                         addScopeSubmenu.add("Add scope topic...");
                         addScopeSubmenu.add(new AddScopeTopicToVariantName(topic, scope));
                         addScopeSubmenu.add("---");
@@ -1279,7 +1281,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
     protected class AssociationTableTransferHandler extends TransferHandler {
 
-        private TopicPanel topicPanel = null;
+		private static final long serialVersionUID = 1L;
+		private TopicPanel topicPanel = null;
         private Wandora wandora = null;
         
         
@@ -1414,7 +1417,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
     
     protected class InstancesPanelTransferHandler extends TransferHandler {
 
-        private TopicPanel topicPanel = null;
+
+		private static final long serialVersionUID = 1L;
+		private TopicPanel topicPanel = null;
         private Wandora wandora = null;
         
         
@@ -1473,7 +1478,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
     
     protected class ClassesPanelTransferHandler extends TransferHandler {
-        private TopicPanel topicPanel = null;
+
+		private static final long serialVersionUID = 1L;
+		private TopicPanel topicPanel = null;
         private Wandora wandora = null;
         
         
@@ -1532,7 +1539,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
     
     
     protected class OccurrencesPanelTransferHandler extends TransferHandler {
-        private TopicPanel topicPanel = null;
+
+		private static final long serialVersionUID = 1L;
+		private TopicPanel topicPanel = null;
         private Wandora wandora = null;
         
         
@@ -1672,7 +1681,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
     
     
     protected class TopicPanelTransferHandler extends TransferHandler {
-        private TopicPanel topicPanel = null;
+
+		private static final long serialVersionUID = 1L;
+		private TopicPanel topicPanel = null;
         private Wandora wandora = null;
         
         

@@ -53,6 +53,10 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 
 public class ErrorDialog extends javax.swing.JDialog {
 
+	
+	private static final long serialVersionUID = 1L;
+	
+	
     private int button=-1;
     
     
@@ -284,7 +288,10 @@ public class ErrorDialog extends javax.swing.JDialog {
 
 
     public class StackTraceTextPane extends JTextPane implements ActionListener {
-        
+    	
+    	
+    	private static final long serialVersionUID = 1L;
+    	
         
         public StackTraceTextPane() {
             super();

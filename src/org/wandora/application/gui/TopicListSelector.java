@@ -21,7 +21,7 @@
  * 
  * TopicListSelector.java
  *
- * Created on 10. heinäkuuta 2007, 15:38
+ * Created on 10. heinï¿½kuuta 2007, 15:38
  */
 
 package org.wandora.application.gui;
@@ -38,7 +38,11 @@ import java.util.*;
  */
 public class TopicListSelector extends javax.swing.JPanel implements TopicSelector {
 
-    private DefaultListModel listModel;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private DefaultListModel listModel;
     private String name;
     
     /** Creates new form TopicListSelector */

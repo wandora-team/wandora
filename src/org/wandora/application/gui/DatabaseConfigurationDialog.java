@@ -21,7 +21,7 @@
  * 
  * DatabaseConfigurationDialog.java
  *
- * Created on 30. kesäkuuta 2006, 15:13
+ * Created on 30. kesï¿½kuuta 2006, 15:13
  */
 
 package org.wandora.application.gui;
@@ -34,6 +34,8 @@ import org.wandora.topicmap.database.DatabaseConfiguration;
  * @author  olli
  */
 public class DatabaseConfigurationDialog extends javax.swing.JDialog {
+	
+	private static final long serialVersionUID = 1L;
     
     private Wandora admin;
     private boolean cancelled=true;

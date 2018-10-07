@@ -40,9 +40,11 @@ import org.wandora.topicmap.TopicMap;
  */
 public class AssociationTest extends AbstractWandoraTool implements WandoraTool {
     
-    
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public String getName() {
         return "Various association tests";
     }
@@ -60,7 +62,7 @@ public class AssociationTest extends AbstractWandoraTool implements WandoraTool 
             setLogTitle("Various association tests");
             
             TopicMap tm = wandora.getTopicMap();
-            ArrayList<String> sis = new ArrayList();
+            ArrayList<String> sis = new ArrayList<>();
             int numberOfTestTopics = 30;
             int numberOfFails = 0;
             int numberOfRepeats = 1;

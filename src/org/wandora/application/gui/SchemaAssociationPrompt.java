@@ -31,10 +31,8 @@ import org.wandora.topicmap.SchemaBox;
 import org.wandora.topicmap.TMBox;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
 import java.util.*;
 import java.awt.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.topicmap.layered.*;
 

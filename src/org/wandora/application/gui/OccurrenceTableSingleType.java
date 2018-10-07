@@ -39,7 +39,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -53,7 +52,7 @@ import org.wandora.utils.*;
 import org.wandora.utils.language.GoogleTranslateBox;
 import org.wandora.utils.language.MicrosoftTranslateBox;
 import org.wandora.utils.language.WatsonTranslateBox;
-import org.wandora.utils.swing.*;
+
 
 
 /**
@@ -61,8 +60,12 @@ import org.wandora.utils.swing.*;
  * @author  olli, akivela
  */
 public class OccurrenceTableSingleType extends SimpleTable implements OccurrenceTable, MouseListener, Clipboardable {
-    
-    public String tableType = VIEW_SCHEMA;
+
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public String tableType = VIEW_SCHEMA;
     
     private Topic topic;
     private Topic[] langs;
@@ -101,7 +104,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         
         this.type = type;
 
-        HashSet<Topic> langSet = new LinkedHashSet();
+        Set<Topic> langSet = new LinkedHashSet();
         if(VIEW_USED.equalsIgnoreCase(tableType) || VIEW_USED_AND_SCHEMA.equalsIgnoreCase(tableType)) {
             Hashtable<Topic,String> occs = null;
             Topic langTopic = null;
@@ -871,7 +874,12 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     
     
     private class DataCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
-        private Topic scope;
+
+
+		private static final long serialVersionUID = 1L;
+		
+		
+		private Topic scope;
         private SimpleTextPane label;
         private String editedText;
         
@@ -993,7 +1001,12 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     
     
     private class TopicCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
-        private JLabel label;
+
+
+		private static final long serialVersionUID = 1L;
+		
+		
+		private JLabel label;
         
         public TopicCellEditor(){
             label= new JLabel();
@@ -1050,8 +1063,11 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     
     private class DataTableModel extends AbstractTableModel {
         
-        
-        @Override
+
+		private static final long serialVersionUID = 1L;
+
+
+		@Override
         public int getColumnCount() {
             return 2;
         }
@@ -1107,7 +1123,11 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     
     private class OccurrencesTableTransferHandler extends TransferHandler {
 
-        @Override
+
+		private static final long serialVersionUID = 1L;
+
+		
+		@Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
             return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor) ||

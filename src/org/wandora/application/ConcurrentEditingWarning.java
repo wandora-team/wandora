@@ -32,6 +32,9 @@ import org.wandora.topicmap.*;
  * @author  olli
  */
 public class ConcurrentEditingWarning extends javax.swing.JDialog {
+	
+	private static final long serialVersionUID = 1L;
+	
     
     /** Creates new form ConcurrentEditingWarning */
     public ConcurrentEditingWarning(java.awt.Frame parent, boolean modal,Topic[] failed,Topic[] removed) {

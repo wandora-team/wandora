@@ -27,15 +27,13 @@
 package org.wandora.application.gui;
 
 
-import org.wandora.utils.swing.ImagePanel;
-import org.wandora.utils.swing.*;
-import org.wandora.utils.*;
+
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 
 import javax.swing.*;
-import java.awt.*;
+
 
 
 
@@ -45,8 +43,12 @@ import java.awt.*;
  */
 public class PasswordPrompt extends javax.swing.JDialog {
     
-    private boolean cancelled;
-    private String titleText = null;
+
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private boolean cancelled;
     public static Icon lockIcon = UIBox.getIcon("gui/icons/dialog/lock.gif");
     
     

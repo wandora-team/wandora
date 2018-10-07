@@ -47,6 +47,10 @@ import org.wandora.topicmap.TopicMapException;
  * @author  akivela
  */
 public class NewTopicPanelExtended extends javax.swing.JPanel {
+	
+	
+	private static final long serialVersionUID = 1L;
+	
     
     private boolean accepted = false;
     private JDialog newTopicDialog = null;

@@ -46,7 +46,10 @@ import java.util.*;
  * @author akivela
  */
 public class BasenameRegexReplacer extends AbstractWandoraTool implements WandoraTool {
-    RegularExpressionEditor editor = null;
+
+	private static final long serialVersionUID = 1L;
+
+	RegularExpressionEditor editor = null;
 
  
 
@@ -110,7 +113,7 @@ public class BasenameRegexReplacer extends AbstractWandoraTool implements Wandor
                     }
                 }
 
-                ArrayList<Topic> changeList = new ArrayList();
+                List<Topic> changeList = new ArrayList<>();
                 changeList.addAll(changeTopics.keySet());
                 
                 for(Topic t : changeList) {

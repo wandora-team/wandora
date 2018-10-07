@@ -38,6 +38,9 @@ package org.wandora.application;
  */
 public class ServerException extends Exception {
     
+	private static final long serialVersionUID = 1L;
+	
+	
     /** Creates a new instance of ServerException */
     public ServerException(){
         super();

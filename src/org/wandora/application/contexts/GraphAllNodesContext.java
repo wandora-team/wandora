@@ -21,7 +21,7 @@
  * 
  * GraphAllNodesContext.java
  *
- * Created on 14. kesäkuuta 2007, 13:18
+ * Created on 14. kesï¿½kuuta 2007, 13:18
  *
  */
 
@@ -87,7 +87,7 @@ public class GraphAllNodesContext implements Context {
     public Iterator getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
-        List contextNodes = new ArrayList();
+        List<VNode> contextNodes = new ArrayList<>();
         if(contextSource instanceof Wandora) {
             try {
                 Wandora w = (Wandora) contextSource;

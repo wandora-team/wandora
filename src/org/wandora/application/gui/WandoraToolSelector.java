@@ -30,7 +30,6 @@ package org.wandora.application.gui;
 
 import java.util.*;
 import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
 import java.awt.*;
 
 
@@ -40,7 +39,10 @@ import java.awt.*;
  */
 public class WandoraToolSelector extends javax.swing.JDialog {
 
-    private Wandora wandora = null;;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora = null;
     private boolean selectToolAccepted = false;
     private WandoraToolTable toolTable = null;
     

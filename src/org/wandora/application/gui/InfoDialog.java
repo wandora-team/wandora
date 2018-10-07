@@ -44,6 +44,8 @@ import org.wandora.application.gui.simple.*;
  */
 public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLogger, ActionListener, MouseListener {
     
+	private static final long serialVersionUID = 1L;
+	
     private Wandora wandora;
     private boolean locked = false;
     private boolean forceStop = false;

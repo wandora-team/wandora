@@ -49,8 +49,9 @@ import org.wandora.application.tools.*;
 public class WandoraToolTable extends JTable implements MouseListener, ActionListener /*, DragSourceListener , DragGestureListener*/ {
 
     
-    
-    private Wandora wandora = null;
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora = null;
     
     private Object[] cols = {
         "Name",

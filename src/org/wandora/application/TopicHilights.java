@@ -50,9 +50,9 @@ import static org.wandora.utils.Tuples.*;
 
 public class TopicHilights {
     
-    private HashMap hilighted = new HashMap();
+    private Map<String, Color> hilighted = new LinkedHashMap<>();
     private Wandora wandora = null;
-    private HashMap hilightedTopics = new HashMap();
+    private Map<Topic, Color> hilightedTopics = new LinkedHashMap<>();
     
     public static Color removedTopicColor = new Color(0xa00000);
     
@@ -255,7 +255,7 @@ public class TopicHilights {
     
     public void remove(Topic topic)  throws TopicMapException {
         if(topic != null) {
-            for(Iterator i = topic.getSubjectIdentifiers().iterator(); i.hasNext();) {
+            for(Iterator<Locator> i = topic.getSubjectIdentifiers().iterator(); i.hasNext();) {
                 try {
                     String si = ((Locator) i.next()).toExternalForm();
                     hilighted.remove(si);
@@ -275,8 +275,8 @@ public class TopicHilights {
         }
     }
     public void removeAll() {
-        hilighted = new HashMap();
-        hilightedTopics = new HashMap();
+        hilighted = new HashMap<>();
+        hilightedTopics = new HashMap<>();
     }
     
     

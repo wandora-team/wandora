@@ -50,9 +50,10 @@ public class ApplicationAssociationContext implements Context {
     public ApplicationAssociationContext() {
     }
 
+    
     @Override
     public Iterator getContextObjects() {
-        List contextAssociations = new ArrayList();
+        List<Association> contextAssociations = new ArrayList<>();
         try {
             Wandora w = (Wandora) contextSource;
             Topic currentTopic = w.getOpenTopic();

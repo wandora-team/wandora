@@ -67,9 +67,9 @@ public class AssociationContext extends LayeredTopicContext implements Context {
     
     
     
-    public Iterator getAssociationsOf(Iterator topics) {
+    public Iterator<Association> getAssociationsOf(Iterator topics) {
         if(topics == null) return null;
-        List contextAssociations = new ArrayList();
+        List<Association> contextAssociations = new ArrayList<>();
         Collection<Association> associations = null;
         Topic topic = null;
         Association association = null;

@@ -52,7 +52,8 @@ import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 public class AssociationRowTableExtractor extends AbstractExtractor implements WandoraTool {
    
 
-    private URL basePath = null;
+	private static final long serialVersionUID = 1L;
+	private URL basePath = null;
     public static String SI_PREFIX = "http://wandora.org/si/table";
     
     
@@ -192,7 +193,11 @@ public class AssociationRowTableExtractor extends AbstractExtractor implements W
     
 
     private static class HTMLParse extends HTMLEditorKit {
-        /**
+
+    	
+		private static final long serialVersionUID = 1L;
+
+		/**
         * Call to obtain a HTMLEditorKit.Parser object.
         * @return A new HTMLEditorKit.Parser object.
         */
@@ -239,7 +244,7 @@ public class AssociationRowTableExtractor extends AbstractExtractor implements W
             this.parent = parent;
             defaultAssociationType = "default-association-type";
             state = null;
-            stateStack = new ArrayList();
+            stateStack = new ArrayList<>();
         }
         
 
@@ -299,8 +304,8 @@ public class AssociationRowTableExtractor extends AbstractExtractor implements W
                     if(FIRST_ROW_CONTAINS_ROLES && state.rowCount == 1) { // FIRST ROW!
                         state.roles = state.row;
                         state.roleLinks = state.links;
-                        state.row = new ArrayList();
-                        state.links = new ArrayList();
+                        state.row = new ArrayList<>();
+                        state.links = new ArrayList<>();
                         return;
                     }
                     if(state.row.size() > 0) {
@@ -374,8 +379,8 @@ public class AssociationRowTableExtractor extends AbstractExtractor implements W
                                     parent.log(e);
                                 }
                             }
-                            state.row = new ArrayList();
-                            state.links = new ArrayList();
+                            state.row = new ArrayList<>();
+                            state.links = new ArrayList<>();
                         }
                         catch(Exception e) {
                             parent.log(e);
@@ -439,10 +444,10 @@ public class AssociationRowTableExtractor extends AbstractExtractor implements W
         
         private class TableState {
             public int state = STATE_OTHER;
-            public ArrayList<String> roles = new ArrayList();
-            public ArrayList<String> roleLinks = new ArrayList();
-            public ArrayList<String> row = new ArrayList();
-            public ArrayList<String> links = new ArrayList();
+            public List<String> roles = new ArrayList<>();
+            public List<String> roleLinks = new ArrayList<>();
+            public List<String> row = new ArrayList<>();
+            public List<String> links = new ArrayList<>();
             public String cellString = "";
             public String cellLink = "";
             public int cellCount = 0;

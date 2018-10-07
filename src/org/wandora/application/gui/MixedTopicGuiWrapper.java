@@ -25,7 +25,7 @@
 
 package org.wandora.application.gui;
 
-import java.util.*;
+
 import java.net.*;
 import org.wandora.topicmap.*;
 import javax.swing.tree.*;

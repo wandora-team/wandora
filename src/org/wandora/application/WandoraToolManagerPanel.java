@@ -29,7 +29,6 @@ package org.wandora.application;
 
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import static org.wandora.utils.Tuples.*;
 import java.util.*;
 import javax.swing.*;
@@ -38,8 +37,12 @@ import javax.swing.*;
  * @author  olli
  */
 public class WandoraToolManagerPanel extends javax.swing.JPanel {
-    
-    public static class ListWrapper {
+
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public static class ListWrapper {
         public T2<WandoraTool,String> tool;
         public ListWrapper(T2<WandoraTool,String> tool){
             this.tool=tool;

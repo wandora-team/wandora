@@ -59,7 +59,7 @@ public class AssociationImpl implements Association {
     
     
     @Override
-    public Collection getRoles() {
+    public Collection<Topic> getRoles() {
         return players.keySet();
     }
     
@@ -197,7 +197,7 @@ public class AssociationImpl implements Association {
         removed=true;
         topicMap.associationRemoved(this);
         
-        ArrayList<Topic> roles = new ArrayList(players.keySet());
+        ArrayList<Topic> roles = new ArrayList<>(players.keySet());
         for(Topic role : roles) {
             TopicImpl t=(TopicImpl)players.get(role);
             if(t!=null) {
@@ -239,7 +239,7 @@ public class AssociationImpl implements Association {
                 smallest=c;
             }
         }
-        Set<Association> delete = new HashSet();
+        Set<Association> delete = new HashSet<Association>();
         for(AssociationImpl a : smallest) {
             if(a==this) continue;
             if(a._equals(this)) {

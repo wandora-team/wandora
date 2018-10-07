@@ -39,7 +39,11 @@ import java.awt.event.*;
  */
 public class TopicSelectList extends javax.swing.JPanel  {
     
-    private Topic[] topics;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private Topic[] topics;
     private JComboBox cbox;
     private JTextField field;
     private boolean running;

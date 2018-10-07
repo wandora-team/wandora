@@ -60,7 +60,7 @@ public class AdminSocketServer extends Thread implements PiccoloShutdownHook {
     private boolean running;
     private WandoraManager manager;
     
-    private Collection socketThreads;
+    private Collection<SocketThread> socketThreads;
     
     private Logger logger;
     
@@ -96,7 +96,7 @@ public class AdminSocketServer extends Thread implements PiccoloShutdownHook {
 //        if(!fileStore.endsWith(File.separator)) fileStore+=File.separator;
         port=serverPort;
         customCommands=null;
-        socketThreads=new Vector();
+        socketThreads=new Vector<>();
         try{
             serverSocket=new ServerSocket(port);
             running=true;
@@ -111,7 +111,7 @@ public class AdminSocketServer extends Thread implements PiccoloShutdownHook {
         try{
             serverSocket.close();
         }catch(IOException ioe){}
-        Iterator iter=new Vector(socketThreads).iterator();
+        Iterator<SocketThread> iter=new Vector(socketThreads).iterator();
         while(iter.hasNext()){
             SocketThread st=(SocketThread)iter.next();
             st.stopThread();

@@ -36,7 +36,8 @@ import org.wandora.application.*;
  * @author  olli
  */
 public abstract class ResourceEditor extends javax.swing.JPanel {   
-    public abstract void initializeAssociation(Topic t,Association a,Wandora parent) throws TopicMapException ;
+
+	public abstract void initializeAssociation(Topic t,Association a,Wandora parent) throws TopicMapException ;
     public abstract void initializeOccurrence(Topic t,Topic otype,Wandora parent) throws TopicMapException ;
     public abstract boolean applyChanges(Topic t,Wandora parent) throws TopicMapException ;
     public abstract boolean hasChanged() throws TopicMapException ;

@@ -37,6 +37,9 @@ import javax.swing.*;
  * @author  akivela
  */
 public class NewTopicPanel extends javax.swing.JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
     
     private boolean accepted = false;
     private JDialog parent = null;

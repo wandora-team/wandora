@@ -45,7 +45,10 @@ import java.util.*;
  */
 public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSelector {
     
-    private ArrayList<TopicSelector> selectors;
+
+	private static final long serialVersionUID = 1L;
+
+	private ArrayList<TopicSelector> selectors;
     private boolean wasCancelled=true;
     private boolean cleared=false;
     

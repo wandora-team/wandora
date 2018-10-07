@@ -64,6 +64,8 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
  */
 public class LayerTree extends DragJTree {
 
+	
+	private static final long serialVersionUID = 1L;
     
     
     private static Color bgColor=UIConstants.defaultInactiveBackground; // new Color(238,238,238);

@@ -41,6 +41,9 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class ModifyLayerDialog extends javax.swing.JDialog {
+	
+	private static final long serialVersionUID = 1L;
+	
     
     private TopicMapConfigurationPanel modifyPanel;
     private TopicMapType modifyType;

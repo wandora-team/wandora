@@ -44,7 +44,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.ApplicationContext;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.occurrences.*;
 import org.wandora.application.tools.occurrences.DeleteOccurrence;
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
@@ -60,7 +59,11 @@ import org.wandora.utils.swing.*;
  */
 public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, MouseListener, Clipboardable {
     
-    public String tableType = VIEW_SCHEMA;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public String tableType = VIEW_SCHEMA;
     
     private Topic topic;
     private Topic[] langs;
@@ -71,7 +74,7 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, 
     private Wandora wandora;
     private Options options;
     private TableTopicWrapper[] wrappedTypes;
-    private HashSet removedTypes;
+    private Set<Topic> removedTypes;
     private String[][] originalData;
     private int rowHeight = 1;
     
@@ -129,7 +132,7 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, 
         langs=langArray.toArray( new Topic[langArray.size()] );
         
         wrappedTypes=new TableTopicWrapper[types.length];
-        removedTypes=new HashSet();
+        removedTypes=new HashSet<>();
         
         data=new String[types.length][langs.length];
         originalData=new String[types.length][langs.length];
@@ -748,7 +751,10 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, 
     
     
     private class DataCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
-        private Topic type,version;
+
+		private static final long serialVersionUID = 1L;
+
+		private Topic type,version;
         private SimpleTextPane label;
         private String editedText;
         int realCol,realRow;
@@ -826,7 +832,10 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, 
     
     
     private class DeleteCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.ActionListener {        
-        private JButton button;
+
+		private static final long serialVersionUID = 1L;
+
+		private JButton button;
         private Topic type;
         
         public DeleteCellEditor() {
@@ -930,7 +939,10 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, 
     
 
     private class TopicCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
-        private Topic topic;
+
+		private static final long serialVersionUID = 1L;
+
+		private Topic topic;
         private JLabel label;
         
         public TopicCellEditor(){
@@ -991,9 +1003,12 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, 
     
     
     private class DataTableModel extends AbstractTableModel {
-        
-        
-        public int getColumnCount() {
+
+    	
+		private static final long serialVersionUID = 1L;
+
+
+		public int getColumnCount() {
             if(langs == null) return 0;
             return langs.length+1;
         }
@@ -1097,7 +1112,11 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, 
     
     private class OccurrencesTableTransferHandler extends TransferHandler {
 
-        @Override
+
+		private static final long serialVersionUID = 1L;
+
+		
+		@Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
             return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor) ||

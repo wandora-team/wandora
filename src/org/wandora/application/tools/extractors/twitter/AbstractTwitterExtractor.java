@@ -29,6 +29,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -224,7 +225,7 @@ public class AbstractTwitterExtractor extends AbstractExtractor {
                             twitterSearchTopic.setData(twitterSearchQueryType, TMBox.getLangTopic(twitterSearchTopic, DEFAULT_LANG), currentQuery.getQuery());
                         }
 
-                        ArrayList tweets = (ArrayList) result.getTweets();
+                        List<Status> tweets = result.getTweets();
                         for(Object tweet : tweets) {
                             if(tweet != null && tweet instanceof Status) {
                                 Status t = (Status) tweet;
@@ -234,7 +235,7 @@ public class AbstractTwitterExtractor extends AbstractExtractor {
                         }
 
                         try {
-                            Thread.currentThread().sleep(SLEEP_TIME_BETWEEN_SEARCHES);
+                            Thread.sleep(SLEEP_TIME_BETWEEN_SEARCHES);
                         }
                         catch(Exception e) {
                             // ...WAKE UP...

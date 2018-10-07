@@ -122,7 +122,7 @@ public class LayeredTopicContext implements Context {
     public Iterator getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
-        ArrayList contextTopics = new ArrayList();
+        List<Topic> contextTopics = new ArrayList<>();
         
         // ***** Wandora *****
         if(contextSource instanceof Wandora) {

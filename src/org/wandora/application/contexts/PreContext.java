@@ -49,26 +49,26 @@ public class PreContext implements Context {
     protected ActionEvent actionEvent = null;
     protected Wandora wandora = null;
     
-    private Collection contextObjects;
+    private Collection<Object> contextObjects;
     
     
     /** Creates a new instance of PreContext */
     public PreContext(Locator locator) {
-        contextObjects = new ArrayList();
+        contextObjects = new ArrayList<>();
         contextObjects.add(locator);
     }
     
     public PreContext(Locator[] locators) {
-        contextObjects = new ArrayList();
+        contextObjects = new ArrayList<>();
         contextObjects.addAll(Arrays.asList(locators));
     }
     public PreContext(Topic locator) {
-        contextObjects = new ArrayList();
+        contextObjects = new ArrayList<>();
         contextObjects.add(locator);
     }
     
     public PreContext(Topic[] locators) {
-        contextObjects = new ArrayList();
+        contextObjects = new ArrayList<>();
         contextObjects.addAll(Arrays.asList(locators));
     }
     

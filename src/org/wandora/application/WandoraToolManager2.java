@@ -57,7 +57,12 @@ import org.wandora.application.tools.project.*;
  * @author akivela
  */
 public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraTool {
-    public static final boolean ADDITIONAL_DEBUG = false;
+
+
+	private static final long serialVersionUID = 1L;
+
+
+	public static final boolean ADDITIONAL_DEBUG = false;
     
     
     private KeyStroke[] accelerators = new KeyStroke[] {

@@ -45,6 +45,9 @@ import org.wandora.topicmap.database.*;
  * @author  olli
  */
 public class DatabaseConfigurationPanel extends javax.swing.JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
     public final static String GENERIC_TYPE = "Generic";
     
     

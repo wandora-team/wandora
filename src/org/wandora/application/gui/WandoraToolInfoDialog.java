@@ -43,7 +43,11 @@ import org.wandora.application.WandoraToolManager2.ToolInfo;
  */
 public class WandoraToolInfoDialog extends javax.swing.JDialog {
 
-    private Wandora wandora;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private Wandora wandora;
     
     
     /** Creates new form WandoraToolInfoDialog */

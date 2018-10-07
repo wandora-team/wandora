@@ -82,9 +82,9 @@ public class AllEmptyVariantRemover extends AbstractWandoraTool implements Wando
                 Topic topic = null;
                 String variant = null;
 
-                ArrayList deleteScopes = null;
-                Collection scopes = null;
-                Iterator scopeIterator = null;
+                ArrayList<Set<Topic>> deleteScopes = null;
+                Collection<Set<Topic>> scopes = null;
+                Iterator<Set<Topic>> scopeIterator = null;
                 Set<Topic> scope = null;
                 int progress = 0;
                 int deleted = 0;
@@ -96,7 +96,7 @@ public class AllEmptyVariantRemover extends AbstractWandoraTool implements Wando
                             progress++;
                             scopes = topic.getVariantScopes();
                             if(scopes != null) {
-                                deleteScopes = new ArrayList();
+                                deleteScopes = new ArrayList<>();
                                 scopeIterator = scopes.iterator();
                                 while(scopeIterator.hasNext()) {
                                     try {

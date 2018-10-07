@@ -50,6 +50,8 @@ import org.wandora.utils.swing.JPanelWithBackground;
  */
 public class EditorPanel extends JPanelWithBackground implements DropTargetListener, DragGestureListener {
     
+	private static final long serialVersionUID = 1L;
+	
     private Object dropContext = null;
     protected Wandora parent = null;
     private DropTarget dt;

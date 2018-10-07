@@ -21,7 +21,7 @@
  * 
  * WandoraOptionPane.java
  *
- * Created on 14. kesäkuuta 2006, 11:16
+ * Created on 14. kesï¿½kuuta 2006, 11:16
  */
 
 package org.wandora.application.gui;
@@ -40,7 +40,12 @@ import org.wandora.application.Wandora;
  * @author  akivela
  */
 public class WandoraOptionPane extends javax.swing.JPanel implements ActionListener, MouseListener {
-    public static final int YES_OPTION = 1100;
+
+	
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final int YES_OPTION = 1100;
     public static final int YES_TO_ALL_OPTION = 1102;
     public static final int NO_OPTION = 1110;
     public static final int CANCEL_OPTION = 1120;

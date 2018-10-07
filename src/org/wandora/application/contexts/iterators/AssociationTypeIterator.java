@@ -41,10 +41,10 @@ public class AssociationTypeIterator extends TopicIterator {
 
     @Override
     public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
-        Collection associationTypeTopics = new ArrayList();
-        Collection associations = null;
+        Collection<Topic> associationTypeTopics = new ArrayList<>();
+        Collection<Association> associations = null;
         Association association = null;
-        Iterator associationIterator = null;
+        Iterator<Association> associationIterator = null;
         
         if(topic != null) {
             try{
@@ -52,7 +52,7 @@ public class AssociationTypeIterator extends TopicIterator {
                 if(associations != null) {
                     associationIterator = associations.iterator();
                     while(associationIterator.hasNext()) {
-                        association = (Association) associationIterator.next();
+                        association = associationIterator.next();
                         if(association == null) continue;
                         associationTypeTopics.add(association.getType());
                     }

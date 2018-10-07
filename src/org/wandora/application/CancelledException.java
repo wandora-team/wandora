@@ -43,6 +43,8 @@ package org.wandora.application;
  */
 public class CancelledException extends Exception {
     
+	private static final long serialVersionUID = 1L;
+	
     /** Creates a new instance of CancelledException */
     public CancelledException() {
     }

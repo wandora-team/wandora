@@ -37,7 +37,7 @@ import java.util.*;
  * @author akivela
  */
 public class MultiContextCollected implements Context {
-    private List<Context> multiContext = new ArrayList();
+    private List<Context> multiContext = new ArrayList<>();
     public boolean removeDuplicates = true;
     private Object contextSource;
     private ActionEvent contextEvent;
@@ -79,8 +79,8 @@ public class MultiContextCollected implements Context {
     
     @Override
     public Iterator getContextObjects() {
-        Collection contextObjects = new ArrayList();
-        Iterator tempContextObjects;
+        Collection<Object> contextObjects = new ArrayList<>();
+        Iterator<Object> tempContextObjects;
         Object contextObject = null;
         Context context = null;
         for(Iterator<Context> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {

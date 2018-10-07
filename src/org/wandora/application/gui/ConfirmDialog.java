@@ -21,7 +21,7 @@
  * 
  * ConfirmDialog.java
  *
- * Created on 6. kesäkuuta 2006, 11:40
+ * Created on 6. kesï¿½kuuta 2006, 11:40
  */
 
 package org.wandora.application.gui;
@@ -37,7 +37,9 @@ import org.wandora.utils.swing.GuiTools;
  */
 public class ConfirmDialog extends javax.swing.JDialog {
     
-    private ConfirmResult result=ConfirmResult.cancel;
+	private static final long serialVersionUID = 1L;
+	
+	private ConfirmResult result=ConfirmResult.cancel;
     
     /** Creates new form ConfirmDialog */
     private ConfirmDialog(java.awt.Frame parent, boolean modal) {

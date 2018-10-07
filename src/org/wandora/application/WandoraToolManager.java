@@ -36,7 +36,6 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import javax.swing.*;
 import java.util.*;
 import java.awt.event.*;
-import java.awt.*;
 import java.net.*;
 import java.io.*;
 
@@ -63,7 +62,11 @@ import org.wandora.application.tools.project.*;
 
 public class WandoraToolManager extends AbstractWandoraTool implements WandoraTool {
 
-    private KeyStroke[] accelerators = new KeyStroke[] {
+
+	private static final long serialVersionUID = 1L;
+
+
+	private KeyStroke[] accelerators = new KeyStroke[] {
         KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK),
         KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK),
         KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK),

@@ -44,7 +44,10 @@ import org.wandora.utils.*;
 
     
 public class WandoraToolSet implements Serializable {
-    private int index = 0;
+
+	
+	private static final long serialVersionUID = 1L;
+	private int index = 0;
     private String name = null;
     private List tools = new ArrayList();
     private Wandora wandora = null;

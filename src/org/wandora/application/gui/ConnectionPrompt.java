@@ -21,15 +21,13 @@
  * 
  * ConnnectionPrompt.java
  *
- * Created on 29. kesäkuuta 2005, 16:37
+ * Created on 29. kesï¿½kuuta 2005, 16:37
  */
 
 package org.wandora.application.gui;
 
 import org.wandora.utils.swing.ImagePanel;
-import org.wandora.application.gui.simple.SimpleButton;
-import org.wandora.application.gui.simple.SimpleField;
-import org.wandora.application.gui.simple.SimpleLabel;
+
 
 /**
  *
@@ -37,7 +35,9 @@ import org.wandora.application.gui.simple.SimpleLabel;
  * @author  olli
  */
 public class ConnectionPrompt extends javax.swing.JDialog {
-    
+	
+	private static final long serialVersionUID = 1L;
+	
     private boolean wasCancelled=true;
     private String titleImage = "gui/login_main.gif";
     

@@ -21,7 +21,7 @@
  * 
  * DropExtractPanel.java
  *
- * Created on 8. kesäkuuta 2006, 15:25
+ * Created on 8. kesï¿½kuuta 2006, 15:25
  */
 
 package org.wandora.application.gui;
@@ -53,7 +53,10 @@ import org.wandora.application.tools.extractors.*;
  * @author  akivela
  */
 public class DropExtractPanel extends JPanel implements ComponentListener, ActionListener, MouseListener, DropTargetListener, DragGestureListener, WandoraToolLogger {
-    private Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora wandora = null;
     private WandoraTool tool = null;
     private DropTarget dt;
     private JPopupMenu popup = null;

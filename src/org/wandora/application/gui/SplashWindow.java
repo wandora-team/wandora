@@ -21,7 +21,7 @@
  * 
  * SplashWindow.java
  *
- * Created on 15. kesäkuuta 2006, 12:00
+ * Created on 15. kesï¿½kuuta 2006, 12:00
  *
  */
 
@@ -38,7 +38,11 @@ import java.awt.*;
  */
 public class SplashWindow extends JWindow {
     
-    protected JLabel splashLabel = null;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	protected JLabel splashLabel = null;
     
     
     /** Creates a new instance of SplashWindow */

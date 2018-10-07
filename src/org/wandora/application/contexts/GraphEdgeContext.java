@@ -21,7 +21,7 @@
  * 
  * GraphEdgeContext.java
  *
- * Created on 13. kesäkuuta 2007, 15:58
+ * Created on 13. kesï¿½kuuta 2007, 15:58
  *
  */
 
@@ -89,7 +89,7 @@ public class GraphEdgeContext implements Context {
     public Iterator getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
-        List contextEdges = new ArrayList();
+        List<VEdge> contextEdges = new ArrayList<>();
         if(contextSource instanceof Wandora) {
             try {
                 Wandora w = (Wandora) contextSource;

@@ -56,7 +56,7 @@ public class PlayerContextCollected extends AssociationContext implements Contex
     
     public Iterator getPlayersOf(Iterator associations) {
         if(associations == null) return null;
-        List contextTopics = new ArrayList();
+        List<Topic> contextTopics = new ArrayList<>();
         
         Association association = null;
         Collection<Topic> roleTopics = null;
@@ -69,7 +69,7 @@ public class PlayerContextCollected extends AssociationContext implements Contex
                 if(association == null) continue;
                 roleTopics = association.getRoles();
                 if(roleTopics != null && roleTopics.size() > 0) {
-                    for(Iterator roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
+                    for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
                         try {
                             roleTopic = (Topic) roleIterator.next();
                             playerTopic = association.getPlayer(roleTopic);

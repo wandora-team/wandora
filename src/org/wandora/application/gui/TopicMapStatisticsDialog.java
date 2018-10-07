@@ -42,8 +42,12 @@ import javax.swing.*;
  * @author  akivela
  */
 public class TopicMapStatisticsDialog extends javax.swing.JDialog {
-    
-    private Wandora wandora = null;
+
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private Wandora wandora = null;
     private TopicMap map = null;
     private StringBuffer stats = null;
     

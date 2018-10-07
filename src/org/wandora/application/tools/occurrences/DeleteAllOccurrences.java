@@ -45,6 +45,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public class DeleteAllOccurrences extends AbstractWandoraTool implements WandoraTool {
     
+	
+	private static final long serialVersionUID = 1L;
+	
     
     public DeleteAllOccurrences(Context proposedContext) {
         this.setContext(proposedContext);

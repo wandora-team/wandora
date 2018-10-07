@@ -24,7 +24,6 @@
 package org.wandora.topicmap.similarity;
 
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -91,14 +90,14 @@ public class AssociationStringSimilarity implements TopicSimilarity {
     
     public Collection<String> getAssociationsAsStrings(Topic t) throws TopicMapException {
         Collection<Association> as = t.getAssociations();
-        ArrayList<String> asStr = new ArrayList();
+        ArrayList<String> asStr = new ArrayList<>();
         
         for(Association a : as) {
             StringBuilder sb = new StringBuilder("");
             sb.append(getAsString(a.getType()));
             sb.append(TOPIC_DELIMITER);
             Collection<Topic> roles = a.getRoles();
-            ArrayList<Topic> sortedRoles = new ArrayList();
+            ArrayList<Topic> sortedRoles = new ArrayList<>();
             sortedRoles.addAll(roles);
             Collections.sort(sortedRoles, new TopicStringComparator());
             
@@ -134,7 +133,7 @@ public class AssociationStringSimilarity implements TopicSimilarity {
     
     
     
-    private class TopicStringComparator implements Comparator {
+    private class TopicStringComparator implements Comparator<Object> {
 
         @Override
         public int compare(Object o1, Object o2) {

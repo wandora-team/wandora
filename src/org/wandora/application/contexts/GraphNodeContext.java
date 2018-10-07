@@ -21,7 +21,7 @@
  * 
  * NodeContext.java
  *
- * Created on 13. kesäkuuta 2007, 15:04
+ * Created on 13. kesï¿½kuuta 2007, 15:04
  *
  */
 
@@ -93,7 +93,7 @@ public class GraphNodeContext implements Context {
         
         System.out.println("GraphNodeContext contextsource == "+contextSource);
         
-        ArrayList contextNodes = new ArrayList();
+        List<VNode> contextNodes = new ArrayList<>();
         if(contextSource instanceof Wandora) {
             try {
                 Wandora wandora = (Wandora) contextSource;

@@ -43,7 +43,10 @@ import bsh.*;
 public class BSHLibrary extends Vector<BSHComponent> {
     
     
-    private HashMap componentCache = null;
+
+
+	private static final long serialVersionUID = 1L;
+	private Map<String,Vector<BSHComponent>> componentCache = null;
     private Interpreter interpreter = null;
     private int limit = 1000;
     public boolean useCache = true;
@@ -60,7 +63,7 @@ public class BSHLibrary extends Vector<BSHComponent> {
     
     /** Creates a new instance of BSHLibrary */
     public BSHLibrary(String bshDir) {
-        componentCache = new HashMap();
+        componentCache = new HashMap<>();
         interpreter = new Interpreter();
         readBSHScripts(new File(bshDir));
     }
@@ -77,7 +80,7 @@ public class BSHLibrary extends Vector<BSHComponent> {
             return (Vector<BSHComponent>) componentCache.get(name);
         }
         else {
-            Vector<BSHComponent> components = new Vector();
+            Vector<BSHComponent> components = new Vector<>();
             for(BSHComponent bshc : this) {
                 if(bshc.includeComponentIn(name)) {
                     components.add(bshc);

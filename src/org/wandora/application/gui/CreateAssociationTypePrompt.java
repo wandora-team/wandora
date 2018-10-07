@@ -21,7 +21,7 @@
  * 
  * CreateAssociationTypePrompt.java
  *
- * Created on 15. kesäkuuta 2006, 10:27
+ * Created on 15. kesï¿½kuuta 2006, 10:27
  */
 
 package org.wandora.application.gui;
@@ -41,6 +41,8 @@ import java.util.*;
  */
 public class CreateAssociationTypePrompt extends javax.swing.JDialog {
 
+	private static final long serialVersionUID = 1L;
+	
     private GetTopicButton typeButton;    
     private Wandora admin;
     private Vector<T2<GetTopicButton,GetTopicButton>> roles;

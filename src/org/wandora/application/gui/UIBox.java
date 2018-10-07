@@ -41,14 +41,13 @@ import javax.swing.*;
 
 import org.wandora.utils.*;
 import org.wandora.utils.swing.*;
-import org.wandora.topicmap.layered.*;
 
 import org.wandora.application.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.topicpanels.*;
 import org.wandora.application.gui.topicpanels.graphpanel.*;
 import org.wandora.application.gui.topicpanels.webview.WebViewPanel;
-import org.wandora.utils.Base64;
+
 
 
 

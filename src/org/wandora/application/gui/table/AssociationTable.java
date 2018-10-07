@@ -46,7 +46,9 @@ import org.wandora.utils.ClipboardBox;
  */
 public class AssociationTable extends TopicTable {
     
-    private Wandora wandora;
+
+	private static final long serialVersionUID = 1L;
+	private Wandora wandora;
     private Association[] associations;
     private Topic[][] tableTopics;
     private Topic[] columnTopics;
@@ -57,15 +59,15 @@ public class AssociationTable extends TopicTable {
     
     
     /** Creates a new instance of AssociationTable */
-    public AssociationTable(Collection as, Wandora w, Topic topic)  throws TopicMapException {
+    public AssociationTable(Collection<Association> as, Wandora w, Topic topic)  throws TopicMapException {
         super(w);
         
         this.wandora = w;
         this.topic=topic;
-        Collection roles=new HashSet();
-        Iterator iter=as.iterator();
+        Collection<Topic> roles=new LinkedHashSet<>();
+        Iterator<Association> iter=as.iterator();
         while(iter.hasNext()){
-            Association a=(Association)iter.next();
+            Association a=iter.next();
             roles.addAll(a.getRoles());
             associationTypeTopic = a.getType();
         }
@@ -181,9 +183,9 @@ public class AssociationTable extends TopicTable {
     // -------------------------------------------------------------------------
 
     
-    public Collection getSelectedAssociations() {
-        ArrayList<int[]> selected = getSelectedCells();
-        ArrayList selectedAssociations = new ArrayList();
+    public Collection<Association> getSelectedAssociations() {
+        List<int[]> selected = getSelectedCells();
+        List<Association> selectedAssociations = new ArrayList<>();
         Association a = null;
 
         if(!selected.isEmpty()) {
@@ -202,8 +204,8 @@ public class AssociationTable extends TopicTable {
     }
     
     
-    public Collection getAllAssociations() {
-        ArrayList allAssociations = new ArrayList();
+    public Collection<Association> getAllAssociations() {
+        List<Association> allAssociations = new ArrayList<>();
         allAssociations.addAll(Arrays.asList(associations));
         return allAssociations;
     }
@@ -291,7 +293,7 @@ public class AssociationTable extends TopicTable {
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        URL u = new URL(topicIdentifier);
+                                        new URL(topicIdentifier);
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}
@@ -346,7 +348,10 @@ public class AssociationTable extends TopicTable {
     
     private class AssociationTableTransferHandler extends TransferHandler {
 
-        @Override
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
             return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||

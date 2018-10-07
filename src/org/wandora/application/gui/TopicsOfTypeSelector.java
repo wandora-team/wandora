@@ -21,25 +21,30 @@
  * 
  * TopicsOfTypeSelector.java
  *
- * Created on 9. heinäkuuta 2007, 13:56
+ * Created on 9. heinï¿½kuuta 2007, 13:56
  */
 
 package org.wandora.application.gui;
 import java.awt.Component;
 import javax.swing.*;
-import org.wandora.application.Wandora;
 import org.wandora.topicmap.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.topicmap.TMBox;
 import java.util.*;
 import org.wandora.topicmap.SchemaBox;
+
+
+
 /**
  *
  * @author  olli
  */
 public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSelector, Runnable {
     
-    private DefaultListModel listModel;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private DefaultListModel listModel;
     private Topic typeTopic;
     private Thread thread;
     private boolean running;

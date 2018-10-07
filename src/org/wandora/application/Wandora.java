@@ -37,15 +37,16 @@ package org.wandora.application;
 import com.mashape.unirest.http.Unirest;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.logging.Level;
+import java.util.List;
+
 import javax.swing.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.search.QueryPanel;
 import org.wandora.application.gui.search.SearchPanel;
-import org.wandora.application.gui.search.SelectTopicPanel;
 import org.wandora.application.gui.search.SimilarityPanel;
 import org.wandora.application.gui.search.TMQLPanel;
 import org.wandora.application.gui.simple.*;
@@ -182,8 +183,8 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     private String frameTitle="Wandora";
     
-    private HashSet<TopicMapListener> topicMapListeners;
-    private HashSet<RefreshListener> refreshListeners;
+    private Set<TopicMapListener> topicMapListeners;
+    private Set<RefreshListener> refreshListeners;
   
   
     private Component focusOwner;
@@ -192,7 +193,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     private JPopupMenu forwardPopup = new JPopupMenu();
     
 
-    private HashSet animationCallers = new HashSet();
+    private Set animationCallers = new HashSet();
     
 
 
@@ -219,7 +220,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     /*
      * <code>wandoraIcons</code> is a data structure for Wandora application icons.
      */
-    public ArrayList wandoraIcons = new ArrayList();
+    public List<BufferedImage> wandoraIcons = new ArrayList<>();
 
 
     /*

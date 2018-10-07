@@ -52,7 +52,11 @@ import org.wandora.topicmap.XTMPSI;
  */
 public class VariantNameEditor extends javax.swing.JPanel {
 
-    private JDialog myDialog = null;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private JDialog myDialog = null;
     private boolean wasAccepted = false;
     private ArrayList<Topic> scopeTopics = new ArrayList<Topic>();
     private Wandora wandora = null;
@@ -431,7 +435,10 @@ public class VariantNameEditor extends javax.swing.JPanel {
 
     private class VariantScopeListModel extends DefaultListModel implements ListModel {
 
-        @Override
+		private static final long serialVersionUID = 1L;
+
+
+		@Override
         public int getSize() {
             if(scopeTopics != null) {
                 return scopeTopics.size();

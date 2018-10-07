@@ -38,6 +38,7 @@ import org.wandora.topicmap.*;
  * @author  olli, akivela
  */
 public interface OccurrenceTable extends MouseListener, Clipboardable {
+	
     public static final String OPTIONS_KEY = "gui.occurrenceTable";
     public static final String VIEW_OPTIONS_KEY = "gui.occurrenceTable.view";
     public static final String ROW_HEIGHT_OPTIONS_KEY = "gui.occurrenceTable.rowHeight";

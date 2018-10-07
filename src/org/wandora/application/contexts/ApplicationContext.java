@@ -58,7 +58,7 @@ public class ApplicationContext implements Context {
     
     @Override
     public Iterator getContextObjects() {
-        List contextTopics = new ArrayList();
+        List<Topic> contextTopics = new ArrayList<>();
         try {
             Wandora w = (Wandora) contextSource;
             Topic currentTopic = w.getOpenTopic();

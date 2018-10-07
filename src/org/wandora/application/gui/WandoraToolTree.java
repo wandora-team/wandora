@@ -47,8 +47,11 @@ import java.awt.datatransfer.*;
  */
 public class WandoraToolTree extends SimpleTree implements MouseListener, TreeModelListener, TreeSelectionListener, ActionListener /*, DragSourceListener, DragGestureListener*/ {
     
-    
-    private Wandora wandora;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private Wandora wandora;
     private MouseEvent mouseEvent;
     private WandoraToolSet toolSet = null;
     protected TreeModel toolTreeModel = null;

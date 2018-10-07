@@ -32,7 +32,6 @@ package org.wandora.application;
 import java.awt.*;
 import java.awt.event.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -45,7 +44,10 @@ import javax.swing.*;
  */
 public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
 
-    private Wandora wandora;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora;
     private WandoraToolManager2 manager;
     private JDialog parent;
     private WandoraToolSet currentToolSet = null;

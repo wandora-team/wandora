@@ -48,7 +48,11 @@ import java.util.*;
 public class BasenameNewlineRemover extends AbstractWandoraTool implements WandoraTool {
 
 
-    public BasenameNewlineRemover() {
+
+	private static final long serialVersionUID = 1L;
+
+
+	public BasenameNewlineRemover() {
     }
     public BasenameNewlineRemover(Context preferredContext) {
         setContext(preferredContext);
@@ -106,7 +110,7 @@ public class BasenameNewlineRemover extends AbstractWandoraTool implements Wando
                 }
             }
 
-            ArrayList<Topic> changeList = new ArrayList();
+            List<Topic> changeList = new ArrayList<>();
             changeList.addAll(changeTopics.keySet());
             
             for(Topic t : changeList) {

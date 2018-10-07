@@ -158,7 +158,7 @@ public class LocatorHistory {
     
     
     public Collection<Locator> getLocators() {
-        Collection locs = new ArrayList();
+        Collection<Locator> locs = new ArrayList<>();
         Locator l = null;
         for(int i=0; i<top; i++) {
             l = history.get(i).e1;
@@ -174,7 +174,7 @@ public class LocatorHistory {
     
     
     public Object[] getBackPopupStruct(Wandora admin) {
-        Collection struct = new ArrayList();
+        Collection<Object> struct = new ArrayList<>();
         Locator l = null;
         Topic t = null;
         String name = null;
@@ -209,7 +209,7 @@ public class LocatorHistory {
     
     
     public Object[] getForwardPopupStruct(Wandora admin) {
-        Collection struct = new ArrayList();
+        Collection<Object> struct = new ArrayList<>();
         Locator l = null;
         Topic t = null;
         String name = null;

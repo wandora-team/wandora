@@ -21,7 +21,7 @@
  * 
  * TopicEditorPanel.java
  *
- * Created on 31. heinäkuuta 2006, 11:41
+ * Created on 31. heinï¿½kuuta 2006, 11:41
  *
  */
 
@@ -39,7 +39,10 @@ import org.wandora.application.*;
  */
 public class TopicEditorPanel extends EditorPanel implements Scrollable {
     
-    /** Creates a new instance of TopicEditorPanel */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of TopicEditorPanel */
     public TopicEditorPanel(Wandora wandora, Object dc) {
         super(wandora,dc);
     }

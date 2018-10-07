@@ -51,7 +51,12 @@ import org.wandora.application.gui.simple.SimpleTextPane;
 
 
 public class RegularExpressionEditor extends javax.swing.JDialog implements ActionListener {
-    public static final String OPTIONS_PREFIX = "regexp.";
+
+	
+	private static final long serialVersionUID = 1L;
+
+	
+	public static final String OPTIONS_PREFIX = "regexp.";
     
     public static final String DEFAULT_PATTERN_NAME = "User expression";
     
@@ -76,7 +81,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     public RegularExpressionEditor(Wandora w) {
         super(w, true);
         this.wandora = w;
-        patterns = new LinkedHashMap();
+        patterns = new LinkedHashMap<>();
         if(wandora != null) {
             parsePatternOptions(wandora.options);
             //setIconImage(admin.getIconImage());
@@ -505,7 +510,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             exportPatterns();
         }
         else if("Delete all expressions...".equalsIgnoreCase(c)) {
-            patterns = new LinkedHashMap();
+            patterns = new LinkedHashMap<>();
             wandora.options.removeAll(OPTIONS_PREFIX);
             initPatternsComboBox();
         }
@@ -756,7 +761,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     
     
     public void importPatterns(File file) {
-        patterns = new LinkedHashMap();
+        patterns = new LinkedHashMap<>();
         mergePatterns(file);
     }
     
@@ -776,7 +781,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     
     
     public void importPatterns(String resourceName) {
-        patterns = new LinkedHashMap();
+        patterns = new LinkedHashMap<>();
         mergePatterns(resourceName);
     }
     

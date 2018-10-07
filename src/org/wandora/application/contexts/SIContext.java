@@ -97,7 +97,7 @@ public class SIContext implements Context {
     }
     
     
-    public void digSIs(ArrayList locators, Topic topic) {
+    public void digSIs(List<Locator> locators, Topic topic) {
         if(topic == null) return;
         try {
             Collection<Locator> sis = topic.getSubjectIdentifiers();
@@ -109,9 +109,9 @@ public class SIContext implements Context {
             e.printStackTrace();
         }
     }
-    public void digSIs(ArrayList locators, Collection topics) {
+    public void digSIs(List<Locator> locators, Collection<Topic> topics) {
         if(topics == null) return;
-        for(Iterator i=topics.iterator(); i.hasNext(); ) {
+        for(Iterator<Topic> i=topics.iterator(); i.hasNext(); ) {
             digSIs(locators, (Topic) i.next());
         }
     }
@@ -119,7 +119,7 @@ public class SIContext implements Context {
     public Iterator getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
-        ArrayList contextLocators = new ArrayList();
+        List<Locator> contextLocators = new ArrayList<>();
         if(contextSource instanceof LocatorTable) {
             try {
                 Locator[] selection = ((LocatorTable) contextSource).getSelectedLocators();

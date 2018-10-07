@@ -29,7 +29,7 @@
 package org.wandora.application.gui;
 
 
-import java.awt.Component;
+
 import org.wandora.application.gui.table.TopicTable;
 import java.io.IOException;
 import javax.swing.*;
@@ -37,7 +37,6 @@ import java.awt.datatransfer.*;
 import java.util.*;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.application.gui.table.TopicGrid;
-import org.wandora.application.gui.table.TopicTableModel;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;

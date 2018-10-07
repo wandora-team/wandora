@@ -30,6 +30,8 @@ package org.wandora.application;
 
 import java.io.*;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -51,7 +53,7 @@ import org.wandora.application.gui.simple.*;
 public class Shortcuts implements ActionListener {
     public static final String OPTIONS_PREFIX = "shortcuts.";
     
-    private ArrayList shortcuts;
+    private List<String> shortcuts;
     private Wandora wandora;
     
     private ManageDialog manageDialog = null;
@@ -87,7 +89,7 @@ public class Shortcuts implements ActionListener {
     /** Creates a new instance of Shortcuts */
     public Shortcuts(Wandora w) {
         this.wandora = w;
-        shortcuts = new ArrayList();
+        shortcuts = new ArrayList<>();
         loadShortcuts(wandora.options);
     }
 
@@ -123,15 +125,15 @@ public class Shortcuts implements ActionListener {
 
     
     public Object[] getMenuStructure() throws TopicMapException {
-        ArrayList shortcutMenuStructure = new ArrayList();
+        List<Object> shortcutMenuStructure = new ArrayList<>();
         Topic t = null;
         TopicMap topicMap = wandora.getTopicMap();
         if(topicMap != null) {
             String name = null;
             int acceleratorCount = 0;
 
-            for(Iterator iter=shortcuts.iterator(); iter.hasNext(); ) {
-                String si = (String) iter.next();
+            for(Iterator<String> iter=shortcuts.iterator(); iter.hasNext(); ) {
+                String si = iter.next();
                 t = null;
                 try{
                     t=topicMap.getTopic(si);
@@ -171,7 +173,7 @@ public class Shortcuts implements ActionListener {
         if("Add shortcut".equalsIgnoreCase(c)) {
             Topic t=wandora.getOpenTopic();
             if(t != null) {
-                Collection tsis=null;
+                Collection<Locator> tsis=null;
                 try {
                     tsis=t.getSubjectIdentifiers();
                     if(tsis!=null && tsis.size() > 1) {
@@ -267,10 +269,9 @@ public class Shortcuts implements ActionListener {
         try {
             OutputStream fos=new FileOutputStream(file);
             PrintWriter writer=new PrintWriter(fos);
-            Iterator iter=shortcuts.iterator();
-            while(iter.hasNext()){
-                Object o=iter.next();
-                writer.print(o.toString()+ "\n");
+            Iterator<String> iter=shortcuts.iterator();
+            while(iter.hasNext()) {
+                writer.print(iter.next()+ "\n");
             }
             writer.close();
         }
@@ -285,10 +286,9 @@ public class Shortcuts implements ActionListener {
     public void saveShortcuts(Options opts) {
         try {
             int i=0;
-            Iterator iter=shortcuts.iterator();
+            Iterator<String> iter=shortcuts.iterator();
             while(iter.hasNext()) {
-                Object o=iter.next();
-                opts.put(OPTIONS_PREFIX + "si["+i+"]", o.toString());
+                opts.put(OPTIONS_PREFIX + "si["+i+"]", iter.next());
                 i++;
             }
         }
@@ -354,7 +354,10 @@ public class Shortcuts implements ActionListener {
     private class ManageDialog extends JDialog implements ActionListener {
         
         
-        Object[] fileMenuStructure = new Object[] {
+		private static final long serialVersionUID = 1L;
+
+		
+		Object[] fileMenuStructure = new Object[] {
             "File",
                 new Object[] {
                     "Import...",
@@ -583,7 +586,7 @@ public class Shortcuts implements ActionListener {
                     }
                 }
                 if(chooser.showDialog(this, "Import")==JFileChooser.APPROVE_OPTION){
-                    shortcuts = new ArrayList();
+                    shortcuts = new ArrayList<>();
                     if(wandora != null) {
                         wandora.options.put("current.directory", chooser.getCurrentDirectory().getPath());
                     }

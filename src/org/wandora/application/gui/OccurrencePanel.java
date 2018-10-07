@@ -42,13 +42,15 @@ import org.wandora.application.gui.simple.*;
  * @author  olli
  */
 public class OccurrencePanel extends ResourceEditor {
+	
+	private static final long serialVersionUID = 1L;
     
     private Wandora wandora;
     private Topic topic;
     private Topic occurrenceType;
     
-    private HashMap dataTable;
-    private HashMap invDataTable;
+    private Map<Topic,SimpleTextPane> dataTable;
+    private Map<SimpleTextPane,Topic> invDataTable;
     
     private boolean deleted;
     
@@ -74,14 +76,14 @@ public class OccurrencePanel extends ResourceEditor {
     public boolean applyChanges(Topic t, Wandora wandora)  throws TopicMapException {
         boolean changed=false;
         if(!deleted) {
-            Iterator iter=dataTable.entrySet().iterator();
+            Iterator<Map.Entry<Topic, SimpleTextPane>> iter = dataTable.entrySet().iterator();
             while(iter.hasNext()) {
-                Map.Entry e=(Map.Entry)iter.next();
-                Topic version=(Topic)e.getKey();
-                SimpleTextPane comp=(SimpleTextPane)e.getValue();
+                Map.Entry<Topic,SimpleTextPane> e = iter.next();
+                Topic version = (Topic) e.getKey();
+                SimpleTextPane comp = (SimpleTextPane) e.getValue();
                 String newText = comp.getText();
                 String orig=topic.getData(occurrenceType,version);
-                if(orig==null) orig="";
+                if(orig==null) orig = "";
                 if(!orig.equals(newText)) {
                     changed=true;
                     topic.removeData(occurrenceType,version);
@@ -127,8 +129,8 @@ public class OccurrencePanel extends ResourceEditor {
         topic=t;
         occurrenceType=otype;
         
-        dataTable=new HashMap();
-        invDataTable=new HashMap();
+        dataTable=new HashMap<>();
+        invDataTable=new HashMap<>();
         deleted=false;
         
         TopicMap tm=w.getTopicMap();
@@ -216,9 +218,10 @@ public class OccurrencePanel extends ResourceEditor {
             wandora.applyChanges();
         }
         catch(CancelledException ce){return;}
-        HashSet versions=new HashSet(); // avoid concurrent modification
+        
+        Set<Topic> versions=new HashSet<>(); // avoid concurrent modification
         versions.addAll(topic.getData(occurrenceType).keySet());
-        Iterator iter=versions.iterator();
+        Iterator<Topic> iter=versions.iterator();
         while(iter.hasNext()) {
             Topic version=(Topic)iter.next();
             topic.removeData(occurrenceType,version);

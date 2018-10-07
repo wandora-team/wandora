@@ -21,7 +21,7 @@
  * 
  * FreeOccurrencePrompt.java
  *
- * Created on 15. kesäkuuta 2006, 16:38
+ * Created on 15. kesï¿½kuuta 2006, 16:38
  */
 
 package org.wandora.application.gui;
@@ -41,6 +41,10 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  */
 public class FreeOccurrencePrompt extends javax.swing.JDialog {
     
+	
+	private static final long serialVersionUID = 1L;
+	
+	
     private Topic topic;
     private Wandora wandora;
     private boolean cancelled;

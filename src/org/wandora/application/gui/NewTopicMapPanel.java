@@ -40,6 +40,9 @@ import org.wandora.utils.Options;
  * @author  olli
  */
 public class NewTopicMapPanel extends javax.swing.JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
     
     private Wandora wandora;
     private Delegate<Object,NewTopicMapPanel> okDelegate;
