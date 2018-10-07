@@ -43,4 +43,7 @@ or Wandora.sh.
 
 To compile and run Wandora, a Java JDK 8 or later is required.
 
+Developers interested in Wandora project should note that our long term plans
+include using Eclipse as a primary development tool.
+
 ### 
