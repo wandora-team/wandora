@@ -29,8 +29,6 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import com.sun.javafx.embed.EmbeddedSceneInterface;
-import com.sun.javafx.embed.HostInterface;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -533,16 +531,11 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
 
             webView = new WebView();
 
-            String javaFXVersion = com.sun.javafx.runtime.VersionInfo.getRuntimeVersion();
-            int javaFXVersionInt = Integer.parseInt(javaFXVersion.substring(0, javaFXVersion.indexOf(".")));
-            
-            if(javaFXVersionInt >= 8) {
-                webView.setScaleX(1.0);
-                webView.setScaleY(1.0);
-                //webView.setFitToHeight(false);
-                //webView.setFitToWidth(false);
-                //webView.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
-            }
+            webView.setScaleX(1.0);
+            webView.setScaleY(1.0);
+            //webView.setFitToHeight(false);
+            //webView.setFitToWidth(false);
+            //webView.setZoom(javafx.stage.Screen.getPrimary().getDpi() / 96);
 
             group.getChildren().add(webView);
 

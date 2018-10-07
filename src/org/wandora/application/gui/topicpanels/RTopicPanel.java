@@ -39,6 +39,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -1049,7 +1050,7 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
             if(answer == SimpleFileChooser.APPROVE_OPTION) {
                 scriptFile = fc.getSelectedFile();
                 String scriptCode = rEditor.getText();
-                FileUtils.writeStringToFile(scriptFile, scriptCode, null);
+                FileUtils.writeStringToFile(scriptFile, scriptCode, "UTF-8");
                 currentScriptSource = FILE_SOURCE;
             }
         }
@@ -1057,6 +1058,7 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
             WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while storing R script to file '"+scriptFile.getName()+"'.", "Can't save R script", WandoraOptionPane.INFORMATION_MESSAGE);
         }
     }
+    
     
     
     

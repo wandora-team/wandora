@@ -27,7 +27,6 @@
 package org.wandora.application.gui;
 
 
-import org.wandora.piccolo.WandoraManager;
 import org.wandora.topicmap.SchemaBox;
 import org.wandora.topicmap.TMBox;
 import org.wandora.application.*;
@@ -574,7 +573,7 @@ public class SchemaAssociationPrompt extends javax.swing.JDialog implements Runn
     public void run(){
         Collection atypes=null;
         try{
-            topic.getTopicMap().getTopicsOfType(WandoraManager.ASSOCIATIONTYPE_SI);
+            topic.getTopicMap().getTopicsOfType(TMBox.ASSOCIATIONTYPE_SI);
             atypes=SchemaBox.getAssociationTypesFor(topic);
         }catch(TopicMapException tme){
             tme.printStackTrace(); // TODO EXCEPTION

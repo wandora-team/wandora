@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- You may freely edit this file. See commented blocks below for -->
-<!-- some examples of how to customize the build. -->
-<!-- (If you delete it and reopen the project it will be recreated.) -->
-<!-- By default, only the Clean and Build commands use this build script. -->
-<!-- Commands such as Run, Debug, and Test only use this build script if -->
-<!-- the Compile on Save feature is turned off for the project. -->
-<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
-<!-- in the project's Project Properties dialog box.-->
-<project name="wandora" default="default" basedir=".">
+<project name="wandora" default="build" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
     <description>Builds, tests, and runs the project wandora.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
@@ -86,8 +78,27 @@
     </target>
     -->
 
+	
+	<property name="wandora.lib.dir" value="lib/ext"/>
+	
+	
+	<target name="-post-init">
+		<path id="wandora.classpath">
+		  <fileset dir="${wandora.lib.dir}">
+		    <include name="*.jar" />
+		  </fileset>
+		</path>
+		<pathconvert property="wandora.javac.classpath" refid="wandora.classpath"/>
+		<script language="javascript">
+		      wandoraClasspath = project.getProperty("wandora.javac.classpath");
+		      project.setProperty("javac.classpath", wandoraClasspath);
+		</script>
+		<echo>CASSPATH IS ${javac.classpath}</echo>
+    </target>
 
-
+	
+	
+	
     <target name="-pre-jar">
         <propertyfile file="${build.classes.dir}/info.properties">
             <entry key="program.NAME" default="Wandora" />
@@ -98,8 +109,8 @@
 
 
     <target name="-post-jar">
-        <copy todir="dist/lib">
-            <fileset dir="lib"/>
+        <copy todir="dist/${wandora.lib.dir}">
+            <fileset dir="${wandora.lib.dir}"/>
         </copy>
         <copy todir="dist/resources">
             <fileset dir="resources"/>
@@ -124,6 +135,15 @@
         <chmod dir="dist/bin" perm="a+x" includes="**/*.sh"/>
     </target>
 
+	
+    <target name="retrieve" description="Retrieve dependencies with Ivy">
+    	<delete dir="${wandora.lib.dir}"/>
+        <ivy:retrieve pattern="lib/ext/[artifact]-[revision](-[classifier]).[ext]"/>
+    	<copy todir="${wandora.lib.dir}" flatten="true">
+    		<fileset dir="lib/local"/>
+    	</copy>
+    </target>
+	
 
 
     <target name="build" depends="clean,compile,jar">

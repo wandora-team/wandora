@@ -175,19 +175,11 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
      */
     public WebViewPanel() {
         try {
-            javaFXVersion = com.sun.javafx.runtime.VersionInfo.getRuntimeVersion();
-            javaFXVersionInt = Integer.parseInt(javaFXVersion.substring(0, javaFXVersion.indexOf(".")));
-            if(javaFXVersionInt >= 8) {
-                System.out.println("You are using JavaFX version "+javaFXVersion);
-                System.out.println("WebViewPanel has been tested with JavaFX 2.x.");
-                System.out.println("At this time WebViewPanel may have problems with JavaFX 8 and above.");
-            }
-        }
-        catch(Exception e) {}
-        try {
             browserExtractorManager = new BrowserExtractorManager(Wandora.getWandora());
         }
-        catch(Exception e) {}
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
     }
     
     

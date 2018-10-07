@@ -27,16 +27,22 @@
 package org.wandora.application.tools.extractors.sparql;
 
 
-import com.hp.hpl.jena.query.QuerySolution;
+
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import javax.swing.Icon;
 
+/*
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.ResultSetFormatter;
+//import com.hp.hpl.jena.query.QuerySolution;
+//import com.hp.hpl.jena.query.ResultSet;
+//import com.hp.hpl.jena.query.ResultSetFactory;
+//import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -44,6 +50,12 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+//import com.hp.hpl.jena.sparql.resultset.JSONInput;
+// import com.hp.hpl.jena.sparql.resultset.ResultsFormat;
+//import com.hp.hpl.jena.sparql.resultset.ResultsFormat;
+import com.hp.hpl.jena.sparql.resultset.JSONInput;
+import com.hp.hpl.jena.sparql.resultset.ResultsFormat;
+*/
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -59,8 +71,19 @@ import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Tuples.T2;
 
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFactory;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.sparql.resultset.JSONInput;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
-import com.hp.hpl.jena.sparql.resultset.*;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
@@ -75,6 +98,7 @@ import org.wandora.topicmap.TMBox;
 
 public class SparqlExtractor extends AbstractExtractor {
 
+	
     public static String DEFAULT_SI_ENCODING = "UTF-8";
 
     public static String DEFAULT_RESULTSET_FORMAT = "JSON";
@@ -220,12 +244,13 @@ public class SparqlExtractor extends AbstractExtractor {
             }
             else if("RDF/XML".equalsIgnoreCase(format)) {
                 System.out.println("Processing SPARQL results set as RDF/XML");
-                results = ResultSetFactory.load(in, ResultsFormat.FMT_RDF_XML);
+                // results = ResultSetFactory.load(in, com.hp.hpl.jena.sparql.resultset.ResultsFormat.FMT_RDF_XML);
             }
         }
         return results;
     }
 
+    
 
     public void handleResultSet(ResultSet results, String method, TopicMap tm) throws Exception {
         if(results != null) {

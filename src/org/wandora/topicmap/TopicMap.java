@@ -1900,10 +1900,10 @@ public abstract class TopicMap implements TopicMapLogger {
                                     else{
                                         if(o.version==null) {
                                             logger.log("Warning: Occurrence has no version, adding a generic one!");
-                                            o.version=getTopic(org.wandora.piccolo.WandoraManager.LANGINDEPENDENT_SI);
+                                            o.version=getTopic(TMBox.LANGINDEPENDENT_SI);
                                             if(o.version==null){
                                                 o.version=createTopic();
-                                                o.version.addSubjectIdentifier(createLocator(org.wandora.piccolo.WandoraManager.LANGINDEPENDENT_SI));
+                                                o.version.addSubjectIdentifier(createLocator(TMBox.LANGINDEPENDENT_SI));
                                                 o.version.setBaseName("Language independent");
                                             }
                                         }

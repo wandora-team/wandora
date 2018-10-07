@@ -342,7 +342,7 @@ public class W2TTopicMap implements TopicMap {
     public void remove() {
     }
 
-    @Override
+
     public void clear() {
         try{
         tm.clearTopicMap();

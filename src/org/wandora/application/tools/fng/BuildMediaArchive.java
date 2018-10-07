@@ -31,7 +31,6 @@ import org.wandora.utils.EasyHash;
 import org.wandora.piccolo.Logger;
 import org.wandora.piccolo.SimpleLogger;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.piccolo.WandoraManager;
 import org.wandora.topicmap.Topic;
 import org.wandora.application.tools.DeleteTopicsWithoutBasename;
 import org.wandora.application.tools.extractors.datum.CrawlerDataSource;
@@ -65,7 +64,6 @@ public class BuildMediaArchive extends Thread {
 
     private Interpreter interpreter;
     private long delay;
-    private WandoraManager manager;
     private TopicMap mediaarchiveMap;
     
     private boolean updateNow=false;;

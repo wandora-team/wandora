@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ivysettings> 
+  <settings defaultResolver="chain"/> 
+  <resolvers>
+    <chain name="chain" returnFirst="true">
+      <ibiblio name="central" m2compatible="true"/>
+      <ibiblio name="wso2-public" root="http://maven.wso2.org/nexus/content/repositories/public/" m2compatible="true"/>
+      <ibiblio name="wso2-dist" root="http://dist.wso2.org/maven2/" m2compatible="true"/>
+      <ibiblio name="openanzo" root="http://www.openanzo.org/maven-repositories/release/" m2compatible="true"/>
+      <ibiblio name="jabylon" root="http://www.jabylon.org/maven/" m2compatible="true"/>
+      <ibiblio name="umass" root="https://dev-iesl.cs.umass.edu/nexus/content/repositories/releases/" m2compatible="true"/>
+      <ibiblio name="bibsonomy" root="https://dev.bibsonomy.org/maven2/" m2compatible="true"/>
+      <ibiblio name="alfresco" root="https://artifacts.alfresco.com/nexus/content/repositories/public/" m2compatible="true"/>
+      <ibiblio name="mygrid" root="http://www.mygrid.org.uk/maven/repository/" m2compatible="true"/>
+      <ibiblio name="pavlab" root="https://maven2.pavlab.msl.ubc.ca/" m2compatible="true"/>
+      <ibiblio name="atlassian" root="https://packages.atlassian.com/maven-3rdparty/" m2compatible="true"/>
+    </chain>
+  </resolvers>
+</ivysettings>

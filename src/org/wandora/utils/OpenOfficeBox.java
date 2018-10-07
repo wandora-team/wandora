@@ -26,6 +26,7 @@ package org.wandora.utils;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+
 import org.odftoolkit.simple.ChartDocument;
 import org.odftoolkit.simple.Document;
 import org.odftoolkit.simple.GraphicsDocument;
@@ -35,6 +36,7 @@ import org.odftoolkit.simple.TextDocument;
 import org.odftoolkit.simple.table.Cell;
 import org.odftoolkit.simple.table.Row;
 import org.odftoolkit.simple.table.Table;
+
 
 /**
  * Simple collection of methods used to access and extract Open Office

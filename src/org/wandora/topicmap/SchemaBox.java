@@ -29,8 +29,6 @@
 package org.wandora.topicmap;
 
 
-
-import org.wandora.piccolo.WandoraManager;
 import java.util.*;
 
 /**
@@ -65,9 +63,9 @@ public class SchemaBox {
 
     public static final String ROLECLASS_SI="http://wandora.org/si/core/role-class";
     public static final String CONTENTTYPE_SI="http://wandora.org/si/core/content-type";
-    public static final String ASSOCIATIONTYPE_SI=WandoraManager.ASSOCIATIONTYPE_SI;
-    public static final String OCCURRENCETYPE_SI=WandoraManager.OCCURRENCETYPE_SI;
-    public static final String ROLE_SI=WandoraManager.ROLE_SI;
+    public static final String ASSOCIATIONTYPE_SI=TMBox.ASSOCIATIONTYPE_SI;
+    public static final String OCCURRENCETYPE_SI=TMBox.OCCURRENCETYPE_SI;
+    public static final String ROLE_SI=TMBox.ROLE_SI;
 /*    public static final String COUNT_SI="http://wandora.org/si/core/count";
     public static final String ENUM_SI="http://wandora.org/si/core/enum";
     public static final String COUNTMULTIPLE_SI="http://wandora.org/si/core/contentmultiple";

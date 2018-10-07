@@ -23,7 +23,7 @@
 package org.wandora.application.tools.extractors.reddit;
 
 import com.mashape.unirest.http.*;
-import org.wandora.dep.json.*;
+import org.json.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.MalformedURLException;

@@ -35,12 +35,14 @@ import java.util.Map;
 import javax.swing.Icon;
 
 import org.apache.commons.httpclient.HttpStatus;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
-import org.wandora.dep.json.*;
+// import org.wandora.dep.json.*;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.Association;

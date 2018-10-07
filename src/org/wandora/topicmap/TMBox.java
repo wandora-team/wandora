@@ -1045,7 +1045,7 @@ public class TMBox {
                 al.addAll(topics);
                 Collections.sort(al,new TopicNameComparator(lang));
             } catch(Exception e){
-                org.wandora.piccolo.Logger.getLogger().writelog("WRN","Exception in sort topics.",e);
+                System.out.println("Exception in sort topics: "+e.toString());
             }
         }
         return al;

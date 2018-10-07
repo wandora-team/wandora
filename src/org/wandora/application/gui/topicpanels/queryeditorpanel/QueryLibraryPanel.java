@@ -31,13 +31,15 @@ import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.ListModel;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
 import org.wandora.utils.JsonMapper;
 import org.wandora.utils.Options;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  *
@@ -219,9 +221,9 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         StoredQuery[] queries=null;
         String queriesJson=options.get(OPTIONS_KEY);
         if(queriesJson!=null){
-            JsonMapper mapper=new JsonMapper();
+            ObjectMapper objectMapper=new ObjectMapper();
             try{
-                StoredQueries wrapper=(StoredQueries)mapper.readValue(queriesJson,StoredQueries.class);
+                StoredQueries wrapper=(StoredQueries)objectMapper.readValue(queriesJson,StoredQueries.class);
                 queries=wrapper.queries;
             }
             catch(IOException ioe){Wandora.getWandora().handleError(ioe);}
@@ -251,9 +253,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         synchronized(storedQueries){
             json=mapper.writeValue(new StoredQueries(storedQueries));
         }
-        options.put(OPTIONS_KEY,json);
-        
-         
+        options.put(OPTIONS_KEY,json);  
     }
     
     
@@ -264,10 +264,11 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         query.name=name;
         
         // cycle through serialisation and deserialisation to make everything consistent
-        JsonMapper mapper=new JsonMapper();
-        String json=mapper.writeValue(query);
+        ObjectMapper objectMapper=new ObjectMapper();
+        JsonMapper jsonMapper=new JsonMapper();
+        String json=jsonMapper.writeValue(query);
         try{
-            query=mapper.readValue(json, StoredQuery.class);
+            query=objectMapper.readValue(json, StoredQuery.class);
         }
         catch(IOException e){Wandora.getWandora().handleError(e); return;}
         

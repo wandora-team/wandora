@@ -25,7 +25,7 @@ package org.wandora.application.tools.mediawikiapi;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import org.wandora.dep.json.JSONObject;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;

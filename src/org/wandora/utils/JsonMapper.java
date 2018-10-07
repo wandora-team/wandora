@@ -23,8 +23,10 @@
 package org.wandora.utils;
 
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
+
+
 /**
  * Transform java objects to JSON and vice versa. To get the JSON simply
  * use the writeValue method. If you don't want some fields in the java class

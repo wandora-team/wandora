@@ -37,9 +37,9 @@ import static org.wandora.application.tools.extractors.rekognition.AbstractRekog
 import static org.wandora.application.tools.extractors.rekognition.AbstractRekognitionExtractor.conf;
 import static org.wandora.application.tools.extractors.rekognition.AbstractRekognitionExtractor.getConfiguration;
 import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
-import org.wandora.dep.json.JSONArray;
-import org.wandora.dep.json.JSONException;
-import org.wandora.dep.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;

@@ -13,7 +13,6 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.axis2.databinding.ADBException;
 
         
-
         /*
         *  CalaisStub java implementation
         */

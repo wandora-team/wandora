@@ -337,7 +337,7 @@ public class Any23Extractor extends AbstractExtractor {
                     subjectTopic.setData(predicateTopic, getOrCreateTopic(tm, occurrenceLang), literalStr);
                 }
                 else {
-                    Topic objectTopic = getObjectTopic(tm, object.stringValue());
+                    Topic objectTopic = getObjectTopic(tm, object.toString());
                     Topic predicateTopic = getPredicateTopic(tm, predicate.toString());
                     Association association = tm.createAssociation(predicateTopic);
                     association.addPlayer(subjectTopic, getSubjectType(tm));

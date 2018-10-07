@@ -27,7 +27,6 @@ package org.wandora.application.tools.extractors.nyt;
 import java.io.File;
 import java.net.URL;
 import javax.swing.Icon;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;

@@ -22,11 +22,12 @@
 
 package org.wandora.application.tools.extractors.word;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;

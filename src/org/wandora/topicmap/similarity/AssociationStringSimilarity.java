@@ -24,10 +24,10 @@
 package org.wandora.topicmap.similarity;
 
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;

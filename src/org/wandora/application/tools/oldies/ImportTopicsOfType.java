@@ -26,7 +26,7 @@
 
 package org.wandora.application.tools.oldies;
 
-import org.wandora.piccolo.WandoraManager;
+
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
@@ -87,7 +87,7 @@ public class ImportTopicsOfType extends AbstractWandoraTool implements WandoraTo
             InputStream in=new FileInputStream(file);
             TopicMap temp=new org.wandora.topicmap.memory.TopicMapImpl();
             temp.importXTM(in);
-            Topic roleCategories=temp.getTopic(WandoraManager.ASSOCIATIONROLECATEGORIES_SI);
+            Topic roleCategories=temp.getTopic(TMBox.ASSOCIATIONROLECATEGORIES_SI);
             in.close();
             log("Copying topics...");
             TopicMap workspace=parent.getTopicMap();

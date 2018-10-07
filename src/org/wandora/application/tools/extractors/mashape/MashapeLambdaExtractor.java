@@ -34,7 +34,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.mashape.unirest.http.*;
 import com.mashape.unirest.http.Unirest;
-import org.wandora.dep.json.*;
+import org.json.*;
 
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.Topic;
@@ -147,7 +147,7 @@ public class MashapeLambdaExtractor extends AbstractMashapeExtractor{
             
         } catch(JSONException jse){
             log(jse.getMessage());
-        } catch (org.wandora.dep.apache.http.NoHttpResponseException httpe){
+        } catch (org.apache.http.NoHttpResponseException httpe){
             log("No response from the server");
         } catch (IOException ioe) {
             log(ioe.getMessage());

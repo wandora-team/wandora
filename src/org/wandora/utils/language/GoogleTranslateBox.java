@@ -93,8 +93,8 @@ public class GoogleTranslateBox {
                     if(apikey != null) apikey = apikey.trim();
                 }
                 if(apikey != null) {
-                    GoogleAPI.setKey(apikey);
-                    translatedText = Translate.DEFAULT.execute(text, sourceLang, targetLang);
+                    // GoogleAPI.setKey(apikey);
+                    translatedText = Translate.execute(text, sourceLang, targetLang);
                     if(translatedText != null && translatedText.length() == 0) {
                         translatedText = null;
                     }

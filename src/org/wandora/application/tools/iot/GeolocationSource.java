@@ -26,7 +26,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.wandora.dep.json.JSONObject;
+import org.json.JSONObject;
 
 /**
  *
@@ -47,7 +47,7 @@ public class GeolocationSource extends AbstractIoTSource implements IoTSource {
 
             return Double.toString(obj.getDouble("lat")) + ", " + Double.toString(obj.getDouble("lon"));
         } 
-        catch (UnirestException ex) {
+        catch (Exception ex) {
             // IGNORE
         }
 

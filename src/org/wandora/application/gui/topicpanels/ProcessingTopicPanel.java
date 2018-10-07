@@ -1792,7 +1792,7 @@ private void saveBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
             if(answer == SimpleFileChooser.APPROVE_OPTION) {
                 scriptFile = fc.getSelectedFile();
                 String scriptCode = processingEditor.getText();
-                FileUtils.writeStringToFile(scriptFile, scriptCode, null);
+                FileUtils.writeStringToFile(scriptFile, scriptCode, "UTF-8");
                 currentSketchSource = FILE_SOURCE;
             }
         }

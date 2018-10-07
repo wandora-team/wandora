@@ -47,9 +47,9 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 
-import org.wandora.dep.json.JSONArray;
-import org.wandora.dep.json.JSONObject;
-import org.wandora.dep.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 /**
  *

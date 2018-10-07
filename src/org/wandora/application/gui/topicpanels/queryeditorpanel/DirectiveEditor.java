@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 import javax.swing.JPanel;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.wandora.application.Wandora;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
@@ -44,6 +43,8 @@ import org.wandora.query2.TopicOperand;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.JsonMapper;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *

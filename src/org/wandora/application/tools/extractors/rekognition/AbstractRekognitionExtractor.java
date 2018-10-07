@@ -29,11 +29,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
-import org.wandora.dep.json.JSONArray;
-import org.wandora.dep.json.JSONException;
-import org.wandora.dep.json.JSONObject;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;

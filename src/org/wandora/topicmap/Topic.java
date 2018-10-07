@@ -166,7 +166,7 @@ public abstract class Topic {
             data=getData(type,langT);
         }
         if(data==null){
-            langT=getTopicMap().getTopic(org.wandora.piccolo.WandoraManager.LANGINDEPENDENT_SI);
+            langT=getTopicMap().getTopic(TMBox.LANGINDEPENDENT_SI);
             if(langT!=null){
                 data=getData(type,langT);
             }

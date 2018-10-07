@@ -22,14 +22,12 @@
  */
 package org.wandora.application.tools.extractors.twitter;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;

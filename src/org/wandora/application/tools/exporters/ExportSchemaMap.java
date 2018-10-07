@@ -28,7 +28,6 @@ package org.wandora.application.tools.exporters;
 
 
 
-import org.wandora.piccolo.WandoraManager;
 import org.wandora.application.gui.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
@@ -170,8 +169,8 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
             }
             copyTypes.add(t);
         }
-        Topic wandoraClass=export.getTopic(WandoraManager.WANDORACLASS_SI);
-        Topic hideLevel=export.getTopic(WandoraManager.HIDELEVEL_SI);
+        Topic wandoraClass=export.getTopic(TMBox.WANDORACLASS_SI);
+        Topic hideLevel=export.getTopic(TMBox.HIDELEVEL_SI);
         iter=export.getTopics();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
@@ -214,7 +213,7 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
         TMBox.getOrCreateTopic(export,XTMPSI.getLang("en"));
         TMBox.getOrCreateTopic(export,XTMPSI.DISPLAY);
         TMBox.getOrCreateTopic(export,XTMPSI.SORT);
-        TMBox.getOrCreateTopic(export,WandoraManager.LANGINDEPENDENT_SI);
+        TMBox.getOrCreateTopic(export,TMBox.LANGINDEPENDENT_SI);
         return export;
     }
     

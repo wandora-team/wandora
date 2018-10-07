@@ -33,8 +33,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.wandora.application.Wandora;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *

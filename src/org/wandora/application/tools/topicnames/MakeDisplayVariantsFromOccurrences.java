@@ -24,7 +24,7 @@
 package org.wandora.application.tools.topicnames;
 
 
-import org.wandora.piccolo.WandoraManager;
+
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
@@ -74,7 +74,7 @@ public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool impl
             Iterator languageIterator = null;
             Topic language = null;
             Set<Topic> scope = null;
-            Collection languages = wandora.getTopicMap().getTopicsOfType(WandoraManager.LANGUAGE_SI);
+            Collection languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
             Topic displayScope = wandora.getTopicMap().getTopic(XTMPSI.DISPLAY);
             int progress = 0;
             

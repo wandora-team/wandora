@@ -24,7 +24,9 @@ package org.wandora.modules.usercontrol;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import org.codehaus.jackson.annotate.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * A basic user implementation. Implements all the methods of the abstract

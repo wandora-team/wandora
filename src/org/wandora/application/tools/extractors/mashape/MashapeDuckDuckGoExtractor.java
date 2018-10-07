@@ -33,7 +33,7 @@ import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import com.mashape.unirest.http.*;
 
-import org.wandora.dep.json.*;
+import org.json.*;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;

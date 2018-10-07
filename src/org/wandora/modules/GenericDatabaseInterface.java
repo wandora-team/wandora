@@ -374,7 +374,7 @@ public class GenericDatabaseInterface extends AbstractModule implements Database
         
         connectionPool.setValidationQuery("select 1");
         connectionPool.setTestOnBorrow(true);
-        connectionPool.setValidationQueryTimeout(1);
+        // connectionPool.setValidationQueryTimeout(1);
         
         fireDatabaseStarted();        
     }
