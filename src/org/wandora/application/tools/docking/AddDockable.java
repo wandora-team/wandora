@@ -23,7 +23,7 @@
 package org.wandora.application.tools.docking;
 
 
-import java.awt.Component;
+
 import java.util.Iterator;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
@@ -49,7 +49,11 @@ import org.wandora.topicmap.Topic;
 
 
 public class AddDockable extends AbstractDockingTool {
-    
+
+	
+	private static final long serialVersionUID = 1L;
+
+
     private Class dockableClass = null;
     private Icon dockableIcon = null;
     
@@ -97,7 +101,7 @@ public class AddDockable extends AbstractDockingTool {
         else {
             if(dockableIcon == null) {
                 try {
-                    Object o = dockableClass.newInstance();
+                    Object o = dockableClass.getDeclaredConstructor().newInstance();
                     if(o instanceof TopicPanel) {
                         TopicPanel tp = (TopicPanel) o;
                         dockableIcon = tp.getIcon();
@@ -136,7 +140,7 @@ public class AddDockable extends AbstractDockingTool {
                 if(t == null) {
                     t = w.getTopicMap().getTopic(TMBox.WANDORACLASS_SI);
                 }
-                dockingPanel.addDockable(dockableClass.newInstance(), t);
+                dockingPanel.addDockable(dockableClass.getDeclaredConstructor().newInstance(), t);
             }
             catch(Exception e) {
                 e.printStackTrace();

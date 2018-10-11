@@ -50,7 +50,11 @@ import org.wandora.application.gui.table.AssociationTable;
 
 
 public class ChangeAssociationRoles extends AbstractWandoraTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private boolean requiresRefresh = false;
     
 
     public ChangeAssociationRoles() {
@@ -77,7 +81,7 @@ public class ChangeAssociationRoles extends AbstractWandoraTool implements Wando
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
         Map<Association, ArrayList<Topic>> associationsWithOldRoles = null;
         
@@ -93,7 +97,7 @@ public class ChangeAssociationRoles extends AbstractWandoraTool implements Wando
                 return;
             }
 
-            Topic newRole = admin.showTopicFinder("Select new role type...");
+            Topic newRole = wandora.showTopicFinder("Select new role type...");
 
             if(newRole == null) {
                 log("New role not selected. Aborting.");

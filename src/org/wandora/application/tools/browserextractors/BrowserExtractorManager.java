@@ -144,7 +144,7 @@ public class BrowserExtractorManager {
                 if(paths.contains(toolResourcePath)) continue;
                 paths.add(toolResourcePath);
                 String classPath = toolResourcePath.replace('/', '.');
-                Enumeration toolResources = ClassLoader.getSystemResources(toolResourcePath);
+                Enumeration<URL> toolResources = ClassLoader.getSystemResources(toolResourcePath);
 
                 while(toolResources.hasMoreElements()) {
                     URL toolBaseUrl = (URL) toolResources.nextElement();
@@ -180,7 +180,7 @@ public class BrowserExtractorManager {
                                     //System.out.println("Rejecting '" + className + "'. No constructor!");
                                     continue;
                                 }
-                                extractor=(BrowserPluginExtractor)Class.forName(className).newInstance();
+                                extractor=(BrowserPluginExtractor)Class.forName(className).getDeclaredConstructor().newInstance();
                                 tools.put(extractor.getBrowserExtractorName(), extractor);
                             }
                             catch(Exception ex) {

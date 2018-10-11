@@ -48,7 +48,11 @@ import java.util.*;
 
 
 public class InsertPlayer extends AbstractWandoraTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private boolean requiresRefresh = false;
     
     
     public InsertPlayer() {
@@ -77,7 +81,7 @@ public class InsertPlayer extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
             Topic player = null;
@@ -90,18 +94,18 @@ public class InsertPlayer extends AbstractWandoraTool implements WandoraTool {
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
                 Iterator associations = context.getContextObjects();
                 if(associations.hasNext()) {
-                    //System.out.println("admin == "+admin);
-                    GenericOptionsDialog god=new GenericOptionsDialog(admin,"Select player and role","Select player and it's role in associations. Selecting existing role overrides old player.",true,new String[][]{
+                    //System.out.println("admin == "+wandora);
+                    GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Select player and role","Select player and it's role in associations. Selecting existing role overrides old player.",true,new String[][]{
                         new String[]{"Role","topic",null},
                         new String[]{"Player","topic",null},
-                    },admin);
+                    },wandora);
                     setState(INVISIBLE);
                     god.setVisible(true);
                     if(!god.wasCancelled()) {
                         Map<String,String> values=god.getValues();
                         String roleSI = values.get("Role");
                         String playerSI = values.get("Player");
-                        TopicMap topicmap = admin.getTopicMap();
+                        TopicMap topicmap = wandora.getTopicMap();
                         role = topicmap.getTopic(roleSI);
                         player = topicmap.getTopic(playerSI);
                     }

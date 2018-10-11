@@ -79,7 +79,11 @@ import java.util.*;
 public class CollectNary extends AbstractWandoraTool implements WandoraTool {
     
 
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private boolean requiresRefresh = false;
     
     
 
@@ -109,7 +113,7 @@ public class CollectNary extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
             Iterator associations = null;
@@ -120,7 +124,7 @@ public class CollectNary extends AbstractWandoraTool implements WandoraTool {
             Topic playerRole = null;
             boolean deleteSourceAssociations = false;
             
-            TopicMap tm = admin.getTopicMap();
+            TopicMap tm = wandora.getTopicMap();
             Association association = null;
             int counter = 0;
             
@@ -130,7 +134,8 @@ public class CollectNary extends AbstractWandoraTool implements WandoraTool {
                 if(associations == null || !associations.hasNext()) return;
 
                 // ASK USER ABOUT THE ROLES AND TYPE TOPICS!
-                GenericOptionsDialog god=new GenericOptionsDialog(admin,
+                GenericOptionsDialog god=new GenericOptionsDialog(
+                		wandora,
                         "Collect n-ary associations",
                         "Combine selected associations using given grouping role.",
                         true,
@@ -140,7 +145,7 @@ public class CollectNary extends AbstractWandoraTool implements WandoraTool {
                     new String[]{"Role of player topic","topic","","Where is the player topic in association."},
                     new String[]{"New association type","topic","", "What is the type of created associations."},
                     new String[]{"Delete source associations","boolean","false", "Should Wandora delete source associations afterward."},
-                },admin);
+                },wandora);
                 god.setVisible(true);
                 if(god.wasCancelled()) return;
                 

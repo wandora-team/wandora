@@ -43,7 +43,12 @@ import org.wandora.application.*;
  * @author akivela
  */
 public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool implements WandoraTool {
-    public static final String OPTIONS_PREFIX = "options.occurrence.findassociations.";
+
+	
+	private static final long serialVersionUID = 1L;
+
+
+	public static final String OPTIONS_PREFIX = "options.occurrence.findassociations.";
     
     
     private boolean requiresRefresh = false;
@@ -133,7 +138,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
     
     
     @Override
-    public void execute(Wandora admin, Context context) {  
+    public void execute(Wandora wandora, Context context) {  
         try {
             int associationCount = 0;
             Iterator topics = context.getContextObjects();
@@ -154,7 +159,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
                 String newOccurrence = editor.getText();
                 occurrence = occurrenceTopic.getData(occurrenceType, occurrenceScope);
                 if(!newOccurrence.equals(occurrence)) {
-                    int a = WandoraOptionPane.showConfirmDialog(admin, "You have changed occurrence in editor. Would you like to save changes to topic map before association seek? If you decide not to save changes, old occurrence text is used.", "Save changes?", WandoraOptionPane.QUESTION_MESSAGE);
+                    int a = WandoraOptionPane.showConfirmDialog(wandora, "You have changed occurrence in editor. Would you like to save changes to topic map before association seek? If you decide not to save changes, old occurrence text is used.", "Save changes?", WandoraOptionPane.QUESTION_MESSAGE);
                     if(a == WandoraOptionPane.OK_OPTION) {
                         occurrenceTopic.setData(occurrenceType, occurrenceScope, newOccurrence);
                     }
@@ -163,12 +168,12 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
 
             // Ensure occurrence type and scope are really ok...
             if(occurrenceType == null) {
-                occurrenceType=admin.showTopicFinder("Select occurrence type...");                
+                occurrenceType=wandora.showTopicFinder("Select occurrence type...");                
                 if(occurrenceType == null) return;
             }
             occurrenceTypeLocator = occurrenceType.getSubjectIdentifiers().iterator().next();
             if(occurrenceScope == null) {
-                occurrenceScope=admin.showTopicFinder("Select occurrence scope...");                
+                occurrenceScope=wandora.showTopicFinder("Select occurrence scope...");                
                 if(occurrenceScope == null) return;
             }
             occurrenceScopeLocator = occurrenceScope.getSubjectIdentifiers().iterator().next();
@@ -181,7 +186,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
             Topic occurrenceTopic = null;
             Topic oldTopic = null;
             int progress = 0;
-            TopicMap map = admin.getTopicMap();
+            TopicMap map = wandora.getTopicMap();
             Association a = null;
 
             ArrayList<Topic> dtopics = new ArrayList<Topic>();

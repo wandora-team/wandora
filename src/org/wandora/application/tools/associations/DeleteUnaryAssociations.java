@@ -44,6 +44,9 @@ import org.wandora.application.contexts.*;
  */
 public class DeleteUnaryAssociations extends DeleteAssociationsInTopic implements WandoraTool {
     
+	private static final long serialVersionUID = 1L;
+	
+	
     public static final boolean LOOK_AT_ASSOCIATION_TYPES_TOO = true;
     
 
@@ -78,7 +81,7 @@ public class DeleteUnaryAssociations extends DeleteAssociationsInTopic implement
     @Override
     public Collection<Association> solveTopicAssociations(Topic topic) throws TopicMapException {
         TopicMap tm = topic.getTopicMap();
-        LinkedHashSet<Association> associations = new LinkedHashSet();
+        Collection<Association> associations = new LinkedHashSet<>();
         associations.addAll(topic.getAssociations());
         if(LOOK_AT_ASSOCIATION_TYPES_TOO) {
             Topic at = null;

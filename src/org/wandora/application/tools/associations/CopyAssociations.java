@@ -51,7 +51,10 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  */
 public class CopyAssociations extends AbstractWandoraTool implements WandoraTool {
     
-    public static final int WANDORA_LAYOUT = 5000;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static final int WANDORA_LAYOUT = 5000;
     public static final int LTM_LAYOUT = 5010;
     
     public static final int TABTEXT_OUTPUT = 2000;
@@ -125,8 +128,8 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
-        String associationText = makeString(admin);
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+        String associationText = makeString(wandora);
         if(associationText != null && associationText.length() > 0) {
             ClipboardBox.setClipboard(associationText);
         }
@@ -135,14 +138,13 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
     
     
     
-    public String makeString(Wandora admin)  throws TopicMapException {
+    public String makeString(Wandora wandora)  throws TopicMapException {
         StringBuilder sb = new StringBuilder("");
 
-        HashMap hash = new HashMap();
-        HashMap<Topic,ArrayList<HashMap<Topic,Topic>>> associationsByType = new HashMap();
-        HashMap<Topic,HashSet<Topic>> rolesByType = new HashMap();
+        Map<Topic,List<Map<Topic,Topic>>> associationsByType = new LinkedHashMap<>();
+        Map<Topic,Set<Topic>> rolesByType = new LinkedHashMap<>();
 
-        Iterator associations = null;
+        Iterator<Association> associations = null;
         Iterator context = getContext().getContextObjects();
         Association a = null;
         Topic t = null;
@@ -161,7 +163,7 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
                 }
                 else if(aort instanceof Association) {
                     a = (Association) aort;
-                    ArrayList as = new ArrayList();
+                    List<Association> as = new ArrayList<>();
                     as.add(a);
                     associations = as.iterator();
                 }
@@ -174,15 +176,17 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
                     a = (Association) associations.next();
                     Topic type = a.getType();
                     hlog("Copying association of type '" + getNameFor(type) + "'.");
-                    ArrayList typedAssociations = associationsByType.get(type);
-                    if(typedAssociations == null) typedAssociations = new ArrayList();
+                    List<Map<Topic, Topic>> typedAssociations = associationsByType.get(type);
+                    if(typedAssociations == null) {
+                    	typedAssociations = new ArrayList<>();
+                    }
 
-                    Collection aRoles = a.getRoles();
-                    HashSet roles = rolesByType.get(type);
-                    if(roles == null) roles = new LinkedHashSet();
-                    HashMap association = new LinkedHashMap();
+                    Collection<Topic> aRoles = a.getRoles();
+                    Set<Topic> roles = rolesByType.get(type);
+                    if(roles == null) roles = new LinkedHashSet<>();
+                    Map<Topic,Topic> association = new LinkedHashMap<>();
 
-                    for(Iterator aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
+                    for(Iterator<Topic> aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
                         Topic role = (Topic) aRoleIter.next();
                         Topic player = a.getPlayer(role);
                         association.put(role, player);
@@ -213,7 +217,7 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
                         
                         if(HTMLOutput) sb.append("</tr>");
                         sb.append("\n");
-                        for(HashMap<Topic,Topic> association : associationsByType.get(associationType)) {
+                        for(Map<Topic,Topic> association : associationsByType.get(associationType)) {
                             if(HTMLOutput) sb.append("<tr>");
                             for(Topic role : rolesByType.get(associationType)) {
                                 if(HTMLOutput) sb.append("<td>");
@@ -234,7 +238,7 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
                 else if(layout == LTM_LAYOUT) {
                     for(Topic associationType : associationsByType.keySet()) {
                         if(HTMLOutput) sb.append("<br>\n<table>\n");
-                        for(HashMap<Topic,Topic> association : associationsByType.get(associationType)) {
+                        for(Map<Topic,Topic> association : associationsByType.get(associationType)) {
                             if(HTMLOutput) sb.append("<tr>");
                             if(HTMLOutput) sb.append("<td>");
                             sb.append(getNameFor(associationType));

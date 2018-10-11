@@ -34,7 +34,10 @@ import org.wandora.application.gui.topicpanels.DockingFramePanel;
 
 
 public class DeleteCurrentDockable extends AbstractDockingTool {
-    
+	
+	private static final long serialVersionUID = 1L;
+
+
 
     /** Creates a new instance of DeleteCurrentDockable */
     public DeleteCurrentDockable() {

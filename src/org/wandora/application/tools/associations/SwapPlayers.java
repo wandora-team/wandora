@@ -63,7 +63,10 @@ import java.util.*;
 
 
 public class SwapPlayers extends AbstractWandoraTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean requiresRefresh = false;
     
 
     public SwapPlayers() {
@@ -90,7 +93,7 @@ public class SwapPlayers extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
         Iterator associations = context.getContextObjects();
         Association association = null;

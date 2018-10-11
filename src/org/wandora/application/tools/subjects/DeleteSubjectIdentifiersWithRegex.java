@@ -21,7 +21,7 @@
  * 
  * DeleteSubjectIdentifiersWithRegex.java
  *
- * Created on 21. heinäkuuta 2006, 16:54
+ * Created on 21. heinï¿½kuuta 2006, 16:54
  *
  */
 
@@ -45,7 +45,10 @@ import java.util.*;
  * @author akivela
  */
 public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers implements WandoraTool {
-    private RegularExpressionEditor editor;    
+
+	private static final long serialVersionUID = 1L;
+	
+	private RegularExpressionEditor editor;    
     
     
     public DeleteSubjectIdentifiersWithRegex() {
@@ -80,7 +83,7 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     
     @Override
     protected Collection<Locator> getSubjectIdentifiers(Iterator<Locator> subjectIdentifiers) throws TopicMapException {
-        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList();
+        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList<>();
         while(subjectIdentifiers.hasNext()) {
             Locator subjectIdentifier = subjectIdentifiers.next();
             if(subjectIdentifier != null) {
@@ -96,7 +99,7 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     
     @Override
     protected Collection<Locator> getSubjectIdentifiers(Topic topic) throws TopicMapException {
-        ArrayList subjectIdentifiersToDelete = new ArrayList();
+        List<Locator> subjectIdentifiersToDelete = new ArrayList<>();
         Collection<Locator> subjectIdentifiersOfTopic = topic.getSubjectIdentifiers();
         for(Locator subjectIdentifier : subjectIdentifiersOfTopic) {
             String subjectIdentifierString = subjectIdentifier.toExternalForm();

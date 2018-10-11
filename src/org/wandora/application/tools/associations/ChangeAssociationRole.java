@@ -47,6 +47,10 @@ import java.util.*;
 
 
 public class ChangeAssociationRole extends AbstractWandoraTool implements WandoraTool {
+	
+	private static final long serialVersionUID = 1L;
+	
+	
     private boolean requiresRefresh = false;
     
 
@@ -74,9 +78,9 @@ public class ChangeAssociationRole extends AbstractWandoraTool implements Wandor
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
-        Iterator associations = context.getContextObjects();
+        Iterator<Association> associations = context.getContextObjects();
         Association association = null;
         int count = 0;
         Collection<Topic> oldRoles = new ArrayList<Topic>();
@@ -120,13 +124,13 @@ public class ChangeAssociationRole extends AbstractWandoraTool implements Wandor
                 String[] oldRoleNameArray = oldRoleNames.toArray(new String[] {});
 
                 // Ask user about the old and new role.
-                String oldRoleBasename = WandoraOptionPane.showOptionDialog(admin, "Select role to be changed", "Changed role", WandoraOptionPane.OK_CANCEL_OPTION, oldRoleNameArray, oldRoleNameArray[0]);
+                String oldRoleBasename = WandoraOptionPane.showOptionDialog(wandora, "Select role to be changed", "Changed role", WandoraOptionPane.OK_CANCEL_OPTION, oldRoleNameArray, oldRoleNameArray[0]);
                 if(oldRoleBasename == null) return;
                 
-                Topic oldRole = admin.getTopicMap().getTopicWithBaseName(oldRoleBasename);
+                Topic oldRole = wandora.getTopicMap().getTopicWithBaseName(oldRoleBasename);
                 if(oldRole == null) {
                     // SI instead of Basename
-                    oldRole = admin.getTopicMap().getTopic(oldRoleBasename);
+                    oldRole = wandora.getTopicMap().getTopic(oldRoleBasename);
                 }
 
                 if(oldRole == null) {
@@ -134,7 +138,7 @@ public class ChangeAssociationRole extends AbstractWandoraTool implements Wandor
                     return;
                 }
                 
-                Topic newRole = admin.showTopicFinder("Select new role type...");
+                Topic newRole = wandora.showTopicFinder("Select new role type...");
 
                 if(newRole == null) {
                     log("New role not selected. Aborting.");

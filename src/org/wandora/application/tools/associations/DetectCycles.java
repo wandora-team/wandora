@@ -41,6 +41,10 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  */
 public class DetectCycles extends AbstractWandoraTool implements WandoraTool {
 
+	
+	private static final long serialVersionUID = 1L;
+	
+	
 
     public DetectCycles() {
         setContext(new AssociationContext());
@@ -67,7 +71,7 @@ public class DetectCycles extends AbstractWandoraTool implements WandoraTool {
     }
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         try {
             Map<Association,ArrayList<Topic>> associationsWithRoles = null;
             Topic role = null;
@@ -96,7 +100,7 @@ public class DetectCycles extends AbstractWandoraTool implements WandoraTool {
                                 role = roleIterator.next();
                                 if(role != null) {
                                     try {
-                                        Topic outRole = findOtherRole(a, role, admin);
+                                        Topic outRole = findOtherRole(a, role, wandora);
                                         if(outRole != null) {
                                             Topic player = a.getPlayer(role);
                                             setDefaultLogger();

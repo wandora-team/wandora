@@ -53,6 +53,10 @@ import java.util.*;
  * @author akivela
  */
 public class DeleteSymmetricAssociation extends AbstractWandoraTool implements WandoraTool {
+	
+	private static final long serialVersionUID = 1L;
+	
+	
     private boolean requiresRefresh = false;
     
 
@@ -80,7 +84,7 @@ public class DeleteSymmetricAssociation extends AbstractWandoraTool implements W
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
         Iterator associations = context.getContextObjects();
         Association association = null;

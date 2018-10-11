@@ -71,7 +71,11 @@ import java.util.*;
  */
 
 public class PasteAssociations extends AbstractWandoraTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+
+	private static final long serialVersionUID = 1L;
+	
+	private boolean requiresRefresh = false;
     private int userInterrupt;
     private boolean yesToAllCountErrors;
     
@@ -105,9 +109,9 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         requiresRefresh = false;
-        TopicMap topicMap = admin.getTopicMap();
+        TopicMap topicMap = wandora.getTopicMap();
         
         Iterator topics = context.getContextObjects();
 
@@ -134,20 +138,20 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
                         String aType = null;
                         if(st.hasMoreTokens()) aType = st.nextToken();
                         else { 
-                            WandoraOptionPane.showMessageDialog(admin ,"Clipboard contains no association type! No associations created!","Association type missing!",WandoraOptionPane.ERROR_MESSAGE); 
+                            WandoraOptionPane.showMessageDialog(wandora ,"Clipboard contains no association type! No associations created!","Association type missing!",WandoraOptionPane.ERROR_MESSAGE); 
                             return;
                         }
 
                         String aRoles = null;
                         if(st.hasMoreTokens()) aRoles = st.nextToken();
                         else { 
-                            WandoraOptionPane.showMessageDialog(admin ,"Clipboard contains no association roles! No associations created!","Association roles missing!",WandoraOptionPane.ERROR_MESSAGE); 
+                            WandoraOptionPane.showMessageDialog(wandora ,"Clipboard contains no association roles! No associations created!","Association roles missing!",WandoraOptionPane.ERROR_MESSAGE); 
                             return;
                         }
-                        ArrayList aRoleVector = vectorize(aRoles, "\t");
+                        List<String> aRoleVector = vectorize(aRoles, "\t");
 
                         if(!st.hasMoreTokens()) {
-                            WandoraOptionPane.showMessageDialog(admin ,"Clipboard contains no association players! No associations created!","Association players missing!",WandoraOptionPane.ERROR_MESSAGE);
+                            WandoraOptionPane.showMessageDialog(wandora ,"Clipboard contains no association players! No associations created!","Association players missing!",WandoraOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
@@ -158,10 +162,10 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
                         while(st.hasMoreTokens() && aType != null && aRoles != null && userInterrupt == 0) {
                             line++;
                             hasAssociations = true;
-                            ArrayList playerVector = vectorize(st.nextToken(), "\t");
+                            List<String> playerVector = vectorize(st.nextToken(), "\t");
                             if(playerVector.size() == aRoleVector.size()) {
-                                ArrayList aPlayerTopicVector = getTopics(admin, topicMap, playerVector, topicOpen);
-                                ArrayList aRoleTopicVector = getTopics(admin, topicMap, aRoleVector, topicOpen);
+                                List<Topic> aPlayerTopicVector = getTopics(wandora, topicMap, playerVector, topicOpen);
+                                List<Topic> aRoleTopicVector = getTopics(wandora, topicMap, aRoleVector, topicOpen);
 
                                 if(userInterrupt == WandoraOptionPane.NO_OPTION) {
                                     // User has disallowed topic creation. Skipping this association.
@@ -179,7 +183,7 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
                                     if(player != null && role != null) {
                                         if(a == null) {
                                             requiresRefresh = true;
-                                            Topic at = getTopic(admin, topicMap, aType);
+                                            Topic at = getTopic(wandora, topicMap, aType);
                                             if(at == null) break;
                                             a = topicMap.createAssociation(at);
                                             count++;
@@ -192,7 +196,7 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
                                 // It seems that the number of players does not equal number of roles.
                                 // Checking if user cancels operation!
                                 if( !yesToAllCountErrors ) {
-                                    int an = WandoraOptionPane.showConfirmDialog(admin ,"Number of players is not equal to number of roles! " +
+                                    int an = WandoraOptionPane.showConfirmDialog(wandora ,"Number of players is not equal to number of roles! " +
                                                                                     "Rejecting association! " +
                                                                                     "Would you like to continue the operation?",
                                                                                     "Player number mismatch number of roles!",
@@ -203,7 +207,7 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
                             }
                         }
                         if(hasAssociations && count == 0) {
-                            WandoraOptionPane.showMessageDialog(admin ,"Association creation failed! No associations created!","No associations created!",WandoraOptionPane.ERROR_MESSAGE);
+                            WandoraOptionPane.showMessageDialog(wandora ,"Association creation failed! No associations created!","No associations created!",WandoraOptionPane.ERROR_MESSAGE);
                         }
                     }
                     catch (Exception e) {
@@ -222,8 +226,8 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
     
       
     
-    public ArrayList vectorize(String str, String delim) {
-        ArrayList v = new ArrayList();
+    public List<String> vectorize(String str, String delim) {
+        List<String> v = new ArrayList<>();
         if(str != null && str.length() > 0) {
             StringTokenizer sto = new StringTokenizer(str, delim);
             while(sto.hasMoreTokens()) {
@@ -232,6 +236,7 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
         }
         return v;
     }
+    
     
     
     private boolean yesToAllNewTopics = false;
@@ -287,8 +292,8 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
    
     
     
-    public ArrayList getTopics(Wandora admin, TopicMap topicMap, ArrayList<String> topicNames, Topic defaultTopic)  throws TopicMapException {
-        ArrayList topics = new ArrayList();
+    public List<Topic> getTopics(Wandora admin, TopicMap topicMap, List<String> topicNames, Topic defaultTopic)  throws TopicMapException {
+        List<Topic> topics = new ArrayList<>();
         Topic t = null;
         for (String topicName : topicNames) {
             if("__CURRENT_TOPIC__".equals(topicName)) {

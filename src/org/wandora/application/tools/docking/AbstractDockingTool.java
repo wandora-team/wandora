@@ -40,7 +40,12 @@ import org.wandora.topicmap.TopicMapException;
 
 public class AbstractDockingTool extends AbstractWandoraTool implements WandoraTool {
 
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	@Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
         System.out.println("Warning: Docking tool is not overriding execute method.");
     }

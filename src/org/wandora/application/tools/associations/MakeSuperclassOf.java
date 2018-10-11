@@ -21,7 +21,7 @@
  * 
  * MakeSuperclassOf.java
  *
- * Created on 28. heinäkuuta 2006, 15:41
+ * Created on 28. heinï¿½kuuta 2006, 15:41
  *
  */
 
@@ -39,7 +39,12 @@ import java.util.*;
  * @author akivela
  */
 public class MakeSuperclassOf extends AbstractWandoraTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private boolean requiresRefresh = false;
     
     
     public MakeSuperclassOf() {
@@ -63,7 +68,7 @@ public class MakeSuperclassOf extends AbstractWandoraTool implements WandoraTool
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
         Iterator topics = context.getContextObjects();
         int count = 0;
@@ -71,15 +76,16 @@ public class MakeSuperclassOf extends AbstractWandoraTool implements WandoraTool
         
         try {
             Topic subTopic = null;
-            Topic superTopic = admin.getOpenTopic();
+            Topic superTopic = wandora.getOpenTopic();
+            
+            if(superTopic == null) return;
+            
             TopicMap topicmap = superTopic.getTopicMap();
             Association newSuperAssociation = null;
             
             Topic superClassType = getOrCreateTopic("http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass", topicmap);
             Topic superClassRole = getOrCreateTopic("http://www.topicmaps.org/xtm/1.0/core.xtm#subclass", topicmap);
             Topic subClassRole = getOrCreateTopic("http://www.topicmaps.org/xtm/1.0/core.xtm#superclass", topicmap);
-
-            if(superTopic == null) return;
 
             setDefaultLogger();
 

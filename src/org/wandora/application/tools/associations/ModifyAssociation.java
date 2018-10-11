@@ -34,7 +34,6 @@ import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.contexts.*;
-import java.io.*;
 import java.util.*;
 import org.wandora.application.tools.AbstractWandoraTool;
 
@@ -46,8 +45,11 @@ import org.wandora.application.tools.AbstractWandoraTool;
  */
 public class ModifyAssociation extends AbstractWandoraTool implements WandoraTool {
     
-    
-    public ModifyAssociation() {
+
+	private static final long serialVersionUID = 1L;
+
+
+	public ModifyAssociation() {
         setContext(new AssociationContext());
     }
     public ModifyAssociation(Context preferredContext) {
@@ -67,15 +69,15 @@ public class ModifyAssociation extends AbstractWandoraTool implements WandoraToo
     }
 
 
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         Iterator contextAssociations = context.getContextObjects();
         if(contextAssociations == null || !contextAssociations.hasNext()) return;
         
         Association association = (Association) contextAssociations.next();
         if( !contextAssociations.hasNext() ) {
             if(association != null) {
-                Topic topic = admin.getOpenTopic();
-                SchemaAssociationPrompt prompt = new SchemaAssociationPrompt(admin,topic,true,association);
+                Topic topic = wandora.getOpenTopic();
+                SchemaAssociationPrompt prompt = new SchemaAssociationPrompt(wandora,topic,true,association);
                 prompt.setVisible(true);
             }
         }

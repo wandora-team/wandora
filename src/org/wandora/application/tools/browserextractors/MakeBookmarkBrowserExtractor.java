@@ -40,7 +40,11 @@ import org.wandora.application.tools.extractors.ExtractHelper;
  */
 public class MakeBookmarkBrowserExtractor extends AbstractExtractor implements BrowserPluginExtractor {
 
-    public static final String bookmarkSI = "http://wandora.org/si/bookmark";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final String bookmarkSI = "http://wandora.org/si/bookmark";
     
     public MakeBookmarkBrowserExtractor() {
         

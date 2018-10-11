@@ -47,7 +47,12 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  * @author akivela
  */
 public class FindAssociationsInOccurrence extends AbstractWandoraTool implements WandoraTool {
-    public static int MAXLEN = 256;
+	
+	
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static int MAXLEN = 256;
     public String replacement = "";
     public String SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
     
@@ -81,27 +86,27 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool implements
     
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora wandora, Context context) {   
         try {
             requiresRefresh = false;
-            GenericOptionsDialog god=new GenericOptionsDialog(admin,"Find associations options","Find associations options",true,new String[][]{
+            GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Find associations options","Find associations options",true,new String[][]{
                 new String[]{"Occurrence type","topic"},
                 new String[]{"Occurrence scope","topic"},
                 new String[]{"Topic role","topic"},
                 new String[]{"Link pattern","string","\\[\\[(.+?)\\]\\]","The regular expression pattern for base names? First capture group in the pattern marks the base name."},
                 new String[]{"SI template","string","http://wandora.org/si/occurrence/%OCCURRENCE%"},
                 new String[]{"Create topics","boolean","true","Should new topics be created for non existing base names"},
-            },admin);
+            },wandora);
             god.setVisible(true);
             if(god.wasCancelled()) return;
             Map<String,String> values=god.getValues();
             
             SITemplate = values.get("SI template");
-            Topic occurrenceType=admin.getTopicMap().getTopic(values.get("Occurrence type"));
+            Topic occurrenceType=wandora.getTopicMap().getTopic(values.get("Occurrence type"));
             if(occurrenceType==null) return;
-            Topic occurrenceScope=admin.getTopicMap().getTopic(values.get("Occurrence scope"));
+            Topic occurrenceScope=wandora.getTopicMap().getTopic(values.get("Occurrence scope"));
             if(occurrenceScope==null) return;
-            Topic topicRole=admin.getTopicMap().getTopic(values.get("Topic role"));
+            Topic topicRole=wandora.getTopicMap().getTopic(values.get("Topic role"));
             if(topicRole==null) return;
             String recognizePatternString=values.get("Link pattern");
             createNewTopics=Boolean.parseBoolean(values.get("Create topics"));
@@ -117,7 +122,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool implements
             setLogTitle("Finding associations from occurrences");
             log("Finding associations from occurrences");
             
-            TopicMap map = admin.getTopicMap();
+            TopicMap map = wandora.getTopicMap();
             Topic topic = null;
             String topicName = null;
             Association a = null;

@@ -41,7 +41,10 @@ import java.util.*;
  * @author akivela
  */
 public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean requiresRefresh = false;
     private boolean shouldContinue = true;
     
     
@@ -72,7 +75,7 @@ public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
             Map<Association,ArrayList<Topic>> associationsWithRoles = null;
@@ -111,7 +114,7 @@ public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
                                 role = roleIterator.next();
                                 if(role != null) {
                                     try {
-                                        if(confirmRemove(admin, a, role)) {
+                                        if(confirmRemove(wandora, a, role)) {
                                             requiresRefresh = true;
                                             a.removePlayer(role);
                                             removeCounter++;

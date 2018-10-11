@@ -49,12 +49,16 @@ import org.wandora.application.tools.AbstractWandoraTool;
 
 public class DuplicateAssociationsOfType extends AbstractWandoraTool implements WandoraTool {
 
-    private Topic theTopic = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private Topic theTopic = null;
     private Topic oldAssociationType = null;
     public boolean wasCancelled = false;
     public boolean changeRoles = false;
     public boolean removeAssociations = false;
-    private Hashtable roleMap = new Hashtable();
+    private Map<Topic,Object> roleMap = new LinkedHashMap<>();
 
     
     
@@ -78,16 +82,16 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
     
     public void makeRoleMap(Wandora admin)  throws TopicMapException {
 //        BaseNamePrompt prompt=new BaseNamePrompt(admin.getManager(), admin, true);
-        roleMap = new Hashtable();
+        roleMap = new LinkedHashMap<>();
         //System.out.println("Type: " + oldAssociationType.getBaseName());
-        Collection associations = theTopic.getAssociations(oldAssociationType);
-        Iterator associationIterator = associations.iterator(); 
+        Collection<Association> associations = theTopic.getAssociations(oldAssociationType);
+        Iterator<Association> associationIterator = associations.iterator(); 
         Association association = null;
         Topic role = null;
         while(associationIterator.hasNext()) {
             association = (Association) associationIterator.next();
-            Collection roles = association.getRoles();
-            for(Iterator i2 = roles.iterator(); i2.hasNext(); ) {
+            Collection<Topic> roles = association.getRoles();
+            for(Iterator<Topic> i2 = roles.iterator(); i2.hasNext(); ) {
                 role = (Topic) i2.next();
                 if(!roleMap.containsKey(role)) {
                     if(changeRoles) {
@@ -126,8 +130,8 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
-        theTopic = admin.getOpenTopic();
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+        theTopic = wandora.getOpenTopic();
         oldAssociationType = (Topic) context.getContextObjects().next();
         wasCancelled = false;
 /*      
@@ -136,26 +140,26 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
         prompt.setVisible(true);
         Topic newAssociationType=prompt.getTopic();
 */
-        Topic newAssociationType=admin.showTopicFinder("Select new association type...");                
+        Topic newAssociationType=wandora.showTopicFinder("Select new association type...");                
         if (newAssociationType != null) {
-            makeRoleMap(admin);        
+            makeRoleMap(wandora);        
             //System.out.println("new type: " + newAssociationType.getBaseName());
             if(theTopic != null) {
                 if(oldAssociationType != null) {
-                    Collection ass = theTopic.getAssociations();
+                    Collection<Association> ass = theTopic.getAssociations();
                     TopicMap topicMap = null;
-                    Vector atemp = new Vector();
-                    for(Iterator asi = ass.iterator(); asi.hasNext();) {
+                    List<Association> atemp = new ArrayList<>();
+                    for(Iterator<Association> asi = ass.iterator(); asi.hasNext();) {
                         atemp.add(asi.next());
                     }
                     for(int i=0; i<atemp.size(); i++) {
-                        Association a = (Association) atemp.elementAt(i);
+                        Association a = (Association) atemp.get(i);
                         if(a.getType().equals(oldAssociationType)) {
                             topicMap = a.getTopicMap();
                             Association ca = topicMap.createAssociation(newAssociationType);
                             //System.out.println("new type: " + newAssociationType.getBaseName());
-                            Collection aRoles = a.getRoles();
-                            for(Iterator aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
+                            Collection<Topic> aRoles = a.getRoles();
+                            for(Iterator<Topic> aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
                                 Topic role = (Topic) aRoleIter.next();
                                 Topic player = a.getPlayer(role);
                                 if(roleMap != null) {

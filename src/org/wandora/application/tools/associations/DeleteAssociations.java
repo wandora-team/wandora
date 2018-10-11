@@ -46,10 +46,12 @@ import java.util.*;
  */
 public class DeleteAssociations extends AbstractWandoraTool implements WandoraTool {
 
+	private static final long serialVersionUID = 1L;
+	
     public boolean forceDelete = true;
     public boolean confirm = true;
     public boolean shouldContinue = true;
-    protected Wandora admin = null;
+    protected Wandora wandora = null;
     private boolean requiresRefresh = false;
     
     
@@ -71,8 +73,8 @@ public class DeleteAssociations extends AbstractWandoraTool implements WandoraTo
 
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
-        this.admin = admin;
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+        this.wandora = wandora;
         Iterator associations = context.getContextObjects();
         Association association = null;
         int count = 0;
@@ -125,7 +127,7 @@ public class DeleteAssociations extends AbstractWandoraTool implements WandoraTo
         if(yesToAll) return true;
         if(association != null) {
             String typeName = association.getType() != null ? association.getType().getBaseName() : "";
-            Iterator roleIterator = association.getRoles().iterator();
+            Iterator<Topic> roleIterator = association.getRoles().iterator();
             StringBuilder playerDescription = new StringBuilder("");
             while(roleIterator.hasNext()) {
                 Topic role = (Topic) roleIterator.next();
@@ -134,7 +136,7 @@ public class DeleteAssociations extends AbstractWandoraTool implements WandoraTo
                 if(roleIterator.hasNext()) playerDescription.append(" and ");
             }
             String confirmMessage = "Would you like delete '" + typeName + "' association between\n" + playerDescription.toString() + "?";
-            int answer = WandoraOptionPane.showConfirmDialog(admin, confirmMessage,"Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION );
+            int answer = WandoraOptionPane.showConfirmDialog(wandora, confirmMessage,"Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION );
             if(answer == WandoraOptionPane.YES_OPTION) {
                 return true;
             }

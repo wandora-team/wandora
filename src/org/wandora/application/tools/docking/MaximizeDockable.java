@@ -34,6 +34,11 @@ import org.wandora.application.gui.topicpanels.DockingFramePanel;
 
 
 public class MaximizeDockable extends AbstractDockingTool {
+	
+	private static final long serialVersionUID = 1L;
+
+
+	
     private Dockable dockable = null;
 
     /** Creates a new instance of MaximizeDockable */

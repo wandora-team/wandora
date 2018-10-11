@@ -67,8 +67,11 @@ import org.wandora.utils.*;
 
 public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
     
-    
-    public CopyEdgePath() {
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public CopyEdgePath() {
         setContext(new AssociationContext());
     }
     
@@ -95,7 +98,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             Map<Association,ArrayList<Topic>> associationsWithRoles = null;
             Topic role = null;
@@ -127,7 +130,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
                                 role = roleIterator.next();
                                 if(role != null) {
                                     try {
-                                        Topic outRole = findOtherRole(a, role, admin);
+                                        Topic outRole = findOtherRole(a, role, wandora);
                                         if(outRole != null) {
                                             Topic player = a.getPlayer(role);
                                             List<Topic> topicPath = TopicTools.getSinglePath(player, a.getType(), role, outRole);
@@ -168,7 +171,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
     
     Topic otherRole = null;
     
-    private Topic findOtherRole(Association a, Topic r, Wandora admin) {
+    private Topic findOtherRole(Association a, Topic r, Wandora wandora) {
         if(otherRole != null) return otherRole;
         
         try {
@@ -185,7 +188,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
             }
             else {
                 allRoles.remove(r);
-                Object answer = WandoraOptionPane.showOptionDialog(admin, "Select second role for association travelsal", "Select second role", WandoraOptionPane.OK_CANCEL_OPTION, allRoles.toArray(), allRoles.iterator().next());
+                Object answer = WandoraOptionPane.showOptionDialog(wandora, "Select second role for association travelsal", "Select second role", WandoraOptionPane.OK_CANCEL_OPTION, allRoles.toArray(), allRoles.iterator().next());
                 if(answer instanceof Topic) {
                     return (Topic) answer;
                 }

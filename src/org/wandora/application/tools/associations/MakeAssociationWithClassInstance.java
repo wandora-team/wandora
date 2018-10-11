@@ -33,8 +33,6 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import static org.wandora.application.tools.AbstractWandoraTool.getTopicName;
-
 
 
 /**
@@ -50,9 +48,11 @@ import static org.wandora.application.tools.AbstractWandoraTool.getTopicName;
 
 public class MakeAssociationWithClassInstance extends AbstractWandoraTool implements WandoraTool {
 
-    
-    
-    private boolean deleteClassInstance = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private boolean deleteClassInstance = false;
     private boolean requiresRefresh = false;
     
 
@@ -80,18 +80,18 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool implem
     
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora wandora, Context context) {   
         try {
             Iterator topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
                         
-            Topic associationType=admin.showTopicFinder("Select association type...");                
+            Topic associationType=wandora.showTopicFinder("Select association type...");                
             if(associationType == null) return;
 
-            Topic instanceRole=admin.showTopicFinder("Select role topic for instances...");                
+            Topic instanceRole=wandora.showTopicFinder("Select role topic for instances...");                
             if(instanceRole == null) return;
 
-            Topic classRole=admin.showTopicFinder("Select role topic for classes...");                
+            Topic classRole=wandora.showTopicFinder("Select role topic for classes...");                
             if(classRole == null) return;
             
             setDefaultLogger();
@@ -100,7 +100,7 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool implem
             
             Topic topic = null;
             int progress = 0;
-            TopicMap map = admin.getTopicMap();
+            TopicMap map = wandora.getTopicMap();
             Association a = null;
 
             ArrayList<Topic> dtopics = new ArrayList<Topic>();

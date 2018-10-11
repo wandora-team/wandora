@@ -21,11 +21,11 @@
  * 
  */
 package org.wandora.application.tools.browserextractors;
+
 import java.io.File;
 import java.net.URL;
 import org.wandora.topicmap.*;
 import org.wandora.application.Wandora;
-import java.util.regex.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -41,7 +41,10 @@ import org.wandora.application.tools.extractors.ExtractHelper;
 public class BrowserHistoryExtractor extends AbstractExtractor implements BrowserPluginExtractor {
 
 
-    public static final String historySI="http://wandora.org/si/browser-history";
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final String historySI="http://wandora.org/si/browser-history";
     public static final String entrySI="http://wandora.org/si/browser-history/entry";
     public static final String dateSI="http://wandora.org/si/browser-history/date";
     public static final String pageSI="http://wandora.org/si/browser-history/page";

@@ -49,11 +49,14 @@ import org.wandora.application.tools.AbstractWandoraTool;
 
 public class DuplicateAssociations extends AbstractWandoraTool implements WandoraTool {
 
+	private static final long serialVersionUID = 1L;
+	
+	
     private Topic oldAssociationType = null;
     public boolean wasCancelled = false;
     public boolean changeRoles = false;
     public boolean removeAssociations = false;
-    private Hashtable roleMap = new Hashtable();
+    private Map<Topic,Object> roleMap = new LinkedHashMap<>();
     
     
     public DuplicateAssociations() {
@@ -67,10 +70,10 @@ public class DuplicateAssociations extends AbstractWandoraTool implements Wandor
     }
     
     
-    public void makeRoleMap(Wandora admin)  throws TopicMapException {
+    public void makeRoleMap(Wandora wandora)  throws TopicMapException {
         Iterator contextAssociations = getContext().getContextObjects();
         if(contextAssociations == null || !contextAssociations.hasNext()) return;
-        if(roleMap == null) roleMap = new Hashtable();
+        if(roleMap == null) roleMap = new LinkedHashMap<>();
 
         //BaseNamePrompt prompt=new BaseNamePrompt(admin.getManager(), admin, true);
         //Topic topicOpen = admin.getOpenTopic();
@@ -79,20 +82,20 @@ public class DuplicateAssociations extends AbstractWandoraTool implements Wandor
         Topic role = null;
         while(contextAssociations.hasNext()) {
             association = (Association) contextAssociations.next();
-            Collection roles = association.getRoles();
-            for(Iterator i2 = roles.iterator(); i2.hasNext(); ) {
+            Collection<Topic> roles = association.getRoles();
+            for(Iterator<Topic> i2 = roles.iterator(); i2.hasNext(); ) {
                 role = (Topic) i2.next();
                 if(!roleMap.containsKey(role)) {
                     if(changeRoles) {                           
 /*                        prompt.setTitle("Map role '" + getTopicName(role) + "' to...");
                         prompt.setVisible(true);
                         Topic newRole=prompt.getTopic();*/
-                        Topic newRole=admin.showTopicFinder("Map role '" + getTopicName(role) + "' to...");                
+                        Topic newRole=wandora.showTopicFinder("Map role '" + getTopicName(role) + "' to...");                
                         if(newRole != null) {
                             roleMap.put(role, newRole);
                         }
                         else {
-                            int answer = WandoraOptionPane.showConfirmDialog(admin ,
+                            int answer = WandoraOptionPane.showConfirmDialog(wandora ,
                                 "Would you like exclude players of role " + getTopicName(role) + " from the association? " +
                                 "Press Yes to exclude players! "+
                                 "Press No to use existing role topic!",
@@ -131,19 +134,19 @@ public class DuplicateAssociations extends AbstractWandoraTool implements Wandor
             Topic topicOpen = admin.getOpenTopic();           
             if(topicOpen != null) {
                 if(oldAssociationType != null) {
-                    Collection ass = topicOpen.getAssociations();
+                    Collection<Association> ass = topicOpen.getAssociations();
                     TopicMap topicMap = admin.getTopicMap();
-                    Vector atemp = new Vector();
-                    for(Iterator asi = ass.iterator(); asi.hasNext();) {
+                    List<Association> atemp = new ArrayList<>();
+                    for(Iterator<Association> asi = ass.iterator(); asi.hasNext();) {
                         atemp.add(asi.next());
                     }
                     for(int i=0; i<atemp.size(); i++) {
-                        Association a = (Association) atemp.elementAt(i);
+                        Association a = (Association) atemp.get(i);
                         if(a.getType().equals(oldAssociationType)) {
                             Association ca = topicMap.createAssociation(topicOpen);
                             ca.setType(newAssociationType);                          
-                            Collection aRoles = a.getRoles();
-                            for(Iterator aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
+                            Collection<Topic> aRoles = a.getRoles();
+                            for(Iterator<Topic> aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
                                 Topic role = (Topic) aRoleIter.next();
                                 Topic player = a.getPlayer(role);
                                 if(roleMap != null) {

@@ -21,7 +21,7 @@
  * 
  * DeleteAssociationsInTopic.java
  *
- * Created on 20. heinäkuuta 2006, 20:55
+ * Created on 20. heinï¿½kuuta 2006, 20:55
  *
  */
 
@@ -36,8 +36,8 @@ import org.wandora.application.gui.*;
 import org.wandora.application.tools.*;
 
 import java.util.*;
-import org.wandora.application.gui.topicstringify.TopicToString;
-import static org.wandora.application.tools.AbstractWandoraTool.getTopicName;
+
+
 
 /**
  * Deletes associations in a certain topic i.e. associations where this player
@@ -47,12 +47,14 @@ import static org.wandora.application.tools.AbstractWandoraTool.getTopicName;
  */
 public class DeleteAssociationsInTopic extends AbstractWandoraTool implements WandoraTool {
     
+	private static final long serialVersionUID = 1L;
+	
     
     public boolean forceDelete = true;
     public boolean confirm = true;
     public boolean shouldContinue = true;
     
-    protected Wandora admin = null;
+    protected Wandora wandora = null;
     private String associationName = null;
     
     
@@ -75,8 +77,8 @@ public class DeleteAssociationsInTopic extends AbstractWandoraTool implements Wa
     
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
-        this.admin = admin;
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+        this.wandora = wandora;
         ArrayList<Association> associationsToDelete = new ArrayList<Association>();
         Iterator topics = getContext().getContextObjects();
         Collection<Association> associations = null;
@@ -102,7 +104,7 @@ public class DeleteAssociationsInTopic extends AbstractWandoraTool implements Wa
                         ltopic = ((LayeredTopic) topic).getTopicForSelectedLayer();
                         if(ltopic == null || ltopic.isRemoved()) {
                             setState(INVISIBLE);
-                            int answer = WandoraOptionPane.showConfirmDialog(admin,"Topic '"+getTopicName(topic)+"' doesn't exist in selected layer.", "Topic not in selected layer", WandoraOptionPane.OK_CANCEL_OPTION);
+                            int answer = WandoraOptionPane.showConfirmDialog(wandora,"Topic '"+getTopicName(topic)+"' doesn't exist in selected layer.", "Topic not in selected layer", WandoraOptionPane.OK_CANCEL_OPTION);
                             setState(VISIBLE);
                             if(answer == WandoraOptionPane.CANCEL_OPTION) shouldContinue = false;
                             continue;
@@ -179,7 +181,7 @@ public class DeleteAssociationsInTopic extends AbstractWandoraTool implements Wa
             setState(INVISIBLE);
             associationName = buildAssociationName(association);
             String confirmMessage = "Would you like delete "+associationName+"?";
-            int answer = WandoraOptionPane.showConfirmDialog(admin, confirmMessage,"Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+            int answer = WandoraOptionPane.showConfirmDialog(wandora, confirmMessage,"Confirm delete", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
             setState(VISIBLE);
             if(answer == WandoraOptionPane.YES_OPTION) {
                 return true;

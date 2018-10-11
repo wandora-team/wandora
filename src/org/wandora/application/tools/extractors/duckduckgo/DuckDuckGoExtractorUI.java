@@ -77,7 +77,7 @@ public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
     public WandoraTool[] getExtractors(DuckDuckGoExtractor tool) throws TopicMapException {
         
         WandoraTool wt;
-        ArrayList<WandoraTool> wts = new ArrayList();
+        ArrayList<WandoraTool> wts = new ArrayList<>();
         
         String query = ddgInput.getText();
         String extractUrl = ddgEndpoint + "?q=" + query + "&format=json";

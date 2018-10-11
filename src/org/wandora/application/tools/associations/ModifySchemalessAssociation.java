@@ -32,7 +32,6 @@ import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.contexts.*;
-import java.io.*;
 import java.util.*;
 import org.wandora.application.tools.AbstractWandoraTool;
 
@@ -42,7 +41,11 @@ import org.wandora.application.tools.AbstractWandoraTool;
  */
 public class ModifySchemalessAssociation extends AbstractWandoraTool implements WandoraTool {
     
-    /** Creates a new instance of ModifySchemalessAssociation */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of ModifySchemalessAssociation */
     public ModifySchemalessAssociation() {
         setContext(new AssociationContext());
     }

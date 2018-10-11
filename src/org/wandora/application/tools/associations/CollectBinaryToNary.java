@@ -73,7 +73,11 @@ import java.util.*;
 
 public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraTool {
     
-    private boolean deleteOld = false;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private boolean deleteOld = false;
     
     private boolean askNewAssociationType = true;
     private boolean requiresRefresh = false;
@@ -106,10 +110,10 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
     
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
-            Iterator associations = null;
+            Iterator<Association> associations = null;
             Topic baseTopic = null;
             Association association = null;
             int counter = 0;
@@ -119,11 +123,11 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
                 
                 Topic newAssociationType = null;
                 if(askNewAssociationType) {
-                    admin.showTopicFinder("Select new type of associations...");
+                	wandora.showTopicFinder("Select new type of associations...");
                     if(newAssociationType == null) return;
                 }
                 
-                baseTopic = admin.getOpenTopic();
+                baseTopic = wandora.getOpenTopic();
                 while(associations.hasNext() && !forceStop()) {
                     association = (Association) associations.next();
                     if(association != null && !association.isRemoved()) {
@@ -145,16 +149,16 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
             
             else { // TOPIC CONTEXT!!
                 
-                Topic addressedAssociationType = admin.showTopicFinder("Select type of processed associations...");
+                Topic addressedAssociationType = wandora.showTopicFinder("Select type of processed associations...");
                 if(addressedAssociationType == null) return;
                 
                 Topic newAssociationType = addressedAssociationType;
                 if(askNewAssociationType) {
-                    admin.showTopicFinder("Select new type of associations...");
+                	wandora.showTopicFinder("Select new type of associations...");
                     if(newAssociationType == null) return;
                 }
                 
-                Iterator baseTopics = context.getContextObjects();
+                Iterator<Topic> baseTopics = context.getContextObjects();
                 baseTopic = null;
                 associations = null;
                 Collection associationCollection = null;

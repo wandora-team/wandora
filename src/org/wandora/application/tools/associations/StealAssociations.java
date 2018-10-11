@@ -21,7 +21,7 @@
  * 
  * StealAssociations.java
  *
- * Created on 13. heinäkuuta 2006, 17:09
+ * Created on 13. heinï¿½kuuta 2006, 17:09
  *
  */
 
@@ -67,7 +67,10 @@ import java.util.*;
 
 public class StealAssociations extends AbstractWandoraTool implements WandoraTool {
     
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean requiresRefresh = false;
     private boolean deleteOld = true;
     private boolean askForThief = false;
     
@@ -102,7 +105,7 @@ public class StealAssociations extends AbstractWandoraTool implements WandoraToo
     
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
             Iterator associations = null;
@@ -119,7 +122,7 @@ public class StealAssociations extends AbstractWandoraTool implements WandoraToo
                 Topic role = null;
                 Topic player = null;
                 
-                thief = admin.getOpenTopic();
+                thief = wandora.getOpenTopic();
                 if(thief == null) return;
                 while(associations.hasNext() && !forceStop()) {
                     a = (Association) associations.next();
@@ -147,8 +150,8 @@ public class StealAssociations extends AbstractWandoraTool implements WandoraToo
             }
             
             else { // TOPIC CONTEXT!!
-                if(askForThief) thief = admin.showTopicFinder("Select new player topic...");
-                else thief = admin.getOpenTopic();
+                if(askForThief) thief = wandora.showTopicFinder("Select new player topic...");
+                else thief = wandora.getOpenTopic();
                 if(thief == null) return;
                 
                 Iterator victims = context.getContextObjects();

@@ -21,7 +21,7 @@
  * 
  * AddFreeAssociation.java
  *
- * Created on 14. kesäkuuta 2006, 10:04
+ * Created on 14. kesï¿½kuuta 2006, 10:04
  */
 
 package org.wandora.application.tools.associations;
@@ -39,6 +39,8 @@ import org.wandora.application.tools.AbstractWandoraTool;
  */
 public class AddSchemalessAssociation extends AbstractWandoraTool {
     
+	private static final long serialVersionUID = 1L;
+	
 
     /** Creates a new instance of AddFreeAssociation */
     public AddSchemalessAssociation() {

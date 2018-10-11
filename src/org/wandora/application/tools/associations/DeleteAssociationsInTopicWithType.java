@@ -21,7 +21,7 @@
  * 
  * DeleteAssociationsInTopicWithType.java
  *
- * Created on 20. heinäkuuta 2006, 21:41
+ * Created on 20. heinï¿½kuuta 2006, 21:41
  *
  */
 
@@ -40,6 +40,9 @@ import java.util.*;
  */
 public class DeleteAssociationsInTopicWithType extends DeleteAssociationsInTopic implements WandoraTool {
     
+	private static final long serialVersionUID = 1L;
+	
+	
     private Topic associationType = null;
     
 
@@ -51,11 +54,11 @@ public class DeleteAssociationsInTopicWithType extends DeleteAssociationsInTopic
     
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
         associationType=null;
-        associationType=admin.showTopicFinder("Select type of association to be removed from topics...");                
+        associationType=wandora.showTopicFinder("Select type of association to be removed from topics...");                
         if(associationType != null) {
-            super.execute(admin, context);
+            super.execute(wandora, context);
         }
     }
     
@@ -63,7 +66,7 @@ public class DeleteAssociationsInTopicWithType extends DeleteAssociationsInTopic
     @Override
     public Collection<Association> solveTopicAssociations(Topic topic) throws TopicMapException {
         TopicMap tm = topic.getTopicMap();
-        ArrayList<Association> associations = new ArrayList();
+        ArrayList<Association> associations = new ArrayList<>();
         Topic at = null;
         for(Locator l : associationType.getSubjectIdentifiers()) {
             at = tm.getTopic(l);

@@ -55,7 +55,10 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  * @author akivela
  */
 public class SplitToBinaryAssociations extends AbstractWandoraTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean requiresRefresh = false;
     
     
     /** Creates a new instance of SplitToBinaryAssociations */
@@ -87,10 +90,10 @@ public class SplitToBinaryAssociations extends AbstractWandoraTool implements Wa
     
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
-            TopicMap topicmap = admin.getTopicMap();
+            TopicMap topicmap = wandora.getTopicMap();
             Iterator associations = null;
             Topic baseRole = null;
             Topic base = null;
@@ -101,7 +104,7 @@ public class SplitToBinaryAssociations extends AbstractWandoraTool implements Wa
             int oldCounter = 0;
             int newCounter = 0;
             
-            int answer = WandoraOptionPane.showConfirmDialog(admin, "Tool splits selected n-ary associations to binary associations. Selected player topic is interpreted as the base player. The base player is same in every created association. The other part of created binary associations is one of the other players in source associations. Are you sure you want convert selected associations to binary associations?", "Convert to binary associations?");
+            int answer = WandoraOptionPane.showConfirmDialog(wandora, "Tool splits selected n-ary associations to binary associations. Selected player topic is interpreted as the base player. The base player is same in every created association. The other part of created binary associations is one of the other players in source associations. Are you sure you want convert selected associations to binary associations?", "Convert to binary associations?");
             if(answer != WandoraOptionPane.YES_OPTION) return;
             
             setDefaultLogger();
@@ -109,7 +112,7 @@ public class SplitToBinaryAssociations extends AbstractWandoraTool implements Wa
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
                 associations = context.getContextObjects();
                 
-                base = admin.getOpenTopic();
+                base = wandora.getOpenTopic();
                 if(base == null) {
                     log("Base topic not found. Rejecting association.");
                 }
@@ -121,7 +124,7 @@ public class SplitToBinaryAssociations extends AbstractWandoraTool implements Wa
                         player = null;
                         a = (Association) associations.next();
                         Iterator<Topic> roles = null;
-                        HashMap splits = new HashMap();
+                        Map<Topic,Topic> splits = new LinkedHashMap<>();
                         if(a != null && !a.isRemoved()) {
                             roles = a.getRoles().iterator();
                             while(roles.hasNext()) {
@@ -142,7 +145,7 @@ public class SplitToBinaryAssociations extends AbstractWandoraTool implements Wa
 
                             oldCounter++;
                             a.remove();
-                            Iterator splitIterator = splits.keySet().iterator();
+                            Iterator<Topic> splitIterator = splits.keySet().iterator();
                             while(splitIterator.hasNext() && !forceStop()) {
                                 try {
                                     role = (Topic) splitIterator.next();

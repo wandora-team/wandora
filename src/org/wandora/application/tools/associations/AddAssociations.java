@@ -44,7 +44,11 @@ import org.wandora.application.tools.AbstractWandoraTool;
  */
 public class AddAssociations extends AbstractWandoraTool implements WandoraTool {
     
-    public AddAssociations() {
+
+	private static final long serialVersionUID = 1L;
+	
+
+	public AddAssociations() {
     }
     public AddAssociations(Context preferredContext) {
         setContext(preferredContext);

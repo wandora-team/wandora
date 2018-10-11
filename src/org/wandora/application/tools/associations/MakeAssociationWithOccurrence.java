@@ -34,8 +34,6 @@ import org.wandora.application.gui.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import static org.wandora.application.tools.AbstractWandoraTool.getTopicName;
-
 
 
 
@@ -67,7 +65,11 @@ import static org.wandora.application.tools.AbstractWandoraTool.getTopicName;
 
 
 public class MakeAssociationWithOccurrence extends AbstractWandoraTool implements WandoraTool {
-    public static int MAXLEN = 256;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public static int MAXLEN = 256;
     public String replacement = "";
     public String SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
     
@@ -101,27 +103,27 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
     
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora wandora, Context context) {   
         try {
             SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
             Iterator topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
                         
-            Topic occurrenceType=admin.showTopicFinder("Select occurrence type...");                
+            Topic occurrenceType=wandora.showTopicFinder("Select occurrence type...");                
             if(occurrenceType == null) return;
             Locator occurrenceTypeLocator = occurrenceType.getSubjectIdentifiers().iterator().next();
             
-            Topic occurrenceScope=admin.showTopicFinder("Select occurrence scope...");                
+            Topic occurrenceScope=wandora.showTopicFinder("Select occurrence scope...");                
             if(occurrenceScope == null) return;
             Locator occurrenceScopeLocator = occurrenceScope.getSubjectIdentifiers().iterator().next();
             
-            Topic topicRole=admin.showTopicFinder("Select topic's role in association...");                
+            Topic topicRole=wandora.showTopicFinder("Select topic's role in association...");                
             if(topicRole == null) return;
 
             if(askTemplate) {
-                SITemplate = WandoraOptionPane.showInputDialog(admin, "Make subject identifier to new topic using following template. String '%OCCURRENCE%' is replaced with the occurrence.", SITemplate);
+                SITemplate = WandoraOptionPane.showInputDialog(wandora, "Make subject identifier to new topic using following template. String '%OCCURRENCE%' is replaced with the occurrence.", SITemplate);
                 if(SITemplate == null || SITemplate.length() == 0 || !SITemplate.contains("%OCCURRENCE%")) {
-                    int a = WandoraOptionPane.showConfirmDialog(admin, "Your template string '"+ SITemplate +"' does not contain '%OCCURRENCE%'. This results identical subject identifiers and topic merges. Are you sure you want to continue?", "Invalid template given", WandoraOptionPane.YES_NO_CANCEL_OPTION);
+                    int a = WandoraOptionPane.showConfirmDialog(wandora, "Your template string '"+ SITemplate +"' does not contain '%OCCURRENCE%'. This results identical subject identifiers and topic merges. Are you sure you want to continue?", "Invalid template given", WandoraOptionPane.YES_NO_CANCEL_OPTION);
                     if(a != WandoraOptionPane.YES_OPTION) return;
                 }
             }
@@ -135,7 +137,7 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
             Topic newTopic = null;
             String SIString = null;
             int progress = 0;
-            TopicMap map = admin.getTopicMap();
+            TopicMap map = wandora.getTopicMap();
             Association a = null;
             String occurrence = null;
             Locator l = null;

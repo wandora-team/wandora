@@ -76,7 +76,11 @@ import org.wandora.application.gui.WandoraOptionPane;
 public class TransposeAssociations extends AbstractWandoraTool implements WandoraTool {
 
 
-    public TransposeAssociations() {
+	private static final long serialVersionUID = 1L;
+
+
+
+	public TransposeAssociations() {
         setContext(new AssociationContext());
     }
     
@@ -101,11 +105,11 @@ public class TransposeAssociations extends AbstractWandoraTool implements Wandor
     
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
-            TopicMap topicmap = admin.getTopicMap();
+            TopicMap topicmap = wandora.getTopicMap();
             
-            int a = WandoraOptionPane.showConfirmDialog(admin, "Transposing association interprets selected associations as a topic matrix and rotates the matrix 90 degrees counter clock wise. New associations will be created using rotated matrix. First row of rotated matrix is interpreted as role topics and old roles will become association player. Finally old associations will be deleted. Are you sure you want transpose selected associations?", "Transpose associations?");
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "Transposing association interprets selected associations as a topic matrix and rotates the matrix 90 degrees counter clock wise. New associations will be created using rotated matrix. First row of rotated matrix is interpreted as role topics and old roles will become association player. Finally old associations will be deleted. Are you sure you want transpose selected associations?", "Transpose associations?");
             if(a != WandoraOptionPane.YES_OPTION) return;
             
             setDefaultLogger();

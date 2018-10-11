@@ -35,9 +35,16 @@ import java.util.*;
 
 
 /**
- * <p>This tool is a companion for CopyEdgePath tool. While CopyEdgePath copies the player chain to system clipboard, OpenEdgeTopic travels to the last player and open it to Wandora's topic panel for detailed inspection.</p>
+ * <p>This tool is a companion for CopyEdgePath tool. While CopyEdgePath 
+ * copies the player chain to system clipboard, OpenEdgeTopic travels to 
+ * the last player and open it to Wandora's topic panel for detailed 
+ * inspection.</p>
  *
- * <p>Think for example associations a-b, b-c, c-d. Letters represent player topics. All associations have same type and same roles. Now think you have selected association a-b and further the player topic a. Executing this tool in this context opens topic d to Wandora's topic panel. </p>
+ * <p>Think for example associations a-b, b-c, c-d. Letters represent 
+ * player topics. All associations have same type and same roles. Now 
+ * think you have selected association a-b and further the player topic a. 
+ * Executing this tool in this context opens topic d to Wandora's 
+ * topic panel. </p>
  * 
  * @see CopyEdgePath
  * 
@@ -45,8 +52,11 @@ import java.util.*;
  */
 public class OpenEdgeTopic extends AbstractWandoraTool implements WandoraTool {
     
-    
-    public OpenEdgeTopic() {
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public OpenEdgeTopic() {
         setContext(new AssociationContext());
     }
     
@@ -68,7 +78,7 @@ public class OpenEdgeTopic extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             Map<Association,ArrayList<Topic>> associationsWithRoles = null;
             Topic role = null;
@@ -97,11 +107,11 @@ public class OpenEdgeTopic extends AbstractWandoraTool implements WandoraTool {
                                 role = roleIterator.next();
                                 if(role != null) {
                                     try {
-                                        Topic outRole = findOtherRole(a, role, admin);
+                                        Topic outRole = findOtherRole(a, role, wandora);
                                         if(outRole != null) {
                                             Topic player = a.getPlayer(role);
                                             Topic rootTopic = TopicTools.getEdgeTopic(player, a.getType(), role, outRole);
-                                            admin.openTopic(rootTopic);
+                                            wandora.openTopic(rootTopic);
                                         }
                                     }
                                     catch(Exception e) {
@@ -125,7 +135,9 @@ public class OpenEdgeTopic extends AbstractWandoraTool implements WandoraTool {
         }
     }
     
-    private Topic findOtherRole(Association a, Topic r, Wandora admin) {
+    
+    
+    private Topic findOtherRole(Association a, Topic r, Wandora wandora) {
         Topic otherRole = null;
         try {
             Collection<Topic> allRoles = a.getRoles();
@@ -141,7 +153,7 @@ public class OpenEdgeTopic extends AbstractWandoraTool implements WandoraTool {
             }
             else {
                 allRoles.remove(r);
-                Object answer = WandoraOptionPane.showOptionDialog(admin, "Select second role for association travelsal", "Select second role", WandoraOptionPane.OK_CANCEL_OPTION, allRoles.toArray(), allRoles.iterator().next());
+                Object answer = WandoraOptionPane.showOptionDialog(wandora, "Select second role for association travelsal", "Select second role", WandoraOptionPane.OK_CANCEL_OPTION, allRoles.toArray(), allRoles.iterator().next());
                 if(answer instanceof Topic) {
                     return (Topic) answer;
                 }
