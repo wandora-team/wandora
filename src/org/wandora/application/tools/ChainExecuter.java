@@ -21,7 +21,7 @@
  * 
  * ChainExecuter.java
  *
- * Created on 2. kesäkuuta 2006, 13:50
+ * Created on 2. kesï¿½kuuta 2006, 13:50
  *
  */
 
@@ -41,8 +41,10 @@ import java.util.*;
  * @author akivela
  */
 public class ChainExecuter extends AbstractWandoraTool implements WandoraTool {
-    
-    private ArrayList<WandoraTool> tools = new ArrayList<WandoraTool>();
+
+	private static final long serialVersionUID = 1L;
+
+	private ArrayList<WandoraTool> tools = new ArrayList<WandoraTool>();
     
     
     
@@ -76,7 +78,7 @@ public class ChainExecuter extends AbstractWandoraTool implements WandoraTool {
                     tool.execute(wandora, context.getContextEvent());
                     while(tool.isRunning() && !forceStop()) {
                         try {
-                            Thread.currentThread().sleep(250);
+                            Thread.sleep(250);
                         }
                         catch(Exception e) {}
                     }

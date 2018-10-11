@@ -40,7 +40,9 @@ import java.util.*;
 public class AddClass extends AbstractWandoraTool implements WandoraTool {
     
 
-    private boolean shouldRefresh = false;
+	private static final long serialVersionUID = 1L;
+
+	private boolean shouldRefresh = false;
     
     
     /** Creates a new instance of AddClass */

@@ -48,7 +48,10 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 
 public class CopyTopicsToLayer extends AbstractWandoraTool implements WandoraTool {
-    public static final int COPY_TOPIC_AS_A_SINGLE_SI_STUB = 101;
+
+	private static final long serialVersionUID = 1L;
+
+	public static final int COPY_TOPIC_AS_A_SINGLE_SI_STUB = 101;
     public static final int COPY_TOPIC_AS_A_SI_STUB = 102;
     public static final int COPY_TOPIC_AS_A_STUB = 106;
     public static final int COPY_TOPIC_AS_A_STUB_WITH_VARIANTS = 107;
@@ -114,7 +117,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool implements WandoraToo
                             
                             if(COPY_TOPIC_AS_A_STUB_WITH_VARIANTS == mode) {
                                 for(Set<Topic> scope : t.getVariantScopes()) {
-                                    HashSet<Topic> ttScope = new LinkedHashSet();
+                                    Set<Topic> ttScope = new LinkedHashSet<>();
                                     for(Topic scopeTopic : scope) {
                                         Topic ttScopeTopic = target.createTopic();
                                         ttScopeTopic.addSubjectIdentifier(scopeTopic.getFirstSubjectIdentifier());

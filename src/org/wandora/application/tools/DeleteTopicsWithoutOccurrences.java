@@ -22,7 +22,7 @@
  * 
  * DeleteTopicsWithoutOccurrences.java
  *
- * Created on 12. kesäkuuta 2006, 17:43
+ * Created on 12. kesï¿½kuuta 2006, 17:43
  *
  */
 
@@ -43,8 +43,11 @@ import org.wandora.application.*;
  */
 public class DeleteTopicsWithoutOccurrences extends DeleteTopics implements WandoraTool {
     
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public String getName() {
         return "Delete topics without occurrences";
     }
@@ -59,7 +62,7 @@ public class DeleteTopicsWithoutOccurrences extends DeleteTopics implements Wand
     @Override
     public boolean shouldDelete(Topic topic)  throws TopicMapException {
         try {
-            Collection dataTypes = topic.getDataTypes();
+            Collection<Topic> dataTypes = topic.getDataTypes();
             if(dataTypes == null || dataTypes.isEmpty()) {
                 if(confirm) {
                     return confirmDelete(topic);

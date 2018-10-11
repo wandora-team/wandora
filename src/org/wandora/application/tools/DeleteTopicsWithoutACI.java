@@ -22,7 +22,7 @@
  * 
  * DeleteTopicsWithoutACI.java
  *
- * Created on 12. heinäkuuta 2006, 14:55
+ * Created on 12. heinï¿½kuuta 2006, 14:55
  *
  */
 
@@ -40,8 +40,11 @@ import org.wandora.application.*;
  * @author akivela
  */
 public class DeleteTopicsWithoutACI extends DeleteTopics implements WandoraTool {
-    
-    /** Creates a new instance of DeleteTopicsWithoutACI */
+
+	
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of DeleteTopicsWithoutACI */
     public DeleteTopicsWithoutACI() {
     }
     

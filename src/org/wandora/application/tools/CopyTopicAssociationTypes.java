@@ -37,8 +37,10 @@ import org.wandora.application.contexts.*;
  * @author akivela
  */
 public class CopyTopicAssociationTypes extends CopyTopics {
-    
-    public CopyTopicAssociationTypes()  throws TopicMapException {
+
+	private static final long serialVersionUID = 1L;
+
+	public CopyTopicAssociationTypes()  throws TopicMapException {
     }
 
     @Override

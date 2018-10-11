@@ -43,7 +43,11 @@ import org.wandora.application.contexts.*;
  */
 public class Exec extends AbstractWandoraTool implements WandoraTool, Runnable {
     
-   private String command = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private String command = null;
     
     public Exec(){
     }

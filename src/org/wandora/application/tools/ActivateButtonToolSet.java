@@ -42,7 +42,9 @@ import javax.swing.*;
  */
 public class ActivateButtonToolSet extends AbstractWandoraTool implements WandoraTool {
 
-    private String toolSetName = null;
+	private static final long serialVersionUID = 1L;
+
+	private String toolSetName = null;
 
 
     public ActivateButtonToolSet() {

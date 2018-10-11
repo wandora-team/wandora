@@ -21,11 +21,13 @@
  * 
  * CreateAssociationType.java
  *
- * Created on 15. kesäkuuta 2006, 10:36
+ * Created on 15. kesï¿½kuuta 2006, 10:36
  *
  */
 
 package org.wandora.application.tools;
+
+
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -38,7 +40,10 @@ import java.util.*;
  */
 public class CreateAssociationType extends AbstractWandoraTool {
     
-    /** Creates a new instance of CreateAssociationType */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of CreateAssociationType */
     public CreateAssociationType(Context preferredContext) {
         setContext(preferredContext);
     }

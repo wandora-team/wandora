@@ -28,7 +28,6 @@ package org.wandora.application.tools;
 
 
 import org.wandora.topicmap.remote.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -42,8 +41,10 @@ import java.io.*;
  * @author  olli
  */
 public class CommitStoredSession extends AbstractWandoraTool implements WandoraTool {
-    
-    RemoteTopicMap remoteTopicMap = null;
+
+	private static final long serialVersionUID = 1L;
+
+	RemoteTopicMap remoteTopicMap = null;
     
 
     @Override
@@ -58,29 +59,29 @@ public class CommitStoredSession extends AbstractWandoraTool implements WandoraT
     }
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         Object contextSource = context.getContextSource();
 
-        TopicMap tm = this.solveContextTopicMap(admin, context);
+        TopicMap tm = this.solveContextTopicMap(wandora, context);
         if(tm instanceof RemoteTopicMap) {
             remoteTopicMap = (RemoteTopicMap) tm;
             try {
                 if(remoteTopicMap.isUncommitted()){
-                    if(WandoraOptionPane.showConfirmDialog(admin,"Uncommitted changes exist. Are you sure you want to rollback?","Uncommitted changes",WandoraOptionPane.YES_NO_OPTION) != WandoraOptionPane.YES_OPTION){
+                    if(WandoraOptionPane.showConfirmDialog(wandora,"Uncommitted changes exist. Are you sure you want to rollback?","Uncommitted changes",WandoraOptionPane.YES_NO_OPTION) != WandoraOptionPane.YES_OPTION){
                         return;
                     }
                 }
                 remoteTopicMap.rollback();
             }
             catch(ServerException se){
-                admin.handleError(se);
+            	wandora.handleError(se);
                 return;
             }
 
             SimpleFileChooser chooser=UIConstants.getFileChooser();
-            if(chooser.open(admin, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION){
+            if(chooser.open(wandora, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION){
                 setDefaultLogger();
-                work(admin, chooser.getSelectedFile());
+                work(wandora, chooser.getSelectedFile());
             }
         }
     }

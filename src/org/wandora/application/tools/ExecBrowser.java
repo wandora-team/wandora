@@ -49,7 +49,11 @@ import javax.swing.*;
 
 public class ExecBrowser extends AbstractWandoraTool implements WandoraTool, Runnable {
     
-    private String uri = null;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private String uri = null;
     
     public ExecBrowser(){
     }
@@ -60,7 +64,7 @@ public class ExecBrowser extends AbstractWandoraTool implements WandoraTool, Run
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         if(uri != null) {
             try {
                 Desktop desktop = Desktop.getDesktop();

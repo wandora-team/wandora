@@ -43,7 +43,10 @@ import javax.swing.*;
  * @author  akivela
  */
 public class AboutWandora extends AbstractWandoraTool implements WandoraTool {
-    private javax.swing.JDialog aboutDialog;
+
+	private static final long serialVersionUID = 1L;
+
+	private javax.swing.JDialog aboutDialog;
     private MultiLineLabel textLabel;
 
     @Override

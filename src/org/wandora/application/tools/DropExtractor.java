@@ -30,7 +30,6 @@ package org.wandora.application.tools;
 
 
 import java.io.File;
-import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMapException;
 
 

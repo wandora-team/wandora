@@ -45,7 +45,10 @@ import javax.swing.*;
 
 public class ExitWandora extends AbstractWandoraTool implements WandoraTool {
     
-    /** Creates a new instance of ExitWandora */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of ExitWandora */
     public ExitWandora() {
     }
 

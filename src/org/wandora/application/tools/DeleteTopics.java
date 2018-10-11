@@ -43,7 +43,11 @@ import javax.swing.*;
  */
 public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
 
-    public boolean forceDelete = true;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public boolean forceDelete = true;
     public boolean confirm = true;
     public boolean shouldContinue = true;
     
@@ -223,7 +227,7 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
     }
     
     
-    public void removeInstances(Topic t)  throws TopicMapException {
+    public void removeInstances(Topic t) throws TopicMapException {
         Collection<Topic> instances = t.getTopicMap().getTopicsOfType(t);
         if(instances != null) {
             Iterator<Topic> instanceIterator = instances.iterator();

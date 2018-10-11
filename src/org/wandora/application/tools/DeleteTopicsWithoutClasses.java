@@ -22,7 +22,7 @@
  * 
  * DeleteTopicsWithoutClasses.java
  *
- * Created on 12. kesäkuuta 2006, 17:47
+ * Created on 12. kesï¿½kuuta 2006, 17:47
  *
  */
 
@@ -42,10 +42,10 @@ import org.wandora.application.*;
  */
 public class DeleteTopicsWithoutClasses extends DeleteTopics implements WandoraTool {
     
-   
-    
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getName() {
         return "Delete topics without classes";
     }
@@ -59,7 +59,7 @@ public class DeleteTopicsWithoutClasses extends DeleteTopics implements WandoraT
     public boolean shouldDelete(Topic topic)  throws TopicMapException {
         try {
             if(topic != null && !topic.isRemoved()) {
-                Collection types = topic.getTypes();
+                Collection<Topic> types = topic.getTypes();
                 if(types == null || types.isEmpty()) {
                     if(confirm) {
                         return confirmDelete(topic);

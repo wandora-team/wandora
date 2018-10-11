@@ -60,7 +60,10 @@ import java.net.*;
 
 public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
 
-    private Exception toolException;
+
+	private static final long serialVersionUID = 1L;
+
+	private Exception toolException;
     private WandoraToolLogger lastLogger = null;
     private WandoraToolLogger logger = null;
     private boolean internalForceStop;
@@ -68,8 +71,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     private Wandora runAdmin = null;
     private Context runContext = null;
     
-    private static final HashSet<Class> toolLocks = new HashSet<Class>();
-    private static final HashMap<Thread,T2<Class,Long>> toolThreads = new HashMap<Thread,T2<Class,Long>>();
+    private static final Set<Class> toolLocks = new LinkedHashSet<Class>();
+    private static final Map<Thread,T2<Class,Long>> toolThreads = new HashMap<Thread,T2<Class,Long>>();
 
     
     

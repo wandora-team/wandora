@@ -40,8 +40,10 @@ import org.wandora.application.*;
 public class DeleteTopicsWithoutBasename extends DeleteTopics implements WandoraTool {
     
     
-    
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public String getName() {
         return "Delete topics without base name";
     }

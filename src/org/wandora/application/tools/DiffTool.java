@@ -49,7 +49,10 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
 
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public String getName() {
         return "Topic map diff";
     }
@@ -107,16 +110,16 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
     
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
         
-        JDialog dialog=new JDialog(admin,"Compare topic maps",true);
-        DiffToolConfigPanel configPanel=new DiffToolConfigPanel(admin,dialog);
+        JDialog dialog=new JDialog(wandora,"Compare topic maps",true);
+        DiffToolConfigPanel configPanel=new DiffToolConfigPanel(wandora,dialog);
         dialog.getContentPane().add(configPanel);
         dialog.setSize(500, 350);
         configPanel.addFormat("Plain text format");
         configPanel.addFormat("HTML format");
         configPanel.addFormat("Patch format");
-        GuiTools.centerWindow(dialog, admin);
+        GuiTools.centerWindow(dialog, wandora);
         dialog.setVisible(true);
         
         if(configPanel.wasCancelled()) return;
@@ -132,7 +135,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
             if(mode1==DiffToolConfigPanel.MODE_FILE){
                 filename = configPanel.getMap1Value();
                 if(filename != null && !"".equals(filename)) {
-                    tm1=openFile(filename,admin);
+                    tm1=openFile(filename,wandora);
                 }
                 else {
                     log("Filename not specified for topic map 1!");
@@ -142,7 +145,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
                 }
             }
             else if(mode1==DiffToolConfigPanel.MODE_LAYER){
-                Layer l=admin.getTopicMap().getLayer(configPanel.getMap1Value());
+                Layer l=wandora.getTopicMap().getLayer(configPanel.getMap1Value());
                 if(l==null) {
                     log("Layer not found");
                     log("Cancelling compare.");
@@ -152,7 +155,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
                 tm1=l.getTopicMap();
             }
             else if(mode1==DiffToolConfigPanel.MODE_PROJECT){
-                tm1=admin.getTopicMap();
+                tm1=wandora.getTopicMap();
             }
 
             int mode2=configPanel.getMap2Mode();
@@ -160,7 +163,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
             if(mode2==DiffToolConfigPanel.MODE_FILE){
                 filename = configPanel.getMap2Value();
                 if(filename != null && !"".equals(filename)) {
-                    tm2=openFile(filename,admin);
+                    tm2=openFile(filename,wandora);
                 }
                 else {
                     log("Filename not specified for topic map 2!");
@@ -170,7 +173,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
                 }
             }
             else if(mode2==DiffToolConfigPanel.MODE_LAYER){
-                Layer l=admin.getTopicMap().getLayer(configPanel.getMap2Value());
+                Layer l=wandora.getTopicMap().getLayer(configPanel.getMap2Value());
                 if(l==null) {
                     log("Layer not found");
                     log("Cancelling compare.");
@@ -180,7 +183,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
                 tm2=l.getTopicMap();
             }
             else if(mode2==DiffToolConfigPanel.MODE_PROJECT){
-                tm2=admin.getTopicMap();
+                tm2=wandora.getTopicMap();
             }
         
             TopicMapDiff diffMaker=new TopicMapDiff();
@@ -201,7 +204,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
             log("Comparing topic maps.");
             if(diffMaker.makeDiff(tm1,tm2,output)){
                 log("Comparison ready. Opening results...");
-                TextEditor e = new TextEditor(admin, true);
+                TextEditor e = new TextEditor(wandora, true);
                 String result = output.getResult();
                 if(html) {
                     e.setContentType("text/html");

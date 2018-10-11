@@ -39,7 +39,10 @@ import org.wandora.application.contexts.*;
 public class DummyTool extends AbstractWandoraTool {
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public String getName() {
         return "Dummy tool";
     }

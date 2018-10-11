@@ -41,8 +41,10 @@ import org.wandora.application.contexts.*;
 
 
 public class CopyTopicInstances extends CopyTopics {
-    
-    /** Creates a new instance of CopyTopicInstances */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of CopyTopicInstances */
     public CopyTopicInstances()  throws TopicMapException {
     }
     

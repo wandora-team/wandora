@@ -27,11 +27,9 @@
 package org.wandora.application.tools;
 
 import org.wandora.topicmap.remote.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.SimpleMenuItem;
 import org.wandora.topicmap.TopicMap;
 
 
@@ -41,8 +39,10 @@ import org.wandora.topicmap.TopicMap;
  */
 public class CustomCommandTool extends AbstractWandoraTool implements WandoraTool {
     
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public void execute(Wandora wandora, Context context) {
         TopicMap tm = this.solveContextTopicMap(wandora, context);
         if(tm instanceof RemoteTopicMap) {

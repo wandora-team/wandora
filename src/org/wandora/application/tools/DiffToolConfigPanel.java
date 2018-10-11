@@ -26,7 +26,6 @@ import org.wandora.application.gui.filechooser.TopicMapFileChooser;
 import org.wandora.topicmap.layered.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 
 import java.io.*;
 import java.util.*;
@@ -38,23 +37,27 @@ import javax.swing.*;
  */
 public class DiffToolConfigPanel extends javax.swing.JPanel {
     
-    public static final int MODE_FILE=1;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final int MODE_FILE=1;
     public static final int MODE_LAYER=2;
     public static final int MODE_PROJECT=3;
     public static final int MODE_NONE=99;
     
-    protected Wandora admin;
+    protected Wandora wandora;
     
     protected JDialog parentDialog;
     
     protected boolean cancelled=true;
     
     /** Creates new form DiffToolConfigPanel */
-    public DiffToolConfigPanel(Wandora admin,JDialog parentDialog) {
+    public DiffToolConfigPanel(Wandora wandora,JDialog parentDialog) {
         initComponents();
-        this.admin=admin;
+        this.wandora=wandora;
         this.parentDialog=parentDialog;
-        List<Layer> layers=admin.getTopicMap().getLayers();
+        List<Layer> layers=wandora.getTopicMap().getLayers();
         for(Layer l : layers){
             layerComboBox1.addItem(l.getName());
             layerComboBox2.addItem(l.getName());
@@ -381,7 +384,7 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
 
     private String browseFile(){
         TopicMapFileChooser chooser=new TopicMapFileChooser();
-        if(chooser.open(admin, "Select")==TopicMapFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Select")==TopicMapFileChooser.APPROVE_OPTION){
             File file = chooser.getSelectedFile();        
             return file.getAbsolutePath();
         }

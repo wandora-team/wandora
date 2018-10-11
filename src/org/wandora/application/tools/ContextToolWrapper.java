@@ -21,7 +21,7 @@
  * 
  * ContextToolWrapper.java
  *
- * Created on 28. heinäkuuta 2006, 12:43
+ * Created on 28. heinï¿½kuuta 2006, 12:43
  */
 
 package org.wandora.application.tools;
@@ -33,7 +33,6 @@ import org.wandora.application.contexts.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.gui.simple.*;
 
-import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 /**
@@ -42,7 +41,10 @@ import java.awt.event.ActionEvent;
  */
 public class ContextToolWrapper implements WandoraTool {
     
-    private WandoraTool wrapped;
+
+	private static final long serialVersionUID = 1L;
+	
+	private WandoraTool wrapped;
     private Context context;
     
     /** Creates a new instance of ContextToolWrapper */
@@ -140,36 +142,36 @@ public class ContextToolWrapper implements WandoraTool {
     }
     
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        wrapped.initialize(admin,options,prefix);
+    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        wrapped.initialize(wandora,options,prefix);
     }
     @Override
     public boolean isConfigurable(){
         return wrapped.isConfigurable();
     }
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        wrapped.configure(admin,options,prefix);
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        wrapped.configure(wandora,options,prefix);
     }
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
-        wrapped.writeOptions(admin,options,prefix);
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
+        wrapped.writeOptions(wandora,options,prefix);
     }    
     
     @Override
-    public void execute(Wandora admin) throws TopicMapException {
-        execute(admin, (ActionEvent) null);
+    public void execute(Wandora wandora) throws TopicMapException {
+        execute(wandora, (ActionEvent) null);
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
-        wrapped.execute(admin,context);
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+        wrapped.execute(wandora,context);
     }
     
     @Override
-    public void execute(Wandora admin, ActionEvent event)  throws TopicMapException {
+    public void execute(Wandora wandora, ActionEvent event)  throws TopicMapException {
         wrapped.setContext(context);
-        wrapped.execute(admin,event);
+        wrapped.execute(wandora,event);
     }    
     
     @Override
@@ -183,8 +185,8 @@ public class ContextToolWrapper implements WandoraTool {
     }
     
     @Override
-    public SimpleMenuItem getToolMenuItem(Wandora admin,String instanceName){
-        return wrapped.getToolMenuItem(admin,instanceName);
+    public SimpleMenuItem getToolMenuItem(Wandora wandora,String instanceName){
+        return wrapped.getToolMenuItem(wandora,instanceName);
     }   
     
     @Override

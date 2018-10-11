@@ -22,7 +22,7 @@
  * 
  * DeleteTopicsWithBasenameRegex.java
  *
- * Created on 18. heinäkuuta 2006, 12:56
+ * Created on 18. heinï¿½kuuta 2006, 12:56
  *
  */
 
@@ -41,8 +41,12 @@ import org.wandora.application.gui.*;
  * @author akivela
  */
 public class DeleteTopicsWithBasenameRegex extends DeleteTopics implements WandoraTool {
-    
-     RegularExpressionEditor editor = null;
+
+	
+	private static final long serialVersionUID = 1L;
+	
+	
+	RegularExpressionEditor editor = null;
     
     
     /** Creates a new instance of DeleteTopicsWithBasenameRegex */

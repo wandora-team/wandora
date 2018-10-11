@@ -41,10 +41,10 @@ import org.wandora.application.*;
  */
 public class DeleteTopicsWithoutAssociations extends DeleteTopics implements WandoraTool {
 
-            
-            
-    
-    public DeleteTopicsWithoutAssociations() {
+	private static final long serialVersionUID = 1L;
+
+
+	public DeleteTopicsWithoutAssociations() {
     }
     
 

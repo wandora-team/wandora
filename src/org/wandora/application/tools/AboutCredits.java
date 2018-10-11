@@ -43,7 +43,10 @@ import javax.swing.*;
  * @author  akivela
  */
 public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
-    private javax.swing.JDialog aboutDialog;
+
+	private static final long serialVersionUID = 1L;
+
+	private javax.swing.JDialog aboutDialog;
     private MultiLineLabel textLabel;
     
     
@@ -75,7 +78,7 @@ public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
                     " \n"+
                     "Wandora Team would like to thank Olli Lyytinen, \n" +
                     "Eero Lehtonen, Elias Tertsunen, Niko Laitinen, \n"+
-                    "Antti Tuppurainen, Pasi Hytönen, Marko Wallgren, \n"+
+                    "Antti Tuppurainen, Pasi Hytï¿½nen, Marko Wallgren, \n"+
                     "Jaakko Lyytinen and Jarno Wallgren for their contribution \n"+
                     "to the Wandora project.\n"+
                     " \n"+

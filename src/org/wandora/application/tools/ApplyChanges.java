@@ -37,8 +37,10 @@ import org.wandora.application.contexts.*;
  * @author olli
  */
 public class ApplyChanges extends AbstractWandoraTool {
-    
-    /** Creates a new instance of ApplyChanges */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of ApplyChanges */
     public ApplyChanges() {
     }
 

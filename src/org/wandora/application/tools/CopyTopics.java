@@ -48,7 +48,12 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  * @author akivela
  */
 public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
-    public static final boolean OUTPUT_LOG = false;
+
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public static final boolean OUTPUT_LOG = false;
     public static String NEW_LINE_SUBSTITUTE_STRING = "\\n";
     public static String TAB_SUBSTITUTE_STRING = "\\t";
     public static String NO_BASENAME_STRING = "[no basename found]";
@@ -87,13 +92,13 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     Topic associationType = null;
     Topic role = null;
     Topic occurrenceType = null;
-    ArrayList<Topic> allOccurrenceTypes = null;
-    LinkedHashSet<Topic> scopeMemory = null;
+    List<Topic> allOccurrenceTypes = null;
+    Set<Topic> scopeMemory = null;
     Wandora wandora = null;
     Iterator topics = null;
     
     
-    public CopyTopics()  throws TopicMapException {
+    public CopyTopics() throws TopicMapException {
         this((Collection) null, COPY_BASENAMES, INCLUDE_NOTHING);
     }
     
@@ -196,7 +201,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
         this.topics = topics.iterator();
     }
     public void setTopics(Topic[] topicArray) {
-        ArrayList topicList = new ArrayList();
+        List<Topic> topicList = new ArrayList<>();
         if(topicArray != null) {
             for(int i=0; i<topicArray.length; i++) {
                 topicList.add(topicArray[i]);
@@ -213,7 +218,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
         this.wandora = wandora;
         try {
             if(wandora != null) {
-                scopeMemory = new LinkedHashSet();
+                scopeMemory = new LinkedHashSet<>();
                 associationType = null;
                 role = null;
                 if(includeOrders == INCLUDE_TYPED_ASSOCIATION_COUNT) {
@@ -257,7 +262,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
         
         try {
             Collection countCollection = null;
-            ArrayList<String> lines = new ArrayList();
+            List<String> lines = new ArrayList<>();
             if(OUTPUT_LOG) log("Copying "+ getTopicTypeName() +" to clipboard...");
             Topic topic = null;
             if(topics == null) {
@@ -465,7 +470,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             
                             case INCLUDE_ASSOCIATION_TYPES: {
                                 Collection<Association> associations = topic.getAssociations();
-                                HashSet<String> associationTypes = new LinkedHashSet();
+                                Set<String> associationTypes = new LinkedHashSet<>();
                                 for(Association association : associations) {
                                     associationTypes.add(TopicToString.toString(association.getType()));
                                 }
@@ -492,7 +497,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             
                             case INCLUDE_PLAYED_ROLES: {
                                 Collection<Association> associations = topic.getAssociations();
-                                HashSet<Topic> usedRoles = new HashSet();
+                                Set<Topic> usedRoles = new HashSet<>();
                                 for(Association association : associations) {
                                     if(association != null) {
                                         Collection<Topic> roles = association.getRoles();
@@ -573,11 +578,13 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    private String stringSerialize(ArrayList<String> lines) {
+    private String stringSerialize(List<String> lines) {
         StringBuilder sb = new StringBuilder("");
-        for(String line : lines) {
-            sb.append(line);
-            sb.append("\n");
+        if(lines != null) {
+	        for(String line : lines) {
+	            sb.append(line);
+	            sb.append("\n");
+	        }
         }
         return sb.toString();
     };
@@ -611,7 +618,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
         Topic langT =t.getTopicMap().getTopic(langsi);
         String dispsi=XTMPSI.DISPLAY;
         Topic dispT=t.getTopicMap().getTopic(dispsi);
-        HashSet scope=new HashSet();
+        Set<Topic> scope=new LinkedHashSet<>();
         if(langT!=null) scope.add(langT);
         if(dispT!=null) scope.add(dispT);
         String variantName = t.getVariant(scope);
@@ -629,8 +636,8 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     
     
 
-    private ArrayList<Topic> getOccurrenceTypes(TopicMap tm) throws TopicMapException {
-        HashSet<Topic> occurrenceTypes = new LinkedHashSet();
+    private List<Topic> getOccurrenceTypes(TopicMap tm) throws TopicMapException {
+        Set<Topic> occurrenceTypes = new LinkedHashSet<>();
         if(tm != null) {
             Topic t = null;
             Iterator<Topic> topics = tm.getTopics();
@@ -641,7 +648,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                 }
             }
         }
-        ArrayList<Topic> ot = new ArrayList();
+        List<Topic> ot = new ArrayList<>();
         ot.addAll(occurrenceTypes);
         return ot;
     }

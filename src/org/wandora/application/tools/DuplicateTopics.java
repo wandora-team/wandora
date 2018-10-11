@@ -49,8 +49,9 @@ import javax.swing.*;
 
 public class DuplicateTopics extends AbstractWandoraTool implements WandoraTool {
     
-    
-    public boolean duplicateAssociations = true;
+	private static final long serialVersionUID = 1L;
+	
+	public boolean duplicateAssociations = true;
     public boolean copyInstances = true;
     
     public boolean askName=true;
@@ -111,9 +112,9 @@ public class DuplicateTopics extends AbstractWandoraTool implements WandoraTool 
         
         Topic copy = copyMap.copyTopicIn(original, false);
         if(duplicateAssociations) {
-            Collection assocs = original.getAssociations();
+            Collection<Association> assocs = original.getAssociations();
             Association a;
-            for(Iterator iter = assocs.iterator(); iter.hasNext();) {
+            for(Iterator<Association> iter = assocs.iterator(); iter.hasNext();) {
                 a = (Association) iter.next();
                 copyMap.copyAssociationIn(a);
             }
@@ -157,15 +158,15 @@ public class DuplicateTopics extends AbstractWandoraTool implements WandoraTool 
         }
 
         // --- resolve new subject identifiers
-        Collection sis = copy.getSubjectIdentifiers();
-        Vector siv = new Vector();
-        for(Iterator iter = sis.iterator(); iter.hasNext(); ) {
+        Collection<Locator> sis = copy.getSubjectIdentifiers();
+        List<Locator> siv = new ArrayList<>();
+        for(Iterator<Locator> iter = sis.iterator(); iter.hasNext(); ) {
             siv.add(iter.next());
         }
         Locator lo = null;
         Locator l = null;
         for(int i=0; i<siv.size(); i++) {
-            lo = (Locator) siv.elementAt(i);
+            lo = (Locator) siv.get(i);
             copy.removeSubjectIdentifier(lo);
             l = (Locator) new Locator(lo.toExternalForm() + "_copy");
             int c = 2;
@@ -182,8 +183,8 @@ public class DuplicateTopics extends AbstractWandoraTool implements WandoraTool 
 
         // --- attach instances
         if(copy != null && copyInstances) {
-            Collection col = tm.getTopicsOfType(original);
-            Iterator iter=col.iterator();
+            Collection<Topic> col = tm.getTopicsOfType(original);
+            Iterator<Topic> iter=col.iterator();
             Topic t = null;
             while(iter.hasNext()) {
                 t=(Topic)iter.next();

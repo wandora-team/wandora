@@ -39,7 +39,10 @@ import org.wandora.application.*;
  */
 public class DeleteTopicsWithoutVariants extends DeleteTopics implements WandoraTool {
 
-    /** Creates a new instance of DeleteTopicsWithoutVariants */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of DeleteTopicsWithoutVariants */
     public DeleteTopicsWithoutVariants() {
     }
 
@@ -60,7 +63,7 @@ public class DeleteTopicsWithoutVariants extends DeleteTopics implements Wandora
     public boolean shouldDelete(Topic topic)  throws TopicMapException {
         try {
             if(topic != null && !topic.isRemoved()) {
-                Set variantScopes = topic.getVariantScopes();
+                Set<Set<Topic>> variantScopes = topic.getVariantScopes();
                 if(variantScopes == null || variantScopes.isEmpty()) {
                     if(confirm) {
                         return confirmDelete(topic);

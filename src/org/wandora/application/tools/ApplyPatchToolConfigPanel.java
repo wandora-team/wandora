@@ -38,23 +38,25 @@ import javax.swing.*;
  */
 public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
-    public static final int MODE_FILE=1;
+	private static final long serialVersionUID = 1L;
+
+	public static final int MODE_FILE=1;
     public static final int MODE_LAYER=2;
     public static final int MODE_PROJECT=3;
     public static final int MODE_NONE=99;
     
-    protected Wandora admin;
+    protected Wandora wandora;
     
     protected JDialog parentDialog;
     
     protected boolean cancelled=true;
     
     /** Creates new form ApplyPatchToolConfigPanel */
-    public ApplyPatchToolConfigPanel(Wandora admin,JDialog parentDialog) {
+    public ApplyPatchToolConfigPanel(Wandora wandora, JDialog parentDialog) {
         initComponents();
-        this.admin=admin;
+        this.wandora=wandora;
         this.parentDialog=parentDialog;
-        List<Layer> layers=admin.getTopicMap().getLayers();
+        List<Layer> layers=wandora.getTopicMap().getLayers();
         for(Layer l : layers){
             layerComboBox1.addItem(l.getName());
         }
@@ -275,10 +277,10 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
     private String browseTopicMap(){
         TopicMapFileChooser chooser;
-        String currentDirectory = admin.options.get("current.directory");
+        String currentDirectory = wandora.options.get("current.directory");
         if(currentDirectory != null) chooser = new TopicMapFileChooser(currentDirectory);
         else chooser=new TopicMapFileChooser();
-        if(chooser.open(admin, "Select")==TopicMapFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Select")==TopicMapFileChooser.APPROVE_OPTION){
             File file = chooser.getSelectedFile();        
             return file.getAbsolutePath();
         }
@@ -286,7 +288,7 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
     }
     private String browseFile(){
         SimpleFileChooser chooser=UIConstants.getFileChooser();
-        if(chooser.showDialog(admin, "Select")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.showDialog(wandora, "Select")==SimpleFileChooser.APPROVE_OPTION){
             File file = chooser.getSelectedFile();        
             return file.getAbsolutePath();
         }

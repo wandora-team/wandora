@@ -43,7 +43,9 @@ import org.wandora.application.contexts.*;
 public class CopyTopicPlayers extends CopyTopics {
     
 
-    public CopyTopicPlayers() throws TopicMapException {
+	private static final long serialVersionUID = 1L;
+
+	public CopyTopicPlayers() throws TopicMapException {
     }
     
     @Override

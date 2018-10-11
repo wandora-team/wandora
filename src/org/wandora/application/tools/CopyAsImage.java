@@ -21,7 +21,7 @@
  * 
  * CopyAsImage.java
  *
- * Created on 14. kesäkuuta 2007, 16:54
+ * Created on 14. kesï¿½kuuta 2007, 16:54
  *
  */
 
@@ -50,7 +50,10 @@ import javax.swing.*;
 
 public class CopyAsImage extends AbstractWandoraTool implements WandoraTool {
     
-    /** Creates a new instance of CopyAsImage */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of CopyAsImage */
     public CopyAsImage() {
     }
     public CopyAsImage(Context proposedContext) {
@@ -59,7 +62,7 @@ public class CopyAsImage extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         Object o = context.getContextSource();
         if(o instanceof Component) {
             try {

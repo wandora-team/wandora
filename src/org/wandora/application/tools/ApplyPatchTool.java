@@ -22,6 +22,8 @@
 
 
 package org.wandora.application.tools;
+
+
 import org.wandora.topicmap.diff.*;
 import org.wandora.topicmap.*;
 import org.wandora.topicmap.layered.*;
@@ -44,7 +46,9 @@ import javax.swing.*;
  */
 public class ApplyPatchTool extends AbstractWandoraTool implements WandoraTool {
     
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/patch_topicmap.png");
     }
@@ -61,12 +65,12 @@ public class ApplyPatchTool extends AbstractWandoraTool implements WandoraTool {
     }
         
     @Override
-    public void execute(final Wandora admin, Context context) throws TopicMapException  {
-        JDialog dialog=new JDialog(admin,"Apply topic map patch",true);
-        ApplyPatchToolConfigPanel configPanel=new ApplyPatchToolConfigPanel(admin,dialog);
+    public void execute(final Wandora wandora, Context context) throws TopicMapException  {
+        JDialog dialog=new JDialog(wandora,"Apply topic map patch",true);
+        ApplyPatchToolConfigPanel configPanel=new ApplyPatchToolConfigPanel(wandora,dialog);
         dialog.getContentPane().add(configPanel);
         dialog.setSize(500, 280);
-        GuiTools.centerWindow(dialog, admin);
+        GuiTools.centerWindow(dialog, wandora);
         dialog.setVisible(true);
         
         if(configPanel.wasCancelled()) return;        
@@ -90,7 +94,7 @@ public class ApplyPatchTool extends AbstractWandoraTool implements WandoraTool {
                 }
             }
             else if(mode==ApplyPatchToolConfigPanel.MODE_LAYER){
-                Layer l=admin.getTopicMap().getLayer(configPanel.getMapValue());
+                Layer l=wandora.getTopicMap().getLayer(configPanel.getMapValue());
                 if(l==null) {
                     log("Layer not found");
                     log("Cancelling patching.");
@@ -100,7 +104,7 @@ public class ApplyPatchTool extends AbstractWandoraTool implements WandoraTool {
                 tm=l.getTopicMap();
             }
             else if(mode==ApplyPatchToolConfigPanel.MODE_PROJECT){
-                tm=admin.getTopicMap();                
+                tm=wandora.getTopicMap();                
             }
             
             filename=configPanel.getPatchFile();
@@ -129,7 +133,8 @@ public class ApplyPatchTool extends AbstractWandoraTool implements WandoraTool {
                 public boolean handleException(PatchException e){
                     pes.add(e);
                     if(yesToAll[0]) return false;
-                    int c=WandoraOptionPane.showConfirmDialog(admin, 
+                    int c=WandoraOptionPane.showConfirmDialog(
+                    		wandora, 
                             "Exception applying patch, do you want to continue?<br>"+
                             e.level+": "+e.message, "Exception applying patch",
                             WandoraOptionPane.YES_TO_ALL_NO_OPTION);
@@ -161,7 +166,7 @@ public class ApplyPatchTool extends AbstractWandoraTool implements WandoraTool {
                 else filename=filename.substring(0,ind)+"_patched"+filename.substring(ind);
                 File f=new File(filename);
                 if(f.exists()){
-                    int r=WandoraOptionPane.showConfirmDialog(admin, "File "+filename+" already exists, overwrite?");
+                    int r=WandoraOptionPane.showConfirmDialog(wandora, "File "+filename+" already exists, overwrite?");
                     if(r!=WandoraOptionPane.YES_OPTION) {
                         log("Patching aborted");
                         setState(WAIT);

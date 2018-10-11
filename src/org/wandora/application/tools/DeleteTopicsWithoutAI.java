@@ -22,7 +22,7 @@
  * 
  * DeleteTopicsWithoutAI.java
  *
- * Created on 14. heinäkuuta 2006, 11:19
+ * Created on 14. heinï¿½kuuta 2006, 11:19
  *
  */
 
@@ -42,7 +42,10 @@ import org.wandora.application.*;
  */
 public class DeleteTopicsWithoutAI extends DeleteTopics implements WandoraTool {
     
-    /** Creates a new instance of DeleteTopicsWithoutAI */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of DeleteTopicsWithoutAI */
     public DeleteTopicsWithoutAI() {
     }
 
