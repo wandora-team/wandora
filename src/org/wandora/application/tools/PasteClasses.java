@@ -43,9 +43,11 @@ import org.wandora.application.contexts.*;
 public class PasteClasses extends PasteTopics implements WandoraTool {
     
     
+	private static final long serialVersionUID = 1L;
 
-        
-    public PasteClasses() {
+
+
+	public PasteClasses() {
         super();
     }
     public PasteClasses(int includeOrders) {

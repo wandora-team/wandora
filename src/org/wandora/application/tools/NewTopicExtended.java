@@ -47,8 +47,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class NewTopicExtended extends AbstractWandoraTool implements WandoraTool {
-    
-    /** Creates a new instance of NewTopicExtended */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of NewTopicExtended */
     public NewTopicExtended() {
     }
     

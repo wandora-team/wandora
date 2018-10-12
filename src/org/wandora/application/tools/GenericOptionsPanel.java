@@ -22,9 +22,10 @@
  *
  * GenericOptionsPanel.java
  *
- * Created on 25. heinäkuuta 2006, 15:30
+ * Created on 25. heinï¿½kuuta 2006, 15:30
  */
 package org.wandora.application.tools;
+
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -41,7 +42,10 @@ import java.awt.*;
  */
 public class GenericOptionsPanel extends JPanel {
 
-    protected HashMap<String,Component> components;
+
+	private static final long serialVersionUID = 1L;
+	
+	protected HashMap<String,Component> components;
     protected Wandora admin;
     protected JPanel paddingPanel;
     protected boolean padding;
@@ -58,7 +62,7 @@ public class GenericOptionsPanel extends JPanel {
     public static GridBagConstraints makeGBC(){
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.insets=new Insets(5,5,0,5);
-        gbc.fill=gbc.HORIZONTAL;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
         return gbc;
     }
 

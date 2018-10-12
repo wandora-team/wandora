@@ -35,7 +35,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 
 import org.wandora.topicmap.*;
-import org.wandora.*;
 
 import javax.swing.*;
 import java.net.*;
@@ -54,7 +53,10 @@ import java.util.*;
 
 public class NewTopic extends AbstractWandoraTool implements WandoraTool {
     
-    public static final int MAKE_INSTANCE_OF_CONTEXT = 100;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static final int MAKE_INSTANCE_OF_CONTEXT = 100;
     public static final int MAKE_SUBCLASS_OF_CONTEXT = 101;
 
     public int orders = 0;
@@ -76,7 +78,7 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         Topic newTopic = null;
         String confirmMessage = null;
         String basename = null;
@@ -84,7 +86,7 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
         Topic contextTopic = null;
         
         // --- New topic is created using a custom dialog panel.
-        newTopic = createNewTopic(admin, "Create new topic", context);
+        newTopic = createNewTopic(wandora, "Create new topic", context);
         if(newTopic==null) return;
         
         // --- Now we are going to post process the created topic.
@@ -111,7 +113,11 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
                     }
                 }
                 else {
-                    WandoraOptionPane.showMessageDialog(admin, "Select class topic for the new topic.", "Select class topic", WandoraOptionPane.WARNING_MESSAGE);
+                    WandoraOptionPane.showMessageDialog(
+                    		wandora, 
+                    		"Select class topic for the new topic.", 
+                    		"Select class topic", 
+                    		WandoraOptionPane.WARNING_MESSAGE);
                 }
                 break;
             }
@@ -137,7 +143,11 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
                     }
                 }
                 else {
-                    WandoraOptionPane.showMessageDialog(admin, "Select superclass topic for the new topic.", "Select superclass topic", WandoraOptionPane.WARNING_MESSAGE);
+                    WandoraOptionPane.showMessageDialog(
+                    		wandora, 
+                    		"Select superclass topic for the new topic.", 
+                    		"Select superclass topic", 
+                    		WandoraOptionPane.WARNING_MESSAGE);
                 }
                 break;
             }

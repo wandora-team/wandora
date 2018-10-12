@@ -36,7 +36,6 @@ import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.*;
 import org.wandora.utils.*;
 import java.util.*;
 
@@ -49,7 +48,10 @@ import java.util.*;
  */
 public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
     
-    public static final int PASTE_SIS = 99;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static final int PASTE_SIS = 99;
     public static final int PASTE_BASENAMES = 1000;
     
     public static final int INCLUDE_NAMES = 1001;
@@ -114,38 +116,43 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
   
     
     @Override
-    public void execute(Wandora admin, Context context) {
-        initialize(admin);
+    public void execute(Wandora wandora, Context context) {
+        initialize(wandora);
 
         try {
-            if(WandoraOptionPane.showConfirmDialog(admin,"Are you sure you want to paste topics using text on clipboard?","Confirm paste", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
+            if(WandoraOptionPane.showConfirmDialog(
+            		wandora,
+            		"Are you sure you want to paste topics using text on clipboard?",
+            		"Confirm paste", 
+            		WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION) {
+            	
                 String tabText = ClipboardBox.getClipboard();
                 StringTokenizer st = new StringTokenizer(tabText, "\n");
 
                 Topic occurrenceType = null;
                 Topic occurrenceScope = null;
                 if(includeOrders == INCLUDE_TEXTDATAS) {
-                    occurrenceType=admin.showTopicFinder("Select occurrence type...");                
+                    occurrenceType=wandora.showTopicFinder("Select occurrence type...");                
                     if(occurrenceType == null) return;
-                    occurrenceScope=admin.showTopicFinder("Select occurrence language (scope)...");
+                    occurrenceScope=wandora.showTopicFinder("Select occurrence language (scope)...");
                     if(occurrenceScope == null) return;
                 }
                 Topic associationType = null;
                 Topic topicRole = null;
                 Topic playerRole = null;
                 if(includeOrders == INCLUDE_PLAYERS) {
-                    associationType=admin.showTopicFinder("Select association type...");                
+                    associationType=wandora.showTopicFinder("Select association type...");                
                     if(associationType == null) return;
-                    topicRole=admin.showTopicFinder("Select instance's role...");                
+                    topicRole=wandora.showTopicFinder("Select instance's role...");                
                     if(topicRole == null) return;
-                    playerRole=admin.showTopicFinder("Select player's role...");                
+                    playerRole=wandora.showTopicFinder("Select player's role...");                
                     if(playerRole == null) return;
                 }
-                Set nameScope = new HashSet();
+                Set<Topic> nameScope = new HashSet<>();
                 if(includeOrders == INCLUDE_NAMES) {
-                    Topic langTopic=admin.showTopicFinder("Select name language...");                
+                    Topic langTopic=wandora.showTopicFinder("Select name language...");                
                     if(langTopic == null) return;
-                    Topic scopeTopic=admin.showTopicFinder("Select name scope...");
+                    Topic scopeTopic=wandora.showTopicFinder("Select name scope...");
                     if(scopeTopic == null) return;
                     nameScope.add(langTopic);
                     nameScope.add(scopeTopic);
@@ -160,11 +167,11 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
                             if(nt.hasMoreTokens()) {
                                 topicIdentifier = nt.nextToken();
                                 if(topicIdentifier != null && topicIdentifier.length() > 0) {
-                                    Topic topic = getTopic(admin, topicMap, topicIdentifier, pasteOrders == PASTE_BASENAMES);
+                                    Topic topic = getTopic(wandora, topicMap, topicIdentifier, pasteOrders == PASTE_BASENAMES);
                                     //log("topic: " + topic);
                                     if(!ACCEPT_UNKNOWN_TOPICS && !isKnownTopic(topic, context) && !USER_HAS_BEEN_ASKED) {
                                         USER_HAS_BEEN_ASKED = true;
-                                        ACCEPT_UNKNOWN_TOPICS = WandoraOptionPane.showConfirmDialog(admin, "Clipboard data addresses topics not in selection! Paste anyway?") == WandoraOptionPane.YES_OPTION;
+                                        ACCEPT_UNKNOWN_TOPICS = WandoraOptionPane.showConfirmDialog(wandora, "Clipboard data addresses topics not in selection! Paste anyway?") == WandoraOptionPane.YES_OPTION;
                                     }
                                     if(ACCEPT_UNKNOWN_TOPICS || isKnownTopic(topic, context)) {
                                         contextTopics = context.getContextObjects();
@@ -184,7 +191,7 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
                                                     case INCLUDE_CLASSES: {
                                                         while(nt.hasMoreTokens() && !forceStop) {
                                                             String instanceClass = nt.nextToken();
-                                                            Topic instanceClassTopic = getTopic(admin, topicMap, instanceClass, true);
+                                                            Topic instanceClassTopic = getTopic(wandora, topicMap, instanceClass, true);
                                                             if(instanceClassTopic != null) {
                                                                 topic.addType(instanceClassTopic);
                                                             }
@@ -194,7 +201,7 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
                                                     case INCLUDE_INSTANCES: {
                                                         while(nt.hasMoreTokens() && !forceStop) {
                                                             String instance = nt.nextToken();
-                                                            Topic instanceTopic = getTopic(admin, topicMap, instance, true);
+                                                            Topic instanceTopic = getTopic(wandora, topicMap, instance, true);
                                                             if(instanceTopic != null) {
                                                                 instanceTopic.addType(topic);
                                                             }
@@ -241,7 +248,7 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
                                                             String player = nt.nextToken();
                                                             if(player != null && player.length() > 0) {
                                                                 if(PLAYER_SHOULD_NOT_BE_EQUAL_TO_INSTANCE && player.equals(topic)) break;
-                                                                Topic playerTopic = getTopic(admin, topicMap, player, true);
+                                                                Topic playerTopic = getTopic(wandora, topicMap, player, true);
                                                                 if(playerTopic != null && !forceStop) {
                                                                     Association a = topicMap.createAssociation(associationType);
                                                                     a.addPlayer(topic, topicRole);
@@ -396,7 +403,7 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
                 Topic langT =t.getTopicMap().getTopic(langsi);
                 String dispsi=XTMPSI.DISPLAY;
                 Topic dispT=t.getTopicMap().getTopic(dispsi);
-                HashSet scope=new HashSet();
+                Set<Topic> scope=new LinkedHashSet<>();
                 if(langT!=null) scope.add(langT);
                 if(dispT!=null) scope.add(dispT);
                 t.setVariant(scope, variantName);

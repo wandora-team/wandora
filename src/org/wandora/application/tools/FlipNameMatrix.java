@@ -43,7 +43,9 @@ import org.wandora.application.contexts.*;
  */
 public class FlipNameMatrix extends AbstractWandoraTool implements WandoraTool {
     
-    private Options localOptions = null;
+	private static final long serialVersionUID = 1L;
+	
+	private Options localOptions = null;
     public String optionsPrefix = "gui.";
     
     /**

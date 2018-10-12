@@ -49,7 +49,11 @@ import java.util.*;
  */
 public class MergeTopics extends AbstractWandoraTool implements WandoraTool {
     
-    /** Creates a new instance of MergeTopics */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of MergeTopics */
     public MergeTopics() {
     }
 

@@ -30,7 +30,6 @@ import org.wandora.application.gui.search.SearchTopicsResults;
 import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
-import org.wandora.application.gui.*;
 import java.util.*;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.*;
@@ -41,7 +40,12 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.*;
  * @author akivela
  */
 public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool implements WandoraTool {
-    public static final String OPTIONS_PREFIX = "options.occurrence.similarity.";
+
+	
+	private static final long serialVersionUID = 1L;
+
+
+	public static final String OPTIONS_PREFIX = "options.occurrence.similarity.";
     
     
     private InterfaceStringMetric stringMetric = null;
@@ -128,7 +132,7 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool impleme
         if(metric != null){
             Class metricClass = Class.forName(metric);
             if(metricClass != null) {
-                stringMetric = (InterfaceStringMetric) metricClass.newInstance();
+                stringMetric = (InterfaceStringMetric) metricClass.getConstructor().newInstance();
             }
         }
     }

@@ -22,11 +22,12 @@
  * 
  * MakeInstancesWithAssociations.java
  *
- * Created on 6. heinäkuuta 2006, 14:19
+ * Created on 6. heinï¿½kuuta 2006, 14:19
  *
  */
 
 package org.wandora.application.tools;
+
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.topicmap.*;
@@ -43,8 +44,11 @@ import java.util.*;
  */
 public class MakeInstancesWithAssociations extends AbstractWandoraTool {
 
-    
-    /** Creates a new instance of MakeInstancesWithAssociations */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of MakeInstancesWithAssociations */
     public MakeInstancesWithAssociations() {
         this(new AssociationContext());
     }

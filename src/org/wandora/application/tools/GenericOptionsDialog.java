@@ -22,7 +22,7 @@
  * 
  * GenericOptionsDialog.java
  *
- * Created on 25. heinäkuuta 2006, 15:30
+ * Created on 25. heinï¿½kuuta 2006, 15:30
  */
 
 package org.wandora.application.tools;
@@ -31,13 +31,10 @@ package org.wandora.application.tools;
 
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.topicmap.*;
-import org.wandora.utils.Textbox;
 import org.wandora.utils.swing.GuiTools;
 import java.util.*;
 import javax.swing.*;
-import java.awt.*;
+
 /**
  * <p>
  * This is a class to display a customizable options dialog. You can choose how
@@ -51,7 +48,10 @@ import java.awt.*;
  */
 public class GenericOptionsDialog extends javax.swing.JDialog {
     
-    protected String[][] fieldData;
+
+	private static final long serialVersionUID = 1L;
+	
+	protected String[][] fieldData;
     protected boolean wasCancelled=true;
     protected Wandora admin;
     protected JPanel paddingPanel;
