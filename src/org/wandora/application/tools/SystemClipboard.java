@@ -45,7 +45,10 @@ import javax.swing.*;
  */
 public class SystemClipboard extends AbstractWandoraTool implements WandoraTool {
     
-    public static final int PASTE = 1;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static final int PASTE = 1;
     public static final int COPY = 2;
     public static final int CUT = 4;
     
@@ -61,8 +64,8 @@ public class SystemClipboard extends AbstractWandoraTool implements WandoraTool 
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
-        Object focusOwner = admin.getFocusOwner();
+    public void execute(Wandora wandora, Context context) {
+        Object focusOwner = wandora.getFocusOwner();
         if(focusOwner != null) {
             if(focusOwner instanceof Clipboardable) {
                 Clipboardable clipboardable = (Clipboardable) focusOwner;

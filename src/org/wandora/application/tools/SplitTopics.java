@@ -22,7 +22,7 @@
  * 
  * SplitTopics.java
  *
- * Created on 12. kesäkuuta 2006, 18:19
+ * Created on 12. kesï¿½kuuta 2006, 18:19
  *
  */
 
@@ -33,7 +33,6 @@ import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -50,8 +49,10 @@ import javax.swing.*;
  */
 public class SplitTopics extends AbstractWandoraTool implements WandoraTool {
     
-    
-    public boolean duplicateAssociations = true;
+
+	private static final long serialVersionUID = 1L;
+	
+	public boolean duplicateAssociations = true;
     public boolean copyInstances = true;
     
     public boolean askName=false;
@@ -114,7 +115,7 @@ public class SplitTopics extends AbstractWandoraTool implements WandoraTool {
 
     
     public void splitTopic(Topic original, TopicMap topicMap, Wandora w)  throws TopicMapException {
-        Collection originalSIs = original.getSubjectIdentifiers();
+        Collection<Locator> originalSIs = original.getSubjectIdentifiers();
         if(originalSIs == null || originalSIs.isEmpty() || originalSIs.size() == 1) {
             log("Topic '"+ getTopicName(original) +"' has only one subject identifier. Can't split.");
             return;

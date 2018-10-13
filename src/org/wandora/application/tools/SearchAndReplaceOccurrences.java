@@ -40,15 +40,17 @@ import java.util.regex.*;
 
 public class SearchAndReplaceOccurrences extends AbstractWandoraTool {
     
-    public SearchAndReplaceOccurrences() {
+	private static final long serialVersionUID = 1L;
+
+	public SearchAndReplaceOccurrences() {
         this.setContext(new TopicContext());
     }
     
     @Override
-    public void execute(final Wandora admin, Context context) {
-        String search=WandoraOptionPane.showInputDialog(admin,"Enter search string","","Search and replace");
+    public void execute(final Wandora wandora, Context context) {
+        String search=WandoraOptionPane.showInputDialog(wandora,"Enter search string","","Search and replace");
         if(search==null || search.length()==0) return;
-        String replace=WandoraOptionPane.showInputDialog(admin,"Enter replace string","","Search and replace");
+        String replace=WandoraOptionPane.showInputDialog(wandora,"Enter replace string","","Search and replace");
         if(replace==null) return;
         Iterator iter=context.getContextObjects();
         Pattern pattern;

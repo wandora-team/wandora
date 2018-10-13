@@ -35,9 +35,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 
-import java.io.*;
-import java.util.*;
-import org.wandora.utils.swing.*;
 import java.awt.*;
 import javax.swing.*;
 
@@ -48,7 +45,10 @@ import javax.swing.*;
  */
 public class TopicHilighter extends AbstractWandoraTool implements WandoraTool {
     
-    public static final int ADD_HILIGHT = 1000;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static final int ADD_HILIGHT = 1000;
     public static final int REMOVE_HILIGHT = 1010;
     public static final int REMOVE_ALL_HILIGHTS = 1020;
     
@@ -61,18 +61,18 @@ public class TopicHilighter extends AbstractWandoraTool implements WandoraTool {
     }
     
     
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         try {
             TopicTable table = (TopicTable) getContext().getContextSource();
             switch(hilightOrders) {
                 case ADD_HILIGHT: {
                     Topic[] topics = table.getSelectedTopics();
                     Color newColor = JColorChooser.showDialog(
-                             admin,
+                    		wandora,
                              "Choose topic hilight color",
                              Color.BLUE);
                     if(newColor != null) {
-                        admin.topicHilights.add(topics, newColor);
+                    	wandora.topicHilights.add(topics, newColor);
                         table.refreshGUI();
                     }
                     break;
@@ -80,16 +80,21 @@ public class TopicHilighter extends AbstractWandoraTool implements WandoraTool {
                 
                 case REMOVE_HILIGHT: {
                     Topic[] topics = table.getSelectedTopics();
-                    admin.topicHilights.remove(topics);
+                    wandora.topicHilights.remove(topics);
                     table.refreshGUI();
                     break;
                 }
                 
                 case REMOVE_ALL_HILIGHTS: {
                     String message = "Remove all topic hilights?";
-                    int r = WandoraOptionPane.showConfirmDialog(admin, message, "Confirm hilight remove", WandoraOptionPane.YES_NO_OPTION);
+                    int r = WandoraOptionPane.showConfirmDialog(
+                    		wandora, 
+                    		message, 
+                    		"Confirm hilight remove", 
+                    		WandoraOptionPane.YES_NO_OPTION);
+                    
                     if(r == WandoraOptionPane.YES_OPTION) {
-                        admin.topicHilights.removeAll();
+                    	wandora.topicHilights.removeAll();
                         table.refreshGUI();
                     }
                     break;

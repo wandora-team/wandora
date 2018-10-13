@@ -28,16 +28,6 @@
 package org.wandora.application.tools;
 
 
-import java.util.*;
-import org.wandora.application.gui.search.SearchTopicsResults;
-import org.wandora.application.gui.search.SearchTopicsDialog;
-import de.topicmapslab.tmql4j.components.processor.results.model.ResultType;
-import de.topicmapslab.tmql4j.components.processor.runtime.ITMQLRuntime;
-import de.topicmapslab.tmql4j.components.processor.runtime.TMQLRuntimeFactory;
-import org.wandora.application.gui.table.MixedTopicTable;
-import org.wandora.topicmap.layered.*;
-import org.wandora.topicmap.*;
-
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
@@ -53,7 +43,11 @@ import org.wandora.application.gui.search.SearchTopicsFrame;
  */
 public class Search extends AbstractWandoraTool implements WandoraTool {
 
-    private static SearchTopicsFrame searchFrame = null;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private static SearchTopicsFrame searchFrame = null;
 
     
     

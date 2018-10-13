@@ -39,8 +39,12 @@ import org.wandora.application.contexts.*;
  * @author olli
  */
 public class RefreshTopicTrees extends AbstractWandoraTool {
-    
-    /** Creates a new instance of RefreshTopicTrees */
+
+	
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of RefreshTopicTrees */
     public RefreshTopicTrees() {
     }
 

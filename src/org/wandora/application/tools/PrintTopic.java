@@ -535,35 +535,35 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
 
                 
                 // --- associations
-                Map<String,List<Map>> associationsByType = new LinkedHashMap<>();
-                Map<String,Map> rolesByType = new HashMap<>();
-                List<Map> allAssociations = new ArrayList<>();
+                Map<String,List<Map<String,String>>> associationsByType = new LinkedHashMap<>();
+                Map<String,Map<String,String>> rolesByType = new HashMap<>();
+                List<Map<String,String>> allAssociations = new ArrayList<>();
                 
                 for(Association a : t.getAssociations()) {
                     Topic type = a.getType();
                     String typeName = getTopicName(type);
-                    List<Map> typedAssociations = associationsByType.get(typeName);
+                    List<Map<String,String>> typedAssociations = associationsByType.get(typeName);
                     if(typedAssociations == null) typedAssociations = new ArrayList<>();
 
                     Collection<Topic> aRoles = a.getRoles();
-                    Map roles = (Map) rolesByType.get(typeName);
+                    Map<String,String> roles = rolesByType.get(typeName);
                     if(roles == null) roles = new LinkedHashMap<>();
                     Map<String,String> association = new LinkedHashMap<>();
 
-                    for(Iterator aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
+                    for(Iterator<Topic> aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
                         Topic role = (Topic) aRoleIter.next();
                         Topic player = a.getPlayer(role);
                         String roleName = getTopicName(role);
                         String playerName = getTopicName(player);
                         association.put(roleName, playerName);
-                        roles.put(roleName, roleName);
+                        roles.put(roleName, roleName); // <-- IS THIS RIGHT!
                     }
                     allAssociations.add(association);
                     typedAssociations.add(association);
                     rolesByType.put(typeName, roles);
                     associationsByType.put(typeName, typedAssociations);                    
                 }
-                if(associationsByType.size() > 0) {
+                if(!associationsByType.isEmpty()) {
                     hash.put("associationsbytype", associationsByType);
                     hash.put("associationrolesbytype", rolesByType);
                     hash.put("allassociations", allAssociations);
@@ -583,7 +583,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
                     temp.add(getTopicName(t2));
                 }
                 if(!temp.isEmpty()) {
-                    List sorted = sortArray(temp, sortFlag);
+                    List<String> sorted = sortArray(temp, sortFlag);
                     hash.put("instances", sorted);
                 }
             }
@@ -618,7 +618,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     
-    public String getVelocityString(Wandora admin, Map hash, String templateFile) {
+    public String getVelocityString(Wandora wandora, Map hash, String templateFile) {
         VelocityContext context;
         Template template;
         StringWriter writer;
@@ -670,13 +670,14 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
 
-    public List sortArray(List v, int sortFlag) {
+    public <T> List<T> sortArray(List<T> v, int sortFlag) {
         if(sortFlag == NO_SORT) return v;
+        if(v == null) return null;
         if(v.size() == 1) return v;
-        
-        Object[] array = v.toArray();
-        Object o1;
-        Object o2;
+
+        T[] array = (T[]) v.toArray(new Object[0]);
+        T o1;
+        T o2;
         String s1;
         String s2;
         for(int i=array.length-1; i>0; i--) {
@@ -695,7 +696,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
             }
         }
 
-        v = new ArrayList();
+        v = new ArrayList<>();
         v.addAll(Arrays.asList(array));
         return v;
     }

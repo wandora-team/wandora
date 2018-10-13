@@ -22,7 +22,7 @@
  * 
  * UploadFile.java
  *
- * Created on 26. heinäkuuta 2006, 12:21
+ * Created on 26. heinï¿½kuuta 2006, 12:21
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -30,7 +30,7 @@
 
 package org.wandora.application.tools;
 
-import /*
+/*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
@@ -51,7 +51,9 @@ import /*
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-org.wandora.utils.fileserver.SimpleFileServerClient;
+
+
+import org.wandora.utils.fileserver.SimpleFileServerClient;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -59,11 +61,8 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.gui.simple.*;
 import java.io.*;
 import java.util.*; 
-import java.sql.*;
-import javax.swing.*;
-import org.wandora.utils.swing.GuiTools;
-import static org.wandora.utils.Tuples.*;
-import org.wandora.utils.fileserver.*;
+
+
 /**
  *
  * @author olli
@@ -71,7 +70,9 @@ import org.wandora.utils.fileserver.*;
 
 public class UploadFile extends AbstractWandoraTool {
 
-    private String host;
+	private static final long serialVersionUID = 1L;
+	
+	private String host;
     private int port;
     private String user;
     private String password;

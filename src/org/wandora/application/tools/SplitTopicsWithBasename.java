@@ -22,7 +22,7 @@
  * 
  * SplitTopicsWithBasename.java
  *
- * Created on 13. heinäkuuta 2006, 16:41
+ * Created on 13. heinï¿½kuuta 2006, 16:41
  *
  */
 
@@ -34,7 +34,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import javax.swing.*;
-import org.wandora.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
@@ -52,7 +51,12 @@ import org.wandora.topicmap.*;
  * @author akivela
  */
 public class SplitTopicsWithBasename extends AbstractWandoraTool implements WandoraTool {
-    public static boolean SKIP_WHITE_SPACE_SPLIT_PARTS = true;
+
+	
+	private static final long serialVersionUID = 1L;
+
+
+	public static boolean SKIP_WHITE_SPACE_SPLIT_PARTS = true;
     
 
     public boolean duplicateAssociations = true;
@@ -266,11 +270,16 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
         String originalFilename = "F:\\projects\\kokoelmat\\update150615\\asiasanat\\original.txt";
         String modsFilename = "F:\\projects\\kokoelmat\\update150615\\asiasanat\\mods.txt";
         
+        FileInputStream fstream = null;
+        BufferedReader br = null;
+        FileInputStream fstream2 = null;
+        BufferedReader br2 = null;
+        
         try {
-            FileInputStream fstream = new FileInputStream(originalFilename);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+            fstream = new FileInputStream(originalFilename);
+            br = new BufferedReader(new InputStreamReader(fstream));
             String str = null;
-            HashMap originals = new HashMap();
+            Map<String,String> originals = new LinkedHashMap<>();
 
             while ((str = br.readLine()) != null)   {
                 String[] keyValue = str.split("\t");
@@ -294,8 +303,8 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
             
             br.close();
             
-            FileInputStream fstream2 = new FileInputStream(modsFilename);
-            BufferedReader br2 = new BufferedReader(new InputStreamReader(fstream2));
+            fstream2 = new FileInputStream(modsFilename);
+            br2 = new BufferedReader(new InputStreamReader(fstream2));
             
             while ((str = br2.readLine()) != null)   {
                 String[] keyValue = str.split("\t");
@@ -319,9 +328,24 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
                     System.out.println("Illegal number of elements in original line: "+str);
                 }
             }
+
         }
         catch(Exception e) {
             e.printStackTrace();
+        }
+        finally {
+        	if(br != null) {
+        		try { br.close(); } catch(Exception e) {}
+        	}
+        	if(fstream != null) {
+        		try { fstream.close(); } catch(Exception e) {}
+        	}
+        	if(br2 != null) {
+        		try { br2.close(); } catch(Exception e ) {}
+        	}
+        	if(fstream2 != null) {
+        		try { fstream2.close(); } catch(Exception e) {}
+        	}
         }
     }
 

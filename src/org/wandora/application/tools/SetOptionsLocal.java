@@ -43,7 +43,10 @@ import org.wandora.utils.*;
  */
 public class SetOptionsLocal extends AbstractWandoraTool implements WandoraTool {
 
-    private HashMap options = new HashMap();
+
+	private static final long serialVersionUID = 1L;
+	
+	private Map<String,String> options = new LinkedHashMap<>();
     private boolean requiresRefresh = false;
     private Options localOptions = null;
     
@@ -67,7 +70,7 @@ public class SetOptionsLocal extends AbstractWandoraTool implements WandoraTool 
             options.put(key, value);
         }
     }
-    public void setOptions(HashMap subOptions) {
+    public void setOptions(Map<String,String> subOptions) {
         if(subOptions != null) {
             options.putAll(subOptions);
         }
@@ -85,7 +88,7 @@ public class SetOptionsLocal extends AbstractWandoraTool implements WandoraTool 
         if(localOptions != null) {
             String key = null;
             String value = null;
-            for(Iterator keys = options.keySet().iterator(); keys.hasNext(); ) {
+            for(Iterator<String> keys = options.keySet().iterator(); keys.hasNext(); ) {
                 try {
                     key = (String) keys.next();
                     value = (String) options.get(key);

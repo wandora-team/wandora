@@ -52,7 +52,9 @@ import javax.swing.*;
 public class SplitToInstancesWithBasename extends AbstractWandoraTool implements WandoraTool {
     
 
-    public boolean descending = false;
+	private static final long serialVersionUID = 1L;
+
+	public boolean descending = false;
     public boolean duplicateAssociations = false;
     public boolean copyInstances = false;
     public boolean copyClasses = false;
@@ -164,9 +166,9 @@ public class SplitToInstancesWithBasename extends AbstractWandoraTool implements
             
             split = splitMap.copyTopicIn(original, false);
             if(duplicateAssociations) {
-                Collection assocs = original.getAssociations();
+                Collection<Association> assocs = original.getAssociations();
                 Association a;
-                for(Iterator iter = assocs.iterator(); iter.hasNext();) {
+                for(Iterator<Association> iter = assocs.iterator(); iter.hasNext();) {
                     a = (Association) iter.next();
                     splitMap.copyAssociationIn(a);
                 }
@@ -203,19 +205,19 @@ public class SplitToInstancesWithBasename extends AbstractWandoraTool implements
             }
            
             // --- resolve new subject identifiers ---
-            Collection sis = split.getSubjectIdentifiers();
-            Vector siv = new Vector();
-            for(Iterator iter = sis.iterator(); iter.hasNext(); ) {
+            Collection<Locator> sis = split.getSubjectIdentifiers();
+            List<Locator> siv = new ArrayList<>();
+            for(Iterator<Locator> iter = sis.iterator(); iter.hasNext(); ) {
                 siv.add(iter.next());
             }
             Locator lo = null;
             Locator l = null;
             for(int j=0; j<siv.size(); j++) {
-                lo = (Locator) siv.elementAt(j);
-                l = (Locator) new Locator(lo.toExternalForm() + "_split");
+                lo = siv.get(j);
+                l = new Locator(lo.toExternalForm() + "_split");
                 int c = 2;
                 while((topicMap.getTopic(l) != null || splitMap.getTopic(l) != null) && c<10000) {
-                    l = (Locator) new Locator(lo.toExternalForm() + "_split" + c);
+                    l = new Locator(lo.toExternalForm() + "_split" + c);
                     c++;
                 }
                 split.addSubjectIdentifier(l);
@@ -228,8 +230,8 @@ public class SplitToInstancesWithBasename extends AbstractWandoraTool implements
             
             // --- attach instances ---
             if(split != null && copyInstances) {
-                Collection col = topicMap.getTopicsOfType(original);
-                Iterator iter=col.iterator();
+                Collection<Topic> col = topicMap.getTopicsOfType(original);
+                Iterator<Topic> iter=col.iterator();
                 Topic t = null;
                 while(iter.hasNext()) {
                     t=(Topic)iter.next();

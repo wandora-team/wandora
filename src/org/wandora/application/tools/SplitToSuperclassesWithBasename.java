@@ -53,7 +53,9 @@ import javax.swing.*;
 public class SplitToSuperclassesWithBasename extends AbstractWandoraTool implements WandoraTool {
     
 
-    public boolean descending = false;
+	private static final long serialVersionUID = 1L;
+	
+	public boolean descending = false;
     public boolean duplicateAssociations = false;
     public boolean copyInstances = false;
     public boolean copyClasses = false;
@@ -98,15 +100,18 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool impleme
     
     
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora wandora, Context context) {
         Iterator topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         
-        splitString = WandoraOptionPane.showInputDialog(w, "Enter regular expression string used to split base name:", splitString);
+        splitString = WandoraOptionPane.showInputDialog(
+        		wandora, 
+        		"Enter regular expression string used to split base name:", 
+        		splitString);
         
         if(splitString == null || splitString.length() == 0) return;
         
-        TopicMap tm = w.getTopicMap();
+        TopicMap tm = wandora.getTopicMap();
         Topic topic = null;
         topicCounter = 0;
         splitCounter = 0;
@@ -117,7 +122,7 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool impleme
                 if(topic != null) {
                     if(!topic.isRemoved()) {
                         Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
-                        splitTopic(ltopic, splitString, tm, w);
+                        splitTopic(ltopic, splitString, tm, wandora);
                     }
                 }
             } catch(Exception e) {
@@ -166,9 +171,9 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool impleme
             
             split = splitMap.copyTopicIn(original, false);
             if(duplicateAssociations) {
-                Collection assocs = original.getAssociations();
+                Collection<Association> assocs = original.getAssociations();
                 Association a;
-                for(Iterator iter = assocs.iterator(); iter.hasNext();) {
+                for(Iterator<Association> iter = assocs.iterator(); iter.hasNext();) {
                     a = (Association) iter.next();
                     splitMap.copyAssociationIn(a);
                 }
@@ -205,15 +210,15 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool impleme
             }
            
             // --- resolve new subject identifiers ---
-            Collection sis = split.getSubjectIdentifiers();
-            Vector siv = new Vector();
-            for(Iterator iter = sis.iterator(); iter.hasNext(); ) {
+            Collection<Locator> sis = split.getSubjectIdentifiers();
+            List<Locator> siv = new ArrayList<>();
+            for(Iterator<Locator> iter = sis.iterator(); iter.hasNext(); ) {
                 siv.add(iter.next());
             }
             Locator lo = null;
             Locator l = null;
             for(int j=0; j<siv.size(); j++) {
-                lo = (Locator) siv.elementAt(j);
+                lo = (Locator) siv.get(j);
                 l = (Locator) new Locator(lo.toExternalForm() + "_split");
                 int c = 2;
                 while((topicMap.getTopic(l) != null || splitMap.getTopic(l) != null) && c<10000) {
@@ -230,8 +235,8 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool impleme
             
             // --- attach instances ---
             if(split != null && copyInstances) {
-                Collection col = topicMap.getTopicsOfType(original);
-                Iterator iter=col.iterator();
+                Collection<Topic> col = topicMap.getTopicsOfType(original);
+                Iterator<Topic> iter=col.iterator();
                 Topic t = null;
                 while(iter.hasNext()) {
                     t=(Topic)iter.next();
@@ -283,17 +288,22 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool impleme
             if(t==null){
                 t=tm.createTopic();
                 t.addSubjectIdentifier(tm.createLocator(si));
-                if(bn!=null) t.setBaseName(bn);
+                if(bn!=null) {
+                	t.setBaseName(bn);
+                }
             }
             return t;
         }
-        else{
+        else {
             Topic t=tm.getTopicWithBaseName(bn);
             if(t==null){
                 t=tm.createTopic();
-                if(bn!=null) t.setBaseName(bn);
-                if(si!=null) t.addSubjectIdentifier(tm.createLocator(si));
-                else t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
+                if(bn!=null) {
+                	t.setBaseName(bn);
+                }
+                else {
+                	t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
+                }
             }
             return t;
         }

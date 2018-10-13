@@ -43,7 +43,11 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class SetTopicStringifier extends AbstractWandoraTool implements WandoraTool {
-    private TopicStringifier topicStringifier = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private TopicStringifier topicStringifier = null;
     
     
     public SetTopicStringifier(TopicStringifier r) {

@@ -26,7 +26,11 @@ package org.wandora.application.tools;
  */
 public class SystemClipboardCopy extends SystemClipboard {
     
-    public SystemClipboardCopy() {
+
+	private static final long serialVersionUID = 1L;
+	
+
+	public SystemClipboardCopy() {
         super(SystemClipboard.COPY);
     }
     
