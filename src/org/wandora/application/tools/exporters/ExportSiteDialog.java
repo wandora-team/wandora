@@ -53,7 +53,10 @@ import org.wandora.application.*;
 
 public class ExportSiteDialog extends javax.swing.JDialog {
     
-    private Wandora admin;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora;
     public boolean accept = false;
     
     
@@ -61,12 +64,12 @@ public class ExportSiteDialog extends javax.swing.JDialog {
     
     
     /** Creates new form ExportSiteDialog */
-    public ExportSiteDialog(Wandora parent, boolean modal) {
-        super(parent, modal);
-        admin = parent;
+    public ExportSiteDialog(Wandora wandora, boolean modal) {
+        super(wandora, modal);
+        this.wandora = wandora;
         initComponents();
         hideSubjectLocatorPanels();
-        admin.centerWindow(this);
+        wandora.centerWindow(this);
     }
     
     
@@ -417,7 +420,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         chooser.setDialogType(SimpleFileChooser.CUSTOM_DIALOG);
         chooser.setApproveButtonToolTipText("Select directory");
 
-        if(chooser.open(admin, "Select")==SimpleFileChooser.APPROVE_OPTION) {
+        if(chooser.open(wandora, "Select")==SimpleFileChooser.APPROVE_OPTION) {
             currentDirectory = chooser.getSelectedFile();
             return currentDirectory.getPath();
         }
@@ -446,7 +449,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         chooser.setDialogTitle(title);
         chooser.setFileSelectionMode(SimpleFileChooser.FILES_ONLY);
 
-        if(chooser.open(admin, "Select")==SimpleFileChooser.APPROVE_OPTION) {
+        if(chooser.open(wandora, "Select")==SimpleFileChooser.APPROVE_OPTION) {
             currentFile = chooser.getSelectedFile();
             return currentFile.getPath();
         }

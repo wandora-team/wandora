@@ -35,7 +35,9 @@ import org.wandora.application.tools.docking.AddDockable;
 
 public class AddGraph extends AddDockable {
     
-    public AddGraph() {
+	private static final long serialVersionUID = 1L;
+
+	public AddGraph() {
         super(GraphTopicPanel.class);
     }
     

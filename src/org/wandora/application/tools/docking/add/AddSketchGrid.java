@@ -35,6 +35,8 @@ import org.wandora.application.tools.docking.AddDockable;
 
 public class AddSketchGrid extends AddDockable {
     
+	private static final long serialVersionUID = 1L;
+	
     public AddSketchGrid() {
         super(SketchGridPanel.class);
     }

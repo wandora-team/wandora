@@ -42,13 +42,15 @@ import org.wandora.topicmap.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*; 
 
    
 
 public class DOTExport extends AbstractExportTool implements WandoraTool {
+	
+	private static final long serialVersionUID = 1L;
+	
+	
     public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
     public static boolean LABEL_NODES = true;
@@ -203,14 +205,14 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
                 logger.setProgress(count++);
                 // Topic occurrences....
                 if(t.getDataTypes().size()>0){
-                    Collection types=t.getDataTypes();
-                    Iterator iter2=types.iterator();
+                    Collection<Topic> types=t.getDataTypes();
+                    Iterator<Topic> iter2=types.iterator();
                     while(iter2.hasNext()) {
                         Topic type=(Topic)iter2.next();
-                        Hashtable ht=(Hashtable)t.getData(type);
-                        Iterator iter3=ht.entrySet().iterator();
+                        Hashtable<Topic,String> ht=t.getData(type);
+                        Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                         while(iter3.hasNext()) {
-                            Map.Entry e=(Map.Entry)iter3.next();
+                            Map.Entry<Topic,String> e=iter3.next();
                             String data=(String)e.getValue();
                             echoNode(data, writer);
                         }
@@ -224,14 +226,14 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
                 logger.setProgress(count++);
                 // Topic occurrences....
                 if(t.getDataTypes().size()>0){
-                    Collection types=t.getDataTypes();
-                    Iterator iter2=types.iterator();
+                    Collection<Topic> types=t.getDataTypes();
+                    Iterator<Topic> iter2=types.iterator();
                     while(iter2.hasNext()){
-                        Topic type=(Topic)iter2.next();
-                        Hashtable ht=(Hashtable)t.getData(type);
-                        Iterator iter3=ht.entrySet().iterator();
+                        Topic type=iter2.next();
+                        Hashtable<Topic,String> ht=t.getData(type);
+                        Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                         while(iter3.hasNext()){
-                            Map.Entry e=(Map.Entry)iter3.next();
+                            Map.Entry<Topic,String> e=iter3.next();
                             String data=(String)e.getValue();
                             echoEdge(t, data, type, writer);
                         }
@@ -264,7 +266,7 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
             while(iter.hasNext() && !logger.forceStop()) {
                 logger.setProgress(count++);
                 Association a=(Association)iter.next();
-                Collection roles = a.getRoles();
+                Collection<Topic> roles = a.getRoles();
                 if(roles.size() < 2) continue;
                 else if(roles.size() == 2) {
                     Topic[] roleArray = (Topic[]) roles.toArray(new Topic[2]);
@@ -275,7 +277,7 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
                         icount++;
                         String target="nameless_intermediator_node-"+icount;
                         echoNode(target, writer);
-                        Iterator iter2 = roles.iterator();
+                        Iterator<Topic> iter2 = roles.iterator();
                         while(iter2.hasNext()) {
                             Topic role=(Topic)iter2.next();
                             echoEdge(a.getPlayer(role), target, a.getType(), writer);

@@ -38,8 +38,6 @@ import org.wandora.utils.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*; 
 
 /**
@@ -47,6 +45,10 @@ import javax.swing.*;
  * @author akivela
  */
 public class AdjacencyMatrixExport extends AbstractExportTool implements WandoraTool {
+	
+	private static final long serialVersionUID = 1L;
+	
+	
     public static boolean COUNT_CLASSES = true;
     public static boolean COUNT_INSTANCES = true;
     public static boolean COUNT_ASSOCIATIONS = true;

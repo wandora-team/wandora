@@ -45,8 +45,11 @@ import javax.swing.*;
  * @author  olli
  */
 public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
-    
-    public static String[] exportTypes=new String[]{
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static String[] exportTypes=new String[]{
         SchemaBox.CONTENTTYPE_SI,
         SchemaBox.ASSOCIATIONTYPE_SI,
         SchemaBox.OCCURRENCETYPE_SI,
@@ -94,19 +97,19 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         SimpleFileChooser chooser = UIConstants.getFileChooser();
         chooser.setDialogTitle("Export Wandora schema...");
         
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();
             File file = chooser.getSelectedFile();
             
             try{
                 file = IObox.addFileExtension(file, "xtm"); // Ensure file extension exists!
-                TopicMap topicMap = solveContextTopicMap(admin, context);
+                TopicMap topicMap = solveContextTopicMap(wandora, context);
                 TopicMap schemaTopicMap = exportTypeDefs(topicMap);
-                String name = solveNameForTopicMap(admin, topicMap);
+                String name = solveNameForTopicMap(wandora, topicMap);
                 if(name != null) {
                     log("Exporting Wandora schema topics of layer '"+ name +"' to '"+ file.getName() + "'.");
                 }
@@ -131,7 +134,7 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
     public static TopicMap exportTypeDefs(TopicMap tm) throws TopicMapException {
         TopicMap export=new org.wandora.topicmap.memory.TopicMapImpl();
         
-        HashSet copyTypes=new HashSet();
+        Set<Topic> copyTypes=new LinkedHashSet<>();
         for(int i=0;i<exportTypes.length;i++){
             Topic t=tm.getTopic(exportTypes[i]);
             if(t==null) {
@@ -140,18 +143,18 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
             copyTypes.add(t);
         }
         
-        HashSet copied=new HashSet();
-        Iterator iter=copyTypes.iterator();
+        Set<Topic> copied=new LinkedHashSet<>();
+        Iterator<Topic> iter=copyTypes.iterator();
         while(iter.hasNext()){
-            Topic type=(Topic)iter.next();
-            Iterator iter2=tm.getTopicsOfType(type).iterator();
+            Topic type=iter.next();
+            Iterator<Topic> iter2=tm.getTopicsOfType(type).iterator();
             while(iter2.hasNext()){
-                Topic topic=(Topic)iter2.next();
+                Topic topic=iter2.next();
                 if(!copied.contains(topic)){
                     export.copyTopicIn(topic,false);
-                    Iterator iter3=topic.getAssociations().iterator();
+                    Iterator<Association> iter3=topic.getAssociations().iterator();
                     while(iter3.hasNext()){
-                        Association a=(Association)iter3.next();
+                        Association a=iter3.next();
                         if(copyTypes.contains(a.getType())){
                             export.copyAssociationIn(a);
                         }
@@ -161,7 +164,7 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
             }
         }
 
-        copyTypes=new HashSet();
+        copyTypes=new LinkedHashSet<>();
         for(int i=0;i<exportTypes.length;i++){
             Topic t=export.getTopic(exportTypes[i]);
             if(t==null) {
@@ -174,37 +177,37 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
         iter=export.getTopics();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
-            Iterator iter2=new ArrayList(t.getVariantScopes()).iterator();
+            Iterator<Set<Topic>> iter2=new ArrayList<>(t.getVariantScopes()).iterator();
             while(iter2.hasNext()){
-                Set scope=(Set)iter2.next();
+                Set<Topic> scope=iter2.next();
                 t.removeVariant(scope);
             }
-            iter2=new ArrayList(t.getDataTypes()).iterator();
-            while(iter2.hasNext()){
-                Topic type=(Topic)iter2.next();
+            Iterator<Topic> iter2b=new ArrayList<>(t.getDataTypes()).iterator();
+            while(iter2b.hasNext()){
+                Topic type=iter2b.next();
                 if(type!=hideLevel){
                     t.removeData(type);
                 }
             }
-            iter2=new ArrayList(t.getTypes()).iterator();
-            while(iter2.hasNext()){
-                Topic type=(Topic)iter2.next();
+            Iterator<Topic> iter2c=new ArrayList<>(t.getTypes()).iterator();
+            while(iter2c.hasNext()){
+                Topic type=iter2c.next();
                 if(!copyTypes.contains(type) && type!=wandoraClass) {
                     t.removeType(type);
                 }
             }
         }
         iter=export.getTopics();
-        Vector v=new Vector();
+        List<Topic> v=new ArrayList<>();
         while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
-            if(t.getAssociations().size()==0 && export.getTopicsOfType(t).size()==0){
+            Topic t=iter.next();
+            if(t.getAssociations().isEmpty() && export.getTopicsOfType(t).isEmpty()){
                 v.add(t);
             }
         }
         iter=v.iterator();
         while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
+            Topic t=iter.next();
             try{
                 t.remove();
             }catch(TopicInUseException tiue){}

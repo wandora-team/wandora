@@ -68,7 +68,10 @@ import javax.swing.*;
 
 
 public class GMLExport extends AbstractExportTool implements WandoraTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
     public static boolean EXPORT_CLASSES = true;
     public static boolean EXPORT_OCCURRENCES = true;

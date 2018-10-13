@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+
 /**
  *
  * @author akivela
@@ -52,20 +53,23 @@ import java.util.zip.ZipOutputStream;
 public class GephiExport extends AbstractExportTool implements WandoraTool {
 
 
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+	private static final long serialVersionUID = 1L;
+
+	
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
     public boolean EXPORT_CLASSES = true;
     public boolean EXPORT_OCCURRENCES = true;
     public boolean EXPORT_ALL_ASSOCIATIONS = true;
 
-    private ArrayList<AttributeColumn> nodeAttributes;
-    private ArrayList<AttributeColumn> edgeAttributes;
+    private List<AttributeColumn> nodeAttributes;
+    private List<AttributeColumn> edgeAttributes;
 
     private int edgeCounter = 0;
     private int nodeCounter = 0;
 
-    private HashMap<String, DataNode> dataNodes;
-    private ArrayList<DataEdge> dataEdges;
+    private Map<String, DataNode> dataNodes;
+    private List<DataEdge> dataEdges;
 
     public GephiExport() {
     }
@@ -114,7 +118,7 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
     static final int BUFFER = 2048;
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -124,7 +128,7 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
        edgeCounter = 0;
        nodeCounter = 0;
 
-       dataNodes = new HashMap<String, DataNode>();
+       dataNodes = new LinkedHashMap<String, DataNode>();
        dataEdges = new ArrayList<DataEdge>();
 
 
@@ -136,8 +140,8 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
             topicMapName = "selection_in_wandora";
         }
         else {
-            tm = solveContextTopicMap(admin, context);
-            topicMapName = this.solveNameForTopicMap(admin, tm);
+            tm = solveContextTopicMap(wandora, context);
+            topicMapName = this.solveNameForTopicMap(wandora, tm);
             if(topicMapName != null) {
                 exportInfo =  "Exporting topic map in layer '" + topicMapName + "' as Gephi graph";
             }
@@ -154,7 +158,7 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
 
         File file;
 
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();
             file = chooser.getSelectedFile();
             String fileName = file.getName();
@@ -322,15 +326,15 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
             StringBuilder occurences = new StringBuilder("");
 
             if(EXPORT_OCCURRENCES) {
-                Collection types=topic.getDataTypes();
-                Iterator iter2=types.iterator();
+                Collection<Topic> types=topic.getDataTypes();
+                Iterator<Topic> iter2=types.iterator();
                 while(iter2.hasNext()){
                     Topic type=(Topic)iter2.next();
                     String typeName = type.getBaseName();
-                    Hashtable ht=(Hashtable)topic.getData(type);
-                    Iterator iter3=ht.entrySet().iterator();
+                    Hashtable<Topic,String> ht=topic.getData(type);
+                    Iterator<Map.Entry<Topic, String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()){
-                        Map.Entry e=(Map.Entry)iter3.next();
+                        Map.Entry<Topic,String> e=iter3.next();
                         String data=(String)e.getValue();
                         String occurence = makeString(typeName)+" : "+makeString(data)+",";
                         occurences.append(occurence);
@@ -346,7 +350,7 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
 
         }
 
-        Iterator iter;
+        Iterator<Topic> iter;
 
         // Classes
 
@@ -355,7 +359,7 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
             while(iter.hasNext()) {
                 Topic t=(Topic)iter.next();
                 if(t.isRemoved()) continue;
-                Iterator iter2=t.getTypes().iterator();
+                Iterator<Topic> iter2=t.getTypes().iterator();
                 while(iter2.hasNext()) {
                     Topic t2=(Topic)iter2.next();
                     if(t2.isRemoved()) continue;
@@ -368,11 +372,11 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
 
 
         // Associations
-        iter=topicMap.getAssociations();
+        Iterator<Association> iter2=topicMap.getAssociations();
         
-        while( iter.hasNext() ) {
+        while( iter2.hasNext() ) {
 
-            Association a=(Association)iter.next();
+            Association a=(Association)iter2.next();
 
             Collection<Topic> roles = a.getRoles();
             if(roles.size() < 2) continue;
@@ -877,8 +881,8 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
         public void setOccurences(String occurences) {
             this.occurences = occurences;
         }
-
     }
+    
 
     private class DataEdge {
 
@@ -907,12 +911,11 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
 
             edgeCounter++;
         }
-
-
     }
 
+    
+    
     private class AttributeColumn {
-
         int index;
         String id;
         String title;
@@ -926,7 +929,6 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
             this.type = type;
             this.origin = origin;
         }
-
     }
 
 

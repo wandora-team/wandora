@@ -34,6 +34,8 @@ import org.wandora.application.tools.docking.AddDockable;
 
 
 public class AddTree extends AddDockable {
+	
+	private static final long serialVersionUID = 1L;
     
     public AddTree() {
         super(TreeTopicPanel.class);

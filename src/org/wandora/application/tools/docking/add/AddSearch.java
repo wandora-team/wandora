@@ -34,6 +34,8 @@ import org.wandora.application.tools.docking.AddDockable;
 
 
 public class AddSearch extends AddDockable {
+	
+	private static final long serialVersionUID = 1L;
     
     public AddSearch() {
         super(SearchTopicPanel.class);

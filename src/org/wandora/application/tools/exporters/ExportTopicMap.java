@@ -46,7 +46,12 @@ import javax.swing.Icon;
  * @author akivela
  */
 public class ExportTopicMap extends AbstractExportTool implements WandoraTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+	
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
     
     public ExportTopicMap() {

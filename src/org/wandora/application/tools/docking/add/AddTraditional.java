@@ -32,6 +32,8 @@ import org.wandora.application.tools.docking.AddDockable;
 
 
 public class AddTraditional extends AddDockable {
+	
+	private static final long serialVersionUID = 1L;
     
     public AddTraditional() {
         super(TraditionalTopicPanel.class);

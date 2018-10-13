@@ -62,7 +62,11 @@ import org.wandora.utils.*;
  * @author  pasi, ak
  */
 public class ExportSite extends AbstractExportTool implements WandoraTool, ActionListener {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
    
     String templateEncoding = "UTF-8";
     String topicmapfile = "";
@@ -70,7 +74,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
     String siurl = null;
     String templatefile = "resources/gui/export/sitepage.vhtml";
     String pageindextemplatefile = "resources/gui/export/siteindex.vhtml";
-    Wandora parent = null;
+    Wandora wandora = null;
     File currentDirectory = null;
     Object codec = null;
     Locale locale = Locale.getDefault();
@@ -177,24 +181,24 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
 
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         forceStop = false;
-        parent = admin;      
-        if(admin!=null) {
+        this.wandora = wandora;      
+        if(wandora!=null) {
             try {
                 // --- Solve first topic map to be exported
                 if(EXPORT_SELECTION_INSTEAD_TOPIC_MAP) {
                     topicMap = makeTopicMapWith(context);
                 }
                 else {
-                    topicMap = solveContextTopicMap(admin, context);
+                    topicMap = solveContextTopicMap(wandora, context);
                 }
 
 
-                 currentTopic = admin.getOpenTopic();
+                 currentTopic = wandora.getOpenTopic();
 
                  if(exportDialog == null) {
-                     exportDialog = new ExportSiteDialog(admin, true);
+                     exportDialog = new ExportSiteDialog(wandora, true);
                      exportDialog.setExportDirectory(outputdir);
                      exportDialog.setPageTemplate(this.templatefile);
                      exportDialog.setIndexTemplate(this.pageindextemplatefile);
@@ -312,7 +316,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
         
         
     private void takeNap(long napTime) {
-        try { Thread.currentThread().sleep(napTime); }
+        try { Thread.sleep(napTime); }
         catch (Exception e) { }            
     }
     
@@ -356,7 +360,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
     
     
     
-    private void collectParams(HashMap localParams, Topic currentTopic, TopicMap topicMap, Locale loc) {
+    private void collectParams(Map<String,Object> localParams, Topic currentTopic, TopicMap topicMap, Locale loc) {
         localParams.put("lang", "en");
 
         if (currentTopic!=null) {
@@ -383,7 +387,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
     
     
     // Attempts to retrieve all external documents referenced by occurrences of the topic locally
-    private void fetchSubjectLocator(Topic t, String directoryToStore, String filesDir, HashMap urlmap)  throws TopicMapException {
+    private void fetchSubjectLocator(Topic t, String directoryToStore, String filesDir, Map<String,String> urlmap)  throws TopicMapException {
         if(t.getSubjectLocator() != null) {
             String mappedName = fetchURL(t.getSubjectLocator().toExternalForm(), directoryToStore, filesDir);
             if (mappedName!=null) {
@@ -421,7 +425,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
             if(IObox.isAuthException(e)) {
                 log.println("Authentication required to fecth url " + f.getPath());
                 boolean success = false;
-                PasswordPrompt pp = new PasswordPrompt((Frame) parent, true);
+                PasswordPrompt pp = new PasswordPrompt((Frame) wandora, true);
                 pp.setTitle(surl);
                 while(!success && !forgetAuth) {
                     log.println("Consulting user!");
@@ -487,7 +491,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
         } else if (topicmap instanceof String) {
             tm = topicMapFromFile((String)topicmap);
         }
-        HashMap globalUrlMap = new HashMap();
+        Map<String,String> globalUrlMap = new HashMap<>();
         VelocityContext context = null;
         Template template = null;
         //Template ntemplate = null;
@@ -498,7 +502,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
         File indexTemplateFile = null;
         String templatePath = null;
         VelocityEngine velocityEngine = null;
-        HashMap localParams;
+        Map<String,Object> localParams;
         try {
             templateFile = new File(templatefilename);
 
@@ -525,21 +529,21 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
             }
             
             // --- Iterate topics ---
-            for (java.util.Iterator ti = tm.getTopics(); ti.hasNext() && !forceStop; ) {
+            for (java.util.Iterator<Topic> ti = tm.getTopics(); ti.hasNext() && !forceStop; ) {
                 Topic t = (Topic)ti.next();
                 if(t == null || t.isRemoved()) continue;
                 
                 boolean isIndexFile = false;
                 log("Exporting topic '" + getTopicName(t) + "'.");
                 
-                HashMap urlMap = new HashMap();
+                Map<String,String> urlMap = new LinkedHashMap<>();
                 fetchSubjectLocator(t, outputdir, filesDirectory, urlMap);
-                localParams = new HashMap();
+                localParams = new HashMap<>();
                 localParams.put("urlMap", urlMap);
                 globalUrlMap.putAll(urlMap);
                 collectParams( localParams, t, tm, loc);
                 context = new VelocityContext();
-                for (Iterator hit = localParams.keySet().iterator(); hit.hasNext(); ) {
+                for (Iterator<String> hit = localParams.keySet().iterator(); hit.hasNext(); ) {
                     Object key = (String) hit.next();
                     if (key instanceof String && key != null) {
                         Object value = localParams.get(key);
@@ -574,7 +578,8 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
                         fos.close();
                         fis.close();
                         log.println("Created "+indexfile.getCanonicalPath()+" file as a copy of "+fulloutputfilename);
-                    } catch (Exception e) {
+                    } 
+                    catch (Exception e) {
                         log.println("Caught exception '"+e.getMessage()+"' while creating starthere.html file.");
                         e.printStackTrace(log);
                     }
@@ -584,13 +589,13 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
             
             // --- time to output master index file ---
             log.println("Creating index.html");
-            localParams = new HashMap();
+            localParams = new HashMap<>();
             localParams.put("urlMap", globalUrlMap);
             collectParams(localParams, null, tm, loc);
             context = new VelocityContext();
             context.put("index", index);
             log("Exporting index for the site!");
-            for (Iterator hit = localParams.keySet().iterator(); hit.hasNext(); ) {
+            for (Iterator<String> hit = localParams.keySet().iterator(); hit.hasNext(); ) {
                 Object key = (String) hit.next();
                 if (key instanceof String && key != null) {
                     Object value = localParams.get(key);

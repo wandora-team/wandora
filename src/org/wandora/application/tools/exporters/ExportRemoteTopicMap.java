@@ -29,24 +29,24 @@ package org.wandora.application.tools.exporters;
 
 
 import org.wandora.application.gui.filechooser.TopicMapFileChooser;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.tools.*;
 import org.wandora.topicmap.remote.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import java.io.*;
-import java.util.*;
+
+
 /**
  *
  * @author  olli
  */
 public class ExportRemoteTopicMap extends AbstractExportTool implements WandoraTool {
     
-    
-    /** Creates a new instance of ImportTopicMap */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of ExportRemoteTopicMap */
     public ExportRemoteTopicMap() {
     }
     
@@ -59,11 +59,11 @@ public class ExportRemoteTopicMap extends AbstractExportTool implements WandoraT
     }
 
     
-    public void execute(Wandora admin, Context context) {
-        TopicMap topicMap = solveContextTopicMap(admin, context);
+    public void execute(Wandora wandora, Context context) {
+        TopicMap topicMap = solveContextTopicMap(wandora, context);
         
         if(topicMap instanceof RemoteTopicMap) {
-            String topicMapName = solveNameForTopicMap(admin, topicMap);
+            String topicMapName = solveNameForTopicMap(wandora, topicMap);
             RemoteTopicMap remoteTopicMap = (RemoteTopicMap) topicMap;
             
             // --- Then solve target file (and format)
@@ -75,7 +75,7 @@ public class ExportRemoteTopicMap extends AbstractExportTool implements WandoraT
                 chooser.setDialogTitle("Export remote topic map in layer '" + topicMapName + "'...");
             }
             
-            if(chooser.open(admin, "Export") == TopicMapFileChooser.APPROVE_OPTION){
+            if(chooser.open(wandora, "Export") == TopicMapFileChooser.APPROVE_OPTION){
                 setDefaultLogger();
                 try {
                     File file = chooser.getSelectedFile();
