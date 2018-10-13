@@ -31,7 +31,11 @@ package org.wandora.application.gui.tree;
 import org.wandora.topicmap.SchemaBox;
 import org.wandora.topicmap.TMBox;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.wandora.topicmap.*;
+
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.*;
 import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.utils.GripCollections;
@@ -45,31 +49,33 @@ import org.wandora.utils.GripCollections;
  */
 public class TopicTreeModel implements TreeModel {
 
-    private HashMap<TopicGuiWrapper, TopicGuiWrapper[]> children;
-    private HashSet listeners;
+    private Map<TopicGuiWrapper, TopicGuiWrapper[]> children;
+    private Set<TreeModelListener> listeners;
     private TopicGuiWrapper rootNode;
     
-    private HashSet<Locator> visibleTopics;
+    private Set<Locator> visibleTopics;
     private int visibleTopicCount = 0;
 
-    private ArrayList<TopicTreeRelation> associations;
+    private List<TopicTreeRelation> associations;
     private TopicTree tree;
     
     
     
-    public TopicTreeModel(Topic rootTopic, ArrayList<TopicTreeRelation> associations, TopicTree tree) {
+    public TopicTreeModel(Topic rootTopic, List<TopicTreeRelation> associations, TopicTree tree) {
         this.associations=associations;
         this.tree=tree;
-        children=new HashMap();
-        listeners=new HashSet();
+        children=new ConcurrentHashMap<>();
+        listeners=new LinkedHashSet<>();
         rootNode=new TopicGuiWrapper(rootTopic);
-        visibleTopics=new HashSet<Locator>();
+        visibleTopics=new LinkedHashSet<Locator>();
         visibleTopicCount = 0;
         try {
             visibleTopics.addAll(rootTopic.getSubjectIdentifiers());
             visibleTopicCount++;
         }
-        catch(TopicMapException tme){tme.printStackTrace();}
+        catch(TopicMapException tme){
+        	tme.printStackTrace();
+    	}
     }
 
     
@@ -84,7 +90,9 @@ public class TopicTreeModel implements TreeModel {
                 try {
                     expansionWaiter.wait();
                 }
-                catch(InterruptedException ie){return;}
+                catch(InterruptedException ie){
+                	return;
+            	}
             }
         }
     }
@@ -108,9 +116,9 @@ public class TopicTreeModel implements TreeModel {
     
     
     private void childrenModifiedNoRemove(final TopicGuiWrapper node){
-        Iterator iter=listeners.iterator();
+        Iterator<TreeModelListener> iter=listeners.iterator();
         while(iter.hasNext()){
-            javax.swing.event.TreeModelListener l=(javax.swing.event.TreeModelListener)iter.next();
+            javax.swing.event.TreeModelListener l=iter.next();
 //            l.treeStructureChanged(new javax.swing.event.TreeModelEvent(this,new Object[]{rootNode}));
             l.treeStructureChanged(new javax.swing.event.TreeModelEvent(this,node.path));
         }
@@ -136,7 +144,9 @@ public class TopicTreeModel implements TreeModel {
     
     
     private TopicGuiWrapper[] getChildren(final TopicGuiWrapper node) {
-        if(children.containsKey(node)) return (TopicGuiWrapper[])children.get(node);
+        if(children.containsKey(node)) {
+        	return (TopicGuiWrapper[]) children.get(node);
+        }
         
         final Object waitObject=new Object();
         final int[] state=new int[1]; state[0]=0; // simple way to wrap a modifyable int in an object
@@ -157,15 +167,15 @@ public class TopicTreeModel implements TreeModel {
                         instancesIcon=a.icon;
                         continue;
                     }
-                    Collection s=null;
+                    Collection<Topic> s=null;
                     try {
                         i = 99999;
                         s = SchemaBox.getSubClassesOf(node.topic,a.subSI,a.assocSI,a.superSI);
                         if(s != null && s.size() > 0) {
                             s = TMBox.sortTopics(s, null);
-                            Iterator iter=s.iterator();
+                            Iterator<Topic> iter=s.iterator();
                             while(iter.hasNext() && --i > 0){
-                                ts.add(new TopicGuiWrapper((Topic)iter.next(),a.icon,a.name,node.path));
+                                ts.add(new TopicGuiWrapper(iter.next(),a.icon,a.name,node.path));
                             }
                         }
                     }
@@ -176,12 +186,12 @@ public class TopicTreeModel implements TreeModel {
                 if(instancesIcon!=null){
                     try {
                         i=99999;
-                        Collection c=node.topic.getTopicMap().getTopicsOfType(node.topic);
+                        Collection<Topic> c=node.topic.getTopicMap().getTopicsOfType(node.topic);
                         if(c != null && c.size() > 0) {
                             c=TMBox.sortTopics(c, null);
-                            Iterator iter=c.iterator();
+                            Iterator<Topic> iter=c.iterator();
                             while(iter.hasNext() && --i > 0){
-                                ts.add(new TopicGuiWrapper((Topic)iter.next(),instancesIcon,"Instances",node.path));
+                                ts.add(new TopicGuiWrapper(iter.next(),instancesIcon,"Instances",node.path));
                             }
                         }
                     }
@@ -227,7 +237,10 @@ public class TopicTreeModel implements TreeModel {
             try{
                 waitObject.wait(2000);
 //                waitObject.wait();
-            }catch(InterruptedException ie){ie.printStackTrace();}
+            }
+            catch(InterruptedException ie){
+            	ie.printStackTrace();
+        	}
 
             state[0]|=2;
             if((state[0]&1)>0) {
@@ -318,7 +331,9 @@ public class TopicTreeModel implements TreeModel {
     public TreePath getPathFor(Topic t) {
         if(t == null) return null;
         try {
-            if(!visibleTopics.contains(t.getOneSubjectIdentifier())) return null;
+            if(!visibleTopics.contains(t.getOneSubjectIdentifier())) {
+            	return null;
+            }
             for(TopicGuiWrapper node : children.keySet()) {
                 if(t.mergesWithTopic(node.topic)) {
                     return node.path;

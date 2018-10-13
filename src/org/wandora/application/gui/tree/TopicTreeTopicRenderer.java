@@ -46,7 +46,10 @@ import org.wandora.topicmap.Topic;
  */
 public class TopicTreeTopicRenderer extends DefaultTreeCellRenderer {
 
-    private TopicTree topicTree;
+
+	private static final long serialVersionUID = 1L;
+	
+	private TopicTree topicTree;
     private Wandora wandora = Wandora.getWandora();
     
     

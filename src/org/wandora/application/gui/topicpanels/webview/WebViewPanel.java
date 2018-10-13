@@ -45,8 +45,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -74,7 +74,6 @@ import org.wandora.utils.Options;
 
 import javafx.scene.web.*;
 import javafx.util.Callback;
-import javax.swing.JMenu;
 import javax.swing.SwingUtilities;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -84,11 +83,9 @@ import javax.xml.transform.stream.StreamResult;
 import netscape.javascript.JSObject;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
-import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
-import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.modulesserver.ModulesWebApp;
 import org.wandora.application.modulesserver.WandoraModulesServer;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
@@ -114,7 +111,10 @@ import org.wandora.utils.Tuples.T3;
 
 public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener, RefreshListener, ActionListener, ComponentListener {
 
-    private static final String JAVASCRIPT_RESOURCE_GET_SELECTED_SOURCE = "js/GetSelectionHTML.js";
+
+	private static final long serialVersionUID = 1L;
+	
+	private static final String JAVASCRIPT_RESOURCE_GET_SELECTED_SOURCE = "js/GetSelectionHTML.js";
     private static final String JAVASCRIPT_RESOURCE_GET_SOURCE_WITH_SELECTION_INDEXES = "js/GetSourceWithSelectionIndexes.js";
     
     public static String javaFXVersion = "";
@@ -151,7 +151,10 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     
     public class WandoraJFXPanel extends JFXPanel {
 
-        // EmbeddedScene.mouseEvent calls it's listeners with 40x wheel rotation 
+
+		private static final long serialVersionUID = 1L;
+
+		// EmbeddedScene.mouseEvent calls it's listeners with 40x wheel rotation 
         // multiplier -> mouseDelta in JS is 4800 instead of 120. This screws up
         // the zoom behavior in D3 powered visualizations.
         //
@@ -399,7 +402,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     
     
     private Object[] getBrowserMenuStruct() {
-        ArrayList topicMenuItems = new ArrayList();
+        List<Object> topicMenuItems = new ArrayList<>();
         if(rootTopic != null) {
             try {
                 if(rootTopic.getSubjectLocator() != null) {
@@ -428,7 +431,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
         }
         
         
-        ArrayList browseServices = new ArrayList();
+        List<Object> browseServices = new ArrayList<>();
         Wandora wandora = Wandora.getWandora();
         if(wandora != null) {
             WandoraModulesServer httpServer = wandora.httpServer;
@@ -458,7 +461,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             }
         }
         
-        ArrayList extractors = new ArrayList();
+        List<Object> extractors = new ArrayList<>();
         if(browserExtractorManager != null) {
             T3<String, Integer, Integer> contentWithSelectionIndexes = getSourceWithSelectionIndexes();
             String content = contentWithSelectionIndexes.e1;
@@ -1098,7 +1101,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
         catch(Exception e) {
             e.printStackTrace();
         }
-        return new T3(content, new Integer(start), new Integer(end));
+        return new T3(content, Integer.valueOf(start), Integer.valueOf(end));
     }
     
     

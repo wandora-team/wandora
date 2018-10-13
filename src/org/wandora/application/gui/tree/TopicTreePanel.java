@@ -21,7 +21,7 @@
  * 
  * TopicTreePanel.java
  *
- * Created on 14. heinäkuuta 2005, 14:45
+ * Created on 14. heinï¿½kuuta 2005, 14:45
  */
 
 package org.wandora.application.gui.tree;
@@ -46,7 +46,10 @@ import org.wandora.application.gui.WandoraOptionPane;
  */
 public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapListener,RefreshListener {
 
-    private String rootTopic;
+
+	private static final long serialVersionUID = 1L;
+	
+	private String rootTopic;
     // private TopicTreeModel model;
     private Wandora wandora;
     

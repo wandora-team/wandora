@@ -25,7 +25,8 @@
 package org.wandora.application.gui.topicstringify;
 
 
-import java.util.HashSet;
+
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.Icon;
@@ -44,7 +45,7 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class TopicStringifierToVariant implements TopicStringifier {
-    private Set scope = null;
+    private Set<Topic> scope = null;
     
     
     public TopicStringifierToVariant() {
@@ -52,7 +53,7 @@ public class TopicStringifierToVariant implements TopicStringifier {
     }
     
     
-    public TopicStringifierToVariant(Set s) {
+    public TopicStringifierToVariant(Set<Topic> s) {
         scope = s;
     }
     
@@ -75,7 +76,7 @@ public class TopicStringifierToVariant implements TopicStringifier {
             Topic typeTopic = tm.getTopic(values.get("Type of variant name"));
             Topic scopeTopic = tm.getTopic(values.get("Scope of variant name"));
             
-            scope = new HashSet();
+            scope = new LinkedHashSet<>();
             if(typeTopic != null) scope.add(typeTopic);
             if(scopeTopic != null) scope.add(scopeTopic);
             

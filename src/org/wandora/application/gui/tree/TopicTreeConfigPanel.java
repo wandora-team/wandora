@@ -43,7 +43,10 @@ import org.wandora.application.gui.GetTopicButton;
  */
 public class TopicTreeConfigPanel extends javax.swing.JPanel {
     
-    private boolean cancelled=true;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean cancelled=true;
     
     private TopicTreeRelation[] allRelations;
     private ArrayList<JCheckBox> checkboxes;

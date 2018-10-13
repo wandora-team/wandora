@@ -32,7 +32,6 @@ package org.wandora.application.gui.tree;
 
 
 import org.wandora.application.gui.tree.TopicTreeConfigPanel;
-import org.wandora.application.gui.tree.TopicTree;
 import javax.swing.ImageIcon;
 import java.util.*;
 import java.net.*;
@@ -49,11 +48,13 @@ import org.wandora.utils.IObox;
  * @author  olli
  */
 public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
-    
-    private TopicTreeRelationsEditor parent;
-    private static ArrayList<IconWrapper> icons;
-    private HashMap<String,Integer> iconIndex;
-    private Wandora admin;
+
+	private static final long serialVersionUID = 1L;
+	
+	private TopicTreeRelationsEditor parent;
+    private static List<IconWrapper> icons;
+    private Map<String,Integer> iconIndex;
+    private Wandora wandora;
 
 
 
@@ -68,7 +69,7 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
                     String baseDir = IObox.getFileFromURL(baseUrl);
                     //String baseDir = URLDecoder.decode(baseUrl.toExternalForm().substring(6), "UTF-8");
                     //System.out.println("Basedir: " + baseDir);
-                    HashSet<String> fileNames = IObox.getFilesAsHash(baseDir, ".*\\.png", 10, 1000);
+                    Set<String> fileNames = IObox.getFilesAsHash(baseDir, ".*\\.png", 10, 1000);
                     for(String f : fileNames) {
                         int ind=f.lastIndexOf("/");
                         int ind2=f.lastIndexOf("\\");
@@ -85,12 +86,12 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
     }
     
     /** Creates new form TreeAssociationTypePanel */
-    public TopicTreeRelationEditorPanel(String name,String subRole,String assocType,String superRole,String icon,TopicTreeRelationsEditor parent,Wandora admin) throws TopicMapException {
-        this.admin=admin;
+    public TopicTreeRelationEditorPanel(String name,String subRole,String assocType,String superRole,String icon,TopicTreeRelationsEditor parent,Wandora wandora) throws TopicMapException {
+        this.wandora=wandora;
 
-        subButton = new GetTopicButton(admin);
-        assocTypeButton = new GetTopicButton(admin);
-        superButton = new GetTopicButton(admin);        
+        subButton = new GetTopicButton(wandora);
+        assocTypeButton = new GetTopicButton(wandora);
+        superButton = new GetTopicButton(wandora);        
         
         initComponents();
         if(icons==null) readIcons();
@@ -248,8 +249,10 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
     
     
     public static class IconWrapper extends ImageIcon {
-        
-        public String resource;
+
+		private static final long serialVersionUID = 1L;
+		
+		public String resource;
     
         public IconWrapper(String resource){
             super(TopicTreeConfigPanel.class.getClassLoader().getResource(resource));

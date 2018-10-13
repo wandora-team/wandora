@@ -25,10 +25,12 @@
  */
 
 package org.wandora.application.gui.tree;
+
 import org.wandora.utils.Options;
 import org.wandora.utils.GripCollections;
 import javax.swing.*;
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.application.*;
@@ -41,7 +43,10 @@ import org.wandora.application.*;
  */
 public class TopicTreeRelationsEditor extends javax.swing.JPanel {
     
-    private TopicTreeRelation[] relations;
+
+	private static final long serialVersionUID = 1L;
+	
+	private TopicTreeRelation[] relations;
     private boolean cancelled=true;
     
     private Component parent;
@@ -78,7 +83,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
     public static TopicTreeRelation[] readRelationTypes() {
         int counter = 0;
         Options options = Wandora.getWandora().getOptions();
-        ArrayList<TopicTreeRelation> v = new ArrayList<>();
+        List<TopicTreeRelation> v = new ArrayList<>();
         if(options != null) {
             while(true) {
                 String name=options.get("trees.type["+counter+"].name");
@@ -198,7 +203,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
 
 
     public TopicTreeRelation[] getRelationTypes() {
-        ArrayList<TopicTreeRelation> v = new ArrayList<>();
+        List<TopicTreeRelation> v = new ArrayList<>();
         for(int i=0; i<relationsPanel.getComponentCount()-1; i++){
             try {
                 TopicTreeRelationEditorPanel panel = (TopicTreeRelationEditorPanel)relationsPanel.getComponent(i);

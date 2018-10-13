@@ -26,6 +26,7 @@
 package org.wandora.application.gui.topicpanels.treemap;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,7 +41,7 @@ public class TreeModel {
     private MapItem[] cachedTreeItems; // we assume tree structure doesn't change.
     private TreeModel[] cachedLeafModels;
     private TreeModel parent;
-    private ArrayList children=new ArrayList();
+    private List<TreeModel> children=new ArrayList<>();
     private boolean sumsChildren;
 
     public TreeModel() {
@@ -60,7 +61,7 @@ public class TreeModel {
     public TreeModel[] getLeafModels() {
         if(cachedLeafModels!=null)
             return cachedLeafModels;
-        ArrayList v=new ArrayList();
+        List<TreeModel> v=new ArrayList<>();
         addLeafModels(v);
         int n=v.size();
         TreeModel[] m=new TreeModel[n];
@@ -69,7 +70,7 @@ public class TreeModel {
         return m;
     }
 
-    private ArrayList addLeafModels(ArrayList v) {
+    private List<TreeModel> addLeafModels(List<TreeModel> v) {
         if(!hasChildren()) {
             System.err.println("Somehow tried to get child model for leaf!!!");
             return v;
@@ -105,7 +106,7 @@ public class TreeModel {
         if(cachedTreeItems!=null)
             return cachedTreeItems;
 
-        ArrayList v=new ArrayList();
+        List<MapItem> v=new ArrayList<>();
         addTreeItems(v);
         int n=v.size();
         MapItem[] m=new MapItem[n];
@@ -114,7 +115,7 @@ public class TreeModel {
         return m;
     }
 
-    private void addTreeItems(ArrayList v) {
+    private void addTreeItems(List<MapItem> v) {
         if(!hasChildren())
             v.add(mapItem);
         else

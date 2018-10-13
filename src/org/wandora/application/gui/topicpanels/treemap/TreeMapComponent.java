@@ -48,12 +48,14 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
+
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
-import org.wandora.application.Wandora;
 import org.wandora.application.contexts.PreContext;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.TreeMapTopicPanel;
@@ -61,7 +63,6 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
 
@@ -74,7 +75,11 @@ import org.wandora.topicmap.TopicMapException;
 
 public class TreeMapComponent extends JComponent implements ComponentListener, MouseListener, MouseMotionListener, ActionListener, MouseWheelListener {
     
-    private static final int topicFontSize = 12;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private static final int topicFontSize = 12;
     private static final int typeFontSize = 9;
     private static final int textLineY = 15;
     
@@ -685,14 +690,14 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
         try {
             Collection<Topic> instances = null;
             if(filterInstances) {
-                instances = new ArrayList();
+                instances = new ArrayList<>();
             }
             else {
                 instances = curTopic.getTopicMap().getTopicsOfType(curTopic);
             }
             Collection<Topic> classes = null;
             if(filterClasses) {
-                classes = new ArrayList();
+                classes = new ArrayList<>();
             }
             else {
                 classes = curTopic.getTypes();
@@ -701,7 +706,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
             int associationTopicsSize = 0;
             
             if(associationTopics == null) {
-                associationTopics = new HashMap();
+                associationTopics = new LinkedHashMap<>();
                 Collection<Association> associations = curTopic.getAssociations();
                 associationTopicsSize = 0;
                 for(Association a : associations) {
@@ -710,7 +715,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                     if(!filteredAssociationTypes.contains(at)) {
                         Collection<Topic> linkedTopics = associationTopics.get(at);
                         if(linkedTopics == null) {
-                            linkedTopics = new ArrayList();
+                            linkedTopics = new ArrayList<>();
                             associationTopics.put(at, linkedTopics);
                         }
                         Topic player = null;
@@ -726,7 +731,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                         }
                     }
                 }
-                associationTopicsSizeCache.put(curTopic, new Integer(associationTopicsSize));
+                associationTopicsSizeCache.put(curTopic, Integer.valueOf(associationTopicsSize));
                 associationTopicsCache.put(curTopic, associationTopics);
             }
             
@@ -835,7 +840,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     
     
     public void removeAllAssociationTypeFilters() {
-        filteredAssociationTypes = new LinkedHashSet();
+        filteredAssociationTypes = new LinkedHashSet<>();
         filterClasses = false;
         filterInstances = false;
     }
@@ -852,7 +857,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
 
 
     private Object[] getRemoveFiltersMenuStruct() {
-        ArrayList struct = new ArrayList();
+        List<Object> struct = new ArrayList<>();
         for(Topic filteredAssociationType : filteredAssociationTypes) {
             try {
                 if(filteredAssociationType != null && !filteredAssociationType.isRemoved()) {
@@ -883,7 +888,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     
     
     private Object[] getAddFiltersMenuStruct() {
-        ArrayList struct = new ArrayList();
+        List<Object> struct = new ArrayList<>();
         for(Topic knownAssociationType : knownAssociationTypes) {
             try {
                 if(knownAssociationType != null && !knownAssociationType.isRemoved()) {

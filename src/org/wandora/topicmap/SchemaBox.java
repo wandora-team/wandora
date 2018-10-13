@@ -103,13 +103,13 @@ public class SchemaBox {
      * class etc.
      */
     public static boolean isInstanceOf(Topic topic,Topic cls) throws TopicMapException {
-        return isInstanceOf(topic,cls,new HashSet());
+        return isInstanceOf(topic,cls,new LinkedHashSet<>());
     }
-    private static boolean isInstanceOf(Topic topic,Topic cls,Collection processed) throws TopicMapException {
+    private static boolean isInstanceOf(Topic topic,Topic cls,Collection<Topic> processed) throws TopicMapException {
         if(topic.isOfType(cls)) return true;
         else{
             processed.add(cls);
-            Iterator iter=getSubClassesOf(cls).iterator();
+            Iterator<Topic> iter=getSubClassesOf(cls).iterator();
             while(iter.hasNext()){
                 Topic subcls=(Topic)iter.next();
                 if(!processed.contains(subcls))
@@ -124,18 +124,18 @@ public class SchemaBox {
      * direct instances but also instances of all subclasses, instances of their
      * subclasses etc.
      */
-    public static Collection getInstancesOf(Topic topic) throws TopicMapException {
-        HashSet topics=new HashSet();
-        HashSet processed=new HashSet();
+    public static Collection<Topic> getInstancesOf(Topic topic) throws TopicMapException {
+        Set<Topic> topics=new LinkedHashSet<>();
+        Set<Topic> processed=new LinkedHashSet<>();
         getInstancesOf(topic,topics,processed);
         return topics;
     }
     
-    private static void getInstancesOf(Topic topic,Collection topics,Collection processed) throws TopicMapException {
+    private static void getInstancesOf(Topic topic,Collection<Topic> topics,Collection<Topic> processed) throws TopicMapException {
         processed.add(topic);
         TopicMap tm=topic.getTopicMap();
         topics.addAll(tm.getTopicsOfType(topic));
-        Iterator iter=getSubClassesOf(topic).iterator();
+        Iterator<Topic> iter=getSubClassesOf(topic).iterator();
         while(iter.hasNext()){
             Topic c=(Topic)iter.next();
             if(!processed.contains(c))
@@ -157,7 +157,7 @@ public class SchemaBox {
         Topic roleType=tm.getTopic(ROLE_SI);
         Topic contentType=tm.getTopic(CONTENTTYPE_SI);
         if(roleClassType==null || roleType==null) return role;
-        Collection as=role.getAssociations(roleClassType,roleType);
+        Collection<Association> as=role.getAssociations(roleClassType,roleType);
         if(as.isEmpty()) return role;
         Association a=(Association)as.iterator().next();
         // WAS: Topic p=a.getPlayer(contentType);
@@ -168,7 +168,7 @@ public class SchemaBox {
      * Gets sub classes of a topic using the standard topics for association type
      * and role topics. Only gets direct sub classes of the topic.
      */
-    public static Collection getSubClassesOf(Topic topic) throws TopicMapException {
+    public static Collection<Topic> getSubClassesOf(Topic topic) throws TopicMapException {
         return getSubClassesOf(topic,XTMPSI.SUBCLASS,XTMPSI.SUPERCLASS_SUBCLASS,XTMPSI.SUPERCLASS);
     }
     /**
@@ -177,8 +177,8 @@ public class SchemaBox {
      * the role topic for the sub class and the role topic for the super class.
      * Only gets direct subclasses of the topic.
      */
-    public static Collection getSubClassesOf(Topic topic,String subSI,String assocSI,String superSI) throws TopicMapException {
-        HashSet topics=new HashSet();
+    public static Collection<Topic> getSubClassesOf(Topic topic,String subSI,String assocSI,String superSI) throws TopicMapException {
+        Set<Topic> topics=new LinkedHashSet<>();
         TopicMap tm=topic.getTopicMap();
         Topic supersub=tm.getTopic(assocSI);
         if(supersub==null) return topics;
@@ -186,7 +186,7 @@ public class SchemaBox {
         if(superc==null) return topics;
         Topic subc=tm.getTopic(subSI);
         if(subc==null) return topics;
-        Iterator iter=topic.getAssociations(supersub,superc).iterator();
+        Iterator<Association> iter=topic.getAssociations(supersub,superc).iterator();
         while(iter.hasNext()){
             Association a=(Association)iter.next();
             Topic t=a.getPlayer(subc);
@@ -200,7 +200,7 @@ public class SchemaBox {
      * Gets super classes of a topic using the standard topics for association type
      * and role topics. Only gets direct superclasses of the topic.
      */
-    public static Collection getSuperClassesOf(Topic topic) throws TopicMapException {
+    public static Collection<Topic> getSuperClassesOf(Topic topic) throws TopicMapException {
         return getSuperClassesOf(topic,XTMPSI.SUBCLASS,XTMPSI.SUPERCLASS_SUBCLASS,XTMPSI.SUPERCLASS);      
     }
     /**
@@ -209,8 +209,8 @@ public class SchemaBox {
      * the role topic for the sub class and the role topic for the super class.
      * Only gets direct superclasses of the topic.
      */
-    public static Collection getSuperClassesOf(Topic topic,String subSI,String assocSI,String superSI) throws TopicMapException {
-        HashSet topics=new HashSet();
+    public static Collection<Topic> getSuperClassesOf(Topic topic,String subSI,String assocSI,String superSI) throws TopicMapException {
+        Set<Topic> topics=new LinkedHashSet<>();
         TopicMap tm=topic.getTopicMap();
         Topic supersub=tm.getTopic(assocSI);
         if(supersub==null) return topics;
@@ -218,7 +218,7 @@ public class SchemaBox {
         if(superc==null) return topics;
         Topic subc=tm.getTopic(subSI);
         if(subc==null) return topics;
-        Iterator iter=topic.getAssociations(supersub,subc).iterator();
+        Iterator<Association> iter=topic.getAssociations(supersub,subc).iterator();
         while(iter.hasNext()){
             Association a=(Association)iter.next();
             Topic t=a.getPlayer(superc);
@@ -234,18 +234,18 @@ public class SchemaBox {
      * type and association roles. That is gets direct super classes of the topic
      * and all their super classes etc.
      */
-    public static Collection getSuperClassesOfRecursive(Topic topic) throws TopicMapException {
-        HashSet processed=new HashSet();
-        HashSet classes=new HashSet();
+    public static Collection<Topic> getSuperClassesOfRecursive(Topic topic) throws TopicMapException {
+        Set<Topic> processed=new LinkedHashSet<>();
+        Set<Topic> classes=new LinkedHashSet<>();
         getSuperClassesOfRecursive(topic,processed,classes);
         return classes;
     }
-    private static void getSuperClassesOfRecursive(Topic topic,HashSet processed,HashSet classes) throws TopicMapException {
+    private static void getSuperClassesOfRecursive(Topic topic, Set<Topic> processed, Set<Topic> classes) throws TopicMapException {
         if(processed.contains(topic)) return;
         processed.add(topic);
-        Collection cs=getSuperClassesOf(topic);
+        Collection<Topic> cs=getSuperClassesOf(topic);
         classes.addAll(cs);
-        Iterator iter=cs.iterator();
+        Iterator<Topic> iter=cs.iterator();
         while(iter.hasNext()){
             Topic c=(Topic)iter.next();
             getSuperClassesOfRecursive(c,processed,classes);
@@ -258,7 +258,7 @@ public class SchemaBox {
      * either a direct instance of the class or it is an instance of a class that
      * is a subclass (possibly through many associations) of the content type.
      */
-    public static Collection getContentTypesOf(Topic topic) throws TopicMapException {
+    public static Collection<Topic> getContentTypesOf(Topic topic) throws TopicMapException {
 /*        HashSet topics=new HashSet();
         Topic contenttype=topic.getTopicMap().getTopic(CONTENTTYPE_SI);
         if(contenttype==null) return topics;
@@ -270,14 +270,14 @@ public class SchemaBox {
         }
         return topics;*/
         
-        HashSet topics=new HashSet();
-        HashSet processed=new HashSet();
+        Set<Topic> topics=new LinkedHashSet<>();
+        Set<Topic> processed=new LinkedHashSet<>();
         Topic contenttype=topic.getTopicMap().getTopic(CONTENTTYPE_SI);
         if(contenttype==null) return topics;
         getContentTypesOfNoSupers(topic,processed,topics,contenttype);
         
-        Collection supers=getSuperClassesOfRecursive(topic);
-        Iterator iter=supers.iterator();
+        Collection<Topic> supers=getSuperClassesOfRecursive(topic);
+        Iterator<Topic> iter=supers.iterator();
         while(iter.hasNext()){
             Topic type=(Topic)iter.next();
             getContentTypesOfNoSupers(type,processed,topics,contenttype);
@@ -286,16 +286,16 @@ public class SchemaBox {
         return topics;
     }
     
-    private static void getContentTypesOfNoSupers(Topic topic,Collection processed,Collection types,Topic contenttype) throws TopicMapException {
+    private static void getContentTypesOfNoSupers(Topic topic,Collection<Topic> processed, Collection<Topic> types,Topic contenttype) throws TopicMapException {
         if(processed.contains(topic)) return;
         processed.add(topic);
 
-        Iterator iter=topic.getTypes().iterator();
+        Iterator<Topic> iter=topic.getTypes().iterator();
         while(iter.hasNext()){
             Topic type=(Topic)iter.next();
             if(type.isOfType(contenttype)) types.add(type);
-            Collection supers=getSuperClassesOfRecursive(type);
-            Iterator iter2=supers.iterator();
+            Collection<Topic> supers=getSuperClassesOfRecursive(type);
+            Iterator<Topic> iter2=supers.iterator();
             while(iter2.hasNext()){
                 Topic type2=(Topic)iter2.next();
                 if(type2.isOfType(contenttype)) types.add(type2);
@@ -309,17 +309,17 @@ public class SchemaBox {
      * method collects all such association types from all content types of the
      * specified topic. Content types of the topic are resolved with <code>getContentTypesOf</code>.
      */
-    public static Collection getAssociationTypesFor(Topic topic) throws TopicMapException {
-        HashSet topics=new HashSet();
+    public static Collection<Topic> getAssociationTypesFor(Topic topic) throws TopicMapException {
+        Set<Topic> topics=new LinkedHashSet<>();
         Topic atype=topic.getTopicMap().getTopic(ASSOCIATIONTYPE_SI);
         if(atype==null) return topics;
         Topic ctype=topic.getTopicMap().getTopic(CONTENTTYPE_SI);
         if(ctype==null) return topics;
-        Collection ctypes=getContentTypesOf(topic);
-        Iterator iter=ctypes.iterator();
+        Collection<Topic> ctypes=getContentTypesOf(topic);
+        Iterator<Topic> iter=ctypes.iterator();
         while(iter.hasNext()){
             Topic type=(Topic)iter.next();
-            Iterator iter2=type.getAssociations(atype,ctype).iterator();
+            Iterator<Association> iter2=type.getAssociations(atype,ctype).iterator();
             while(iter2.hasNext()){
                 Association a=(Association)iter2.next();
                 Topic player=a.getPlayer(atype);
@@ -337,17 +337,17 @@ public class SchemaBox {
      * method collects all such occurrence types from all content types of the
      * specified topic. Content types of the topic are resolved with <code>getContentTypesOf</code>.
      */
-    public static Collection getOccurrenceTypesFor(Topic topic) throws TopicMapException {
-        HashSet topics=new HashSet();
+    public static Collection<Topic> getOccurrenceTypesFor(Topic topic) throws TopicMapException {
+        Set<Topic> topics=new LinkedHashSet<>();
         Topic otype=topic.getTopicMap().getTopic(OCCURRENCETYPE_SI);
         if(otype==null) return topics;
         Topic ctype=topic.getTopicMap().getTopic(CONTENTTYPE_SI);
         if(ctype==null) return topics;
-        Collection ctypes=getContentTypesOf(topic);
-        Iterator iter=ctypes.iterator();
+        Collection<Topic> ctypes=getContentTypesOf(topic);
+        Iterator<Topic> iter=ctypes.iterator();
         while(iter.hasNext()){
             Topic type=(Topic)iter.next();
-            Iterator iter2=type.getAssociations(otype,ctype).iterator();
+            Iterator<Association> iter2=type.getAssociations(otype,ctype).iterator();
             while(iter2.hasNext()){
                 Association a=(Association)iter2.next();
                 Topic player=a.getPlayer(otype);
@@ -436,14 +436,14 @@ public class SchemaBox {
      * Each association type topic specifies all roles that can (and should)
      * be used whit associations of that type. This method gets those roles.
      */
-    public static Collection getAssociationTypeRoles(Topic associationType) throws TopicMapException {
-        HashSet topics=new HashSet();
+    public static Collection<Topic> getAssociationTypeRoles(Topic associationType) throws TopicMapException {
+        Set<Topic> topics=new LinkedHashSet<>();
         TopicMap tm=associationType.getTopicMap();
         Topic role=tm.getTopic(ROLE_SI);
         if(role==null) return topics;
         Topic atype=tm.getTopic(ASSOCIATIONTYPE_SI);
         if(atype==null) return topics;
-        Iterator iter=associationType.getAssociations(role,atype).iterator();
+        Iterator<Association> iter=associationType.getAssociations(role,atype).iterator();
         while(iter.hasNext()){
             Association a=(Association)iter.next();
             Topic t=a.getPlayer(role);
