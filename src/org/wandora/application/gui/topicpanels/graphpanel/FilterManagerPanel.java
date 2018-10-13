@@ -21,7 +21,7 @@
  * 
  * FilterManagerPanel.java
  *
- * Created on 29. kesäkuuta 2007, 14:01
+ * Created on 29. kesï¿½kuuta 2007, 14:01
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel;
@@ -32,7 +32,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import org.wandora.application.gui.simple.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 
@@ -43,18 +42,22 @@ import org.wandora.application.*;
  */
 public class FilterManagerPanel extends javax.swing.JPanel implements ActionListener {
     
-    private Wandora admin = null;
-    private DefaultListModel filteredTopicsModel;
-    private DefaultListModel filteredTopicTypesModel;
-    private DefaultListModel filteredAssociationTypesModel;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private Wandora wandora = null;
+    private DefaultListModel<TopicNode> filteredTopicsModel;
+    private DefaultListModel<TopicNode> filteredTopicTypesModel;
+    private DefaultListModel<Object> filteredAssociationTypesModel; // NEAR <TopicNode>
     
     private GraphFilter topicNodeFilter;
     
     /** Creates new form FilterManagerPanel */
     public FilterManagerPanel(Wandora admin) {
-        filteredTopicsModel=new DefaultListModel();
-        filteredTopicTypesModel=new DefaultListModel();
-        filteredAssociationTypesModel=new DefaultListModel();
+        filteredTopicsModel=new DefaultListModel<>();
+        filteredTopicTypesModel=new DefaultListModel<>();
+        filteredAssociationTypesModel=new DefaultListModel<>();
         initComponents();
     }
     

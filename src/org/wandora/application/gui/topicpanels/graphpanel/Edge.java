@@ -21,13 +21,14 @@
  * 
  * Edge.java
  *
- * Created on 4. kesäkuuta 2007, 12:29
+ * Created on 4. kesï¿½kuuta 2007, 12:29
  *
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel;
+
+
 import static org.wandora.utils.Tuples.*;
-import java.awt.Color;
 
 /**
  *

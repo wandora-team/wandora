@@ -26,7 +26,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComponent;
@@ -50,7 +49,9 @@ import org.wandora.query2.DirectiveUIHints.Constructor;
 
 public class QueryEditorComponent extends javax.swing.JPanel {
 
-    protected final ArrayList<Connector> connectors=new ArrayList<Connector>();
+	private static final long serialVersionUID = 1L;
+
+	protected final ArrayList<Connector> connectors=new ArrayList<Connector>();
     
     protected DirectivePanel selectedPanel;
     

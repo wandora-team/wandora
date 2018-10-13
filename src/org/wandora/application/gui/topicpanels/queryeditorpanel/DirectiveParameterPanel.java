@@ -25,7 +25,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
-import org.wandora.application.gui.topicpanels.queryeditorpanel.ConnectorAnchor.Direction;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
 import org.wandora.query2.DirectiveUIHints.Parameter;
@@ -38,7 +37,10 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public class DirectiveParameterPanel extends AbstractTypePanel {
 
-    protected Class<? extends Directive> directiveType;
+
+	private static final long serialVersionUID = 1L;
+
+	protected Class<? extends Directive> directiveType;
     
     protected ConnectorAnchor fromAnchor;
     protected DirectivePanel fromPanel;

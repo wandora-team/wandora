@@ -38,7 +38,11 @@ import javax.swing.JPanel;
 
 
 public class QueryEditorDockPanel extends JPanel {
-    protected DockController dockController;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected DockController dockController;
     protected SplitDockStation dockStation;
     
     protected QueryEditorComponent queryEditor;

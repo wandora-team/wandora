@@ -32,7 +32,9 @@ import org.wandora.topicmap.Topic;
 
 public class TopicOperandParameterPanel extends OperandParameterPanel {
 
-    public TopicOperandParameterPanel(Parameter parameter,DirectivePanel panel){
+	private static final long serialVersionUID = 1L;
+
+	public TopicOperandParameterPanel(Parameter parameter,DirectivePanel panel){
         super(parameter,panel);
     }
     

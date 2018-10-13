@@ -24,7 +24,11 @@
  *
  */
 package org.wandora.application.gui.topicpanels.processing;
+
+
 import java.util.ArrayList;
+import java.util.List;
+
 import org.wandora.application.gui.topicpanels.graph3d.Vector3;
 import processing.core.*;
 
@@ -34,7 +38,10 @@ import processing.core.*;
  */
 public class ThreeDSketchTemplate extends SketchTemplate {
 
-    protected final ArrayList<ThreeDObject> objects=new ArrayList<ThreeDObject>();
+
+	private static final long serialVersionUID = 1L;
+
+	protected final List<ThreeDObject> objects=new ArrayList<ThreeDObject>();
 
     protected PGraphics clickBuffer;
 

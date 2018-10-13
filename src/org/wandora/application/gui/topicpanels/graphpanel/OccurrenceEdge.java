@@ -21,7 +21,7 @@
  * 
  * InstanceEdge.java
  *
- * Created on 16. heinäkuuta 2007, 10:55
+ * Created on 16. heinï¿½kuuta 2007, 10:55
  *
  */
 
@@ -87,10 +87,12 @@ public class OccurrenceEdge extends AbstractEdge {
         return "Carrier-Occurrence";
     }
     
+    
     @Override
     public T2<String,String> getNodeLabels(){
         return nodeLabels;
     }
+    
     
     @Override
     public T2<Node, Node> getNodes() {
@@ -101,10 +103,12 @@ public class OccurrenceEdge extends AbstractEdge {
         return nodes;
     }
     
+    
     public void setBaseLength(double l){
         baseLength=l;
     }
 
+    
     @Override
     public double getLength() {
         return baseLength+(nodes.e1.getMass()+nodes.e2.getMass())/4.0;

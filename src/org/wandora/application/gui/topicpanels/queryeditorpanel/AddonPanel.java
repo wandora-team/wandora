@@ -33,7 +33,10 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public class AddonPanel extends javax.swing.JPanel {
 
-    protected Addon addon;
+
+	private static final long serialVersionUID = 1L;
+
+	protected Addon addon;
     
     protected DirectiveEditor parentPanel;
     protected AbstractTypePanel[] parameterPanels;

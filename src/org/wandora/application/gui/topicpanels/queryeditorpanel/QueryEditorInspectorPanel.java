@@ -31,7 +31,10 @@ import javax.swing.JPanel;
 
 public class QueryEditorInspectorPanel extends javax.swing.JPanel {
 
-    protected Object selectedObject;
+
+	private static final long serialVersionUID = 1L;
+	
+	protected Object selectedObject;
     protected JPanel editor;
     
     /**

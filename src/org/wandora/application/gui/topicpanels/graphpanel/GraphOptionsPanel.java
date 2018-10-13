@@ -34,7 +34,10 @@ package org.wandora.application.gui.topicpanels.graphpanel;
 
 public class GraphOptionsPanel extends javax.swing.JPanel {
 
-    /** Creates new form GraphOptionsPanel */
+	private static final long serialVersionUID = 1L;
+	
+	
+	/** Creates new form GraphOptionsPanel */
     public GraphOptionsPanel() {
         initComponents();
     }

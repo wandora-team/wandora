@@ -21,7 +21,7 @@
  * 
  * GraphFilter.java
  *
- * Created on 6. kesäkuuta 2007, 15:51
+ * Created on 6. kesï¿½kuuta 2007, 15:51
  *
  */
 
@@ -40,8 +40,8 @@ public class GraphFilter implements NodeFilter, EdgeFilter {
     
     
     
-    private HashSet<TopicNode> filteredNodes;
-    private HashSet<TopicNode> filteredTypes;
+    private Set<TopicNode> filteredNodes;
+    private Set<TopicNode> filteredTypes;
     private boolean filterInstances;
     private boolean filterOccurrences;
     private HashSet<TopicNode> filteredEdgeTypes;
@@ -52,9 +52,9 @@ public class GraphFilter implements NodeFilter, EdgeFilter {
     /** Creates a new instance of GraphFilter */
     public GraphFilter(TopicMapModel tmModel) {
         this.model=tmModel;
-        filteredNodes=new HashSet<TopicNode>();
-        filteredTypes=new HashSet<TopicNode>();
-        filteredEdgeTypes=new HashSet<TopicNode>();
+        filteredNodes=new LinkedHashSet<TopicNode>();
+        filteredTypes=new LinkedHashSet<TopicNode>();
+        filteredEdgeTypes=new LinkedHashSet<TopicNode>();
         filterInstances=false;
         filterOccurrences=false;
     }

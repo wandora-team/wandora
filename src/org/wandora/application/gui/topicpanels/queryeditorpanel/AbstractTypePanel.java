@@ -33,7 +33,10 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public abstract class AbstractTypePanel extends JPanel {
     
-    protected Parameter parameter;
+
+	private static final long serialVersionUID = 1L;
+
+	protected Parameter parameter;
     
     protected DirectivePanel directivePanel;
 

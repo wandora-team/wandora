@@ -42,7 +42,11 @@ import org.wandora.query2.DirectiveUIHints;
 
 public class DirectivesListPanel extends javax.swing.JPanel {
 
-    /**
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
      * Creates new form DirectivesListPanel
      */
     public DirectivesListPanel() {

@@ -21,13 +21,14 @@
  * 
  * Projection.java
  *
- * Created on 5. kesäkuuta 2007, 10:37
+ * Created on 5. kesï¿½kuuta 2007, 10:37
  *
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel.projections;
 
-import static org.wandora.utils.Options.*;
+
+
 import static org.wandora.utils.Tuples.*;
 import org.wandora.utils.*;
 import javax.swing.*;

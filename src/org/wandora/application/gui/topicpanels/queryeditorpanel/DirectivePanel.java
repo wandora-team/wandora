@@ -44,7 +44,6 @@ import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.
 import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
-import org.wandora.query2.DirectiveUIHints.Addon;
 import org.wandora.query2.DirectiveUIHints.Constructor;
 
 /**
@@ -55,7 +54,11 @@ import org.wandora.query2.DirectiveUIHints.Constructor;
 
 public class DirectivePanel extends javax.swing.JPanel {
 
-    protected DirectiveUIHints hints;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected DirectiveUIHints hints;
     protected DirectivePanel to;
     protected DirectivePanel from;
     protected Connector toConnector;

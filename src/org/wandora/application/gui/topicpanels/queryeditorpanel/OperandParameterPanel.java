@@ -22,7 +22,6 @@
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Component;
-import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**
@@ -33,7 +32,11 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public class OperandParameterPanel extends AbstractTypePanel {
 
-    protected AbstractTypePanel parameterPanel;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected AbstractTypePanel parameterPanel;
     
     /**
      * Creates new form OperandParameterPanel

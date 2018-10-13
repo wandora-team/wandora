@@ -21,17 +21,16 @@
  * 
  * OccurrenceNode.java
  *
- * Created on 5. kesäkuuta 2007, 15:18
+ * Created on 5. kesï¿½kuuta 2007, 15:18
  *
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel;
 
-import java.awt.Color;
+
 import java.util.*;
-import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.*;
-import static org.wandora.utils.Tuples.*;
+
 
 /**
  *
@@ -98,7 +97,7 @@ public class OccurrenceNode extends AbstractNode {
     @Override
     public Collection<Edge> getEdges() {
         if(edges == null) {
-            edges = new ArrayList();
+            edges = new ArrayList<>();
             edges.add(model.getOccurrenceEdgeFor(carrier, type, scope, occurrence));
         }
         return edges;

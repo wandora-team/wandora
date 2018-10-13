@@ -21,7 +21,7 @@
  * 
  * DefaultProjection.java
  *
- * Created on 18. heinäkuuta 2007, 15:25
+ * Created on 18. heinï¿½kuuta 2007, 15:25
  *
  */
 
@@ -30,8 +30,6 @@ package org.wandora.application.gui.topicpanels.graphpanel.projections;
 
 import org.wandora.utils.Options;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import org.wandora.utils.*;
 import static org.wandora.utils.Tuples.*;
 import java.awt.*;
 import javax.swing.*;

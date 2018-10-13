@@ -23,7 +23,6 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.GetTopicButton;
-import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints.Parameter;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
@@ -36,7 +35,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class TopicParameterPanel extends AbstractTypePanel {
 
-    /**
+
+	private static final long serialVersionUID = 1L;
+	
+	/**
      * Creates new form TopicParameterPanel
      */
     public TopicParameterPanel(Parameter parameter,DirectivePanel panel) {

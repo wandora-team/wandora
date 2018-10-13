@@ -41,7 +41,10 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public class MultipleParameterPanel extends AbstractTypePanel {
 
-    protected Class<? extends AbstractTypePanel> typeCls;
+
+	private static final long serialVersionUID = 1L;
+
+	protected Class<? extends AbstractTypePanel> typeCls;
     
     protected final ArrayList<Row> rows=new ArrayList<Row>();
     

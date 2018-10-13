@@ -26,8 +26,6 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.ListModel;
@@ -49,7 +47,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class QueryLibraryPanel extends javax.swing.JPanel {
 
-    protected String openedName;
+
+	private static final long serialVersionUID = 1L;
+
+	protected String openedName;
     
     protected final ArrayList<StoredQuery> storedQueries=new ArrayList<StoredQuery>();
     

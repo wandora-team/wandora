@@ -21,16 +21,17 @@
  * 
  * TestEdge.java
  *
- * Created on 4. kesäkuuta 2007, 13:21
+ * Created on 4. kesï¿½kuuta 2007, 13:21
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel;
+
+
 import static org.wandora.utils.Tuples.*;
-import java.awt.Color;
-import java.util.*;
+
 
 /**
  *

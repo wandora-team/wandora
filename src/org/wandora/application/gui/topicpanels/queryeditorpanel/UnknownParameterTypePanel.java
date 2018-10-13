@@ -31,7 +31,11 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public class UnknownParameterTypePanel extends AbstractTypePanel {
 
-    /**
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
      * Creates new form UnknownParameterTypePanel
      */
     public UnknownParameterTypePanel(Parameter parameter,DirectivePanel panel) {

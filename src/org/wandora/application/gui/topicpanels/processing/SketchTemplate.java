@@ -39,7 +39,10 @@ import org.wandora.application.gui.topicpanels.*;
  * @author olli
  */
 public class SketchTemplate extends PApplet implements ActionListener, ComponentListener {
-    private Topic topic;
+
+	private static final long serialVersionUID = 1L;
+	
+	private Topic topic;
     private TopicMap topicmap;
     private ProcessingTopicPanel processingPanel = null;
 

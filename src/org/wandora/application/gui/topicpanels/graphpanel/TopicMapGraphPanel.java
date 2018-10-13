@@ -21,7 +21,7 @@
  * 
  * TopicMapGraphPanel.java
  *
- * Created on 4. kesäkuuta 2007, 11:57
+ * Created on 4. kesï¿½kuuta 2007, 11:57
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel;
@@ -66,7 +66,11 @@ import org.wandora.application.tools.graph.export.GraphGraphXMLExport;
  * @author  olli
  */
 public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, MouseListener, MouseMotionListener, ComponentListener, MouseWheelListener, TopicMapListener, RefreshListener, KeyListener  {
-    private String OPTIONS_PREFIX = "gui.graphTopicPanel.";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private String OPTIONS_PREFIX = "gui.graphTopicPanel.";
     private String OPTIONS_VIEW_PREFIX = OPTIONS_PREFIX + "view.";
        
     //private int viewWidth,viewHeight;   
@@ -108,7 +112,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     private double minX=-1.0,maxX=1.0,minY=-1.0,maxY=1.0;
 
-    private HashMap renderingHints;
+    private Map renderingHints;
     
     private Topic rootTopic;
     
@@ -123,7 +127,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     private MouseToolManager mouseToolManager;
     
-    private ArrayList<T2<Double,Double>> selectPath;
+    private java.util.List<T2<Double,Double>> selectPath;
     
     private Wandora wandora = null;
     private Options options = null;
@@ -144,7 +148,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         // Notice, the opts coming here is a *copy* of global options. Setting
         // options doesn't affect global settings.
         this.options = opts;
-        renderingHints = new HashMap();
+        renderingHints = new LinkedHashMap<>();
 
         this.mouseX=0.0;
         this.mouseY=0.0;
@@ -185,12 +189,12 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         needsRefresh=false;   
     }
     
-    
-    
+
     public void setFilterManagerPanel(FilterManagerPanel filterManagerPanel){
         this.filterManagerPanel=filterManagerPanel;
         if(filterDialog != null && filterDialog.isVisible()) openFilterManager();
     }
+    
     public void openFilterManager() {
         if(filterDialog == null) {
             filterDialog = filterManagerPanel.getDialogForMe(wandora);
@@ -198,8 +202,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         filterDialog.setVisible(true);
     }
     
-    
-    
+
     public void updateMouseWorldCoordinates(int x,int y){
         T2<Double,Double> p=projection.screenToWorld(x,y);
         if(!p.e1.isNaN() && !p.e2.isNaN()){
@@ -211,11 +214,11 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     public void setMouseFollowNode(VNode node){
         followNode=node;
     }
+    
     public void setFreezeForPopup(boolean b){
         freezeForPopup=b;
     }
 
-    
     public T2<Double,Double> getMouseWorldCoordinates(){
         return t2(mouseX,mouseY);
     }
@@ -223,9 +226,11 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     public T2<Double,Double> getViewCoordinates(){
         return t2(projection.get(Projection.VIEW_X),projection.get(Projection.VIEW_Y));
     }
+    
     public void setViewCoordinates(T2<Double,Double> p){
         setViewCoordinates(p.e1,p.e2);
     }
+    
     public void setViewCoordinates(double x,double y){
         projection.set(Projection.VIEW_X, x);
         projection.set(Projection.VIEW_Y, y);
@@ -234,6 +239,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     public VNode getMouseOverNode(){
         return mouseOverNode;
     }
+    
     public Topic getMouseOverTopic(){
         if(mouseOverNode==null) return null;
         Node n=mouseOverNode.getNode();
@@ -244,6 +250,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     public VEdge getMouseOverEdge(){
         return mouseOverEdge;
     }
+    
     public Association getMouseOverAssociation(){
         if(mouseOverEdge==null) return null;
         Edge e=mouseOverEdge.getEdge();
@@ -254,6 +261,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     public VModel getModel(){
         return model;
     }
+    
     public TopicMapModel getTopicMapModel(){
         return tmModel;
     }
@@ -261,6 +269,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     public int getMouseTool(){
         return mouseTool;
     }
+    
     public void setMouseTool(int tool) {
         mouseTool=tool;
 //        updateCursor();
@@ -371,14 +380,17 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     public Topic getRootTopic(){
         return rootTopic;
     }
+    
     public VNode getRootNode(){
         return model.getNode(tmModel.getNodeFor(rootTopic));
     }
+    
     public Set<VEdge> getSelectedEdges(){
         Set<VEdge> ret=model.getSelectedEdges();
         if(ret==null) return new HashSet<VEdge>();
         else return ret;
     }
+    
     public Set<VNode> getSelectedNodes(){
         Set<VNode> ret=model.getSelectedNodes();
         if(ret==null) {
@@ -386,6 +398,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         }
         else return ret;
     }
+    
     public Collection<Topic> getSelectedTopics(){
         ArrayList<Topic> ret=new ArrayList<Topic>();
         Set<VNode> selection=model.getSelectedNodes();
@@ -396,6 +409,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         }
         return ret;
     }
+    
     public void clearModel(){
         // System.out.println("Clear model");
         model=null;
@@ -403,6 +417,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         stopThread();
         repaint();
     }
+    
     public void remakeModels(TopicMap tm){
         // System.out.println("Remake model");
         needsRefresh=false;
@@ -463,6 +478,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         viewFilterInfo=b;
         setOption("viewFilterInfo", ""+b);
     }
+    
     public boolean getViewFilterInfo() {
         return viewFilterInfo;
     }
@@ -473,6 +489,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         cropNodeBoxes=b;
         setOption("cropNodeBoxes", ""+b);
     }
+    
     public boolean getCropNodeBoxes() {
         return cropNodeBoxes;
     }
@@ -483,6 +500,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         framerate=fr;
         setOption("framerate", ""+fr);
     }
+    
     public double getFramerate() {
         return framerate;
     }
@@ -492,6 +510,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         freezeForMouseOver=b;
         setOption("freezeForMouseOver", ""+b);
     }
+    
     public boolean getFreezeForMouseOver() {
         return freezeForMouseOver;
     }
@@ -501,6 +520,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         labelEdges = b;
         setOption("labelEdges", ""+b);
     }
+    
     public boolean getLabelEdges() {
         return labelEdges;
     }
@@ -563,6 +583,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             thread.start();
         }
     }
+    
     public void stopThread() {
         this.running=false;
     }
@@ -586,7 +607,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         public double mass;
         public double averageDist;
         public int id;
-        public ArrayList<VNode> nodes;
+        public java.util.List<VNode> nodes;
         public Cluster(){x=y=0; size=0; radius=0; mass=0; averageDist=0; id=0;}
         public Cluster(VNode vnode){this(); x=vnode.x;y=vnode.y; }
         public Cluster(VNode vnode,int id){this(vnode); this.id=id; }
@@ -714,6 +735,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         return clusters;
     }
     
+    
     private void updateClusters(Cluster c1,Cluster c2){
         VNode vin,vjn;
         VEdge ve;
@@ -796,8 +818,8 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         ArrayList<Cluster> clusters=doClustering();
 //        t2=System.currentTimeMillis();
         
-        ArrayList<VNode> nodes=model.getNodes();
-        ArrayList<VEdge> edges=model.getEdges();
+        java.util.List<VNode> nodes=model.getNodes();
+        java.util.List<VEdge> edges=model.getEdges();
         if(!freeze && animation) {
             for(int i=0;i<clusters.size();i++){
                 Cluster ic=clusters.get(i);
@@ -939,7 +961,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         paint(g);
     }
     
-    public HashMap getRenderingHints(){
+    public Map getRenderingHints(){
         return renderingHints;
     }
     
@@ -1512,7 +1534,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     
     public Object[] getOptionsMenuStruct() {
-        HashMap hints=this.getRenderingHints();
+        Map hints=this.getRenderingHints();
         Object antialized=hints.get(RenderingHints.KEY_ANTIALIASING);
         return new Object[] {
             "Antialised", (antialized==null || antialized==RenderingHints.VALUE_ANTIALIAS_OFF ? UIBox.getIcon("gui/icons/checkbox.png") : UIBox.getIcon("gui/icons/checkbox_selected.png")), new ToggleAntialiasTool(this),

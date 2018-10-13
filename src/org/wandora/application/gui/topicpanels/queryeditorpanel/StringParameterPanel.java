@@ -32,7 +32,11 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
 
 public class StringParameterPanel extends AbstractTypePanel {
 
-    /**
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/**
      * Creates new form StringParameterPanel
      */
     public StringParameterPanel(Parameter parameter,DirectivePanel panel) {

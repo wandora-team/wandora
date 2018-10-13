@@ -22,14 +22,8 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
+
 import javax.swing.JComponent;
-import javax.swing.TransferHandler;
 import org.wandora.query2.DirectiveUIHints;
 
 /**
@@ -40,7 +34,10 @@ import org.wandora.query2.DirectiveUIHints;
 
 public class DirectiveListLine extends javax.swing.JPanel {
 
-    protected DirectiveUIHints hints;
+
+	private static final long serialVersionUID = 1L;
+	
+	protected DirectiveUIHints hints;
     
     /**
      * Creates new form DirectiveListLine

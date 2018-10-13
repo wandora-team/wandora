@@ -44,7 +44,11 @@ import org.wandora.topicmap.TopicMapException;
 
 public class ResultsPanel extends javax.swing.JPanel {
 
-    protected boolean autoUpdate=true;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected boolean autoUpdate=true;
     
     /**
      * Creates new form ResultsPanel

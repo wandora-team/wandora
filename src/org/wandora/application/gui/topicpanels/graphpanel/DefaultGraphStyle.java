@@ -21,7 +21,7 @@
  * 
  * DefaultGraphStyle.java
  *
- * Created on 12. heinäkuuta 2007, 11:40
+ * Created on 12. heinï¿½kuuta 2007, 11:40
  *
  */
 
@@ -59,7 +59,7 @@ public class DefaultGraphStyle implements GraphStyle {
     private static Color[] colors;
     static {
         int step=64;
-        ArrayList<Color> cs=new ArrayList<Color>();
+        ArrayList<Color> cs=new ArrayList<>();
         int counter=0;
         for(int r=0;r<=256;r+=step){
             for(int g=0;g<=256;g+=step){
@@ -73,7 +73,7 @@ public class DefaultGraphStyle implements GraphStyle {
         colors=cs.toArray(new Color[cs.size()]);
     }
     
-    private HashMap<Topic,Color> topicColors = new HashMap<Topic,Color>();
+    private Map<Topic,Color> topicColors = new LinkedHashMap<Topic,Color>();
     
     
     

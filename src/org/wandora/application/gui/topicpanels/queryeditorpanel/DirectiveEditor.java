@@ -42,7 +42,6 @@ import org.wandora.query2.Operand;
 import org.wandora.query2.TopicOperand;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.utils.JsonMapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -54,7 +53,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DirectiveEditor extends javax.swing.JPanel {
 
-    protected DirectiveUIHints.Constructor selectedConstructor;
+	private static final long serialVersionUID = 1L;
+	
+	protected DirectiveUIHints.Constructor selectedConstructor;
     protected AbstractTypePanel[] constructorParamPanels;
     
     protected final ArrayList<AddonPanel> addonPanels=new ArrayList<AddonPanel>();

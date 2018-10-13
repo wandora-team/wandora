@@ -29,7 +29,6 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
-import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
 
 /**
@@ -40,7 +39,10 @@ import org.wandora.query2.DirectiveUIHints;
 
 public class DnDTools {
     public static class ChainedTransferHandler extends TransferHandler {
-        protected ChainedTransferHandler next;
+
+		private static final long serialVersionUID = 1L;
+		
+		protected ChainedTransferHandler next;
         public ChainedTransferHandler(){
         }
         public ChainedTransferHandler(ChainedTransferHandler next){

@@ -21,17 +21,17 @@
  * 
  * MoveViewMouseTool.java
  *
- * Created on 25. kesäkuuta 2007, 10:41
+ * Created on 25. kesï¿½kuuta 2007, 10:41
  *
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel;
-import javax.swing.*;
+
+
+
 import java.awt.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import java.util.*;
 import static org.wandora.utils.Tuples.*;
+
 
 /**
  *

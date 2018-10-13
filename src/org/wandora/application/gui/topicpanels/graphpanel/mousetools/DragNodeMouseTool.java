@@ -21,7 +21,7 @@
  * 
  * DragNodeMouseTool.java
  *
- * Created on 25. kesäkuuta 2007, 12:12
+ * Created on 25. kesï¿½kuuta 2007, 12:12
  *
  */
 
@@ -40,7 +40,10 @@ public class DragNodeMouseTool extends MouseTool {
     
     private boolean pinned=false;
     private VNode draggingNode=null;
-    private double dragOffsX,dragOffsY,dragOffsX2,dragOffsY2;
+    private double dragOffsX,
+				    dragOffsY,
+				    dragOffsX2,
+				    dragOffsY2;
     
     
     /** Creates a new instance of DragNodeMouseTool */

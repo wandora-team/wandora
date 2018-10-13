@@ -41,6 +41,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.*;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -75,7 +76,11 @@ import org.wandora.utils.*;
  */
 public abstract class AbstractTraditionalTopicPanel extends JPanel implements Printable, MouseListener, TopicMapListener, RefreshListener  {
 
-    public static final String VARIANT_GUITYPE_SCHEMA = "schema";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final String VARIANT_GUITYPE_SCHEMA = "schema";
     public static final String VARIANT_GUITYPE_USED = "used";
 
 
@@ -1085,12 +1090,12 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
         try {
             boolean changed = false;
             if(nameTable != null) {
-                Iterator iter = nameTable.entrySet().iterator();
+                Iterator<Map.Entry<Set<Topic>,SimpleField>> iter = nameTable.entrySet().iterator();
                 String originalText = null;
                 while(iter.hasNext()) {
-                    Map.Entry e = (Map.Entry) iter.next();
-                    final Set scope = (Set) e.getKey();
-                    javax.swing.JTextField field = (javax.swing.JTextField) e.getValue();
+                    Map.Entry<Set<Topic>,SimpleField> e = iter.next();
+                    final Set<Topic> scope = e.getKey();
+                    SimpleField field = e.getValue();
                     final String text = field.getText().trim();
                     originalText = (String) originalNameTable.get(scope);
                     if(originalText != null && originalText.equals(text)){

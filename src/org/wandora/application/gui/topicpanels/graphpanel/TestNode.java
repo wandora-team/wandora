@@ -21,13 +21,14 @@
  * 
  * TestNode.java
  *
- * Created on 4. kesäkuuta 2007, 13:21
+ * Created on 4. kesï¿½kuuta 2007, 13:21
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel;
 
-import java.awt.Color;
+
 import java.util.*;
+
 
 /**
  *
@@ -35,7 +36,7 @@ import java.util.*;
  */
 public class TestNode extends AbstractNode {
     
-    private ArrayList<Edge> edges;
+    private List<Edge> edges;
     private String label;
     
     /** Creates a new instance of TestNode */

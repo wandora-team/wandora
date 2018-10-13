@@ -21,17 +21,17 @@
  * 
  * AssociationNode.java
  *
- * Created on 6. kesäkuuta 2007, 11:48
+ * Created on 6. kesï¿½kuuta 2007, 11:48
  *
  */
 
 package org.wandora.application.gui.topicpanels.graphpanel;
 
-import java.awt.Color;
+
 import java.util.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.*;
-import static org.wandora.utils.Tuples.*;
+
 
 /**
  *
@@ -42,13 +42,13 @@ public class AssociationNode extends AbstractNode  {
     private Association association;
     private TopicMapModel model;
     private Collection<Edge> edges;
-    private HashMap<Node,Edge> edgeMap;
+    private Map<Node,Edge> edgeMap;
     
     /** Creates a new instance of AssociationNode */
     public AssociationNode(Association association, TopicMapModel model) throws TopicMapException {
         this.association=association;
         this.model=model;
-        edgeMap=new HashMap<Node,Edge>();
+        edgeMap=new LinkedHashMap<Node,Edge>();
         edges=new ArrayList<Edge>();
         for(Topic role : association.getRoles()){
             Node roleNode=model.getNodeFor(role);
