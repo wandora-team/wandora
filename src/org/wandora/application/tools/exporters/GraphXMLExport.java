@@ -34,8 +34,7 @@ import org.wandora.topicmap.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.*; 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
    
 
@@ -61,7 +60,11 @@ import java.util.logging.Logger;
 
 
 public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
     public boolean EXPORT_CLASSES = true;
     public boolean EXPORT_OCCURRENCES = false;

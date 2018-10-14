@@ -36,8 +36,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*; 
 
    
@@ -67,7 +65,11 @@ import javax.swing.*;
 
 
 public class GraphMLExport extends AbstractExportTool implements WandoraTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
     public static boolean EXPORT_CLASSES = true;
     public static boolean EXPORT_OCCURRENCES = true;
@@ -119,7 +121,7 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
     
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -131,8 +133,8 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
             topicMapName = "selection_in_wandora";
         }
         else {
-            tm = solveContextTopicMap(admin, context);
-            topicMapName = this.solveNameForTopicMap(admin, tm);
+            tm = solveContextTopicMap(wandora, context);
+            topicMapName = this.solveNameForTopicMap(wandora, tm);
             if(topicMapName != null) {
                 exportInfo =  "Exporting topic map in layer '" + topicMapName + "' as GraphML graph";
             }
@@ -147,7 +149,7 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle(exportInfo+"...");
 
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();
             File file = chooser.getSelectedFile();
             String fileName = file.getName();
@@ -209,23 +211,23 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
         
         println(writer, " <graph id=\""+makeID(graphName)+"\" edgedefault=\""+(EXPORT_DIRECTED ? "directed" : "undirected")+"\">");
 
-        Iterator iter=topicMap.getTopics();
-        while(iter.hasNext() && !logger.forceStop()) {
-            Topic t=(Topic)iter.next();
+        Iterator<Topic> topicIter=topicMap.getTopics();
+        while(topicIter.hasNext() && !logger.forceStop()) {
+            Topic t=(Topic)topicIter.next();
             if(t.isRemoved()) continue;
             logger.setProgress(count++);
             echoNode(t, writer);
             
             // Topic occurrences....
             if(EXPORT_OCCURRENCES && t.getDataTypes().size()>0){
-                Collection types=t.getDataTypes();
-                Iterator iter2=types.iterator();
-                while(iter2.hasNext()){
-                    Topic type=(Topic)iter2.next();
-                    Hashtable ht=(Hashtable)t.getData(type);
-                    Iterator iter3=ht.entrySet().iterator();
+                Collection<Topic> types=t.getDataTypes();
+                Iterator<Topic> typeTopicIter=types.iterator();
+                while(typeTopicIter.hasNext()){
+                    Topic type=(Topic)typeTopicIter.next();
+                    Hashtable<Topic,String> ht=(Hashtable)t.getData(type);
+                    Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()){
-                        Map.Entry e=(Map.Entry)iter3.next();
+                        Map.Entry<Topic,String> e=iter3.next();
                         String data=(String)e.getValue();
                         echoNode(data, writer);
                         echoEdge(t, data, type, writer);
@@ -236,15 +238,15 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
 
         // Topic types....
         if(EXPORT_CLASSES) {
-            iter=topicMap.getTopics();
-            while(iter.hasNext() && !logger.forceStop()) {
-                Topic t=(Topic)iter.next();
+        	topicIter=topicMap.getTopics();
+            while(topicIter.hasNext() && !logger.forceStop()) {
+                Topic t=(Topic)topicIter.next();
                 if(t.isRemoved()) continue;
                 logger.setProgress(count++);
                 if(t.getTypes().size()>0){
-                    Iterator iter2=t.getTypes().iterator();
-                    while(iter2.hasNext()){
-                        Topic t2=(Topic)iter2.next();
+                    Iterator<Topic> typeTopicIter=t.getTypes().iterator();
+                    while(typeTopicIter.hasNext()){
+                        Topic t2=(Topic)typeTopicIter.next();
                         if(t2.isRemoved()) continue;
                         echoEdge(t2, t, "class-instance", writer);
                     }
@@ -254,12 +256,12 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
 
         // Associations....
         if(!logger.forceStop()) {
-            iter=topicMap.getAssociations();
+            Iterator<Association> associationIter=topicMap.getAssociations();
             int icount=0;
-            while(iter.hasNext() && !logger.forceStop()) {
+            while(associationIter.hasNext() && !logger.forceStop()) {
                 logger.setProgress(count++);
-                Association a=(Association)iter.next();
-                Collection roles = a.getRoles();
+                Association a=(Association)associationIter.next();
+                Collection<Topic> roles = a.getRoles();
                 if(roles.size() < 2) continue;
                 else if(roles.size() == 2) {
                     Topic[] roleArray = (Topic[]) roles.toArray(new Topic[2]);
@@ -270,9 +272,9 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
                         icount++;
                         String target="nameless-intermediator-node-"+icount;
                         echoNode(target, writer);
-                        Iterator iter2 = roles.iterator();
-                        while(iter2.hasNext()) {
-                            Topic role=(Topic)iter2.next();
+                        Iterator<Topic> roleTopicIter = roles.iterator();
+                        while(roleTopicIter.hasNext()) {
+                            Topic role=(Topic)roleTopicIter.next();
                             echoEdge(a.getPlayer(role), target, a.getType(), writer);
                         }
                     }
