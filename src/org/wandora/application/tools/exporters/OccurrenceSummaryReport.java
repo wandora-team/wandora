@@ -26,17 +26,15 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import java.util.Set;
+
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolLogger;
@@ -45,7 +43,6 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -59,7 +56,11 @@ import org.wandora.utils.IObox;
 
 
 public class OccurrenceSummaryReport extends AbstractExportTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
     
     
     public static final String TAB_FORMAT = "Tabulator separated plain text";
@@ -177,7 +178,7 @@ public class OccurrenceSummaryReport extends AbstractExportTool {
         }
 
         int totalCount = 0;
-        ArrayList<Topic> topics = new ArrayList<Topic>();
+        List<Topic> topics = new ArrayList<Topic>();
         Topic t = null;
 
         log("Collecting topics...");
@@ -202,8 +203,8 @@ public class OccurrenceSummaryReport extends AbstractExportTool {
     
     
     
-    public void exportReportAsTabText(PrintWriter writer, ArrayList<Topic> topics, TopicMap tm, WandoraToolLogger logger) throws TopicMapException {
-        ArrayList<Topic> occurrenceTypes = getOccurrenceTypes(tm);
+    public void exportReportAsTabText(PrintWriter writer, List<Topic> topics, TopicMap tm, WandoraToolLogger logger) throws TopicMapException {
+        List<Topic> occurrenceTypes = getOccurrenceTypes(tm);
         int occurrenceTypeCount = occurrenceTypes.size();
 
         for(Topic occurrenceType : occurrenceTypes) {
@@ -241,8 +242,8 @@ public class OccurrenceSummaryReport extends AbstractExportTool {
     
     
     
-    private ArrayList<Topic> getOccurrenceTypes(TopicMap tm) throws TopicMapException {
-        HashSet<Topic> occurrenceTypes = new LinkedHashSet();
+    private List<Topic> getOccurrenceTypes(TopicMap tm) throws TopicMapException {
+        Set<Topic> occurrenceTypes = new LinkedHashSet<>();
         if(tm != null) {
             Topic t = null;
             Iterator<Topic> topics = tm.getTopics();
@@ -253,7 +254,7 @@ public class OccurrenceSummaryReport extends AbstractExportTool {
                 }
             }
         }
-        ArrayList<Topic> ot = new ArrayList();
+        List<Topic> ot = new ArrayList<>();
         ot.addAll(occurrenceTypes);
         return ot;
     }

@@ -54,7 +54,10 @@ import java.util.*;
 
 
 public class LuceneIndexBuilder extends AbstractExportTool {
-    private boolean checkVisibility=true;
+
+	private static final long serialVersionUID = 1L;
+	
+	private boolean checkVisibility=true;
     
     
     /** Creates a new instance of LuceneIndexBuilder */
@@ -84,7 +87,7 @@ public class LuceneIndexBuilder extends AbstractExportTool {
     // -------------------------------------------------------------------------
     
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         String temp=options.get(prefix+"checkVisibility");
         if(temp!=null) checkVisibility=Boolean.parseBoolean(temp);
     }
@@ -95,19 +98,19 @@ public class LuceneIndexBuilder extends AbstractExportTool {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"Lucene index builder options","Lucene index builder options",true,new String[][]{
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Lucene index builder options","Lucene index builder options",true,new String[][]{
             new String[]{"Check visibility","boolean",""+checkVisibility},
         });
         god.setVisible(true);
         if(god.wasCancelled()) return;
         Map<String,String> values=god.getValues();
         checkVisibility=Boolean.parseBoolean(values.get("Check visibility"));
-        writeOptions(admin,options,prefix);
+        writeOptions(wandora,options,prefix);
     }
     
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
         options.put(prefix+"checkVisibility",""+checkVisibility);
     }    
     

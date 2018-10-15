@@ -37,8 +37,6 @@ import org.wandora.utils.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*; 
 import org.wandora.topicmap.similarity.TopicSimilarity;
 
@@ -47,7 +45,12 @@ import org.wandora.topicmap.similarity.TopicSimilarity;
  * @author akivela
  */
 public class SimilarityMatrixExport extends AbstractExportTool implements WandoraTool {
-    public static final String TAB_FORMAT = "Tabulator separated plain text";
+
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final String TAB_FORMAT = "Tabulator separated plain text";
     public static final String HTML_FORMAT = "HTML table";
     
     private SimilarityMatrixExportDialog similarityDialog = null;
@@ -88,7 +91,7 @@ public class SimilarityMatrixExport extends AbstractExportTool implements Wandor
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
 
         Iterator<Topic> topics = null;
         String exportInfo = "";
@@ -99,8 +102,8 @@ public class SimilarityMatrixExport extends AbstractExportTool implements Wandor
             }
             else {
                 // --- Solve first topic map to be exported
-                TopicMap tm = solveContextTopicMap(admin, context);
-                String topicMapName = this.solveNameForTopicMap(admin, tm);
+                TopicMap tm = solveContextTopicMap(wandora, context);
+                String topicMapName = this.solveNameForTopicMap(wandora, tm);
                 topics = tm.getTopics();
 
                 if(topicMapName == null) exportInfo = "LayerStack";
@@ -126,7 +129,7 @@ public class SimilarityMatrixExport extends AbstractExportTool implements Wandor
                 // --- Then solve target file (and format)
                 SimpleFileChooser chooser=UIConstants.getFileChooser();
                 chooser.setDialogTitle("Export "+exportInfo+" as similarity matrix...");
-                if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+                if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
                     setDefaultLogger();
                     File file = chooser.getSelectedFile();
                     String fileName = file.getName();

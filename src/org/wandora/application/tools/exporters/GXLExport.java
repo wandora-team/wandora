@@ -190,7 +190,7 @@ public class GXLExport extends AbstractExportTool implements WandoraTool {
         print(writer, " hypergraph=\"true\"");
         println(writer, ">");
 
-        Iterator iter=topicMap.getTopics();
+        Iterator<Topic> iter=topicMap.getTopics();
         while(iter.hasNext() && !logger.forceStop()) {
             Topic t=(Topic)iter.next();
             if(t.isRemoved()) continue;
@@ -205,7 +205,7 @@ public class GXLExport extends AbstractExportTool implements WandoraTool {
                 logger.setProgress(count++);
                 Topic t=(Topic)iter.next();
                 if(t.isRemoved()) continue;
-                Iterator iter2=t.getTypes().iterator();
+                Iterator<Topic> iter2=t.getTypes().iterator();
                 while(iter2.hasNext()) {
                     Topic t2=(Topic)iter2.next();
                     if(t2.isRemoved()) continue;
@@ -216,11 +216,11 @@ public class GXLExport extends AbstractExportTool implements WandoraTool {
 
         // Associations....
         if(!logger.forceStop()) {
-            iter=topicMap.getAssociations();
+            Iterator<Association> associationIter=topicMap.getAssociations();
             icount=0;
-            while(iter.hasNext() && !logger.forceStop()) {
+            while(associationIter.hasNext() && !logger.forceStop()) {
                 logger.setProgress(count++);
-                Association a=(Association)iter.next();
+                Association a=associationIter.next();
                 echoEdge(a, writer);
             }
         }
@@ -268,15 +268,15 @@ public class GXLExport extends AbstractExportTool implements WandoraTool {
 
         // Topic occurrences....
         if(EXPORT_OCCURRENCES && t.getDataTypes().size()>0) {
-            Collection types=t.getDataTypes();
-            Iterator iter2=types.iterator();
+            Collection<Topic> types=t.getDataTypes();
+            Iterator<Topic> iter2=types.iterator();
             while(iter2.hasNext()){
                 Topic type=(Topic)iter2.next();
                 String typeName = type.getBaseName();
-                Hashtable ht=(Hashtable)t.getData(type);
-                Iterator iter3=ht.entrySet().iterator();
+                Hashtable<Topic,String> ht=t.getData(type);
+                Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                 while(iter3.hasNext()){
-                    Map.Entry e=(Map.Entry)iter3.next();
+                    Map.Entry<Topic,String> e=iter3.next();
                     String data=(String)e.getValue();
                     println(writer, "   <attr name=\"occurrence-"+typeName+"\"><string>"+makeString(data)+"</string></attr>");
                 }
@@ -290,7 +290,7 @@ public class GXLExport extends AbstractExportTool implements WandoraTool {
     int icount = 0;
     protected void echoEdge(Association a, PrintWriter writer) throws TopicMapException {
         if(PREFER_EDGES) {
-            Collection roles = a.getRoles();
+            Collection<Topic> roles = a.getRoles();
             if(roles.size() < 2) return;
             else if(roles.size() == 2) {
                 Topic[] roleArray = (Topic[]) roles.toArray(new Topic[2]);
@@ -304,7 +304,7 @@ public class GXLExport extends AbstractExportTool implements WandoraTool {
                 icount++;
                 String target="nameless-intermediator-node-"+icount;
                 println(writer, "  <node id=\""+target+"\">");
-                Iterator iter2 = roles.iterator();
+                Iterator<Topic> iter2 = roles.iterator();
                 while(iter2.hasNext()) {
                     Topic role=(Topic)iter2.next();
                     println(writer, "  <edge from=\""+makeID(a.getPlayer(role))+"\" to=\""+target+"\">");

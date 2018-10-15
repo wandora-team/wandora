@@ -45,7 +45,9 @@ import org.wandora.topicmap.similarity.TopicSimilarityHelper;
 
 public class SimilarityMatrixExportDialog extends javax.swing.JPanel {
 
-    private boolean wasAccepted = false;
+	private static final long serialVersionUID = 1L;
+	
+	private boolean wasAccepted = false;
     private JDialog myDialog = null;
     private ArrayList<TopicSimilarity> similarityMeasures = null;
     

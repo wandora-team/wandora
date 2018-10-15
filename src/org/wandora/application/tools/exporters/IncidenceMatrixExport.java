@@ -36,8 +36,6 @@ import org.wandora.utils.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*; 
 
 
@@ -46,7 +44,10 @@ import javax.swing.*;
  * @author akivela
  */
 public class IncidenceMatrixExport  extends AbstractExportTool implements WandoraTool {
-    public static boolean LABEL_MATRIX = true;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static boolean LABEL_MATRIX = true;
     public static boolean EXPORT_AS_HTML_TABLE = true;
     public static boolean SORT = true;
 
@@ -79,11 +80,11 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
         return true;
     }
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"Incidence matrix export options","Incidence matrix export options",true,new String[][]{
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Incidence matrix export options","Incidence matrix export options",true,new String[][]{
             new String[]{"Label matrix columns and rows","boolean",(LABEL_MATRIX ? "true" : "false"), "Should Wandora label matrix columns and rows using topic names?"},
             new String[]{"Export as HTML table","boolean",(EXPORT_AS_HTML_TABLE ? "true" : "false"), "Export HTML table instead of tab text?"},
-        },admin);
+        },wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
 
@@ -98,7 +99,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
 
         Iterator<Topic> topics = null;
         Iterator<Association> associations = null;
@@ -116,8 +117,8 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
             }
             else {
                 // --- Solve first topic map to be exported
-                TopicMap tm = solveContextTopicMap(admin, context);
-                String topicMapName = this.solveNameForTopicMap(admin, tm);
+                TopicMap tm = solveContextTopicMap(wandora, context);
+                String topicMapName = this.solveNameForTopicMap(wandora, tm);
                 topics = tm.getTopics();
                 associations = tm.getAssociations();
 
@@ -129,7 +130,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
             // --- Then solve target file (and format)
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setDialogTitle("Export "+exportInfo+" as incidence matrix...");
-            if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+            if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
                 setDefaultLogger();
                 File file = chooser.getSelectedFile();
                 String fileName = file.getName();
@@ -190,8 +191,8 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
         }
 
         int totalCount = 0;
-        ArrayList<Topic> topics = new ArrayList<Topic>();
-        ArrayList<Association> associations = new ArrayList<Association>();
+        List<Topic> topics = new ArrayList<Topic>();
+        List<Association> associations = new ArrayList<Association>();
         Topic t = null;
         Association a = null;
 
@@ -237,7 +238,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
 
 
 
-    public void exportMatrixAsTabText(PrintWriter writer, ArrayList<Association> associations, ArrayList<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrixAsTabText(PrintWriter writer, List<Association> associations, List<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
         int progress = 0;
         Association a = null;
         Topic t = null;
@@ -263,7 +264,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
 
 
 
-    public void exportMatrixAsHTMLTable(PrintWriter writer, ArrayList<Association> associations, ArrayList<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrixAsHTMLTable(PrintWriter writer, List<Association> associations, List<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
         int progress = 0;
         Association a = null;
         Topic t = null;

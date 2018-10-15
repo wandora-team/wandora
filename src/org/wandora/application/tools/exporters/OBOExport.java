@@ -43,8 +43,13 @@ import javax.swing.*;
 public class OBOExport extends AbstractExportTool {
 
    
-    
-    /** Creates a new instance of RDFExport */
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	/** Creates a new instance of RDFExport */
     public OBOExport() {
     }
     
@@ -110,8 +115,8 @@ public class OBOExport extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
-        String namespace = WandoraOptionPane.showInputDialog(admin, "Give OBO namespace to export", "", "OBO namespace");
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+        String namespace = WandoraOptionPane.showInputDialog(wandora, "Give OBO namespace to export", "", "OBO namespace");
         if(namespace == null || namespace.trim().length() == 0) return;
         
         String[] namespaces = null;
@@ -127,10 +132,10 @@ public class OBOExport extends AbstractExportTool {
         
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("OBO Export");
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();        
             File file = chooser.getSelectedFile();
-            TopicMap tm=solveContextTopicMap(admin,context);
+            TopicMap tm=solveContextTopicMap(wandora,context);
             exportOBO(file, namespaces, tm);
             setState(WAIT);
         }

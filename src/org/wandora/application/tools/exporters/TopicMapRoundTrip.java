@@ -40,7 +40,11 @@ import javax.swing.*;
  */
 public class TopicMapRoundTrip extends AbstractWandoraTool implements WandoraTool {
 
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public String getName() {
         return "Topic map round trip";
     }
@@ -64,12 +68,12 @@ public class TopicMapRoundTrip extends AbstractWandoraTool implements WandoraToo
 
     
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setMultiSelectionEnabled(true);
             chooser.setDialogTitle("Select topic map files to round trip");
-            if(chooser.open(admin)==SimpleFileChooser.APPROVE_OPTION) {
+            if(chooser.open(wandora)==SimpleFileChooser.APPROVE_OPTION) {
                 setDefaultLogger();
                 importExport(chooser.getSelectedFiles());
             }

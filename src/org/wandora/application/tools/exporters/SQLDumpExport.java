@@ -31,7 +31,6 @@ import org.wandora.application.gui.simple.*;
 import org.wandora.application.contexts.*;
 import java.io.*;
 import java.util.*;
-import org.wandora.topicmap.layered.Layer;
 import org.xml.sax.*;
 
 /**
@@ -39,7 +38,11 @@ import org.xml.sax.*;
  * @author olli
  */
 public class SQLDumpExport extends AbstractExportTool {
-    public static final int I_TOPIC=0;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public static final int I_TOPIC=0;
     public static final int I_ASSOCIATION=1;
     public static final int I_MEMBER=2;
     public static final int I_SUBJECTIDENTIFIER=3;
@@ -73,14 +76,14 @@ public class SQLDumpExport extends AbstractExportTool {
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("Topic map SQL dump export");
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();        
             File file = chooser.getSelectedFile();
 //            TopicMap tm=admin.getTopicMap();
-            TopicMap tm = solveContextTopicMap(admin,context);
+            TopicMap tm = solveContextTopicMap(wandora,context);
             
             try{
                 String filePath=file.getAbsolutePath();

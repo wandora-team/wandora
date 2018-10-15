@@ -32,10 +32,7 @@ import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import java.io.*;
 import java.util.*;
-import org.wandora.utils.*;
-import org.wandora.utils.swing.*;
 import org.wandora.application.gui.simple.*;
-import java.awt.*;
 import javax.swing.*;
 
 
@@ -45,7 +42,10 @@ import javax.swing.*;
  */
 public class OBORoundTrip extends AbstractWandoraTool implements WandoraTool {
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public String getName() {
         return "OBO round trip";
     }
@@ -70,7 +70,7 @@ public class OBORoundTrip extends AbstractWandoraTool implements WandoraTool {
     
     // **** Configuration ****
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         String o=options.get(OBO.optionPrefix+"options");
         if(o!=null){
             int i=Integer.parseInt(o);
@@ -85,9 +85,9 @@ public class OBORoundTrip extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         //System.out.println(prefix);
-        OBOConfiguration dialog=new OBOConfiguration(admin,true);
+        OBOConfiguration dialog=new OBOConfiguration(wandora,true);
         dialog.setOptions(OBO.getOptions());
         dialog.setVisible(true);
         if(!dialog.wasCancelled()){
@@ -99,7 +99,7 @@ public class OBORoundTrip extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
         options.put(OBO.optionPrefix+"options",""+OBO.getOptions());
     }  
     
@@ -109,12 +109,12 @@ public class OBORoundTrip extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setMultiSelectionEnabled(true);
             chooser.setDialogTitle("Select OBO files to round trip");
-            if(chooser.open(admin)==SimpleFileChooser.APPROVE_OPTION) {
+            if(chooser.open(wandora)==SimpleFileChooser.APPROVE_OPTION) {
                 setDefaultLogger();
                 importExport(chooser.getSelectedFiles());
             }

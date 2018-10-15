@@ -21,7 +21,7 @@
  * 
  * RDFExport.java
  *
- * Created on 4. heinäkuuta 2006, 13:16
+ * Created on 4. heinï¿½kuuta 2006, 13:16
  *
  */
 
@@ -47,7 +47,11 @@ import org.wandora.utils.XMLbox;
  */
 public class RDFExport extends AbstractExportTool {
     
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
     
     public RDFExport() {
@@ -79,10 +83,10 @@ public class RDFExport extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("RDF N3 Export");
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
 
             setDefaultLogger();        
             File file = chooser.getSelectedFile();
@@ -93,7 +97,7 @@ public class RDFExport extends AbstractExportTool {
                 tm = makeTopicMapWith(context);
             }
             else {
-                tm = solveContextTopicMap(admin, context);
+                tm = solveContextTopicMap(wandora, context);
             }
             
             try {
