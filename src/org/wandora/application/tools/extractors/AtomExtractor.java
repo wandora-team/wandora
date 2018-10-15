@@ -55,7 +55,11 @@ import org.wandora.utils.*;
 
 public class AtomExtractor extends AbstractExtractor {
     
-    public static final String DEFAULT_LANG = "en";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final String DEFAULT_LANG = "en";
     private String baseUrl = null;
     
     

@@ -40,8 +40,11 @@ import java.net.*;
  * @author akivela
  */
 public class GellishExtractor extends AbstractExtractor implements WandoraTool {
-    
-    public String locatorPrefix = "http://wandora.org/si/gellish/";
+
+
+	private static final long serialVersionUID = 1L;
+
+	public String locatorPrefix = "http://wandora.org/si/gellish/";
 
     public static String DEFAULT_LANG = "en";
     public static boolean EXTRACT_EXTRAS = true;

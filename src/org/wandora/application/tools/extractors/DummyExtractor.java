@@ -39,7 +39,10 @@ import org.wandora.application.tools.*;
 public class DummyExtractor extends AbstractWandoraTool {
     
 
-    public DummyExtractor() {
+	private static final long serialVersionUID = 1L;
+
+	
+	public DummyExtractor() {
     }
      
     @Override

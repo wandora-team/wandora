@@ -25,20 +25,14 @@
  */
 
 package org.wandora.application.tools.extractors;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.topicmap.database.*;
+
+
 import org.wandora.application.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
-import org.wandora.application.contexts.*;
-import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import java.awt.GridBagConstraints;
 import org.wandora.utils.swing.GuiTools;
-import static org.wandora.utils.Tuples.*;
 
 /**
  *
@@ -46,15 +40,18 @@ import static org.wandora.utils.Tuples.*;
  */
 public class GenericDatabaseExtractorConfigurationDialog extends javax.swing.JDialog {
     
-    private Wandora admin;
+
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora wandora;
     private boolean wasCancelled=true;
     private Vector<GenericDatabaseExtractorConfigurationPanel> panels;
     
     /** Creates new form GenericDatabaseExtractorConfigurationDialog */
-    public GenericDatabaseExtractorConfigurationDialog(Wandora admin,boolean modal,GenericDatabaseExtractor.DatabaseSchema schema) {
-        super(admin, modal);
+    public GenericDatabaseExtractorConfigurationDialog(Wandora wandora,boolean modal,GenericDatabaseExtractor.DatabaseSchema schema) {
+        super(wandora, modal);
         
-        this.admin=admin;
+        this.wandora=wandora;
         
         initComponents();
         
@@ -62,7 +59,7 @@ public class GenericDatabaseExtractorConfigurationDialog extends javax.swing.JDi
         
         setTables(schema);
         
-        GuiTools.centerWindow(this,admin);
+        GuiTools.centerWindow(this,wandora);
     }
     
     private void setTables(GenericDatabaseExtractor.DatabaseSchema schema){

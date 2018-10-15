@@ -43,7 +43,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class JsoupHTMLLinkStructureExtractor extends AbstractJsoupExtractor implements WandoraTool, BrowserPluginExtractor {
 
-    private TopicMap tm;
+
+	private static final long serialVersionUID = 1L;
+	
+	private TopicMap tm;
     private Topic wandoraClass;
     
     private static final String LINK_TYPE = "http://wandora.org/si/link";

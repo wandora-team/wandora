@@ -39,7 +39,12 @@ import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
  */
 public class Sentences2Associations  extends AbstractExtractor implements WandoraTool {
 
-    public static boolean ADD_SOURCE_AS_PLAYER = true;
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	public static boolean ADD_SOURCE_AS_PLAYER = true;
     
     
 

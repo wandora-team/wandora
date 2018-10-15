@@ -27,10 +27,9 @@
 
 package org.wandora.application.tools.extractors;
 
+
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.*;
-
 
 import java.util.*;
 import java.io.*;
@@ -66,7 +65,10 @@ import java.net.*;
  */
 public class MobyThesaurusExtractor extends AbstractExtractor implements WandoraTool {
     
-    public String locatorPrefix = "http://wandora.org/si/moby/";
+
+	private static final long serialVersionUID = 1L;
+	
+	public String locatorPrefix = "http://wandora.org/si/moby/";
     public boolean ANTISYMMETRIC_ASSOCIATIONS = true;
     public boolean REMOVE_RARE_WORDS = false;
     

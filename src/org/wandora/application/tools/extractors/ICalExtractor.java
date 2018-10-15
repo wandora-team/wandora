@@ -53,6 +53,10 @@ import org.wandora.topicmap.XTMPSI;
 
 public class ICalExtractor extends AbstractExtractor {
 
+
+  private static final long serialVersionUID = 1L;
+	
+	
   public static final String ICAL_SI = "http://tools.ietf.org/html/rfc5545/";
   // ****** TYPE SIS FOR GENERAL COMPONENT PROPERTIES ******
   public static final String ICAL_CALENDAR_SI = ICAL_SI + "calendar";

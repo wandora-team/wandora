@@ -51,8 +51,12 @@ import org.wandora.utils.IObox;
  *
  * @author anttirt
  */
+@Deprecated
 public class DiggURLExtractor extends AbstractWandoraTool {
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public WandoraToolType getType() {
         return WandoraToolType.createExtractType();
     }
@@ -72,12 +76,14 @@ public class DiggURLExtractor extends AbstractWandoraTool {
         return UIBox.getIcon("gui/icons/extract_digg.png");
     }
     public static class ExtractionFailure extends Exception {
-        public ExtractionFailure(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public ExtractionFailure(String message) { super(message); }
         public ExtractionFailure(Throwable cause) { super(cause); }
         public ExtractionFailure(String message, Throwable cause) { super(message, cause); }
     }
     public static class RequestFailure extends ExtractionFailure {
-        public RequestFailure(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public RequestFailure(String message) { super(message); }
         public RequestFailure(Throwable cause) { super(cause); }
         public RequestFailure(String message, Throwable cause) { super(message, cause); }
     }
@@ -99,8 +105,8 @@ public class DiggURLExtractor extends AbstractWandoraTool {
         }
     }
     
-    public void execute(Wandora admin, final Context context) throws TopicMapException {
-        currentMap = admin.getTopicMap();
+    public void execute(Wandora wandora, final Context context) throws TopicMapException {
+        currentMap = wandora.getTopicMap();
         
         setDefaultLogger();
         

@@ -45,7 +45,11 @@ import org.wandora.topicmap.TopicTools;
 
 public abstract class AbstractJsoupExtractor extends AbstractExtractor {
 
-    private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     
     private final String[] contentTypes= new String[] {
         "text/html"

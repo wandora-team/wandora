@@ -21,17 +21,18 @@
  * 
  * IMDBExtractor.java
  *
- * Created on 16. kesäkuuta 2006, 10:41
+ * Created on 16. kesï¿½kuuta 2006, 10:41
  */
 
 package org.wandora.application.tools.extractors;
-import org.wandora.topicmap.database.DatabaseTopicMap;
+
+
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.text.*;
 
 import org.wandora.topicmap.*;
+import org.wandora.topicmap.database2.DatabaseTopicMap;
 import org.wandora.topicmap.layered.*;
 import org.wandora.application.*;
 import org.wandora.piccolo.utils.crawler.*;
@@ -46,7 +47,11 @@ import org.wandora.utils.*;
  */
 public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
     
-    public static final String ACTOR_SI="http://wandora.org/si/imdb/actor";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final String ACTOR_SI="http://wandora.org/si/imdb/actor";
     public static final String DIRECTOR_SI="http://wandora.org/si/imdb/director";
     public static final String PRODUCER_SI="http://wandora.org/si/imdb/producer";
     public static final String ROLE_SI="http://wandora.org/imdb/si/role";

@@ -48,7 +48,10 @@ import java.io.*;
  * @author  akivela
  */
 public class AbstractExtractorDialog extends javax.swing.JDialog {
-    private Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora = null;
     private WandoraTool parentTool = null;
     private boolean wasAccepted = false;
     private HashMap<Component,Integer> registeredSources = null;
@@ -56,9 +59,9 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
     
     
     /** Creates new form AbstractExtractorDialog */
-    public AbstractExtractorDialog(Wandora admin, boolean modal) {
-        super(admin, modal);
-        this.wandora = admin;
+    public AbstractExtractorDialog(Wandora wandora, boolean modal) {
+        super(wandora, modal);
+        this.wandora = wandora;
         initComponents();
         setSize(640,400);
         //initialize(null);

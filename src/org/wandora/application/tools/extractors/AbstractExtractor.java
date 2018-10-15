@@ -55,7 +55,10 @@ import org.wandora.utils.XMLbox;
  */
 public abstract class AbstractExtractor extends AbstractWandoraTool implements WandoraTool, Runnable, Handler, InterruptHandler, DropExtractor, BrowserPluginExtractor {
     
-    public final static String STRING_EXTRACTOR_NOT_SUPPORTED_MESSAGE = "String extractor not supported";
+
+	private static final long serialVersionUID = 1L;
+
+	public final static String STRING_EXTRACTOR_NOT_SUPPORTED_MESSAGE = "String extractor not supported";
 
     // Extractor types...
     public final static int CUSTOM_EXTRACTOR = 1;
@@ -262,9 +265,9 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
-        setWandora(admin);
-        if(admin != null) topicMap = admin.getTopicMap();
+    public void execute(Wandora wandora, Context context) {
+        setWandora(wandora);
+        if(wandora != null) topicMap = wandora.getTopicMap();
         Object contextSource = context.getContextSource();
         if(contextSource instanceof OccurrenceTextEditor) {
             try {
@@ -295,7 +298,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
                     // --- ASK CONTENT FOR EXTRACTION ---
                     
                     int possibleTypes = getExtractorType();
-                    extractorSourceDialog = new AbstractExtractorDialog(admin, true);
+                    extractorSourceDialog = new AbstractExtractorDialog(wandora, true);
                     extractorSourceDialog.initialize(this);
                     if((possibleTypes & FILE_EXTRACTOR) != 0) extractorSourceDialog.registerFileSource();
                     if((possibleTypes & URL_EXTRACTOR) != 0) extractorSourceDialog.registerUrlSource();

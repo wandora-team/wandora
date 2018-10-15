@@ -21,7 +21,7 @@
  * 
  * DatabaseImport.java
  *
- * Created on 30. kesäkuuta 2006, 14:14
+ * Created on 30. kesï¿½kuuta 2006, 14:14
  *
  */
 
@@ -30,7 +30,7 @@ package org.wandora.application.tools.extractors;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.topicmap.layered.*;
-import org.wandora.topicmap.database.*;
+import org.wandora.topicmap.database2.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.contexts.*;
@@ -53,7 +53,10 @@ import static org.wandora.utils.Tuples.*;
  */
 public class GenericDatabaseExtractor extends AbstractWandoraTool {
     
-    /** Creates a new instance of GenericDatabaseExtractor */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of GenericDatabaseExtractor */
     public GenericDatabaseExtractor() {
     }
 
@@ -75,9 +78,9 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
     }
 
     
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
         setDefaultLogger();        
-        DatabaseConfigurationDialog d=new DatabaseConfigurationDialog(admin,true);
+        DatabaseConfigurationDialog d=new DatabaseConfigurationDialog(wandora,true);
         d.setTitle("Select extracted database");
         d.setVisible(true);
         if(d.wasCancelled()) return;
@@ -98,9 +101,9 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
             System.out.println("Found tables:");
             schema.print(System.out);
             
-            if(!configureSchema(admin,schema)){ return; }
+            if(!configureSchema(wandora,schema)){ return; }
 
-            TopicMap tm=admin.getTopicMap();
+            TopicMap tm=wandora.getTopicMap();
             if(tm instanceof LayerStack){
                 tm=((LayerStack)tm).getSelectedLayer().getTopicMap();
             }

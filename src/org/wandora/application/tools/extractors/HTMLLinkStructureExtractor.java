@@ -49,8 +49,10 @@ import javax.swing.*;
 public class HTMLLinkStructureExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
    
     
-    
-    /** Creates a new instance of HTMLLinkStructureExtractor */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of HTMLLinkStructureExtractor */
     public HTMLLinkStructureExtractor() {
     }
     

@@ -57,8 +57,11 @@ import org.wandora.utils.Tuples.T2;
 
 
 public class SimbergExport extends AbstractExportTool implements WandoraTool {
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	
+	@Override
     public String getName() {
         return "Simberg export";
     }

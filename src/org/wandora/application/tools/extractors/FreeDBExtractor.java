@@ -29,16 +29,12 @@ package org.wandora.application.tools.extractors;
 
 
 import org.wandora.application.gui.*;
-import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.*;
-import org.wandora.utils.*;
+
 
 
 import java.util.*;
-import java.text.*;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
@@ -54,7 +50,11 @@ import javax.swing.*;
  */
 public class FreeDBExtractor extends AbstractExtractor implements WandoraTool {
     
-    public String locatorPrefix = "http://wandora.org/si/freedb/";
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public String locatorPrefix = "http://wandora.org/si/freedb/";
    
     
     /** Creates a new instance of ExtractIconclassKeywords */

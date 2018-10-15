@@ -26,22 +26,15 @@
 
 package org.wandora.application.tools.extractors;
 
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.topicmap.database.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
+
 import org.wandora.application.gui.simple.*;
-import org.wandora.application.contexts.*;
-import java.io.*;
+
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
 import java.awt.GridBagConstraints;
-import org.wandora.utils.swing.GuiTools;
-import static org.wandora.utils.Tuples.*;
+
 
 /**
  *
@@ -49,6 +42,10 @@ import static org.wandora.utils.Tuples.*;
  */
 public class GenericDatabaseExtractorConfigurationPanel extends javax.swing.JPanel implements TableModelListener {
     
+
+	private static final long serialVersionUID = 1L;
+	
+	
 //    private GenericDatabaseExtractor.DatabaseSchema schema;
     private String table;
     private JTableHeader jTableHeader;

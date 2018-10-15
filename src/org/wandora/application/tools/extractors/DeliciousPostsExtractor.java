@@ -47,15 +47,24 @@ import org.wandora.utils.IObox;
 import org.wandora.application.gui.*;
         
 import javax.swing.*;
-import java.util.*;
+
 
 
 /**
  *
  * @author anttirt
  */
+@Deprecated
 public class DeliciousPostsExtractor extends AbstractWandoraTool {
-    @Override
+
+	
+	private static final long serialVersionUID = 1L;
+
+
+
+
+
+	@Override
     public WandoraToolType getType() {
         return WandoraToolType.createExtractType();
     }
@@ -77,19 +86,21 @@ public class DeliciousPostsExtractor extends AbstractWandoraTool {
     
     
     public static class ExtractionFailure extends Exception {
-        public ExtractionFailure(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public ExtractionFailure(String message) { super(message); }
         public ExtractionFailure(Throwable cause) { super(cause); }
         public ExtractionFailure(String message, Throwable cause) { super(message, cause); }
     }
     public static class RequestFailure extends ExtractionFailure {
-        public RequestFailure(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public RequestFailure(String message) { super(message); }
         public RequestFailure(Throwable cause) { super(cause); }
         public RequestFailure(String message, Throwable cause) { super(message, cause); }
     }
-    public void execute(Wandora admin, final Context context) {
-        currentMap = admin.getTopicMap();
+    public void execute(Wandora wandora, final Context context) {
+        currentMap = wandora.getTopicMap();
         
-        ChooseUserDialog dlg = new ChooseUserDialog(admin, true, "<html><body><p>Please enter a comma-delimited list of Delicious usernames to fetch information for.</p></body></html>");
+        ChooseUserDialog dlg = new ChooseUserDialog(wandora, true, "<html><body><p>Please enter a comma-delimited list of Delicious usernames to fetch information for.</p></body></html>");
         dlg.setVisible(true);
         setDefaultLogger();
         if(dlg.wasCancelled())

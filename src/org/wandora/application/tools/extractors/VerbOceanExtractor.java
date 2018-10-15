@@ -27,15 +27,11 @@
 
 package org.wandora.application.tools.extractors;
 
-import org.wandora.application.tools.*;
+
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.*;
-import org.wandora.utils.*;
 import java.util.regex.*;
 
-import java.util.*;
-import java.text.*;
 import java.io.*;
 import java.net.*;
 
@@ -64,7 +60,11 @@ import java.net.*;
  * @author akivela
  */
 public class VerbOceanExtractor extends AbstractExtractor implements WandoraTool {
-    boolean INCLUDE_STRENGHTS = true;
+
+
+	private static final long serialVersionUID = 1L;
+	
+	boolean INCLUDE_STRENGHTS = true;
     private Wandora admin = null;
     private File verbOceanFile = null;
     

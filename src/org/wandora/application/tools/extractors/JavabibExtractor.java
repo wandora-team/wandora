@@ -52,7 +52,11 @@ import bibtex.expansions.*;
  */
 public class JavabibExtractor extends AbstractExtractor implements WandoraTool {
     
-    private String baseLocator = "http://wandora.org/si/bibtex/";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private String baseLocator = "http://wandora.org/si/bibtex/";
     private String defaultEncoding = "ISO-8859-1";
 
     private boolean encounteredExceptions=false;

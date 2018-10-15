@@ -40,8 +40,10 @@ import javax.swing.*;
  */
 public class WikipediaExtractor extends AbstractWandoraTool {
     
-    
-    private static WikipediaExtractorSelector selector = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private static WikipediaExtractorSelector selector = null;
     
     
     /** Creates a new instance of WikipediaExtractor */
@@ -72,12 +74,12 @@ public class WikipediaExtractor extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         try {
             if(selector == null) {
-                selector = new WikipediaExtractorSelector(admin);
+                selector = new WikipediaExtractorSelector(wandora);
             }
-            selector.setWandora(admin);
+            selector.setWandora(wandora);
             selector.setContext(context);
             selector.selectAll();
             selector.setVisible(true);
@@ -86,7 +88,7 @@ public class WikipediaExtractor extends AbstractWandoraTool {
                 WandoraTool extractor = selector.getWandoraTool(this);
                 if(extractor != null) {
                     extractor.setToolLogger(getDefaultLogger());
-                    extractor.execute(admin, context);
+                    extractor.execute(wandora, context);
                 }
             }
             else {

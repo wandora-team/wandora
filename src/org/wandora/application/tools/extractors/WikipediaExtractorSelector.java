@@ -21,18 +21,16 @@
  * 
  * WikipediaExtractorSelector.java
  *
- * Created on 16. heinäkuuta 2008, 21:26
+ * Created on 16. heinï¿½kuuta 2008, 21:26
  */
 
 package org.wandora.application.tools.extractors;
 
 
 import org.wandora.application.contexts.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
@@ -45,27 +43,30 @@ import java.net.*;
  * @author  akivela
  */
 public class WikipediaExtractorSelector extends javax.swing.JDialog {
-    private boolean accepted = false;
-    private Wandora admin = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private boolean accepted = false;
+    private Wandora wandora = null;
     private Context context = null;
     
     
     
     /** Creates new form WikipediaExtractorSelector */
-    public WikipediaExtractorSelector(Wandora admin) {
-        super(admin, true);
+    public WikipediaExtractorSelector(Wandora wandora) {
+        super(wandora, true);
         initComponents();
         setSize(450,300);
         setTitle("Wikipedia extractor");
-        admin.centerWindow(this);
-        this.admin = admin;
+        wandora.centerWindow(this);
+        this.wandora = wandora;
         accepted = false;
     }
 
     
     
     public void setWandora(Wandora wandora) {
-        this.admin = wandora;
+        this.wandora = wandora;
     }
     
     public void setContext(Context context) {

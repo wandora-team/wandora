@@ -58,8 +58,13 @@ import javax.swing.*;
  *
  * @author anttirt
  */
+@Deprecated
 public final class DeliciousURLExtractor extends AbstractWandoraTool {
-    @Override
+
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public WandoraToolType getType() {
         return WandoraToolType.createExtractType();
     }
@@ -73,12 +78,14 @@ public final class DeliciousURLExtractor extends AbstractWandoraTool {
         return "Tries to find a post in Delicious matching the URL in the SI or SL of a topic and if found, extracts information.";
     }
     public static class ExtractionFailure extends Exception {
-        public ExtractionFailure(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public ExtractionFailure(String message) { super(message); }
         public ExtractionFailure(Throwable cause) { super(cause); }
         public ExtractionFailure(String message, Throwable cause) { super(message, cause); }
     }
     public static class RequestFailure extends ExtractionFailure {
-        public RequestFailure(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public RequestFailure(String message) { super(message); }
         public RequestFailure(Throwable cause) { super(cause); }
         public RequestFailure(String message, Throwable cause) { super(message, cause); }
     }
@@ -91,8 +98,8 @@ public final class DeliciousURLExtractor extends AbstractWandoraTool {
     }
 
 
-    public void execute(Wandora admin, final Context context) {
-        currentMap = admin.getTopicMap();
+    public void execute(Wandora wandora, final Context context) {
+        currentMap = wandora.getTopicMap();
         
         setDefaultLogger();
         

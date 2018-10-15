@@ -31,14 +31,10 @@ import javax.swing.*;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.text.*;
 import org.xml.sax.*;
 import java.util.regex.*;
 
 import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.utils.*;
 import org.wandora.application.gui.*;
 
 
@@ -55,7 +51,10 @@ public class MediaWikiExtractor extends AbstractExtractor {
 
 //    private String extracterUrl = null;
 
-    private String wikiBaseURL = null;
+	private static final long serialVersionUID = 1L;
+	
+	
+	private String wikiBaseURL = null;
     private boolean followRedirects = false;
 
 
