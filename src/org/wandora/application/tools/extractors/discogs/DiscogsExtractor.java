@@ -33,7 +33,11 @@ import org.wandora.application.contexts.Context;
 
 public class DiscogsExtractor extends AbstractDiscogsExtractor {
     
-    private DiscogsExtractorUI ui = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private DiscogsExtractorUI ui = null;
 
     
     @Override

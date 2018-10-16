@@ -21,7 +21,7 @@
  * 
  * SimpleEmailExtractor.java
  *
- * Created on 20. kesäkuuta 2006, 20:00
+ * Created on 20. kesï¿½kuuta 2006, 20:00
  *
  */
 
@@ -54,7 +54,6 @@ import net.fortuna.mstor.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 
 
@@ -65,8 +64,12 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
  */
 public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPluginExtractor {
     
-    private ArrayList visitedEmailFolders = null;
-    private ArrayList visitedDirectories = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private List<String> visitedEmailFolders = null;
+    private List<String> visitedDirectories = null;
 
     private String defaultLang = "en";
     private boolean shouldExtractHeaders = false;
@@ -139,8 +142,8 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     @Override
     public void execute(Wandora wandora, Context context) {
         TopicMap tm = wandora.getTopicMap();
-        visitedDirectories = new ArrayList();
-        visitedEmailFolders = new ArrayList();
+        visitedDirectories = new ArrayList<>();
+        visitedEmailFolders = new ArrayList<>();
         
         setTopicMap(tm);
         boolean handledForcedContent = handleForcedContent();
@@ -213,8 +216,8 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     public boolean _extractTopicsFrom(File file, TopicMap topicMap, int type) throws Exception {
         if(file == null) return false;
         if(file.isDirectory()) {
-            if(!visitedDirectories.contains(file)) {
-                visitedDirectories.add(file);
+            if(!visitedDirectories.contains(file.getAbsolutePath())) {
+                visitedDirectories.add(file.getAbsolutePath());
                 log("Extracting from folder '"+file+"'.");
                 File[] fs = file.listFiles();
                 for(int i=0; i<fs.length; i++) {
@@ -276,7 +279,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     public boolean extractTopicsFromMBOX(File file, TopicMap topicMap) throws Exception {
         extractedEmails = 0;
         try {
-            visitedEmailFolders = new ArrayList();
+            visitedEmailFolders = new ArrayList<>();
             Properties properties = new Properties();
             properties.setProperty("mstor.mbox.metadataStrategy", "none");
             
@@ -313,7 +316,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     public boolean extractTopicsFromDBX(File file, TopicMap topicMap) throws Exception {
         extractedEmails = 0;
         try {
-            visitedEmailFolders = new ArrayList();
+            visitedEmailFolders = new ArrayList<>();
             Properties properties = new Properties();
             
             log("Initializing DBX store '"+file.getName()+"'.");

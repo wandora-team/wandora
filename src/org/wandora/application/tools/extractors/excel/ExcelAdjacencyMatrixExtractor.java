@@ -24,8 +24,9 @@
 
 package org.wandora.application.tools.extractors.excel;
 
-import java.util.HashMap;
+
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -49,7 +50,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class ExcelAdjacencyMatrixExtractor extends AbstractExcelExtractor {
 
-    public static boolean ADD_CELL_VALUE_AS_PLAYER = false;
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static boolean ADD_CELL_VALUE_AS_PLAYER = false;
     public static boolean ADD_CELL_COLOR_AS_PLAYER = false;
     
     public static boolean INTERPRET_FALSE_AS_EMPTY_CELL = true;
@@ -61,8 +65,8 @@ public class ExcelAdjacencyMatrixExtractor extends AbstractExcelExtractor {
     
     
        
-    private HashMap<String,String> columnLabels = new HashMap();
-    private HashMap<String,String> rowLabels = new HashMap();
+    private Map<String,String> columnLabels = new LinkedHashMap<>();
+    private Map<String,String> rowLabels = new LinkedHashMap<>();
             
     
     
@@ -101,8 +105,8 @@ public class ExcelAdjacencyMatrixExtractor extends AbstractExcelExtractor {
     public void processSheet(HSSFSheet sheet, TopicMap tm) {
         Iterator<Row> rowIterator = sheet.iterator();
         boolean isFirst = true;
-        columnLabels = new HashMap();
-        rowLabels = new HashMap();
+        columnLabels = new LinkedHashMap<>();
+        rowLabels = new LinkedHashMap<>();
         while(rowIterator.hasNext() && !forceStop()) {
             Row row = rowIterator.next();
             if(isFirst) {
@@ -120,8 +124,8 @@ public class ExcelAdjacencyMatrixExtractor extends AbstractExcelExtractor {
     public void processSheet(XSSFSheet sheet, TopicMap tm) {
         Iterator<Row> rowIterator = sheet.iterator();
         boolean isFirst = true;
-        columnLabels = new HashMap();
-        rowLabels = new HashMap();
+        columnLabels = new LinkedHashMap<>();
+        rowLabels = new LinkedHashMap<>();
         while(rowIterator.hasNext() && !forceStop()) {
             Row row = rowIterator.next();
             if(isFirst) {

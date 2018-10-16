@@ -25,9 +25,12 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
-import org.wandora.application.tools.extractors.*;
+
+
 import org.wandora.topicmap.*;
 import java.util.*;
+
+
 /**
  *
  * @author  olli
@@ -57,12 +60,12 @@ public class CreateAndAssociateFieldProcessor implements FieldProcessor {
     
     public void processDatum(java.util.Map datum, String field, org.wandora.topicmap.TopicMap tm, org.wandora.piccolo.Logger logger) throws ExtractionException {
         try{
-            Collection thists=helper.getOrCreateTopics(datum, field, tm,setBaseName);
+            Collection<Topic> thists=helper.getOrCreateTopics(datum, field, tm,setBaseName);
             if(thists==null){
                 logger.writelog("WRN","Null value for field "+field);
                 return;
             }
-            Collection otherts=helper.getOrCreateTopics(datum,otherField,tm,false);
+            Collection<Topic> otherts=helper.getOrCreateTopics(datum,otherField,tm,false);
             if(otherts==null){
                 logger.writelog("WRN","Null value for field "+otherField);
                 return;
@@ -70,11 +73,11 @@ public class CreateAndAssociateFieldProcessor implements FieldProcessor {
 
             Topic type=null;
             if(topicType!=null) type=helper.getOrCreateTopic(tm,topicType);
-            Iterator iter=thists.iterator();
+            Iterator<Topic> iter=thists.iterator();
             while(iter.hasNext()){
                 Topic thist=(Topic)iter.next();
                 if(type!=null) thist.addType(type);
-                Iterator iter2=otherts.iterator();
+                Iterator<Topic> iter2=otherts.iterator();
                 while(iter2.hasNext()){
                     Topic othert=(Topic)iter2.next();
                     Association a=tm.createAssociation(helper.getOrCreateTopic(tm,associationType));
@@ -82,7 +85,10 @@ public class CreateAndAssociateFieldProcessor implements FieldProcessor {
                     a.addPlayer(othert,helper.getOrCreateTopic(tm,otherRole));
                 }
             }
-        }catch(TopicMapException tme){throw new ExtractionException(tme);}
+        }
+        catch(TopicMapException tme){
+        	throw new ExtractionException(tme);
+    	}
     }
     
 }

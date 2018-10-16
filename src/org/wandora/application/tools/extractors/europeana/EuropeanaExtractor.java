@@ -33,7 +33,11 @@ import org.wandora.application.contexts.Context;
 
 public class EuropeanaExtractor extends AbstractEuropeanaExtractor {
     
-    private EuropeanaExtractorUI ui = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private EuropeanaExtractorUI ui = null;
 
     
     @Override

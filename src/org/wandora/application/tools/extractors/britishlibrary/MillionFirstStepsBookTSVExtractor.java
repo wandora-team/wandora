@@ -30,8 +30,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
-import org.wandora.application.Wandora;
-import static org.wandora.application.tools.extractors.britishlibrary.AbstractMillionFirstStepsExtractor.defaultEncoding;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -46,8 +44,12 @@ import org.wandora.topicmap.memory.TopicMapImpl;
 
 public class MillionFirstStepsBookTSVExtractor extends AbstractMillionFirstStepsExtractor {
     
-       
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	@Override
     public String getName() {
         return "BL's million first steps book TSV extractor";
     }

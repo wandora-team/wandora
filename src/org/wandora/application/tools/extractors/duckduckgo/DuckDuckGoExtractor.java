@@ -22,17 +22,14 @@
 
 package org.wandora.application.tools.extractors.duckduckgo;
 
-import java.io.File;
-import java.net.URL;
+
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.CLOSE;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
-import org.wandora.topicmap.TopicMap;
+
 
 /**
  *
@@ -42,7 +39,11 @@ import org.wandora.topicmap.TopicMap;
 
 public class DuckDuckGoExtractor extends AbstractWandoraTool {
     
-    private DuckDuckGoExtractorUI ui = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private DuckDuckGoExtractorUI ui = null;
     
 
     @Override

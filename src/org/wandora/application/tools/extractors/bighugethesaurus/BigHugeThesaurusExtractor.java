@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.bighugethesaurus;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 
 import javax.swing.*;
@@ -39,7 +38,12 @@ import javax.swing.*;
  */
 public class BigHugeThesaurusExtractor extends AbstractWandoraTool {
 
-    private static BigHugeThesaurusSelector selector = null;
+
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private static BigHugeThesaurusSelector selector = null;
 
     @Override
     public String getName() {

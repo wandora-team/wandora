@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.dbpedia;
 
 
 import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
@@ -42,22 +41,26 @@ import java.net.*;
  */
 public class DbpediaExtractorSelector extends JDialog {
 
-    public static String webServiceBase = "http://www.dbpedia.org/";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static String webServiceBase = "http://www.dbpedia.org/";
     public static String sparqlServiceBase = "http://dbpedia.org/sparql/";
 
-    private Wandora admin = null;
+    private Wandora wandora = null;
     private Context context = null;
     private boolean accepted = false;
 
 
     /** Creates new form OpenCycExtractorSelector */
-    public DbpediaExtractorSelector(Wandora admin) {
-        super(admin, true);
+    public DbpediaExtractorSelector(Wandora wandora) {
+        super(wandora, true);
         initComponents();
         setTitle("DBpedia extractors");
         setSize(450,300);
-        admin.centerWindow(this);
-        this.admin = admin;
+        wandora.centerWindow(this);
+        this.wandora = wandora;
         accepted = false;
     }
 
@@ -65,7 +68,7 @@ public class DbpediaExtractorSelector extends JDialog {
 
 
     public void setWandora(Wandora wandora) {
-        this.admin = wandora;
+        this.wandora = wandora;
     }
 
     public void setContext(Context context) {

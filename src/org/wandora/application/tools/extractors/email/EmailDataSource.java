@@ -21,16 +21,17 @@
  * 
  * EmailDataSource.java
  *
- * Created on 6. heinäkuuta 2005, 12:11
+ * Created on 6. heinï¿½kuuta 2005, 12:11
  */
 
 package org.wandora.application.tools.extractors.email;
+
+
 import org.wandora.application.tools.extractors.datum.ConfigurableDataSource;
 import org.wandora.application.tools.extractors.datum.DataStructure;
 import org.wandora.application.tools.extractors.datum.ExtractTool;
 import org.wandora.application.tools.extractors.datum.ExtractionException;
 import java.util.*;
-import java.io.*;
 import org.wandora.utils.*;
 import javax.mail.*;
 

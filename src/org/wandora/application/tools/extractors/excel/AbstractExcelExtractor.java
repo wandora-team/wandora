@@ -30,9 +30,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import javax.swing.Icon;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -40,22 +38,14 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.RichTextString;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
-import static org.wandora.application.tools.extractors.AbstractExtractor.FILE_EXTRACTOR;
-import static org.wandora.application.tools.extractors.AbstractExtractor.RAW_EXTRACTOR;
-import static org.wandora.application.tools.extractors.AbstractExtractor.URL_EXTRACTOR;
-import static org.wandora.application.tools.importers.graphs.AdjacencyListImport.SI_PREFIX;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
@@ -71,8 +61,10 @@ import org.wandora.topicmap.XTMPSI;
 
 
 public abstract class AbstractExcelExtractor extends AbstractExtractor implements WandoraTool {
-    
-    public static String DEFAULT_LANG = "en";
+
+	private static final long serialVersionUID = 1L;
+	
+	public static String DEFAULT_LANG = "en";
     
     
     

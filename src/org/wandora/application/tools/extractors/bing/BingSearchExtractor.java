@@ -29,7 +29,7 @@ import java.util.HashMap;
 import org.xml.sax.*;
 
 import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+
 
 
 
@@ -41,7 +41,10 @@ public class BingSearchExtractor extends BingSearchResultExtractor {
 
 
 
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getName() {
         return "Bing search extractor";
     }

@@ -40,7 +40,11 @@ import org.wandora.topicmap.TopicMapException;
 
 public class AbstractDiscogsExtractor  extends AbstractExtractor {
 
-    // Default language of occurrences and variant names.
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	// Default language of occurrences and variant names.
     public static String LANG = "en";
     public static String LANGUAGE_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     

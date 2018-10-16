@@ -32,18 +32,11 @@ import org.wandora.application.tools.extractors.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.TMBox;
-import org.wandora.piccolo.utils.crawler.*;
-import org.wandora.piccolo.utils.crawler.handlers.*;
-import org.wandora.utils.swing.*;
-import org.wandora.utils.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.regex.*;
+
 
 
 /**
@@ -51,8 +44,11 @@ import java.util.regex.*;
  * @author olli
  */
 public class BibtexExtractor extends AbstractExtractor implements WandoraTool {
-    
-    private String baseLocator = "http://wandora.org/si/bibtex/";
+
+
+	private static final long serialVersionUID = 1L;
+	
+	private String baseLocator = "http://wandora.org/si/bibtex/";
     private String defaultEncoding = "ISO-8859-1";
 
     /** Creates a new instance of BibtexExtractor */

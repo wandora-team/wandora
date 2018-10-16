@@ -30,7 +30,6 @@ package org.wandora.application.tools.extractors.bing;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
@@ -43,7 +42,12 @@ import java.net.*;
  */
 public class BingExtractorSelector extends javax.swing.JDialog {
 
-    private Wandora wandora = null;
+
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private Wandora wandora = null;
     private boolean accepted = false;
     private Context context = null;
 

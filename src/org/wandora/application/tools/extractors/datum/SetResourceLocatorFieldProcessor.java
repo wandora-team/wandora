@@ -25,9 +25,12 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
+
+
 import org.wandora.topicmap.*;
 import org.wandora.piccolo.Logger;
 import java.util.*;
+
 
 /**
  *

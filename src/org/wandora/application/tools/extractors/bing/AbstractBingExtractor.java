@@ -39,7 +39,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.application.gui.*;
 import javax.swing.*;
@@ -56,7 +55,11 @@ import org.wandora.application.tools.GenericOptionsDialog;
  */
 public abstract class AbstractBingExtractor extends AbstractExtractor {
 
-    protected boolean EXTRACT_RELEVANCE = true;
+
+	private static final long serialVersionUID = 1L;
+
+
+	protected boolean EXTRACT_RELEVANCE = true;
 
 
     protected String defaultEncoding = "ISO-8859-1";

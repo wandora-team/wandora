@@ -25,10 +25,11 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
-import org.wandora.application.tools.extractors.*;
+
+
 import org.wandora.topicmap.*;
-import org.wandora.piccolo.Logger;
 import java.util.*;
+
 /**
  *
  * @author  olli
@@ -90,18 +91,18 @@ public class ExtractionHelper implements SIMaker {
         }
         else{
             String si=makeSI(field,((String)val).trim());
-            Vector v=new Vector();
+            Vector<Topic> v=new Vector<>();
             Topic t=getOrCreateTopic(tm,si);
             if(setBaseName) t.setBaseName(((String)val).trim());
             return t;
         }        
     }
     
-    public Collection getOrCreateTopics(Map datum,String field,TopicMap tm) throws TopicMapException {
+    public Collection<Topic> getOrCreateTopics(Map datum,String field,TopicMap tm) throws TopicMapException {
         return getOrCreateTopics(datum,field,tm,false);
     }
     
-    public Collection getOrCreateTopics(Map datum,String field,TopicMap tm,boolean setBaseName) throws TopicMapException {
+    public Collection<Topic> getOrCreateTopics(Map datum,String field,TopicMap tm,boolean setBaseName) throws TopicMapException {
         Object val=datum.get(field);
         if(val==null){
             System.out.println("Extraction helper can't find field '"+field+"'.");
@@ -111,7 +112,7 @@ public class ExtractionHelper implements SIMaker {
         if(val instanceof Collection) {
             Collection c=(Collection)val;
             Iterator iter=c.iterator();
-            Vector v=new Vector();
+            Vector<Topic> v=new Vector<>();
             while(iter.hasNext()){
                 String subval=(String)iter.next();
                 String si=makeSI(field,subval);
@@ -124,7 +125,7 @@ public class ExtractionHelper implements SIMaker {
         }
         else {
             String si=makeSI(field,((String)val).trim());
-            Vector v=new Vector();
+            Vector<Topic> v=new Vector<>();
             Topic t=getOrCreateTopic(tm,si);
             if(setBaseName) t.setBaseName(((String)val).trim());
             v.add(t);

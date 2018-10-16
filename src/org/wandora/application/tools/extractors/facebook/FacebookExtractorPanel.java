@@ -26,9 +26,7 @@
 package org.wandora.application.tools.extractors.facebook;
 
 
-import org.wandora.*;
 import org.wandora.application.*;
-import org.wandora.application.tools.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.topicmap.*;
@@ -47,7 +45,10 @@ import java.util.*;
  */
 public class FacebookExtractorPanel extends javax.swing.JPanel {
 
-    public static final String defaultAccessTokenText = "click here to paste your access token...";
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String defaultAccessTokenText = "click here to paste your access token...";
 
     public static final int CONFIRM_TOKEN = 0;
     public static final int INTRO = 1;

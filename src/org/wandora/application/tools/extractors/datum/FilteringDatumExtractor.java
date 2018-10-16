@@ -25,7 +25,11 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
+
+
 import java.util.*;
+
+
 /**
  *
  * @author  olli
@@ -86,7 +90,7 @@ public class FilteringDatumExtractor implements DatumExtractor {
         }
         
         iter=datum.entrySet().iterator();
-        HashMap newMap=new HashMap();
+        HashMap newMap=new LinkedHashMap();
         while(iter.hasNext()){
             Map.Entry e=(Map.Entry)iter.next();
             Object key=e.getKey();

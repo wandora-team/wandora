@@ -23,7 +23,6 @@
 
 package org.wandora.application.tools.extractors.excel;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -34,7 +33,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.GenericOptionsDialog;
-import static org.wandora.application.tools.extractors.excel.ExcelAdjacencyListExtractor.FIRST_ROW_CONTAINS_ROLES;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -49,7 +47,10 @@ import org.wandora.topicmap.XTMPSI;
 
 public class ExcelTopicTreeExtractor extends AbstractExcelExtractor {
 
-    public static boolean MAKE_SUPER_SUB_CLASS_RELATION = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static boolean MAKE_SUPER_SUB_CLASS_RELATION = false;
     public static boolean MAKE_CLASS_INSTANCE_RELATION = true;
     public static boolean MAKE_EXCEL_RELATION = false;
     public static boolean MAKE_CUSTOM_RELATION = false;

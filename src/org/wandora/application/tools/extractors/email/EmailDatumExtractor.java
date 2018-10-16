@@ -21,23 +21,21 @@
  * 
  * IdentityDatumExtractor.java
  *
- * Created on 12. heinäkuuta 2005, 13:44
+ * Created on 12. heinï¿½kuuta 2005, 13:44
  */
 
 package org.wandora.application.tools.extractors.email;
 
-import org.wandora.application.tools.extractors.*;
+
 import org.wandora.application.*;
 import org.wandora.application.tools.extractors.datum.DataStructure;
 import org.wandora.application.tools.extractors.datum.DatumExtractor;
 import org.wandora.application.tools.extractors.datum.ExtractionException;
-import org.wandora.application.tools.oldies.UploadFileOld;
 import java.awt.image.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
-import org.wandora.utils.*;
 import java.awt.Graphics;
-import java.io.*;
+
 
 /**
  *

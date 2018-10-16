@@ -28,18 +28,14 @@ import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.*;
 import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
+
 
 import java.util.*;
 import java.io.*;
 import java.net.*;
-import java.awt.*;
 import javax.swing.*;
 
-import java.net.*;
 import org.json.*;
 
 
@@ -49,7 +45,11 @@ import org.json.*;
  */
 public class FacebookAPIExtractor  extends AbstractExtractor {
 
-    private FacebookExtractorPanel fbep = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private FacebookExtractorPanel fbep = null;
     private String defaultEncoding = "ISO-8859-1";
     private String accessToken = null;
     private int browseDepth = 1;

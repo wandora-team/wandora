@@ -37,8 +37,13 @@ import org.wandora.application.Wandora;
 
 public class DiscogsSearchExtractor extends AbstractDiscogsExtractor {
         
-    private static String defaultEncoding = "UTF-8";
+ 
+	private static final long serialVersionUID = 1L;
+	
+	private static String defaultEncoding = "UTF-8";
     
+	
+	
     public static String doUrl (URL url) throws IOException {
         StringBuilder sb = new StringBuilder(5000);
         

@@ -32,11 +32,10 @@ import org.wandora.application.gui.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
-import java.text.*;
+
 
 
 /**
@@ -44,7 +43,10 @@ import java.text.*;
  * @author akivela
  */
 public class BigHugeThesaurusSelector extends javax.swing.JDialog {
-    public static String defaultLanguage = "en";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String defaultLanguage = "en";
 
     public static String apiURL = "http://words.bighugelabs.com/api/2/__2__/__1__/xml";
 

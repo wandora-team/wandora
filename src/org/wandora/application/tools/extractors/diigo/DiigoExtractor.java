@@ -31,7 +31,6 @@ package org.wandora.application.tools.extractors.diigo;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 
 import javax.swing.*;
@@ -44,7 +43,9 @@ import javax.swing.*;
  */
 public class DiigoExtractor extends AbstractWandoraTool {
 
-    private static DiigoExtractorSelector selector = null;
+	private static final long serialVersionUID = 1L;
+	
+	private static DiigoExtractorSelector selector = null;
     
     @Override
     public String getName() {
@@ -65,14 +66,14 @@ public class DiigoExtractor extends AbstractWandoraTool {
     
     
     
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         int counter = 0;   
         try {
             if(selector == null) {
-                selector = new DiigoExtractorSelector(admin);
+                selector = new DiigoExtractorSelector(wandora);
             }
             selector.setAccepted(false);
-            selector.setWandora(admin);
+            selector.setWandora(wandora);
             selector.setContext(context);
             selector.setVisible(true);
             if(selector.wasAccepted()) {
@@ -80,7 +81,7 @@ public class DiigoExtractor extends AbstractWandoraTool {
                 WandoraTool extractor = selector.getWandoraTool(this);
                 if(extractor != null) {
                     extractor.setToolLogger(getDefaultLogger());
-                    extractor.execute(admin, context);
+                    extractor.execute(wandora, context);
                 }
             }
             else {

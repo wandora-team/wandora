@@ -21,6 +21,7 @@
  */
 package org.wandora.application.tools.extractors.duckduckgo;
 
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -43,8 +44,10 @@ import org.wandora.topicmap.TopicMap;
 
 
 public class DuckDuckGoZeroClickExtractor  extends AbstractDuckDuckGoExtractor {
-    
-    private static final String API_SI 
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String API_SI 
         = "http://api.duckduckgo.com";
     
     private static final String API_NAME = "DuckDuckGo API";    

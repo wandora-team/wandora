@@ -32,20 +32,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.swing.Icon;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.wandora.application.Wandora;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.WandoraToolType;
-import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
-import static org.wandora.application.tools.extractors.AbstractExtractor.FILE_EXTRACTOR;
-import static org.wandora.application.tools.extractors.AbstractExtractor.URL_EXTRACTOR;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
+
 
 /**
  *
@@ -56,7 +49,12 @@ import org.wandora.topicmap.TopicMapException;
 public class ExcelExtractor extends AbstractExtractor {
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	@Override
     public String getName() {
         return "Excel extractor";
     }
@@ -223,8 +221,8 @@ public class ExcelExtractor extends AbstractExtractor {
     
     
     
-    public Collection getSheets(HSSFWorkbook workbook) {
-        ArrayList<String> sheets = new ArrayList();
+    public Collection<String> getSheets(HSSFWorkbook workbook) {
+        ArrayList<String> sheets = new ArrayList<>();
         int numberOfSheets = workbook.getNumberOfSheets();
         for(int i=0; i<numberOfSheets && !forceStop(); i++) {
             sheets.add(workbook.getSheetName(i));

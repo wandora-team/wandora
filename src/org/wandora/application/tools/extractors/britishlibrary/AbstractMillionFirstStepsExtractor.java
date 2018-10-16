@@ -48,9 +48,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public abstract class AbstractMillionFirstStepsExtractor extends AbstractExtractor {
     
-    
-    
-    protected static String defaultEncoding = "UTF-8";
+
+	private static final long serialVersionUID = 1L;
+
+	protected static String defaultEncoding = "UTF-8";
     protected static String defaultLang = "en";
     
 

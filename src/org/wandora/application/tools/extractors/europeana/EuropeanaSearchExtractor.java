@@ -50,7 +50,10 @@ import org.wandora.utils.IObox;
 public class EuropeanaSearchExtractor extends AbstractEuropeanaExtractor {
     
     
-    private static String defaultEncoding = "UTF-8";
+	private static final long serialVersionUID = 1L;
+	
+	
+	private static String defaultEncoding = "UTF-8";
     private static String defaultLang = "en";
     private static String currentURL = null;
     

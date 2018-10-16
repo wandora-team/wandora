@@ -25,11 +25,11 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
-import org.wandora.application.tools.extractors.*;
+
 import java.util.*;
-import java.net.*;
-import java.io.*;
 import javax.swing.*;
+
+
 /**
  *
  * DataSource that can be used to process a predetermined list of URLs or a list of urls

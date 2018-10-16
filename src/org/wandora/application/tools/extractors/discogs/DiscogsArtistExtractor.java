@@ -41,7 +41,11 @@ import org.wandora.utils.IObox;
 
 public class DiscogsArtistExtractor extends AbstractDiscogsExtractor {
     
-    private static String defaultLang = "en";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private static String defaultLang = "en";
     private static String currentURL = null;
     
     public DiscogsArtistExtractor () {
@@ -122,6 +126,8 @@ public class DiscogsArtistExtractor extends AbstractDiscogsExtractor {
             log("API returned no results.");
         }
     }
+    
+    
     
     public void parseResult(JSONObject result, TopicMap tm) throws JSONException, TopicMapException {
         

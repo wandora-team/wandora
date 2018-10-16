@@ -27,7 +27,6 @@ import org.wandora.topicmap.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
 
 import java.io.*;
 import javax.swing.*;
@@ -42,7 +41,9 @@ import org.xml.sax.*;
  */
 public class XMLBigHugeThesaurusExtractor  extends AbstractExtractor {
 
-    public static final boolean INCLUDE_PART_OF_SPEECH = true;
+	private static final long serialVersionUID = 1L;
+	
+	public static final boolean INCLUDE_PART_OF_SPEECH = true;
     public static final boolean RELATIONSHIP_AS_ASSOCIATION_TYPE = true;
 
     private String queryTerm = null;

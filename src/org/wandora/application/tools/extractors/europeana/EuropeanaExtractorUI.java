@@ -41,8 +41,11 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 public class EuropeanaExtractorUI extends javax.swing.JPanel {
-    
-    private Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
     private Context context = null;
@@ -80,9 +83,11 @@ public class EuropeanaExtractorUI extends javax.swing.JPanel {
         dialog.setVisible(true);
     }
 
+    
+    
     public WandoraTool[] getExtractors(EuropeanaExtractor tool) throws TopicMapException {
         WandoraTool wt = null;
-        ArrayList<WandoraTool> wts = new ArrayList();
+        ArrayList<WandoraTool> wts = new ArrayList<>();
 
         // ***** SEARCH *****
         String query = searchTextField.getText();
@@ -105,6 +110,8 @@ public class EuropeanaExtractorUI extends javax.swing.JPanel {
         return wts.toArray(new WandoraTool[]{});
     }
 
+    
+    
     protected static String urlEncode(String str) {
         try {
             str = URLEncoder.encode(str, "utf-8");

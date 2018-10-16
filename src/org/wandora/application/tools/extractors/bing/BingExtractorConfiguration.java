@@ -27,7 +27,7 @@
 package org.wandora.application.tools.extractors.bing;
 
 
-import javax.swing.*;
+
 import org.wandora.application.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.utils.*;
@@ -37,7 +37,10 @@ import org.wandora.utils.*;
  * @author akivela
  */
 public class BingExtractorConfiguration extends javax.swing.JDialog {
-    private WandoraTool tool = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private WandoraTool tool = null;
     private Wandora wandora = null;
     private Options options = null;
 

@@ -27,7 +27,6 @@
 package org.wandora.application.tools.extractors.datum;
 
 
-import org.wandora.application.tools.extractors.datum.*;
 import org.wandora.application.*;
 import java.util.*;
 import java.util.regex.*;

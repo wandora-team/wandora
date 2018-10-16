@@ -33,7 +33,6 @@ import org.wandora.topicmap.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
 
 import java.io.*;
 import javax.swing.*;
@@ -67,8 +66,10 @@ import org.xml.sax.*;
  */
 
 public class DublinCoreXMLExtractor extends AbstractExtractor {
+	
+	private static final long serialVersionUID = 1L;
 
-    public static boolean IDENTIFIER_AS_SI = true;
+	public static boolean IDENTIFIER_AS_SI = true;
 
     public static boolean DESCRIPTION_AS_PLAYER = false;
     public static boolean DESCRIPTION_AS_OCCURRENCE = true;

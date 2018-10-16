@@ -31,17 +31,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Iterator;
-import javax.swing.Icon;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.UIBox;
-import org.wandora.application.tools.extractors.AbstractExtractor;
-import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
@@ -55,9 +48,13 @@ import org.wandora.utils.IObox;
 
 public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionFirstStepsExtractor {
     
-    
-   
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	@Override
     public String getName() {
         return "BL's million first steps book JSON extractor";
     }

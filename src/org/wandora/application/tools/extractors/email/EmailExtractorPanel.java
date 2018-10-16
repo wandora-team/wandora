@@ -21,7 +21,7 @@
  * 
  * EmailExtractorPanel.java
  *
- * Created on 5. heinäkuuta 2005, 14:43
+ * Created on 5. heinï¿½kuuta 2005, 14:43
  */
 
 package org.wandora.application.tools.extractors.email;
@@ -38,22 +38,21 @@ import javax.mail.internet.*;
 import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;
-import java.util.regex.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.PictureView;
-import com.sun.mail.pop3.POP3Folder;
-import org.wandora.utils.*;
 
 /**
  *
  * @author  olli
  */
 public class EmailExtractorPanel extends javax.swing.JPanel {
-    
-    private DefaultTableModel tableModel;
+
+
+	private static final long serialVersionUID = 1L;
+	
+	private DefaultTableModel tableModel;
     private Vector<BufferedImage> fullImages;
     private Vector<String> uids;
     private Vector<String> senders;
@@ -162,7 +161,9 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
     }
     
     private class ImageViewerCellEditor extends AbstractCellEditor implements TableCellEditor {
-        private JButton button;
+
+		private static final long serialVersionUID = 1L;
+		private JButton button;
         private ImageIcon currentImage;
         private BufferedImage fullImage;
         public ImageViewerCellEditor(){
@@ -186,8 +187,13 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         }
     }
     
+    
+    
+    
     public static class ImageTableRenderer extends JComponent {
-        private java.awt.Image img;
+
+		private static final long serialVersionUID = 1L;
+		private java.awt.Image img;
         public ImageTableRenderer(){}
         public void setImage(java.awt.Image img){
             this.img=img;
@@ -196,6 +202,9 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
             g.drawImage(img,0,0,this);
         }
     }
+    
+    
+    
     
     public static class EmailSession{
         public Session session;

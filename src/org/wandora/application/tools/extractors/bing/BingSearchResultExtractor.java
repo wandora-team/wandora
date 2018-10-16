@@ -36,13 +36,19 @@ import org.xml.sax.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
+
+
 /**
  *
  * @author akivela
  */
 public class BingSearchResultExtractor extends AbstractBingExtractor {
 
-    private String searchStr = null;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private String searchStr = null;
 
 
 

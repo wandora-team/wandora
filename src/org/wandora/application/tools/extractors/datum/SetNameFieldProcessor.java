@@ -25,8 +25,12 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
+
+
 import org.wandora.topicmap.*;
 import java.util.*;
+
+
 /**
  *
  * @author  olli
@@ -54,7 +58,7 @@ public class SetNameFieldProcessor implements FieldProcessor {
     
     public void processDatum(java.util.Map datum, String field, org.wandora.topicmap.TopicMap tm, org.wandora.piccolo.Logger logger) throws ExtractionException {
         try{
-            HashSet tscope=new HashSet();
+            HashSet tscope=new LinkedHashSet();
             Collection ts=helper.getOrCreateTopics(datum, targetField, tm);
             if(ts==null){
                 logger.writelog("WRN","Null value for field "+targetField);

@@ -35,7 +35,7 @@ import org.wandora.application.gui.*;
 import org.wandora.application.*;
 
 import javax.swing.*;
-import org.wandora.topicmap.TopicMap;
+
 
 
 /**
@@ -45,8 +45,11 @@ import org.wandora.topicmap.TopicMap;
 public class DbpediaExtractor extends AbstractWandoraTool {
 
 
-
-    private static DbpediaExtractorSelector selector = null;
+	
+	private static final long serialVersionUID = 1L;
+	
+	
+	private static DbpediaExtractorSelector selector = null;
 
     @Override
     public String getName() {
@@ -93,7 +96,9 @@ public class DbpediaExtractor extends AbstractWandoraTool {
         catch(Exception e) {
             singleLog(e);
         }
-        if(selector != null && selector.wasAccepted()) setState(WAIT);
+        if(selector != null && selector.wasAccepted()) {
+        	setState(WAIT);
+        }
     }
 
 

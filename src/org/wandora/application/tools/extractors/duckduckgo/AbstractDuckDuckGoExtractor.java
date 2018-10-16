@@ -40,7 +40,11 @@ import org.wandora.topicmap.TopicMapException;
 
 public abstract class AbstractDuckDuckGoExtractor extends AbstractExtractor{
     
-    private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     private static final String LAMBDA_SI = "https://lambda-face-detection-and-recognition.p.mashape.com";
     
     private static final String TAG_SI = "http://wandora.org/si/mashape/lambda/tag";
@@ -53,17 +57,17 @@ public abstract class AbstractDuckDuckGoExtractor extends AbstractExtractor{
     
     @Override
     public String getName() {
-        return "Abstract Mashape extractor";
+        return "Abstract DuckDuckGo extractor";
     }
 
     @Override
     public String getDescription(){
-        return "Abstract extractor for Mashapi.";
+        return "Abstract extractor for DuckDuckGo.";
     }
 
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/extract_mashape.png");
+        return UIBox.getIcon("gui/icons/extract_duckduckgo.png");
     }
 
     private final String[] contentTypes=new String[] { "text/plain", "text/json", "application/json" };

@@ -21,7 +21,7 @@
  * 
  * EmailExtractorDialog.java
  *
- * Created on 5. heinäkuuta 2005, 14:43
+ * Created on 5. heinï¿½kuuta 2005, 14:43
  */
 
 package org.wandora.application.tools.extractors.email;
@@ -31,8 +31,11 @@ package org.wandora.application.tools.extractors.email;
  * @author  olli
  */
 public class EmailExtractorDialog extends javax.swing.JDialog {
-    
-    /** Creates new form EmailExtractorDialog */
+
+	
+	private static final long serialVersionUID = 1L;
+
+	/** Creates new form EmailExtractorDialog */
     public EmailExtractorDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

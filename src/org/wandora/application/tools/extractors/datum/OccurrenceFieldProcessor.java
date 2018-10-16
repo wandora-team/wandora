@@ -25,8 +25,12 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
+
+
 import org.wandora.topicmap.*;
 import java.util.*;
+
+
 /**
  *
  * @author  olli

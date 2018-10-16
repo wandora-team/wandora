@@ -39,7 +39,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
 
-    private boolean accepted = false;
+	private static final long serialVersionUID = 1L;
+	
+	
+	private boolean accepted = false;
     private JDialog dialog = null;
     private Context context = null;
     private Wandora wandora = null;
@@ -74,6 +77,8 @@ public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
         dialog.setVisible(true);
     }
 
+    
+    
     public WandoraTool[] getExtractors(DuckDuckGoExtractor tool) throws TopicMapException {
         
         WandoraTool wt;

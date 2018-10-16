@@ -32,7 +32,11 @@ package org.wandora.application.tools.extractors.datum;
  */
 public class ExtractionException extends Exception {
     
-    /** Creates a new instance of ExtractionException */
+
+	private static final long serialVersionUID = 1L;
+
+	
+	/** Creates a new instance of ExtractionException */
     public ExtractionException(String message) {
         super(message);
     }

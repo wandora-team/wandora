@@ -28,9 +28,7 @@
 package org.wandora.application.tools.extractors.diigo;
 
 
-import org.wandora.application.tools.extractors.ovi.*;
 import org.wandora.application.contexts.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
 
@@ -45,7 +43,11 @@ import java.net.*;
  * @author  akivela
  */
 public class DiigoExtractorSelector extends JDialog {
-    public static String defaultLanguage = "en";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static String defaultLanguage = "en";
     private String defaultEncoding = "UTF-8";
     
     private static final String diigoURL = "http://api2.diigo.com/";
@@ -54,7 +56,7 @@ public class DiigoExtractorSelector extends JDialog {
     private static final String diigoSearchURL=diigoURL+"bookmarks?ft=__1__&rows=__2__&start=__3__";
     private static final String diigoSiteURL=diigoURL+"bookmarks?site=__1__&rows=__2__&start=__3__";
 
-    private Wandora admin = null;
+    private Wandora wandora = null;
     private Context context = null;
     private boolean accepted = false;
     
@@ -67,7 +69,7 @@ public class DiigoExtractorSelector extends JDialog {
         setTitle("Diigo extractor");
         setSize(400,300);
         admin.centerWindow(this);
-        this.admin = admin;
+        this.wandora = wandora;
         accepted = false;
     }
     
@@ -75,7 +77,7 @@ public class DiigoExtractorSelector extends JDialog {
 
 
     public void setWandora(Wandora wandora) {
-        this.admin = wandora;
+        this.wandora = wandora;
     }
     
     public void setContext(Context context) {

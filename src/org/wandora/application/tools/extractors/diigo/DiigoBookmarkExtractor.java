@@ -32,14 +32,12 @@ import java.io.*;
 import java.util.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
-import java.awt.*;
 import javax.swing.*;
 import java.text.*;
 
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.extractors.geonames.*;
 import org.wandora.topicmap.*;
 
 import org.json.*;
@@ -51,7 +49,11 @@ import org.json.*;
  * @author akivela
  */
 public class DiigoBookmarkExtractor extends AbstractExtractor {
-    private String defaultEncoding = "UTF-8";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private String defaultEncoding = "UTF-8";
     public static String defaultLanguage = "en";
     
     
@@ -153,7 +155,7 @@ public class DiigoBookmarkExtractor extends AbstractExtractor {
             boolean r = _extractTopicsFrom(s, topicMap);
             hlog("Waiting before next step...");
             try {
-                Thread.currentThread().sleep(8000);
+                Thread.sleep(8000);
             }
             catch(Exception e) {}
             return r;

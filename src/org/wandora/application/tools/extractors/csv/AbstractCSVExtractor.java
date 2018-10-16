@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.csv;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
-import java.net.URLEncoder;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -43,7 +42,11 @@ import org.wandora.utils.CSVParser.Table;
 
 public abstract class AbstractCSVExtractor extends AbstractExtractor implements WandoraTool {
 
-    protected static char csvStringCharacter = '"';
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected static char csvStringCharacter = '"';
     protected static char csvLineSeparator = '\n';
     protected static char csvValueSeparator = ',';
     protected static String csvEncoding = "UTF-8";

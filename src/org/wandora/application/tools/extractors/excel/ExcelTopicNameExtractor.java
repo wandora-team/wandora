@@ -29,6 +29,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
+
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -38,7 +40,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
@@ -53,13 +54,17 @@ import org.wandora.topicmap.XTMPSI;
 public class ExcelTopicNameExtractor extends AbstractExcelExtractor {
 
     
-    public static boolean FIRST_ROW_CONTAINS_LANGUAGES = true;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static boolean FIRST_ROW_CONTAINS_LANGUAGES = true;
     public static boolean CREATE_MISSING_LANGUAGE_TOPICS = true;
     
     public static boolean ADD_DISPLAY_TO_SCOPE = true;
     public static boolean ADD_SORT_TO_SCOPE = false;
     
-    private HashMap<String,String> languagesPerColumn = new HashMap();
+    private HashMap<String,String> languagesPerColumn = new HashMap<>();
     
     
     
@@ -99,7 +104,7 @@ public class ExcelTopicNameExtractor extends AbstractExcelExtractor {
     public void processSheet(HSSFSheet sheet, TopicMap tm) {
         Iterator<Row> rowIterator = sheet.iterator();
         boolean isFirst = true;
-        languagesPerColumn = new HashMap();
+        languagesPerColumn = new HashMap<>();
         while(rowIterator.hasNext() && !forceStop()) {
             Row row = rowIterator.next();
             if(isFirst && FIRST_ROW_CONTAINS_LANGUAGES) {
@@ -150,7 +155,7 @@ public class ExcelTopicNameExtractor extends AbstractExcelExtractor {
                             String langSI = languagesPerColumn.get(Integer.toString(cell.getColumnIndex()));
                             Topic lang = tm.getTopic(langSI);
                             if(lang == null) lang = getDefaultLanguageTopic(cell, tm);
-                            HashSet scope = new LinkedHashSet();
+                            Set<Topic> scope = new LinkedHashSet<>();
                             scope.add(lang);
                             if(ADD_DISPLAY_TO_SCOPE) scope.add(tm.getTopic(XTMPSI.DISPLAY));
                             if(ADD_SORT_TO_SCOPE) scope.add(tm.getTopic(XTMPSI.SORT));

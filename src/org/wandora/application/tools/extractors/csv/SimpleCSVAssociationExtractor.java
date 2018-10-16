@@ -45,7 +45,10 @@ public class SimpleCSVAssociationExtractor extends AbstractCSVExtractor {
 
     
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	
+	@Override
     public String getName() {
         return "Simple CSV association extractor";
     }

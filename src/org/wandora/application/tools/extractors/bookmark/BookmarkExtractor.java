@@ -25,7 +25,6 @@ package org.wandora.application.tools.extractors.bookmark;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
@@ -33,20 +32,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.Icon;
 
-import org.apache.commons.io.IOUtils;
-
 import org.jsoup.*;
-import org.jsoup.parser.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 import org.wandora.application.gui.UIBox;
 
 
 import org.wandora.application.tools.extractors.AbstractExtractor;
-import static org.wandora.application.tools.extractors.AbstractExtractor.FILE_EXTRACTOR;
-import static org.wandora.application.tools.extractors.AbstractExtractor.URL_EXTRACTOR;
 import org.wandora.application.tools.extractors.ExtractHelper;
-import static org.wandora.application.tools.extractors.list.DefinitionListExtractor.contentTypes;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
@@ -62,7 +55,9 @@ import org.wandora.topicmap.XTMPSI;
 
 public class BookmarkExtractor extends AbstractExtractor {
 
-    private String ROOT_SI = "http://wandora.org/si/bookmark";
+	private static final long serialVersionUID = 1L;
+
+	private String ROOT_SI = "http://wandora.org/si/bookmark";
     private String HREF_SI = "http://wandora.org/si/bookmark/href";
     private String ADD_SI  = "http://wandora.org/si/bookmark/added";
     private String MOD_SI  = "http://wandora.org/si/bookmark/modified";

@@ -46,7 +46,11 @@ import org.wandora.application.gui.simple.SimpleLabel;
 
 public class ExcelExtractorUI extends javax.swing.JPanel {
 
-    private JDialog myDialog = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private JDialog myDialog = null;
     private boolean accepted = false;
     private ArrayList<JComboBox> comboboxes = null;
             
@@ -66,7 +70,7 @@ public class ExcelExtractorUI extends javax.swing.JPanel {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         
         
-        comboboxes = new ArrayList();
+        comboboxes = new ArrayList<>();
         
         for(String sheet : sheets) {
             JLabel label = new SimpleLabel(sheet);
@@ -98,7 +102,7 @@ public class ExcelExtractorUI extends javax.swing.JPanel {
 
     
     public String[] getExtractors() {
-        ArrayList<String> extractors = new ArrayList();
+        ArrayList<String> extractors = new ArrayList<>();
         for(JComboBox combobox : comboboxes) {
             if(combobox != null) {
                 Object extractor = combobox.getSelectedItem();

@@ -21,13 +21,15 @@
  * 
  * ModifyFieldProcessor.java
  *
- * Created on 21. heinäkuuta 2005, 11:18
+ * Created on 21. heinï¿½kuuta 2005, 11:18
  */
 
 package org.wandora.application.tools.extractors.datum;
+
 import org.wandora.topicmap.*;
 import java.util.*;
 import java.util.regex.*;
+
 
 /**
  *

@@ -25,9 +25,13 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
-import org.wandora.application.tools.extractors.*;
+
+
+
 import org.wandora.topicmap.*;
 import java.util.*;
+
+
 /**
  *
  * @author  olli
@@ -51,7 +55,7 @@ public class AddTypeFieldProcessor implements FieldProcessor {
     }
     
     public void processDatum(java.util.Map datum, String field, TopicMap tm, org.wandora.piccolo.Logger logger) throws ExtractionException {
-        Collection types=null;
+        Collection<Topic> types=null;
         String tar=target;
         try{
             if(tar==null) tar=field;
@@ -63,18 +67,18 @@ public class AddTypeFieldProcessor implements FieldProcessor {
                 }
             }
             else{
-                types=new Vector();
+                types=new Vector<Topic>();
                 types.add(helper.getOrCreateTopic(tm,type));
             }
-            Collection c=helper.getOrCreateTopics(datum,tar,tm,false);
+            Collection<Topic> c=helper.getOrCreateTopics(datum,tar,tm,false);
             if(c==null){
                 logger.writelog("WRN","Null value for field "+tar);
                 return;
             }
-            Iterator iter=c.iterator();
+            Iterator<Topic> iter=c.iterator();
             while(iter.hasNext()){
                 Topic t=(Topic)iter.next();
-                Iterator iter2=types.iterator();
+                Iterator<Topic> iter2=types.iterator();
                 while(iter2.hasNext()){
                     Topic type=(Topic)iter2.next();
                     t.addType(type);

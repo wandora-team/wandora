@@ -26,6 +26,8 @@ import java.awt.Component;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -46,7 +48,11 @@ import org.wandora.topicmap.TopicMapException;
 
 public class DiscogsExtractorUI extends javax.swing.JPanel {
     
-    private boolean accepted = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private boolean accepted = false;
     private JDialog dialog = null;
     private Context context = null;
     private static final String DISCOGS_API_BASE = "http://api.discogs.com/database/search";
@@ -80,7 +86,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
     public WandoraTool[] getExtractors(DiscogsExtractor tool) throws TopicMapException {
         WandoraTool[] wtArray = null;
         WandoraTool wt = null;
-        ArrayList<WandoraTool> wts = new ArrayList();
+        List<WandoraTool> wts = new ArrayList<>();
         Component tab = TabsPane.getSelectedComponent();
         String extractUrl;
 

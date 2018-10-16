@@ -44,8 +44,10 @@ import java.util.*;
 
 
 public class ExtractTool extends AbstractWandoraTool implements WandoraTool {
-    
-    public boolean guiless = false;
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean guiless = false;
     
     protected DataSource dataSource;
     protected DatumExtractor datumExtractor;

@@ -25,6 +25,7 @@ package org.wandora.application.tools.extractors.excel;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -34,7 +35,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.GenericOptionsDialog;
-import static org.wandora.application.tools.extractors.excel.AbstractExcelExtractor.DEFAULT_LANG;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
@@ -48,10 +48,14 @@ import org.wandora.topicmap.XTMPSI;
 
 public class ExcelTopicOccurrenceExtractor extends AbstractExcelExtractor {
 
-    public static boolean FIRST_ROW_CONTAINS_OCCURRENCE_TYPES = true;
+
+	private static final long serialVersionUID = 1L;
+
+
+	public static boolean FIRST_ROW_CONTAINS_OCCURRENCE_TYPES = true;
     
     
-    private HashMap<String,String> occurrenceTypes = new HashMap();
+    private HashMap<String,String> occurrenceTypes = new LinkedHashMap<>();
     
     
     @Override
@@ -86,7 +90,7 @@ public class ExcelTopicOccurrenceExtractor extends AbstractExcelExtractor {
     public void processSheet(HSSFSheet sheet, TopicMap tm) {
         Iterator<Row> rowIterator = sheet.iterator();
         boolean isFirst = true;
-        occurrenceTypes = new HashMap();
+        occurrenceTypes = new HashMap<>();
         while(rowIterator.hasNext() && !forceStop()) {
             Row row = rowIterator.next();
             if(isFirst && FIRST_ROW_CONTAINS_OCCURRENCE_TYPES) {
@@ -104,7 +108,7 @@ public class ExcelTopicOccurrenceExtractor extends AbstractExcelExtractor {
     public void processSheet(XSSFSheet sheet, TopicMap tm) {
         Iterator<Row> rowIterator = sheet.iterator();
         boolean isFirst = true;
-        occurrenceTypes = new HashMap();
+        occurrenceTypes = new HashMap<>();
         while(rowIterator.hasNext() && !forceStop()) {
             Row row = rowIterator.next();
             if(isFirst && FIRST_ROW_CONTAINS_OCCURRENCE_TYPES) {

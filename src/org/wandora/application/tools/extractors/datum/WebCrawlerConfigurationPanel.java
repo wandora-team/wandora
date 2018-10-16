@@ -32,7 +32,11 @@ package org.wandora.application.tools.extractors.datum;
  */
 public class WebCrawlerConfigurationPanel extends javax.swing.JPanel {
     
-    /** Creates new form WebCrawlerConfigurationPanel */
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/** Creates new form WebCrawlerConfigurationPanel */
     public WebCrawlerConfigurationPanel() {
         initComponents();
     }

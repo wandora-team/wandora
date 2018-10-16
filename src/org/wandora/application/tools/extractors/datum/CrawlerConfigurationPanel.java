@@ -28,10 +28,8 @@ package org.wandora.application.tools.extractors.datum;
 
 
 
-import org.wandora.application.tools.extractors.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.*;
 import javax.swing.*;
 import java.net.*;
 import java.util.*;
@@ -46,6 +44,8 @@ import java.awt.datatransfer.*;
  */
 public class CrawlerConfigurationPanel extends javax.swing.JPanel implements DropTargetListener {
     
+
+	private static final long serialVersionUID = 1L;
 //    private Vector urlList;
     private DefaultListModel urlList;
     private CrawlerDataSource parent;

@@ -43,7 +43,9 @@ import org.wandora.application.gui.simple.SimpleLabel;
  */
 public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
 
-    public static int EMAIL_RESOURCE = 1;
+	private static final long serialVersionUID = 1L;
+
+	public static int EMAIL_RESOURCE = 1;
     public static int MBOX_EMAIL_REPOSITORY = 2;
     public static int DBX_EMAIL_REPOSITORY = 3;
 

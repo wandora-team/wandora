@@ -33,7 +33,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.GenericOptionsDialog;
-import static org.wandora.application.tools.extractors.excel.AbstractExcelExtractor.DEFAULT_LANG;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
@@ -47,8 +46,9 @@ import org.wandora.topicmap.XTMPSI;
 
 public class ExcelTopicExtractor extends AbstractExcelExtractor {
 
-    
-    public static boolean EXTRACT_CELL_TYPE = true;
+	private static final long serialVersionUID = 1L;
+	
+	public static boolean EXTRACT_CELL_TYPE = true;
     public static boolean EXTRACT_CELL_COLORS = true;
     public static boolean EXTRACT_SHEET = true;
     public static boolean EXTRACT_CELL_FORMULA = true;

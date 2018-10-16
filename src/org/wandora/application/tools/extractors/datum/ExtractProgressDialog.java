@@ -25,19 +25,24 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
-import org.wandora.application.tools.extractors.*;
+
+
+
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import javax.swing.*;
 import java.io.*;
+
+
 /**
  *
  * @author  olli
  */
 public class ExtractProgressDialog extends javax.swing.JDialog {
-    
-    protected ExtractTool extractTool;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected ExtractTool extractTool;
     
     /** Creates new form ExtractProgressDialog */
     public ExtractProgressDialog(java.awt.Frame parent, boolean modal,ExtractTool extractTool) {

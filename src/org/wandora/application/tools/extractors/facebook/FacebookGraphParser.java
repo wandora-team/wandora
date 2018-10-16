@@ -25,12 +25,10 @@ package org.wandora.application.tools.extractors.facebook;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.utils.Tuples.*;
 import org.wandora.utils.*;
 
 
 import java.util.*;
-import java.io.*;
 import java.net.*;
 import org.json.*;
 import org.wandora.application.tools.extractors.ExtractHelper;

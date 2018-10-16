@@ -42,7 +42,11 @@ import org.wandora.application.gui.simple.SimpleLabel;
 
 public class CSVExtractorConfiguration extends javax.swing.JPanel {
 
-    public static final char defaultStringCharacter = '"';
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static final char defaultStringCharacter = '"';
     public static final char defaultLineSeparator = '\n';
     public static final char defaultValueSeparator = ',';
     

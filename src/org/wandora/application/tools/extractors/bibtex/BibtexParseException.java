@@ -31,8 +31,11 @@ package org.wandora.application.tools.extractors.bibtex;
  * @author olli
  */
 public class BibtexParseException extends Exception {
-    
-    /** Creates a new instance of BibtexParseException */
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/** Creates a new instance of BibtexParseException */
     public BibtexParseException() {
     }
     public BibtexParseException(String message) {

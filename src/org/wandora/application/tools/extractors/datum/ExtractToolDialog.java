@@ -25,14 +25,22 @@
  */
 
 package org.wandora.application.tools.extractors.datum;
+
+
 import javax.swing.*;
+
+
 /**
  *
  * @author  olli
  */
 public class ExtractToolDialog extends javax.swing.JDialog {
     
-    /** Creates new form ExtractToolDialog */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates new form ExtractToolDialog */
     public ExtractToolDialog(java.awt.Frame parent, boolean modal,ConfigurableDataSource[] possibleDataSources) {
         super(parent, modal);
         initComponents();
