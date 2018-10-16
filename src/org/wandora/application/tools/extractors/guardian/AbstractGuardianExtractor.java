@@ -24,7 +24,8 @@ package org.wandora.application.tools.extractors.guardian;
 
 import javax.swing.Icon;
 import java.util.HashMap;
-import org.wandora.application.Wandora;
+import java.util.Map;
+
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
@@ -42,7 +43,11 @@ import org.wandora.topicmap.TopicMapException;
 
 public abstract class AbstractGuardianExtractor extends AbstractExtractor {
   
-  @Override
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	@Override
     public String getName() {
         return "Abstract The Guardian API extractor";
     }
@@ -90,7 +95,7 @@ public abstract class AbstractGuardianExtractor extends AbstractExtractor {
     public static final String API_URL_SI = GUARDIAN_BASE_SI + "api_url";
     public static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
 
-    private static  HashMap<String,String> fieldNames = new HashMap() {{
+    private static HashMap<String,String> fieldNames = new HashMap<String, String>() {{
       put("trailText","trail text");
       put("showInRelatedContent","show in related content");
       put("lastModified","last modified");

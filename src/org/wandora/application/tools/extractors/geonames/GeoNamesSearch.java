@@ -41,7 +41,10 @@ import org.wandora.topicmap.*;
  * @author akivela
  */
 public class GeoNamesSearch extends AbstractGeoNamesExtractor {
-    public String dataLang = "en";
+
+	private static final long serialVersionUID = 1L;
+	
+	public String dataLang = "en";
     public String requestGeoObject = null;
     
     

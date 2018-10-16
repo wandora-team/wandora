@@ -38,7 +38,10 @@ import org.wandora.topicmap.*;
  * @author akivela
  */
 public class GeoNamesCities extends AbstractGeoNamesExtractor {
-    public String dataLang = "en";
+
+	private static final long serialVersionUID = 1L;
+
+	public String dataLang = "en";
     
     
     @Override

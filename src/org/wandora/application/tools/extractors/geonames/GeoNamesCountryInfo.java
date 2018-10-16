@@ -43,7 +43,9 @@ import org.wandora.topicmap.*;
  */
 public class GeoNamesCountryInfo extends AbstractGeoNamesExtractor {
 
-    public String dataLang = "en";
+	private static final long serialVersionUID = 1L;
+	
+	public String dataLang = "en";
     
     
     /** Creates a new instance of GeoNamesCountryInfo */

@@ -36,7 +36,6 @@ import org.wandora.application.*;
 import org.wandora.topicmap.*;
 import org.wandora.utils.Tuples;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
@@ -50,8 +49,10 @@ import java.net.*;
 public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 
     
-    
-    public static String BASE_URL = "http://api.geonames.org/";
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static String BASE_URL = "http://api.geonames.org/";
     private Wandora wandora = null;
     private Context context = null;
     private boolean accepted = false;

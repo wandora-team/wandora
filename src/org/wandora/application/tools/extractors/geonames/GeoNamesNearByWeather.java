@@ -38,7 +38,11 @@ import java.util.regex.*;
  * @author akivela
  */
 public class GeoNamesNearByWeather extends AbstractGeoNamesExtractor {
-    public String dataLang = "en";
+
+
+	private static final long serialVersionUID = 1L;
+	
+	public String dataLang = "en";
     public String requestGeoObject = null;
     
     

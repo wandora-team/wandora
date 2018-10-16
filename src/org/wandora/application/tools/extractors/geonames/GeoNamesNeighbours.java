@@ -25,7 +25,6 @@
 package org.wandora.application.tools.extractors.geonames;
 
 
-import java.util.*;
 import java.io.*;
 import org.xml.sax.*;
 import org.wandora.topicmap.*;
@@ -40,7 +39,10 @@ import java.util.regex.*;
  * @author akivela
  */
 public class GeoNamesNeighbours extends AbstractGeoNamesExtractor {
-    public String dataLang = "en";
+
+	private static final long serialVersionUID = 1L;
+	
+	public String dataLang = "en";
     public String requestGeoObject = null;
     
     

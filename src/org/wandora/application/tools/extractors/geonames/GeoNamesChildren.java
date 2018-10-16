@@ -41,7 +41,10 @@ import java.util.regex.*;
  * @author akivela
  */
 public class GeoNamesChildren extends AbstractGeoNamesExtractor {
-    public String dataLang = "en";
+
+	private static final long serialVersionUID = 1L;
+	
+	public String dataLang = "en";
     public String requestGeoObject = null;
     
     
