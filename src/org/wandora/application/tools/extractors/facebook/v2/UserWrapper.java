@@ -27,8 +27,6 @@ import com.restfb.types.FacebookType;
 import com.restfb.types.NamedFacebookType;
 import com.restfb.types.User;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import org.apache.tika.io.IOUtils;
@@ -42,7 +40,7 @@ import org.wandora.utils.DataURL;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 

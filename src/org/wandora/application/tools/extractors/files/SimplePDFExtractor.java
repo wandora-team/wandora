@@ -21,7 +21,7 @@
  * 
  * SimplePDFExtractor.java
  *
- * Created on 9. kesäkuuta 2006, 15:08
+ * Created on 9. kesï¿½kuuta 2006, 15:08
  *
  */
 
@@ -57,7 +57,10 @@ import org.wandora.utils.*;
  * @author akivela
  */
 public class SimplePDFExtractor extends AbstractExtractor {
-    protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+	private static final long serialVersionUID = 1L;
+
+	protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
     public boolean makePageTopics = false;
     public boolean makeVariantFromTitle = true;

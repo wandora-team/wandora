@@ -30,8 +30,6 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JDialog;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.wandora.application.Wandora;
 
@@ -39,13 +37,16 @@ import org.wandora.application.gui.simple.*;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
 public class FBGraphExtractorPanel extends javax.swing.JPanel {
 
-    private Wandora app;
+
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora app;
     private JDialog window;
     
     private boolean allPermissionsSelected;

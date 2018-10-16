@@ -21,7 +21,7 @@
  * 
  * ExtractSIFFKeywords.java
  *
- * Created on 6. kesäkuuta 2006, 19:51
+ * Created on 6. kesï¿½kuuta 2006, 19:51
  *
  */
 
@@ -36,17 +36,8 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.Association;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.*;
-import org.wandora.utils.*;
-
 
 import java.util.*;
-import java.text.*;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 
@@ -70,9 +61,9 @@ import java.net.*;
  * NO:A IV 3299
  * MU:SFF
  * OM:Valtion taidemuseo
- * NI:INTIALAINEN MINIATYYRI ; Kaksi naista soittaa kahdelle pyhälle miehelle (sadhulle), Rajput-miniatyyri
+ * NI:INTIALAINEN MINIATYYRI ; Kaksi naista soittaa kahdelle pyhï¿½lle miehelle (sadhulle), Rajput-miniatyyri
  * VV:n 1800
- * MA:vesiväri, kulta ja hopea
+ * MA:vesivï¿½ri, kulta ja hopea
  * MI:20x12,7
  * ME:merk.
  * MJ:takana
@@ -84,9 +75,9 @@ import java.net.*;
  * HH:30.000
  * VY:MV
  * VN: 11085
- * PÄ:maalaus
+ * Pï¿½:maalaus
  * ER:miniatyyri
- * AH:KOHTAUS;musiikki;naiset;pyhät miehet;intialaiset;koira
+ * AH:KOHTAUS;musiikki;naiset;pyhï¿½t miehet;intialaiset;koira
  * KI:B.Robinson
  * LI:RV/87
  * </pre>
@@ -98,7 +89,9 @@ import java.net.*;
  */
 public class ExtractSIFFKeywords extends AbstractExtractor implements WandoraTool {
     
-    public boolean createArtworkTopics = true;
+	private static final long serialVersionUID = 1L;
+	
+	public boolean createArtworkTopics = true;
     
     
     /** Creates a new instance of ExtractSIFFKeywords */
@@ -203,7 +196,7 @@ public class ExtractSIFFKeywords extends AbstractExtractor implements WandoraToo
             Topic asiasanaTopic = null;
             String asiasanaDisplayName = null;
             Association asiasanaAssociation = null;
-            Hashtable players = null;
+            Hashtable<Topic,Topic> players = null;
             
             line = breader.readLine();
             while(line != null && !forceStop()) {
@@ -248,7 +241,7 @@ public class ExtractSIFFKeywords extends AbstractExtractor implements WandoraToo
 
                             if(currentWork != null) {
                                 log("Associating keyword '" + asiasana + "' and artwork '" + currentWorkId + "'!");
-                                players = new Hashtable();
+                                players = new Hashtable<>();
                                 players.put(asiasanaClassType, asiasanaTopic );
                                 players.put(artWorkType, currentWork);
                                 asiasanaAssociation = topicMap.createAssociation(asiasanaClassType);

@@ -32,25 +32,13 @@ package org.wandora.application.tools.extractors.foaf;
 
 import java.net.*;
 import java.io.*;
-import java.util.*;
-import org.wandora.utils.*;
 import org.wandora.application.gui.*;
-import java.awt.*;
 import javax.swing.*;
-import java.text.*;
 
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.extractors.geonames.*;
 import org.wandora.topicmap.*;
-
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 
 import com.hp.hpl.jena.rdf.model.*;
 
@@ -61,7 +49,11 @@ import com.hp.hpl.jena.rdf.model.*;
  * @author akivela
  */
 public class FoafRDFExtractor extends AbstractExtractor {
-    private String defaultEncoding = "UTF-8";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private String defaultEncoding = "UTF-8";
     public static String defaultLanguage = "en";
     
     

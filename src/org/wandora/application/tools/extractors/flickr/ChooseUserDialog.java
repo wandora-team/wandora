@@ -27,7 +27,8 @@
 package org.wandora.application.tools.extractors.flickr;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
+
 import org.wandora.application.Wandora;
 
 /**
@@ -36,7 +37,11 @@ import org.wandora.application.Wandora;
  */
 public class ChooseUserDialog extends javax.swing.JDialog {
     
-    /** Creates new form ChooseUserDialog */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates new form ChooseUserDialog */
     public ChooseUserDialog(java.awt.Frame parent, boolean modal, String text) {
         super(parent, modal);
         initComponents();
@@ -63,7 +68,7 @@ public class ChooseUserDialog extends javax.swing.JDialog {
     
     public String[] getUserList() {
         String users = this.userNameTextField.getText();
-        ArrayList processedUserList = new ArrayList();
+        List<String> processedUserList = new ArrayList<>();
         if(users != null) {
             if(users.indexOf(',') != -1) {
                 String[] userList = users.split(",");

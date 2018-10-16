@@ -24,14 +24,11 @@
 package org.wandora.application.tools.extractors.facebook.v2;
 
 import com.restfb.DefaultFacebookClient;
-import com.restfb.DefaultJsonMapper;
 import com.restfb.FacebookClient;
-import com.restfb.Parameter;
 import com.restfb.Version;
 import com.restfb.json.JsonArray;
 import com.restfb.json.JsonObject;
-import com.restfb.types.Page;
-import com.restfb.types.User;
+
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -46,14 +43,16 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
 abstract class AbstractFBGraphExtractor extends AbstractExtractor{
-    
 
-    protected static final com.restfb.Version API_VERSION = Version.VERSION_2_3;
+
+	private static final long serialVersionUID = 1L;
+	
+	protected static final com.restfb.Version API_VERSION = Version.VERSION_2_3;
     protected static final String URL_ROOT = "https://graph.facebook.com/v2.3/";
 
     protected static final String AUTH_PAGE = "http://wandora.org/fbv2";

@@ -51,7 +51,10 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
  */
 
 public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool {
-    private String tempFilename = "temp/wandora_temp.tmp";
+
+	private static final long serialVersionUID = 1L;
+
+	private String tempFilename = "temp/wandora_temp.tmp";
 
     private String baseLocator = "http://wandora.org/si/mp3";
 

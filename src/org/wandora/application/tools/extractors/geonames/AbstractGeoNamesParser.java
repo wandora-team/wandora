@@ -24,11 +24,9 @@
 package org.wandora.application.tools.extractors.geonames;
 
 import java.util.*;
-import java.io.*;
 import org.xml.sax.*;
 import org.wandora.topicmap.*;
-import java.net.*;
-import java.util.regex.*;
+
 
 
 

@@ -52,7 +52,11 @@ import org.wandora.utils.*;
  */
 public class SimpleJPGExtractor extends AbstractExtractor implements WandoraTool {
 
-    private String defaultLang = "en";
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private String defaultLang = "en";
     protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
     

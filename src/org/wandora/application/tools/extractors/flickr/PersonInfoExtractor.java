@@ -42,7 +42,11 @@ import org.wandora.utils.Tuples.T2;
  * @author anttirt
  */
 public class PersonInfoExtractor extends FlickrExtractor {
-    private static final int photosPerPage = 250;
+
+	
+	private static final long serialVersionUID = 1L;
+
+	private static final int photosPerPage = 250;
 
     private FlickrPerson curPerson;
     private Topic curPersonTopic;
@@ -50,7 +54,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
 
 
     private Collection<T2<FlickrPerson, Topic>> promptForUsers(Wandora admin) throws ExtractionFailure {
-        ArrayList<T2<FlickrPerson, Topic>> people = new ArrayList();
+        ArrayList<T2<FlickrPerson, Topic>> people = new ArrayList<>();
         
         ChooseUserDialog dlg = new ChooseUserDialog(admin, true, null);
         setState(INVISIBLE);
@@ -62,7 +66,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
 
         for(String username : dlg.getUserList()) {
             try {
-                SortedMap<String, String> userInfoArgs = new TreeMap();
+                SortedMap<String, String> userInfoArgs = new TreeMap<>();
                 userInfoArgs.put("username", username);
                 JSONObject obj = getFlickrState().unauthorizedCall("flickr.people.findByUsername", userInfoArgs);
 
@@ -91,7 +95,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
 
 
     @Override
-    protected boolean extract(Wandora admin, Context context) throws ExtractionFailure {
+    protected boolean extract(Wandora wandora, Context context) throws ExtractionFailure {
         Collection<T2<FlickrPerson, Topic>> people = null;
         Topic profileT = null;
         Topic nsidT = null;
@@ -109,7 +113,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
         Collection<Topic> contextUserTopics = getWithType(context, profileT);
         
         if(contextUserTopics.isEmpty()) {
-            people = promptForUsers(admin);
+            people = promptForUsers(wandora);
             if(people == null) return false; // user cancelled
         }
         else {
@@ -140,16 +144,16 @@ public class PersonInfoExtractor extends FlickrExtractor {
                 curPersonTopic = p.e2;
                 
                 log("Getting profile info for " + p.e1.UserName);
-                people_getInfo(admin);
+                people_getInfo(wandora);
                 if(forceStop()) return true;
                 log("Getting public photo list for " + p.e1.UserName);
-                getPhotoList(admin, "flickr.people.getPublicPhotos", FlickrAssoc.Ownership, "owned");
+                getPhotoList(wandora, "flickr.people.getPublicPhotos", FlickrAssoc.Ownership, "owned");
                 if(forceStop()) return true;
                 log("Getting favorite photo list for " + p.e1.UserName);
-                getPhotoList(admin, "flickr.favorites.getList", FlickrAssoc.Favorite, "marked as favorite");
+                getPhotoList(wandora, "flickr.favorites.getList", FlickrAssoc.Favorite, "marked as favorite");
                 if(forceStop()) return true;
                 log("Getting public group list for " + p.e1.UserName);
-                people_getPublicGroups(admin);
+                people_getPublicGroups(wandora);
                 if(forceStop()) return true;
             }
             catch(TopicMapException e) {
@@ -176,7 +180,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
         int totalPhotos = 0;
         int photosReceived = 0;
 
-        TreeMap<String, String> args = new TreeMap();
+        TreeMap<String, String> args = new TreeMap<>();
         args.put("user_id", curPerson.ID);
         args.put("extras", "date_taken,date_upload,o_dims,geo,last_update,license,media,owner_name,tags,views");
         args.put("per_page", "" + photosPerPage);
@@ -221,7 +225,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
     
     
     private void people_getPublicGroups(Wandora wandora) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure {
-        TreeMap<String, String> args = new TreeMap();
+        TreeMap<String, String> args = new TreeMap<>();
         args.put("user_id", curPerson.ID);
 
         JSONObject result = getFlickrState().unauthorizedCall("flickr.people.getPublicGroups", args);
@@ -242,7 +246,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
     
     
     private void people_getInfo(Wandora wandora) throws JSONException, TopicMapException, RequestFailure, ExtractionFailure {
-        TreeMap<String, String> args = new TreeMap();
+        TreeMap<String, String> args = new TreeMap<>();
         args.put("user_id", curPerson.ID);
         JSONObject response = getFlickrState().unauthorizedCall("flickr.people.getInfo", args);
         throwOnAPIError(response);

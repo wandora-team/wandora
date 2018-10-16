@@ -21,7 +21,7 @@
  * 
  * ExtractFNGTextEnrichment.java
  *
- * Created on 10. kesäkuuta 2006, 11:18
+ * Created on 10. kesï¿½kuuta 2006, 11:18
  *
  */
 
@@ -38,17 +38,11 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.*;
-import org.wandora.utils.*;
+
 
 
 import java.util.*;
 import java.text.*;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -62,7 +56,10 @@ import org.apache.pdfbox.util.PDFTextStripper;
  * @author akivela
  */
 public class ExtractFNGTextEnrichment extends AbstractExtractor implements WandoraTool {
-    protected Wandora admin = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	protected Wandora wandora = null;
     protected File keywordFile = null;
     private String defaultLang = "en";
     
@@ -118,8 +115,8 @@ public class ExtractFNGTextEnrichment extends AbstractExtractor implements Wando
             textTopic.addSubjectIdentifier(new Locator(TopicTools.cleanDirtyLocator(url.toExternalForm())));
             
             URLConnection uc = null;
-            if(admin != null) {
-                uc = admin.wandoraHttpAuthorizer.getAuthorizedAccess(url);
+            if(wandora != null) {
+                uc = wandora.wandoraHttpAuthorizer.getAuthorizedAccess(url);
             }
             else {
                 uc = url.openConnection();

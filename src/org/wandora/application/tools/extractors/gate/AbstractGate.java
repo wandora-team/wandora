@@ -32,7 +32,9 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
  */
 public abstract class AbstractGate extends AbstractExtractor {
 
-    public static final String GATE_HOME = "lib/gate";
+	private static final long serialVersionUID = 1L;
+
+	public static final String GATE_HOME = "lib/gate";
 
     public static final String GATE_PLUGIN_HOME = GATE_HOME+"/plugins";
     public static final String CONFIG_FILE = GATE_HOME+"/gate.xml";

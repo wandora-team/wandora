@@ -53,11 +53,11 @@ import java.net.*;
  * <p><pre>
  * NOT[34 F 1]
  * TXT[animals threatening man]
- * FIT[ihminen eläinten uhkaamana]
+ * FIT[ihminen elï¿½inten uhkaamana]
  *  
  * NOT[34 F 11]
  * TXT[man struggling with animals]
- * FIT[ihmisen ja eläinten välinen kamppailu]
+ * FIT[ihmisen ja elï¿½inten vï¿½linen kamppailu]
  * 
  * NOT[34 F 11 1]
  * TXT[man struggling with animals as ornamental variant with antithetically placed animals (mostly lions)]
@@ -65,7 +65,7 @@ import java.net.*;
  * 
  * NOT[34 F 12]
  * TXT[man killing animal]
- * FIT[ihminen surmaa eläimen]
+ * FIT[ihminen surmaa elï¿½imen]
  * </pre></p>
  *
  * <p>
@@ -94,7 +94,11 @@ import java.net.*;
  */
 public class ExtractIconclassKeywords extends AbstractExtractor implements WandoraTool {
     
-    public static boolean CREATE_ICONCLASS_TOPICS = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static boolean CREATE_ICONCLASS_TOPICS = false;
     
    
     

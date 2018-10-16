@@ -29,7 +29,6 @@ package org.wandora.application.tools.extractors.flickr;
 import java.awt.Color;
 import javax.swing.JLabel;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.*;
 
 /**
@@ -38,7 +37,9 @@ import org.wandora.application.gui.*;
  */
 public class AuthConfigDialog extends javax.swing.JDialog {
     
-    private Wandora admin;
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora admin;
     private FlickrState flickrState;
     private JLabel[] curLabels;
     

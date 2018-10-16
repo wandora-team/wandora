@@ -38,17 +38,8 @@ import org.wandora.topicmap.XTMPSI;
 import org.wandora.topicmap.Association;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.*;
-import org.wandora.utils.*;
-
 
 import java.util.*;
-import java.text.*;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 
@@ -80,9 +71,12 @@ import java.net.*;
  */
 public class ExtractMuusaIconclassBridge extends AbstractExtractor implements WandoraTool {
     
-    
-    
-    /** Creates a new instance of ExtractMuusaIconclassBridge */
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	/** Creates a new instance of ExtractMuusaIconclassBridge */
     public ExtractMuusaIconclassBridge() {
     }
    
@@ -194,7 +188,7 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
             Topic iconclassTopic = null;
             String iconclassDisplayName = null;
             Association iconclassAssociation = null;
-            Hashtable players = null;
+            Hashtable<Topic,Topic> players = null;
             Association muusaIconclassBridge = null;
             
             line = breader.readLine();
@@ -248,7 +242,7 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
                             }
 
                             if(iconclassTopic != null && muusaKeyword != null) {
-                                players = new Hashtable();
+                                players = new Hashtable<>();
                                 players.put(iconclassType, iconclassTopic);
                                 players.put(muusaType, muusaKeyword);
                                 muusaIconclassBridge = topicMap.createAssociation(muusaIconclassBridgeType);
@@ -292,7 +286,7 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
                     superClass.setBaseName(sup + " (iconclass)");
                 }
                 
-                Hashtable players = new Hashtable();
+                Hashtable<Topic,Topic> players = new Hashtable<>();
                 players.put(superclassType, superClass);
                 players.put(subclassType, subClass);
                 Association supeclassAssociation = topicMap.createAssociation(supersubclassType);

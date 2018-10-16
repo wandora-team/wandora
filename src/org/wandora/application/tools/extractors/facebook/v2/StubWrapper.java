@@ -27,7 +27,7 @@ import com.restfb.types.FacebookType;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 

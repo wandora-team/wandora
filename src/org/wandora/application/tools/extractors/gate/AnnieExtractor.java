@@ -31,7 +31,6 @@ import java.net.*;
 import gate.*;
 import gate.corpora.DocumentContentImpl;
 import gate.corpora.DocumentImpl;
-import gate.creole.*;
 import gate.util.*;
 import gate.util.persistence.PersistenceManager;
 import javax.swing.Icon;
@@ -58,8 +57,9 @@ import org.wandora.utils.XMLbox;
 public class AnnieExtractor extends AbstractGate {
 
 
-
-    public static final String SOURCE_SI = "http://wandora.org/si/source";
+	private static final long serialVersionUID = 1L;
+	
+	public static final String SOURCE_SI = "http://wandora.org/si/source";
     public static final String DOCUMENT_SI = "http://wandora.org/si/document";
     public static final String TOPIC_SI = "http://wandora.org/si/topic";
 
@@ -119,7 +119,7 @@ public class AnnieExtractor extends AbstractGate {
         configuration.setVisible(true);
     }
     @Override
-    public void writeOptions(Wandora admin, Options options, String prefix) {
+    public void writeOptions(Wandora wandora, Options options, String prefix) {
     }
 
 
@@ -253,7 +253,7 @@ public class AnnieExtractor extends AbstractGate {
 
         // -------------------------------------------------
         // for each document, get the annotations
-        Iterator iter = corpus.iterator();
+        Iterator<Document> iter = corpus.iterator();
         int count = 0;
 
         while(iter.hasNext() && !forceStop()) {
@@ -271,7 +271,7 @@ public class AnnieExtractor extends AbstractGate {
                     int c = 0;
                     log("Extracting "+annotations.size()+" entities of type '"+annotType+"'...");
 
-                    Iterator it = annotations.iterator();
+                    Iterator<Annotation> it = annotations.iterator();
                     Annotation annotation;
                     long positionEnd;
                     long positionStart;

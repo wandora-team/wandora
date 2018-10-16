@@ -23,7 +23,7 @@
 
 package org.wandora.application.tools.extractors.facebook.v2;
 
-import com.restfb.types.User;
+
 import java.io.File;
 import java.net.URL;
 import javax.swing.Icon;
@@ -35,14 +35,19 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
 public class FBGraphExtractor extends AbstractFBGraphExtractor{
 
-    protected static String token = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected static String token = null;
     
+	
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/extract_facebook.png");

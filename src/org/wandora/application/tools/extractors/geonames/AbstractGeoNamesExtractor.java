@@ -36,7 +36,6 @@ import org.wandora.application.tools.extractors.*;
 import org.wandora.application.gui.*;
 import javax.swing.*;
 import java.util.regex.*;
-import org.wandora.application.Wandora;
 
 
 /**
@@ -45,7 +44,11 @@ import org.wandora.application.Wandora;
  */
 public abstract class AbstractGeoNamesExtractor extends AbstractExtractor {
 
-    public static boolean USE_EXISTING_TOPICS = false;
+	private static final long serialVersionUID = 1L;
+
+
+
+	public static boolean USE_EXISTING_TOPICS = false;
     
     
     
@@ -789,9 +792,9 @@ public abstract class AbstractGeoNamesExtractor extends AbstractExtractor {
             try {
                 Topic langTopic = tm.getTopic(langSI);
                 if(langTopic != null) {
-                    Collection languageTopics = tm.getTopicsOfType(TMBox.LANGUAGE_SI);
+                    Collection<Topic> languageTopics = tm.getTopicsOfType(TMBox.LANGUAGE_SI);
                     Topic schemaLangTopic = null;
-                    for(Iterator i=languageTopics.iterator(); i.hasNext(); ) {
+                    for(Iterator<Topic> i=languageTopics.iterator(); i.hasNext(); ) {
                         schemaLangTopic = (Topic) i.next();
                         if(langTopic.mergesWithTopic(schemaLangTopic)) {
                             isValid = true;
@@ -1074,7 +1077,7 @@ public abstract class AbstractGeoNamesExtractor extends AbstractExtractor {
             { "BH", "Bahrain" },
             { "BI", "Burundi" },
             { "BJ", "Benin" },
-            { "BL", "Saint Barthélemy" },
+            { "BL", "Saint Barthï¿½lemy" },
             { "BM", "Bermuda" },
             { "BN", "Brunei" },
             { "BO", "Bolivia" },

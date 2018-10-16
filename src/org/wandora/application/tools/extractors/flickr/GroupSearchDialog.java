@@ -22,11 +22,6 @@ import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.application.gui.simple.*;
-import org.wandora.utils.Tuples.T2;
-import static org.wandora.utils.Tuples.t2;
-import static org.wandora.application.tools.extractors.flickr.FlickrUtils.each;
-import static org.wandora.application.tools.extractors.flickr.FlickrUtils.*;
 import org.wandora.application.gui.*;
 
 /**
@@ -34,7 +29,10 @@ import org.wandora.application.gui.*;
  * @author  anttirt
  */
 public class GroupSearchDialog extends javax.swing.JDialog {
-    private FlickrState flickrState;
+
+	private static final long serialVersionUID = 1L;
+	
+	private FlickrState flickrState;
     private DefaultListModel listModel;
     private Frame parentFrame;
     private HashMap<String, Topic> allGroups;

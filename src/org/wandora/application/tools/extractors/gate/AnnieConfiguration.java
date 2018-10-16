@@ -26,10 +26,13 @@
 package org.wandora.application.tools.extractors.gate;
 
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -37,7 +40,6 @@ import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
-import org.wandora.utils.Options;
 
 
 /**
@@ -47,10 +49,12 @@ import org.wandora.utils.Options;
 public class AnnieConfiguration extends JDialog {
 
 
-    private boolean accepted = false;
+	private static final long serialVersionUID = 1L;
+
+	private boolean accepted = false;
     private Wandora wandora = null;
     private AnnieExtractor parent = null;
-    private HashMap oldData = new HashMap();
+    private Map<Object,Object> oldData = new HashMap<>();
 
 
 
@@ -110,7 +114,7 @@ public class AnnieConfiguration extends JDialog {
 
     
     private boolean annotationTypeUpdateRequired = true;
-    private HashSet annotationTypes = null;
+    private Set<String> annotationTypes = null;
     public boolean acceptAnnotationType(String t) {
         if(annotationTypes == null || annotationTypeUpdateRequired) {
             annotationTypes = getAnnotationTypes();
@@ -125,7 +129,7 @@ public class AnnieConfiguration extends JDialog {
     // ADD Date, JobTitle, Location, Organization, Temp
 
 
-    public HashSet getAnnotationTypes() {
+    public Set<String> getAnnotationTypes() {
         LinkedHashSet<String> types = new LinkedHashSet<String>();
         if(firstPersonCheckBox.isSelected())    types.add("FirstPerson");
         if(lookupCheckBox.isSelected())         types.add("Lookup");

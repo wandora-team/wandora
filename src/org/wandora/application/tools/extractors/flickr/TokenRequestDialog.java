@@ -32,7 +32,6 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.simple.*;
 
 /**
  *
@@ -40,7 +39,10 @@ import org.wandora.application.gui.simple.*;
  */
 public class TokenRequestDialog extends javax.swing.JDialog {
     
-    private boolean mCancelled;
+
+	private static final long serialVersionUID = 1L;
+	
+	private boolean mCancelled;
     private String requiredAuth;
     private FlickrState flickrState;
     

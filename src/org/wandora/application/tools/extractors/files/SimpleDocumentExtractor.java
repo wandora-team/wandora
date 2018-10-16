@@ -31,23 +31,19 @@ package org.wandora.application.tools.extractors.files;
 
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil;
-import eu.medsea.mimeutil.detector.MagicMimeMimeDetector;
 
 import org.wandora.application.tools.browserextractors.*;
 import org.wandora.topicmap.TMBox;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.MSOfficeBox;
-import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.*;
 import org.wandora.utils.*;
 
 
 import java.util.*;
 import java.text.*;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 import javax.swing.Icon;
@@ -67,7 +63,12 @@ import org.wandora.application.tools.extractors.ExtractHelper;
  * @author akivela
  */
 public class SimpleDocumentExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
-    protected static String TOPIC_SI = "http://wandora.org/si/topic";
+
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected static String TOPIC_SI = "http://wandora.org/si/topic";
     protected static String SOURCE_SI = "http://wandora.org/si/source";
     protected static String DOCUMENT_SI = "http://wandora.org/si/document";
 
@@ -78,7 +79,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
     
     private Wandora admin = null;
 
-    private ArrayList<String> visitedDirectories = new ArrayList<String>();
+    private ArrayList<String> visitedDirectories = new ArrayList<>();
     
     
     /** Creates a new instance of SimpleDocumentExtractor */

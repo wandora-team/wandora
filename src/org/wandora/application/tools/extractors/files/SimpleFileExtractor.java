@@ -55,14 +55,18 @@ import org.wandora.application.tools.extractors.ExtractHelper;
  * @author akivela
  */
 public class SimpleFileExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
-    protected static String TOPIC_SI = "http://wandora.org/si/topic";
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	protected static String TOPIC_SI = "http://wandora.org/si/topic";
     protected static String SOURCE_SI = "http://wandora.org/si/source";
     protected static String DOCUMENT_SI = "http://wandora.org/si/document";
 
     protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
     private String defaultLang = "en";
-    private Wandora admin = null;
+    private Wandora wandora = null;
 
     private ArrayList<String> visitedDirectories = new ArrayList<String>();
     

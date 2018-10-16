@@ -25,14 +25,13 @@ package org.wandora.application.tools.extractors.facebook.v2;
 
 import com.restfb.types.NamedFacebookType;
 import com.restfb.types.User;
-import static org.wandora.application.tools.extractors.facebook.v2.AbstractFBWrapper.getOrCreateType;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 

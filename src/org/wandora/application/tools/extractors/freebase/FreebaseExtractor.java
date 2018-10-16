@@ -41,8 +41,10 @@ import org.wandora.topicmap.TopicMap;
 
 
 public class FreebaseExtractor extends AbstractExtractor {
-    
-    private FreebaseExtractorUI ui = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private FreebaseExtractorUI ui = null;
     
     @Override
     public WandoraToolType getType(){

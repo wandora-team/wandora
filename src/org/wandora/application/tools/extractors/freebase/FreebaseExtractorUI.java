@@ -52,7 +52,11 @@ import org.wandora.utils.IObox;
 
 public class FreebaseExtractorUI extends javax.swing.JPanel {
     
-    private Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
     private Context context = null;
@@ -91,7 +95,7 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
     public WandoraTool[] getExtractors(FreebaseExtractor tool) throws TopicMapException {
         Component component = freebaseTabbedPane.getSelectedComponent();
         WandoraTool wt = null;
-        ArrayList<WandoraTool> wts = new ArrayList();
+        ArrayList<WandoraTool> wts = new ArrayList<>();
         
         try{
             maxDepth = Integer.parseInt(mqlDepthTextField.getText());

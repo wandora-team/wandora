@@ -40,7 +40,10 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class GroupInfoExtractor extends FlickrExtractor {
 
-    private FlickrGroup curGroup;
+
+	private static final long serialVersionUID = 1L;
+	
+	private FlickrGroup curGroup;
     private Topic curGroupTopic;
         
     @Override
@@ -57,7 +60,7 @@ public class GroupInfoExtractor extends FlickrExtractor {
     
     
     @Override
-    protected boolean extract(Wandora admin, Context context) throws ExtractionFailure {
+    protected boolean extract(Wandora wandora, Context context) throws ExtractionFailure {
         Collection<Topic> groupTopics = null;
         Topic groupT = null;
         
@@ -72,7 +75,7 @@ public class GroupInfoExtractor extends FlickrExtractor {
 
         if(groupTopics.isEmpty()) {
             log("Unable to find any groups in context.");
-            GroupSearchDialog dlg = new GroupSearchDialog(admin, true, getFlickrState(), this);
+            GroupSearchDialog dlg = new GroupSearchDialog(wandora, true, getFlickrState(), this);
             setState(INVISIBLE);
             dlg.setVisible(true);
             setState(VISIBLE);
@@ -94,7 +97,7 @@ public class GroupInfoExtractor extends FlickrExtractor {
                 curGroup.Name = t.getDisplayName();
                 curGroupTopic = t;
                 log("Getting info for group " + curGroup.Name);
-                getPhotoList(admin, "flickr.groups.pools.getPhotos", FlickrAssoc.InGroupPool, "in the photo pool of ");
+                getPhotoList(wandora, "flickr.groups.pools.getPhotos", FlickrAssoc.InGroupPool, "in the photo pool of ");
             }
             catch(JSONException e) {
                 log(e);

@@ -47,7 +47,11 @@ import org.wandora.application.gui.UIBox;
  */
 public class DirectoryStructureExtractor extends AbstractExtractor implements WandoraTool {
 
-    private String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     private String defaultLang = "en";
     public static boolean USE_SUPERSUBCLASS_RELATION = true;
 

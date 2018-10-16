@@ -39,7 +39,11 @@ import org.wandora.topicmap.*;
 
 public abstract class AbstractFreebaseExtractor extends AbstractExtractor {
     
-    @Override
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	@Override
     public String getName() {
         return "Abstract Freebase API extractor";
     }

@@ -76,7 +76,7 @@ public class FlickrPhoto {
         ret.Title = FlickrUtils.searchString(obj, "title._content");
         ret.OwnerName = FlickrUtils.searchString(obj, "owner.username");
         ret.OwnerID = FlickrUtils.searchString(obj, "owner.nsid");
-        ret.Tags = new ArrayList();
+        ret.Tags = new ArrayList<>();
         JSONArray tagsArray = FlickrUtils.searchJSONArray(obj, "tags.tag");
         for(int i = 0; i < tagsArray.length(); ++i) {
             JSONObject tagObj = tagsArray.getJSONObject(i);

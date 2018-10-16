@@ -37,17 +37,8 @@ import org.wandora.topicmap.XTMPSI;
 import org.wandora.topicmap.Association;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.*;
-import org.wandora.utils.*;
-
 
 import java.util.*;
-import java.text.*;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 
@@ -71,9 +62,9 @@ import java.net.*;
  * have been changed to sets of spaces.
  * <p>
  * <p><pre>
- * N-1992-225   Trockel, Rosemarie    Nimetön          41B2      liesi, hella, uuni yms.	
+ * N-1992-225   Trockel, Rosemarie    Nimetï¿½n          41B2      liesi, hella, uuni yms.	
  *                                                   49D452      hexahedron, cube	
- *                                               22C4(WHITE)	 värit, pigmentit ja maalit: valkoinen	
+ *                                               22C4(WHITE)	 vï¿½rit, pigmentit ja maalit: valkoinen	
  * </pre></p>
  *
  *
@@ -81,8 +72,11 @@ import java.net.*;
  */
 public class ExtractKiasmaKeywords extends AbstractExtractor implements WandoraTool {
     
-    
-    /**
+
+	private static final long serialVersionUID = 1L;
+
+
+	/**
      * Creates a new instance of ExtractKiasmaKeywords
      */
     public ExtractKiasmaKeywords() {
@@ -186,7 +180,7 @@ public class ExtractKiasmaKeywords extends AbstractExtractor implements WandoraT
             Topic iconclassTopic = null;
             String iconclassDisplayName = null;
             Association iconclassAssociation = null;
-            Hashtable players = null;
+            Hashtable<Topic,Topic> players = null;
            
             line = breader.readLine();
             while(line != null && !forceStop()) {
@@ -257,7 +251,7 @@ public class ExtractKiasmaKeywords extends AbstractExtractor implements WandoraT
                                     }
                                 }
                             }
-                            players = new Hashtable();
+                            players = new Hashtable<>();
                             players.put(iconclassType, iconclassTopic);
                             players.put(artWorkType, currentWork);
                             iconclassAssociation = topicMap.createAssociation(iconclassType);
@@ -298,7 +292,7 @@ public class ExtractKiasmaKeywords extends AbstractExtractor implements WandoraT
                     superClass.setBaseName(sup + " (iconclass)");
                 }
                 
-                Hashtable players = new Hashtable();
+                Hashtable<Topic,Topic> players = new Hashtable<>();
                 players.put(superclassType, superClass);
                 players.put(subclassType, subClass);
                 Association supeclassAssociation = topicMap.createAssociation(supersubclassType);

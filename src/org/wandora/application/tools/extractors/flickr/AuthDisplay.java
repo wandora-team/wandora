@@ -36,7 +36,10 @@ import javax.swing.JLabel;
  * @author  anttirt
  */
 public class AuthDisplay extends javax.swing.JPanel {
-    private JLabel[] curLabels, reqLabels;
+
+	private static final long serialVersionUID = 1L;
+	
+	private JLabel[] curLabels, reqLabels;
     public int requiredAuthLevel, currentAuthLevel;
     private FlickrState flickrState;
     

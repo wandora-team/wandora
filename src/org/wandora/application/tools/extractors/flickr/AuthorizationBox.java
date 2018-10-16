@@ -26,14 +26,17 @@
 
 package org.wandora.application.tools.extractors.flickr;
 
-import java.awt.Frame;
 
 /**
  *
  * @author  anttirt
  */
 public class AuthorizationBox extends javax.swing.JPanel {
-    private java.awt.Frame dlgParent;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private java.awt.Frame dlgParent;
     private FlickrState flickrState;
     private String authRequirements;
     

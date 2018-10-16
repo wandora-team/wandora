@@ -46,7 +46,10 @@ import org.wandora.utils.IObox;
 
 
 public class FreebaseMQLExtractor  extends AbstractFreebaseExtractor {
-    private static String currentURL = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private static String currentURL = null;
     
     @Override
     public String getName() {

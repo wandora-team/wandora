@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.flickr;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeMap;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +45,10 @@ import org.wandora.application.tools.extractors.geonames.*;
  */
 public class PhotoInfoExtractor extends FlickrExtractor {
 
-    public boolean MAKE_GPS_OCCURRENCES = true;
+	private static final long serialVersionUID = 1L;
+
+
+	public boolean MAKE_GPS_OCCURRENCES = true;
     
 
     private FlickrPhoto photo;
@@ -68,8 +70,8 @@ public class PhotoInfoExtractor extends FlickrExtractor {
     
     
     @Override
-    protected boolean extract(Wandora admin, Context context) throws ExtractionFailure {
-        currentAdmin = admin;
+    protected boolean extract(Wandora wandora, Context context) throws ExtractionFailure {
+        currentAdmin = wandora;
         Collection<Topic> photoTopics = null;
         Topic photoT = null;
         try {
@@ -95,7 +97,7 @@ public class PhotoInfoExtractor extends FlickrExtractor {
                 photoTopic = t;
                 String photoID = photoTopic.getData(getOccurrence(FlickrOccur.PhotoID), getLanguage(null));
                 log("Extracting information for photo " + photoTopic.getDisplayName());
-                TreeMap<String, String> args = new TreeMap();
+                TreeMap<String, String> args = new TreeMap<>();
                 args.put("photo_id", photoID);
                 JSONObject response = getFlickrState().unauthorizedCall("flickr.photos.getInfo", args);
                 throwOnAPIError(response);
@@ -126,7 +128,7 @@ public class PhotoInfoExtractor extends FlickrExtractor {
     
     
     private void photos_geo_getLocation() throws RequestFailure, JSONException, TopicMapException {
-        TreeMap<String, String> args = new TreeMap();
+        TreeMap<String, String> args = new TreeMap<>();
         args.put("photo_id", photo.ID);
         JSONObject response = getFlickrState().unauthorizedCall("flickr.photos.geo.getLocation", args);
         if(response.getString("stat").equals("ok")) {
@@ -149,7 +151,7 @@ public class PhotoInfoExtractor extends FlickrExtractor {
     
     
     private void photos_getExif() throws RequestFailure, JSONException, TopicMapException, UserCancellation {
-        TreeMap<String, String> args = new TreeMap();
+        TreeMap<String, String> args = new TreeMap<>();
         args.put("photo_id", photo.ID);
         JSONObject exifResponse = getFlickrState().authorizedCall("flickr.photos.getExif", args, FlickrState.PermRead, currentAdmin);
         throwOnAPIError(exifResponse);

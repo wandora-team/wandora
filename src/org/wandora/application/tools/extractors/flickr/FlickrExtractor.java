@@ -61,7 +61,11 @@ import org.wandora.application.gui.UIBox;
  */
 public abstract class FlickrExtractor extends AbstractWandoraTool {
     
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public WandoraToolType getType() {
         return WandoraToolType.createExtractType();
     }
@@ -89,25 +93,25 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
     
     
     @Override
-    public void configure(Wandora admin, org.wandora.utils.Options options, String prefix) {
+    public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) {
         if(staticState == null)
             staticState = new FlickrState();
         
-        AuthConfigDialog dlg = new AuthConfigDialog(admin, true, getFlickrState());
+        AuthConfigDialog dlg = new AuthConfigDialog(wandora, true, getFlickrState());
         dlg.setVisible(true);
     }
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         if(staticState == null)
             staticState = new FlickrState();
         
-        currentMap = admin.getTopicMap();
+        currentMap = wandora.getTopicMap();
         
         try {
             setDefaultLogger();
-            extract(admin, context);
+            extract(wandora, context);
         }
         catch(ExtractionFailure e) {
             log(e);
@@ -118,21 +122,24 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
     
     
     protected static class ExtractionFailure extends Exception {
-        public ExtractionFailure(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public ExtractionFailure(String message) { super(message); }
         public ExtractionFailure(Throwable cause) { super(cause); }
         public ExtractionFailure(String message, Throwable cause) { super(message, cause); }
     }
     
     
     protected static class RequestFailure extends Exception {
-        public RequestFailure(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public RequestFailure(String message) { super(message); }
         public RequestFailure(Throwable cause) { super(cause); }
         public RequestFailure(String message, Throwable cause) { super(message, cause); }
     }
 
     
     public static class UserCancellation extends Exception {
-        public UserCancellation(String message) { super(message); }
+		private static final long serialVersionUID = 1L;
+		public UserCancellation(String message) { super(message); }
         public UserCancellation(Throwable cause) { super(cause); }
         public UserCancellation(String message, Throwable cause) { super(message, cause); }
     }
@@ -384,7 +391,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
     
     public final Collection<Topic> getWithType( Context context, Topic type) {
         Iterator objs = context.getContextObjects();
-        ArrayList<Topic> topicList = new ArrayList();
+        ArrayList<Topic> topicList = new ArrayList<>();
         if(type == null) return topicList;
             
         try {
