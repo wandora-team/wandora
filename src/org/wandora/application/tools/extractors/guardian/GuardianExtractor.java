@@ -41,7 +41,10 @@ import org.wandora.topicmap.TopicMap;
 
 public class GuardianExtractor extends AbstractExtractor{
     
-    private GuardianExtractorUI ui = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private GuardianExtractorUI ui = null;
 
 
     @Override

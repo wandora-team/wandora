@@ -30,18 +30,14 @@ import org.wandora.utils.IObox;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.text.*;
 import javax.swing.*;
 import org.xml.sax.*;
 import org.w3c.tidy.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.application.gui.*;
-import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
 
 
 /**
@@ -50,7 +46,11 @@ import org.wandora.utils.Tuples.*;
  */
 public class HCardExtractor extends AbstractExtractor implements WandoraTool {
     
-    /** Creates a new instance of HCardExtractor */
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/** Creates a new instance of HCardExtractor */
     public HCardExtractor() {
     }
 
@@ -291,8 +291,8 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
         private String rev;
         private ArrayList<String> revs;
         
-        private ArrayList<Integer> state = null;
-        private Stack stateStack = null;
+        private Collection<Integer> state = null;
+        private Stack<Collection<Integer>> stateStack = null;
 
         
         private int isAbbr = 0;
@@ -305,9 +305,9 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
 
             initCard();
 
-            stateStack = new Stack();
+            stateStack = new Stack<>();
             state = new ArrayList<Integer>();
-            state.add(new Integer(STATE_START));
+            state.add(Integer.valueOf(STATE_START));
         }
 
 
@@ -345,7 +345,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
 
             String[] clases = clas.split(" ");
                        
-            ArrayList newState = new ArrayList();
+            Collection<Integer> newState = new ArrayList<>();
             
             for(int i=0; i<clases.length; i++) {
                 Iterator<Integer> stateIter = state.iterator();
@@ -357,10 +357,10 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                         case STATE_START: {
                             if("vcard".equalsIgnoreCase(clases[i])) {
                                 initCard();
-                                newState.add(new Integer(STATE_VCARD));
+                                newState.add(Integer.valueOf(STATE_VCARD));
                             }
                             else {
-                                newState.add(new Integer(STATE_START));
+                                newState.add(Integer.valueOf(STATE_START));
                             }
                             break;
                         }
@@ -378,7 +378,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     n.name = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_N));
+                                newState.add(Integer.valueOf(STATE_N));
                             }
                             else if("nickname".equalsIgnoreCase(clases[i])) {
                                 if(nickname != null) {
@@ -388,14 +388,14 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     nickname = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_NICKNAME));
+                                newState.add(Integer.valueOf(STATE_NICKNAME));
                             }
                             else if("sort-string".equalsIgnoreCase(clases[i])) {
                                 if(n == null) n = new Name();
                                 if(isAbbr > 0) {
                                     n.sortString = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_SORTSTRING));
+                                newState.add(Integer.valueOf(STATE_SORTSTRING));
                             }
                             else if("url".equalsIgnoreCase(clases[i])) {
                                 if(url != null) {
@@ -408,7 +408,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if("a".equalsIgnoreCase(qName)) {
                                     url = atts.getValue("href");
                                 }
-                                newState.add(new Integer(STATE_URL));
+                                newState.add(Integer.valueOf(STATE_URL));
                             }
                             else if("email".equalsIgnoreCase(clases[i])) {
                                 if(email != null) {
@@ -426,7 +426,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                         }
                                     }
                                 }
-                                newState.add(new Integer(STATE_EMAIL));
+                                newState.add(Integer.valueOf(STATE_EMAIL));
                             }
                             else if("tel".equalsIgnoreCase(clases[i])) {
                                 if(tel != null) {
@@ -436,14 +436,14 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     tel.value = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_TEL));
+                                newState.add(Integer.valueOf(STATE_TEL));
                             }
                             else if("adr".equalsIgnoreCase(clases[i])) {
                                 if(adr != null) {
                                     adrs.add(adr);
                                 }
                                 adr = new Adr();
-                                newState.add(new Integer(STATE_ADR));
+                                newState.add(Integer.valueOf(STATE_ADR));
                             }
                             else if("label".equalsIgnoreCase(clases[i])) {
                                 if(label != null) {
@@ -453,7 +453,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     label = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_LABEL));
+                                newState.add(Integer.valueOf(STATE_LABEL));
                             }
                             else if("geo".equalsIgnoreCase(clases[i])) {
                                 latitude = null;
@@ -465,14 +465,14 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                         longitude = geo[1];
                                     }
                                 }
-                                newState.add(new Integer(STATE_GEO));
+                                newState.add(Integer.valueOf(STATE_GEO));
                             }
                             else if("tz".equalsIgnoreCase(clases[i])) {
                                 tz = null;
                                 if(isAbbr > 0) {
                                     tz = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_TZ));
+                                newState.add(Integer.valueOf(STATE_TZ));
                             }
                             else if("photo".equalsIgnoreCase(clases[i])) {
                                 if(photo != null) {
@@ -491,7 +491,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                         photo = atts.getValue("href");
                                     }
                                 }
-                                newState.add(new Integer(STATE_PHOTO));
+                                newState.add(Integer.valueOf(STATE_PHOTO));
                             }
                             else if("logo".equalsIgnoreCase(clases[i])) {
                                 if(logo != null) {
@@ -510,7 +510,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                         logo = atts.getValue("href");
                                     }
                                 }
-                                newState.add(new Integer(STATE_LOGO));
+                                newState.add(Integer.valueOf(STATE_LOGO));
                             }
                             else if("sound".equalsIgnoreCase(clases[i])) {
                                 if(sound != null) {
@@ -536,7 +536,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if("abbr".equalsIgnoreCase(qName)) {
                                     bday = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_BDAY));
+                                newState.add(Integer.valueOf(STATE_BDAY));
                             }
                             else if("title".equalsIgnoreCase(clases[i])) {
                                 if(title != null) {
@@ -546,7 +546,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     title = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_TITLE));
+                                newState.add(Integer.valueOf(STATE_TITLE));
                             }
                             else if("role".equalsIgnoreCase(clases[i])) {
                                 if(role != null) {
@@ -556,7 +556,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     role = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ROLE));
+                                newState.add(Integer.valueOf(STATE_ROLE));
                             }
                             else if("org".equalsIgnoreCase(clases[i])) {
                                 if(org != null) {
@@ -566,7 +566,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     org.name = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ORG));
+                                newState.add(Integer.valueOf(STATE_ORG));
                             }
                             else if("category".equalsIgnoreCase(clases[i])) {
                                 if(category != null) {
@@ -576,7 +576,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     category = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_CATEGORY));
+                                newState.add(Integer.valueOf(STATE_CATEGORY));
                             }
                             else if("note".equalsIgnoreCase(clases[i])) {
                                 if(note != null) {
@@ -586,14 +586,14 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     note = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_NOTE));
+                                newState.add(Integer.valueOf(STATE_NOTE));
                             }
                             else if("class".equalsIgnoreCase(clases[i])) {
                                 classs = null;
                                 if(isAbbr > 0) {
                                     classs = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_CLASS));
+                                newState.add(Integer.valueOf(STATE_CLASS));
                             }
                             else if("key".equalsIgnoreCase(clases[i])) {
                                 if(key != null) {
@@ -603,7 +603,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     key = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_KEY));
+                                newState.add(Integer.valueOf(STATE_KEY));
                             }
                             else if("mailer".equalsIgnoreCase(clases[i])) {
                                 if(mailer != null) {
@@ -613,14 +613,14 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     mailer = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_MAILER));
+                                newState.add(Integer.valueOf(STATE_MAILER));
                             }
                             else if("uid".equalsIgnoreCase(clases[i])) {
                                 uid = null;
                                 if(isAbbr > 0) {
                                     uid = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_UID));
+                                newState.add(Integer.valueOf(STATE_UID));
                             }
                             else if("rev".equalsIgnoreCase(clases[i])) {
                                 if(rev != null) {
@@ -630,7 +630,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     rev = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_REV));
+                                newState.add(Integer.valueOf(STATE_REV));
                             }
                             else if("organization-name".equalsIgnoreCase(clases[i])) {
                                 if(org == null) org = new Org();
@@ -638,7 +638,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     org.name = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ORG_NAME));
+                                newState.add(Integer.valueOf(STATE_ORG_NAME));
                             }
                             else if("organization-unit".equalsIgnoreCase(clases[i])) {
                                 if(org == null) org = new Org();
@@ -646,7 +646,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     org.unit = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ORG_UNIT));
+                                newState.add(Integer.valueOf(STATE_ORG_UNIT));
                             }
                             break;
                         }
@@ -657,35 +657,35 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     n.familyName = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_N_FAMILY));
+                                newState.add(Integer.valueOf(STATE_N_FAMILY));
                             }
                             else if("given-name".equalsIgnoreCase(clases[i])) {
                                 n.givenName = null;
                                 if(isAbbr > 0) {
                                     n.givenName = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_N_GIVEN));
+                                newState.add(Integer.valueOf(STATE_N_GIVEN));
                             }
                             else if("additional-name".equalsIgnoreCase(clases[i])) {
                                 n.additionalName = null;
                                 if(isAbbr > 0) {
                                     n.additionalName = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_N_ADDITIONAL));
+                                newState.add(Integer.valueOf(STATE_N_ADDITIONAL));
                             }
                             else if("honorific-prefix".equalsIgnoreCase(clases[i])) {
                                 n.honorifixPrefix = null;
                                 if(isAbbr > 0) {
                                     n.honorifixPrefix = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_N_HONORIFIC_PREFIX));
+                                newState.add(Integer.valueOf(STATE_N_HONORIFIC_PREFIX));
                             }
                             else if("honorific-suffix".equalsIgnoreCase(clases[i])) {
                                 n.honorifixSuffix = null;
                                 if(isAbbr > 0) {
                                     n.honorifixSuffix = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_N_HONORIFIC_SUFFIX));
+                                newState.add(Integer.valueOf(STATE_N_HONORIFIC_SUFFIX));
                             }
                             break;
                         }
@@ -696,7 +696,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     email.type = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_EMAIL_TYPE));
+                                newState.add(Integer.valueOf(STATE_EMAIL_TYPE));
                             }
                             else if("value".equalsIgnoreCase(clases[i])) {
                                 email.value = null;
@@ -711,7 +711,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                         }
                                     }
                                 }
-                                newState.add(new Integer(STATE_EMAIL_VALUE));
+                                newState.add(Integer.valueOf(STATE_EMAIL_VALUE));
                             }
                             else {
                                 email.type = clases[i];
@@ -726,14 +726,14 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     tel.type = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_TEL_TYPE));
+                                newState.add(Integer.valueOf(STATE_TEL_TYPE));
                             }
                             else if("value".equalsIgnoreCase(clases[i])) {
                                 tel.value = null;
                                 if(isAbbr > 0) {
                                     tel.value = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_TEL_VALUE));
+                                newState.add(Integer.valueOf(STATE_TEL_VALUE));
                             }
                             break;
                         }
@@ -745,62 +745,62 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     adr.postOfficeBox = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_POST_OFFICE_BOX));
+                                newState.add(Integer.valueOf(STATE_ADR_POST_OFFICE_BOX));
                             }
                             else if("extended-address".equalsIgnoreCase(clases[i])) {
                                 adr.extendedAddress = null;
                                 if(isAbbr > 0) {
                                     adr.extendedAddress = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_EXTENDED_ADDRESS));
+                                newState.add(Integer.valueOf(STATE_ADR_EXTENDED_ADDRESS));
                             }
                             else if("street-address".equalsIgnoreCase(clases[i])) {
                                 adr.streetAddress = null;
                                 if(isAbbr > 0) {
                                     adr.streetAddress = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_STREET_ADDRESS));
+                                newState.add(Integer.valueOf(STATE_ADR_STREET_ADDRESS));
                             }
                             else if("locality".equalsIgnoreCase(clases[i])) {
                                 adr.locality = null;
                                 if(isAbbr > 0) {
                                     adr.locality = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_LOCALITY));
+                                newState.add(Integer.valueOf(STATE_ADR_LOCALITY));
                             }
                             else if("region".equalsIgnoreCase(clases[i])) {
                                 adr.region = null;
                                 if(isAbbr > 0) {
                                     adr.region = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_REGION));
+                                newState.add(Integer.valueOf(STATE_ADR_REGION));
                             }
                             else if("postal-code".equalsIgnoreCase(clases[i])) {
                                 adr.postalCode = null;
                                 if(isAbbr > 0) {
                                     adr.postalCode = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_POSTAL_CODE));
+                                newState.add(Integer.valueOf(STATE_ADR_POSTAL_CODE));
                             }
                             else if("country-name".equalsIgnoreCase(clases[i])) {
                                 adr.countryName = null;
                                 if(isAbbr > 0) {
                                     adr.countryName = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_COUNTRY_NAME));
+                                newState.add(Integer.valueOf(STATE_ADR_COUNTRY_NAME));
                             }
                             else if("type".equalsIgnoreCase(clases[i])) {
                                 adr.type = null;
                                 if(isAbbr > 0) {
                                     adr.type = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_TYPE));
+                                newState.add(Integer.valueOf(STATE_ADR_TYPE));
                             }
                             else if("value".equalsIgnoreCase(clases[i])) {
                                 if(isAbbr > 0) {
                                     adr.adr = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ADR_VALUE));
+                                newState.add(Integer.valueOf(STATE_ADR_VALUE));
                             }
                             break;
                         }
@@ -811,14 +811,14 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     latitude = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_GEO_LATITUDE));
+                                newState.add(Integer.valueOf(STATE_GEO_LATITUDE));
                             }
                             else if("longitude".equalsIgnoreCase(clases[i])) {
                                 latitude = null;
                                 if(isAbbr > 0) {
                                     longitude = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_GEO_LONGITUDE));
+                                newState.add(Integer.valueOf(STATE_GEO_LONGITUDE));
                             }
                             break;
                         }
@@ -829,14 +829,14 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     org.name = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ORG_NAME));
+                                newState.add(Integer.valueOf(STATE_ORG_NAME));
                             }
                             else if("organization-unit".equalsIgnoreCase(clases[i])) {
                                 org.unit = null;
                                 if(isAbbr > 0) {
                                     org.unit = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_ORG_UNIT));
+                                newState.add(Integer.valueOf(STATE_ORG_UNIT));
                             }
                             break;
                         }
@@ -847,7 +847,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
             if(newState.size() == 0) {
                 newState.addAll(state);
             }
-            state = new ArrayList();
+            state = new ArrayList<>();
             Iterator<Integer> newStateIterator = newState.iterator();
             Integer i = null;
             while(newStateIterator.hasNext()) {
@@ -878,11 +878,11 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
 
                 switch(singleStateInt) {
                     case STATE_VCARD: {
-                        Iterator<ArrayList<Integer>> statesLeft = stateStack.iterator();
+                        Iterator<Collection<Integer>> statesLeft = stateStack.iterator();
                         boolean doProcessCard = true;
                         while(statesLeft.hasNext()) {
-                            ArrayList<Integer> stateLeft = statesLeft.next();
-                            if(stateLeft.contains(new Integer(STATE_VCARD))) {
+                            Collection<Integer> stateLeft = statesLeft.next();
+                            if(stateLeft.contains(Integer.valueOf(STATE_VCARD))) {
                                 doProcessCard = false;
                                 break;
                             }
@@ -900,7 +900,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
             }
             else {
                 state = new ArrayList<Integer>();
-                state.add(new Integer(STATE_START));
+                state.add(Integer.valueOf(STATE_START));
             }
         }
 

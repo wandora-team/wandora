@@ -41,7 +41,10 @@ import org.wandora.topicmap.TopicMapException;
 public class JsoupHCardExtractor 
     extends AbstractJsoupMicroformatExtractor {
 
-    private static final String SI_PREFIX = "http://wandora.org/si/hcard/";
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String SI_PREFIX = "http://wandora.org/si/hcard/";
     
     private static final String[] CARD_PROPS = {
         "fn",

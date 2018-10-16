@@ -32,17 +32,15 @@ import org.wandora.utils.IObox;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.text.*;
 import org.xml.sax.*;
 import org.w3c.tidy.*;
 import javax.swing.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.utils.*;
 import org.wandora.application.gui.*;
+
 
 
 /**
@@ -54,8 +52,11 @@ import org.wandora.application.gui.*;
 
 public class GeoExtractor extends AbstractExtractor implements WandoraTool {
 
-    
-    /** Creates a new instance of GeoExtractor */
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	/** Creates a new instance of GeoExtractor */
     public GeoExtractor() {
     }
     
@@ -91,10 +92,7 @@ public class GeoExtractor extends AbstractExtractor implements WandoraTool {
     }
     
     
-    
-  
-    
-    
+
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         return _extractTopicsFrom(url.openStream(),topicMap);
     }

@@ -51,7 +51,9 @@ import org.wandora.topicmap.Topic;
 public class HelmetUI extends javax.swing.JPanel {
 
 
-    public static final String baseURL = "http://data.kirjastot.fi/search";
+	private static final long serialVersionUID = 1L;
+	
+	public static final String baseURL = "http://data.kirjastot.fi/search";
     public static final String authorURL = baseURL+"/author.json?query=__1__";
     public static final String titleURL = baseURL+"/title.json?query=__1__";
     public static final String isbnURL = baseURL+"/isbn.json?query=__1__";

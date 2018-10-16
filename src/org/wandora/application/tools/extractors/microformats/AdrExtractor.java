@@ -33,7 +33,6 @@ import org.wandora.utils.IObox;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.text.*;
 import org.xml.sax.*;
 import org.w3c.tidy.*;
 import javax.swing.*;
@@ -41,9 +40,7 @@ import javax.swing.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.utils.*;
 import org.wandora.application.gui.*;
 
 
@@ -53,7 +50,10 @@ import org.wandora.application.gui.*;
  */
 public class AdrExtractor extends AbstractExtractor implements WandoraTool {
     
-    /** Creates a new instance of AdrExtractor */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of AdrExtractor */
     public AdrExtractor() {
     }
 
@@ -77,6 +77,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
 
     
     public static final String[] contentTypes=new String[] { "text/html" };
+    
     
     @Override
     public String[] getContentTypes() {
@@ -211,7 +212,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
         
         private Association association;
 
-        private Stack stateStack;
+        private Stack<Integer> stateStack;
         
 
         // -------------------------------------------------------------------------
@@ -230,7 +231,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
             location = null;
             
             association = null;
-            stateStack = new Stack();
+            stateStack = new Stack<>();
         }
 
 
@@ -244,7 +245,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
         }
 
         public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-            stateStack.push(new Integer(state));
+            stateStack.push(Integer.valueOf(state));
             String clas = atts.getValue("class");
             
             if(debug) System.out.print("qname=="+ qName);
@@ -336,7 +337,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
         public void endElement(String uri, String localName, String qName) throws SAXException {
             switch(state) {
                 case STATE_ADR: {
-                    if(!stateStack.contains(new Integer(STATE_ADR))) {
+                    if(!stateStack.contains(Integer.valueOf(STATE_ADR))) {
                         processAdr();
                     }
                     break;

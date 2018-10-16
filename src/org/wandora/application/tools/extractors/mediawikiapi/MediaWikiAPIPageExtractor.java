@@ -40,15 +40,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.application.WandoraToolLogger;
-import org.wandora.application.gui.WandoraOptionPane;
+
 
 /**
  *
@@ -58,7 +56,9 @@ import org.wandora.application.gui.WandoraOptionPane;
 
 public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{    
 
-    private int nExtracted;
+	private static final long serialVersionUID = 1L;
+	
+	private int nExtracted;
     private String baseURL;
     private String queryURL;
     private boolean crawlClasses;
@@ -67,6 +67,8 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     
     private int progress;
     private WandoraToolLogger logger;
+    
+    
     
     MediaWikiAPIPageExtractor(String baseURL, String[] qType, boolean crawl){
         super();
@@ -116,16 +118,18 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         throw new UnsupportedOperationException("Not supported."); 
     }
 
+    
     @Override
     public boolean _extractTopicsFrom(URL u, TopicMap t) throws Exception {
         return extractTopicsFromURL(u, t);
     }
 
+    
     @Override
-    public boolean _extractTopicsFrom(String str, TopicMap t) throws Exception {
-        
+    public boolean _extractTopicsFrom(String str, TopicMap t) throws Exception {    
         return extractTopicsFromString(str, t);
     }
+    
     
     private boolean extractTopicsFromString(String str, TopicMap t){
         
@@ -142,6 +146,8 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         
         return true;
     }
+    
+    
     
     private boolean extractTopicsFromURL(URL u, TopicMap t){
         HttpResponse<JsonNode> resp;
@@ -177,6 +183,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         
         return true;
     }
+    
     
     private void continueExtraction(JSONObject contObject, TopicMap t) 
             throws Exception{
@@ -244,6 +251,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         return null;
     }
     
+    
     private void parsePage(JSONObject page, TopicMap tm) 
             throws JSONException, TopicMapException, IOException{
         
@@ -251,6 +259,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         parsePage(title,tm);
         
     }
+    
     
     private void parsePage(String title, TopicMap tm)
             throws JSONException, TopicMapException, IOException{
@@ -293,6 +302,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         getDefaultLogger().setProgress(progress++);
     }
     
+    
     private String getArticleBody(String title) throws IOException{
         StringBuilder queryBuilder = new StringBuilder(this.baseURL)
             .append("/index.php?action=raw&title=")
@@ -312,6 +322,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         
         return bodyString;
     }
+    
     
     private HashMap<String,String> getArticleInfo(String title) 
             throws IOException{
@@ -364,6 +375,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
                 
         return null;
     }
+    
     
     private List<String> getArticleClasses(String title) throws IOException{
         
@@ -418,10 +430,12 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         return null;
     }
     
+    
     private void printError(JSONObject body) throws JSONException{
         JSONObject e = body.getJSONObject("error");
         log(e.getString("info"));
     }
+    
     
     private void printWarnings(JSONObject body) throws JSONException{
         JSONObject warnings = body.getJSONObject("warnings");

@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.helmet;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.utils.Tuples.*;
 import org.wandora.utils.*;
 
 
@@ -160,7 +159,7 @@ public class HelmetJSONParser {
 
     public void takeNap(long napTime) {
         try {
-            Thread.currentThread().sleep(napTime);
+            Thread.sleep(napTime);
         }
         catch(Exception e) {}
     }

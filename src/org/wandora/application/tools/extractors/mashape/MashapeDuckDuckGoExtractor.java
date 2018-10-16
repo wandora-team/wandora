@@ -26,10 +26,8 @@ package org.wandora.application.tools.extractors.mashape;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import com.mashape.unirest.http.*;
 
@@ -37,7 +35,8 @@ import org.json.*;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
+
+
 
 /**
  *
@@ -47,7 +46,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class MashapeDuckDuckGoExtractor extends AbstractMashapeExtractor{
     
-    private static final String API_SI 
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String API_SI 
         = "https://duckduckgo-duckduckgo-zero-click-info.p.mashape.com";
     
     private static final String API_NAME = "DuckDuckGo API";    

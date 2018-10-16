@@ -39,7 +39,10 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
 
 
 public class MashapeExtractor extends AbstractExtractor{
-    private MashapeExtractorUI ui = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private MashapeExtractorUI ui = null;
     
 
     @Override

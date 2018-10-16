@@ -30,6 +30,7 @@ package org.wandora.application.tools.extractors.mashape;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.HashSet;
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;
@@ -40,7 +41,6 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
-import org.wandora.application.gui.simple.SimpleList;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -48,7 +48,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class MashapeExtractorUI extends javax.swing.JPanel {
 
-    private Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
     private Context context = null;
@@ -66,14 +69,17 @@ public class MashapeExtractorUI extends javax.swing.JPanel {
         initComponents();
     }
 
+    
     public boolean wasAccepted() {
         return accepted;
     }
 
+    
     public void setAccepted(boolean b) {
         accepted = b;
     }
 
+    
     public void open(Wandora w, Context c) {
         context = c;
         wandora = w;
@@ -90,11 +96,12 @@ public class MashapeExtractorUI extends javax.swing.JPanel {
         }
         dialog.setVisible(true);
     }
+    
 
     public WandoraTool[] getExtractors(MashapeExtractor tool) throws TopicMapException {
         
         WandoraTool wt;
-        ArrayList<WandoraTool> wts = new ArrayList();
+        List<WandoraTool> wts = new ArrayList<>();
         String key = solveAPIKey();
         
         if(key == null){
@@ -112,7 +119,8 @@ public class MashapeExtractorUI extends javax.swing.JPanel {
             ex.setApiKey(key); 
             wt = ex;
             wts.add(wt);
-        } else if(MashapiTabs.getSelectedComponent().equals(duckDuckGoPanel)){
+        } 
+        else if(MashapiTabs.getSelectedComponent().equals(duckDuckGoPanel)){
             
             String query = ddgInput.getText();
             String extractUrl = ddgEndpoint + "?q=" + query + "&format=json";
@@ -126,6 +134,8 @@ public class MashapeExtractorUI extends javax.swing.JPanel {
         return wts.toArray(new WandoraTool[]{});
     }
 
+    
+    
     protected static String urlEncode(String str) {
         try {
             str = URLEncoder.encode(str, "utf-8");
@@ -134,11 +144,14 @@ public class MashapeExtractorUI extends javax.swing.JPanel {
         return str;
     }
     
+    
+    
     private static String apikey = null;
 
     public String solveAPIKey(Wandora wandora) {
         return solveAPIKey();
     }
+    
     
     public String solveAPIKey() {
         if(apikey == null) {
@@ -152,10 +165,12 @@ public class MashapeExtractorUI extends javax.swing.JPanel {
         return apikey;
     }
     
+    
     public void forgetAuthorization() {
         apikey = null;
         forgetButton.setEnabled(false);
     }
+    
     
     private void selectContextSLs() {
         Iterator iter = context.getContextObjects();
@@ -192,6 +207,8 @@ public class MashapeExtractorUI extends javax.swing.JPanel {
         lambdaSearchField.setText(s);
     }
     
+    
+    
     private void selectContextSIs() {
         Iterator iter = context.getContextObjects();
         Object o;
@@ -226,6 +243,8 @@ public class MashapeExtractorUI extends javax.swing.JPanel {
         }
         lambdaSearchField.setText(s);
     }
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.

@@ -34,17 +34,13 @@ import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.application.tools.*;
-import org.wandora.*;
 import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
 
 import java.util.*;
 import java.io.*;
 import java.net.*;
-import java.awt.*;
 import javax.swing.*;
 
-import java.net.*;
 import org.xml.sax.*;
 
 
@@ -55,7 +51,9 @@ import org.xml.sax.*;
 
 public class MarcXMLExtractor extends AbstractExtractor {
 
-    public static boolean TRIM_DATAS = false;
+	private static final long serialVersionUID = 1L;
+
+	public static boolean TRIM_DATAS = false;
 
     public static boolean INCLUDE_INDX_IN_ASSOCIATIONS = true;
     public static boolean SOLVE_FIELD_NAMES = true;
@@ -86,13 +84,13 @@ public class MarcXMLExtractor extends AbstractExtractor {
     private static String defaultEncoding = "UTF-8"; //"ISO-8859-1";
     private static String defaultLang = "en";
 
-    private HashMap excludeFields = null;
-    private HashMap includeFields = null;
-    private HashMap excludeSubfields = null;
-    private HashMap includeSubfields = null;
+    private Map<String,String> excludeFields = null;
+    private Map<String,String> includeFields = null;
+    private Map<String,String> excludeSubfields = null;
+    private Map<String,String> includeSubfields = null;
 
-    private ArrayList<String> recordSIPatterns = null;
-    private ArrayList<String> basenamePatterns = null;
+    private List<String> recordSIPatterns = null;
+    private List<String> basenamePatterns = null;
 
 
 
@@ -140,8 +138,8 @@ public class MarcXMLExtractor extends AbstractExtractor {
         return true;
     }
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"MARCXML extract options","MARCXML extract options",true,new String[][]{
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"MARCXML extract options","MARCXML extract options",true,new String[][]{
             new String[] {
                 "Record SI patterns",
                 "string",
@@ -220,7 +218,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                 defaultLang,
                 "Language used in occurrences for example. Use two letter acronyms."
             }
-        },admin);
+        },wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
 
@@ -249,9 +247,9 @@ public class MarcXMLExtractor extends AbstractExtractor {
     }
 
 
-    private HashMap parseFieldCodes(String str) {
+    private Map<String,String> parseFieldCodes(String str) {
         String[] strs = str.split(",");
-        HashMap codes = new HashMap();
+        Map<String,String> codes = new LinkedHashMap<>();
         for(int i=0; i<strs.length; i++) {
             String s = strs[i];
             s.trim();
@@ -285,9 +283,9 @@ public class MarcXMLExtractor extends AbstractExtractor {
 
 
 
-    public HashMap parseSubfieldCodes(String str) {
+    public Map<String,String> parseSubfieldCodes(String str) {
         String[] strs = str.split(",");
-        HashMap codes = new HashMap();
+        Map<String,String> codes = new LinkedHashMap<>();
         for(int i=0; i<strs.length; i++) {
             String s = strs[i];
             s.trim();
@@ -483,11 +481,11 @@ public class MarcXMLExtractor extends AbstractExtractor {
         private String data_datafield_ind2 = null;
         private String data_subfield_code = null;
 
-        private ArrayList<MarcField> data_datafields = null;
-        private HashMap<String,String> data_controlfields = null;
+        private List<MarcField> data_datafields = null;
+        private Map<String,String> data_controlfields = null;
 
-        private ArrayList<String> subjectIdentifiers = null;
-        private ArrayList<String> basenames = null;
+        private List<String> subjectIdentifiers = null;
+        private List<String> basenames = null;
 
 
         public void startDocument() throws SAXException {
@@ -512,7 +510,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         data_datafield = "";
                         data_subfield = "";
 
-                        data_controlfields = new HashMap<String,String>();
+                        data_controlfields = new LinkedHashMap<String,String>();
                         data_datafields = new ArrayList<MarcField>();
 
                         subjectIdentifiers = new ArrayList<String>();
@@ -587,7 +585,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         String fieldCode = data_datafield_tag.trim();
                         if(subjectIdentifiers != null && subjectIdentifiers.size() > 0) {
                             try {
-                                ArrayList<String> updatedSubjectIdentifiers = new ArrayList<String>();
+                                List<String> updatedSubjectIdentifiers = new ArrayList<String>();
                                 for(String si : subjectIdentifiers) {
                                     if(si != null) {
                                         if( si.indexOf( "___"+subfieldCode+"@"+fieldCode+"___" ) > -1) {
@@ -611,7 +609,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         // BUILD BASENAMEs
                         if(basenames != null && basenames.size() > 0) {
                             try {
-                                ArrayList<String> updatedBasenames = new ArrayList<String>();
+                                List<String> updatedBasenames = new ArrayList<String>();
                                 for(String n : basenames) {
                                     if(n != null) {
                                         if( n.indexOf( "___"+subfieldCode+"@"+fieldCode+"___" ) > -1) {
@@ -769,10 +767,6 @@ public class MarcXMLExtractor extends AbstractExtractor {
 
 
     // -------------------------------------------------------------------------
-
-
-
-
     // -------------------------------------------------------------------------
 
 
@@ -786,7 +780,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
     };
 
 
-    protected void topicalize(String leader, ArrayList<MarcField> datafields, HashMap<String,String> controlfields, ArrayList<String> subjectIdentifiers, ArrayList<String> basenames, TopicMap tm) {
+    protected void topicalize(String leader, List<MarcField> datafields, Map<String,String> controlfields, List<String> subjectIdentifiers, List<String> basenames, TopicMap tm) {
         if(!(leader == null && datafields.isEmpty() && controlfields.isEmpty() && tm == null && subjectIdentifiers.isEmpty() && basenames.isEmpty())) {
             try {
                 String recordHook = null;
@@ -883,7 +877,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                 recordTopic = tm.getTopic(recordHook);
                                 a.addPlayer(recordTopic, recordTypeTopic);
 
-                                HashMap usedSubFields = new HashMap();
+                                Map<String,Integer> usedSubFields = new LinkedHashMap<>();
                                 for( MarcSubfield subfield : datafield.getSubfields() ) {
                                     String subcode = subfield.getCode();
                                     String subvalue = subfield.getValue();
@@ -892,7 +886,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                         Integer count = (Integer) usedSubFields.get(subcode);
                                         int counti = count.intValue();
                                         counti++;
-                                        usedSubFields.put(subcode, new Integer(counti));
+                                        usedSubFields.put(subcode, Integer.valueOf(counti));
 
                                         Topic subfieldCodeTopic = getSubFieldCodeTopic( subcode, counti, tag, datafield.getInd1(), datafield.getInd2(), tm);
                                         Topic subfieldDataTopic = getSubFieldDataTopic( subvalue, tag, datafield.getInd1(), datafield.getInd2(), tm);
@@ -901,7 +895,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                         }
                                     }
                                     else {
-                                        usedSubFields.put(subcode, new Integer(1));
+                                        usedSubFields.put(subcode, Integer.valueOf(1));
                                         Topic subfieldCodeTopic = getSubFieldCodeTopic( subcode, tag, datafield.getInd1(), datafield.getInd2(), tm);
                                         Topic subfieldDataTopic = getSubFieldDataTopic( subvalue, tag, datafield.getInd1(), datafield.getInd2(), tm);
                                         if( subfieldCodeTopic != null && subfieldDataTopic != null) {

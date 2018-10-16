@@ -26,6 +26,7 @@
 package org.wandora.application.tools.extractors.mads;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -36,17 +37,17 @@ public class MadsModel {
     String version = null;
     String id = null;
     
-    ArrayList<MadsAuthority> authorities = new ArrayList<MadsAuthority>();
-    ArrayList<MadsRelated> related = new ArrayList<MadsRelated>();
-    ArrayList<MadsVariant> variant = new ArrayList<MadsVariant>();
+    List<MadsAuthority> authorities = new ArrayList<MadsAuthority>();
+    List<MadsRelated> related = new ArrayList<MadsRelated>();
+    List<MadsVariant> variant = new ArrayList<MadsVariant>();
 
-    ArrayList<MadsNote> notes = new ArrayList<MadsNote>();
-    ArrayList<MadsAffiliation> affiliations = new ArrayList<MadsAffiliation>();
-    ArrayList<MadsUrl> urls = new ArrayList<MadsUrl>();
-    ArrayList<MadsIdentifier> identifiers = new ArrayList<MadsIdentifier>();
-    ArrayList<MadsFieldOfActivity> fieldOfActivities = new ArrayList<MadsFieldOfActivity>();
-    ArrayList<MadsExtension> extensions = new ArrayList<MadsExtension>();
-    ArrayList<MadsRecordInfo> recordInfos = new ArrayList<MadsRecordInfo>();
+    List<MadsNote> notes = new ArrayList<MadsNote>();
+    List<MadsAffiliation> affiliations = new ArrayList<MadsAffiliation>();
+    List<MadsUrl> urls = new ArrayList<MadsUrl>();
+    List<MadsIdentifier> identifiers = new ArrayList<MadsIdentifier>();
+    List<MadsFieldOfActivity> fieldOfActivities = new ArrayList<MadsFieldOfActivity>();
+    List<MadsExtension> extensions = new ArrayList<MadsExtension>();
+    List<MadsRecordInfo> recordInfos = new ArrayList<MadsRecordInfo>();
 
 
     
@@ -58,14 +59,14 @@ public class MadsModel {
         String language = null;
         String id = null;
 
-        ArrayList<MadsTopic> topics = new ArrayList<MadsTopic>();
-        ArrayList<MadsName> names = new ArrayList<MadsName>();
-        ArrayList<MadsTitleInfo> titleInfos = new ArrayList<MadsTitleInfo>();
-        ArrayList<MadsTemporal> temporals = new ArrayList<MadsTemporal>();
-        ArrayList<MadsGenre> genres = new ArrayList<MadsGenre>();
-        ArrayList<MadsGeographic> geographics = new ArrayList<MadsGeographic>();
-        ArrayList<MadsHierarchicalGeographic> hgeographics = new ArrayList<MadsHierarchicalGeographic>();
-        ArrayList<MadsOccupation> occupations = new ArrayList<MadsOccupation>();
+        List<MadsTopic> topics = new ArrayList<MadsTopic>();
+        List<MadsName> names = new ArrayList<MadsName>();
+        List<MadsTitleInfo> titleInfos = new ArrayList<MadsTitleInfo>();
+        List<MadsTemporal> temporals = new ArrayList<MadsTemporal>();
+        List<MadsGenre> genres = new ArrayList<MadsGenre>();
+        List<MadsGeographic> geographics = new ArrayList<MadsGeographic>();
+        List<MadsHierarchicalGeographic> hgeographics = new ArrayList<MadsHierarchicalGeographic>();
+        List<MadsOccupation> occupations = new ArrayList<MadsOccupation>();
     }
 
 
@@ -75,14 +76,14 @@ public class MadsModel {
         String id = null;
         String type = null;
 
-        ArrayList<MadsTopic> topics = new ArrayList<MadsTopic>();
-        ArrayList<MadsName> names = new ArrayList<MadsName>();
-        ArrayList<MadsTitleInfo> titleInfos = new ArrayList<MadsTitleInfo>();
-        ArrayList<MadsTemporal> temporals = new ArrayList<MadsTemporal>();
-        ArrayList<MadsGenre> genres = new ArrayList<MadsGenre>();
-        ArrayList<MadsGeographic> geographics = new ArrayList<MadsGeographic>();
-        ArrayList<MadsHierarchicalGeographic> hgeographics = new ArrayList<MadsHierarchicalGeographic>();
-        ArrayList<MadsOccupation> occupations = new ArrayList<MadsOccupation>();
+        List<MadsTopic> topics = new ArrayList<MadsTopic>();
+        List<MadsName> names = new ArrayList<MadsName>();
+        List<MadsTitleInfo> titleInfos = new ArrayList<MadsTitleInfo>();
+        List<MadsTemporal> temporals = new ArrayList<MadsTemporal>();
+        List<MadsGenre> genres = new ArrayList<MadsGenre>();
+        List<MadsGeographic> geographics = new ArrayList<MadsGeographic>();
+        List<MadsHierarchicalGeographic> hgeographics = new ArrayList<MadsHierarchicalGeographic>();
+        List<MadsOccupation> occupations = new ArrayList<MadsOccupation>();
     }
 
 
@@ -92,14 +93,14 @@ public class MadsModel {
         String id = null;
         String type = null;
 
-        ArrayList<MadsTopic> topics = new ArrayList<MadsTopic>();
-        ArrayList<MadsName> names = new ArrayList<MadsName>();
-        ArrayList<MadsTitleInfo> titleInfos = new ArrayList<MadsTitleInfo>();
-        ArrayList<MadsTemporal> temporals = new ArrayList<MadsTemporal>();
-        ArrayList<MadsGenre> genres = new ArrayList<MadsGenre>();
-        ArrayList<MadsGeographic> geographics = new ArrayList<MadsGeographic>();
-        ArrayList<MadsHierarchicalGeographic> hgeographics = new ArrayList<MadsHierarchicalGeographic>();
-        ArrayList<MadsOccupation> occupations = new ArrayList<MadsOccupation>();
+        List<MadsTopic> topics = new ArrayList<MadsTopic>();
+        List<MadsName> names = new ArrayList<MadsName>();
+        List<MadsTitleInfo> titleInfos = new ArrayList<MadsTitleInfo>();
+        List<MadsTemporal> temporals = new ArrayList<MadsTemporal>();
+        List<MadsGenre> genres = new ArrayList<MadsGenre>();
+        List<MadsGeographic> geographics = new ArrayList<MadsGeographic>();
+        List<MadsHierarchicalGeographic> hgeographics = new ArrayList<MadsHierarchicalGeographic>();
+        List<MadsOccupation> occupations = new ArrayList<MadsOccupation>();
     }
 
 
@@ -110,8 +111,8 @@ public class MadsModel {
         String type = null;
         String authority = null;
         
-        ArrayList<MadsNamePart> nameParts = new ArrayList<MadsNamePart>();
-        ArrayList<MadsDescription> descriptions = new ArrayList<MadsDescription>();
+        List<MadsNamePart> nameParts = new ArrayList<MadsNamePart>();
+        List<MadsDescription> descriptions = new ArrayList<MadsDescription>();
     }
 
 
@@ -211,14 +212,14 @@ public class MadsModel {
         String language = null;
         String value = null;
 
-        ArrayList<MadsOrganization> organizations = new ArrayList<MadsOrganization>();
-        ArrayList<MadsPosition> positions = new ArrayList<MadsPosition>();
-        ArrayList<MadsAddress> addresses = new ArrayList<MadsAddress>();
-        ArrayList<MadsEmail> emails = new ArrayList<MadsEmail>();
-        ArrayList<MadsPhone> phones = new ArrayList<MadsPhone>();
-        ArrayList<MadsFax> faxs = new ArrayList<MadsFax>();
-        ArrayList<MadsHours> hours = new ArrayList<MadsHours>();
-        ArrayList<MadsDateValid> dateValids = new ArrayList<MadsDateValid>();
+        List<MadsOrganization> organizations = new ArrayList<MadsOrganization>();
+        List<MadsPosition> positions = new ArrayList<MadsPosition>();
+        List<MadsAddress> addresses = new ArrayList<MadsAddress>();
+        List<MadsEmail> emails = new ArrayList<MadsEmail>();
+        List<MadsPhone> phones = new ArrayList<MadsPhone>();
+        List<MadsFax> faxs = new ArrayList<MadsFax>();
+        List<MadsHours> hours = new ArrayList<MadsHours>();
+        List<MadsDateValid> dateValids = new ArrayList<MadsDateValid>();
     }
 
 
@@ -229,11 +230,11 @@ public class MadsModel {
         String value = null;
     }
     class MadsAddress {
-        ArrayList<String> streets = new ArrayList<String>();
-        ArrayList<String> cities = new ArrayList<String>();
-        ArrayList<String> states = new ArrayList<String>();
-        ArrayList<String> countries = new ArrayList<String>();
-        ArrayList<String> postcodes = new ArrayList<String>();
+        List<String> streets = new ArrayList<String>();
+        List<String> cities = new ArrayList<String>();
+        List<String> states = new ArrayList<String>();
+        List<String> countries = new ArrayList<String>();
+        List<String> postcodes = new ArrayList<String>();
         String value = null;
     }
 

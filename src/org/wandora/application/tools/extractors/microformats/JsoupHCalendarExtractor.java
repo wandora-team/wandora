@@ -27,7 +27,6 @@ import java.util.HashMap;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import static org.wandora.application.tools.extractors.microformats.AbstractJsoupMicroformatExtractor.TYPE_STRINGS;
 import org.wandora.topicmap.Association;
 
 import org.wandora.topicmap.Topic;
@@ -43,7 +42,10 @@ import org.wandora.topicmap.TopicMapException;
 public class JsoupHCalendarExtractor
     extends AbstractJsoupMicroformatExtractor {
     
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getName() {
         return "HCalendar microformat extractor";
     }

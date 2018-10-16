@@ -27,22 +27,14 @@ package org.wandora.application.tools.extractors.mads;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.*;
-import org.wandora.*;
 import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
-import org.wandora.application.tools.extractors.mads.MadsModel.*;
 
-import java.util.*;
 import java.io.*;
 import java.net.*;
-import java.awt.*;
 import javax.swing.*;
 
-import java.net.*;
 import org.xml.sax.*;
 
 /**
@@ -51,8 +43,9 @@ import org.xml.sax.*;
  */
 public class MadsExtractor extends AbstractExtractor {
 
-
-    protected static String MADS_SI = "http://www.loc.gov/marc/bibliographic/bdintro.html";
+	private static final long serialVersionUID = 1L;
+	
+	protected static String MADS_SI = "http://www.loc.gov/marc/bibliographic/bdintro.html";
     protected static String AUTHORITY_SI = "http://www.loc.gov/marc/bibliographic/bdintro.html#indicator";
    
     private static String defaultEncoding = "UTF-8"; //"ISO-8859-1";

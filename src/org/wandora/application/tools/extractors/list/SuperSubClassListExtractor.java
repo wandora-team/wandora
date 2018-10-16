@@ -27,22 +27,15 @@ package org.wandora.application.tools.extractors.list;
 import org.wandora.application.tools.browserextractors.*;
 import org.wandora.utils.IObox;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.*;
-import org.wandora.utils.*;
-
 
 import java.util.*;
-import java.text.*;
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 
 import javax.swing.text.html.*;
-import javax.swing.text.html.parser.*;
 import javax.swing.text.*;
 import javax.swing.*;
 import org.w3c.tidy.*;
@@ -75,7 +68,10 @@ import org.w3c.tidy.*;
  */
 public class SuperSubClassListExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
 
-    private URL basePath = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private URL basePath = null;
     private static int listCounter = 0;
     
     
@@ -206,7 +202,10 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
     
 
     private static class HTMLParse extends HTMLEditorKit {
-        /**
+
+		private static final long serialVersionUID = 1L;
+
+		/**
         * Call to obtain a HTMLEditorKit.Parser object.
         * @return A new HTMLEditorKit.Parser object.
         */
@@ -244,8 +243,8 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
         private Topic parentTopic;
         private String listId;
 
-        private Stack stateStack;
-        private Stack parentTopics;
+        private Stack<Integer> stateStack;
+        private Stack<Topic> parentTopics;
         
         private Topic listRoot = null;
         
@@ -260,8 +259,8 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
             currentTopicName = null;
             currentTopicUrl = null;
                       
-            stateStack = new Stack();
-            parentTopics = new Stack();
+            stateStack = new Stack<>();
+            parentTopics = new Stack<>();
             
             parentTopic = null;
             currentTopic = null;
@@ -300,7 +299,7 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
                     }
                 }
                 catch(Exception e) {}
-                stateStack.push(new Integer(state));
+                stateStack.push(Integer.valueOf(state));
                 state = STATE_UL;
             }
             else if(t == HTML.Tag.OL) {
@@ -318,7 +317,7 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
                     }
                 }
                 catch(Exception e) {}
-                stateStack.push(new Integer(state));
+                stateStack.push(Integer.valueOf(state));
                 state = STATE_OL;
             }
             else if(t == HTML.Tag.LI) {
@@ -326,7 +325,7 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
                     parentTopic = createListTopic();
                 }
                 currentTopicUrl = null;
-                stateStack.push(new Integer(state));
+                stateStack.push(Integer.valueOf(state));
                 state = STATE_LI;
             }
             else if(t == HTML.Tag.A) {

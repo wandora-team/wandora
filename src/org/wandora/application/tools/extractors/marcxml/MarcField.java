@@ -45,7 +45,7 @@ public class MarcField {
     private String tag = null;
     private String ind1 = null;
     private String ind2 = null;
-    private ArrayList<MarcSubfield> subfields = null;
+    private List<MarcSubfield> subfields = null;
 
 
     public MarcField(String tag, String ind1, String ind2) {
@@ -310,12 +310,12 @@ public class MarcField {
         "886", "886 - Foreign MARC Information Field (R)",
         "887", "887 - Non-MARC Information Field (R)",
     };
-    private static HashMap<String,String> fieldNameHash = null;
+    private static Map<String,String> fieldNameHash = null;
 
 
     public static String getFieldName(String field) {
         if(fieldNameHash == null) {
-            fieldNameHash = new HashMap<String,String>();
+            fieldNameHash = new LinkedHashMap<String,String>();
             for(int i=0; i<fieldNames.length; i=i+2) {
                 fieldNameHash.put(fieldNames[i], fieldNames[i+1]);
             }
@@ -1006,7 +1006,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "Répertoire de vedettes-matière",
+                    "6", "Rï¿½pertoire de vedettes-matiï¿½re",
                     "7", "Source specified in subfield $2"
                 },
         "610",
@@ -1024,7 +1024,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "Répertoire de vedettes-matière",
+                    "6", "Rï¿½pertoire de vedettes-matiï¿½re",
                     "7", "Source specified in subfield $2"
                 },
         "611",
@@ -1042,7 +1042,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "Répertoire de vedettes-matière",
+                    "6", "Rï¿½pertoire de vedettes-matiï¿½re",
                     "7", "Source specified in subfield $2"
                 },
         "630",
@@ -1057,7 +1057,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "Répertoire de vedettes-matière",
+                    "6", "Rï¿½pertoire de vedettes-matiï¿½re",
                     "7", "Source specified in subfield $2"
                 },
         "648",
@@ -1072,7 +1072,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "Répertoire de vedettes-matière",
+                    "6", "Rï¿½pertoire de vedettes-matiï¿½re",
                     "7", "Source specified in subfield $2"
                 },
         "650",
@@ -1090,7 +1090,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "Répertoire de vedettes-matière",
+                    "6", "Rï¿½pertoire de vedettes-matiï¿½re",
                     "7", "Source specified in subfield $2"
                 },
         "651",
@@ -1105,7 +1105,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "Répertoire de vedettes-matière",
+                    "6", "Rï¿½pertoire de vedettes-matiï¿½re",
                     "7", "Source specified in subfield $2"
                 },
         "653",
@@ -1148,7 +1148,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "Répertoire de vedettes-matière",
+                    "6", "Rï¿½pertoire de vedettes-matiï¿½re",
                     "7", "Source specified in subfield $2"
                 },
         "656",

@@ -27,7 +27,6 @@ import java.util.HashMap;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import static org.wandora.application.tools.extractors.microformats.AbstractJsoupMicroformatExtractor.TYPE_STRINGS;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
@@ -40,8 +39,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class JsoupGeoExtractor extends AbstractJsoupMicroformatExtractor{
 
-   
-    private static final String SI_PREFIX = "http://wandora.org/si/adr/";
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String SI_PREFIX = "http://wandora.org/si/adr/";
     
     private HashMap<String,Topic> typeTopics;
     private TopicMap tm;

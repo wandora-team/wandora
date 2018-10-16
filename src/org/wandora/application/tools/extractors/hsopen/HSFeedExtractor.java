@@ -31,12 +31,11 @@ package org.wandora.application.tools.extractors.hsopen;
 
 import java.net.*;
 import java.io.*;
-import javax.swing.*;
 import org.xml.sax.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.gui.*;
+
 import org.wandora.application.tools.extractors.*;
 
 /**
@@ -45,7 +44,9 @@ import org.wandora.application.tools.extractors.*;
  */
 public class HSFeedExtractor extends AbstractExtractor {
     
-    /** Creates a new instance of HSFeedExtractor */
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of HSFeedExtractor */
     public HSFeedExtractor() {
     }
 

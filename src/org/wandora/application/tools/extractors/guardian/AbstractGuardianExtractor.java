@@ -180,6 +180,7 @@ public abstract class AbstractGuardianExtractor extends AbstractExtractor {
         try {
             t = getOrCreateTopic(tm, TAG_BASE_SI + siExt, desc + " (The Guardian API / Tag)");
             Topic tagTopicType = getTagTopicType(tm);
+            t.addType(tagTopicType);
         } catch (TopicMapException e) {
             e.printStackTrace();
         }

@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.hsopen;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import java.util.*;
 import java.io.*;
 import java.net.*;
 import org.wandora.utils.Textbox;
@@ -36,7 +35,10 @@ import org.wandora.utils.Textbox;
  * @author akivela
  */
 public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool {
-    protected String defaultEncoding = "UTF-8";
+
+	private static final long serialVersionUID = 1L;
+	
+	protected String defaultEncoding = "UTF-8";
     public static String LANG = "fi";
 
     public static final String APURAHAT_SI = "http://wandora.org/si/hsopen/apurahat";
@@ -301,7 +303,7 @@ public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool
         return ExtractHelper.getOrCreateTopic(KOONTI_SI, "Koonti", getApuRahatType(tm), tm);
     }
     public Topic getHenkiloType( TopicMap tm ) throws Exception {
-        return ExtractHelper.getOrCreateTopic(HENKILO_SI, "Henkilö", getApuRahatType(tm), tm);
+        return ExtractHelper.getOrCreateTopic(HENKILO_SI, "Henkilï¿½", getApuRahatType(tm), tm);
     }
     public Topic getKieliType( TopicMap tm ) throws Exception {
         return ExtractHelper.getOrCreateTopic(KIELI_SI, "Kieli", getApuRahatType(tm), tm);
@@ -316,10 +318,10 @@ public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool
         return ExtractHelper.getOrCreateTopic(HAKEMUSLUOKKA_SI, "Hakemusluokka", getApuRahatType(tm), tm);
     }
     public Topic getPaatosType( TopicMap tm ) throws Exception {
-        return ExtractHelper.getOrCreateTopic(PAATOS_SI, "Päätös", getApuRahatType(tm), tm);
+        return ExtractHelper.getOrCreateTopic(PAATOS_SI, "Pï¿½ï¿½tï¿½s", getApuRahatType(tm), tm);
     }
     public Topic getJasenType( TopicMap tm ) throws Exception {
-        return ExtractHelper.getOrCreateTopic(JASEN_SI, "Jäsen", getApuRahatType(tm), tm);
+        return ExtractHelper.getOrCreateTopic(JASEN_SI, "Jï¿½sen", getApuRahatType(tm), tm);
     }
     public Topic getSummaType( TopicMap tm ) throws Exception {
         return ExtractHelper.getOrCreateTopic(SUMMA_SI, "Summa", getApuRahatType(tm), tm);
@@ -328,7 +330,7 @@ public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool
         return ExtractHelper.getOrCreateTopic(MAAKUNTA_SI, "Maakunta", getApuRahatType(tm), tm);
     }
     public Topic getLaaniType( TopicMap tm ) throws Exception {
-        return ExtractHelper.getOrCreateTopic(LAANI_SI, "Lääni", getApuRahatType(tm), tm);
+        return ExtractHelper.getOrCreateTopic(LAANI_SI, "Lï¿½ï¿½ni", getApuRahatType(tm), tm);
     }
     public Topic getKotipaikkaType( TopicMap tm ) throws Exception {
         return ExtractHelper.getOrCreateTopic(KOTIPAIKKA_SI, "Kotipaikka", getApuRahatType(tm), tm);
@@ -339,7 +341,7 @@ public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool
         return ExtractHelper.getOrCreateTopic(SYNNYINKUUKAUSI_SI, "Synnyinkuukausi", getApuRahatType(tm), tm);
     }
     public Topic getSynnyinPaivaType( TopicMap tm ) throws Exception {
-        return ExtractHelper.getOrCreateTopic(SYNNYINPAIVA_SI, "Synnyinpäivä", getApuRahatType(tm), tm);
+        return ExtractHelper.getOrCreateTopic(SYNNYINPAIVA_SI, "Synnyinpï¿½ivï¿½", getApuRahatType(tm), tm);
     }
     public Topic getSynnyinVuosiType( TopicMap tm ) throws Exception {
         return ExtractHelper.getOrCreateTopic(SYNNYINVUOSI_SI, "Synnyinvuosi", getApuRahatType(tm), tm);

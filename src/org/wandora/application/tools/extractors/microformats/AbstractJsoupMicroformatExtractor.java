@@ -43,7 +43,10 @@ import org.wandora.topicmap.TopicMapException;
 
 abstract class AbstractJsoupMicroformatExtractor extends AbstractJsoupExtractor{
     
-    @Override
+	
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/extract_microformat.png");
     } 
@@ -170,6 +173,7 @@ abstract class AbstractJsoupMicroformatExtractor extends AbstractJsoupExtractor{
         return type;
     }
     
+    
     protected void addProp(Topic topic, String propName, Element prop) throws TopicMapException {
         
         Topic topicType = getType("vcard");
@@ -177,6 +181,7 @@ abstract class AbstractJsoupMicroformatExtractor extends AbstractJsoupExtractor{
         addProp(topic, topicType,propName,prop);
         
     }
+    
     
     protected void addProp(Topic topic,Topic topicType, String propName, Element prop) throws TopicMapException {
         
@@ -215,6 +220,7 @@ abstract class AbstractJsoupMicroformatExtractor extends AbstractJsoupExtractor{
         
     }
     
+    
     protected void parseName(Topic card, Element element) throws TopicMapException {
         
         TopicMap tm = getTopicMap();
@@ -239,10 +245,10 @@ abstract class AbstractJsoupMicroformatExtractor extends AbstractJsoupExtractor{
                     log(tme);
                 }
             }
-        }
-        
+        } 
     }
 
+    
     protected void parseAdr(Topic parent, Element element, String parentTypeName) throws TopicMapException {
         TopicMap tm = getTopicMap();
         Topic topic = getOrCreateTopic(tm, null);
@@ -267,8 +273,8 @@ abstract class AbstractJsoupMicroformatExtractor extends AbstractJsoupExtractor{
                 }
             }
         }
-    
     }
+    
     
     protected void parseGeo(Topic card, Element element, String parentTypeName) throws TopicMapException {
         TopicMap tm = getTopicMap();
@@ -296,6 +302,7 @@ abstract class AbstractJsoupMicroformatExtractor extends AbstractJsoupExtractor{
             }
         }
     }
+    
     
     abstract protected String[][] getTypeStrings();
 

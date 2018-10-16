@@ -39,7 +39,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public class JsoupAdrExtractor extends AbstractJsoupMicroformatExtractor{
 
-    private static final String SI_PREFIX = "http://wandora.org/si/adr/";
+	private static final long serialVersionUID = 1L;
+
+	private static final String SI_PREFIX = "http://wandora.org/si/adr/";
     
     private HashMap<String,Topic> typeTopics;
     private TopicMap tm;

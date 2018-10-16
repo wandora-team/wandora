@@ -41,7 +41,11 @@ import org.wandora.topicmap.TopicMapException;
 
 public class JsoupInstanceListExtractor extends AbstractJsoupExtractor implements WandoraTool, BrowserPluginExtractor {
 
-    private TopicMap tm;
+	
+	private static final long serialVersionUID = 1L;
+	
+	
+	private TopicMap tm;
     private Topic wandoraClass;
     
     

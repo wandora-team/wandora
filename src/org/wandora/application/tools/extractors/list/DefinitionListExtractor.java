@@ -62,7 +62,9 @@ import org.w3c.tidy.*;
  */
 public class DefinitionListExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getName() {
         return "HTML definition list extractor";
     }
@@ -173,7 +175,10 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
     
 
     private static class HTMLParse extends HTMLEditorKit {
-        /**
+
+		private static final long serialVersionUID = 1L;
+
+		/**
         * Call to obtain a HTMLEditorKit.Parser object.
         * @return A new HTMLEditorKit.Parser object.
         */
@@ -206,17 +211,17 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
         private String currentName;
         private String currentUrl;
         private String currentDefinition;
-        private HashMap<String,String> currentUrls;
-        private ArrayList<String> currentNames;
-        private ArrayList<String> currentDefinitions;
+        private Map<String,String> currentUrls;
+        private List<String> currentNames;
+        private List<String> currentDefinitions;
         
         private Topic currentTopic;
         private Topic parentTopic;
         private Topic definitionTypeTopic;
         private Topic definitionScopeTopic;
         
-        private Stack stateStack;
-        private Stack parentTopics;
+        private Stack<Integer> stateStack;
+        private Stack<Topic> parentTopics;
         
         
         
@@ -235,8 +240,8 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
             definitionTypeTopic = null;
             definitionScopeTopic = null;
             
-            stateStack = new Stack();
-            parentTopics = new Stack();
+            stateStack = new Stack<>();
+            parentTopics = new Stack<>();
             
             parentTopic = null;
             try {
@@ -264,7 +269,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
             if(t == HTML.Tag.DL) {
                 processCapturedData();
                 previousStartState = STATE_DL;
-                stateStack.push(new Integer(state));
+                stateStack.push(Integer.valueOf(state));
                 state = STATE_DL;
             }
             else if(t == HTML.Tag.DT) {
@@ -280,7 +285,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
                     processCapturedData();
                 }
                 previousStartState = STATE_DT;
-                stateStack.push(new Integer(state));
+                stateStack.push(Integer.valueOf(state));
                 state = STATE_DT;
             }
             else if(t == HTML.Tag.DD) {
@@ -289,7 +294,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
                     currentDefinition = null;
                 }
                 previousStartState = STATE_DD;
-                stateStack.push(new Integer(state));
+                stateStack.push(Integer.valueOf(state));
                 state = STATE_DD;
             }
             else if(t == HTML.Tag.A) {
@@ -429,7 +434,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
             currentUrl = null;
             currentNames = new ArrayList<String>();
             currentDefinitions = new ArrayList<String>();
-            currentUrls = new HashMap<String,String>();
+            currentUrls = new LinkedHashMap<String,String>();
         }
         
         

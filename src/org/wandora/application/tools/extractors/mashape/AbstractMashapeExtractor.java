@@ -41,8 +41,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public abstract class AbstractMashapeExtractor extends AbstractExtractor{
     
-    
-    private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     private static final String LAMBDA_SI = "https://lambda-face-detection-and-recognition.p.mashape.com";
     
     private static final String TAG_SI = "http://wandora.org/si/mashape/lambda/tag";

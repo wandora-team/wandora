@@ -37,6 +37,7 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.IObox;
 
+
 /*
  * See http://data.kirjastot.fi/
  *
@@ -44,7 +45,9 @@ import org.wandora.utils.IObox;
  */
 public class HelmetJSONExtractor extends AbstractExtractor {
 
-    private static String defaultEncoding = "UTF-8"; //"ISO-8859-1";
+	private static final long serialVersionUID = 1L;
+	
+	private static String defaultEncoding = "UTF-8"; //"ISO-8859-1";
     private HelmetUI ui = null;
     
 
@@ -81,17 +84,17 @@ public class HelmetJSONExtractor extends AbstractExtractor {
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         try {
             if(ui == null) {
-                ui = new HelmetUI(admin);
+                ui = new HelmetUI(wandora);
             }
 
-            ui.open(admin, context);
+            ui.open(wandora, context);
 
             if(ui.wasAccepted()) {
                 setDefaultLogger();
-                TopicMap tm = admin.getTopicMap();
+                TopicMap tm = wandora.getTopicMap();
                 String[] urls = ui.getQueryURLs(this);
                 int c = 0;
                 if(urls != null && urls.length > 0) {

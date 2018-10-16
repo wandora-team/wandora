@@ -42,8 +42,11 @@ import org.wandora.topicmap.TopicMapException;
 
 public class JsoupDefinitionListExtractor extends AbstractJsoupExtractor 
 implements WandoraTool, BrowserPluginExtractor {
-    
-    public static final String SI_PREFIX = "http://wandora.org/si/";
+
+	
+	private static final long serialVersionUID = 1L;
+
+	public static final String SI_PREFIX = "http://wandora.org/si/";
     
     public static final String LIST_SI = SI_PREFIX + "list/";
     public static final String DOCUMENT_SI = SI_PREFIX + "document/";
@@ -103,6 +106,8 @@ implements WandoraTool, BrowserPluginExtractor {
         return true;
     }
 
+    
+    
     private void parseList(Element list, Topic documentTopic) throws TopicMapException {
         
         Topic listTopic = getOrCreateTopic(tm, null);
@@ -115,6 +120,8 @@ implements WandoraTool, BrowserPluginExtractor {
         for(Element name: names) parseName(name,listTopic);
         
     }
+    
+    
 
     private void parseName(Element name, Topic listTopic) throws TopicMapException {
         

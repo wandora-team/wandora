@@ -30,16 +30,12 @@ package org.wandora.application.tools.extractors.marcxml;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.tools.extractors.*;
 import org.wandora.application.tools.*;
-import org.wandora.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
 import org.wandora.application.contexts.*;
 
 import java.io.*;
-import java.util.*;
 import javax.swing.*;
 
 /**
@@ -48,7 +44,11 @@ import javax.swing.*;
  */
 public class BatchExtractMarcXML extends AbstractWandoraTool {
 
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public String getName() {
         return "MarcXML batch extractor";
     }
@@ -69,12 +69,12 @@ public class BatchExtractMarcXML extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         try {
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setMultiSelectionEnabled(true);
             chooser.setDialogTitle("Select MARCXML files to convert");
-            if(chooser.open(admin)==SimpleFileChooser.APPROVE_OPTION) {
+            if(chooser.open(wandora)==SimpleFileChooser.APPROVE_OPTION) {
                 setDefaultLogger();
                 importExport(chooser.getSelectedFiles());
             }

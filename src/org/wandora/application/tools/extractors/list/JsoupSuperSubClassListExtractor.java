@@ -43,7 +43,11 @@ import org.wandora.topicmap.TopicMapException;
 public class JsoupSuperSubClassListExtractor extends AbstractJsoupExtractor 
 implements WandoraTool, BrowserPluginExtractor {
 
-    private TopicMap tm;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private TopicMap tm;
     private Topic wandoraClass;
     
     @Override
@@ -65,6 +69,7 @@ implements WandoraTool, BrowserPluginExtractor {
         return true;
 
     }    
+    
 
     private void parseList(Element list, Topic classTopic) throws TopicMapException {
         
@@ -77,6 +82,7 @@ implements WandoraTool, BrowserPluginExtractor {
         }
         
     }
+    
 
     private void parseTopic(Element classElement, Topic classTopic) throws TopicMapException {
         String name = classElement.text().trim();

@@ -25,7 +25,6 @@ package org.wandora.application.tools.extractors.mashape;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.UUID;
@@ -42,6 +41,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TopicMapException;
 
+
 /**
  *
  * @author Eero Lehtonen
@@ -50,7 +50,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class MashapeLambdaExtractor extends AbstractMashapeExtractor{
     
-    private static final String endpoint
+	private static final long serialVersionUID = 1L;
+
+
+	private static final String endpoint
         = "https://lambda-face-detection-and-recognition.p.mashape.com/detect";
     
     
@@ -116,7 +119,10 @@ public class MashapeLambdaExtractor extends AbstractMashapeExtractor{
         return true;
     }
     
+    
     // -------------------------------------------------------------------------
+    
+    
     
     private void parse(HttpResponse<JsonNode> json, TopicMap tm){
         try {
@@ -158,6 +164,8 @@ public class MashapeLambdaExtractor extends AbstractMashapeExtractor{
         } 
     }
     
+    
+    
     private void parsePhoto(JSONObject photoJSON, TopicMap tm, 
                             HashMap<String,Topic> types, Topic lang){
         try {
@@ -186,6 +194,8 @@ public class MashapeLambdaExtractor extends AbstractMashapeExtractor{
             log(tme.getMessage());
         }
     }
+    
+    
     
     private void parseFace(JSONObject tagJSON, TopicMap tm, 
                           HashMap<String,Topic> types, Topic photo, Topic lang)

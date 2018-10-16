@@ -24,6 +24,8 @@ package org.wandora.application.tools.extractors.mediawikiapi;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -38,7 +40,11 @@ import org.wandora.application.gui.simple.*;
 
 public class MediaWikiAPIExtractorUI extends javax.swing.JPanel {
 
-    private int LIMIT = 100;
+
+	private static final long serialVersionUID = 1L;
+	
+	
+	private int LIMIT = 100;
     private String FORMAT = "json";
     
     private boolean accepted = false;
@@ -79,7 +85,7 @@ public class MediaWikiAPIExtractorUI extends javax.swing.JPanel {
             throws Exception {
         
         WandoraTool wt;
-        ArrayList<WandoraTool> wts = new ArrayList();
+        List<WandoraTool> wts = new ArrayList<>();
         
         StringBuilder urlBuilder = new StringBuilder();
         String baseUrl, extractUrl;
@@ -160,6 +166,7 @@ public class MediaWikiAPIExtractorUI extends javax.swing.JPanel {
         
         return wts.toArray(new WandoraTool[]{});
     }
+    
         
     /**
      * This method is called from within the constructor to initialize the form.
