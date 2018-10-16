@@ -26,11 +26,7 @@ package org.wandora.application.tools.extractors.alchemy;
 
 import java.net.*;
 import java.io.*;
-import java.util.*;
-import org.wandora.application.Wandora;
 import org.wandora.application.tools.extractors.ExtractHelper;
-import static org.wandora.application.tools.extractors.alchemy.AbstractAlchemyExtractor.ALCHEMY_URL;
-import static org.wandora.application.tools.extractors.alchemy.AbstractAlchemyExtractor.sendRequest;
 import org.xml.sax.*;
 
 import org.wandora.topicmap.*;
@@ -45,7 +41,10 @@ import org.wandora.utils.*;
  */
 public class AlchemyRelationExtractor extends AbstractAlchemyExtractor {
 
-    private static boolean DEBUG_STATE_TRANSITIONS_IN_PARSER = true;
+
+	private static final long serialVersionUID = 1L;
+
+	private static boolean DEBUG_STATE_TRANSITIONS_IN_PARSER = true;
     
     private static boolean TRANSFORM_VERB_AND_TENSE = true;
     private static boolean ACTION_AS_PLAYER = true;

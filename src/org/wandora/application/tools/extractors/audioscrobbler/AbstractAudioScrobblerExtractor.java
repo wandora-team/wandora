@@ -44,7 +44,11 @@ import org.wandora.application.gui.*;
  */
 public abstract class AbstractAudioScrobblerExtractor extends AbstractExtractor {
     
-    // Default language of occurrences and variant names.
+
+	private static final long serialVersionUID = 1L;
+
+
+	// Default language of occurrences and variant names.
     public static String LANG = "en";
     
     

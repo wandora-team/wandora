@@ -37,7 +37,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import javax.imageio.ImageIO;
-import static org.wandora.application.tools.extractors.alchemy.AbstractAlchemyExtractor.ALCHEMY_URL;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -57,7 +56,10 @@ import org.xml.sax.XMLReader;
 
 public class AlchemyImageKeywordExtractor extends AbstractAlchemyExtractor {
 
-    private static int tempCounter = 0;
+
+	private static final long serialVersionUID = 1L;
+	
+	private static int tempCounter = 0;
     public static int scaleDownWidth = 800;
     public static boolean transformScores = true;
     private int keywordCounter = 0;

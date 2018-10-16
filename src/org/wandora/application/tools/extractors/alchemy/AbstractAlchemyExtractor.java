@@ -33,7 +33,6 @@ package org.wandora.application.tools.extractors.alchemy;
 
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -46,10 +45,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
-import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
@@ -66,7 +63,11 @@ import org.wandora.utils.*;
  */
 public abstract class AbstractAlchemyExtractor extends AbstractExtractor {
 
-    protected boolean EXTRACT_RELEVANCE = true;
+
+	private static final long serialVersionUID = 1L;
+
+
+	protected boolean EXTRACT_RELEVANCE = true;
 
     
     protected String defaultEncoding = "UTF-8";

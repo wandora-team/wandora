@@ -30,7 +30,6 @@ package org.wandora.application.tools.extractors.alchemy;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import org.wandora.application.Wandora;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.xml.sax.*;
 
@@ -49,7 +48,11 @@ import org.wandora.utils.*;
 public class AlchemyEntityExtractor extends AbstractAlchemyExtractor {
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+
+	@Override
     public String getName() {
         return "Alchemy entity extractor";
     }

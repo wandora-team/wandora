@@ -27,20 +27,11 @@
 package org.wandora.application.tools.extractors.audioscrobbler;
 
 
-import java.net.*;
+
 import java.io.*;
-import java.util.*;
-import java.text.*;
 import org.xml.sax.*;
-
 import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.utils.*;
 
-import org.wandora.application.gui.*;
-import javax.swing.*;
 
 /**
  *
@@ -48,7 +39,11 @@ import javax.swing.*;
  */
 public class TagTopArtistsExtractor extends AbstractAudioScrobblerExtractor {
     
-    /**
+
+	private static final long serialVersionUID = 1L;
+
+
+	/**
      * Creates a new instance of TagTopArtistsExtractor
      */
     public TagTopArtistsExtractor() {

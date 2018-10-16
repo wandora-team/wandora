@@ -51,7 +51,11 @@ import org.wandora.topicmap.*;
  */
 public class AlbumInfoExtractor extends AbstractAudioScrobblerExtractor {
     
-    /** Creates a new instance of AlbumInfoExtractor */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of AlbumInfoExtractor */
     public AlbumInfoExtractor() {
     }
 

@@ -42,7 +42,11 @@ import org.wandora.utils.*;
 public class AlchemySentimentExtractor extends AbstractAlchemyExtractor {
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+
+	@Override
     public String getName() {
         return "Alchemy sentiment extractor";
     }

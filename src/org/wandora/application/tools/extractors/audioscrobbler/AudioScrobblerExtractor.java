@@ -29,7 +29,6 @@ package org.wandora.application.tools.extractors.audioscrobbler;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 
 import javax.swing.*;
@@ -42,7 +41,10 @@ import javax.swing.*;
  */
 public class AudioScrobblerExtractor extends AbstractWandoraTool {
 
-    private static AudioScrobblerExtractorSelector selector = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private static AudioScrobblerExtractorSelector selector = null;
     
     @Override
     public String getName() {

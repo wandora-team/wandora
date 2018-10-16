@@ -29,8 +29,6 @@ package org.wandora.application.tools.extractors.alchemy;
 
 import java.net.*;
 import java.io.*;
-import java.util.*;
-import java.text.*;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.xml.sax.*;
 
@@ -46,7 +44,11 @@ import org.wandora.utils.*;
 public class AlchemyLanguageExtractor extends AbstractAlchemyExtractor {
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+
+	@Override
     public String getName() {
         return "Alchemy language extractor";
     }

@@ -46,7 +46,6 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.application.tools.extractors.rdf.rdfmappings.RDF2TopicMapsMapping;
 import org.wandora.topicmap.*;
 
 
@@ -62,7 +61,11 @@ import org.wandora.topicmap.*;
 
 public class Any23Extractor extends AbstractExtractor {
 
-    public static final String SOURCE_TYPE = "http://wandora.org/si/any23/source"; // Used also as a role-topic.
+	
+	private static final long serialVersionUID = 1L;
+
+	
+	public static final String SOURCE_TYPE = "http://wandora.org/si/any23/source"; // Used also as a role-topic.
 
     public static final String ANY23_PREDICATE_TYPE = "http://wandora.org/si/any23/predicate";
     public static final String ANY23_SUBJECT_TYPE = "http://wandora.org/si/any23/subject";

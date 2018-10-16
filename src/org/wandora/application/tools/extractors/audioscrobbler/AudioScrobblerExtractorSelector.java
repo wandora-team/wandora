@@ -27,7 +27,6 @@
 package org.wandora.application.tools.extractors.audioscrobbler;
 
 import org.wandora.application.contexts.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
 
@@ -47,27 +46,30 @@ import java.net.*;
 
 public class AudioScrobblerExtractorSelector extends JDialog {
 
-    public static String BASE_URL = "http://ws.audioscrobbler.com/1.0/";
-    private Wandora admin = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static String BASE_URL = "http://ws.audioscrobbler.com/1.0/";
+    private Wandora wandora = null;
     private Context context = null;
     private boolean accepted = false;
     
     
     
     /** Creates new form AudioScrobblerExtractor */
-    public AudioScrobblerExtractorSelector(Wandora admin) {
-        super(admin, true);
+    public AudioScrobblerExtractorSelector(Wandora wandora) {
+        super(wandora, true);
         setSize(450,300);
         setTitle("Audioscrobbler extractors");
-        admin.centerWindow(this);
-        this.admin = admin;
+        wandora.centerWindow(this);
+        this.wandora = wandora;
         accepted = false;
         initComponents();
     }
 
     
     public void setWandora(Wandora wandora) {
-        this.admin = wandora;
+        this.wandora = wandora;
     }
     
     public void setContext(Context context) {
