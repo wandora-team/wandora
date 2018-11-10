@@ -31,7 +31,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -52,7 +51,9 @@ import org.wandora.utils.CSVParser;
 
 public class ArticleTagsExtractor extends AbstractElavaArkistoExtractor {
     
-    public static boolean EXTRACT_SERVICE = false;
+	private static final long serialVersionUID = 1L;
+	
+	public static boolean EXTRACT_SERVICE = false;
     public static boolean EXTRACT_RELATION = true;
     public static boolean EXTRACT_LANGUAGE = true;
     
@@ -199,7 +200,7 @@ AID,SERVICE,KID,LANGUAGE,LABEL,REL
 where
 
     AID = artikkelin Yle ID (Article ID)
-    SERVICE = artikkelin lähde (Elävä arkisto vai Arkivet)
+    SERVICE = artikkelin lï¿½hde (Elï¿½vï¿½ arkisto vai Arkivet)
     KID = termin Yle ID (Keyword ID)
     LANGUAGE = termin kieli
     LABEL = termin nimi

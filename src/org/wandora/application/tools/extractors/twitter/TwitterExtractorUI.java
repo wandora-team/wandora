@@ -34,9 +34,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
-import org.wandora.utils.Tuples.T2;
 import twitter4j.GeoLocation;
-import twitter4j.Paging;
 import twitter4j.Query;
 
 /**
@@ -47,8 +45,9 @@ import twitter4j.Query;
 
 public class TwitterExtractorUI extends javax.swing.JPanel {
 
-    
-    private JDialog myDialog = null;
+	private static final long serialVersionUID = 1L;
+
+	private JDialog myDialog = null;
     
     private boolean wasAccepted = false;
     private boolean shouldReset = false;

@@ -38,7 +38,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
@@ -48,7 +47,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
-import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 
 
 
@@ -58,7 +56,10 @@ import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
  */
 public abstract class AbstractZemantaExtractor extends AbstractExtractor {
 
-    protected boolean EXTRACT_RELEVANCE = true;
+	private static final long serialVersionUID = 1L;
+
+
+	protected boolean EXTRACT_RELEVANCE = true;
 
     
     protected String defaultEncoding = "UTF-8";

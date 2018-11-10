@@ -32,7 +32,6 @@ import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.tools.extractors.ExtractHelper;
-import org.xml.sax.*;
 
 import org.wandora.topicmap.*;
 import org.wandora.utils.*;
@@ -46,7 +45,10 @@ import org.wandora.utils.*;
 
 public class UClassifier extends AbstractUClassifier {
     
-    protected static final String OPTIONS_KEY = "uclassify";
+	private static final long serialVersionUID = 1L;
+
+	
+	protected static final String OPTIONS_KEY = "uclassify";
     
     private static String[] defaultClassifiers = new String[] {
         "Text Language", "uClassify",

@@ -47,7 +47,10 @@ import java.io.*;
  * @author  akivela
  */
 public class UClassifierDialog extends javax.swing.JDialog {
-    private Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora = null;
     private WandoraTool parentTool = null;
     private boolean wasAccepted = false;
     private HashMap<Component,Integer> registeredSources = null;

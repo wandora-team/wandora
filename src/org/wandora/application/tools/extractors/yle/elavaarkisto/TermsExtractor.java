@@ -52,8 +52,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class TermsExtractor extends AbstractElavaArkistoExtractor {
-    
-    public static boolean EXTRACT_TITLE = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public static boolean EXTRACT_TITLE = true;
     public static boolean EXTRACT_TYPE = true;
     public static boolean EXTRACT_KEYWORD = true;
     public static boolean EXTRACT_FIRST_AND_LASTNAME = true;

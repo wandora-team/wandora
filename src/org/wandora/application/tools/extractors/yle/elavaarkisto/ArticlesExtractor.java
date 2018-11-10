@@ -28,15 +28,12 @@ package org.wandora.application.tools.extractors.yle.elavaarkisto;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import org.json.JSONObject;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -58,8 +55,10 @@ import org.wandora.utils.CSVParser;
 
 
 public class ArticlesExtractor extends AbstractElavaArkistoExtractor {
-    
-    public static boolean EXTRACT_SERVICE = true;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static boolean EXTRACT_SERVICE = true;
     public static boolean EXTRACT_LANGUAGE = true;
     public static boolean EXTRACT_PUBLISHED = true;
     
@@ -234,18 +233,18 @@ public class ArticlesExtractor extends AbstractElavaArkistoExtractor {
 Example of extracted CSV:
 
 AID,SERVICE,URL,LANGUAGE,TITLE,PUBLISHED
-7-916094,arkivet,http://svenska.yle.fi/artikel/2015/04/08/eurovisionen-ar-1974,sv,"Eurovisionen år 1974",2015-04-08T18:39:57+03:00
-7-915599,arkivet,http://svenska.yle.fi/artikel/2015/04/07/eurovisionen-ar-1973,sv,"Eurovisionen år 1973",2015-04-07T19:23:59+03:00
-7-915523,arkivet,http://svenska.yle.fi/artikel/2015/04/07/eurovisionen-ar-1972,sv,"Eurovisionen år 1972",2015-04-07T16:41:27+03:00
-7-913620,arkivet,http://svenska.yle.fi/artikel/2015/04/06/43-000-ord-men-ingen-karlek,sv,"43 000 ord men ingen kärlek",2015-04-06T13:00:00+03:00
-7-913066,arkivet,http://svenska.yle.fi/artikel/2015/04/06/historiekollen-landsbygdspartiet-blev-sannfinlandskt,sv,"Historiekollen: Landsbygdspartiet blev Sannfinländskt",2015-04-06T09:00:00+03:00
-7-915098,arkivet,http://svenska.yle.fi/artikel/2015/04/06/eurovisionen-ar-1971,sv,"Eurovisionen år 1971",2015-04-06T03:36:42+03:00
+7-916094,arkivet,http://svenska.yle.fi/artikel/2015/04/08/eurovisionen-ar-1974,sv,"Eurovisionen ï¿½r 1974",2015-04-08T18:39:57+03:00
+7-915599,arkivet,http://svenska.yle.fi/artikel/2015/04/07/eurovisionen-ar-1973,sv,"Eurovisionen ï¿½r 1973",2015-04-07T19:23:59+03:00
+7-915523,arkivet,http://svenska.yle.fi/artikel/2015/04/07/eurovisionen-ar-1972,sv,"Eurovisionen ï¿½r 1972",2015-04-07T16:41:27+03:00
+7-913620,arkivet,http://svenska.yle.fi/artikel/2015/04/06/43-000-ord-men-ingen-karlek,sv,"43 000 ord men ingen kï¿½rlek",2015-04-06T13:00:00+03:00
+7-913066,arkivet,http://svenska.yle.fi/artikel/2015/04/06/historiekollen-landsbygdspartiet-blev-sannfinlandskt,sv,"Historiekollen: Landsbygdspartiet blev Sannfinlï¿½ndskt",2015-04-06T09:00:00+03:00
+7-915098,arkivet,http://svenska.yle.fi/artikel/2015/04/06/eurovisionen-ar-1971,sv,"Eurovisionen ï¿½r 1971",2015-04-06T03:36:42+03:00
 
 
 where
 
     AID = artikkelin Yle ID (Article ID)
-    SERVICE = artikkelin lähde (Elävä arkisto vai Arkivet)
+    SERVICE = artikkelin lï¿½hde (Elï¿½vï¿½ arkisto vai Arkivet)
     URL = artikkelin HTML-version osoite
     LANGUAGE = artikkelin kieli (ISO 639-1 -muodossa: fi tai sv)
     TITLE = artikkelin otsikko

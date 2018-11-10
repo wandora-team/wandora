@@ -39,7 +39,9 @@ import org.wandora.application.gui.simple.SimpleLabel;
 
 public class UClassifierAddDialog extends javax.swing.JDialog {
 
-    private boolean isAccepted = false;
+	private static final long serialVersionUID = 1L;
+
+	private boolean isAccepted = false;
     
     
     

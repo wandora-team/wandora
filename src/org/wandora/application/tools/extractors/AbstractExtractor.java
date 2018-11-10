@@ -674,7 +674,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
 
 
     protected void takeNap(long napTime) {
-        try { Thread.currentThread().sleep(napTime); }
+        try { Thread.sleep(napTime); }
         catch (Exception e) { }            
     }
 
@@ -690,9 +690,9 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
 
 
     public int extractTopicsFrom(String fileName, Pattern fileMask, int depth, int space) {
-        return extractTopicsFrom(fileName, new ArrayList(), fileMask, depth, space);
+        return extractTopicsFrom(fileName, new ArrayList<String>(), fileMask, depth, space);
     }
-    public int extractTopicsFrom(String fileName, Collection visited, Pattern fileMask, int depth, int space) {
+    public int extractTopicsFrom(String fileName, Collection<String> visited, Pattern fileMask, int depth, int space) {
         browseCounter++;
         if(!forceStop()) {
             //System.out.println("depth: "+depth);
@@ -769,7 +769,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
             }
             else {
                 log("Found no valid metadata in " + croppedUrlString(url));
-                try { Thread.currentThread().sleep(errorNapTime); }
+                try { Thread.sleep(errorNapTime); }
                 catch (Exception e) {}
             }
         }
@@ -797,7 +797,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
             }
             else {
                 log("Found no valid metadata in given string.");
-                try { Thread.currentThread().sleep(errorNapTime); }
+                try { Thread.sleep(errorNapTime); }
                 catch (Exception e) {}
             }
         }
@@ -826,7 +826,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
             }
             else {
                 log("Found no valid metadata in " + croppedFilename(file));
-                try { Thread.currentThread().sleep(errorNapTime); }
+                try { Thread.sleep(errorNapTime); }
                 catch (Exception e) {}
             }
 
@@ -945,7 +945,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         Association a = topicMap.createAssociation(aType);
         Topic player;
         Topic role;
-        Collection playerTypes;
+        Collection<Topic> playerTypes;
         for(int i=0; i<players.length; i++) {
             player = players[i];
             if(player != null && !player.isRemoved()) {
@@ -1002,7 +1002,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
                 dispT.addSubjectIdentifier(new Locator(dispsi));
                 dispT.setBaseName("Scope Display");
             }
-            HashSet scope=new HashSet();
+            HashSet<Topic> scope=new LinkedHashSet<>();
             if(langT!=null) scope.add(langT);
             if(dispT!=null) scope.add(dispT);
             t.setVariant(scope, name);

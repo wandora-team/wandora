@@ -38,7 +38,9 @@ import org.wandora.application.tools.AbstractWandoraTool;
 public class BossExtractor extends AbstractWandoraTool {
 
 
-    private BossExtractorSelector selector = null;
+	private static final long serialVersionUID = 1L;
+	
+	private BossExtractorSelector selector = null;
 
 
 

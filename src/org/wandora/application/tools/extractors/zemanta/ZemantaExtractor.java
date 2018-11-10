@@ -43,8 +43,15 @@ import org.wandora.utils.*;
 public class ZemantaExtractor extends AbstractZemantaExtractor implements BrowserPluginExtractor {
 
 
+	private static final long serialVersionUID = 1L;
 
-    @Override
+
+
+
+
+
+
+	@Override
     public String getName() {
         return "Zemanta extractor";
     }

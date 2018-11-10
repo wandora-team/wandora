@@ -27,14 +27,9 @@ package org.wandora.application.tools.extractors.twitter;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
-import javax.swing.JDialog;
-import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -58,7 +53,7 @@ import twitter4j.URLEntity;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
-import twitter4j.conf.ConfigurationBuilder;
+
 
 /**
  *
@@ -70,7 +65,10 @@ import twitter4j.conf.ConfigurationBuilder;
 
 
 public class AbstractTwitterExtractor extends AbstractExtractor {
-    public static final int SLEEP_TIME_BETWEEN_SEARCHES = 3000;
+
+	private static final long serialVersionUID = 1L;
+
+	public static final int SLEEP_TIME_BETWEEN_SEARCHES = 3000;
     
     public static String DEFAULT_LANG = "en";
     

@@ -191,20 +191,20 @@ public class AdminSocketServer extends Thread implements PiccoloShutdownHook {
 
         
         private Object[] parseParams(String line,int startind){
-            Stack stack=new Stack();
-            ArrayList al=new ArrayList();
+            Stack<ArrayList> stack=new Stack<>();
+            ArrayList al=new ArrayList<>();
             int ptr=startind;
             while(ptr<line.length()){
                 while(ptr<line.length() && line.charAt(ptr)==' ') ptr++;
                 if(line.charAt(ptr)=='('){
                     stack.push(al);
-                    al=new ArrayList();
+                    al=new ArrayList<>();
                     ptr++;
                 }
                 else if(line.charAt(ptr)==')'){
                     if(stack.isEmpty()) break;
                     ArrayList p=al;
-                    al=(ArrayList)stack.pop();
+                    al=stack.pop();
                     al.add(p.toArray());
                     ptr++;
                 }

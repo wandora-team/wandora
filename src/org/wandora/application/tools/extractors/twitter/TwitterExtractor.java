@@ -39,7 +39,9 @@ import twitter4j.Query;
 
 public class TwitterExtractor extends AbstractTwitterExtractor {
     
-    private TwitterExtractorUI ui = null;
+	private static final long serialVersionUID = 1L;
+	
+	private TwitterExtractorUI ui = null;
 
     
     

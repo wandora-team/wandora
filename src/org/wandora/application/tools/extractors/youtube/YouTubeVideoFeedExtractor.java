@@ -41,7 +41,10 @@ import com.google.gdata.util.*;
  */
 public class YouTubeVideoFeedExtractor extends YouTubeExtractor {
 
-    private String baseLocator = "http://wandora.org/si/youtube";
+	private static final long serialVersionUID = 1L;
+	
+	
+	private String baseLocator = "http://wandora.org/si/youtube";
 
     
 

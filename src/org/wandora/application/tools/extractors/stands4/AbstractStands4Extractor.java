@@ -27,8 +27,6 @@ import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.*;
-import org.wandora.utils.Tuples.*;
 import javax.swing.*;
 
 import java.net.*;
@@ -41,7 +39,9 @@ import java.net.*;
  */
 public abstract class AbstractStands4Extractor extends AbstractExtractor {
 
-    protected String STANDS4_SI = "http://www.abbreviations.com/api.asp";
+	private static final long serialVersionUID = 1L;
+
+	protected String STANDS4_SI = "http://www.abbreviations.com/api.asp";
 
     protected String SYNONYMS_BASE = "http://www.synonyms.net/";
     protected String SYNONYMS_TERM_BASE = SYNONYMS_BASE+"synonym/";

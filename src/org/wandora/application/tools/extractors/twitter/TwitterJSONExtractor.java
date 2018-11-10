@@ -48,8 +48,10 @@ import twitter4j.TwitterObjectFactory;
 
 
 public class TwitterJSONExtractor extends AbstractTwitterExtractor {
-    
-    private static final String BASE_SI = "http://wandora.org/si/twitter/twurl";
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String BASE_SI = "http://wandora.org/si/twitter/twurl";
     private static final String BASE_NAME = "twurl";
     
     @Override

@@ -30,8 +30,11 @@ package org.wandora.application.tools.extractors.uclassify;
 
 
 public class SentimentUClassifier extends UClassifier {
-    
-    public SentimentUClassifier() {
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public SentimentUClassifier() {
         super("Sentiment", "uClassify", 0.001);
     }
     

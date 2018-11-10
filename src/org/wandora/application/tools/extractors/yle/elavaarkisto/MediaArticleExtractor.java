@@ -49,8 +49,10 @@ import org.wandora.utils.CSVParser;
 
 public class MediaArticleExtractor extends AbstractElavaArkistoExtractor {
     
-    
-    public static boolean EXTRACT_SERVICE = false;
+
+	private static final long serialVersionUID = 1L;
+
+	public static boolean EXTRACT_SERVICE = false;
     
     
 
@@ -183,7 +185,7 @@ AID,SERVICE,MID
 where
 
     AID = Artikkelin Yle ID (Article ID)
-    SERVICE = Elävä arkisto vai Arkivet
+    SERVICE = Elï¿½vï¿½ arkisto vai Arkivet
     MID = Median Yle ID (Media ID)
 
 

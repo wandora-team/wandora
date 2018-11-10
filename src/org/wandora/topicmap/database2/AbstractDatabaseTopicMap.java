@@ -518,7 +518,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     public Iterator<Map<String,Object>> getRowIterator(final String query, final String orderby) {
 
         if(unconnected) {
-            return new Iterator() {
+            return new Iterator<Map<String,Object>>() {
                 @Override
                 public boolean hasNext() {
                     return false;
@@ -535,7 +535,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
         }
         else {
 
-            return new Iterator() {
+            return new Iterator<Map<String,Object>>() {
                 boolean hasNext = false;
                 int offset = 0;
                 int limit = 1000;
@@ -545,7 +545,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 private void prepare() {
                     try {
                         String newQuery = query +" order by "+orderby+ " limit "+limit+" offset "+offset;
-                        rows = new ArrayList(executeQuery(newQuery));
+                        rows = new ArrayList<>(executeQuery(newQuery));
                         offset += limit;
                         rowIndex = 0;
                     }

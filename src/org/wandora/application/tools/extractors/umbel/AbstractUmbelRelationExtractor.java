@@ -40,9 +40,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public abstract class AbstractUmbelRelationExtractor extends AbstractUmbelExtractor {
-    
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
         if(str != null && topicMap != null) {
             String[] strs = str.split(UMBEL_CONCEPT_STRING_SPLITTER);
@@ -55,8 +56,8 @@ public abstract class AbstractUmbelRelationExtractor extends AbstractUmbelExtrac
                         if(response != null) {
                             logApiRequest(s);
                             Topic baseConceptTopic = null; // getConceptTopic(getUmbelConceptURI(s), s, 0, topicMap);
-                            ArrayList<Topic> conceptTopics = new ArrayList();
-                            HashMap<Topic,Integer> distances = new HashMap();
+                            ArrayList<Topic> conceptTopics = new ArrayList<>();
+                            HashMap<Topic,Integer> distances = new HashMap<>();
                             Iterator concepts = response.keys();
                             while(concepts.hasNext() && !forceStop()) {
                                 Object concept = concepts.next();

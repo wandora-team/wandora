@@ -41,8 +41,10 @@ import org.wandora.utils.Tuples;
 
 
 public class UmbelGetConcept extends AbstractUmbelExtractor {
-    
-    public static final String API_URL = "http://umbel.org/ws/concept/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String API_URL = "http://umbel.org/ws/concept/";
 
     
     @Override

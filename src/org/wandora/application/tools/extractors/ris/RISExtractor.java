@@ -59,7 +59,9 @@ import static org.wandora.application.tools.extractors.ris.RISReference.*;
  */
 public class RISExtractor extends AbstractExtractor {
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getName()
     {
         return "RIS bibliography extractor";

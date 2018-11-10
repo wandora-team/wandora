@@ -56,7 +56,9 @@ import org.wandora.utils.swing.TextLineNumber;
  */
 public class SparqlExtractorUI extends javax.swing.JPanel {
 
-    public static final String WIKIDATA_ENDPOINT = "https://query.wikidata.org/sparql";
+	private static final long serialVersionUID = 1L;
+
+	public static final String WIKIDATA_ENDPOINT = "https://query.wikidata.org/sparql";
     public static final String EUROPEAN_OPEN_DATA_ENDPOINT = "http://open-data.europa.eu/sparqlep";
     public static final String DBPEDIA_ENDPOINT = "http://dbpedia.org/sparql";
     public static final String DATAGOVUK_ENDPOINT = "http://services.data.gov.uk/reference/sparql";
@@ -83,26 +85,26 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
                 "PREFIX hallintaperuste: <http://semantic.hri.fi/data/dimensions/Hallintaperuste#>\n"+
                 "PREFIX vuosi: <http://semantic.hri.fi/data/dimensions/Vuosi#>\n"+
                 "PREFIX huoneistotyyppi: <http://semantic.hri.fi/data/dimensions/Huoneistotyyppi#>\n"+
-                "PREFIX yksikkö: <http://semantic.hri.fi/data/dimensions/Yksikkö#>\n"+
-                "PREFIX henkilöluku: <http://semantic.hri.fi/data/dimensions/Henkilöluku#>\n"+
-                "PREFIX ikäryhmä: <http://semantic.hri.fi/data/dimensions/Ikäryhmä#>\n"+
-                "PREFIX äidinkieli: <http://semantic.hri.fi/data/dimensions/Äidinkieli#>\n"+
+                "PREFIX yksikkï¿½: <http://semantic.hri.fi/data/dimensions/Yksikkï¿½#>\n"+
+                "PREFIX henkilï¿½luku: <http://semantic.hri.fi/data/dimensions/Henkilï¿½luku#>\n"+
+                "PREFIX ikï¿½ryhmï¿½: <http://semantic.hri.fi/data/dimensions/Ikï¿½ryhmï¿½#>\n"+
+                "PREFIX ï¿½idinkieli: <http://semantic.hri.fi/data/dimensions/ï¿½idinkieli#>\n"+
                 "PREFIX sukupuoli: <http://semantic.hri.fi/data/dimensions/Sukupuoli#>\n"+
-                "PREFIX ikä: <http://semantic.hri.fi/data/dimensions/Ikä#>\n"+
-                "PREFIX lasten_määrä_perheessä_140-17v_15: <http://semantic.hri.fi/data/dimensions/Lasten_määrä_perheessä_140-17v_15#>\n"+
+                "PREFIX ikï¿½: <http://semantic.hri.fi/data/dimensions/Ikï¿½#>\n"+
+                "PREFIX lasten_mï¿½ï¿½rï¿½_perheessï¿½_140-17v_15: <http://semantic.hri.fi/data/dimensions/Lasten_mï¿½ï¿½rï¿½_perheessï¿½_140-17v_15#>\n"+
                 "PREFIX perhetyyppi: <http://semantic.hri.fi/data/dimensions/Perhetyyppi#>\n"+
-                "PREFIX väestön_määrä: <http://semantic.hri.fi/data/dimensions/Väestön_määrä#>\n"+
-                "PREFIX lasten_määrä_perheessä: <http://semantic.hri.fi/data/dimensions/Lasten_määrä_perheessä#>\n"+
+                "PREFIX vï¿½estï¿½n_mï¿½ï¿½rï¿½: <http://semantic.hri.fi/data/dimensions/Vï¿½estï¿½n_mï¿½ï¿½rï¿½#>\n"+
+                "PREFIX lasten_mï¿½ï¿½rï¿½_perheessï¿½: <http://semantic.hri.fi/data/dimensions/Lasten_mï¿½ï¿½rï¿½_perheessï¿½#>\n"+
                 "PREFIX muuttosuunta: <http://semantic.hri.fi/data/dimensions/Muuttosuunta#>\n"+
                 "PREFIX koulutusaste: <http://semantic.hri.fi/data/dimensions/Koulutusaste#>\n"+
                 "PREFIX toimiala: <http://semantic.hri.fi/data/dimensions/Toimiala#>\n"+
                 "PREFIX toimiala-1995: <http://semantic.hri.fi/data/dimensions/Toimiala-1995#>\n"+
-                "PREFIX työttömyys: <http://semantic.hri.fi/data/dimensions/Työttömyys#>\n"+
+                "PREFIX tyï¿½ttï¿½myys: <http://semantic.hri.fi/data/dimensions/Tyï¿½ttï¿½myys#>\n"+
                 "PREFIX valmistumisvuosi: <http://semantic.hri.fi/data/dimensions/Valmistumisvuosi#>\n"+
-                "PREFIX käytössäolotilanne: <http://semantic.hri.fi/data/dimensions/Käytössäolotilanne#>\n"+
-                "PREFIX käyttötarkoitus_ja_kerrosluku: <http://semantic.hri.fi/data/dimensions/Käyttötarkoitus_ja_kerrosluku#>\n"+
+                "PREFIX kï¿½ytï¿½ssï¿½olotilanne: <http://semantic.hri.fi/data/dimensions/Kï¿½ytï¿½ssï¿½olotilanne#>\n"+
+                "PREFIX kï¿½yttï¿½tarkoitus_ja_kerrosluku: <http://semantic.hri.fi/data/dimensions/Kï¿½yttï¿½tarkoitus_ja_kerrosluku#>\n"+
                 "PREFIX tuloluokka: <http://semantic.hri.fi/data/dimensions/Tuloluokka#>\n"+
-                "PREFIX käyttötarkoitus: <http://semantic.hri.fi/data/dimensions/Käyttötarkoitus#>\n"+
+                "PREFIX kï¿½yttï¿½tarkoitus: <http://semantic.hri.fi/data/dimensions/Kï¿½yttï¿½tarkoitus#>\n"+
                 "PREFIX toimenpide: <http://semantic.hri.fi/data/dimensions/Toimenpide#>\n";
 
 

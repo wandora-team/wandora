@@ -155,7 +155,7 @@ abstract class AbstractFBGraphExtractor extends AbstractExtractor{
 
     static List<String> getScopes() {
         
-        ArrayList<String> scopes = new ArrayList();
+        ArrayList<String> scopes = new ArrayList<>();
         
         JsonObject permResponse = facebookClient.fetchObject("me/permissions", JsonObject.class);
         JsonArray permsArray = permResponse.getJsonArray("data");

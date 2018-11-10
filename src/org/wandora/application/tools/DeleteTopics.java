@@ -254,7 +254,7 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
         }
         Iterator<Association> associations = tm.getAssociations();
         Association association = null;
-        ArrayList<Association> asociationsToBeRemoved = new ArrayList();
+        ArrayList<Association> asociationsToBeRemoved = new ArrayList<>();
         while(associations.hasNext()) {
             association = associations.next();
             if(t.mergesWithTopic(association.getType()) || association.getPlayer(t) != null) {

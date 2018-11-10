@@ -56,7 +56,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public abstract class AbstractElavaArkistoExtractor extends AbstractExtractor {
 
-    public static final String ELAVA_ARKISTO_SI = "http://wandora.org/si/yle/elava-arkisto";
+	private static final long serialVersionUID = 1L;
+
+	public static final String ELAVA_ARKISTO_SI = "http://wandora.org/si/yle/elava-arkisto";
     
     public static final String ELAVA_ARKISTO_ARTICLE_TYPE_SI = ELAVA_ARKISTO_SI+"/article";
     public static final String ELAVA_ARKISTO_ARTICLE_ID_TYPE_SI = ELAVA_ARKISTO_SI+"/article-id";

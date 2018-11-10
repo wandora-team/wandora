@@ -24,14 +24,9 @@ package org.wandora.application.tools.extractors.yahoo.yql;
 
 
 
-
-
-
-import org.wandora.application.tools.extractors.yahoo.termextraction.*;
 import javax.swing.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 
 
 
@@ -41,7 +36,10 @@ import org.wandora.application.gui.simple.*;
  */
 public class YQLExtractorConfiguration extends javax.swing.JDialog {
 
-    private JFrame parent = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private JFrame parent = null;
     private Options options = null;
     private AbstractYQLExtractor parentTool = null;
     

@@ -33,7 +33,9 @@ import org.wandora.utils.Options;
  */
 public class SimpleWordMatchingExtractor extends AbstractWordExtractor {
 
-    private final String SI_BASE = "http://wandora.org/si/simple-word/";
+	private static final long serialVersionUID = 1L;
+
+	private final String SI_BASE = "http://wandora.org/si/simple-word/";
     private final String BN_SUFFIX = "(simple word extractor)";
     private SimpleWordConfiguration config;
     

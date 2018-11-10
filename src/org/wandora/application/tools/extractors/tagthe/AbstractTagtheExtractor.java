@@ -38,7 +38,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
@@ -54,8 +53,10 @@ import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
  */
 public abstract class AbstractTagtheExtractor extends AbstractExtractor {
 
-    
-    protected String defaultEncoding = "UTF-8";
+
+	private static final long serialVersionUID = 1L;
+
+	protected String defaultEncoding = "UTF-8";
 
     // Default language of occurrences and variant names.
     public static String LANG = "en";

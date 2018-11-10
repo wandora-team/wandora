@@ -35,10 +35,8 @@ import bibliothek.gui.dock.event.DockableListener;
 import bibliothek.gui.dock.title.DockTitle;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureListener;
@@ -54,7 +52,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JMenu;
@@ -67,17 +64,13 @@ import org.wandora.application.RefreshListener;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolManager;
-import org.wandora.application.contexts.LayeredTopicContext;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.topicpanels.dockingpanel.SelectTopicPanelPanel;
-import org.wandora.application.gui.topicpanels.dockingpanel.WandoraBackgroundPaint;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockActionSource;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockController;
-import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockTheme;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockable;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraSplitDockStation;
 import org.wandora.application.gui.topicstringify.TopicToString;
@@ -88,14 +81,10 @@ import org.wandora.application.tools.docking.DeleteCurrentDockable;
 import org.wandora.application.tools.docking.DeleteDockable;
 import org.wandora.application.tools.docking.MaximizeDockable;
 import org.wandora.application.tools.docking.SelectDockable;
-import org.wandora.application.tools.extractors.files.SimpleDocumentExtractor;
 import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
-import org.wandora.application.tools.navigate.CloseCurrentTopicPanel;
-import org.wandora.application.tools.navigate.OpenTopicIn;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
@@ -117,7 +106,11 @@ import org.wandora.utils.Options;
 
 
 public class DockingFramePanel extends JPanel implements TopicPanel, ActionListener, RefreshListener, TopicMapListener, DockableFocusListener, ComponentListener, DockableListener, DropTargetListener, DragGestureListener {
-    private String OPTIONS_PREFIX = "gui.dockingFramePanel.";
+
+	private static final long serialVersionUID = 1L;
+
+
+	private String OPTIONS_PREFIX = "gui.dockingFramePanel.";
     
 
     private HashMap<Dockable,TopicPanel> dockedTopicPanels;
@@ -151,8 +144,8 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         backgroundImageHeight = backgroundImage.getHeight();
 
         wandora = Wandora.getWandora();
-        dockedTopicPanels = new HashMap();
-        chainedTopicPanels = new HashMap(); 
+        dockedTopicPanels = new HashMap<>();
+        chainedTopicPanels = new HashMap<>(); 
         control = new WandoraDockController();
         control.addDockableFocusListener(this);
         station = new WandoraSplitDockStation();

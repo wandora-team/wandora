@@ -45,7 +45,9 @@ import org.wandora.topicmap.TopicMap;
 public class JsoupAssociationRowTableExtractor extends AbstractJsoupExtractor 
 implements WandoraTool, BrowserPluginExtractor {
 
-    private TopicMap tm;
+	
+	private static final long serialVersionUID = 1L;
+	private TopicMap tm;
     
     @Override
     public boolean extractTopicsFrom(Document d, String u, TopicMap t) throws Exception {

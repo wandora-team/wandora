@@ -55,7 +55,9 @@ import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
  */
 public class PropertyTableExtractor extends AbstractExtractor implements WandoraTool {
    
-    private URL basePath = null;
+	private static final long serialVersionUID = 1L;
+	
+	private URL basePath = null;
     public static String SI_PREFIX = "http://wandora.org/si/table";
     
     

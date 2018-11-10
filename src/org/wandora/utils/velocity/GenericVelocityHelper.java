@@ -344,7 +344,7 @@ public class GenericVelocityHelper {
     
     
     public static ArrayList<Topic> getSortedPlayers(Topic topic, String associationTypeSI, String roleSI, String sortRole, String lang) throws TopicMapException {
-        ArrayList players = new ArrayList();
+        ArrayList<Topic[]> players = new ArrayList<>();
         ArrayList<Topic> sortedPlayers = new ArrayList<Topic>();
         if(topic != null && associationTypeSI != null && roleSI != null && sortRole != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
@@ -403,7 +403,7 @@ public class GenericVelocityHelper {
     
     
     public static ArrayList<Topic> getSortedPlayers(Topic topic, Collection<String> associationTypesSI, Collection<String> rolesSI, String sortRole, String lang) throws TopicMapException {
-        ArrayList players = new ArrayList();
+        ArrayList<Topic[]> players = new ArrayList<>();
         ArrayList<Topic> sortedPlayers = new ArrayList<Topic>();
         
         Iterator<String> ai = associationTypesSI.iterator();
@@ -589,7 +589,7 @@ public class GenericVelocityHelper {
 
     
     public static <K> ArrayList<K> crop(Collection<K> collection, int start, int end) {
-        ArrayList<K> cropped = new ArrayList();
+        ArrayList<K> cropped = new ArrayList<>();
         if(collection != null) {
             int s = collection.size();
             Iterator<K> iterator = collection.iterator();
@@ -606,7 +606,7 @@ public class GenericVelocityHelper {
     
     
     
-    public static <K> ArrayList cropPage(Collection<K> collection, int page, int pageSize) {
+    public static <K> ArrayList<K> cropPage(Collection<K> collection, int page, int pageSize) {
         ArrayList<K> cropped = new ArrayList<K>();
         if(collection != null) {
             int start = Math.max(0, (page-1)*pageSize);
@@ -665,8 +665,7 @@ public class GenericVelocityHelper {
     
     public static ArrayList<Topic> collectTopicsOfType(TopicMap topicmap, Topic typeTopic, int depth) {
         LinkedHashSet<Topic> results = new LinkedHashSet<Topic>();
-        Object object = null;
-        
+
         ArrayList<Topic> temp = null; // new topics of previous iteration
         ArrayList<Topic> temp2 = new ArrayList<Topic>(); // new topics of current iteration
         ArrayList<Topic> temp3 = null; // candidates for new topics of current iteration
@@ -707,8 +706,7 @@ public class GenericVelocityHelper {
     
      public static ArrayList<Topic> collectPlayers(TopicMap topicmap, Topic topic, String associationTypeSI, String roleSI, String hasRole, String hasPlayer, int depth) {
         LinkedHashSet<Topic> results = new LinkedHashSet<Topic>();
-        Object object = null;
-        
+
         ArrayList<Topic> temp = null; // new topics of previous iteration
         ArrayList<Topic> temp2 = new ArrayList<Topic>(); // new topics of current iteration
         ArrayList<Topic> temp3 = null; // candidates for new topics of current iteration
@@ -719,9 +717,8 @@ public class GenericVelocityHelper {
         for(int i=0; i<depth; i++) {
             temp=temp2;
             temp2=new ArrayList<Topic>();
-            
             temp3 = new ArrayList<Topic>();
-            int s = results.size();
+            
             for(Topic t : temp) {
                 try {
                     temp3.addAll(getPlayers(t, associationTypeSI, roleSI, hasRole, hasPlayer));
@@ -761,7 +758,7 @@ public class GenericVelocityHelper {
     
     
     public static <K> Vector<K> extractRandomVector(Collection<K> c, int newSize) {
-        Vector cropped = new Vector();
+        Vector<K> cropped = new Vector<>();
         if( c == null || c.size() < 1 || newSize < 1) return cropped;
         int s = c.size();
         int randomStep = 0;
@@ -775,7 +772,7 @@ public class GenericVelocityHelper {
     }
     
     public static <K> List<K> extractRandomList(Collection<K> c, int newSize) {
-        ArrayList cropped = new ArrayList();
+        ArrayList<K> cropped = new ArrayList<>();
         if( c == null || c.size() < 1 || newSize < 1) return cropped;
         int s = c.size();
         int randomStep = 0;
@@ -1175,26 +1172,32 @@ public class GenericVelocityHelper {
         
         int i=0;
         int j=word.length()-1;
-        for(; i<word.length() && !Character.isJavaLetterOrDigit(word.charAt(i)); i++);
-        for(; j>i+1 && !Character.isJavaLetterOrDigit(word.charAt(j)); j--);
+        for(; i<word.length() && !Character.isLetterOrDigit(word.charAt(i)); i++);
+        for(; j>i+1 && !Character.isLetterOrDigit(word.charAt(j)); j--);
         
         return word.substring(i,j+1);
     }
     
     
     public static String encodeURL(String s) {
-        return encodeURL(s, "UTF-8");
+    	if(s != null) {
+    		return encodeURL(s, "UTF-8");
+    	}
+    	return null;
     }
+    
     public static String encodeURL(String s, String enc) {
         try { if(s != null && enc != null) { return java.net.URLEncoder.encode(s, enc); } }
         catch (Exception e) { e.printStackTrace(); return s; }
         return "";
     }
+    
     public static String decodeURL(String s) {
         return decodeURL(s, "UTF-8");
     }
+    
     public static String decodeURL(String s, String enc) {
-        try { if(s != null) { return java.net.URLDecoder.decode(s); } }
+        try { if(s != null) { return java.net.URLDecoder.decode(s, enc); } }
         catch (Exception e) { e.printStackTrace(); return s; }
         return "";
     }
@@ -1256,6 +1259,8 @@ public class GenericVelocityHelper {
         return text;
     }
 
+    
+    
     public static class TreeNode {
         public Topic content;
         public boolean openChildren;
@@ -1340,9 +1345,10 @@ public class GenericVelocityHelper {
     
 
     public static Collection<Association> sortAssociationsWithPlayer(Collection<Association> associations, Topic sortRole, String lang) {
-        ArrayList<Association> al=new ArrayList<Association>(associations);
-        Collections.sort(al,new TMBox.AssociationPlayerComparator(sortRole,lang));
+        ArrayList<Association> al = new ArrayList<Association>(associations);
+        Collections.sort(al, new TMBox.AssociationPlayerComparator(sortRole,lang));
         return al;
+        
 /*        Vector<Association> sortedAssociations = new Vector();
         
         if(associations == null || sortRole == null || lang == null ) return sortedAssociations;
@@ -1440,7 +1446,7 @@ public class GenericVelocityHelper {
     
     
     public static Collection<Topic> sortTopicsWithPlayer(Collection<Topic> topics, Topic associationType, Topic role, String lang) {
-        ArrayList<Topic> al=new ArrayList<Topic>(topics);
+        List<Topic> al=new ArrayList<Topic>(topics);
         Collections.sort(al,new TMBox.TopicAssociationPlayerComparator(associationType,role,lang));
         return al;
 /*        Vector<Topic> sortedTopics = new Vector();
@@ -1523,18 +1529,13 @@ public class GenericVelocityHelper {
     
     
     public static <K> Collection<K> reverseOrder(Collection<K> objects) {
-        Object[] reversed = new Object[objects.size()];
-        Iterator<K> iter = objects.iterator();
-        int i = objects.size() - 1;
-        while(iter.hasNext()) {
-            reversed[i] = iter.next();
-            i--;
-        }
-        Collection<K> reversedCollection = new ArrayList<K>();
-        for(i=0; i<reversed.length; i++) {
-            reversedCollection.add((K)reversed[i]);
-        }
-        return reversedCollection;
+    	if(objects != null) {
+	    	List<K> reversedList = new ArrayList<K>();
+	    	reversedList.addAll(objects);
+	    	Collections.reverse(reversedList);
+	        return reversedList;
+    	}
+    	return null;
     }
     
     
@@ -1543,16 +1544,16 @@ public class GenericVelocityHelper {
     
     // -------------------------------------------------------------------------
     
-    public static String composeLinearTopicNameString(Collection topics, String lang, String delimiter) {
+    public static String composeLinearTopicNameString(Collection<Topic> topics, String lang, String delimiter) {
         return composeLinearTopicNameString(topics, lang, delimiter, "");
     }
     
-    public static String composeLinearTopicNameString(Collection topics, String lang, String delimiter, String extraSettings) {
+    public static String composeLinearTopicNameString(Collection<Topic> topics, String lang, String delimiter, String extraSettings) {
         StringBuffer sb = new StringBuffer("");
         if(delimiter == null) delimiter = "";
         if(lang == null) lang = "en";
         if(topics != null && topics.size() > 0) {
-            for(Iterator iter = topics.iterator(); iter.hasNext(); ) {
+            for(Iterator<Topic> iter = topics.iterator(); iter.hasNext(); ) {
                 try {
                     Topic t = (Topic) iter.next();
                     String name = t.getDisplayName(lang);
@@ -1646,8 +1647,8 @@ public class GenericVelocityHelper {
    // --------------------------------------------------------------- SEARCH ---
     
     
-    public static ArrayList search(String query, WandoraManager manager) {
-        ArrayList results = new ArrayList();
+    public static Collection<Topic> search(String query, WandoraManager manager) {
+        List<Topic> results = new ArrayList<>();
         try {
             org.wandora.piccolo.actions.Search search = new org.wandora.piccolo.actions.Search();
             String[] queryWords = search.makeQueryWords(query);
@@ -1660,8 +1661,8 @@ public class GenericVelocityHelper {
     }
     
     
-    public static ArrayList search(String query, TopicMap topicmap) {
-        ArrayList results = new ArrayList();
+    public static Collection<Topic> search(String query, TopicMap topicmap) {
+        List<Topic> results = new ArrayList<>();
         try {
             org.wandora.piccolo.actions.Search search = new org.wandora.piccolo.actions.Search();
             String[] queryWords = search.makeQueryWords(query);
@@ -1678,7 +1679,7 @@ public class GenericVelocityHelper {
     
     
     
-    public static List sort(List list) {
+    public static <T extends Comparable> List<T> sort(List<T> list) {
         Collections.sort(list);
         return list;
     }

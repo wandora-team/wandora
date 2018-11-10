@@ -45,8 +45,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.wandora.topicmap.TMBox;
 
 
@@ -58,7 +60,9 @@ import org.wandora.topicmap.TMBox;
  */
 public class SQLExtractor extends AbstractExtractor {
 
-    public static String DEFAULT_SI_ENCODING = "UTF-8";
+	private static final long serialVersionUID = 1L;
+
+	public static String DEFAULT_SI_ENCODING = "UTF-8";
     public static String DEFAULT_LANG = "en";
 
     public static String RESULTSET_SI = "http://wandora.org/si/sql/resultset";
@@ -173,7 +177,7 @@ public class SQLExtractor extends AbstractExtractor {
         }
         int counter = 0;
         while(rs.next() && !forceStop()) {
-            HashMap<Topic,Topic> roledPlayers = new HashMap();
+            Map<Topic,Topic> roledPlayers = new LinkedHashMap<>();
             for(int i=1; i<numColumns+1; i++) {
                 try {
                     if(forceStop()) break;

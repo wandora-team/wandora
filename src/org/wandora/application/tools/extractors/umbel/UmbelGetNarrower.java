@@ -38,7 +38,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public class UmbelGetNarrower extends AbstractUmbelRelationExtractor {
 
-    public static final String API_URL = "http://umbel.org/ws/narrower-concepts/ext/";
+	private static final long serialVersionUID = 1L;
+
+	public static final String API_URL = "http://umbel.org/ws/narrower-concepts/ext/";
 
 
     @Override

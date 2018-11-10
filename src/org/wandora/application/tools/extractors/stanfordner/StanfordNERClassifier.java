@@ -56,7 +56,10 @@ import org.wandora.utils.XMLbox;
  * @author akivela
  */
 public class StanfordNERClassifier extends AbstractExtractor {
-    public static final String SOURCE_SI = "http://wandora.org/si/source";
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String SOURCE_SI = "http://wandora.org/si/source";
     public static final String DOCUMENT_SI = "http://wandora.org/si/document";
     public static final String TOPIC_SI = "http://wandora.org/si/topic";
 
@@ -163,7 +166,7 @@ public class StanfordNERClassifier extends AbstractExtractor {
 
             String serializedClassifier = selectedClassifier;
 
-            AbstractSequenceClassifier classifier = null;
+            AbstractSequenceClassifier<CoreLabel> classifier = null;
             
             try {
                 classifier = CRFClassifier.getClassifierNoExceptions(serializedClassifier);

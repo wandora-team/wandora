@@ -50,7 +50,9 @@ import org.wandora.topicmap.TopicMapException;
 
 abstract class AbstractWordExtractor extends AbstractExtractor{
     
-    private Topic baseTopic = null;
+	private static final long serialVersionUID = 1L;
+	
+	private Topic baseTopic = null;
     private WordConfiguration config;
     
     

@@ -30,7 +30,6 @@ package org.wandora.application.tools.extractors.subj3ct;
 import org.wandora.topicmap.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.extractors.*;
-import org.wandora.*;
 import org.wandora.utils.*;
 import org.wandora.utils.Tuples.*;
 
@@ -53,8 +52,10 @@ import org.xml.sax.*;
  */
 
 public class XMLSubj3ctRecordExtractor extends AbstractExtractor {
-    
-    public static final boolean OVERRIDE_BASENAME = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public static final boolean OVERRIDE_BASENAME = true;
     public static final boolean DESCRIPTION_AS_OCCURRENCE = true;
     public static final boolean DESCRIPTION_AS_PLAYER = false;
 

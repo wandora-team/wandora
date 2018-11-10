@@ -35,7 +35,6 @@ import javax.swing.JDialog;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
@@ -49,8 +48,9 @@ import org.wandora.application.gui.simple.SimpleTextPane;
  */
 public class SQLExtractorUI extends javax.swing.JPanel {
 
+	private static final long serialVersionUID = 1L;
 
-    private boolean accepted = false;
+	private boolean accepted = false;
     private JDialog dialog = null;
     private Wandora wandora = null;
 

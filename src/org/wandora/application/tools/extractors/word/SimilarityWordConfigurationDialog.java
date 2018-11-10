@@ -44,7 +44,9 @@ import org.wandora.application.gui.simple.SimpleCheckBox;
  */
 class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
 
-    private Wandora wandora = null;
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora wandora = null;
     private boolean wasAccepted = false;
     private JDialog myDialog = null;
     private SimilarityWordConfiguration config;

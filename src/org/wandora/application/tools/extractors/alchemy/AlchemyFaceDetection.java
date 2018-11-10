@@ -544,7 +544,7 @@ public class AlchemyFaceDetection extends AbstractAlchemyExtractor {
                         data_face_identity_disambiguated_freebase = "";
                         data_face_identity_disambiguated_opencyc = "";
                         data_face_identity_disambiguated_yago = "";
-                        data_face_identity_disambiguated_subtypes = new ArrayList();
+                        data_face_identity_disambiguated_subtypes = new ArrayList<>();
                     }
                     break;
                 

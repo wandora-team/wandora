@@ -103,10 +103,10 @@ public class AsuntojenHintaTiedotExtractor {
                 if(index > 0) c = c.substring(index);
                 index = c.indexOf("<div id=\"footer\">");
                 if(index > 0) c = c.substring(0, index);
-                c = c.replace("&#228;", "ä");
-                c = c.replace("&#246;", "ö");
+                c = c.replace("&#228;", "ï¿½");
+                c = c.replace("&#246;", "ï¿½");
                 c = c.replace("&#160;", " ");
-                c = c.replace("&#196;", "Ä");
+                c = c.replace("&#196;", "ï¿½");
                 
                 String pn = files[i].getName();
                 int pni = pn.indexOf("_");
@@ -125,13 +125,13 @@ public class AsuntojenHintaTiedotExtractor {
                         "(.*?)"+ // Huoneet
                         "<\\/td>\\s*?"+
                         "<td>"+
-                        "(.*?)"+ // Neliöt
+                        "(.*?)"+ // Neliï¿½t
                         "<\\/td>\\s*?"+
                         "<td>"+
                         "(.*?)"+ // Hinta
                         "<\\/td>\\s*?"+
                         "<td>"+
-                        "(.*?)"+ // Neliöhinta
+                        "(.*?)"+ // Neliï¿½hinta
                         "<\\/td>\\s*?"+
                         "<td>"+
                         "(.*?)"+ // Rak. vuosi
@@ -221,15 +221,15 @@ public class AsuntojenHintaTiedotExtractor {
             System.out.println(ilmoituksetArray.length + " ilmoitusta.");
             System.out.println(myydytArray.length + " myyntia.");
             
-            HashMap<String,ArrayList> ilmoituksetHash = new HashMap<String,ArrayList>();
-            HashMap<String,ArrayList> myydytHash = new HashMap<String,ArrayList>();
+            HashMap<String,ArrayList<String[]>> ilmoituksetHash = new HashMap<>();
+            HashMap<String,ArrayList<String[]>> myydytHash = new HashMap<>();
             
             for(String ilmo : ilmoituksetArray) {
                 String[] ilmoParts = ilmo.split("\t");
                 String pno = ilmoParts[1];
                 ArrayList<String[]> pnoIlmos = ilmoituksetHash.get(pno);
                 if(pnoIlmos == null) {
-                    pnoIlmos = new ArrayList();
+                    pnoIlmos = new ArrayList<>();
                 }
                 pnoIlmos.add(ilmoParts);
                 ilmoituksetHash.put(pno, pnoIlmos);
@@ -240,21 +240,20 @@ public class AsuntojenHintaTiedotExtractor {
                 String pno = myydytParts[1];
                 ArrayList<String[]> pnoMyydyt = myydytHash.get(pno);
                 if(pnoMyydyt == null) {
-                    pnoMyydyt = new ArrayList();
+                    pnoMyydyt = new ArrayList<>();
                 }
                 pnoMyydyt.add(myydytParts);
                 myydytHash.put(pno, pnoMyydyt);
             }
             
             // **** calculate ****
-            HashMap results = new HashMap();
             for(String pno : ilmoituksetHash.keySet()) {
                 if(!"100".equals(pno)) continue;
                 System.out.println("--------------------");
                 
                 
-                ArrayList iArray = ilmoituksetHash.get(pno);
-                ArrayList mArray = myydytHash.get(pno);
+                ArrayList<String[]> iArray = ilmoituksetHash.get(pno);
+                ArrayList<String[]> mArray = myydytHash.get(pno);
                 
                 int countI = 0;
                 double hintaTotalI = 0;

@@ -37,14 +37,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
-import java.text.*;
+
 
 /**
  *
  * @author  akivela
  */
 public class Stands4Selector extends JDialog {
-    public static String defaultLanguage = "en";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String defaultLanguage = "en";
     
     private static final String acronymsAPIURL = "http://www.abbreviations.com/services/v1/abbr.aspx?tokenid=__2__&term=__1__";
     private static final String synonymsAPIURL = "http://www.abbreviations.com/services/v1/syno.aspx?tokenid=__2__&word=__1__";

@@ -23,7 +23,6 @@ package org.wandora.utils;
 import java.awt.Image;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
-import java.awt.event.*;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
@@ -71,7 +70,7 @@ public class DnDBox {
                 }
                 try {
                     String[] split = data.split("\n");
-                    ArrayList<URI> uris = new ArrayList();
+                    List<URI> uris = new ArrayList<>();
                     for(int i=0; i<split.length; i++){
                         try {
                             URI uri = new URI(split[i].trim());
@@ -81,7 +80,7 @@ public class DnDBox {
                             // Silently ignore illegal URIs.
                         }
                     }
-                    java.util.List<File> files = new java.util.ArrayList<File>();
+                    List<File> files = new ArrayList<File>();
                     for(URI uri : uris) {
                         try{
                             files.add(new File(uri));

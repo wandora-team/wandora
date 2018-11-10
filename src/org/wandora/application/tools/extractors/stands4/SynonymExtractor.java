@@ -24,9 +24,7 @@ package org.wandora.application.tools.extractors.stands4;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
 
 import java.io.*;
 import java.net.*;
@@ -41,7 +39,10 @@ import org.xml.sax.*;
 public class SynonymExtractor extends AbstractStands4Extractor {
 
 
-    private String queryTerm = null;
+	private static final long serialVersionUID = 1L;
+
+
+	private String queryTerm = null;
 
 
     private boolean excludeSynonyms = false;

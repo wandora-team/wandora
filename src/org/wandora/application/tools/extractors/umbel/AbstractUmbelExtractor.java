@@ -40,9 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
-import static org.wandora.application.tools.extractors.AbstractExtractor.FILE_EXTRACTOR;
-import static org.wandora.application.tools.extractors.AbstractExtractor.RAW_EXTRACTOR;
-import static org.wandora.application.tools.extractors.AbstractExtractor.URL_EXTRACTOR;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -61,7 +58,10 @@ import org.wandora.utils.Tuples.T3;
 
 
 public abstract class AbstractUmbelExtractor extends AbstractExtractor {
-    public static final String UMBEL_CONCEPT_STRING_SPLITTER = "\\s+";
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String UMBEL_CONCEPT_STRING_SPLITTER = "\\s+";
     
     public static final int FILE_CONTAINS_UMBEL_CONCEPT_URLS = 2;
     public static final int FILE_CONTAINS_PLAIN_UMBEL_CONCEPT = 4;

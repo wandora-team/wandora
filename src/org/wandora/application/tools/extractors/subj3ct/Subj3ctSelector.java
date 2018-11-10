@@ -28,7 +28,6 @@
 package org.wandora.application.tools.extractors.subj3ct;
 
 
-import org.wandora.application.tools.extractors.ovi.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
@@ -38,7 +37,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
-import java.text.*;
 
 
 
@@ -51,7 +49,10 @@ import java.text.*;
  * @author  akivela
  */
 public class Subj3ctSelector extends JDialog {
-    public static String defaultLanguage = "en";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String defaultLanguage = "en";
     
     private static final String apiURL = "http://api.subj3ct.com/subjects";
 

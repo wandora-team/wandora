@@ -87,8 +87,10 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.wandora.topicmap.TMBox;
 
 /**
@@ -98,8 +100,9 @@ import org.wandora.topicmap.TMBox;
 
 public class SparqlExtractor extends AbstractExtractor {
 
-	
-    public static String DEFAULT_SI_ENCODING = "UTF-8";
+	private static final long serialVersionUID = 1L;
+
+	public static String DEFAULT_SI_ENCODING = "UTF-8";
 
     public static String DEFAULT_RESULTSET_FORMAT = "JSON";
     public static String DEFAULT_HANDLE_METHOD = "RESULTSET-TOPICMAP";
@@ -277,7 +280,7 @@ public class SparqlExtractor extends AbstractExtractor {
         while(rs.hasNext()) {
             QuerySolution soln = rs.nextSolution();
             if(soln != null) {
-                HashMap<Topic,Topic> roledPlayers = new HashMap();
+                Map<Topic,Topic> roledPlayers = new LinkedHashMap<>();
                 for(String col : columns) {
                     RDFNode x = soln.get(col);
                     if(x == null) continue;

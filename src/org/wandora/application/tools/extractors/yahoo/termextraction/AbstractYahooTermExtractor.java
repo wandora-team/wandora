@@ -38,13 +38,11 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
 import javax.swing.*;
 import java.io.*;
-import java.net.URLEncoder;
 
 
 
@@ -54,8 +52,10 @@ import java.net.URLEncoder;
  */
 public abstract class AbstractYahooTermExtractor extends AbstractExtractor {
 
-    
-    protected String defaultEncoding = "ISO-8859-1";
+
+	private static final long serialVersionUID = 1L;
+
+	protected String defaultEncoding = "ISO-8859-1";
 
     // Default language of occurrences and variant names.
     public static String LANG = "en";

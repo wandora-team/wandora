@@ -21,7 +21,6 @@
  */
 package org.wandora.application.tools.extractors.word;
 
-import java.util.HashMap;
 
 /**
  *

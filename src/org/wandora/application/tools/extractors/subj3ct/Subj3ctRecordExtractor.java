@@ -28,7 +28,6 @@ package org.wandora.application.tools.extractors.subj3ct;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 
 import javax.swing.*;
@@ -43,7 +42,9 @@ import javax.swing.*;
  */
 public class Subj3ctRecordExtractor extends AbstractWandoraTool {
 
-    private static Subj3ctSelector selector = null;
+	private static final long serialVersionUID = 1L;
+
+	private static Subj3ctSelector selector = null;
 
     @Override
     public String getName() {

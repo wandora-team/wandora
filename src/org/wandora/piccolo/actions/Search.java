@@ -131,7 +131,7 @@ public class Search implements Action,XMLParamAware {
 
     
     
-    public ArrayList doSearch(String[] queryWords, Object searchObject, int limit) {
+    public ArrayList<Topic> doSearch(String[] queryWords, Object searchObject, int limit) {
         String queryWord;
         ArrayList<Topic> found = new ArrayList<Topic>();
         ArrayList<Topic> foundTemp;

@@ -48,7 +48,9 @@ import org.wandora.utils.Options;
 
 public class UClassifierConfiguration extends javax.swing.JPanel {
 
-    private JDialog confDialog = null;
+	private static final long serialVersionUID = 1L;
+
+	private JDialog confDialog = null;
     private boolean isAccepted = false;
     private Wandora wandora = null;
     private String[] classifiers = null;

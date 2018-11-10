@@ -36,7 +36,10 @@ import org.wandora.utils.*;
  * @author akivela
  */
 public class BossSearchResultExtractor extends AbstractBossExtractor {
-    private String searchStr = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private String searchStr = null;
 
 
 

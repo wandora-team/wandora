@@ -42,7 +42,11 @@ import org.wandora.utils.*;
 public class YahooTermExtractor extends AbstractYahooTermExtractor {
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+
+	@Override
     public String getName() {
         return "Yahoo! Term Extractor";
     }

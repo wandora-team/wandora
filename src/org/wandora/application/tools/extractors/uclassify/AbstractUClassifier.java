@@ -38,7 +38,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 import org.wandora.application.tools.extractors.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
@@ -61,8 +60,12 @@ import org.xml.sax.XMLReader;
 
 public abstract class AbstractUClassifier extends AbstractExtractor {
     
-    
-    private String REQUEST_TEMPLATE = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>"+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	private String REQUEST_TEMPLATE = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>"+
         "<uclassify xmlns=\"http://api.uclassify.com/1/RequestSchema\" version=\"1.01\">"+
           "<texts>"+
             "<textBase64 id=\"UnknownText1\">__REQUEST_DATA__</textBase64>"+

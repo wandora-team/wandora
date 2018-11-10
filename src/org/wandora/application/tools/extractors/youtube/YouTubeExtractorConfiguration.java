@@ -20,7 +20,9 @@ import org.wandora.application.gui.simple.*;
  */
 public class YouTubeExtractorConfiguration extends javax.swing.JDialog {
 
-    private JFrame parent = null;
+	private static final long serialVersionUID = 1L;
+
+	private JFrame parent = null;
     private Options options = null;
     private YouTubeExtractor parentTool = null;
     

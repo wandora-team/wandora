@@ -28,7 +28,6 @@ import org.wandora.application.tools.extractors.*;
 import org.wandora.application.gui.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.utils.*;
 
 import java.util.*;
 import java.io.*;
@@ -49,7 +48,9 @@ import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
  */
 public class YouTubeURLExtractor extends AbstractExtractor {
 
-    private YouTubeVideoFeedExtractor parentExtractor;
+	private static final long serialVersionUID = 1L;
+	
+	private YouTubeVideoFeedExtractor parentExtractor;
 
     public YouTubeURLExtractor(){
         parentExtractor=new YouTubeVideoFeedExtractor();

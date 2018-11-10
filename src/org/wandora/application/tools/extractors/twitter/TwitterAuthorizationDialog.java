@@ -39,7 +39,9 @@ import org.wandora.utils.ClipboardBox;
 
 public class TwitterAuthorizationDialog extends javax.swing.JPanel {
 
-    private boolean wasAccepted = false;
+	private static final long serialVersionUID = 1L;
+
+	private boolean wasAccepted = false;
     private JDialog dialog = null;
     
     

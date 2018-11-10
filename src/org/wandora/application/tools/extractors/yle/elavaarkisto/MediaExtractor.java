@@ -61,7 +61,9 @@ import org.wandora.utils.CSVParser;
 
 public class MediaExtractor extends AbstractElavaArkistoExtractor {
     
-    public static boolean CREATE_MID_IF_MISSING = true;
+	private static final long serialVersionUID = 1L;
+	
+	public static boolean CREATE_MID_IF_MISSING = true;
     
 
     @Override
@@ -912,9 +914,9 @@ public class MediaExtractor extends AbstractElavaArkistoExtractor {
 Example of extracted CSV:
 
 MID,TYPE,TITLE_FI,TITLE_SV,PROMOTITLE_FI,PROMOTITLE_SV,ORIGINALTITLE_FI,ORIGINALTITLE_SV,DESCRIPTION_FI,DESCRIPTION_SV,KEYWORDS,CLASSIFICATION_ANALYTICS,CLASSIFICATION_MAIN_CLASS,CLASSIFICATION_SUB_CLASS,ACTORS,CONTRIBUTORS,FORMAT,COLOR,LANGUAGE,DURATION,DURATIONPERCENTAGE,FIRSTRUN,PUBLICATIONS,GEORESTRICTION,DOWNLOAD,EMBED,EA_CREATOR,EA_PUBLISHED,EA_UPDATED
-26-103988,TVClip,"Hyvää yötä ja huomenta materiaalinauhat",,"Laulava ratikkakuski Aarne Tenkanen oli Göstä Sundqvistin luomus",,Leirintäalue,,"Kaide Järvisen esittämä raitiovaununkuljettaja Aarne Tenkanen esiintyi useissa Gösta Sundqvistin radio-ohjelmissa ennen siirtymistään levy-ja lavatähdeksi.",,"aihe: fiktiiviset henkilöt; henkilö: Kai Järvinen; aihe: huumorimusiikki; tapahtuma: 1998; aihe: laulajat; henkilö: Aarne Tenkanen; aihe: raitiovaununkuljettajat; ohjelmatyyppi: haastattelut",,,,"Kai 'Kaide' Järvinen (Aarne Tenkanen)","Axa Sorjanen - ohjaaja, haastattelut; Raino Kuisma - kuvaus; Tuomas Palola - äänitys; Lasse Wikman - tuottaja",video,,fi,2399000,,1998-11-09,,0,0,1,"Axa Sorjanen",2014-05-19T15:10:09+03:00,
-26-66172,TVClip,,,,"Det finlandssvenska vädret från Kaisaniemiparken",,,"Äidinkieli.","Kurre Österberg och meteorolog Kenneth Holmlund, Yle bildband",,,,,,"Tuottaja: Torsten Bergman; Käsikirjoittaja: Anneli Sjöstedt; Ohjaaja: Öivind Nyquist; Kuvaussihteeri: Barbro Rännäri; Käsikirjoittaja: Mikaela Groop; Käsikirjoittaja: Ann-Kristin Schevelew; Musiikin suunnittelija: Kaj Wessman; Lukija (kertoja/speak): Ann-Kristin Schevelew; Kuvaussuunnittelija: Pentti Jurvanen; Lavastussuunnittelija: Julia Tallgren; Järjestäjä: Juha Suomela; Naamioitsija: P Aiho; Naamioitsija: N Bang; Pukusuunnittelija: Maija Kalkas; Graafinen suunnittelija: Pirjo Puolakka; muut: Anneli Sjöstedt, Birgitta Ohralahti, Immo Puustinen, Byman, Häikiö, Tonteri, Stig Granström",video,Väri,sv,298000,6,1988-11-05,,0,0,1,"Ida Fellman",2011-05-27T13:54:23+03:00,
-26-42871,RadioClip,,,"102 b. Murhemielin, kyynelöiden",,,,"Jukka Lintinen",,,,,,,,audio,,fi,290000,,,,0,0,1,"Elina Yli-Ojanperä",2011-08-17T15:32:46+03:00,
+26-103988,TVClip,"Hyvï¿½ï¿½ yï¿½tï¿½ ja huomenta materiaalinauhat",,"Laulava ratikkakuski Aarne Tenkanen oli Gï¿½stï¿½ Sundqvistin luomus",,Leirintï¿½alue,,"Kaide Jï¿½rvisen esittï¿½mï¿½ raitiovaununkuljettaja Aarne Tenkanen esiintyi useissa Gï¿½sta Sundqvistin radio-ohjelmissa ennen siirtymistï¿½ï¿½n levy-ja lavatï¿½hdeksi.",,"aihe: fiktiiviset henkilï¿½t; henkilï¿½: Kai Jï¿½rvinen; aihe: huumorimusiikki; tapahtuma: 1998; aihe: laulajat; henkilï¿½: Aarne Tenkanen; aihe: raitiovaununkuljettajat; ohjelmatyyppi: haastattelut",,,,"Kai 'Kaide' Jï¿½rvinen (Aarne Tenkanen)","Axa Sorjanen - ohjaaja, haastattelut; Raino Kuisma - kuvaus; Tuomas Palola - ï¿½ï¿½nitys; Lasse Wikman - tuottaja",video,,fi,2399000,,1998-11-09,,0,0,1,"Axa Sorjanen",2014-05-19T15:10:09+03:00,
+26-66172,TVClip,,,,"Det finlandssvenska vï¿½dret frï¿½n Kaisaniemiparken",,,"ï¿½idinkieli.","Kurre ï¿½sterberg och meteorolog Kenneth Holmlund, Yle bildband",,,,,,"Tuottaja: Torsten Bergman; Kï¿½sikirjoittaja: Anneli Sjï¿½stedt; Ohjaaja: ï¿½ivind Nyquist; Kuvaussihteeri: Barbro Rï¿½nnï¿½ri; Kï¿½sikirjoittaja: Mikaela Groop; Kï¿½sikirjoittaja: Ann-Kristin Schevelew; Musiikin suunnittelija: Kaj Wessman; Lukija (kertoja/speak): Ann-Kristin Schevelew; Kuvaussuunnittelija: Pentti Jurvanen; Lavastussuunnittelija: Julia Tallgren; Jï¿½rjestï¿½jï¿½: Juha Suomela; Naamioitsija: P Aiho; Naamioitsija: N Bang; Pukusuunnittelija: Maija Kalkas; Graafinen suunnittelija: Pirjo Puolakka; muut: Anneli Sjï¿½stedt, Birgitta Ohralahti, Immo Puustinen, Byman, Hï¿½ikiï¿½, Tonteri, Stig Granstrï¿½m",video,Vï¿½ri,sv,298000,6,1988-11-05,,0,0,1,"Ida Fellman",2011-05-27T13:54:23+03:00,
+26-42871,RadioClip,,,"102 b. Murhemielin, kyynelï¿½iden",,,,"Jukka Lintinen",,,,,,,,audio,,fi,290000,,,,0,0,1,"Elina Yli-Ojanperï¿½",2011-08-17T15:32:46+03:00,
 
 
 where:
@@ -923,26 +925,26 @@ where:
     TYPE = median tyyppi (TVClip, TVProgram, RadioClip, RadioProgram)
     TITLE_FI/TITLE_SV = median otsikko suomeksi/ruotsiksi
     PROMOTITLE_FI/PROMOTITLE_SV = median mainosotsikko suomeksi/ruotsiksi
-    ORIGINALTITLE_FI/ORIGINALTITLE_SV = alkuperäisohjelman nimi suomeksi/ruotsiksi
-    DESCRIPTION_FI/DESCRIPTION_SV = sisältökuvaus suomeksi/ruotsiksi
+    ORIGINALTITLE_FI/ORIGINALTITLE_SV = alkuperï¿½isohjelman nimi suomeksi/ruotsiksi
+    DESCRIPTION_FI/DESCRIPTION_SV = sisï¿½ltï¿½kuvaus suomeksi/ruotsiksi
     KEYWORDS = avainsanat
     CLASSIFICATION_ANALYTICS = tilastointiluokka
-    CLASSIFICATION_MAIN_CLASS, CLASSIFICATION_SUB_CLASS = sisällön pääluokka, aliluokka
-    ACTORS = esiintyjät
-    CONTRIBUTORS = tekijät
+    CLASSIFICATION_MAIN_CLASS, CLASSIFICATION_SUB_CLASS = sisï¿½llï¿½n pï¿½ï¿½luokka, aliluokka
+    ACTORS = esiintyjï¿½t
+    CONTRIBUTORS = tekijï¿½t
     FORMAT = mediaformaatti (video, audio)
-    COLOR = väri (Muva, Väri, ...)
+    COLOR = vï¿½ri (Muva, Vï¿½ri, ...)
     LANGUAGE = kulutuskieli (fi, sv)
     DURATION = median kesto millisekunneissa
-    DURATIONPERCENTAGE = median keston osuus alkuperäisen ohjelman kestosta (0-100)
-    FIRSTRUN = ensijulkaisupäivä (tarkkuus vaihtelee vuosikymmenestä päivän tarkkuuteen)
+    DURATIONPERCENTAGE = median keston osuus alkuperï¿½isen ohjelman kestosta (0-100)
+    FIRSTRUN = ensijulkaisupï¿½ivï¿½ (tarkkuus vaihtelee vuosikymmenestï¿½ pï¿½ivï¿½n tarkkuuteen)
     PUBLICATIONS = esitetysajat Ylen kanavilla
-    GEORESTRICTION = maarajattu (1=kyllä, 0=ei)
-    DOWNLOAD = ladattavissa (1=kyllä, 0=ei)
-    EMBED = upotettavissa (1=kyllä, 0=ei)
-    EA_CREATOR = Elävään arkistoon julkaissut henkilö
-    EA_PUBLISHED = julkaisuaika Elävässä arkistossa
-    EA_UPDATED = viimeisin muokkausaika Elävässä arkistossa
+    GEORESTRICTION = maarajattu (1=kyllï¿½, 0=ei)
+    DOWNLOAD = ladattavissa (1=kyllï¿½, 0=ei)
+    EMBED = upotettavissa (1=kyllï¿½, 0=ei)
+    EA_CREATOR = Elï¿½vï¿½ï¿½n arkistoon julkaissut henkilï¿½
+    EA_PUBLISHED = julkaisuaika Elï¿½vï¿½ssï¿½ arkistossa
+    EA_UPDATED = viimeisin muokkausaika Elï¿½vï¿½ssï¿½ arkistossa
 
 
 */

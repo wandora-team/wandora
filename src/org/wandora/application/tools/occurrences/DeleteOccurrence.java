@@ -32,7 +32,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
 
 
 import java.util.*;
@@ -45,7 +44,10 @@ import java.util.*;
  */
 public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool {
     
-    private Topic masterTopic = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private Topic masterTopic = null;
     private Topic occurrenceType = null;
     
     private boolean deleteAll = false;
@@ -102,7 +104,7 @@ public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool
         else {
             Iterator topics = null;
             if(masterTopic != null && !masterTopic.isRemoved()) {
-                ArrayList<Topic> topicArray = new ArrayList();
+                ArrayList<Topic> topicArray = new ArrayList<>();
                 topicArray.add(masterTopic);
                 topics = topicArray.iterator();
                 deleteAll = true;
@@ -154,7 +156,7 @@ public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool
                     if(topic != null && !topic.isRemoved()) {
                         if(shouldDelete(topic,type,admin)) {
                             try {
-                                Iterator iter=new ArrayList(topic.getData(type).keySet()).iterator();
+                                Iterator<Topic> iter=new ArrayList<>(topic.getData(type).keySet()).iterator();
                                 while(iter.hasNext()){
                                     Topic version=(Topic)iter.next();
                                     topic.removeData(type,version);

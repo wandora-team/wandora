@@ -39,8 +39,6 @@ import com.google.gdata.util.*;
 import com.google.gdata.data.media.mediarss.*;
 import com.google.gdata.data.geo.impl.*;
 
-import java.io.IOException;
-import java.io.File;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
@@ -52,7 +50,9 @@ import javax.swing.*;
  */
 public abstract class YouTubeExtractor extends AbstractWandoraTool implements WandoraTool {
 
-    public static final String LANG = "en";
+	private static final long serialVersionUID = 1L;
+
+	public static final String LANG = "en";
     public static final String VIDEO_DESCRIPTION = "http://wandora.org/si/youtube/video-description";
     public static final String VIDEO_ID = "http://wandora.org/si/youtube/video-id";
     public static final String VIDEO_TYPE = "http://wandora.org/si/youtube/video";

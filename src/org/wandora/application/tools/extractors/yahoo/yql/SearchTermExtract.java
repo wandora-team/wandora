@@ -30,13 +30,10 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
-import java.net.URLEncoder;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
-import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -57,8 +54,9 @@ import org.xml.sax.XMLReader;
  */
 public class SearchTermExtract extends AbstractYQLExtractor {
 
+	private static final long serialVersionUID = 1L;
 
-    protected String defaultEncoding = "UTF-8";
+	protected String defaultEncoding = "UTF-8";
 
     // Default language of occurrences and variant names.
     public static String LANG = "en";

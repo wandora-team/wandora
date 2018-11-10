@@ -32,7 +32,10 @@ package org.wandora.application.tools.extractors.uclassify;
 
 public class TextLanguageUClassifier extends UClassifier {
 
-    public TextLanguageUClassifier() {
+	private static final long serialVersionUID = 1L;
+
+	
+	public TextLanguageUClassifier() {
         super("Text Language", "uClassify", 0.001);
     }
     

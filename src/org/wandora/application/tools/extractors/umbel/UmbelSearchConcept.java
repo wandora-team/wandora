@@ -53,8 +53,10 @@ import org.wandora.topicmap.XTMPSI;
 
 
 public class UmbelSearchConcept extends UmbelGetConcept {
-    
-    public static final String API_URL = "http://umbel.org/ws/search/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String API_URL = "http://umbel.org/ws/search/";
     public static final int MAX_PAGE_INDEX = 100;
 
     
@@ -74,7 +76,7 @@ public class UmbelSearchConcept extends UmbelGetConcept {
         String query = WandoraOptionPane.showInputDialog(wandora, "Search for Umbel concepts with query", "", "Search for Umbel concepts", WandoraOptionPane.QUESTION_MESSAGE);
         int pageIndex = 0;
         int numberOfPages = 1;
-        ArrayList<JSONObject> allResults = new ArrayList();
+        ArrayList<JSONObject> allResults = new ArrayList<>();
         if(query != null && query.length()>0) {
             do {
                 String requestUrl = getApiRequestUrlFor(query);

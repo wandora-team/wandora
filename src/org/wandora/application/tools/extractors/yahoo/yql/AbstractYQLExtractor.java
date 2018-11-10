@@ -31,11 +31,9 @@ import java.net.URLEncoder;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolType;
-import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
-import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 
@@ -46,7 +44,9 @@ import org.wandora.topicmap.TopicMapException;
 public abstract class AbstractYQLExtractor extends AbstractExtractor {
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/extract_yahoo.png");
     }

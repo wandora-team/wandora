@@ -30,7 +30,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import org.json.JSONObject;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TMBox;
@@ -55,7 +54,9 @@ import org.wandora.utils.CSVParser;
 public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtractor {
     
 
-    public static boolean EXTRACT_SERVICE = true;
+	private static final long serialVersionUID = 1L;
+
+	public static boolean EXTRACT_SERVICE = true;
     public static boolean EXTRACT_CONTRIBUTORS = true;
     public static boolean EXTRACT_EDITORS = true;
     public static boolean EXTRACT_ARKKIID = true;
@@ -228,17 +229,17 @@ public class ArticlesAdditionalFieldsExtractor extends AbstractElavaArkistoExtra
 Example of extracted CSV:
 
 AID,SERVICE,CONTRIBUTORS,EDITORS,DELTAID,ARKKIID
-7-884577,arkivet,"Fredrik Hackman, Ywe Jalander, Öivind Nyquist, Jyrki Rapp",RTV,61796,5720
+7-884577,arkivet,"Fredrik Hackman, Ywe Jalander, ï¿½ivind Nyquist, Jyrki Rapp",RTV,61796,5720
 20-87062,elava-arkisto,,,82350,
-20-108693,elava-arkisto,"Leike 1: Hannu Vilpponen (tuot toim), Tauno Jarva (ohj), Risto Heikkilä (toimsiht), Leo Lehdistö & Seppo Heikki Salonen & Arne Wessberg & Erkki Saksa (toim), Pirjo Isomäki (kuvsiht). Leike 2: Jarmo Porola (tuot ohj toim), Matti Rosvall (toim), Eija Pietarinen (kuvsiht). Leike 3: Kirsti Wallasvaara (juont).","TV2 Ajankohtaistoimitus. TV2 Viihdetoimitus.",48220,9230
-20-94053,elava-arkisto,"LEENA VIHTONEN (TUOT), ANNELI SJÖSTEDT (KUVSIHT). Matti Rosvall & Jouko Konttinen & Jarmo Porola (toim). Ulla Paulaniemi (kuvsiht). Mikko Alatalo (juont).","RTV Viihdetoimitus. TV2 Viihdetoimitus.",25733,4508
+20-108693,elava-arkisto,"Leike 1: Hannu Vilpponen (tuot toim), Tauno Jarva (ohj), Risto Heikkilï¿½ (toimsiht), Leo Lehdistï¿½ & Seppo Heikki Salonen & Arne Wessberg & Erkki Saksa (toim), Pirjo Isomï¿½ki (kuvsiht). Leike 2: Jarmo Porola (tuot ohj toim), Matti Rosvall (toim), Eija Pietarinen (kuvsiht). Leike 3: Kirsti Wallasvaara (juont).","TV2 Ajankohtaistoimitus. TV2 Viihdetoimitus.",48220,9230
+20-94053,elava-arkisto,"LEENA VIHTONEN (TUOT), ANNELI SJï¿½STEDT (KUVSIHT). Matti Rosvall & Jouko Konttinen & Jarmo Porola (toim). Ulla Paulaniemi (kuvsiht). Mikko Alatalo (juont).","RTV Viihdetoimitus. TV2 Viihdetoimitus.",25733,4508
 
 
 where:
 
     AID = artikkelin Yle ID (Article ID)
-    SERVICE = artikkelin lähde (Elävä arkisto vai Arkivet)
-    CONTRIBUTORS = artikkelin medioiden tekijät
+    SERVICE = artikkelin lï¿½hde (Elï¿½vï¿½ arkisto vai Arkivet)
+    CONTRIBUTORS = artikkelin medioiden tekijï¿½t
     EDITORS = artikkelin medioiden toimitukset
     DELTAID = legacy ID
     ARKKIID = legacy ID

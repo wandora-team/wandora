@@ -47,7 +47,10 @@ import org.xml.sax.*;
  * @author akivela
  */
 public class TextWiseClassifier extends AbstractExtractor {
-    public static final boolean USE_WEIGHTS = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public static final boolean USE_WEIGHTS = true;
 
     private static final String API_ADDRESS = "http://api.semantichacker.com/__TOKEN__/concept/";
     

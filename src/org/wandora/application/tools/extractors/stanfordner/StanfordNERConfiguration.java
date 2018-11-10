@@ -40,7 +40,9 @@ import org.wandora.utils.Options;
  */
 public class StanfordNERConfiguration extends javax.swing.JDialog {
 
-    private boolean accepted = false;
+	private static final long serialVersionUID = 1L;
+
+	private boolean accepted = false;
     private Wandora wandora = null;
     private Options options = null;
     private StanfordNERClassifier parent = null;

@@ -31,7 +31,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.topicmap.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
@@ -39,16 +38,10 @@ import java.util.regex.*;
 
 import com.google.gdata.client.youtube.*;
 import com.google.gdata.data.youtube.*;
-import com.google.gdata.data.extensions.*;
 import com.google.gdata.util.*;
 import com.google.gdata.client.*;
 import com.google.gdata.data.*;
 
-import com.google.gdata.client.youtube.*;
-import com.google.gdata.data.youtube.*;
-import com.google.gdata.data.extensions.*;
-import com.google.gdata.util.*;
-import org.wandora.application.gui.*;
 
 
 
@@ -58,7 +51,9 @@ import org.wandora.application.gui.*;
  */
 public class YouTubeVideoFeedSelector extends javax.swing.JDialog {
 
-    public static final String YOUTUBE_VIDEO_URL = "http://gdata.youtube.com/feeds/api/videos";
+	private static final long serialVersionUID = 1L;
+	
+	public static final String YOUTUBE_VIDEO_URL = "http://gdata.youtube.com/feeds/api/videos";
     public static final String YOUTUBE_BASE_URL = "http://gdata.youtube.com/feeds/api/";
     protected String USER_URL_PREFIX = "http://gdata.youtube.com/feeds/api/users/";
     protected String USER_URL_POSTFIX = "/uploads";

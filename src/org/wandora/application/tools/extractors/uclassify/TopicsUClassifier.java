@@ -30,8 +30,11 @@ package org.wandora.application.tools.extractors.uclassify;
 
 
 public class TopicsUClassifier extends UClassifier {
-    
-    public TopicsUClassifier() {
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public TopicsUClassifier() {
         super("Topics", "uClassify", 0.001);
     }
     

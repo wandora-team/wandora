@@ -21,7 +21,7 @@
  * 
  * DeleteSubjectIdentifiers.java
  *
- * Created on 21. heinäkuuta 2006, 16:57
+ * Created on 21. heinï¿½kuuta 2006, 16:57
  *
  */
 
@@ -52,8 +52,12 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
 
-    
-    public DeleteSubjectIdentifiers() {
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	public DeleteSubjectIdentifiers() {
     }
     public DeleteSubjectIdentifiers(Context context) {
         setContext(context);
@@ -153,7 +157,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements Wan
                         // identifier and prevent deletion if there is only one
                         // subject locator.
                         inspectionCount++;
-                        Collection<Locator> sis = new ArrayList(getSubjectIdentifiers(topic));
+                        Collection<Locator> sis = new ArrayList<>(getSubjectIdentifiers(topic));
                         int localDeleteCount = 0;
                         
                         for(Locator si : sis) {
@@ -227,7 +231,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements Wan
      * @throws TopicMapException 
      */
     protected Collection<Locator> getSubjectIdentifiers(Topic topic) throws TopicMapException {
-        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList();
+        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList<>();
         Iterator<Locator> subjectIdentifiersOfTopic = topic.getSubjectIdentifiers().iterator();
         subjectIdentifiersOfTopic.next(); // Hop over == save first locator
         while(subjectIdentifiersOfTopic.hasNext()) {
@@ -249,7 +253,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool implements Wan
      * @throws TopicMapException 
      */
     protected Collection<Locator> getSubjectIdentifiers(Iterator<Locator> subjectIdentifiers) throws TopicMapException {
-        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList();
+        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList<>();
         while(subjectIdentifiers.hasNext()) {
             subjectIdentifiersToDelete.add(subjectIdentifiers.next());
         }

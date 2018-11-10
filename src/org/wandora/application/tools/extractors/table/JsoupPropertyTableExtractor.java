@@ -43,7 +43,9 @@ import org.wandora.topicmap.TopicMap;
 public class JsoupPropertyTableExtractor extends AbstractJsoupExtractor 
 implements WandoraTool, BrowserPluginExtractor {
 
-    private TopicMap tm;
+	private static final long serialVersionUID = 1L;
+
+	private TopicMap tm;
     private Topic wandoraClass;
     
     @Override
