@@ -32,25 +32,14 @@ import org.wandora.piccolo.Logger;
 import org.wandora.piccolo.SimpleLogger;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.Topic;
-import org.wandora.application.tools.DeleteTopicsWithoutBasename;
 import org.wandora.application.tools.extractors.datum.CrawlerDataSource;
 import org.wandora.application.tools.extractors.datum.ExtractTool;
 import org.wandora.application.tools.extractors.datum.FilteringDatumExtractor;
 import org.wandora.application.tools.extractors.datum.FirstDatumProcessor;
-import org.w3c.dom.*;
-import org.wandora.*;
-import org.wandora.topicmap.*;
-import org.wandora.piccolo.*;
-import org.wandora.utils.*;
-
-import org.wandora.application.tools.fng.*;
-import org.wandora.application.tools.extractors.*;
 
 import java.util.*;
 import java.io.*;
 import java.net.*;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
 import bsh.*;
 
 
@@ -80,7 +69,7 @@ public class BuildMediaArchive extends Thread {
         
 
     
-    public boolean build(Vector urls, TopicMap tm, TopicMap filteredTm) throws IOException {
+    public boolean build(Vector<URL> urls, TopicMap tm, TopicMap filteredTm) throws IOException {
         try {
             if(urls.size() == 0) {
                 logger.writelog("INF", "No source urls defined! Exiting!");
@@ -107,10 +96,10 @@ public class BuildMediaArchive extends Thread {
             tool.doExtract(tm,logger);
             
             try {
-                Vector deletedTopics = new Vector();
+                Vector<Topic> deletedTopics = new Vector<>();
                 Topic t = null;
                 String basename = null;
-                for(Iterator iter=tm.getTopics(); iter.hasNext();) {
+                for(Iterator<Topic> iter=tm.getTopics(); iter.hasNext();) {
                     t = (Topic) iter.next();
                     if(!t.isRemoved()) {
                         basename = t.getBaseName();
@@ -142,10 +131,10 @@ public class BuildMediaArchive extends Thread {
                 filter.execute(filteredTm, null);
 
                 try {
-                    Vector deletedTopics = new Vector();
+                    Vector<Topic> deletedTopics = new Vector<>();
                     Topic t = null;
                     String basename = null;
-                    for(Iterator iter=filteredTm.getTopics(); iter.hasNext();) {
+                    for(Iterator<Topic> iter=filteredTm.getTopics(); iter.hasNext();) {
                         t = (Topic) iter.next();
                         if(!t.isRemoved()) {
                             if(t.getAssociations().size() == 0) {
@@ -185,7 +174,7 @@ public class BuildMediaArchive extends Thread {
         TopicMap mediaArchiveTopicMap=new org.wandora.topicmap.memory.TopicMapImpl();
         TopicMap mediateekkiTopicMap=new org.wandora.topicmap.memory.TopicMapImpl();
         
-        Vector urls = new Vector();
+        Vector<URL> urls = new Vector<>();
         for(int i=0; i<args.length-2; i++) {
             try {
                 urls.add(new URL(args[i]));

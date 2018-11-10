@@ -25,6 +25,7 @@
  */
 
 package org.wandora.application.tools.fng;
+
 import org.wandora.topicmap.TopicInUseException;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.XTMPSI;
@@ -32,12 +33,9 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TMBox;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
+
 
 /**
  *
@@ -81,8 +79,8 @@ public class DigitalPictureRemover {
         Topic langfi=TMBox.getOrCreateTopic(tm, XTMPSI.getLang("fi"));
         
         int counter=0;
-        HashSet pictures=new HashSet();
-        Iterator iter=tm.getTopicsOfType(photograph).iterator();
+        HashSet<Topic> pictures=new HashSet<>();
+        Iterator<Topic> iter=tm.getTopicsOfType(photograph).iterator();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
             if(!t.isOfType(work)) pictures.add(t);
@@ -92,7 +90,7 @@ public class DigitalPictureRemover {
             Topic t=(Topic)iter.next();
             if(!t.isOfType(work)) pictures.add(t);
         }
-        Vector descriptions=new Vector();
+        Vector<Topic> descriptions=new Vector<>();
         iter=pictures.iterator();
         int counter3=0;
         while(iter.hasNext()){
@@ -100,8 +98,8 @@ public class DigitalPictureRemover {
             Topic depict=null;
             String descS="";
 //            Iterator iter2=pict.getAssociations(name,hasTitle).iterator();
-            Iterator iter2=pict.getAssociations().iterator();
-            Collection tobedeleted=new Vector();
+            Iterator<Association> iter2=pict.getAssociations().iterator();
+            Collection<Association> tobedeleted=new Vector<>();
             while(iter2.hasNext()){
                 Association a=(Association)iter2.next();
                 

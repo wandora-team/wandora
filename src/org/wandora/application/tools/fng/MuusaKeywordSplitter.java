@@ -42,7 +42,10 @@ import java.util.*;
  * @author  olli, akivela
  */
 public class MuusaKeywordSplitter extends AbstractWandoraTool implements WandoraTool {
-    Wandora admin = null;
+
+	private static final long serialVersionUID = 1L;
+
+	Wandora wandora = null;
     
     
     /** Creates a new instance of InventoryNumbenCleaner */
@@ -55,12 +58,12 @@ public class MuusaKeywordSplitter extends AbstractWandoraTool implements Wandora
     }
     
     
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         setDefaultLogger();
         
         try {
             setLogTitle("Splitting Muusa Keywords...");
-            process(admin.getTopicMap(), Logger.getLogger());
+            process(wandora.getTopicMap(), Logger.getLogger());
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -98,7 +101,7 @@ public class MuusaKeywordSplitter extends AbstractWandoraTool implements Wandora
         int splitCounter=0;
         int createTopicCounter=0;
         int createAssociationCounter=0;
-        Iterator iter=tm.getTopicsOfType(work).iterator();
+        Iterator<Topic> iter=tm.getTopicsOfType(work).iterator();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
             List<Topic> keywords = TopicTools.getPlayers(t, isAboutType, isAboutRole, requiredRole, requiredPlayer);
@@ -134,7 +137,7 @@ public class MuusaKeywordSplitter extends AbstractWandoraTool implements Wandora
                     }
                 }
                 try {
-                    for(Iterator assos = keywordTopic.getAssociations().iterator(); assos.hasNext(); ) {
+                    for(Iterator<Association> assos = keywordTopic.getAssociations().iterator(); assos.hasNext(); ) {
                         Association a = (Association) assos.next();
                         if(a != null) a.remove();
                     }
@@ -186,7 +189,7 @@ public class MuusaKeywordSplitter extends AbstractWandoraTool implements Wandora
     
     
     public char repacementCharacterFor(char c) {
-        int i = "ÄÖÅäöåéü".indexOf(c);
+        int i = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½".indexOf(c);
         if(i == -1) return '_';
         else return "AOAaoaeu".charAt(i);
     }

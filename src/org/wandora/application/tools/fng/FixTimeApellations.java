@@ -47,12 +47,14 @@ import org.wandora.application.contexts.*;
  * @author  akivela
  */
 public class FixTimeApellations extends AbstractWandoraTool implements WandoraTool {
-    
-    
-    public void execute(Wandora admin, Context context) {
+
+	private static final long serialVersionUID = 1L;
+
+
+	public void execute(Wandora wandora, Context context) {
         try {
-            TopicMap topicMap = admin.getTopicMap();
-            int answer = JOptionPane.showConfirmDialog(admin,"You are about to fix time apellations!\nAre you sure?","Fix time apellations?", JOptionPane.YES_NO_OPTION);
+            TopicMap topicMap = wandora.getTopicMap();
+            int answer = JOptionPane.showConfirmDialog(wandora,"You are about to fix time apellations!\nAre you sure?","Fix time apellations?", JOptionPane.YES_NO_OPTION);
             if(answer == JOptionPane.YES_OPTION) {
                 FixTimeApellations.process(topicMap);
             }
@@ -278,8 +280,8 @@ public class FixTimeApellations extends AbstractWandoraTool implements WandoraTo
                 if("maalis".equalsIgnoreCase(month)) month = "03";
                 if("huhti".equalsIgnoreCase(month)) month = "04";
                 if("touko".equalsIgnoreCase(month)) month = "05";
-                if("kesä".equalsIgnoreCase(month)) month = "06";
-                if("heinä".equalsIgnoreCase(month)) month = "07";
+                if("kesï¿½".equalsIgnoreCase(month)) month = "06";
+                if("heinï¿½".equalsIgnoreCase(month)) month = "07";
                 if("elo".equalsIgnoreCase(month)) month = "08";
                 if("syys".equalsIgnoreCase(month)) month = "09";
                 if("loka".equalsIgnoreCase(month)) month = "10";
@@ -561,20 +563,20 @@ public class FixTimeApellations extends AbstractWandoraTool implements WandoraTo
 
         createTopic(tm,
                     "http://www.fng.fi/wandora/wandora-fng.xtm#kesakuu",
-                    "kesäkuu",
+                    "kesï¿½kuu",
                     "Juni", 
                     new String[] { "http://www.fng.fi/wandora/wandora-fng.xtm#kuukausi" });
         
         try { createTopic(tm,
-                    URLEncoder.encode("http://www.fng.fi/wandora/wandora-fng.xtm#kesäkuu", "UTF-8"),
-                    "kesäkuu",
+                    URLEncoder.encode("http://www.fng.fi/wandora/wandora-fng.xtm#kesï¿½kuu", "UTF-8"),
+                    "kesï¿½kuu",
                     "Juni", 
                     new String[] { "http://www.fng.fi/wandora/wandora-fng.xtm#kuukausi" });
         } catch(Exception e) {}
                     
         try { createTopic(tm,
                     URLEncoder.encode("http://www.fng.fi/wandora/wandora-fng.xtm#heinakuu", "UTF-8"),
-                    "heinäkuu",
+                    "heinï¿½kuu",
                     "July", 
                     new String[] { "http://www.fng.fi/wandora/wandora-fng.xtm#kuukausi" });
         } catch(Exception e) {}

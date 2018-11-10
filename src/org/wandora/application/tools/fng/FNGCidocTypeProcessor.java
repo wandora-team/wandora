@@ -35,16 +35,9 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.application.tools.AbstractWandoraTool;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 
-import org.wandora.topicmap.*;
-import org.wandora.*;
-import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
+
 
 /**
  * Tool converts given is-type-of associations into topic map's native
@@ -55,8 +48,10 @@ import java.text.*;
 
 
 public class FNGCidocTypeProcessor extends AbstractWandoraTool implements WandoraTool {
-    
-    private String[] makeTypes;
+
+	private static final long serialVersionUID = 1L;
+
+	private String[] makeTypes;
     private String[] deleteTypes;
     
     /** Creates a new instance of FNGCidocTypeProcessor */
@@ -89,7 +84,7 @@ public class FNGCidocTypeProcessor extends AbstractWandoraTool implements Wandor
             log("Couldn't find all needed topics.");
             return;
         }
-        Collection makeC=new HashSet();
+        Collection<Topic> makeC=new LinkedHashSet<>();
         for(int i=0;i<makeTypes.length;i++){
             Topic t=tm.getTopic(makeTypes[i]);
             if(t==null){
@@ -98,7 +93,7 @@ public class FNGCidocTypeProcessor extends AbstractWandoraTool implements Wandor
             }
             makeC.add(t);
         }
-        Collection deleteC=new HashSet();
+        Collection<Topic> deleteC=new LinkedHashSet<>();
         for(int i=0;i<deleteTypes.length;i++){
             Topic t=tm.getTopic(deleteTypes[i]);
             if(t==null){
@@ -111,7 +106,7 @@ public class FNGCidocTypeProcessor extends AbstractWandoraTool implements Wandor
         
         int counter=0;
         int counter2=0;
-        Iterator iter=new ArrayList(tm.getAssociationsOfType(hasType)).iterator();
+        Iterator<Association> iter=new ArrayList(tm.getAssociationsOfType(hasType)).iterator();
         while(iter.hasNext() && !forceStop()) {
             Association a=(Association)iter.next();
             Topic l=a.getPlayer(listedIn);

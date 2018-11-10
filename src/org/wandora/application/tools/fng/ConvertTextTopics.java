@@ -110,7 +110,7 @@ public class ConvertTextTopics {
         Topic langT=t.getTopicMap().getTopic(langsi);
         String dispsi=XTMPSI.DISPLAY;
         Topic dispT=t.getTopicMap().getTopic(dispsi);
-        HashSet scope=new HashSet();
+        HashSet<Topic> scope=new HashSet<>();
         if(langT!=null) scope.add(langT);
         if(dispT!=null) scope.add(dispT);
         t.setVariant(scope, name);
@@ -149,9 +149,9 @@ public class ConvertTextTopics {
         );
         
         createTopic(targetTopicMap,
-            "http://www.fng.fi/wandora/wandora-fng.xtm#kp-henkilö",
-            "henkilö",
-            "henkilö", 
+            "http://www.fng.fi/wandora/wandora-fng.xtm#kp-henkilÃ¶",
+            "henkilÃ¶",
+            "henkilÃ¶", 
             "person",
             new String[] {}
         );
@@ -162,7 +162,7 @@ public class ConvertTextTopics {
             "toimija", 
             "actor",
             new String[] {
-                "http://www.fng.fi/wandora/wandora-fng.xtm#kp-henkilö"
+                "http://www.fng.fi/wandora/wandora-fng.xtm#kp-henkilÃ¶"
             }
         );
         
@@ -172,7 +172,7 @@ public class ConvertTextTopics {
             "kaupunki tekstin kirjoittaja", 
             "City text author",
             new String[] {
-                "http://www.fng.fi/wandora/wandora-fng.xtm#kp-henkilö",
+                "http://www.fng.fi/wandora/wandora-fng.xtm#kp-henkilÃ¶",
                 "http://www.fng.fi/wandora/wandora-fng.xtm#kp-toimija"
             }
         );
@@ -190,13 +190,13 @@ public class ConvertTextTopics {
     
     
     public static void removeOccurrences(String occurrenceType, TopicMap tm) throws TopicMapException {
-        Vector v=new Vector();
+        Vector<Topic> v=new Vector<>();
         Topic typeTopic = tm.getTopic(occurrenceType);    
         
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         while(iter.hasNext()) {
             Topic t=(Topic)iter.next();
-            Hashtable data = t.getData(typeTopic);
+            Hashtable<Topic,String> data = t.getData(typeTopic);
             if(data.size() > 0) {
                 v.add(t);
             }
@@ -223,9 +223,9 @@ public class ConvertTextTopics {
     
     
     public static void moveOccurrences(Topic source, Topic target) throws TopicMapException  {
-        Collection sourceOTypes = source.getDataTypes();
-        Vector occusToDel = new Vector();
-        for(Iterator iter = sourceOTypes.iterator(); iter.hasNext(); ) {
+        Collection<Topic> sourceOTypes = source.getDataTypes();
+        Vector<Topic> occusToDel = new Vector<>();
+        for(Iterator<Topic> iter = sourceOTypes.iterator(); iter.hasNext(); ) {
             try {
                 Topic oType = (Topic) iter.next();
                 target.setData(oType, source.getData(oType));
@@ -245,12 +245,12 @@ public class ConvertTextTopics {
     
     
     public static void fixAineisto(TopicMap tm) throws TopicMapException  {
-        Vector v=new Vector();
+        Vector<Topic> v=new Vector<>();
         Topic typeTopic = tm.getTopic("http://www.fng.fi/wandora/wandora-fng.xtm#kp-kaupunki-teksti");    
         Topic aineistoTypeTopic = tm.getTopic("http://www.fng.fi/wandora/wandora-fng.xtm#kp-aineisto");
         Topic occurrenceRoleTopic = tm.getTopic("http://wandora.org/si/compatibility/occurrenceroletopic");
         
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         while(iter.hasNext()) {
             Topic t=(Topic)iter.next();
             if(t.isOfType(typeTopic)) {
@@ -261,19 +261,19 @@ public class ConvertTextTopics {
         int c=0;
         int unregocnized = 0;
         while(iter.hasNext()){
-            Vector assocsToMove=new Vector();
+            Vector<Association> assocsToMove=new Vector<>();
             Topic t=(Topic)iter.next();
             if(t.isRemoved()) continue;
             try {
-                Collection col = t.getAssociations();
+                Collection<Association> col = t.getAssociations();
                 Association a;
-                for(Iterator i = col.iterator(); i.hasNext();) {
+                for(Iterator<Association> i = col.iterator(); i.hasNext();) {
                     a = (Association) i.next();
                     if(a.getType().equals(aineistoTypeTopic)) {
                         Topic aineistoTopic = a.getPlayer(aineistoTypeTopic);
-                        Collection aineistoAssociations = aineistoTopic.getAssociations();
+                        Collection<Association> aineistoAssociations = aineistoTopic.getAssociations();
                         Association aa;
-                        for(Iterator ai = aineistoAssociations.iterator(); ai.hasNext();) {
+                        for(Iterator<Association> ai = aineistoAssociations.iterator(); ai.hasNext();) {
                             assocsToMove.add((Association) ai.next());
                         }
                         moveOccurrences(aineistoTopic, t);
@@ -302,10 +302,10 @@ public class ConvertTextTopics {
     
     
     public static void fixDocumentOccurrences(TopicMap tm) throws TopicMapException {
-        Vector v=new Vector(); 
+        Vector<Topic> v=new Vector<>(); 
         Topic tekstiTiedostoType = tm.getTopic("http://www.fng.fi/wandora/wandora-fng.xtm#kp-tekstitiedosto");
         
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         while(iter.hasNext()) {
             Topic t=(Topic)iter.next();
             if(t.getSubjectLocator() != null) {
@@ -340,10 +340,10 @@ public class ConvertTextTopics {
     
     
     public static void removeAssociationsOfType(TopicMap tm, String si) throws TopicMapException {
-        Vector v=new Vector();
+        Vector<Association> v=new Vector<>();
         Topic typeTopic = tm.getTopic(si);    
         
-        Iterator iter=tm.getAssociations();
+        Iterator<Association> iter=tm.getAssociations();
         while(iter.hasNext()) {
             Association a=(Association)iter.next();
             if(a.getType().equals(typeTopic)) {
@@ -372,10 +372,10 @@ public class ConvertTextTopics {
     
     
     public static void removeTopicsOfType(TopicMap tm, String si) throws TopicMapException {
-        Vector v=new Vector();
+        Vector<Topic> v=new Vector<>();
         Topic typeTopic = tm.getTopic(si);    
         
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         while(iter.hasNext()) {
             Topic t=(Topic)iter.next();
             if(t.isOfType(typeTopic)) {
@@ -411,19 +411,19 @@ public class ConvertTextTopics {
         copyInstancesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-kaupunki-teksti", tm, targetTopicMap);
         copyInstancesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-aineisto", tm, targetTopicMap);
         copyInstancesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-tekstin-kirjoittaja", tm, targetTopicMap);
-        copyInstancesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-sisältötyyppi-paikka", tm, targetTopicMap);
+        copyInstancesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-sisÃ¤ltÃ¶tyyppi-paikka", tm, targetTopicMap);
         
         //BaseNameCleaner baseNameCleaner = new BaseNameCleaner();
         //targetTopicMap = baseNameCleaner.process(targetTopicMap, Logger.getLogger());
         
-        fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-henkilö", targetTopicMap);
+        fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-henkilÃ¶", targetTopicMap);
         fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-paikka", targetTopicMap);
         fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-asema", targetTopicMap);
         fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-tekstin-kirjoittaja", targetTopicMap);
         fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-aineisto", targetTopicMap);
-        fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-sisällön-ajoitus", targetTopicMap);
-        fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-sisältötyyppi", targetTopicMap);
-        fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-juridinen-henkilö", targetTopicMap);
+        fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-sisÃ¤llÃ¶n-ajoitus", targetTopicMap);
+        fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-sisÃ¤ltÃ¶tyyppi", targetTopicMap);
+        fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-juridinen-henkilÃ¶", targetTopicMap);
         fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-kaupunki-teksti", " (kaupunki teksti)", targetTopicMap);
         fixBaseNamesOf("http://www.fng.fi/wandora/wandora-fng.xtm#kp-tekstin-nro", targetTopicMap);
         
@@ -442,10 +442,10 @@ public class ConvertTextTopics {
     }
     
     public static void fixBaseNamesOf(String si, String postfix, TopicMap tm) throws TopicMapException {
-        Vector v=new Vector();
+        Vector<Topic> v=new Vector<>();
         Topic typeTopic = tm.getTopic(si);    
         
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         while(iter.hasNext()) {
             Topic t=(Topic)iter.next();
             if(t.isOfType(typeTopic)) {
@@ -485,10 +485,10 @@ public class ConvertTextTopics {
     
     
     public static void copyInstancesOf(String si, TopicMap source, TopicMap target) throws TopicMapException {
-        Vector v=new Vector();
+        Vector<Topic> v=new Vector<>();
         Topic typeTopic = source.getTopic(si);    
         
-        Iterator iter=source.getTopics();
+        Iterator<Topic> iter=source.getTopics();
         while(iter.hasNext()) {
             Topic t=(Topic)iter.next();
             if(t.isOfType(typeTopic)) {
@@ -505,9 +505,9 @@ public class ConvertTextTopics {
                 c++;
                 Topic copyTopic = target.copyTopicIn(t, false);
                 
-                Collection col = t.getAssociations();
+                Collection<Association> col = t.getAssociations();
                 Association a;
-                for(Iterator i = col.iterator(); i.hasNext();) {
+                for(Iterator<Association> i = col.iterator(); i.hasNext();) {
                     a = (Association) i.next();
                     targetTopicMap.copyAssociationIn(a);
                 }

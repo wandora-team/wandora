@@ -25,15 +25,13 @@
  */
 
 package org.wandora.application.tools.fng;
+
+
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
 
 /**
  *
@@ -58,7 +56,7 @@ public class OccurrenceRemover {
             }
         }
         int counter=0;
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
             for(int i=0;i<ot.length;i++){

@@ -25,17 +25,15 @@
  */
 
 package org.wandora.application.tools.fng;
+
 import org.wandora.topicmap.TopicInUseException;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
+
 
 /**
  *
@@ -58,7 +56,7 @@ public class DeleteFNGTypeIfEmpty {
             return tm;
         }
         
-        HashSet ts=new HashSet();
+        HashSet<Topic> ts=new HashSet<>();
         for(int i=0;i<types.length;i++){
             Topic t=tm.getTopic(types[i]);
             if(t==null){
@@ -67,13 +65,13 @@ public class DeleteFNGTypeIfEmpty {
             else ts.add(t);
         }
         
-        Vector v=new Vector();
-        Iterator iter=tm.getTopics();
+        Vector<Topic> v=new Vector<>();
+        Iterator<Topic> iter=tm.getTopics();
         int counter=0;
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
             if(tm.getTopicsOfType(t).size()>0) continue;
-            Collection associations=t.getAssociations();
+            Collection<Association> associations=t.getAssociations();
             if(associations.size()==1){
                 Association a=(Association)t.getAssociations().iterator().next();
                 if(a.getType()!=hasType) continue;

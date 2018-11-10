@@ -40,7 +40,10 @@ import java.util.*;
  * @author  akivela
  */
 public class MakeSIFromOccurrence extends AbstractWandoraTool implements WandoraTool {
-    Wandora admin = null;
+
+	private static final long serialVersionUID = 1L;
+
+	Wandora wandora = null;
     
     
     /** Creates a new instance of MakeSIFromOccurrence */
@@ -53,11 +56,11 @@ public class MakeSIFromOccurrence extends AbstractWandoraTool implements Wandora
     }
     
     
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
 
         try {
             log("Processing works...");
-            process(admin.getTopicMap(), Logger.getLogger());
+            process(wandora.getTopicMap(), Logger.getLogger());
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -88,7 +91,7 @@ public class MakeSIFromOccurrence extends AbstractWandoraTool implements Wandora
             return tm;
         }
         int counter=0;
-        Iterator workiter=tm.getTopicsOfType(workType).iterator();
+        Iterator<Topic> workiter=tm.getTopicsOfType(workType).iterator();
         
         //Iterate through artworks!
         while(workiter.hasNext()){

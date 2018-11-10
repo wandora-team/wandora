@@ -39,7 +39,10 @@ import java.util.*;
  * @author  olli
  */
 public class AuthorAssociationFilter extends AbstractWandoraTool implements WandoraTool {
-    Wandora admin = null;
+
+	private static final long serialVersionUID = 1L;
+
+	Wandora wandora = null;
     
     
     /** Creates a new instance of AuthorAssociationFilter */
@@ -54,13 +57,13 @@ public class AuthorAssociationFilter extends AbstractWandoraTool implements Wand
 
     
     
-    public void execute(Wandora admin, Context context) {      
-        this.admin = admin;
+    public void execute(Wandora wandora, Context context) {      
+        this.wandora = wandora;
         setDefaultLogger();
 
         try {
             log("Processing artwork authors...");
-            process(admin.getTopicMap());
+            process(wandora.getTopicMap());
         }
         catch(Exception e) {
             log(e);
@@ -79,13 +82,13 @@ public class AuthorAssociationFilter extends AbstractWandoraTool implements Wand
         if(newProducedBy == null) {
             newProducedBy = tm.createTopic();
             newProducedBy.addSubjectIdentifier(new Locator("http://wandora.org/si/has_produced"));
-            newProducedBy.setBaseName("Teoksen tekij‰");
+            newProducedBy.setBaseName("Teoksen tekij√§");
         }
         Topic newProducedByRole=tm.getTopic("http://wandora.org/si/author_role");
         if(newProducedByRole == null) {
             newProducedByRole = tm.createTopic();
             newProducedByRole.addSubjectIdentifier(new Locator("http://wandora.org/si/author_role"));
-            newProducedByRole.setBaseName("Teoksen tekij‰n rooli");
+            newProducedByRole.setBaseName("Teoksen tekij√§n rooli");
         }
         
         Topic newTechnique=tm.getTopic("http://wandora.org/si/technique");

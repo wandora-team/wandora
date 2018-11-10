@@ -25,15 +25,16 @@
  */
 
 package org.wandora.application.tools.fng;
+
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TMBox;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
 import java.util.*;
+
+
 /**
  *
  * @author  olli
@@ -63,10 +64,10 @@ public class ImageTypeProcessor {
         Topic highresType=TMBox.getOrCreateTopic(tm,"http://wandora.org/si/common/highresimage");
         Topic ultraresType=TMBox.getOrCreateTopic(tm,"http://wandora.org/si/common/ultraresimage");
         Topic otherversionType=TMBox.getOrCreateTopic(tm,"http://wandora.org/si/common/otherversionimage");
-        Vector v=new Vector();
-        Iterator iter=tm.getAssociations();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
+        Vector<Topic> v=new Vector<>();
+        Iterator<Association> aiter=tm.getAssociations();
+        while(aiter.hasNext()){
+            Association a=(Association)aiter.next();
             if(a.getType()!=occType) continue;
             Topic topic=a.getPlayer(roleTop);
             Topic ref=a.getPlayer(roleRef);
@@ -74,13 +75,13 @@ public class ImageTypeProcessor {
             if(a.getRoles().size()>2) continue;
                 v.add(topic);
         }
-        iter=v.iterator();
-        while(iter.hasNext()){
-            Hashtable images=new Hashtable();
-            Topic topic=(Topic)iter.next();
-            Iterator iter2=new ArrayList(topic.getAssociations(occType,roleTop)).iterator();
-            while(iter2.hasNext()){
-                Association a=(Association)iter2.next();
+        Iterator<Topic> titer=v.iterator();
+        while(titer.hasNext()){
+            Hashtable<String,ImageGroup> images=new Hashtable<>();
+            Topic topic=(Topic)titer.next();
+            Iterator<Association> aiter2=new ArrayList(topic.getAssociations(occType,roleTop)).iterator();
+            while(aiter2.hasNext()){
+                Association a=(Association)aiter2.next();
                 Topic ref=a.getPlayer(roleRef);
                 if(ref==null || a.getRoles().size()!=2) continue;
                 String s=ref.getSubjectLocator().toExternalForm();
@@ -110,9 +111,9 @@ public class ImageTypeProcessor {
                 }
                 a.remove();
             }
-            iter2=images.entrySet().iterator();
-            while(iter2.hasNext()){
-                Map.Entry e=(Map.Entry)iter2.next();
+            Iterator<Map.Entry<String,ImageGroup>> igeiter2=images.entrySet().iterator();
+            while(igeiter2.hasNext()){
+                Map.Entry<String,ImageGroup> e=igeiter2.next();
                 ImageGroup group=(ImageGroup)e.getValue();
                 Topic img=null;
                 if(!group.normal.isEmpty()) img=(Topic)group.normal.iterator().next();
@@ -126,7 +127,7 @@ public class ImageTypeProcessor {
                 topic.addType(pictureType);
                 img.addType(imageOccurrence);
                 
-                Iterator iter3=group.normal.iterator();
+                Iterator<Topic> iter3=group.normal.iterator();
                 while(iter3.hasNext()){
                     Topic t=(Topic)iter3.next();
                     if(t!=img){
@@ -188,12 +189,12 @@ public class ImageTypeProcessor {
     }
     
     private class ImageGroup {
-        public Collection tif,huge,tiny,normal;
+        public Collection<Topic> tif,huge,tiny,normal;
         public ImageGroup(){
-            tif=new HashSet();
-            huge=new HashSet();
-            tiny=new HashSet();
-            normal=new HashSet();
+            tif=new LinkedHashSet<Topic>();
+            huge=new LinkedHashSet<Topic>();
+            tiny=new LinkedHashSet<Topic>();
+            normal=new LinkedHashSet<Topic>();
         }
     }
 }

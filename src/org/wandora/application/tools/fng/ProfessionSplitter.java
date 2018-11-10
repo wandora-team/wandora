@@ -25,18 +25,18 @@
  */
 
 package org.wandora.application.tools.fng;
+
+
 import org.wandora.piccolo.utils.URLEncoder;
 import org.wandora.topicmap.TopicInUseException;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
+
+
 /**
  *
  * @author  olli
@@ -62,8 +62,8 @@ public class ProfessionSplitter {
             return tm;
         }
         URLEncoder ue=new URLEncoder();
-        Vector v=new Vector();
-        Iterator iter=tm.getAssociationsOfType(luokitus).iterator();
+        Vector<Association> v=new Vector<>();
+        Iterator<Association> iter=tm.getAssociationsOfType(luokitus).iterator();
         while(iter.hasNext()){
             Association a=(Association)iter.next();
             Topic player=a.getPlayer(luokitus);
@@ -79,7 +79,7 @@ public class ProfessionSplitter {
             String name=prof.getBaseName().toLowerCase().trim();
             if(name.startsWith("ammatti")) name=name.substring("ammatti".length()).trim();
             StringTokenizer st=new StringTokenizer(name,",");
-            Vector newProfs=new Vector();
+            Vector<Topic> newProfs=new Vector<>();
             while(st.hasMoreTokens()){
                 String token=st.nextToken().trim();
                 token=token.substring(0,1).toUpperCase()+token.substring(1);
@@ -98,8 +98,8 @@ public class ProfessionSplitter {
                 newProfs.add(newProf);
             }
             
-            Vector u=new Vector();
-            Iterator iter2=prof.getAssociations(performed,performed).iterator();
+            Vector<Association> u=new Vector<>();
+            Iterator<Association> iter2=prof.getAssociations(performed,performed).iterator();
             while(iter2.hasNext()){
                 Association a2=(Association)iter2.next();
                 if(a2.getRoles().size()!=3) continue;
@@ -112,7 +112,7 @@ public class ProfessionSplitter {
                 Association a2=(Association)iter2.next();
                 Topic player=a2.getPlayer(carriedOut);
                 a2.remove();
-                Iterator iter3=newProfs.iterator();
+                Iterator<Topic> iter3=newProfs.iterator();
                 while(iter3.hasNext()){
                     Topic newProf=(Topic)iter3.next();
                     Association newa=tm.createAssociation(ammatti);

@@ -25,16 +25,14 @@
  */
 
 package org.wandora.application.tools.fng;
+
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
+
 
 /**
  *
@@ -57,7 +55,7 @@ public class TechniqueSplitter {
         }
         
         int counter=0;
-        Iterator iter=new ArrayList(tm.getTopicsOfType(techniqueOf)).iterator();
+        Iterator<Topic> iter=new ArrayList<>(tm.getTopicsOfType(techniqueOf)).iterator();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
             if(t.isRemoved()) continue;
@@ -68,8 +66,8 @@ public class TechniqueSplitter {
             if(name.matches(".*,\\s*jo.*")) continue;
             if(name.indexOf(',')==-1) continue;
             
-            Collection works=new Vector();
-            Iterator iter2=new ArrayList(t.getAssociations(techniqueOf,techniqueOf)).iterator();
+            Collection<Topic> works=new Vector<>();
+            Iterator<Association> iter2=new ArrayList(t.getAssociations(techniqueOf,techniqueOf)).iterator();
             while(iter2.hasNext()){
                 Association a=(Association)iter2.next();
                 Topic w=a.getPlayer(work);
@@ -84,9 +82,9 @@ public class TechniqueSplitter {
                 Topic nt=tm.getTopicWithBaseName(token);
                 if(nt==null) nt=tm.createTopic();
                 setNewName(nt,token);
-                iter2=works.iterator();
-                while(iter2.hasNext()){
-                    Topic w=(Topic)iter2.next();
+                Iterator<Topic> witer=works.iterator();
+                while(witer.hasNext()){
+                    Topic w=(Topic)witer.next();
                     Association na=tm.createAssociation(techniqueOf);
                     na.addPlayer(nt,techniqueOf);
                     na.addPlayer(w,work);
@@ -98,12 +96,13 @@ public class TechniqueSplitter {
         return tm;
     }    
     
+    
     public void setNewName(Topic t,String newName) throws TopicMapException {
         String oldName=t.getBaseName();
         t.setBaseName(newName);
-        Iterator iter=new ArrayList(t.getVariantScopes()).iterator();
+        Iterator<Set<Topic>> iter=new ArrayList<>(t.getVariantScopes()).iterator();
         while(iter.hasNext()){
-            Set scope=(Set)iter.next();
+            Set<Topic> scope=iter.next();
             String v=t.getVariant(scope);
             if(v.equals(oldName)){
                 t.setVariant(scope, newName);
@@ -114,6 +113,7 @@ public class TechniqueSplitter {
         }
         t.addSubjectIdentifier(t.getTopicMap().createLocator(makeLocatorFor(newName)));
     }
+    
     
     public String makeLocatorFor(String name){
         String prefix="http://www.fng.fi/muusa/FNG_CIDOC_v3.4.dtd#";

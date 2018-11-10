@@ -25,6 +25,8 @@
  */
 
 package org.wandora.application.tools.fng;
+
+
 import org.wandora.topicmap.TopicInUseException;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.XTMPSI;
@@ -33,12 +35,9 @@ import org.wandora.topicmap.Association;
 import org.wandora.piccolo.WandoraManager;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TMBox;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
+
 
 /**
  *
@@ -70,7 +69,7 @@ public class PersonNameProcessor {
             return tm;
         }
         int counter=0;
-        Iterator iter=new ArrayList(tm.getTopicsOfType(actorAppellation)).iterator();
+        Iterator<Topic> iter=new ArrayList<>(tm.getTopicsOfType(actorAppellation)).iterator();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
             
@@ -96,7 +95,7 @@ public class PersonNameProcessor {
             }
             else{
                 t.removeType(actorAppellation);
-                Iterator iter2=new ArrayList(t.getAssociations(hasType,isType)).iterator();
+                Iterator<Association> iter2=new ArrayList<>(t.getAssociations(hasType,isType)).iterator();
                 while(iter2.hasNext()){
                     Association a=(Association)iter2.next();
                     if(a.getPlayer(hasType)==officialName){
@@ -109,15 +108,15 @@ public class PersonNameProcessor {
         iter=tm.getTopicsOfType(person).iterator();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
-            Iterator iter2=new ArrayList(t.getVariantScopes()).iterator();
+            Iterator<Set<Topic>> iter2=new ArrayList<>(t.getVariantScopes()).iterator();
             while(iter2.hasNext()){
-                Set scope=(Set)iter2.next();
+                Set<Topic> scope=iter2.next();
                 t.removeVariant(scope);
             }
-            HashSet scope=new HashSet();
+            HashSet<Topic> scope=new HashSet<>();
             scope.add(fi); scope.add(disp);
             t.setVariant(scope,t.getBaseName());
-            scope=new HashSet();
+            scope=new HashSet<>();
             scope.add(en); scope.add(disp);
             t.setVariant(scope,t.getBaseName());
             counter2++;

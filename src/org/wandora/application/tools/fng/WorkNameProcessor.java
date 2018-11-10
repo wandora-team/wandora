@@ -27,11 +27,24 @@
 package org.wandora.application.tools.fng;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import java.util.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicInUseException;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicTools;
+
+
 
 /**
  *
@@ -40,7 +53,10 @@ import java.util.*;
 
 
 public class WorkNameProcessor extends AbstractWandoraTool implements WandoraTool {
-    Wandora admin = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	Wandora wandora = null;
     
     
     /** Creates a new instance of WorkNameProcessor */
@@ -53,11 +69,11 @@ public class WorkNameProcessor extends AbstractWandoraTool implements WandoraToo
     }
     
     
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         setDefaultLogger();
         try {
             log("Processing work names...");
-            process(admin.getTopicMap());
+            process(wandora.getTopicMap());
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -93,10 +109,10 @@ public class WorkNameProcessor extends AbstractWandoraTool implements WandoraToo
             return tm;
         }
         int counter=0;
-        Iterator workiter=tm.getTopicsOfType(workType).iterator();
+        Iterator<Topic> workiter=tm.getTopicsOfType(workType).iterator();
         
         Topic work = null;
-        Iterator nameiter = null;
+        Iterator<Association> nameiter = null;
         
         Association nameAssociation = null;
         Topic nameT = null;
@@ -112,7 +128,7 @@ public class WorkNameProcessor extends AbstractWandoraTool implements WandoraToo
         while(workiter.hasNext() && !forceStop()) {
             work = (Topic)workiter.next();
             hlog("Processing artwork '"+ getTopicName(work) +"'.");
-            nameiter=new ArrayList(work.getAssociations(nameAssociationType)).iterator();
+            nameiter=new ArrayList<>(work.getAssociations(nameAssociationType)).iterator();
             
             // Make basename (inventory number) occurrence of the artwork topic!
             work.setData(inventaarionNumeroTopic, indepLang, work.getBaseName());
@@ -178,4 +194,6 @@ public class WorkNameProcessor extends AbstractWandoraTool implements WandoraToo
         log("Deleted "+counter+" name associations");
         return tm;
     }
+
+
 }

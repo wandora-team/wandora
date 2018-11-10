@@ -25,18 +25,27 @@
  */
 
 package org.wandora.application.tools.fng;
+
+
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.piccolo.WandoraManager;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TMBox;
-import org.wandora.topicmap.*;
-import org.wandora.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
-import java.util.*;
-import java.text.*;
+
+
+
 
 /**
  *
@@ -63,7 +72,7 @@ public class VariantCleaner {
         Topic indep=TMBox.getOrCreateTopic(tm,WandoraManager.LANGINDEPENDENT_SI);
         Topic disp=TMBox.getOrCreateTopic(tm,XTMPSI.DISPLAY);
         Topic sort=TMBox.getOrCreateTopic(tm,XTMPSI.SORT);
-        HashMap map=new org.wandora.utils.EasyHash(new Object[]{
+        HashMap<Topic,Topic> map=new org.wandora.utils.EasyHash<>(new Object[]{
             tm.getTopic(XTMPSI.getLang("sw")),sv,
             tm.getTopic(XTMPSI.getLang("se")),sv,
             tm.getTopic(XTMPSI.getLang("ranska")),fr,
@@ -78,23 +87,23 @@ public class VariantCleaner {
             tm.getTopic(XTMPSI.getLang("norja")),no,
             tm.getTopic("http://www.topicmaps.org/xtm/1.0/core.xtm#psi-sort"),sort,
         });
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         int counter=0;
         int counter2=0;
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
-            Iterator iter2=new ArrayList(t.getVariantScopes()).iterator();
+            Iterator<Set<Topic>> iter2=new ArrayList<>(t.getVariantScopes()).iterator();
             while(iter2.hasNext()){
-                Set scope=(Set)iter2.next();
+                Set<Topic> scope=iter2.next();
                 
-                Iterator iter3=map.entrySet().iterator();
+                Iterator<Map.Entry<Topic, Topic>> iter3=map.entrySet().iterator();
                 while(iter3.hasNext()){
-                    Map.Entry e=(Map.Entry)iter3.next();
+                    Map.Entry<Topic, Topic> e=iter3.next();
                     Topic key=(Topic)e.getKey();
                     if(key==null) continue;
                     Topic value=(Topic)e.getValue();
                     if(scope.contains(key)){
-                        HashSet newScope=new HashSet();
+                        HashSet<Topic> newScope=new LinkedHashSet<>();
                         newScope.addAll(scope);
                         String name=t.getVariant(scope);
                         t.removeVariant(scope);
@@ -117,7 +126,7 @@ public class VariantCleaner {
                 }
                 else if( scope.size()==1 && scope.contains(disp) ){
                     counter++;
-                    HashSet newScope=new HashSet();
+                    HashSet<Topic> newScope=new HashSet<>();
                     newScope.addAll(scope);
                     newScope.add(indep);
                     String name=t.getVariant(scope);
@@ -127,7 +136,7 @@ public class VariantCleaner {
                 }
                 else{
                     StringBuffer buf=new StringBuffer();
-                    Iterator iter4=scope.iterator();
+                    Iterator<Topic> iter4=scope.iterator();
                     while(iter4.hasNext()){
                         Topic st=(Topic)iter4.next();
                         buf.append(" "+st.getOneSubjectIdentifier());

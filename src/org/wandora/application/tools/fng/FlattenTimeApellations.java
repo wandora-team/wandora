@@ -45,9 +45,11 @@ import org.wandora.application.contexts.*;
  * @author  akivela
  */
 public class FlattenTimeApellations extends AbstractWandoraTool implements WandoraTool {
-    
-    
-    public void execute(Wandora admin, Context context) {
+
+	private static final long serialVersionUID = 1L;
+
+
+	public void execute(Wandora admin, Context context) {
         try {
             admin.applyChanges();
             TopicMap topicMap = admin.getTopicMap();
@@ -133,7 +135,7 @@ public class FlattenTimeApellations extends AbstractWandoraTool implements Wando
         Topic langT=t.getTopicMap().getTopic(langsi);
         String dispsi=XTMPSI.DISPLAY;
         Topic dispT=t.getTopicMap().getTopic(dispsi);
-        HashSet scope=new HashSet();
+        HashSet<Topic> scope=new HashSet<>();
         if(langT!=null) scope.add(langT);
         if(dispT!=null) scope.add(dispT);
         t.setVariant(scope, name);
@@ -261,12 +263,12 @@ public class FlattenTimeApellations extends AbstractWandoraTool implements Wando
     
     
     public static void process(TopicMap tm) throws TopicMapException  {
-        Vector v=new Vector();
+        Vector<Topic> v=new Vector<>();
         createDateTopics(tm);
         Topic timeApellationTopic = tm.getTopic("http://www.fng.fi/wandora/wandora-fng.xtm#kp-ajoitus");
         System.out.println("Time type == " + timeApellationTopic.getBaseName());       
         
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         while(iter.hasNext()) {
             Topic t=(Topic)iter.next();
             if(t.isOfType(timeApellationTopic)) {
@@ -290,9 +292,9 @@ public class FlattenTimeApellations extends AbstractWandoraTool implements Wando
                     setDisplayName(t, "fi", fixedfn);
                     t.setBaseName(fixedfn);
                     
-                    Collection sis = t.getSubjectIdentifiers();
-                    Vector ve = new Vector();
-                    for(Iterator i=sis.iterator(); i.hasNext(); ) {
+                    Collection<Locator> sis = t.getSubjectIdentifiers();
+                    Vector<Locator> ve = new Vector<>();
+                    for(Iterator<Locator> i=sis.iterator(); i.hasNext(); ) {
                         ve.add((Locator) i.next());
                     }
                     for(int i=0; i<ve.size(); i++) {
@@ -415,20 +417,20 @@ public class FlattenTimeApellations extends AbstractWandoraTool implements Wando
 
         createTopic(tm,
                     "http://www.fng.fi/wandora/wandora-fng.xtm#kesakuu",
-                    "kesäkuu",
+                    "kesï¿½kuu",
                     "Juni", 
                     new String[] { "http://www.fng.fi/wandora/wandora-fng.xtm#kuukausi" });
         
         try { createTopic(tm,
-                    URLEncoder.encode("http://www.fng.fi/wandora/wandora-fng.xtm#kesäkuu", "UTF-8"),
-                    "kesäkuu",
+                    URLEncoder.encode("http://www.fng.fi/wandora/wandora-fng.xtm#kesï¿½kuu", "UTF-8"),
+                    "kesï¿½kuu",
                     "Juni", 
                     new String[] { "http://www.fng.fi/wandora/wandora-fng.xtm#kuukausi" });
         } catch(Exception e) {}
                     
         try { createTopic(tm,
                     URLEncoder.encode("http://www.fng.fi/wandora/wandora-fng.xtm#heinakuu", "UTF-8"),
-                    "heinäkuu",
+                    "heinï¿½kuu",
                     "July", 
                     new String[] { "http://www.fng.fi/wandora/wandora-fng.xtm#kuukausi" });
         } catch(Exception e) {}

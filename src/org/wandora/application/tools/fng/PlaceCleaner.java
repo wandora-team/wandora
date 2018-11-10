@@ -25,17 +25,16 @@
  */
 
 package org.wandora.application.tools.fng;
+
+
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TMBox;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
+
 
 /**
  *
@@ -78,7 +77,7 @@ public class PlaceCleaner {
             StringTokenizer st=new StringTokenizer(name,",;");
             String base=st.nextToken().trim();
             setNewName(t,base);
-            HashSet types=new HashSet();
+            HashSet<Topic> types=new HashSet<>();
             types.addAll(t.getTypes());
             Topic last=t;
             while(st.hasMoreTokens()){
@@ -86,7 +85,7 @@ public class PlaceCleaner {
                 Topic nt=tm.createTopic();
                 setNewName(nt,token);
                 
-                Iterator iter=types.iterator();
+                Iterator<Topic> iter=types.iterator();
                 while(iter.hasNext()){
                     Topic type=(Topic)iter.next();
                     nt.addType(type);
@@ -105,9 +104,9 @@ public class PlaceCleaner {
     public void setNewName(Topic t,String newName) throws TopicMapException {
         String oldName=t.getBaseName();
         t.setBaseName(newName);
-        Iterator iter=new ArrayList(t.getVariantScopes()).iterator();
+        Iterator<Set<Topic>> iter=new ArrayList<>(t.getVariantScopes()).iterator();
         while(iter.hasNext()){
-            Set scope=(Set)iter.next();
+            Set<Topic> scope=iter.next();
             String v=t.getVariant(scope);
             if(v.equals(oldName)){
                 t.setVariant(scope, newName);

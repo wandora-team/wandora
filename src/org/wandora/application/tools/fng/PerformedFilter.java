@@ -25,17 +25,15 @@
  */
 
 package org.wandora.application.tools.fng;
+
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
 import java.util.regex.*;
-import java.text.*;
+
 
 /**
  *
@@ -62,7 +60,7 @@ public class PerformedFilter {
             return tm;
         }
         int counter=0,counter2=0,counter3=0;
-        Iterator iter=new ArrayList(tm.getAssociationsOfType(performed)).iterator();
+        Iterator<Association> iter=new ArrayList(tm.getAssociationsOfType(performed)).iterator();
         while(iter.hasNext()){
             Association a=(Association)iter.next();
             if(a.isRemoved()) continue;
@@ -135,14 +133,17 @@ public class PerformedFilter {
         }
         logger.writelog("Added "+counter+" time appellations. Replaced "+counter2+" redundant events. Removed year from "+counter3+" events");
         return tm;
-    }    
+    }
+    
+    
+    
     
     public void setName(Topic t,String name) throws TopicMapException { 
         String oldName=t.getBaseName();
         t.setBaseName(name);
-        Iterator iter=new ArrayList(t.getVariantScopes()).iterator();
+        Iterator<Set<Topic>> iter=new ArrayList(t.getVariantScopes()).iterator();
         while(iter.hasNext()){
-            Set scope=(Set)iter.next();
+            Set<Topic> scope=iter.next();
             String n=t.getVariant(scope);
             if(n.equals(oldName)){
                 t.removeVariant(scope);

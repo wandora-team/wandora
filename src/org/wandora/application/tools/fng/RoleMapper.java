@@ -25,16 +25,15 @@
  */
 
 package org.wandora.application.tools.fng;
+
+
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.piccolo.Logger;
-import org.wandora.piccolo.utils.*;
 import java.util.*;
-import java.text.*;
+
 
 /**
  *
@@ -69,7 +68,7 @@ public class RoleMapper {
             Topic atype=mapT[i];
             Topic role=mapT[i+1];
             Topic newRole=mapT[i+2];
-            Iterator iter=new Vector(tm.getAssociationsOfType(atype)).iterator();
+            Iterator<Association> iter=new Vector(tm.getAssociationsOfType(atype)).iterator();
             while(iter.hasNext()){
                 Association a=(Association)iter.next();
                 if(a.isRemoved()) continue;
