@@ -37,7 +37,10 @@ import org.wandora.application.contexts.*;
  * @author akivela
  */
 public class ClearNodeFilters extends AbstractGraphTool {
-    GraphFilter filter = null;
+
+	private static final long serialVersionUID = 1L;
+
+	GraphFilter filter = null;
     
     
     

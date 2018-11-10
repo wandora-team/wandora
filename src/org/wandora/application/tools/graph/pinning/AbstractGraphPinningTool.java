@@ -21,7 +21,7 @@
  * 
  * AbstractGraphPinningTool.java
  *
- * Created on 14. kesäkuuta 2007, 13:04
+ * Created on 14. kesï¿½kuuta 2007, 13:04
  *
  */
 
@@ -37,8 +37,10 @@ import java.util.*;
  * @author akivela
  */
 public abstract class AbstractGraphPinningTool extends AbstractGraphTool {
-    
-    public static final int SET_PINNED = 10;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static final int SET_PINNED = 10;
     public static final int SET_UNPINNED = 20;
     public static final int REVERSE_PINNING = 30;
     

@@ -21,7 +21,7 @@
  * 
  * ReleaseNodesOfType.java
  *
- * Created on 6. kesäkuuta 2007, 15:40
+ * Created on 6. kesï¿½kuuta 2007, 15:40
  *
  */
 
@@ -35,7 +35,6 @@ import org.wandora.application.tools.graph.*;
 import org.wandora.topicmap.*;
 import java.util.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.DummyTool;
 
 
 /**
@@ -44,9 +43,10 @@ import org.wandora.application.tools.DummyTool;
  */
 public class ReleaseNodesOfType extends AbstractGraphTool {
     
-    
-    
-    private Topic type;
+
+	private static final long serialVersionUID = 1L;
+
+	private Topic type;
     private GraphFilter filter;
     
     public ReleaseNodesOfType(Topic type, NodeFilter filter) {
@@ -75,7 +75,7 @@ public class ReleaseNodesOfType extends AbstractGraphTool {
     
 
     
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         if(type != null && filter != null) {
             filter.releaseNodesOfType(type);
         }
@@ -87,7 +87,7 @@ public class ReleaseNodesOfType extends AbstractGraphTool {
     
  
     
-    public static ArrayList<AbstractGraphTool> makeTools(GraphFilter graphFilter, ArrayList<AbstractGraphTool> tools) {
+    public static List<AbstractGraphTool> makeTools(GraphFilter graphFilter, List<AbstractGraphTool> tools) {
         if(tools==null) tools=new ArrayList<AbstractGraphTool>();
 
         for(TopicNode tn : graphFilter.getFilteredNodeTypes()) {

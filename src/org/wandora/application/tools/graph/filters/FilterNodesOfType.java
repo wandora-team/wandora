@@ -21,7 +21,7 @@
  * 
  * FilterNodesOfType.java
  *
- * Created on 6. kesäkuuta 2007, 15:40
+ * Created on 6. kesï¿½kuuta 2007, 15:40
  *
  */
 
@@ -42,7 +42,10 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  * @author olli
  */
 public class FilterNodesOfType extends AbstractGraphTool {
-    private Topic type;
+
+	private static final long serialVersionUID = 1L;
+
+	private Topic type;
     private GraphFilter filter;
     
     public FilterNodesOfType(Topic type,NodeFilter filter) {
@@ -72,8 +75,8 @@ public class FilterNodesOfType extends AbstractGraphTool {
     
 
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        VModel model=solveModel(admin,context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        VModel model=solveModel(wandora,context);
         CloseTopicNodesOfType.hideTopicsOfType(type,model);
         filter.filterNodesOfType(type);
     }
@@ -107,7 +110,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
     
     
     
-    public static ArrayList<AbstractGraphTool> makeTools(Collection ns, NodeFilter nodeFilter, ArrayList<AbstractGraphTool> tools){
+    public static List<AbstractGraphTool> makeTools(Collection ns, NodeFilter nodeFilter, List<AbstractGraphTool> tools){
         if(tools==null) tools=new ArrayList<AbstractGraphTool>();
         ArrayList<Topic> oldTypes = new ArrayList<Topic>();
         for(Object o : ns) {

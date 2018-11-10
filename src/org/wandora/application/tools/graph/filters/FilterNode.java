@@ -21,7 +21,7 @@
  * 
  * FilterNode.java
  *
- * Created on 6. kesäkuuta 2007, 15:38
+ * Created on 6. kesï¿½kuuta 2007, 15:38
  *
  */
 
@@ -38,7 +38,10 @@ import java.util.*;
  * @author olli
  */
 public class FilterNode extends AbstractGraphTool {
-    private GraphFilter filter;
+
+	private static final long serialVersionUID = 1L;
+
+	private GraphFilter filter;
     
     public FilterNode(GraphFilter filter) {
         this.filter=filter;
@@ -56,7 +59,7 @@ public class FilterNode extends AbstractGraphTool {
     
 
     
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         VModel model = null;
         VNode node = null;
         for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {

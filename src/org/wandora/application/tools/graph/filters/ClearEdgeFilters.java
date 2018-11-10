@@ -38,7 +38,10 @@ import org.wandora.application.contexts.*;
  * @author akivela
  */
 public class ClearEdgeFilters extends AbstractGraphTool {
-    GraphFilter filter = null;
+
+	private static final long serialVersionUID = 1L;
+
+	GraphFilter filter = null;
     
     
     @Override
@@ -51,7 +54,7 @@ public class ClearEdgeFilters extends AbstractGraphTool {
         this.filter = filter;
     }
 
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         try {
             filter.clearEdgeFilters();
         }

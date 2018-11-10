@@ -21,7 +21,7 @@
  * 
  * SetPinnedTool.java
  *
- * Created on 14. kesäkuuta 2007, 12:53
+ * Created on 14. kesï¿½kuuta 2007, 12:53
  *
  */
 
@@ -39,7 +39,13 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
  */
 public class SetPinnedTool extends AbstractGraphPinningTool {
     
-    /** Creates a new instance of SetPinnedTool */
+
+	
+	private static final long serialVersionUID = 1L;
+
+
+
+	/** Creates a new instance of SetPinnedTool */
     public SetPinnedTool(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -58,7 +64,7 @@ public class SetPinnedTool extends AbstractGraphPinningTool {
     
     
 
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         if(context != null) {
             setPinning(context.getContextObjects(), SET_PINNED);
         }

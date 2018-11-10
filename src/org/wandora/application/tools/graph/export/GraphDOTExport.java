@@ -32,7 +32,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -52,10 +51,10 @@ import org.wandora.utils.Tuples.T2;
 
 
 public class GraphDOTExport extends AbstractGraphTool {
-    
-    
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getName() {
         return "Graph view DOT export";
     }

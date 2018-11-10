@@ -21,7 +21,7 @@
  * 
  * ReversePinningTool.java
  *
- * Created on 7. kesäkuuta 2007, 16:19
+ * Created on 7. kesï¿½kuuta 2007, 16:19
  *
  */
 
@@ -40,7 +40,12 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
  */
 public class ReversePinningTool extends AbstractGraphPinningTool {
     
-    /** Creates a new instance of ReversePinningTool */
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	/** Creates a new instance of ReversePinningTool */
     public ReversePinningTool(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -59,7 +64,7 @@ public class ReversePinningTool extends AbstractGraphPinningTool {
     
     
 
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         if(context != null) {
             setPinning(context.getContextObjects(), REVERSE_PINNING);
         }

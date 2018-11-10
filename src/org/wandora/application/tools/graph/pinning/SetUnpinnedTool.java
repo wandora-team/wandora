@@ -21,7 +21,7 @@
  * 
  * SetUnpinnedTool.java
  *
- * Created on 14. kesäkuuta 2007, 13:13
+ * Created on 14. kesï¿½kuuta 2007, 13:13
  *
  */
 
@@ -39,7 +39,12 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 
 public class SetUnpinnedTool extends AbstractGraphPinningTool {
     
-    /** Creates a new instance of SetUnpinnedTool */
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	/** Creates a new instance of SetUnpinnedTool */
     public SetUnpinnedTool(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -57,7 +62,7 @@ public class SetUnpinnedTool extends AbstractGraphPinningTool {
     
     
 
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         if(context != null) {
             setPinning(context.getContextObjects(), SET_UNPINNED);
         }

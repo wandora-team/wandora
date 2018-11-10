@@ -21,7 +21,7 @@
  * 
  * ReleaseEdges.java
  *
- * Created on 7. kesäkuuta 2007, 12:06
+ * Created on 7. kesï¿½kuuta 2007, 12:06
  *
  */
 
@@ -35,7 +35,7 @@ import org.wandora.application.tools.graph.*;
 import org.wandora.topicmap.*;
 import java.util.*;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import static org.wandora.utils.Tuples.*;
+
 
 
 
@@ -45,7 +45,9 @@ import static org.wandora.utils.Tuples.*;
  */
 public class ReleaseEdges extends AbstractGraphTool  {
     
-    public static final int FILTER_EDGES_WITH_TYPE = 1;
+	private static final long serialVersionUID = 1L;
+	
+	public static final int FILTER_EDGES_WITH_TYPE = 1;
     public static final int FILTER_INSTANCE_EDGES = 2;
     public static final int FILTER_OCCURRENCE_EDGES = 3;
     
@@ -93,8 +95,8 @@ public class ReleaseEdges extends AbstractGraphTool  {
 
     
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        VModel model = solveModel(admin,context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        VModel model = solveModel(wandora,context);
         switch(filterType) {
             case FILTER_OCCURRENCE_EDGES: { filter.setFilterOccurrences(false); break; }
             case FILTER_INSTANCE_EDGES: { filter.setFilterInstances(false); break; }
@@ -113,7 +115,7 @@ public class ReleaseEdges extends AbstractGraphTool  {
     
     
     
-    public static ArrayList<AbstractGraphTool> makeTools(Collection c, GraphFilter graphFilter, ArrayList<AbstractGraphTool> tools){
+    public static List<AbstractGraphTool> makeTools(Collection c, GraphFilter graphFilter, List<AbstractGraphTool> tools){
         if(tools==null) tools=new ArrayList<AbstractGraphTool>();
         ArrayList<Topic> types = new ArrayList<Topic>();
 
