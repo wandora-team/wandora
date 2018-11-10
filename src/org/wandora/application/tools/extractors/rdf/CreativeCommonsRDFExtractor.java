@@ -30,7 +30,6 @@ package org.wandora.application.tools.extractors.rdf;
 
 import javax.swing.*;
 import org.wandora.application.gui.*;
-import org.wandora.utils.Tuples.*;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.*;
 
 /**
@@ -39,8 +38,9 @@ import org.wandora.application.tools.extractors.rdf.rdfmappings.*;
  */
 public class CreativeCommonsRDFExtractor extends AbstractRDFExtractor {
 
+	private static final long serialVersionUID = 1L;
 
-    private RDF2TopicMapsMapping[] mappings = new RDF2TopicMapsMapping[] {
+	private RDF2TopicMapsMapping[] mappings = new RDF2TopicMapsMapping[] {
         new CreativeCommonsMapping(),
         new RDFSMapping(),
         new RDFMapping(),

@@ -24,7 +24,6 @@ package org.wandora.application.tools.extractors.palvelukartta;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Collection;
 import javax.swing.Icon;
 import org.json.JSONArray;
@@ -48,8 +47,11 @@ import org.wandora.utils.IObox;
 
 
 public abstract class AbstractPalvelukarttaExtractor extends AbstractExtractor {
-    
-    public static final String LANG = "fi";
+
+	private static final long serialVersionUID = 1L;
+
+
+	public static final String LANG = "fi";
     
     
     public static final String PALVELUKARTTA_SI = "http://www.palvelukartta.fi";

@@ -38,9 +38,10 @@ import org.wandora.application.tools.AbstractWandoraTool;
 
 
 public class PalvelukarttaExtractor extends AbstractWandoraTool {
-    
 
-    private static PalvelukarttaSelector selector = null;
+	private static final long serialVersionUID = 1L;
+
+	private static PalvelukarttaSelector selector = null;
     
     
     

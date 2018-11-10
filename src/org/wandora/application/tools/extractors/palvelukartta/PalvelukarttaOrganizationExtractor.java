@@ -42,8 +42,9 @@ import org.wandora.topicmap.TopicMap;
 public class PalvelukarttaOrganizationExtractor extends AbstractPalvelukarttaExtractor {
     
 
+	private static final long serialVersionUID = 1L;
 
-    private int organizationCount = 0;
+	private int organizationCount = 0;
     
     
     

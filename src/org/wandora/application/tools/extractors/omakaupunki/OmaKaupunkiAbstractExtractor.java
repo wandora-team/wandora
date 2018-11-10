@@ -35,7 +35,6 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -51,7 +50,9 @@ import org.wandora.utils.IObox;
 
 public abstract class OmaKaupunkiAbstractExtractor extends AbstractExtractor {
 
-    public static boolean USE_EXISTING_TOPICS = false;
+	private static final long serialVersionUID = 1L;
+
+	public static boolean USE_EXISTING_TOPICS = false;
     
     public static final String OMA_KAUPUNKI_SI = "http://omakaupunki.fi/";
     

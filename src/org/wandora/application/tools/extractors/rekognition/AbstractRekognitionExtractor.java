@@ -43,11 +43,13 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
 *
-* @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+* @author Eero Lehtonen
 */
 abstract class AbstractRekognitionExtractor extends AbstractExtractor {
-    
-    private static boolean MAKE_DISTINCT_CONFIDENCE_TOPICS = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private static boolean MAKE_DISTINCT_CONFIDENCE_TOPICS = false;
     
     protected static final String API_ROOT = "http://rekognition.com/func/api/";
     

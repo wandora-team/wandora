@@ -44,11 +44,14 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public class RekognitionFaceDetector extends AbstractRekognitionExtractor{
     
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public int getExtractorType() {
         return URL_EXTRACTOR | RAW_EXTRACTOR;
     }

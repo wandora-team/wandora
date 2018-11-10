@@ -45,8 +45,9 @@ import org.wandora.utils.IObox;
 public class PalvelukarttaUnitExtractor extends AbstractPalvelukarttaExtractor {
     
 
+	private static final long serialVersionUID = 1L;
 
-    private boolean deepExtraction = false;
+	private boolean deepExtraction = false;
     private int unitCount = 0;
     
     

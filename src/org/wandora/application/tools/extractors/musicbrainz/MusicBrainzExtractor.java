@@ -24,8 +24,6 @@ package org.wandora.application.tools.extractors.musicbrainz;
 
 
 
-import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import org.wandora.application.*;
@@ -48,7 +46,9 @@ import org.musicbrainz.wsxml.element.*;
  */
 public class MusicBrainzExtractor extends AbstractMusicBrainzExtractor {
 
-    public static final String MBID_PATTERN = "\\w{8}?\\-\\w{4}?\\-\\w{4}?\\-\\w{4}?\\-\\w+?";
+	private static final long serialVersionUID = 1L;
+
+	public static final String MBID_PATTERN = "\\w{8}?\\-\\w{4}?\\-\\w{4}?\\-\\w{4}?\\-\\w+?";
 
 
     @Override

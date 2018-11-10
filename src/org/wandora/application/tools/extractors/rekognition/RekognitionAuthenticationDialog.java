@@ -34,11 +34,13 @@ import org.wandora.application.tools.extractors.rekognition.RekognitionConfigura
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public class RekognitionAuthenticationDialog extends javax.swing.JPanel {
 
-    private JDialog dialog;
+	private static final long serialVersionUID = 1L;
+
+	private JDialog dialog;
     
     private HashMap<AUTH_KEY,String> auth;
     

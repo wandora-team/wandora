@@ -37,8 +37,13 @@ import org.wandora.topicmap.TopicMap;
 
 public class OmaKaupunkiDirectoryCategoriesExtractor extends OmaKaupunkiAbstractExtractor {
     
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	@Override
     public String getName() {
         return "OmaKaupunki directory categories extractor";
     }

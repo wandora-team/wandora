@@ -40,11 +40,10 @@ import org.wandora.topicmap.TopicMap;
 
 
 public class OmaKaupunkiDirectoryExtractor extends OmaKaupunkiAbstractExtractor {
-    
-    
-    
-    
-    public static boolean MAKE_OCCURRENCES = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public static boolean MAKE_OCCURRENCES = true;
     public static boolean MAKE_ASSOCIATIONS = true;
     
     

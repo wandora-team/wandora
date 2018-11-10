@@ -38,9 +38,13 @@ import org.wandora.topicmap.TopicMap;
 
 public class OmaKaupunkiEventCategoriesExtractor extends OmaKaupunkiAbstractExtractor {
     
-    
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	@Override
     public String getName() {
         return "OmaKaupunki event categories extractor";
     }

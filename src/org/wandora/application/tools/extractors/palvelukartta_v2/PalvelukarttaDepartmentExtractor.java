@@ -23,7 +23,6 @@
 package org.wandora.application.tools.extractors.palvelukartta_v2;
 
 
-import org.wandora.application.tools.extractors.palvelukartta.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wandora.topicmap.Association;
@@ -40,8 +39,9 @@ import org.wandora.topicmap.TopicMap;
 public class PalvelukarttaDepartmentExtractor extends AbstractPalvelukarttaExtractor {
     
 
+	private static final long serialVersionUID = 1L;
 
-    private int departmentCount = 0;
+	private int departmentCount = 0;
     
     
     

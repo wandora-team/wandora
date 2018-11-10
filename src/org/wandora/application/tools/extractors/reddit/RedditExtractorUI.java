@@ -53,11 +53,13 @@ import org.json.JSONException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public class RedditExtractorUI extends javax.swing.JPanel {
 
-    private Wandora wandora = null;
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
     private Context context = null;

@@ -29,7 +29,7 @@ import org.wandora.application.gui.simple.SimpleCheckBox;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 class SimpleWordConfigurationDialog extends javax.swing.JPanel {
 

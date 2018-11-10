@@ -31,13 +31,7 @@ import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.UIBox;
-import static org.wandora.application.tools.extractors.AbstractExtractor.RAW_EXTRACTOR;
-import static org.wandora.application.tools.extractors.AbstractExtractor.URL_EXTRACTOR;
-import static org.wandora.application.tools.extractors.rekognition.AbstractRekognitionExtractor.API_ROOT;
-import static org.wandora.application.tools.extractors.rekognition.AbstractRekognitionExtractor.conf;
-import static org.wandora.application.tools.extractors.rekognition.AbstractRekognitionExtractor.getConfiguration;
 import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.topicmap.Topic;
@@ -46,13 +40,15 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
 public class RekognitionSceneDetector  extends AbstractRekognitionExtractor{
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public int getExtractorType() {
         return URL_EXTRACTOR | RAW_EXTRACTOR;
     }

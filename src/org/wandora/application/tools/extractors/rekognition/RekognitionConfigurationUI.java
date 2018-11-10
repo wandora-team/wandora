@@ -37,11 +37,13 @@ import org.wandora.application.tools.extractors.rekognition.RekognitionConfigura
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 class RekognitionConfigurationUI extends javax.swing.JPanel {
 
-    private Wandora wandora = null;
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora wandora = null;
     private JDialog dialog = null;
     
     private RekognitionConfiguration configuration;

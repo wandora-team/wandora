@@ -42,7 +42,7 @@ import twitter4j.TwitterObjectFactory;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 

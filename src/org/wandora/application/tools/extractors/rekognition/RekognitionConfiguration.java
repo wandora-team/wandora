@@ -27,7 +27,7 @@ import org.wandora.application.Wandora;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 class RekognitionConfiguration {
     

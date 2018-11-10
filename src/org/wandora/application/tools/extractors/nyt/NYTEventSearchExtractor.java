@@ -40,12 +40,14 @@ import org.wandora.utils.XMLbox;
 
 /**
  *
- * @author
- * Eero
+ * @author Eero
  */
 public class NYTEventSearchExtractor extends AbstractNYTExtractor {
 
-    private static String defaultLang = "en";
+
+	private static final long serialVersionUID = 1L;
+
+	private static String defaultLang = "en";
     private static String currentURL = null;
 
     @Override

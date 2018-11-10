@@ -40,11 +40,13 @@ import org.wandora.utils.IObox;
 /**
  *
  * @author akivela
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
 
-    private static String defaultLang = "en";
+	private static final long serialVersionUID = 1L;
+	
+	private static String defaultLang = "en";
     private static String currentURL = null;
 
     @Override

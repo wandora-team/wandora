@@ -33,8 +33,6 @@ import org.wandora.topicmap.TopicMap;
 
 
 import java.util.HashMap;
-import org.wandora.application.Wandora;
-import static org.wandora.application.tools.extractors.reddit.AbstractRedditExtractor.getThingTypes;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
@@ -48,7 +46,9 @@ import org.wandora.topicmap.TopicMapException;
 public class RedditThingExtractor extends AbstractRedditExtractor {
     
 
-    private HashMap<String,Boolean> crawlSettings;
+	private static final long serialVersionUID = 1L;
+
+	private HashMap<String,Boolean> crawlSettings;
     
     
 

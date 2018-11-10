@@ -34,7 +34,6 @@ import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
 import javax.swing.*;
 
-import org.musicbrainz.*;
 import org.musicbrainz.model.*;
 import org.wandora.application.tools.extractors.ExtractHelper;
 
@@ -46,7 +45,10 @@ import org.wandora.application.tools.extractors.ExtractHelper;
  */
 public abstract class AbstractMusicBrainzExtractor extends AbstractWandoraTool {
 
-    // Default language of occurrences and variant names.
+	private static final long serialVersionUID = 1L;
+
+
+	// Default language of occurrences and variant names.
     public static String LANG = "en";
 
 

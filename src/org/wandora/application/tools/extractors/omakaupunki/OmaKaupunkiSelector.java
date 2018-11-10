@@ -47,7 +47,9 @@ import org.wandora.topicmap.Topic;
 
 public class OmaKaupunkiSelector extends javax.swing.JPanel {
 
-    public static final String BASE_URL = "http://api.omakaupunki.fi/v1/";
+	private static final long serialVersionUID = 1L;
+
+	public static final String BASE_URL = "http://api.omakaupunki.fi/v1/";
     
     private boolean wasAccepted = false;
     private JDialog myDialog = null;
@@ -309,13 +311,13 @@ public class OmaKaupunkiSelector extends javax.swing.JPanel {
             "Futsal",
             "Golf",
             "Hiihto",
-            "Hölkkä",
-            "Iskelmä",
+            "Hï¿½lkkï¿½",
+            "Iskelmï¿½",
             "Jalkapallo",
             "Jazz",
             "Juhlaviikot",
-            "Jääkiekko",
-            "Jääpallo",
+            "Jï¿½ï¿½kiekko",
+            "Jï¿½ï¿½pallo",
             "Kaukalopallo",
             "Keilailu",
             "Kirjallisuus",
@@ -325,27 +327,27 @@ public class OmaKaupunkiSelector extends javax.swing.JPanel {
             "Koripallo",
             "Kuntoilu",
             "Kurssit",
-            "Käsipallo",
+            "Kï¿½sipallo",
             "Lapsille",
             "Lastentapahtumat",
             "Lentopallo",
             "Melonta",
             "Messut",
             "Miekkailu",
-            "Moottoripyöräily",
+            "Moottoripyï¿½rï¿½ily",
             "Musiikki",
             "Muut elokuvat",
             "Muut menot",
             "Muut tapahtumat",
-            "Myyjäiset",
+            "Myyjï¿½iset",
             "Nyrkkeily",
-            "Näyttelyt",
+            "Nï¿½yttelyt",
             "Ooppera",
             "Paini",
-            "Pesäpallo",
+            "Pesï¿½pallo",
             "Pikaluistelu",
-            "Pyöräily",
-            "Pöytätennis",
+            "Pyï¿½rï¿½ily",
+            "Pï¿½ytï¿½tennis",
             "Ravintolavinkki",
             "Retket",
             "Ringette",
@@ -368,7 +370,7 @@ public class OmaKaupunkiSelector extends javax.swing.JPanel {
             "Vesipallo",
             "Voimistelu",
             "Yleisurheilu",
-            "Yleisöluennot",
+            "Yleisï¿½luennot",
         };
     }
     

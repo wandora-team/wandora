@@ -39,7 +39,13 @@ import org.wandora.topicmap.*;
  */
 public class OpenCycSpecsExtractor extends AbstractOpenCycExtractor {
     
-    /** Creates a new instance of OpenCycIsaExtractor */
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	/** Creates a new instance of OpenCycIsaExtractor */
     public OpenCycSpecsExtractor() {
     }
     

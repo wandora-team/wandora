@@ -24,16 +24,9 @@
 package org.wandora.application.tools.extractors.opencalais;
 
 
-
-
-
-
-import org.wandora.application.tools.extractors.alchemy.*;
-import org.wandora.application.tools.extractors.youtube.*;
 import javax.swing.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 
 
 
@@ -43,7 +36,9 @@ import org.wandora.application.gui.simple.*;
  */
 public class OpenCalaisConfiguration extends javax.swing.JDialog {
 
-    private JFrame parent = null;
+	private static final long serialVersionUID = 1L;
+
+	private JFrame parent = null;
     private Options options = null;
     private OpenCalaisClassifier parentTool = null;
     

@@ -38,14 +38,12 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleRadioButton;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
-import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 
@@ -57,7 +55,9 @@ import org.wandora.topicmap.Topic;
 
 public class PalvelukarttaSelector extends javax.swing.JPanel {
 
-    private static final String BASE_URL = "http://www.hel.fi/palvelukarttaws/rest/v1/";
+	private static final long serialVersionUID = 1L;
+
+	private static final String BASE_URL = "http://www.hel.fi/palvelukarttaws/rest/v1/";
     private static final String ORGANIZATION_BASE_URL = BASE_URL + "organization/";
     private static final String DEPARTMENT_BASE_URL = BASE_URL + "department/";
     private static final String UNIT_BASE_URL = BASE_URL + "unit/";

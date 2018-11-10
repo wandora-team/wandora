@@ -48,7 +48,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class IIIFRDFExtractor extends AbstractRDFExtractor {
-    protected RDF2TopicMapsMapping[] mappings=new RDF2TopicMapsMapping[]{
+
+	private static final long serialVersionUID = 1L;
+
+	protected RDF2TopicMapsMapping[] mappings=new RDF2TopicMapsMapping[]{
         new IIIFMapping(),
         new SCMapping(),
         new OAMapping(),

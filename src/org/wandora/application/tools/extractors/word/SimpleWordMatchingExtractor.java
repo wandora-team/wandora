@@ -29,7 +29,7 @@ import org.wandora.utils.Options;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public class SimpleWordMatchingExtractor extends AbstractWordExtractor {
 

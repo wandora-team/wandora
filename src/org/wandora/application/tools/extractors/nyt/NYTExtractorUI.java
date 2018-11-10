@@ -45,13 +45,14 @@ import org.wandora.topicmap.TopicMapException;
 
 /**
  *
- * @author
- * akivela
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author akivela
+ * @author Eero Lehtonen
  */
 public class NYTExtractorUI extends javax.swing.JPanel {
 
-    private Wandora wandora = null;
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
     private Context context = null;
@@ -95,7 +96,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
     public WandoraTool[] getExtractors(NYTExtractor tool) throws TopicMapException {
         Component component = nytTabbedPane.getSelectedComponent();
         WandoraTool wt;
-        ArrayList<WandoraTool> wts = new ArrayList();
+        ArrayList<WandoraTool> wts = new ArrayList<>();
 
         // ***** SEARCH ARTICLES *****
         if (articleSearchPanel.equals(component)) {

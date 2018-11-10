@@ -41,8 +41,10 @@ import org.wandora.topicmap.TopicMap;
 
 public class OmaKaupunkiEventExtractor extends OmaKaupunkiAbstractExtractor {
     
-    
-    public static boolean MAKE_OCCURRENCES = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public static boolean MAKE_OCCURRENCES = true;
     public static boolean MAKE_ASSOCIATIONS = true;
     
     
@@ -199,7 +201,7 @@ public class OmaKaupunkiEventExtractor extends OmaKaupunkiAbstractExtractor {
             },
             "data": [
                 {
-                    "body": "Dj:t Bommitommi, Enrico ja VG+ sekä Komposti Sound - dj:t.",
+                    "body": "Dj:t Bommitommi, Enrico ja VG+ sekï¿½ Komposti Sound - dj:t.",
                     "title": "Dance on the Corner",
                     "url": "http://omakaupunki.fi/sornainen/tapahtumat/dance_on_the_corner.9/",
                     "created_at": 1304989145,
@@ -208,7 +210,7 @@ public class OmaKaupunkiEventExtractor extends OmaKaupunkiAbstractExtractor {
                     "start_time": 1305918000
                 }, 
                 {
-                    "body": "Livenä Signmark ja Species Traitor. Dj:t Anna CCCCC, Unelmavävy ja Multitunes. Viittomakielinen tulkkaus.",
+                    "body": "Livenï¿½ Signmark ja Species Traitor. Dj:t Anna CCCCC, Unelmavï¿½vy ja Multitunes. Viittomakielinen tulkkaus.",
                     "title": "Utopia",
                     "url": "http://omakaupunki.fi/sornainen/tapahtumat/utopia.5/",
                     "created_at": 1304989145,

@@ -40,7 +40,12 @@ import org.wandora.topicmap.*;
  */
 public class OpenCycSiblingsExtractor extends AbstractOpenCycExtractor {
     
-    /** Creates a new instance of OpenCycSiblingsExtractor */
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	/** Creates a new instance of OpenCycSiblingsExtractor */
     public OpenCycSiblingsExtractor() {
     }
     

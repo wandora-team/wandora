@@ -36,8 +36,13 @@ import org.wandora.topicmap.*;
  * @author akivela
  */
 public class OpenCycIsaExtractor extends AbstractOpenCycExtractor {
-    
-    /** Creates a new instance of OpenCycIsaExtractor */
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	/** Creates a new instance of OpenCycIsaExtractor */
     public OpenCycIsaExtractor() {
     }
     

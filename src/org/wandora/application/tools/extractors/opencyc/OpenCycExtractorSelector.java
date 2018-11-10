@@ -21,13 +21,12 @@
  * 
  * OpenCycExtractorSelector.java
  *
- * Created on 22. heinäkuuta 2008, 12:17
+ * Created on 22. heinï¿½kuuta 2008, 12:17
  */
 
 package org.wandora.application.tools.extractors.opencyc;
    
 import org.wandora.application.contexts.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
 
@@ -35,9 +34,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.net.*;
-import org.wandora.application.tools.extractors.rdf.OWLExtractor;
 import org.wandora.application.tools.extractors.rdf.OpenCYCOWLExtractor;
-import org.wandora.application.tools.extractors.rdf.RDFSExtractor;
 
 
 
@@ -56,22 +53,25 @@ import org.wandora.application.tools.extractors.rdf.RDFSExtractor;
  */
 public class OpenCycExtractorSelector extends JDialog {
 
-    public static String webServiceBase = "http://65.99.218.242:8080/RESTfulCyc/";
+	private static final long serialVersionUID = 1L;
+
+
+	public static String webServiceBase = "http://65.99.218.242:8080/RESTfulCyc/";
    
 
-    private Wandora admin = null;
+    private Wandora wandora = null;
     private Context context = null;
     private boolean accepted = false;
     
     
     /** Creates new form OpenCycExtractorSelector */
-    public OpenCycExtractorSelector(Wandora admin) {
-        super(admin, true);
+    public OpenCycExtractorSelector(Wandora wandora) {
+        super(wandora, true);
         initComponents();
         setTitle("OpenCyc extractors");
         setSize(450,300);
-        admin.centerWindow(this);
-        this.admin = admin;
+        wandora.centerWindow(this);
+        this.wandora = wandora;
         accepted = false;
     }
 
@@ -79,7 +79,7 @@ public class OpenCycExtractorSelector extends JDialog {
     
 
     public void setWandora(Wandora wandora) {
-        this.admin = wandora;
+        this.wandora = wandora;
     }
     
     public void setContext(Context context) {

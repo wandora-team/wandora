@@ -22,7 +22,6 @@
 
 package org.wandora.application.tools.extractors.palvelukartta_v2;
 
-import org.wandora.application.tools.extractors.palvelukartta.*;
 import java.util.ArrayList;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
@@ -41,7 +40,9 @@ import org.wandora.application.tools.AbstractWandoraTool;
 public class PalvelukarttaExtractor extends AbstractWandoraTool {
     
 
-    private static PalvelukarttaSelector selector = null;
+	private static final long serialVersionUID = 1L;
+	
+	private static PalvelukarttaSelector selector = null;
     
     
     

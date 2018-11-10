@@ -43,7 +43,9 @@ import org.wandora.topicmap.TopicMap;
 public class NYTExtractor extends AbstractExtractor {
 
 
-    private NYTExtractorUI ui = null;
+	private static final long serialVersionUID = 1L;
+
+	private NYTExtractorUI ui = null;
     
 
     @Override

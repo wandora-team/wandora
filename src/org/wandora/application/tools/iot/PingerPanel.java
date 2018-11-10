@@ -53,13 +53,15 @@ import org.wandora.topicmap.TopicMap;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 
 public class PingerPanel extends javax.swing.JPanel {
 
-    private static final String PANEL_TITLE = "IoT pinger";
+	private static final long serialVersionUID = 1L;
+
+	private static final String PANEL_TITLE = "IoT pinger";
     
     private GetTopicButton maybeTargetButton;
     private GetTopicButton maybeSourceButton;

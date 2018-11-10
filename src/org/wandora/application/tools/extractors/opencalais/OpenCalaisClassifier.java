@@ -52,8 +52,10 @@ import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
  * @author akivela
  */
 public class OpenCalaisClassifier extends AbstractExtractor {
-    
-    protected static final boolean EXTRACT_RELEVANCE = true;
+
+	private static final long serialVersionUID = 1L;
+
+	protected static final boolean EXTRACT_RELEVANCE = true;
     protected static final boolean EXTRACT_SCORE = true;
     
     protected static final String CALAIS_SI = "http://www.opencalais.com";

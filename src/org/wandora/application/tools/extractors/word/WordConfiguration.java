@@ -24,7 +24,7 @@ package org.wandora.application.tools.extractors.word;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 

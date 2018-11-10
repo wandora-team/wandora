@@ -38,7 +38,9 @@ import org.wandora.application.gui.simple.*;
  */
 public class MusicBrainzExtractorSelector extends javax.swing.JDialog {
 
-    public static final int ARTIST_TAB = 100;
+	private static final long serialVersionUID = 1L;
+
+	public static final int ARTIST_TAB = 100;
     public static final int RELEASES_TAB = 101;
     public static final int TRACKS_TAB = 102;
     

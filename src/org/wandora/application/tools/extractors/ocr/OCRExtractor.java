@@ -22,7 +22,7 @@
 
 package org.wandora.application.tools.extractors.ocr;
 
-/* Misc */
+
 import java.net.URL;
 import javax.swing.Icon;
 import java.io.*;
@@ -47,14 +47,15 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
 
 /**
  *
- * @author
- * Eero Lehtonen
+ * @author Eero Lehtonen
  */
 
 
 public class OCRExtractor extends AbstractExtractor {
     
-    protected String SOURCE_SI         = "http://wandora.org/si/source";
+	private static final long serialVersionUID = 1L;
+	
+	protected String SOURCE_SI         = "http://wandora.org/si/source";
     protected String DOCUMENT_SI       = "http://wandora.org/si/document";
     
     protected String TEXT_CONTENT_SI   = "http://wandora.org/si/text_content";

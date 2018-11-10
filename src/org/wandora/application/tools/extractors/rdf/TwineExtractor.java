@@ -31,7 +31,6 @@ package org.wandora.application.tools.extractors.rdf;
 
 import java.net.*;
 import javax.swing.*;
-import org.wandora.application.tools.extractors.rdf.*;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.*;
 import org.wandora.topicmap.*;
 
@@ -45,8 +44,10 @@ import org.wandora.application.gui.*;
  * @author akivela
  */
 public class TwineExtractor extends AbstractRDFExtractor {
-  
-    private RDF2TopicMapsMapping[] mappings = new RDF2TopicMapsMapping[] {
+
+	private static final long serialVersionUID = 1L;
+
+	private RDF2TopicMapsMapping[] mappings = new RDF2TopicMapsMapping[] {
         new TwineMapping(),
         new RDFSMapping(),
         new RDFMapping(),

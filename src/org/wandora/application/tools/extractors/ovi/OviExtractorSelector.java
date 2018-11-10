@@ -29,7 +29,6 @@ package org.wandora.application.tools.extractors.ovi;
 
 
 import org.wandora.application.contexts.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.*;
 import org.wandora.topicmap.*;
 
@@ -44,7 +43,10 @@ import java.text.*;
  * @author  akivela
  */
 public class OviExtractorSelector extends JDialog {
-    public static String defaultLanguage = "en";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String defaultLanguage = "en";
     private String defaultEncoding = "ISO-8859-1";
     
     private static final String oviURL = "http://share.ovi.com/feeds/rss/search/media/";

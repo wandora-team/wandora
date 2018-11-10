@@ -36,7 +36,6 @@ import javax.xml.xpath.*;
 import javax.xml.parsers.*;
 import org.wandora.utils.*;
 import org.wandora.application.gui.*;
-import java.awt.*;
 import javax.swing.*;
 import java.text.*;
 
@@ -50,7 +49,10 @@ import org.wandora.topicmap.*;
  * @author akivela
  */
 public class OviMediaExtractor extends AbstractExtractor {
-    private String defaultEncoding = "ISO-8859-1";
+
+	private static final long serialVersionUID = 1L;
+
+	private String defaultEncoding = "ISO-8859-1";
     private static final String oviMedia="http://media.share.ovi.com";
     public static String defaultLanguage = "en";
     

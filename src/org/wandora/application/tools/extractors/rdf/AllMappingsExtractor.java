@@ -34,7 +34,9 @@ import org.wandora.application.tools.extractors.rdf.rdfmappings.*;
  */
 public class AllMappingsExtractor extends AbstractRDFExtractor {
 
-    private RDF2TopicMapsMapping[] mappings = new RDF2TopicMapsMapping[] {
+	private static final long serialVersionUID = 1L;
+
+	private RDF2TopicMapsMapping[] mappings = new RDF2TopicMapsMapping[] {
         new RDFSMapping(),
         new RDFMapping(),
     };

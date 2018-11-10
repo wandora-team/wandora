@@ -30,7 +30,7 @@ import org.wandora.topicmap.TopicMap;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 

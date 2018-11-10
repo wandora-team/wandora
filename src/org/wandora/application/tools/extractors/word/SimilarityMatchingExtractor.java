@@ -30,7 +30,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 
 /**
  *
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 
 

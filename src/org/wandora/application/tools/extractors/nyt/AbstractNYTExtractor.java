@@ -38,11 +38,13 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author
  * akivela
- * @author Eero Lehtonen <eero.lehtonen@gripstudios.com>
+ * @author Eero Lehtonen
  */
 public abstract class AbstractNYTExtractor extends AbstractExtractor {
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getName() {
         return "Abstract New York Times API extractor";
     }

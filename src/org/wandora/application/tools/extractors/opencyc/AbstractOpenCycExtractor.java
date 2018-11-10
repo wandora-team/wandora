@@ -42,7 +42,11 @@ import javax.swing.*;
  * @author akivela
  */
 public abstract class AbstractOpenCycExtractor extends AbstractExtractor {
-    protected static boolean ISA_EQUALS_INSTANCE = false;
+
+	private static final long serialVersionUID = 1L;
+
+
+	protected static boolean ISA_EQUALS_INSTANCE = false;
     
     
     public static String termSIBase = "http://www.opencyc.org/";

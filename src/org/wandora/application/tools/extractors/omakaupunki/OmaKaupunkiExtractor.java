@@ -38,8 +38,10 @@ import org.wandora.application.tools.AbstractWandoraTool;
 
 
 public class OmaKaupunkiExtractor extends AbstractWandoraTool {
-    
-    public static final String API_BASE = "http://api.omakaupunki.fi/v1/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String API_BASE = "http://api.omakaupunki.fi/v1/";
     private static OmaKaupunkiSelector selector = null;
     
     

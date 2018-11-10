@@ -47,10 +47,10 @@ import javax.swing.*;
  * @author akivela
  */
 public class OpenCycExtractor extends AbstractWandoraTool {
-    
-    
-    
-    private static OpenCycExtractorSelector selector = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private static OpenCycExtractorSelector selector = null;
     
     @Override
     public String getName() {

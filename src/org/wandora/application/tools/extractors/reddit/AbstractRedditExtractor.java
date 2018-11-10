@@ -57,7 +57,10 @@ import org.wandora.topicmap.TopicMapException;
  */
 public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
-    private static final String ERROR_MSG = "Reddit API error occurred:";
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String ERROR_MSG = "Reddit API error occurred:";
     private static final String ERROR_RESPONSE_MSG = "API response follows:";
     
     protected static final String apiRoot = "http://api.reddit.com/";

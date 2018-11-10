@@ -60,7 +60,9 @@ import org.wandora.topicmap.XTMPSI;
 
 public class PalvelukarttaSelector extends javax.swing.JPanel {
 
-    private static final String BASE_URL 
+	private static final long serialVersionUID = 1L;
+
+	private static final String BASE_URL 
             = "http://www.hel.fi/palvelukarttaws/rest/v2/";
     private static final String ORGANIZATION_URL = BASE_URL + "organization/";
     private static final String DEPARTMENT_URL = BASE_URL + "department/";

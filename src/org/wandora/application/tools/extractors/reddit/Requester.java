@@ -52,7 +52,7 @@ public class Requester {
     
     
     public Requester() {
-        requestQueue = new ArrayList();
+        requestQueue = new ArrayList<>();
         runCounter = 0;
         failCounter = 0;
         Unirest.clearDefaultHeaders();

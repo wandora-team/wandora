@@ -31,8 +31,8 @@ package org.wandora.application.tools.extractors.rdf;
 
 
 import javax.swing.*;
-import org.wandora.application.gui.*;
-import org.wandora.utils.Tuples.*;
+
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.*;
 
 
@@ -42,8 +42,10 @@ import org.wandora.application.tools.extractors.rdf.rdfmappings.*;
  */
 public class DublinCoreRDFExtractor extends AbstractRDFExtractor {
 
-    
-    private RDF2TopicMapsMapping[] mappings = new RDF2TopicMapsMapping[] {
+
+	private static final long serialVersionUID = 1L;
+
+	private RDF2TopicMapsMapping[] mappings = new RDF2TopicMapsMapping[] {
         new DublinCoreMapping(),
         new RDFSMapping(),
         new RDFMapping(),

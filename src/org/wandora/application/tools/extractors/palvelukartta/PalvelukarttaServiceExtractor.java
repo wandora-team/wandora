@@ -39,8 +39,9 @@ import org.wandora.topicmap.TopicMap;
 public class PalvelukarttaServiceExtractor extends AbstractPalvelukarttaExtractor {
     
 
+	private static final long serialVersionUID = 1L;
 
-    private int serviceCount = 0;
+	private int serviceCount = 0;
     
     
     

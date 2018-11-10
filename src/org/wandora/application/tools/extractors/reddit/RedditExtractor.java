@@ -30,7 +30,6 @@ package org.wandora.application.tools.extractors.reddit;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -38,7 +37,9 @@ import org.wandora.application.tools.AbstractWandoraTool;
 
 public class RedditExtractor extends AbstractWandoraTool{
     
-    private RedditExtractorUI ui = null;
+	private static final long serialVersionUID = 1L;
+	
+	private RedditExtractorUI ui = null;
 
     @Override
     public String getName() {

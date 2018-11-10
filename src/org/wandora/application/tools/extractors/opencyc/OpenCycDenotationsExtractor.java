@@ -38,7 +38,13 @@ import org.wandora.topicmap.*;
  */
 public class OpenCycDenotationsExtractor extends AbstractOpenCycExtractor {
     
-    /** Creates a new instance of OpenCycDenotationsExtractor */
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	/** Creates a new instance of OpenCycDenotationsExtractor */
     public OpenCycDenotationsExtractor() {
     }
     @Override

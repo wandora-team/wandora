@@ -53,7 +53,10 @@ import org.wandora.utils.Tuples.*;
  * @author akivela
  */
 public abstract class AbstractRDFExtractor extends AbstractExtractor {
-    private String defaultEncoding = "UTF-8";
+
+	private static final long serialVersionUID = 1L;
+
+	private String defaultEncoding = "UTF-8";
     public static String defaultLanguage = "en";
     public static final String defaultOccurrenceScopeSI = TMBox.LANGINDEPENDENT_SI;
 
