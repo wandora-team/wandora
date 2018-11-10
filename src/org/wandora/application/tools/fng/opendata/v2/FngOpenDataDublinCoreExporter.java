@@ -31,8 +31,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -40,21 +38,16 @@ import org.json.simple.parser.JSONParser;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
-import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.application.tools.exporters.AbstractExportTool;
 import org.wandora.application.tools.exporters.DOTExport;
-import static org.wandora.application.tools.exporters.DOTExport.EXPORT_CLASSES;
-import static org.wandora.application.tools.exporters.DOTExport.EXPORT_N_ASSOCIATIONS;
-import static org.wandora.application.tools.exporters.DOTExport.EXPORT_OCCURRENCES;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.utils.IObox;
+
 
 
 /**
@@ -64,7 +57,10 @@ import org.wandora.utils.IObox;
 
 
 public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements WandoraTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
     
     @Override
     public Icon getIcon() {

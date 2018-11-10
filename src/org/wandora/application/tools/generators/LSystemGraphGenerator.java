@@ -41,9 +41,10 @@ import static org.wandora.utils.Tuples.T2;
  * @author akivela
  */
 public class LSystemGraphGenerator extends AbstractGenerator implements WandoraTool {
-    
-    
-    public static String DEFAULT_SI_PREFIX = "http://wandora.org/si/l-system/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String DEFAULT_SI_PREFIX = "http://wandora.org/si/l-system/";
     public static String DEFAULT_ASSOCIATION_TYPE_SI = DEFAULT_SI_PREFIX+"association-type";
     public static String DEFAULT_ROLE1_SI = DEFAULT_SI_PREFIX+"role-1";
     public static String DEFAULT_ROLE2_SI = DEFAULT_SI_PREFIX+"role-2";
@@ -328,8 +329,8 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
         private WandoraTool parent = null;
         private Word input = null;
         private int parsePoint = 0;
-        private Stack<T2<Alphabet,Stack>> stackStack = new Stack<T2<Alphabet,Stack>>();
-        private Stack stack = new Stack();
+        private Stack<T2<Alphabet,Stack<Topic>>> stackStack = new Stack<T2<Alphabet,Stack<Topic>>>();
+        private Stack<Topic> stack = new Stack<>();
         private Alphabet defaultGuide = new Alphabet("("); // Sequential by default
         private Alphabet guide = defaultGuide;
         private TopicMap tm = null;
@@ -381,8 +382,8 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
                 // ***** OPEN BLOCKS *****
                 else if(isCreateParallelBlock(a) || isCreateSequentialBlock(a) || isCreateCycleBlock(a)) {
                     //hlog("Creating Block");
-                    stackStack.push(new T2(guide, stack));
-                    stack = new Stack();
+                    stackStack.push(new T2<>(guide, stack));
+                    stack = new Stack<>();
                     guide = a;
                 }
                 
@@ -402,12 +403,12 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
                         }
                     }
                     if(!stackStack.empty()) {
-                        T2<Alphabet,Stack> guidedStack = stackStack.pop();
+                        T2<Alphabet,Stack<Topic>> guidedStack = stackStack.pop();
                         guide = guidedStack.e1;
                         stack = guidedStack.e2;
                     }
                     else {
-                        stack = new Stack();
+                        stack = new Stack<>();
                         guide = defaultGuide;
                     }
                 }
@@ -481,7 +482,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
             if(isCreateParallelBlock(guide)) {
                 if(!stackStack.empty()) {
                     int peekIndex = stackStack.size();
-                    T2<Alphabet,Stack> guidedStack = null;
+                    T2<Alphabet,Stack<Topic>> guidedStack = null;
                     do {
                         guidedStack = stackStack.get(--peekIndex);
                     } while(peekIndex > 0 && guidedStack.e2.empty());
@@ -498,7 +499,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
                 }
                 else if(!stackStack.empty()) {
                     int peekIndex = stackStack.size();
-                    T2<Alphabet,Stack> guidedStack = null;
+                    T2<Alphabet,Stack<Topic>> guidedStack = null;
                     do {
                         guidedStack = stackStack.get(--peekIndex);
                     } while(peekIndex > 0 && guidedStack.e2.empty());
@@ -676,12 +677,12 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
     
     
     private class Word {
-        ArrayList<Alphabet> alphabets = new ArrayList<Alphabet>();
+        List<Alphabet> alphabets = new ArrayList<Alphabet>();
         
         public Word() {
             
         }
-        public Word(ArrayList<Alphabet> w) {
+        public Word(List<Alphabet> w) {
             this.alphabets = w;
         }
         public Word(String[] str) {
@@ -734,7 +735,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
         
         
         public void add(Word word, boolean fresh) {
-            ArrayList<Alphabet> alphas = word.getAlphabets();
+            List<Alphabet> alphas = word.getAlphabets();
             for(int i=0; i<alphas.size(); i++) {
                 this.alphabets.add(alphas.get(i).duplicate(fresh));
             }
@@ -750,7 +751,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
             }
         }
         
-        public ArrayList<Alphabet> getAlphabets() {
+        public List<Alphabet> getAlphabets() {
             return alphabets;
         }
         

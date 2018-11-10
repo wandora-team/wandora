@@ -28,10 +28,8 @@ package org.wandora.application.tools.generators;
 
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
-import java.io.*;
 import java.util.*;
 import org.wandora.application.gui.WandoraOptionPane;
 import static org.wandora.utils.Tuples.T2;
@@ -44,7 +42,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author elehtonen
  */
 public class CylinderGenerator extends AbstractGenerator implements WandoraTool {
-    public static String globalSiPattern = "";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String globalSiPattern = "";
     public static String globalBasenamePattern = "";
     public static boolean connectWithWandoraClass = true;
     
@@ -154,7 +155,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
         setLogTitle("Cylinder graph generator");
 
         for (Cylinder cylinder : cylinders) {
-            Collection<T2> edges = cylinder.getEdges();
+            Collection<T2<String,String>> edges = cylinder.getEdges();
 
             log("Creating " + cylinder.getName() + " graph");
 
@@ -215,7 +216,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
         public String getSIPrefix();
         public String getName();
         public int getSize();
-        public Collection<T2> getEdges();
+        public Collection<T2<String,String>> getEdges();
         public Collection<String> getVertices();
         public Topic getVertexTopic(String vertex, TopicMap topicmap, Map<String,String> optionsValues);
         public Topic getAssociationTypeTopic(TopicMap topicmap, Map<String,String> optionsValues);
@@ -353,21 +354,21 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
         }
 
         @Override
-        public Collection<T2> getEdges() {
-            ArrayList<T2> edges = new ArrayList<>();
+        public Collection<T2<String,String>> getEdges() {
+            ArrayList<T2<String,String>> edges = new ArrayList<>();
 
             for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     int ww = (w == width - 1) ? 0 : (w + 1);
                     int hh = (h == height - 1 && isToroid) ? 0 : (h + 1);
-                    edges.add(new T2(h + "-" + w, h + "-" + ww));
-                    edges.add(new T2((h + "-" + ww), hh + "-" + ww));
+                    edges.add(new T2<String,String>(h + "-" + w, h + "-" + ww));
+                    edges.add(new T2<String,String>((h + "-" + ww), hh + "-" + ww));
                 }
             }
             if (!this.isToroid) {
                 for (int w = 0; w < width; w++) {
                     int ww = (w != width - 1) ? (w + 1) : 0;
-                    edges.add(new T2(height + "-" + w, height + "-" + ww));
+                    edges.add(new T2<String,String>(height + "-" + w, height + "-" + ww));
                 }
             }
             return edges;
@@ -424,23 +425,23 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
         }
 
         @Override
-        public Collection<T2> getEdges() {
-            ArrayList<T2> edges = new ArrayList<>();
+        public Collection<T2<String,String>> getEdges() {
+            ArrayList<T2<String,String>> edges = new ArrayList<>();
 
             for (int d = 0; d < depth; d++) {
                 for (int w = 0; w < width; w++) {
                     int ww = (w == width - 1) ? 0 : (w + 1);
                     int dd = (d == depth - 1 && this.isToroid) ? 0 : (d + 1);
-                    edges.add(new T2(d + "-" + w, d + "-" + ww));
-                    edges.add(new T2(d + "-" + w, dd + "-" + ww));
-                    edges.add(new T2(d + "-" + ww, dd + "-" + ww));
+                    edges.add(new T2<String,String>(d + "-" + w, d + "-" + ww));
+                    edges.add(new T2<String,String>(d + "-" + w, dd + "-" + ww));
+                    edges.add(new T2<String,String>(d + "-" + ww, dd + "-" + ww));
                 }
             }
 
             if (!this.isToroid) {
                 for (int w = 0; w < width; w++) {
                     int ww = (w != width - 1) ? (w + 1) : 0;
-                    edges.add(new T2(depth + "-" + w, depth + "-" + ww));
+                    edges.add(new T2<String,String>(depth + "-" + w, depth + "-" + ww));
                 }
             }
 
@@ -497,8 +498,8 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
         }
 
         @Override
-        public Collection<T2> getEdges() {
-            ArrayList<T2> edges = new ArrayList<>();
+        public Collection<T2<String,String>> getEdges() {
+            ArrayList<T2<String,String>> edges = new ArrayList<>();
             String nc = null;
             String n1 = null;
             String n2 = null;
@@ -511,12 +512,12 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
                     n1 = (d == depth -1 && this.isToroid) ? 0 + "-" + w : (d+1) + "-" + w ;
                     n2 = d + "-" + w;
 
-                    edges.add(new T2(nc, n1));
-                    edges.add(new T2(nc, n2));
+                    edges.add(new T2<String,String>(nc, n1));
+                    edges.add(new T2<String,String>(nc, n2));
 
                     n3 = (w == width - 1) ? d + "-" + 0 : d + "-" + (w + 1); 
 
-                    edges.add(new T2(nc, n3));
+                    edges.add(new T2<String,String>(nc, n3));
 
                 }
             }
@@ -527,8 +528,8 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
                     n1 = depth + "-" + w;
                     n2 = (w == width -1 ) ? depth + "-" + 0 : depth + "-" + (w + 1);
 
-                    edges.add(new T2(nc, n1));
-                    edges.add(new T2(nc, n2));
+                    edges.add(new T2<String,String>(nc, n1));
+                    edges.add(new T2<String,String>(nc, n2));
                 }
             }
 

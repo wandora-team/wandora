@@ -38,10 +38,13 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 
 
 public class ChangeFramerate extends AbstractSliderTool implements WandoraTool {
-    
+
+	
+	private static final long serialVersionUID = 1L;
 
 
-    /** Creates a new instance of ChangeFramerate */
+
+	/** Creates a new instance of ChangeFramerate */
     public ChangeFramerate(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());

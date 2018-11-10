@@ -39,8 +39,10 @@ import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection
 
 public class ChangeCurvature extends AbstractSliderTool implements WandoraTool {
 
-    
-    private int key = HyperbolicProjection.CURVATURE;
+
+	private static final long serialVersionUID = 1L;
+
+	private int key = HyperbolicProjection.CURVATURE;
     private int minVal = 1;
     private int maxVal = 100;
 

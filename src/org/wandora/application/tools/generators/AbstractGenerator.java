@@ -21,7 +21,7 @@
  * 
  * AbstractGenerator.java
  *
- * Created on 1. kesäkuuta 2007, 10:39
+ * Created on 1. kesï¿½kuuta 2007, 10:39
  *
  */
 
@@ -41,7 +41,9 @@ import javax.swing.*;
  */
 public abstract class AbstractGenerator extends AbstractWandoraTool implements WandoraTool {
     
-    /** Creates a new instance of AbstractGenerator */
+	private static final long serialVersionUID = 1L;
+	
+	/** Creates a new instance of AbstractGenerator */
     public AbstractGenerator() {
     }
     

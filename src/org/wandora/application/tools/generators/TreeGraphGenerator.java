@@ -42,7 +42,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool {
-    public static String TREE_GRAPH_SI = "http://wandora.org/si/tree-graph/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String TREE_GRAPH_SI = "http://wandora.org/si/tree-graph/";
     
     public static String siPattern = "http://wandora.org/si/tree-graph/node/__n__";
     public static String basenamePattern = "Tree graph node __n__";

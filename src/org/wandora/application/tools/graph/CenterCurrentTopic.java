@@ -21,7 +21,7 @@
  * 
  * CenterCurrentGraph.java
  *
- * Created on 18. heinäkuuta 2007, 16:50
+ * Created on 18. heinï¿½kuuta 2007, 16:50
  *
  */
 
@@ -41,8 +41,10 @@ import org.wandora.application.gui.topicpanels.graphpanel.*;
 public class CenterCurrentTopic extends AbstractGraphTool implements WandoraTool {
     
 
-    
-    /** Creates a new instance of CenterCurrentTopic */
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of CenterCurrentTopic */
     public CenterCurrentTopic(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -56,8 +58,8 @@ public class CenterCurrentTopic extends AbstractGraphTool implements WandoraTool
     
     
     @Override
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             graphPanel.setMouseFollowNode(graphPanel.getRootNode());
         }

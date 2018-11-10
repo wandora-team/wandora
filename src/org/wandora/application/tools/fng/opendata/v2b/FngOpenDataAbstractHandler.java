@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples;
@@ -45,32 +47,32 @@ public class FngOpenDataAbstractHandler {
     
     private String resourceURI = null;
     
-    private Collection<HashMap> titles = null;
-    private Collection<HashMap> types = null;
-    private Collection<HashMap> identifiers = null;
-    private Collection<HashMap> subjects = null;
-    private Collection<HashMap> creators = null;
-    private Collection<HashMap> dates = null;
-    private Collection<HashMap> formats = null;
-    private Collection<HashMap> rights = null;
-    private Collection<HashMap> publishers = null;
-    private Collection<HashMap> relations = null;
-    private Collection<HashMap> descriptions = null;
+    private Collection<Map<String,String>> titles = null;
+    private Collection<Map<String,String>> types = null;
+    private Collection<Map<String,String>> identifiers = null;
+    private Collection<Map<String,String>> subjects = null;
+    private Collection<Map<String,String>> creators = null;
+    private Collection<Map<String,String>> dates = null;
+    private Collection<Map<String,String>> formats = null;
+    private Collection<Map<String,String>> rights = null;
+    private Collection<Map<String,String>> publishers = null;
+    private Collection<Map<String,String>> relations = null;
+    private Collection<Map<String,String>> descriptions = null;
     
     
     
     public FngOpenDataAbstractHandler() {
-        titles = new ArrayList<HashMap>();
-        identifiers = new ArrayList<HashMap>();
-        types = new ArrayList<HashMap>();
-        subjects = new ArrayList<HashMap>();
-        creators = new ArrayList<HashMap>();
-        dates = new ArrayList<HashMap>();
-        formats = new ArrayList<HashMap>();
-        rights = new ArrayList<HashMap>();
-        publishers = new ArrayList<HashMap>();
-        relations = new ArrayList<HashMap>();
-        descriptions = new ArrayList<HashMap>();
+        titles = new ArrayList<Map<String,String>>();
+        identifiers = new ArrayList<Map<String,String>>();
+        types = new ArrayList<Map<String,String>>();
+        subjects = new ArrayList<Map<String,String>>();
+        creators = new ArrayList<Map<String,String>>();
+        dates = new ArrayList<Map<String,String>>();
+        formats = new ArrayList<Map<String,String>>();
+        rights = new ArrayList<Map<String,String>>();
+        publishers = new ArrayList<Map<String,String>>();
+        relations = new ArrayList<Map<String,String>>();
+        descriptions = new ArrayList<Map<String,String>>();
     }
     
     
@@ -118,7 +120,7 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public Collection<HashMap> getTitles() {
+    public Collection<Map<String,String>> getTitles() {
         return titles;
     }
     
@@ -134,7 +136,7 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public Collection<HashMap> getTypes() {
+    public Collection<Map<String,String>> getTypes() {
         return types;
     }
     
@@ -151,7 +153,7 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public Collection<HashMap> getIdentifiers() {
+    public Collection<Map<String,String>> getIdentifiers() {
         return identifiers;
     }
     
@@ -168,18 +170,18 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public void addCreator(String str, String type, HashMap additionalProperties) {
+    public void addCreator(String str, String type, Map<String,String> additionalProperties) {
         if(str != null) {
-            HashMap map = makeTypeMap(str, type);
+        	Map<String,String> map = makeTypeMap(str, type);
             map.putAll(additionalProperties);
             creators.add(map);
         }
     }
     
     
-    public void addCreator(String str, HashMap additionalProperties) {
+    public void addCreator(String str, Map<String,String> additionalProperties) {
         if(str != null) {
-            HashMap map = makeTypeMap(str, null);
+        	Map<String,String> map = makeTypeMap(str, null);
             map.putAll(additionalProperties);
             creators.add(map);
         }
@@ -187,7 +189,7 @@ public class FngOpenDataAbstractHandler {
     
     
     
-    public Collection<HashMap> getCreators() {
+    public Collection<Map<String,String>> getCreators() {
         return creators;
     }
     
@@ -206,21 +208,21 @@ public class FngOpenDataAbstractHandler {
     
     public void addDate(String str, String type, String description) {
         if(str != null) {
-            HashMap map = makeTypeMap(str, type);
+        	Map<String,String> map = makeTypeMap(str, type);
             map.put("description", description);
             dates.add(map);
         }
     }
     
-    public void addDate(String str, String type, HashMap additionalProperties) {
+    public void addDate(String str, String type, Map<String,String> additionalProperties) {
         if(str != null) {
-            HashMap map = makeTypeMap(str, type);
+        	Map<String,String> map = makeTypeMap(str, type);
             map.putAll(additionalProperties);
             dates.add(map);
         }
     }
     
-    public Collection<HashMap> getDates() {
+    public Collection<Map<String,String>> getDates() {
         return dates;
     }
     
@@ -236,7 +238,7 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public Collection<HashMap> getSubjects() {
+    public Collection<Map<String,String>> getSubjects() {
         return subjects;
     }
         
@@ -253,7 +255,7 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public Collection<HashMap> getFormats() {
+    public Collection<Map<String,String>> getFormats() {
         return formats;
     }
     
@@ -270,7 +272,7 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public Collection<HashMap> getRights() {
+    public Collection<Map<String,String>> getRights() {
         return rights;
     }
     
@@ -288,7 +290,7 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public Collection<HashMap> getPublishers() {
+    public Collection<Map<String,String>> getPublishers() {
         return publishers;
     }
     
@@ -309,15 +311,15 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public void addRelation(String str, String type, HashMap additionalProperties) {
+    public void addRelation(String str, String type, Map<String,String> additionalProperties) {
         if(str != null) {
-            HashMap map = makeTypeMap(str, type);
+        	Map<String,String> map = makeTypeMap(str, type);
             map.putAll(additionalProperties);
             relations.add(map);
         }
     }
     
-    public Collection<HashMap> getRelations() {
+    public Collection<Map<String,String>> getRelations() {
         return relations;
     }
     
@@ -340,7 +342,7 @@ public class FngOpenDataAbstractHandler {
         }
     }
     
-    public Collection<HashMap> getDescriptions() {
+    public Collection<Map<String,String>> getDescriptions() {
         return descriptions;
     }
     
@@ -375,9 +377,9 @@ public class FngOpenDataAbstractHandler {
     
     // -------------------------------------------------------------------------
     
-    protected void appendAsDCXMLStatement(String valueType, Collection<HashMap> hashs, StringBuilder sb) {
+    protected void appendAsDCXMLStatement(String valueType, Collection<Map<String,String>> hashs, StringBuilder sb) {
         if(hashs != null && !hashs.isEmpty()) {
-            for(HashMap<String,String> hash : hashs) {
+            for(Map<String,String> hash : hashs) {
                 String value = encodeXMLValue(hash.get(VALUE_KEY));
                 StringBuilder attributes = new StringBuilder("");
                 for(String key : hash.keySet()) {
@@ -397,10 +399,10 @@ public class FngOpenDataAbstractHandler {
     // -------------------------------------------------------------------------
     
     
-    protected void appendAsXMLStatement(String propertyUri, String valueType, Collection<HashMap> hashs, StringBuilder sb) {
+    protected void appendAsXMLStatement(String propertyUri, String valueType, Collection<Map<String,String>> hashs, StringBuilder sb) {
         if(hashs != null && !hashs.isEmpty()) {
             appendLine(sb, 2, "<dcds:statement dcds:propertyURI=\""+propertyUri +"\">");
-            for(HashMap<String,String> hash : hashs) {
+            for(Map<String,String> hash : hashs) {
                 String value = encodeXMLValue(hash.get(VALUE_KEY));
                 StringBuilder attributes = new StringBuilder("");
                 for(String key : hash.keySet()) {
@@ -419,11 +421,11 @@ public class FngOpenDataAbstractHandler {
     
     // -------------------------------------------------------------------------
     
-    protected void appendAsTextStatement(String propertyUri, String valueType, Collection<HashMap> hashs, StringBuilder sb) {
+    protected void appendAsTextStatement(String propertyUri, String valueType, Collection<Map<String,String>> hashs, StringBuilder sb) {
         if(hashs != null && !hashs.isEmpty()) {
             appendLine(sb, 2, "Statement (");
             appendLine(sb, 3, "PropertyURI ( dcterms:"+propertyUri+" )");
-            for(HashMap<String,String> hash : hashs) {
+            for(Map<String,String> hash : hashs) {
                 String str = encodeTextString(hash.get(VALUE_KEY));
                 appendLine(sb, 3, "ValueString ( \""+str+"\" )" );
                 
@@ -463,10 +465,10 @@ public class FngOpenDataAbstractHandler {
     
     
     
-    protected void appendAsJSONArray(String label, Collection<HashMap> hashs, StringBuilder sb) {
+    protected void appendAsJSONArray(String label, Collection<Map<String,String>> hashs, StringBuilder sb) {
         if(hashs != null && !hashs.isEmpty()) {
             appendLine(sb, 2, "\""+label+"\": [");
-            for(HashMap<String,String> hash : hashs) {
+            for(Map<String,String> hash : hashs) {
                 if(hash.size() <= 2) {
                     String val = encodeJSONString(hash.get(VALUE_KEY));
                     String key = label;
@@ -656,31 +658,31 @@ public class FngOpenDataAbstractHandler {
     // -------------------------------------------------------------------------
     
     
-      protected HashMap makeTypeMap(String value, String type) {
-        HashMap map = new LinkedHashMap();
+      protected Map<String,String> makeTypeMap(String value, String type) {
+        Map<String,String> map = new LinkedHashMap<>();
         map.put(VALUE_KEY, value);
         if(type != null) map.put("type", type);
         return map;
     }  
     
-    protected HashMap makeLangMap(String value, String lang) {
-        HashMap map = new LinkedHashMap();
+    protected Map<String,String> makeLangMap(String value, String lang) {
+    	Map<String,String> map = new LinkedHashMap<>();
         map.put(VALUE_KEY, value);
         if(lang != null) map.put("lang", lang);
         return map;
     }
     
     
-    protected HashMap makeMap(String value, String key, String val) {
-        HashMap map = new LinkedHashMap();
+    protected Map<String,String> makeMap(String value, String key, String val) {
+        Map<String,String> map = new LinkedHashMap<>();
         map.put(VALUE_KEY, value);
         if(key != null && val != null) map.put(key, val);
         return map;
     }
     
     
-    protected HashMap makeMap(String value, String key1, String val1, String key2, String val2) {
-        HashMap map = new LinkedHashMap();
+    protected Map<String,String> makeMap(String value, String key1, String val1, String key2, String val2) {
+        Map<String,String> map = new LinkedHashMap<>();
         map.put(VALUE_KEY, value);
         if(key1 != null && val1 != null) map.put(key1, val1);
         if(key2 != null && val2 != null) map.put(key2, val2);
@@ -688,8 +690,8 @@ public class FngOpenDataAbstractHandler {
     }
     
     
-    protected HashMap makeMap(String value, String key1, String val1, String key2, String val2, String key3, String val3) {
-        HashMap map = new LinkedHashMap();
+    protected Map<String,String> makeMap(String value, String key1, String val1, String key2, String val2, String key3, String val3) {
+        Map<String,String> map = new LinkedHashMap<>();
         map.put(VALUE_KEY, value);
         if(key1 != null && val1 != null) map.put(key1, val1);
         if(key2 != null && val2 != null) map.put(key2, val2);

@@ -44,7 +44,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class TilingGenerator extends AbstractGenerator implements WandoraTool {
-    public static String globalSiPattern = "";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String globalSiPattern = "";
     public static String globalBasenamePattern = "";
     public static boolean connectWithWandoraClass = true;
     
@@ -392,15 +395,15 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
             
             for(int x=0; x<w; x++) {
                 for(int y=0; y<h; y++) {
-                    edges.add(new T2(x+"-"+y, x+"-"+(y+1)));
-                    edges.add(new T2(x+"-"+y, (x+1)+"-"+y));
+                    edges.add(new T2<>(x+"-"+y, x+"-"+(y+1)));
+                    edges.add(new T2<>(x+"-"+y, (x+1)+"-"+y));
                 }
             }
             for(int x=0; x<w; x++) {
-                edges.add(new T2(x+"-"+h, (x+1)+"-"+h));
+                edges.add(new T2<>(x+"-"+h, (x+1)+"-"+h));
             }
             for(int y=0; y<h; y++) {
-                edges.add(new T2(w+"-"+y, w+"-"+(y+1)));
+                edges.add(new T2<>(w+"-"+y, w+"-"+(y+1)));
             }
             return edges;
         }
@@ -459,9 +462,9 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
 
             for(int d=0; d<depth; d++) {
                 for(int f=0; f<d; f++) {
-                    edges.add(new T2(d+"-"+f, (d-1)+"-"+f));
-                    edges.add(new T2(d+"-"+f, d+"-"+(f+1)));
-                    edges.add(new T2((d-1)+"-"+f, d+"-"+(f+1)));
+                    edges.add(new T2<>(d+"-"+f, (d-1)+"-"+f));
+                    edges.add(new T2<>(d+"-"+f, d+"-"+(f+1)));
+                    edges.add(new T2<>((d-1)+"-"+f, d+"-"+(f+1)));
                 }
             }
             return edges;
@@ -529,16 +532,16 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
                     n2 = d+"-"+f;
                     n3 = d+"-"+(f+1);
 
-                    edges.add(new T2(nc, n2));
-                    edges.add(new T2(nc, n3));
+                    edges.add(new T2<>(nc, n2));
+                    edges.add(new T2<>(nc, n3));
 
                     if(d == 0) {
                         n1 = d+"-"+f+"-t";
-                        edges.add(new T2(nc, n1));
+                        edges.add(new T2<>(nc, n1));
                     }
                     else {
                         n1 = (d-1)+"-"+f;
-                        edges.add(new T2(nc, n1));
+                        edges.add(new T2<>(nc, n1));
                     }
                 }
             }

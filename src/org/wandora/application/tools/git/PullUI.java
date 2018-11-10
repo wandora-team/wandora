@@ -35,7 +35,10 @@ import org.wandora.application.gui.simple.SimplePasswordField;
  */
 public class PullUI extends javax.swing.JPanel {
 
-    private JDialog dialog = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private JDialog dialog = null;
     private boolean wasAccepted = false;
     
     

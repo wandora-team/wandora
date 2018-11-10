@@ -23,7 +23,8 @@
 package org.wandora.application.tools.fng.opendata.v2b;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -141,7 +142,7 @@ public class VttkOpenDataArtworkHandler extends FngOpenDataArtworkHandler implem
             // **** CREATORS ****
             Collection<Topic> authors = GenericVelocityHelper.getPlayers(t, AUTHOR_SI, ARTIST_SI, AUTHOR_ROLE_SI, ARTIST_SI);
             for( Topic author : authors ) {
-                HashMap properties = new HashMap();
+                Map<String,String> properties = new LinkedHashMap<>();
                 for( Locator si : author.getSubjectIdentifiers() ) {
                     String sis = si.toExternalForm();
                     if(!sis.startsWith("http://wandora.org/si/defaultSI")) {

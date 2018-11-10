@@ -21,7 +21,7 @@
  * 
  * ToggleFilterWindow.java
  *
- * Created on 17. heinäkuuta 2007, 11:26
+ * Created on 17. heinï¿½kuuta 2007, 11:26
  *
  */
 
@@ -40,9 +40,10 @@ import org.wandora.application.gui.topicpanels.graphpanel.*;
 public class ToggleFilterWindow extends AbstractGraphTool implements WandoraTool {
     
 
+	private static final long serialVersionUID = 1L;
 
-    
-    /** Creates a new instance of ToggleFilterWindow */
+
+	/** Creates a new instance of ToggleFilterWindow */
     public ToggleFilterWindow(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -55,8 +56,8 @@ public class ToggleFilterWindow extends AbstractGraphTool implements WandoraTool
     }
     
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             graphPanel.openFilterManager();
         }

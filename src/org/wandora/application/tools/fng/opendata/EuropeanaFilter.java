@@ -44,8 +44,10 @@ import org.wandora.topicmap.TopicTools;
  * @author akivela
  */
 public class EuropeanaFilter extends AbstractWandoraTool implements WandoraTool {
-    
-    public EuropeanaFilter() {
+
+	private static final long serialVersionUID = 1L;
+
+	public EuropeanaFilter() {
         
     }
     
@@ -92,7 +94,7 @@ public class EuropeanaFilter extends AbstractWandoraTool implements WandoraTool 
                                 || credits.startsWith("kka") 
                                 || credits.startsWith("fng") 
                                 || credits.startsWith("kansallisgalleria")
-                                || credits.startsWith("mykkänen, pirje")) {
+                                || credits.startsWith("mykkï¿½nen, pirje")) {
                             removeImage = false;
                         }
                     }

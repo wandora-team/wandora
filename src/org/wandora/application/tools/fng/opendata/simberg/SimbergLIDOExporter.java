@@ -28,9 +28,6 @@ package org.wandora.application.tools.fng.opendata.simberg;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.zip.ZipOutputStream;
 import javax.swing.Icon;
 import org.wandora.application.Wandora;
@@ -51,7 +48,9 @@ import org.wandora.topicmap.TopicMap;
 
 public class SimbergLIDOExporter extends AbstractExportTool implements WandoraTool {
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/fng.png");
     }

@@ -21,7 +21,7 @@
  * 
  * ToggleAntialiasTool.java
  *
- * Created on 11. kesäkuuta 2007, 16:33
+ * Created on 11. kesï¿½kuuta 2007, 16:33
  *
  */
 
@@ -39,8 +39,10 @@ import org.wandora.application.gui.topicpanels.graphpanel.*;
  */
 public class ToggleLabelEdges extends AbstractGraphTool implements WandoraTool {
     
-    
-    /** Creates a new instance of ToggleLabelEdges */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of ToggleLabelEdges */
     public ToggleLabelEdges(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -58,8 +60,8 @@ public class ToggleLabelEdges extends AbstractGraphTool implements WandoraTool {
     }
     
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             graphPanel.setLabelEdges(!graphPanel.getLabelEdges());
         }

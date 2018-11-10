@@ -21,7 +21,7 @@
  * 
  * ExpandNodeTool.java
  *
- * Created on 6. kesäkuuta 2007, 15:16
+ * Created on 6. kesï¿½kuuta 2007, 15:16
  *
  */
 
@@ -38,8 +38,10 @@ import java.util.*;
  * @author olli
  */
 public class ExpandNodeTool extends AbstractGraphTool {
-    
-    public ExpandNodeTool(TopicMapGraphPanel gp) {
+
+	private static final long serialVersionUID = 1L;
+
+	public ExpandNodeTool(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
     }
@@ -50,7 +52,7 @@ public class ExpandNodeTool extends AbstractGraphTool {
         return "Open graph node";
     }
     
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         VModel model = null;
         VNode node = null;
         for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {

@@ -47,7 +47,7 @@ public class SimbergOpenDataHandler {
     private static final boolean SPLIT_KEYWORDS = false;
     
     
-    ArrayList<SimbergPhotograph> data = new ArrayList();
+    ArrayList<SimbergPhotograph> data = new ArrayList<>();
 
     
     
@@ -273,8 +273,8 @@ public class SimbergOpenDataHandler {
         public String author = null;
         public String material = null;
         public String keeper = null;
-        public ArrayList<SimbergImage> images = new ArrayList();
-        public ArrayList<SimbergKeyword> keywords = new ArrayList();
+        public ArrayList<SimbergImage> images = new ArrayList<>();
+        public ArrayList<SimbergKeyword> keywords = new ArrayList<>();
         
         
         

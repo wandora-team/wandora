@@ -37,9 +37,11 @@ import org.wandora.application.gui.topicpanels.graphpanel.*;
  * @author akivela
  */
 public class ToggleStaticWidthNodeBoxes extends AbstractGraphTool implements WandoraTool {
-    
-    
-    /** Creates a new instance of ToggleStaticWidthNodeBoxes */
+
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of ToggleStaticWidthNodeBoxes */
     public ToggleStaticWidthNodeBoxes(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -57,8 +59,8 @@ public class ToggleStaticWidthNodeBoxes extends AbstractGraphTool implements Wan
     }
     
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             graphPanel.setCropNodeBoxes(!graphPanel.getCropNodeBoxes());
         }

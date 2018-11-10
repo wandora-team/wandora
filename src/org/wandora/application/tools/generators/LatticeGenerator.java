@@ -42,8 +42,10 @@ import org.wandora.utils.swing.GuiTools;
 
 
 public class LatticeGenerator extends AbstractGenerator implements WandoraTool {
-    
-    public static String LATTICE_GRAPH_SI = "http://wandora.org/si/lattice/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String LATTICE_GRAPH_SI = "http://wandora.org/si/lattice/";
     
     public static String siPattern = "http://wandora.org/si/lattice/vertex/__n__";
     public static String basenamePattern = "Lattice vertex __n__";

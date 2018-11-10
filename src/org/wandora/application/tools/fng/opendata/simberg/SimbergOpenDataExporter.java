@@ -39,7 +39,6 @@ import org.json.simple.parser.JSONParser;
 import org.w3c.dom.Document;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -59,7 +58,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class SimbergOpenDataExporter extends AbstractExportTool implements WandoraTool {
     
-    public static boolean CHECK_EXPORTED_FILE = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public static boolean CHECK_EXPORTED_FILE = true;
     
     
     @Override

@@ -21,7 +21,7 @@
  * 
  * CloseTopicNodesOfType.java
  *
- * Created on 7. kesäkuuta 2007, 13:09
+ * Created on 7. kesï¿½kuuta 2007, 13:09
  *
  */
 
@@ -40,7 +40,10 @@ import java.util.*;
  */
 public class CloseTopicNodesOfType extends AbstractGraphTool {
     
-    private Topic type;
+
+	private static final long serialVersionUID = 1L;
+
+	private Topic type;
     private GraphFilter filter;
     
     
@@ -82,7 +85,7 @@ public class CloseTopicNodesOfType extends AbstractGraphTool {
     }
 
     
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         VModel model = null;
         VNode node = null;
         for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {

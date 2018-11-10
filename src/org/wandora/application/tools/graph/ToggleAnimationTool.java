@@ -21,7 +21,7 @@
  * 
  * ToggleAnimationTool.java
  *
- * Created on 7. kesäkuuta 2007, 16:04
+ * Created on 7. kesï¿½kuuta 2007, 16:04
  *
  */
 
@@ -36,8 +36,10 @@ import org.wandora.application.gui.topicpanels.graphpanel.*;
  * @author olli
  */
 public class ToggleAnimationTool extends AbstractGraphTool implements WandoraTool {
-    
-    /** Creates a new instance of ToggleAnimationTool */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of ToggleAnimationTool */
     public ToggleAnimationTool(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -55,8 +57,8 @@ public class ToggleAnimationTool extends AbstractGraphTool implements WandoraToo
                "graph is animated.";
     }
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
 
         if(graphPanel != null) {
             graphPanel.setAnimationEnabled(!graphPanel.getAnimationEnabled());

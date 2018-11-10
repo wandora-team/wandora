@@ -29,7 +29,6 @@ import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.project.LoadWandoraProject;
 
@@ -40,8 +39,9 @@ import org.wandora.application.tools.project.LoadWandoraProject;
  */
 public class Clone extends AbstractGitTool implements WandoraTool {
 
-    
-    private CloneUI cloneUI = null;
+	private static final long serialVersionUID = 1L;
+
+	private CloneUI cloneUI = null;
     
     
     /**

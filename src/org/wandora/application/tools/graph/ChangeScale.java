@@ -40,8 +40,9 @@ import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection
 public class ChangeScale extends AbstractSliderTool implements WandoraTool {
     
 
-    
-    private int key = HyperbolicProjection.SCALE;
+	private static final long serialVersionUID = 1L;
+
+	private int key = HyperbolicProjection.SCALE;
     private int minVal = 1;
     private int maxVal = 100;
 

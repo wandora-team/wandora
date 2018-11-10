@@ -45,7 +45,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class LinearListGenerator extends AbstractGenerator implements WandoraTool {
-    public static String LIST_GRAPH_SI = "http://wandora.org/si/linear-list/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String LIST_GRAPH_SI = "http://wandora.org/si/linear-list/";
     
     public static String siPattern = "http://wandora.org/si/linear-list/node/__n__";
     public static String basenamePattern = "Linear list vertex __n__";

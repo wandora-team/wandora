@@ -42,8 +42,11 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 public class ChangeStiffness extends AbstractSliderTool implements WandoraTool {
     
 
+	private static final long serialVersionUID = 1L;
 
-    /** Creates a new instance of ChangeStiffness */
+
+
+	/** Creates a new instance of ChangeStiffness */
     public ChangeStiffness(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());

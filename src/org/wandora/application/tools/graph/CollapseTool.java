@@ -21,7 +21,7 @@
  * 
  * CollapseTool.java
  *
- * Created on 6. kesäkuuta 2007, 15:21
+ * Created on 6. kesï¿½kuuta 2007, 15:21
  *
  */
 
@@ -40,7 +40,10 @@ import org.wandora.application.contexts.*;
  * @author olli
  */
 public class CollapseTool extends AbstractGraphTool {
-    private int depth;
+
+	private static final long serialVersionUID = 1L;
+
+	private int depth;
     
     public CollapseTool(TopicMapGraphPanel gp) {
         this(gp, 1);
@@ -76,7 +79,7 @@ public class CollapseTool extends AbstractGraphTool {
     
     
     @Override
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         if(context != null) {
             VNode vn = null;
             for(Iterator iter=context.getContextObjects(); iter.hasNext(); ) {

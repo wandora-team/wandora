@@ -23,11 +23,6 @@
 package org.wandora.application.tools.fng.opendata.v2b;
 
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
 
 
 /**

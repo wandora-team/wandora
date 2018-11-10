@@ -21,7 +21,7 @@
  * 
  * ExpandNodesRecursivelyTool.java
  *
- * Created on 12. kesäkuuta 2007, 11:17
+ * Created on 12. kesï¿½kuuta 2007, 11:17
  *
  */
 
@@ -32,7 +32,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.topicpanels.graphpanel.*;
 import org.wandora.application.gui.WandoraOptionPane;
-import java.awt.*;
 import java.util.*;
 import static org.wandora.utils.Tuples.*;
 
@@ -44,9 +43,11 @@ import static org.wandora.utils.Tuples.*;
  */
 
 public class ExpandNodesRecursivelyTool extends AbstractGraphTool {
-    
-    private int depth;
-    private HashSet openNodes = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private int depth;
+    private HashSet<VNode> openNodes = null;
     
     
     /** Creates a new instance of ExpandNodesRecursivelyTool */
@@ -80,14 +81,14 @@ public class ExpandNodesRecursivelyTool extends AbstractGraphTool {
         }
     }
 
-    public void executeSynchronized(Wandora admin, Context context) {}
+    public void executeSynchronized(Wandora wandora, Context context) {}
     
     @Override
     public void execute(Wandora wandora, Context context){
         if(context != null) {
             Iterator contextObjects = context.getContextObjects();
             if(!contextObjects.hasNext()) {
-                ArrayList<Topic> adhocContext = new ArrayList();
+                ArrayList<Topic> adhocContext = new ArrayList<>();
                 adhocContext.add( wandora.getOpenTopic() );
                 contextObjects = adhocContext.iterator();
             }
@@ -108,7 +109,7 @@ public class ExpandNodesRecursivelyTool extends AbstractGraphTool {
                     synchronized(solveGraphPanel(wandora,context)) {
                         VNode node = null;
                         VModel model = null;
-                        openNodes = new HashSet();
+                        openNodes = new LinkedHashSet<>();
                         while(contextObjects.hasNext()) {
                             node = (VNode) contextObjects.next();
                             if(node != null) {

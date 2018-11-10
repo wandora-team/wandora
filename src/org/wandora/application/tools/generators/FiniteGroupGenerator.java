@@ -44,7 +44,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class FiniteGroupGenerator extends AbstractGenerator implements WandoraTool {
-    public static String FINITE_GROUP_SI = "http://wandora.org/si/finite-group";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String FINITE_GROUP_SI = "http://wandora.org/si/finite-group";
 
     public static String siPattern = "http://wandora.org/si/finite-group/node/__n__";
     public static String basenamePattern = "Topic __n__";

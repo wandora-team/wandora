@@ -45,7 +45,9 @@ import org.wandora.topicmap.TopicMap;
 
 public class SimbergOAIDCExporter extends AbstractExportTool implements WandoraTool {
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/fng.png");
     }

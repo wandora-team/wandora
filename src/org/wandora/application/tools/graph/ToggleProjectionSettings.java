@@ -21,7 +21,7 @@
  * 
  * ToggleProjectionSettings.java
  *
- * Created on 16. heinäkuuta 2007, 13:34
+ * Created on 16. heinï¿½kuuta 2007, 13:34
  *
  */
 
@@ -40,8 +40,10 @@ public class ToggleProjectionSettings extends AbstractGraphTool implements Wando
     
 
 
-    
-    /** Creates a new instance of ToggleProjectionSettings */
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of ToggleProjectionSettings */
     public ToggleProjectionSettings(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -55,8 +57,8 @@ public class ToggleProjectionSettings extends AbstractGraphTool implements Wando
     
     
     @Override
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             try {
                 graphPanel.getProjection().useNextProjectionSettings();

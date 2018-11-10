@@ -30,7 +30,6 @@ import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.TopicMapException;
 
@@ -39,8 +38,10 @@ import org.wandora.topicmap.TopicMapException;
  * @author akikivela
  */
 public class CommitPush extends AbstractGitTool implements WandoraTool {
-    
-    private CommitPushUI commitPushUI = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private CommitPushUI commitPushUI = null;
     
     
     @Override

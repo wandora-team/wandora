@@ -45,7 +45,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool {
-    public static String HYPERCUBE_GRAPH_SI = "http://wandora.org/si/hypercube/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String HYPERCUBE_GRAPH_SI = "http://wandora.org/si/hypercube/";
     
     public static String siPattern = "http://wandora.org/si/hypercube/vertex/__n__";
     public static String basenamePattern = "Hypercube vertex __n__";
@@ -238,23 +241,23 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
             ArrayList<T2<String,String>> edges = new ArrayList<T2<String,String>>();
             if(this.dimension == 0) {}
             else if(this.dimension == 1) {
-                edges.add(new T2("0", "0-1"));
+                edges.add(new T2<String,String>("0", "0-1"));
             }
             else {
                 if(parent != null) {
                     Collection<T2<String,String>> parentEdges = parent.getEdges();
                     edges.addAll(parentEdges);
                     
-                    for(T2 edge : parentEdges) {
+                    for(T2<String,String> edge : parentEdges) {
                         if(edge != null) {
-                            edges.add( new T2( edge.e1+"-"+this.dimension, edge.e2+"-"+this.dimension ));
+                            edges.add( new T2<String,String>( edge.e1+"-"+this.dimension, edge.e2+"-"+this.dimension ));
                         }
                     }
                     
                     Collection<String> parentVertices = parent.getVertices();
                     for(String vertex : parentVertices) {
                         if(vertex != null) {
-                            edges.add( new T2(vertex+"-"+this.dimension, vertex) );
+                            edges.add( new T2<String,String>(vertex+"-"+this.dimension, vertex) );
                         }
                     }
                     //System.out.println("edges: dim="+this.dimension+", edges="+edges.size());

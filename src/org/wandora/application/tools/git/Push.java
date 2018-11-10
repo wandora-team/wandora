@@ -31,7 +31,6 @@ import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 
 
@@ -40,8 +39,10 @@ import org.wandora.application.contexts.Context;
  * @author akikivela
  */
 public class Push extends AbstractGitTool implements WandoraTool {
-    
-    private static PushUI pushUI = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private static PushUI pushUI = null;
     
     
     @Override

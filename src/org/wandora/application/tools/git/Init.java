@@ -26,7 +26,6 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
@@ -39,8 +38,11 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class Init extends AbstractGitTool implements WandoraTool {
     
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public void execute(Wandora wandora, Context context) {
 
         try {

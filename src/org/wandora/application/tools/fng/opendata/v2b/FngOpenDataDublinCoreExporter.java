@@ -45,7 +45,6 @@ import org.w3c.dom.Document;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -56,7 +55,6 @@ import org.wandora.application.tools.exporters.DOTExport;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -71,7 +69,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 
 public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements WandoraTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
     
     public static boolean EXPORT_ARTISTS = true;
     public static boolean EXPORT_ARTWORKS = true;
@@ -164,6 +165,7 @@ public class FngOpenDataDublinCoreExporter extends AbstractExportTool implements
                 Collection<Topic> data = make(tm, getCurrentLogger());
                 if(forceStop()) {
                     log("Aborting.");
+                    out.close();
                     return;
                 }
                 

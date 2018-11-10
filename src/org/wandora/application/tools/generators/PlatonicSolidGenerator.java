@@ -39,7 +39,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class PlatonicSolidGenerator extends AbstractGenerator implements WandoraTool {
-    public static boolean connectWithWandoraClass = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public static boolean connectWithWandoraClass = true;
     public static String PLATONIC_SOLID_GRAPH_SI = "http://wandora.org/si/platonic-solid";
     
     

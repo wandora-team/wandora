@@ -28,7 +28,6 @@
 package org.wandora.application.tools.generators;
 
 
-import org.wandora.application.tools.extractors.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.*;
@@ -37,7 +36,6 @@ import org.wandora.application.contexts.*;
 import org.wandora.utils.*;
 import org.wandora.utils.Tuples.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.io.*;
@@ -53,7 +51,10 @@ import java.net.*;
  * @author  akivela
  */
 public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
-    public static final int L_SYSTEM = 11;
+
+	private static final long serialVersionUID = 1L;
+
+	public static final int L_SYSTEM = 11;
     public static final int RAW_RESULT = 12;
     
     
@@ -108,7 +109,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
             lsystemName = options.get(optionsPrefix + ".lsystem[" + i +"].name");
             lsystemSystem = options.get(optionsPrefix + ".lsystem[" + i +"].system");
             if(lsystemName != null && lsystemSystem != null) {
-                lsystems.add(new T2(lsystemName, lsystemSystem));
+                lsystems.add(new T2<String,String>(lsystemName, lsystemSystem));
                 lSystemComboBox.addItem(lsystemName);
             }
             i++;
@@ -120,7 +121,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         try {
             int lsystemIndex =  lSystemComboBox.getSelectedIndex();
             if(lsystems.size() > lsystemIndex) {
-                T2 namedLSystem = (T2) lsystems.get(lsystemIndex);
+                T2<String,String> namedLSystem = lsystems.get(lsystemIndex);
                 if(namedLSystem != null) {
                     String lsystemSystem = (String) namedLSystem.e2;
                     if(lsystemSystem != null) {
@@ -142,7 +143,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
             String newLSystemName = WandoraOptionPane.showInputDialog(parent, "Name of created L-system?", "", "Name of created L-system?");
             if(newLSystemSystem != null && newLSystemName.length()>0) {
                 lSystemComboBox.addItem(newLSystemName);
-                lsystems.add(new T2(newLSystemName, newLSystemSystem));
+                lsystems.add(new T2<>(newLSystemName, newLSystemSystem));
                 lSystemComboBox.setSelectedIndex(lSystemComboBox.getItemCount()-1);
                 if(parent != null && parent.getOptions() != null) {
                     Options options = parent.getOptions();

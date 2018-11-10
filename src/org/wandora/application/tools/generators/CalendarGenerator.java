@@ -40,7 +40,9 @@ import java.text.*;
  */
 public class CalendarGenerator extends AbstractGenerator implements WandoraTool {
     
-    public static String CALENDAR_SI_BODY = "http://wandora.org/si/calendar/";
+	private static final long serialVersionUID = 1L;
+	
+	public static String CALENDAR_SI_BODY = "http://wandora.org/si/calendar/";
     
     
     /** Creates a new instance of CalendarGenerator */
@@ -58,15 +60,15 @@ public class CalendarGenerator extends AbstractGenerator implements WandoraTool 
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        TopicMap topicmap = solveContextTopicMap(admin, context);
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        TopicMap topicmap = solveContextTopicMap(wandora, context);
         
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,
             "Calendar topic map generator",
             "Creates a topic map that represents one year calendar.",
             true,new String[][]{
             new String[]{"Years","string", "", "Use comma (,) to separate years. Use minus (-) to define durations."},
-        },admin);
+        },wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
         Map<String,String> values=god.getValues();

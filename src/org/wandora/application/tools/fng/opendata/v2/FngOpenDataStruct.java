@@ -26,7 +26,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
-import org.json.JSONObject;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -99,7 +98,7 @@ public class FngOpenDataStruct {
     
     public void addTitle(String str, String lang) {
         if(str != null) {
-            titles.add(new T2(str, lang));
+            titles.add(new T2<String,String>(str, lang));
         }
     }
     
@@ -115,7 +114,7 @@ public class FngOpenDataStruct {
     
     public void addType(String str, String lang) {
         if(str != null) {
-            types.add(new T2(str, lang));
+            types.add(new T2<>(str, lang));
         }
     }
     
@@ -132,7 +131,7 @@ public class FngOpenDataStruct {
     
     public void addIdentifier(String str, String lang) {
         if(str != null) {
-            identifiers.add(new T2(str, lang));
+            identifiers.add(new T2<>(str, lang));
         }
     }
     
@@ -149,7 +148,7 @@ public class FngOpenDataStruct {
     
     public void addCreator(String str, String lang) {
         if(str != null) {
-            creators.add(new T2(str, lang));
+            creators.add(new T2<>(str, lang));
         }
     }
     
@@ -166,7 +165,7 @@ public class FngOpenDataStruct {
     
     public void addDate(String str, String lang) {
         if(str != null) {
-            dates.add(new T2(str, lang));
+            dates.add(new T2<>(str, lang));
         }
     }
     
@@ -182,7 +181,7 @@ public class FngOpenDataStruct {
     
     public void addSubject(String str, String lang) {
         if(str != null) {
-            subjects.add(new T2(str, lang));
+            subjects.add(new T2<>(str, lang));
         }
     }
     
@@ -199,7 +198,7 @@ public class FngOpenDataStruct {
     
     public void addFormat(String str, String lang) {
         if(str != null) {
-            formats.add(new T2(str, lang));
+            formats.add(new T2<>(str, lang));
         }
     }
     
@@ -216,7 +215,7 @@ public class FngOpenDataStruct {
     
     public void addRights(String str, String lang) {
         if(str != null) {
-            rights.add(new T2(str, lang));
+            rights.add(new T2<>(str, lang));
         }
     }
     
@@ -234,7 +233,7 @@ public class FngOpenDataStruct {
     
     public void addPublisher(String str, String lang) {
         if(str != null) {
-            publishers.add(new T2(str, lang));
+            publishers.add(new T2<>(str, lang));
         }
     }
     
@@ -250,7 +249,7 @@ public class FngOpenDataStruct {
     
     public void addRelation(String str, String lang) {
         if(str != null) {
-            relations.add(new T2(str, lang));
+            relations.add(new T2<>(str, lang));
         }
     }
     
@@ -267,7 +266,7 @@ public class FngOpenDataStruct {
     
     public void addDescription(String str, String lang) {
         if(str != null) {
-            descriptions.add(new T2(str, lang));
+            descriptions.add(new T2<>(str, lang));
         }
     }
     

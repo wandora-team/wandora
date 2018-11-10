@@ -25,7 +25,6 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 
 /**
@@ -34,8 +33,11 @@ import org.wandora.application.contexts.Context;
  */
 public class Status extends AbstractGitTool implements WandoraTool {
     
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public void execute(Wandora wandora, Context context) {
 
         try {

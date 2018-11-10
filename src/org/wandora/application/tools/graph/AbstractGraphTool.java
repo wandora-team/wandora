@@ -21,7 +21,7 @@
  * 
  * AbstractGraphTool.java
  *
- * Created on 13. kesäkuuta 2007, 15:32
+ * Created on 13. kesï¿½kuuta 2007, 15:32
  *
  */
 
@@ -42,7 +42,10 @@ import org.wandora.application.*;
  * @author akivela
  */
 public abstract class AbstractGraphTool extends AbstractWandoraTool implements WandoraTool {
-    private TopicMapGraphPanel graphPanel = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private TopicMapGraphPanel graphPanel = null;
     
     
     
@@ -57,10 +60,10 @@ public abstract class AbstractGraphTool extends AbstractWandoraTool implements W
     
     
     @Override
-    public void execute(Wandora admin, Context context){
+    public void execute(Wandora wandora, Context context){
         try {
-            synchronized(solveGraphPanel(admin,context)){
-                executeSynchronized(admin,context);
+            synchronized(solveGraphPanel(wandora,context)){
+                executeSynchronized(wandora,context);
             }
         }
         catch(Exception e) {
@@ -93,8 +96,8 @@ public abstract class AbstractGraphTool extends AbstractWandoraTool implements W
         return null;
     }
     
-    public VModel solveModel(Wandora admin, Context context){
-        TopicMapGraphPanel panel=solveGraphPanel(admin,context);
+    public VModel solveModel(Wandora wandora, Context context){
+        TopicMapGraphPanel panel=solveGraphPanel(wandora,context);
         if(panel==null) return null;
         else return panel.getModel();
     }

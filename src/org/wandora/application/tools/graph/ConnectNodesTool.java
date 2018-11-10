@@ -21,7 +21,7 @@
  * 
  * ConnectNodesTool.java
  *
- * Created on 16. heinäkuuta 2007, 14:43
+ * Created on 16. heinï¿½kuuta 2007, 14:43
  *
  */
 
@@ -37,7 +37,9 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
  */
 public class ConnectNodesTool extends AbstractGraphTool {
     
-    /** Creates a new instance of ConnectNodesTool */
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of ConnectNodesTool */
     public ConnectNodesTool(TopicMapGraphPanel gp) {
         super(gp);
     }

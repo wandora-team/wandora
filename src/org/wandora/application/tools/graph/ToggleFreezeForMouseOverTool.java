@@ -40,7 +40,10 @@ import org.wandora.application.gui.topicpanels.graphpanel.*;
 public class ToggleFreezeForMouseOverTool extends AbstractGraphTool implements WandoraTool {
     
     
-    /** Creates a new instance of ToggleFreezeForMouseOverTool */
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of ToggleFreezeForMouseOverTool */
     public ToggleFreezeForMouseOverTool(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -58,8 +61,8 @@ public class ToggleFreezeForMouseOverTool extends AbstractGraphTool implements W
     }
     
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         //System.out.println("GRAPHPANEL: "+graphPanel);
         if(graphPanel != null) {
             graphPanel.setFreezeForMouseOver(!graphPanel.getFreezeForMouseOver());

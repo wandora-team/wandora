@@ -21,7 +21,7 @@
  * 
  * CloseNodeTopic.java
  *
- * Created on 7. kesäkuuta 2007, 11:24
+ * Created on 7. kesï¿½kuuta 2007, 11:24
  *
  */
 
@@ -40,7 +40,11 @@ import java.util.*;
  */
 public class CloseTopicNode extends AbstractGraphTool {
     
-    private boolean allButCurrent;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private boolean allButCurrent;
     
     public CloseTopicNode(TopicMapGraphPanel gp) {
         this(gp, false);
@@ -61,7 +65,7 @@ public class CloseTopicNode extends AbstractGraphTool {
     
     
     @Override
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         VModel model = null;
         VNode node = null;
         if(!allButCurrent){
@@ -91,7 +95,7 @@ public class CloseTopicNode extends AbstractGraphTool {
                     singleLog(e);
                 }
             }
-            model=solveModel(admin,context);
+            model=solveModel(wandora, context);
             ArrayList<VNode> all=new ArrayList<VNode>(model.getNodes());
             for(VNode vn : all){
                 if(!selected.contains(vn)) model.removeNode(vn);

@@ -37,8 +37,10 @@ import org.wandora.topicmap.TopicMapException;
  * @author akikivela
  */
 public class Commit extends AbstractGitTool implements WandoraTool {
-    
-    private CommitUI commitUI = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private CommitUI commitUI = null;
     
     
     @Override

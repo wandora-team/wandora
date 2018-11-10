@@ -40,8 +40,10 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 
 public class ToggleViewFilterInfo extends AbstractGraphTool implements WandoraTool {
     
-    
-    /** Creates a new instance of ToggleViewFilterInfo */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of ToggleViewFilterInfo */
     public ToggleViewFilterInfo(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -59,8 +61,8 @@ public class ToggleViewFilterInfo extends AbstractGraphTool implements WandoraTo
     }
     
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             graphPanel.setViewFilterInfo(!graphPanel.getViewFilterInfo());
         }

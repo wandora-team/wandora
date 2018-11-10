@@ -21,7 +21,7 @@
 package org.wandora.application.tools.git;
 
 
-import java.io.IOException;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.api.MergeResult.MergeStatus;
@@ -34,10 +34,9 @@ import org.eclipse.jgit.transport.FetchResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
-import org.wandora.topicmap.TopicMapException;
+
 
 /**
  *
@@ -45,7 +44,10 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class Pull extends AbstractGitTool implements WandoraTool {
     
-    private PullUI pullUI = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private PullUI pullUI = null;
     
     
     @Override

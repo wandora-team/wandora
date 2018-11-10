@@ -46,9 +46,10 @@ import org.wandora.topicmap.packageio.ZipPackageInput;
  * @author akikivela
  */
 public abstract class AbstractGitTool extends AbstractWandoraTool implements WandoraTool {
-    
 
-    private static String username = null;
+	private static final long serialVersionUID = 1L;
+
+	private static String username = null;
     private static String password = null;
     
     

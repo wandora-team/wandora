@@ -21,7 +21,7 @@
  * 
  * ToggleAntialiasTool.java
  *
- * Created on 11. kesäkuuta 2007, 16:33
+ * Created on 11. kesï¿½kuuta 2007, 16:33
  *
  */
 
@@ -39,8 +39,11 @@ import org.wandora.application.gui.topicpanels.graphpanel.*;
  */
 public class ToggleAntialiasTool extends AbstractGraphTool implements WandoraTool {
     
-    
-    /** Creates a new instance of ToggleAntialiasTool */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of ToggleAntialiasTool */
     public ToggleAntialiasTool(TopicMapGraphPanel gp) {
         super(gp);
         this.setContext(new GraphNodeContext());
@@ -57,8 +60,8 @@ public class ToggleAntialiasTool extends AbstractGraphTool implements WandoraToo
                "graph is draw smooth. Drawing smooth graphics requires more computing power.";
     }
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         //System.out.println("GRAPHPANEL: "+graphPanel);
         if(graphPanel != null) {
             graphPanel.setAntialized(!graphPanel.getAntialized());

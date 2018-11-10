@@ -56,8 +56,10 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 
 public abstract class AbstractSliderTool extends AbstractGraphTool implements WandoraTool, ChangeListener, MouseListener {
     
-    
-    private TopicMapGraphPanel graphPanel = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private TopicMapGraphPanel graphPanel = null;
     private JWindow sliderPopup = null;
     private SimpleSlider slider = null;
     private SimpleLabel sliderLabel = null;
@@ -113,8 +115,8 @@ public abstract class AbstractSliderTool extends AbstractGraphTool implements Wa
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
-        // graphPanel = this.solveGraphPanel(admin, context);
+    public void execute(Wandora wandora, Context context) {
+        // graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             ActionEvent ae = context.getContextEvent();
             Object o = ae.getSource();
@@ -137,7 +139,7 @@ public abstract class AbstractSliderTool extends AbstractGraphTool implements Wa
     
     
     @Override
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora wandora, Context context) {
         // NOTHING HERE!
     }
     

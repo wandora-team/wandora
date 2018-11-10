@@ -41,7 +41,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class RandomGraphGenerator extends AbstractGenerator implements WandoraTool {
-    public static String RANDOM_GRAPH_SI = "http://wandora.org/si/random-graph";
+
+	private static final long serialVersionUID = 1L;
+
+	public static String RANDOM_GRAPH_SI = "http://wandora.org/si/random-graph";
 
     public static String siPattern = "http://wandora.org/si/random-graph/node/__n__";
     public static String basenamePattern = "Random graph node __n__";

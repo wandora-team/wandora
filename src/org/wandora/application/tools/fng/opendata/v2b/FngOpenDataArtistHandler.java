@@ -23,14 +23,14 @@
 package org.wandora.application.tools.fng.opendata.v2b;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.velocity.GenericVelocityHelper;
 
 /**
@@ -107,7 +107,7 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
                 for(Association birthTime : birthTimes) {
                     Topic timeTopic = birthTime.getPlayer(timeType);
                     if(timeTopic != null) {
-                        HashMap properties = new HashMap();
+                        Map<String,String> properties = new LinkedHashMap<>();
                         if(locationType != null) {
                             Topic locationTopic = birthTime.getPlayer(locationType);
                             if(locationTopic != null) {
@@ -125,7 +125,7 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
                 for(Association deathTime : deathTimes) {
                     Topic timeTopic = deathTime.getPlayer(timeType);
                     if(timeTopic != null) {
-                        HashMap properties = new HashMap();
+                        Map<String,String> properties = new LinkedHashMap<>();
                         if(locationType != null) {
                             Topic locationTopic = deathTime.getPlayer(locationType);
                             if(locationTopic != null) {
@@ -141,7 +141,7 @@ public class FngOpenDataArtistHandler extends FngOpenDataAbstractHandler impleme
             // ARTWORKS
             Collection<Topic> artworks = GenericVelocityHelper.getPlayers(t, AUTHOR_SI, ARTWORK_SI);
             for( Topic artwork : artworks ) {
-                HashMap properties = new HashMap();
+                Map<String,String> properties = new LinkedHashMap<>();
                 properties.put("id", artwork.getBaseName());
                 properties.put("uri", getResourceURIBase()+urlEncode(artwork.getBaseName()));
                 for( Locator si : artwork.getSubjectIdentifiers() ) {

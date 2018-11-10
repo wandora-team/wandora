@@ -21,7 +21,7 @@
  * 
  * SetMouseTool.java
  *
- * Created on 16. heinäkuuta 2007, 14:52
+ * Created on 16. heinï¿½kuuta 2007, 14:52
  *
  */
 
@@ -31,16 +31,17 @@ package org.wandora.application.tools.graph;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.topicpanels.graphpanel.*;
-import java.awt.*;
-import java.util.HashMap;
+
 
 /**
  *
  * @author akivela
  */
 public class SetMouseTool extends AbstractGraphTool implements WandoraTool {
-    
-    private int myMouseTool = -1;
+
+	private static final long serialVersionUID = 1L;
+
+	private int myMouseTool = -1;
 
 
     
@@ -74,8 +75,8 @@ public class SetMouseTool extends AbstractGraphTool implements WandoraTool {
     }
     
     
-    public void executeSynchronized(Wandora admin, Context context) {
-        TopicMapGraphPanel graphPanel = this.solveGraphPanel(admin, context);
+    public void executeSynchronized(Wandora wandora, Context context) {
+        TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             graphPanel.setMouseTool(myMouseTool);
         }
