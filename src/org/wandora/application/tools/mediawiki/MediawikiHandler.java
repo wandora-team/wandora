@@ -58,7 +58,10 @@ import org.xml.sax.SAXException;
  */
 
 public abstract class MediawikiHandler extends AbstractWandoraTool {
-    private static boolean logged = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private static boolean logged = false;
     private HashMap<String, String> cookies = new HashMap<String, String>(12);
     
     private static final String VERSION = "1.0";

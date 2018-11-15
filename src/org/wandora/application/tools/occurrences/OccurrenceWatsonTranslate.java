@@ -25,16 +25,12 @@
 package org.wandora.application.tools.occurrences;
 
 
-import com.google.api.translate.Language;
 import java.util.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.utils.Tuples.T2;
-import org.wandora.utils.language.GoogleTranslateBox;
-import org.wandora.utils.language.SelectGoogleTranslationLanguagesPanel;
 import org.wandora.utils.language.SelectWatsonTranslationLanguagesPanel;
 import org.wandora.utils.language.WatsonTranslateBox;
 
@@ -48,9 +44,10 @@ import org.wandora.utils.language.WatsonTranslateBox;
 public class OccurrenceWatsonTranslate extends AbstractWandoraTool implements WandoraTool {
 
 
+	private static final long serialVersionUID = 1L;
 
 
-    /** Creates a new instance of OccurrenceWatsonTranslate */
+	/** Creates a new instance of OccurrenceWatsonTranslate */
     public OccurrenceWatsonTranslate() {
     }
 

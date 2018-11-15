@@ -51,7 +51,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public class MediawikiOccurrenceUploader extends MediawikiHandler implements WandoraTool {
     
-    private static MediawikiUploaderConfigurationUI configurationUI = null;
+	private static final long serialVersionUID = 1L;
+	
+	private static MediawikiUploaderConfigurationUI configurationUI = null;
     private static MediawikiUploaderConfiguration config = new MediawikiUploaderConfiguration();
     
     private boolean requiresRefresh = false;
@@ -88,7 +90,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
         Object source = context.getContextSource();
         String o = null;
         Collection<Topic> dataTypes;
-        HashSet typeSet = new HashSet();
+        HashSet<Topic> typeSet = new HashSet<>();
         Topic carrier = null;
         Topic type = null;
         Topic lang = null;
@@ -154,7 +156,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
                 Iterator objects = context.getContextObjects();
                 Object cx = null;
                 Topic topic = null;
-                Collection occurranceTypes = null;
+                Collection<Topic> occurranceTypes = null;
                 
                 while(objects.hasNext()) {
                     cx = objects.next();
@@ -172,7 +174,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
                         if(co instanceof Topic) {
                             carrier = (Topic) co;
                             dataTypes = carrier.getDataTypes();
-                            Iterator dataTypeObjects = dataTypes.iterator();
+                            Iterator<Topic> dataTypeObjects = dataTypes.iterator();
                             
                             config = setupUI(wandora, typeSet, null, carrier, uploadLang, true);
                             if(config != null) {
@@ -231,7 +233,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
         return requiresRefresh;
     }
     
-    public MediawikiUploaderConfiguration setupUI(Wandora wandora, HashSet dataTypes, String o, Topic carrier, Topic lang, boolean batch) throws TopicMapException {        
+    public MediawikiUploaderConfiguration setupUI(Wandora wandora, HashSet<Topic> dataTypes, String o, Topic carrier, Topic lang, boolean batch) throws TopicMapException {        
         URL fileUrl = null;
         
         if(!isConfigured) {            
@@ -243,7 +245,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
             configurationUI.resetDescriptionTypeItems();
             if (dataTypes.size() > 1) {
                 configurationUI.addDescriptionTypeItem("none");
-                for (Iterator it = dataTypes.iterator(); it.hasNext();) {
+                for (Iterator<Topic> it = dataTypes.iterator(); it.hasNext();) {
                     Topic dataType = (Topic) it.next();
                     configurationUI.addDescriptionTypeItem(dataType);
                 }

@@ -48,7 +48,10 @@ import java.io.*;
  * @author  akivela
  */
 public class AbstractImportDialog extends javax.swing.JDialog {
-    private Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora = null;
     private WandoraTool parentTool = null;
     private boolean wasAccepted = false;
     private HashMap<Component,Integer> registeredSources = null;
@@ -94,7 +97,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
     public void registerSource(String name, Component component, int id) {
         if(component == null) return;
         if(registeredSources.get(component) == null) {
-            registeredSources.put(component, new Integer(id));
+            registeredSources.put(component, Integer.valueOf(id));
             tabbedSourcePane.addTab(name, component);
         }
     }

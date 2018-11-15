@@ -42,8 +42,11 @@ import java.util.*;
  */
 public class MakeOccurrenceFromBasename extends AbstractWandoraTool implements WandoraTool {
 
-    public static boolean overWrite = false;
+	private static final long serialVersionUID = 1L;
+	
+	public static boolean overWrite = false;
 
+	
     /**
      * Creates a new instance of MakeOccurrenceFromBasename
      */

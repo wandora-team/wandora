@@ -21,7 +21,7 @@
  *
  * OccurrenceRegexReplacerOne.java
  *
- * Created on 10. heinäkuuta 2007, 13:00
+ * Created on 10. heinï¿½kuuta 2007, 13:00
  *
  */
 
@@ -44,7 +44,10 @@ import java.util.*;
  * @author akivela
  */
 public class OccurrenceRegexReplacerOne extends AbstractWandoraTool implements WandoraTool {
-    RegularExpressionEditor editor = null;
+
+	private static final long serialVersionUID = 1L;
+
+	RegularExpressionEditor editor = null;
 
 
     public OccurrenceRegexReplacerOne() {

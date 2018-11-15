@@ -31,7 +31,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
 
 
 
@@ -41,9 +40,11 @@ import org.wandora.*;
  */
 public class CopyOccurrence  extends AbstractWandoraTool implements WandoraTool {
     
-    
-    
-    /** Creates a new instance of CopyOccurrence */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of CopyOccurrence */
     public CopyOccurrence() {
     }
     public CopyOccurrence(Context proposedContext) {

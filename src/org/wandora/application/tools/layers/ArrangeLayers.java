@@ -57,8 +57,10 @@ import javax.swing.*;
 
 public class ArrangeLayers extends AbstractLayerTool implements WandoraTool {
 
-    
-    private int option = LayerTree.MOVE_LAYER_UP;
+
+	private static final long serialVersionUID = 1L;
+
+	private int option = LayerTree.MOVE_LAYER_UP;
 
 
 

@@ -30,7 +30,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.utils.*;
 
 import java.io.*;
@@ -45,7 +44,9 @@ import java.util.*;
  */
 public class URLOccurrenceChecker extends AbstractWandoraTool implements WandoraTool {
 
-    String urlExists = "EXISTS\t'<locator/>'";
+	private static final long serialVersionUID = 1L;
+
+	String urlExists = "EXISTS\t'<locator/>'";
     String urlDoesntExists = "MISSING\t'<locator/>'";
     String noURLOccurrences = "NOT URL\t'<topic/>'.";
     String illegalURLOccurrence = "INVALID URL\t'<topic/>'.";
@@ -65,24 +66,24 @@ public class URLOccurrenceChecker extends AbstractWandoraTool implements Wandora
     String reportType = "sm";
 
     File currentDirectory = null;
-    Iterator topicsToCheck;
+    Iterator<Topic> topicsToCheck;
 
 
     public URLOccurrenceChecker() {}
     public URLOccurrenceChecker(Context context) {
         setContext(context);
     }
-    public URLOccurrenceChecker(Collection topics) {
+    public URLOccurrenceChecker(Collection<Topic> topics) {
         topicsToCheck = topics.iterator();
     }
-    public URLOccurrenceChecker(Iterator topics) {
+    public URLOccurrenceChecker(Iterator<Topic> topics) {
         topicsToCheck = topics;
     }
 
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         setDefaultLogger();
 
         if(topicsToCheck == null) {

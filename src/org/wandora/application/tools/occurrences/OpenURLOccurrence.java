@@ -40,9 +40,11 @@ import org.wandora.application.contexts.*;
  */
 public class OpenURLOccurrence  extends AbstractWandoraTool implements WandoraTool {
 
-    
-    
-    /** Creates a new instance of OpenURLOccurrence */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of OpenURLOccurrence */
     public OpenURLOccurrence() {
     }
     public OpenURLOccurrence(Context proposedContext) {

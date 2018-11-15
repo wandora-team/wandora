@@ -42,7 +42,9 @@ import org.wandora.topicmap.*;
  */
 public class ChangeOccurrenceType  extends AbstractWandoraTool implements WandoraTool {
     
-    private Topic occurrenceType = null;
+	private static final long serialVersionUID = 1L;
+	
+	private Topic occurrenceType = null;
     private Topic masterTopic = null;
     
     private boolean deleteAll = false;

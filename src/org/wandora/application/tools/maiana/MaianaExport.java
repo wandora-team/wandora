@@ -37,7 +37,7 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.exporters.AbstractExportTool;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.utils.IObox;
+
 
 
 
@@ -48,7 +48,10 @@ import org.wandora.utils.IObox;
  * @author akivela
  */
 public class MaianaExport extends AbstractExportTool implements WandoraTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
 
     public MaianaExport() {

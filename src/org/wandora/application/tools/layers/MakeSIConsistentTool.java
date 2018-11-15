@@ -40,7 +40,10 @@ import org.wandora.application.gui.*;
  * @author akivela
  */
 public class MakeSIConsistentTool extends AbstractLayerTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean requiresRefresh = false;
     private static final String title = "Confirm";
     
     

@@ -33,13 +33,11 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
-import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
@@ -53,7 +51,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements  WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean requiresRefresh = false;
     private Context preferredContext = null;
 
     public static final String INCLUSION_TYPE = "http://wandora.org/si/find-point-in-polygon/inclusion";
@@ -89,7 +90,7 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
     
 
 
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         requiresRefresh = false;
         Iterator topics = null;
         if(preferredContext != null) topics = preferredContext.getContextObjects();
@@ -99,9 +100,9 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
             int pointcount = 0;
             int polygoncount = 0;
             int acount = 0;
-            TopicMap tm = admin.getTopicMap();
+            TopicMap tm = wandora.getTopicMap();
 
-            GenericOptionsDialog god=new GenericOptionsDialog(admin,
+            GenericOptionsDialog god=new GenericOptionsDialog(wandora,
                 "Find point occurrences in polygon occurrence and associate",
                 "Select point and polygon occurrence types.",true,new String[][]{
                 new String[]{"Type of point carrier topics","topic","","Type of topics carrying the point occurrence"},
@@ -110,7 +111,7 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
                 new String[]{"Occurrence type of polygons","topic","","Type of occurrences that contain polygons"},
                 new String[]{"Scope of occurrences","topic","","Scope i.e. language of changed occurrences"},
                 new String[]{"Reverse point coordinates","boolean","","Swap latitude with longitude"},
-            },admin);
+            },wandora);
             god.setVisible(true);
             if(god.wasCancelled()) return;
 
@@ -126,7 +127,7 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
             setDefaultLogger();
             setLogTitle("Finding point in polygons occurrences...");
 
-            Collection<Topic> pointTopics = new ArrayList();
+            Collection<Topic> pointTopics = new ArrayList<>();
             if(pointType == null) {
                 while(topics.hasNext() && !forceStop()) {
                     pointTopics.add((Topic) topics.next());
@@ -136,7 +137,7 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
                 pointTopics = tm.getTopicsOfType(pointType);
             }
 
-            Collection<Topic> polygonTopics = new ArrayList();
+            Collection<Topic> polygonTopics = new ArrayList<>();
             if(polygonType == null) {
                 while(topics.hasNext() && !forceStop()) {
                     polygonTopics.add((Topic) topics.next());
@@ -146,8 +147,8 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
                 polygonTopics = tm.getTopicsOfType(polygonType);
             }
 
-            HashMap<Topic,String> pointOccurrences = new HashMap();
-            HashMap<Topic,String> polygonOccurrences = new HashMap();
+            HashMap<Topic,String> pointOccurrences = new HashMap<>();
+            HashMap<Topic,String> polygonOccurrences = new HashMap<>();
 
             try {
                 

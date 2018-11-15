@@ -31,7 +31,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
 
 
 
@@ -41,10 +40,11 @@ import org.wandora.*;
  */
 public class AppendOccurrence extends AbstractWandoraTool implements WandoraTool {
     
-    
-    
 
-    public AppendOccurrence() {
+	private static final long serialVersionUID = 1L;
+
+
+	public AppendOccurrence() {
     }
     public AppendOccurrence(Context proposedContext) {
         this.setContext(proposedContext);

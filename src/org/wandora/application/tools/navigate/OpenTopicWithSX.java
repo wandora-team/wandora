@@ -33,7 +33,6 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.utils.*;
 import org.wandora.utils.swing.*;
 
@@ -45,9 +44,10 @@ import javax.swing.*;
  * @author  olli, akivela
  */
 public class OpenTopicWithSX extends AbstractWandoraTool implements WandoraTool {
-    
 
-    private static InputDialogWithHistory dialog = null;
+	private static final long serialVersionUID = 1L;
+	
+	private static InputDialogWithHistory dialog = null;
     
 
     public OpenTopicWithSX() {

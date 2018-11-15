@@ -43,9 +43,11 @@ import java.util.*;
  */
 public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool {
     
-    
 
-    public SpreadOccurrence() {
+	private static final long serialVersionUID = 1L;
+
+
+	public SpreadOccurrence() {
     }
     public SpreadOccurrence(Context proposedContext) {
         this.setContext(proposedContext);
@@ -93,7 +95,7 @@ public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool
             Topic topic = null;
             String spreadOccurrence = null;
 
-            Iterator typeIterator = null;
+            Iterator<Topic> typeIterator = null;
             Collection<Topic> types = null;
             Hashtable<Topic, String> occurrences = null;
             //Iterator occurrenceIterator = null;

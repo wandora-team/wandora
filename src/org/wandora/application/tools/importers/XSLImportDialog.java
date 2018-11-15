@@ -28,17 +28,13 @@ package org.wandora.application.tools.importers;
 
 
 
-import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.utils.*;
 
 import java.io.*;
-import java.util.*;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-import javax.swing.*;
+
 
 /**
  *
@@ -46,7 +42,10 @@ import javax.swing.*;
  */
 public class XSLImportDialog extends javax.swing.JDialog {
     
-    private Wandora wandora;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora;
     public boolean accept = false;
     
     /**

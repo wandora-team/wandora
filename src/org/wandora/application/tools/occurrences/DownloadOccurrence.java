@@ -47,7 +47,9 @@ import java.util.*;
  */
 public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTool {
 
-    public static final int TARGET_FILE = 1;
+	private static final long serialVersionUID = 1L;
+
+	public static final int TARGET_FILE = 1;
     public static final int TARGET_OCCURRENCE = 2;
 
     private int target = TARGET_FILE;
@@ -323,25 +325,6 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
 //        return "file://" + f.getPath().replace('\\', '/');
     }
 
-
-    private String croppedFilename(String filename) {
-        if(filename != null) {
-            if(filename.length() > 40) filename = filename.substring(0,37) + "...";
-            return filename;
-        }
-        return "";
-    }
-
-
-    private String croppedFilename(File file) {
-        if(file != null) { return croppedFilename(file.getPath()); }
-        return "";
-    }
-
-
-    private String croppedUrlString(String urlString) {
-        return (urlString.length() > 60 ? urlString.substring(0,59) + "..." : urlString);
-    }
 
 
 

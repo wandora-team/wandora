@@ -44,8 +44,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class MediaWikiAPIUploader extends MediaWikiAPIHandler implements WandoraTool{
-    
-    private static final String DEFAULT_TYPE_SI  
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String DEFAULT_TYPE_SI  
             = "http://wandora.org/si/mediawiki/api/content/";
     private static final String DEFAULT_SCOPE_SI  
             = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";

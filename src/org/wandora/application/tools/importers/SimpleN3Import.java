@@ -21,7 +21,7 @@
  * 
  * SimpleN3Import.java
  *
- * Created on 6. heinäkuuta 2006, 10:29
+ * Created on 6. heinï¿½kuuta 2006, 10:29
  *
  */
 
@@ -42,7 +42,12 @@ import com.hp.hpl.jena.rdf.model.*;
  */
 public class SimpleN3Import extends SimpleRDFImport {
     
-    /**
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	/**
      * Creates a new instance of SimpleN3Import
      */
     public SimpleN3Import() {

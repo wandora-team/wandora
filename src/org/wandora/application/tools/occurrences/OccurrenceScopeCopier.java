@@ -44,7 +44,10 @@ import java.util.*;
  * @author akivela
  */
 public class OccurrenceScopeCopier extends AbstractWandoraTool implements WandoraTool {
-    private boolean REMOVE_AFTER_COPY = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean REMOVE_AFTER_COPY = false;
     private boolean COPY_NULLS = true;
     private boolean OVERWRITE_OLDIES = true;
     
@@ -78,12 +81,12 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool implements Wandor
     }
     
   
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora wandora, Context context) {   
         try {
             Iterator topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
-            GenericOptionsDialog god=new GenericOptionsDialog(admin,
+            GenericOptionsDialog god=new GenericOptionsDialog(wandora,
                 ( REMOVE_AFTER_COPY ? "Move occurrences to other type and scope" : "Copy occurrences to type and other scope" ),
                 "To change occurrence scopes please address source and target scopes.",true,new String[][]{
                 new String[]{"Type of source occurrences","topic","","Type of changed occurrences"},
@@ -92,7 +95,7 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool implements Wandor
                 new String[]{"Scope of target occurrences","topic","","Scope i.e. language of new occurrences"},
                 new String[]{"Overwrite existing occurrences?","boolean","false","Save existing target occurrences?"},
                 new String[]{"Copy also null occurrences?","boolean","false","Set target occurrences although source variant is null?"},
-            },admin);
+            },wandora);
             god.setVisible(true);
             if(god.wasCancelled()) return;
             

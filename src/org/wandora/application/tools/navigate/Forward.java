@@ -39,7 +39,10 @@ import javax.swing.*;
  */
 public class Forward extends AbstractWandoraTool {
     
-    /** Creates a new instance of Forward */
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of Forward */
     public Forward() {
     }
     

@@ -43,8 +43,11 @@ import org.wandora.application.gui.topicpanels.TopicPanel;
  * @author akivela
  */
 public class CloseCurrentTopicPanel extends AbstractWandoraTool implements WandoraTool {
-    
-    /** Creates a new instance of CloseCurrentTopicPanel */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of CloseCurrentTopicPanel */
     public CloseCurrentTopicPanel() {
     }
 

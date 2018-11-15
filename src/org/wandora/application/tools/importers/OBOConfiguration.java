@@ -21,7 +21,7 @@
  * 
  * OBOConfiguration.java
  *
- * Created on 10. heinäkuuta 2006, 12:39
+ * Created on 10. heinï¿½kuuta 2006, 12:39
  */
 
 package org.wandora.application.tools.importers;
@@ -39,8 +39,10 @@ import org.wandora.utils.swing.GuiTools;
  * @author  akivela, olli
  */
 public class OBOConfiguration extends javax.swing.JDialog {
-
-    private boolean cancelled=true;
+	
+	private static final long serialVersionUID = 1L;
+	
+	private boolean cancelled=true;
     
     /** Creates new form ImportConfiguration */
     public OBOConfiguration(java.awt.Frame parent, boolean modal) {

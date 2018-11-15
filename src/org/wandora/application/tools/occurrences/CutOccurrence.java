@@ -31,7 +31,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
 
 
 
@@ -41,9 +40,11 @@ import org.wandora.*;
  */
 public class CutOccurrence  extends AbstractWandoraTool implements WandoraTool {
     
-    
-    
-    /** Creates a new instance of CutOccurrence */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of CutOccurrence */
     public CutOccurrence() {
     }
     public CutOccurrence(Context proposedContext) {
@@ -63,7 +64,7 @@ public class CutOccurrence  extends AbstractWandoraTool implements WandoraTool {
 
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         Object source = getContext().getContextSource();
         if(source instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) source;

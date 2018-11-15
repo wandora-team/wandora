@@ -47,9 +47,12 @@ import javax.swing.*;
 public class TopicMapImport extends AbstractImportTool implements WandoraTool {
     
 
+	private static final long serialVersionUID = 1L;
 
-    
-    /**
+
+
+
+	/**
      * Creates a new instance of TopicMapImport
      */
     public TopicMapImport() {

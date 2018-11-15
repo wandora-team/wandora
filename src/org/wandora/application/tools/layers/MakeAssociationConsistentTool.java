@@ -46,7 +46,10 @@ import org.wandora.application.gui.*;
 
 
 public class MakeAssociationConsistentTool extends AbstractLayerTool implements WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean requiresRefresh = false;
     private static final String title = "Confirm";
     
     
@@ -72,16 +75,16 @@ public class MakeAssociationConsistentTool extends AbstractLayerTool implements 
     }
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         requiresRefresh = false;
-        Layer contextLayer =  solveContextLayer(admin, context);
+        Layer contextLayer =  solveContextLayer(wandora, context);
         
         if(contextLayer == null) {
-            WandoraOptionPane.showMessageDialog(admin, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
+            WandoraOptionPane.showMessageDialog(wandora, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        if(WandoraOptionPane.YES_OPTION != WandoraOptionPane.showConfirmDialog(admin,
+        if(WandoraOptionPane.YES_OPTION != WandoraOptionPane.showConfirmDialog(wandora,
                 "You are about to start topic map consistency check for layer '"+contextLayer.getName()+"'. "+
                 "Depending on your topic map size this operation may take a long time. "+
                 "Are you sure you want to start consistency check?",

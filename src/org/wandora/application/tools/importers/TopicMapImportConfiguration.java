@@ -46,7 +46,9 @@ import org.wandora.utils.Options;
 
 public class TopicMapImportConfiguration extends javax.swing.JPanel {
 
-    private Wandora wandora = null;
+	private static final long serialVersionUID = 1L;
+
+	private Wandora wandora = null;
     private boolean wasAccepted = false;
     private JDialog myDialog = null;
     

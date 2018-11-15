@@ -43,8 +43,11 @@ import org.wandora.application.tools.AbstractWandoraTool;
  * @author akivela
  */
 public class AddOccurrences extends AbstractWandoraTool implements WandoraTool {
-    
-    public AddOccurrences() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public AddOccurrences() {}
     public AddOccurrences(Context preferredContext) {
         setContext(preferredContext);
     }

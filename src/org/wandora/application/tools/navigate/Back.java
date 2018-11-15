@@ -26,6 +26,8 @@
  */
 
 package org.wandora.application.tools.navigate;
+
+
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
@@ -39,7 +41,9 @@ import javax.swing.*;
  */
 public class Back extends AbstractWandoraTool {
     
-    /** Creates a new instance of Back */
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of Back */
     public Back() {
     }
     

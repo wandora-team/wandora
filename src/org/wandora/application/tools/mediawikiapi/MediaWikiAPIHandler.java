@@ -41,7 +41,9 @@ import org.wandora.application.tools.AbstractWandoraTool;
 
 abstract class MediaWikiAPIHandler extends AbstractWandoraTool{
 
-    private static boolean loggedIn = false;
+	private static final long serialVersionUID = 1L;
+
+	private static boolean loggedIn = false;
     
     private static String token = null;
     private static String editToken = null;

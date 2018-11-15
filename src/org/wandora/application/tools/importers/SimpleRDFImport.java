@@ -35,7 +35,6 @@ import javax.swing.*;
 
 import com.hp.hpl.jena.rdf.model.*;
 import java.util.List;
-import static org.wandora.application.tools.extractors.rdf.AbstractRDFExtractor.RDF_LIST_ORDER;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
 
 
@@ -50,8 +49,9 @@ import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
  */
 public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
 
+	private static final long serialVersionUID = 1L;
 
-    public static final String anonSIPrefix="http://wandora.org/si/rdf/anon/";
+	public static final String anonSIPrefix="http://wandora.org/si/rdf/anon/";
 
     /**
      * Creates a new instance of SimpleRDFLocalImport
@@ -63,7 +63,7 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
     }
     
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         String o=options.get(prefix+"options");
         if(o!=null){
             int i=Integer.parseInt(o);
@@ -77,9 +77,9 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         System.out.println(prefix);
-        ImportConfiguration dialog=new ImportConfiguration(admin,true);
+        ImportConfiguration dialog=new ImportConfiguration(wandora,true);
         dialog.setOptions(getOptions());
         dialog.setVisible(true);
         if(!dialog.wasCancelled()){
@@ -90,7 +90,7 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
     }
     
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
         options.put(prefix+"options",""+getOptions());
     }    
     
@@ -250,14 +250,14 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
     public void RDF2TopicMap(Model model, TopicMap map) {
         // list the statements in the Model
         StmtIterator iter = model.listStatements();
-        Topic subjectTopic = null;
-        Topic predicateTopic = null;
-        Topic objectTopic = null;
-        Association association = null;
+        // Topic subjectTopic = null;
+        // Topic predicateTopic = null;
+        // Topic objectTopic = null;
+        // Association association = null;
         Statement stmt = null;
-        Resource subject = null;
-        Property predicate = null;
-        RDFNode object = null;
+        // Resource subject = null;
+        // Property predicate = null;
+        // RDFNode object = null;
         int counter = 0;
         
         Topic subjectType = getOrCreateTopic(map, subjectTypeSI);
@@ -267,7 +267,7 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
         // print out the predicate, subject and object of each statement
         while (iter.hasNext() && !forceStop()) {
             try {
-                stmt      = iter.nextStatement();  // get next statement
+                stmt = iter.nextStatement();  // get next statement
                 
                 handleStatement(stmt,map,subjectType,predicateType,objectType);
             }

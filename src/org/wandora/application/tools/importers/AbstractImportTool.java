@@ -48,7 +48,10 @@ import org.wandora.topicmap.layered.LayerStack;
  * @author akivela
  */
 public abstract class AbstractImportTool extends AbstractWandoraTool implements WandoraTool {
-    // Importer types...
+
+	private static final long serialVersionUID = 1L;
+
+	// Importer types...
     public final static int CUSTOM_IMPORTER = 1;
     public final static int RAW_IMPORTER = 2;
     public final static int FILE_IMPORTER = 4;

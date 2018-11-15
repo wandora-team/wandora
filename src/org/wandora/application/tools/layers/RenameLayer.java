@@ -45,7 +45,10 @@ import javax.swing.*;
  */
 public class RenameLayer extends AbstractLayerTool implements WandoraTool {
     
-    /** Creates a new instance of RenameLayer */
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of RenameLayer */
     public RenameLayer() {
     }
     
@@ -65,19 +68,19 @@ public class RenameLayer extends AbstractLayerTool implements WandoraTool {
     
    
     @Override
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
-            LayerTree layerTree = admin.layerTree;           
-            Layer selected = solveContextLayer(admin, context);
+            LayerTree layerTree = wandora.layerTree;           
+            Layer selected = solveContextLayer(wandora, context);
             if(selected != null) {
-                String newName = WandoraOptionPane.showInputDialog(admin,"New name for the layer" , selected.getName(),"New layer name" , WandoraOptionPane.QUESTION_MESSAGE );
+                String newName = WandoraOptionPane.showInputDialog(wandora,"New name for the layer" , selected.getName(),"New layer name" , WandoraOptionPane.QUESTION_MESSAGE );
                 if(newName != null) {
                     selected.setName(newName);
                     layerTree.resetLayers();
                 }
             }
             else {
-                WandoraOptionPane.showMessageDialog(admin, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
+                WandoraOptionPane.showMessageDialog(wandora, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
             }
         }
         catch(Exception e) {

@@ -42,8 +42,10 @@ import org.wandora.application.gui.simple.SimpleLabel;
  */
 public class MaianaExportPanel extends javax.swing.JPanel {
 
-    private boolean wasAccepted = false;
-    private JDialog window = null;
+	private static final long serialVersionUID = 1L;
+	
+	private boolean wasAccepted = false;
+	private JDialog window = null;
 
 
 

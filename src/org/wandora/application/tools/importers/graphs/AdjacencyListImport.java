@@ -34,11 +34,9 @@ import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
-import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
-import static org.wandora.utils.Tuples.T2;
 
 
 /**
@@ -47,7 +45,10 @@ import static org.wandora.utils.Tuples.T2;
  */
 public class AdjacencyListImport extends AbstractWandoraTool implements WandoraTool {
     
-    public final static String SI_PREFIX = "http://wandora.org/si/topic/";
+
+	private static final long serialVersionUID = 1L;
+
+	public final static String SI_PREFIX = "http://wandora.org/si/topic/";
     
     public static String nodeDelimiter = ",";
     public static String edgeDelimiter = "";

@@ -21,7 +21,7 @@
  * 
  * AbstractLayerTool.java
  *
- * Created on 13. kesäkuuta 2006, 18:47
+ * Created on 13. kesï¿½kuuta 2006, 18:47
  *
  */
 
@@ -33,7 +33,7 @@ import org.wandora.application.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.contexts.*;
 import org.wandora.topicmap.layered.*;
-import org.wandora.topicmap.linked.*;
+
 
 /**
  *
@@ -41,12 +41,12 @@ import org.wandora.topicmap.linked.*;
  */
 public abstract class AbstractLayerTool extends AbstractWandoraTool implements WandoraTool {
     
-    
 
+	private static final long serialVersionUID = 1L;
 
-    
-    protected Layer solveContextLayer(Wandora admin, Context context) {
-        LayerTree layerTree = admin.layerTree;
+	
+	protected Layer solveContextLayer(Wandora wandora, Context context) {
+        LayerTree layerTree = wandora.layerTree;
         Layer layer=null;
         if(context.getContextSource() instanceof LayerTree){
             layer = ((LayerTree)context.getContextSource()).getLastClickedLayer();

@@ -46,7 +46,10 @@ import org.wandora.topicmap.Topic;
 
 public class MediawikiUploaderConfigurationUI extends javax.swing.JPanel {
 
-    private JDialog myDialog = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private JDialog myDialog = null;
     private boolean accepted = false;
     
     /**

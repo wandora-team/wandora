@@ -30,8 +30,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -218,7 +216,6 @@ public class MaianaUtils {
         int i;
         int len = string.length();
         StringBuilder sb = new StringBuilder(len + 4);
-        String t;
 
         for (i=0; i<len; i=i+1) {
             c = string.charAt(i);

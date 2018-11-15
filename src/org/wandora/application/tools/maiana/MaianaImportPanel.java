@@ -34,14 +34,10 @@ package org.wandora.application.tools.maiana;
 
 
 import java.awt.Cursor;
-import java.awt.Desktop;
-import java.io.ByteArrayInputStream;
-import java.net.URI;
 import java.net.URL;
 import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -54,11 +50,6 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleScrollPane;
-import org.wandora.application.gui.simple.SimpleTabbedPane;
-import org.wandora.application.gui.simple.SimpleTable;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.layered.Layer;
-import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.utils.IObox;
 
 
@@ -68,7 +59,9 @@ import org.wandora.utils.IObox;
  */
 public class MaianaImportPanel extends javax.swing.JPanel {
 
-    private boolean autoLoadList = false;
+	private static final long serialVersionUID = 1L;
+	
+	private boolean autoLoadList = false;
     private boolean wasAccepted = false;
     private JDialog window = null;
     private JTable mapTable = null;
@@ -522,7 +515,10 @@ public class MaianaImportPanel extends javax.swing.JPanel {
 
 
     class TopicMapsTableModel extends DefaultTableModel implements TableModel {
-        JSONArray jsonModel = null;
+
+		private static final long serialVersionUID = 1L;
+
+		JSONArray jsonModel = null;
 
         public TopicMapsTableModel(JSONArray m) {
             jsonModel = m;

@@ -36,7 +36,6 @@ import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
 
 import org.wandora.utils.*;
 
@@ -54,8 +53,9 @@ import java.util.*;
  */
 public class DownloadAllOccurrences extends AbstractWandoraTool implements  WandoraTool {
 
+	private static final long serialVersionUID = 1L;
 
-    public boolean changeOccurrence = false;
+	public boolean changeOccurrence = false;
     public boolean overWriteAll = false;
 
 
@@ -243,26 +243,6 @@ public class DownloadAllOccurrences extends AbstractWandoraTool implements  Wand
     public String makeFileLocator(File f) {
         return f.toURI().toString();
 //        return "file://" + f.getPath().replace('\\', '/');
-    }
-
-
-    private String croppedFilename(String filename) {
-        if(filename != null) {
-            if(filename.length() > 40) filename = filename.substring(0,37) + "...";
-            return filename;
-        }
-        return "";
-    }
-
-
-    private String croppedFilename(File file) {
-        if(file != null) { return croppedFilename(file.getPath()); }
-        return "";
-    }
-
-
-    private String croppedUrlString(String urlString) {
-        return (urlString.length() > 60 ? urlString.substring(0,59) + "..." : urlString);
     }
 
 

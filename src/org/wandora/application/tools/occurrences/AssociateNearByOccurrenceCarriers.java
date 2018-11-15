@@ -25,22 +25,16 @@
 package org.wandora.application.tools.occurrences;
 
 
-import java.awt.Point;
-import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
-import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
@@ -54,7 +48,9 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool implements  WandoraTool {
-    private boolean requiresRefresh = false;
+
+	private static final long serialVersionUID = 1L;
+	private boolean requiresRefresh = false;
     private Context preferredContext = null;
 
     public static final String NEARBY_TYPE = "http://wandora.org/si/nearby-points/";
@@ -133,8 +129,8 @@ public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool imple
 
             Iterator<Topic> allTopics = tm.getTopics();
             
-            HashMap<Topic,GeoLocation> pointAOccurrences = new HashMap();
-            HashMap<Topic,GeoLocation> pointBOccurrences = new HashMap();
+            Map<Topic,GeoLocation> pointAOccurrences = new LinkedHashMap<>();
+            Map<Topic,GeoLocation> pointBOccurrences = new LinkedHashMap<>();
 
             try {
                 log("Looking for point occurrences...");

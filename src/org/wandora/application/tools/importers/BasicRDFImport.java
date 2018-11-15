@@ -21,7 +21,7 @@
  * 
  * BasicRDFImport.java
  *
- * Created on 10. heinäkuuta 2006, 11:39
+ * Created on 10. heinï¿½kuuta 2006, 11:39
  *
  */
 
@@ -33,7 +33,7 @@ import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.vocabulary.*;
 import java.util.List;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
-import static org.wandora.application.tools.importers.SimpleRDFImport.RDF_LIST_ORDER;
+
 
 
 /**
@@ -42,7 +42,11 @@ import static org.wandora.application.tools.importers.SimpleRDFImport.RDF_LIST_O
  */
 public class BasicRDFImport extends SimpleRDFImport {
     
-    /** Creates a new instance of BasicRDFImport */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of BasicRDFImport */
     public BasicRDFImport() {
     }
     public BasicRDFImport(int options){

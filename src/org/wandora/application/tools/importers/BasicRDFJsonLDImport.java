@@ -33,8 +33,13 @@ import org.wandora.topicmap.TopicMap;
 
 
 public class BasicRDFJsonLDImport extends BasicRDFImport {
-    
-    public BasicRDFJsonLDImport() {
+
+	
+	private static final long serialVersionUID = 1L;
+
+
+
+	public BasicRDFJsonLDImport() {
     }
     
     public BasicRDFJsonLDImport(int options) {

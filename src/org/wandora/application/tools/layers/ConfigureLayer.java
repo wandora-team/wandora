@@ -56,7 +56,11 @@ import javax.swing.*;
 
 public class ConfigureLayer extends AbstractLayerTool implements WandoraTool {
     
-    /** Creates a new instance of ConfigureLayer */
+	
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of ConfigureLayer */
     public ConfigureLayer() {
     }
 
@@ -77,28 +81,16 @@ public class ConfigureLayer extends AbstractLayerTool implements WandoraTool {
     }
     
     
-    public void execute(Wandora admin, Context context) {      
+    public void execute(Wandora wandora, Context context) {      
         try {
-            Layer contextLayer =  solveContextLayer(admin, context);
+            Layer contextLayer =  solveContextLayer(wandora, context);
             
             if(contextLayer == null) {
-                WandoraOptionPane.showMessageDialog(admin, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
+                WandoraOptionPane.showMessageDialog(wandora, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
                 return;
             }
             
-            boolean found=false;
-            java.util.List<Layer> layers=admin.getTopicMap().getTreeLayers();
-            for(Layer l : layers){
-                if(l==contextLayer){
-                    found=true;
-                    break;
-                }
-            }
-            if(!found){
-                int dummy=1;
-            }
-            
-            admin.layerTree.modifyLayer(contextLayer);
+            wandora.layerTree.modifyLayer(contextLayer);
         }
         catch(Exception e) {
             singleLog(e);

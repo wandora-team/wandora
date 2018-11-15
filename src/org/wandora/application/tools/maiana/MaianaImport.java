@@ -48,8 +48,9 @@ import org.wandora.topicmap.layered.LayerStack;
 public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
 
 
+	private static final long serialVersionUID = 1L;
 
-    public MaianaImport() {
+	public MaianaImport() {
     }
 
     @Override
@@ -62,18 +63,18 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
         return false;
     }
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         /*
         
         THESE ARE HERE FOR A REFERENCE. HOW TO SET UP CONFIGURABLE OPTIONS.
         COPIED FROM GML EXPORT.
         
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"GML export options","GML export options",true,new String[][]{
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"GML export options","GML export options",true,new String[][]{
             new String[]{"Export classes","boolean",(EXPORT_CLASSES ? "true" : "false"),"Should Wandora export also topic types (class-instance relations)?"},
             new String[]{"Export occurrences","boolean",(EXPORT_OCCURRENCES ? "true" : "false"),"Should topic occurrences also export?"},
             new String[]{"Export n associations","boolean",(EXPORT_N_ASSOCIATIONS ? "true" : "false"), "Should associations with more than 2 players also export?"},
             new String[]{"Is directed","boolean",(EXPORT_DIRECTED ? "true" : "false"), "Export directed or undirected graph" },
-        },admin);
+        },wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
 

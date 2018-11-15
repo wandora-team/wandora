@@ -45,7 +45,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public class MediawikiSubjectLocatorUploader extends MediawikiHandler implements WandoraTool {
     
-    private static MediawikiUploaderConfigurationUI configurationUI = null;
+	private static final long serialVersionUID = 1L;
+	
+	private static MediawikiUploaderConfigurationUI configurationUI = null;
     private static MediawikiUploaderConfiguration config = new MediawikiUploaderConfiguration();
 
     private boolean requiresRefresh = false;

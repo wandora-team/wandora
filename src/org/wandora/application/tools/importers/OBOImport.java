@@ -30,7 +30,6 @@ package org.wandora.application.tools.importers;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
 
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -54,7 +53,10 @@ import java.util.regex.*;
 
 
 public class OBOImport extends AbstractImportTool implements WandoraTool {
-    protected ArrayList<String> namespaces = null;
+
+	private static final long serialVersionUID = 1L;
+
+	protected ArrayList<String> namespaces = null;
     
     
     
@@ -67,7 +69,7 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
     
 
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void initialize(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
         String o=options.get(OBO.optionPrefix+"options");
         if(o!=null){
             int i=Integer.parseInt(o);
@@ -81,9 +83,9 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
         //System.out.println(prefix);
-        OBOConfiguration dialog=new OBOConfiguration(admin,true);
+        OBOConfiguration dialog=new OBOConfiguration(wandora,true);
         dialog.setOptions(OBO.getOptions());
         dialog.setVisible(true);
         if(!dialog.wasCancelled()){
@@ -93,7 +95,7 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
         }
     }
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
+    public void writeOptions(Wandora wandora, org.wandora.utils.Options options, String prefix){
         options.put(OBO.optionPrefix+"options",""+OBO.getOptions());
     }    
 
@@ -1786,7 +1788,7 @@ public class OBOImport extends AbstractImportTool implements WandoraTool {
         }
         
         public String getDefaultSynonymType() {
-            Set types = synonymTypes.keySet();
+            Set<String> types = synonymTypes.keySet();
             if(types != null && !types.isEmpty()) {
                 return (String) types.iterator().next();
             }

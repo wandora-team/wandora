@@ -21,7 +21,7 @@
  * 
  * BasicN3Import.java
  *
- * Created on 10. heinäkuuta 2006, 16:06
+ * Created on 10. heinï¿½kuuta 2006, 16:06
  *
  */
 
@@ -38,7 +38,9 @@ import com.hp.hpl.jena.rdf.model.*;
  */
 public class BasicN3Import extends BasicRDFImport  {
     
-    /** Creates a new instance of BasicN3Import */
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of BasicN3Import */
     public BasicN3Import() {
     }
     public BasicN3Import(int options){

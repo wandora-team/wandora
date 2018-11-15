@@ -47,7 +47,9 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
 
 
 
-    String forceXSL = null;
+	private static final long serialVersionUID = 1L;
+
+	String forceXSL = null;
     String forceXML = null;
     
     

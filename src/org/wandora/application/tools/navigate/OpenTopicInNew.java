@@ -29,11 +29,9 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
 import java.util.*;
 import javax.swing.*;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
-import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.gui.topicpanels.TraditionalTopicPanel;
 
 /**
@@ -41,7 +39,10 @@ import org.wandora.application.gui.topicpanels.TraditionalTopicPanel;
  * @author  akivela
  */
 public class OpenTopicInNew extends AbstractWandoraTool implements WandoraTool {
-    public final static int ASK_USER = 100;
+
+	private static final long serialVersionUID = 1L;
+
+	public final static int ASK_USER = 100;
     public final static int SOLVE_USING_CONTEXT = 102;
     
     public int options = SOLVE_USING_CONTEXT;
@@ -100,7 +101,7 @@ public class OpenTopicInNew extends AbstractWandoraTool implements WandoraTool {
                 if(dockableClass != null) {
                     Topic t = wandora.showTopicFinder();                
                     if(t != null) {
-                        dockingPanel.addDockable(dockableClass.newInstance(), t);
+                        dockingPanel.addDockable(dockableClass.getDeclaredConstructor().newInstance(), t);
                     }
                 }
                 else {

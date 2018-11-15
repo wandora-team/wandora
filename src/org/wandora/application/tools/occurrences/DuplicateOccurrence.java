@@ -42,9 +42,11 @@ import org.wandora.application.contexts.*;
  */
 public class DuplicateOccurrence  extends AbstractWandoraTool implements WandoraTool {
     
-    
-    
-    private Topic occurrenceType = null;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	private Topic occurrenceType = null;
     private Topic masterTopic = null;
     
     
@@ -97,7 +99,7 @@ public class DuplicateOccurrence  extends AbstractWandoraTool implements Wandora
         else {
             Iterator<Topic> topics = null;
             if(masterTopic != null) {
-                ArrayList<Topic> topicArray = new ArrayList();
+                ArrayList<Topic> topicArray = new ArrayList<>();
                 topicArray.add(masterTopic);
                 topics = topicArray.iterator();
             }

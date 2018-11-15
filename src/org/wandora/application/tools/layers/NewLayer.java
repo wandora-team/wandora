@@ -50,7 +50,11 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
  */
 public class NewLayer extends AbstractLayerTool implements WandoraTool {
     
-    /** Creates a new instance of NewLayer */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of NewLayer */
     public NewLayer() {
     }
     

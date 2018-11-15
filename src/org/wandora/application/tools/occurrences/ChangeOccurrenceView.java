@@ -31,7 +31,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
 
 import org.wandora.utils.*;
 
@@ -44,8 +43,10 @@ import org.wandora.utils.*;
  * @author akivela
  */
 public class ChangeOccurrenceView extends AbstractWandoraTool implements WandoraTool {
-    
-    private String newView = OccurrenceTable.VIEW_SCHEMA;
+
+	private static final long serialVersionUID = 1L;
+	
+	private String newView = OccurrenceTable.VIEW_SCHEMA;
     private Options localOptions = null;
     
     

@@ -32,11 +32,9 @@ import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
-import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
-import static org.wandora.utils.Tuples.T2;
 
 /**
  *
@@ -45,8 +43,9 @@ import static org.wandora.utils.Tuples.T2;
 public class IncidenceMatrixImport extends AbstractWandoraTool implements WandoraTool {
 
 
-
-    public final static String SI_PREFIX = "http://wandora.org/si/topic/";
+	private static final long serialVersionUID = 1L;
+	
+	public final static String SI_PREFIX = "http://wandora.org/si/topic/";
 
 
 
@@ -70,10 +69,10 @@ public class IncidenceMatrixImport extends AbstractWandoraTool implements Wandor
     }
 
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        TopicMap topicmap = solveContextTopicMap(admin, context);
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        TopicMap topicmap = solveContextTopicMap(wandora, context);
 
-        IncidenceMatrixImportDialog matrixSourceDialog = new IncidenceMatrixImportDialog(admin, this, true);
+        IncidenceMatrixImportDialog matrixSourceDialog = new IncidenceMatrixImportDialog(wandora, this, true);
         matrixSourceDialog.setVisible(true);
         if(!matrixSourceDialog.wasAccepted()) return;
 
@@ -161,7 +160,7 @@ public class IncidenceMatrixImport extends AbstractWandoraTool implements Wandor
         private void parse() {
             String[] rows = data.split(rowRegex);
             associations = new ArrayList[rows.length];
-            ArrayList a = null;
+            ArrayList<String> a = null;
             for(int row=0; row<rows.length; row++) {
                 if(rows[row] != null && rows[row].length() > 0) {
                     String[] cols = rows[row].split(colRegex);

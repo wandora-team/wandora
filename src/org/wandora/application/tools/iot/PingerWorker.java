@@ -165,7 +165,7 @@ class PingerWorker {
         Collection<Topic> languageTopics = tm.getTopicsOfType(XTMPSI.LANGUAGE);
 
         if(languageTopics == null) {
-            languageTopics = new ArrayList();
+            languageTopics = new ArrayList<>();
         }
         
         if(languageTopics.isEmpty()) {

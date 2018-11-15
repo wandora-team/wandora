@@ -25,12 +25,11 @@ package org.wandora.application.tools.occurrences;
 
 
 import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
-import org.wandora.application.gui.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
+
 
 
 
@@ -41,7 +40,10 @@ import org.wandora.*;
  */
 public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool implements WandoraTool {
     
-    public boolean ASSOCIATE_TO_OCCURRENCE_CARRIER = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean ASSOCIATE_TO_OCCURRENCE_CARRIER = true;
     private boolean requiresRefresh = false;
             
             

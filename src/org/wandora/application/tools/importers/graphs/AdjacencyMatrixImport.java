@@ -33,11 +33,11 @@ import org.wandora.topicmap.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
-import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
 import static org.wandora.utils.Tuples.T2;
+
 
 /**
  *
@@ -46,8 +46,9 @@ import static org.wandora.utils.Tuples.T2;
 public class AdjacencyMatrixImport extends AbstractWandoraTool implements WandoraTool {
 
 
+	private static final long serialVersionUID = 1L;
 
-    public final static String SI_PREFIX = "http://wandora.org/si/topic/";
+	public final static String SI_PREFIX = "http://wandora.org/si/topic/";
 
     private boolean cellValueToPlayer = false;
 
@@ -203,17 +204,17 @@ public class AdjacencyMatrixImport extends AbstractWandoraTool implements Wandor
                             String cell = cols[col].trim();
                             if(cellValueToPlayer) {
                                 ArrayList<T2<String,String>> nodes = new ArrayList<T2<String,String>>();
-                                nodes.add(new T2(""+col, "col"));
-                                nodes.add(new T2(""+row, "row"));
-                                nodes.add(new T2(""+cell, "cell"));
+                                nodes.add(new T2<String,String>(""+col, "col"));
+                                nodes.add(new T2<String,String>(""+row, "row"));
+                                nodes.add(new T2<String,String>(""+cell, "cell"));
                                 createEdgeAssociation(nodes, topicmap);
                                 counter++;
                             }
                             else {
                                 if(!"0".equals(cell)) {
                                     ArrayList<T2<String,String>> nodes = new ArrayList<T2<String,String>>();
-                                    nodes.add(new T2(""+col, "col"));
-                                    nodes.add(new T2(""+row, "row"));
+                                    nodes.add(new T2<String,String>(""+col, "col"));
+                                    nodes.add(new T2<String,String>(""+row, "row"));
                                     createEdgeAssociation(nodes, topicmap);
                                     counter++;
                                 }

@@ -52,7 +52,10 @@ import javax.swing.*;
 
 
 public class LockLayers extends AbstractLayerTool implements WandoraTool {
-    public static final int LOCK_ALL = 1000;
+
+	private static final long serialVersionUID = 1L;
+
+	public static final int LOCK_ALL = 1000;
     public static final int UNLOCK_ALL = 1010;
     public static final int LOCK_ALL_BUT_CURRENT = 1020;
     public static final int REVERSE_LOCKS = 1030;
@@ -116,17 +119,17 @@ public class LockLayers extends AbstractLayerTool implements WandoraTool {
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         try {
-            Layer selected = solveContextLayer(admin, context);
+            Layer selected = solveContextLayer(wandora, context);
             
             if(selected == null) {
-                WandoraOptionPane.showMessageDialog(admin, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
+                WandoraOptionPane.showMessageDialog(wandora, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
                 return;
             }
             
-            Collection layers = admin.layerTree.getAllLayers();
-            Iterator layerIterator = layers.iterator();
+            Collection<Layer> layers = wandora.layerTree.getAllLayers();
+            Iterator<Layer> layerIterator = layers.iterator();
             Layer layer = null;
 
             while(layerIterator.hasNext()) {
@@ -156,7 +159,7 @@ public class LockLayers extends AbstractLayerTool implements WandoraTool {
                     }
                 }
             }
-            admin.layerTree.resetLayers();
+            wandora.layerTree.resetLayers();
         }
         catch(Exception e) {
             singleLog(e);

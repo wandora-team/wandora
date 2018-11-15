@@ -48,7 +48,10 @@ import javax.swing.*;
  * @author akivela
  */
 public class MergeLayers extends AbstractLayerTool implements WandoraTool {
-    private static final String message = "You are about to merge topic map layers. "+
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String message = "You are about to merge topic map layers. "+
             "Depending on topic map sizes this operation may take a long time. "+
             "Are you sure you want to start merge?";
     private static final String title = "Confirm";

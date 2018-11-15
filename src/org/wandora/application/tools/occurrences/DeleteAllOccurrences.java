@@ -30,9 +30,6 @@ import java.util.Iterator;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.ComboBoxTopicWrapper;
-import org.wandora.application.gui.OccurrenceTable;
-import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
@@ -70,7 +67,7 @@ public class DeleteAllOccurrences extends AbstractWandoraTool implements Wandora
     
 
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         Object contextSource = context.getContextSource();
 
         Iterator topics = getContext().getContextObjects();
@@ -87,7 +84,7 @@ public class DeleteAllOccurrences extends AbstractWandoraTool implements Wandora
                     if(types.isEmpty()) continue;
                     for(Topic type : types) {
                         try {
-                            Collection<Topic> scopes = new ArrayList(topic.getData(type).keySet());
+                            Collection<Topic> scopes = new ArrayList<>(topic.getData(type).keySet());
                             for(Topic scope : scopes) {
                                 topic.removeData(type, scope);
                                 count++;

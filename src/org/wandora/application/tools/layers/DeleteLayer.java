@@ -48,7 +48,10 @@ import javax.swing.*;
 
 public class DeleteLayer extends AbstractLayerTool implements WandoraTool {
     
-    /** Creates a new instance of DeleteLayer */
+	private static final long serialVersionUID = 1L;
+
+	
+	/** Creates a new instance of DeleteLayer */
     public DeleteLayer() {
     }
 
@@ -68,12 +71,12 @@ public class DeleteLayer extends AbstractLayerTool implements WandoraTool {
     }
    
     @Override
-    public void execute(Wandora admin, Context context) {
-        LayerTree layerTree = admin.layerTree;
-        Layer contextLayer =  solveContextLayer(admin, context);
+    public void execute(Wandora wandora, Context context) {
+        LayerTree layerTree = wandora.layerTree;
+        Layer contextLayer =  solveContextLayer(wandora, context);
         
         if(contextLayer == null) {
-            WandoraOptionPane.showMessageDialog(admin, "There is no current topic map layer.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
+            WandoraOptionPane.showMessageDialog(wandora, "There is no current topic map layer.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -83,14 +86,14 @@ public class DeleteLayer extends AbstractLayerTool implements WandoraTool {
             TopicMap tm=l.getTopicMap();
             if(tm instanceof LinkedTopicMap){
                 if(((LinkedTopicMap)tm).getLinkedTopicMap()==contextTM){
-                    WandoraOptionPane.showMessageDialog(admin, "Layer is used in the linked topic layer \""+l.getName()+"\" and cannot be deleted.","Delete layer",WandoraOptionPane.ERROR_MESSAGE);
+                    WandoraOptionPane.showMessageDialog(wandora, "Layer is used in the linked topic layer \""+l.getName()+"\" and cannot be deleted.","Delete layer",WandoraOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
         }
         
         try {
-            admin.getTopicMap().clearTopicMapIndexes();
+        	wandora.getTopicMap().clearTopicMapIndexes();
         }
         catch(Exception e) {
             singleLog(e);

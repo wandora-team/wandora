@@ -23,7 +23,6 @@ package org.wandora.application.tools.iot;
 
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.json.JSONObject;

@@ -39,8 +39,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class Pinger extends AbstractWandoraTool implements WandoraTool, Runnable {
 
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getDescription(){
         return "Open the IoT pinger";
     }

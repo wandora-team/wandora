@@ -21,7 +21,7 @@
  * 
  * ClearTopicMap.java
  *
- * Created on 20. kesäkuuta 2006, 11:42
+ * Created on 20. kesï¿½kuuta 2006, 11:42
  *
  */
 
@@ -47,7 +47,11 @@ import javax.swing.*;
  */
 public class ClearTopicMap extends AbstractLayerTool {
     
-    /** Creates a new instance of ClearTopicMap */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of ClearTopicMap */
     public ClearTopicMap() {
     }
     
@@ -75,24 +79,24 @@ public class ClearTopicMap extends AbstractLayerTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        Layer l = solveContextLayer(admin, context);
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
+        Layer l = solveContextLayer(wandora, context);
         
         if(l != null) {
-            int answer = WandoraOptionPane.showConfirmDialog(admin,"Are you sure you want to clear layer \""+l.getName()+"\"? Everything in the topic map will be deleted.", "Clear topic map", WandoraOptionPane.YES_NO_OPTION);
+            int answer = WandoraOptionPane.showConfirmDialog(wandora,"Are you sure you want to clear layer \""+l.getName()+"\"? Everything in the topic map will be deleted.", "Clear topic map", WandoraOptionPane.YES_NO_OPTION);
             if(answer != WandoraOptionPane.YES_OPTION ) return;
             
             setDefaultLogger();
             log("Deleting content of topic map in layer '"+l.getName()+"'.");
             l.getTopicMap().clearTopicMap();
-            TopicMap tm=admin.getTopicMap();
+            TopicMap tm=wandora.getTopicMap();
             if(tm instanceof LayerStack){
                 ((LayerStack)tm).clearTopicIndex();
             }
             setState(CLOSE);
         }
         else {
-            WandoraOptionPane.showMessageDialog(admin, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
+            WandoraOptionPane.showMessageDialog(wandora, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
         }
     }    
 }

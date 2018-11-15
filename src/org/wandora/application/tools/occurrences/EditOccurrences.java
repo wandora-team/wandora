@@ -25,7 +25,7 @@
 
 package org.wandora.application.tools.occurrences;
 
-import java.util.Iterator;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.LayeredTopicContext;
@@ -41,7 +41,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class EditOccurrences extends AbstractWandoraTool {
-    private Topic masterTopic = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private Topic masterTopic = null;
     private Topic occurrenceType = null;
     
     

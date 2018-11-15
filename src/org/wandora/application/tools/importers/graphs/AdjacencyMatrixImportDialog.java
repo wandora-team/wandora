@@ -28,7 +28,6 @@
 package org.wandora.application.tools.importers.graphs;
 
 
-import org.wandora.application.tools.extractors.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.*;
@@ -36,7 +35,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.utils.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.io.*;
@@ -52,7 +50,10 @@ import java.net.*;
  * @author  akivela
  */
 public class AdjacencyMatrixImportDialog extends javax.swing.JDialog {
-    private Wandora parent = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora parent = null;
     private WandoraTool parentTool = null;
     private boolean wasAccepted = false;
     

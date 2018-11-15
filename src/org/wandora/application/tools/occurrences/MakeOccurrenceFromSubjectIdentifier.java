@@ -42,7 +42,9 @@ import org.wandora.application.gui.WandoraOptionPane;
  */
 public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
 
-    public static boolean overWrite = false;
+	private static final long serialVersionUID = 1L;
+
+	public static boolean overWrite = false;
     
     private int mode = COPY_ONE;
     
@@ -168,9 +170,8 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool imp
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        Wandora wandora = Wandora.getWandora();
-        
+    public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
+
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Make occurrence out of subject identifier options","Make occurrence out of subject identifier options",true,new String[][]{
             new String[]{"Copy one subject identifier regocnized by a regular expression?","boolean",(mode == COPY_ONE_WITH_REGEX ? "true" : "false"),null },    
             new String[]{"Copy all subject identifiers?","boolean",(mode == COPY_ALL ? "true" : "false"), null },

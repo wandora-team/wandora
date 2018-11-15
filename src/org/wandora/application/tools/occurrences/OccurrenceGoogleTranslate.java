@@ -48,8 +48,10 @@ public class OccurrenceGoogleTranslate extends AbstractWandoraTool implements Wa
 
 
 
+	private static final long serialVersionUID = 1L;
 
-    /** Creates a new instance of OccurrenceGoogleTranslate */
+
+	/** Creates a new instance of OccurrenceGoogleTranslate */
     public OccurrenceGoogleTranslate() {
     }
 
@@ -120,7 +122,7 @@ public class OccurrenceGoogleTranslate extends AbstractWandoraTool implements Wa
                                     targetLangTopic = GoogleTranslateBox.createTopicForLanguage(targetLang, tm);
                                 }
                                 if(targetLangTopic != null) {
-                                    targetScopes.add(new T2(targetLang, targetLangTopic));
+                                    targetScopes.add(new T2<>(targetLang, targetLangTopic));
                                 }
                                 else {
                                     log("Found no topic for target language '"+targetLang+"'.");

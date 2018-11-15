@@ -21,7 +21,7 @@
  * 
  * SQLTopicMapImport.java
  *
- * Created on 20. kesäkuuta 2006, 10:24
+ * Created on 20. kesï¿½kuuta 2006, 10:24
  *
  */
 
@@ -44,9 +44,11 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
  */
 public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool {
     
-    
-    
-    /** Creates a new instance of SQLTopicMapImport */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of SQLTopicMapImport */
     public SQLTopicMapImport() {
     }
     public SQLTopicMapImport(int options) {

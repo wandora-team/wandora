@@ -21,10 +21,11 @@
  * 
  * AddSchemalessOccurrence.java
  *
- * Created on 15. kesäkuuta 2006, 17:10
+ * Created on 15. kesï¿½kuuta 2006, 17:10
  */
 
 package org.wandora.application.tools.occurrences;
+
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
@@ -38,8 +39,10 @@ import org.wandora.application.tools.AbstractWandoraTool;
  * @author olli
  */
 public class AddSchemalessOccurrence extends AbstractWandoraTool {
-    
-    /** Creates a new instance of AddSchemalessOccurrence */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of AddSchemalessOccurrence */
     public AddSchemalessOccurrence() {
         setContext(new LayeredTopicContext());
     }

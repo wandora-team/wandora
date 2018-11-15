@@ -39,7 +39,12 @@ import com.hp.hpl.jena.rdf.model.*;
  */
 public class SimpleRDFTurtleImport extends SimpleRDFImport {
 
-    /**
+	
+	private static final long serialVersionUID = 1L;
+
+
+
+	/**
      * Creates a new instance of SimpleRDFTurtleImport
      */
     public SimpleRDFTurtleImport() {

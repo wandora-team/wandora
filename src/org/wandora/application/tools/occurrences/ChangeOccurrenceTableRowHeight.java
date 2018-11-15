@@ -38,7 +38,10 @@ import org.wandora.utils.Options;
 
 
 public class ChangeOccurrenceTableRowHeight extends AbstractWandoraTool implements WandoraTool {
-    private int rowHeight = 1;
+
+	private static final long serialVersionUID = 1L;
+
+	private int rowHeight = 1;
     private Options localOptions = null;
 
     

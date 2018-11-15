@@ -21,7 +21,7 @@
  * 
  * OccurrenceRegexReplacer.java
  *
- * Created on 10. heinäkuuta 2007, 13:00
+ * Created on 10. heinï¿½kuuta 2007, 13:00
  *
  */
 
@@ -44,7 +44,10 @@ import java.util.*;
  * @author akivela
  */
 public class OccurrenceRegexReplacerAll extends AbstractWandoraTool implements WandoraTool {
-    RegularExpressionEditor editor = null;
+
+	private static final long serialVersionUID = 1L;
+
+	RegularExpressionEditor editor = null;
  
     
     public OccurrenceRegexReplacerAll() {
@@ -92,7 +95,7 @@ public class OccurrenceRegexReplacerAll extends AbstractWandoraTool implements W
                 Topic scope = null;
                 int progress = 0;
                 int count = 0;
-                ArrayList updatedOccurrences = new ArrayList();
+                List updatedOccurrences = new ArrayList();
 
                 while(topics.hasNext() && !forceStop()) {
                     try {

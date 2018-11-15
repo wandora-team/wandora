@@ -42,15 +42,15 @@ import java.net.*;
 
 
 
-
-
-
 /**
  *
  * @author  akivela
  */
 public class AdjacencyListImportDialog extends javax.swing.JDialog {
-    private Wandora parent = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private Wandora parent = null;
     private WandoraTool parentTool = null;
     private boolean wasAccepted = false;
     

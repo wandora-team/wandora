@@ -42,7 +42,9 @@ import java.util.*;
  */
 public class MakeOccurrencesFromVariants extends AbstractWandoraTool implements WandoraTool {
 
-    public static boolean overWrite = false;
+	private static final long serialVersionUID = 1L;
+
+	public static boolean overWrite = false;
 
     /**
      * Creates a new instance of MakeOccurrencesFromVariants
@@ -83,9 +85,9 @@ public class MakeOccurrencesFromVariants extends AbstractWandoraTool implements 
             Topic type = wandora.showTopicFinder("Select occurrence type...");
             if(type == null) return;
 
-            Collection languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
+            Collection<Topic> languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
             Topic language = null;
-            Iterator languageIterator = null;
+            Iterator<Topic> languageIterator = null;
 
             Set<Topic> scope = null;
             Topic displayScope = wandora.getTopicMap().getTopic(XTMPSI.DISPLAY);
@@ -102,7 +104,7 @@ public class MakeOccurrencesFromVariants extends AbstractWandoraTool implements 
                             while(languageIterator.hasNext()) {
                                 try {
                                     language = (Topic) languageIterator.next();
-                                    scope = new HashSet();
+                                    scope = new LinkedHashSet<>();
                                     scope.add(language);
                                     scope.add(displayScope);
                                     variant = topic.getVariant(scope);

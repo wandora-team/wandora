@@ -30,7 +30,6 @@ package org.wandora.application.tools.importers;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import java.io.*;
@@ -46,8 +45,12 @@ import javax.swing.*;
  */
 public class GOAImport extends AbstractImportTool implements WandoraTool {
     
-    
-    public GOAImport() {
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	public GOAImport() {
     }
     
     @Override

@@ -28,10 +28,7 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
@@ -41,7 +38,10 @@ import org.wandora.exceptions.OpenTopicNotSupportedException;
  * @author  akivela
  */
 public class OpenTopicIn extends AbstractWandoraTool implements WandoraTool {
-    public final static int ASK_USER = 100;
+
+	private static final long serialVersionUID = 1L;
+	
+	public final static int ASK_USER = 100;
     public final static int SOLVE_USING_CONTEXT = 102;
     
     public int options = SOLVE_USING_CONTEXT;

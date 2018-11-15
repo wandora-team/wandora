@@ -31,7 +31,7 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
+
 
 
 /**
@@ -41,9 +41,9 @@ import org.wandora.*;
  */
 public class PasteOccurrence  extends AbstractWandoraTool implements WandoraTool {
     
-    
+	private static final long serialVersionUID = 1L;
 
-    public PasteOccurrence() {
+	public PasteOccurrence() {
     }
     public PasteOccurrence(Context proposedContext) {
         this.setContext(proposedContext);

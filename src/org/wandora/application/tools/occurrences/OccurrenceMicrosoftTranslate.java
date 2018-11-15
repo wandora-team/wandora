@@ -46,9 +46,12 @@ import org.wandora.utils.Tuples.T2;
 public class OccurrenceMicrosoftTranslate extends AbstractWandoraTool implements WandoraTool {
 
 
+	private static final long serialVersionUID = 1L;
 
 
-    /** Creates a new instance of OccurrenceMicrosoftTranslate */
+
+
+	/** Creates a new instance of OccurrenceMicrosoftTranslate */
     public OccurrenceMicrosoftTranslate() {
     }
 
@@ -133,7 +136,7 @@ public class OccurrenceMicrosoftTranslate extends AbstractWandoraTool implements
                                     targetLangTopic = MicrosoftTranslateBox.createTopicForLanguage(targetLang, tm);
                                 }
                                 if(targetLangTopic != null) {
-                                    targetScopes.add(new T2(targetLang, targetLangTopic));
+                                    targetScopes.add(new T2<>(targetLang, targetLangTopic));
                                 }
                                 else {
                                     log("Found no topic for target language '"+targetLang+"'.");

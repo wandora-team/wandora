@@ -36,7 +36,9 @@ import org.wandora.application.gui.simple.*;
 
 class MediaWikiAPIConfigUI extends javax.swing.JPanel {
 
-    private JDialog dialog = null;
+	private static final long serialVersionUID = 1L;
+
+	private JDialog dialog = null;
     private boolean accepted;
     
     

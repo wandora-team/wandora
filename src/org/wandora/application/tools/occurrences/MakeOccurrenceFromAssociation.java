@@ -36,7 +36,6 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.*;
 
 
 
@@ -59,8 +58,10 @@ import org.wandora.*;
 
 public class MakeOccurrenceFromAssociation extends AbstractWandoraTool implements WandoraTool {
 
-    
-    boolean deleteAssociationAndTopic = false;
+
+	private static final long serialVersionUID = 1L;
+
+	boolean deleteAssociationAndTopic = false;
     
     
     public MakeOccurrenceFromAssociation() {
@@ -108,7 +109,7 @@ public class MakeOccurrenceFromAssociation extends AbstractWandoraTool implement
             else {
                 Iterator topics = context.getContextObjects();                
                 if(topics == null || !topics.hasNext()) return;
-                ArrayList associationArray = new ArrayList();
+                ArrayList<Association> associationArray = new ArrayList<>();
                 
                 associationType = admin.showTopicFinder("Select association type...");                
                 if(associationType == null) return;
