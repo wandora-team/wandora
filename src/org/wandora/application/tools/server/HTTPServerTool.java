@@ -44,7 +44,9 @@ import org.wandora.application.modulesserver.WandoraModulesServer;
  */
 public class HTTPServerTool extends AbstractWandoraTool {
     
-    public static final int CONFIGURE=1;
+	private static final long serialVersionUID = 1L;
+	
+	public static final int CONFIGURE=1;
     public static final int START=2;
     public static final int STOP=4;
     public static final int CONFIGURE_AND_START=CONFIGURE+START;

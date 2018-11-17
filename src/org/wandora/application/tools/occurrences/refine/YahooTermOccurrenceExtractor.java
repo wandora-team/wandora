@@ -28,10 +28,8 @@ package org.wandora.application.tools.occurrences.refine;
 
 import java.io.StringReader;
 import java.net.URL;
-import java.net.URLEncoder;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
-import org.wandora.application.tools.extractors.yahoo.termextraction.YahooTermExtractor;
 import org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -47,7 +45,15 @@ import org.xml.sax.XMLReader;
 public class YahooTermOccurrenceExtractor extends AbstractOccurrenceExtractor {
 
 
-    public YahooTermOccurrenceExtractor() {
+	private static final long serialVersionUID = 1L;
+
+
+
+
+
+
+
+	public YahooTermOccurrenceExtractor() {
     }
     public YahooTermOccurrenceExtractor(Context preferredContext) {
         super(preferredContext);

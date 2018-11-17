@@ -45,7 +45,9 @@ import org.xml.sax.XMLReader;
  */
 public class OpenCalaisOccurrenceExtractor extends AbstractOccurrenceExtractor {
 
-    private String params = "<c:params xmlns:c=\"http://s.opencalais.com/1/pred/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">"+
+	private static final long serialVersionUID = 1L;
+	
+	private String params = "<c:params xmlns:c=\"http://s.opencalais.com/1/pred/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">"+
             "<c:processingDirectives c:contentType=\"__CONTENTTYPE__\" c:outputFormat=\"Text/Simple\">"+
             "</c:processingDirectives>"+
             "<c:userDirectives c:allowDistribution=\"false\" c:allowSearch=\"false\" c:externalID=\"17cabs901\" c:submitter=\"Wandora\">"+

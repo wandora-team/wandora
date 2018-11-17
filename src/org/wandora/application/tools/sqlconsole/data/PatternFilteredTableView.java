@@ -27,8 +27,7 @@
 package org.wandora.application.tools.sqlconsole.data;
 
 
-import java.util.regex.*;
-import org.wandora.application.tools.sqlconsole.*;
+
 import org.wandora.application.tools.sqlconsole.data.utils.*;
 
 /**

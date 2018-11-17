@@ -36,5 +36,7 @@ package org.wandora.application.tools.som;
 
 public class IllegalDimensionException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 }
     

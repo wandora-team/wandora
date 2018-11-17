@@ -53,7 +53,10 @@ import org.wandora.application.gui.table.TopicGrid;
 
 public class SelectAll extends DoSelection {
        
-    @Override
+	private static final long serialVersionUID = 1L;
+	
+	
+	@Override
     public void doOtherSelection(Wandora wandora, Component component) {
         if(component instanceof JTextComponent) {
             JTextComponent tc = (JTextComponent) component;
@@ -95,7 +98,7 @@ public class SelectAll extends DoSelection {
             if(model != null) {
                 model.deselectAll();
                 VNode vnode = null;
-                for(Iterator vnodes = model.getNodes().iterator(); vnodes.hasNext(); ) {
+                for(Iterator<VNode> vnodes = model.getNodes().iterator(); vnodes.hasNext(); ) {
                     vnode = (VNode) vnodes.next();
                     if(vnode != null) {
                         model.addSelection(vnode);

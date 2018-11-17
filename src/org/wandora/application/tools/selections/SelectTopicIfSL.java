@@ -48,8 +48,10 @@ import org.wandora.topicmap.*;
 public class SelectTopicIfSL extends DoTopicSelection {
     
 
-    
-    @Override
+	private static final long serialVersionUID = 1L;
+
+
+	@Override
     public boolean acceptTopic(Topic topic)  {
         try {
             if(topic == null || topic.isRemoved()) return false;

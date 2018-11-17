@@ -25,6 +25,8 @@
  */
 
 package org.wandora.application.tools.sqlconsole;
+
+
 import java.util.*;
 import java.io.StringWriter;
 /**
@@ -51,7 +53,7 @@ public class SQLQueryResult {
         resultIsRows=false;
     }
     private void makeColumnIndex(){
-        columnIndex=new HashMap();
+        columnIndex=new HashMap<>();
         for(int i=0;i<columnNames.length;i++){
             columnIndex.put(columnNames[i],i);
         }
@@ -69,7 +71,7 @@ public class SQLQueryResult {
      * row as the rest of the parameters.
      */
     public Collection<String> makeStringCollection(String formatString){
-        Collection<String> ss=new Vector();
+        Collection<String> ss=new Vector<>();
         for(Object[] row : rows){
             StringWriter w=new StringWriter();
             Formatter formatter=new Formatter(w);

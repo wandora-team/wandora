@@ -37,7 +37,15 @@ import org.wandora.topicmap.TopicMap;
 public class StanfordNEROccurrenceExtractor extends AbstractOccurrenceExtractor {
 
 
-    public StanfordNEROccurrenceExtractor() {
+	private static final long serialVersionUID = 1L;
+
+
+
+
+
+
+
+	public StanfordNEROccurrenceExtractor() {
     }
     public StanfordNEROccurrenceExtractor(Context preferredContext) {
         super(preferredContext);

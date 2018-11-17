@@ -37,7 +37,15 @@ import org.wandora.topicmap.TopicMap;
 public class ZemantaOccurrenceExtractor extends AbstractOccurrenceExtractor {
 
 
-    public ZemantaOccurrenceExtractor() {
+	private static final long serialVersionUID = 1L;
+
+
+
+
+
+
+
+	public ZemantaOccurrenceExtractor() {
     }
     public ZemantaOccurrenceExtractor(Context preferredContext) {
         super(preferredContext);

@@ -29,10 +29,9 @@ package org.wandora.application.tools.sqlconsole.data;
 
 import java.util.*;
 import java.awt.*;
-import org.wandora.utils.*;
-import org.wandora.application.tools.sqlconsole.*;
-import java.sql.*;
 import static org.wandora.utils.Tuples.*;
+
+
 /**
  *
  * @author  akivela
@@ -266,7 +265,7 @@ public class RowTable implements TableView {
     
     public void importFromFile(String resourceName, String importOrder) {
         try {
-            Vector rowVector = new Vector();
+            Vector<Row> rowVector = new Vector<>();
             if(importOrder == null || importOrder.length() < 1) importOrder="0123456789";
             if(resourceName != null) {
                 String s = ""; // IObox.loadResource(resourceName);

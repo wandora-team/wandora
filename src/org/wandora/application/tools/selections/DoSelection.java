@@ -33,7 +33,6 @@ import org.wandora.application.gui.table.TopicTable;
 import org.wandora.application.tools.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.gui.topicpanels.*;
 import org.wandora.application.gui.topicpanels.graphpanel.*;
 import java.awt.*;
@@ -52,10 +51,10 @@ import org.wandora.application.gui.tree.TopicTree;
  */
 public class DoSelection extends AbstractWandoraTool implements WandoraTool {
     
-  
-    
-    
-    public DoSelection() {}
+
+	private static final long serialVersionUID = 1L;
+
+	public DoSelection() {}
     
     
     

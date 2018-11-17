@@ -25,7 +25,6 @@ package org.wandora.application.tools.occurrences.refine;
 
 
 
-import java.io.StringReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import org.wandora.application.Wandora;
@@ -34,10 +33,8 @@ import org.wandora.application.tools.extractors.geonames.FindNearByGeoNames;
 import org.wandora.application.tools.extractors.geonames.GeoNamesExtractorSelector;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.utils.IObox;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+
 
 /**
  *
@@ -45,7 +42,8 @@ import org.xml.sax.XMLReader;
  */
 public class FindNearByGeoNamesOccurrence extends AbstractOccurrenceExtractor {
 
-    private static int rows = 1000;
+	private static final long serialVersionUID = 1L;
+	private static int rows = 1000;
     private static int radius = 1;
     private static String lang = "en";
 

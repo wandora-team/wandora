@@ -46,7 +46,7 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
+
 
 
 /**
@@ -59,7 +59,9 @@ import org.wandora.*;
 
 public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements WandoraTool {
     
-    private static final String apibase = "http://pastebin.com/api/api_post.php";
+	private static final long serialVersionUID = 1L;
+	
+	private static final String apibase = "http://pastebin.com/api/api_post.php";
     private static final String apikey = "e3dbea933563db6ad9d11e2a5a2ab99c";
     private static PasteBinConfiguration configuration = null;
 

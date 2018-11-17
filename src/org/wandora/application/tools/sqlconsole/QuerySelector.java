@@ -33,8 +33,10 @@ import javax.swing.*;
  * @author  olli
  */
 public class QuerySelector extends javax.swing.JDialog {
-    
-    private Vector<String> queryNames;
+
+	private static final long serialVersionUID = 1L;
+
+	private Vector<String> queryNames;
     private Map<String,StoredQuery> storedQueries;
     private Map<String,StoredQuery> selection=null;;
     

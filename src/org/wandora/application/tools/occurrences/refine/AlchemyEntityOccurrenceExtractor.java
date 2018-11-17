@@ -41,10 +41,13 @@ import org.xml.sax.XMLReader;
  */
 public class AlchemyEntityOccurrenceExtractor extends AbstractOccurrenceExtractor {
 
-    
+
+	private static final long serialVersionUID = 1L;
 
 
-    public AlchemyEntityOccurrenceExtractor() {
+
+
+	public AlchemyEntityOccurrenceExtractor() {
     }
     public AlchemyEntityOccurrenceExtractor(Context preferredContext) {
         super(preferredContext);

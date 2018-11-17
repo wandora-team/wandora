@@ -21,7 +21,7 @@
  * 
  * SelectCellsInTopicTable.java
  *
- * Created on 14. heinäkuuta 2006, 11:51
+ * Created on 14. heinï¿½kuuta 2006, 11:51
  *
  */
 
@@ -36,7 +36,6 @@ import org.wandora.application.gui.*;
 import java.util.*;
 import javax.swing.*;
 import org.wandora.application.gui.table.TopicGrid;
-import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 
 
@@ -46,7 +45,11 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
  */
 public abstract class DoTopicSelection extends DoSelection implements WandoraTool {
     
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	
+	@Override
     public void doTableSelection(Wandora admin, TopicTable table) {
         table.clearSelection();
         int colCount = table.getColumnCount();

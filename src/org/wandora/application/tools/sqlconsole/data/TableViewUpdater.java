@@ -25,7 +25,9 @@
  */
 
 package org.wandora.application.tools.sqlconsole.data;
-import org.wandora.application.tools.sqlconsole.gui.*;
+
+
+
 /**
  *
  * @author olli

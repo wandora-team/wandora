@@ -21,7 +21,7 @@
  * 
  * SelectTopicWithClipboardRegex.java
  *
- * Created on 14. heinäkuuta 2006, 12:18
+ * Created on 14. heinï¿½kuuta 2006, 12:18
  *
  */
 
@@ -51,7 +51,10 @@ import java.util.regex.*;
 
 public class SelectTopicWithClipboardRegex extends DoTopicSelection {
     
-    Pattern[] patterns = null;
+
+	private static final long serialVersionUID = 1L;
+
+	Pattern[] patterns = null;
     Pattern pattern = null;
     String[] regexes = null;
     String regex = null;

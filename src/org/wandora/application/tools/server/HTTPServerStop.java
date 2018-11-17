@@ -26,7 +26,10 @@ package org.wandora.application.tools.server;
  * @author akivela
  */
 public class HTTPServerStop extends HTTPServerTool {
-    public HTTPServerStop(){
+
+	private static final long serialVersionUID = 1L;
+
+	public HTTPServerStop(){
         super(HTTPServerTool.STOP);
     }
 

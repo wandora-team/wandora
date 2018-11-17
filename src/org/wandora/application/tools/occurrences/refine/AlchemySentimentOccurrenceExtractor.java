@@ -44,8 +44,12 @@ public class AlchemySentimentOccurrenceExtractor extends AbstractOccurrenceExtra
 
 
 
+	private static final long serialVersionUID = 1L;
 
-    public AlchemySentimentOccurrenceExtractor() {
+
+
+
+	public AlchemySentimentOccurrenceExtractor() {
     }
     public AlchemySentimentOccurrenceExtractor(Context preferredContext) {
         super(preferredContext);

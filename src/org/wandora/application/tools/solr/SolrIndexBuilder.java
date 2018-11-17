@@ -28,20 +28,17 @@ package org.wandora.application.tools.solr;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.tools.exporters.AbstractExportTool;
-import static org.wandora.modules.velocityhelpers.JSONBox.JSONEncode;
 
 import org.wandora.topicmap.*;
-import org.wandora.utils.IObox; 
+
     
 
 /**
@@ -64,7 +61,10 @@ import org.wandora.utils.IObox;
 
 
 public class SolrIndexBuilder extends AbstractExportTool implements WandoraTool {
-    public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
 
     protected static boolean indexOccurrences = true;
     
@@ -112,7 +112,7 @@ public class SolrIndexBuilder extends AbstractExportTool implements WandoraTool 
     
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -124,8 +124,8 @@ public class SolrIndexBuilder extends AbstractExportTool implements WandoraTool 
             topicMapName = "selection_in_wandora";
         }
         else {
-            tm = solveContextTopicMap(admin, context);
-            topicMapName = this.solveNameForTopicMap(admin, tm);
+            tm = solveContextTopicMap(wandora, context);
+            topicMapName = this.solveNameForTopicMap(wandora, tm);
             if(topicMapName != null) {
                 exportInfo =  "Export topic map in layer '" + topicMapName + "' as Solr index";
             }
@@ -135,10 +135,10 @@ public class SolrIndexBuilder extends AbstractExportTool implements WandoraTool 
             }
         }
 
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"Solr index export options","Solr index export options",true,new String[][]{
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Solr index export options","Solr index export options",true,new String[][]{
             new String[]{"Server URL", "String", serverUrl, "Where the Solr locates?"},
             new String[]{"Clear database before indexing?", "boolean", (deleteEverythingFirst ? "true" : "false"), "Clear database before indexing?"},
-        },admin);
+        },wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
         

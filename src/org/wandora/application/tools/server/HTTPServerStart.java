@@ -28,7 +28,9 @@ package org.wandora.application.tools.server;
  */
 public class HTTPServerStart extends HTTPServerTool {
 
-    public HTTPServerStart(){
+	private static final long serialVersionUID = 1L;
+
+	public HTTPServerStart(){
         super(HTTPServerTool.START);
     }
 

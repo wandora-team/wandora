@@ -5,9 +5,7 @@ package org.wandora.application.tools.som;
 import org.wandora.utils.*;
 import static org.wandora.utils.Tuples.*;
 import org.wandora.topicmap.*;
-import org.wandora.application.*;
 import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
 import java.awt.*;
 import java.util.*;
 import java.awt.geom.*;
@@ -23,9 +21,10 @@ import java.awt.image.*;
  */
 public class SOMTopicVisualizationPanel extends JPanel implements Runnable, ActionListener, MouseListener, MouseMotionListener, KeyListener {
 
-    
-    
-    public static final String SI_PREFIX = "http://wandora.org/si/som/";
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String SI_PREFIX = "http://wandora.org/si/som/";
     
     public static final String ASSOCIATE_TOPICS_IN_EVERY_CELL_TO_A_CELL_SPECIFIC_GROUP = "Group topics in every cell";
     public static final String ASSOCIATE_TOPICS_IN_SELECTED_CELLS_TO_A_GROUP = "Group topics in selected cells";
@@ -256,7 +255,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
     
     public void run() {
         if(map != null) {
-            HashMap<Topic,SOMVector> samples = map.getSamples();
+            Map<Topic,SOMVector> samples = map.getSamples();
             Set<Topic> set = samples.keySet();
             Topic t = null;
             SOMVector v = null;
@@ -272,7 +271,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
                     int y = bmu.e2.intValue();
 
                     synchronized(topicLocations) {
-                        topicLocations.add(new T3( t, new Integer(x), new Integer(y) ));
+                        topicLocations.add(new T3<Topic,Integer,Integer>( t, Integer.valueOf(x), Integer.valueOf(y) ));
                     }
                     synchronized(cellLabels) {
                         if(cellLabels[x][y] == null) cellLabels[x][y] = new ArrayList<String>();
@@ -286,7 +285,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
                         parent.repaint();
                     }
                     try {
-                        Thread.currentThread().sleep(100);
+                        Thread.sleep(100);
                     }
                     catch(Exception e) { /* WAKEUP */ }
                 }
@@ -916,7 +915,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
             }
             
             // --- EXTEND SELECTION LEFT
-            else if(e.getKeyCode() == e.VK_LEFT) {
+            else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
                 for(int i=1; i<mapSize; i++) {
                     for(int j=0; j<mapSize; j++) {
                         if(selectedCells[i][j]) {

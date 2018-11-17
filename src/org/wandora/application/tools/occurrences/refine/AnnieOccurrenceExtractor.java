@@ -37,7 +37,15 @@ import org.wandora.topicmap.TopicMap;
 public class AnnieOccurrenceExtractor extends AbstractOccurrenceExtractor {
 
 
-    public AnnieOccurrenceExtractor() {
+	private static final long serialVersionUID = 1L;
+
+
+
+
+
+
+
+	public AnnieOccurrenceExtractor() {
     }
     public AnnieOccurrenceExtractor(Context preferredContext) {
         super(preferredContext);

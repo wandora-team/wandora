@@ -21,7 +21,7 @@
  * 
  * SelectTopicIfNoOccurrences.java
  *
- * Created on 14. heinäkuuta 2006, 12:13
+ * Created on 14. heinï¿½kuuta 2006, 12:13
  *
  */
 
@@ -38,9 +38,10 @@ import org.wandora.topicmap.*;
  */
 public class SelectTopicIfNoOccurrences extends DoTopicSelection {
     
-    
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public boolean acceptTopic(Topic topic)  {
         try {
             if(topic != null && !topic.isRemoved() && topic.getDataTypes().isEmpty()) return true;

@@ -32,8 +32,12 @@ import java.util.*;
  * @author  olli
  */
 public class EditQueryPanel extends javax.swing.JPanel {
-    private SQLConsolePanel parent;
+
+	private static final long serialVersionUID = 1L;
+
+	private SQLConsolePanel parent;
     private HashMap paramMap=new HashMap();
+    
     /** Creates new form EditQueryPanel */
     public EditQueryPanel(SQLConsolePanel parent,StoredQuery query) {
         this.parent=parent;

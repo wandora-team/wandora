@@ -26,7 +26,10 @@ package org.wandora.application.tools.server;
  * @author akivela
  */
 public class HTTPServerOpenPage extends HTTPServerTool {
-    public HTTPServerOpenPage(){
+
+	private static final long serialVersionUID = 1L;
+
+	public HTTPServerOpenPage(){
         super(HTTPServerTool.OPEN_PAGE);
     }
 }

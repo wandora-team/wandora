@@ -21,7 +21,7 @@
  * 
  * SelectTopicIfNoInstances.java
  *
- * Created on 14. heinäkuuta 2006, 12:00
+ * Created on 14. heinï¿½kuuta 2006, 12:00
  *
  */
 
@@ -37,9 +37,10 @@ import org.wandora.topicmap.*;
  */
 public class SelectTopicIfNoInstances extends DoTopicSelection {
     
-    
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public boolean acceptTopic(Topic topic)  {
         try {
             if(topic != null && !topic.isRemoved() && topic.getTopicMap().getTopicsOfType(topic).isEmpty()) return true;

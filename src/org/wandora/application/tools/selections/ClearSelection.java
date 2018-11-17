@@ -46,7 +46,10 @@ import org.wandora.application.gui.table.TopicGrid;
  */
 public class ClearSelection extends DoSelection {
     
-    /** Creates a new instance of ClearSelection */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of ClearSelection */
     public ClearSelection() {
     }
     

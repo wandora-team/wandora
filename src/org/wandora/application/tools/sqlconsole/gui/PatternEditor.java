@@ -34,10 +34,8 @@ import java.util.*;
 import java.util.regex.*;
 import java.awt.event.*;
 import javax.swing.*;
-import org.wandora.application.tools.sqlconsole.*;
 import org.wandora.application.tools.sqlconsole.data.utils.*;
 import org.wandora.application.gui.simple.*;
-import org.wandora.utils.*;
 import org.wandora.application.gui.*;
 
 
@@ -48,15 +46,17 @@ import org.wandora.application.gui.*;
 
 
 public class PatternEditor extends javax.swing.JDialog implements ActionListener {
-    
-    public static final String DEFAULT_PATTERN_NAME = "k‰ytt‰j‰n lauseke";
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String DEFAULT_PATTERN_NAME = "k√§ytt√§j√§n lauseke";
     
     public static Color TEST_ERROR = new Color(255,220,220);
     public static Color TEST_MATCH = new Color(220,255,220);
     public static Color TEST_MISMATCH = new Color(240,220,220);
      
     File currentDirectory;
-    Hashtable patterns;
+    Hashtable<String,SQLPattern> patterns;
     public boolean approve;
     Object owner;
     SQLPattern originalPattern;
@@ -66,7 +66,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     
     public PatternEditor() {
-        patterns = new Hashtable();
+        patterns = new Hashtable<>();
         //importPatterns(kirjava.getOptions().get("options.patterns.file"));
         //setIconImage(kirjava.getIconImage());
         owner = null;
@@ -335,7 +335,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        new PatternEditor().show();
+        new PatternEditor().setVisible(true);
     }
     
 
@@ -367,7 +367,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 o.applyPattern(currentColumn, getCurrentPattern(), andCheckBox.isSelected());
             }
         }
-        else if("S‰ilyt‰ lauseke...".equalsIgnoreCase(c)) {
+        else if("SÔøΩilytÔøΩ lauseke...".equalsIgnoreCase(c)) {
             savePattern();
         }
         else if("Testaa".equalsIgnoreCase(c)) {
@@ -383,7 +383,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     
     public void tryExit() {
-        this.hide();
+        this.setVisible(false);
     }
     
     
@@ -405,7 +405,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
             patternPane.setText(pattern.getPatternString());
         }
         andCheckBox.setSelected(isAnd);
-        super.show();
+        super.setVisible(true);
     }
     
     
@@ -431,7 +431,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 return new SQLPattern((String) nameComboBox.getSelectedItem(), patternPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected()); }
             catch (Exception e) { 
                 testResultPane.setBackground(TEST_ERROR);
-                testResultPane.setText("Virhe s‰‰nnˆllisess‰ lausekkeessa!\n\n" + e.toString());
+                testResultPane.setText("Virhe sÔøΩÔøΩnnÔøΩllisessÔøΩ lausekkeessa!\n\n" + e.toString());
                 return null; }
         }
         else {
@@ -460,7 +460,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     
     public void savePattern() {
-        String patternNameString=JOptionPane.showInputDialog(this, "Anna s‰‰nnˆllisen lausekkeen nimi", nameComboBox.getSelectedItem());
+        String patternNameString=JOptionPane.showInputDialog(this, "Anna s√§√§nn√∂llisen lausekkeen nimi", nameComboBox.getSelectedItem());
 
         String patternString = patternPane.getText();
         if(patternNameString != null && patternNameString.length() > 0) {
@@ -474,7 +474,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 }
                 catch (Exception e) {
                     testResultPane.setBackground(TEST_ERROR);
-                    testResultPane.setText("S‰ilytys ep‰onnistui! Virhe s‰‰nnˆllisess‰ lausekkeessa!\n\n" + e.toString());
+                    testResultPane.setText("S√§ilytys ep√§onnistui! Virhe s√§√§nn√∂llisess√§ lausekkeessa!\n\n" + e.toString());
                 }
             }
             else {
@@ -503,11 +503,11 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                     }
                     if(match) {
                         testResultPane.setBackground(TEST_MATCH);
-                        testResultPane.setText("Ok! Testattava merkkijono on s‰‰nnˆllisen lausekkeen mukainen!");
+                        testResultPane.setText("Ok! Testattava merkkijono on s√§√§nn√∂llisen lausekkeen mukainen!");
                     }
                     else {
                         testResultPane.setBackground(TEST_MISMATCH);
-                        testResultPane.setText("Testattava merkkijono ei ole s‰‰nnˆllisen lausekkeen mukainen!");
+                        testResultPane.setText("Testattava merkkijono ei ole s√§√§nn√∂llisen lausekkeen mukainen!");
                     }
                 }
                 catch (PatternSyntaxException pse) {
@@ -515,7 +515,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                     StringWriter sw = new StringWriter();
                     pse.printStackTrace(new PrintWriter(sw));
                     testResultPane.setBackground(TEST_ERROR);
-                    testResultPane.setText("Virhe s‰‰nnˆllisess‰ lausekkeessa!\n\n" + sw.toString());
+                    testResultPane.setText("Virhe s√§√§nn√∂llisess√§ lausekkeessa!\n\n" + sw.toString());
                 }
                 catch (Exception e) {
                     testResultPane.setBackground(TEST_ERROR);
@@ -526,12 +526,12 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
             }
             else {
                 testResultPane.setBackground(TEST_ERROR);
-                testResultPane.setText("Testattava merkkijono on tyhj‰!");
+                testResultPane.setText("Testattava merkkijono on tyhj√§!");
             }
         }
         else {
             testResultPane.setBackground(TEST_ERROR);
-            testResultPane.setText("S‰‰nnˆllinen lauseke on tyhj‰!");
+            testResultPane.setText("S√§√§nn√∂llinen lauseke on tyhj√§!");
         }
     }
 
@@ -559,7 +559,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     
     public void importPatterns(File file) {
-        patterns = new Hashtable();
+        patterns = new Hashtable<>();
         mergePatterns(file);
     }
     
@@ -567,7 +567,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     public void mergePatterns(File file) {
         if(file != null) {
-            patterns = new Hashtable();
+            patterns = new Hashtable<>();
             try {
                 String s = ""; // IObox.loadFile(file);
                 parsePatterns(s);
@@ -580,7 +580,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     
     public void importPatterns(String resourceName) {
-        patterns = new Hashtable();
+        patterns = new Hashtable<>();
         mergePatterns(resourceName);
     }
     
@@ -631,7 +631,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     public void exportPatterns() {
         JFileChooser chooser=new javax.swing.JFileChooser();
-        chooser.setDialogTitle("Talletetaan s‰‰nnˆlliset lausekkeet");
+        chooser.setDialogTitle("Talletetaan sÔøΩÔøΩnnÔøΩlliset lausekkeet");
         chooser.setApproveButtonText("Talleta");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -661,7 +661,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     public String patterns2String() {
         StringBuffer sb = new StringBuffer("");
         String key;
-        for(Enumeration keys=patterns.keys(); keys.hasMoreElements();) {
+        for(Enumeration<String> keys=patterns.keys(); keys.hasMoreElements();) {
             try {
                 key = (String) keys.nextElement();
                 SQLPattern kp = (SQLPattern) patterns.get(key);

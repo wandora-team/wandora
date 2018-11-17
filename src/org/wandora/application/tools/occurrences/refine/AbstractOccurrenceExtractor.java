@@ -38,7 +38,6 @@ import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
-import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 
@@ -47,7 +46,10 @@ import org.wandora.topicmap.TopicMap;
  * @author akivela
  */
 public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool implements  WandoraTool {
-    private Context preferredContext = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private Context preferredContext = null;
 
 
 
@@ -68,7 +70,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         Iterator topics = null;
         if(preferredContext != null) topics = preferredContext.getContextObjects();
         else topics = context.getContextObjects();
@@ -78,14 +80,14 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
                 Topic topic = null;
                 int total = 0;
                 int count = 0;
-                TopicMap tm = admin.getTopicMap();
+                TopicMap tm = wandora.getTopicMap();
 
-                GenericOptionsDialog god=new GenericOptionsDialog(admin,
+                GenericOptionsDialog god=new GenericOptionsDialog(wandora,
                     "Extract information from occurrences",
                     "To extract information from occurrences please address type and scope of occurrences.",true,new String[][]{
                     new String[]{"Type of occurrences","topic","","Type of changed occurrences"},
                     new String[]{"Scope of occurrences","topic","","Scope i.e. language of changed occurrences"},
-                },admin);
+                },wandora);
                 god.setVisible(true);
                 if(god.wasCancelled()) return;
 
@@ -118,7 +120,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
                                         String occurrence = scopedOccurrences.get(scopeTopic);
                                         if(occurrence != null) {
                                             count++;
-                                            _extractTopicsFrom(occurrence, topic, tm, admin);
+                                            _extractTopicsFrom(occurrence, topic, tm, wandora);
                                         }
                                     }
                                     else {
@@ -128,7 +130,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
                                             String occurrence = scopedOccurrences.get(oscopeTopic);
                                             if(occurrence != null && occurrence.length() > 0) {
                                                 count++;
-                                                _extractTopicsFrom(occurrence, topic, tm, admin);
+                                                _extractTopicsFrom(occurrence, topic, tm, wandora);
                                             }
                                         }
                                     }
@@ -146,7 +148,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
                                         String occurrence = scopedOccurrences.get(oscopeTopic);
                                         if(occurrence != null && occurrence.length() > 0) {
                                             count++;
-                                            _extractTopicsFrom(occurrence, topic, tm, admin);
+                                            _extractTopicsFrom(occurrence, topic, tm, wandora);
                                         }
                                     }
                                 }
@@ -159,7 +161,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
 
                     // WAIT FOR A WHILE BEFORE SENDING ANOTHER REQUEST
                     if(topics.hasNext() && !forceStop()) {
-                        try { Thread.currentThread().sleep(100); }
+                        try { Thread.sleep(100); }
                         catch(Exception e) {}
                     }
                 }

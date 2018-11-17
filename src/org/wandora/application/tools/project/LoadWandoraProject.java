@@ -55,7 +55,10 @@ import org.wandora.topicmap.packageio.DirectoryPackageInput;
  * @author akivela
  */
 public class LoadWandoraProject extends AbstractWandoraTool implements WandoraTool {
-    public File forceFile = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	public File forceFile = null;
     
     
     /**

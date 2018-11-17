@@ -21,24 +21,18 @@
  * 
  * SOMTopicVisualization.java
  *
- * Created on 30. heinäkuuta 2008, 13:43
+ * Created on 30. heinï¿½kuuta 2008, 13:43
  */
 
 package org.wandora.application.tools.som;
 
 
-
-
-
 import org.wandora.utils.*;
-import static org.wandora.utils.Tuples.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.gui.simple.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
-import java.awt.geom.*;
+
 
 
 /**
@@ -47,7 +41,9 @@ import java.awt.geom.*;
  */
 public class SOMTopicVisualization extends javax.swing.JDialog {
 
-    SOMMap map = null;
+	private static final long serialVersionUID = 1L;
+
+	SOMMap map = null;
 
     
     
@@ -103,7 +99,7 @@ public class SOMTopicVisualization extends javax.swing.JDialog {
     public void copySamples() {
         StringBuilder sb = new StringBuilder("");
         if(map != null) {
-            HashMap<Topic,SOMVector> samples = map.getSamples();
+            Map<Topic,SOMVector> samples = map.getSamples();
             Set<Topic> set = samples.keySet();
             Topic t = null;
             SOMVector v = null;

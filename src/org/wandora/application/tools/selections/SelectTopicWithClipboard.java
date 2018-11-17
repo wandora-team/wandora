@@ -21,7 +21,7 @@
  * 
  * SelectTopicWithClipboard.java
  *
- * Created on 14. heinäkuuta 2006, 12:18
+ * Created on 14. heinï¿½kuuta 2006, 12:18
  *
  */
 
@@ -43,7 +43,9 @@ import java.util.*;
  */
 public class SelectTopicWithClipboard extends DoTopicSelection {
     
-    String[] identifiers = null;
+
+	private static final long serialVersionUID = 1L;
+	String[] identifiers = null;
     String identifier = null;
     Iterator<Locator> sis = null;
     Locator si = null;

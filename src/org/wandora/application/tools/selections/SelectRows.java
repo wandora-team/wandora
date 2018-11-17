@@ -43,7 +43,11 @@ import org.wandora.application.gui.table.TopicGrid;
 
 public class SelectRows extends DoSelection {
     
-    /** Creates a new instance of SelectRows */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of SelectRows */
     public SelectRows() {
     }
     

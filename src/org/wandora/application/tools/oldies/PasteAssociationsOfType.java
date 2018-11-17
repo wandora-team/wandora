@@ -46,7 +46,9 @@ import java.util.*;
  */
 public class PasteAssociationsOfType extends AbstractWandoraTool implements WandoraTool {
 
-    private Topic associationType = null;
+
+	private static final long serialVersionUID = 1L;
+	private Topic associationType = null;
     private boolean HTMLOutput = false;
     
 
@@ -91,7 +93,7 @@ public class PasteAssociationsOfType extends AbstractWandoraTool implements Wand
                             WandoraOptionPane.showMessageDialog(wandora ,"Clipboard contains no association roles!\nNo associations created!","Association roles missing!",WandoraOptionPane.ERROR_MESSAGE); 
                             return;
                         }
-                        Vector aRoleVector = vectorize(aRoles, "\t");
+                        Vector<String> aRoleVector = vectorize(aRoles, "\t");
 
                         if(!st.hasMoreTokens()) {
                             WandoraOptionPane.showMessageDialog(wandora ,"Clipboard contains no association players! No associations created!","Association players missing!",WandoraOptionPane.ERROR_MESSAGE);
@@ -105,11 +107,11 @@ public class PasteAssociationsOfType extends AbstractWandoraTool implements Wand
                         while(st.hasMoreTokens() && aType != null && aRoles != null && !forceStop) {
                             line++;
                             hasAssociations = true;
-                            Vector playerVector = vectorize(st.nextToken(), "\t");                       
+                            Vector<String> playerVector = vectorize(st.nextToken(), "\t");                       
                             if(playerVector.size() == aRoleVector.size()) {
                                 if(playerVector.contains(topicOpen.getBaseName()) || aRoleVector.contains(topicOpen.getBaseName())) {
-                                    Vector aPlayerTopicVector = getTopics(wandora, topicMap, playerVector);
-                                    Vector aRoleTopicVector = getTopics(wandora, topicMap, aRoleVector);
+                                    Vector<Topic> aPlayerTopicVector = getTopics(wandora, topicMap, playerVector);
+                                    Vector<Topic> aRoleTopicVector = getTopics(wandora, topicMap, aRoleVector);
                                     a = null;
                                     for(int i=0; i<playerVector.size(); i++) {
                                         Topic player = (Topic) aPlayerTopicVector.elementAt(i);
@@ -163,8 +165,8 @@ public class PasteAssociationsOfType extends AbstractWandoraTool implements Wand
     
     
     
-    public Vector vectorize(String str, String delim) {
-        Vector v = new Vector();
+    public Vector<String> vectorize(String str, String delim) {
+        Vector<String> v = new Vector<>();
         if(str != null && str.length() > 0) {
             StringTokenizer sto = new StringTokenizer(str, delim);
             while(sto.hasMoreTokens()) {
@@ -176,7 +178,7 @@ public class PasteAssociationsOfType extends AbstractWandoraTool implements Wand
     
     
     
-    public Topic getTopic(Wandora admin, TopicMap topicMap, String topicName)  throws TopicMapException {
+    public Topic getTopic(Wandora wandora, TopicMap topicMap, String topicName)  throws TopicMapException {
         if(topicName != null) {
             topicName = Textbox.trimExtraSpaces(topicName);
             if(topicName.length() > 0) {
@@ -191,7 +193,7 @@ public class PasteAssociationsOfType extends AbstractWandoraTool implements Wand
                         si = "http://wandora.org/si/" + time + "-" + counter;
                     }
                     t.addSubjectIdentifier(new Locator(si));
-                    WandoraOptionPane.showMessageDialog(admin ,"Topic does not exists! Created new topic with base name '" + topicName + "'.","New topic created!",WandoraOptionPane.INFORMATION_MESSAGE);
+                    WandoraOptionPane.showMessageDialog(wandora ,"Topic does not exists! Created new topic with base name '" + topicName + "'.","New topic created!",WandoraOptionPane.INFORMATION_MESSAGE);
                 }
                 return t;
             }
@@ -201,10 +203,10 @@ public class PasteAssociationsOfType extends AbstractWandoraTool implements Wand
    
     
     
-    public Vector getTopics(Wandora admin, TopicMap topicMap, Vector topicNames)  throws TopicMapException {
-        Vector topics = new Vector();
+    public Vector<Topic> getTopics(Wandora wandora, TopicMap topicMap, Vector<String> topicNames)  throws TopicMapException {
+        Vector<Topic> topics = new Vector<>();
         for(int i=0; i<topicNames.size(); i++) {
-            topics.add(getTopic(admin, topicMap, (String) topicNames.elementAt(i)));
+            topics.add(getTopic(wandora, topicMap, (String) topicNames.elementAt(i)));
         }
         return topics;
     }

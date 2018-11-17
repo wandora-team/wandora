@@ -35,7 +35,10 @@ import org.wandora.topicmap.TopicMap;
  * @author akivela
  */
 public class UClassifyOccurrenceExtractor extends AbstractOccurrenceExtractor {
-    private String forceClassifier = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private String forceClassifier = null;
     private String forceOwner = null;
     private double forceProbability = 0.1;
     

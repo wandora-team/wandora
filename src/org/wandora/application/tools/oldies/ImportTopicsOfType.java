@@ -33,7 +33,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import org.wandora.application.gui.simple.*;
-import org.wandora.*;
 import java.io.*;
 import java.util.*;
 
@@ -42,7 +41,9 @@ import java.util.*;
  * @author  olli
  */
 public class ImportTopicsOfType extends AbstractWandoraTool implements WandoraTool {
-    private String typeName;
+
+	private static final long serialVersionUID = 1L;
+	private String typeName;
     private String typeSI;
     private boolean shallow;
     /** Creates a new instance of ImportTopicsOfType */
@@ -65,12 +66,12 @@ public class ImportTopicsOfType extends AbstractWandoraTool implements WandoraTo
     
     private Topic copyShallow(TopicMap workspace,Topic t) throws TopicMapException {
         Topic edit=null;
-        Collection merging=workspace.getMergingTopics(t);
+        Collection<Topic> merging=workspace.getMergingTopics(t);
         if(!merging.isEmpty()) edit=(Topic)merging.iterator().next();
         if(edit==null){
             edit=workspace.createTopic();
         }
-        Iterator iter2=t.getSubjectIdentifiers().iterator();
+        Iterator<Locator> iter2=t.getSubjectIdentifiers().iterator();
         while(iter2.hasNext()){
             Locator l=(Locator)iter2.next();
             edit.addSubjectIdentifier(l);
@@ -102,8 +103,8 @@ public class ImportTopicsOfType extends AbstractWandoraTool implements WandoraTo
                     editType=workspace.copyTopicIn(type, false);
                 }
 
-                Collection c=temp.getTopicsOfType(type);
-                Iterator iter=c.iterator();
+                Collection<Topic> c=temp.getTopicsOfType(type);
+                Iterator<Topic> iter=c.iterator();
                 while(iter.hasNext()){
                     Topic t=(Topic)iter.next();
                     Topic edit=null;

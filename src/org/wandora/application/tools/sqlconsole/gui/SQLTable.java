@@ -31,12 +31,8 @@ import org.wandora.utils.Textbox;
 import org.wandora.utils.swing.TableSorter;
 import java.util.*;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
-import javax.swing.border.*;
-import org.wandora.utils.*;
-import org.wandora.utils.swing.*;
 
 
 /**
@@ -45,7 +41,9 @@ import org.wandora.utils.swing.*;
  */
 public class SQLTable extends JTable implements TableCellRenderer {
     
-    boolean[] columnEditable;
+	private static final long serialVersionUID = 1L;
+	
+	boolean[] columnEditable;
     String[][] data;
     String[] columnNames;
     Color[] columnBackground;
@@ -185,7 +183,10 @@ public class SQLTable extends JTable implements TableCellRenderer {
     
      
    private class KirjavaTableModel extends AbstractTableModel {
-        private HashSet<Integer> editedRows=new HashSet<Integer>();
+
+	   	private static final long serialVersionUID = 1L;
+		
+	   	private HashSet<Integer> editedRows=new HashSet<Integer>();
         private Collection<Integer> getEditedRows(){
             return editedRows;
         }

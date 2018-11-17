@@ -54,7 +54,10 @@ import org.wandora.utils.swing.GuiTools;
 
 public class RConsole2 extends javax.swing.JPanel implements ActionListener, SimpleTextConsoleListener, RBridgeListener {
     
-    private SimpleTextConsole simpleTextConsole = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private SimpleTextConsole simpleTextConsole = null;
     
     protected static Object[] fileMenuStruct = new Object[] {
         "Import...", UIBox.getIcon("gui/icons/file_open.png"),

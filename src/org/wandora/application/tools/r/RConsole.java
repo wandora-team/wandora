@@ -61,7 +61,9 @@ import org.wandora.utils.swing.GuiTools;
 public class RConsole extends javax.swing.JPanel implements ActionListener {
     
 
-    private ArrayList<String> history=new ArrayList<String>(); { history.add(""); }
+	private static final long serialVersionUID = 1L;
+
+	private ArrayList<String> history=new ArrayList<String>(); { history.add(""); }
     private int historyPtr=0;
 
     private boolean prompt=false;

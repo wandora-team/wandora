@@ -42,10 +42,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class LocateSelectTopicInTree extends AbstractWandoraTool implements WandoraTool {
 
-    
+	
+	private static final long serialVersionUID = 1L;
 
-    
-    /** Creates a new instance of LocateSelectTopicInTree */
+	/** Creates a new instance of LocateSelectTopicInTree */
     public LocateSelectTopicInTree() {
     }
     public LocateSelectTopicInTree(Context preferredContext) {

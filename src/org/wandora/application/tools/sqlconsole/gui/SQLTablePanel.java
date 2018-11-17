@@ -34,12 +34,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
-import javax.swing.border.*;
 import java.util.*;
-import java.util.regex.*;
-import org.wandora.utils.*;
-import org.wandora.utils.swing.*;
-import org.wandora.application.tools.sqlconsole.*;
 import org.wandora.application.tools.sqlconsole.data.*;
 import org.wandora.application.tools.sqlconsole.data.utils.*;
 import org.wandora.application.gui.UIBox;
@@ -51,7 +46,9 @@ import org.wandora.application.gui.UIBox;
  */
 public class SQLTablePanel extends JPanel implements MouseListener, ActionListener, Scrollable {
     
-    private static Color PATTERN_BACKGROUND = new Color(250, 245, 245);
+	private static final long serialVersionUID = 1L;
+	
+	private static Color PATTERN_BACKGROUND = new Color(250, 245, 245);
     private static Color PATTERN_FOREGROUND = new Color(10, 0, 0);
     
     private SQLTable guiTable;
@@ -85,7 +82,7 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
             "---",
             "Kopioi",
             "Leikkaa",
-            "Liitä",
+            "Liitï¿½",
             "---",
             "Valitse kaikki",
             "Valitse rivi(t)",
@@ -261,7 +258,7 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
         }
         if(columnModel != null) {
             guiTable.setColumnModel(columnModel);
-            for(Enumeration e = columnModel.getColumns(); e.hasMoreElements(); ) {
+            for(Enumeration<TableColumn> e = columnModel.getColumns(); e.hasMoreElements(); ) {
                 TableColumn column = (TableColumn) e.nextElement();
                 column.setHeaderValue(columnNames[column.getModelIndex()]);
             }
@@ -280,11 +277,11 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
     
     
     
-    public Vector getHiddenColumnFromSelectedRows(int hiddenColumn) {
+    public Vector<String> getHiddenColumnFromSelectedRows(int hiddenColumn) {
         if(getSelectedRow() != -1) {
             try {
                 int[] r=getSelectedRows();
-                Vector colData=new Vector();
+                Vector<String> colData=new Vector<>();
                 for(int i=0;i<r.length;i++){
                     Object[] hidden=getHiddenData(r[i]);
                     colData.add(hidden[hiddenColumn].toString());
@@ -557,23 +554,23 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
                 }
                 else guiTable.editCellAt(loc.x, loc.y);
             }
-            // ----- leikepöytä ------
+            // ----- leikepï¿½ytï¿½ ------
             else if("Kopioi".equalsIgnoreCase(command)) {
                 copy();
             }
             else if("Leikkaa".equalsIgnoreCase(command)) {
                 cut();
             }
-            else if("Liitä".equalsIgnoreCase(command)) {
+            else if("Liitï¿½".equalsIgnoreCase(command)) {
                 paste();
             }
             else if("Laske rivit...".equalsIgnoreCase(command)) {
                 int rowsCounter = guiTable.getRowCount();
-                String message = "Taulussa on " + rowsCounter + " riviä!";
-                JOptionPane.showMessageDialog(this, message, "Taulussa rivejä", JOptionPane.INFORMATION_MESSAGE);
+                String message = "Taulussa on " + rowsCounter + " riviï¿½!";
+                JOptionPane.showMessageDialog(this, message, "Taulussa rivejï¿½", JOptionPane.INFORMATION_MESSAGE);
             }
             /*
-            else if("Lisää rivi...".equalsIgnoreCase(command)) {
+            else if("Lisï¿½ï¿½ rivi...".equalsIgnoreCase(command)) {
                 addRows();
             }
             else if("Poista rivi...".equalsIgnoreCase(command)) {

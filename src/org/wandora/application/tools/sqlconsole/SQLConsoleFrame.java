@@ -27,15 +27,16 @@
 package org.wandora.application.tools.sqlconsole;
 
 import org.wandora.utils.Options;
-import org.wandora.utils.*;
 
 /**
  *
  * @author  olli
  */
 public class SQLConsoleFrame extends javax.swing.JFrame {
-    
-    //private Kirjava kirjava;
+
+	private static final long serialVersionUID = 1L;
+
+	//private Kirjava kirjava;
     public Options options = null;
     
     /** Creates new form SQLConsole */

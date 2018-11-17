@@ -52,7 +52,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements WandoraTool {
     
-    private static final String URL_PREFIX = "http://pastebin.com/";
+
+	private static final long serialVersionUID = 1L;
+
+	private static final String URL_PREFIX = "http://pastebin.com/";
     private static final String RAW_PREFIX = "http://pastebin.com/raw.php?i=";
     private boolean cancelled = false;
     
@@ -115,7 +118,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements
                             if(forceStop() || cancelled) break;
                             type = otype;
                             Hashtable<Topic, String> occurrences = carrier.getData(type);
-                            for(Iterator scopes = occurrences.keySet().iterator(); scopes.hasNext(); ) {
+                            for(Iterator<Topic> scopes = occurrences.keySet().iterator(); scopes.hasNext(); ) {
                                 Topic scope = (Topic) scopes.next();
                                 if(scope != null) {
                                     o = occurrences.get(scope);

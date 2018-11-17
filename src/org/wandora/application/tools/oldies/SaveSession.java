@@ -29,7 +29,6 @@ package org.wandora.application.tools.oldies;
 
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.remote.*;
-import org.wandora.topicmap.layered.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
@@ -44,7 +43,10 @@ import java.io.*;
  */
 public class SaveSession extends AbstractWandoraTool implements WandoraTool {
     
-    RemoteTopicMap remoteTopicMap = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	RemoteTopicMap remoteTopicMap = null;
     
     
     /** Creates a new instance of SaveSession */

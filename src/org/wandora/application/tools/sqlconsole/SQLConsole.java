@@ -31,16 +31,16 @@ import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import org.wandora.utils.RegexFileChooser;
-import org.wandora.application.tools.sqlconsole.gui.*;
-import org.wandora.utils.*;
 import org.wandora.application.gui.UIBox;
 /**
  *
  * @author  olli
  */
 public class SQLConsole extends javax.swing.JDialog {
-    
-    private Options options;
+
+	private static final long serialVersionUID = 1L;
+
+	private Options options;
         
     /** Creates new form SQLConsole */
     public SQLConsole(Options options) {
@@ -50,7 +50,7 @@ public class SQLConsole extends javax.swing.JDialog {
         menuBar.add(UIBox.makeMenu(new Object[]{
             "SQL-Konsoli",new Object[]{
                 "Tuo",
-                "Tallenna nimellä",
+                "Tallenna nimellï¿½",
                 "---",
                 "Exit"
             }
@@ -61,7 +61,7 @@ public class SQLConsole extends javax.swing.JDialog {
                 if(cmd.equalsIgnoreCase("Tuo")){
                     importQueries();
                 }
-                else if(cmd.equalsIgnoreCase("Tallenna nimellä")){
+                else if(cmd.equalsIgnoreCase("Tallenna nimellï¿½")){
                     exportQueries();
                 }
                 else if(cmd.equalsIgnoreCase("Exit")){

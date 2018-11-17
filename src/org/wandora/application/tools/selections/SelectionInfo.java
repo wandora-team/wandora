@@ -56,7 +56,12 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 public class SelectionInfo extends DoSelection {
     
-    /** Creates a new instance of SelectionInfo */
+
+	private static final long serialVersionUID = 1L;
+
+	
+	
+	/** Creates a new instance of SelectionInfo */
     public SelectionInfo() {
     }
     

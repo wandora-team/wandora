@@ -50,8 +50,11 @@ import org.wandora.application.gui.table.TopicGrid;
 
 
 public class InvertSelection extends DoSelection {
-    
-    /** Creates a new instance of InvertSelection */
+
+	private static final long serialVersionUID = 1L;
+
+	
+	/** Creates a new instance of InvertSelection */
     public InvertSelection() {
     }
     

@@ -255,7 +255,7 @@ public class RBridge {
                 }
             }
             try {
-                Thread.currentThread().sleep(200);
+                Thread.sleep(200);
             }
             catch(Exception e) {
                 // WAKE UP

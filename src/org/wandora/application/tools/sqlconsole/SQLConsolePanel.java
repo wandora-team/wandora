@@ -25,6 +25,8 @@
  */
 
 package org.wandora.application.tools.sqlconsole;
+
+
 import java.util.*;
 import java.sql.*;
 import org.wandora.application.tools.sqlconsole.data.*;
@@ -32,14 +34,16 @@ import org.wandora.application.tools.sqlconsole.gui.*;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.Options;
 import java.io.*;
-import org.w3c.dom.*;
+
 /**
  *
  * @author  olli
  */
 public class SQLConsolePanel extends javax.swing.JPanel {
-    
-    private Map<String,StoredQuery> storedQueries=new TreeMap<String,StoredQuery>();
+
+	private static final long serialVersionUID = 1L;
+
+	private Map<String,StoredQuery> storedQueries=new TreeMap<String,StoredQuery>();
     private Connection connection;
     private int resultMaxRows;
     private Options options;
@@ -127,7 +131,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
             resultPanel.validate();
             resultPanel.repaint();
             if(result.rowCountOverFlow){
-                javax.swing.JOptionPane.showMessageDialog(this,"N‰ytet‰‰n vain ensimm‰iset "+result.rows.size()+" rivi‰.");
+                javax.swing.JOptionPane.showMessageDialog(this,"N√§ytet√§√§n vain ensimm√§iset "+result.rows.size()+" riviÔøΩ.");
             }
         }
         else{
@@ -153,7 +157,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
                 columnNames[i]=metaData.getColumnName(i+1);
             }
             int count=0;
-            Vector<Object[]> rows=new Vector();
+            Vector<Object[]> rows=new Vector<>();
             boolean hasNext = resultSet.next();
             while(hasNext) {
                 try {
@@ -234,7 +238,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
     }
     
     public void clearStoredQueries(){
-        storedQueries=new HashMap();
+        storedQueries=new HashMap<>();
         updateSimpleView();
     }
     public void loadStoredQueries() throws Exception {

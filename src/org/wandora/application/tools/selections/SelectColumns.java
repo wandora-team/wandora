@@ -42,8 +42,11 @@ import org.wandora.application.gui.table.TopicGrid;
 
 public class SelectColumns extends DoSelection {
     
-    
-    /** Creates a new instance of SelectColumns */
+
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of SelectColumns */
     public SelectColumns() {
     }
  

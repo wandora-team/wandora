@@ -31,7 +31,6 @@ package org.wandora.application.tools.som;
 import java.util.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import static org.wandora.utils.Tuples.T2;
 import static org.wandora.utils.Tuples.T3;
 
 
@@ -42,7 +41,7 @@ import static org.wandora.utils.Tuples.T3;
 public class SOMMap {
     public static boolean RANDOM_TRAINING_VECTOR_SELECTION = false;
     
-    private HashMap<Topic,SOMVector> samples = null;
+    private Map<Topic,SOMVector> samples = null;
     
     private SOMNeuron[][] map = null;
     private int size = 0;
@@ -58,7 +57,7 @@ public class SOMMap {
     
     
     
-    public SOMMap(HashMap<Topic,SOMVector> samples, WandoraTool parent) {
+    public SOMMap(Map<Topic,SOMVector> samples, WandoraTool parent) {
         startTime = System.currentTimeMillis();
         this.samples = samples;
         this.parent = parent;
@@ -190,7 +189,7 @@ public class SOMMap {
 
     
 
-    public HashMap<Topic,SOMVector> getSamples() {
+    public Map<Topic,SOMVector> getSamples() {
         return samples;
     }
 
@@ -209,11 +208,11 @@ public class SOMMap {
                     distance = v.distance( mapNeuron.getSOMVector() );
                     if(distance < maxDistance) {
                         matchList = new ArrayList<T3<Integer, Integer, SOMNeuron>>();
-                        matchList.add(new T3(new Integer(i), new Integer(j), mapNeuron));
+                        matchList.add(new T3<Integer,Integer,SOMNeuron>(Integer.valueOf(i), Integer.valueOf(j), mapNeuron));
                         maxDistance = distance;
                     }
                     else if(distance == maxDistance) {
-                        matchList.add(new T3(new Integer(i), new Integer(j), mapNeuron));
+                        matchList.add(new T3<Integer,Integer,SOMNeuron>(Integer.valueOf(i), Integer.valueOf(j), mapNeuron));
                     }
                 }
                 catch(Exception e) {

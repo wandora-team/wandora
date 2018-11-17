@@ -21,7 +21,7 @@
  * 
  * SelectTopicWithAssociationType.java
  *
- * Created on 26. heinäkuuta 2006, 11:51
+ * Created on 26. heinï¿½kuuta 2006, 11:51
  *
  */
 
@@ -43,16 +43,19 @@ import java.util.*;
  */
 public class SelectTopicWithAssociationType extends DoTopicSelection {
     
-    Topic type = null;
+
+	private static final long serialVersionUID = 1L;
+
+	Topic type = null;
 
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         try {
-            type = admin.showTopicFinder("Select association type...");
+            type = wandora.showTopicFinder("Select association type...");
             if(type != null) {
-                super.execute(admin, context);
+                super.execute(wandora, context);
             }
         }
         catch(Exception e) {

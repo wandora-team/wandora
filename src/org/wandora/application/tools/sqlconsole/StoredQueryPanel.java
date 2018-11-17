@@ -27,17 +27,19 @@
 package org.wandora.application.tools.sqlconsole;
 
 
-import org.wandora.application.tools.sqlconsole.gui.*;
 import java.util.*;
-import javax.swing.*;
 import javax.swing.text.JTextComponent;
+
+
 /**
  *
  * @author  olli
  */
 public class StoredQueryPanel extends javax.swing.JPanel {
     
-    private Map<String,StoredQuery> storedQueries;
+	private static final long serialVersionUID = 1L;
+	
+	private Map<String,StoredQuery> storedQueries;
     private Map<String,JTextComponent> paramMap=new TreeMap<String,JTextComponent>();
     private SQLConsolePanel parent;
     

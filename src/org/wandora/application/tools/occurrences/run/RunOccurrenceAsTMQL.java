@@ -43,10 +43,11 @@ import org.wandora.utils.DataURL;
 
 
 public class RunOccurrenceAsTMQL extends AbstractWandoraTool implements WandoraTool {
-    
-    
 
-    public RunOccurrenceAsTMQL() {}
+	private static final long serialVersionUID = 1L;
+
+
+	public RunOccurrenceAsTMQL() {}
     public RunOccurrenceAsTMQL(Context preferredContext) {
         setContext(preferredContext);
     }

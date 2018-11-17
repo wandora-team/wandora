@@ -27,9 +27,6 @@
 package org.wandora.application.tools.sqlconsole.data;
 
 
-
-import org.wandora.application.tools.sqlconsole.*;
-import java.util.*;
 import java.awt.*;
 
 /**

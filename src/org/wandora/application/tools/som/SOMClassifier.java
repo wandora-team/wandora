@@ -32,7 +32,6 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.gui.*;
-import java.io.*;
 import java.util.*;
 
 
@@ -79,9 +78,13 @@ import java.util.*;
  */
 public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
 
-    
-    
-    public SOMClassifier(Context preferredContext) {
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	public SOMClassifier(Context preferredContext) {
         this.setContext(preferredContext);
     }
     
@@ -112,8 +115,8 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
                     setLogTitle("SOM of associations");
                     if(groupingRole != null) {
                         log("Building input vectors");
-                        HashMap<Topic,Set> inputSets = buildInputSets(wandora, groupingRole, context.getContextObjects());
-                        HashMap<Topic,SOMVector> inputVectors = buildInputVectors(inputSets);
+                        Map<Topic,Set<Topic>> inputSets = buildInputSets(wandora, groupingRole, context.getContextObjects());
+                        Map<Topic,SOMVector> inputVectors = buildInputVectors(inputSets);
                         log("Training SOM");
                         SOMMap map = new SOMMap(inputVectors, this);
                         SOMTopicVisualization visualization = new SOMTopicVisualization(wandora);
@@ -164,13 +167,13 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    private HashMap<Topic,Set> buildInputSets(Wandora admin, Topic groupingRole, Iterator<Association> associations) {
-        HashMap<Topic,Set> resultSets = new HashMap<Topic,Set>();
+    private Map<Topic,Set<Topic>> buildInputSets(Wandora admin, Topic groupingRole, Iterator<Association> associations) {
+        HashMap<Topic,Set<Topic>> resultSets = new LinkedHashMap<Topic,Set<Topic>>();
         Association a = null;
         Topic groupingTopic = null;
         Topic role = null;
         Topic player = null;
-        Set resultSet;
+        Set<Topic> resultSet;
         
         while(associations.hasNext()) {
             try {
@@ -205,12 +208,12 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    private HashMap<Topic,SOMVector> buildInputVectors(HashMap<Topic,Set> inputSets) {
+    private Map<Topic,SOMVector> buildInputVectors(Map<Topic,Set<Topic>> inputSets) {
         ArrayList<Topic> fullVector = new ArrayList<Topic>();
-        Collection<Set> sets = inputSets.values();
+        Collection<Set<Topic>> sets = inputSets.values();
         Set<Topic> set = null;
         Topic t = null;
-        for(Iterator<Set> setIterator = sets.iterator(); setIterator.hasNext(); ) {
+        for(Iterator<Set<Topic>> setIterator = sets.iterator(); setIterator.hasNext(); ) {
             try {
                 set = setIterator.next();
                 for(Iterator<Topic> topicIterator = set.iterator(); topicIterator.hasNext(); ) {
@@ -225,7 +228,7 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
             }
         }
         
-        HashMap<Topic,SOMVector> inputVectors = new HashMap<Topic,SOMVector>();
+        Map<Topic,SOMVector> inputVectors = new LinkedHashMap<Topic,SOMVector>();
         int s = fullVector.size();
         Set<Topic> keys = inputSets.keySet();
         Iterator<Topic> keyIterator = keys.iterator();

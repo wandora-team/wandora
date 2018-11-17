@@ -43,7 +43,7 @@ public class QueryProcessor {
     
     public static String[] parseParemeterFields(String query){
         System.out.println("Finding params from "+query);
-        Vector params=new Vector();
+        Vector<String> params=new Vector<>();
         Pattern pattern=Pattern.compile("(^|[^\\{])((\\{\\{)*)\\{([^\\{\\}]+)\\}");
         Matcher matcher=pattern.matcher(query);
         int ptr=0;

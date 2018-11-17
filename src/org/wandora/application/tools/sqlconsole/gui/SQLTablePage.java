@@ -29,15 +29,9 @@ package org.wandora.application.tools.sqlconsole.gui;
 import org.wandora.utils.Delegate;
 import java.util.*;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.table.*;
-import org.wandora.utils.*;
-import static org.wandora.utils.Tuples.*;
-import org.wandora.utils.swing.*;
-import org.wandora.application.tools.sqlconsole.*;
 import org.wandora.application.tools.sqlconsole.data.*;
-import java.sql.*;
+
 
 /**
  *
@@ -45,8 +39,10 @@ import java.sql.*;
  */
 public class SQLTablePage extends JPanel {
     
-    
-    private long refreshTime;
+
+	private static final long serialVersionUID = 1L;
+
+	private long refreshTime;
     //Kirjava kirjava = null;
     //Kirjasto kirjasto = null;
     TableView dataTable = null;
@@ -276,15 +272,15 @@ public class SQLTablePage extends JPanel {
                             JOptionPane.showMessageDialog(kirjava, "Tallennettu taulukon muutokset!", "Tallennus!", JOptionPane.INFORMATION_MESSAGE);
                         }
                         else {
-                            JOptionPane.showMessageDialog(kirjava, "Taulukon rivejä ei ole muutettu!", "Ei talletettavaa!", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(kirjava, "Taulukon rivejï¿½ ei ole muutettu!", "Ei talletettavaa!", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }catch(Exception e){
                         e.printStackTrace();
-                        JOptionPane.showMessageDialog(kirjava, "Muutosten tallennus keskeytyi virheeseen\n" + e.toString(), "Tallennus epäonnistui!", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(kirjava, "Muutosten tallennus keskeytyi virheeseen\n" + e.toString(), "Tallennus epï¿½onnistui!", JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 else {
-                    JOptionPane.showMessageDialog(kirjava, "Taulukko on tyhjä, eikä sisällä muutettuja tietoja!", "Ei talletettavaa!", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(kirjava, "Taulukko on tyhjï¿½, eikï¿½ sisï¿½llï¿½ muutettuja tietoja!", "Ei talletettavaa!", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         }), gridBagConstraints);

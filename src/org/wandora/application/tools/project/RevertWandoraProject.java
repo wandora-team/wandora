@@ -49,8 +49,10 @@ import org.wandora.topicmap.packageio.DirectoryPackageInput;
  */
 public class RevertWandoraProject extends AbstractWandoraTool implements WandoraTool {
    
-    
-    /**
+
+	private static final long serialVersionUID = 1L;
+	
+	/**
      * Creates a new instance of RevertWandoraProject 
      */
     public RevertWandoraProject() {

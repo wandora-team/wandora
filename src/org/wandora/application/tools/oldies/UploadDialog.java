@@ -41,8 +41,10 @@ import javax.swing.*;
  * @author  olli
  */
 public class UploadDialog extends javax.swing.JDialog {
-    
-    private Wandora parent;
+
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora parent;
     private String[] dirs;
     
     /** Creates new form UploadDialog */

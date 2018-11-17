@@ -25,13 +25,12 @@
  */
 
 package org.wandora.application.tools.oldies;
+
 import org.wandora.application.tools.AbstractWandoraTool;
-import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 
 import java.io.*;
-import java.util.*;
 
 /**
  *
@@ -39,7 +38,9 @@ import java.util.*;
  */
 public class UploadFileOld extends AbstractWandoraTool implements WandoraTool {
     
-    private File file;
+	private static final long serialVersionUID = 1L;
+	
+	private File file;
     
     /**
      * Creates a new instance of UploadFileOld

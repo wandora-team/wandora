@@ -32,7 +32,6 @@ import org.wandora.application.tools.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.*;
 import javax.swing.*;
 
 
@@ -43,7 +42,10 @@ import javax.swing.*;
 public class ResetWandora extends AbstractWandoraTool implements WandoraTool {
     
 
-    public ResetWandora() {
+	private static final long serialVersionUID = 1L;
+
+
+	public ResetWandora() {
     }
     
     

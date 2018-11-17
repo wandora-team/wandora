@@ -50,7 +50,10 @@ import org.wandora.topicmap.packageio.DirectoryPackageOutput;
  * @author akivela
  */
 public class SaveWandoraProject extends AbstractWandoraTool implements WandoraTool {
-    private boolean useCurrentFileName = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	private boolean useCurrentFileName = false;
     
     
 

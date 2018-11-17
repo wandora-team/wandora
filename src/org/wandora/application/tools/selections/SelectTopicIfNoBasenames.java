@@ -21,7 +21,7 @@
  * 
  * SelectTopicIfNoBasenames.java
  *
- * Created on 14. heinäkuuta 2006, 12:14
+ * Created on 14. heinï¿½kuuta 2006, 12:14
  */
 
 package org.wandora.application.tools.selections;
@@ -34,10 +34,11 @@ import org.wandora.topicmap.*;
  * @author akivela
  */
 public class SelectTopicIfNoBasenames extends DoTopicSelection {
-    
-    
-    
-    @Override
+
+	
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public boolean acceptTopic(Topic topic)  {
         try {
             if(topic != null && !topic.isRemoved() && topic.getBaseName() == null) return true;

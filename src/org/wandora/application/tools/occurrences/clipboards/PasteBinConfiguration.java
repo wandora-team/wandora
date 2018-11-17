@@ -44,7 +44,9 @@ import org.wandora.application.gui.simple.SimpleLabel;
 
 public class PasteBinConfiguration extends javax.swing.JPanel {
 
-    private JDialog myDialog = null;
+	private static final long serialVersionUID = 1L;
+
+	private JDialog myDialog = null;
     private boolean accepted = false;
     
     

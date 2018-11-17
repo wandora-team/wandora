@@ -25,7 +25,6 @@ package org.wandora.application.tools.occurrences.run;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -35,9 +34,7 @@ import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.application.gui.table.TableViewerPanel;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.query2.QueryRunner;
-import org.wandora.topicmap.TMQLRunner;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.DataURL;
 
 /**
@@ -49,7 +46,9 @@ import org.wandora.utils.DataURL;
 public class RunOccurrenceAsQuery extends AbstractWandoraTool implements WandoraTool {
     
 
-    public RunOccurrenceAsQuery() {}
+	private static final long serialVersionUID = 1L;
+
+	public RunOccurrenceAsQuery() {}
     public RunOccurrenceAsQuery(Context preferredContext) {
         setContext(preferredContext);
     }
