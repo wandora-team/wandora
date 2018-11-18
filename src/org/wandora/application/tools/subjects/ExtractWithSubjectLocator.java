@@ -42,7 +42,10 @@ import java.util.*;
  * @author akivela
  */
 public class ExtractWithSubjectLocator extends AbstractWandoraTool implements WandoraTool, Runnable {
-    private AbstractExtractor enclosedExtractor = null;
+
+
+	private static final long serialVersionUID = 1L;
+	private AbstractExtractor enclosedExtractor = null;
     
     
     /** Creates a new instance of SubjectLocatorExtractor */

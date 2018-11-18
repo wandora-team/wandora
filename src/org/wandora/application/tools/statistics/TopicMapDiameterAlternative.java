@@ -21,7 +21,7 @@
  * 
  * TopicMapDiameter.java
  *
- * Created on 1. kesäkuuta 2007, 12:41
+ * Created on 1. kesï¿½kuuta 2007, 12:41
  *
  */
 
@@ -47,7 +47,9 @@ import org.wandora.topicmap.layered.*;
 // Apparently uses Floyd-Warshall algorithm
 public class TopicMapDiameterAlternative extends AbstractWandoraTool {
     
-    /** Creates a new instance of TopicMapDiameter */
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of TopicMapDiameter */
     public TopicMapDiameterAlternative() {
     }
 

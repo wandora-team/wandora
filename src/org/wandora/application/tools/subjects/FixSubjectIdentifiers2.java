@@ -26,16 +26,13 @@
 
 package org.wandora.application.tools.subjects;
 
-import java.net.URI;
-import java.net.URL;
 import java.net.URLEncoder;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import static org.wandora.application.gui.ConfirmResult.*;
-import org.wandora.*;
+
 
 import java.util.*;
 import org.wandora.utils.DataURL;
@@ -55,7 +52,10 @@ import org.wandora.utils.DataURL;
  */
 public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements WandoraTool {
 
-    boolean quiet = false;
+
+	private static final long serialVersionUID = 1L;
+
+	boolean quiet = false;
 
     public FixSubjectIdentifiers2() {
     }
@@ -104,7 +104,7 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
                                 addCounter++;
                             }
                             else {
-                                subjectIdentifiers = new ArrayList(subjectIdentifiers);
+                                subjectIdentifiers = new ArrayList<>(subjectIdentifiers);
                                 for(Locator subjectIdentifier : subjectIdentifiers) {
                                     if(subjectIdentifier != null) {
                                         checkCount++;

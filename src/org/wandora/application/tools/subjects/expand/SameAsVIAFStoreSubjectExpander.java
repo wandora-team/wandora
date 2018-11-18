@@ -34,7 +34,11 @@ import org.wandora.application.contexts.Context;
 
 public class SameAsVIAFStoreSubjectExpander extends SameAsSubjectExpander {
     
-    public SameAsVIAFStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsVIAFStoreSubjectExpander() {}
     public SameAsVIAFStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

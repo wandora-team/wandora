@@ -42,9 +42,10 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class MakeSubjectLocatorFromFileContent extends AbstractWandoraTool implements WandoraTool, Runnable {
-    
 
-    public MakeSubjectLocatorFromFileContent() {
+	private static final long serialVersionUID = 1L;
+
+	public MakeSubjectLocatorFromFileContent() {
     }
     public MakeSubjectLocatorFromFileContent(Context proposedContext) {
         setContext(proposedContext);

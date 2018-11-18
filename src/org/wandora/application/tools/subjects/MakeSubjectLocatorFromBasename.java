@@ -21,7 +21,7 @@
  * 
  * MakeSIFromBasename.java
  *
- * Created on 4. heinäkuuta 2006, 11:07
+ * Created on 4. heinï¿½kuuta 2006, 11:07
  *
  */
 
@@ -35,8 +35,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 
-import org.wandora.*;
-
 
 /**
  * Add context topics a subject locator created using topic's basename.
@@ -47,7 +45,10 @@ import org.wandora.*;
  * @author akivela
  */
 public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool implements WandoraTool {
-    private static int MAXLEN = 256;
+
+	private static final long serialVersionUID = 1L;
+	
+	private static int MAXLEN = 256;
     private String replacement = "";
     private String SLTemplate = "http://wandora.org/si/%BASENAME%";
     

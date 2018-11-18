@@ -34,7 +34,6 @@ import org.wandora.application.*;
 import org.wandora.application.tools.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import org.wandora.*;
 
 import java.util.*;
 import java.awt.*;
@@ -50,8 +49,10 @@ import java.net.*;
  */   
 public class OpenSubjectIdentifier extends AbstractWandoraTool implements WandoraTool, Runnable {
     
+	private static final long serialVersionUID = 1L;
 
-    public OpenSubjectIdentifier() {
+
+	public OpenSubjectIdentifier() {
     }
     public OpenSubjectIdentifier(Context proposedContext) {
         setContext(proposedContext);
@@ -68,7 +69,7 @@ public class OpenSubjectIdentifier extends AbstractWandoraTool implements Wandor
                     contextSIs = getContext().getContextObjects();
                 }
                 else if(context instanceof LayeredTopicContext) {
-                    HashSet<Locator> siSet = new LinkedHashSet();
+                    HashSet<Locator> siSet = new LinkedHashSet<>();
                     Iterator contextTopics = getContext().getContextObjects();
                     if(contextTopics == null) return;
                     while(contextTopics.hasNext() && !forceStop()) {
@@ -116,7 +117,7 @@ public class OpenSubjectIdentifier extends AbstractWandoraTool implements Wandor
                                 errors = true;
                                 log(e);
                             }
-                            try { Thread.currentThread().sleep(200); } 
+                            try { Thread.sleep(200); } 
                             catch(Exception e) {} // WAKEUP!
                             openNext = false;
                             openCount++;

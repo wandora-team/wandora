@@ -35,7 +35,11 @@ import org.wandora.application.contexts.Context;
 
 public class SameAsNoTubeStoreSubjectExpander extends SameAsSubjectExpander {
     
-    public SameAsNoTubeStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsNoTubeStoreSubjectExpander() {}
     public SameAsNoTubeStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

@@ -43,7 +43,10 @@ import java.util.*;
  * @author akivela
  */
 public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool implements WandoraTool {
-    RegularExpressionEditor editor = null;
+
+	private static final long serialVersionUID = 1L;
+
+	RegularExpressionEditor editor = null;
 
     
 
@@ -84,7 +87,7 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool imple
                 String SIString = null;
                 int progress = 0;
                 int changed = 0;
-                Collection sis = null;
+                Collection<Locator> sis = null;
                 Locator l = null;
                 
                 ArrayList<Locator> lv = null;

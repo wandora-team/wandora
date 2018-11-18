@@ -33,8 +33,11 @@ import org.wandora.application.contexts.Context;
 
 
 public class SameAsWebIndexStoreSubjectExpander extends SameAsSubjectExpander {
-    
-    public SameAsWebIndexStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsWebIndexStoreSubjectExpander() {}
     public SameAsWebIndexStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

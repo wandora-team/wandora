@@ -37,7 +37,10 @@ import java.util.*;
  */
 public class CheckSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
 
-    public CheckSubjectIdentifiers() {
+	private static final long serialVersionUID = 1L;
+
+
+	public CheckSubjectIdentifiers() {
         super();
     }
     public CheckSubjectIdentifiers(Context context) {
@@ -63,7 +66,7 @@ public class CheckSubjectIdentifiers extends AbstractWandoraTool implements Wand
             setLogTitle("Checking subject identifiers");
             Topic topic = null;
             Locator l = null;
-            Collection sis = null;
+            Collection<Locator> sis = null;
             int progress = 0;
             int broken = 0;
             int checked = 0;
@@ -75,7 +78,7 @@ public class CheckSubjectIdentifiers extends AbstractWandoraTool implements Wand
                         setProgress(progress++);
                         sis = topic.getSubjectIdentifiers();
                         if(!sis.isEmpty()) {
-                            for(Iterator siIterator = sis.iterator(); siIterator.hasNext(); ) {
+                            for(Iterator<Locator> siIterator = sis.iterator(); siIterator.hasNext(); ) {
                                 l = (Locator) siIterator.next();
                                 if(l != null) {
                                     checked++;

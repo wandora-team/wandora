@@ -48,7 +48,10 @@ import java.text.DecimalFormatSymbols;
 
 
 public class MergeMatrixTool extends AbstractWandoraTool{
-    protected HashMap<String, Integer> processedPairs;
+
+	private static final long serialVersionUID = 1L;
+
+	protected HashMap<String, Integer> processedPairs;
     public MergeMatrixTool() {
         processedPairs = new HashMap<String, Integer>();
     }
@@ -99,7 +102,7 @@ public class MergeMatrixTool extends AbstractWandoraTool{
         
         List<Layer> rootLayers = admin.getTopicMap().getLayers();
         List<Layer> allLayers = getChildLayers(rootLayers);
-        List<List> sl = new ArrayList<List>();
+        List<List<String>> sl = new ArrayList<>();
         List<String> currentRow;
         setProgressMax(allLayers.size()*allLayers.size());
         int prog = 0;
@@ -167,10 +170,10 @@ public class MergeMatrixTool extends AbstractWandoraTool{
     
     private int getMatrixMerges(Layer l, Layer ll) throws TopicMapException{
         int n = 0;
-        Iterator ti = l.getTopicMap().getTopics();
+        Iterator<Topic> ti = l.getTopicMap().getTopics();
         while(ti.hasNext()){
             Topic t = (Topic)ti.next();
-            Iterator tti = ll.getTopicMap().getTopics();
+            Iterator<Topic> tti = ll.getTopicMap().getTopics();
             while(tti.hasNext()){
                 Topic tt = (Topic)tti.next();
                 if(t.mergesWithTopic(tt)){

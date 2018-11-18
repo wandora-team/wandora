@@ -48,7 +48,13 @@ import java.util.*;
 public class DeleteSubjectLocator extends AbstractWandoraTool implements WandoraTool {
 
 
-    public DeleteSubjectLocator() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	public DeleteSubjectLocator() {
         setContext(new TopicContext());
     }
     public DeleteSubjectLocator(Context preferredContext) {

@@ -45,7 +45,13 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+
+
+
+	@Override
     public String getName() {
         return "Various topic tests";
     }
@@ -288,7 +294,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                     }
                     else {
                         for(int j=0; j<numberOfRepeats; j++) {
-                            Set<Topic> scope = new HashSet();
+                            Set<Topic> scope = new HashSet<>();
                             for(int i=0; i<1+Math.round(Math.random()*Math.min(10, numberOfTestTopics)); i++) {
                                 scope.add(tm.getTopic(sis2.get((int) Math.floor(Math.random() * sis2.size()))));
                             }
@@ -296,7 +302,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                             String name = getRandomString();
                             t.setVariant(scope, name);
 
-                            Set<Topic> scope2 = new HashSet();
+                            Set<Topic> scope2 = new HashSet<>();
                             scope2.addAll(scope);
                             String name2 = t.getVariant(scope2);
                             if(!name.equals(name2)) {

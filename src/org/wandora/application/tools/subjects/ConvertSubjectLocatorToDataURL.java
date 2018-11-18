@@ -38,18 +38,19 @@ import org.wandora.utils.DataURL;
  */
 public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool implements WandoraTool {
 
-    
-    private Iterator topicsToProcess;
+	private static final long serialVersionUID = 1L;
+
+	private Iterator<Topic> topicsToProcess;
     
     
     public ConvertSubjectLocatorToDataURL() {}
     public ConvertSubjectLocatorToDataURL(Context context) {
         setContext(context);
     }
-    public ConvertSubjectLocatorToDataURL(Collection topics) {
+    public ConvertSubjectLocatorToDataURL(Collection<Topic> topics) {
         topicsToProcess = topics.iterator();
     }
-    public ConvertSubjectLocatorToDataURL(Iterator topics) {
+    public ConvertSubjectLocatorToDataURL(Iterator<Topic> topics) {
         topicsToProcess = topics;
     }
     

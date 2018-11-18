@@ -26,6 +26,7 @@
  */
 
 package org.wandora.application.tools.statistics;
+
 import org.wandora.application.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
@@ -46,7 +47,10 @@ import org.wandora.topicmap.layered.*;
 public class AverageClusteringCoefficient extends AbstractWandoraTool {
     
 
-    public AverageClusteringCoefficient() {
+	private static final long serialVersionUID = 1L;
+
+
+	public AverageClusteringCoefficient() {
     }
 
     @Override

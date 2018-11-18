@@ -56,8 +56,10 @@ import java.util.*;
 
 public class DuplicateSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
     
-    
-    protected Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	protected Wandora wandora = null;
        
     
     

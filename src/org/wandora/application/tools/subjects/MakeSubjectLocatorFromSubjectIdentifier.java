@@ -44,8 +44,10 @@ import java.util.*;
  */
 public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
 
+	private static final long serialVersionUID = 1L;
 
-    public MakeSubjectLocatorFromSubjectIdentifier() {
+
+	public MakeSubjectLocatorFromSubjectIdentifier() {
     }
     public MakeSubjectLocatorFromSubjectIdentifier(Context preferredContext) {
         setContext(preferredContext);

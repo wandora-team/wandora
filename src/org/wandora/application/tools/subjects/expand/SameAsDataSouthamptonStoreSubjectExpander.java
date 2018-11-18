@@ -35,8 +35,11 @@ import org.wandora.application.contexts.Context;
 
 public class SameAsDataSouthamptonStoreSubjectExpander extends SameAsSubjectExpander {
     
-    
-    public SameAsDataSouthamptonStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsDataSouthamptonStoreSubjectExpander() {}
     public SameAsDataSouthamptonStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

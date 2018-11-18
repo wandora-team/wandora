@@ -31,7 +31,7 @@ import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
-import static org.wandora.application.gui.ConfirmResult.*;
+
 
 import java.util.*;
 
@@ -49,8 +49,10 @@ import java.util.*;
  */
 public class FixSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
 
-    
-    public FixSubjectIdentifiers() {
+	private static final long serialVersionUID = 1L;
+
+
+	public FixSubjectIdentifiers() {
     }
     public FixSubjectIdentifiers(Context context) {
         setContext(context);

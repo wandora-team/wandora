@@ -33,7 +33,11 @@ import org.wandora.application.contexts.Context;
 
 public class SameAsSchemaOrgStoreSubjectExpander extends SameAsSubjectExpander {
     
-    public SameAsSchemaOrgStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsSchemaOrgStoreSubjectExpander() {}
     public SameAsSchemaOrgStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

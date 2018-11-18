@@ -21,7 +21,7 @@
  * 
  * MoveSubjectLocatorResources.java
  *
- * Created on 27. heinäkuuta 2006, 14:47
+ * Created on 27. heinï¿½kuuta 2006, 14:47
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -81,7 +81,7 @@ public class MoveSubjectLocatorResources extends AbstractWandoraTool {
     }
 
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         host=options.get(prefix+"host");
         String p=options.get(prefix+"port");
         port=Integer.parseInt(p);
@@ -102,8 +102,8 @@ public class MoveSubjectLocatorResources extends AbstractWandoraTool {
     }
 
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"File server options","File server connection options",true,new String[][]{
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"File server options","File server connection options",true,new String[][]{
             new String[]{"Host","string",host},
             new String[]{"Port","string",""+port},
             new String[]{"Use SSL","boolean",""+useSSL},
@@ -123,11 +123,11 @@ public class MoveSubjectLocatorResources extends AbstractWandoraTool {
         if(password!=null && password.length()==0) password=null;
         filePrefix=values.get("File prefix");
         if(filePrefix==null) filePrefix="";
-        writeOptions(admin,options,prefix);
+        writeOptions(wandora,options,prefix);
     }
 
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
         options.put(prefix+"host",host);
         options.put(prefix+"port",""+port);
         options.put(prefix+"user",user==null?"":user);
@@ -147,7 +147,7 @@ public class MoveSubjectLocatorResources extends AbstractWandoraTool {
         return sb.toString();
     }
     
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context context) throws TopicMapException  {
         setDefaultLogger();        
         Iterator iter=context.getContextObjects();
         java.net.Socket s=null;
@@ -172,7 +172,7 @@ public class MoveSubjectLocatorResources extends AbstractWandoraTool {
             }
             else log("Logged in to file server");
             //WandoraHttpAuthorizer authorizer=new WandoraHttpAuthorizer(admin);
-            WandoraHttpAuthorizer authorizer=admin.wandoraHttpAuthorizer;
+            WandoraHttpAuthorizer authorizer=wandora.wandoraHttpAuthorizer;
             
             while(iter.hasNext()){
                 Object o=iter.next();

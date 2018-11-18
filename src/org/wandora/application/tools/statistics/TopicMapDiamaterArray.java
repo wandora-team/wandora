@@ -33,12 +33,13 @@ package org.wandora.application.tools.statistics;
  */
 
 import java.util.HashMap;
+import java.util.Map;
 import java.lang.String;
 
 public class TopicMapDiamaterArray {
     
     //private SparseDoubleMatrix2D map;
-    private HashMap<String,Integer> map;
+    private Map<String,Integer> map;
     public TopicMapDiamaterArray(int size){
         map = new HashMap<String, Integer>();
     }

@@ -49,7 +49,10 @@ import org.wandora.application.gui.topicstringify.TopicToString;
  */
 public class PasteSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
-    public boolean confirm = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public boolean confirm = true;
     
     
     public PasteSubjectIdentifiers() {}
@@ -128,7 +131,7 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool implements Wand
 
 
     protected Collection<Topic> getTargetTopics(Context context) {
-        ArrayList topics = new ArrayList();
+        ArrayList<Topic> topics = new ArrayList<>();
         if(context instanceof SIContext) {
             Iterator<Locator> sis = context.getContextObjects();
             TopicMap topicmap = Wandora.getWandora().getTopicMap();

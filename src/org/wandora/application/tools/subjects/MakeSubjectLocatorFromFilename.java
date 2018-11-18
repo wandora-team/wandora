@@ -44,7 +44,9 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 public class MakeSubjectLocatorFromFilename extends AbstractWandoraTool implements WandoraTool, Runnable {
     
 
-    public MakeSubjectLocatorFromFilename() {
+	private static final long serialVersionUID = 1L;
+
+	public MakeSubjectLocatorFromFilename() {
     }
     public MakeSubjectLocatorFromFilename(Context proposedContext) {
         setContext(proposedContext);

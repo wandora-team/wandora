@@ -34,9 +34,11 @@ import org.wandora.application.contexts.Context;
 
 
 public class SameAsFreebaseStoreSubjectExpander extends SameAsSubjectExpander {
-    
-    
-    public SameAsFreebaseStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsFreebaseStoreSubjectExpander() {}
     public SameAsFreebaseStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

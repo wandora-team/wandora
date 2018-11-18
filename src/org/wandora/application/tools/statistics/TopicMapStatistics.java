@@ -43,8 +43,9 @@ import javax.swing.*;
  */
 public class TopicMapStatistics extends AbstractWandoraTool implements WandoraTool {
     
+	private static final long serialVersionUID = 1L;
 
-    public TopicMapStatistics() {
+	public TopicMapStatistics() {
     }
     public TopicMapStatistics(Context preferredContext) {
         setContext(preferredContext);

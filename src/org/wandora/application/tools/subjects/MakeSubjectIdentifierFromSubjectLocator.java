@@ -34,7 +34,6 @@ import org.wandora.application.*;
 import org.wandora.application.gui.*;
 import static org.wandora.application.gui.ConfirmResult.*;
 import org.wandora.application.tools.*;
-import org.wandora.*;
 
 import java.util.*;
 
@@ -48,7 +47,10 @@ import java.util.*;
  */
 public class MakeSubjectIdentifierFromSubjectLocator extends AbstractWandoraTool implements WandoraTool {
 
-    public MakeSubjectIdentifierFromSubjectLocator() {
+	private static final long serialVersionUID = 1L;
+
+
+	public MakeSubjectIdentifierFromSubjectLocator() {
     }
     public MakeSubjectIdentifierFromSubjectLocator(Context preferredContext) {
         setContext(preferredContext);

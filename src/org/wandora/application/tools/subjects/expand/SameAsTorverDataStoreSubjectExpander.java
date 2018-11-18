@@ -32,8 +32,11 @@ import org.wandora.application.contexts.Context;
 
 
 public class SameAsTorverDataStoreSubjectExpander extends SameAsSubjectExpander {
-    
-    public SameAsTorverDataStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsTorverDataStoreSubjectExpander() {}
     public SameAsTorverDataStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

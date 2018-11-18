@@ -44,8 +44,10 @@ import java.io.*;
  * @author  olli
  */
 public class HistogramPanel extends javax.swing.JPanel {
-    
-    private int[] data;
+
+	private static final long serialVersionUID = 1L;
+
+	private int[] data;
     private int maxValue;
     private int dataSize;
     private int zoomFactor;
@@ -346,7 +348,10 @@ public class HistogramPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     
     private class ContentPanel extends JPanel {
-        private Color barColor=new Color(0,0,0);
+
+		private static final long serialVersionUID = 1L;
+
+		private Color barColor=new Color(0,0,0);
         private Color bgColor=new Color(255,255,255);
         private Color mouseBgColor=new Color(255,128,128);
         private Color mouseColor=new Color(128,0,0);

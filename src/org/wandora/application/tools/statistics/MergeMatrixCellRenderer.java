@@ -40,7 +40,9 @@ import javax.swing.table.TableCellRenderer;
 
 public class MergeMatrixCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer{
     
-    public MergeMatrixCellRenderer() {
+	private static final long serialVersionUID = 1L;
+
+	public MergeMatrixCellRenderer() {
         
     }
     

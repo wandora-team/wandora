@@ -44,7 +44,9 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 public class MakeSubjectIdentifierFromFilename extends AbstractWandoraTool implements WandoraTool, Runnable {
     
 
-    public MakeSubjectIdentifierFromFilename() {
+	private static final long serialVersionUID = 1L;
+
+	public MakeSubjectIdentifierFromFilename() {
     }
     public MakeSubjectIdentifierFromFilename(Context proposedContext) {
         setContext(proposedContext);

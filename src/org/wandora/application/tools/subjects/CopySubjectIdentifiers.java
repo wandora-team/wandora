@@ -34,7 +34,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.*;
 import org.wandora.utils.*;
 
 import java.util.*;
@@ -48,7 +47,10 @@ import java.util.*;
  */
 public class CopySubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
     
-    /** Creates a new instance of CopySIs */
+	private static final long serialVersionUID = 1L;
+
+
+	/** Creates a new instance of CopySIs */
     public CopySubjectIdentifiers() {
     }
     public CopySubjectIdentifiers(Context context) {
@@ -69,8 +71,8 @@ public class CopySubjectIdentifiers extends AbstractWandoraTool implements Wando
     @Override
     public void execute(Wandora wandora, Context context) {
         StringBuilder sis = new StringBuilder("");
-        Collection topicSIs = null;
-        Iterator SIIterator = null;
+        Collection<Locator> topicSIs = null;
+        Iterator<Locator> SIIterator = null;
         Locator SI = null;
         int progress = 0;
 

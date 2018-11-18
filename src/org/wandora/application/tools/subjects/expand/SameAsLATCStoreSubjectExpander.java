@@ -36,7 +36,11 @@ import org.wandora.application.contexts.Context;
 public class SameAsLATCStoreSubjectExpander extends SameAsSubjectExpander {
     
     
-    public SameAsLATCStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsLATCStoreSubjectExpander() {}
     public SameAsLATCStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

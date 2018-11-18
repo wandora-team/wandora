@@ -41,7 +41,8 @@ import org.wandora.application.gui.simple.SimpleURIField;
 
 public class AddSubjectIdentifierPanel extends javax.swing.JPanel {
 
-    private JDialog dialog = null;
+	private static final long serialVersionUID = 1L;
+	private JDialog dialog = null;
     private boolean wasAccepted = false;
     private Wandora wandora = null;
     

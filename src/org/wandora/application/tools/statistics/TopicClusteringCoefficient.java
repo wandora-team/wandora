@@ -44,7 +44,10 @@ import javax.swing.*;
  */
 public class TopicClusteringCoefficient extends AbstractWandoraTool {
     
-    /** Creates a new instance of TopicClusteringCoefficient */
+
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of TopicClusteringCoefficient */
     public TopicClusteringCoefficient() {
     }
 

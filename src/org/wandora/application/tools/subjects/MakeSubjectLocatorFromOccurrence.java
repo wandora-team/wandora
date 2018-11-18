@@ -21,7 +21,7 @@
  * 
  * MakeSubjectLocatorFromOccurrence.java
  *
- * Created on 4. heinäkuuta 2006, 11:07
+ * Created on 4. heinï¿½kuuta 2006, 11:07
  *
  */
 
@@ -36,7 +36,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 
-import org.wandora.*;
 
 
 /**
@@ -48,7 +47,10 @@ import org.wandora.*;
  * @author akivela
  */
 public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool implements WandoraTool {
-    private static int MAXLEN = 256;
+
+	private static final long serialVersionUID = 1L;
+
+	private static int MAXLEN = 256;
     private String replacement = "";
     private String SLTemplate = "http://wandora.org/si/%OCCURRENCE%";
     

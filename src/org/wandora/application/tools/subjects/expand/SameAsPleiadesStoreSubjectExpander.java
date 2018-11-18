@@ -36,7 +36,11 @@ import org.wandora.application.contexts.Context;
 
 public class SameAsPleiadesStoreSubjectExpander extends SameAsSubjectExpander {
     
-    public SameAsPleiadesStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsPleiadesStoreSubjectExpander() {}
     public SameAsPleiadesStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

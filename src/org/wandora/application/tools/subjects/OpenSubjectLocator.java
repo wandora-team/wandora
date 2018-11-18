@@ -47,9 +47,10 @@ import java.net.*;
  * @author akivela
  */
 public class OpenSubjectLocator extends AbstractWandoraTool implements WandoraTool, Runnable {
-    
 
-    public OpenSubjectLocator() {
+	private static final long serialVersionUID = 1L;
+
+	public OpenSubjectLocator() {
     }
     public OpenSubjectLocator(Context proposedContext) {
         setContext(proposedContext);
@@ -95,7 +96,7 @@ public class OpenSubjectLocator extends AbstractWandoraTool implements WandoraTo
                             catch(Exception e) {
                                 log(e);
                             }
-                            try { Thread.currentThread().sleep(200); } 
+                            try { Thread.sleep(200); } 
                             catch(Exception e) {} // WAKEUP!
                             openNext = false;
                             openCount++;

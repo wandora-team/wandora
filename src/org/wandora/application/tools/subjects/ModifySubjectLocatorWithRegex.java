@@ -45,7 +45,10 @@ import java.util.*;
  * @author akivela
  */
 public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool implements WandoraTool {
-    RegularExpressionEditor editor = null;
+
+	private static final long serialVersionUID = 1L;
+
+	RegularExpressionEditor editor = null;
 
     
     /** Creates a new instance of SubjectLocatorRegexReplacer */

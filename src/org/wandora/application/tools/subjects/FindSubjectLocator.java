@@ -64,7 +64,9 @@ import java.net.*;
 
 public class FindSubjectLocator extends AbstractWandoraTool implements WandoraTool,  Handler, InterruptHandler {
 
-    private Wandora admin = null;
+
+	private static final long serialVersionUID = 1L;
+	private Wandora admin = null;
     private WebCrawler crawler = null;
     private int crawlCounter = 9000;
     
@@ -133,7 +135,7 @@ public class FindSubjectLocator extends AbstractWandoraTool implements WandoraTo
             if(startUrl == null || startUrl.length() == 0) return;
 
             Topic topic = null;
-            topicPatterns = new HashMap();
+            topicPatterns = new HashMap<>();
             while(topics.hasNext()) {
                 try {
                     topic = (Topic) topics.next();

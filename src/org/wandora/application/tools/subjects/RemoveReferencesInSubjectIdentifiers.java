@@ -48,9 +48,11 @@ import java.util.*;
  */
 public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
 
-    
 
-    public RemoveReferencesInSubjectIdentifiers() {
+	private static final long serialVersionUID = 1L;
+
+
+	public RemoveReferencesInSubjectIdentifiers() {
         setContext(new TopicContext());
     }
     public RemoveReferencesInSubjectIdentifiers(Context preferredContext) {
@@ -81,7 +83,7 @@ public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool im
             String newSIString = null;
             String SIString = null;
             int progress = 0;
-            Collection sis = null;
+            Collection<Locator> sis = null;
             Locator l = null;
             int refPos = -1;
 
@@ -97,7 +99,7 @@ public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool im
                     if(topic != null && !topic.isRemoved()) {
                         setProgress(progress++);
                         sis = topic.getSubjectIdentifiers();
-                        for(Iterator siIterator = sis.iterator(); siIterator.hasNext(); ) {
+                        for(Iterator<Locator> siIterator = sis.iterator(); siIterator.hasNext(); ) {
                             l = (Locator) siIterator.next();
                             if(l != null) {
                                 SIString = l.toExternalForm();

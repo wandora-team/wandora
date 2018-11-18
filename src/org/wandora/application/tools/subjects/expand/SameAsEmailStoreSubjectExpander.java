@@ -36,7 +36,11 @@ import org.wandora.application.contexts.Context;
 public class SameAsEmailStoreSubjectExpander extends SameAsSubjectExpander {
     
     
-    public SameAsEmailStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsEmailStoreSubjectExpander() {}
     public SameAsEmailStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

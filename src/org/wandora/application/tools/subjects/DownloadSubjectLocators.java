@@ -50,8 +50,9 @@ import java.util.*;
  */
 public class DownloadSubjectLocators extends AbstractWandoraTool implements  WandoraTool {
 
-   
-    private boolean changeSubjectLocator = false;
+	private static final long serialVersionUID = 1L;
+
+	private boolean changeSubjectLocator = false;
     private boolean overWriteAll = false;
     private Wandora wandora = null;
     private boolean isCancelled = false;

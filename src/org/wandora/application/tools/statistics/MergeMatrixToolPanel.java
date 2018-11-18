@@ -29,7 +29,6 @@ import javax.swing.table.TableModel;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.Wandora;
 import java.util.*;
-import javax.swing.event.TableModelListener;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleRadioButton;
@@ -44,8 +43,9 @@ import org.wandora.application.tools.statistics.MergeMatrixCellRenderer;
 
 
 public class MergeMatrixToolPanel extends javax.swing.JPanel {
-    
-    private List<List> data = null;
+
+	private static final long serialVersionUID = 1L;
+	private List<List<String>> data = null;
     private String html = null;
     private String delim = null;
     private JDialog dialog = null;
@@ -59,7 +59,7 @@ public class MergeMatrixToolPanel extends javax.swing.JPanel {
      * MergeMatrixToolPanel
      */
     
-    public MergeMatrixToolPanel(Wandora w,List<List> data) {
+    public MergeMatrixToolPanel(Wandora w,List<List<String>> data) {
         /*
          * The data is structured in the following manner:
          * [
@@ -105,12 +105,12 @@ public class MergeMatrixToolPanel extends javax.swing.JPanel {
           .append("\t<body>\n")
           .append("\t\t<table>\n")
           .append("\t\t\t<th>\n");
-        for(List row : this.data){
+        for(List<String> row : this.data){
             sb.append("\t\t\t\t<td>\n")
               .append("\t\t\t\t\t").append(row.get(0)).append("\n")
               .append("\t\t\t\t</td>\n");
         }
-        for(List row : this.data){
+        for(List<String> row : this.data){
             sb.append("\t\t\t<tr>\n");
             for(Object cell : row){
                 String s = (String)cell;
@@ -138,11 +138,11 @@ public class MergeMatrixToolPanel extends javax.swing.JPanel {
         String delimeter = (MMTPDelimDot.isSelected()) ? ";" : "\t";
         String eol = System.getProperty("line.separator");
         delim += delimeter;
-        for (List row : data) {
+        for (List<String> row : data) {
             delim += (String)row.get(0) + delimeter;
         }
         delim += eol;
-        for (List row : data){
+        for (List<String> row : data){
             for (Object cell : row){
                 String s  = (String)cell;
                 delim += s + delimeter;

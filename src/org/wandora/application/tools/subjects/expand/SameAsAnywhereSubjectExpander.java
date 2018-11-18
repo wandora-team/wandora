@@ -35,7 +35,11 @@ import org.wandora.application.gui.WandoraOptionPane;
 
 public class SameAsAnywhereSubjectExpander extends SameAsSubjectExpander {
     
-    public SameAsAnywhereSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsAnywhereSubjectExpander() {}
     public SameAsAnywhereSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

@@ -26,9 +26,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
@@ -37,7 +39,6 @@ import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
-import org.wandora.application.tools.subjects.AddSubjectIdentifierPanel;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
@@ -54,7 +55,10 @@ import org.wandora.utils.IObox;
 
 public class SameAsSubjectExpander extends AbstractWandoraTool implements WandoraTool {
     
-    private static boolean makeAssociationsInstead = false; 
+
+	private static final long serialVersionUID = 1L;
+
+	private static boolean makeAssociationsInstead = false; 
     
     private boolean shouldRefresh = false;
     
@@ -216,7 +220,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
     
     
     protected Collection<URL> getExpandingSubjects(String subject) {
-        HashSet<URL> additionalSubjects = new HashSet();
+        Set<URL> additionalSubjects = new LinkedHashSet<>();
         
         try {
             URL requestURL = getExpandingRequestURL(subject);

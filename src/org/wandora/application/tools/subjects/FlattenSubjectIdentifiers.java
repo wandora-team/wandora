@@ -32,7 +32,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.gui.*;
 import static org.wandora.application.gui.ConfirmResult.*;
-import org.wandora.*;
 
 import java.util.*;
 
@@ -50,8 +49,11 @@ import java.util.*;
  * @author akivela
  */
 public class FlattenSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
-    
-    public FlattenSubjectIdentifiers() {
+
+	private static final long serialVersionUID = 1L;
+
+
+	public FlattenSubjectIdentifiers() {
         setContext(new TopicContext());
     }
     public FlattenSubjectIdentifiers(Context context) {
@@ -78,10 +80,10 @@ public class FlattenSubjectIdentifiers extends AbstractWandoraTool implements Wa
         if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to delete all but one subject identifiers of context topics?","Delete subject identifiers", WandoraOptionPane.YES_NO_OPTION)== WandoraOptionPane.YES_OPTION){
             setDefaultLogger();
             Topic topic = null;
-            Collection tsis = null;
-            ArrayList lv = null;
+            Collection<Locator> tsis = null;
+            List<Locator >lv = null;
             Locator l = null;
-            Iterator it = null;
+            Iterator<Locator> it = null;
             ConfirmResult result = yes;
             int progress = 0;
             int sc = 0;
@@ -98,7 +100,7 @@ public class FlattenSubjectIdentifiers extends AbstractWandoraTool implements Wa
                     if(tsis.size() > 1) {
                         try {
                             tc++;
-                            lv = new ArrayList();
+                            lv = new ArrayList<>();
                             it=tsis.iterator();
                             it.next(); // Hop over == save first locator
                             while(it.hasNext()) {

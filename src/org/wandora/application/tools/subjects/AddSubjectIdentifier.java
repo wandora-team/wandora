@@ -29,7 +29,6 @@ package org.wandora.application.tools.subjects;
 
 
 import org.wandora.topicmap.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.topicmap.TMBox;
@@ -52,7 +51,9 @@ import org.wandora.utils.DataURL;
 
 public class AddSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
     
-    private boolean shouldRefresh = false;
+	private static final long serialVersionUID = 1L;
+	
+	private boolean shouldRefresh = false;
     
     public AddSubjectIdentifier() {}
     public AddSubjectIdentifier(Context preferredContext) {

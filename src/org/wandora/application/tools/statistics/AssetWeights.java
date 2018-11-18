@@ -54,7 +54,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class AssetWeights extends AbstractWandoraTool {
-    public static int CONTEXT_IS_GIVEN = 0;
+
+	private static final long serialVersionUID = 1L;
+
+	public static int CONTEXT_IS_GIVEN = 0;
     public static int CONTEXT_IS_TOPICMAP = 1;
 
     private int forcedContext = CONTEXT_IS_GIVEN;

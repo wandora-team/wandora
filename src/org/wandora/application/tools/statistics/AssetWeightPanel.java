@@ -35,16 +35,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.UIConstants;
-import org.wandora.application.gui.TabbedTopicSelector;
-import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleField;
@@ -68,7 +64,10 @@ import org.wandora.utils.ClipboardBox;
  */
 public class AssetWeightPanel extends javax.swing.JPanel {
 
-    private JDialog assetWeightDialog = null;
+
+	private static final long serialVersionUID = 1L;
+
+	private JDialog assetWeightDialog = null;
     private Wandora app = null;
 
     private Collection<Topic> topics = null;
@@ -1313,7 +1312,9 @@ public class AssetWeightPanel extends javax.swing.JPanel {
 
     class TopicWeightTable extends JTable {
 
-        private HashMap<Topic,Double> modelData = null;
+		private static final long serialVersionUID = 1L;
+
+		private HashMap<Topic,Double> modelData = null;
         private TopicWeightTableModel dm = null;
         private String name1 = "Type";
         private String name2 = "Weight";

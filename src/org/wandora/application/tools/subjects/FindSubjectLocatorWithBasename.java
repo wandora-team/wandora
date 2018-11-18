@@ -46,7 +46,12 @@ import org.wandora.topicmap.*;
 
 public class FindSubjectLocatorWithBasename extends FindSubjectLocator {
     
-    /** Creates a new instance of FindSubjectLocatorWithBasename */
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	/** Creates a new instance of FindSubjectLocatorWithBasename */
     public FindSubjectLocatorWithBasename() {
     }
     public FindSubjectLocatorWithBasename(Context preferredContext) {

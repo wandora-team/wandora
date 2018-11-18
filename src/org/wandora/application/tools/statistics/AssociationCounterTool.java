@@ -43,8 +43,10 @@ import org.wandora.topicmap.layered.*;
  */
 public class AssociationCounterTool extends AbstractWandoraTool {
     
+	private static final long serialVersionUID = 1L;
 
-    public AssociationCounterTool() {
+
+	public AssociationCounterTool() {
     }
 
     @Override

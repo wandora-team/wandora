@@ -35,7 +35,11 @@ import org.wandora.application.contexts.Context;
 
 public class SameAsMusicNetStoreSubjectExpander extends SameAsSubjectExpander {
     
-    public SameAsMusicNetStoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsMusicNetStoreSubjectExpander() {}
     public SameAsMusicNetStoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }

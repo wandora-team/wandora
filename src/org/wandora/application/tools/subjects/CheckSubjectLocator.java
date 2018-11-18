@@ -32,7 +32,6 @@ import org.wandora.application.*;
 import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.*;
 import org.wandora.utils.*;
 
 import java.io.*;
@@ -51,8 +50,9 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 
 public class CheckSubjectLocator extends AbstractWandoraTool implements WandoraTool {
 
-    
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * <code>reportType</code> contains characters defining tool
      * generated reports. Possible report characters are:
      *

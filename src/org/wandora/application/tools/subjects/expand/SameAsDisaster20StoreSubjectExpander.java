@@ -35,8 +35,11 @@ import org.wandora.application.contexts.Context;
 
 public class SameAsDisaster20StoreSubjectExpander extends SameAsSubjectExpander {
     
-    
-    public SameAsDisaster20StoreSubjectExpander() {}
+
+	private static final long serialVersionUID = 1L;
+
+
+	public SameAsDisaster20StoreSubjectExpander() {}
     public SameAsDisaster20StoreSubjectExpander(Context preferredContext) {
         setContext(preferredContext);
     }
