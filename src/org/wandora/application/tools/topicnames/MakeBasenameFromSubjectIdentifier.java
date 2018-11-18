@@ -48,7 +48,10 @@ import java.net.*;
 
 
 public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
-    boolean overWrite = false;
+
+
+	private static final long serialVersionUID = 1L;
+	boolean overWrite = false;
     
     
     /**
@@ -85,10 +88,10 @@ public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool imple
 
             Topic topic = null;
             String basename = null;
-            Collection sis = null;
+            Collection<Locator> sis = null;
             int progress = 0;
 
-            ArrayList<Object> dt = new ArrayList<Object>();
+            List<Object> dt = new ArrayList<Object>();
             while(topics.hasNext() && !forceStop()) {
                 dt.add(topics.next());
             }

@@ -33,8 +33,11 @@ package org.wandora.exceptions;
  * @author  olli
  */
 public class WandoraException extends Exception {
-    
-    /** Creates a new instance of WandoraException */
+
+	private static final long serialVersionUID = 1L;
+	
+
+	/** Creates a new instance of WandoraException */
     public WandoraException() {
     }
     

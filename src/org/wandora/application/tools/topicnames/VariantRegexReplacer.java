@@ -47,7 +47,10 @@ import java.util.*;
 
 
 public class VariantRegexReplacer extends AbstractWandoraTool implements WandoraTool {
-    RegularExpressionEditor editor = null;
+
+	private static final long serialVersionUID = 1L;
+
+	RegularExpressionEditor editor = null;
  
     
     /** Creates a new instance of VariantRegexReplacer */
@@ -86,8 +89,8 @@ public class VariantRegexReplacer extends AbstractWandoraTool implements Wandora
                 String variant = null;
                 String newVariant = null;
 
-                Collection scopes = null;
-                Iterator scopeIterator = null;
+                Collection<Set<Topic>> scopes = null;
+                Iterator<Set<Topic>> scopeIterator = null;
                 Set<Topic> scope = null;
                 int progress = 0;
                 int count = 0;

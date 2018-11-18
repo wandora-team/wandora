@@ -46,7 +46,10 @@ import java.util.*;
  */
 public class VariantRemover extends AbstractWandoraTool implements WandoraTool {
     
-    /**
+	private static final long serialVersionUID = 1L;
+
+
+	/**
      * Creates a new instance of VariantRemover
      */
     public VariantRemover() {

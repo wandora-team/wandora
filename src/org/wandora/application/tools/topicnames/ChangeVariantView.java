@@ -47,7 +47,10 @@ import org.wandora.utils.*;
  */
 public class ChangeVariantView extends AbstractWandoraTool implements WandoraTool {
     
-    private String viewType = OccurrenceTable.VIEW_SCHEMA;
+
+	private static final long serialVersionUID = 1L;
+
+	private String viewType = OccurrenceTable.VIEW_SCHEMA;
     private Options localOptions = null;
     
     

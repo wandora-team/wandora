@@ -40,7 +40,10 @@ import java.util.*;
 public class AddVariantName extends AbstractWandoraTool implements WandoraTool {
 
 
-    public AddVariantName() {
+	private static final long serialVersionUID = 1L;
+
+
+	public AddVariantName() {
     }
     public AddVariantName(Context preferredContext) {
         setContext(preferredContext);

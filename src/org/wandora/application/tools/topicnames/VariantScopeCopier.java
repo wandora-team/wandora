@@ -45,7 +45,10 @@ import java.util.*;
  * @author akivela
  */
 public class VariantScopeCopier extends AbstractWandoraTool implements WandoraTool {
-    private boolean REMOVE_AFTER_COPY = false;
+
+	private static final long serialVersionUID = 1L;
+
+	private boolean REMOVE_AFTER_COPY = false;
     private boolean COPY_NULLS = false;
     private boolean OVERWRITE_OLDIES = true;
     

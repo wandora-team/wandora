@@ -44,7 +44,10 @@ import java.util.*;
  * @author akivela
  */
 public class VariantNewlineRemover extends AbstractWandoraTool implements WandoraTool {
-    public String replacement = "";
+
+	private static final long serialVersionUID = 1L;
+
+	public String replacement = "";
     
     /**
      * Creates a new instance of VariantNewlineRemover
@@ -80,8 +83,8 @@ public class VariantNewlineRemover extends AbstractWandoraTool implements Wandor
             String variant = null;
             String newVariant = null;
             
-            Collection scopes = null;
-            Iterator scopeIterator = null;
+            Collection<Set<Topic>> scopes = null;
+            Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
             int progress = 0;
             

@@ -40,8 +40,13 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class AddWebLocationAsSubjectIdentifier extends AbstractWebViewTool {
-    
-    @Override
+
+	
+	private static final long serialVersionUID = 1L;
+
+
+
+	@Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
         String location = getWebLocation(context);
         Topic topic = getTopic(context);

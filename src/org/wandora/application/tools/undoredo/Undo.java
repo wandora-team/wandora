@@ -43,7 +43,9 @@ import org.wandora.topicmap.undowrapper.UndoException;
 
 public class Undo extends AbstractWandoraTool implements WandoraTool{
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/undo_undo.png");
     }
@@ -91,7 +93,7 @@ public class Undo extends AbstractWandoraTool implements WandoraTool{
     
 
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
     }
     
     @Override
@@ -100,14 +102,14 @@ public class Undo extends AbstractWandoraTool implements WandoraTool{
     }
     
     @Override
-    public void configure(Wandora w,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         //System.out.println(prefix);
         UndoRedoOptions dialog=new UndoRedoOptions();
-        dialog.open(w);
+        dialog.open(wandora);
     }
     
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
     }
     
 

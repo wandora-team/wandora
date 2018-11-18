@@ -38,7 +38,10 @@ import java.util.*;
 public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool implements WandoraTool {
 
 
-    public BasenameWhiteSpaceCollapser() {
+	private static final long serialVersionUID = 1L;
+
+
+	public BasenameWhiteSpaceCollapser() {
     }
     public BasenameWhiteSpaceCollapser(Context preferredContext) {
         setContext(preferredContext);
@@ -118,7 +121,7 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool implements 
                 }
             }
             
-            ArrayList<Topic> changeList = new ArrayList();
+            List<Topic> changeList = new ArrayList<>();
             changeList.addAll(changeTopics.keySet());
 
             for(Topic t : changeList) {

@@ -42,7 +42,11 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class AddWebSourceAsOccurrence extends AbstractWebViewTool {
-    public boolean USE_SELECTION_SOURCE = false;
+
+	private static final long serialVersionUID = 1L;
+
+	
+	public boolean USE_SELECTION_SOURCE = false;
     
     public static final boolean REUSE_TOPIC_SELECTION_DIALOG = true;
     private static GenericOptionsDialog god = null;

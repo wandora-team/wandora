@@ -26,11 +26,9 @@ package org.wandora.application.tools.undoredo;
 import java.util.ArrayList;
 import javax.swing.JDialog;
 import org.wandora.application.Wandora;
-import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
-import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.table.OperationTable;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.topicmap.undowrapper.UndoOperation;
@@ -43,7 +41,10 @@ import org.wandora.topicmap.undowrapper.UndoOperation;
 
 public class UndoRedoOptions extends javax.swing.JPanel {
 
-    private Wandora wandora = null;
+
+	private static final long serialVersionUID = 1L;
+	
+	private Wandora wandora = null;
     private JDialog dialog = null;
     
     

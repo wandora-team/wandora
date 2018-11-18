@@ -40,8 +40,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public class AddWebLocationAsOccurrence extends AbstractWebViewTool {
     
-    
-    public static final boolean REUSE_TOPIC_SELECTION_DIALOG = true;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static final boolean REUSE_TOPIC_SELECTION_DIALOG = true;
     private static GenericOptionsDialog god = null;
     
     

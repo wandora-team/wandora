@@ -40,7 +40,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public class OpenOccurrenceInWebView extends AbstractWebViewTool {
 
-    private Topic otopic;
+	private static final long serialVersionUID = 1L;
+	
+	private Topic otopic;
     private Topic otype;
     private Topic oscope;
     

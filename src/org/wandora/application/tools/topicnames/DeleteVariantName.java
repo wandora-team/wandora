@@ -35,7 +35,8 @@ import org.wandora.topicmap.Topic;
  */
 public class DeleteVariantName extends AbstractWandoraTool {
 
-    private Topic t = null;
+	private static final long serialVersionUID = 1L;
+	private Topic t = null;
     private Set<Topic> scope = null;
 
 

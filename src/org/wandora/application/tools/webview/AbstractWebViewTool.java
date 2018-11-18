@@ -27,7 +27,6 @@ import javafx.scene.web.WebEngine;
 import javax.swing.Icon;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.topicpanels.WebViewTopicPanel;
 import org.wandora.application.gui.topicpanels.webview.WebViewPanel;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -41,8 +40,12 @@ import org.wandora.topicmap.Topic;
 
 public abstract class AbstractWebViewTool extends AbstractWandoraTool {
 
-    
-    public AbstractWebViewTool() {
+
+	private static final long serialVersionUID = 1L;
+
+
+
+	public AbstractWebViewTool() {
         
     }
     

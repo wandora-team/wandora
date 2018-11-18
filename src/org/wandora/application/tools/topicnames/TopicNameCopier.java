@@ -41,8 +41,11 @@ import org.wandora.utils.*;
  * @author akivela
  */
 public class TopicNameCopier extends AbstractWandoraTool implements WandoraTool {
-    
-    /**
+
+	private static final long serialVersionUID = 1L;
+
+
+	/**
      * Creates a new instance of TopicNameCopier
      */
     public TopicNameCopier() {
@@ -77,8 +80,8 @@ public class TopicNameCopier extends AbstractWandoraTool implements WandoraTool 
             Topic topic = null;
             String variant = null;
             
-            Collection scopes = null;
-            Iterator scopeIterator = null;
+            Collection<Set<Topic>> scopes = null;
+            Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
             int progress = 0;
             

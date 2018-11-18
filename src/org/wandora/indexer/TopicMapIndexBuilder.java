@@ -77,22 +77,22 @@ public class TopicMapIndexBuilder extends AbstractIndexBuilder {
     public void processTopic(Topic topic, IndexWriter writer) throws IOException, TopicMapException {
         if(topic == null || topic.isRemoved()) return;
         
-        Set sis = getTopicSubjectIndicators(topic);
+        Set<String> sis = getTopicSubjectIndicators(topic);
         if(sis==null || sis.isEmpty()) return;
         if(checkVisibility && !TMBox.topicVisible(topic)) return;
 
-        Set dependent=new HashSet();
+        Set<String> dependent=new HashSet<>();
 
         Topic dispT=topic.getTopicMap().getTopic(XTMPSI.DISPLAY);
         
-        HashSet namehash=new HashSet();
+        Set<String> namehash=new HashSet<>();
         StringBuilder associatedB=new StringBuilder();
         StringBuilder namesB=new StringBuilder();
-        Set scopes=topic.getVariantScopes();
-        Iterator iter=scopes.iterator();
+        Set<Set<Topic>> scopes=topic.getVariantScopes();
+        Iterator<Set<Topic>> iter=scopes.iterator();
         boolean found=false;
         while(iter.hasNext()){
-            Set scope=(Set)iter.next();
+            Set<Topic> scope=iter.next();
             if(dispT!=null && scope.contains(dispT)){
                 String data=topic.getVariant(scope).trim();
                 if(!namehash.contains(data)){
@@ -131,19 +131,19 @@ public class TopicMapIndexBuilder extends AbstractIndexBuilder {
         
         StringBuilder dependentB=new StringBuilder();
         String dependentS="";
-        iter=dependent.iterator();
-        while(iter.hasNext()){
+        Iterator<String>iter2=dependent.iterator();
+        while(iter2.hasNext()){
 //            dependentS+=iter.next().toString()+"\n";
-            dependentB.append(iter.next().toString()).append("\n");
+            dependentB.append(iter2.next().toString()).append("\n");
         }
         dependentS=dependentB.toString();
         
         for(Topic type : topic.getDataTypes()){
             if((!checkVisibility) || TMBox.topicVisible(type)){
-                Hashtable ht=topic.getData(type);
-                Iterator iter2=ht.values().iterator();
-                while(iter2.hasNext()){
-                    associatedB.append(iter2.next()).append(" ");
+                Hashtable<Topic,String> ht=topic.getData(type);
+                Iterator<String> iter3=ht.values().iterator();
+                while(iter3.hasNext()){
+                    associatedB.append(iter3.next()).append(" ");
                 }
             }
         }

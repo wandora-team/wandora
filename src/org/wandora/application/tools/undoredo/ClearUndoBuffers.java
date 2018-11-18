@@ -40,8 +40,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class ClearUndoBuffers extends AbstractWandoraTool implements WandoraTool {
-    
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Icon getIcon() {
         return super.getIcon();
     }

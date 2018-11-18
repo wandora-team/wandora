@@ -49,7 +49,7 @@ import org.wandora.piccolo.*;
 public abstract class AbstractIndexBuilder {
 
     
-    protected HashMap extractors;
+    protected Map<String,Extractor> extractors;
     protected Logger logger;
     protected WandoraToolLogger toolLogger;
     
@@ -60,11 +60,11 @@ public abstract class AbstractIndexBuilder {
     }
     public AbstractIndexBuilder(Logger logger) {
         this.logger=logger;
-        extractors=new HashMap();
+        extractors=new LinkedHashMap<>();
     }
     public AbstractIndexBuilder(WandoraToolLogger logger) {
         this.toolLogger=logger;
-        extractors=new HashMap();
+        extractors=new LinkedHashMap<>();
     }
     
     
@@ -155,7 +155,7 @@ public abstract class AbstractIndexBuilder {
             }
         }
 
-        for(Set variantScope : t.getVariantScopes()){
+        for(Set<Topic> variantScope : t.getVariantScopes()){
             String n=t.getVariant(variantScope);
             if(keywords.length()>0) keywords.append(", ");
             keywords.append(n);
@@ -174,8 +174,8 @@ public abstract class AbstractIndexBuilder {
     
     
     
-    public Set getTopicSubjectIndicators(Topic t) throws TopicMapException {
-        Set s = new HashSet();
+    public Set<String> getTopicSubjectIndicators(Topic t) throws TopicMapException {
+        Set<String> s = new LinkedHashSet<>();
         for(org.wandora.topicmap.Locator si : t.getSubjectIdentifiers()) {
             s.add( si.toExternalForm() );
         }
@@ -197,7 +197,7 @@ public abstract class AbstractIndexBuilder {
     }
     
     public void processTopicMap(TopicMap tm,IndexWriter writer) throws IOException, TopicMapException {
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         int count = 0;
         while(iter.hasNext()) {
             try {
@@ -219,8 +219,8 @@ public abstract class AbstractIndexBuilder {
         reader.deleteDocuments(new Term("topic",si));
     }
 	
-    public void removeTopicsFromIndex(Set topics,IndexReader reader) throws IOException {
-        Iterator iter=topics.iterator();
+    public void removeTopicsFromIndex(Set<String> topics,IndexReader reader) throws IOException {
+        Iterator<String> iter=topics.iterator();
         while(iter.hasNext()) {
             try {
                 removeTopicFromIndex((String)iter.next(),reader);
@@ -232,7 +232,7 @@ public abstract class AbstractIndexBuilder {
         }
     }
 	
-    public Set getDependentTopics(String topic ,IndexReader reader) throws IOException {
+    public Set<String> getDependentTopics(String topic ,IndexReader reader) throws IOException {
         TermDocs docs=reader.termDocs(new Term("topic",topic));
         while(docs.next()){
             Document doc=reader.document(docs.doc());
@@ -240,7 +240,7 @@ public abstract class AbstractIndexBuilder {
             if(type!=null && type.toString().equals("topic")) {
                 String d=doc.get("dependent");
                 StringTokenizer st=new StringTokenizer(d,"\n");
-                Set s=new HashSet();
+                Set<String> s=new LinkedHashSet<>();
                 while(st.hasMoreTokens()) {
                     s.add(st.nextToken());
                 }
@@ -253,17 +253,17 @@ public abstract class AbstractIndexBuilder {
     
     
     
-    public void updateTopics(Set topics, Set topicsNoDependent, String index, TopicMap tm) throws IOException,TopicMapException {
-        Iterator iter=topics.iterator();
-        Set delete=new HashSet(); // put all deleted topics here, these are the topics that will need to be remade after deletion
+    public void updateTopics(Set<String> topics, Set<String> topicsNoDependent, String index, TopicMap tm) throws IOException,TopicMapException {
+        Iterator<String> iter=topics.iterator();
+        Set<String> delete=new LinkedHashSet<>(); // put all deleted topics here, these are the topics that will need to be remade after deletion
         // first collect all topics that must be deleted before actually deleting anything. otherwise we might be unable to get dependent data for all topics.
         IndexReader reader=IndexReader.open(index);
         while(iter.hasNext()){
             String topic=(String)iter.next();
             delete.add(topic);
-            Set dep=getDependentTopics(topic,reader);
+            Set<String> dep=getDependentTopics(topic,reader);
             if(dep!=null){
-                Iterator iter2=dep.iterator();
+                Iterator<String> iter2=dep.iterator();
                 while(iter2.hasNext()){
                     String topic2=(String)iter2.next();
                     delete.add(topic2);
@@ -284,7 +284,7 @@ public abstract class AbstractIndexBuilder {
         }
         reader.close();
         // now remake everything we deleted
-        Set processed=new HashSet(); // collect updated topic ids here so that we don't update the same topic twice
+        Set<Topic> processed=new LinkedHashSet<>(); // collect updated topic ids here so that we don't update the same topic twice
         IndexWriter writer=new IndexWriter(new File(index),getWriterAnalyzer(),false);
         iter=delete.iterator();
         while(iter.hasNext()){

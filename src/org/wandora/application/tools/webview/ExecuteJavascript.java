@@ -40,7 +40,10 @@ import org.wandora.topicmap.TopicMapException;
 
 public abstract class ExecuteJavascript extends AbstractWebViewTool {
     
-    @Override
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
         try {
             Object r = executeJavascript(context, getJavascript());

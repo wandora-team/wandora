@@ -31,31 +31,36 @@ package org.wandora.exceptions;
 
 import java.util.*;
 
+import org.wandora.topicmap.Topic;
+
 /**
  *
  * @author  olli
  */
 public class ConcurrentEditingException extends WandoraException {
     
-    private Set failedTopics;
-    private Set removedTopics;
+
+	private static final long serialVersionUID = 1L;
+	
+	private Set<Topic> failedTopics;
+    private Set<Topic> removedTopics;
     
     
-    public ConcurrentEditingException(Set failedTopics, Set removedTopics) {
+    public ConcurrentEditingException(Set<Topic> failedTopics, Set<Topic> removedTopics) {
         this.failedTopics=failedTopics;
         this.removedTopics=removedTopics;
     }
     
-    public Set getFailedTopics() {
+    public Set<Topic> getFailedTopics() {
         return failedTopics;
     }
-    public Set getRemovedTopics() {
+    public Set<Topic> getRemovedTopics() {
         return removedTopics;
     }
-    public void setFailedTopics(Set s) {
+    public void setFailedTopics(Set<Topic> s) {
         failedTopics=s;
     }
-    public void setRemovedTopics(Set s) {
+    public void setRemovedTopics(Set<Topic> s) {
         removedTopics=s;
     }
 }

@@ -52,7 +52,10 @@ import java.util.*;
 
 
 public class MakeDisplayVariantsFromBasename extends AbstractWandoraTool implements WandoraTool {
-    boolean overWrite = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	boolean overWrite = false;
     
     /**
      * Creates a new instance of MakeDisplayVariantsWithBasename
@@ -89,10 +92,10 @@ public class MakeDisplayVariantsFromBasename extends AbstractWandoraTool impleme
             String basename = null;
             String variant = null;
             
-            Iterator languageIterator = null;
+            Iterator<Topic> languageIterator = null;
             Topic language = null;
             Set<Topic> scope = null;
-            Collection languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
+            Collection<Topic> languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
             Topic displayScope = wandora.getTopicMap().getTopic(XTMPSI.DISPLAY);
             int progress = 0;
             
@@ -107,7 +110,7 @@ public class MakeDisplayVariantsFromBasename extends AbstractWandoraTool impleme
                             while(languageIterator.hasNext()) {
                                 try {
                                     language = (Topic) languageIterator.next();
-                                    scope = new HashSet();
+                                    scope = new LinkedHashSet<>();
                                     scope.add(language);
                                     scope.add(displayScope);
                                     variant = topic.getVariant(scope);

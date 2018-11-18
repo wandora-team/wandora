@@ -47,7 +47,10 @@ import org.wandora.topicmap.XTMPSI;
 
 public class CreateWebLocationTopic extends AbstractWebViewTool {
     
-    public boolean MAKE_INSTANCE_OF_CURRENT = false;
+
+	private static final long serialVersionUID = 1L;
+	
+	public boolean MAKE_INSTANCE_OF_CURRENT = false;
     public boolean MAKE_SUBCLASS_OF_CURRENT = false;
     public boolean MAKE_INSTANCE_OF_DOCUMENT_TOPIC = true;
     public boolean ASSOCIATE_WITH_CURRENT = true;

@@ -25,16 +25,11 @@
 package org.wandora.application.tools.topicnames;
 
 
-import com.google.api.translate.Language;
 import java.util.*;
 import org.wandora.application.*;
 import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
-import org.wandora.utils.Tuples.T2;
-import org.wandora.utils.language.GoogleTranslateBox;
-import org.wandora.utils.language.SelectGoogleTranslationLanguagesPanel;
 import org.wandora.utils.language.SelectWatsonTranslationLanguagesPanel;
 import org.wandora.utils.language.WatsonTranslateBox;
 
@@ -48,7 +43,10 @@ import org.wandora.utils.language.WatsonTranslateBox;
 
 public class VariantWatsonTranslate extends AbstractWandoraTool implements WandoraTool {
 
-    public static final boolean OVERRIDE_EXISTING_VARIANTS = true;
+
+	private static final long serialVersionUID = 1L;
+	
+	public static final boolean OVERRIDE_EXISTING_VARIANTS = true;
 
 
 
@@ -129,7 +127,7 @@ public class VariantWatsonTranslate extends AbstractWandoraTool implements Wando
                             }
 
                             Topic topic = null;
-                            ArrayList<Topic> layerStackTopics = new ArrayList<Topic>();
+                            List<Topic> layerStackTopics = new ArrayList<Topic>();
                             while(topics.hasNext() && !forceStop()) {
                                 try {
                                     topic = (Topic) topics.next();

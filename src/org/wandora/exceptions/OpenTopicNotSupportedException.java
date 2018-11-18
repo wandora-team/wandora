@@ -33,8 +33,9 @@ package org.wandora.exceptions;
 public class OpenTopicNotSupportedException extends WandoraException {
     
     
-    
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public String getMessage() {
         return "The topic panel can't open a topic.";
     }

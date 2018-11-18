@@ -84,7 +84,7 @@ public class BasenameTrimmer extends AbstractWandoraTool implements WandoraTool 
             int c = 0;
             int changed = 0;
             int progress = 0;
-            HashMap<Topic,String> changeTopics = new HashMap<Topic,String>();
+            Map<Topic,String> changeTopics = new HashMap<Topic,String>();
             
             while(topics.hasNext() && !forceStop()) {
                 try {

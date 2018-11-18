@@ -30,7 +30,6 @@ import org.wandora.application.contexts.*;
 import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
-import org.wandora.application.gui.*;
 import java.util.*;
 
 import com.memetix.mst.language.Language;
@@ -48,7 +47,10 @@ import org.wandora.utils.Tuples.T2;
 
 public class VariantMicrosoftTranslate extends AbstractWandoraTool implements WandoraTool {
 
-    public static final boolean OVERRIDE_EXISTING_VARIANTS = true;
+
+	private static final long serialVersionUID = 1L;
+
+	public static final boolean OVERRIDE_EXISTING_VARIANTS = true;
 
 
 
@@ -135,7 +137,7 @@ public class VariantMicrosoftTranslate extends AbstractWandoraTool implements Wa
                                     Set<Topic> targetScope = new HashSet<Topic>();
                                     targetScope.add(displayScope);
                                     targetScope.add(targetLangTopic);
-                                    targetScopes.add(new T2(targetLang, targetScope));
+                                    targetScopes.add(new T2<Language,Set<Topic>>(targetLang, targetScope));
                                 }
                                 else {
                                     log("Found no topic for target language '"+targetLang+"'.");

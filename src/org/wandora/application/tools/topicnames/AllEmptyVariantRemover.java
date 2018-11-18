@@ -48,7 +48,10 @@ import java.util.*;
 public class AllEmptyVariantRemover extends AbstractWandoraTool implements WandoraTool {
     
 
-    public AllEmptyVariantRemover() {
+	private static final long serialVersionUID = 1L;
+
+
+	public AllEmptyVariantRemover() {
     }
     public AllEmptyVariantRemover(Context preferredContext) {
         setContext(preferredContext);
@@ -82,7 +85,7 @@ public class AllEmptyVariantRemover extends AbstractWandoraTool implements Wando
                 Topic topic = null;
                 String variant = null;
 
-                ArrayList<Set<Topic>> deleteScopes = null;
+                List<Set<Topic>> deleteScopes = null;
                 Collection<Set<Topic>> scopes = null;
                 Iterator<Set<Topic>> scopeIterator = null;
                 Set<Topic> scope = null;

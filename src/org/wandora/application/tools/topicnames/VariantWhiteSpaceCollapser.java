@@ -41,7 +41,11 @@ import java.util.*;
  */
 public class VariantWhiteSpaceCollapser extends AbstractWandoraTool implements WandoraTool {
     
-    /**
+
+	private static final long serialVersionUID = 1L;
+
+
+	/**
      * Creates a new instance of VariantWhiteSpaceCollapser
      */
     public VariantWhiteSpaceCollapser() {
@@ -76,8 +80,8 @@ public class VariantWhiteSpaceCollapser extends AbstractWandoraTool implements W
             String variant = null;
             StringBuffer newVariant = null;
             
-            Collection scopes = null;
-            Iterator scopeIterator = null;
+            Collection<Set<Topic>> scopes = null;
+            Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
             int progress = 0;
             

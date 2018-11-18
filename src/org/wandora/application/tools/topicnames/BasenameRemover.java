@@ -52,9 +52,10 @@ import java.util.*;
 
 public class BasenameRemover extends AbstractWandoraTool implements WandoraTool {
 
-    
+	private static final long serialVersionUID = 1L;
 
-    public BasenameRemover() {
+
+	public BasenameRemover() {
     }
     public BasenameRemover(Context preferredContext) {
         setContext(preferredContext);

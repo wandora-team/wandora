@@ -41,10 +41,10 @@ import org.wandora.utils.Tuples.T2;
 
 public class VariantsToTopicsAndAssociations extends AbstractWandoraTool implements WandoraTool {
 
+	private static final long serialVersionUID = 1L;
 
 
-
-    public VariantsToTopicsAndAssociations() {
+	public VariantsToTopicsAndAssociations() {
     }
     public VariantsToTopicsAndAssociations(Context preferredContext) {
         setContext(preferredContext);
@@ -102,15 +102,15 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
                 int progress = 0;
                 int associationCount = 0;
 
-                ArrayList<T2<Topic,Set<Topic>>> deleteScopes = new ArrayList();
+                List<T2<Topic,Set<Topic>>> deleteScopes = new ArrayList<>();
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         Topic topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             progress++;
-                            Collection scopes = topic.getVariantScopes();
+                            Collection<Set<Topic>> scopes = topic.getVariantScopes();
                             if(scopes != null) {
-                                Iterator scopeIterator = scopes.iterator();
+                                Iterator<Set<Topic>> scopeIterator = scopes.iterator();
                                 while(scopeIterator.hasNext()) {
                                     try {
                                         Set<Topic> scope = (Set<Topic>) scopeIterator.next();
@@ -137,7 +137,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
                                                 }
                                             }
                                             if(deleteVariants) {
-                                                deleteScopes.add(new T2(topic, scope));
+                                                deleteScopes.add(new T2<Topic,Set<Topic>>(topic, scope));
                                             }
                                         }
                                     }

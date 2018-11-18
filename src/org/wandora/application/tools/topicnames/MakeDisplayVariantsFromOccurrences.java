@@ -38,7 +38,10 @@ import java.util.*;
  * @author akivela
  */
 public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool implements WandoraTool {
-    boolean overWrite = false;
+
+	private static final long serialVersionUID = 1L;
+
+	boolean overWrite = false;
     
     /**
      * Creates a new instance of MakeDisplayVariantsWithOccurrences
@@ -71,10 +74,10 @@ public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool impl
             String occurrence = null;
             String variant = null;
             
-            Iterator languageIterator = null;
+            Iterator<Topic> languageIterator = null;
             Topic language = null;
             Set<Topic> scope = null;
-            Collection languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
+            Collection<Topic> languages = wandora.getTopicMap().getTopicsOfType(TMBox.LANGUAGE_SI);
             Topic displayScope = wandora.getTopicMap().getTopic(XTMPSI.DISPLAY);
             int progress = 0;
             
@@ -101,7 +104,7 @@ public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool impl
                                     occurrence = topic.getData(type, language);
                                     if(occurrence != null) {
                                         occurrence = occurrence.replace("\n", " ");
-                                        scope = new HashSet();
+                                        scope = new LinkedHashSet<>();
                                         scope.add(language);
                                         scope.add(displayScope);
                                         variant = topic.getVariant(scope);

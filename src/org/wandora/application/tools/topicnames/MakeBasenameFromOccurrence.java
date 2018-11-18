@@ -36,7 +36,6 @@ import org.wandora.application.tools.*;
 import org.wandora.topicmap.*;
 import org.wandora.application.*;
 
-import org.wandora.*;
 
 
 
@@ -57,7 +56,10 @@ import org.wandora.*;
 
 
 public class MakeBasenameFromOccurrence extends AbstractWandoraTool implements WandoraTool {
-    public static int MAXLEN = 256;
+
+	private static final long serialVersionUID = 1L;
+
+	public static int MAXLEN = 256;
     public String replacement = "";
     public String template = "%OCCURRENCE%";
     

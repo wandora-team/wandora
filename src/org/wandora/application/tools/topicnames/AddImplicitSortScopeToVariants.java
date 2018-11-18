@@ -39,7 +39,11 @@ import java.util.*;
  */
 public class AddImplicitSortScopeToVariants extends AbstractWandoraTool implements WandoraTool {
 
-    /**
+
+	private static final long serialVersionUID = 1L;
+
+
+	/**
      * Creates a new instance of AddImplicitDisplayScopeToVariants
      */
     public AddImplicitSortScopeToVariants() {
@@ -80,8 +84,8 @@ public class AddImplicitSortScopeToVariants extends AbstractWandoraTool implemen
             Topic sortScope = tm.getTopic(XTMPSI.SORT);
             if(sortScope == null) return;
 
-            Collection scopes = null;
-            Iterator scopeIterator = null;
+            Collection<Set<Topic>> scopes = null;
+            Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
             Topic scopeTopic = null;
             int progress = 0;
