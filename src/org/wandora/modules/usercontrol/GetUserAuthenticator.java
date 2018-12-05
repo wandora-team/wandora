@@ -23,7 +23,8 @@ package org.wandora.modules.usercontrol;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.wandora.modules.AbstractModule;
@@ -31,7 +32,7 @@ import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
 import org.wandora.modules.servlet.ModulesServlet;
-import org.wandora.utils.Base64;
+
 
 /**
  * <p>
@@ -71,7 +72,7 @@ public class GetUserAuthenticator extends AbstractModule implements UserAuthenti
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         
         Object o;
         o=settings.get("userParam");

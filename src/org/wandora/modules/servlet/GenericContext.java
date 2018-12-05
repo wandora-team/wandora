@@ -24,7 +24,8 @@ package org.wandora.modules.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -33,7 +34,6 @@ import org.wandora.modules.AbstractModule;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
-import org.wandora.modules.servlet.ServletModule.RequestListener;
 import org.wandora.modules.usercontrol.User;
 import org.wandora.utils.ListenerList;
 import org.wandora.utils.ParallelListenerList;
@@ -160,7 +160,7 @@ public class GenericContext extends AbstractModule implements ServletModule, Ser
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("checkActions");
         if(o!=null && o.toString().equalsIgnoreCase("false")) checkActions=false;
         

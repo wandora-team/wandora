@@ -29,7 +29,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +54,7 @@ public class ScreenCastWebApp extends AbstractWebApp {
     protected String format="jpeg";
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("format");
         if(o!=null) format=o.toString().trim();
         super.init(manager, settings);

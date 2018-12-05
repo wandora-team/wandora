@@ -22,7 +22,6 @@
 
 package org.wandora.modules.servlet;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import org.apache.velocity.app.VelocityEngine;
@@ -53,7 +52,7 @@ public class VelocityEngineModule extends AbstractModule {
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
         
         engineProperties=new Properties();

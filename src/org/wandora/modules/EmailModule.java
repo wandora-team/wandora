@@ -21,8 +21,7 @@
  */
 package org.wandora.modules;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,11 +34,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.wandora.modules.servlet.AbstractAction;
-import org.wandora.modules.servlet.ModulesServlet.HttpMethod;
+
 
 /**
  * A module that provides email sending services for other modules. 
@@ -186,7 +181,7 @@ public class EmailModule extends AbstractModule {
     
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o;
         
         mailProps=new Properties();

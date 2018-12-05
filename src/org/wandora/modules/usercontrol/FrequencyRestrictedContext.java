@@ -23,7 +23,8 @@ package org.wandora.modules.usercontrol;
 
 import java.io.IOException;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +49,7 @@ public class FrequencyRestrictedContext extends AbstractControlledContext {
     private String requiredRole=null;
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("keyPrefix");
         if(o!=null) keyPrefix=o.toString();
         

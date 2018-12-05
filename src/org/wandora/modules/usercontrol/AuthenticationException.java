@@ -29,7 +29,10 @@ package org.wandora.modules.usercontrol;
 
 public class AuthenticationException extends Exception {
 
-    public AuthenticationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+
+	private static final long serialVersionUID = 1L;
+
+	public AuthenticationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

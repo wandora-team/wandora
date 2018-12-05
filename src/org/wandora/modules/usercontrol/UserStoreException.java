@@ -29,7 +29,10 @@ package org.wandora.modules.usercontrol;
 
 public class UserStoreException extends Exception {
 
-    public UserStoreException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	private static final long serialVersionUID = 1L;
+
+	
+	public UserStoreException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

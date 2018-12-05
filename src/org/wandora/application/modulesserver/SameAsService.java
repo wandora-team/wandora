@@ -26,7 +26,9 @@ package org.wandora.application.modulesserver;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,7 +70,7 @@ public class SameAsService  extends AbstractTopicWebApp {
     
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
     }
     
@@ -134,7 +136,7 @@ public class SameAsService  extends AbstractTopicWebApp {
         sb.append("\"uri\": ").append(encodeJSON(sameas.url)).append(",");
         sb.append("\"numDuplicates\": \"").append(sameas.getSameCount()).append("\",");
         sb.append("\"duplicates\": [");
-        ArrayList<String> sames = sameas.sames;
+        List<String> sames = sameas.sames;
         for(int i=0; i<sames.size(); i++) {
             String url = sames.get(i);
             sb.append(encodeJSON(url));
@@ -230,7 +232,7 @@ public class SameAsService  extends AbstractTopicWebApp {
     **/
     protected class SameAs {
         public String url = null;
-        public ArrayList<String> sames = new ArrayList();
+        public List<String> sames = new ArrayList<>();
         
         public SameAs() {
             
@@ -241,12 +243,12 @@ public class SameAsService  extends AbstractTopicWebApp {
         }
         
         public void addSame(String u) {
-            if(sames == null) sames = new ArrayList();
+            if(sames == null) sames = new ArrayList<>();
             sames.add(u);
         }
         
         public int getSameCount() {
-            if(sames == null) sames = new ArrayList();
+            if(sames == null) sames = new ArrayList<>();
             return sames.size();
         }
     }

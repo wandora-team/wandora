@@ -25,7 +25,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,7 +54,7 @@ public class BrowserPluginService extends AbstractAction {
     private BrowserExtractorManager extractorManager;
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         /*
          The default actionParamKey is "action" which conflicts with operation of
          this action. The actionParamKey can still be set in module initialisation

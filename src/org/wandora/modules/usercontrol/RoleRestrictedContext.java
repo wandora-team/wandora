@@ -22,7 +22,8 @@
 package org.wandora.modules.usercontrol;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,7 +43,7 @@ public class RoleRestrictedContext extends AbstractControlledContext {
 
     protected String requiredRole;
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("requiredRole");
         if(o!=null) this.requiredRole=o.toString();
         super.init(manager, settings);

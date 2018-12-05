@@ -23,7 +23,6 @@ package org.wandora.modules;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 
@@ -66,7 +65,7 @@ public abstract class AbstractModule implements Module {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         this.moduleManager=manager;
         isInitialized=true;
     }

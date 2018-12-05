@@ -24,6 +24,8 @@ package org.wandora.modules;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.wandora.modules.DatabaseInterface.PreparedDatabaseStatement;
 import org.wandora.modules.DatabaseInterface.Row;
 import org.wandora.modules.DatabaseInterface.Rows;
@@ -54,7 +56,7 @@ public class DBTesterModule extends AbstractModule {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("useprepared");
         if(o!=null) usePrepared=Boolean.parseBoolean(o.toString());
         

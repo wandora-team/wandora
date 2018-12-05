@@ -20,10 +20,12 @@
  *
  */
 package org.wandora.modules;
+
+
 import java.util.HashMap;
-import java.util.logging.Level;
+import java.util.Map;
+
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.Jdk14Logger;
 import org.apache.commons.logging.impl.SimpleLog;
 
 /**
@@ -89,7 +91,7 @@ public class LoggingModule extends AbstractModule {
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=null;
         o=settings.get("log");
         if(o!=null && o instanceof Log) log=(Log)o;

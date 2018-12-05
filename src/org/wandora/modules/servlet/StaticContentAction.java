@@ -27,11 +27,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.spec.PSSParameterSpec;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.regex.Matcher;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +50,7 @@ import org.wandora.modules.usercontrol.User;
 public class StaticContentAction extends AbstractAction {
 
     protected String mountPoint=null;
-    protected ArrayList<Pattern> forbidden=new ArrayList<Pattern>();
+    protected List<Pattern> forbidden=new ArrayList<Pattern>();
     protected String urlPrefix="";
     
     private MimeTypes mimeTypes;
@@ -66,7 +65,7 @@ public class StaticContentAction extends AbstractAction {
     
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         this.isDefaultAction=true; // defaultAction defaults to true, can still be changed with init params
         
         Object o;

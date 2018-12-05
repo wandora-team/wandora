@@ -90,7 +90,7 @@ public class TemplateActionExceptionHandler extends AbstractModule implements Ac
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
         
         forwardRequestParameters=new ArrayList<String>();

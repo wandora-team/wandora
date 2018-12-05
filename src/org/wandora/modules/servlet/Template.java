@@ -71,11 +71,11 @@ public interface Template {
      * @param params The template context used for processing of the template.
      * @param output The output stream where the result is written.
      */
-    public void process(java.util.HashMap<String,Object> params,java.io.OutputStream output);    
+    public void process(java.util.Map<String,Object> params,java.io.OutputStream output);    
     /**
      * Returns the default context for this template. You may then add more
      * content into the context before passing it on to process.
      * @return The default context of the template.
      */
-    public HashMap<String,Object> getTemplateContext();
+    public java.util.Map<String,Object> getTemplateContext();
 }

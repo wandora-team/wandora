@@ -199,7 +199,7 @@ public class ImageResizeAction extends CachedAction {
     
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         imageProfiles=new HashMap<String,ImageProfile>();
         imageSources=new LinkedHashMap<String,ImageSource>();
         
@@ -392,8 +392,8 @@ public class ImageResizeAction extends CachedAction {
             }
             finally{ 
                 outStream.close(); 
-                return true;
             }
+            return true;
         }
         
         return false;

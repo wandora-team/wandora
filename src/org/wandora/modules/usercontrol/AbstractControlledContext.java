@@ -24,19 +24,13 @@ package org.wandora.modules.usercontrol;
 import org.wandora.modules.servlet.GenericContext;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.wandora.modules.AbstractModule;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
-import org.wandora.modules.servlet.ActionHandler;
 import org.wandora.modules.servlet.ModulesServlet;
-import org.wandora.modules.servlet.ServletModule;
-import org.wandora.utils.ListenerList;
-import org.wandora.utils.ParallelListenerList;
+
 
 /**
  *

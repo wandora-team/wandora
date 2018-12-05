@@ -22,6 +22,8 @@
 package org.wandora.modules;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import org.wandora.utils.ScriptManager;
@@ -66,7 +68,7 @@ public class ScriptModule extends AbstractModule {
     protected HashMap<String,Object> persistentObjects;
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o;
         o=settings.get("scriptEngine");
         if(o!=null) engine=o.toString();

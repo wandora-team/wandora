@@ -31,6 +31,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.wandora.utils.Tuples;
 import org.wandora.utils.Tuples.T2;
@@ -380,7 +382,7 @@ public class GenericDatabaseInterface extends AbstractModule implements Database
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         driver=(String)settings.get("driver");
         connectionString=(String)settings.get("connectionstring");
         userName=(String)settings.get("username");

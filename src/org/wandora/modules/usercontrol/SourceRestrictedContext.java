@@ -23,7 +23,8 @@ package org.wandora.modules.usercontrol;
 
 import org.wandora.modules.servlet.GenericContext;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +53,7 @@ public class SourceRestrictedContext extends GenericContext {
     protected int mask=0xffffffff;
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("address");
         if(o!=null){
             String s=o.toString();

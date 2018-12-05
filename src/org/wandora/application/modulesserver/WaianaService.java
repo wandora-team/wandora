@@ -22,11 +22,9 @@
 package org.wandora.application.modulesserver;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,6 +39,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -84,7 +84,7 @@ public class WaianaService extends AbstractTopicWebApp {
 
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         /*
          The default actionParamKey is "action" which conflicts with operation of
          this action. The actionParamKey can still be set in module initialisation
@@ -411,7 +411,7 @@ public class WaianaService extends AbstractTopicWebApp {
         
         
         public WaianaStorage() {
-            data = new LinkedHashMap();
+            data = new LinkedHashMap<>();
         }
         
         

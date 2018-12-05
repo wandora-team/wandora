@@ -21,9 +21,9 @@
  */
 package org.wandora.modules;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.HashMap;
+
+import java.util.Map;
+
 import javax.script.ScriptException;
 import org.w3c.dom.Element;
 
@@ -58,6 +58,6 @@ public interface XMLOptionsHandler {
      * @return The parsed module parameters which will be passed to the init
      *          method of your module later.
      */
-    public HashMap<String,Object> parseXMLOptionsElement(ModuleManager manager,Element e,String source) throws ReflectiveOperationException, ScriptException;
+    public Map<String,Object> parseXMLOptionsElement(ModuleManager manager,Element e,String source) throws ReflectiveOperationException, ScriptException;
 //    public void writeXMLOptions(ModuleManager manager,Writer out) throws IOException;
 }

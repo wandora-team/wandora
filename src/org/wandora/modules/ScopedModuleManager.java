@@ -25,6 +25,8 @@ import static com.hp.hpl.jena.vocabulary.RDFSyntax.doc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+
 import javax.script.ScriptException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -99,7 +101,7 @@ public class ScopedModuleManager extends ModuleManager implements Module, XMLOpt
     
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> parameters) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> parameters) throws ModuleException {
         this.parentManager=manager;
         initAllModules();
         initialized=true;
@@ -208,7 +210,7 @@ public class ScopedModuleManager extends ModuleManager implements Module, XMLOpt
     
     
     @Override
-    public HashMap<String, Object> parseXMLOptionsElement(ModuleManager manager, Element e, String source) throws ReflectiveOperationException, ScriptException {
+    public Map<String, Object> parseXMLOptionsElement(ModuleManager manager, Element e, String source) throws ReflectiveOperationException, ScriptException {
         parentManager=manager;
         String src=e.getAttribute("src").trim();
         if(src.length()>0){

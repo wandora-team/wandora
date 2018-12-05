@@ -23,7 +23,8 @@ package org.wandora.application.modulesserver;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
+import java.util.Map;
+
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
 import org.wandora.modules.ModuleManager.ModuleSettings;
@@ -45,7 +46,7 @@ public class ViewTopicWebApp extends ViewTopicAction implements ModulesWebApp {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         // NOTE: ViewTopicWebApp does not extend AbstractWebApp so you may want
         // to do any modifications here in AbstractWebApp also.
         Object o=settings.get("webAppName");

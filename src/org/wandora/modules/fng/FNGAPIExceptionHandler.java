@@ -21,8 +21,9 @@
  */
 package org.wandora.modules.fng;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
@@ -41,7 +42,7 @@ public class FNGAPIExceptionHandler extends TemplateActionExceptionHandler {
     protected String defaultOutputMode="dc-xml";
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         
         Object o=settings.get("defaultOutput");
         if(o!=null) defaultOutputMode=o.toString();

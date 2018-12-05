@@ -24,7 +24,8 @@ package org.wandora.application.modulesserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +51,7 @@ public class GraphMLWebApp extends AbstractTopicWebApp {
     protected boolean deepCopy = false;
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("deepCopy");
         if(o!=null) deepCopy=Boolean.parseBoolean(o.toString().trim());
         super.init(manager, settings);

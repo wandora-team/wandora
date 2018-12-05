@@ -24,7 +24,8 @@ package org.wandora.modules.servlet;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.wandora.modules.AbstractModule;
 import org.wandora.modules.Module;
@@ -73,9 +74,9 @@ import org.wandora.modules.ModuleManager;
 
 public class TemplateManager extends AbstractModule {
     
-    protected final HashMap<String,ArrayList<Template>> templateMap=new HashMap<String,ArrayList<Template>>();
+    protected final Map<String,List<Template>> templateMap=new LinkedHashMap<>();
     
-    protected final HashMap<String,Object> defaultContext=new HashMap<String,Object>();
+    protected final Map<String,Object> defaultContext=new LinkedHashMap<>();
     
     protected TemplateContextProvider contextProvider=null;
     protected boolean ignoreContextProvider=false;
@@ -87,9 +88,9 @@ public class TemplateManager extends AbstractModule {
      * as a basis for template contexts.
      * @return The manager specific default template context.
      */
-    public HashMap<String,Object> getDefaultContext(){
+    public Map<String,Object> getDefaultContext(){
         if(contextProvider!=null && !ignoreContextProvider){
-            HashMap<String,Object> ret=new HashMap<String,Object>();
+            Map<String,Object> ret=new LinkedHashMap<String,Object>();
             ret.putAll(contextProvider.getTemplateBaseContext());
             ret.putAll(defaultContext);
             return ret;
@@ -107,7 +108,7 @@ public class TemplateManager extends AbstractModule {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
         
         for(Map.Entry<String,Object> e : settings.entrySet()){
@@ -172,7 +173,7 @@ public class TemplateManager extends AbstractModule {
      */
     public Template getTemplate(String key,String version){
         synchronized(templateMap){
-            ArrayList<Template> templates=templateMap.get(key);
+            List<Template> templates=templateMap.get(key);
             if(templates==null || templates.isEmpty()) return null;
             if(templates.size()==1) return templates.get(0);
             
@@ -214,7 +215,7 @@ public class TemplateManager extends AbstractModule {
                 logging.warn("Tried to register template with null key");
                 return;
             }
-            ArrayList<Template> templates=templateMap.get(key);
+            List<Template> templates=templateMap.get(key);
             if(templates==null){
                 templates=new ArrayList<Template>();
                 templateMap.put(key,templates);
@@ -232,7 +233,7 @@ public class TemplateManager extends AbstractModule {
         synchronized(templateMap){
             String key=template.getKey();
             if(key==null) return;
-            ArrayList<Template> templates=templateMap.get(key);
+            List<Template> templates=templateMap.get(key);
             if(templates==null) return;
             templates.remove(template);
             if(templates.isEmpty()) templateMap.remove(key);

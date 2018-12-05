@@ -24,6 +24,8 @@ package org.wandora.modules;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+
 import javax.script.ScriptException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -107,7 +109,7 @@ public class ModuleGroup extends ScriptModule implements XMLOptionsHandler {
         try{
             NodeList nl=(NodeList)xpath.evaluate("module",e,XPathConstants.NODESET);
             for(int i=0;i<nl.getLength();i++){
-                Tuples.T3<Module,HashMap<String,Object>,ModuleManager.ModuleSettings> tuple=manager.parseXMLModuleElement(e,source);
+                Tuples.T3<Module,Map<String,Object>,ModuleManager.ModuleSettings> tuple=manager.parseXMLModuleElement(e,source);
                 manager.addModule(tuple.e1, tuple.e2, tuple.e3);
                 addChildModule(tuple.e1);
             }
@@ -118,7 +120,7 @@ public class ModuleGroup extends ScriptModule implements XMLOptionsHandler {
     }
     
     @Override
-    public HashMap<String, Object> parseXMLOptionsElement(ModuleManager manager, Element e, String source) throws ReflectiveOperationException, ScriptException {
+    public Map<String, Object> parseXMLOptionsElement(ModuleManager manager, Element e, String source) throws ReflectiveOperationException, ScriptException {
         parseChildModules(manager, e, source);
         
         return manager.parseXMLOptionsElement(e);

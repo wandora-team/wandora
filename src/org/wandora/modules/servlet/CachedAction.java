@@ -113,7 +113,7 @@ public abstract class CachedAction extends AbstractAction {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("caching");
         if(o!=null && o.toString().equalsIgnoreCase("true")) caching=true;
         

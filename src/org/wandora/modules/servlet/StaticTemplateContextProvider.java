@@ -50,7 +50,7 @@ public class StaticTemplateContextProvider extends AbstractModule implements Tem
     protected Map<String,Object> context;
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         context=new HashMap<String, Object>();
         
         for(Map.Entry<String,Object> e : settings.entrySet()){

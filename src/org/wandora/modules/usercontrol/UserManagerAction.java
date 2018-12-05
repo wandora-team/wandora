@@ -24,7 +24,8 @@ package org.wandora.modules.usercontrol;
 import java.lang.String;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
@@ -66,11 +67,11 @@ public class UserManagerAction extends GenericTemplateAction {
     
     
     @Override
-    protected HashMap<String, Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, User user) throws ActionException {
+    protected Map<String, Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, User user) throws ActionException {
         String editAction=req.getParameter("editaction");
         if(editAction==null || editAction.length()==0) editAction="userlist";
         
-        HashMap<String,Object> params=super.getTemplateContext(template, req, method, action, user);
+        Map<String,Object> params=super.getTemplateContext(template, req, method, action, user);
         
         String userName=req.getParameter("user");
         if(userName!=null) userName=userName.trim();
@@ -163,7 +164,7 @@ public class UserManagerAction extends GenericTemplateAction {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
         forwardRequestParameters.add("editAction");
         forwardRequestParameters.add("user");

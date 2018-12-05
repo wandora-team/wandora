@@ -136,7 +136,7 @@ public abstract class AbstractAction extends ScriptModule implements ServletModu
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object actionParamKeyO=settings.get("actionParamKey");
         if(actionParamKeyO!=null) this.actionParamKey=actionParamKeyO.toString();
         Object actionsO=settings.get("actions");

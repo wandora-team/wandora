@@ -20,16 +20,19 @@
  *
  */
 package org.wandora.modules;
-import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author olli
  */
 public class ModuleInUseException extends ModuleException {
-    public ModuleInUseException(ArrayList<Module> modules){
+
+	private static final long serialVersionUID = 1L;
+	
+	public ModuleInUseException(List<Module> modules){
         this(null,modules);
     }
-    public ModuleInUseException(String message,ArrayList<Module> modules){
+    public ModuleInUseException(String message,List<Module> modules){
         super("Module is in use "+modules+". "+(message!=null?message:""));
     }
 }

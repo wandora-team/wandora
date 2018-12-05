@@ -53,7 +53,7 @@ public interface Module {
      * @param parametersThe module parameters parsed from the configuration file.
      * @throws ModuleException 
      */
-    public void init(ModuleManager manager,HashMap<String,Object> parameters) throws ModuleException;
+    public void init(ModuleManager manager,Map<String,Object> parameters) throws ModuleException;
     
     /**
      * Returns all the modules this module depends on. This method will be

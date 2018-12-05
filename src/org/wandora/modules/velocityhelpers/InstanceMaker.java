@@ -36,18 +36,18 @@ package org.wandora.modules.velocityhelpers;
  */
 public class InstanceMaker {
     
-    private Class c;
+    private Class<?> c;
     
     /** Creates a new instance of InstanceMaker */
     public InstanceMaker(String cls) throws ReflectiveOperationException {
         c=Class.forName(cls);
     }
-    public InstanceMaker(Class cls){
+    public InstanceMaker(Class<?> cls){
         this.c=cls;
     }
     
     
     public Object make() throws Exception {
-        return c.newInstance();
+        return c.getDeclaredConstructor().newInstance();
     }
 }

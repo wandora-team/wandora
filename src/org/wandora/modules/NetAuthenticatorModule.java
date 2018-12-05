@@ -21,7 +21,7 @@
  */
 package org.wandora.modules;
 
-import java.util.HashMap;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.wandora.utils.MultiNetAuthenticator;
@@ -42,8 +42,8 @@ public class NetAuthenticatorModule extends AbstractModule {
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
-        LinkedHashMap<String,Login> logins=new LinkedHashMap<String,Login>();
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
+        Map<String,Login> logins=new LinkedHashMap<String,Login>();
         
         for(Map.Entry<String,Object> e : settings.entrySet()){
             String key=e.getKey();

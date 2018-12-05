@@ -27,8 +27,10 @@
  */
 
 package org.wandora.modules.velocityhelpers;
+
+
 import java.util.*;
-import java.text.*;
+
 
 /**
  *
@@ -62,7 +64,7 @@ public class TextBox {
     }
     
     public String charToStr(int c){
-        return new Character((char)c).toString();
+        return Character.valueOf((char)c).toString();
     }
     public String repeat(String s,int times){
         String r="";

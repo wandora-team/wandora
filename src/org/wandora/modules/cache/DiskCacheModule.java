@@ -29,6 +29,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.wandora.modules.AbstractModule;
@@ -95,7 +96,7 @@ public class DiskCacheModule extends AbstractModule implements CacheService {
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
         
         Object cacheDirO=settings.get("cacheDir");
@@ -329,6 +330,7 @@ public class DiskCacheModule extends AbstractModule implements CacheService {
             if(!lockReturned) cacheLock.writeLock().unlock();
         }
     }
+    
     
     private class LockedInputStream extends InputStream {
 

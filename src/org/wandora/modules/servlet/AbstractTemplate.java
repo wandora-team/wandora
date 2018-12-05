@@ -68,7 +68,7 @@ public abstract class AbstractTemplate extends AbstractModule implements Templat
     protected HashMap<String,Object> templateContext;
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
         
         Object o;
@@ -100,7 +100,7 @@ public abstract class AbstractTemplate extends AbstractModule implements Templat
     }
     
     @Override
-    public HashMap<String,Object> getTemplateContext(){
+    public Map<String,Object> getTemplateContext(){
         return templateContext;
     }
 
@@ -154,6 +154,6 @@ public abstract class AbstractTemplate extends AbstractModule implements Templat
     }
 
     @Override
-    public abstract void process(HashMap<String, Object> params, OutputStream output);
+    public abstract void process(Map<String, Object> params, OutputStream output);
     
 }

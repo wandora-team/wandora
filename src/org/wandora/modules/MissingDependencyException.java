@@ -26,7 +26,10 @@ package org.wandora.modules;
  * @author olli
  */
 public class MissingDependencyException extends ModuleException {
-    public MissingDependencyException(Class<? extends Module> cls){
+
+	private static final long serialVersionUID = 1L;
+	
+	public MissingDependencyException(Class<? extends Module> cls){
         this(null,cls,null);
     }
     public MissingDependencyException(Class<? extends Module> cls,String instanceName){

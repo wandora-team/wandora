@@ -99,8 +99,8 @@ public class VelocityTemplate extends AbstractTemplate {
     }
 
     @Override
-    public HashMap<String, Object> getTemplateContext() {
-        HashMap<String,Object> context=super.getTemplateContext();
+    public Map<String, Object> getTemplateContext() {
+        Map<String,Object> context=super.getTemplateContext();
         if(!context.containsKey("urlencoder")) context.put("urlencoder",new URLEncoder());
         if(!context.containsKey("listmaker")) context.put("listmaker",new InstanceMaker(java.util.ArrayList.class));
         return context;
@@ -109,7 +109,7 @@ public class VelocityTemplate extends AbstractTemplate {
     
     
     @Override
-    public void process(HashMap<String, Object> params, OutputStream output) {
+    public void process(Map<String, Object> params, OutputStream output) {
         org.apache.velocity.Template vTemplate=this.vTemplate;
         if(vTemplate==null || !templateCaching){
             String templatePath=getFullTemplatePath();

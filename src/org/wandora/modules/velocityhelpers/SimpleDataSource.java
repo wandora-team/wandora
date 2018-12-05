@@ -27,11 +27,12 @@
  */
 
 package org.wandora.modules.velocityhelpers;
+
 import javax.activation.*;
 import javax.mail.internet.*;
 import javax.mail.*;
 import java.io.*;
-import org.wandora.utils.Base64;
+
 
 /**
  *

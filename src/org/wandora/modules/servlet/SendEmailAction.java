@@ -24,8 +24,6 @@ package org.wandora.modules.servlet;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -76,7 +74,7 @@ public class SendEmailAction extends GenericTemplateAction {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         
         Object o=settings.get("subject");
         if(o!=null) subject=o.toString();
@@ -195,7 +193,7 @@ public class SendEmailAction extends GenericTemplateAction {
         Template template=getTemplate(req, method, action);
         if(template==null) return false;
 
-        HashMap<String,Object> context=getTemplateContext(template, req, method, action, user);
+        Map<String,Object> context=getTemplateContext(template, req, method, action, user);
         if(context==null) return false;
 
         ByteArrayOutputStream baos=new ByteArrayOutputStream();

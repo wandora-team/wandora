@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -110,7 +113,7 @@ public class ViewTopicAction extends GenericTemplateAction {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
         
         Object o;
@@ -149,8 +152,8 @@ public class ViewTopicAction extends GenericTemplateAction {
     
     
     @Override
-    protected LinkedHashMap<String,String> getCacheKeyParams(HttpServletRequest req, HttpMethod method, String action) {
-        LinkedHashMap<String,String> params=super.getCacheKeyParams(req, method, action);
+    protected Map<String,String> getCacheKeyParams(HttpServletRequest req, HttpMethod method, String action) {
+        Map<String,String> params=super.getCacheKeyParams(req, method, action);
         
         String lang=req.getParameter("lang");
         if(lang==null || lang.length()==0) lang=defaultLang;
@@ -193,8 +196,8 @@ public class ViewTopicAction extends GenericTemplateAction {
      * @return The topics matching the query.
      * @throws TopicMapException 
      */
-    public static ArrayList<Topic> getTopics(String query,TopicMap tm,int max) throws TopicMapException {
-        ArrayList<Topic> ret=new ArrayList<Topic>();
+    public static List<Topic> getTopics(String query,TopicMap tm,int max) throws TopicMapException {
+        List<Topic> ret=new ArrayList<Topic>();
         if(query.startsWith("si:")){
             Topic t=tm.getTopic(query.substring(3));
             if(t!=null) ret.add(t);
@@ -235,14 +238,14 @@ public class ViewTopicAction extends GenericTemplateAction {
      * @throws TopicMapException 
      */
     public static Topic getTopic(String query,TopicMap tm) throws TopicMapException {
-        ArrayList<Topic> ts=getTopics(query,tm,1);
+        List<Topic> ts=getTopics(query,tm,1);
         if(ts.isEmpty()) return null;
         else return ts.get(0);
     }
 
     @Override
-    protected HashMap<String, Object> getStaticTemplateContext() {
-        HashMap<String,Object> context=super.getStaticTemplateContext();
+    protected Map<String, Object> getStaticTemplateContext() {
+        Map<String,Object> context=super.getStaticTemplateContext();
         context.put("tmbox",new TMBox());
         return context;
     }
@@ -250,8 +253,8 @@ public class ViewTopicAction extends GenericTemplateAction {
     
     
     @Override
-    protected HashMap<String, Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, org.wandora.modules.usercontrol.User user) throws ActionException {
-        HashMap<String, Object> context=super.getTemplateContext(template, req, method, action, user);
+    protected Map<String, Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, org.wandora.modules.usercontrol.User user) throws ActionException {
+        Map<String, Object> context=super.getTemplateContext(template, req, method, action, user);
         
         context.putAll(getCacheKeyParams(req, method, action));
         

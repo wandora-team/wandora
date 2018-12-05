@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +49,7 @@ public class UserLoggerAction extends AbstractAction {
 
     // these are static so that same log files can be shared by multiple actions
     protected static final Object fileWait=new Object();
-    protected static final HashSet openFiles=new HashSet();
+    protected static final Set<String> openFiles=new HashSet<>();
     
     protected String entryHeader;
     protected HashMap<String,String> logParams;
@@ -72,7 +74,7 @@ public class UserLoggerAction extends AbstractAction {
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("logDir");
         if(o!=null) logDir=o.toString();
         

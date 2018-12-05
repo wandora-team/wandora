@@ -25,6 +25,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.wandora.modules.*;
 import org.wandora.modules.DatabaseInterface.Row;
@@ -92,7 +94,7 @@ public class DatabaseUserStore extends AbstractModule implements ModifyableUserS
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o;
         o=settings.get("tablePrefix");
         if(o!=null) tablePrefix=o.toString();
@@ -162,9 +164,9 @@ public class DatabaseUserStore extends AbstractModule implements ModifyableUserS
     }
 
     protected void fetchUsers() throws UserStoreException {
-        HashMap<String,DBUser> newUsers=new HashMap<String,DBUser>();
+        Map<String,DBUser> newUsers=new LinkedHashMap<String,DBUser>();
         try{
-            ArrayList<User> ret=new ArrayList<User>();
+            List<User> ret=new ArrayList<User>();
             Rows userRows=database.query("select * from "+tablePrefix+"USERS order by ID");
             Rows roleRows=database.query("select * from "+tablePrefix+"USER_ROLES order by USERID");
             Rows propRows=database.query("select * from "+tablePrefix+"USER_PROPS order by USERID");

@@ -23,7 +23,9 @@ package org.wandora.modules.usercontrol;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,8 +42,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class SimpleUser extends User {
 
     protected String userName;
-    protected HashMap<String,String> options;
-    protected ArrayList<String> roles;
+    protected Map<String,String> options;
+    protected List<String> roles;
     @JsonIgnore
     protected boolean changed=false;
     @JsonIgnore
@@ -51,14 +53,14 @@ public class SimpleUser extends User {
     }
     
     public SimpleUser(String userName){
-        this(userName,new HashMap<String,String>(),new ArrayList<String>());
+        this(userName,new LinkedHashMap<String,String>(),new ArrayList<String>());
     }
     
-    public SimpleUser(String userName, HashMap<String,String> options, ArrayList<String> roles) {
+    public SimpleUser(String userName, Map<String,String> options, List<String> roles) {
         this(userName, options, roles, null);
     }
     
-    public SimpleUser(String userName, HashMap<String,String> options, ArrayList<String> roles,UserStore userStore) {
+    public SimpleUser(String userName, Map<String,String> options, List<String> roles, UserStore userStore) {
         this.userName = userName;
         this.options = options;
         this.roles = roles;
@@ -74,7 +76,7 @@ public class SimpleUser extends User {
         return userName;
     }
 
-    public HashMap<String, String> getOptions() {
+    public Map<String, String> getOptions() {
         return options;
     }
 
@@ -84,7 +86,7 @@ public class SimpleUser extends User {
         return options.keySet();
     }
 
-    public void setOptions(HashMap<String, String> options) {
+    public void setOptions(Map<String, String> options) {
         this.options = options;
     }
 
@@ -163,6 +165,6 @@ public class SimpleUser extends User {
     
     @JsonIgnore
     public SimpleUser duplicate(){
-        return new SimpleUser(userName, new HashMap<String,String>(options), new ArrayList<String>(roles),userStore);
+        return new SimpleUser(userName, new LinkedHashMap<String,String>(options), new ArrayList<String>(roles),userStore);
     }
 }

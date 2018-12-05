@@ -25,7 +25,9 @@ package org.wandora.application.modulesserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,14 +56,14 @@ public class IIIFWebApp extends AbstractTopicWebApp {
     protected boolean prettyPrint=true;
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("iiifBuilder");
         if(o!=null) o=SelectionInstancesIIIFBuilder.class.getName();
         
         try{
-            builder=(IIIFBuilder)Class.forName(o.toString()).newInstance();            
+            builder=(IIIFBuilder)Class.forName(o.toString()).getDeclaredConstructor().newInstance();            
         }
-        catch (ClassNotFoundException | IllegalAccessException | InstantiationException e){
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e){
             logging.error(e);
         }
         
@@ -90,7 +92,10 @@ public class IIIFWebApp extends AbstractTopicWebApp {
                 
                 // the export tool itself is only needed for logging
                 Manifest m=builder.buildIIIF(Wandora.getWandora(), context, new IIIFExport(){
-                    @Override
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
                     public void log(Error e) {
                         logging.error(e);
                     }

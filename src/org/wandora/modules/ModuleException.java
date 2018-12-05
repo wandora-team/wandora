@@ -26,7 +26,10 @@ package org.wandora.modules;
  * @author olli
  */
 public class ModuleException extends Exception {
-    public ModuleException(){
+
+	private static final long serialVersionUID = 1L;
+	
+	public ModuleException(){
         super();
     }
     public ModuleException(String message){

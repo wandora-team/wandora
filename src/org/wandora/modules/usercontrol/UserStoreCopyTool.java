@@ -22,7 +22,8 @@
 package org.wandora.modules.usercontrol;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
+
 import org.wandora.modules.*;
 
 /**
@@ -63,8 +64,9 @@ public class UserStoreCopyTool extends AbstractModule {
         return deps;
     }
 
+    
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o;
         o=settings.get("fromStore");
         if(o!=null) fromStoreName=o.toString();

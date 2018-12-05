@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.wandora.modules.AbstractModule;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
@@ -49,7 +52,7 @@ import org.wandora.utils.JsonMapper;
 
 public class FileUserStore extends AbstractModule implements ModifyableUserStore {
 
-    protected final HashMap<String,User> users=new HashMap<String,User>();
+    protected final Map<String,User> users=new LinkedHashMap<String,User>();
     protected String userFile;
     
     protected long saveTime=10000;
@@ -67,7 +70,7 @@ public class FileUserStore extends AbstractModule implements ModifyableUserStore
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("autoSave");
         if(o!=null) autoSave=Boolean.parseBoolean(o.toString());
         

@@ -22,11 +22,8 @@
 package org.wandora.modules.usercontrol;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.wandora.modules.AbstractModule;
@@ -75,7 +72,7 @@ public class BasicUserAuthenticator extends AbstractModule implements UserAuthen
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("realm");
         if(o!=null) realm=o.toString();
         
@@ -99,7 +96,7 @@ public class BasicUserAuthenticator extends AbstractModule implements UserAuthen
     
     protected AuthenticationResult replyNotAuthorized(String realm, HttpServletResponse resp) throws IOException {
         resp.setHeader("WWW-Authenticate","BASIC realm=\""+realm+"\"");
-        resp.sendError(resp.SC_UNAUTHORIZED);
+        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         return new AuthenticationResult(false, null, true);
     }
     

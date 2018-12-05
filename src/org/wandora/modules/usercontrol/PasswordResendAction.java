@@ -22,7 +22,8 @@
 package org.wandora.modules.usercontrol;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
@@ -45,8 +46,8 @@ public class PasswordResendAction extends SendEmailAction {
     protected String emailParam="email"; // the key used in http request to supply email
 
     @Override
-    protected HashMap<String, Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, User user) throws ActionException {
-        HashMap<String,Object> context=super.getTemplateContext(template, req, method, action, user);
+    protected Map<String, Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, User user) throws ActionException {
+        Map<String,Object> context=super.getTemplateContext(template, req, method, action, user);
         
         String userEmail=req.getParameter(emailParam);
         if(userEmail==null || userEmail.length()==0) return null;
@@ -79,7 +80,7 @@ public class PasswordResendAction extends SendEmailAction {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o;
         o=settings.get("emailKey");
         if(o!=null) emailKey=o.toString();

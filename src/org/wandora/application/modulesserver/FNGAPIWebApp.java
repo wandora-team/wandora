@@ -25,7 +25,8 @@ package org.wandora.application.modulesserver;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
+
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
@@ -51,7 +52,7 @@ public class FNGAPIWebApp extends FNGAPIAction implements ModulesWebApp {
     
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         Object o=settings.get("webAppName");
         if(o!=null) webAppName=o.toString().trim();
         else {

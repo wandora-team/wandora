@@ -89,10 +89,10 @@ public class GenericTemplateAction extends CachedAction {
     protected TemplateManager templateManager;
     protected String templateKey;
     
-    protected ArrayList<String> forwardRequestParameters;
-    protected HashMap<String,String> defaultRequestParameters;
+    protected List<String> forwardRequestParameters;
+    protected Map<String,String> defaultRequestParameters;
     
-    protected final HashMap<String,Object> staticContext=new HashMap<String,Object>();
+    protected final Map<String,Object> staticContext=new HashMap<String,Object>();
     
     /**
      * Adds a value to the action specific static template context. The
@@ -117,7 +117,7 @@ public class GenericTemplateAction extends CachedAction {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         super.init(manager, settings);
         
         forwardRequestParameters=new ArrayList<String>();
@@ -166,8 +166,8 @@ public class GenericTemplateAction extends CachedAction {
      * default context.
      * @return  The static template context.
      */
-    protected HashMap<String,Object> getStaticTemplateContext(){
-        HashMap<String,Object> params=new HashMap<String,Object>();
+    protected Map<String,Object> getStaticTemplateContext(){
+        Map<String,Object> params=new LinkedHashMap<String,Object>();
         params.putAll(templateManager.getDefaultContext());
         params.putAll(staticContext);
         return params;
@@ -179,8 +179,8 @@ public class GenericTemplateAction extends CachedAction {
      * @param req The HTTP request.
      * @return A Map containing the forwarded parameters and their values.
      */
-    protected LinkedHashMap<String,String> getForwardedParameters(HttpServletRequest req){
-        LinkedHashMap<String,String> params=new LinkedHashMap<String, String>();
+    protected Map<String,String> getForwardedParameters(HttpServletRequest req){
+        Map<String,String> params=new LinkedHashMap<String, String>();
         for(String s : forwardRequestParameters){
             String value=req.getParameter(s);
             if(value==null) {
@@ -217,8 +217,8 @@ public class GenericTemplateAction extends CachedAction {
      * @return The template context used with processing the template for this action.
      * @throws ActionException 
      */
-    protected HashMap<String,Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, User user) throws ActionException {
-        HashMap<String,Object> context=getStaticTemplateContext();
+    protected Map<String,Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, User user) throws ActionException {
+        Map<String,Object> context=getStaticTemplateContext();
         context.put(requestContextKey,req);
         context.putAll(template.getTemplateContext());
         context.putAll(getForwardedParameters(req));
@@ -242,8 +242,8 @@ public class GenericTemplateAction extends CachedAction {
      * @param action The parsed action parameter from the request.
      * @return 
      */
-    protected LinkedHashMap<String,String> getCacheKeyParams(HttpServletRequest req, HttpMethod method, String action){
-        LinkedHashMap<String,String> params=new LinkedHashMap<String,String>();
+    protected Map<String,String> getCacheKeyParams(HttpServletRequest req, HttpMethod method, String action){
+        Map<String,String> params=new LinkedHashMap<String,String>();
         params.putAll(getForwardedParameters(req));
         params.put("requestAction",action);
         return params;
@@ -278,10 +278,10 @@ public class GenericTemplateAction extends CachedAction {
         Template template=getTemplate(req, method, action);
         if(template==null) return false;
 
-        HashMap<String,Object> context=getTemplateContext(template, req, method, action, user);
+        Map<String,Object> context=getTemplateContext(template, req, method, action, user);
         if(context==null) return false;
         
-        HashMap<String,String> metadata=new HashMap<String,String>();
+        Map<String,String> metadata=new LinkedHashMap<String,String>();
         metadata.put("contenttype",template.getMimeType());
         metadata.put("encoding",template.getEncoding());
         

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -74,10 +75,10 @@ import org.wandora.modules.servlet.Template;
 
 public class ChangeUserAction extends GenericTemplateAction {
     
-    protected HashMap<String,String> setProperties;
+    protected Map<String,String> setProperties;
     
-    protected ArrayList<String> removeRoles;
-    protected ArrayList<String> addRoles;
+    protected List<String> removeRoles;
+    protected List<String> addRoles;
     
     /*
      * If this action is set to chainMode then all output is suppressed and
@@ -94,7 +95,7 @@ public class ChangeUserAction extends GenericTemplateAction {
     }
     
     @Override
-    protected HashMap<String, Object> getTemplateContext(Template template, HttpServletRequest req, ModulesServlet.HttpMethod method, String action, User user) throws ActionException {
+    protected Map<String, Object> getTemplateContext(Template template, HttpServletRequest req, ModulesServlet.HttpMethod method, String action, User user) throws ActionException {
         if(user!=null){
             for(String r : removeRoles){
                 user.removeRole(r);
@@ -120,7 +121,7 @@ public class ChangeUserAction extends GenericTemplateAction {
                 return new HashMap<String, Object>(); // just return non-null to indicate success
             }
             else {
-                HashMap<String, Object> context=super.getTemplateContext(template, req, method, action, user);
+                Map<String, Object> context=super.getTemplateContext(template, req, method, action, user);
                 context.put("isActivated",isActivated);
                 return context;
             }
@@ -129,7 +130,7 @@ public class ChangeUserAction extends GenericTemplateAction {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         setProperties=new HashMap<String,String>();
         
         removeRoles=new ArrayList<String>();

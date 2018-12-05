@@ -94,13 +94,13 @@ public class ModuleManager {
      * Initialisation parameters that will be passed to module init method, read
      * from the config file.
      */
-    protected HashMap<Module,HashMap<String,Object>> moduleParams;
+    protected Map<Module,Map<String,Object>> moduleParams;
 
     /**
      * Other settings about modules besides the parameters. Includes things
      * like auto restart, priority, name, and explicit services used.
      */
-    protected HashMap<Module,ModuleSettings> moduleSettings;
+    protected Map<Module,ModuleSettings> moduleSettings;
     
     /**
      * Logger used by the manager. Can be set with setLog, otherwise it's
@@ -114,7 +114,7 @@ public class ModuleManager {
      * Modules that are used by some other running module are put here so that
      * they cannot be stopped before the depending module is stopped.
      */
-    protected HashMap<Module,ArrayList<Module>> isRequiredBy;
+    protected Map<Module,ArrayList<Module>> isRequiredBy;
     
     /**
      * Variables used in the configuration file.
@@ -123,7 +123,7 @@ public class ModuleManager {
 
     public ModuleManager(){
         modules=new ArrayList<Module>();
-        moduleParams=new HashMap<Module,HashMap<String,Object>>();
+        moduleParams=new HashMap<Module,Map<String,Object>>();
         moduleListeners=new ListenerList<ModuleListener>(ModuleListener.class);
         moduleSettings=new HashMap<Module,ModuleSettings>();
         isRequiredBy=new HashMap<Module,ArrayList<Module>>();
@@ -187,7 +187,7 @@ public class ModuleManager {
     /**
      * Returns a list of all modules added to this manager.
      */
-    public synchronized ArrayList<Module> getAllModules(){
+    public synchronized List<Module> getAllModules(){
         ArrayList<Module> ret=new ArrayList<Module>();
         ret.addAll(modules);
         return ret;
@@ -284,7 +284,7 @@ public class ModuleManager {
         ArrayList<A> ret=new ArrayList<A>();
         for(Module m : modules){
             if(cls.isAssignableFrom(m.getClass())){
-                ret.add((A)m);
+                ret.add((A) m);
             }
         }
         Collections.sort(ret, new Comparator<A>(){
@@ -512,7 +512,7 @@ public class ModuleManager {
      * @param settings The settings for the module.
      */
     public void addModule(Module module,ModuleSettings settings){
-        addModule(module,new HashMap<String,Object>(),settings);
+        addModule(module,new LinkedHashMap<String,Object>(),settings);
     }
     /**
      * Adds a module to this manager with the given module parameters and
@@ -524,7 +524,7 @@ public class ModuleManager {
      * @param module The module to be added.
      * @param params The module parameters.
      */
-    public synchronized void addModule(Module module,HashMap<String,Object> params){
+    public synchronized void addModule(Module module,Map<String,Object> params){
         addModule(module,params,new ModuleSettings());
     }
 
@@ -539,7 +539,7 @@ public class ModuleManager {
      * @param params The module parameters.
      * @param settings  The module settings.
      */
-    public synchronized void addModule(Module module,HashMap<String,Object> params,ModuleSettings settings){
+    public synchronized void addModule(Module module,Map<String,Object> params,ModuleSettings settings){
         if(log==null && module instanceof LoggingModule){
             try{
                 module.init(this, params);
@@ -831,7 +831,7 @@ public class ModuleManager {
         String instance=e.getAttribute("instance");
         if(instance!=null && instance.length()>0){
             Class cls=Class.forName(instance);
-            HashMap<String,Object> params=parseXMLOptionsElement(e);
+            Map<String,Object> params=parseXMLOptionsElement(e);
             if(!params.isEmpty()){
                 Collection<Object> constructorParams=params.values();
                 Constructor[] cs=cls.getConstructors();
@@ -864,7 +864,7 @@ public class ModuleManager {
                 throw new NoSuchMethodException("Couldn't find a constructor that matches parameters parsed from XML.");
             }
             else {
-                return cls.newInstance();
+                return cls.getDeclaredConstructor().newInstance();
             }
         }
         
@@ -912,7 +912,7 @@ public class ModuleManager {
      * @throws ReflectiveOperationException
      * @throws ScriptException 
      */
-    public HashMap<String,Object> parseXMLOptionsElement(Element e) throws ReflectiveOperationException, ScriptException {
+    public Map<String,Object> parseXMLOptionsElement(Element e) throws ReflectiveOperationException, ScriptException {
         if(xpath==null) xpath=XPathFactory.newInstance().newXPath();
         
         LinkedHashMap<String,Object> params=new LinkedHashMap<String,Object>();
@@ -994,11 +994,11 @@ public class ModuleManager {
      * @throws ReflectiveOperationException
      * @throws ScriptException 
      */
-    public T3<Module,HashMap<String,Object>,ModuleSettings> parseXMLModuleElement(Element e,String source) throws ReflectiveOperationException, ScriptException {
+    public T3<Module,Map<String,Object>,ModuleSettings> parseXMLModuleElement(Element e,String source) throws ReflectiveOperationException, ScriptException {
         String moduleClass=e.getAttribute("class");
-        Module module=(Module)Class.forName(moduleClass).newInstance();
+        Module module=(Module)Class.forName(moduleClass).getDeclaredConstructor().newInstance();
 
-        HashMap<String,Object> params;
+        Map<String,Object> params;
         if(module instanceof XMLOptionsHandler){
             params=((XMLOptionsHandler)module).parseXMLOptionsElement(this,e,source);
         }
@@ -1117,7 +1117,7 @@ public class ModuleManager {
             nl=(NodeList)xpath.evaluate("//module",doc,XPathConstants.NODESET);
             for(int i=0;i<nl.getLength();i++){
                 Element e=(Element)nl.item(i);
-                T3<Module,HashMap<String,Object>,ModuleSettings> parsed=parseXMLModuleElement(e,source);
+                T3<Module,Map<String,Object>,ModuleSettings> parsed=parseXMLModuleElement(e,source);
                 addModule(parsed.e1,parsed.e2,parsed.e3);
             }
             

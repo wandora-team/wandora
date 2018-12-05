@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,8 +63,8 @@ public class NewAPIKeyAction extends GenericTemplateAction {
         public UserParam(){}
     }
     
-    protected ArrayList<String> userRoles;
-    protected HashMap<String,UserParam> userParams;
+    protected List<String> userRoles;
+    protected Map<String,UserParam> userParams;
     protected ModifyableUserStore userStore;
     
     protected EmailModule email;
@@ -72,8 +73,8 @@ public class NewAPIKeyAction extends GenericTemplateAction {
     public String emailSubject;
     public String emailFrom;
 
-    protected ArrayList<String> checkParams(HttpServletRequest req,HashMap<String,UserParam> params) throws UserStoreException {
-        ArrayList<String> errors=new ArrayList<String>();
+    protected List<String> checkParams(HttpServletRequest req, Map<String,UserParam> params) throws UserStoreException {
+        List<String> errors=new ArrayList<>();
         
         for(UserParam param : params.values() ) {
             if(param.value!=null) continue;
@@ -95,19 +96,19 @@ public class NewAPIKeyAction extends GenericTemplateAction {
     protected final SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     @Override
-    protected HashMap<String, Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, User user) throws ActionException {
+    protected Map<String, Object> getTemplateContext(Template template, HttpServletRequest req, HttpMethod method, String action, User user) throws ActionException {
         Template emailTemplate=templateManager.getTemplate(emailTemplateKey, null);
         if(emailTemplate==null){
             logging.warn("Couldn't find email template");
             return null;
         }
 
-        HashMap<String,Object> params=super.getTemplateContext(template, req, method, action, user);
+        Map<String,Object> params=super.getTemplateContext(template, req, method, action, user);
         
         boolean sent=false;
         String error=null;
         try{
-            ArrayList<String> paramErrors=checkParams(req, userParams);
+            List<String> paramErrors=checkParams(req, userParams);
             String apikey=null;
             
             params.put("paramErrors",paramErrors);
@@ -194,7 +195,7 @@ public class NewAPIKeyAction extends GenericTemplateAction {
     
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         userParams=new HashMap<String, UserParam>();
         userRoles=new ArrayList<String>();
         

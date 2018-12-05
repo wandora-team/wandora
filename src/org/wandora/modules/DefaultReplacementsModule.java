@@ -46,7 +46,7 @@ public class DefaultReplacementsModule extends AbstractModule implements Replace
     protected HashMap<String,Replacement> replacements;
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         replacements=new HashMap<String,Replacement>();
         
         final SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

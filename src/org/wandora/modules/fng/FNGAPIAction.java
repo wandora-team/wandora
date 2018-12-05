@@ -47,7 +47,6 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.utils.velocity.GenericVelocityHelper;
 
 /**
  *
@@ -114,7 +113,7 @@ public class FNGAPIAction extends CachedAction {
     
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         
         Object o=settings.get("defaultOutput");
         if(o!=null) defaultOutputMode=o.toString();
@@ -155,7 +154,7 @@ public class FNGAPIAction extends CachedAction {
     
     
     protected String outputTopics(String query, String outputMode, TopicMap tm) throws TopicMapException, ActionException {
-        ArrayList<Topic> outputTopics = new ArrayList();
+        List<Topic> outputTopics = new ArrayList<>();
         int count=0;
         
         // ------------------------------------------------- SEARCH ARTISTS ----
@@ -298,7 +297,7 @@ public class FNGAPIAction extends CachedAction {
                     for(Association collectionArtwork : collectionArtworks){
                         Topic art=collectionArtwork.getPlayer(artwork);
                         if(art!=null) {
-                            HashSet<Topic> artists = new HashSet();
+                            Set<Topic> artists = new HashSet<>();
                             Collection<Association> artworkAuthors=art.getAssociations(author, artist);
                             for(Association artworkAuthor : artworkAuthors){
                                 Topic artistTopic = artworkAuthor.getPlayer(artist);
@@ -473,7 +472,7 @@ public class FNGAPIAction extends CachedAction {
                     try {
                         Class handlerClass = Class.forName(dataHandlerClassName);
                         if(handlerClass != null) {
-                            dataHandler = (FngOpenDataHandlerInterface) handlerClass.newInstance();
+                            dataHandler = (FngOpenDataHandlerInterface) handlerClass.getDeclaredConstructor().newInstance();
                         }
                     }
                     catch(Exception e) {

@@ -47,8 +47,8 @@ import org.wandora.modules.servlet.ModulesServlet.HttpMethod;
 
 public class RequestForwarder extends CachedAction {
 
-    protected LinkedHashMap<String,String> additionalParams;
-    protected ArrayList<String> forwardParams;
+    protected Map<String,String> additionalParams;
+    protected List<String> forwardParams;
     protected boolean forwardAllParams=false;
     
     protected String destinationProtocol;
@@ -64,7 +64,7 @@ public class RequestForwarder extends CachedAction {
     }
 
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         additionalParams=new LinkedHashMap<String,String>();
         forwardParams=new ArrayList<String>();
         
@@ -110,8 +110,8 @@ public class RequestForwarder extends CachedAction {
         super.init(manager, settings);
     }
     
-    protected LinkedHashMap<String,String> getSendParams(HttpServletRequest req){
-        LinkedHashMap<String,String> params=new LinkedHashMap<String,String>();
+    protected Map<String,String> getSendParams(HttpServletRequest req){
+        Map<String,String> params=new LinkedHashMap<String,String>();
         if(forwardAllParams){
             for(String s : forwardParams){
                 String v=req.getParameter(s);
@@ -129,7 +129,7 @@ public class RequestForwarder extends CachedAction {
     }
 
     protected String makeSendParamString(HttpServletRequest req){
-        LinkedHashMap<String,String> params=getSendParams(req);
+        Map<String,String> params=getSendParams(req);
 
         StringBuilder paramString=new StringBuilder();
         for(Map.Entry<String,String> e : params.entrySet()){
@@ -192,7 +192,7 @@ public class RequestForwarder extends CachedAction {
         
         logging.debug("Starting response");        
         
-        HashMap<String,String> metadata=new HashMap<String,String>();
+        Map<String,String> metadata=new LinkedHashMap<String,String>();
         String contentType=connection.getContentType();
         if(contentType==null) contentType="";
         String encoding=connection.getContentEncoding();
@@ -220,7 +220,7 @@ public class RequestForwarder extends CachedAction {
 
     @Override
     protected String getCacheKey(HttpServletRequest req, HttpMethod method, String action) {
-        LinkedHashMap<String,String> params=getSendParams(req);
+        Map<String,String> params=getSendParams(req);
         params.put("requestAction",action);
         return buildCacheKey(params);
     }

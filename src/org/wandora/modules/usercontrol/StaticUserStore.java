@@ -24,6 +24,8 @@ package org.wandora.modules.usercontrol;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.wandora.modules.AbstractModule;
@@ -64,14 +66,14 @@ import org.wandora.modules.ModuleManager;
 
 
 public class StaticUserStore extends AbstractModule implements UserStore{
-    protected HashMap<String,User> users;
+    protected Map<String,User> users;
 
     protected String userData;
     
     private Pattern userPattern1=Pattern.compile("^((?:[^;]|\\\\;|\\\\\\\\)*);(\\d+);(.*)$");
     private Pattern userPattern2=Pattern.compile("^((?:[^;]|\\\\;|\\\\\\\\)*);(.*$)");
     protected void parseUsers(String userData){
-        users=new HashMap<String,User>();
+        users=new LinkedHashMap<String,User>();
         
         String[] lines=userData.split("\n");
         
@@ -120,7 +122,7 @@ public class StaticUserStore extends AbstractModule implements UserStore{
     }
     
     @Override
-    public void init(ModuleManager manager, HashMap<String, Object> settings) throws ModuleException {
+    public void init(ModuleManager manager, Map<String, Object> settings) throws ModuleException {
         userData=(String)settings.get("users");
         
         super.init(manager, settings);
