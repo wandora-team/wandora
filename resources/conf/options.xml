@@ -560,10 +560,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.bing.BingExtractor</class>
             </item>
             <item>
-               <name>Yahoo BOSS extractor...</name>
-               <class>org.wandora.application.tools.extractors.yahoo.boss.BossExtractor</class>
-            </item>
-            <item>
                <name>DuckDuckGo extractor...</name>
                <class>org.wandora.application.tools.extractors.duckduckgo.DuckDuckGoExtractor</class>
             </item>
@@ -606,42 +602,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier</class>
             </item>
             <item>
-               <name>--- ALCHEMY EXTRACTORS ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Alchemy entity extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyEntityExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy keyword extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyKeywordExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy category extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyCategoryExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy language extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyLanguageExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy sentiment extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemySentimentExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy relation extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyRelationExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy image keyword extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy face detection extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyFaceDetection</class>
-            </item>
-            <item>
                <name>--- WEB SERVICES ---</name>
                <class>org.wandora.application.tools.DummyTool</class>
             </item>
@@ -650,16 +610,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.uclassify.UClassifier</class>
             </item>
             <item>
-               <name>TextWise classifier...</name>
-               <class>org.wandora.application.tools.extractors.textwise.TextWiseClassifier</class>
-            </item>
-            <item>
                <name>Yahoo! YQL term extractor...</name>
                <class>org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract</class>
-            </item>
-            <item>
-               <name>Zemanta extractor...</name>
-               <class>org.wandora.application.tools.extractors.zemanta.ZemantaExtractor</class>
             </item>
             <item>
                <name>--- WORD ---</name>
@@ -774,31 +726,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.DummyTool</class>
             </item>
             <item>
-               <name>Facebook graph extractor v2...</name>
-               <class>org.wandora.application.tools.extractors.facebook.v2.FBGraphExtractor</class>
-            </item>
-            <item>
                <name>Reddit extractor...</name>
                <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
-            </item>
-         </item>
-         <item>
-            <name>Services</name>
-            <item>
-               <name>Oma kaupunki extractor...</name>
-               <class>org.wandora.application.tools.extractors.omakaupunki.OmaKaupunkiExtractor</class>
-            </item>
-            <item>
-               <name>--- PALVELUKARTTA ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>Palvelukartta extractor...</name>
-               <class>org.wandora.application.tools.extractors.palvelukartta.PalvelukarttaExtractor</class>
-            </item>
-            <item>
-               <name>Palvelukartta API version 2 extractor...</name>
-               <class>org.wandora.application.tools.extractors.palvelukartta_v2.PalvelukarttaExtractor</class>
             </item>
          </item>
          <item>
@@ -836,26 +765,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.FreeDBExtractor</class>
             </item>
             <item>
-               <name>Last.fm extractor...</name>
-               <class>org.wandora.application.tools.extractors.audioscrobbler.AudioScrobblerExtractor</class>
-            </item>
-            <item>
-               <name>MusicBrainz extractor...</name>
-               <class>org.wandora.application.tools.extractors.musicbrainz.MusicBrainzExtractor</class>
-            </item>
-            <item>
-               <name>--- YOUTUBE ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>YouTube video feed...</name>
-               <class>org.wandora.application.tools.extractors.youtube.YouTubeVideoFeedExtractor</class>
-            </item>
-            <item>
-               <name>YouTube video URL...</name>
-               <class>org.wandora.application.tools.extractors.youtube.YouTubeURLExtractor</class>
-            </item>
-            <item>
                <name>--- OTHER MEDIA ---</name>
                <class>org.wandora.application.tools.extractors.DummyExtractor</class>
             </item>
@@ -866,18 +775,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>OCR extractor...</name>
                <class>org.wandora.application.tools.extractors.ocr.OCRExtractor</class>
-            </item>
-            <item>
-               <name>--- IMAGE RECOGNITION ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy face detection extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyFaceDetection</class>
-            </item>
-            <item>
-               <name>Alchemy image keyword extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
             </item>
             <item>
                <name>--- YLE Elava arkisto ---</name>
@@ -1343,40 +1240,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier</class>
          </item>
          <item>
-            <name>OpenCalais classifier</name>
-            <class>org.wandora.application.tools.extractors.opencalais.OpenCalaisClassifier</class>
-         </item>
-         <item>
             <name>TextWise classifier</name>
             <class>org.wandora.application.tools.extractors.textwise.TextWiseClassifier</class>
          </item>
          <item>
             <name>Yahoo! YQL term extractor</name>
             <class>org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract</class>
-         </item>
-         <item>
-            <name>Zemanta extractor</name>
-            <class>org.wandora.application.tools.extractors.zemanta.ZemantaExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy entity extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemyEntityExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy keyword extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemyKeywordExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy category extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemyCategoryExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy language extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemyLanguageExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy sentiment extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemySentimentExtractor</class>
          </item>
          <item>
             <name>uClassify Text Language</name>

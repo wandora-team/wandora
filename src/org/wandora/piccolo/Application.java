@@ -31,8 +31,6 @@ import org.wandora.utils.XMLParamAware;
 import org.wandora.utils.XMLParamProcessor;
 import java.util.*;
 import javax.servlet.*;
-import org.wandora.utils.*;
-import org.wandora.piccolo.utils.*;
 import org.w3c.dom.*;
 /**
  *

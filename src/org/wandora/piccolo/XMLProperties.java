@@ -28,10 +28,10 @@
  */
 
 package org.wandora.piccolo;
+
 import org.wandora.utils.XMLParamAware;
 import org.wandora.utils.XMLParamProcessor;
 import java.util.*;
-import org.wandora.utils.*;
 import org.w3c.dom.*;
 
 /**
@@ -48,7 +48,9 @@ import org.w3c.dom.*;
  */
 public class XMLProperties extends Properties implements XMLParamAware {
     
-    /** Creates a new instance of XMLProperties */
+	private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of XMLProperties */
     public XMLProperties() {
         super();
     }

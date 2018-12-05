@@ -147,9 +147,11 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
                     JSONObject replyObject = new JSONObject(reply);
 
                     if(replyObject.has("code")) {
-                        String code = replyObject.getString("code");
-                        if(!"0".equals(code)) {
-                            log("An error occurred while requesting a topic map '"+n+"' from user '"+o+"'.");
+                    	Object code = replyObject.get("code");
+                        if(code != null) {
+	                        if(!"0".equals(code.toString())) {
+	                            log("An error occurred while requesting a topic map '"+n+"' from user '"+o+"'.");
+	                        }
                         }
                     }
                     if(replyObject.has("msg")) {

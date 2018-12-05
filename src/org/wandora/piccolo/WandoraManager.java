@@ -35,7 +35,6 @@ import org.wandora.piccolo.SearchResultItem;
 //import org.wandora.piccolo.AdminSocketServer;
 import org.wandora.topicmap.TMBox;
 import org.wandora.utils.ReaderWriterLock;
-import org.wandora.*;
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -43,7 +42,6 @@ import org.wandora.topicmap.layered.*;
 import org.wandora.topicmap.*;
 import org.wandora.indexer.*;
 import org.wandora.tools.*;
-import org.wandora.utils.*;
 import org.apache.lucene.search.*;
 import org.apache.lucene.index.*;
 
@@ -94,10 +92,10 @@ public class WandoraManager implements Runnable, TopicMapListener {
     
     private TopicMap topicMap;
     
-    private HashMap topicMaps;
+    private HashMap<String,TopicMap> topicMaps;
     
-    private HashSet changedTopics;
-    private HashSet changedTopicsShallow;
+    private HashSet<String> changedTopics;
+    private HashSet<String> changedTopicsShallow;
     
     private TMBox tmBox;
     
@@ -142,9 +140,9 @@ public class WandoraManager implements Runnable, TopicMapListener {
         tmLock=new ReaderWriterLock();
         searchLock=new ReaderWriterLock();        
         
-        topicMaps=new HashMap();
-        changedTopics=new HashSet();
-        changedTopicsShallow=new HashSet();
+        topicMaps=new HashMap<>();
+        changedTopics=new HashSet<>();
+        changedTopicsShallow=new HashSet<>();
         
         indexNeedsUpdate=false;
               
@@ -158,7 +156,7 @@ public class WandoraManager implements Runnable, TopicMapListener {
         String maps=properties.getProperty(prefix+PROP_AUTOSAVEMAPS,"");
         java.util.StringTokenizer st=new java.util.StringTokenizer(maps,",");
         adminPass=properties.getProperty(prefix+PROP_ADMINPASS,null);
-        autoSaveMaps=new ArrayList();
+        autoSaveMaps=new ArrayList<>();
         while(st.hasMoreTokens()){
             autoSaveMaps.add(st.nextToken());
         }
@@ -239,7 +237,7 @@ public class WandoraManager implements Runnable, TopicMapListener {
         tm.setTrackDependent(false);
         tm.importXTM(in);
         long time=System.currentTimeMillis();
-        Iterator iter=tm.getTopics();
+        Iterator<Topic> iter=tm.getTopics();
         while(iter.hasNext()){
             Topic t=(Topic)iter.next();
             t.setDependentEditTime(time);
@@ -261,8 +259,8 @@ public class WandoraManager implements Runnable, TopicMapListener {
         }finally{ releaseTopicMap(LOCK_READ); }
     }
     
-    public void mergeInTopicMapsNoLock(Collection urls) throws WandoraException {
-        Iterator iter=urls.iterator();
+    public void mergeInTopicMapsNoLock(Collection<URL> urls) throws WandoraException {
+        Iterator<URL> iter=urls.iterator();
         while(iter.hasNext()){
             Object o=iter.next();
             URL url=null;
@@ -281,7 +279,7 @@ public class WandoraManager implements Runnable, TopicMapListener {
         }
     }
     
-    public void mergeInTopicMaps(Collection urls) throws WandoraException {
+    public void mergeInTopicMaps(Collection<URL> urls) throws WandoraException {
         if(!lockTopicMap(LOCK_WRITE)) throw new WandoraException("Could not lock topicmap");
         try{
             mergeInTopicMapsNoLock(urls);
@@ -369,20 +367,20 @@ public class WandoraManager implements Runnable, TopicMapListener {
             return null;
         }
     }
-    public Collection getTopicsOfType(String si){
+    public Collection<Topic> getTopicsOfType(String si){
         try{
             Topic t=topicMap.getTopic(si);
-            if(t==null) return new HashSet();
+            if(t==null) return new HashSet<>();
             else return topicMap.getTopicsOfType(t);
         }catch(TopicMapException tme){
             tme.printStackTrace(); // TODO EXCEPTION
             return null;
         }
     }
-    public Collection getTopicsOfType(Locator l){
+    public Collection<Topic> getTopicsOfType(Locator l){
         try{
             Topic t=topicMap.getTopic(l);
-            if(t==null) return new HashSet();
+            if(t==null) return new HashSet<>();
             else return topicMap.getTopicsOfType(t);
         }catch(TopicMapException tme){
             tme.printStackTrace(); // TODO EXCEPTION

@@ -27,7 +27,7 @@
  */
 
 package org.wandora.piccolo;
-import org.wandora.*;
+
 import org.wandora.piccolo.PiccoloShutdownHook;
 /**
  *

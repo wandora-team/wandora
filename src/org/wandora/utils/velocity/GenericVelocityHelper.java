@@ -34,8 +34,6 @@ import org.wandora.piccolo.WandoraManager;
 import org.wandora.topicmap.TMBox;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Textbox;
-import org.wandora.utils.*;
-import org.wandora.*;
 import org.wandora.topicmap.*;
 import java.util.*;
 import java.net.*;
