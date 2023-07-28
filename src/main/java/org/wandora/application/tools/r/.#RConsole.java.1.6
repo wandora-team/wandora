@@ -306,7 +306,7 @@ public class RConsole extends javax.swing.JPanel implements ActionListener {
     }
     
     private void initEngine(){
-        engine.eval("source(\"resources/conf/rinit.r\",TRUE)");
+        engine.eval("source(\"conf/rinit.r\",TRUE)");
         engine.startMainLoop();
     }
 
@@ -402,7 +402,7 @@ public class RConsole extends javax.swing.JPanel implements ActionListener {
         fileMenu.setFont(GUIConstants.menuFont);
 
         closeMenuItem.setFont(GUIConstants.menuFont);
-        closeMenuItem.setIcon(GuiBox.getIcon("resources/gui/icons/exit.png"));
+        closeMenuItem.setIcon(GuiBox.getIcon("gui/icons/exit.png"));
         closeMenuItem.setText("Close");
         closeMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

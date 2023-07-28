@@ -85,7 +85,9 @@ import org.wandora.utils.swing.ImagePanel;
  */
 public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionListener, MouseListener, TopicMapListener {
     
-    /*
+    private static final long serialVersionUID = 1L;
+
+	/*
      * If the application makes URL requests and the URL stream is initialized
      * properly, USER_AGENT is a user agent string for Wandora application.
      */
@@ -150,7 +152,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     /*
      * <code>options</code> is a data structure that contains application
      * specific information required to initialize the application. <code>options</code>
-     * is read from XML file <code>resources/conf/options.xml</code> at startup and
+     * is read from XML file <code>conf/options.xml</code> at startup and
      * stored to the same file at shutdown. Broken or incomplete options data structure
      * may prevent running the Wandora application.
      */
@@ -395,7 +397,14 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         catch(UndoException ue){handleError(ue);}
         TopicMap initialTopicMap = new org.wandora.topicmap.memory.TopicMapImpl();
         try {
-            initialTopicMap.importTopicMap(options.get("basemap"));
+        	String basemapFile = options.get("basemap");
+        	if(!new File(basemapFile).exists()) {
+        		basemapFile = "resources/main/"+basemapFile;
+        		if(!new File(basemapFile).exists()) {
+        			basemapFile = "build/"+basemapFile;
+        		}
+        	}
+            initialTopicMap.importTopicMap(basemapFile);
         }
         catch(Exception e) {
             handleError(e);
@@ -927,7 +936,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         toolBar.setPreferredSize(new java.awt.Dimension(900, 46));
 
         openButton.setBackground(new Color(238,238,238));
-        openButton.setIcon(org.wandora.application.gui.UIBox.getIcon("resources/gui/button_open.png"));
+        openButton.setIcon(org.wandora.application.gui.UIBox.getIcon("gui/button_open.png"));
         openButton.setToolTipText("Open topic...");
         openButton.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.gray));
         openButton.setFocusPainted(false);
@@ -937,7 +946,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         toolBar.add(openButton);
 
         backButton.setBackground(new Color(238,238,238));
-        backButton.setIcon(org.wandora.application.gui.UIBox.getIcon("resources/gui/button_back.png"));
+        backButton.setIcon(org.wandora.application.gui.UIBox.getIcon("gui/button_back.png"));
         backButton.setToolTipText("Backward");
         backButton.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.gray));
         backButton.setFocusPainted(false);
@@ -947,7 +956,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         toolBar.add(backButton);
 
         forwardButton.setBackground(new Color(238,238,238));
-        forwardButton.setIcon(org.wandora.application.gui.UIBox.getIcon("resources/gui/button_forward.png"));
+        forwardButton.setIcon(org.wandora.application.gui.UIBox.getIcon("gui/button_forward.png"));
         forwardButton.setToolTipText("Forward");
         forwardButton.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.gray));
         forwardButton.setFocusPainted(false);
@@ -1295,7 +1304,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      * Stores application window placement, size and splitter locations to the
      * <code>options</code> object and commands the <code>options</code> to
      * save itself. Saving the <code>options</code> writes it into an XML
-     * file. By default this file is <code>resources/conf/options.xml</code>.
+     * file. By default this file is <code>conf/options.xml</code>.
      */
     public void saveOptions() {
         try {

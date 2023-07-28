@@ -706,7 +706,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     public void solveTemplates() {
         try {
-            HashSet<String> templateFiles = IObox.getFilesAsHash("resources/gui/printtemplates", ".+\\.vhtml", 1, 999);
+            HashSet<String> templateFiles = IObox.getFilesAsHash("gui/printtemplates", ".+\\.vhtml", 1, 999);
             for(String templateFilename : templateFiles) {
                 if(templateFilename != null) {
                     try {

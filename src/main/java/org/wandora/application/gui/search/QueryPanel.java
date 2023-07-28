@@ -423,7 +423,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
         scriptLabel.setFont(org.wandora.application.gui.UIConstants.tabFont);
         scriptLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        scriptLabel.setIcon(org.wandora.application.gui.UIBox.getIcon("resources/gui/icons/help_in_context.png"));
+        scriptLabel.setIcon(org.wandora.application.gui.UIBox.getIcon("gui/icons/help_in_context.png"));
         scriptLabel.setText("Script");
         scriptLabel.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         scriptLabel.setIconTextGap(0);

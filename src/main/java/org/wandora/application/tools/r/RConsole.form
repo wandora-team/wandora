@@ -25,7 +25,7 @@
                   <Connection code="org.wandora.application.gui.UIConstants.menuFont" type="code"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="org.wandora.application.gui.UIBox.getIcon(&quot;resources/gui/icons/exit.png&quot;)" type="code"/>
+                  <Connection code="org.wandora.application.gui.UIBox.getIcon(&quot;gui/icons/exit.png&quot;)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Close"/>
               </Properties>

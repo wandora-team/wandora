@@ -45,8 +45,8 @@ public class SimpleRadioButton extends JRadioButton {
     public SimpleRadioButton() {
         this.setFont(UIConstants.buttonLabelFont);
         UIConstants.setFancyFont(this);
-        this.setIcon(UIBox.getIcon("resources/gui/icons/radiobox.png"));
-        this.setSelectedIcon(UIBox.getIcon("resources/gui/icons/radiobox_selected.png"));
+        this.setIcon(UIBox.getIcon("gui/icons/radiobox.png"));
+        this.setSelectedIcon(UIBox.getIcon("gui/icons/radiobox_selected.png"));
         this.setFocusPainted(false);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }

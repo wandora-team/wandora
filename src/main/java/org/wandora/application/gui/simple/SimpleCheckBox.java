@@ -44,8 +44,8 @@ public class SimpleCheckBox extends JCheckBox {
     public SimpleCheckBox() {
         this.setFont(UIConstants.buttonLabelFont);
         UIConstants.setFancyFont(this);
-        this.setIcon(UIBox.getIcon("resources/gui/icons/checkbox.png"));
-        this.setSelectedIcon(UIBox.getIcon("resources/gui/icons/checkbox_selected.png"));
+        this.setIcon(UIBox.getIcon("gui/icons/checkbox.png"));
+        this.setSelectedIcon(UIBox.getIcon("gui/icons/checkbox_selected.png"));
         this.setFocusPainted(false);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         // this.setUI(new SimpleCheckBoxUI());

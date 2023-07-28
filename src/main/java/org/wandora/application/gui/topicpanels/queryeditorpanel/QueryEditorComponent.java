@@ -96,14 +96,14 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         Object[] buttonStruct = {
             "New",
-            UIBox.getIcon(0xF016), // See resources/gui/fonts/FontAwesome.ttf for alternative icons.
+            UIBox.getIcon(0xF016), // See gui/fonts/FontAwesome.ttf for alternative icons.
             new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     newButtonActionPerformed(evt);
                 }
             },
             "Build script",
-            UIBox.getIcon(0xF085), // See resources/gui/fonts/FontAwesome.ttf for alternative icons.
+            UIBox.getIcon(0xF085), // See gui/fonts/FontAwesome.ttf for alternative icons.
             new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     buildButtonActionPerformed(evt);

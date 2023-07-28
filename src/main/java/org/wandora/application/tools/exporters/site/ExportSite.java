@@ -72,8 +72,8 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
     String topicmapfile = "";
     String outputdir = ".";
     String siurl = null;
-    String templatefile = "resources/gui/export/sitepage.vhtml";
-    String pageindextemplatefile = "resources/gui/export/siteindex.vhtml";
+    String templatefile = "gui/export/sitepage.vhtml";
+    String pageindextemplatefile = "gui/export/siteindex.vhtml";
     Wandora wandora = null;
     File currentDirectory = null;
     Object codec = null;
@@ -113,8 +113,8 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
     /** Creates a new instance of ExportSite */
     public ExportSite() {
         this(GripCollections.addArrayToMap(new LinkedHashMap(),new Object[]{
-                            "pageTemplate","resources/gui/export/sitepage.vhtml",
-                            "indexTemplate","resources/gui/export/siteindex.vhtml",
+                            "pageTemplate","gui/export/sitepage.vhtml",
+                            "indexTemplate","gui/export/siteindex.vhtml",
                             "templateEncoding","UTF-8",
                             "fetchUrls","false",
                             "resizeImages","true",

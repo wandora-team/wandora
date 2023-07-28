@@ -148,7 +148,7 @@ public class NativeFileCopy implements Abortable.Impl {
                             "IO exception: " +
                                 e.getMessage() +
                                 "\nMake sure the \"copycommand\" tag " +
-                                "in resources/conf/options.xml is set " +
+                                "in conf/options.xml is set " +
                                 "to the correct system-specific copy " +
                                 "command (such as /bin/cp or cmd /c copy) " +
                                 "or alternatively, remove it and a slower " +

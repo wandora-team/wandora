@@ -29,11 +29,25 @@
 package org.wandora.application;
 
 
-import java.util.*;
-import java.awt.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import static org.wandora.utils.Tuples.*;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.Collection;
+import java.util.Iterator;
+
+import java.awt.Color;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TopicMapException;
+
+import org.wandora.topicmap.layered.LayeredTopic;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.topicmap.layered.ContainerTopicMap;
+
+import static org.wandora.utils.Tuples.T2;
+import static org.wandora.utils.Tuples.T3;
+
 
 /**
   * <p>
@@ -275,8 +289,8 @@ public class TopicHilights {
         }
     }
     public void removeAll() {
-        hilighted = new HashMap<>();
-        hilightedTopics = new HashMap<>();
+        hilighted.clear();
+        hilightedTopics.clear();
     }
     
     

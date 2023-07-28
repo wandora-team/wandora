@@ -62,7 +62,7 @@ public class MemoryTopicMapType implements TopicMapType {
         if(params instanceof String && params != null) {
             String load = (String) params;
             if(MemoryConfiguration.LOAD_MINI_SCHEMA_PARAM.equals(params)) {
-                load="resources/conf/wandora_mini.xtm";
+                load="conf/wandora_mini.xtm";
             }
             if(load!=null && load.length()>0) {
                 try {

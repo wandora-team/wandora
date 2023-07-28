@@ -84,7 +84,7 @@
               <Connection code="new Color(238,238,238)" type="code"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="org.wandora.application.gui.UIBox.getIcon(&quot;resources/gui/button_open.png&quot;)" type="code"/>
+              <Connection code="org.wandora.application.gui.UIBox.getIcon(&quot;gui/button_open.png&quot;)" type="code"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Open topic..."/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -116,7 +116,7 @@
               <Connection code="new Color(238,238,238)" type="code"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="org.wandora.application.gui.UIBox.getIcon(&quot;resources/gui/button_back.png&quot;)" type="code"/>
+              <Connection code="org.wandora.application.gui.UIBox.getIcon(&quot;gui/button_back.png&quot;)" type="code"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Backward"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -148,7 +148,7 @@
               <Connection code="new Color(238,238,238)" type="code"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="org.wandora.application.gui.UIBox.getIcon(&quot;resources/gui/button_forward.png&quot;)" type="code"/>
+              <Connection code="org.wandora.application.gui.UIBox.getIcon(&quot;gui/button_forward.png&quot;)" type="code"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Forward"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">

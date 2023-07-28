@@ -28,18 +28,51 @@
 package org.wandora.application;
 
 
-import java.io.*;
-import java.util.*;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.PrintWriter;
+
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Collection;
+import java.util.StringTokenizer;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JDialog;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
+import javax.swing.JMenuBar;
 
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
+import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.ActionListener;
+
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.Locator;
+
+import org.wandora.utils.Options;
+import org.wandora.utils.IObox;
+import org.wandora.utils.Textbox;
+import org.wandora.utils.ClipboardBox;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.UIConstants;
+
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleList;
 
 
 /**
@@ -61,15 +94,15 @@ public class Shortcuts implements ActionListener {
     
     
     private Object[] accelerators = new Object[] {
-        KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_8, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_9, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_8, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+        KeyStroke.getKeyStroke(KeyEvent.VK_9, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
     };
     Object[] staticMenuStructure = new Object[] {
         "Add shortcut", UIBox.getIcon("gui/icons/shortcut_new.png"),

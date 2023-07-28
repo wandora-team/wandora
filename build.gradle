@@ -18,6 +18,21 @@ repositories {
     }
 }
 
+
+sourceSets {
+	main {
+		java {
+			srcDirs = [ 'src/main/java' ]
+		}
+	}
+	javadoc {
+		java {
+			srcDirs = [ 'src/main/java' ]
+		}
+	}
+}
+
+
 dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.2'
@@ -89,11 +104,17 @@ dependencies {
 	implementation group: 'org.eclipse.jdt', name: 'ecj', version: '3.34.0'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-http', version: '11.0.15'
 	implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: '11.0.15'
+	
+	implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
 }
 
 
 configurations.all {
     exclude group: 'xml-apis'
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 
@@ -104,6 +125,7 @@ java {
     }
 }
 
+
 compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile) {
@@ -112,5 +134,5 @@ tasks.withType(JavaCompile) {
 
 application {
     // Define the main class for the application.
-    mainClass = 'wandora.App'
+    mainClass = 'org.wandora.application.Wandora'
 }

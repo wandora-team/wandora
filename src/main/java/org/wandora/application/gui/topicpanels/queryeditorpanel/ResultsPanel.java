@@ -58,7 +58,7 @@ public class ResultsPanel extends javax.swing.JPanel {
         
         Object[] buttonStruct = {
             "Run",
-            UIBox.getIcon(0xF04B), // See resources/gui/fonts/FontAwesome.ttf for alternative icons.
+            UIBox.getIcon(0xF04B), // See gui/fonts/FontAwesome.ttf for alternative icons.
             new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     runButtonActionPerformed(evt);

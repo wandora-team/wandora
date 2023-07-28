@@ -169,7 +169,7 @@ public class WandoraModulesServer {
         }
         
         useSSL = options.isTrue(OPTION_USESSL);
-        keystoreFile = options.get(OPTION_KEYSTORE_FILE, "resources/conf/keystore/keystore");
+        keystoreFile = options.get(OPTION_KEYSTORE_FILE, "conf/keystore/keystore");
         try {
             keystoreFile = new File(keystoreFile).getCanonicalPath();
         } catch (IOException ex) {

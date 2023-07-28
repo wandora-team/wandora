@@ -26,7 +26,12 @@
  */
 
 package org.wandora.application;
-import org.wandora.topicmap.*;
+
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+
+
 /**
  *
  * @author  olli

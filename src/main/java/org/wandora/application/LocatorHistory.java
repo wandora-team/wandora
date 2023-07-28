@@ -29,12 +29,18 @@
 package org.wandora.application;
 
 
-import java.util.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.tools.navigate.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+
+import org.wandora.application.tools.navigate.OpenTopic;
+import org.wandora.application.contexts.PreContext;
+import org.wandora.application.gui.UIBox;
 import static org.wandora.utils.Tuples.*;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.swing.*;
 
 
@@ -52,7 +58,7 @@ import javax.swing.*;
 public class LocatorHistory {
     private static final int DEFAULT_MAX_SIZE = 999;
     
-    private ArrayList<T2<Locator,Integer>> history;
+    private List<T2<Locator,Integer>> history;
     
     // location of history "cursor"
     private int index;
@@ -76,7 +82,7 @@ public class LocatorHistory {
     
     
     public void clear() {
-        history = new ArrayList<T2<Locator,Integer>>(maxsize);
+        history = new ArrayList<>(maxsize);
         for(int i=0; i<maxsize; i++) history.add(null);
         index = 0;
         top = 0;

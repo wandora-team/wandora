@@ -37,7 +37,7 @@ import org.wandora.utils.DataURL;
 
 public class SimpleURILabel extends SimpleLabel {
 
-    private static BufferedImage invalidURIImage = UIBox.getImage("resources/gui/icons/invalid_uri.png");
+    private static BufferedImage invalidURIImage = UIBox.getImage("gui/icons/invalid_uri.png");
     
     private String completeLabelString = null;
 

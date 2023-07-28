@@ -200,7 +200,7 @@ public class RBridge {
     
     
     private void initEngine(){
-        engine.eval("source(\"resources/conf/rinit.r\",TRUE)");
+        engine.eval("source(\"conf/rinit.r\",TRUE)");
         engine.startMainLoop();
     }
 

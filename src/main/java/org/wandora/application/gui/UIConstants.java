@@ -166,13 +166,13 @@ public class UIConstants {
             
             UIManager.put("Tree.selectionBackground", defaultActiveBackground);
             UIManager.put("Tree.line", "None");
-            UIManager.put("Tree.collapsedIcon", UIBox.getIcon("resources/gui/icons/tree_branch.png"));
-            UIManager.put("Tree.expandedIcon", UIBox.getIcon("resources/gui/icons/tree_branch_open.png"));
+            UIManager.put("Tree.collapsedIcon", UIBox.getIcon("gui/icons/tree_branch.png"));
+            UIManager.put("Tree.expandedIcon", UIBox.getIcon("gui/icons/tree_branch_open.png"));
             
             UIManager.put("Slider.foreground", defaultActiveBackground);
             UIManager.put("Slider.highlight", defaultActiveBackground);
-            UIManager.put("Slider.horizontalThumbIcon", UIBox.getIcon("resources/gui/icons/slider_thumb_horizontal.png"));
-            UIManager.put("Slider.VerticalThumbIcon", UIBox.getIcon("resources/gui/icons/slider_thumb_vertical.png"));
+            UIManager.put("Slider.horizontalThumbIcon", UIBox.getIcon("gui/icons/slider_thumb_horizontal.png"));
+            UIManager.put("Slider.VerticalThumbIcon", UIBox.getIcon("gui/icons/slider_thumb_vertical.png"));
             
             UIManager.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
             
@@ -235,7 +235,7 @@ public class UIConstants {
         /*
         try {
             if(fancyBaseFont == null) {
-                InputStream is = new BufferedInputStream(new FileInputStream("./resources/gui/fonts/Arimo-Regular.ttf"));
+                InputStream is = new BufferedInputStream(new FileInputStream("./gui/fonts/Arimo-Regular.ttf"));
                 fancyBaseFont = Font.createFont(Font.TRUETYPE_FONT, is);
             }
             if(fancyBaseFont != null) {

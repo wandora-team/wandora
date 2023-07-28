@@ -15,7 +15,7 @@ source SetTesseract.sh
 
 cd ..
 if [ "$(uname)" == "Darwin" ]; then
-  java -Xms750m -Xmx1000m -Xdock:icon=resources/gui/appicon/wandora.icns -Djava.library.path=$WANDORALIB -classpath $WANDORACLASSES org.wandora.application.Wandora $1
+  java -Xms750m -Xmx1000m -Xdock:icon=gui/appicon/wandora.icns -Djava.library.path=$WANDORALIB -classpath $WANDORACLASSES org.wandora.application.Wandora $1
 else
   java -Xms750m -Xmx1000m -Djava.library.path=$WANDORALIB -classpath $WANDORACLASSES org.wandora.application.Wandora $1
 fi

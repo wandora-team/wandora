@@ -60,8 +60,8 @@ public class SimpleToggleButton extends JToggleButton {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         this.setOpaque(true);
         this.setBackground(UIConstants.defaultActiveBackground);
-        this.offIcon = UIBox.getIcon("resources/gui/icons/checkbox.png");
-        this.onIcon = UIBox.getIcon("resources/gui/icons/checkbox_selected.png");
+        this.offIcon = UIBox.getIcon("gui/icons/checkbox.png");
+        this.onIcon = UIBox.getIcon("gui/icons/checkbox_selected.png");
         this.addMouseListener(
             new MouseAdapter() {
                 @Override

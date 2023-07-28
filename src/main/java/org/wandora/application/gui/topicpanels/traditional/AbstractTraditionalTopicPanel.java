@@ -899,7 +899,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     buttonPanel.setMinimumSize(new Dimension(30, 23));
                     buttonPanel.setMaximumSize(new Dimension(30, 23));
                     buttonPanel.setLayout(new FlowLayout(0));
-                    SimpleButton deleteVariantButton = new SimpleButton(UIBox.getIcon("resources/gui/icons/delete_variant.png"));
+                    SimpleButton deleteVariantButton = new SimpleButton(UIBox.getIcon("gui/icons/delete_variant.png"));
                     deleteVariantButton.setPreferredSize(new Dimension(16, 16));
                     deleteVariantButton.setBackground(UIConstants.buttonBarBackgroundColor);
                     deleteVariantButton.setForeground(UIConstants.buttonBarLabelColor);

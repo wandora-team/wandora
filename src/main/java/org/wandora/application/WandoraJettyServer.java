@@ -164,8 +164,8 @@ public class WandoraJettyServer {
         localOnly=!options.isFalse(OPTION_LOCALONLY);
         autoStart=options.isTrue(OPTION_AUTOSTART);
         port=options.getInt(OPTION_PORT);
-        staticPath=options.get(OPTION_STATICPATH,"resources/gui/server/");
-        templatePath=options.get(OPTION_TEMPLATEPATH,"resources/gui/server/templates/");
+        staticPath=options.get(OPTION_STATICPATH,"gui/server/");
+        templatePath=options.get(OPTION_TEMPLATEPATH,"gui/server/templates/");
         templateFile=options.get(OPTION_TEMPLATEFILE,"viewtopic.vhtml");
         loginUser=options.get(OPTION_USERNAME);
         loginPass=options.get(OPTION_PASSWORD);
