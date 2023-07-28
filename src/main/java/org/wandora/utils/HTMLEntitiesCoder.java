@@ -27,7 +27,13 @@
  */
 
 package org.wandora.utils;
-import java.util.*;
+
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
+
+
 
 /**
  * This class has mappings from html entities to characters and vica versa
