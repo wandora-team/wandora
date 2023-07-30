@@ -30,7 +30,8 @@
 package org.wandora.topicmap.layered.ambiguity;
 
 
-import org.wandora.topicmap.layered.*;
+import org.wandora.topicmap.layered.AmbiguityResolution;
+import org.wandora.topicmap.layered.AmbiguityResolver;
 
 /**
  *

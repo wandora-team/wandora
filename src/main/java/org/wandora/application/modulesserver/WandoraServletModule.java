@@ -22,7 +22,7 @@
 package org.wandora.application.modulesserver;
 
 import java.io.IOException;
-import jakarta.servlet.ServletException;
+
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -32,6 +32,8 @@ import org.wandora.modules.servlet.ModulesServlet;
 import org.wandora.modules.servlet.ServletModule;
 import org.wandora.utils.ListenerList;
 import org.wandora.utils.ParallelListenerList;
+
+import jakarta.servlet.ServletException;
 
 /**
  *

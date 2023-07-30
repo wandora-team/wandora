@@ -24,12 +24,21 @@
 
 package org.wandora.application.tools.extractors.yahoo.boss;
 
-import java.net.*;
-import java.io.*;
-import org.xml.sax.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.URL;
 
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.IObox;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 /**
  *

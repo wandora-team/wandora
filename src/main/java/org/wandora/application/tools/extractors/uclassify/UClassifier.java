@@ -25,16 +25,21 @@
 
 package org.wandora.application.tools.extractors.uclassify;
 
-import java.net.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.tools.extractors.ExtractHelper;
-
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.IObox;
+import org.wandora.utils.Options;
 
 
 /**

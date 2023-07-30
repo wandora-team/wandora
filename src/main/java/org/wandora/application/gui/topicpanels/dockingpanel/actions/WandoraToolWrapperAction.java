@@ -23,22 +23,18 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel.actions;
 
-import bibliothek.gui.Dockable;
-import bibliothek.gui.dock.action.ActionContentModifier;
-import bibliothek.gui.dock.action.ActionType;
-import bibliothek.gui.dock.action.actions.AbstractStandardDockAction;
-import bibliothek.gui.dock.action.actions.SimpleButtonAction;
-import bibliothek.gui.dock.action.actions.SimpleDockAction;
-import bibliothek.gui.dock.action.view.ActionViewConverter;
-import bibliothek.gui.dock.action.view.ViewTarget;
 import java.awt.event.ActionEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.TopicMapException;
+
+import bibliothek.gui.Dockable;
+import bibliothek.gui.dock.action.ActionContentModifier;
+import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 /**
  *

@@ -28,12 +28,14 @@
 package org.wandora.application.gui.previews;
 
 
-import javax.swing.JPanel;
-import java.awt.Component;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JPanel;
+
 import org.wandora.topicmap.Locator;
 
 

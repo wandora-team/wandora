@@ -28,6 +28,7 @@ package org.wandora.application.tools.extractors.reddit;
  * @author akivela
  */
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;

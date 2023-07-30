@@ -23,8 +23,11 @@
  *
  */
 package org.wandora.query2;
-import org.wandora.topicmap.*;
-import static org.wandora.utils.Tuples.*;
+import static org.wandora.utils.Tuples.t2;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 
 /**
  *

@@ -30,7 +30,7 @@
 package org.wandora.application.tools.extractors.marcxml;
 
 
-import java.util.*;
+import java.util.HashMap;
 
 
 /**

@@ -26,22 +26,28 @@
 
 package org.wandora.application.tools.occurrences;
 
+import java.io.File;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+
 /**
  *
  * @author akivela
  */
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-
-import org.wandora.utils.*;
-
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.IObox;
 
 /**
  * <p>

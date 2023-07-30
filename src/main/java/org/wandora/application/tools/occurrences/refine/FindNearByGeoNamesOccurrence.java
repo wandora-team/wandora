@@ -27,6 +27,7 @@ package org.wandora.application.tools.occurrences.refine;
 
 import java.net.URL;
 import java.net.URLEncoder;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.extractors.geonames.FindNearByGeoNames;

@@ -28,10 +28,14 @@
 package org.wandora.application.gui.simple;
 
 
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
-import javax.swing.*;
-import org.wandora.application.gui.*;
+
+import javax.swing.Icon;
+import javax.swing.JButton;
+
+import org.wandora.application.gui.UIConstants;
 
 
 

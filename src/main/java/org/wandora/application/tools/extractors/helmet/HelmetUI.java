@@ -30,8 +30,10 @@ import java.awt.Component;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import javax.swing.JDialog;
 import javax.swing.JTextPane;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;

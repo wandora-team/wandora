@@ -26,10 +26,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
-import jakarta.servlet.http.HttpServletResponse;
 import org.wandora.modules.AbstractModule;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
@@ -37,6 +33,11 @@ import org.wandora.modules.ModuleManager;
 import org.wandora.modules.usercontrol.User;
 import org.wandora.utils.ListenerList;
 import org.wandora.utils.ParallelListenerList;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * <p>

@@ -26,6 +26,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 import org.wandora.application.tools.exporters.simberg.ModelField.Type;
 
 /**

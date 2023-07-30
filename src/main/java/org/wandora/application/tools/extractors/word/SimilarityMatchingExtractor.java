@@ -22,10 +22,12 @@
 
 package org.wandora.application.tools.extractors.word;
 
-import org.wandora.application.Wandora;
 import static org.wandora.application.gui.search.SimilarityBox.getSimilarity;
+
+import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 
 /**

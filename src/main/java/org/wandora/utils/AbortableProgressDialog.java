@@ -25,8 +25,6 @@
 
 package org.wandora.utils;
 
-import org.wandora.utils.Abortable;
-
 /**
  *
  * @author  anttirt

@@ -23,13 +23,11 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel.actions;
 
-import bibliothek.gui.DockController;
-import bibliothek.gui.Dockable;
-import bibliothek.gui.dock.action.actions.SimpleButtonAction;
-import bibliothek.gui.dock.facile.action.CloseAction;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
-import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockController;
+
+import bibliothek.gui.Dockable;
+import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 /**
  *

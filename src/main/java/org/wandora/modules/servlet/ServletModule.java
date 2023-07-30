@@ -22,11 +22,13 @@
 package org.wandora.modules.servlet;
 
 import java.io.IOException;
+
+import org.wandora.modules.Module;
+import org.wandora.modules.usercontrol.User;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.wandora.modules.Module;
-import org.wandora.modules.usercontrol.User;
 
 /**
  * A module that hooks to a servlet, or something similar. The typical

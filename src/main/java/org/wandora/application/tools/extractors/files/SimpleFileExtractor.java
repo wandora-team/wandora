@@ -29,25 +29,32 @@ package org.wandora.application.tools.extractors.files;
 
 
 
-import org.wandora.application.tools.browserextractors.*;
-import org.wandora.topicmap.TMBox;
-import org.wandora.utils.Textbox;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.utils.*;
+import java.io.File;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
-
-import java.util.*;
-import java.text.*;
-import java.io.*;
-import java.net.*;
 import javax.swing.Icon;
 
-
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
+import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.DataURL;
+import org.wandora.utils.Textbox;
+import org.wandora.utils.XMLbox;
 
 
 /**

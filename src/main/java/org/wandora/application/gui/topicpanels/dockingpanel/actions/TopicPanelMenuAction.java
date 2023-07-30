@@ -23,16 +23,18 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel.actions;
 
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+
+import javax.swing.Icon;
+import javax.swing.JPopupMenu;
+
+import org.wandora.application.gui.topicpanels.TopicPanel;
+import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockable;
+
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.action.ActionContentModifier;
 import bibliothek.gui.dock.action.actions.SimpleButtonAction;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import javax.swing.Icon;
-import javax.swing.JPopupMenu;
-import org.wandora.application.WandoraTool;
-import org.wandora.application.gui.topicpanels.TopicPanel;
-import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockable;
 
 /**
  *

@@ -24,7 +24,8 @@
  * Topics.java
  */
 package org.wandora.query2;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *

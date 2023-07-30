@@ -21,6 +21,7 @@
 package org.wandora.application.tools.git;
 
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleLabel;

@@ -29,6 +29,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+
 import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
 

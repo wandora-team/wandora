@@ -24,6 +24,7 @@ package org.wandora.modules;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import org.wandora.utils.MultiNetAuthenticator;
 import org.wandora.utils.SimpleNetAuthenticator;
 

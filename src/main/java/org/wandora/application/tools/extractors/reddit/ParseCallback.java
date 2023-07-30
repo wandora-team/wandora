@@ -22,11 +22,13 @@
 
 package org.wandora.application.tools.extractors.reddit;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import java.util.HashMap;
+
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 
 /**
  *

@@ -26,9 +26,14 @@
 
 package org.wandora.application.tools.extractors.gedcom;
 
-import org.wandora.application.*;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+import org.wandora.application.WandoraTool;
 
 
 

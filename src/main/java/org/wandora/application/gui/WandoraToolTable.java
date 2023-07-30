@@ -28,17 +28,31 @@
 
 package org.wandora.application.gui;
 
-import org.wandora.application.gui.table.TopicTableSorter;
-import org.wandora.utils.swing.TableSorter;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.WandoraToolManager2;
 import org.wandora.application.WandoraToolManager2.ToolInfo;
-import org.wandora.application.tools.*;
+import org.wandora.application.gui.table.TopicTableSorter;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.utils.swing.TableSorter;
 
 
 

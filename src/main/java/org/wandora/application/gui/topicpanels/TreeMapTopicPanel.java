@@ -27,30 +27,27 @@
 package org.wandora.application.gui.topicpanels;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.Collection;
+
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
+
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
 import org.wandora.application.RefreshListener;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.topicpanels.treemap.TreeMapComponent;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
 

@@ -23,8 +23,9 @@
  *
  */
 package org.wandora.query2;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 /**
  *

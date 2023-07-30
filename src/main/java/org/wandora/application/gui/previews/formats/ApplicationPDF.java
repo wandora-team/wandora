@@ -27,24 +27,52 @@
 
 package org.wandora.application.gui.previews.formats;
 
-import com.sun.pdfview.PDFFile;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
+import static java.awt.event.InputEvent.CTRL_MASK;
+import static java.awt.event.InputEvent.SHIFT_MASK;
+import static java.awt.event.KeyEvent.VK_C;
+import static java.awt.event.KeyEvent.VK_END;
+import static java.awt.event.KeyEvent.VK_HOME;
+import static java.awt.event.KeyEvent.VK_MINUS;
+import static java.awt.event.KeyEvent.VK_PAGE_DOWN;
+import static java.awt.event.KeyEvent.VK_PAGE_UP;
+import static java.awt.event.KeyEvent.VK_PLUS;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.previews.*;
-import org.wandora.utils.*;
-import static org.wandora.utils.Functional.*;
-import static java.awt.event.KeyEvent.*;
-import java.net.URISyntaxException;
-import java.net.URL;
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+import javax.swing.MenuElement;
+import javax.swing.event.MouseInputAdapter;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.PreviewUtils;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.DataURL;
+import org.wandora.utils.Functional.Pr2;
+import org.wandora.utils.IObox;
+
+import com.sun.pdfview.PDFFile;
 
 
 

@@ -21,25 +21,26 @@
  */
 package org.wandora.application.tools.extractors.rekognition;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.swing.Icon;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.rekognition.RekognitionConfiguration.AUTH_KEY;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 
 
 /**

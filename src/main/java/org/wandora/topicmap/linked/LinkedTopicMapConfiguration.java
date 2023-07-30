@@ -27,10 +27,10 @@
 
 package org.wandora.topicmap.linked;
 import org.wandora.application.Wandora;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.application.gui.simple.*;
-import java.util.*;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.topicmap.layered.ContainerTopicMap;
+import org.wandora.topicmap.layered.Layer;
 
 /**
  *

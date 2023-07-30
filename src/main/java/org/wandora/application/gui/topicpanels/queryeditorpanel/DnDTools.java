@@ -27,8 +27,10 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
+
 import org.wandora.query2.DirectiveUIHints;
 
 /**

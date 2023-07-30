@@ -28,9 +28,12 @@ package org.wandora.application.gui;
 
 
 import java.awt.Component;
-import javax.swing.*;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.Vector;
+
+import javax.swing.DefaultListModel;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *

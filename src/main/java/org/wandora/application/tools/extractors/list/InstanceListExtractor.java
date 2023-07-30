@@ -26,21 +26,39 @@
 package org.wandora.application.tools.extractors.list;
 
 
-import org.wandora.application.tools.browserextractors.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Properties;
+import java.util.Stack;
+
+import javax.swing.Icon;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+
+import org.w3c.tidy.Tidy;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
+import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicTools;
+import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.gui.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-
-import java.util.*;
-import java.io.*;
-import java.net.*;
-
-import javax.swing.*;
-import javax.swing.text.html.*;
-import javax.swing.text.*;
-import org.w3c.tidy.*;
 
 /**
 /**

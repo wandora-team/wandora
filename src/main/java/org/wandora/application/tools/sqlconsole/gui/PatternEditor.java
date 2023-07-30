@@ -28,15 +28,26 @@ package org.wandora.application.tools.sqlconsole.gui;
 
 
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import java.awt.event.*;
-import javax.swing.*;
-import org.wandora.application.tools.sqlconsole.data.utils.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.gui.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.tools.sqlconsole.data.utils.SQLPattern;
 
 
 /**

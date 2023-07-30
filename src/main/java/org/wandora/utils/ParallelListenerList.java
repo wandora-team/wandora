@@ -21,11 +21,12 @@
  */
 package org.wandora.utils;
 
+import static org.wandora.utils.Tuples.t2;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import static org.wandora.utils.Tuples.t2;
 
 /**
  * This is like ListenerList but several events can be firing simultaneously

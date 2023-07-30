@@ -28,9 +28,6 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.LayeredTopicContext;
 import org.wandora.application.tools.exporters.iiifexport.IIIFBuilder;
@@ -43,6 +40,10 @@ import org.wandora.modules.servlet.ActionException;
 import org.wandora.modules.servlet.ModulesServlet;
 import org.wandora.modules.usercontrol.User;
 import org.wandora.topicmap.Topic;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 /**

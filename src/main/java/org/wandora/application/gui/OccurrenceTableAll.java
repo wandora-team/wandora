@@ -28,26 +28,65 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.table.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
+
+import javax.swing.AbstractCellEditor;
+import javax.swing.DropMode;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+import javax.swing.TransferHandler;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraMenuManager;
 import org.wandora.application.contexts.ApplicationContext;
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleTable;
+import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.occurrences.DeleteOccurrence;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
-import org.wandora.utils.swing.*;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.IObox;
+import org.wandora.utils.MSOfficeBox;
+import org.wandora.utils.Options;
+import org.wandora.utils.Textbox;
+import org.wandora.utils.swing.TableSorter;
 
 
 /**

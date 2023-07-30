@@ -27,9 +27,6 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Map;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.browserextractors.BrowserExtractorManager;
@@ -42,6 +39,10 @@ import org.wandora.modules.servlet.ActionException;
 import org.wandora.modules.servlet.ModulesServlet;
 import org.wandora.modules.usercontrol.User;
 import org.wandora.utils.XMLbox;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *

@@ -33,11 +33,32 @@ package org.wandora.topicmap.parser;
 
 
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.wandora.application.Wandora;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapLogger;
+import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Options;
 
 

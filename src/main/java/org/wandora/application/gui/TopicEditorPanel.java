@@ -28,9 +28,15 @@
 package org.wandora.application.gui;
 
 
-import javax.swing.*;
-import java.awt.*;
-import org.wandora.application.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
+
+import org.wandora.application.Wandora;
 
 
 /**

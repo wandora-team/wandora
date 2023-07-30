@@ -29,16 +29,17 @@ import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.tree.TopicTreeConfigPanel;
 import org.wandora.application.gui.tree.TopicTreePanel;

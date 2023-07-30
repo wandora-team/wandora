@@ -29,12 +29,21 @@
 package org.wandora.application.tools.generators;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import java.util.*;
-import static org.wandora.utils.Tuples.T2;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 
 /**
  *

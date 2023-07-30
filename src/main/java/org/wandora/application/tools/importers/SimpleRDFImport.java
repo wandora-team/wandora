@@ -27,15 +27,34 @@
 package org.wandora.application.tools.importers;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import java.io.*;
-import javax.swing.*;
-
-import org.apache.jena.rdf.model.*;
+import java.io.InputStream;
 import java.util.List;
+
+import javax.swing.Icon;
+
+import org.apache.jena.rdf.model.AnonId;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFList;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.topicmap.TopicTools;
+import org.wandora.topicmap.XTMPSI;
 
 
 

@@ -1,8 +1,6 @@
 
 package org.wandora.application.gui.topicpanels.graph3d;
 
-import java.awt.Color;
-
 /**
  *
  * @author olli

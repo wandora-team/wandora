@@ -31,12 +31,27 @@
 package org.wandora.topicmap.parser;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.utils.Tuples.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
-import java.util.*;
-import java.io.*;
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapLogger;
+import org.wandora.topicmap.TopicTools;
+import org.wandora.utils.Tuples.T2;
 
 
 

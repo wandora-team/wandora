@@ -28,14 +28,31 @@
 package org.wandora.application.tools.exporters;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.contexts.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraToolLogger;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.XMLbox;
 
 

@@ -20,7 +20,8 @@
  */
 
 package org.wandora.topicmap.diff;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
 /**
  *
  * @author olli

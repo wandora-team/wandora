@@ -27,11 +27,14 @@
 
 package org.wandora.application.tools.selections;
 
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.util.*;
-import java.util.regex.*;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.ClipboardBox;
 
 
 /**

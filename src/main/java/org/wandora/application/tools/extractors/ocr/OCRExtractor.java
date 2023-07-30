@@ -23,24 +23,34 @@
 package org.wandora.application.tools.extractors.ocr;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import javax.swing.Icon;
-import java.io.*;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import org.apache.commons.io.IOUtils;
 
+import javax.swing.Icon;
+
+import org.apache.commons.io.IOUtils;
 /* wandora */
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
-import org.wandora.topicmap.*;
-import org.wandora.utils.language.LanguageBox;
-import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.language.LanguageBox;
 
 
 

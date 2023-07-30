@@ -27,18 +27,35 @@
 package org.wandora.application.tools.sqlconsole.gui;
 
 
-import org.wandora.utils.Delegate;
-import org.wandora.utils.ClipboardBox;
-import org.wandora.utils.Textbox;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
-import java.util.*;
-import org.wandora.application.tools.sqlconsole.data.*;
-import org.wandora.application.tools.sqlconsole.data.utils.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.ListSelectionModel;
+import javax.swing.Scrollable;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 import org.wandora.application.gui.UIBox;
 //import com.gripstudios.applications.sqlconsole.beanshell.*;
+import org.wandora.application.tools.sqlconsole.data.PatternFilteredTableView;
+import org.wandora.application.tools.sqlconsole.data.TableView;
+import org.wandora.application.tools.sqlconsole.data.utils.SQLPattern;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.Delegate;
+import org.wandora.utils.Textbox;
 
 /**
  *

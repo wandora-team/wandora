@@ -29,9 +29,11 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapSearchOptions;
+
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 
 

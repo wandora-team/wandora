@@ -29,19 +29,26 @@ package org.wandora.application.tools.project;
 
 
 
-import org.wandora.topicmap.packageio.ZipPackageOutput;
-import org.wandora.topicmap.packageio.PackageOutput;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.contexts.*;
-import org.wandora.utils.IObox;
+import java.io.File;
+import java.io.FileOutputStream;
 
-import java.io.*;
 import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.TopicMapTypeManager;
 import org.wandora.topicmap.packageio.DirectoryPackageOutput;
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.ZipPackageOutput;
+import org.wandora.utils.IObox;
 
 
 

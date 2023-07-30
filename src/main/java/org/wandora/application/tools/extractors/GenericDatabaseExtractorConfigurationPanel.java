@@ -27,13 +27,19 @@
 package org.wandora.application.tools.extractors;
 
 
-import org.wandora.application.gui.simple.*;
-
-import java.util.*;
-import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
 import java.awt.GridBagConstraints;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
+
+import org.wandora.application.gui.simple.SimpleLabel;
 
 
 /**

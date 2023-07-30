@@ -24,7 +24,10 @@ package org.wandora.modules.usercontrol;
 import java.util.Collection;
 import java.util.Map;
 
-import org.wandora.modules.*;
+import org.wandora.modules.AbstractModule;
+import org.wandora.modules.MissingDependencyException;
+import org.wandora.modules.ModuleException;
+import org.wandora.modules.ModuleManager;
 
 /**
  * This is a module you might include in the modules config to move users

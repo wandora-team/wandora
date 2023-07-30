@@ -28,16 +28,25 @@ package org.wandora.application.gui.tree;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import javax.swing.*;
-import javax.swing.tree.*;
-import java.util.*;
-import java.awt.*;
+import java.awt.Component;
+import java.util.Collection;
+import java.util.Set;
+
+import javax.swing.JPanel;
+import javax.swing.tree.TreePath;
+
+import org.wandora.application.RefreshListener;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
 
 
 

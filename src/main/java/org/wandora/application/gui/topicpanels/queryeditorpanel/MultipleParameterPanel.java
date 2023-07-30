@@ -29,7 +29,9 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+
 import javax.swing.JButton;
+
 import org.wandora.application.Wandora;
 import org.wandora.query2.DirectiveUIHints.Parameter;
 

@@ -30,7 +30,9 @@
 package org.wandora.application.gui.topicpanels.graphpanel;
 
 
-import static org.wandora.utils.Tuples.*;
+import static org.wandora.utils.Tuples.t2;
+
+import org.wandora.utils.Tuples.T2;
 
 
 /**

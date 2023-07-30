@@ -29,19 +29,20 @@
 package org.wandora.application;
 
 
-import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.Topic;
+import static org.wandora.utils.Tuples.t2;
 
-import org.wandora.application.tools.navigate.OpenTopic;
-import org.wandora.application.contexts.PreContext;
-import org.wandora.application.gui.UIBox;
-import static org.wandora.utils.Tuples.*;
-
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.Icon;
+
+import org.wandora.application.contexts.PreContext;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.navigate.OpenTopic;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.utils.Tuples.T2;
 
 
 /**

@@ -29,7 +29,7 @@
 package org.wandora.exceptions;
 
 
-import java.util.*;
+import java.util.Set;
 
 import org.wandora.topicmap.Topic;
 

@@ -20,7 +20,8 @@
  *
  */
 package org.wandora.modules;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 /**
  * The interface all modules must implement. Typically you will want to
  * extend AbstractModule instead of implementing this directly. It'll contain 

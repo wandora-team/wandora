@@ -24,6 +24,7 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 
 import javax.swing.JComponent;
+
 import org.wandora.query2.DirectiveUIHints;
 
 /**

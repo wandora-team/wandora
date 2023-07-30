@@ -27,10 +27,19 @@
 
 package org.wandora.application.tools.extractors.bibtex;
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import static org.wandora.utils.Tuples.*;
+import static org.wandora.utils.Tuples.t2;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PushbackReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.wandora.utils.Tuples.T2;
 /**
  *
  * @author olli

@@ -27,10 +27,12 @@
  */
 
 package org.wandora.topicmap;
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import org.wandora.topicmap.memory.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import org.wandora.topicmap.memory.TopicMapImpl;
 /**
  *
  * @author  olli

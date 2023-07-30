@@ -5,12 +5,20 @@
 
 package org.wandora.utils.swing.treetable;
 
-import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.util.*;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.util.EventObject;
+
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.EventListenerList;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 /**
  *

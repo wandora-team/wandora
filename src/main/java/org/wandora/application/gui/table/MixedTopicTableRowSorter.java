@@ -27,7 +27,9 @@
 package org.wandora.application.gui.table;
 
 import java.util.Comparator;
+
 import javax.swing.table.TableRowSorter;
+
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Topic;
 

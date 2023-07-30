@@ -29,12 +29,50 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.StringWriter;
+import java.net.URI;
+import java.net.URL;
+import java.util.HashSet;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.WandoraToolSet;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.PreviewUtils;
+import org.wandora.application.tools.DropExtractor;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.DataURL;
+
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -48,21 +86,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.previews.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.utils.ClipboardBox;
-import org.wandora.utils.DataURL;
 
 
 

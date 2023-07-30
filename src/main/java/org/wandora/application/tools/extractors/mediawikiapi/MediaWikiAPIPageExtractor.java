@@ -21,19 +21,11 @@
 
 package org.wandora.application.tools.extractors.mediawikiapi;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import org.json.*;
-import java.net.URL;
-
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.net.URLEncoder;
-import org.apache.commons.io.IOUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,11 +33,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.wandora.topicmap.TopicMap;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.wandora.application.WandoraToolLogger;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.application.WandoraToolLogger;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 
 /**

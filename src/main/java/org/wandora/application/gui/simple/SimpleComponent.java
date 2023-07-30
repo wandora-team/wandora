@@ -27,7 +27,7 @@
 package org.wandora.application.gui.simple;
 
 
-import java.awt.event.*;
+import java.awt.event.FocusListener;
 
 
 /**

@@ -30,12 +30,17 @@ package org.wandora.application.tools.extractors.freebase;
 
 
 import javax.swing.Icon;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 public abstract class AbstractFreebaseExtractor extends AbstractExtractor {
     

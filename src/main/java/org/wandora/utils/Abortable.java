@@ -21,11 +21,11 @@
  */
 package org.wandora.utils;
 
-import org.wandora.application.gui.previews.*;
 import java.awt.Frame;
+
 import javax.swing.SwingUtilities;
-import org.wandora.utils.Option;
-import org.wandora.application.gui.*;
+
+import org.wandora.application.gui.UIBox;
 
 /**
  *

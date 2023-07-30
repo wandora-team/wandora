@@ -26,12 +26,21 @@
 
 package org.wandora.application.tools.generators;
 
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.*;
-import java.util.*;
-import java.text.*;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.tools.GenericOptionsDialog;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
 
 
 /**

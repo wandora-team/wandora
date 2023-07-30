@@ -24,7 +24,9 @@ package org.wandora.application.tools.extractors.europeana;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;

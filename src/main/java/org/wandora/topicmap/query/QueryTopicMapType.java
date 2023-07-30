@@ -20,16 +20,27 @@
  */
 package org.wandora.topicmap.query;
 
-import org.wandora.topicmap.packageio.PackageOutput;
-import org.wandora.topicmap.packageio.PackageInput;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapLogger;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.topicmap.layered.LayeredTopicMapType;
+import org.wandora.topicmap.packageio.PackageInput;
+import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.utils.Options;
 
 

@@ -32,12 +32,24 @@ package org.wandora.application.tools;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.utils.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.Textbox;
 
 
 

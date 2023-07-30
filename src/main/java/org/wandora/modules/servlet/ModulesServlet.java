@@ -23,11 +23,7 @@
 package org.wandora.modules.servlet;
 
 import java.io.IOException;
-import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.Jdk14Logger;
 import org.wandora.modules.AbstractModule;
@@ -37,6 +33,12 @@ import org.wandora.modules.ModuleManager.ModuleSettings;
 import org.wandora.modules.servlet.ServletModule.RequestListener;
 import org.wandora.utils.ListenerList;
 import org.wandora.utils.ParallelListenerList;
+
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * A HttpServlet that sets up the modules framework. This is the actual

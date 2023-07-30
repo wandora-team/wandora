@@ -28,11 +28,16 @@ package org.wandora.application.tools.importers;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import java.io.*;
-import javax.swing.*;
+import java.io.InputStream;
+
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.UIBox;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
 
 
 

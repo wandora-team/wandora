@@ -24,7 +24,6 @@ package org.wandora.modules.usercontrol;
 import java.util.Collection;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
@@ -32,6 +31,8 @@ import org.wandora.modules.servlet.ActionException;
 import org.wandora.modules.servlet.ModulesServlet.HttpMethod;
 import org.wandora.modules.servlet.SendEmailAction;
 import org.wandora.modules.servlet.Template;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *

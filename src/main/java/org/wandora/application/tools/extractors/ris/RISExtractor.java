@@ -33,25 +33,31 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.*;
-import java.nio.charset.*;
-import java.nio.channels.*;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.CharBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.ArrayList;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.ris.RISReference.Date;
+import org.wandora.application.tools.extractors.ris.RISReference.ReferenceType;
+import org.wandora.application.tools.extractors.ris.RISReference.Types;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
-import org.wandora.topicmap.TMBox;
 import org.wandora.utils.IObox;
-import static org.wandora.utils.Tuples.*;
-import static org.wandora.application.tools.extractors.ris.RISReference.*;
+import org.wandora.utils.Tuples.T2;
 
 /**
  * 

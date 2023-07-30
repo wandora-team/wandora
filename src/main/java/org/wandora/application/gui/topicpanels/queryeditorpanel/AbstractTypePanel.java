@@ -22,7 +22,9 @@
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Container;
+
 import javax.swing.JPanel;
+
 import org.wandora.query2.DirectiveUIHints.Parameter;
 
 /**

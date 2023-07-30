@@ -27,14 +27,20 @@
 package org.wandora.application.tools.subjects;
 
 import java.net.URLEncoder;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
-
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicTools;
 import org.wandora.utils.DataURL;
 
 

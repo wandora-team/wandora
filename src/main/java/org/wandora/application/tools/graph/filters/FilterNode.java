@@ -27,11 +27,16 @@
 
 package org.wandora.application.tools.graph.filters;
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import org.wandora.application.tools.graph.*;
-import java.util.*;
+import java.util.Iterator;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.GraphNodeContext;
+import org.wandora.application.gui.topicpanels.graphpanel.GraphFilter;
+import org.wandora.application.gui.topicpanels.graphpanel.NodeFilter;
+import org.wandora.application.gui.topicpanels.graphpanel.VModel;
+import org.wandora.application.gui.topicpanels.graphpanel.VNode;
+import org.wandora.application.tools.graph.AbstractGraphTool;
 
 /**
  *

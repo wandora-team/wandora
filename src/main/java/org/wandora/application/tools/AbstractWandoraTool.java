@@ -28,23 +28,44 @@
 package org.wandora.application.tools;
 
 
-import org.wandora.utils.Tuples.T2;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
+import static org.wandora.application.gui.ConfirmResult.cancel;
+import static org.wandora.application.gui.ConfirmResult.notoall;
+
+import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import org.wandora.application.ErrorMessages;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.WandoraToolActionListener;
+import org.wandora.application.WandoraToolLogger;
+import org.wandora.application.WandoraToolType;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.LayeredTopicContext;
+import org.wandora.application.gui.ConfirmResult;
+import org.wandora.application.gui.InfoDialog;
+import org.wandora.application.gui.LayerTree;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleMenuItem;
-import org.wandora.application.*;
-
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import static org.wandora.application.gui.ConfirmResult.*;
-import org.wandora.utils.*;
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.utils.Textbox;
+import org.wandora.utils.Tuples.T2;
 
 
 

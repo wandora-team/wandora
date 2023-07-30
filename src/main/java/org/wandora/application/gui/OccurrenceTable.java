@@ -27,9 +27,11 @@
 package org.wandora.application.gui;
 
 
-import java.awt.event.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
+import java.awt.event.MouseListener;
+
+import org.wandora.application.Wandora;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 

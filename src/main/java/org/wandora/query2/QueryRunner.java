@@ -27,8 +27,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.ScriptManager;

@@ -20,13 +20,34 @@
  */
 
 package org.wandora.topicmap.diff;
-import org.wandora.topicmap.packageio.ZipPackageInput;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicInUseException;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapHashCode;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.TopicMapTypeManager;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.topicmap.packageio.PackageInput;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.memory.*;
-import org.wandora.topicmap.layered.*;
-import java.util.*;
-import java.io.*;
+import org.wandora.topicmap.packageio.ZipPackageInput;
 
 /**
  *

@@ -27,11 +27,14 @@
 
 package org.wandora.application.gui.simple;
 
-import javax.swing.*;
-import java.io.*;
-import java.awt.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.io.File;
+
+import javax.swing.JFileChooser;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIConstants;
 
 
 

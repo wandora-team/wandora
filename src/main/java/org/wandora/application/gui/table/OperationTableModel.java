@@ -27,6 +27,7 @@
 package org.wandora.application.gui.table;
 
 import javax.swing.table.DefaultTableModel;
+
 import org.wandora.topicmap.undowrapper.UndoOperation;
 
 /**

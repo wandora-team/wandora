@@ -39,8 +39,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.nio.charset.Charset;
 import java.util.Collection;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -50,9 +50,8 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
-//import jsyntaxpane.DefaultSyntaxKit;
-import de.sciss.syntaxpane.DefaultSyntaxKit;
 import javax.swing.text.DefaultEditorKit;
+
 import org.apache.commons.io.FileUtils;
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
@@ -83,6 +82,9 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
+
+//import jsyntaxpane.DefaultSyntaxKit;
+import de.sciss.syntaxpane.DefaultSyntaxKit;
 
 
 

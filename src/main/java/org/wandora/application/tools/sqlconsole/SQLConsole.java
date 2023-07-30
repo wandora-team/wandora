@@ -26,12 +26,15 @@
 
 package org.wandora.application.tools.sqlconsole;
 
-import org.wandora.utils.Options;
-import javax.swing.*;
-import java.io.*;
-import java.util.*;
-import org.wandora.utils.RegexFileChooser;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
+import javax.swing.JFileChooser;
+
 import org.wandora.application.gui.UIBox;
+import org.wandora.utils.Options;
+import org.wandora.utils.RegexFileChooser;
 /**
  *
  * @author  olli

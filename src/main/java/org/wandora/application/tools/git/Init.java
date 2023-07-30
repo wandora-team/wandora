@@ -22,6 +22,7 @@ package org.wandora.application.tools.git;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.wandora.application.Wandora;

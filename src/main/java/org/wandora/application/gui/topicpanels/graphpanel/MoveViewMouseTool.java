@@ -29,8 +29,9 @@ package org.wandora.application.gui.topicpanels.graphpanel;
 
 
 
-import java.awt.*;
-import static org.wandora.utils.Tuples.*;
+import java.awt.Cursor;
+
+import org.wandora.utils.Tuples.T2;
 
 
 /**

@@ -26,6 +26,7 @@ package org.wandora.application.tools.extractors.umbel;
 
 
 import java.util.Iterator;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wandora.topicmap.Association;

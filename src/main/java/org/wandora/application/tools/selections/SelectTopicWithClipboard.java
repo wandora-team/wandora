@@ -28,10 +28,12 @@
 package org.wandora.application.tools.selections;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import java.util.Iterator;
 
-import java.util.*;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.ClipboardBox;
 
 /**
  * Class implements a tool used to select topics in topic table. Topic is

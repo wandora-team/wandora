@@ -24,6 +24,7 @@ package org.wandora.topicmap.similarity;
 
 
 import java.util.Collection;
+
 import org.wandora.topicmap.Topic;
 
 

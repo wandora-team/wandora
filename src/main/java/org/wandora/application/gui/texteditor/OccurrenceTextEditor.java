@@ -28,15 +28,18 @@
 package org.wandora.application.gui.texteditor;
 
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.KeyStroke;
 
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.tools.*;
+import org.wandora.application.gui.simple.SimpleMenu;
+import org.wandora.application.tools.FindTopicsWithSimilarOccurrence;
 import org.wandora.application.tools.associations.FindAssociationsInOccurrenceSimple;
 import org.wandora.application.tools.extractors.gate.AnnieExtractor;
 import org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier;
@@ -47,9 +50,10 @@ import org.wandora.application.tools.extractors.uclassify.TextLanguageUClassifie
 import org.wandora.application.tools.extractors.uclassify.TopicsUClassifier;
 import org.wandora.application.tools.extractors.uclassify.UClassifier;
 import org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract;
-
-import org.wandora.application.tools.occurrences.*;
-import org.wandora.topicmap.*;
+import org.wandora.application.tools.occurrences.CreateTopicWithOccurrenceSelection;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
 
 
 

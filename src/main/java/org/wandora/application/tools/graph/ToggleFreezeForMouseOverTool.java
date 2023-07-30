@@ -26,9 +26,11 @@
 
 package org.wandora.application.tools.graph;
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.GraphNodeContext;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 
 
 /**

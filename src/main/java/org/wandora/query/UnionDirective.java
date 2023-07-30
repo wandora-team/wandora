@@ -28,9 +28,11 @@
  */
 
 package org.wandora.query;
-import org.wandora.topicmap.*;
-import org.wandora.utils.GripCollections;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+
+import org.wandora.topicmap.TopicMapException;
 
 /**
  * @deprecated

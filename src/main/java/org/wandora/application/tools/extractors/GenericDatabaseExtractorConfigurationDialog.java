@@ -27,11 +27,13 @@
 package org.wandora.application.tools.extractors;
 
 
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
-import java.util.*;
-import javax.swing.*;
 import java.awt.GridBagConstraints;
+import java.util.Vector;
+
+import javax.swing.JPanel;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.utils.swing.GuiTools;
 
 /**

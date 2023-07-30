@@ -27,10 +27,11 @@
  */
 
 package org.wandora.utils;
-import javax.crypto.*;
-import javax.crypto.spec.*;
-import java.security.*;
-import java.math.*;
+import java.math.BigInteger;
+import java.security.AlgorithmParameterGenerator;
+import java.security.AlgorithmParameters;
+
+import javax.crypto.spec.DHParameterSpec;
 
 /**
  *

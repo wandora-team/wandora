@@ -29,10 +29,12 @@
 package org.wandora.utils.swing;
 
 
-import java.util.*;
-import java.awt.*;
-import org.wandora.utils.*;
-import org.wandora.application.gui.simple.*;
+import java.awt.Font;
+
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleComboBox;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.utils.Textbox;
 
 
 

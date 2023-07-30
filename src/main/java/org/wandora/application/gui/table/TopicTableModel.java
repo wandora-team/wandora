@@ -26,8 +26,9 @@ package org.wandora.application.gui.table;
 
 
 import javax.swing.table.DefaultTableModel;
-import org.wandora.application.gui.topicstringify.TopicToString;
+
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Topic;
 
 

@@ -27,12 +27,13 @@ package org.wandora.application.gui.topicpanels;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Collection;
-import javafx.scene.web.WebEngine;
+
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.LineBorder;
+
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
 import org.wandora.application.gui.UIBox;
@@ -43,6 +44,8 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+
+import javafx.scene.web.WebEngine;
 
 /**
  *

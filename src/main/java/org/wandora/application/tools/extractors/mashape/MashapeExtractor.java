@@ -24,13 +24,15 @@ package org.wandora.application.tools.extractors.mashape;
 
 import java.io.File;
 import java.net.URL;
+
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.topicmap.TopicMap;
 
 /**
  *

@@ -28,7 +28,7 @@
 package org.wandora.application.gui.topicpanels.graphpanel;
 
 
-import java.util.*;
+import java.util.Collection;
 
 
 

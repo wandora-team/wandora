@@ -31,10 +31,15 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.Iterator;
-import org.wandora.application.gui.simple.*;
-import javax.swing.*;
+
+import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.SchemaBox;
 import org.wandora.topicmap.TMBox;

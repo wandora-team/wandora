@@ -27,11 +27,14 @@ package org.wandora.application.tools.occurrences;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.OccurrenceTable;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 

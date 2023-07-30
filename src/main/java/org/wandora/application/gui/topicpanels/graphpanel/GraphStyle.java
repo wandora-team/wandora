@@ -27,7 +27,9 @@
 
 package org.wandora.application.gui.topicpanels.graphpanel;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Stroke;
 
 
 /**

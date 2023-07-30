@@ -29,18 +29,27 @@
 package org.wandora.topicmap.database2;
 
 
-import org.wandora.topicmap.packageio.PackageOutput;
-import org.wandora.topicmap.packageio.PackageInput;
-import org.wandora.utils.Options;
-import org.wandora.application.tools.layers.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.SQLException;
+
+import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.DatabaseConfigurationPanel;
 import org.wandora.application.gui.UIBox;
-import static org.wandora.utils.Tuples.*;
-import java.sql.*;
-import java.io.*;
-import javax.swing.*;
+import org.wandora.application.tools.layers.MakeSIConsistentTool;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.topicmap.TopicMapLogger;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.packageio.PackageInput;
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.utils.Options;
+import org.wandora.utils.Tuples.T2;
 
 
 /**

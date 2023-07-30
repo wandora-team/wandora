@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.tools.extractors.flickr.FlickrExtractor.RequestFailure;

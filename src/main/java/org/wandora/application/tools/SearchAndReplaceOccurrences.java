@@ -28,12 +28,18 @@ package org.wandora.application.tools;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import java.util.*;
-import java.util.regex.*;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.TopicContext;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 

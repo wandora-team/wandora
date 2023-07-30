@@ -27,13 +27,16 @@
 package org.wandora.application.gui.simple;
 
 
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.TableModelEvent;
 
-
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
 import org.wandora.utils.swing.anyselectiontable.AnySelectionTable;
 
 

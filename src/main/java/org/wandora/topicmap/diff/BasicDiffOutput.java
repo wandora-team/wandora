@@ -20,10 +20,14 @@
  */
 
 package org.wandora.topicmap.diff;
-import org.wandora.topicmap.*;
-import static org.wandora.topicmap.diff.TopicMapDiff.DiffEntry;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.diff.TopicMapDiff.DiffEntry;
 /**
  *
  * @author olli

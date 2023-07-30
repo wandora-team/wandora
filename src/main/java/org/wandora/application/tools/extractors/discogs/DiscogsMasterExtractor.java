@@ -24,6 +24,7 @@ package org.wandora.application.tools.extractors.discogs;
 
 import java.io.File;
 import java.net.URL;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -28,16 +28,15 @@
 
 package org.wandora.application;
 
-import org.wandora.utils.IObox;
-import org.wandora.utils.Base64;
-import org.wandora.utils.HttpAuthorizer;
-
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.wandora.application.gui.PasswordPrompt;
+import org.wandora.utils.Base64;
+import org.wandora.utils.HttpAuthorizer;
+import org.wandora.utils.IObox;
 
 
 

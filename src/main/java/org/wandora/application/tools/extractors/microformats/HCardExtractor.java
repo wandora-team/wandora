@@ -26,18 +26,36 @@
 package org.wandora.application.tools.extractors.microformats;
 
 
-import org.wandora.utils.IObox;
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import org.xml.sax.*;
-import org.w3c.tidy.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Stack;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.gui.*;
+import javax.swing.Icon;
+
+import org.w3c.tidy.Tidy;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicTools;
+import org.wandora.utils.IObox;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 
 /**

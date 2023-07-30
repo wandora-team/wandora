@@ -29,10 +29,12 @@
 package org.wandora.application.tools;
 
 
-import java.util.*;
+import java.util.Collection;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import org.wandora.application.WandoraTool;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 
 

@@ -28,13 +28,23 @@
 package org.wandora.application.gui;
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import javax.swing.border.*;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
 import javax.swing.text.DefaultEditorKit;
+
 import org.wandora.application.gui.filechooser.WPRFileChooser;
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.simple.SimpleFileChooser;
 
 
 

@@ -27,9 +27,11 @@
 package org.wandora.application.tools.extractors.flickr;
 
 import java.awt.Color;
+
 import javax.swing.JLabel;
+
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.*;
+import org.wandora.application.gui.WandoraOptionPane;
 
 /**
  *

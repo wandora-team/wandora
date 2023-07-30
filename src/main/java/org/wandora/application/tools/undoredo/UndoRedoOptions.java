@@ -24,7 +24,9 @@
 package org.wandora.application.tools.undoredo;
 
 import java.util.ArrayList;
+
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;

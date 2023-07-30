@@ -1,8 +1,12 @@
 
 package org.wandora.application.gui.simple;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
 
 
 /**

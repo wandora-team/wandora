@@ -28,11 +28,16 @@
  */
 
 package org.wandora.utils.fileserver;
-import java.io.*;
-import java.util.*;
-import java.net.*;
-import javax.net.ssl.*;
-import javax.net.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.net.Socket;
+
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  *

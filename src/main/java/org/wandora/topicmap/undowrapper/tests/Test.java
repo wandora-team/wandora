@@ -2,6 +2,7 @@ package org.wandora.topicmap.undowrapper.tests;
 
 import java.io.IOException;
 import java.io.Writer;
+
 import org.wandora.topicmap.TopicMapException;
 
 /**

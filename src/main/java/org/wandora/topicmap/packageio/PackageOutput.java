@@ -28,7 +28,8 @@
  */
 
 package org.wandora.topicmap.packageio;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 /**
  * A package is a collection of data consisting of entries. Each entry has a name
  * and data. Data is written with OutputStream to allow binary entries. A new entry

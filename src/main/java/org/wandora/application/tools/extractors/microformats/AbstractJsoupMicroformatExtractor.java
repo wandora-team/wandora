@@ -24,7 +24,9 @@
 package org.wandora.application.tools.extractors.microformats;
 
 import java.util.HashMap;
+
 import javax.swing.Icon;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.wandora.application.gui.UIBox;

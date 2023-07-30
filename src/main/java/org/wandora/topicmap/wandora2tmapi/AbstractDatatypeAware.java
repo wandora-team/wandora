@@ -23,6 +23,7 @@ package org.wandora.topicmap.wandora2tmapi;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
 import org.tmapi.core.DatatypeAware;
 import org.tmapi.core.Locator;
 import org.tmapi.core.ModelConstraintException;

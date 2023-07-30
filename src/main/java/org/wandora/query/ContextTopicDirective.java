@@ -19,8 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.query;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.ArrayList;
+
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  * @deprecated

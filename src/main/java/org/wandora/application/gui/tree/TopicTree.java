@@ -28,25 +28,53 @@
 package org.wandora.application.gui.tree;
 
 
+import static org.wandora.utils.Tuples.t2;
+
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
-import static org.wandora.utils.Tuples.*;
-import javax.swing.*;
-import javax.swing.tree.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.awt.datatransfer.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import javax.swing.DropMode;
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+import javax.swing.JTree;
+import javax.swing.JViewport;
+import javax.swing.TransferHandler;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraMenuManager;
 import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.SimpleTree;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
+import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.GripCollections;
+import org.wandora.utils.Tuples.T2;
 
 
 

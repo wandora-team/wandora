@@ -27,15 +27,18 @@
 
 package org.wandora.application.tools.selections;
 
-import org.wandora.application.gui.table.SITable;
-import org.wandora.application.gui.table.TopicTable;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
+import java.util.Iterator;
 
-import java.util.*;
-import javax.swing.*;
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.table.SITable;
 import org.wandora.application.gui.table.TopicGrid;
+import org.wandora.application.gui.table.TopicTable;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.VModel;
+import org.wandora.application.gui.topicpanels.graphpanel.VNode;
 
 
 

@@ -25,6 +25,8 @@
  */
 
 package org.wandora.application.tools.extractors.ris;
+import static org.wandora.utils.Tuples.t2;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,8 +36,9 @@ import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.wandora.application.WandoraToolLogger;
-import static org.wandora.utils.Tuples.*;
+import org.wandora.utils.Tuples.T2;
 /**
  *
  * @author anttirt

@@ -14,15 +14,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
 import javax.swing.DefaultListModel;
 import javax.swing.SwingUtilities;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIConstants;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.application.gui.*;
 
 /**
  *

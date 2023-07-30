@@ -27,6 +27,7 @@ package org.wandora.application.tools.extractors.omakaupunki;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wandora.topicmap.Association;

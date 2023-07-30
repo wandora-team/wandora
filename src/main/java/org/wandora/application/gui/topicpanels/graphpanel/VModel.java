@@ -27,8 +27,14 @@
 
 package org.wandora.application.gui.topicpanels.graphpanel;
 
-import java.util.*;
-import static org.wandora.utils.Tuples.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.wandora.utils.Tuples.T2;
 
 
 /**

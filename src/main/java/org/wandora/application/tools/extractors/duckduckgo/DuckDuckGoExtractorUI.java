@@ -23,12 +23,16 @@
 package org.wandora.application.tools.extractors.duckduckgo;
 
 import java.util.ArrayList;
+
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.topicmap.TopicMapException;
 
 /**

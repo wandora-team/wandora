@@ -26,11 +26,14 @@
 
 package org.wandora.application.gui;
 import java.awt.Component;
-import javax.swing.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.TMBox;
-import java.util.*;
+import java.util.Collection;
+
+import javax.swing.DefaultListModel;
+
 import org.wandora.topicmap.SchemaBox;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 

@@ -19,12 +19,14 @@
 package org.wandora.application.gui.simple;
 
 
+import static java.lang.Math.floor;
+import static java.lang.String.format;
+
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import static java.lang.Math.floor;
-import static java.lang.String.format;
+
 import javax.swing.JProgressBar;
 
 

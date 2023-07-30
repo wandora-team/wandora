@@ -24,9 +24,10 @@ package org.wandora.application.tools.extractors.yahoo.yql;
 
 
 
-import javax.swing.*;
-import org.wandora.utils.*;
-import org.wandora.application.gui.*;
+import javax.swing.JFrame;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.utils.Options;
 
 
 

@@ -29,18 +29,30 @@ package org.wandora.application.gui.table;
 
 
 
-import java.util.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
 import java.net.URL;
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.StringTokenizer;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.tools.*;
-import org.wandora.application.contexts.*;
+import javax.swing.DropMode;
+import javax.swing.JComponent;
+import javax.swing.TransferHandler;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.ApplicationContext;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.tools.AddInstance;
+import org.wandora.application.tools.DeleteFromTopics;
+import org.wandora.application.tools.PasteInstances;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.ClipboardBox;
 
 

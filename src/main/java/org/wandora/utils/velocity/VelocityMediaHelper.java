@@ -27,10 +27,11 @@
  */
 
 package org.wandora.utils.velocity;
-import org.wandora.topicmap.TopicMapException;
+import java.util.Iterator;
+
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
-import java.util.*;
+import org.wandora.topicmap.TopicMapException;
 /**
  *
  * @author  olli

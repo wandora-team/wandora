@@ -27,13 +27,19 @@
 package org.wandora.application.gui.tree;
 
 
-import javax.swing.*;
-import java.util.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JCheckBox;
+
 import org.wandora.application.Wandora;
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.simple.*;
 import org.wandora.application.gui.GetTopicButton;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleCheckBox;
+import org.wandora.topicmap.TopicMapException;
 
 
 

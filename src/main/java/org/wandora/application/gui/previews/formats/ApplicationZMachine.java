@@ -22,6 +22,8 @@
 
 package org.wandora.application.gui.previews.formats;
 
+import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -32,23 +34,20 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
-import static org.wandora.application.gui.previews.PreviewUtils.endsWithAny;
-import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.zmpp.swingui.PanelMachineFactory;
 import org.zmpp.swingui.ZmppPanel;
-import org.zmpp.vm.Cpu;
-import org.zmpp.vm.Input;
 import org.zmpp.vm.Machine;
-import org.zmpp.vm.Output;
 
 
 

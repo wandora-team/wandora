@@ -28,13 +28,17 @@
 package org.wandora.application.tools.importers;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.database.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.*;
-import java.io.*;
-import java.sql.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.LayerTree;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.database.DatabaseTopicMap;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 

@@ -26,9 +26,11 @@
 package org.wandora.application.gui.table;
 
 import java.util.ArrayList;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
+
 import org.wandora.application.gui.simple.SimpleTable;
 import org.wandora.topicmap.undowrapper.UndoOperation;
 

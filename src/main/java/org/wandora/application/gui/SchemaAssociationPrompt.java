@@ -27,14 +27,25 @@
 package org.wandora.application.gui;
 
 
+import java.awt.Dimension;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.topicmap.Association;
 import org.wandora.topicmap.SchemaBox;
 import org.wandora.topicmap.TMBox;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import java.util.*;
-import java.awt.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.topicmap.layered.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.topicmap.layered.LayeredAssociation;
+import org.wandora.topicmap.layered.LayeredTopic;
 
 /**
  * @deprecated 

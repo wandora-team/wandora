@@ -24,11 +24,15 @@
 package org.wandora.topicmap.undowrapper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
-import org.wandora.topicmap.*;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.memory.TopicMapImpl;
 
 

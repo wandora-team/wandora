@@ -27,9 +27,9 @@
 
 package org.wandora.application.gui.simple;
 
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.table.AssociationTable;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import org.wandora.topicmap.Topic;
 
 
 /**

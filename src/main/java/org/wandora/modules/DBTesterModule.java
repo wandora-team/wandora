@@ -23,7 +23,6 @@ package org.wandora.modules;
 
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.wandora.modules.DatabaseInterface.PreparedDatabaseStatement;

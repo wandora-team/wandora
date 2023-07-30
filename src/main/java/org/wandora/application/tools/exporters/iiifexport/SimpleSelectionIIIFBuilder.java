@@ -25,9 +25,11 @@ package org.wandora.application.tools.exporters.iiifexport;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Locator;

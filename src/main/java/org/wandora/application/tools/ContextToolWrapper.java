@@ -28,13 +28,18 @@ package org.wandora.application.tools;
 
 
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.simple.*;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
+
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.WandoraToolLogger;
+import org.wandora.application.WandoraToolType;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.LayeredTopicContext;
+import org.wandora.application.gui.simple.SimpleMenuItem;
+import org.wandora.topicmap.TopicMapException;
 /**
  *
  * @author olli

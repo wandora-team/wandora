@@ -24,6 +24,7 @@ package org.wandora.application.tools.extractors.word;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.event.ChangeEvent;
@@ -33,6 +34,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;

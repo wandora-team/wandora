@@ -30,13 +30,15 @@
 
 package org.wandora.application.tools.extractors.sparql;
 
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryFactory;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.net.URL;
 import java.net.URLEncoder;
+
 import javax.swing.JDialog;
+
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryFactory;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;

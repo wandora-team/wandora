@@ -25,13 +25,15 @@
 package org.wandora.application.tools.topicnames;
 
 
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import java.util.Iterator;
+import java.util.Set;
 
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.VariantNameEditor;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Topic;
 
 /**
  *

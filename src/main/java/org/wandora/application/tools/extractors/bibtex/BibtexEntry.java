@@ -28,7 +28,9 @@
 package org.wandora.application.tools.extractors.bibtex;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 /**
  *
  * @author olli

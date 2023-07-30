@@ -27,11 +27,13 @@ package org.wandora.application.tools.extractors.any23;
 
 
 
-import java.io.*;
-
-import java.net.*;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
-import javax.swing.*;
+
+import javax.swing.Icon;
+
 import org.apache.any23.Any23;
 import org.apache.any23.extractor.ExtractionContext;
 import org.apache.any23.http.HTTPClient;
@@ -42,10 +44,18 @@ import org.apache.any23.source.StringDocumentSource;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.*;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.topicmap.*;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicTools;
+import org.wandora.topicmap.XTMPSI;
 
 
 /**

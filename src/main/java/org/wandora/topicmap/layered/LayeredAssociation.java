@@ -27,10 +27,18 @@
  */
 
 package org.wandora.topicmap.layered;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Vector;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.utils.KeyedHashMap;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
-import java.util.*;
 
 /**
  *

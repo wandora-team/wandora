@@ -28,7 +28,7 @@
 package org.wandora.application.gui.topicpanels.graphpanel;
 
 
-import static org.wandora.utils.Tuples.*;
+import org.wandora.utils.Tuples.T2;
 /**
  *
  * @author olli

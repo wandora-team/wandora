@@ -28,20 +28,45 @@ package org.wandora.application.tools.extractors.email;
 
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Vector;
+
+import javax.imageio.ImageIO;
+import javax.swing.AbstractCellEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.tools.PictureView;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.XMLbox;
-import javax.swing.table.*;
-import javax.swing.*;
-import java.util.*;
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
-import java.io.*;
-import java.awt.image.*;
-import javax.imageio.*;
-import java.awt.event.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.tools.PictureView;
+
+import jakarta.mail.Address;
+import jakarta.mail.BodyPart;
+import jakarta.mail.FetchProfile;
+import jakarta.mail.Flags;
+import jakarta.mail.Folder;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.Store;
+import jakarta.mail.URLName;
+import jakarta.mail.internet.MimeMultipart;
 
 /**
  *

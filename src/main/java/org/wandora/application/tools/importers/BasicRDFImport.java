@@ -28,11 +28,22 @@
 package org.wandora.application.tools.importers;
 
 
-import org.wandora.topicmap.*;
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.vocabulary.*;
 import java.util.List;
+
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFList;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
 
 
 

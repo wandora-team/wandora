@@ -23,8 +23,10 @@
 
 package org.wandora.topicmap.undowrapper;
 
-import java.util.Set;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *

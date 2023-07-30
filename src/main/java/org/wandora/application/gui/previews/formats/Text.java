@@ -28,11 +28,13 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.net.URL;
+
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;

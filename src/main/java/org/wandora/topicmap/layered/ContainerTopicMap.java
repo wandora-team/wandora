@@ -19,8 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.layered;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 /**

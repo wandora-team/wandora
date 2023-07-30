@@ -27,10 +27,13 @@
 
 package org.wandora.application.gui.simple;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import org.wandora.application.gui.*;
+import java.awt.Graphics;
+import java.awt.event.ActionListener;
+
+import javax.swing.JMenuItem;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
 
 
 /**

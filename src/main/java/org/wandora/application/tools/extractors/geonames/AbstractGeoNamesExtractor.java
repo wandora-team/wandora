@@ -28,14 +28,30 @@
 
 package org.wandora.application.tools.extractors.geonames;
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.gui.*;
-import javax.swing.*;
-import java.util.regex.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.Icon;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
 
 
 /**

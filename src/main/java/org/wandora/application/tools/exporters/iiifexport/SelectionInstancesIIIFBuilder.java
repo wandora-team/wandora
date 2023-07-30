@@ -22,6 +22,7 @@
 package org.wandora.application.tools.exporters.iiifexport;
 
 import java.util.Iterator;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Topic;

@@ -24,9 +24,10 @@
 package org.wandora.application.gui.topicpanels.dockingpanel;
 
 import java.util.ArrayList;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
-import javax.swing.ListModel;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;

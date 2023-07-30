@@ -28,16 +28,25 @@
 package org.wandora.application.gui.tree;
 
 
-import org.wandora.topicmap.SchemaBox;
-import org.wandora.topicmap.TMBox;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.wandora.topicmap.*;
-
 import javax.swing.event.TreeModelListener;
-import javax.swing.tree.*;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+
 import org.wandora.application.gui.TopicGuiWrapper;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.SchemaBox;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.GripCollections;
 
 

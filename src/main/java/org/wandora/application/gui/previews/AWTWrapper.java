@@ -29,10 +29,12 @@ import java.awt.Dimension;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Rectangle;
+
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
 

@@ -30,23 +30,44 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import org.wandora.application.gui.previews.*;
+import static java.awt.event.InputEvent.CTRL_MASK;
+import static java.awt.event.KeyEvent.VK_C;
+import static java.awt.event.KeyEvent.VK_MINUS;
+import static java.awt.event.KeyEvent.VK_PLUS;
+import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.PreviewUtils;
+import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.Options;
-import org.wandora.application.gui.simple.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import javax.imageio.*;
-import java.awt.event.*;
-import java.awt.print.*;
-
-import static java.awt.event.KeyEvent.*;
-
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
-import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 
 
 

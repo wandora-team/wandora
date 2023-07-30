@@ -28,16 +28,6 @@ package org.wandora.application.tools.extractors.sql;
 
 import java.io.File;
 import java.net.URL;
-import javax.swing.Icon;
-
-import org.wandora.application.Wandora;
-import org.wandora.application.contexts.Context;
-import org.wandora.application.gui.UIBox;
-import org.wandora.application.tools.extractors.AbstractExtractor;
-import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
-
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -49,7 +39,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 
 
 

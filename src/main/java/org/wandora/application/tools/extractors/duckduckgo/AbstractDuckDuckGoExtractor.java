@@ -23,7 +23,9 @@
 package org.wandora.application.tools.extractors.duckduckgo;
 
 import java.util.HashMap;
+
 import javax.swing.Icon;
+
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;

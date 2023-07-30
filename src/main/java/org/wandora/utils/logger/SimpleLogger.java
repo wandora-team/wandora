@@ -29,7 +29,7 @@
 package org.wandora.utils.logger;
 
 
-import java.io.*;
+import java.io.PrintStream;
 /**
  *
  * @author  olli

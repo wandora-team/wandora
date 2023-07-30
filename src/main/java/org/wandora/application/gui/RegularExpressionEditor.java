@@ -28,20 +28,32 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.application.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import java.awt.event.*;
-import javax.swing.*;
-import org.wandora.utils.*;
-import org.wandora.application.gui.simple.SimpleFileChooser;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.JFileChooser;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleComboBox;
+import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.utils.EasyReplaceExpression;
+import org.wandora.utils.IObox;
+import org.wandora.utils.Options;
 
 
 /**

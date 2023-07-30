@@ -25,18 +25,24 @@
 package org.wandora.application.tools.occurrences;
 
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
+import java.io.File;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
 
-import org.wandora.utils.*;
-
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.OccurrenceTable;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.application.tools.GenericOptionsDialog;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.DataURL;
+import org.wandora.utils.IObox;
 
 
 /**

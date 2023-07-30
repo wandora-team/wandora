@@ -24,9 +24,10 @@
 package org.wandora.application.tools.extractors;
 
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.tools.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraToolType;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.tools.AbstractWandoraTool;
 
 
 

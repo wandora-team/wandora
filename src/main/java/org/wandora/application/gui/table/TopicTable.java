@@ -28,28 +28,41 @@ package org.wandora.application.gui.table;
 
 
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import javax.swing.*;
+
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
+import javax.swing.TransferHandler;
 import javax.swing.event.RowSorterEvent;
-import javax.swing.event.RowSorterListener;
-import javax.swing.table.*;
-import org.wandora.application.*;
-import static org.wandora.application.WandoraMenuManager.getOpenInMenu;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraMenuManager;
 import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleTable;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.*;
+import org.wandora.application.tools.DuplicateTopics;
+import org.wandora.application.tools.SplitTopics;
+import org.wandora.application.tools.SplitTopicsWithBasename;
 import org.wandora.application.tools.navigate.OpenTopic;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.Textbox;
 import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 

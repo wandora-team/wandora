@@ -27,18 +27,26 @@
 
 package org.wandora.application.tools.statistics;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.Icon;
-import org.wandora.application.*;
-import org.wandora.application.tools.*;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
+import org.wandora.application.tools.GenericOptionsDialog;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import java.util.*;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import org.wandora.topicmap.layered.ContainerTopicMap;
+import org.wandora.topicmap.layered.Layer;
 
 /**
  *

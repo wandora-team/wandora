@@ -24,9 +24,12 @@
 
 package org.wandora.application.gui.simple;
 
-import java.awt.*;
-import javax.swing.*;
-import org.wandora.application.gui.*;
+import java.awt.Graphics;
+
+import javax.swing.JList;
+import javax.swing.ListModel;
+
+import org.wandora.application.gui.UIConstants;
 
 
 

@@ -28,8 +28,10 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *

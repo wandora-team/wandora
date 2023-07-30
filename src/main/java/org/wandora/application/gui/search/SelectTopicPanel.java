@@ -29,12 +29,18 @@ package org.wandora.application.gui.search;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.KeyEvent;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.TopicSelector;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleRadioButton;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 

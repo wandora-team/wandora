@@ -23,9 +23,13 @@
 
 package org.wandora.application.tools.extractors.geonames;
 
-import java.util.*;
-import org.xml.sax.*;
-import org.wandora.topicmap.*;
+import java.util.HashMap;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 
 

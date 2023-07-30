@@ -27,24 +27,34 @@
 
 package org.wandora.application.contexts;
 
-import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
-import org.wandora.application.gui.tree.TopicTreePanel;
-import org.wandora.application.gui.tree.TopicTree;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.table.JTableHeader;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.LayerTree;
+import org.wandora.application.gui.OccurrenceTable;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.simple.TopicLinkBasename;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.application.gui.table.SITable;
-import org.wandora.application.gui.table.TopicTable;
-import org.wandora.application.gui.topicpanels.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.TopicLinkBasename;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-
-import java.util.*;
-import java.awt.event.*;
-import javax.swing.table.*;
 import org.wandora.application.gui.table.TopicGrid;
+import org.wandora.application.gui.table.TopicTable;
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
+import org.wandora.application.gui.topicpanels.GraphTopicPanel;
 import org.wandora.application.gui.topicpanels.webview.WebViewPanel;
+import org.wandora.application.gui.tree.TopicTree;
+import org.wandora.application.gui.tree.TopicTreePanel;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.layered.Layer;
 
 
 /**

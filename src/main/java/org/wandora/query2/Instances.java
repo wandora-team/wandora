@@ -27,8 +27,12 @@
  */
 package org.wandora.query2;
 
-import java.util.*;
-import org.wandora.topicmap.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 /**
  *
  * @author olli

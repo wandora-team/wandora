@@ -28,11 +28,19 @@
 package org.wandora.utils;
 
 
-import java.util.*;
-import java.awt.*;
-import java.io.*;
-import javax.swing.text.rtf.*;
-import javax.swing.text.*;
+import java.awt.Color;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.rtf.RTFEditorKit;
 
 
 

@@ -26,6 +26,7 @@ package org.wandora.application.tools.extractors.csv;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;

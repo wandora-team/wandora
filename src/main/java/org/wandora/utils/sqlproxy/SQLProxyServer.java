@@ -28,17 +28,31 @@
  */
 
 package org.wandora.utils.sqlproxy;
-import java.sql.*;
-import java.util.*;
+import static org.wandora.utils.Tuples.t4;
 
-import java.io.*;
-import java.net.*;
-import javax.net.ssl.*;
-import javax.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.HashMap;
+import java.util.zip.GZIPOutputStream;
 
-import java.util.zip.*;
+import javax.net.ssl.SSLServerSocketFactory;
 
-import static org.wandora.utils.Tuples.*;
+import org.wandora.utils.Tuples.T4;
 
 /**
  *

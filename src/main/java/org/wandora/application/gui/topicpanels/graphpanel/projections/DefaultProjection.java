@@ -28,11 +28,15 @@
 package org.wandora.application.gui.topicpanels.graphpanel.projections;
 
 
+import static org.wandora.utils.Tuples.t2;
+
+import java.awt.Graphics2D;
+
+import javax.swing.Icon;
+
+import org.wandora.application.gui.UIBox;
 import org.wandora.utils.Options;
-import org.wandora.application.gui.*;
-import static org.wandora.utils.Tuples.*;
-import java.awt.*;
-import javax.swing.*;
+import org.wandora.utils.Tuples.T2;
 
 
 /**

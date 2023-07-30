@@ -26,12 +26,17 @@
  *
  */
 package org.wandora.query2;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.wandora.query2.DirectiveUIHints.Addon;
 import org.wandora.query2.DirectiveUIHints.Constructor;
 import org.wandora.query2.DirectiveUIHints.Parameter;
-import org.wandora.topicmap.*;
-import static org.wandora.utils.Tuples.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 /**
  *
  * @author olli

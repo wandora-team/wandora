@@ -31,8 +31,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
-import org.wandora.application.gui.UIConstants;
 
 /**
  *

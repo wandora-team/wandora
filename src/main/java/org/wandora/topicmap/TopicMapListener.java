@@ -27,7 +27,7 @@
  */
 
 package org.wandora.topicmap;
-import java.util.*;
+import java.util.Collection;
 /**
  * A listener for various changes in a topic map.
  *

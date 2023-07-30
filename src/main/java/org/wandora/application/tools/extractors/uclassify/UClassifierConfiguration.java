@@ -28,11 +28,13 @@ package org.wandora.application.tools.extractors.uclassify;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import javax.swing.JDialog;
 import javax.swing.RowSorter;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;

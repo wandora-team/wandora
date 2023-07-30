@@ -28,8 +28,10 @@
 package org.wandora.application.gui.topicpanels.graphpanel;
 
 
-import java.util.*;
-import org.wandora.topicmap.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.wandora.topicmap.Topic;
 
 
 /**

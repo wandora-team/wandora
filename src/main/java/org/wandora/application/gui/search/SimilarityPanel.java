@@ -33,13 +33,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Set;
+
 import javax.swing.table.DefaultTableModel;
+
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -49,13 +47,13 @@ import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.gui.table.TopicTable;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapSearchOptions;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples;
+
 import uk.ac.shef.wit.simmetrics.similaritymetrics.BlockDistance;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.CosineSimilarity;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;

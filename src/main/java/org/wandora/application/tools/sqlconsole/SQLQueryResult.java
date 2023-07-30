@@ -27,8 +27,13 @@
 package org.wandora.application.tools.sqlconsole;
 
 
-import java.util.*;
 import java.io.StringWriter;
+import java.util.Collection;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 /**
  *
  * @author  olli

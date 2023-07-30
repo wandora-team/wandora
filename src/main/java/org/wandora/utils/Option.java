@@ -23,7 +23,10 @@ package org.wandora.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import static org.wandora.utils.Functional.*;
+
+import org.wandora.utils.Functional.Fn0;
+import org.wandora.utils.Functional.Fn1;
+import org.wandora.utils.Functional.Pr1;
 
 /**
  * Use Option&lt;T&gt; instead of T as a function return or argument type to

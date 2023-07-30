@@ -28,7 +28,9 @@ package org.wandora.application.tools.extractors.yahoo.yql;
 
 import java.io.InputStream;
 import java.net.URLEncoder;
+
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.gui.UIBox;

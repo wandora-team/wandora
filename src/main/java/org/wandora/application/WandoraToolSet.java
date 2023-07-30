@@ -28,11 +28,19 @@
 
 package org.wandora.application;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.utils.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JMenu;
+import javax.swing.JSeparator;
+
+import org.wandora.application.gui.simple.SimpleMenu;
+import org.wandora.application.gui.simple.SimpleMenuItem;
+import org.wandora.utils.Textbox;
 
 
 

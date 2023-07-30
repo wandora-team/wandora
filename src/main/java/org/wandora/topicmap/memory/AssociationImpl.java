@@ -28,8 +28,20 @@
 
 
 package org.wandora.topicmap.memory;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
 
 /**
  * TODO: maybe we should check for duplicate associations when modifying association and throw an exception if found

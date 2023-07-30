@@ -29,12 +29,15 @@ package org.wandora.application.tools.layers;
 
 
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.topicmap.layered.*;
-import javax.swing.*;
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.layered.ContainerTopicMap;
+import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 

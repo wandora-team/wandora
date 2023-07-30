@@ -21,8 +21,15 @@
  */
 
 package org.wandora.topicmap.linked;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
 
 /**
  *

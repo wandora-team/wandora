@@ -28,8 +28,10 @@
 package org.wandora.application.gui.table;
 
 
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
+
 import org.wandora.utils.swing.TableSorter;
-import javax.swing.table.*;
 
 /**
  *

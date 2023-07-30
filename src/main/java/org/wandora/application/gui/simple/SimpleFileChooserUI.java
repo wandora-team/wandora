@@ -24,9 +24,7 @@
 
 package org.wandora.application.gui.simple;
 
-import javax.swing.Icon;
 import javax.swing.JFileChooser;
-import javax.swing.plaf.basic.BasicFileChooserUI;
 import javax.swing.plaf.metal.MetalFileChooserUI;
 
 /**

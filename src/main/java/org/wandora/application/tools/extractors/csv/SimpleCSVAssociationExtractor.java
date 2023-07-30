@@ -26,6 +26,7 @@ package org.wandora.application.tools.extractors.csv;
 
 
 import javax.swing.Icon;
+
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;

@@ -26,30 +26,38 @@
  */
 
 package org.wandora.application.gui.topicpanels.custompanel;
+import static java.awt.event.KeyEvent.VK_F5;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.dnd.DnDConstants;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.KeyStroke;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeWillExpandListener;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.ExpandVetoException;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraScriptManager;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.texteditor.TextEditor;
 import org.wandora.application.gui.topicpanels.CustomTopicPanel;
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.gui.*;
+import org.wandora.application.gui.topicpanels.CustomTopicPanel.QueryGroupInfo;
+import org.wandora.application.gui.topicpanels.CustomTopicPanel.QueryInfo;
 import org.wandora.utils.swing.DragJTree;
-import javax.swing.*;
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.util.*;
-import java.awt.dnd.DnDConstants;
-
-import static org.wandora.application.gui.topicpanels.CustomTopicPanel.QueryGroupInfo;
-import static org.wandora.application.gui.topicpanels.CustomTopicPanel.QueryInfo;
-
-
-import static java.awt.event.KeyEvent.*;
-import static java.awt.event.InputEvent.*;
-//import jsyntaxpane.DefaultSyntaxKit;
-import de.sciss.syntaxpane.DefaultSyntaxKit;
-import javax.script.ScriptEngine;
 /**
  *
  * @author  olli

@@ -28,7 +28,7 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Topic;
 /**
  *
  * This is the interface for topic selectors. Topic selectors are used to select

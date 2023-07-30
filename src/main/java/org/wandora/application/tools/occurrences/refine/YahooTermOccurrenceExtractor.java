@@ -28,6 +28,7 @@ package org.wandora.application.tools.occurrences.refine;
 
 import java.io.StringReader;
 import java.net.URL;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract;

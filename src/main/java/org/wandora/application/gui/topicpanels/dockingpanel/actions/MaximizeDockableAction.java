@@ -22,11 +22,11 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel.actions;
 
-import bibliothek.gui.Dockable;
-import bibliothek.gui.dock.action.actions.SimpleButtonAction;
-import bibliothek.gui.dock.station.split.SplitFullScreenAction;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+
+import bibliothek.gui.Dockable;
+import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 /**
  *

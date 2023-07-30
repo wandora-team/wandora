@@ -29,19 +29,21 @@ package org.wandora.application.gui.simple;
 
 
 
-import java.util.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.regex.*;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import org.wandora.utils.*;
-import org.wandora.application.*;
-import org.wandora.utils.EasyVector;
-import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.*;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIConstants;
 
 /**
  *

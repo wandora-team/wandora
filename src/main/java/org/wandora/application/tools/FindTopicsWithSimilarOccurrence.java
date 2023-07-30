@@ -25,14 +25,21 @@
 package org.wandora.application.tools;
 
 
-import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
-import org.wandora.application.gui.search.SearchTopicsResults;
-import org.wandora.topicmap.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
-import uk.ac.shef.wit.simmetrics.similaritymetrics.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.search.SearchTopicsResults;
+import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+
+import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
 
 /**

@@ -31,17 +31,32 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import static org.wandora.utils.Tuples.*;
-import javax.swing.*;
-import java.awt.*;
+import static org.wandora.utils.Tuples.t2;
+
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.TransferHandler;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleMenuItem;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 
 
 

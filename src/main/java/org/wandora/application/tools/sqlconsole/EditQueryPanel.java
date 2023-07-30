@@ -26,7 +26,7 @@
 
 package org.wandora.application.tools.sqlconsole;
 
-import java.util.*;
+import java.util.HashMap;
 /**
  *
  * @author  olli

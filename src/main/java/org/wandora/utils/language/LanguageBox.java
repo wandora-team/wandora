@@ -28,6 +28,7 @@ package org.wandora.utils.language;
 
 
 import java.util.HashMap;
+
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;

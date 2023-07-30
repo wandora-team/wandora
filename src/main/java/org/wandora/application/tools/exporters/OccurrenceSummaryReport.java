@@ -28,7 +28,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -36,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;

@@ -28,16 +28,26 @@
 package org.wandora.application.tools.extractors;
 
 
-import org.wandora.application.gui.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Hashtable;
 
+import javax.swing.Icon;
 
-
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import javax.swing.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.UIBox;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicTools;
 
 
 

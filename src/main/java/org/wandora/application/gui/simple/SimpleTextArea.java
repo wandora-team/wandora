@@ -23,9 +23,11 @@
 
 package org.wandora.application.gui.simple;
 
-import java.awt.*;
-import javax.swing.*;
-import org.wandora.application.gui.*;
+import java.awt.Graphics;
+
+import javax.swing.JTextArea;
+
+import org.wandora.application.gui.UIConstants;
 
 /**
  *

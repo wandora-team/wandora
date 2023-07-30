@@ -28,13 +28,19 @@
 package org.wandora.application.contexts;
 
 
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import org.wandora.application.gui.topicpanels.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import java.util.*;
-import java.awt.event.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.topicpanels.DockingFramePanel;
+import org.wandora.application.gui.topicpanels.GraphTopicPanel;
+import org.wandora.application.gui.topicpanels.TopicPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.VEdge;
 
 
 /**

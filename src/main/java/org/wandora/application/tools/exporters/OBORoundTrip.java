@@ -23,17 +23,26 @@
 
 package org.wandora.application.tools.exporters;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.WandoraToolType;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.application.tools.importers.OBO;
+import org.wandora.application.tools.importers.OBOConfiguration;
+import org.wandora.application.tools.importers.OBOImport;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
-import org.wandora.application.contexts.*;
-import org.wandora.application.tools.*;
-import org.wandora.application.tools.importers.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import java.io.*;
-import java.util.*;
-import org.wandora.application.gui.simple.*;
-import javax.swing.*;
 
 
 /**

@@ -26,6 +26,7 @@ package org.wandora.application.gui.simple;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.net.URI;
+
 import org.wandora.application.gui.UIBox;
 import org.wandora.utils.DataURL;
 

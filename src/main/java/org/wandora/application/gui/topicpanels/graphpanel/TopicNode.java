@@ -27,11 +27,15 @@
 
 package org.wandora.application.gui.topicpanels.graphpanel;
 
-import java.awt.Color;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
+
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.topicmap.*;
-import static org.wandora.utils.Tuples.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 
 /**
  *

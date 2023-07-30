@@ -29,9 +29,10 @@ package org.wandora.application.gui.topicpanels.graphpanel.projections;
 
 
 
-import static org.wandora.utils.Tuples.*;
-import org.wandora.utils.*;
-import javax.swing.*;
+import javax.swing.Icon;
+
+import org.wandora.utils.Options;
+import org.wandora.utils.Tuples.T2;
 
 
 /**

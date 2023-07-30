@@ -4,12 +4,14 @@
  */
 
 package org.wandora.utils;
-import org.wandora.utils.Tuples.T2;
+import static org.wandora.utils.Tuples.t2;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import static org.wandora.utils.Tuples.t2;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.wandora.utils.Tuples.T2;
 /**
  * Provides a list of objects, primarily intended for listeners, and a way to
  * invoke a method in all the registered listeners, that is fire an event.

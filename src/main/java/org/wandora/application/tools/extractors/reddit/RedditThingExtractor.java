@@ -22,19 +22,22 @@
 
 package org.wandora.application.tools.extractors.reddit;
 
-import com.mashape.unirest.http.*;
-import org.json.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.apache.commons.io.IOUtils;
-import org.wandora.topicmap.TopicMap;
-
-
 import java.util.HashMap;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 
 /**
  *

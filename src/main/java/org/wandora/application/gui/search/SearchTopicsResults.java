@@ -27,14 +27,14 @@
 package org.wandora.application.gui.search;
 
 
-import org.wandora.application.gui.table.MixedTopicTable;
+import java.awt.BorderLayout;
+import java.util.Collection;
 
+import javax.swing.JScrollPane;
 
-import java.util.*;
-import org.wandora.application.*;
-import java.awt.*;
-import javax.swing.*;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.table.MixedTopicTable;
 
 
 /**

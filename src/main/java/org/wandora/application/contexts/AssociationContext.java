@@ -29,11 +29,16 @@ package org.wandora.application.contexts;
 
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.wandora.application.gui.simple.AssociationTypeLinkBasename;
 import org.wandora.application.gui.table.AssociationTable;
-import org.wandora.application.gui.topicpanels.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.topicmap.*;
-import java.util.*;
+import org.wandora.application.gui.topicpanels.GraphTopicPanel;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
 
 
 

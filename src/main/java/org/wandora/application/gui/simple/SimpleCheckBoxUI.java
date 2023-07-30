@@ -28,16 +28,12 @@
 package org.wandora.application.gui.simple;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+
 import javax.swing.AbstractButton;
-import javax.swing.ButtonModel;
 import javax.swing.JComponent;
-import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicCheckBoxUI;
-import javax.swing.plaf.metal.MetalButtonUI;
 
 /**
  *

@@ -26,6 +26,7 @@ package org.wandora.application.gui.simple;
 
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+
 import javax.swing.JSlider;
 
 /**

@@ -27,8 +27,8 @@
 
 package org.wandora.application.tools;
 
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 /**
  *

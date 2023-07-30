@@ -28,13 +28,18 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.utils.*;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
+import javax.swing.JSeparator;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapStatOptions;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.utils.ClipboardBox;
 
 
 /**

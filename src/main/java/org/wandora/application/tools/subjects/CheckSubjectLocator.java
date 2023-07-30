@@ -28,16 +28,21 @@ package org.wandora.application.tools.subjects;
 
 
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import java.io.File;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Iterator;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.DataURL;
+import org.wandora.utils.IObox;
 
 
 

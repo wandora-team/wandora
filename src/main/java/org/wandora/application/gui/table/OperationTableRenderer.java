@@ -29,9 +29,11 @@ package org.wandora.application.gui.table;
 
 import java.awt.Color;
 import java.awt.Component;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+
 import org.wandora.application.gui.UIConstants;
 
 

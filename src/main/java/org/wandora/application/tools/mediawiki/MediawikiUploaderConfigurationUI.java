@@ -28,7 +28,9 @@
 package org.wandora.application.tools.mediawiki;
 
 import java.awt.event.KeyEvent;
+
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.simple.SimpleButton;

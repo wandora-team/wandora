@@ -29,15 +29,22 @@ package org.wandora.application.tools.subjects;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.tools.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
+import java.awt.Desktop;
+import java.net.URI;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
-import java.util.*;
-import java.awt.*;
-import java.net.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.LayeredTopicContext;
+import org.wandora.application.contexts.SIContext;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
 
 
 /**

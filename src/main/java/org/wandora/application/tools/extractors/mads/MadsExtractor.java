@@ -26,16 +26,27 @@
 package org.wandora.application.tools.extractors.mads;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.utils.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLEncoder;
 
-import java.io.*;
-import java.net.*;
-import javax.swing.*;
+import javax.swing.Icon;
 
-import org.xml.sax.*;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.IObox;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 /**
  *

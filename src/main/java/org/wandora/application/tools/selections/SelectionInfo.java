@@ -28,15 +28,18 @@
 package org.wandora.application.tools.selections;
 
 
-import org.wandora.application.gui.table.TopicTable;
 import javax.swing.ListSelectionModel;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import org.wandora.application.*;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.table.AssociationTable;
 import org.wandora.application.gui.table.ClassTable;
 import org.wandora.application.gui.table.InstanceTable;
 import org.wandora.application.gui.table.SITable;
 import org.wandora.application.gui.table.TopicGrid;
+import org.wandora.application.gui.table.TopicTable;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.VModel;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.tree.TopicTreeModel;

@@ -23,11 +23,11 @@
 
 package org.wandora.utils;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Uses a system-specific copy command provided in wandora's config with the name "copycommand"

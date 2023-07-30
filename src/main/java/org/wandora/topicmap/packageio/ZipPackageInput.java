@@ -31,10 +31,15 @@
 
 package org.wandora.topicmap.packageio;
 
-import java.util.zip.*;
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * <p>

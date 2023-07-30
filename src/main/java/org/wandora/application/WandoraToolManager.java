@@ -29,27 +29,44 @@
 package org.wandora.application;
 
 
-import org.wandora.utils.Options;
-import org.wandora.utils.IObox;
-import org.wandora.utils.Textbox;
-import org.wandora.application.tools.AbstractWandoraTool;
-import javax.swing.*;
-import java.util.*;
-import java.awt.event.*;
-import java.net.*;
-import java.io.*;
+import static org.wandora.utils.Tuples.t2;
 
-import org.wandora.utils.*;
-import static org.wandora.utils.Tuples.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.tools.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Vector;
 
+import javax.swing.JDialog;
+import javax.swing.JMenu;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
+
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleMenuItem;
-
-import org.wandora.application.tools.importers.*;
-import org.wandora.application.tools.project.*;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.application.tools.ClearToolLocks;
+import org.wandora.application.tools.importers.OBOImport;
+import org.wandora.application.tools.importers.SimpleN3Import;
+import org.wandora.application.tools.importers.SimpleRDFImport;
+import org.wandora.application.tools.importers.SimpleRDFJsonLDImport;
+import org.wandora.application.tools.importers.SimpleRDFTurtleImport;
+import org.wandora.application.tools.importers.TopicMapImport;
+import org.wandora.application.tools.project.LoadWandoraProject;
+import org.wandora.application.tools.project.MergeWandoraProject;
+import org.wandora.utils.GripCollections;
+import org.wandora.utils.IObox;
+import org.wandora.utils.Options;
+import org.wandora.utils.Textbox;
+import org.wandora.utils.Tuples.T2;
 
 /**
  * WandoraToolManager implements Wandora's Tool Manager. Tool Manager is

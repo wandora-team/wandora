@@ -29,7 +29,7 @@
 package org.wandora.utils;
 
 
-import java.util.regex.*;
+import java.util.regex.Pattern;
 
 
 /**

@@ -4,7 +4,6 @@ package org.wandora.application.gui.topicpanels.graph3d;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 /**
  *

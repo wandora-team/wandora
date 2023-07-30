@@ -25,8 +25,9 @@
 
 package org.wandora.application.gui.simple;
 
-import java.awt.*;
-import org.wandora.application.gui.*;
+import java.awt.Menu;
+
+import org.wandora.application.gui.UIConstants;
 
 
 

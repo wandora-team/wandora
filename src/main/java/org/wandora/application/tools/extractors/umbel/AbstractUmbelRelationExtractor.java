@@ -26,8 +26,8 @@ package org.wandora.application.tools.extractors.umbel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import org.json.JSONObject;
 
+import org.json.JSONObject;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;

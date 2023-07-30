@@ -28,20 +28,39 @@
 package org.wandora.application.gui.topicpanels;
 
 
-import javax.swing.*;
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.wandora.utils.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+
+import org.wandora.application.CancelledException;
+import org.wandora.application.RefreshListener;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.EditorPanel;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleMenuItem;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
+import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.topicmap.TopicTools;
+import org.wandora.utils.Options;
 
 
 

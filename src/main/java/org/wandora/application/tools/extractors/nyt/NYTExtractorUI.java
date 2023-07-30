@@ -28,19 +28,21 @@ package org.wandora.application.tools.extractors.nyt;
 import java.awt.Component;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+
 import javax.swing.JDialog;
 import javax.swing.ListModel;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleList;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
-import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.topicmap.TopicMapException;
 
 /**

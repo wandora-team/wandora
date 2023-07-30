@@ -28,9 +28,15 @@
 package org.wandora.application.gui.topicpanels.graphpanel;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 /**

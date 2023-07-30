@@ -24,16 +24,20 @@
 package org.wandora.application.tools.extractors.gate;
 
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
-import gate.*;
-import gate.corpora.DocumentContentImpl;
-import gate.corpora.DocumentImpl;
-import gate.util.*;
-import gate.util.persistence.PersistenceManager;
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -47,6 +51,20 @@ import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.XMLbox;
+
+import gate.Annotation;
+import gate.AnnotationSet;
+import gate.Corpus;
+import gate.CorpusController;
+import gate.Document;
+import gate.DocumentContent;
+import gate.Factory;
+import gate.FeatureMap;
+import gate.Gate;
+import gate.corpora.DocumentContentImpl;
+import gate.corpora.DocumentImpl;
+import gate.util.GateException;
+import gate.util.persistence.PersistenceManager;
 
 
 /**

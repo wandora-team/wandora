@@ -28,13 +28,15 @@
 
 package org.wandora.application.gui.topicpanels.elements;
 
+import java.awt.GridBagConstraints;
+import java.util.HashSet;
+
+import javax.swing.JPanel;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.table.ClassTable;
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
 
 
 /**

@@ -29,20 +29,70 @@ package org.wandora.application.gui.topicpanels;
 
 
 
-import org.wandora.application.tools.graph.*;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import org.wandora.utils.*;
-import javax.swing.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.net.URL;
-import org.wandora.application.gui.topicstringify.TopicToString;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.StringTokenizer;
 
-import org.wandora.topicmap.*;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+import javax.swing.Scrollable;
+
+import org.wandora.application.CancelledException;
+import org.wandora.application.LocatorHistory;
+import org.wandora.application.RefreshListener;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.Clipboardable;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleComponent;
+import org.wandora.application.gui.simple.SimpleToggleButton;
+import org.wandora.application.gui.topicpanels.graphpanel.AssociationEdge;
+import org.wandora.application.gui.topicpanels.graphpanel.Edge;
+import org.wandora.application.gui.topicpanels.graphpanel.FilterManagerPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.Node;
+import org.wandora.application.gui.topicpanels.graphpanel.OccurrenceNode;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicNode;
+import org.wandora.application.gui.topicpanels.graphpanel.VEdge;
+import org.wandora.application.gui.topicpanels.graphpanel.VModel;
+import org.wandora.application.gui.topicpanels.graphpanel.VNode;
+import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.tools.graph.CenterCurrentTopic;
+import org.wandora.application.tools.graph.ChangeCurvature;
+import org.wandora.application.tools.graph.ChangeFramerate;
+import org.wandora.application.tools.graph.ChangeNodeMass;
+import org.wandora.application.tools.graph.ChangeScale;
+import org.wandora.application.tools.graph.ChangeStiffness;
+import org.wandora.application.tools.graph.SetMouseTool;
+import org.wandora.application.tools.graph.ToggleProjectionSettings;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.Options;
 
 
 /**

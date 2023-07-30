@@ -27,9 +27,17 @@
 
 package org.wandora.application.gui.topicpanels.graphpanel;
 
-import org.wandora.topicmap.*;
-import java.util.*;
-import static org.wandora.utils.Tuples.*;
+import static org.wandora.utils.Tuples.t2;
+
+import java.util.Collection;
+import java.util.HashMap;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicHashMap;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 
 
 /**

@@ -27,7 +27,7 @@
  */
 
 package org.wandora.utils;
-import java.util.*;
+import java.util.Map;
 
 /**
  * A simple class that implements java.util.Map.Entry. Needed to make own

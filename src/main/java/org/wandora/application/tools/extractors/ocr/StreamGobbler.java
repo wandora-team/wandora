@@ -4,8 +4,10 @@ package org.wandora.application.tools.extractors.ocr;
 /**
  *http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html?page=4
  */
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 class StreamGobbler extends Thread {
 

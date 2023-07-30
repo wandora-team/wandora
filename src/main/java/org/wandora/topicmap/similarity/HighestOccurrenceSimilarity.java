@@ -23,7 +23,9 @@
 package org.wandora.topicmap.similarity;
 
 import java.util.Hashtable;
+
 import org.wandora.topicmap.Topic;
+
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 

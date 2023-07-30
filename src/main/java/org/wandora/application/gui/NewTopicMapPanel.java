@@ -28,10 +28,14 @@ package org.wandora.application.gui;
 
 
 import java.awt.event.KeyEvent;
-import org.wandora.utils.Delegate;
-import org.wandora.topicmap.*;
+
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.utils.Delegate;
 import org.wandora.utils.Options;
 
 

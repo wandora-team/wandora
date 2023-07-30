@@ -28,12 +28,18 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
+import static org.wandora.utils.Tuples.t2;
 
-import static org.wandora.utils.Tuples.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.topicmap.SchemaBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 
 /**
  *

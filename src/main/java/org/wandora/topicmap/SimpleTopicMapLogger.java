@@ -21,7 +21,7 @@
  */
 
 package org.wandora.topicmap;
-import java.io.*;
+import java.io.PrintStream;
 /**
  *
  * @author olli

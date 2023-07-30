@@ -22,21 +22,24 @@
 
 package org.wandora.application.tools.server;
 
-import org.wandora.application.tools.*;
-import org.wandora.application.contexts.*;
-import org.wandora.topicmap.*;
+import java.awt.Desktop;
+import java.net.URI;
+import java.util.Map;
+
+import javax.swing.Icon;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import java.net.*;
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
-
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.topicpanels.webview.WebViewPanel;
 import org.wandora.application.modulesserver.ModulesWebApp;
 import org.wandora.application.modulesserver.WandoraModulesServer;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.application.tools.GenericOptionsDialog;
+import org.wandora.topicmap.TopicMapException;
 
 
 /**

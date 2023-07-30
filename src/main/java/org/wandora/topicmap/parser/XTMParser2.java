@@ -24,7 +24,14 @@ package org.wandora.topicmap.parser;
 
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Stack;
+
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -34,7 +41,9 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapLogger;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Options;
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 
 

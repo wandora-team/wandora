@@ -28,9 +28,11 @@
 package org.wandora.application.tools.graph.pinning;
 
 
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import org.wandora.application.tools.graph.*;
-import java.util.*;
+import java.util.Iterator;
+
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.VNode;
+import org.wandora.application.tools.graph.AbstractGraphTool;
 
 /**
  *

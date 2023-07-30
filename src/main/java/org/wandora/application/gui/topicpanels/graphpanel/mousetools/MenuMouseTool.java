@@ -27,8 +27,13 @@
 
 package org.wandora.application.gui.topicpanels.graphpanel.mousetools;
 
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import javax.swing.*;
+import javax.swing.JPopupMenu;
+
+import org.wandora.application.gui.topicpanels.graphpanel.MouseTool;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.VEdge;
+import org.wandora.application.gui.topicpanels.graphpanel.VModel;
+import org.wandora.application.gui.topicpanels.graphpanel.VNode;
 
 /**
  *

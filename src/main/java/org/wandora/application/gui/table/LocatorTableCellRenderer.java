@@ -30,12 +30,15 @@ package org.wandora.application.gui.table;
 
 
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.table.*;
-import org.wandora.application.gui.UIConstants;
+import java.awt.Color;
+import java.awt.Component;
 
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+
+import org.wandora.application.gui.UIConstants;
 import org.wandora.topicmap.Locator;
 import org.wandora.utils.DataURL;
 

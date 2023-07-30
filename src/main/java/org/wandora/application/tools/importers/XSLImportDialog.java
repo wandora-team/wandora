@@ -28,12 +28,15 @@ package org.wandora.application.tools.importers;
 
 
 
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.utils.*;
+import java.io.File;
 
-import java.io.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.utils.Options;
 
 
 /**

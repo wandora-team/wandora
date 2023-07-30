@@ -24,18 +24,33 @@
 package org.wandora.application.tools;
 
 
-import org.wandora.topicmap.diff.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import static org.wandora.topicmap.diff.TopicMapDiff.*;
-import org.wandora.utils.swing.GuiTools;
+import static org.wandora.topicmap.diff.TopicMapDiff.openFile;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+
+import javax.swing.Icon;
+import javax.swing.JDialog;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.diff.PatchDiffParser;
+import org.wandora.topicmap.diff.TopicMapDiff;
+import org.wandora.topicmap.diff.TopicMapDiff.DiffEntry;
+import org.wandora.topicmap.diff.TopicMapDiff.PatchException;
+import org.wandora.topicmap.diff.TopicMapDiff.PatchExceptionHandler;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.utils.swing.GuiTools;
 
 
 /**

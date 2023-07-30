@@ -23,22 +23,13 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel;
 
-import bibliothek.gui.DockController;
-import bibliothek.gui.dock.action.MultiDockActionSource;
-import bibliothek.gui.dock.facile.action.CloseAction;
-import bibliothek.gui.dock.facile.mode.ExternalizedMode;
-import bibliothek.gui.dock.facile.mode.MinimizedMode;
-import bibliothek.gui.dock.facile.mode.action.ExternalizedModeAction;
-import bibliothek.gui.dock.facile.mode.action.MinimizedModeAction;
-import javax.swing.JMenu;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.gui.topicpanels.dockingpanel.actions.CloseDockableAction;
 import org.wandora.application.gui.topicpanels.dockingpanel.actions.MaximizeDockableAction;
-import org.wandora.application.gui.topicpanels.dockingpanel.actions.TopicPanelMenuAction;
-import org.wandora.application.gui.topicpanels.dockingpanel.actions.WandoraToolWrapperAction;
-import org.wandora.application.tools.AboutWandora;
-import org.wandora.application.tools.navigate.OpenTopic;
+
+import bibliothek.gui.DockController;
+import bibliothek.gui.dock.action.MultiDockActionSource;
 
 /**
  *

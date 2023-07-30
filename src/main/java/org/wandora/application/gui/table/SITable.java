@@ -27,10 +27,13 @@
 package org.wandora.application.gui.table;
 
 
-import org.wandora.topicmap.*;
-import java.awt.*;
+import java.awt.Color;
 
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraMenuManager;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 /**

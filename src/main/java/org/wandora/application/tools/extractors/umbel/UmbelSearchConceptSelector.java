@@ -27,12 +27,14 @@ package org.wandora.application.tools.extractors.umbel;
 
 import java.awt.Cursor;
 import java.util.ArrayList;
+
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;

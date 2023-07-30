@@ -23,26 +23,22 @@
 package org.wandora.application;
 
 
-import org.wandora.application.tools.browserextractors.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.net.URLDecoder;
+import java.util.Collection;
+import java.util.Properties;
 
-import org.wandora.utils.Options;
-import org.wandora.utils.XMLbox;
-
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-
-import org.wandora.topicmap.*;
-import org.wandora.utils.velocity.*;
-import org.wandora.application.gui.UIBox;
-import org.wandora.utils.Base64;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.http.MimeTypes;
 import org.eclipse.jetty.server.ConnectionFactory;
 import org.eclipse.jetty.server.Connector;
@@ -53,7 +49,23 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
+import org.wandora.application.tools.browserextractors.BrowserExtractorManager;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.utils.Base64;
+import org.wandora.utils.Options;
+import org.wandora.utils.XMLbox;
+import org.wandora.utils.velocity.InstanceMaker;
+import org.wandora.utils.velocity.JavaScriptEncoder;
+import org.wandora.utils.velocity.TextBox;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 /**

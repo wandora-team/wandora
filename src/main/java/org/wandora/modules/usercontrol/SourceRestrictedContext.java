@@ -21,16 +21,17 @@
  */
 package org.wandora.modules.usercontrol;
 
-import org.wandora.modules.servlet.GenericContext;
 import java.io.IOException;
 import java.util.Map;
+
+import org.wandora.modules.ModuleException;
+import org.wandora.modules.ModuleManager;
+import org.wandora.modules.servlet.GenericContext;
+import org.wandora.modules.servlet.ModulesServlet.HttpMethod;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.wandora.modules.ModuleException;
-import org.wandora.modules.ModuleManager;
-import org.wandora.modules.servlet.ModulesServlet.HttpMethod;
 
 /**
  * A context which restricts access to the source IP address. The allowed

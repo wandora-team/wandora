@@ -30,8 +30,10 @@ package org.wandora.utils.swing;
 
 
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Window;
+
+import javax.swing.JViewport;
 /**
  *
  * @author olli

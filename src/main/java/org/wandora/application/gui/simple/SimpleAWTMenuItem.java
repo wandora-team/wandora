@@ -26,9 +26,10 @@
 package org.wandora.application.gui.simple;
 
 
-import java.awt.*;
+import java.awt.MenuItem;
 import java.awt.event.ActionListener;
-import org.wandora.application.gui.*;
+
+import org.wandora.application.gui.UIConstants;
 
 
 

@@ -29,10 +29,12 @@ package org.wandora.application.gui.simple;
 
 
 
-import java.awt.Dimension;
-import org.wandora.topicmap.*;
-import java.awt.event.*;
-import org.wandora.application.*;
+import java.awt.event.MouseEvent;
+
+import org.wandora.application.Wandora;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 

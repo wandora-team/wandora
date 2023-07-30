@@ -29,14 +29,33 @@
 package org.wandora.topicmap;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
+import org.wandora.topicmap.parser.JTMParser;
+import org.wandora.topicmap.parser.LTMParser;
 import org.wandora.topicmap.parser.XTMAdaptiveParser;
-import java.util.*;
-import java.io.*;
-
-
-import org.xml.sax.*;
 import org.wandora.utils.Tuples.T2;
-import org.wandora.topicmap.parser.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 
 /**

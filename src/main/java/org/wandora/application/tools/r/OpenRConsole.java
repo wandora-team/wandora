@@ -26,6 +26,7 @@ package org.wandora.application.tools.r;
 
 import javax.swing.Icon;
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;

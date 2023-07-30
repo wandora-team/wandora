@@ -23,13 +23,25 @@
 
 package org.wandora.application.tools.extractors;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  * Extractor takes text as input and transforms sentences to associations where

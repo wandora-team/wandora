@@ -27,7 +27,9 @@
  */
 
 package org.wandora.utils;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 /**
  * 09.05.2014 AK: Commented method boolean remove(K key, V value)
  * 20.08.2011 AK: Commented method Collection<V> get(K key)

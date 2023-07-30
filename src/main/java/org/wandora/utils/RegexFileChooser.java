@@ -27,9 +27,10 @@
  */
 
 package org.wandora.utils;
-import java.io.*;
+import java.io.File;
+import java.util.regex.Pattern;
+
 import javax.swing.filechooser.FileFilter;
-import java.util.regex.*;
 /**
  *
  * @author olli

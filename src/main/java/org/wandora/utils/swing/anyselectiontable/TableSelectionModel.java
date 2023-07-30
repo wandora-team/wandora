@@ -25,15 +25,19 @@ package org.wandora.utils.swing.anyselectiontable;
 
 
 
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
-
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
-import javax.swing.ListSelectionModel;
+
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import javax.swing.event.*;
 
 /**
   * This class represents the current state of the selection of

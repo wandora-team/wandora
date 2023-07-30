@@ -27,18 +27,31 @@
 package org.wandora.application.tools.exporters;
 
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import javax.swing.Icon;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.*; 
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.WandoraToolLogger;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.similarity.TopicSimilarity;
+import org.wandora.utils.IObox;
 
 /**
  *

@@ -28,10 +28,13 @@
 
 package org.wandora.application.tools.som;
 
-import java.util.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import static org.wandora.utils.Tuples.T3;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+
+import org.wandora.application.WandoraTool;
+import org.wandora.topicmap.Topic;
+import org.wandora.utils.Tuples.T3;
 
 
 /**

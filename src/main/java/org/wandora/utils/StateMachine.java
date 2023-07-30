@@ -26,7 +26,7 @@
 package org.wandora.utils;
 
 
-import java.util.*;
+import java.util.Vector;
 
 
 public class StateMachine extends Object {

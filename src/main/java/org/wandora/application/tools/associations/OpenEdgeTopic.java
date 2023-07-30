@@ -24,13 +24,22 @@
 package org.wandora.application.tools.associations;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.AssociationContext;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.table.AssociationTable;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.contexts.*;
-import java.util.*;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicTools;
 
 
 

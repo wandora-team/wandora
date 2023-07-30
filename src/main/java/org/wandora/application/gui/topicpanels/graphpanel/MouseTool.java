@@ -29,7 +29,8 @@ package org.wandora.application.gui.topicpanels.graphpanel;
 
 
 
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
 
 
 /**

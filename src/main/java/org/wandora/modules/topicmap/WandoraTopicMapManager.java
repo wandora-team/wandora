@@ -24,13 +24,13 @@ package org.wandora.modules.topicmap;
 import java.util.Collection;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.wandora.application.Wandora;
 import org.wandora.modules.AbstractModule;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.ListenerList;
 
 /**

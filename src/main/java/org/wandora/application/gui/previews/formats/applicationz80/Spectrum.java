@@ -9,11 +9,11 @@
  */
 package org.wandora.application.gui.previews.formats.applicationz80;
 
-import java.awt.image.ImageProducer;
-import java.awt.image.ImageConsumer;
-import java.awt.image.ColorModel;
-import java.awt.image.IndexColorModel;
 import java.awt.event.KeyEvent;
+import java.awt.image.ColorModel;
+import java.awt.image.ImageConsumer;
+import java.awt.image.ImageProducer;
+import java.awt.image.IndexColorModel;
 import java.util.Vector;
 
 public class Spectrum extends Thread implements Z80.Env, ImageProducer {

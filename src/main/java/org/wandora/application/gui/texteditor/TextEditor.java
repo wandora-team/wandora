@@ -29,29 +29,27 @@ package org.wandora.application.gui.texteditor;
 
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.KeyStroke;
-import javax.swing.Icon;
-import javax.swing.JDialog;
-import javax.swing.JComponent;
 
 import org.wandora.application.Wandora;
-
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
-import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleScrollPane;
-
-import org.wandora.utils.Options;
+import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.utils.HTMLEntitiesCoder;
+import org.wandora.utils.Options;
 import org.wandora.utils.XMLbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

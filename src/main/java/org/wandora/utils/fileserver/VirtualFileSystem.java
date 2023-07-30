@@ -28,7 +28,7 @@
  */
 
 package org.wandora.utils.fileserver;
-import java.io.*;
+import java.io.File;
 /**
  *
  * A virtual file system is like a file system with directories which contain

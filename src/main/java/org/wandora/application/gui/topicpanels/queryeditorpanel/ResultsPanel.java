@@ -25,7 +25,9 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.util.ArrayList;
+
 import javax.swing.JComponent;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.GetTopicButton;
 import org.wandora.application.gui.UIBox;

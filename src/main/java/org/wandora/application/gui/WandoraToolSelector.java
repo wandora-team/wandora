@@ -28,9 +28,11 @@
 package org.wandora.application.gui;
 
 
-import java.util.*;
-import org.wandora.application.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
 
 
 /**

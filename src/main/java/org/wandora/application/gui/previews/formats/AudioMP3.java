@@ -29,20 +29,31 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
-import java.net.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
-import javax.sound.sampled.*;
-import javax.swing.*;
-import javazoom.jl.player.Player;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.previews.*;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+
+import javazoom.jl.player.Player;
 
 
 /**

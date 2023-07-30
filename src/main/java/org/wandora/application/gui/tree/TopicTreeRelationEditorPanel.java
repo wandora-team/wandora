@@ -31,14 +31,20 @@ package org.wandora.application.gui.tree;
 
 
 
-import org.wandora.application.gui.tree.TopicTreeConfigPanel;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.swing.ImageIcon;
-import java.util.*;
-import java.net.*;
-import org.wandora.topicmap.TopicMapException;
-import org.wandora.application.gui.simple.*;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.GetTopicButton;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 
 

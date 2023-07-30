@@ -28,16 +28,18 @@
 package org.wandora.application.tools.selections;
 
 
+import java.awt.Component;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.table.SITable;
-import org.wandora.application.gui.table.TopicTable;
-import org.wandora.application.tools.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.topicpanels.*;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import java.awt.*;
 import org.wandora.application.gui.table.TopicGrid;
+import org.wandora.application.gui.table.TopicTable;
+import org.wandora.application.gui.topicpanels.GraphTopicPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 import org.wandora.application.gui.tree.TopicTree;
+import org.wandora.application.tools.AbstractWandoraTool;
 
 
 

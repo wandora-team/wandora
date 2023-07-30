@@ -27,15 +27,31 @@
 
 package org.wandora.application.tools.extractors.bibtex;
 
-import org.wandora.utils.GripCollections;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.TMBox;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicTools;
+import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.GripCollections;
 
 
 

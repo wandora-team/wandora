@@ -26,11 +26,16 @@ package org.wandora.application.tools.browserextractors;
 
 import java.io.File;
 import java.net.URL;
-import org.wandora.topicmap.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.wandora.application.Wandora;
-import java.util.regex.*;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 
 

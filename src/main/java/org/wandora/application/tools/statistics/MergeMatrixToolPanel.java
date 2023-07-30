@@ -24,16 +24,17 @@
  */
 package org.wandora.application.tools.statistics;
 
+import java.util.List;
+
 import javax.swing.JDialog;
 import javax.swing.table.TableModel;
-import org.wandora.application.gui.UIBox;
+
 import org.wandora.application.Wandora;
-import java.util.*;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleRadioButton;
 import org.wandora.utils.ClipboardBox;
-import org.wandora.application.tools.statistics.MergeMatrixCellRenderer;
 
 /**
  *

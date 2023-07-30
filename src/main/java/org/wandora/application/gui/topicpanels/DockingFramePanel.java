@@ -27,12 +27,6 @@
 package org.wandora.application.gui.topicpanels;
 
 
-import bibliothek.gui.Dockable;
-import bibliothek.gui.dock.dockable.AbstractDockable;
-import bibliothek.gui.dock.event.DockableFocusEvent;
-import bibliothek.gui.dock.event.DockableFocusListener;
-import bibliothek.gui.dock.event.DockableListener;
-import bibliothek.gui.dock.title.DockTitle;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -53,11 +47,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
 import org.wandora.application.RefreshListener;
@@ -92,6 +88,13 @@ import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.DnDBox;
 import org.wandora.utils.Options;
+
+import bibliothek.gui.Dockable;
+import bibliothek.gui.dock.dockable.AbstractDockable;
+import bibliothek.gui.dock.event.DockableFocusEvent;
+import bibliothek.gui.dock.event.DockableFocusListener;
+import bibliothek.gui.dock.event.DockableListener;
+import bibliothek.gui.dock.title.DockTitle;
 
 
 

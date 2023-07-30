@@ -30,8 +30,13 @@
 package org.wandora.topicmap;
 
 
-import java.util.*;
-import org.wandora.topicmap.layered.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.wandora.topicmap.layered.ContainerTopicMap;
+import org.wandora.topicmap.layered.Layer;
 import org.wandora.utils.DataURL;
 
 /**

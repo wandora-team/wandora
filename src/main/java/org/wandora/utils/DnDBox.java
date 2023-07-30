@@ -21,11 +21,15 @@
 package org.wandora.utils;
 
 import java.awt.Image;
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
-import java.io.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

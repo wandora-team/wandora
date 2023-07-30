@@ -27,19 +27,24 @@
 package org.wandora.application.gui.search;
 
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.*;
-import javax.swing.*;
+import java.util.Collection;
+
+import javax.swing.ComboBoxEditor;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import org.wandora.application.*;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.TopicSelector;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.table.TopicTable;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapSearchOptions;
+import org.wandora.utils.Textbox;
 
 
 /**

@@ -30,16 +30,18 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
-
-import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.Unirest;
-import org.json.*;
-
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.Topic;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 
 
 /**

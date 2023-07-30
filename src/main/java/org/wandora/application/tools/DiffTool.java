@@ -25,20 +25,36 @@
 package org.wandora.application.tools;
 
 
-import org.wandora.topicmap.packageio.ZipPackageInput;
-import org.wandora.topicmap.packageio.PackageInput;
-import org.wandora.application.gui.texteditor.TextEditor;
-import org.wandora.topicmap.diff.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.memory.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.utils.swing.GuiTools;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringWriter;
 
-import java.io.*;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JDialog;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.texteditor.TextEditor;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.TopicMapTypeManager;
+import org.wandora.topicmap.diff.BasicDiffOutput;
+import org.wandora.topicmap.diff.DiffEntryFormatter;
+import org.wandora.topicmap.diff.HTMLDiffEntryFormatter;
+import org.wandora.topicmap.diff.PatchDiffEntryFormatter;
+import org.wandora.topicmap.diff.PlainTextDiffEntryFormatter;
+import org.wandora.topicmap.diff.TopicMapDiff;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.topicmap.memory.TopicMapImpl;
+import org.wandora.topicmap.packageio.PackageInput;
+import org.wandora.topicmap.packageio.ZipPackageInput;
+import org.wandora.utils.swing.GuiTools;
 
 
 /**

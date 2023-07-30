@@ -23,12 +23,22 @@
 package org.wandora.application.tools.extractors.stands4;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 
-import java.io.*;
-import java.net.*;
-import org.xml.sax.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.IObox;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 
 

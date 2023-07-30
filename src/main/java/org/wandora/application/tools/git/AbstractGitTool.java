@@ -22,7 +22,9 @@ package org.wandora.application.tools.git;
 
 import java.io.File;
 import java.io.IOException;
+
 import javax.swing.Icon;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.wandora.application.Wandora;

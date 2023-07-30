@@ -30,23 +30,20 @@
 package org.wandora.utils;
 
 
-import java.io.*;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.poi.extractor.ExtractorFactory;
+import org.apache.poi.extractor.POITextExtractor;
 import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.hwpf.model.TextPiece;
 import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-
-import org.apache.poi.*;
-import org.apache.poi.extractor.*;
-import org.apache.poi.hslf.extractor.*;
-import org.apache.poi.hwpf.extractor.*;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 

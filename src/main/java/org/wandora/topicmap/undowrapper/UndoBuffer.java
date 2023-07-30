@@ -25,6 +25,7 @@ package org.wandora.topicmap.undowrapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
 

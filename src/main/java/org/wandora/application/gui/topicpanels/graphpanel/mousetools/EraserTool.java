@@ -28,8 +28,12 @@
 package org.wandora.application.gui.topicpanels.graphpanel.mousetools;
 
 
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import java.awt.*;
+import java.awt.Cursor;
+
+import org.wandora.application.gui.topicpanels.graphpanel.MouseTool;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.VModel;
+import org.wandora.application.gui.topicpanels.graphpanel.VNode;
 
 
 /**

@@ -30,14 +30,10 @@ package org.wandora.topicmap.memory;
 
 
 
-import javax.swing.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.utils.*;
-import java.util.*;
-import static org.wandora.utils.Tuples.*;
+import javax.swing.JFileChooser;
+
+import org.wandora.application.Wandora;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
 /**
  *
  * @author  olli

@@ -24,6 +24,7 @@
 package org.wandora.application.tools.extractors.microformats;
 
 import java.util.HashMap;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

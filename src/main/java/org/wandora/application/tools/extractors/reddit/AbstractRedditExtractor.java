@@ -21,9 +21,6 @@
  */
 package org.wandora.application.tools.extractors.reddit;
 
-import com.mashape.unirest.http.*;
-import com.mashape.unirest.request.body.MultipartBody;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +31,6 @@ import java.util.Map;
 
 import javax.swing.Icon;
 
-import org.apache.hc.core5.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,13 +38,18 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
 // import org.wandora.dep.json.*;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.Association;
-import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.request.body.MultipartBody;
 
 /**
  *

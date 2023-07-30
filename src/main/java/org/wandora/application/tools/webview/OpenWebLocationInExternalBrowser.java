@@ -26,6 +26,7 @@ package org.wandora.application.tools.webview;
 
 import java.awt.Desktop;
 import java.net.URI;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.TopicMapException;

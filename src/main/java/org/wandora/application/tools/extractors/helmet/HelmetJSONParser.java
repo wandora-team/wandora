@@ -25,16 +25,23 @@ package org.wandora.application.tools.extractors.helmet;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.LinkedHashSet;
 
-
-import java.util.*;
-import java.net.*;
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapLogger;
+import org.wandora.utils.IObox;
 
 /**
  *

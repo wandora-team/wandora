@@ -22,12 +22,6 @@
 
 package org.wandora.application.gui.previews.formats;
 
-import de.joergjahnke.c64.core.C1541;
-import de.joergjahnke.c64.core.C64;
-import de.joergjahnke.c64.extendeddevices.EmulatorUtils;
-import de.joergjahnke.c64.swing.C64Canvas;
-import de.joergjahnke.common.extendeddevices.WavePlayer;
-import de.joergjahnke.common.vmabstraction.sunvm.SunVMResourceLoader;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -45,12 +39,14 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.net.URL;
 import java.util.Properties;
+
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -60,6 +56,13 @@ import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+
+import de.joergjahnke.c64.core.C1541;
+import de.joergjahnke.c64.core.C64;
+import de.joergjahnke.c64.extendeddevices.EmulatorUtils;
+import de.joergjahnke.c64.swing.C64Canvas;
+import de.joergjahnke.common.extendeddevices.WavePlayer;
+import de.joergjahnke.common.vmabstraction.sunvm.SunVMResourceLoader;
 
 
 

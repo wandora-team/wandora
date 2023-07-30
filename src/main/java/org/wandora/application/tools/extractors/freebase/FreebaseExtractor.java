@@ -24,7 +24,9 @@ package org.wandora.application.tools.extractors.freebase;
 
 import java.io.File;
 import java.net.URL;
+
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;

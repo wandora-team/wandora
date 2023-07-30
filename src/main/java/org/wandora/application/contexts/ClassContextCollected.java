@@ -28,8 +28,12 @@
 package org.wandora.application.contexts;
 
 
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.wandora.topicmap.Topic;
 
 
 

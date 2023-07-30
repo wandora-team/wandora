@@ -26,14 +26,29 @@
 
 package org.wandora.application.tools.exporters.simberg;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
@@ -41,7 +56,21 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.exporters.AbstractExportTool;
-import org.wandora.query2.*;
+import org.wandora.query2.Directive;
+import org.wandora.query2.Identity;
+import org.wandora.query2.If;
+import org.wandora.query2.Instances;
+import org.wandora.query2.IsOfType;
+import org.wandora.query2.Join;
+import org.wandora.query2.Not;
+import org.wandora.query2.Null;
+import org.wandora.query2.Of;
+import org.wandora.query2.OrderBy;
+import org.wandora.query2.Players;
+import org.wandora.query2.QueryContext;
+import org.wandora.query2.QueryException;
+import org.wandora.query2.ResultRow;
+import org.wandora.query2.Variant2;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;

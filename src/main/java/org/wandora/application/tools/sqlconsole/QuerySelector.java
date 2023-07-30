@@ -26,8 +26,12 @@
 
 package org.wandora.application.tools.sqlconsole;
 
-import java.util.*;
-import javax.swing.*;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
 /**
  *
  * @author  olli

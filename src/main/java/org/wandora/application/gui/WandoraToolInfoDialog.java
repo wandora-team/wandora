@@ -28,13 +28,21 @@
 package org.wandora.application.gui;
 
 
-import org.wandora.application.*;
-import org.wandora.application.tools.*;
-import org.wandora.application.gui.simple.*;
-import java.util.*;
-import org.wandora.utils.Tuples.*;
-import java.text.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.WandoraToolManager2.ToolInfo;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleScrollPane;
+import org.wandora.application.gui.simple.SimpleTabbedPane;
+import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.utils.Tuples.T2;
 
 
 /**

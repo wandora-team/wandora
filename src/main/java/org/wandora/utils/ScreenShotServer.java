@@ -27,14 +27,20 @@
  */
 
 package org.wandora.utils;
-import java.io.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.net.*;
-import javax.imageio.*;
-import javax.net.ssl.*;
-import javax.net.*;
+import java.awt.DisplayMode;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.StringTokenizer;
+
+import javax.imageio.ImageIO;
+import javax.net.ssl.SSLServerSocketFactory;
 /**
  * For the ssl to work you need to create a certificate in command prompt with the
  * keytool utility (should be in jdk bin directory).

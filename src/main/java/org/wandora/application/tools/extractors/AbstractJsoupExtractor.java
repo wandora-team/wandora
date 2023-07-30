@@ -25,12 +25,12 @@ package org.wandora.application.tools.extractors;
 
 import java.io.File;
 import java.net.URL;
+
 import javax.swing.Icon;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.tools.extractors.AbstractExtractor;
-import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;

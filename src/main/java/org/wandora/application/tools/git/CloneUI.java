@@ -21,8 +21,10 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
+
 import javax.swing.JDialog;
 import javax.swing.JPasswordField;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleButton;

@@ -27,9 +27,11 @@
 package org.wandora.application.tools.sqlconsole.data;
 
 
-import java.util.*;
-import java.awt.*;
-import static org.wandora.utils.Tuples.*;
+import java.awt.Point;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import org.wandora.utils.Tuples.T2;
 
 
 /**

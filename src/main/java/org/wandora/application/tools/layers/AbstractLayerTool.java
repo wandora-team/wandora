@@ -28,11 +28,12 @@
 package org.wandora.application.tools.layers;
 
 
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.LayerTree;
-import org.wandora.application.*;
-import org.wandora.application.tools.*;
-import org.wandora.application.contexts.*;
-import org.wandora.topicmap.layered.*;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.layered.Layer;
 
 
 /**

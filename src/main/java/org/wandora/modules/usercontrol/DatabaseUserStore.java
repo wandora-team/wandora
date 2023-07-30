@@ -28,9 +28,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.wandora.modules.*;
+
+import org.wandora.modules.AbstractModule;
+import org.wandora.modules.DatabaseInterface;
 import org.wandora.modules.DatabaseInterface.Row;
 import org.wandora.modules.DatabaseInterface.Rows;
+import org.wandora.modules.ModuleException;
+import org.wandora.modules.ModuleManager;
 
 /**
  * <p>

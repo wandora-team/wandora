@@ -31,9 +31,11 @@ package org.wandora.application.tools.r;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JDialog;
 import javax.swing.JMenuBar;
 import javax.swing.WindowConstants;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleMenu;

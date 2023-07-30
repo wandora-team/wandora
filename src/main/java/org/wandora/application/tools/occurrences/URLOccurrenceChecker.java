@@ -26,15 +26,19 @@
 
 package org.wandora.application.tools.occurrences;
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import java.io.File;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Iterator;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.IObox;
 
 /**
  * Performs a test to given occurrences. Test checks if the occurrence is an URL,

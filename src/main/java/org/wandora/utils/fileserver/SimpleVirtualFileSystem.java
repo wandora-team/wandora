@@ -27,10 +27,11 @@
  */
 
 package org.wandora.utils.fileserver;
-import java.io.*;
-import java.util.*;
-import org.wandora.utils.*;
-import org.w3c.dom.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *

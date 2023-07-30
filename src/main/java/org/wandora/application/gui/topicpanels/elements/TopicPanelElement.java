@@ -30,9 +30,9 @@
 package org.wandora.application.gui.topicpanels.elements;
 
 
-import java.awt.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
+import java.awt.Component;
+
+import org.wandora.topicmap.Topic;
 
 
 

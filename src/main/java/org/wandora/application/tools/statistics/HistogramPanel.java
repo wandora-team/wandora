@@ -29,12 +29,23 @@ package org.wandora.application.tools.statistics;
 
 
 
-import org.wandora.application.gui.simple.*;
+import java.awt.Color;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+
+import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.utils.ClipboardBox;
-import java.awt.*;
-import javax.swing.*;
 import org.wandora.utils.swing.GuiTools;
-import java.io.*;
 
 
 

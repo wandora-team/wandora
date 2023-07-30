@@ -27,7 +27,9 @@
  */
 
 package org.wandora.utils;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  *

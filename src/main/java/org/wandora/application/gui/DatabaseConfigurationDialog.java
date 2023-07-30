@@ -28,8 +28,8 @@ package org.wandora.application.gui;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
-import org.wandora.utils.swing.GuiTools;
 import org.wandora.topicmap.database.DatabaseConfiguration;
+import org.wandora.utils.swing.GuiTools;
 /**
  *
  * @author  olli

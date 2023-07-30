@@ -28,14 +28,29 @@
 package org.wandora.application.tools.graph.filters;
 
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.topicpanels.graphpanel.*;
-import org.wandora.application.tools.graph.*;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.GraphEdgeContext;
+import org.wandora.application.gui.topicpanels.graphpanel.AssociationEdge;
+import org.wandora.application.gui.topicpanels.graphpanel.Edge;
+import org.wandora.application.gui.topicpanels.graphpanel.GraphFilter;
+import org.wandora.application.gui.topicpanels.graphpanel.InstanceEdge;
+import org.wandora.application.gui.topicpanels.graphpanel.NodeFilter;
+import org.wandora.application.gui.topicpanels.graphpanel.OccurrenceEdge;
+import org.wandora.application.gui.topicpanels.graphpanel.VEdge;
+import org.wandora.application.gui.topicpanels.graphpanel.VModel;
+import org.wandora.application.gui.topicpanels.graphpanel.VNode;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import static org.wandora.utils.Tuples.*;
+import org.wandora.application.tools.graph.AbstractGraphTool;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 
 
 

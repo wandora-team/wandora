@@ -29,12 +29,15 @@
 package org.wandora.utils.swing;
 
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.net.*;
-import java.io.*;
-import javax.imageio.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 
 

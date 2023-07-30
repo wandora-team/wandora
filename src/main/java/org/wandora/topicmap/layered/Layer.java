@@ -27,7 +27,8 @@
  */
 
 package org.wandora.topicmap.layered;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 /**
  * The Layer class represents one layer in a LayerStack. Each Layer contains

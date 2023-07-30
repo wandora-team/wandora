@@ -30,22 +30,34 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import org.wandora.application.gui.previews.*;
-import org.wandora.utils.IObox;
-import org.wandora.utils.ClipboardBox;
-import org.wandora.application.gui.simple.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.net.*;
-import java.io.*;
-import java.awt.event.*;
-
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
 
-import javax.sound.midi.*;
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MetaEventListener;
+import javax.sound.midi.MetaMessage;
+import javax.sound.midi.MidiChannel;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.Synthesizer;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.PreviewUtils;
+import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 
 

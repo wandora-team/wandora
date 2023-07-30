@@ -27,9 +27,16 @@
  */
 
 package org.wandora.topicmap.database;
-import java.lang.ref.*;
-import java.util.*;
-import org.wandora.topicmap.*;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.MultiHashMap;
 /**
  * <p>

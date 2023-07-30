@@ -22,10 +22,11 @@
 
 package org.wandora.application.tools.docking;
 
-import bibliothek.gui.Dockable;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+
+import bibliothek.gui.Dockable;
 
 /**
  *

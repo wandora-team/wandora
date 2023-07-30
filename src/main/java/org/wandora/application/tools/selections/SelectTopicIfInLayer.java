@@ -31,8 +31,8 @@ package org.wandora.application.tools.selections;
  *
  * @author akivela
  */
-
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.layered.LayeredTopic;
 
 

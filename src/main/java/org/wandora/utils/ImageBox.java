@@ -30,14 +30,18 @@ package org.wandora.utils;
 
 
 
-import java.net.*;
-import java.io.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.lang.*;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URL;
+
 //import com.sun.image.codec.jpeg.*;
-import javax.imageio.*;
-import javax.imageio.stream.*;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
 
 
 /**

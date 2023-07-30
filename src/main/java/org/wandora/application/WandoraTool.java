@@ -30,13 +30,15 @@ package org.wandora.application;
 
 
 
-import org.wandora.application.contexts.Context;
 import java.awt.event.ActionEvent;
-import javax.swing.*;
+import java.io.Serializable;
+
+import javax.swing.Icon;
+
+import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.simple.SimpleMenuItem;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
-import java.io.*;
 
 
 

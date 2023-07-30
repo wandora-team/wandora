@@ -27,7 +27,11 @@
  */
 
 package org.wandora.utils;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 /**
  * <p>
  * A map that keeps the order of entries in entrySet. Entries are returned in the order they are added.

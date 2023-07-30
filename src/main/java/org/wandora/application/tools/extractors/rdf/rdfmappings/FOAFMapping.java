@@ -29,10 +29,6 @@
 
 package org.wandora.application.tools.extractors.rdf.rdfmappings;
 
-
-import org.wandora.utils.Tuples.*;
-
-
 /**
  *
  * @author akivela

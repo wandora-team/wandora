@@ -26,7 +26,9 @@
  *
  */
 package org.wandora.query2;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.NoSuchElementException;
 /**
  *
  * @author olli

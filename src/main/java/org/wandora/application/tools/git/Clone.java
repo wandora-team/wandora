@@ -21,8 +21,8 @@
 package org.wandora.application.tools.git;
 
 import java.io.File;
-import org.eclipse.jgit.api.CloneCommand;
 
+import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.CredentialsProvider;

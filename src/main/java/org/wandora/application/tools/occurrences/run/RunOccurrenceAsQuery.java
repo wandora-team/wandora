@@ -26,6 +26,7 @@ package org.wandora.application.tools.occurrences.run;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;

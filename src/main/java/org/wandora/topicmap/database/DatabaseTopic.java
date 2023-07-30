@@ -27,10 +27,29 @@
  */
 
 package org.wandora.topicmap.database;
-import org.wandora.topicmap.*;
-import static org.wandora.utils.Tuples.*;
-import java.util.*;
+import static org.wandora.utils.Tuples.t2;
+
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicInUseException;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.topicmap.TopicRemovedException;
+import org.wandora.utils.Tuples.T2;
 
 
 /**

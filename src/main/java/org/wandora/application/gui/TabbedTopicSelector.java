@@ -29,13 +29,16 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.application.gui.search.SelectTopicPanel;
+import java.awt.Component;
+import java.util.ArrayList;
+
 import org.wandora.application.gui.search.SearchPanel;
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.search.SelectTopicPanel;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleCheckBox;
+import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.swing.GuiTools;
-import java.awt.*;
-import java.util.*;
 
 
 

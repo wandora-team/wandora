@@ -24,10 +24,6 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel;
 
-import bibliothek.gui.dock.util.BackgroundComponent;
-import bibliothek.gui.dock.util.BackgroundPaint;
-import bibliothek.gui.dock.util.PaintableComponent;
-import bibliothek.gui.dock.util.Transparency;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -36,8 +32,14 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
+
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
+
+import bibliothek.gui.dock.util.BackgroundComponent;
+import bibliothek.gui.dock.util.BackgroundPaint;
+import bibliothek.gui.dock.util.PaintableComponent;
+import bibliothek.gui.dock.util.Transparency;
 
 /**
  *

@@ -27,10 +27,10 @@
 
 package org.wandora.application.tools.selections;
 
-import org.wandora.application.gui.table.TopicTable;
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.table.SITable;
 import org.wandora.application.gui.table.TopicGrid;
+import org.wandora.application.gui.table.TopicTable;
 
 
 /**

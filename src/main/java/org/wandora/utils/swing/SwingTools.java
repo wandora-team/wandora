@@ -30,10 +30,11 @@
  */
 
 package org.wandora.utils.swing;
-import org.wandora.utils.*;
-import javax.swing.SwingUtilities;
 import java.awt.EventQueue;
-import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.SwingUtilities;
+
+import org.wandora.utils.Semaphore;
 /**
  *
  * @author olli

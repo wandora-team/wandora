@@ -23,8 +23,10 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
+
 import org.wandora.query2.Directive;
 import org.wandora.query2.DirectiveUIHints;
 import org.wandora.query2.DirectiveUIHints.Parameter;

@@ -30,6 +30,21 @@
 
 package org.wandora.application.tools;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.Map;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.topicmap.TopicMapException;
+
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
@@ -53,14 +68,7 @@ package org.wandora.application.tools;
  */
 
 
-import org.wandora.utils.fileserver.SimpleFileServerClient;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.simple.*;
-import java.io.*;
-import java.util.*; 
+import org.wandora.utils.fileserver.SimpleFileServerClient; 
 
 
 /**

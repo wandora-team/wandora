@@ -30,9 +30,33 @@ package org.wandora.topicmap.memory;
 
 
 
-import org.wandora.topicmap.*;
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicIterator;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
+import org.wandora.topicmap.TopicMapLogger;
+import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.topicmap.TopicMapSearchOptions;
+import org.wandora.topicmap.TopicMapStatData;
+import org.wandora.topicmap.TopicMapStatOptions;
 /**
  *
  * @author  olli, ak

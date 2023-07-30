@@ -25,6 +25,7 @@
 package org.wandora.application.gui.search;
 
 import java.awt.BorderLayout;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleScrollPane;

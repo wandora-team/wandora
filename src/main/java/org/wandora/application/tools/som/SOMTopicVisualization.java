@@ -27,11 +27,15 @@
 package org.wandora.application.tools.som;
 
 
-import org.wandora.utils.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleScrollPane;
+import org.wandora.topicmap.Topic;
+import org.wandora.utils.ClipboardBox;
 
 
 

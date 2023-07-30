@@ -28,15 +28,25 @@ package org.wandora.application.tools.subjects;
 
 
 
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.utils.*;
-import java.util.*;
-import java.net.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+
+import org.wandora.application.CancelledException;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.contexts.SIContext;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.DataURL;
 
 
 

@@ -28,8 +28,10 @@
  */
 
 package org.wandora.query;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.wandora.topicmap.Locator;
 
 /**
  * @deprecated

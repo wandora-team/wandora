@@ -27,12 +27,20 @@
 package org.wandora.application.tools.sqlconsole.gui;
 
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Point;
+import java.util.Collection;
+import java.util.HashSet;
+
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+
 import org.wandora.utils.Textbox;
 import org.wandora.utils.swing.TableSorter;
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.table.*;
 
 
 /**

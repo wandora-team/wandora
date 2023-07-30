@@ -26,8 +26,10 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+
 import javax.swing.JDialog;
 import javax.swing.ListModel;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;

@@ -24,10 +24,12 @@
 
 package org.wandora.application.gui.simple;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import org.wandora.application.gui.*;
+import java.awt.Graphics;
+import java.awt.event.MouseListener;
+
+import javax.swing.JLabel;
+
+import org.wandora.application.gui.UIConstants;
 
 
 

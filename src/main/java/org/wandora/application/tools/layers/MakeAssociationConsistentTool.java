@@ -27,11 +27,12 @@
 
 package org.wandora.application.tools.layers;
 
-import org.wandora.topicmap.layered.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.layered.Layer;
 
 
 

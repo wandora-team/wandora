@@ -27,9 +27,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
@@ -38,7 +35,14 @@ import org.wandora.modules.servlet.CachedAction;
 import org.wandora.modules.servlet.GenericTemplateAction;
 import org.wandora.modules.servlet.ModulesServlet.HttpMethod;
 import org.wandora.modules.servlet.Template;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * <p>

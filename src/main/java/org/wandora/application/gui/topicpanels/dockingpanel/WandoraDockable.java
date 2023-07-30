@@ -26,13 +26,16 @@
 package org.wandora.application.gui.topicpanels.dockingpanel;
 
 
-import bibliothek.gui.dock.DefaultDockable;
-import bibliothek.gui.dock.title.DockTitle;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
+
 import javax.swing.Icon;
 import javax.swing.event.MouseInputListener;
+
 import org.wandora.application.gui.topicpanels.TopicPanel;
+
+import bibliothek.gui.dock.DefaultDockable;
+import bibliothek.gui.dock.title.DockTitle;
 
 
 

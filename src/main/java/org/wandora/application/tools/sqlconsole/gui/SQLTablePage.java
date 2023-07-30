@@ -26,11 +26,16 @@
 
 package org.wandora.application.tools.sqlconsole.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Point;
+import java.util.Collection;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import org.wandora.application.tools.sqlconsole.data.TableView;
 import org.wandora.utils.Delegate;
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
-import org.wandora.application.tools.sqlconsole.data.*;
 
 
 /**

@@ -27,13 +27,15 @@
 package org.wandora.application.tools.extractors;
 
 
-import org.wandora.application.contexts.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
+import java.awt.Component;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import java.awt.*;
-import java.util.*;
-import java.net.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.topicmap.Topic;
 
 
 

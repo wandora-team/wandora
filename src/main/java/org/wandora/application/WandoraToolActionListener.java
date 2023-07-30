@@ -29,8 +29,9 @@
 package org.wandora.application;
 
 
+import javax.swing.SwingUtilities;
+
 import org.wandora.topicmap.TopicMapException;
-import javax.swing.*;
 
 
 /**

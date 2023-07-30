@@ -30,9 +30,14 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.TopicMapTypeManager;
+import org.wandora.topicmap.layered.ContainerTopicMap;
+import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 import org.wandora.utils.swing.GuiTools;
 

@@ -27,13 +27,24 @@
 package org.wandora.application.gui.simple;
 
 
-import java.util.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.event.MouseListener;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.swing.ComboBoxEditor;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import org.wandora.application.gui.*;
+
+import org.wandora.application.gui.UIConstants;
 
 /**
  *

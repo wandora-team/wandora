@@ -28,9 +28,11 @@ package org.wandora.application.gui;
 
 
 import java.awt.event.KeyEvent;
-import org.wandora.application.gui.simple.*;
-import org.wandora.utils.*;
-import javax.swing.*;
+
+import javax.swing.JDialog;
+
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.utils.Textbox;
 
 
 /**

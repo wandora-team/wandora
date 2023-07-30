@@ -24,8 +24,10 @@ package org.wandora.application.tools.extractors.rekognition;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;

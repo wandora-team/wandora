@@ -37,8 +37,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
+
 import org.wandora.application.ErrorMessages;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;

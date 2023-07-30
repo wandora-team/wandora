@@ -29,7 +29,8 @@ package org.wandora.application.tools.selections;
 
 
 
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *

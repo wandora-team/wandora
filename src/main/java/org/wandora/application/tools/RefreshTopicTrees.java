@@ -29,9 +29,9 @@
 package org.wandora.application.tools;
 
 
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
 
 
 /**

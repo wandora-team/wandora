@@ -22,13 +22,11 @@
 package org.wandora.application.tools.extractors.duckduckgo;
 
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.util.HashMap;
+
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +34,10 @@ import org.json.JSONObject;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 
 /**
  *

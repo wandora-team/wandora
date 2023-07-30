@@ -24,9 +24,11 @@ package org.wandora.application.tools.extractors.mashape;
 
 
 import java.util.HashMap;
-import org.wandora.application.tools.extractors.AbstractExtractor;
+
 import javax.swing.Icon;
+
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;

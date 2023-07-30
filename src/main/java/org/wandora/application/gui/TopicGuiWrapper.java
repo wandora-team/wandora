@@ -27,9 +27,10 @@
 package org.wandora.application.gui;
 
 
-import org.wandora.topicmap.*;
-import javax.swing.tree.*;
+import javax.swing.tree.TreePath;
+
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.topicmap.Topic;
 
 /**
  *

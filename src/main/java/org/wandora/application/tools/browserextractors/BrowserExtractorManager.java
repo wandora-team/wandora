@@ -26,15 +26,21 @@
 package org.wandora.application.tools.browserextractors;
 
 
-import org.wandora.topicmap.*;
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.wandora.application.Wandora;
-import org.wandora.utils.*;
-import java.io.*;
-import java.util.*;
-import java.net.*;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolSet;
 import org.wandora.application.WandoraToolType;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.IObox;
 
 
 /**

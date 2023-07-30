@@ -22,9 +22,6 @@
  */
 package org.wandora.application.tools.extractors.rdf.rdfmappings;
 
-import static org.wandora.application.tools.extractors.rdf.rdfmappings.DublinCoreMapping.DC_ELEMENTS_NS;
-import static org.wandora.application.tools.extractors.rdf.rdfmappings.OAMapping.RDF_NS;
-
 /**
  *
  * @author olli

@@ -28,13 +28,18 @@
 
 package org.wandora.topicmap.memory;
 
-import org.wandora.topicmap.packageio.PackageOutput;
-import org.wandora.topicmap.packageio.PackageInput;
-import org.wandora.utils.Options;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
 import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapLogger;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.packageio.PackageInput;
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.utils.Options;
 
 /**
  *

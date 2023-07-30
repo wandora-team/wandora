@@ -30,20 +30,43 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import org.wandora.application.gui.previews.*;
-import org.wandora.utils.ClipboardBox;
-import javax.swing.*;
-import java.awt.*;
-import java.net.*;
-import java.io.*;
-import java.awt.event.*;
-
-import java.util.Map;
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
-
-import javax.sound.sampled.*;
 import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.PreviewUtils;
+import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 
 

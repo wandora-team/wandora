@@ -23,6 +23,7 @@ package org.wandora.application.tools.extractors.word;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;

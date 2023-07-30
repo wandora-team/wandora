@@ -27,8 +27,12 @@
 
 package org.wandora.application.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JLabel;
+import javax.swing.JWindow;
 
 
 

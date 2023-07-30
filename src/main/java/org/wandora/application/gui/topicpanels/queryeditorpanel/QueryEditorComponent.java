@@ -28,12 +28,14 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
+
 import org.wandora.application.Wandora;
-import org.wandora.application.gui.texteditor.TextEditor;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.texteditor.TextEditor;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.DirectiveParameters;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.QueryLibraryPanel.StoredQuery;
 import org.wandora.query2.Directive;

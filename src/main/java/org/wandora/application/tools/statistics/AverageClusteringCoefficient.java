@@ -27,16 +27,21 @@
 
 package org.wandora.application.tools.statistics;
 
-import org.wandora.application.*;
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.contexts.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 
-import java.util.*;
-import javax.swing.*;
+import javax.swing.Icon;
 
-import org.wandora.application.gui.*;
-import org.wandora.topicmap.layered.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicHashMap;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.layered.LayerStack;
 
 
 

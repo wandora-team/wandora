@@ -29,16 +29,22 @@ package org.wandora.application.gui;
 
 
 
-import java.awt.*;
-import java.awt.dnd.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.border.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.topicpanels.*;
-import org.wandora.application.tools.*;
-import org.wandora.application.tools.extractors.files.SimpleDocumentExtractor;
+import java.awt.BorderLayout;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.swing.border.Border;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.WandoraToolManager;
+import org.wandora.application.gui.topicpanels.TopicPanel;
+import org.wandora.application.tools.ChainExecuter;
 import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
 import org.wandora.utils.DnDBox;
 import org.wandora.utils.swing.JPanelWithBackground;

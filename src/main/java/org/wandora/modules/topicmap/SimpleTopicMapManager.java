@@ -21,8 +21,6 @@
  */
 package org.wandora.modules.topicmap;
 
-import org.wandora.topicmap.packageio.ZipPackageOutput;
-import org.wandora.topicmap.packageio.PackageOutput;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,13 +30,20 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.wandora.modules.AbstractModule;
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.SimpleTopicMapLogger;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.TopicMapTypeManager;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.topicmap.memory.TopicMapImpl;
+import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.topicmap.packageio.ZipPackageOutput;
 import org.wandora.utils.ListenerList;
 
 /**

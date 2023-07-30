@@ -27,7 +27,10 @@
  */
 
 package org.wandora.utils;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Vector;
 /**
  * This class provides some methods that make it easier to create and convert
  * between collections, arrays and maps.

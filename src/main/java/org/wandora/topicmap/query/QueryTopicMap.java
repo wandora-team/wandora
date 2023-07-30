@@ -19,13 +19,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.query;
-import java.util.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.query2.*;
-import static org.wandora.utils.Tuples.*;
-import javax.script.*;
+import static org.wandora.utils.Tuples.t2;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.script.ScriptEngine;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraScriptManager;
+import org.wandora.query2.Directive;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
+import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.topicmap.TopicMapSearchOptions;
+import org.wandora.topicmap.TopicMapStatData;
+import org.wandora.topicmap.TopicMapStatOptions;
+import org.wandora.topicmap.layered.ContainerTopicMap;
+import org.wandora.topicmap.layered.ContainerTopicMapListener;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.utils.Tuples.T2;
 
 /**
  *

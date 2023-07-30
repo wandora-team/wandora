@@ -30,6 +30,16 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.previews.PreviewPanel;
+import org.wandora.application.gui.previews.PreviewUtils;
+import org.wandora.application.gui.simple.SimpleTimeSlider;
+import org.wandora.utils.ClipboardBox;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -43,13 +53,6 @@ import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.previews.PreviewPanel;
-import org.wandora.application.gui.previews.PreviewUtils;
-import org.wandora.application.gui.simple.SimpleTimeSlider;
-import org.wandora.utils.ClipboardBox;
 
 
 /**

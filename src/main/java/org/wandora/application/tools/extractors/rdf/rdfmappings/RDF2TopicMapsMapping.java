@@ -27,7 +27,7 @@
 
 package org.wandora.application.tools.extractors.rdf.rdfmappings;
 
-import org.wandora.utils.Tuples.*;
+import org.wandora.utils.Tuples.T2;
 
 
 

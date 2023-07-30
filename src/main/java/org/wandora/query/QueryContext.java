@@ -28,8 +28,9 @@
  */
 
 package org.wandora.query;
-import java.util.*;
-import org.wandora.topicmap.*;
+import java.util.HashMap;
+
+import org.wandora.topicmap.Topic;
 
 /**
  * @deprecated

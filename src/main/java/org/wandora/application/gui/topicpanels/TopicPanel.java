@@ -28,10 +28,17 @@
 package org.wandora.application.gui.topicpanels;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
+import org.wandora.application.CancelledException;
+import org.wandora.application.LocatorHistory;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
 
 
 /**

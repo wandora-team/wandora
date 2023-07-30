@@ -25,8 +25,25 @@
 package org.wandora.application.gui.previews;
 
 
-import org.wandora.application.gui.previews.formats.*;
 import org.wandora.application.Wandora;
+import org.wandora.application.gui.previews.formats.ApplicationC64;
+import org.wandora.application.gui.previews.formats.ApplicationPDF;
+import org.wandora.application.gui.previews.formats.ApplicationXML;
+import org.wandora.application.gui.previews.formats.ApplicationZ80;
+import org.wandora.application.gui.previews.formats.ApplicationZMachine;
+import org.wandora.application.gui.previews.formats.ApplicationZip;
+import org.wandora.application.gui.previews.formats.AudioFlac;
+import org.wandora.application.gui.previews.formats.AudioMP3v2;
+import org.wandora.application.gui.previews.formats.AudioMidi;
+import org.wandora.application.gui.previews.formats.AudioMod;
+import org.wandora.application.gui.previews.formats.AudioOgg;
+import org.wandora.application.gui.previews.formats.AudioSid;
+import org.wandora.application.gui.previews.formats.AudioWav;
+import org.wandora.application.gui.previews.formats.Image;
+import org.wandora.application.gui.previews.formats.Text;
+import org.wandora.application.gui.previews.formats.TextHTML;
+import org.wandora.application.gui.previews.formats.TextRTF;
+import org.wandora.application.gui.previews.formats.VideoMp4;
 import org.wandora.topicmap.Locator;
 
 

@@ -28,15 +28,23 @@
 package org.wandora.application.tools.extractors.stands4;
 
 
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
+import java.awt.Component;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.net.*;
+import javax.swing.JDialog;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleCheckBox;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
 
 
 /**

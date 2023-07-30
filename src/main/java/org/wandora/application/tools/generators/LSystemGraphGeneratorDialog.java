@@ -28,18 +28,28 @@
 package org.wandora.application.tools.generators;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.utils.*;
-import org.wandora.utils.Tuples.*;
+import java.awt.Component;
+import java.awt.Desktop;
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
-import java.awt.*;
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.utils.IObox;
+import org.wandora.utils.Options;
+import org.wandora.utils.Tuples.T2;
 
 
 

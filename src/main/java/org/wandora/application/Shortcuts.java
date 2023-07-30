@@ -28,51 +28,46 @@
 package org.wandora.application;
 
 
-import java.io.OutputStream;
-import java.io.FileOutputStream;
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
-
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JFileChooser;
-import javax.swing.JScrollPane;
-import javax.swing.JMenuBar;
-
-import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.ActionListener;
-
-import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.Locator;
-
-import org.wandora.utils.Options;
-import org.wandora.utils.IObox;
-import org.wandora.utils.Textbox;
-import org.wandora.utils.ClipboardBox;
 
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.UIConstants;
-
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleList;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.IObox;
+import org.wandora.utils.Options;
+import org.wandora.utils.Textbox;
 
 
 /**

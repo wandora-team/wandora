@@ -27,9 +27,17 @@
 package org.wandora.application.tools.sqlconsole;
 
 
-import org.w3c.dom.*;
-import java.util.*;
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 /**
  *
  * @author  olli

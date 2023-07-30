@@ -34,7 +34,6 @@ package org.wandora.application.tools.statistics;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.lang.String;
 
 public class TopicMapDiamaterArray {
     

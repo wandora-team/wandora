@@ -27,15 +27,29 @@
 
 package org.wandora.application.tools.extractors;
 
-import javax.swing.*;
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import org.xml.sax.*;
-import java.util.regex.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.*;
+import javax.swing.Icon;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 
 

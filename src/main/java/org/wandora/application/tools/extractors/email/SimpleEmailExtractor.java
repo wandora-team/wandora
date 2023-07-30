@@ -31,31 +31,54 @@ package org.wandora.application.tools.extractors.email;
 
 
 
-import org.wandora.application.tools.browserextractors.*;
-
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.text.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.utils.*;
-
-import javax.mail.*;
-import javax.mail.internet.*;
-
+import javax.mail.Address;
+import javax.mail.BodyPart;
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Header;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Part;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.internet.MimeMessage;
 //import jmbox.oe5dbx.*;
 import javax.swing.Icon;
-import net.fortuna.mstor.*;
-import net.fortuna.mstor.model.*;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
+import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.MSOfficeBox;
+import org.wandora.utils.Textbox;
+
+import net.fortuna.mstor.model.MStorStore;
 
 
 

@@ -35,6 +35,7 @@ package org.wandora.application.tools.maiana;
 
 import java.awt.Cursor;
 import java.net.URL;
+
 import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -42,6 +43,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;

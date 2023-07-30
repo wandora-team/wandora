@@ -28,28 +28,30 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
+
 import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.utils.IObox;
-import java.util.List;
-
-import edu.stanford.nlp.ie.crf.*;
-import edu.stanford.nlp.ie.AbstractSequenceClassifier;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.ling.CoreAnnotations.AnswerAnnotation;
-import java.net.URLEncoder;
-import org.wandora.application.Wandora;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.XMLbox;
+
+import edu.stanford.nlp.ie.AbstractSequenceClassifier;
+import edu.stanford.nlp.ie.crf.CRFClassifier;
+import edu.stanford.nlp.ling.CoreAnnotations.AnswerAnnotation;
+import edu.stanford.nlp.ling.CoreLabel;
 
 /**
  *

@@ -29,31 +29,66 @@ package org.wandora.application.gui.topicpanels.traditional;
 
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.*;
-import java.awt.print.*;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.print.Printable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.RowSorter;
+import javax.swing.TransferHandler;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-
-
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.RefreshListener;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.DnDHelper;
+import org.wandora.application.gui.OccurrenceTableAll;
+import org.wandora.application.gui.OccurrenceTableSingleType;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.simple.AssociationTypeLink;
+import org.wandora.application.gui.simple.OccurrenceTypeLink;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.TopicLink;
 import org.wandora.application.gui.table.AssociationTable;
 import org.wandora.application.gui.table.ClassTable;
 import org.wandora.application.gui.table.InstanceTable;
@@ -63,8 +98,21 @@ import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.topicnames.AddScopeTopicToVariantName;
 import org.wandora.application.tools.topicnames.DeleteScopeTopicInVariantName;
 import org.wandora.application.tools.topicnames.DeleteVariantName;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.SchemaBox;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
+import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.IObox;
+import org.wandora.utils.IteratedMap;
+import org.wandora.utils.MSOfficeBox;
+import org.wandora.utils.Options;
+import org.wandora.utils.Textbox;
 
 
 

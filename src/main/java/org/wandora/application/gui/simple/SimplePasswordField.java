@@ -21,13 +21,14 @@
 package org.wandora.application.gui.simple;
 
 import java.awt.AWTKeyStroke;
-import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
+
 import javax.swing.JPasswordField;
+
 import org.wandora.utils.EasyVector;
 
 /**

@@ -21,7 +21,6 @@
  */
 package org.wandora.modules;
 
-import org.wandora.modules.Module;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;

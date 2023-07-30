@@ -32,6 +32,7 @@ package org.wandora.application.tools.extractors.sql;
 import java.awt.Component;
 
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;

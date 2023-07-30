@@ -27,6 +27,7 @@
 package org.wandora.application.tools.extractors;
 
 import java.net.URL;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;

@@ -26,7 +26,9 @@ package org.wandora.application.gui.topicstringify;
 
 
 import java.net.URL;
+
 import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;

@@ -30,8 +30,10 @@
  */
 
 package org.wandora.topicmap.packageio;
-import java.util.zip.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * <p>

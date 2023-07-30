@@ -24,16 +24,28 @@
 package org.wandora.application.gui.tree;
 
 
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
-import javax.swing.*;
-import java.awt.event.*;
-import java.util.*;
+import javax.swing.JDialog;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleMenuItem;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Options;
 
 
 /**

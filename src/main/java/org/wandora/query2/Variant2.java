@@ -27,8 +27,11 @@
  */
 
 package org.wandora.query2;
-import org.wandora.topicmap.*;
-import java.util.*;
+import java.util.HashSet;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  * Alternative version of Variant directive that can be used to get

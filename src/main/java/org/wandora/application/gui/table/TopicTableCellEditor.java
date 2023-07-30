@@ -27,17 +27,17 @@
 package org.wandora.application.gui.table;
 
 
-import org.wandora.application.gui.topicstringify.TopicToString;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.table.*;
+import java.awt.Component;
+import java.awt.Font;
 
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.gui.*;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
+
 import org.wandora.application.gui.TopicGuiWrapper;
-import org.wandora.utils.swing.*;
 import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.topicmap.Topic;
 
 
 /**

@@ -40,10 +40,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraScriptManager;
 import org.wandora.application.contexts.Context;

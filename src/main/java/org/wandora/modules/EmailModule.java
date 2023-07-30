@@ -22,9 +22,14 @@
 package org.wandora.modules;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;

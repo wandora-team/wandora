@@ -31,10 +31,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-
 import java.io.File;
 import java.util.ArrayList;
+
 import javax.swing.text.Document;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.utils.ClipboardBox;

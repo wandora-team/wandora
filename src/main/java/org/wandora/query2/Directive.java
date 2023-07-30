@@ -24,7 +24,9 @@
  *
  */
 package org.wandora.query2;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.wandora.query2.DirectiveUIHints.Addon;
 import org.wandora.query2.DirectiveUIHints.Parameter;
 

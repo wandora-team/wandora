@@ -29,9 +29,11 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.text.rtf.RTFEditorKit;
+
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.utils.DataURL;
 

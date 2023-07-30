@@ -27,14 +27,14 @@
 package org.wandora.application.gui;
 
 
+import java.util.Iterator;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.topicmap.SchemaBox;
-import java.util.*;
-
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-
-import org.wandora.application.gui.topicpanels.*;
-import org.wandora.application.gui.simple.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 /**

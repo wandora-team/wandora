@@ -27,18 +27,23 @@
 package org.wandora.application.gui;
 
 
+import static org.wandora.utils.Tuples.t2;
+
+import java.awt.Cursor;
+import java.util.Collection;
+import java.util.Vector;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleList;
+import org.wandora.application.gui.simple.SimpleTextArea;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.topicmap.database.DatabaseConfiguration;
 import org.wandora.utils.Options;
+import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.swing.GuiTools;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-
-
-import static org.wandora.utils.Tuples.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.database.*;
 
 /**
  *

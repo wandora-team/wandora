@@ -22,14 +22,15 @@
 package org.wandora.application.tools;
 
 
-import org.wandora.application.gui.filechooser.TopicMapFileChooser;
-import org.wandora.topicmap.layered.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
+import java.io.File;
+import java.util.List;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
+import javax.swing.JDialog;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.filechooser.TopicMapFileChooser;
+import org.wandora.topicmap.layered.Layer;
 
 /**
  *

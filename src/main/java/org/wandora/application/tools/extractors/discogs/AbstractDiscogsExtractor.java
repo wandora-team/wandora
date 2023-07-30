@@ -24,7 +24,9 @@ package org.wandora.application.tools.extractors.discogs;
 
 import java.io.File;
 import java.net.URL;
+
 import javax.swing.Icon;
+
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;

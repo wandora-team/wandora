@@ -19,8 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.query;
-import java.util.*;
-import org.wandora.topicmap.*;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Map;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
 
 /**
  *

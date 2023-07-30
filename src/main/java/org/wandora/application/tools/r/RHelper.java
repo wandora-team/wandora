@@ -29,12 +29,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.LayeredTopicContext;
-import org.wandora.topicmap.*;
-
 import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 
 

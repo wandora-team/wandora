@@ -28,11 +28,13 @@
 package org.wandora.application.tools.selections;
 
 
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.topicmap.*;
+import java.util.Collection;
 
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  * Tool selects topics in topic table if topic plays a role in association with

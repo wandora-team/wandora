@@ -23,13 +23,15 @@
 
 package org.wandora.application.tools.webview;
 
-import javafx.scene.web.WebEngine;
 import javax.swing.Icon;
+
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.webview.WebViewPanel;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
+
+import javafx.scene.web.WebEngine;
 
 /**
  * This tool should be executed in context of the WebViewTopicPanel.

@@ -28,13 +28,24 @@
 package org.wandora.application.tools.extractors;
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.Iterator;
 
-
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import org.wandora.application.WandoraTool;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
 /**
  *
  * @author akivela

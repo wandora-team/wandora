@@ -24,11 +24,11 @@
 package org.wandora.application.tools.extractors.microformats;
 
 import java.util.HashMap;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.wandora.topicmap.Association;
-
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;

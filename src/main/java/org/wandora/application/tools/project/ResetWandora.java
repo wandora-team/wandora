@@ -28,11 +28,14 @@ package org.wandora.application.tools.project;
 
 
 
-import org.wandora.application.tools.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import javax.swing.*;
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.tools.AbstractWandoraTool;
 
 
 /**

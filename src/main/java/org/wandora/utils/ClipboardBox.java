@@ -29,13 +29,23 @@
 package org.wandora.utils;
 
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import java.awt.datatransfer.*;
+import java.awt.Component;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
+import javax.swing.text.JTextComponent;
+
 import org.wandora.utils.transferables.TransferableDataURL;
 import org.wandora.utils.transferables.TransferableImage;
 

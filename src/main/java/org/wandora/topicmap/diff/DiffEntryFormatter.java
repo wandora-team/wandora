@@ -20,8 +20,10 @@
  */
 
 package org.wandora.topicmap.diff;
-import org.wandora.topicmap.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.Writer;
+
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *

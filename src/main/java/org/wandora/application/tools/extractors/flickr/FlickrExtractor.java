@@ -38,22 +38,23 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import javax.swing.Icon;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
-import org.wandora.topicmap.TMBox;
 import org.wandora.utils.IObox;
-
-import javax.swing.Icon;
-import org.wandora.application.gui.UIBox;
         
 /**
  *

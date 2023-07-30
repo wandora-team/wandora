@@ -26,10 +26,17 @@
 
 package org.wandora.application.tools.sqlconsole;
 
-import java.util.regex.*;
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.text.JTextComponent;
 /**
  *

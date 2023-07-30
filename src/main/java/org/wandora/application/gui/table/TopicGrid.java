@@ -38,19 +38,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
+
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraMenuManager;
 import org.wandora.application.gui.Clipboardable;

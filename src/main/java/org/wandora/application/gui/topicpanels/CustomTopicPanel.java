@@ -26,28 +26,52 @@
 
 package org.wandora.application.gui.topicpanels;
 
-import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
-import org.wandora.application.gui.table.TopicTable;
-import org.wandora.utils.Options;
-import java.util.*;
-import java.awt.*;
-import java.awt.print.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.script.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterException;
+import java.util.ArrayList;
 
-import org.wandora.application.gui.topicpanels.custompanel.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.previews.*;
-import org.wandora.topicmap.*;
-import org.wandora.query2.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.simple.*;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.TransferHandler;
 
-
-import java.awt.datatransfer.*;
+import org.wandora.application.CancelledException;
+import org.wandora.application.LocatorHistory;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraMenuManager;
+import org.wandora.application.WandoraScriptManager;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.previews.PreviewWrapper;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimplePanel;
 import org.wandora.application.gui.table.MixedTopicTable;
+import org.wandora.application.gui.topicpanels.custompanel.CustomTopicPanelConfiguration;
+import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.query2.Directive;
+import org.wandora.query2.QueryContext;
+import org.wandora.query2.QueryException;
+import org.wandora.query2.ResultRow;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Options;
 
 
 

@@ -23,6 +23,7 @@ package org.wandora.topicmap.wandora2tmapi;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.tmapi.core.Locator;
 import org.tmapi.core.ModelConstraintException;
 import org.tmapi.core.Occurrence;

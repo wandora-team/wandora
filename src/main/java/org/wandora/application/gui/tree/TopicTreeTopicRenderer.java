@@ -27,16 +27,23 @@
 
 package org.wandora.application.gui.tree;
 
-import javax.swing.*;
-import javax.swing.tree.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
+
 import org.wandora.application.Wandora;
-import org.wandora.utils.GripCollections;
 import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.GripCollections;
 
 
 

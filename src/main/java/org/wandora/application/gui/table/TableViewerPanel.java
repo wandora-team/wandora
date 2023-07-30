@@ -27,7 +27,9 @@ package org.wandora.application.gui.table;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 

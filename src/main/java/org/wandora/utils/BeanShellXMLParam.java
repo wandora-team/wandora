@@ -27,9 +27,15 @@
  */
 
 package org.wandora.utils;
-import bsh.*;
-import org.w3c.dom.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import bsh.EvalError;
+import bsh.Interpreter;
 /**
  *
  * @author  olli

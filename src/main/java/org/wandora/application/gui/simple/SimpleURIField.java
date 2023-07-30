@@ -31,12 +31,17 @@ package org.wandora.application.gui.simple;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Robot;
-import java.io.*;
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+
 import javax.swing.JPopupMenu;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;

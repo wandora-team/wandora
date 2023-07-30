@@ -31,11 +31,28 @@
 
 package org.wandora.topicmap;
 
-import org.wandora.topicmap.layered.*;
-import java.util.*;
-import static org.wandora.utils.Tuples.*;
+import static org.wandora.utils.Tuples.t2;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.Stack;
+
+import org.wandora.application.gui.ConfirmDialog;
+import org.wandora.application.gui.ConfirmResult;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.topicmap.layered.LayeredTopic;
 import org.wandora.utils.GripCollections;
-import org.wandora.application.gui.*;
+import org.wandora.utils.Tuples.T2;
 /**
  * TMBox contains various topic map related tools and utility methods.
  *

@@ -23,6 +23,7 @@ package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
 
 import java.awt.Point;
+
 import javax.swing.JComponent;
 
 /**

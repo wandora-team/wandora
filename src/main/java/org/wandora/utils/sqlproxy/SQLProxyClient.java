@@ -28,16 +28,27 @@
  */
 
 package org.wandora.utils.sqlproxy;
-import java.sql.*;
-import java.util.*;
-import java.util.zip.*;
+import static org.wandora.utils.Tuples.t2;
 
-import java.io.*;
-import java.net.*;
-import javax.net.ssl.*;
-import javax.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PushbackReader;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.net.Socket;
+import java.sql.Types;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+import java.util.zip.GZIPInputStream;
 
-import static org.wandora.utils.Tuples.*;
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocketFactory;
+
+import org.wandora.utils.Tuples.T2;
 
 /**
  *

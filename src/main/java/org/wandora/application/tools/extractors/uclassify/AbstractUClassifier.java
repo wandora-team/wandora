@@ -23,31 +23,48 @@
 
 package org.wandora.application.tools.extractors.uclassify;
 
-/**
- *
- * @author akivela
- */
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 
-import org.w3c.dom.Document;
-
+import javax.swing.Icon;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.utils.*;
-import org.wandora.application.gui.*;
-import javax.swing.*;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+/**
+ *
+ * @author akivela
+ */
+
+import org.w3c.dom.Document;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraToolType;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Base64;
+import org.wandora.utils.Textbox;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

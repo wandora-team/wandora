@@ -27,15 +27,21 @@
 package org.wandora.application.gui.tree;
 
 
-import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.event.*;
-import java.awt.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
+import java.awt.Component;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTextField;
+import javax.swing.JTree;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.tree.DefaultTreeCellEditor;
+import javax.swing.tree.TreeCellEditor;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.TopicGuiWrapper;
+import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.topicmap.Topic;
 
 /**
  *

@@ -27,11 +27,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleCheckBox;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleScrollPane;
+import org.wandora.application.gui.simple.SimpleTabbedPane;
+import org.wandora.application.gui.simple.SimpleTextArea;
 
 /**
  *

@@ -30,15 +30,25 @@
 package org.wandora.topicmap.layered;
 
 
-import org.wandora.topicmap.packageio.PackageOutput;
-import org.wandora.topicmap.packageio.PackageInput;
-import org.wandora.application.Wandora;
-import org.wandora.topicmap.*;
-import org.wandora.utils.Options;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapLogger;
+import org.wandora.topicmap.TopicMapType;
+import org.wandora.topicmap.TopicMapTypeManager;
+import org.wandora.topicmap.packageio.PackageInput;
+import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
+import org.wandora.utils.Options;
 
 
 /**

@@ -27,13 +27,26 @@
 
 package org.wandora.application.gui.topicpanels.graphpanel.mousetools;
 
-import org.wandora.application.gui.topicpanels.graphpanel.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.util.Vector;
+
+import org.wandora.application.gui.FreeAssociationPrompt;
+import org.wandora.application.gui.topicpanels.graphpanel.Edge;
+import org.wandora.application.gui.topicpanels.graphpanel.MouseTool;
+import org.wandora.application.gui.topicpanels.graphpanel.Node;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicMapModel;
+import org.wandora.application.gui.topicpanels.graphpanel.TopicNode;
+import org.wandora.application.gui.topicpanels.graphpanel.VModel;
+import org.wandora.application.gui.topicpanels.graphpanel.VNode;
 import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection;
-import java.awt.*;
-import org.wandora.topicmap.*;
-import java.util.*;
-import static org.wandora.utils.Tuples.*;
-import org.wandora.application.gui.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Tuples.T2;
 
 
 /**

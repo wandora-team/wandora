@@ -32,24 +32,41 @@ package org.wandora.application;
 
 
 
-import javax.swing.*;
-import java.util.*;
-import java.awt.event.*;
-import java.net.*;
-import java.io.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+
 import org.reflections.Reflections;
-
-import org.wandora.utils.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.tools.*;
-
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleMenu;
-
-import org.wandora.application.tools.importers.*;
-import org.wandora.application.tools.project.*;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.application.tools.ActivateButtonToolSet;
+import org.wandora.application.tools.ClearToolLocks;
+import org.wandora.application.tools.importers.AbstractImportTool;
+import org.wandora.application.tools.importers.OBOImport;
+import org.wandora.application.tools.importers.SimpleN3Import;
+import org.wandora.application.tools.importers.SimpleRDFImport;
+import org.wandora.application.tools.importers.TopicMapImport;
+import org.wandora.application.tools.project.LoadWandoraProject;
+import org.wandora.application.tools.project.MergeWandoraProject;
+import org.wandora.utils.JarClassLoader;
+import org.wandora.utils.Options;
 
 
 /**

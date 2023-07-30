@@ -28,8 +28,9 @@
 package org.wandora.application.contexts;
 
 
-import org.wandora.application.contexts.iterators.*;
-import java.util.*;
+import java.util.Iterator;
+
+import org.wandora.application.contexts.iterators.AssociationTypeIterator;
 
 /**
  *

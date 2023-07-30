@@ -26,15 +26,28 @@
  */
 package org.wandora.application.tools;
 
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.topicmap.*;
-import org.wandora.utils.Textbox;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.*;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.GetTopicButton;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.simple.SimpleCheckBox;
+import org.wandora.application.gui.simple.SimpleComboBox;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Textbox;
 
 /**
  *

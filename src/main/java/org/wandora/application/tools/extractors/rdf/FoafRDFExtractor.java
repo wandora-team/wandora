@@ -29,9 +29,14 @@
 package org.wandora.application.tools.extractors.rdf;
 
 
-import javax.swing.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.tools.extractors.rdf.rdfmappings.*;
+import javax.swing.Icon;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.extractors.rdf.rdfmappings.DublinCoreMapping;
+import org.wandora.application.tools.extractors.rdf.rdfmappings.FOAFMapping;
+import org.wandora.application.tools.extractors.rdf.rdfmappings.RDF2TopicMapsMapping;
+import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
+import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFSMapping;
 
 
 

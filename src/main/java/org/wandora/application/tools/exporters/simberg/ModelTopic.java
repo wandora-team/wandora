@@ -24,6 +24,7 @@ package org.wandora.application.tools.exporters.simberg;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+
 import org.wandora.application.tools.exporters.simberg.ModelField.Type;
 
 /**

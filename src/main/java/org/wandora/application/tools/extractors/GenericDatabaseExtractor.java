@@ -27,18 +27,37 @@
 
 package org.wandora.application.tools.extractors;
 
-import org.wandora.application.tools.*;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.topicmap.database2.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.contexts.*;
-import java.io.*;
-import java.util.*;
-import java.sql.*;
-import javax.swing.*;
-import static org.wandora.utils.Tuples.*;
+import static org.wandora.utils.Tuples.t2;
+
+import java.io.PrintStream;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraToolType;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.DatabaseConfigurationDialog;
+import org.wandora.application.gui.DatabaseConfigurationPanel;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
+import org.wandora.topicmap.database2.DatabaseTopicMap;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.utils.Tuples.T2;
 
 /**
  *

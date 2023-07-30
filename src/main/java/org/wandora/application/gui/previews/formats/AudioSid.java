@@ -23,12 +23,16 @@
 
 package org.wandora.application.gui.previews.formats;
 
-import de.quippy.javamod.mixer.Mixer;
+import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
+
 import java.awt.event.ActionEvent;
+
 import javax.swing.JComponent;
+
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewUtils;
-import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
+
+import de.quippy.javamod.mixer.Mixer;
 
 /**
  *

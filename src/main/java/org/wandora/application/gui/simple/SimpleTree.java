@@ -28,13 +28,13 @@
 package org.wandora.application.gui.simple;
 
 
-import java.awt.*;
-import javax.swing.*;
-import org.wandora.application.gui.*;
+import java.awt.Cursor;
+import java.awt.Graphics;
 
+import javax.swing.JTree;
 
-
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.UIConstants;
 
 /**
  *

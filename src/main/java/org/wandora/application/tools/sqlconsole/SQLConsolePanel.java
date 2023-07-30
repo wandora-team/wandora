@@ -27,13 +27,24 @@
 package org.wandora.application.tools.sqlconsole;
 
 
-import java.util.*;
-import java.sql.*;
-import org.wandora.application.tools.sqlconsole.data.*;
-import org.wandora.application.tools.sqlconsole.gui.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+
+import org.wandora.application.tools.sqlconsole.data.PatternFilteredTableView;
+import org.wandora.application.tools.sqlconsole.data.RowTable;
+import org.wandora.application.tools.sqlconsole.data.TableView;
+import org.wandora.application.tools.sqlconsole.gui.SQLTablePanel;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.Options;
-import java.io.*;
 
 /**
  *

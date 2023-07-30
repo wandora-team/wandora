@@ -29,11 +29,13 @@
 package org.wandora.topicmap.database;
 
 
+import java.util.Collection;
+import java.util.Vector;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.DatabaseConfigurationPanel;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
 import org.wandora.utils.Options;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import java.util.*;
 
 
 /**

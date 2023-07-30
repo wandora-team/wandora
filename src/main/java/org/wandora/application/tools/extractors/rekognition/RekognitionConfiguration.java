@@ -23,6 +23,7 @@ package org.wandora.application.tools.extractors.rekognition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.wandora.application.Wandora;
 
 /**

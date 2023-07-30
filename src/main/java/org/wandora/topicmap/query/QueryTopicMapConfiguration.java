@@ -20,12 +20,23 @@
  */
 
 package org.wandora.topicmap.query;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import java.util.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.gui.*;
-import javax.script.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraScriptManager;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleComboBox;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.topicmap.TopicMapConfigurationPanel;
 
 /**
  *

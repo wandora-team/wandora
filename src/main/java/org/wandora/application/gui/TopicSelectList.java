@@ -25,13 +25,20 @@
  */
 
 package org.wandora.application.gui;
-import org.wandora.topicmap.TMBox;
-import org.wandora.application.gui.*;
-import java.util.*;
-import javax.swing.*;
-import org.wandora.topicmap.*;
+import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.Vector;
 
-import java.awt.event.*;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *

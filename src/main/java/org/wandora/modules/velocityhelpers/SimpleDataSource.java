@@ -28,10 +28,11 @@
 
 package org.wandora.modules.velocityhelpers;
 
-import javax.activation.*;
-import javax.mail.internet.*;
-import javax.mail.*;
-import java.io.*;
+import java.io.InputStream;
+
+import javax.activation.DataSource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
 
 
 /**

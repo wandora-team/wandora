@@ -28,9 +28,11 @@
 package org.wandora.application.tools.importers;
 
 
-import org.wandora.topicmap.*;
-import java.io.*;
-import org.apache.jena.rdf.model.*;
+import java.io.InputStream;
+
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.wandora.topicmap.TopicMap;
 
 
 /**

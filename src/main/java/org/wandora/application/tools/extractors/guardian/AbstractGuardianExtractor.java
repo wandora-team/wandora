@@ -22,9 +22,9 @@
 
 package org.wandora.application.tools.extractors.guardian;
 
-import javax.swing.Icon;
 import java.util.HashMap;
-import java.util.Map;
+
+import javax.swing.Icon;
 
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;

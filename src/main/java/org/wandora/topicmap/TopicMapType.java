@@ -29,12 +29,15 @@
 package org.wandora.topicmap;
 
 
-import org.wandora.topicmap.packageio.PackageOutput;
+import java.io.IOException;
+
+import javax.swing.Icon;
+import javax.swing.JMenuItem;
+
+import org.wandora.application.Wandora;
 import org.wandora.topicmap.packageio.PackageInput;
+import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.utils.Options;
-import org.wandora.application.*;
-import java.io.*;
-import javax.swing.*;
 /**
  * TopicMapType is a class that makes it possible to use a topic map implementation
  * in Wandora. The class extending TopicMap implements everything directly

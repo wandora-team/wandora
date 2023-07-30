@@ -28,7 +28,9 @@ package org.wandora.application.tools.maiana;
 
 import java.io.ByteArrayInputStream;
 import java.net.URL;
+
 import javax.swing.Icon;
+
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;

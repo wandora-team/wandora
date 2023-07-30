@@ -28,26 +28,28 @@
 package org.wandora.application.tools.extractors.fng;
 
 
-import org.wandora.utils.Textbox;
-import org.wandora.utils.IObox;
-import org.wandora.utils.MSOfficeBox;
-import org.wandora.application.tools.extractors.AbstractExtractor;
-import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.TopicTools;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
-import org.wandora.topicmap.Topic;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.DateFormat;
+import java.util.Date;
 
-
-
-import java.util.*;
-import java.text.*;
-import java.io.*;
-import java.net.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicTools;
+import org.wandora.utils.IObox;
+import org.wandora.utils.MSOfficeBox;
+import org.wandora.utils.Textbox;
 
 
 

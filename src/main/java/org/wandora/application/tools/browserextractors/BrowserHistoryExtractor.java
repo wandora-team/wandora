@@ -24,12 +24,18 @@ package org.wandora.application.tools.browserextractors;
 
 import java.io.File;
 import java.net.URL;
-import org.wandora.topicmap.*;
-import org.wandora.application.Wandora;
-import java.util.*;
 import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.XTMPSI;
 
 
 

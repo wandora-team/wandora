@@ -23,6 +23,7 @@
 package org.wandora.modules.usercontrol;
 
 import java.util.Collection;
+
 import org.wandora.modules.Module;
 
 /**

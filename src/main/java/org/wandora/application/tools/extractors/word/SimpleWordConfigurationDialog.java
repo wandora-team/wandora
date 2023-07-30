@@ -22,6 +22,7 @@
 package org.wandora.application.tools.extractors.word;
 
 import javax.swing.JDialog;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;

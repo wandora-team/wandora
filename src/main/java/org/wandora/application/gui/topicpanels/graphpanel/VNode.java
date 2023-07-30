@@ -30,10 +30,17 @@ package org.wandora.application.gui.topicpanels.graphpanel;
 
 
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection;
-import java.awt.*;
-import static org.wandora.utils.Tuples.*;
-import java.util.*;
+import org.wandora.utils.Tuples.T2;
 
 
 

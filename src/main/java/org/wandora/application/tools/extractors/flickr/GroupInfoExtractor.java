@@ -26,6 +26,7 @@ package org.wandora.application.tools.extractors.flickr;
 
 import java.util.Collection;
 import java.util.TreeMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

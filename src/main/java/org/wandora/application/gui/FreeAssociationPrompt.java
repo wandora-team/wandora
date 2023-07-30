@@ -26,15 +26,32 @@
 
 package org.wandora.application.gui;
 
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import static org.wandora.utils.Tuples.*;
-import org.wandora.utils.swing.GuiTools;
+import static org.wandora.utils.Tuples.t2;
+
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.JPanel;
+import javax.swing.Scrollable;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.SchemaBox;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicHashMap;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.GripCollections;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.swing.GuiTools;
 
 
 /**

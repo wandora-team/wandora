@@ -29,12 +29,11 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.table.TableCellEditor;
-import javax.swing.plaf.basic.BasicTableUI;
-import javax.swing.plaf.ComponentUI;
 import javax.swing.event.MouseInputListener;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicTableUI;
+import javax.swing.table.TableCellEditor;
 
 /**
   * This class doesn't change the L&F of the JTable but

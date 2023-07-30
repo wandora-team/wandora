@@ -27,10 +27,13 @@
 package org.wandora.application.gui.simple;
 
 
-import org.wandora.application.gui.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.*;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+
+import org.wandora.application.gui.UIConstants;
 
 
 

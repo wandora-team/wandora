@@ -27,9 +27,11 @@ package org.wandora.application.tools;
 
 
 
-import java.util.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import java.util.Set;
+
+import org.wandora.application.WandoraTool;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 
 

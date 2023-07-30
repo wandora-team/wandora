@@ -29,7 +29,10 @@
 package org.wandora.topicmap;
 
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * SchemaBox contains many high level methods related to the proprietary topic

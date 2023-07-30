@@ -28,11 +28,31 @@ package org.wandora.application.tools.extractors.sparql;
 
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.Icon;
+
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFactory;
+// import com.hp.hpl.jena.sparql.resultset.JSONInput;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.sparql.resultset.RDFOutput;
 
 /*
 import com.hp.hpl.jena.query.QuerySolution;
@@ -64,35 +84,13 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDF2TopicMapsMapping;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Tuples.T2;
-
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFactory;
-import org.apache.jena.query.ResultSetFormatter;
-// import com.hp.hpl.jena.sparql.resultset.JSONInput;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.sparql.resultset.RDFOutput;
-
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.net.URLEncoder;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.wandora.topicmap.TMBox;
 
 /**
  *

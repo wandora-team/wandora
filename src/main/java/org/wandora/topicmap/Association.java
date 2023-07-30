@@ -27,7 +27,8 @@
  */
 
 package org.wandora.topicmap;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 /**
  *
  * @author  olli

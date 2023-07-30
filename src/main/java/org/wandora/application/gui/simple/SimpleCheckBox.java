@@ -30,9 +30,13 @@ package org.wandora.application.gui.simple;
 
 
 
-import java.awt.*;
-import javax.swing.*;
-import org.wandora.application.gui.*;
+import java.awt.Cursor;
+import java.awt.Graphics;
+
+import javax.swing.JCheckBox;
+
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
 
 /**
  *

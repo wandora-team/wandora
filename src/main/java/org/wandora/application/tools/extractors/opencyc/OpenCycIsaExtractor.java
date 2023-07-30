@@ -26,9 +26,16 @@
 package org.wandora.application.tools.extractors.opencyc;
 
 
-import java.io.*;
-import org.xml.sax.*;
-import org.wandora.topicmap.*;
+import java.io.InputStream;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 
 /**

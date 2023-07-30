@@ -26,7 +26,9 @@
 package org.wandora.application.gui.table;
 
 import java.awt.Color;
+
 import javax.swing.table.DefaultTableModel;
+
 import org.wandora.topicmap.Locator;
 
 

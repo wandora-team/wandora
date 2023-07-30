@@ -26,9 +26,12 @@
 package org.wandora.application.gui;
 
 
-import java.net.*;
-import org.wandora.topicmap.*;
-import javax.swing.tree.*;
+import java.net.URL;
+
+import javax.swing.tree.TreePath;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
 
 /**
  *

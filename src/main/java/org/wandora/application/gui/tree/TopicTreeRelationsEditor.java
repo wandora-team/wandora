@@ -26,14 +26,18 @@
 
 package org.wandora.application.gui.tree;
 
-import org.wandora.utils.Options;
-import org.wandora.utils.GripCollections;
-import javax.swing.*;
-import java.util.*;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.util.ArrayList;
 import java.util.List;
-import java.awt.*;
+
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+
+import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.application.*;
+import org.wandora.utils.GripCollections;
+import org.wandora.utils.Options;
 
 
 

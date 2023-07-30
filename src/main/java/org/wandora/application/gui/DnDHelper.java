@@ -30,13 +30,18 @@ package org.wandora.application.gui;
 
 
 
-import org.wandora.application.gui.table.TopicTable;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import javax.swing.*;
-import java.awt.datatransfer.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.TransferHandler;
+
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.application.gui.table.TopicGrid;
+import org.wandora.application.gui.table.TopicTable;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;

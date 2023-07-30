@@ -28,12 +28,21 @@
 package org.wandora.application.gui.search;
 
 
-import org.wandora.utils.swing.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Font;
+
+import javax.swing.AbstractCellEditor;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
+
+import org.wandora.application.Wandora;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.swing.TableSorter;
 
 
 

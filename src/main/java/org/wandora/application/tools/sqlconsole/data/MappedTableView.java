@@ -27,7 +27,7 @@
 package org.wandora.application.tools.sqlconsole.data;
 
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
  *

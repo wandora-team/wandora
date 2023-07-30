@@ -28,23 +28,38 @@ package org.wandora.application.gui.simple;
 
 
 
-import java.awt.*;
 import java.awt.AWTKeyStroke;
+import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.undo.UndoManager;
 
-
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.EasyVector;
 

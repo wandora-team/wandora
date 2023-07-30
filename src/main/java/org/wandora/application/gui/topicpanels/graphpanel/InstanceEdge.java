@@ -27,8 +27,10 @@
 
 package org.wandora.application.gui.topicpanels.graphpanel;
 
-import static org.wandora.utils.Tuples.*;
-import org.wandora.topicmap.*;
+import static org.wandora.utils.Tuples.t2;
+
+import org.wandora.topicmap.Topic;
+import org.wandora.utils.Tuples.T2;
 
 
 

@@ -24,14 +24,14 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel;
 
+import org.wandora.application.gui.UIConstants;
+
 import bibliothek.gui.DockController;
 import bibliothek.gui.DockTheme;
 import bibliothek.gui.dock.util.IconManager;
 import bibliothek.gui.dock.util.Priority;
 import bibliothek.gui.dock.util.color.ColorManager;
 import bibliothek.gui.dock.util.font.FontManager;
-import java.awt.Color;
-import org.wandora.application.gui.UIConstants;
 
 /**
  *

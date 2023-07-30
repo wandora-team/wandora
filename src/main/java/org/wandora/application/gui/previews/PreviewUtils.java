@@ -24,6 +24,9 @@
 package org.wandora.application.gui.previews;
 
 
+import static org.wandora.utils.Option.none;
+import static org.wandora.utils.Option.some;
+
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
@@ -43,10 +46,12 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.Icon;
-import javax.swing.JPanel;
+
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 import org.apache.tika.Tika;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
@@ -61,7 +66,6 @@ import org.wandora.utils.Functional.Fn0;
 import org.wandora.utils.Functional.Fn1;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Option;
-import static org.wandora.utils.Option.*;
 
 
 public class PreviewUtils {

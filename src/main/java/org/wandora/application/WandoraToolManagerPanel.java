@@ -27,11 +27,20 @@
 
 package org.wandora.application;
 
+import static org.wandora.utils.Tuples.t2;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
+
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.application.gui.*;
-import static org.wandora.utils.Tuples.*;
-import java.util.*;
-import javax.swing.*;
+import org.wandora.utils.Tuples.T2;
 /**
  *
  * @author  olli

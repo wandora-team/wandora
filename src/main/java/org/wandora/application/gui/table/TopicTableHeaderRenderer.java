@@ -28,11 +28,12 @@
 package org.wandora.application.gui.table;
 
 
-import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.*;
-import org.wandora.application.gui.UIConstants;
-import org.wandora.topicmap.*;
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 
 /**

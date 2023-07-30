@@ -27,16 +27,18 @@
 
 package org.wandora.application.tools.extractors.marcxml;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.tools.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.utils.*;
-import org.wandora.application.contexts.*;
+import java.io.File;
 
-import java.io.*;
-import javax.swing.*;
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.IObox;
 
 /**
  *

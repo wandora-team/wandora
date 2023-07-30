@@ -19,9 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.query;
-import java.util.*;
-import org.wandora.topicmap.*;
-import org.wandora.query2.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
+
+import org.wandora.query2.Directive;
+import org.wandora.query2.QueryContext;
+import org.wandora.query2.QueryException;
+import org.wandora.query2.ResultRow;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
 
 /**
  *

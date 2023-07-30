@@ -19,11 +19,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.diff;
-import org.wandora.topicmap.*;
-import static org.wandora.topicmap.diff.TopicMapDiff.*;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.PushbackReader;
+import java.io.Reader;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.diff.TopicMapDiff.AssociationAdded;
+import org.wandora.topicmap.diff.TopicMapDiff.AssociationDeleted;
+import org.wandora.topicmap.diff.TopicMapDiff.BNChanged;
+import org.wandora.topicmap.diff.TopicMapDiff.DiffEntry;
+import org.wandora.topicmap.diff.TopicMapDiff.SIAdded;
+import org.wandora.topicmap.diff.TopicMapDiff.SIDeleted;
+import org.wandora.topicmap.diff.TopicMapDiff.SLChanged;
+import org.wandora.topicmap.diff.TopicMapDiff.TopicAdded;
+import org.wandora.topicmap.diff.TopicMapDiff.TopicChanged;
+import org.wandora.topicmap.diff.TopicMapDiff.TopicDeleted;
+import org.wandora.topicmap.diff.TopicMapDiff.TopicDiffEntry;
+import org.wandora.topicmap.diff.TopicMapDiff.TypeAdded;
+import org.wandora.topicmap.diff.TopicMapDiff.TypeDeleted;
+import org.wandora.topicmap.diff.TopicMapDiff.VariantChanged;
 
 /**
  *

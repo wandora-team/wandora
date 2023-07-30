@@ -28,7 +28,8 @@
  */
 
 package org.wandora.utils;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 /**
  * This class provides mappings between commonly used file suffixes and 
  * content types.

@@ -27,12 +27,30 @@
  */
 
 package org.wandora.topicmap.layered;
+import static org.wandora.utils.Tuples.t2;
+import static org.wandora.utils.Tuples.t3;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.KeyedHashMap;
-import org.wandora.topicmap.*;
-import java.util.*;
-import org.wandora.utils.*;
-import static org.wandora.utils.Tuples.*;
+import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.Tuples.T3;
 /**
  * <p>
  * A LayeredTopic is a collection of topics in different layers that together

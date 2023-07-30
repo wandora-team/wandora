@@ -29,7 +29,7 @@
 package org.wandora.modules.velocityhelpers;
 
 
-import java.util.*;
+import java.util.Properties;
 
 
 /**

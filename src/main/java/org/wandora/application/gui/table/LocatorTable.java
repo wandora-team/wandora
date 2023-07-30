@@ -29,22 +29,38 @@ package org.wandora.application.gui.table;
 
 
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
-import java.io.*;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.swing.*;
 
-import org.wandora.application.*;
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+import javax.swing.ListSelectionModel;
+import javax.swing.TransferHandler;
+
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
 import org.wandora.application.gui.simple.SimpleTable;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Base64;
+import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.DataURL;
+import org.wandora.utils.DnDBox;
 import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 

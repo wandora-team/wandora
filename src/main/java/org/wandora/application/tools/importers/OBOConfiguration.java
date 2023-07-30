@@ -27,7 +27,8 @@
 package org.wandora.application.tools.importers;
 
 
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleCheckBox;
 import org.wandora.utils.swing.GuiTools;
 
 

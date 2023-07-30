@@ -24,12 +24,13 @@ package org.wandora.application.tools.extractors.word;
 
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.Jaro;
 
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
+
+import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.Jaro;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.JaroWinkler;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
 /**
  *

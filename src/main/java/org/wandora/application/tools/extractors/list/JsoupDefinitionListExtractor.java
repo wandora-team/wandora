@@ -23,12 +23,12 @@
 
 package org.wandora.application.tools.extractors.list;
 
-import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
+import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;

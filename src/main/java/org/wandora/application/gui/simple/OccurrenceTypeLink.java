@@ -25,9 +25,9 @@
 
 package org.wandora.application.gui.simple;
 
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
 import org.wandora.application.gui.OccurrenceTable;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Topic;
 
 
 

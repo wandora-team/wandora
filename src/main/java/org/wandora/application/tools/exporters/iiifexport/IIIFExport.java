@@ -29,9 +29,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.Icon;
+
 import org.wandora.application.Wandora;
-import static org.wandora.application.WandoraToolLogger.WAIT;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIConstants;

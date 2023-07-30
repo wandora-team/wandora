@@ -24,8 +24,10 @@
 package org.wandora.application.tools.extractors.geonames;
 
 
-import org.xml.sax.*;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.TopicMap;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 
 

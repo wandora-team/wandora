@@ -30,12 +30,11 @@
 package org.wandora.utils;
 
 
-import org.wandora.application.Wandora;
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
-import org.wandora.application.*;
+import org.wandora.application.Wandora;
 
 
 

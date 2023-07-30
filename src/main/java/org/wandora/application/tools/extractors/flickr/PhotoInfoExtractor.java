@@ -27,16 +27,15 @@ package org.wandora.application.tools.extractors.flickr;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.TreeMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
+import org.wandora.application.tools.extractors.geonames.AbstractGeoNamesExtractor;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
-
-
-import org.wandora.application.tools.extractors.geonames.*;
 
 
 /**

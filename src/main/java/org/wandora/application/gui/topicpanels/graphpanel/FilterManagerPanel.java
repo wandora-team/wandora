@@ -28,11 +28,19 @@ package org.wandora.application.gui.topicpanels.graphpanel;
 
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
+import javax.swing.JMenuBar;
+import javax.swing.JSeparator;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleMenu;
+import org.wandora.application.gui.simple.SimpleMenuItem;
 
 
 

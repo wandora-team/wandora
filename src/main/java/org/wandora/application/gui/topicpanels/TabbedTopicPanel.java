@@ -28,28 +28,51 @@ package org.wandora.application.gui.topicpanels;
 
 
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.wandora.application.CancelledException;
+import org.wandora.application.LocatorHistory;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraMenuManager;
+import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.gui.ConfirmResult;
+import org.wandora.application.gui.NewTopicPanelExtended;
 import org.wandora.application.gui.UIBox;
-import org.wandora.application.gui.previews.*;
-import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.previews.PreviewWrapper;
 import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.NewTopicExtended;
 import org.wandora.application.tools.navigate.OpenTopic;
-import org.wandora.application.tools.subjects.*;
 import org.wandora.application.tools.subjects.AddSubjectIdentifier;
+import org.wandora.application.tools.subjects.CheckSubjectLocator;
+import org.wandora.application.tools.subjects.CopySubjectIdentifiers;
+import org.wandora.application.tools.subjects.DeleteSubjectLocator;
+import org.wandora.application.tools.subjects.DownloadSubjectLocators;
+import org.wandora.application.tools.subjects.FlattenSubjectIdentifiers;
 import org.wandora.application.tools.subjects.PasteSubjectIdentifiers;
-import org.wandora.application.tools.topicnames.*;
-
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import org.wandora.application.tools.topicnames.AddVariantName;
+import org.wandora.application.tools.topicnames.AllEmptyVariantRemover;
+import org.wandora.application.tools.topicnames.TopicNameCopier;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Options;
 
 
 

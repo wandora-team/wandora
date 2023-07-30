@@ -28,12 +28,17 @@
 package org.wandora.application.tools.layers;
 
 
-import org.wandora.topicmap.layered.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import java.util.*;
-import javax.swing.*;
+import java.util.Collection;
+import java.util.Iterator;
+
+import javax.swing.Icon;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.layered.Layer;
 
 
 /**

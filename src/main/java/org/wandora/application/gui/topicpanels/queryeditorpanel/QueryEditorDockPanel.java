@@ -21,6 +21,10 @@
  */
 package org.wandora.application.gui.topicpanels.queryeditorpanel;
 
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
+
 import bibliothek.gui.DockController;
 import bibliothek.gui.DockStation;
 import bibliothek.gui.Dockable;
@@ -28,8 +32,6 @@ import bibliothek.gui.dock.DefaultDockable;
 import bibliothek.gui.dock.SplitDockStation;
 import bibliothek.gui.dock.StackDockStation;
 import bibliothek.gui.dock.station.split.SplitDockGrid;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
 
 /**
  *

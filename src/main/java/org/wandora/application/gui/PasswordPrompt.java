@@ -28,11 +28,11 @@ package org.wandora.application.gui;
 
 
 
+import javax.swing.Icon;
+
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
-
-import javax.swing.*;
 
 
 

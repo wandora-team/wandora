@@ -27,11 +27,16 @@
  */
 
 package org.wandora.topicmap;
-import org.wandora.topicmap.memory.*;
-import org.wandora.topicmap.database.*;
-import org.wandora.topicmap.layered.*;
-import org.wandora.topicmap.query.*;
-import org.wandora.topicmap.linked.*;
+import org.wandora.topicmap.database.DatabaseTopicMap;
+import org.wandora.topicmap.database.DatabaseTopicMapType;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.topicmap.layered.LayeredTopicMapType;
+import org.wandora.topicmap.linked.LinkedTopicMap;
+import org.wandora.topicmap.linked.LinkedTopicMapType;
+import org.wandora.topicmap.memory.MemoryTopicMapType;
+import org.wandora.topicmap.memory.TopicMapImpl;
+import org.wandora.topicmap.query.QueryTopicMap;
+import org.wandora.topicmap.query.QueryTopicMapType;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 /**

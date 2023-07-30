@@ -26,8 +26,15 @@
  *
  */
 package org.wandora.query2;
-import java.util.*;
-import javax.script.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.script.Bindings;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+
 import org.wandora.application.WandoraScriptManager;
 /**
  *

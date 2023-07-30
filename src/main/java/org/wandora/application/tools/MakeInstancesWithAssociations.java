@@ -28,12 +28,14 @@
 
 package org.wandora.application.tools;
 
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
+import java.util.Iterator;
 
-import java.util.*;
+import org.wandora.application.Wandora;
+import org.wandora.application.contexts.AssociationContext;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.WandoraOptionPane;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
 
 
 /**

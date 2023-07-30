@@ -35,7 +35,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
+
 import javax.swing.Icon;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.application.gui.UIBox;

@@ -21,8 +21,6 @@
  */
 package org.wandora.modules.servlet;
 
-import java.util.HashMap;
-
 /**
  * <p>
  * The interface for all templates. A template is an object which can 

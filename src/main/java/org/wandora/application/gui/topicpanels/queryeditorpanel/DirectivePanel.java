@@ -35,9 +35,11 @@ import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.AddonParameters;
 import org.wandora.application.gui.topicpanels.queryeditorpanel.DirectiveEditor.BoundParameter;

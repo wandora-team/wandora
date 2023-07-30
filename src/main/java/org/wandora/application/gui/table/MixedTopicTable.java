@@ -27,23 +27,30 @@ package org.wandora.application.gui.table;
 
 
 import java.awt.Dimension;
-import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.navigate.OpenTopic;
-
-import java.awt.event.*;
-import javax.swing.*;
-import java.awt.datatransfer.*;
-
+import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import org.wandora.application.*;
+
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+import javax.swing.TransferHandler;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraMenuManager;
 import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.UIBox;
-import static org.wandora.application.gui.simple.SimpleTable.DEFAULT_ROW_HEIGHT;
-import org.wandora.topicmap.*;
-import org.wandora.utils.swing.*;
-import org.wandora.application.tools.*;
+import org.wandora.application.gui.topicstringify.TopicToString;
+import org.wandora.application.tools.DuplicateTopics;
+import org.wandora.application.tools.SplitTopics;
+import org.wandora.application.tools.SplitTopicsWithBasename;
+import org.wandora.application.tools.navigate.OpenTopic;
+import org.wandora.topicmap.Topic;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.swing.TableSorter;
 
 
 /**

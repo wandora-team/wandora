@@ -22,7 +22,6 @@
 package org.wandora.modules;
 
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;

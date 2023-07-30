@@ -28,15 +28,26 @@ package org.wandora.application.tools.importers;
 
 
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.contexts.*;
-import org.wandora.application.gui.*;
-import java.io.*;
-import java.net.*;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.net.URL;
+
+import javax.swing.Icon;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIBox;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapReadOnlyException;
 
 
 /**

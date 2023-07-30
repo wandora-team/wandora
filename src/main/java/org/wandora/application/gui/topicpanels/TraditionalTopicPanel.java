@@ -30,24 +30,41 @@ package org.wandora.application.gui.topicpanels;
 
 
 
-import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
-import org.wandora.application.*;
-import org.wandora.application.gui.*;
-import org.wandora.application.gui.previews.*;
-import org.wandora.topicmap.*;
-import org.wandora.utils.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+
+import org.wandora.application.CancelledException;
+import org.wandora.application.LocatorHistory;
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraMenuManager;
+import org.wandora.application.gui.ConfirmResult;
+import org.wandora.application.gui.NewTopicPanelExtended;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.previews.PreviewWrapper;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleToggleButton;
 import org.wandora.application.gui.simple.SimpleURIField;
+import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.navigate.OpenTopic;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.Options;
 
 
 /**

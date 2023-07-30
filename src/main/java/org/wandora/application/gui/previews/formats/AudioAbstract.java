@@ -24,11 +24,8 @@
 
 package org.wandora.application.gui.previews.formats;
 
-import de.quippy.javamod.main.JavaModMainBase;
-import de.quippy.javamod.mixer.Mixer;
-import de.quippy.javamod.multimedia.MultimediaContainer;
-import de.quippy.javamod.multimedia.MultimediaContainerManager;
-import de.quippy.javamod.multimedia.mod.ModContainer;
+import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -42,17 +39,24 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Properties;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
-import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.MimeTypes;
+
+import de.quippy.javamod.main.JavaModMainBase;
+import de.quippy.javamod.mixer.Mixer;
+import de.quippy.javamod.multimedia.MultimediaContainer;
+import de.quippy.javamod.multimedia.MultimediaContainerManager;
+import de.quippy.javamod.multimedia.mod.ModContainer;
 
 /**
  * AudioAbstract uses Daniel Becker's Javamod player.

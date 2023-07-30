@@ -26,11 +26,22 @@
 
 package org.wandora.application.gui;
 
-import org.wandora.utils.ClipboardBox;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.Icon;
+import javax.swing.JDialog;
+import javax.swing.JPopupMenu;
+
 import org.wandora.application.Wandora;
+import org.wandora.utils.ClipboardBox;
 
 
 

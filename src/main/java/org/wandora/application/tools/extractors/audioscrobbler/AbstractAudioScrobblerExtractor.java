@@ -26,14 +26,22 @@
 
 package org.wandora.application.tools.extractors.audioscrobbler;
 
-import java.net.*;
-import java.io.*;
-import javax.swing.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 
-import org.wandora.topicmap.*;
-import org.wandora.application.*;
-import org.wandora.application.tools.extractors.*;
-import org.wandora.application.gui.*;
+import javax.swing.Icon;
+
+import org.wandora.application.WandoraToolType;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.application.tools.extractors.ExtractHelper;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 
 

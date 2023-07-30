@@ -25,6 +25,7 @@
 package org.wandora.application.tools.extractors.flickr;
 
 import java.util.TreeMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wandora.topicmap.Locator;

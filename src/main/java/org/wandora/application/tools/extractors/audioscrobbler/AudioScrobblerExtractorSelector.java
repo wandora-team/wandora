@@ -26,14 +26,18 @@
 
 package org.wandora.application.tools.extractors.audioscrobbler;
 
-import org.wandora.application.contexts.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
+import java.awt.Component;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.net.*;
+import javax.swing.JDialog;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Topic;
 
 
 

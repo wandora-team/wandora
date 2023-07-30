@@ -23,7 +23,8 @@
  *
  */
 package org.wandora.query2;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 /**
  *
  * @author olli

@@ -56,6 +56,7 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
+
 import org.wandora.application.contexts.PreContext;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.TreeMapTopicPanel;

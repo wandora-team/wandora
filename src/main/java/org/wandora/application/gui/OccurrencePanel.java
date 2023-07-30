@@ -30,10 +30,20 @@ package org.wandora.application.gui;
 
 
 import java.awt.event.KeyEvent;
-import org.wandora.topicmap.*;
-import java.util.*;
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import org.wandora.application.CancelledException;
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.topicmap.TMBox;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
 
 
 

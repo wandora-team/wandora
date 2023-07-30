@@ -23,13 +23,11 @@ package org.wandora.application.tools.extractors.mediawikiapi;
 
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
-
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
-
 import org.wandora.utils.language.LanguageBox;
 
 /**

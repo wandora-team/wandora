@@ -22,7 +22,7 @@
 
 package org.wandora.application.tools.browserextractors;
 import org.wandora.application.Wandora;
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.TopicMapException;
 /**
  *
  * @author olli

@@ -27,9 +27,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import org.wandora.modules.Module;
 import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
@@ -37,6 +35,10 @@ import org.wandora.modules.servlet.ActionException;
 import org.wandora.modules.servlet.GenericTemplateAction;
 import org.wandora.modules.servlet.ModulesServlet;
 import org.wandora.modules.servlet.Template;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * <p>
