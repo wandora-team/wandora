@@ -39,6 +39,10 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 
 public class TopicMapFileChooser extends SimpleFileChooser {
     
+    private static final long serialVersionUID = 1L;
+
+
+
     public TopicMapFileChooser() {
         initialize();
     }

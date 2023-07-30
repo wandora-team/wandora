@@ -27,7 +27,11 @@
 package org.wandora.application.gui;
 
 
-import org.wandora.topicmap.*;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.TopicMapException;
+
+
 /**
  *
  * @author  olli

@@ -25,8 +25,9 @@
  */
 
 package org.wandora.application.gui;
-import org.wandora.application.*;
-import org.wandora.application.gui.simple.*;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.utils.swing.GuiTools;
 import org.wandora.topicmap.database.DatabaseConfiguration;
 /**
@@ -37,19 +38,19 @@ public class DatabaseConfigurationDialog extends javax.swing.JDialog {
 	
 	private static final long serialVersionUID = 1L;
     
-    private Wandora admin;
+    private Wandora wandora;
     private boolean cancelled=true;
     private DatabaseConfigurationPanel databaseConfigurationPanel;
     
     /** Creates new form DatabaseConfigurationDialog */
-    public DatabaseConfigurationDialog(Wandora admin, boolean modal) {
-        super(admin, modal);
-        this.admin=admin;
+    public DatabaseConfigurationDialog(Wandora wandora, boolean modal) {
+        super(wandora, modal);
+        this.wandora=wandora;
         initComponents();
-        databaseConfigurationPanel=new DatabaseConfigurationPanel(admin);
-        databaseConfigurationPanel.setConnections(DatabaseConfiguration.parseConnections(admin.getOptions()));
+        databaseConfigurationPanel=new DatabaseConfigurationPanel(wandora);
+        databaseConfigurationPanel.setConnections(DatabaseConfiguration.parseConnections(wandora.getOptions()));
         container.add(databaseConfigurationPanel);
-        GuiTools.centerWindow(this,admin);
+        GuiTools.centerWindow(this,wandora);
     }
     
     /** This method is called from within the constructor to
@@ -114,13 +115,13 @@ public class DatabaseConfigurationDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        DatabaseConfiguration.writeOptions(admin.getOptions(),databaseConfigurationPanel);
+        DatabaseConfiguration.writeOptions(wandora.getOptions(),databaseConfigurationPanel);
         cancelled=true;
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        DatabaseConfiguration.writeOptions(admin.getOptions(),databaseConfigurationPanel);
+        DatabaseConfiguration.writeOptions(wandora.getOptions(),databaseConfigurationPanel);
         cancelled=false;
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed

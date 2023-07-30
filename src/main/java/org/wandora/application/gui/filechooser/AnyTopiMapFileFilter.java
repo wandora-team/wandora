@@ -28,7 +28,7 @@
 package org.wandora.application.gui.filechooser;
 
 
-import java.io.*;
+import java.io.File;
 
 
 /**

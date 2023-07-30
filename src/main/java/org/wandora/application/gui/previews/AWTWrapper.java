@@ -42,6 +42,9 @@ import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTo
  */
 public class AWTWrapper extends JPanel implements PreviewPanel {
     
+    private static final long serialVersionUID = 1L;
+    
+    
     private Panel heavyContainer;
     private PreviewPanel innerPanel;
     private Dimension prefSize;

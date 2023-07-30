@@ -29,7 +29,7 @@
 package org.wandora.utils.velocity;
 
 
-import java.util.*;
+import java.util.Properties;
 
 /**
  *

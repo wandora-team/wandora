@@ -28,11 +28,12 @@
 package org.wandora.application.gui.previews;
 
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.Map;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.wandora.topicmap.Locator;
 
 
@@ -42,7 +43,9 @@ import org.wandora.topicmap.Locator;
  * @author akivela
  */
 public class PreviewWrapper extends JPanel {
-    private static HashMap<Object,PreviewWrapper> previewWrappers = null;
+    private static final long serialVersionUID = 1L;
+    
+    private static Map<Object,PreviewWrapper> previewWrappers = null;
     
     private PreviewPanel currentPanel = null;
     private Component currentUI = null;
@@ -64,7 +67,7 @@ public class PreviewWrapper extends JPanel {
     
     public static PreviewWrapper getPreviewWrapper(Object owner) {
         if(previewWrappers == null) {
-            previewWrappers = new HashMap();
+            previewWrappers = new HashMap<>();
         }
         PreviewWrapper previewWrapper = previewWrappers.get(owner);
         if(previewWrapper == null) {

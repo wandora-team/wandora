@@ -27,10 +27,10 @@
 
 package org.wandora.application.gui.filechooser;
 
-import org.wandora.application.gui.*;
-import javax.swing.filechooser.*;
-import java.io.*;
-import javax.swing.*;
+import org.wandora.application.gui.UIBox;
+import javax.swing.filechooser.FileView;
+import java.io.File;
+import javax.swing.Icon;
 
 
 

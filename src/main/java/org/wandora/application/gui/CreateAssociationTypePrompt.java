@@ -25,15 +25,23 @@
  */
 
 package org.wandora.application.gui;
+
+
 import org.wandora.topicmap.SchemaBox;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.*;
-import org.wandora.topicmap.*;
-import static org.wandora.utils.Tuples.*;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.Wandora;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMap;
+import static org.wandora.utils.Tuples.T2;
 import org.wandora.utils.swing.GuiTools;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import java.awt.GridBagConstraints;
+import java.util.Vector;
+import java.util.Collection;
 
 /**
  *
@@ -300,7 +308,7 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
         addPlayer(null,null);
     }
     public void addPlayer(Topic role,Topic roleClass) throws TopicMapException {
-        T2<GetTopicButton,GetTopicButton> t=t2(new GetTopicButton(role,admin,this),new GetTopicButton(roleClass,admin,this,true));
+        T2<GetTopicButton,GetTopicButton> t=new T2<>(new GetTopicButton(role,admin,this),new GetTopicButton(roleClass,admin,this,true));
         roles.add(t);
         refreshPlayersPanel();
     }

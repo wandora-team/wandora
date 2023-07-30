@@ -27,7 +27,8 @@
 package org.wandora.application.gui;
 
 
-import org.wandora.application.gui.simple.*;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.utils.swing.GuiTools;
 
 
