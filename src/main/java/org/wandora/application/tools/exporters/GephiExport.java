@@ -117,13 +117,13 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
     }
 
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        GenericOptionsDialog genOptDiag=new GenericOptionsDialog(admin,"Gephi","Gephi Export options",true,new String[][]{
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        GenericOptionsDialog genOptDiag=new GenericOptionsDialog(wandora,"Gephi","Gephi Export options",true,new String[][]{
             new String[]{"Export classes","boolean",(EXPORT_CLASSES ? "true" : "false"),"Should Wandora export also topic types (class-instance relations)?"},
             new String[]{"Export occurrences","boolean",(EXPORT_OCCURRENCES ? "true" : "false"),"Should topic occurrences also export?"},
             new String[]{"Export all associations","boolean",(EXPORT_ALL_ASSOCIATIONS ? "true" : "false"),"Should associations with multiple roles be exported?"},
 
-        },admin);
+        },wandora);
         genOptDiag.setVisible(true);
         if(genOptDiag.wasCancelled()) return;
 

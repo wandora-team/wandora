@@ -77,16 +77,16 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
     private int layout = WANDORA_LAYOUT;
 
     
-    public CopyAssociations(Wandora admin, Context context)  throws TopicMapException {
-        this(admin, context, TABTEXT_OUTPUT);
+    public CopyAssociations(Wandora wandora, Context context)  throws TopicMapException {
+        this(wandora, context, TABTEXT_OUTPUT);
     }
     
-    public CopyAssociations(Wandora admin, Context context, int outputFormat)  throws TopicMapException {
+    public CopyAssociations(Wandora wandora, Context context, int outputFormat)  throws TopicMapException {
         this.outputFormat = outputFormat;
         setContext(context);
     }
     
-    public CopyAssociations(Wandora admin, Context context, int outputFormat, int outputLayout)  throws TopicMapException {
+    public CopyAssociations(Wandora wandora, Context context, int outputFormat, int outputLayout)  throws TopicMapException {
         this.outputFormat = outputFormat;
         this.layout = outputLayout;
         setContext(context);

@@ -211,9 +211,7 @@ public class ExcelTopicOccurrenceExtractor extends AbstractExcelExtractor {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        Wandora wandora = Wandora.getWandora();
-        
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Excel topic occurrence extractor options","Excel topic occurrence extractor options",true,new String[][]{
             new String[]{"First row contains occurrence types?","boolean",(FIRST_ROW_CONTAINS_OCCURRENCE_TYPES ? "true" : "false"),null },
         },wandora);

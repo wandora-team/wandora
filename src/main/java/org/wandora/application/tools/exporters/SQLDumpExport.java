@@ -100,7 +100,7 @@ public class SQLDumpExport extends AbstractExportTool {
         if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();        
             File file = chooser.getSelectedFile();
-//            TopicMap tm=admin.getTopicMap();
+//            TopicMap tm=wandora.getTopicMap();
             TopicMap tm = solveContextTopicMap(wandora,context);
             
             try{

@@ -94,7 +94,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
     
     private String defaultLang = "en";
     
-    private Wandora admin = null;
+    private Wandora wandora = null;
 
     private ArrayList<String> visitedDirectories = new ArrayList<>();
     
@@ -311,8 +311,8 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
             setData(documentTopic, extractionTimeType, defaultLang, dateString);
 
             URLConnection uc = null;
-            if(admin != null) {
-                uc = admin.wandoraHttpAuthorizer.getAuthorizedAccess(url);
+            if(wandora != null) {
+                uc = wandora.wandoraHttpAuthorizer.getAuthorizedAccess(url);
             }
             else {
                 uc = url.openConnection();

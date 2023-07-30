@@ -96,12 +96,12 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
         return true;
     }
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"DOT Export options","DOT Export options",true,new String[][]{
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"DOT Export options","DOT Export options",true,new String[][]{
             new String[]{"Export classes","boolean",(EXPORT_CLASSES ? "true" : "false"),"Should topic classes also export?"},
             new String[]{"Export occurrences","boolean",(EXPORT_OCCURRENCES ? "true" : "false"),"Should topic occurrences also export?"},
             new String[]{"Export n associations","boolean",(EXPORT_N_ASSOCIATIONS ? "true" : "false"), "Should associations with more than 2 players also export?"},
-        },admin);
+        },wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
         
@@ -117,7 +117,7 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
     
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -129,8 +129,8 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
             topicMapName = "selection_in_wandora";
         }
         else {
-            tm = solveContextTopicMap(admin, context);
-            topicMapName = this.solveNameForTopicMap(admin, tm);
+            tm = solveContextTopicMap(wandora, context);
+            topicMapName = this.solveNameForTopicMap(wandora, tm);
             if(topicMapName != null) {
                 exportInfo =  "Exporting topic map in layer '" + topicMapName + "' as DOT graph";
             }
@@ -145,7 +145,7 @@ public class DOTExport extends AbstractExportTool implements WandoraTool {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle(exportInfo+"...");
 
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();
             File file = chooser.getSelectedFile();
             String fileName = file.getName();

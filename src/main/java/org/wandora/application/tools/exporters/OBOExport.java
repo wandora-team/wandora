@@ -95,7 +95,7 @@ public class OBOExport extends AbstractExportTool {
     }
 
     @Override
-    public void initialize(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         String o=options.get(OBO.optionPrefix+"options");
         if(o!=null){
             int i=Integer.parseInt(o);
@@ -109,9 +109,9 @@ public class OBOExport extends AbstractExportTool {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         //System.out.println(prefix);
-        OBOConfiguration dialog=new OBOConfiguration(admin,true);
+        OBOConfiguration dialog=new OBOConfiguration(wandora,true);
         dialog.setOptions(OBO.getOptions());
         dialog.setVisible(true);
         if(!dialog.wasCancelled()){
@@ -122,7 +122,7 @@ public class OBOExport extends AbstractExportTool {
     }
     
     @Override
-    public void writeOptions(Wandora admin,org.wandora.utils.Options options,String prefix){
+    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
         options.put(prefix+"OBO.optionPrefix",""+OBO.getOptions());
     }  
     

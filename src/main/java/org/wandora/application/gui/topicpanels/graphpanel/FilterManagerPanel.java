@@ -62,7 +62,7 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
     private GraphFilter topicNodeFilter;
     
     /** Creates new form FilterManagerPanel */
-    public FilterManagerPanel(Wandora admin) {
+    public FilterManagerPanel(Wandora wandora) {
         filteredTopicsModel=new DefaultListModel<>();
         filteredTopicTypesModel=new DefaultListModel<>();
         filteredAssociationTypesModel=new DefaultListModel<>();
@@ -77,14 +77,14 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
     
     
     JDialog filterDialog = null;
-    public JDialog getDialogForMe(Wandora admin) {
+    public JDialog getDialogForMe(Wandora wandora) {
         if(filterDialog == null) {
-            filterDialog = new JDialog(admin, false);
+            filterDialog = new JDialog(wandora, false);
             filterDialog.setLayout(new BorderLayout());
             filterDialog.setSize(300, 400);
             filterDialog.setTitle("Graph Filter Manager");
-            filterDialog.setJMenuBar(getMenuBar(admin));
-            if(admin != null) admin.centerWindow(filterDialog);
+            filterDialog.setJMenuBar(getMenuBar(wandora));
+            if(wandora != null) wandora.centerWindow(filterDialog);
         }
         filterDialog.add(this, BorderLayout.CENTER);
         filterDialog.add(footerPanel, BorderLayout.SOUTH);

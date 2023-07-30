@@ -284,9 +284,7 @@ public class ExcelAdjacencyMatrixExtractor extends AbstractExcelExtractor {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        Wandora wandora = Wandora.getWandora();
-        
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Excel adjacency matrix extractor options","Excel adjacency matrix extractor options",true,new String[][]{
             new String[]{"Interpret false as empty cell?","boolean",(INTERPRET_FALSE_AS_EMPTY_CELL ? "true" : "false"),null },
             new String[]{"Interpret zero character (0) as empty cell?","boolean",(INTERPRET_ZERO_AS_EMPTY_CELL ? "true" : "false"),null },

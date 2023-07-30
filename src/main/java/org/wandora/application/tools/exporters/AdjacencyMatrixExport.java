@@ -102,14 +102,14 @@ public class AdjacencyMatrixExport extends AbstractExportTool implements Wandora
         return true;
     }
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"Adjacency matrix export options","Adjacency matrix export options",true,new String[][]{
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Adjacency matrix export options","Adjacency matrix export options",true,new String[][]{
             new String[]{"Count classes","boolean",(COUNT_CLASSES ? "true" : "false"),"Should Wandora count classes?"},
             new String[]{"Count instances","boolean",(COUNT_INSTANCES ? "true" : "false"),"Should Wandora count instances?"},
             new String[]{"Count associations","boolean",(COUNT_ASSOCIATIONS ? "true" : "false"), "Should Wandora count associations?"},
             new String[]{"Label matrix columns and rows","boolean",(LABEL_MATRIX ? "true" : "false"), "Should Wandora label matrix columns and rows using topic names?"},
             new String[]{"Export as HTML table","boolean",(EXPORT_AS_HTML_TABLE ? "true" : "false"), "Export HTML table instead of tab text?"},
-        },admin);
+        },wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
 
@@ -128,7 +128,7 @@ public class AdjacencyMatrixExport extends AbstractExportTool implements Wandora
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
 
         Iterator<Topic> topics = null;
         String exportInfo = "";
@@ -139,8 +139,8 @@ public class AdjacencyMatrixExport extends AbstractExportTool implements Wandora
             }
             else {
                 // --- Solve first topic map to be exported
-                TopicMap tm = solveContextTopicMap(admin, context);
-                String topicMapName = this.solveNameForTopicMap(admin, tm);
+                TopicMap tm = solveContextTopicMap(wandora, context);
+                String topicMapName = this.solveNameForTopicMap(wandora, tm);
                 topics = tm.getTopics();
 
                 if(topicMapName == null) exportInfo = "LayerStack";
@@ -150,7 +150,7 @@ public class AdjacencyMatrixExport extends AbstractExportTool implements Wandora
             // --- Then solve target file (and format)
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setDialogTitle("Export "+exportInfo+" as adjacency matrix...");
-            if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+            if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
                 setDefaultLogger();
                 File file = chooser.getSelectedFile();
                 String fileName = file.getName();

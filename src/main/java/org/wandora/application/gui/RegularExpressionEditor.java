@@ -96,7 +96,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
         patterns = new LinkedHashMap<>();
         if(wandora != null) {
             parsePatternOptions(wandora.options);
-            //setIconImage(admin.getIconImage());
+            //setIconImage(wandora.getIconImage());
         }
         originalPattern = null;
         initGui();

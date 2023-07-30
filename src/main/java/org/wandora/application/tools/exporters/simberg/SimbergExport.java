@@ -726,13 +726,13 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context context) throws TopicMapException {
         TopicMap tm=Wandora.getWandora().getTopicMap();
         
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("Export nyblin data as JSON");
 
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();
             File file = chooser.getSelectedFile();
 

@@ -67,14 +67,14 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
     
     
     
-    public EditorPanel(Wandora admin, Object dc) {
-        this(admin, 0, dc);
+    public EditorPanel(Wandora wandora, Object dc) {
+        this(wandora, 0, dc);
     }
     
     
     /** Creates a new instance of EditorPanel */
-    public EditorPanel(Wandora admin, int o, Object dc) {
-        parent = admin;
+    public EditorPanel(Wandora wandora, int o, Object dc) {
+        parent = wandora;
         orders = o;
         dropContext = dc;
         dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);

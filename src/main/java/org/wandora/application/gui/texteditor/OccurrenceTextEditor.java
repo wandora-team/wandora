@@ -70,18 +70,18 @@ public class OccurrenceTextEditor extends TextEditor {
     
     
     
-    public OccurrenceTextEditor(Wandora admin, boolean modal, String initText, Topic occurrenceTopic, Topic type, Topic version) {
-        this(admin,modal,initText,null,occurrenceTopic,type,version);
+    public OccurrenceTextEditor(Wandora wandora, boolean modal, String initText, Topic occurrenceTopic, Topic type, Topic version) {
+        this(wandora,modal,initText,null,occurrenceTopic,type,version);
     }
-    public OccurrenceTextEditor(Wandora admin, boolean modal, String initText) {
-        this(admin,modal,initText,null);
+    public OccurrenceTextEditor(Wandora wandora, boolean modal, String initText) {
+        this(wandora,modal,initText,null);
     }
-    public OccurrenceTextEditor(Wandora admin, boolean modal, String initText, String contentType) {
-        super(admin, modal, initText, contentType);
+    public OccurrenceTextEditor(Wandora wandora, boolean modal, String initText, String contentType) {
+        super(wandora, modal, initText, contentType);
         infoLabel.setText("Editing occurrence");
     }
-    public OccurrenceTextEditor(Wandora admin, boolean modal, String initText, String contentType, Topic occurrenceTopic, Topic type, Topic version) {
-        super(admin, modal, initText, contentType);
+    public OccurrenceTextEditor(Wandora wandora, boolean modal, String initText, String contentType, Topic occurrenceTopic, Topic type, Topic version) {
+        super(wandora, modal, initText, contentType);
         this.occurrenceTopic = occurrenceTopic;
         this.occurrenceType = type;
         this.occurrenceVersion = version;
@@ -131,8 +131,8 @@ public class OccurrenceTextEditor extends TextEditor {
     
     
     /** Creates new form OccurrenceTextEditor */
-    public OccurrenceTextEditor(Wandora admin, boolean modal) {
-        super(admin, modal);
+    public OccurrenceTextEditor(Wandora wandora, boolean modal) {
+        super(wandora, modal);
     }
     
     

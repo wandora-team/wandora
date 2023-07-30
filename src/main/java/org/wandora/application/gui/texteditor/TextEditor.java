@@ -478,7 +478,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 }
             }
             else if("close".equalsIgnoreCase(c)) {
-                //int a = WandoraOptionPane.showConfirmDialog(admin, "Accept changes?", "Accept changes?", WandoraOptionPane.OK_CANCEL_OPTION);
+                //int a = WandoraOptionPane.showConfirmDialog(wandora, "Accept changes?", "Accept changes?", WandoraOptionPane.OK_CANCEL_OPTION);
                 JDialog acceptDialog = new JDialog(this, true);
                 acceptDialog.setTitle("Accept changes?");
                 acceptDialog.add(acceptPanel);

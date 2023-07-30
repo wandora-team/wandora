@@ -101,7 +101,7 @@ public class InsertPlayer extends AbstractWandoraTool implements WandoraTool {
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
                 Iterator associations = context.getContextObjects();
                 if(associations.hasNext()) {
-                    //System.out.println("admin == "+wandora);
+                    //System.out.println("wandora == "+wandora);
                     GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Select player and role","Select player and it's role in associations. Selecting existing role overrides old player.",true,new String[][]{
                         new String[]{"Role","topic",null},
                         new String[]{"Player","topic",null},

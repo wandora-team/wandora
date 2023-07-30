@@ -524,12 +524,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             }
         }
     }
-    
-    /*
-    public void setWandoraAdmin(Wandora admin) {
-        this.admin = admin;
-    }
-     */
+
     
     public Wandora getWandora(){
         return wandora;
@@ -1330,9 +1325,9 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         if(e.getButton()==e.BUTTON1){
             if(e.getClickCount() == 2 && mouseOverNode!=null) {
                 Node n = mouseOverNode.getNode();
-                if(n instanceof TopicNode && admin != null) {
+                if(n instanceof TopicNode && wandora != null) {
                     Topic t = ((TopicNode) n).getTopic();
-                    admin.applyChangesAndOpen(t);                    
+                    wandora.applyChangesAndOpen(t);                    
                 }
             }
             else if(mouseTool==TOOL_SELECT || (e.getModifiers()&e.SHIFT_MASK)!=0) {

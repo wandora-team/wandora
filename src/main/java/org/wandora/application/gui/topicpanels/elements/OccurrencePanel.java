@@ -45,13 +45,13 @@ import org.wandora.topicmap.Topic;
 public class OccurrencePanel extends JPanel {
 
     private Topic topic = null;
-    private Wandora admin = null;
+    private Wandora wandora = null;
     protected HashSet<Locator> visibleTopics;
     
     
-    public OccurrencePanel(Wandora admin, Topic t) {
+    public OccurrencePanel(Wandora wandora, Topic t) {
         this.topic = t;
-        this.admin = admin;
+        this.wandora = wandora;
     }
     
     

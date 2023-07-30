@@ -230,9 +230,7 @@ public class ExcelTopicTreeExtractor extends AbstractExcelExtractor {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        Wandora wandora = Wandora.getWandora();
-        
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Excel topic tree extractor options","Excel topic tree extractor options",true,new String[][]{
             new String[]{"Make superclass-subclass relation?","boolean",(MAKE_SUPER_SUB_CLASS_RELATION ? "true" : "false"),null },
             new String[]{"Make class-instance relation?","boolean",(MAKE_CLASS_INSTANCE_RELATION ? "true" : "false"),null },    

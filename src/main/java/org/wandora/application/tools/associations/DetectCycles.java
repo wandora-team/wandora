@@ -157,7 +157,7 @@ public class DetectCycles extends AbstractWandoraTool implements WandoraTool {
         }
     }
 
-    private Topic findOtherRole(Association a, Topic r, Wandora admin) {
+    private Topic findOtherRole(Association a, Topic r, Wandora wandora) {
         Topic otherRole = null;
         try {
             Collection<Topic> allRoles = a.getRoles();
@@ -173,7 +173,7 @@ public class DetectCycles extends AbstractWandoraTool implements WandoraTool {
             }
             else {
                 allRoles.remove(r);
-                Object answer = WandoraOptionPane.showOptionDialog(admin, "Select second role for association travelsal", "Select second role", WandoraOptionPane.OK_CANCEL_OPTION, allRoles.toArray(), allRoles.iterator().next());
+                Object answer = WandoraOptionPane.showOptionDialog(wandora, "Select second role for association travelsal", "Select second role", WandoraOptionPane.OK_CANCEL_OPTION, allRoles.toArray(), allRoles.iterator().next());
                 if(answer instanceof Topic) {
                     return (Topic) answer;
                 }

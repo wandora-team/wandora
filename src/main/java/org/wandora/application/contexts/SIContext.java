@@ -59,7 +59,7 @@ public class SIContext implements Context {
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
-    protected Wandora admin = null;
+    protected Wandora wandora = null;
     
     
     
@@ -74,16 +74,16 @@ public class SIContext implements Context {
     
     
     @Override
-    public void initialize(Wandora admin, ActionEvent actionEvent, WandoraTool contextOwner) {
-        this.admin = admin;
+    public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
+        this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
         
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
         if( !isContextSource(proposedContextSource) ) {
-            proposedContextSource = admin.getFocusOwner();
+            proposedContextSource = wandora.getFocusOwner();
             if( !isContextSource(proposedContextSource) ) {
-                proposedContextSource = admin;
+                proposedContextSource = wandora;
             }
         }
         setContextSource( proposedContextSource );

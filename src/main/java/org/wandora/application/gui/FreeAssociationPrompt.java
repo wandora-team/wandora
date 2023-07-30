@@ -77,7 +77,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
     
 //    private GetTopicButton selectedButton;
     
-    private Wandora admin;
+    private Wandora wandora;
 //    private Topic contextTopic;
     
     private Vector<T2<GetTopicButton,GetTopicButton>> players;
@@ -101,12 +101,12 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
     public FreeAssociationPrompt(final Wandora wandora, Vector<Topic> contextTopics, Association original) throws TopicMapException {
         super(wandora,true);
         this.originalAssociation=original;
-        this.admin=wandora;
+        this.wandora=wandora;
   //      this.contextTopic=contextTopic;
         
         fixedPlayers=new Vector<T2<GetTopicButton,Topic>>();
         for(Topic contextTopic : contextTopics){
-            GetTopicButton b=new GetTopicButton(admin,this);
+            GetTopicButton b=new GetTopicButton(wandora,this);
             b.updateText();
             fixedPlayers.add(t2(b,contextTopic));
         }
@@ -116,15 +116,15 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
         }
         
         players=new Vector<T2<GetTopicButton,GetTopicButton>>();
-        typeButton=new GetTopicButton(null,admin,this,false,new GetTopicButton.ButtonHandler(){
+        typeButton=new GetTopicButton(null,wandora,this,false,new GetTopicButton.ButtonHandler(){
             private Vector<Topic> suggested=null;
             public T2<Topic,Boolean> pressed(GetTopicButton button) throws TopicMapException {
                 if(suggested==null) suggested=suggestAssociationType(fixedPlayers2,false);
                 if(suggested==null || suggested.isEmpty()) return button.defaultPressHandler();
                 else{
-                    TabbedTopicSelector finder=admin.getTopicFinder();
+                    TabbedTopicSelector finder=wandora.getTopicFinder();
                     finder.insertTab(new TopicListSelector(suggested),0);
-                    Topic s=admin.showTopicFinder(admin,finder);
+                    Topic s=wandora.showTopicFinder(wandora,finder);
                     if(s==null) return t2(null,true);
                     else return t2(s,false);                    
                 }
@@ -142,17 +142,17 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
                 return suggestAssociationType(fixedPlayers2,false);
             }
         });
-//        selectedButton=new GetTopicButton(admin,this);
+//        selectedButton=new GetTopicButton(wandora,this);
         initComponents();
         typeButton.updateText();
 //        selectedButton.updateText();
-//        selectedTopicLabel.setText(admin.getTopicGUIName(contextTopic));
+//        selectedTopicLabel.setText(wandora.getTopicGUIName(contextTopic));
 
         if(previousAssociationType == null && previousRoles == null) {
             usePrevButton.setEnabled(false);
         }
 
-        GuiTools.centerWindow(this,admin);
+        GuiTools.centerWindow(this,wandora);
         
         if(originalAssociation!=null) fillWith(originalAssociation);
         else if(fixedPlayers.size()<2) addPlayer();
@@ -524,7 +524,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
         
         for(Topic r : roles){
             Topic p=association.getPlayer(r);
-            T2<GetTopicButton,GetTopicButton> t=t2(new GetTopicButton(admin,this),new GetTopicButton(admin,this));
+            T2<GetTopicButton,GetTopicButton> t=t2(new GetTopicButton(wandora,this),new GetTopicButton(wandora,this));
             t.e1.setTopic(r);
             t.e2.setTopic(p);
             players.add(t);
@@ -611,9 +611,9 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
                     Topic t=typeButton.getTopic();
                     if(t!=null){
                         Vector<Topic> v=suggestAssociationRole(t,player,false);
-                        TabbedTopicSelector finder=admin.getTopicFinder();
+                        TabbedTopicSelector finder=wandora.getTopicFinder();
                         finder.insertTab(new TopicListSelector(v),0);
-                        Topic s=admin.showTopicFinder(admin,finder);
+                        Topic s=wandora.showTopicFinder(wandora,finder);
                         if(s==null) return t2(null,true);
                         else return t2(s,false);                        
                     }
@@ -629,7 +629,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
             });
             gbc.gridx=2;
             gbc.fill=GridBagConstraints.NONE;
-            SimpleLabel l=new SimpleLabel(admin.getTopicGUIName(fixedPlayer.e2));
+            SimpleLabel l=new SimpleLabel(wandora.getTopicGUIName(fixedPlayer.e2));
             playersPanel.add(l,gbc);
             counter++;
         }
@@ -649,9 +649,9 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
                     Topic p=playerButton.getTopic();
                     if(t!=null){
                         Vector<Topic> v=suggestAssociationRole(t,p,false);
-                        TabbedTopicSelector finder=admin.getTopicFinder();
+                        TabbedTopicSelector finder=wandora.getTopicFinder();
                         finder.insertTab(new TopicListSelector(v),0);
-                        Topic s=admin.showTopicFinder(admin,finder);
+                        Topic s=wandora.showTopicFinder(wandora,finder);
                         if(s==null) return t2(null,true);
                         else return t2(s,false);                        
                     }
@@ -673,9 +673,9 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
                     Topic t=roleButton.getTopic();
                     if(t!=null){
                         t=SchemaBox.getRoleClass(t);
-                        TabbedTopicSelector finder=admin.getTopicFinder();
+                        TabbedTopicSelector finder=wandora.getTopicFinder();
                         finder.insertTab(new TopicsOfTypeSelector(t,null,true),0);
-                        Topic s=admin.showTopicFinder(admin,finder);
+                        Topic s=wandora.showTopicFinder(wandora,finder);
                         if(s==null) return t2(null,true);
                         else return t2(s,false);
                     }
@@ -721,13 +721,13 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
     }
     
     public void addPlayer() throws TopicMapException {
-        T2<GetTopicButton,GetTopicButton> t=t2(new GetTopicButton(admin,this),new GetTopicButton(admin,this));
+        T2<GetTopicButton,GetTopicButton> t=t2(new GetTopicButton(wandora,this),new GetTopicButton(wandora,this));
         players.add(t);
         refreshPlayersPanel();
     }
     
     public Association createAssociation() throws TopicMapException {
-        TopicMap tm = admin.getTopicMap();
+        TopicMap tm = wandora.getTopicMap();
 //        TopicMap tm=contextTopic.getTopicMap();
 //        TopicMap tm=fixedPlayers.elementAt(0).e2.getTopicMap();
         boolean cont=true;
@@ -739,7 +739,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
             if(t.e1.getTopic()==null || t.e2.getTopic()==null) cont=false;
         }
         if(!cont){
-            WandoraOptionPane.showMessageDialog(admin,"You must select topic for association type and all players and roles.", "Select topics", WandoraOptionPane.WARNING_MESSAGE);
+            WandoraOptionPane.showMessageDialog(wandora,"You must select topic for association type and all players and roles.", "Select topics", WandoraOptionPane.WARNING_MESSAGE);
             return null;
         }
         

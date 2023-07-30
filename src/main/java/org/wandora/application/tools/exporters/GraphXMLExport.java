@@ -112,8 +112,8 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        GenericOptionsDialog god=new GenericOptionsDialog(admin,"GraphXML Export options","GraphXML Export options",true,new String[][]{
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
+        GenericOptionsDialog god=new GenericOptionsDialog(wandora,"GraphXML Export options","GraphXML Export options",true,new String[][]{
             new String[]{"Export classes","boolean",(EXPORT_CLASSES ? "true" : "false"),"Should topic classes also export?"},
             new String[]{"Export occurrences","boolean",(EXPORT_OCCURRENCES ? "true" : "false"),"Should topic occurrences also export?"},
             new String[]{"Export n associations","boolean",(EXPORT_N_ASSOCIATIONS ? "true" : "false"), "Should associations with more than 2 players also export?"},
@@ -121,7 +121,7 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
             new String[]{"Label edges","boolean",(LABEL_EDGES ? "true" : "false"), "Label edges with association type?" },
             new String[]{"Export subject locators","boolean",(EXPORT_SUBJECT_LOCATORS ? "true" : "false"), "Export subject locators as node links?" },
             new String[]{"Mark as forest","boolean",(MARK_AS_FOREST ? "true" : "false"), "Export subject locators as node links?" },
-        },admin);
+        },wandora);
         god.setVisible(true);
         if(god.wasCancelled()) return;
         
@@ -141,7 +141,7 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
     
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -153,8 +153,8 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
             topicMapName = "selection_in_wandora";
         }
         else {
-            tm = solveContextTopicMap(admin, context);
-            topicMapName = this.solveNameForTopicMap(admin, tm);
+            tm = solveContextTopicMap(wandora, context);
+            topicMapName = this.solveNameForTopicMap(wandora, tm);
             if(topicMapName != null) {
                 exportInfo =  "Exporting topic map in layer '" + topicMapName + "' as GraphXML graph";
             }
@@ -169,7 +169,7 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle(exportInfo+"...");
 
-        if(chooser.open(admin, "Export")==SimpleFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
             setDefaultLogger();
             File file = chooser.getSelectedFile();
             String fileName = file.getName();

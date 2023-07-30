@@ -54,20 +54,20 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
 	private static final long serialVersionUID = 1L;
 	
     private GetTopicButton typeButton;    
-    private Wandora admin;
+    private Wandora wandora;
     private Vector<T2<GetTopicButton,GetTopicButton>> roles;
     
     /** Creates new form CreateAssociationTypePrompt */
-    public CreateAssociationTypePrompt(Wandora admin) throws TopicMapException {
-        super(admin,true);
-        this.admin=admin;
+    public CreateAssociationTypePrompt(Wandora wandora) throws TopicMapException {
+        super(wandora,true);
+        this.wandora=wandora;
         initialize();        
         addPlayer();
         addPlayer();        
     }
-    public CreateAssociationTypePrompt(Wandora admin,Association a) throws TopicMapException {
-        super(admin,true);
-        this.admin=admin;
+    public CreateAssociationTypePrompt(Wandora wandora,Association a) throws TopicMapException {
+        super(wandora,true);
+        this.wandora=wandora;
         initialize();
         typeButton.setTopic(a.getType());
         for(Topic role : a.getRoles()){
@@ -80,9 +80,9 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
             addPlayer(role,roleClass);
         }
     }
-    public CreateAssociationTypePrompt(Wandora admin,Collection<Topic> roles) throws TopicMapException {
-        super(admin,true);
-        this.admin=admin;
+    public CreateAssociationTypePrompt(Wandora wandora,Collection<Topic> roles) throws TopicMapException {
+        super(wandora,true);
+        this.wandora=wandora;
         initialize();
         for(Topic t : roles){
             addPlayer(t,null);
@@ -91,10 +91,10 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
     
     private void initialize() throws TopicMapException {
         roles=new Vector<T2<GetTopicButton,GetTopicButton>>();
-        typeButton=new GetTopicButton(admin,this);
+        typeButton=new GetTopicButton(wandora,this);
         initComponents();
         typeButton.updateText();
-        GuiTools.centerWindow(this,admin);        
+        GuiTools.centerWindow(this,wandora);        
     }
     
     /** This method is called from within the constructor to
@@ -218,7 +218,7 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
     }//GEN-LAST:event_addPlayerButtonActionPerformed
     
     public void createAssociationType() throws TopicMapException {
-        TopicMap tm=admin.getTopicMap();
+        TopicMap tm=wandora.getTopicMap();
         boolean cont=true;
         if(typeButton.getTopic()==null) cont=false;
         for(T2<GetTopicButton,GetTopicButton> t : roles){
@@ -310,7 +310,7 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
         addPlayer(null,null);
     }
     public void addPlayer(Topic role,Topic roleClass) throws TopicMapException {
-        T2<GetTopicButton,GetTopicButton> t=new T2<>(new GetTopicButton(role,admin,this),new GetTopicButton(roleClass,admin,this,true));
+        T2<GetTopicButton,GetTopicButton> t=new T2<>(new GetTopicButton(role,wandora,this),new GetTopicButton(roleClass,wandora,this,true));
         roles.add(t);
         refreshPlayersPanel();
     }

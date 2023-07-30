@@ -205,9 +205,7 @@ public class ExcelAdjacencyListExtractor extends AbstractExcelExtractor {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        Wandora wandora = Wandora.getWandora();
-        
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Excel adjacency list extractor options","Excel adjacency list extractor options",true,new String[][]{
             new String[]{"First row contains association role topics?","boolean",(FIRST_ROW_CONTAINS_ROLES ? "true" : "false"),null },
         },wandora);

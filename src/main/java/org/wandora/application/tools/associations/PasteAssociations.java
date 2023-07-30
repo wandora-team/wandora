@@ -302,7 +302,7 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
    
     
     
-    public List<Topic> getTopics(Wandora admin, TopicMap topicMap, List<String> topicNames, Topic defaultTopic)  throws TopicMapException {
+    public List<Topic> getTopics(Wandora wandora, TopicMap topicMap, List<String> topicNames, Topic defaultTopic)  throws TopicMapException {
         List<Topic> topics = new ArrayList<>();
         Topic t = null;
         for (String topicName : topicNames) {
@@ -310,7 +310,7 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
                 t = defaultTopic;
             }
             else {
-                t = getTopic(admin, topicMap, topicName);
+                t = getTopic(wandora, topicMap, topicName);
             }
             if(t != null) topics.add(t);
             if(userInterrupt != 0) return null;

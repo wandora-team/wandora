@@ -46,13 +46,13 @@ import org.wandora.topicmap.Topic;
 public class ClassPanel extends JPanel {
 
     private Topic topic = null;
-    private Wandora admin = null;
+    private Wandora wandora = null;
     protected HashSet<Locator> visibleTopics;
     
     
-    public ClassPanel(Wandora admin, Topic t) {
+    public ClassPanel(Wandora wandora, Topic t) {
         this.topic = t;
-        this.admin = admin;
+        this.wandora = wandora;
     }
     
     
@@ -96,7 +96,7 @@ public class ClassPanel extends JPanel {
             gbc.gridy=0;
             gbc.fill=GridBagConstraints.HORIZONTAL;
             gbc.weightx=1.0;
-            this.add(new ClassTable(topic,admin),gbc);
+            this.add(new ClassTable(topic,wandora),gbc);
             
             {
                 for(Topic t : topic.getTypes()){
@@ -105,7 +105,7 @@ public class ClassPanel extends JPanel {
             }
         }
         catch(Exception e) {
-            admin.handleError(e);
+            wandora.handleError(e);
         }
     }
     

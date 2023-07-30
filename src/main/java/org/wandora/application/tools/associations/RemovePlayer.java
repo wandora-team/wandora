@@ -155,14 +155,14 @@ public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
     
     
     private boolean yesToAll = false;
-    public boolean confirmRemove(Wandora admin, Association association, Topic role)  throws TopicMapException {
+    public boolean confirmRemove(Wandora wandora, Association association, Topic role)  throws TopicMapException {
         if(association == null || association.getType() == null || role == null) return false;
         if(yesToAll) return true;
 
         String typeName = getTopicName(association.getType());
         String roleName = getTopicName(role);
         String confirmMessage = "Would you like remove player in role '" + roleName + "' from association of type '" + typeName + "'?";
-        int answer = WandoraOptionPane.showConfirmDialog(admin, confirmMessage,"Confirm player remove", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION );
+        int answer = WandoraOptionPane.showConfirmDialog(wandora, confirmMessage,"Confirm player remove", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION );
         if(answer == WandoraOptionPane.YES_OPTION) {
             return true;
         }

@@ -274,12 +274,12 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
                 chooser.setDialogType(WandoraFileChooser.CUSTOM_DIALOG);
                 chooser.setApproveButtonToolTipText("Export site to directory...");
                 
-                if(chooser.open(admin, "Export")==WandoraFileChooser.APPROVE_OPTION) {
+                if(chooser.open(wandora, "Export")==WandoraFileChooser.APPROVE_OPTION) {
                     currentDirectory = chooser.getSelectedFile();
                     try { log = new PrintWriter(currentDirectory.getPath() + "/" + logName); }
                     catch (Exception e) { log = new PrintWriter(System.out); }
                     
-                    info = new InfoThread(admin);
+                    info = new InfoThread(wandora);
                     
                     panel = new JPanel();
                     panel.setLayout(new FlowLayout());

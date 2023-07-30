@@ -81,13 +81,6 @@ public class AudioMidi implements ActionListener, MetaEventListener, PreviewPane
     private JPanel ui = null;
     
     
-    
-    /** Creates a new instance of AudioMidiPreviewPanel */
-    /*
-    public AudioMidiPreviewPanel(Wandora admin) {
-        initialize(admin);
-    }
-    */
     public AudioMidi(String audioLocator) {
         this.audioLocator = audioLocator;
         initialize();

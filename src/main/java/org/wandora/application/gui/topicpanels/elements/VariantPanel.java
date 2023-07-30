@@ -44,13 +44,13 @@ import org.wandora.topicmap.Topic;
 public class VariantPanel extends JPanel {
 
     private Topic topic = null;
-    private Wandora admin = null;
+    private Wandora wandora = null;
     protected HashSet<Locator> visibleTopics;
     
     
-    public VariantPanel(Wandora admin, Topic t) {
+    public VariantPanel(Wandora wandora, Topic t) {
         this.topic = t;
-        this.admin = admin;
+        this.wandora = wandora;
     }
     
     

@@ -67,14 +67,14 @@ public class AudioScrobblerExtractor extends AbstractWandoraTool {
     
     
     
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         int counter = 0;   
         try {
             if(selector == null) {
-                selector = new AudioScrobblerExtractorSelector(admin);
+                selector = new AudioScrobblerExtractorSelector(wandora);
             }
             selector.setAccepted(false);
-            selector.setWandora(admin);
+            selector.setWandora(wandora);
             selector.setContext(context);
             selector.setVisible(true);
             setDefaultLogger();
@@ -82,7 +82,7 @@ public class AudioScrobblerExtractor extends AbstractWandoraTool {
                 WandoraTool extractor = selector.getWandoraTool(this);
                 if(extractor != null) {
                     extractor.setToolLogger(getDefaultLogger());
-                    extractor.execute(admin, context);
+                    extractor.execute(wandora, context);
                 }
             }
             else {

@@ -51,12 +51,12 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelector {
     
-    private Wandora admin;
+    private Wandora wandora;
     private Topic result;
     
     /** Creates new form SelectTopicPanel */
-    public SelectTopicPanel(Wandora admin) {
-        this.admin=admin;
+    public SelectTopicPanel(Wandora wandora) {
+        this.wandora=wandora;
         initComponents();
     }
     
@@ -212,13 +212,13 @@ public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelecto
         result=null;
         try {
             if(baseNameRadioButton.isSelected()){
-                result=admin.getTopicMap().getTopicWithBaseName(text);
+                result=wandora.getTopicMap().getTopicWithBaseName(text);
             }
             else if(subjectIdentifierRadioButton.isSelected()){
-                result=admin.getTopicMap().getTopic(text);
+                result=wandora.getTopicMap().getTopic(text);
             }
             else{
-                result=admin.getTopicMap().getTopicBySubjectLocator(text);
+                result=wandora.getTopicMap().getTopicBySubjectLocator(text);
             }
         }catch(TopicMapException tme){
             tme.printStackTrace(); // TODO EXCEPTION

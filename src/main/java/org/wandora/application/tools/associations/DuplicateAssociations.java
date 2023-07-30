@@ -86,8 +86,8 @@ public class DuplicateAssociations extends AbstractWandoraTool implements Wandor
         if(contextAssociations == null || !contextAssociations.hasNext()) return;
         if(roleMap == null) roleMap = new LinkedHashMap<>();
 
-        //BaseNamePrompt prompt=new BaseNamePrompt(admin.getManager(), admin, true);
-        //Topic topicOpen = admin.getOpenTopic();
+        //BaseNamePrompt prompt=new BaseNamePrompt(wandora.getManager(), wandora, true);
+        //Topic topicOpen = wandora.getOpenTopic();
         //Collection associations = topicOpen.getAssociations(oldAssociationType);
         Association association = null;
         Topic role = null;
@@ -133,20 +133,20 @@ public class DuplicateAssociations extends AbstractWandoraTool implements Wandor
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context context)  throws TopicMapException {
         wasCancelled = false;
-/*        BaseNamePrompt prompt=new BaseNamePrompt(admin.getManager(), admin, true);
+/*        BaseNamePrompt prompt=new BaseNamePrompt(wandora.getManager(), wandora, true);
         prompt.setTitle("Select new association type...");
         prompt.setVisible(true);
         Topic newAssociationType=prompt.getTopic();*/
-        Topic newAssociationType=admin.showTopicFinder("Select new association type...");                
+        Topic newAssociationType=wandora.showTopicFinder("Select new association type...");                
         if (newAssociationType != null) {
-            makeRoleMap(admin);
-            Topic topicOpen = admin.getOpenTopic();           
+            makeRoleMap(wandora);
+            Topic topicOpen = wandora.getOpenTopic();           
             if(topicOpen != null) {
                 if(oldAssociationType != null) {
                     Collection<Association> ass = topicOpen.getAssociations();
-                    TopicMap topicMap = admin.getTopicMap();
+                    TopicMap topicMap = wandora.getTopicMap();
                     List<Association> atemp = new ArrayList<>();
                     for(Iterator<Association> asi = ass.iterator(); asi.hasNext();) {
                         atemp.add(asi.next());
@@ -179,7 +179,7 @@ public class DuplicateAssociations extends AbstractWandoraTool implements Wandor
                             }
                         }
                     }
-                    admin.openTopic(topicOpen);
+                    wandora.openTopic(topicOpen);
                 }
                 else {
                     log("Can't solve old association type!");

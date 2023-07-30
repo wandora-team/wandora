@@ -90,8 +90,8 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
     }
     
     
-    public void makeRoleMap(Wandora admin)  throws TopicMapException {
-//        BaseNamePrompt prompt=new BaseNamePrompt(admin.getManager(), admin, true);
+    public void makeRoleMap(Wandora wandora)  throws TopicMapException {
+//        BaseNamePrompt prompt=new BaseNamePrompt(wandora.getManager(), wandora, true);
         roleMap = new LinkedHashMap<>();
         //System.out.println("Type: " + oldAssociationType.getBaseName());
         Collection<Association> associations = theTopic.getAssociations(oldAssociationType);
@@ -108,12 +108,12 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
 /*                        prompt.setTitle("Map role '" + getTopicName(role) + "' to...");
                         prompt.setVisible(true);
                         Topic newRole=prompt.getTopic();*/
-                        Topic newRole=admin.showTopicFinder("Map role '"+getTopicName(role)+"' to...");                
+                        Topic newRole=wandora.showTopicFinder("Map role '"+getTopicName(role)+"' to...");                
                         if(newRole != null) {
                             roleMap.put(role, newRole);
                         }
                         else {
-                            int answer = WandoraOptionPane.showConfirmDialog(admin ,
+                            int answer = WandoraOptionPane.showConfirmDialog(wandora ,
                                 "Would you like exclude players of role " + getTopicName(role) + " from the association? " +
                                 "Press Yes to exclude players! "+
                                 "Press No to use existing role topic!",
@@ -145,7 +145,7 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
         oldAssociationType = (Topic) context.getContextObjects().next();
         wasCancelled = false;
 /*      
-        BaseNamePrompt prompt=new BaseNamePrompt(admin.getManager(), admin, true);
+        BaseNamePrompt prompt=new BaseNamePrompt(wandora.getManager(), wandora, true);
         prompt.setTitle("Select new association type...");
         prompt.setVisible(true);
         Topic newAssociationType=prompt.getTopic();

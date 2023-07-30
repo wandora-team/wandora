@@ -54,7 +54,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
     private boolean cancelled=true;
     
     private Component parent;
-    private Wandora admin;
+    private Wandora wandora;
     
     
     
@@ -66,7 +66,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
 
 
     public void open(Wandora wandora) {
-        admin = wandora;
+        this.wandora = wandora;
         relations = readRelationTypes();
         updateRelationsPanel();
         
@@ -152,7 +152,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
                         relations[i].superSI,
                         relations[i].icon,
                         this,
-                        admin
+                        wandora
                     );
                 relationsPanel.add(tatep,gbc);
             }
@@ -336,7 +336,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
         gbc.weightx=1.0;
         gbc.fill=GridBagConstraints.HORIZONTAL;
         try {
-            TopicTreeRelationEditorPanel tatep=new TopicTreeRelationEditorPanel("","","","","",this,admin);
+            TopicTreeRelationEditorPanel tatep=new TopicTreeRelationEditorPanel("","","","","",this,wandora);
             relationsPanel.add(tatep,gbc);
         }
         catch(TopicMapException tme) {

@@ -77,7 +77,7 @@ public class ExportTopicMap extends AbstractExportTool implements WandoraTool {
     
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora wandora, Context context) {
         TopicMap tm = null;
         String topicMapName = null;
         String exportInfo = "";
@@ -88,8 +88,8 @@ public class ExportTopicMap extends AbstractExportTool implements WandoraTool {
             exportInfo = "Exporting selected topics as topic map";
         }
         else {
-            tm = solveContextTopicMap(admin, context);
-            topicMapName = this.solveNameForTopicMap(admin, tm);
+            tm = solveContextTopicMap(wandora, context);
+            topicMapName = this.solveNameForTopicMap(wandora, tm);
             if(topicMapName != null) {
                 exportInfo =  "Exporting topic map in layer '" + topicMapName + "'";
             }
@@ -102,7 +102,7 @@ public class ExportTopicMap extends AbstractExportTool implements WandoraTool {
         TopicMapFileChooser chooser=new TopicMapFileChooser();
         chooser.setDialogTitle(exportInfo+"...");
         
-        if(chooser.open(admin, "Export")==TopicMapFileChooser.APPROVE_OPTION){
+        if(chooser.open(wandora, "Export")==TopicMapFileChooser.APPROVE_OPTION){
             setDefaultLogger();
             File file = chooser.getSelectedFile();
             String fileName = file.getName();

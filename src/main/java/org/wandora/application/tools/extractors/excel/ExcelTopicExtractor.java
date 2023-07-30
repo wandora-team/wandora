@@ -176,9 +176,7 @@ public class ExcelTopicExtractor extends AbstractExcelExtractor {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        Wandora wandora = Wandora.getWandora();
-        
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Excel topic extractor options","Excel topic extractor options",true,new String[][]{
             new String[]{"Extract cell colors?","boolean",(EXTRACT_CELL_COLORS ? "true" : "false"), "Associate cell to it's background and foreground color?" },
             new String[]{"Extract sheet?","boolean",(EXTRACT_SHEET ? "true" : "false"), "Associate cell to it's sheet?" },    

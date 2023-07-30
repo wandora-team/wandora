@@ -237,9 +237,7 @@ public class ExcelTopicNameExtractor extends AbstractExcelExtractor {
     }
     
     @Override
-    public void configure(Wandora admin,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        Wandora wandora = Wandora.getWandora();
-        
+    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Excel topic name extractor options","Excel topic name extractor options",true,new String[][]{
             new String[]{"First row contains languages?","boolean",(FIRST_ROW_CONTAINS_LANGUAGES ? "true" : "false"),null },
             new String[]{"Create display names?","boolean",(ADD_DISPLAY_TO_SCOPE ? "true" : "false"),null },
