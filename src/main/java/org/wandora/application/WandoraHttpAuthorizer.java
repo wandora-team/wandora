@@ -31,9 +31,13 @@ package org.wandora.application;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Base64;
 import org.wandora.utils.HttpAuthorizer;
-import java.net.*;
 
-import org.wandora.application.gui.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.wandora.application.gui.PasswordPrompt;
 
 
 
@@ -108,7 +112,6 @@ public class WandoraHttpAuthorizer extends HttpAuthorizer {
                 
                 if(authUser != null && authPassword != null) {
                     String userPassword = authUser + ":" + authPassword;
-//                    String encoding = new sun.misc.BASE64Encoder().encode (userPassword.getBytes());
                     String encodedUserPassword = Base64.encodeBytes(userPassword.getBytes());
                     uc = (HttpURLConnection) uc.getURL().openConnection();
                     Wandora.initUrlConnection(uc);

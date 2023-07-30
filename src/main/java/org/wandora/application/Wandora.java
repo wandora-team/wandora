@@ -34,41 +34,88 @@ package org.wandora.application;
 
 
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.List;
 
-import javax.swing.*;
-import org.wandora.application.gui.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Point;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URLConnection;
+import java.util.Collection;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JViewport;
+import javax.swing.JPopupMenu;
+import javax.swing.JToolBar;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+import org.wandora.application.gui.LayerTree;
+import org.wandora.application.gui.LogoAnimation;
+import org.wandora.application.gui.TabbedTopicSelector;
+import org.wandora.application.gui.TopicEditorPanel;
+import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.SplashWindow;
+import org.wandora.application.gui.ErrorDialog;
 import org.wandora.application.gui.search.QueryPanel;
 import org.wandora.application.gui.search.SearchPanel;
 import org.wandora.application.gui.search.SimilarityPanel;
-import org.wandora.application.gui.simple.*;
-import org.wandora.application.gui.topicpanels.*;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.application.gui.simple.SimplePanel;
+import org.wandora.application.gui.simple.SimpleTabbedPane;
+import org.wandora.application.gui.topicpanels.TopicPanel;
+import org.wandora.application.gui.topicpanels.TopicPanelManager;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.application.gui.tree.TopicTreeTabManager;
+
 import org.wandora.application.modulesserver.WandoraModulesServer;
-import org.wandora.application.tools.importers.*;
+import org.wandora.application.tools.importers.TopicMapImport;
+import org.wandora.application.tools.importers.SimpleRDFImport;
+import org.wandora.application.tools.importers.SimpleN3Import;
+import org.wandora.application.tools.importers.SimpleRDFTurtleImport;
+import org.wandora.application.tools.importers.SimpleRDFJsonLDImport;
 import org.wandora.application.tools.navigate.Back;
 import org.wandora.application.tools.navigate.Forward;
 import org.wandora.application.tools.navigate.OpenTopic;
-import org.wandora.application.tools.project.*;
+import org.wandora.application.tools.project.LoadWandoraProject;
 import org.wandora.exceptions.OpenTopicNotSupportedException;
 import org.wandora.utils.logger.Logger;
 import org.wandora.utils.logger.SimpleLogger;
-import org.wandora.topicmap.*;
-import org.wandora.topicmap.layered.*;
+import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+import org.wandora.topicmap.TopicMapListener;
+import org.wandora.topicmap.layered.ContainerTopicMap;
+import org.wandora.topicmap.layered.Layer;
+import org.wandora.topicmap.layered.LayerStack;
+import org.wandora.topicmap.layered.LayeredTopic;
 import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.topicmap.undowrapper.UndoException;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
-import org.wandora.utils.*;
-import static org.wandora.utils.Tuples.*;
+import org.wandora.utils.CMDParamParser;
+import org.wandora.utils.Options;
+import org.wandora.utils.Textbox;
+import org.wandora.utils.Delegate;
 import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.swing.ImagePanel;
 
@@ -615,7 +662,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
      */
     public void refreshTopicTrees() {
         try {
-            HashMap<String,TopicTreePanel> trees = topicTreeManager.getTrees();
+            Map<String,TopicTreePanel> trees = topicTreeManager.getTrees();
             if(trees != null) {
                 for(TopicTreePanel tree : trees.values()){
                     tree.refresh();
@@ -1895,10 +1942,10 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         d.setVisible(true);
         T2<Topic,Boolean> ret=null;
         if(finder.wasCancelled()) {
-            ret=t2(null,true);
+            ret=new T2((Topic) null, true);
         }
         else {
-            ret=t2(finder.getSelectedTopic(),false);
+            ret=new T2(finder.getSelectedTopic(), false);
         }
         finder.cleanup();
         return ret;
