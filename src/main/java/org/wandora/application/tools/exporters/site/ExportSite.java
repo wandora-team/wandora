@@ -374,7 +374,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
         localParams.put("javascriptencoder", JavaScriptEncoder.class);
         localParams.put("tmbox", new org.wandora.topicmap.TMBox());
         localParams.put("textbox", new TextBox());
-        localParams.put("intparser", new java.lang.Integer(0));
+        localParams.put("intparser", Integer.valueOf(0));
 //        localParams.put("filter", new com.gripstudios.applications.assembly.AssemblyTopicFilter(new String[] { "http://wandora.org/si/common/picture", "http://wandora.org/si/common/video" }, "http://wandora.org/si/common/unmoderatedpicture" ));
         localParams.put("vhelper", new org.wandora.utils.velocity.VelocityMediaHelper());
         localParams.put("helper", new org.wandora.topicmap.TopicTools());

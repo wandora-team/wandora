@@ -37,10 +37,10 @@ import java.util.HashMap;
  * The new constructor makes it possible to more easily create a new HashMap
  * instance. For example, this associates letters with numbers:
  *      <code>EasyHash eh=new EasyHash(new Object[] {
- *          "a",new Integer(1),
- *          "b",new Integer(2),
- *          "c",new Integer(3),
- *          "d",new Integer(4)
+ *          "a",Integer.valueOf(1),
+ *          "b",Integer.valueOf(2),
+ *          "c",Integer.valueOf(3),
+ *          "d",Integer.valueOf(4)
  *      });</code>
  *
  * @author  Olli Lyytinen
@@ -54,10 +54,10 @@ import java.util.HashMap;
  * The new constructor makes it possible to more easily create a new HashMap
  * instance. For example, this associates letters with numbers:
  *      EasyHash eh=new EasyHash(new Object[] {
- *          "a",new Integer(1),
- *          "b",new Integer(2),
- *          "c",new Integer(3),
- *          "d",new Integer(4)
+ *          "a",Integer.valueOf(1),
+ *          "b",Integer.valueOf(2),
+ *          "c",Integer.valueOf(3),
+ *          "d",Integer.valueOf(4)
  *      });
  *
  * The setArray can be used to add values to this EasyHash in a similar way.

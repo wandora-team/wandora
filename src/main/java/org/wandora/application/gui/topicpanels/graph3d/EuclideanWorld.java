@@ -139,7 +139,7 @@ public class EuclideanWorld implements World {
 
     public void makeRandomWorld(int numNodes, int numEdges){
         for(int i=0;i<numNodes;i++){
-            SphericalNode n=(SphericalNode)addNode(new Integer(i));
+            SphericalNode n=(SphericalNode)addNode( i );
             // not uniform distribution but good enough
             n.randomPos();
             n.setSize(Math.random()*5.0);

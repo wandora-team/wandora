@@ -40,10 +40,10 @@ public class TopicMapStatData {
     public TopicMapStatData() {
     }
     public TopicMapStatData(int intData) {
-        data = new Object[] { new Integer(intData) };
+        data = new Object[] { Integer.valueOf(intData) };
     }
     public TopicMapStatData(int intData1, int intData2) {
-        data = new Object[] { new Integer(intData1),  new Integer(intData2) };
+        data = new Object[] { Integer.valueOf(intData1),  Integer.valueOf(intData2) };
     }
     public TopicMapStatData(TopicMapStatData newData) {
         data = new Object[] { newData };

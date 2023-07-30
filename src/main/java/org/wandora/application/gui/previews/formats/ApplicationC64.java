@@ -543,7 +543,7 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
                     if(tmpFile != null) {
                         System.out.println("disk attached: "+tmpFile.getAbsolutePath());
                         EmulatorUtils.attachImage(c64, c64.getActiveDrive(), tmpFile.getAbsolutePath());
-                        //attachedImages.put(new Integer(c64.getActiveDrive()), tmpFile.getAbsolutePath());
+                        //attachedImages.put(Integer.valueOf(c64.getActiveDrive()), tmpFile.getAbsolutePath());
                     }
                     else {
                         PreviewUtils.previewError(ui, "Unable to create temporal file for a dataurl.");

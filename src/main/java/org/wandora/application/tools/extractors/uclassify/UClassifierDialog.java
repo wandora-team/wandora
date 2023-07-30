@@ -118,7 +118,7 @@ public class UClassifierDialog extends javax.swing.JDialog {
     public void registerSource(String name, Component component, int id) {
         if(component == null) return;
         if(registeredSources.get(component) == null) {
-            registeredSources.put(component, new Integer(id));
+            registeredSources.put(component, Integer.valueOf(id));
             tabbedSourcePane.addTab(name, component);
         }
     }

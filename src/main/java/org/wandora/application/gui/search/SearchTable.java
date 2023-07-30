@@ -58,8 +58,8 @@ public class SearchTable extends JTable {
         data=new Object[res.length/3][2];
         
         for(int i=0;i<res.length/3;i++){
-            try { data[i][0]=new Double(res[i*3]); }
-            catch (Exception e) { data[i][0]=new Double( 0 ); }
+            try { data[i][0]=Double.valueOf(res[i*3]); }
+            catch (Exception e) { data[i][0]=Double.valueOf( 0 ); }
             data[i][1]=res[i*3+2];
         }
         this.setColumnSelectionAllowed(false);

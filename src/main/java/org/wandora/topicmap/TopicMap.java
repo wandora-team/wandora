@@ -2265,7 +2265,7 @@ public abstract class TopicMap implements TopicMapLogger {
                 return ((Integer)stack.pop()).intValue();
             }
             public void push(int i){
-                stack.push(new Integer(i));
+                stack.push(Integer.valueOf(i));
             }
             public int peek(){
                 return ((Integer)stack.peek()).intValue();

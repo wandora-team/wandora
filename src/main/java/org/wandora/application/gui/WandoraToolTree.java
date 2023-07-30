@@ -640,7 +640,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         protected Object transferable;
         
         public ToolTreeTransferable(ToolTreeNode node) {
-            this.transferable=new Integer(node.hashCode());
+            this.transferable=node.hashCode();
         }
         
         @Override

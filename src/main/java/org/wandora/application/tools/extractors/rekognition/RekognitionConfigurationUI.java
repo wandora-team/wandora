@@ -98,7 +98,7 @@ class RekognitionConfigurationUI extends javax.swing.JPanel {
         }
         
         faceAssociateCelebrity.setSelected(configuration.celebrityNaming);
-        faceCelebrityTreshold.setValue(new Double(configuration.celebrityTreshold));
+        faceCelebrityTreshold.setValue(Double.valueOf(configuration.celebrityTreshold));
     }
     
     public void open(Wandora w, int height){

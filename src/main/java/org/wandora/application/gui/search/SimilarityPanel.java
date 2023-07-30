@@ -111,21 +111,21 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
     
     
     public Tuples.T2[] similarityTypes = {
-        new Tuples.T2("Levenshtein distance",                  new Integer(SIMILARITY_LEVENSHTEIN_DISTANCE)),
-        new Tuples.T2("Needleman-Wunch distance (Sellers Algorithm)", new Integer(SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE)),
-        new Tuples.T2("Smith-Waterman distance",               new Integer(SIMILARITY_SMITH_WATERMAN_DISTANCE)),
-        new Tuples.T2("Block distance (L1 distance or City block distance)", new Integer(SIMILARITY_BLOCK_DISTANCE)),
-        new Tuples.T2("Monge Elkan distance",                  new Integer(SIMILARITY_MONGE_ELKAN_DISTANCE)),
-        new Tuples.T2("Jaro distance metric",                  new Integer(SIMILARITY_JARO_DISTANCE_METRIC)),
-        new Tuples.T2("Jaro Winkler",                          new Integer(SIMILARITY_JARO_WINKLER)),
-        new Tuples.T2("SoundEx distance metric",               new Integer(SIMILARITY_SOUNDEX_DISTANCE_METRIC)),
-        new Tuples.T2("Matching Coefficient",                  new Integer(SIMILARITY_MATCHING_COEFFICIENT)),
-        new Tuples.T2("Dice's Coefficient",                    new Integer(SIMILARITY_DICES_COEFFICIENT)),
-        new Tuples.T2("Jaccard Similarity (Jaccard Coefficient or Tanimoto coefficient)", new Integer(SIMILARITY_OVERLAP_COEFFICIENT)),
-        new Tuples.T2("Overlap Coefficient",                   new Integer(SIMILARITY_JACCARD_SIMILARITY)),
-        new Tuples.T2("Euclidean distance (L2 distance)",      new Integer(SIMILARITY_EUCLIDEAN_DISTANCE)),
-        new Tuples.T2("Cosine similarity",                     new Integer(SIMILARITY_COSINE_SIMILARITY)),
-        new Tuples.T2("q-gram",                                new Integer(SIMILARITY_Q_GRAM)),
+        new Tuples.T2("Levenshtein distance",                  Integer.valueOf(SIMILARITY_LEVENSHTEIN_DISTANCE)),
+        new Tuples.T2("Needleman-Wunch distance (Sellers Algorithm)", Integer.valueOf(SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE)),
+        new Tuples.T2("Smith-Waterman distance",               Integer.valueOf(SIMILARITY_SMITH_WATERMAN_DISTANCE)),
+        new Tuples.T2("Block distance (L1 distance or City block distance)", Integer.valueOf(SIMILARITY_BLOCK_DISTANCE)),
+        new Tuples.T2("Monge Elkan distance",                  Integer.valueOf(SIMILARITY_MONGE_ELKAN_DISTANCE)),
+        new Tuples.T2("Jaro distance metric",                  Integer.valueOf(SIMILARITY_JARO_DISTANCE_METRIC)),
+        new Tuples.T2("Jaro Winkler",                          Integer.valueOf(SIMILARITY_JARO_WINKLER)),
+        new Tuples.T2("SoundEx distance metric",               Integer.valueOf(SIMILARITY_SOUNDEX_DISTANCE_METRIC)),
+        new Tuples.T2("Matching Coefficient",                  Integer.valueOf(SIMILARITY_MATCHING_COEFFICIENT)),
+        new Tuples.T2("Dice's Coefficient",                    Integer.valueOf(SIMILARITY_DICES_COEFFICIENT)),
+        new Tuples.T2("Jaccard Similarity (Jaccard Coefficient or Tanimoto coefficient)", Integer.valueOf(SIMILARITY_OVERLAP_COEFFICIENT)),
+        new Tuples.T2("Overlap Coefficient",                   Integer.valueOf(SIMILARITY_JACCARD_SIMILARITY)),
+        new Tuples.T2("Euclidean distance (L2 distance)",      Integer.valueOf(SIMILARITY_EUCLIDEAN_DISTANCE)),
+        new Tuples.T2("Cosine similarity",                     Integer.valueOf(SIMILARITY_COSINE_SIMILARITY)),
+        new Tuples.T2("q-gram",                                Integer.valueOf(SIMILARITY_Q_GRAM)),
     };
     
     

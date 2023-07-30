@@ -371,7 +371,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                 if(isAbbr > 0) {
                                     n.fn = abbrTitle;
                                 }
-                                newState.add(new Integer(STATE_FN));
+                                newState.add(Integer.valueOf(STATE_FN));
                             }
                             else if("n".equalsIgnoreCase(clases[i])) {
                                 if(n == null) n = new Name();
@@ -529,7 +529,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                                         sound = atts.getValue("href");
                                     }
                                 }
-                                newState.add(new Integer(STATE_SOUND));
+                                newState.add(Integer.valueOf(STATE_SOUND));
                             }
                             else if("bday".equalsIgnoreCase(clases[i])) {
                                 bday = null;

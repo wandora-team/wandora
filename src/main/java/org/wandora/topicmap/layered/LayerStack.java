@@ -243,7 +243,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 }
             }
         }
-        return new T2(new Integer(biggest), ret);
+        return new T2(Integer.valueOf(biggest), ret);
     }
     
     
@@ -274,7 +274,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 }
             }
         }
-        return new T2(new Integer(smallest), ret);
+        return new T2(Integer.valueOf(smallest), ret);
     }
     
     public boolean canUndo(){

@@ -252,7 +252,7 @@ public class OmaKaupunkiSelector extends javax.swing.JPanel {
                         long first = Long.parseLong(firstStr);
                         long last = Long.parseLong(lastStr);
                         for(long p=first; p<=last; p++) {
-                            Long pl = new Long(p);
+                            Long pl = Long.valueOf(p);
                             if(!pages.contains(pl)) {
                                 pages.add(pl);
                             }
@@ -267,7 +267,7 @@ public class OmaKaupunkiSelector extends javax.swing.JPanel {
                 try {
                     long p = Long.parseLong(pageStr.trim());
                     if(p > 0) {
-                        Long pl = new Long(p);
+                        Long pl = Long.valueOf(p);
                         if(!pages.contains(pl)) {
                             pages.add(pl);
                         }

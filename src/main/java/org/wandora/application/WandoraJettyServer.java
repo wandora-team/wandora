@@ -295,7 +295,7 @@ public class WandoraJettyServer {
             Properties p=new Properties();
             p.setProperty("textbox.shortnamelength", "70");
             context.put("textbox",new TextBox(p));
-            context.put("intparser",new Integer(0));
+            context.put("intparser",Integer.valueOf(0));
             context.put("vhelper",new org.wandora.utils.velocity.GenericVelocityHelper());
             context.put("helper", new org.wandora.topicmap.TopicTools());
             context.put("topicmap",wandora.getTopicMap());
@@ -411,7 +411,7 @@ public class WandoraJettyServer {
                 context.put("topic",topic);
                 context.put("filter",filter);
                 context.put("request",request);
-                context.put("page",new Integer(pagenum));
+                context.put("page",Integer.valueOf(pagenum));
                 context.put("lang",lang);
                 context.put("wandora",wandora);
                 context.put("manager",wandora);

@@ -737,25 +737,25 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
 
     private void deleteNoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteNoneButtonActionPerformed
         for(int i=0;i<tableModel.getRowCount();i++){
-            tableModel.setValueAt(new Boolean(false), i, 1);
+            tableModel.setValueAt(Boolean.valueOf(false), i, 1);
         }
     }//GEN-LAST:event_deleteNoneButtonActionPerformed
 
     private void deleteAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllButtonActionPerformed
         for(int i=0;i<tableModel.getRowCount();i++){
-            tableModel.setValueAt(new Boolean(true), i, 1);
+            tableModel.setValueAt(Boolean.valueOf(true), i, 1);
         }
     }//GEN-LAST:event_deleteAllButtonActionPerformed
 
     private void importNoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importNoneButtonActionPerformed
         for(int i=0;i<tableModel.getRowCount();i++){
-            tableModel.setValueAt(new Boolean(false), i, 0);
+            tableModel.setValueAt(Boolean.valueOf(false), i, 0);
         }
     }//GEN-LAST:event_importNoneButtonActionPerformed
 
     private void importAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importAllButtonActionPerformed
         for(int i=0;i<tableModel.getRowCount();i++){
-            tableModel.setValueAt(new Boolean(true), i, 0);
+            tableModel.setValueAt(Boolean.valueOf(true), i, 0);
         }
     }//GEN-LAST:event_importAllButtonActionPerformed
     

@@ -98,7 +98,7 @@ public class FullIIIFBuilder implements IIIFBuilder {
         if(o!=null) {
             try{
                 int i=Integer.parseInt(o);
-                setItem(modelObject, setter, new Integer(i));
+                setItem(modelObject, setter, i);
             }catch(NumberFormatException nfe){}
         }
         

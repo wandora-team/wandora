@@ -183,7 +183,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         if(runInOwnThread()) {
             Thread worker = new Thread(this, getName());
             synchronized(toolThreads) {
-                toolThreads.put(worker, new T2(this.getClass(), new Long(System.currentTimeMillis())));
+                toolThreads.put(worker, new T2(this.getClass(), Long.valueOf(System.currentTimeMillis())));
             }
             //SwingUtilities.invokeLater(worker);
             worker.start();

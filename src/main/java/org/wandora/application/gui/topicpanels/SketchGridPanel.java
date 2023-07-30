@@ -33,8 +33,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -106,7 +107,7 @@ public class SketchGridPanel extends javax.swing.JPanel implements TopicMapListe
 
     @Override
     public void open(Topic topic) throws TopicMapException {
-        ArrayList<int[]> cells = topicGrid.getSelectedCells();
+        List<int[]> cells = topicGrid.getSelectedCells();
         if(cells != null && !cells.isEmpty()) {
             topicGrid.setCurrentTopic(topic);
         }

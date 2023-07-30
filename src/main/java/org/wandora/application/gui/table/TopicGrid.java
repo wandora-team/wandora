@@ -38,23 +38,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Stack;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
-import static javax.swing.TransferHandler.MOVE;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraMenuManager;
 import org.wandora.application.gui.Clipboardable;
@@ -87,7 +83,10 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 
 public class TopicGrid extends SimpleTable implements Clipboardable, MouseListener, ActionListener {
-    public static final int LEFT = 201;
+    private static final long serialVersionUID = 1L;
+    
+    
+	public static final int LEFT = 201;
     public static final int UP = 202;
     public static final int RIGHT = 203;
     public static final int DOWN = 204;
@@ -244,24 +243,24 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     }
     
     public void setCurrentTopic(Topic t) {
-        ArrayList<int[]> cells = this.getSelectedCells();
+        List<int[]> cells = this.getSelectedCells();
         for(int[] c : cells) {
-            gridData.put(new T2(c[0], c[1]), t);
+            gridData.put(new T2<>(c[0], c[1]), t);
         }
     }
     
     public void setTopicAt(Topic t, int column, int row) {
-        gridData.put(new T2(row, column), t);
+        gridData.put(new T2<>(row, column), t);
     }
     
     
     
     public Topic[] getCurrentTopics() {
-        ArrayList<int[]> cells = this.getSelectedCells();
-        ArrayList<Topic> ts = new ArrayList();
+        List<int[]> cells = this.getSelectedCells();
+        List<Topic> ts = new ArrayList<>();
         Topic t;
         for(int[] c : cells) {
-            t = gridData.get(new T2(c[0], c[1]));
+            t = gridData.get(new T2<>(c[0], c[1]));
             if(t != null) {
                 ts.add(t);
             }
@@ -307,7 +306,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     private void moveSelection(int[] newOrigo) {
         if(newOrigo != null) {
-            ArrayList<int[]> selectedCells = getSelectedCells();
+            List<int[]> selectedCells = getSelectedCells();
             if(selectedCells != null && !selectedCells.isEmpty()) {
                 int[] oldOrigo = getOrigo(selectedCells);
                 clearSelection();
@@ -429,7 +428,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void clearSelectedCells() {
-        ArrayList<int[]> cells = getSelectedCells();
+        List<int[]> cells = getSelectedCells();
         for(int[] c : cells) {
             _setTopicAt(null, c[0], c[1]);
         }
@@ -506,12 +505,12 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void insertRows() {
-        ArrayList<int[]> cells = getSelectedCells();
-        HashMap<Integer, ArrayList<Integer>> rowsByColumn = new LinkedHashMap();
+        List<int[]> cells = getSelectedCells();
+        Map<Integer, List<Integer>> rowsByColumn = new LinkedHashMap<>();
         for(int[] c : cells) {
-            Integer column = new Integer(c[1]);
-            Integer row = new Integer(c[0]);
-            ArrayList<Integer> columnRows = rowsByColumn.get(column);
+            Integer column = c[1];
+            Integer row = c[0];
+            List<Integer> columnRows = rowsByColumn.get(column);
             if(columnRows == null) {
                 columnRows = new ArrayList<Integer>();
             }
@@ -520,10 +519,10 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
         }
 
         for(Integer column : rowsByColumn.keySet()) {
-            ArrayList<Integer> rows = rowsByColumn.get(column);
+            List<Integer> rows = rowsByColumn.get(column);
             Collections.sort(rows);
             for(Integer row : rows) {
-                HashMap<T2<Integer,Integer>, Topic> subData = new LinkedHashMap();   
+                Map<T2<Integer,Integer>, Topic> subData = new LinkedHashMap<>();   
                 for(T2<Integer,Integer> coords : gridData.keySet()) {
                     if(column.equals(coords.e2)) {
                         if(row <= coords.e1) {
@@ -535,14 +534,14 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     gridData.remove(coords);
                 }
                 for(T2<Integer,Integer> coords : subData.keySet()) {
-                    gridData.put(new T2(coords.e1+1, coords.e2), subData.get(coords));
+                    gridData.put(new T2<>(coords.e1+1, coords.e2), subData.get(coords));
                 }
             }
         }
         
         int numberOfNewRows = 0;
         for(Integer column : rowsByColumn.keySet()) {
-            ArrayList<Integer> rows = rowsByColumn.get(column);
+            List<Integer> rows = rowsByColumn.get(column);
             if(rows.size() > numberOfNewRows) {
                 numberOfNewRows = rows.size();
             }
@@ -556,12 +555,12 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void deleteRows() {
-        ArrayList<int[]> cells = getSelectedCells();
-        HashMap<Integer, ArrayList<Integer>> rowsByColumn = new LinkedHashMap();
+        List<int[]> cells = getSelectedCells();
+        Map<Integer, List<Integer>> rowsByColumn = new LinkedHashMap<>();
         for(int[] c : cells) {
-            Integer column = new Integer(c[1]);
-            Integer row = new Integer(c[0]);
-            ArrayList<Integer> columnRows = rowsByColumn.get(column);
+            Integer column = c[1];
+            Integer row = c[0];
+            List<Integer> columnRows = rowsByColumn.get(column);
             if(columnRows == null) {
                 columnRows = new ArrayList<Integer>();
             }
@@ -570,11 +569,11 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
         }
 
         for(Integer column : rowsByColumn.keySet()) {
-            ArrayList<Integer> rows = rowsByColumn.get(column);
+            List<Integer> rows = rowsByColumn.get(column);
             Collections.sort(rows);
             Collections.reverse(rows);
             for(Integer row : rows) {
-                HashMap<T2<Integer,Integer>, Topic> subData = new LinkedHashMap();   
+                Map<T2<Integer,Integer>, Topic> subData = new LinkedHashMap<>();   
                 for(T2<Integer,Integer> coords : gridData.keySet()) {
                     if(column.equals(coords.e2)) {
                         if(row < coords.e1) {
@@ -583,14 +582,14 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     }
                 }
                 if(subData.isEmpty()) {
-                    gridData.remove(new T2(row, column));
+                    gridData.remove(new T2<>(row, column));
                 }
                 else {
                     for(T2<Integer,Integer> coords : subData.keySet()) {
                         gridData.remove(coords);
                     }
                     for(T2<Integer,Integer> coords : subData.keySet()) {
-                        gridData.put(new T2(coords.e1-1, coords.e2), subData.get(coords));
+                        gridData.put(new T2<>(coords.e1-1, coords.e2), subData.get(coords));
                     }
                 }
             }
@@ -600,12 +599,12 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void insertColumns() {
-        ArrayList<int[]> cells = getSelectedCells();
-        HashMap<Integer, ArrayList<Integer>> columnsByRow = new LinkedHashMap();
+        List<int[]> cells = getSelectedCells();
+        Map<Integer, List<Integer>> columnsByRow = new LinkedHashMap<>();
         for(int[] c : cells) {
-            Integer column = new Integer(c[1]);
-            Integer row = new Integer(c[0]);
-            ArrayList<Integer> rowColumns = columnsByRow.get(row);
+            Integer column = c[1];
+            Integer row = c[0];
+            List<Integer> rowColumns = columnsByRow.get(row);
             if(rowColumns == null) {
                 rowColumns = new ArrayList<Integer>();
             }
@@ -614,10 +613,10 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
         }
 
         for(Integer row : columnsByRow.keySet()) {
-            ArrayList<Integer> columns = columnsByRow.get(row);
+            List<Integer> columns = columnsByRow.get(row);
             Collections.sort(columns);
             for(Integer column : columns) {
-                HashMap<T2<Integer,Integer>, Topic> subData = new LinkedHashMap();   
+                Map<T2<Integer,Integer>, Topic> subData = new LinkedHashMap<>();   
                 for(T2<Integer,Integer> coords : gridData.keySet()) {
                     if(row.equals(coords.e1)) {
                         if(column <= coords.e2) {
@@ -629,14 +628,14 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     gridData.remove(coords);
                 }
                 for(T2<Integer,Integer> coords : subData.keySet()) {
-                    gridData.put(new T2(coords.e1, coords.e2+1), subData.get(coords));
+                    gridData.put(new T2<>(coords.e1, coords.e2+1), subData.get(coords));
                 }
             }
         }
         
         int numberOfNewColumns = 0;
         for(Integer row : columnsByRow.keySet()) {
-            ArrayList<Integer> columns = columnsByRow.get(row);
+            List<Integer> columns = columnsByRow.get(row);
             if(columns.size() > numberOfNewColumns) {
                 numberOfNewColumns = columns.size();
             }
@@ -647,12 +646,12 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void deleteColumns() {
-        ArrayList<int[]> cells = getSelectedCells();
-        HashMap<Integer, ArrayList<Integer>> columnsByRow = new LinkedHashMap();
+        List<int[]> cells = getSelectedCells();
+        Map<Integer, List<Integer>> columnsByRow = new LinkedHashMap<>();
         for(int[] c : cells) {
-            Integer column = new Integer(c[1]);
-            Integer row = new Integer(c[0]);
-            ArrayList<Integer> rowColumns = columnsByRow.get(row);
+            Integer column = c[1];
+            Integer row = c[0];
+            List<Integer> rowColumns = columnsByRow.get(row);
             if(rowColumns == null) {
                 rowColumns = new ArrayList<Integer>();
             }
@@ -660,11 +659,11 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             columnsByRow.put(row, rowColumns);
         }
         for(Integer row : columnsByRow.keySet()) {
-            ArrayList<Integer> columns = columnsByRow.get(row);
+            List<Integer> columns = columnsByRow.get(row);
             Collections.sort(columns);
             Collections.reverse(columns);
             for(Integer column : columns) {
-                HashMap<T2<Integer,Integer>, Topic> subData = new LinkedHashMap();   
+                Map<T2<Integer,Integer>, Topic> subData = new LinkedHashMap<>();   
                 for(T2<Integer,Integer> coords : gridData.keySet()) {
                     if(row.equals(coords.e1)) {
                         if(column < coords.e2) {
@@ -673,14 +672,14 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     }
                 }
                 if(subData.isEmpty()) {
-                    gridData.remove(new T2(row, column));
+                    gridData.remove(new T2<>(row, column));
                 }
                 else {
                     for(T2<Integer,Integer> coords : subData.keySet()) {
                         gridData.remove(coords);
                     }
                     for(T2<Integer,Integer> coords : subData.keySet()) {
-                        gridData.put(new T2(coords.e1, coords.e2-1), subData.get(coords));
+                        gridData.put(new T2<>(coords.e1, coords.e2-1), subData.get(coords));
                     }
                 }
             }
@@ -720,7 +719,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
 
     
     
-    private int[] getOrigo(ArrayList<int[]> cells) {
+    private int[] getOrigo(List<int[]> cells) {
         int[] o = null;
         if(cells != null && !cells.isEmpty()) {
             for(int[] c : cells) {
@@ -741,8 +740,8 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     
-    public ArrayList<int[]> getSelectedCells() {
-        ArrayList<int[]> selected = new ArrayList();
+    public List<int[]> getSelectedCells() {
+        List<int[]> selected = new ArrayList<>();
         
         TableSelectionModel selection = getTableSelectionModel();
         int colCount = this.getColumnCount();
@@ -766,7 +765,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public Object[][] getSelectedValues() {
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         int rlen = 0;
         int clen = 0;
         for(int[] cell : selectedCells) {
@@ -783,7 +782,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public Topic[][] getSelectedTopicsNormalized() {
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         int ymax = 0;
         int xmax = 0;
         int ymin = Integer.MAX_VALUE;
@@ -805,8 +804,8 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public Topic[] getSelectedTopics() {
-        ArrayList<Topic> topics = new ArrayList<Topic>();
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<Topic> topics = new ArrayList<Topic>();
+        List<int[]> selectedCells = getSelectedCells();
         for(int[] cell : selectedCells) {
             topics.add( getTopicAt(cell[0], cell[1]) );
         }
@@ -874,15 +873,15 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public Topic _getTopicAt(int col, int row) {
-        return gridData.get(new T2(col, row));
+        return gridData.get(new T2<>(col, row));
     }
     
     public void _setTopicAt(Topic t, int col, int row) {
         if(t != null) {
-            gridData.put(new T2(col, row), t);
+            gridData.put(new T2<>(col, row), t);
         }
         else {
-            gridData.remove(new T2(col, row));
+            gridData.remove(new T2<>(col, row));
         }
     }
     
@@ -1213,7 +1212,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     public void expandInstances(int direction) {
         TopicMap tm = wandora.getTopicMap();
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         if(selectedCells != null && !selectedCells.isEmpty()) {
             for(int[] cell : selectedCells) {
                 try {
@@ -1232,7 +1231,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void expandClasses(int direction) {
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         if(selectedCells != null && !selectedCells.isEmpty()) {
             for(int[] cell : selectedCells) {
                 try {
@@ -1251,7 +1250,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void expandAssociationTypes(int direction) {
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         if(selectedCells != null && !selectedCells.isEmpty()) {
             for(int[] cell : selectedCells) {
                 try {
@@ -1274,7 +1273,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void expandAssociationRoles(int direction) {
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         if(selectedCells != null && !selectedCells.isEmpty()) {
             for(int[] cell : selectedCells) {
                 try {
@@ -1319,7 +1318,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     public void expandAssociatedTopics(int direction, Topic associationType, Topic role) {
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         if(selectedCells != null && !selectedCells.isEmpty()) {
             for(int[] cell : selectedCells) {
                 try {

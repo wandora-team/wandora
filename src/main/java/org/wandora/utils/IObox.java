@@ -1083,7 +1083,7 @@ public class IObox extends java.lang.Object {
                     }
                     length += readBytes;
                     bufs.addElement(buf);
-                    lengths.addElement(new Integer(readBytes));
+                    lengths.addElement(Integer.valueOf(readBytes));
                 }
                 inS.close();
                 byte[] data = new byte[length];
