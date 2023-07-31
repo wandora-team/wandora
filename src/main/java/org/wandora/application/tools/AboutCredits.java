@@ -78,11 +78,11 @@ public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
             aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
 
             String text =
-                    "Copyright (C) 2004-2017 Wandora Team\n"+
+                    "Copyright (C) 2004-2023 Wandora Team\n"+
                     " \n"+
                     "Wandora Team would like to thank Olli Lyytinen, \n" +
                     "Eero Lehtonen, Elias Tertsunen, Niko Laitinen, \n"+
-                    "Antti Tuppurainen, Pasi Hyt�nen, Marko Wallgren, \n"+
+                    "Antti Tuppurainen, Pasi Hytönen, Marko Wallgren, \n"+
                     "Jaakko Lyytinen and Jarno Wallgren for their contribution \n"+
                     "to the Wandora project.\n"+
                     " \n"+

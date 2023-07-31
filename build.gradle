@@ -24,6 +24,9 @@ sourceSets {
 		java {
 			srcDirs = [ 'src/main/java' ]
 		}
+		resources {
+            srcDirs = [ 'src/main/resources' ]
+        }
 	}
 	javadoc {
 		java {
@@ -133,6 +136,9 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    // Define the main class for the application.
     mainClass = 'org.wandora.application.Wandora'
+    applicationDefaultJvmArgs = ['-Xms750m -Xmx1000m']
+//    executableDir = 'bin'
 }
+
+
