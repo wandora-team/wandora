@@ -145,7 +145,7 @@ distributions {
   main {
     contents {
       from {
-        'other/dist-extras'
+        'extras/dist-extras'
       }
       from('resources') {
         into 'resources'
