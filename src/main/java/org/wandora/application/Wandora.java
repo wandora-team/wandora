@@ -445,7 +445,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         try {
         	String basemapFile = options.get("basemap");
         	if(!new File(basemapFile).exists()) {
-        		basemapFile = "resources/main/"+basemapFile;
+        		basemapFile = "resources/"+basemapFile;
         		if(!new File(basemapFile).exists()) {
         			basemapFile = "build/"+basemapFile;
         		}
