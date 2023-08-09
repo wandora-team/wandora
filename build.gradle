@@ -4,8 +4,10 @@
  */
 
 plugins {
+  id 'java'
   id 'distribution'
   id 'application'
+  id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 repositories {
@@ -15,81 +17,77 @@ repositories {
   }
 }
 
-
+group = 'org.wandora'
+version = '2023-08-26'
 
 
 dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
-    implementation group: 'org.reflections', name: 'reflections', version: '0.10.2'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.13.0'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-    implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.2.1'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
-
-	implementation group: 'uk.ac.shef.wit.simmetrics', name: 'simmetrics', version: '1.6.2.20070207'
-    implementation group: 'org.apache.poi', name: 'poi', version: '5.2.3'
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
-	implementation group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '4.1.2'
-	implementation group: 'org.apache.poi', name: 'poi-scratchpad', version: '5.2.3'
-	implementation group: 'org.odftoolkit', name: 'odfdom-java', version: '0.11.0'
-	implementation group: 'org.odftoolkit', name: 'simple-odf', version: '0.9.0'
-    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.29'
+    implementation 'org.reflections:reflections:0.10.2'
+    implementation 'commons-io:commons-io:2.13.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+	implementation 'uk.ac.shef.wit.simmetrics:simmetrics:1.6.2.20070207'
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+	implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
+	implementation 'org.apache.poi:poi-scratchpad:5.2.3'
+	implementation 'org.odftoolkit:odfdom-java:0.11.0'
+	implementation 'org.odftoolkit:simple-odf:0.9.0'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.29'
+    implementation 'org.apache-extras.beanshell:bsh:2.0b6'
+    implementation 'org.apache.commons:commons-dbcp2:2.9.0'
     
     implementation 'org.apache.tika:tika-core:2.8.0'
-    implementation group: 'org.apache.tika', name: 'tika-parsers', version: '2.8.0'
-    implementation group: 'org.apache.tika', name: 'tika-parser-audiovideo-module', version: '2.8.0'
+    implementation 'org.apache.tika:tika-parsers:2.8.0'
+    implementation 'org.apache.tika:tika-parser-audiovideo-module:2.8.0'
     
-    implementation group: 'eu.medsea.mimeutil', name: 'mime-util', version: '2.1.3'
-    implementation group: 'com.github.jtidy', name: 'jtidy', version: '1.0.4'
-    implementation group: 'org.jsoup', name: 'jsoup', version: '1.16.1'
-    implementation group: 'org.mnode.ical4j', name: 'ical4j', version: '3.2.12'
-    implementation group: 'org.apache.any23', name: 'apache-any23-core', version: '2.7'
-    implementation group: 'org.openrdf', name: 'openrdf-model', version: '1.2.7'
-    implementation group: 'org.apache.jena', name: 'jena', version: '4.9.0', ext: 'pom'
-    implementation group: 'org.apache.jena', name: 'jena-arq', version: '4.9.0'
+    implementation 'eu.medsea.mimeutil:mime-util:2.1.3'
+    implementation 'com.github.jtidy:jtidy:1.0.4'
+    implementation 'org.jsoup:jsoup:1.16.1'
+    implementation 'org.mnode.ical4j:ical4j:3.2.12'
+    implementation 'org.apache.any23:apache-any23-core:2.7'
+    implementation 'org.openrdf:openrdf-model:1.2.7'
+    implementation 'org.apache.jena:jena:4.9.0@pom'
+    implementation 'org.apache.jena:jena-arq:4.9.0'
 
-    implementation group: 'uk.ac.gate', name: 'gate-core', version: '9.0.1'
-    implementation group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '4.5.4'
-    implementation group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
-    implementation group: 'org.mnode.mstor', name: 'mstor', version: '1.0.3'
-    implementation group: 'org.apache.velocity', name: 'velocity-engine-core', version: '2.3'
+    implementation 'uk.ac.gate:gate-core:9.0.1'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.4'
+    implementation 'com.mashape.unirest:unirest-java:1.4.9'
+    implementation 'org.mnode.mstor:mstor:1.0.3'
+    implementation 'org.apache.velocity:velocity-engine-core:2.3'
 
-    implementation group: 'de.quippy', name: 'javamod', version: '2.2'
-    implementation group: 'javazoom', name: 'jlayer', version: '1.0.1'
-    implementation files('libs/local/JSwingC64-1.10.4.jar')
-    implementation files('libs/local/zmpp-wandora.jar')
-    implementation group: 'com.kenai.nbpwr', name: 'com-sun-pdfview', version: '1.0.5-201003191900'
-    implementation 'org.openjfx:javafx-web:19:mac'
-    implementation 'org.openjfx:javafx-base:19:mac'
-    implementation 'org.openjfx:javafx-graphics:19:mac'
-    implementation 'org.openjfx:javafx-media:19:mac'
-    implementation 'org.openjfx:javafx-swing:19:mac'
+    implementation 'de.quippy:javamod:2.2'
+    implementation 'javazoom:jlayer:1.0.1'
+    implementation 'com.kenai.nbpwr:com-sun-pdfview:1.0.5-201003191900'
 
-    implementation files('libs/local/JRI.jar')
-    implementation files('libs/local/JRIEngine.jar')
-    implementation files('libs/local/REngine.jar')
-
-    implementation group: 'org.dockingframes', name: 'docking-frames-common', version: '1.1.1'
-    implementation group: 'de.sciss', name: 'syntaxpane', version: '1.3.0'
+    implementation 'org.dockingframes:docking-frames-common:1.1.1'
+    implementation 'de.sciss:syntaxpane:1.3.0'
     
-    implementation group: 'javax.servlet', name: 'servlet-api', version: '2.5'
-    implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
-    implementation group: 'com.sun.mail', name: 'jakarta.mail', version: '2.0.1'
-    implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
+    implementation 'javax.servlet:servlet-api:2.5'
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
     implementation 'xerces:xercesImpl:2.12.2'
-    implementation group: 'org.apache-extras.beanshell', name: 'bsh', version: '2.0b6'
-    implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.9.0'
     
-    implementation group: 'net.ontopia.external.org.tmapi', name: 'tmapi', version: '2.0.2'
-    implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '6.6.0.202305301015-r'
-	implementation group: 'org.eclipse.jdt', name: 'ecj', version: '3.34.0'
-	implementation group: 'org.eclipse.jetty', name: 'jetty-http', version: '11.0.15'
-	implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: '11.0.15'
+    implementation 'net.ontopia.external.org.tmapi:tmapi:2.0.2'
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
+	implementation 'org.eclipse.jdt:ecj:3.34.0'
+	implementation 'org.eclipse.jetty:jetty-http:11.0.15'
+	implementation 'org.eclipse.jetty:jetty-server:11.0.15'
 	
 	implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
+    
+    // Embedded dependencies
+    implementation files('libs/local/JSwingC64-1.10.4.jar')
+    implementation files('libs/local/zmpp-wandora.jar')
+    implementation files('libs/local/JRI.jar')
+    implementation files('libs/local/JRIEngine.jar')
+    implementation files('libs/local/REngine.jar')
     
     testImplementation 'junit:junit:4.13.2'
 }
@@ -106,6 +104,17 @@ java {
   toolchain {
     languageVersion = JavaLanguageVersion.of(17)
   }
+}
+
+javafx {
+  version = "20"
+  modules = [ 
+    'javafx.web', 
+    'javafx.base',
+    'javafx.graphics',
+    'javafx.media',
+    'javafx.swing'
+  ]
 }
 
 
