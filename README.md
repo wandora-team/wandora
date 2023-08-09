@@ -30,18 +30,10 @@ or drop a line.
 
 Wandora was originally developed with the [Netbeans IDE](https://netbeans.apache.org/).
 Since October 2018 we have started developing Wandora with Eclipse, preferably 
-Eclipse IDE for Java Developers version 4.9.0. Eclipse development has changed
-the library retrieval and build process. Since October 2018 Wandora's Git repository
-doesn't contain jar libraries any more in the lib directory. To retrieve all
-required jar libraries, the developer should run ant task retrieve in the
-build.xml. After retrieval the Eclipse user should refresh package explorer view,
-and the developer is ready to build Wandora with the build task in the build.xml.
+Eclipse IDE for Java Developers version 4.27.0. Eclipse development has changed
+the library retrieval and build process. Wandora uses Gradle for dependency management and building application packages.
 
-Build task creates Wandora's binary distribution package in to the dist directory.
-To run Wandora application enter folder dist/bin and execute startup script Wandora.bat
-or Wandora.sh.
-
-To compile and run Wandora, a Java JDK 8 or later is required.
+To compile and run Wandora, a Java JDK 17 or later is required.
 
 Developers interested in Wandora project should note that our long term plans
 include using Eclipse as a primary development tool.
