@@ -86,6 +86,8 @@ import org.wandora.utils.Options;
 
 public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, ChangeListener, TopicPanel, ComponentListener {
     
+    private static final long serialVersionUID = 1L;
+
     public static final boolean MAKE_LOCAL_SETTINGS_GLOBAL = false;
     
     public Topic topic;

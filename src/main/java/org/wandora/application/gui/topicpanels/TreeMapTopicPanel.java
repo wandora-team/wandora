@@ -60,6 +60,8 @@ import org.wandora.topicmap.TopicMapListener;
 public class TreeMapTopicPanel extends javax.swing.JPanel implements TopicMapListener, RefreshListener, TopicPanel, ActionListener, ComponentListener {
 
 
+    private static final long serialVersionUID = 1L;
+    
     private Topic topic;
     private String topicSI;
     

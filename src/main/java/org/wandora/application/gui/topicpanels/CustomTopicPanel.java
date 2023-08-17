@@ -80,6 +80,8 @@ import org.wandora.utils.Options;
  * @author  olli
  */
 public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
+    private static final long serialVersionUID = 1L;
+
     public static boolean USE_GLOBAL_OPTIONS = true;
     
     private boolean viewSubjectLocatorResources = false;

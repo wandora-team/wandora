@@ -62,6 +62,9 @@ import org.wandora.utils.Options;
 public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener, TopicPanel {
     
     
+    private static final long serialVersionUID = 1L;
+    
+    
     private String title = "Tree";
     private Options options = null;
     private TopicTreePanel topicTreePanel = null;
@@ -88,7 +91,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     public void init() {
         try {
             allRelations = TopicTreeRelationsEditor.readRelationTypes();
-            selectedRelations = new HashSet();
+            selectedRelations = new HashSet<>();
             for(TopicTreeRelation allRelation : allRelations) {
                 selectedRelations.add(allRelation.name);
             }

@@ -97,6 +97,8 @@ import de.sciss.syntaxpane.DefaultSyntaxKit;
 
 
 public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener, RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener, RBridgeListener {
+    private static final long serialVersionUID = 1L;
+    
     public boolean USE_LOCAL_OPTIONS = true;
     public boolean SAVE_SKETCH_TO_GLOBAL_OPTIONS = true;
     

@@ -37,6 +37,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -74,6 +75,8 @@ import org.wandora.utils.Options;
 
 
 public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
+
+    private static final long serialVersionUID = 1L;
 
     public static final boolean MAKE_LOCAL_SETTINGS_GLOBAL = false;
 
@@ -268,7 +271,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         Icon viewIcon = UIBox.getIcon("gui/icons/view2.png");
         Icon hideIcon = UIBox.getIcon("gui/icons/view2_no.png");
 
-        ArrayList menuVector = new ArrayList();
+        List menuVector = new ArrayList();
         for(int i=0; i<panelStruct.length; i++) {
             Object[] panelData = panelStruct[i];
             String panelName = ((JPanel) panelData[0]).getName();

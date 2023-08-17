@@ -34,6 +34,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.JMenu;
@@ -74,10 +75,10 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
     private Wandora wandora = null;
     private TopicMap map = null;
     private StringBuilder stats = null;
-    private HashMap originalValues = null;
     private boolean trackChanges = false;
     private JPanel buttonPanel = null;
-    private HashMap<Object, SimpleLabel> fieldLabels = null;
+    private Map<Object, SimpleLabel> fieldLabels = null;
+    private Map<Integer, String> originalValues = null;
     private boolean requiresRefresh = false;
     private Thread refresher = null;
     
@@ -91,7 +92,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
         wandora = Wandora.getWandora();
         infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
-        fieldLabels = new HashMap();
+        fieldLabels = new HashMap<>();
         initInfo();
         
         refresher = new Thread(this);
@@ -194,7 +195,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
         gbc.gridy=bagCount++;
         gbc.gridx=0;
         gbc.weightx=1;
-        gbc.fill=gbc.HORIZONTAL;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
         String layerName = getCurrentLayerName();
         SimpleLabel layerNameLabel = new SimpleLabel(layerName);
         layerNameLabel.setFont(UIConstants.largeLabelFont);
@@ -204,7 +205,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
         
         boolean fillOriginalValues = false;
         if(originalValues == null) {
-            originalValues = new HashMap();
+            originalValues = new HashMap<>();
             fillOriginalValues = true;
         }
         
@@ -214,7 +215,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
                 gbc.gridx=0;
                 gbc.weightx=0.5;
                 gbc.gridwidth=1;
-                gbc.fill=gbc.HORIZONTAL;
+                gbc.fill=GridBagConstraints.HORIZONTAL;
 
                 statDescriptionString = TopicMapStatOptions.describeStatOption(statOptions[i]);
                 stats.append(statDescriptionString);
@@ -321,7 +322,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
         
         boolean fillOriginalValues = false;
         if(originalValues == null) {
-            originalValues = new HashMap();
+            originalValues = new HashMap<>();
             fillOriginalValues = true;
         }
         
@@ -465,7 +466,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
                 infoPanel.repaint();
             }
             try {
-                refresher.sleep(300);
+                Thread.sleep(300);
             }
             catch(InterruptedException e) {}
         }

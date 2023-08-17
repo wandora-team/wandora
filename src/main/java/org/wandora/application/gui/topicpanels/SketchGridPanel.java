@@ -62,6 +62,8 @@ import org.wandora.topicmap.TopicMapListener;
 
 public class SketchGridPanel extends javax.swing.JPanel implements TopicMapListener, RefreshListener, TopicPanel, ActionListener, ComponentListener {
 
+    private static final long serialVersionUID = 1L;
+    
     private int gridWidth = 10;
     private int gridHeight = 200;
     private TopicGrid topicGrid;

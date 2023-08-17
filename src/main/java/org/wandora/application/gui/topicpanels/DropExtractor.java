@@ -53,6 +53,8 @@ import org.wandora.topicmap.TopicMapException;
 
 public class DropExtractor extends javax.swing.JPanel implements TopicPanel, ActionListener {
 
+    private static final long serialVersionUID = 1L;
+    
     private DropExtractPanel dropExtractPanel = null;
     
     

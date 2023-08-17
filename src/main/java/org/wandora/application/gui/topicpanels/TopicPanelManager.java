@@ -35,7 +35,6 @@ import java.awt.event.KeyEvent;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -62,6 +61,8 @@ import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.utils.Options;
 
+import bibliothek.gui.Dockable;
+
 
 
 /**
@@ -69,10 +70,10 @@ import org.wandora.utils.Options;
  */
 public class TopicPanelManager implements ActionListener {
 
-    private Set<String> topicPanelsSupportingOpenTopic = new LinkedHashSet();
-    private Map<String,String> topicPanelMap = new LinkedHashMap();
-    private Map<String,Integer> topicPanelOrder = new LinkedHashMap();
-    private Map<String,Icon> topicPanelIcon = new LinkedHashMap();
+    private Set<String> topicPanelsSupportingOpenTopic = new LinkedHashSet<>();
+    private Map<String,String> topicPanelMap = new LinkedHashMap<>();
+    private Map<String,Integer> topicPanelOrder = new LinkedHashMap<>();
+    private Map<String,Icon> topicPanelIcon = new LinkedHashMap<>();
     private Wandora wandora;
     private TopicPanel oldTopicPanel = null;
     private TopicPanel baseTopicPanel;
@@ -256,9 +257,9 @@ public class TopicPanelManager implements ActionListener {
     
     
     public List<List> getAvailableTopicPanels() {
-        ArrayList availablePanels = new ArrayList<ArrayList>();
+        List<List> availablePanels = new ArrayList<>();
         for(String panelName : sortedTopicPanels()) {
-            ArrayList panelData = new ArrayList();
+            List panelData = new ArrayList();
             String panelClass = topicPanelMap.get(panelName);
             panelData.add(panelClass);
             panelData.add(panelName);
@@ -273,7 +274,7 @@ public class TopicPanelManager implements ActionListener {
     
     
     public List<List> getAvailableTopicPanelsSupportingOpenTopic() {
-        ArrayList availablePanels = new ArrayList<ArrayList>();
+        List<List> availablePanels = new ArrayList<>();
         for(String panelName : sortedTopicPanels()) {
             ArrayList panelData = new ArrayList();
             String panelClass = topicPanelMap.get(panelName);
@@ -351,7 +352,7 @@ public class TopicPanelManager implements ActionListener {
      * using a special sort value returned by a topic panel.
      */
     private Collection<String> sortedTopicPanels() {
-        ArrayList<String> sortedPanels = new ArrayList();
+        List<String> sortedPanels = new ArrayList<>();
         sortedPanels.addAll(topicPanelOrder.keySet());
 
         /*
@@ -370,7 +371,7 @@ public class TopicPanelManager implements ActionListener {
     }
     
     
-    public HashMap getDockedTopicPanels() {
+    public Map<Dockable,TopicPanel> getDockedTopicPanels() {
         if(baseTopicPanel != null && baseTopicPanel instanceof DockingFramePanel) {
             return ((DockingFramePanel) baseTopicPanel).getDockedTopicPanels();
         }

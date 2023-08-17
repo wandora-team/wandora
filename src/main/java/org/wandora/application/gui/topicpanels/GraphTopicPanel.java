@@ -100,6 +100,8 @@ import org.wandora.utils.Options;
  * @author olli, akivela
  */
 public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, SimpleComponent, Clipboardable, TopicMapListener, RefreshListener, ActionListener, ComponentListener {
+    private static final long serialVersionUID = 1L;
+    
     private String OPTIONS_PREFIX = "gui.graphTopicPanel.";
     private String OPTIONS_VIEW_PREFIX = OPTIONS_PREFIX + "view.";
 

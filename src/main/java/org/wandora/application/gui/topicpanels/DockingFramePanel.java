@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.JMenu;
@@ -555,8 +556,8 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
     
     
-    public HashMap getDockedTopicPanels() {
-        return (HashMap) dockedTopicPanels.clone();
+    public Map<Dockable,TopicPanel> getDockedTopicPanels() {
+        return (Map<Dockable,TopicPanel>) dockedTopicPanels.clone();
     }
     
     
