@@ -59,6 +59,8 @@ import org.wandora.utils.Options;
 
 public class SearchTopicPanel extends javax.swing.JPanel implements ActionListener, TopicPanel {
 
+    private static final long serialVersionUID = 1L;
+
     private Options options = null;
     
     private SearchPanel searchPanel = null;
@@ -199,7 +201,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         tabbedPane.addTab("Query", queryContainerPanel);
 
         tmqlContainerPanel.setLayout(new java.awt.BorderLayout());
-        tabbedPane.addTab("TMQL", tmqlContainerPanel);
+        // tabbedPane.addTab("TMQL", tmqlContainerPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

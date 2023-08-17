@@ -27,6 +27,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.script.Bindings;
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
@@ -54,38 +56,35 @@ public class ScriptManager {
      * version.
      */
     public int matchEngine(String key, ScriptEngineFactory f) {
+        int score = 0;
         String[] info=key.split("\\s*;\\s*");
+        
         String e=f.getEngineName().replace(";","_");
-        if(e==null) e="";
+        if(e != null && info[0] != null) {
+            if(e.equalsIgnoreCase(info[0])) {
+                score = 10;
+            }
+        };
         String l=f.getLanguageName().replace(";","_");
-        if(l==null) return 0;
-        String v=f.getLanguageVersion().replace(";","_");
-        if(v==null) v="0";
-        if(l.equals(info[1])){
-            int offs=0;
-            if(e.equals(info[0])) offs=5;
-            
-            if(v.equals(info[2])) return 5+offs;
-            try{
-                if(Double.parseDouble(v)>=Double.parseDouble(info[2])) return 4+offs;
-            }catch(NumberFormatException nfe){}
-            return offs+1;
+        if(l != null && info[1] != null) {
+            if(l.equalsIgnoreCase(info[1])) {
+                score = Math.min(10, score+5);
+            }
         }
-        return 0;
+        
+        return score;
     }
     
     public static String getDefaultScriptEngine(){
-        return "Oracle Nashhorn ; ECMAScript ; 1.0";
+        return "Graal.js ; ECMAScript";
     }
     
     public static String makeEngineKey(ScriptEngineFactory f){
         String e=f.getEngineName().replace(";","_");
         if(e==null) e="";
         String l=f.getLanguageName().replace(";","_");
-        if(l==null) l="";
-        String v=f.getLanguageVersion().replace(";","_");
-        if(v==null) v="";        
-        return e+" ; "+l+" ; "+v;
+        if(l==null) l="";      
+        return e+" ; "+l;
     }
     
     public static List<String> getAvailableEngines(){
@@ -100,7 +99,7 @@ public class ScriptManager {
     
     public ScriptEngine getScriptEngine(String engineInfo){
         ScriptEngineFactory factory=engines.get(engineInfo);
-        if(factory==null){
+        if(factory==null) {
             javax.script.ScriptEngineManager manager=new javax.script.ScriptEngineManager();
             List<ScriptEngineFactory> fs=manager.getEngineFactories();
             int bestScore=0;
@@ -119,13 +118,18 @@ public class ScriptManager {
         }
         if(factory==null) return null;
         
+        if(isGraal(factory)) {
+            System.setProperty("polyglot.js.nashorn-compat", "true");
+        }
+        
         ScriptEngine engine = factory.getScriptEngine();
         
         if(engine != null) {
             try {
-                String engineName = factory.getEngineName();
-                if(engineName != null && engineName.toLowerCase().contains("nashorn")) {
-                    // https://bugs.openjdk.java.net/browse/JDK-8025132
+                if(isGraal(factory)) {
+                    Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+                    bindings.put("polyglot.js.allowAllAccess", true);
+                    bindings.put("polyglot.js.allowHostClassLookup", true);
                     engine.eval("load('nashorn:mozilla_compat.js');");
                 }
             }
@@ -141,6 +145,16 @@ public class ScriptManager {
         Object o=engine.eval(script);
         return o;
     }
+    
+    private boolean isGraal(ScriptEngineFactory factory) {
+        if(factory != null) {
+            if(factory.getEngineName().equalsIgnoreCase("graal.js")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     
     /**
      * This helper class is meant for creation of arrays in javascript. Mozilla
