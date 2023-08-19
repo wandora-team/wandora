@@ -40,6 +40,7 @@ import org.wandora.application.gui.topicpanels.TopicPanel;
 
 
 public class SelectTopicPanelPanel extends javax.swing.JPanel {
+    private static final long serialVersionUID = 1L;
     
     private JDialog myDialog = null;
     private ArrayList<TopicPanel> topicPanels = null;

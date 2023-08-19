@@ -38,6 +38,7 @@ import java.awt.event.KeyEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -97,7 +98,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     
     protected SimplePanel customPanel;
     
-    protected ArrayList<QueryGroupInfo> queryGroups;
+    protected List<QueryGroupInfo> queryGroups;
 
     private String OPTIONS_PREFIX = "gui.customTopicPanel.";
     private String OPTIONS_VIEW_PREFIX = OPTIONS_PREFIX + "view.";
@@ -963,7 +964,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     private void configOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configOkButtonActionPerformed
         if(configDialog.isVisible()){
             
-            ArrayList<QueryGroupInfo> newGroups=((CustomTopicPanelConfiguration)configurationPanel).getQueryGroups();
+            List<QueryGroupInfo> newGroups=((CustomTopicPanelConfiguration)configurationPanel).getQueryGroups();
 /*            boolean error=false;
             for(QueryGroupInfo group : newGroups){
                 for(QueryInfo query : group.queries){

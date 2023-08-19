@@ -117,7 +117,6 @@ public class PreContext implements Context {
             public Object next() {
                 Object current = next;
                 next = solveNext();
-                //System.out.println("next == " + current);
                 return current;
             }
 

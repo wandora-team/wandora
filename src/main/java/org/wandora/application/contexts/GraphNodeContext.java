@@ -96,9 +96,7 @@ public class GraphNodeContext implements Context {
     
     public Iterator getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
-        
-        System.out.println("GraphNodeContext contextsource == "+contextSource);
-        
+
         List<VNode> contextNodes = new ArrayList<>();
         if(contextSource instanceof Wandora) {
             try {

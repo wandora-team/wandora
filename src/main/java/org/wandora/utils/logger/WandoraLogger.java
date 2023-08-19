@@ -17,28 +17,48 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
  *
+ *
+ * 
+ *
+ * WandoraLogger.java
  */
+package org.wandora.utils.logger;
 
 
-package org.wandora.application.gui.topicpanels.dockingpanel;
-
-import bibliothek.gui.dock.SplitDockStation;
 
 /**
+ * 
+ * @author akikivela
  *
- * @author akivela
  */
+public class WandoraLogger {
 
-
-public class WandoraSplitDockStation extends SplitDockStation {
-    private static final long serialVersionUID = 1L;
+    org.apache.logging.log4j.Logger realLogger;
     
-    public WandoraSplitDockStation() {
-        super(false);
+    
+    private WandoraLogger(Class<?> clazz) {
+        realLogger = org.apache.logging.log4j.LogManager.getLogger(clazz);
     }
-    public WandoraSplitDockStation(boolean createFullScreenAction) {
-        super(false);
+    
+    
+    public static WandoraLogger getLogger(Class<?> clazz) {
+        return new WandoraLogger(clazz);
+    }
+    
+    public void debug(String str) {
+        realLogger.debug(str);
+    }
+    
+    public void info(String str) {
+        realLogger.info(str);
+    }
+    
+    public void warn(String str) {
+        realLogger.warn(str);
+    }
+    
+    public void error(String str) {
+        realLogger.warn(str);
     }
 }

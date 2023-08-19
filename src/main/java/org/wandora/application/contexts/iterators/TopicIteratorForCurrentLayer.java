@@ -52,8 +52,6 @@ public class TopicIteratorForCurrentLayer extends TopicIterator {
                     collection = ((LayeredTopic) topic).getTopicsForSelectedLayer();
                 }
                 else {
-                    //System.out.println("topic:" + topic.getClass().getName());
-                    
                     ArrayList list = new ArrayList();
                     list.add(topic);
                     collection = list;

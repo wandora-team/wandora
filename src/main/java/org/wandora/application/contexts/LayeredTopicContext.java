@@ -342,7 +342,6 @@ public class LayeredTopicContext implements Context {
     
     
     public boolean isContextSource(Object contextSource) {
-        // System.out.println("Checking if "+contextSource+" is a valid context source!");
         if(contextSource != null && (
                 contextSource instanceof Wandora ||
                 contextSource instanceof TopicLinkBasename ||

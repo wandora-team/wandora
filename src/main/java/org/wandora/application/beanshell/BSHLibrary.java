@@ -39,6 +39,7 @@ import java.util.Vector;
 
 import org.wandora.utils.Options;
 import org.wandora.utils.RegexFileChooser;
+import org.wandora.utils.logger.WandoraLogger;
 
 import bsh.Interpreter;
 
@@ -50,6 +51,7 @@ import bsh.Interpreter;
  */
 public class BSHLibrary extends Vector<BSHComponent> {
     
+    private static final WandoraLogger logger = WandoraLogger.getLogger(BSHLibrary.class);
     
 
 
@@ -103,8 +105,8 @@ public class BSHLibrary extends Vector<BSHComponent> {
     
     
     public void readBSHScripts(File file) {
-        if(!file.exists()) System.out.println("Beanshell directory "+file.getAbsolutePath()+" does not exists.");
-        if(!file.isDirectory()) System.out.println("Beanshell directory "+file.getAbsolutePath()+" is not a directory.");
+        if(!file.exists()) logger.info("Beanshell directory "+file.getAbsolutePath()+" does not exists.");
+        if(!file.isDirectory()) logger.info("Beanshell directory "+file.getAbsolutePath()+" is not a directory.");
         if(file.exists() && file.isDirectory()) {
             File[] files=file.listFiles(RegexFileChooser.ioFileFilter(RegexFileChooser.suffixChooser("bsh","Beanshell scripts")));
             for(File f: files){
@@ -114,10 +116,10 @@ public class BSHLibrary extends Vector<BSHComponent> {
                         Object bshc=interpreter.eval(reader);
                         reader.close();
                         if(bshc==null) {
-                            System.out.println("Beanshell script "+f.getAbsolutePath()+" returned null.");
+                            logger.info("Beanshell script "+f.getAbsolutePath()+" returned null.");
                         }
                         else if(!(bshc instanceof BSHComponent)){
-                            System.out.println("Beanshell script "+f.getAbsolutePath()+" returned object which is not instanceof BSHComponent.");
+                            logger.info("Beanshell script "+f.getAbsolutePath()+" returned object which is not instanceof BSHComponent.");
                         }
                         else{
                             this.add((BSHComponent)bshc);

@@ -34,6 +34,7 @@ import java.awt.dnd.DnDConstants;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JMenu;
@@ -64,7 +65,9 @@ import org.wandora.utils.swing.DragJTree;
  */
 public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
     
-    private ArrayList<QueryGroupInfo> groups;
+    private static final long serialVersionUID = 1L;
+    
+    private List<QueryGroupInfo> groups;
     private Object rootNode;
     
     private CustomTreeModel treeModel;
@@ -90,11 +93,11 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         });
     }
     
-    public ArrayList<QueryGroupInfo> getQueryGroups(){
+    public List<QueryGroupInfo> getQueryGroups(){
         return groups;
     }
     
-    public void readQueryGroups(ArrayList<QueryGroupInfo> oldGroups){
+    public void readQueryGroups(List<QueryGroupInfo> oldGroups){
         rootNode="Custom panel";
         this.groups=new ArrayList<QueryGroupInfo>();
         for(QueryGroupInfo g : oldGroups){
@@ -623,6 +626,8 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
     
     
     private class ScriptEditor extends TextEditor {
+        private static final long serialVersionUID = 1L;
+        
         public static final String optionPrefix = "scriptTextEditor.";
         protected JMenu scriptMenu;
         

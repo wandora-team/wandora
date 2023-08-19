@@ -64,6 +64,8 @@ import org.wandora.topicmap.Topic;
  */
 public class OccurrenceTextEditor extends TextEditor {
 
+    private static final long serialVersionUID = 1L;
+    
     protected Topic occurrenceTopic = null;
     protected Topic occurrenceType = null;
     protected Topic occurrenceVersion = null;
