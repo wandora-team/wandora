@@ -38,6 +38,8 @@ import org.wandora.topicmap.Topic;
  */
 public class AssociationTypeLinkBasename extends TopicLinkBasename {
     
+    private static final long serialVersionUID = 1L;
+    
     private AssociationTable associationTable = null;
     
     

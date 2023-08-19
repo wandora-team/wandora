@@ -56,6 +56,7 @@ import javax.swing.JViewport;
 
 public class SimpleTextPaneResizeable extends SimpleTextPane implements MouseMotionListener {
     
+    private static final long serialVersionUID = 1L;
     
     protected boolean onlyVerticalResize = false;
     protected boolean mousePressedInTriangle = false;

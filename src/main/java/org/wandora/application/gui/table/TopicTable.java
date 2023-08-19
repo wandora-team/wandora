@@ -75,6 +75,8 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
  */
 public class TopicTable extends SimpleTable implements MouseListener, ActionListener, Clipboardable {
 
+    private static final long serialVersionUID = 1L;
+    
     private Wandora wandora = null;
     private MouseEvent mouseEvent;
 

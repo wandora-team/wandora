@@ -44,6 +44,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class TopicLinkBasename extends SimpleLabel {
     
+    private static final long serialVersionUID = 1L;
     
     protected Wandora parent;
     protected Locator locator;

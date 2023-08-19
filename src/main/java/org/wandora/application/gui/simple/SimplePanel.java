@@ -43,6 +43,7 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimplePanel extends JPanel {
 
+    private static final long serialVersionUID = 1L;
     
     
     /** Creates a new instance of SimplePanel */

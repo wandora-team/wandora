@@ -48,6 +48,8 @@ import org.wandora.utils.swing.anyselectiontable.AnySelectionTable;
  */
 public class SimpleTable extends AnySelectionTable implements SimpleComponent {
     
+    private static final long serialVersionUID = 1L;
+    
     public static final int DEFAULT_ROW_HEIGHT = 21;
     
     

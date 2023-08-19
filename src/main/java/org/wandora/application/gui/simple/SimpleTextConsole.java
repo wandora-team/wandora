@@ -51,6 +51,8 @@ import org.wandora.utils.IObox;
 
 public class SimpleTextConsole extends SimpleTextPane {
 
+    private static final long serialVersionUID = 1L;
+    
     private static final int DEFAULT_FONT_SIZE = 12;
 
     private static final Color DEFAULT_FOREGROUND_COLOR = Color.BLACK;

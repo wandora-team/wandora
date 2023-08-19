@@ -53,7 +53,7 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class TopicGridCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
-    
+    private static final long serialVersionUID = 1L;
     
     private Wandora wandora = null;
     private Topic topic;

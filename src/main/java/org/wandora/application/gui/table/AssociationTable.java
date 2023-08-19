@@ -69,6 +69,7 @@ public class AssociationTable extends TopicTable {
     
 
 	private static final long serialVersionUID = 1L;
+	
 	private Wandora wandora;
     private Association[] associations;
     private Topic[][] tableTopics;

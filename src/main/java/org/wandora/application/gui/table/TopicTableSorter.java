@@ -39,6 +39,7 @@ import org.wandora.utils.swing.TableSorter;
  */
 public class TopicTableSorter extends TableSorter {
 
+    private static final long serialVersionUID = 1L;
     
     public TopicTableSorter() {
         super();

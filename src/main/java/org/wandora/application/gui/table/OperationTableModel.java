@@ -37,6 +37,9 @@ import org.wandora.topicmap.undowrapper.UndoOperation;
 
 
 public class OperationTableModel extends DefaultTableModel {
+    
+    private static final long serialVersionUID = 1L;
+    
     private UndoOperation[] ops = null;
     
     

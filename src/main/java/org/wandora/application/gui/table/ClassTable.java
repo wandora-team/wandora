@@ -61,7 +61,7 @@ import org.wandora.utils.ClipboardBox;
 
 
 public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
-    
+    private static final long serialVersionUID = 1L;
 
     private Topic topic;
     private Topic[] types;

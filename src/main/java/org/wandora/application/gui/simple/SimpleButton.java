@@ -48,6 +48,8 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleButton extends JButton {
     
+    private static final long serialVersionUID = 1L;
+    
     /** Creates a new instance of SimpleButton */
     public SimpleButton() {
         initialize();

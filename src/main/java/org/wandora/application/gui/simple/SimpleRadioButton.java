@@ -43,7 +43,7 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleRadioButton extends JRadioButton {
     
-   
+    private static final long serialVersionUID = 1L;
     
     /** Creates a new instance of SimpleRadioButton */
     public SimpleRadioButton() {

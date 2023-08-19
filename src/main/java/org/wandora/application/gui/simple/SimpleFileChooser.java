@@ -45,6 +45,7 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleFileChooser extends JFileChooser {
 
+    private static final long serialVersionUID = 1L;
    
     
     public SimpleFileChooser() {

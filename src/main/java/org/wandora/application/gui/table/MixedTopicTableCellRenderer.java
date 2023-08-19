@@ -53,6 +53,9 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+    
+    private static final long serialVersionUID = 1L;
+    
     public Object content;
     private Topic topic;
     private MixedTopicTable topicTable;

@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
  */
 public class ScrollableSimplePanel extends SimplePanel implements Scrollable {
 
+    private static final long serialVersionUID = 1L;
 
 
     /** Creates a new instance of ScrollableSimplePanel */

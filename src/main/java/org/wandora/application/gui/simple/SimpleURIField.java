@@ -58,6 +58,7 @@ import org.wandora.utils.DataURL;
  */
 public class SimpleURIField extends SimpleField {
 
+    private static final long serialVersionUID = 1L;
     
     private static Color BROKEN_URI_COLOR = new Color(255, 240, 240);
     private static Color DATA_URI_COLOR = Color.WHITE;

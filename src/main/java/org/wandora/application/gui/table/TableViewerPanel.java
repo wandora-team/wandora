@@ -41,6 +41,8 @@ import org.wandora.application.gui.simple.SimpleButton;
 
 
 public class TableViewerPanel extends javax.swing.JPanel {
+    
+    private static final long serialVersionUID = 1L;
 
     private Component component = null;
     private JDialog dialog = null;

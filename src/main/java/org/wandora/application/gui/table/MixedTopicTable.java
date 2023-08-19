@@ -59,6 +59,7 @@ import org.wandora.utils.swing.TableSorter;
  */
 public class MixedTopicTable extends TopicTable implements MouseListener, ActionListener, Clipboardable /*, DragSourceListener , DragGestureListener*/  {
 
+    private static final long serialVersionUID = 1L;
 
     
     public Wandora wandora = null;

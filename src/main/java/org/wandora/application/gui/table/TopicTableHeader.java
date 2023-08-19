@@ -37,6 +37,7 @@ import javax.swing.table.JTableHeader;
  * @author akivela
  */
 public class TopicTableHeader extends JTableHeader {
+    private static final long serialVersionUID = 1L;
     
     /** Creates a new instance of TopicTableHeader */
     public TopicTableHeader() {

@@ -51,6 +51,8 @@ import org.wandora.utils.DataURL;
  */
 public class LocatorTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
     
+    private static final long serialVersionUID = 1L;
+    
     private LocatorTable locatorTable;
 
     

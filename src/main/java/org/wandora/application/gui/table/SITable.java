@@ -42,6 +42,8 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class SITable extends LocatorTable {
 
+    private static final long serialVersionUID = 1L;
+    
     private Topic topic;
     private Locator[] sis;
     private Color[] colors;

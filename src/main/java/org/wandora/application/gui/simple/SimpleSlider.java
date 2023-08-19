@@ -37,6 +37,8 @@ import javax.swing.JSlider;
 
 public class SimpleSlider extends JSlider implements MouseWheelListener {
     
+    private static final long serialVersionUID = 1L;
+    
     
     public SimpleSlider(int orientation, int min, int max, int value) {
         super(orientation, min, max, value);

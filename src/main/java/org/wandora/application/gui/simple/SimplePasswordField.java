@@ -37,6 +37,7 @@ import org.wandora.utils.EasyVector;
  */
 public class SimplePasswordField extends JPasswordField {
     
+    private static final long serialVersionUID = 1L;
     
     protected Insets defaultMargins = new Insets(3,3,3,3);
     

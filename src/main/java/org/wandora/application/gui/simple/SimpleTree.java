@@ -42,6 +42,8 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleTree extends JTree implements SimpleComponent {
     
+    private static final long serialVersionUID = 1L;
+    
     /** Creates a new instance of SimpleTree */
     public SimpleTree() {
         this.putClientProperty("JTree.lineStyle", "None");

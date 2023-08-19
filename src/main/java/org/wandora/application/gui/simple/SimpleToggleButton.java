@@ -48,6 +48,8 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleToggleButton extends JToggleButton {
     
+    private static final long serialVersionUID = 1L;
+    
     Icon onIcon = null;
     Icon offIcon = null;
     

@@ -29,10 +29,10 @@
 package org.wandora.application;
 
 
-import static java.awt.event.InputEvent.ALT_MASK;
-import static java.awt.event.InputEvent.CTRL_MASK;
-import static java.awt.event.InputEvent.META_MASK;
-import static java.awt.event.InputEvent.SHIFT_MASK;
+import static java.awt.event.InputEvent.ALT_DOWN_MASK;
+import static java.awt.event.InputEvent.CTRL_DOWN_MASK;
+import static java.awt.event.InputEvent.META_DOWN_MASK;
+import static java.awt.event.InputEvent.SHIFT_DOWN_MASK;
 import static java.awt.event.KeyEvent.VK_A;
 import static java.awt.event.KeyEvent.VK_C;
 import static java.awt.event.KeyEvent.VK_D;
@@ -64,11 +64,13 @@ import static org.wandora.application.gui.topicpanels.traditional.AbstractTradit
 import static org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel.VARIANT_GUITYPE_USED;
 
 import java.awt.Component;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.JMenu;
@@ -386,7 +388,7 @@ public class WandoraMenuManager {
     public JMenu extractMenu = new SimpleMenu("Extract", UIBox.getIcon("gui/icons/extract.png"));
     public JMenu generatorMenu = new SimpleMenu("Generate", UIBox.getIcon("gui/icons/generate.png"));
 
-    public static HashMap SLExtractorMenus = new LinkedHashMap();
+    public static Map SLExtractorMenus = new LinkedHashMap();
     //public static JMenu extractWithSLTableMenu = new SimpleMenu("Extract with SL"); // Here the context is default topic context.
     //public static JMenu extractWithSLTreeMenu = new SimpleMenu("Extract with SL"); // Here the context is default topic context.
     public JMenu extractWithSLTopicMenu = new SimpleMenu("Extract with subject locator"); // Here the context is application.
@@ -412,7 +414,7 @@ public class WandoraMenuManager {
 
     private static WandoraMenuManager menuManager;
     
-    private static int DEF_MASK = UIBox.isMac() ? META_MASK : CTRL_MASK;
+    private static int DEF_MASK = UIBox.isMac() ? META_DOWN_MASK : CTRL_DOWN_MASK;
     
     
     
@@ -539,20 +541,20 @@ public class WandoraMenuManager {
         
         // --- Merge ---
         Object[] mergeLayers = new Object[] {
-            "Merge up...", KeyStroke.getKeyStroke(VK_UP, SHIFT_MASK | ALT_MASK), new MergeLayers(MergeLayers.MERGE_UP),
-            "Merge down...", KeyStroke.getKeyStroke(VK_DOWN, SHIFT_MASK | ALT_MASK), new MergeLayers(MergeLayers.MERGE_DOWN),
-            "Merge all...", KeyStroke.getKeyStroke(VK_M, SHIFT_MASK | ALT_MASK), new MergeLayers(MergeLayers.MERGE_ALL),
-            "Merge visible...", KeyStroke.getKeyStroke(VK_M, ALT_MASK), new MergeLayers(MergeLayers.MERGE_VISIBLE),
+            "Merge up...", KeyStroke.getKeyStroke(VK_UP, SHIFT_DOWN_MASK | ALT_DOWN_MASK), new MergeLayers(MergeLayers.MERGE_UP),
+            "Merge down...", KeyStroke.getKeyStroke(VK_DOWN, SHIFT_DOWN_MASK | ALT_DOWN_MASK), new MergeLayers(MergeLayers.MERGE_DOWN),
+            "Merge all...", KeyStroke.getKeyStroke(VK_M, SHIFT_DOWN_MASK | ALT_DOWN_MASK), new MergeLayers(MergeLayers.MERGE_ALL),
+            "Merge visible...", KeyStroke.getKeyStroke(VK_M, ALT_DOWN_MASK), new MergeLayers(MergeLayers.MERGE_VISIBLE),
         };
         JMenu mergeLayersMenu =  new SimpleMenu("Merge layers", UIBox.getIcon("gui/icons/layers_merge.png"));
         UIBox.attachMenu( mergeLayersMenu, mergeLayers, wandora );
         
         // --- Arrange ---
         Object[] arrangeLayers = new Object[] {
-            "Move up", UIBox.getIcon("gui/icons/move_up.png"), KeyStroke.getKeyStroke(VK_UP, ALT_MASK), new ArrangeLayers(LayerTree.MOVE_LAYER_UP),
-            "Move down", UIBox.getIcon("gui/icons/move_down.png"), KeyStroke.getKeyStroke(VK_DOWN, ALT_MASK), new ArrangeLayers(LayerTree.MOVE_LAYER_DOWN),
-            "Move top", UIBox.getIcon("gui/icons/move_top.png"), KeyStroke.getKeyStroke(VK_HOME, ALT_MASK), new ArrangeLayers(LayerTree.MOVE_LAYER_TOP),
-            "Move bottom", UIBox.getIcon("gui/icons/move_bottom.png"), KeyStroke.getKeyStroke(VK_END, ALT_MASK), new ArrangeLayers(LayerTree.MOVE_LAYER_BOTTOM),
+            "Move up", UIBox.getIcon("gui/icons/move_up.png"), KeyStroke.getKeyStroke(VK_UP, ALT_DOWN_MASK), new ArrangeLayers(LayerTree.MOVE_LAYER_UP),
+            "Move down", UIBox.getIcon("gui/icons/move_down.png"), KeyStroke.getKeyStroke(VK_DOWN, ALT_DOWN_MASK), new ArrangeLayers(LayerTree.MOVE_LAYER_DOWN),
+            "Move top", UIBox.getIcon("gui/icons/move_top.png"), KeyStroke.getKeyStroke(VK_HOME, ALT_DOWN_MASK), new ArrangeLayers(LayerTree.MOVE_LAYER_TOP),
+            "Move bottom", UIBox.getIcon("gui/icons/move_bottom.png"), KeyStroke.getKeyStroke(VK_END, ALT_DOWN_MASK), new ArrangeLayers(LayerTree.MOVE_LAYER_BOTTOM),
             "---",
             "Reverse order", UIBox.getIcon("gui/icons/reverse_order.png"), new ArrangeLayers(LayerTree.REVERSE_LAYERS),
         };
@@ -561,9 +563,9 @@ public class WandoraMenuManager {
         
         // --- View ---
         Object[] viewLayers = new Object[] {
-            "View all", KeyStroke.getKeyStroke(VK_V, ALT_MASK), new ViewLayers(ViewLayers.VIEW_ALL),
-            "Hide all", KeyStroke.getKeyStroke(VK_H, ALT_MASK), new ViewLayers(ViewLayers.HIDE_ALL),
-            "Hide all but current", KeyStroke.getKeyStroke(VK_V, SHIFT_MASK | ALT_MASK), new ViewLayers(ViewLayers.HIDE_ALL_BUT_CURRENT),
+            "View all", KeyStroke.getKeyStroke(VK_V, ALT_DOWN_MASK), new ViewLayers(ViewLayers.VIEW_ALL),
+            "Hide all", KeyStroke.getKeyStroke(VK_H, ALT_DOWN_MASK), new ViewLayers(ViewLayers.HIDE_ALL),
+            "Hide all but current", KeyStroke.getKeyStroke(VK_V, SHIFT_DOWN_MASK | ALT_DOWN_MASK), new ViewLayers(ViewLayers.HIDE_ALL_BUT_CURRENT),
             "Reverse visibility", new ViewLayers(ViewLayers.REVERSE_VISIBILITY), 
         };
         JMenu viewLayersMenu =  new SimpleMenu("View layers", UIBox.getIcon("gui/icons/layers_view.png"));
@@ -571,9 +573,9 @@ public class WandoraMenuManager {
         
         // --- Lock ---
         Object[] lockLayers = new Object[] {
-            "Lock all", KeyStroke.getKeyStroke(VK_L, ALT_MASK), new LockLayers(LockLayers.LOCK_ALL),
-            "Unlock all", KeyStroke.getKeyStroke(VK_U, ALT_MASK), new LockLayers(LockLayers.UNLOCK_ALL),
-            "Lock all but current", KeyStroke.getKeyStroke(VK_L, SHIFT_MASK | ALT_MASK), new LockLayers(LockLayers.LOCK_ALL_BUT_CURRENT),
+            "Lock all", KeyStroke.getKeyStroke(VK_L, ALT_DOWN_MASK), new LockLayers(LockLayers.LOCK_ALL),
+            "Unlock all", KeyStroke.getKeyStroke(VK_U, ALT_DOWN_MASK), new LockLayers(LockLayers.UNLOCK_ALL),
+            "Lock all but current", KeyStroke.getKeyStroke(VK_L, SHIFT_DOWN_MASK | ALT_DOWN_MASK), new LockLayers(LockLayers.LOCK_ALL_BUT_CURRENT),
             "Reverse locks", new LockLayers(LockLayers.REVERSE_LOCKS),
         };
         JMenu lockLayersMenu =  new SimpleMenu("Lock layers", UIBox.getIcon("gui/icons/layers_lock.png"));
@@ -581,7 +583,7 @@ public class WandoraMenuManager {
         
         // --- Stats ---
         Object[] statLayers = new Object[] {
-            "Topic map info...", UIBox.getIcon("gui/icons/layer_info.png"), KeyStroke.getKeyStroke(VK_I, ALT_MASK), new TopicMapStatistics(),
+            "Topic map info...", UIBox.getIcon("gui/icons/layer_info.png"), KeyStroke.getKeyStroke(VK_I, ALT_DOWN_MASK), new TopicMapStatistics(),
             "Topic map connection statistics...", UIBox.getIcon("gui/icons/layer_acount.png"), new AssociationCounterTool(),
             "Asset weights...", UIBox.getIcon("gui/icons/asset_weight.png"), new AssetWeights(AssetWeights.CONTEXT_IS_TOPICMAP),
             "Topic map diameter...", UIBox.getIcon("gui/icons/topicmap_diameter.png"), new TopicMapDiameter(),
@@ -596,11 +598,11 @@ public class WandoraMenuManager {
         
         // --- Compose Layer Menu ---
         Object[] menuStructure = new Object[] {
-            "New layer...", UIBox.getIcon("gui/icons/layer_create.png"), KeyStroke.getKeyStroke(VK_N, ALT_MASK), new NewLayer(),
+            "New layer...", UIBox.getIcon("gui/icons/layer_create.png"), KeyStroke.getKeyStroke(VK_N, ALT_DOWN_MASK), new NewLayer(),
             "---",
-            "Rename layer", UIBox.getIcon("gui/icons/layer_rename.png"), KeyStroke.getKeyStroke(VK_R, ALT_MASK), new RenameLayer(),
-            "Configure layer...", UIBox.getIcon("gui/icons/layer_configure.png"), KeyStroke.getKeyStroke(VK_O, ALT_MASK), new ConfigureLayer(),
-            "Delete layer...", UIBox.getIcon("gui/icons/layer_delete.png"), KeyStroke.getKeyStroke(VK_DELETE, ALT_MASK), new DeleteLayer(),
+            "Rename layer", UIBox.getIcon("gui/icons/layer_rename.png"), KeyStroke.getKeyStroke(VK_R, ALT_DOWN_MASK), new RenameLayer(),
+            "Configure layer...", UIBox.getIcon("gui/icons/layer_configure.png"), KeyStroke.getKeyStroke(VK_O, ALT_DOWN_MASK), new ConfigureLayer(),
+            "Delete layer...", UIBox.getIcon("gui/icons/layer_delete.png"), KeyStroke.getKeyStroke(VK_DELETE, ALT_DOWN_MASK), new DeleteLayer(),
             "Clear layer topic map...", UIBox.getIcon("gui/icons/layer_topicmap_clear.png"), new ClearTopicMap(),
             "Clear topic map indexes...", UIBox.getIcon("gui/icons/layer_index_clear.png"), new ClearTopicMapIndexes(),
             "---",
@@ -739,7 +741,7 @@ public class WandoraMenuManager {
     public void refreshTopicsMenu() {
         
         Object[] splitTopicStructure = new Object[] {
-            "Split topic with subject identifiers", KeyStroke.getKeyStroke(VK_S, DEF_MASK | SHIFT_MASK), new SplitTopics(new ApplicationContext()), 
+            "Split topic with subject identifiers", KeyStroke.getKeyStroke(VK_S, DEF_MASK | SHIFT_DOWN_MASK), new SplitTopics(new ApplicationContext()), 
             "Split topic with a base name regex...", new SplitTopicsWithBasename(new ApplicationContext()),
             "---",
             "Split to descending instances with a base name regex...", new SplitToInstancesWithBasename(new ApplicationContext(), true),
@@ -999,12 +1001,12 @@ public class WandoraMenuManager {
         UIBox.attachMenu( patchMenu, patchMenuStruct, wandora );
 
         Object[] menuStructure = new Object[] {
-            "New project...", KeyStroke.getKeyStroke(VK_N, DEF_MASK | SHIFT_MASK), UIBox.getIcon("gui/icons/new_project.png"), new ResetWandora(),
+            "New project...", KeyStroke.getKeyStroke(VK_N, DEF_MASK | SHIFT_DOWN_MASK), UIBox.getIcon("gui/icons/new_project.png"), new ResetWandora(),
             "Open project...", KeyStroke.getKeyStroke(VK_L, DEF_MASK), UIBox.getIcon("gui/icons/load_project.png"), new LoadWandoraProject(),
             "Merge project...", KeyStroke.getKeyStroke(VK_M, DEF_MASK), UIBox.getIcon("gui/icons/merge_project.png"), new MergeWandoraProject(),
             "---",
             "Save project", KeyStroke.getKeyStroke(VK_S, DEF_MASK), UIBox.getIcon("gui/icons/save_project.png"), new SaveWandoraProject(true),
-            "Save project as...", KeyStroke.getKeyStroke(VK_S, DEF_MASK | SHIFT_MASK), UIBox.getIcon("gui/icons/save_project_as.png"), new SaveWandoraProject(),
+            "Save project as...", KeyStroke.getKeyStroke(VK_S, DEF_MASK | SHIFT_DOWN_MASK), UIBox.getIcon("gui/icons/save_project_as.png"), new SaveWandoraProject(),
             "Revert", UIBox.getIcon("gui/icons/revert_project.png"), new RevertWandoraProject(),
             "---",
 
@@ -2227,10 +2229,10 @@ public class WandoraMenuManager {
     
     public static Object[] getOpenInMenu() {
         Wandora wandora = Wandora.getWandora();
-        ArrayList struct = new ArrayList();
+        List struct = new ArrayList();
         
         if(wandora != null) {
-            HashMap<Dockable,TopicPanel> dockedTopicPanels = wandora.topicPanelManager.getDockedTopicPanels();
+            Map<Dockable,TopicPanel> dockedTopicPanels = wandora.topicPanelManager.getDockedTopicPanels();
             if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
                 for(Dockable dockable : dockedTopicPanels.keySet()) {
                     TopicPanel tp = dockedTopicPanels.get(dockable);

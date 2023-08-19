@@ -44,7 +44,10 @@ import org.wandora.topicmap.Topic;
  *
  * @author olli,akivela
  */
-public class TopicTableCellEditor extends AbstractCellEditor implements TableCellEditor {        
+public class TopicTableCellEditor extends AbstractCellEditor implements TableCellEditor {   
+    
+    private static final long serialVersionUID = 1L;
+    
     private Topic topic;
     private SimpleLabel label;
     private TopicTable table;

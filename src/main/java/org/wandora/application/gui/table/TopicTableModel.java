@@ -42,6 +42,8 @@ import org.wandora.topicmap.Topic;
 
 public class TopicTableModel extends DefaultTableModel {
 
+    private static final long serialVersionUID = 1L;
+    
     private Topic[][] data = null;
     private Object[] cols = null;
 

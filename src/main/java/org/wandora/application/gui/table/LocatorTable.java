@@ -74,6 +74,7 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 public class LocatorTable extends SimpleTable implements MouseListener, ActionListener, Clipboardable /*, DropTargetListener, DragGestureListener*/ {
     
 
+    private static final long serialVersionUID = 1L;
     
 
     protected Wandora wandora = null;

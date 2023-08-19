@@ -41,6 +41,8 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleTabbedPane extends JTabbedPane {
     
+    private static final long serialVersionUID = 1L;
+    
     /** Creates a new instance of SimpleTabbedPane */
     public SimpleTabbedPane() {
         this.setUI(new SimpleTabbedPaneUI());

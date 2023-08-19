@@ -39,6 +39,8 @@ import org.wandora.utils.swing.TableSorter;
  */
 public class LocatorTableSorter extends TableSorter {
 
+    private static final long serialVersionUID = 1L;
+    
     
     public LocatorTableSorter() {
         super();

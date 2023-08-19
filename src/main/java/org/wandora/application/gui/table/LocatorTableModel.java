@@ -41,7 +41,7 @@ import org.wandora.topicmap.Locator;
 
 public class LocatorTableModel extends DefaultTableModel {
         
-    
+    private static final long serialVersionUID = 1L;
     
     private String[] cols;
     private Locator[][] data;

@@ -42,6 +42,8 @@ import org.wandora.topicmap.Topic;
 
 public class MixedTopicTableRowSorter extends TableRowSorter {
 
+    private static final long serialVersionUID = 1L;
+    
 
     public MixedTopicTableRowSorter(MixedTopicTableModel dm) {
         super(dm);

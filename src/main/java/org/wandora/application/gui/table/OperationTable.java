@@ -42,6 +42,8 @@ import org.wandora.topicmap.undowrapper.UndoOperation;
 
 public class OperationTable extends SimpleTable /*, DropTargetListener, DragGestureListener*/ {
     
+    private static final long serialVersionUID = 1L;
+    
     private OperationTableModel opsModel = null;
     
 

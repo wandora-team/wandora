@@ -45,6 +45,8 @@ import javax.swing.JPanel;
  */
 public class ComponentThumbnail extends JPanel implements Runnable {
     
+    private static final long serialVersionUID = 1L;
+    
     Component original = null;
     int thumbWidth = 50;
     int thumbHeight = 50;

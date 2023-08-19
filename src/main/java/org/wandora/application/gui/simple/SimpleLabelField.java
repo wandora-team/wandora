@@ -51,6 +51,8 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleLabelField extends JPanel implements MouseListener, KeyListener, ActionListener, SimpleComponent {
 
+    private static final long serialVersionUID = 1L;
+    
     public final static int LABEL = 1;
     public final static int FIELD = 2;
     

@@ -40,6 +40,7 @@ import org.wandora.topicmap.Topic;
 
 
 public class TopicGridModel extends DefaultTableModel {
+    private static final long serialVersionUID = 1L;
 
     private TopicGrid topicGrid;
     private static final String columnNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

@@ -70,6 +70,8 @@ import org.wandora.utils.EasyVector;
  */
 public class SimpleField extends JTextField implements MouseListener, KeyListener, ActionListener, SimpleComponent, Clipboardable, DropTargetListener, DragGestureListener {
     
+    private static final long serialVersionUID = 1L;
+    
     protected Border defaultBorder = null;
     protected DropTarget dt;
     protected Wandora wandora = null;

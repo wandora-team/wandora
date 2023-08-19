@@ -52,6 +52,7 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleComboBox extends JComboBox implements MouseListener, SimpleComponent {
     
+    private static final long serialVersionUID = 1L;
    
     
     /** Creates a new instance of SimpleComboBox */

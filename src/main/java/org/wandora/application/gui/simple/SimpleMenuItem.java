@@ -41,7 +41,7 @@ import org.wandora.application.gui.UIConstants;
  * @author akivela
  */
 public class SimpleMenuItem extends JMenuItem {
-    
+    private static final long serialVersionUID = 1L;
 
     
     public SimpleMenuItem() {

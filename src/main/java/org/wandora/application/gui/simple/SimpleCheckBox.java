@@ -44,6 +44,7 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleCheckBox extends JCheckBox {
 
+    private static final long serialVersionUID = 1L;
 
     public SimpleCheckBox() {
         this.setFont(UIConstants.buttonLabelFont);

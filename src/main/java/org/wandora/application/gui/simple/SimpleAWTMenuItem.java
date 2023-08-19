@@ -38,6 +38,9 @@ import org.wandora.application.gui.UIConstants;
  * @author anttirt
  */
 public class SimpleAWTMenuItem extends MenuItem {
+    
+    private static final long serialVersionUID = 1L;
+    
     public SimpleAWTMenuItem() {
     }
     

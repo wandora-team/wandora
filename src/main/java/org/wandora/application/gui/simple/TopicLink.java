@@ -40,6 +40,8 @@ import org.wandora.topicmap.Topic;
  */
 public class TopicLink extends TopicLinkBasename {
 
+    private static final long serialVersionUID = 1L;
+    
     private boolean limitLength = true;
     private String lname = "";
     private String sname = "";

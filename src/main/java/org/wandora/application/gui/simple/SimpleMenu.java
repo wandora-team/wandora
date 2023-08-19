@@ -44,6 +44,8 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleMenu extends JMenu {
     
+    private static final long serialVersionUID = 1L;
+    
     /** Creates a new instance of SimpleMenu */
     public SimpleMenu() {
         super();

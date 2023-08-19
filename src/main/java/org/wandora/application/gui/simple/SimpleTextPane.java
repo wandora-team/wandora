@@ -87,6 +87,8 @@ import org.wandora.utils.Textbox;
  */
 public class SimpleTextPane extends javax.swing.JTextPane implements MouseListener, ActionListener, SimpleComponent, Printable, UndoableEditListener, DropTargetListener, DragGestureListener {
     
+    private static final long serialVersionUID = 1L;
+    
     private boolean DROP_FILE_NAMES_INSTEAD_FILE_CONTENT = false;
     public static final int MAX_TEXT_SIZE = 999999;
     

@@ -41,6 +41,7 @@ import javax.swing.table.TableCellRenderer;
  */
 public class MixedTopicTableHeaderRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
 
+    private static final long serialVersionUID = 1L;
 
     Color[] columnColors = null;
     TableCellRenderer oldRenderer = null;

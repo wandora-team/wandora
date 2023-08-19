@@ -44,6 +44,9 @@ import org.wandora.application.gui.UIConstants;
 
 
 public class OperationTableRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+    
+    private static final long serialVersionUID = 1L;
+    
     private OperationTable table;
     private OperationTableModel model;
     

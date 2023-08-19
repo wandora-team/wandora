@@ -39,6 +39,7 @@ import org.wandora.application.gui.UIConstants;
  */
 public class SimpleLabel extends JLabel implements MouseListener {
     
+    private static final long serialVersionUID = 1L;
     
     /** Creates a new instance of SimpleLabel */
     public SimpleLabel() {

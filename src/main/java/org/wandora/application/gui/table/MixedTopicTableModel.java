@@ -37,6 +37,7 @@ import org.wandora.topicmap.Topic;
 
 public class MixedTopicTableModel extends DefaultTableModel {
     
+    private static final long serialVersionUID = 1L;
     
     private Object[] cols;
     private Object[][] data;

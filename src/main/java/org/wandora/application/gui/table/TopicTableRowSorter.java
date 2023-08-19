@@ -43,6 +43,8 @@ import org.wandora.topicmap.Topic;
 
 public class TopicTableRowSorter extends TableRowSorter {
 
+    private static final long serialVersionUID = 1L;
+    
     private TopicTable table = null;
 
     

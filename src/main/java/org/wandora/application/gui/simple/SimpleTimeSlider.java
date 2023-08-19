@@ -38,6 +38,8 @@ import javax.swing.JProgressBar;
  */
 public class SimpleTimeSlider extends JProgressBar {
     
+    private static final long serialVersionUID = 1L;
+    
     private final static int MULTIPLIER = 100; 
     
     
