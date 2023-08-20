@@ -28,14 +28,10 @@ or drop a line.
 
 ## Developer Introduction
 
-Wandora was originally developed with the [Netbeans IDE](https://netbeans.apache.org/).
-Since October 2018 we have started developing Wandora with Eclipse, preferably 
-Eclipse IDE for Java Developers version 4.27.0. Eclipse development has changed
-the library retrieval and build process. Wandora uses Gradle for dependency management and building application packages.
-
 To compile and run Wandora, a Java JDK 17 or later is required.
 
-Developers interested in Wandora project should note that our long term plans
-include using Eclipse as a primary development tool.
+Wandora uses Gradle for dependency management and building application packages.
 
-### 
+We use Eclipse, preferably Eclipse IDE for Java Developers version 4.27.0.
+
+If you wish to look at the old version of Wandora checkout git tag 'master-old'.
