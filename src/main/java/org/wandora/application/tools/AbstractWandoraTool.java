@@ -752,25 +752,33 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     @Override
     public void hlog(String message) {
-        if(logger != null) logger.hlog(message);
+        if(logger != null) {
+            logger.hlog(message);
+        }
         else if(runAdmin != null) {
             WandoraOptionPane.showMessageDialog(runAdmin, message);
         }
         else System.out.println(message);
     }
+    
     
     @Override
     public void log(String message) {
-        if(logger != null) logger.log(message);
+        if(logger != null) {
+            logger.log(message);
+        }
         else if(runAdmin != null) {
             WandoraOptionPane.showMessageDialog(runAdmin, message);
         }
         else System.out.println(message);
     }
     
+    
     @Override
     public void log(String message, Exception e) {
-        if(logger != null) logger.log(message, e);
+        if(logger != null) {
+            logger.log(message, e);
+        }
         else if(runAdmin != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -783,9 +791,13 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
             e.printStackTrace();
         }
     }
+    
+    
     @Override
     public void log(Exception e) {
-        if(logger != null) logger.log(e);
+        if(logger != null) {
+            logger.log(e);
+        }
         else if(runAdmin != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -797,9 +809,13 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
             e.printStackTrace();
         }
     }
+    
+    
     @Override
     public void log(Error e) {
-        if(logger != null) logger.log(e);
+        if(logger != null) {
+            logger.log(e);
+        }
         else if(runAdmin != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -811,47 +827,72 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
             e.printStackTrace();
         }
     }
+    
     
     @Override
     public void setProgress(int n) {
         if(logger != null) logger.setProgress(n);
     }
+    
+    
     @Override
     public void setProgressMax(int maxn) {
-        if(logger != null) logger.setProgressMax(maxn);
+        if(logger != null) {
+            logger.setProgressMax(maxn);
+        }
     }
+    
+    
     @Override
     public void setLogTitle(String title) {
-        if(logger != null) logger.setLogTitle(title);
+        if(logger != null) {
+            logger.setLogTitle(title);
+        }
         else System.out.println(title);
     }
     
     @Override
     public void lockLog(boolean lock) {
-        if(logger != null) logger.lockLog(lock);
+        if(logger != null) {
+            logger.lockLog(lock);
+        }
     }
     
     
     @Override
     public String getHistory() {
-        if(logger != null) return logger.getHistory();
-        else return "";
+        if(logger != null) {
+            return logger.getHistory();
+        }
+        else {
+            return "";
+        }
     }
     
     @Override
     public void setState(int state) {
-        if(logger != null) logger.setState(state);
+        if(logger != null) {
+            logger.setState(state);
+        }
     }
     @Override
     public int getState() {
-        if(logger != null) return logger.getState();
-        else return 0;
+        if(logger != null) {
+            return logger.getState();
+        }
+        else {
+            return 0;
+        }
     }
     
     @Override
     public boolean forceStop() {
-        if(logger != null) return logger.forceStop();
-        else return internalForceStop;
+        if(logger != null) {
+            return logger.forceStop();
+        }
+        else {
+            return internalForceStop;
+        }
     }
     
     public boolean forceStop(ConfirmResult result) {

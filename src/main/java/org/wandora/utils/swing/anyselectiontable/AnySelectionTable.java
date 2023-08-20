@@ -39,6 +39,8 @@ import javax.swing.table.TableModel;
   */
 public class AnySelectionTable extends JTable {
     
+    private static final long serialVersionUID = 1L;
+    
     private TableSelectionModel tableSelectionModel;
 
     /**
@@ -116,6 +118,8 @@ public class AnySelectionTable extends JTable {
         if(tableSelectionModel != null) {
             tableSelectionModel.clearSelection();
         }
+        super.getSelectionModel().clearSelection();
+        super.getColumnModel().getSelectionModel().clearSelection();
         this.repaint();
     }
     
