@@ -65,7 +65,8 @@ public class ClipboardBox {
     
     
     /** Creates a new instance of ClipboardBox */
-    public ClipboardBox() {
+    private ClipboardBox() {
+        // Private
     }
     
     

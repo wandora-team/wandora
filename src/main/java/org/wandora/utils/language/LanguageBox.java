@@ -251,10 +251,10 @@ public class LanguageBox {
 
 
     public static void initializeHashMaps() {
-        nameToCode6391 = new HashMap();
-        nameToCode6392 = new HashMap();
-        code6391ToName = new HashMap();
-        code6392ToName = new HashMap();
+        nameToCode6391 = new HashMap<>();
+        nameToCode6392 = new HashMap<>();
+        code6391ToName = new HashMap<>();
+        code6392ToName = new HashMap<>();
         for(int i=0; i<languageNamesAndCodes.length; i=i+3) {
             nameToCode6392.put(languageNamesAndCodes[i].toLowerCase(), languageNamesAndCodes[i+1]);
             nameToCode6391.put(languageNamesAndCodes[i].toLowerCase(), languageNamesAndCodes[i+2]);

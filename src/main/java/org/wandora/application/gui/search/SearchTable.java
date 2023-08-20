@@ -51,6 +51,8 @@ import org.wandora.utils.swing.TableSorter;
  */
 public class SearchTable extends JTable {
     
+    private static final long serialVersionUID = 1L;
+    
     private Object[][] data;
     private TableSorter sorter;
     private Wandora wandora;

@@ -34,11 +34,39 @@ package org.wandora.utils.logger;
  */
 public abstract class Logger {
 
+    private static Logger defaultLogger = new SystemOutLogger();
+    
     public abstract void writelog(String level, String s);
     
     public void writelog(String s){
         writelog("INF", s);
     }
+    
+    public void writelog(String level, String s, Throwable e){
+        writelog(level,s+"\n"+getStackTrace(e, true));
+    }
+    public void writelog(String level, Throwable e){
+        writelog(level, getStackTrace(e, true));
+    }
+    
+    
+    
+    
+    public static void log(String msg) {
+        defaultLogger.writelog(msg);
+    }
+
+    public static void setLogger(Logger logger){
+        defaultLogger=logger;
+    }
+    
+    public static Logger getLogger() {
+        return defaultLogger;
+    }
+    
+    
+    // ---------------------------------------------
+    
     
     public String getStackTrace(Throwable e, boolean cause){
         java.io.StringWriter writer=new java.io.StringWriter();
@@ -50,28 +78,4 @@ public abstract class Logger {
         }
         return writer.toString();
     }
-    
-    public void writelog(String level,String s,Throwable e){
-        writelog(level,s+"\n"+getStackTrace(e,true));
-    }
-    public void writelog(String level,Throwable e){
-        writelog(level,getStackTrace(e,true));
-    }
-    
-    
-    public static void log(String msg) {
-        defaultLogger.writelog(msg);
-    }
-    
-    private static Logger defaultLogger = new SimpleLogger();
-    
-    
-    public static void setLogger(Logger logger){
-        defaultLogger=logger;
-    }
-    
-    public static Logger getLogger() {
-        return defaultLogger;
-    }
-    
 }

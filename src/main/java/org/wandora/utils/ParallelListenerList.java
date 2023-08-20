@@ -27,6 +27,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This is like ListenerList but several events can be firing simultaneously
@@ -46,10 +48,10 @@ import java.util.HashMap;
 
 public class ParallelListenerList <T> {
     
-    protected final ArrayList<T> listeners;
-    protected final ArrayList<Tuples.T2<T,Boolean>> changes;
+    protected final List<T> listeners;
+    protected final List<Tuples.T2<T,Boolean>> changes;
     protected Class<T> cls;
-    protected final HashMap<String,Method> methods;
+    protected final Map<String,Method> methods;
     protected boolean returnValues=false;
     protected int iterating=0;
 

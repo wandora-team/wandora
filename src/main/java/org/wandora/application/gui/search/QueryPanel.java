@@ -79,6 +79,8 @@ import org.wandora.utils.Tuples;
 
 public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
+    private static final long serialVersionUID = 1L;
+    
     private Wandora wandora = null;
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
     private List<Tuples.T3<String,String,String>> storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();

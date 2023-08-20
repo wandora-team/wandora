@@ -64,7 +64,8 @@ public class MSOfficeBox {
     /**
      * Creates a new instance of MSOfficeBox
      */
-    public MSOfficeBox() {
+    private MSOfficeBox() {
+        // Private
     }
     
     
@@ -124,9 +125,9 @@ public class MSOfficeBox {
 	public static String getWordTextFromPieces(HWPFDocument doc) {
     	StringBuilder textBuf = new StringBuilder();
     	
-    	Iterator textPieces = doc.getTextTable().getTextPieces().iterator();
+    	Iterator<TextPiece> textPieces = doc.getTextTable().getTextPieces().iterator();
     	while (textPieces.hasNext()) {
-    		TextPiece piece = (TextPiece) textPieces.next();
+    		TextPiece piece = textPieces.next();
 
     		String encoding = "Cp1252";
     		if (piece.isUnicode()) {
@@ -170,12 +171,18 @@ public class MSOfficeBox {
 
 
 	public static String getWordText(InputStream is) {
+	    WordExtractor extractor = null;
         try {
-            WordExtractor extractor = new WordExtractor(is);
+            extractor = new WordExtractor(is);
             return extractor.getText();
         }
         catch(Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            if(extractor != null ) {
+                try { extractor.close(); } catch(Exception ex) {};
+            }
         }
         return null;
 	}
@@ -200,14 +207,20 @@ public class MSOfficeBox {
 
     
     public static String getDocxText(File file) {
+        XWPFWordExtractor extractor = null;
         try {
             XWPFDocument docx = new XWPFDocument(new FileInputStream(file));
-            XWPFWordExtractor extractor = new XWPFWordExtractor(docx);
+            extractor = new XWPFWordExtractor(docx);
             String text = extractor.getText();
             return text;
         }
         catch(Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            if(extractor != null ) {
+                try { extractor.close(); } catch(Exception ex) {};
+            }
         }
         return null;
     }

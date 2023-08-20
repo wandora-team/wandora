@@ -51,7 +51,8 @@ import javax.imageio.stream.FileImageOutputStream;
 public class ImageBox {
     
     /** Creates a new instance of ImageBox */
-    public ImageBox() {
+    private ImageBox() {
+        // Private
     }
     
     

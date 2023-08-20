@@ -38,6 +38,11 @@ import java.util.Hashtable;
  */
 public class AdvancedHashtable extends Hashtable {
     
+    private static final long serialVersionUID = 1L;
+
+
+
+
     /** Creates a new instance of AdvancedHashtable */
     public AdvancedHashtable() {
     }

@@ -51,6 +51,8 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelector {
     
+    private static final long serialVersionUID = 1L;
+    
     private Wandora wandora;
     private Topic result;
     

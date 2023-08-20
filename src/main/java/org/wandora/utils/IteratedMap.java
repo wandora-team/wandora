@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.utils;
+
 import static org.wandora.utils.Tuples.t2;
 
 import java.util.AbstractMap;

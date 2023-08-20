@@ -39,7 +39,7 @@ import java.util.Vector;
 
 import org.wandora.utils.Options;
 import org.wandora.utils.RegexFileChooser;
-import org.wandora.utils.logger.WandoraLogger;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bsh.Interpreter;
 
@@ -51,7 +51,7 @@ import bsh.Interpreter;
  */
 public class BSHLibrary extends Vector<BSHComponent> {
     
-    private static final WandoraLogger logger = WandoraLogger.getLogger(BSHLibrary.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(BSHLibrary.class);
     
 
 

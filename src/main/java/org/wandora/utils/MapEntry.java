@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * A simple class that implements java.util.Map.Entry. Needed to make own
  * Map implementations for entrySet method.
+ * 
  * @author olli
  */
 public class MapEntry<K,V> implements Map.Entry<K,V> {

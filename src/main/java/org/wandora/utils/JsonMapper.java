@@ -42,6 +42,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author olli
  */
 public class JsonMapper extends ObjectMapper {
+    private static final long serialVersionUID = 1L;
+
     public JsonMapper(){
         super();
     }

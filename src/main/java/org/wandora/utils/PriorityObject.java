@@ -29,6 +29,9 @@ package org.wandora.utils;
 
 
 public class PriorityObject extends Object implements Comparable, java.io.Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    
     public final static int HIGHEST_PRIORITY = 10000;
     public final static int HIGHER_PRIORITY  = 1000;
     public final static int DEFAULT_PRIORITY = 100;

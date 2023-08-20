@@ -34,13 +34,15 @@ import java.io.PrintStream;
  *
  * @author  olli
  */
-public class SimpleLogger extends Logger {
+public class SystemOutLogger extends Logger {
     protected PrintStream stream;
+    
     /** Creates a new instance of SimpleLogger */
-    public SimpleLogger() {
+    public SystemOutLogger() {
         this(System.out);
     }
-    public SimpleLogger(PrintStream stream) {
+    
+    public SystemOutLogger(PrintStream stream) {
         this.stream=stream;
     }
     

@@ -39,6 +39,9 @@ import org.wandora.application.gui.topicpanels.SearchTopicPanel;
 
 public class SearchTopicsFrame extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+    
+    
     private SearchTopicPanel searchPanels = null;
     
     /**

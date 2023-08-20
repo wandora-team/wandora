@@ -81,7 +81,8 @@ import org.wandora.application.Wandora;
 public class IObox extends java.lang.Object {
 
     /** Creates new IObox */
-    public IObox() {
+    private IObox() {
+        // Private
     }
 
     

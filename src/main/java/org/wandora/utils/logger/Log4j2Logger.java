@@ -32,19 +32,21 @@ package org.wandora.utils.logger;
  * @author akikivela
  *
  */
-public class WandoraLogger {
+public class Log4j2Logger {
 
-    org.apache.logging.log4j.Logger realLogger;
+    org.apache.logging.log4j.Logger realLogger = org.apache.logging.log4j.LogManager.getLogger(Log4j2Logger.class);
     
     
-    private WandoraLogger(Class<?> clazz) {
+    private Log4j2Logger(Class<?> clazz) {
         realLogger = org.apache.logging.log4j.LogManager.getLogger(clazz);
     }
     
     
-    public static WandoraLogger getLogger(Class<?> clazz) {
-        return new WandoraLogger(clazz);
+    public static Log4j2Logger getLogger(Class<?> clazz) {
+        return new Log4j2Logger(clazz);
     }
+    
+    
     
     public void debug(String str) {
         realLogger.debug(str);
@@ -60,5 +62,22 @@ public class WandoraLogger {
     
     public void error(String str) {
         realLogger.warn(str);
+    }
+    
+    
+    
+    public void writelog(String level, String s) {
+        if("INF".equalsIgnoreCase(level)) {
+            info(s);
+        }
+        else if("DBG".equalsIgnoreCase(level)) {
+            debug(s);
+        }
+        else if("ERR".equalsIgnoreCase(level)) {
+            error(s);
+        }
+        else {
+            info(s);
+        }
     }
 }

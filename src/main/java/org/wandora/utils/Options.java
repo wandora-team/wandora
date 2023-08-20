@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -71,7 +72,7 @@ public class Options {
     /** Creates a new instance of Options */
     public Options(String optionsResource) {
         resource = optionsResource;
-        options = new LinkedHashMap();
+        options = new LinkedHashMap<>();
         String optionsString = null;
         if(optionsResource.startsWith("http")) {
             //System.out.println("Reading options from URL '" + resource + "'.");
@@ -438,8 +439,8 @@ public class Options {
         if(options.size() == 0) {
             System.out.println("  no options available (size == 0)!");
         }
-        Set keys = options.keySet();
-        for(Iterator i=keys.iterator();i.hasNext();) {
+        Set<String> keys = options.keySet();
+        for(Iterator<String> i=keys.iterator();i.hasNext();) {
             key = i.next();
             value = options.get(key.toString());
             System.out.println("  " + key + " == " + value);
@@ -477,7 +478,7 @@ public class Options {
 
     
     public Collection<String> keySet(){
-        ArrayList<String> copy=new ArrayList<String>();
+        List<String> copy=new ArrayList<String>();
         copy.addAll(options.keySet());
         return copy;
     }

@@ -24,6 +24,7 @@
 package org.wandora.application.gui.search;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -49,7 +50,7 @@ public class SimilarityBox {
     
     
     public static Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options, Iterator<Topic> topicIterator, InterfaceStringMetric stringMetric, float threshold, boolean differenceInsteadOfSimilarity, boolean useNGrams) {
-        ArrayList<Topic> selection = new ArrayList<Topic>();
+        List<Topic> selection = new ArrayList<Topic>();
         int count = 0;
         Topic t = null;
         boolean isSimilar = false;

@@ -57,17 +57,22 @@ public class JarClassLoader extends URLClassLoader {
         LinkedHashSet<String> ret=new LinkedHashSet<String>();
         for(File f : files){
             JarFile jf=new JarFile(f);
-            Enumeration<? extends JarEntry> entries=jf.entries();
-            while(entries.hasMoreElements()){
-                JarEntry e=entries.nextElement();
-                if(!e.isDirectory()){
-                    String name=e.getName();
-                    if(name.endsWith(".class")){
-                        name=name.substring(0,name.length()-6);
-                        name=name.replaceAll("[/\\\\]", ".");
-                        ret.add(name);
+            try {
+                Enumeration<? extends JarEntry> entries=jf.entries();
+                while(entries.hasMoreElements()){
+                    JarEntry e=entries.nextElement();
+                    if(!e.isDirectory()){
+                        String name=e.getName();
+                        if(name.endsWith(".class")){
+                            name=name.substring(0,name.length()-6);
+                            name=name.replaceAll("[/\\\\]", ".");
+                            ret.add(name);
+                        }
                     }
                 }
+            }
+            finally {
+                jf.close();
             }
         }
         return ret;
@@ -80,19 +85,24 @@ public class JarClassLoader extends URLClassLoader {
         LinkedHashSet<String> ret=new LinkedHashSet<String>();
         for(File f : files){
             JarFile jf=new JarFile(f);
-            JarEntry e=jf.getJarEntry("META-INF/services/"+service);
-            if(e!=null){
-                InputStream is=jf.getInputStream(e);
-                BufferedReader in=new BufferedReader(new InputStreamReader(is));
-                String line;
-                while( (line=in.readLine())!=null ){
-                    int commentInd=line.indexOf("#");
-                    if(commentInd>=0) line=line.substring(0,commentInd);
-                    line=line.trim();
-                    if(line.length()>0){
-                        ret.add(line);
+            try {
+                JarEntry e=jf.getJarEntry("META-INF/services/"+service);
+                if(e!=null){
+                    InputStream is=jf.getInputStream(e);
+                    BufferedReader in=new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    while( (line=in.readLine())!=null ){
+                        int commentInd=line.indexOf("#");
+                        if(commentInd>=0) line=line.substring(0,commentInd);
+                        line=line.trim();
+                        if(line.length()>0){
+                            ret.add(line);
+                        }
                     }
                 }
+            }
+            finally {
+                jf.close();
             }
         }
         return ret;

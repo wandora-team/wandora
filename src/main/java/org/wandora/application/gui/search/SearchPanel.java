@@ -54,6 +54,8 @@ import org.wandora.utils.Textbox;
 public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
        
     
+    private static final long serialVersionUID = 1L;
+
     public static final int HISTORYMAXSIZE = 40;
     
     private Wandora wandora;

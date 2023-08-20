@@ -43,6 +43,8 @@ import org.wandora.application.gui.table.MixedTopicTable;
  */
 public class SearchTopicsResults extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+    
     private boolean searchAgain = false;
     
     

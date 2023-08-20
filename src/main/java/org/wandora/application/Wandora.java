@@ -115,7 +115,7 @@ import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.logger.Logger;
-import org.wandora.utils.logger.SimpleLogger;
+import org.wandora.utils.logger.SystemOutLogger;
 import org.wandora.utils.swing.ImagePanel;
 
 
@@ -2320,7 +2320,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         CMDParamParser cmdparams=new CMDParamParser(args);
         UIConstants.initializeGUI();
         SplashWindow splashWindow = new SplashWindow();
-        Logger.setLogger(new SimpleLogger());
+        Logger.setLogger(new SystemOutLogger());
 
         do {
             Wandora wandoraApplication = new Wandora(cmdparams);

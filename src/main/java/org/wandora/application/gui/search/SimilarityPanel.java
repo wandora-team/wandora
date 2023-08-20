@@ -86,6 +86,9 @@ import uk.ac.shef.wit.simmetrics.tokenisers.TokeniserWhitespace;
 
 public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector {
 
+    private static final long serialVersionUID = 1L;
+
+
     public boolean ALLOW_PARTIAL_MATCH = true;
 
 
@@ -109,31 +112,31 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
     
     
     public Tuples.T2[] similarityTypes = {
-        new Tuples.T2("Levenshtein distance",                  Integer.valueOf(SIMILARITY_LEVENSHTEIN_DISTANCE)),
-        new Tuples.T2("Needleman-Wunch distance (Sellers Algorithm)", Integer.valueOf(SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE)),
-        new Tuples.T2("Smith-Waterman distance",               Integer.valueOf(SIMILARITY_SMITH_WATERMAN_DISTANCE)),
-        new Tuples.T2("Block distance (L1 distance or City block distance)", Integer.valueOf(SIMILARITY_BLOCK_DISTANCE)),
-        new Tuples.T2("Monge Elkan distance",                  Integer.valueOf(SIMILARITY_MONGE_ELKAN_DISTANCE)),
-        new Tuples.T2("Jaro distance metric",                  Integer.valueOf(SIMILARITY_JARO_DISTANCE_METRIC)),
-        new Tuples.T2("Jaro Winkler",                          Integer.valueOf(SIMILARITY_JARO_WINKLER)),
-        new Tuples.T2("SoundEx distance metric",               Integer.valueOf(SIMILARITY_SOUNDEX_DISTANCE_METRIC)),
-        new Tuples.T2("Matching Coefficient",                  Integer.valueOf(SIMILARITY_MATCHING_COEFFICIENT)),
-        new Tuples.T2("Dice's Coefficient",                    Integer.valueOf(SIMILARITY_DICES_COEFFICIENT)),
-        new Tuples.T2("Jaccard Similarity (Jaccard Coefficient or Tanimoto coefficient)", Integer.valueOf(SIMILARITY_OVERLAP_COEFFICIENT)),
-        new Tuples.T2("Overlap Coefficient",                   Integer.valueOf(SIMILARITY_JACCARD_SIMILARITY)),
-        new Tuples.T2("Euclidean distance (L2 distance)",      Integer.valueOf(SIMILARITY_EUCLIDEAN_DISTANCE)),
-        new Tuples.T2("Cosine similarity",                     Integer.valueOf(SIMILARITY_COSINE_SIMILARITY)),
-        new Tuples.T2("q-gram",                                Integer.valueOf(SIMILARITY_Q_GRAM)),
+        new Tuples.T2<>("Levenshtein distance",                  Integer.valueOf(SIMILARITY_LEVENSHTEIN_DISTANCE)),
+        new Tuples.T2<>("Needleman-Wunch distance (Sellers Algorithm)", Integer.valueOf(SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE)),
+        new Tuples.T2<>("Smith-Waterman distance",               Integer.valueOf(SIMILARITY_SMITH_WATERMAN_DISTANCE)),
+        new Tuples.T2<>("Block distance (L1 distance or City block distance)", Integer.valueOf(SIMILARITY_BLOCK_DISTANCE)),
+        new Tuples.T2<>("Monge Elkan distance",                  Integer.valueOf(SIMILARITY_MONGE_ELKAN_DISTANCE)),
+        new Tuples.T2<>("Jaro distance metric",                  Integer.valueOf(SIMILARITY_JARO_DISTANCE_METRIC)),
+        new Tuples.T2<>("Jaro Winkler",                          Integer.valueOf(SIMILARITY_JARO_WINKLER)),
+        new Tuples.T2<>("SoundEx distance metric",               Integer.valueOf(SIMILARITY_SOUNDEX_DISTANCE_METRIC)),
+        new Tuples.T2<>("Matching Coefficient",                  Integer.valueOf(SIMILARITY_MATCHING_COEFFICIENT)),
+        new Tuples.T2<>("Dice's Coefficient",                    Integer.valueOf(SIMILARITY_DICES_COEFFICIENT)),
+        new Tuples.T2<>("Jaccard Similarity (Jaccard Coefficient or Tanimoto coefficient)", Integer.valueOf(SIMILARITY_OVERLAP_COEFFICIENT)),
+        new Tuples.T2<>("Overlap Coefficient",                   Integer.valueOf(SIMILARITY_JACCARD_SIMILARITY)),
+        new Tuples.T2<>("Euclidean distance (L2 distance)",      Integer.valueOf(SIMILARITY_EUCLIDEAN_DISTANCE)),
+        new Tuples.T2<>("Cosine similarity",                     Integer.valueOf(SIMILARITY_COSINE_SIMILARITY)),
+        new Tuples.T2<>("q-gram",                                Integer.valueOf(SIMILARITY_Q_GRAM)),
     };
     
     
     public Tuples.T2[] similarityTokenizers = {
-        new Tuples.T2("Whitespace", new TokeniserWhitespace()),
-        new Tuples.T2("CSVBasic", new TokeniserCSVBasic()),
-        new Tuples.T2("QGram2", new TokeniserQGram2()),
-        new Tuples.T2("QGram2 extended", new TokeniserQGram2Extended()),
-        new Tuples.T2("QGram3", new TokeniserQGram3()),
-        new Tuples.T2("QGram3 extended", new TokeniserQGram3Extended())
+        new Tuples.T2<>("Whitespace", new TokeniserWhitespace()),
+        new Tuples.T2<>("CSVBasic", new TokeniserCSVBasic()),
+        new Tuples.T2<>("QGram2", new TokeniserQGram2()),
+        new Tuples.T2<>("QGram2 extended", new TokeniserQGram2Extended()),
+        new Tuples.T2<>("QGram3", new TokeniserQGram3()),
+        new Tuples.T2<>("QGram3 extended", new TokeniserQGram3Extended())
     };
     
     

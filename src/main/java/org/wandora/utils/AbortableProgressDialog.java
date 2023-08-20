@@ -31,11 +31,14 @@ package org.wandora.utils;
  */
 public class AbortableProgressDialog extends javax.swing.JDialog {
     
+    private static final long serialVersionUID = 1L;
+    
+    
     private Runnable abortProc;
     private Abortable.Status status;
     private double ratio;
     
-    /** Creates new form CopyProgressDialog */
+    /** Creates new form AbortableProgressDialog */
     public AbortableProgressDialog(java.awt.Frame parent, boolean modal, Runnable abortProc, String title) {
         super(parent, modal);
         

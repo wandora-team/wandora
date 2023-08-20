@@ -10,6 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.wandora.utils.Tuples.T2;
 /**
@@ -34,11 +36,11 @@ import org.wandora.utils.Tuples.T2;
  * @author olli
  */
 public class ListenerList <T> {
-    protected final ArrayList<T> listeners;
-    protected final ArrayList<T2<T,Boolean>> changes;
+    protected final List<T> listeners;
+    protected final List<T2<T,Boolean>> changes;
     protected boolean iterating;
     protected Class<T> cls;
-    protected HashMap<String,Method> methods;
+    protected Map<String,Method> methods;
     protected boolean returnValues=false;
 
     public ListenerList(Class<T> cls){
@@ -71,6 +73,8 @@ public class ListenerList <T> {
             else listeners.add(l);
         }
     }
+    
+    
     public void removeListener(T l){
         synchronized(listeners){
             if(iterating) changes.add(t2(l,false));
@@ -78,6 +82,7 @@ public class ListenerList <T> {
         }
     }
 
+    
     protected void processChanges(){
         for( T2<T,Boolean> c : changes ){
             if(c.e2) listeners.add(c.e1);
@@ -86,6 +91,7 @@ public class ListenerList <T> {
         changes.clear();
     }
 
+    
     public Method findMethod(String event){
         synchronized(listeners){
             Method m=methods.get(event);
@@ -104,10 +110,13 @@ public class ListenerList <T> {
             return m;
         }
     }
+    
+    
     public Object[] fireEvent(Method m,Object ... params){
         return fireEventFiltered(m,null,params);
     }
 
+    
     public Object[] fireEventFiltered(Method m,ListenerFilter<T> filter,Object ... params){
         synchronized(listeners){
             iterating=true;
@@ -142,11 +151,14 @@ public class ListenerList <T> {
     public Object[] fireEvent(String event,Object ... params){
         return fireEventFiltered(event,null,params);
     }
+    
+    
     public Object[] fireEventFiltered(String event,ListenerFilter<T> filter,Object ... params){
         Method m=findMethod(event);
         if(m==null) throw new RuntimeException("Trying to fire event "+event+" but method not found.");
         return fireEventFiltered(m,filter,params);
     }
+    
     
     public void forEach(EachDelegate delegate,Object ... params) {
         synchronized(listeners){
@@ -165,9 +177,11 @@ public class ListenerList <T> {
         }        
     }
 
+    
     public static interface EachDelegate<T> {
         public void run(T listener,Object ... params);
     }
+    
     
     public static interface ListenerFilter<T> {
         public boolean invokeListener(T listener);
