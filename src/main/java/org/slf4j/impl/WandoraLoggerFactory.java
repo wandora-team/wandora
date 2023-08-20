@@ -41,12 +41,12 @@ public class WandoraLoggerFactory implements ILoggerFactory {
 
     private Map<String, WandoraLoggerAdapter> loggerMap;
     
-    private Map<String, Integer> loggingLevels = new HashMap();  
+    private Map<String, Integer> loggingLevels = new HashMap<>();  
 
     
     
     public WandoraLoggerFactory() {
-        loggingLevels = new HashMap();
+        loggingLevels = new HashMap<>();
         loggerMap = new HashMap<String, WandoraLoggerAdapter>();
         initializeLoggerFactory();
     }
