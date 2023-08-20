@@ -116,6 +116,10 @@ public class AnySelectionTableUI extends BasicTableUI {
             }
 
             JTable t = getTable();
+            if(!t.isEnabled()) {
+                return;
+            }
+
             Point p = e.getPoint();
             int row = t.rowAtPoint(p);
             int column = t.columnAtPoint(p);
@@ -144,8 +148,11 @@ public class AnySelectionTableUI extends BasicTableUI {
                 return;
             }
 
-            
             JTable t = getTable();
+            if(!t.isEnabled()) {
+                return;
+            }
+            
             Point p = e.getPoint();
             int row = t.rowAtPoint(p);
             int column = t.columnAtPoint(p);
