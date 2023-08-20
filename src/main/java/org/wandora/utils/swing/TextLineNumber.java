@@ -76,6 +76,8 @@ import javax.swing.text.Utilities;
  */
 public class TextLineNumber extends JPanel implements CaretListener, DocumentListener, PropertyChangeListener {
 
+    private static final long serialVersionUID = 1L;
+    
     public final static float LEFT = 0.0f;
     public final static float CENTER = 0.5f;
     public final static float RIGHT = 1.0f;

@@ -46,6 +46,8 @@ import javax.swing.JPanel;
  * @author  akivela
  */
 public class ImagePanel extends JPanel {
+    private static final long serialVersionUID = 1L;
+    
     private URL url;
     private File file;
     private BufferedImage image;

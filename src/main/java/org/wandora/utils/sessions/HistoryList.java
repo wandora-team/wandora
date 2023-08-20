@@ -42,7 +42,7 @@ public class HistoryList {
     
     private int currentIndex = -1;
     
-    private ArrayList list = new ArrayList();
+    private List list = new ArrayList();
     
     private int maxSize = 0;
     

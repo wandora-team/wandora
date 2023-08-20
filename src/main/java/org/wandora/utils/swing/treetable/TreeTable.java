@@ -25,6 +25,8 @@ import javax.swing.tree.TreePath;
  * @author olli
  */
 public class TreeTable extends JTable {
+    private static final long serialVersionUID = 1L;
+    
     protected TreeTableCellRenderer tree;
     
     public TreeTable(TreeTableModel treeTableModel){

@@ -86,6 +86,8 @@ import javax.swing.tree.TreePath;
  */
 public abstract class DragJTree extends JTree implements Autoscroll {
     
+    private static final long serialVersionUID = 1L;
+    
     protected TreePath selectedTreePath = null;
     private Point offsetPoint = new Point();
     private BufferedImage ghostImage;

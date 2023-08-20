@@ -37,11 +37,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 
 
 public class MultiLineLabel extends Canvas {
+    
+    private static final long serialVersionUID = 1L;
+    
     public static final int LEFT = 0;
     public final int CENTER = 1;
     public final int RIGHT = 2;
@@ -55,7 +59,7 @@ public class MultiLineLabel extends Canvas {
     protected int[] line_widths;
     protected int max_width;
     protected int alignment = LEFT;
-    private ArrayList history;
+    private List<String []> history;
     private int historyMaxSize = 1000;
     
 
@@ -89,7 +93,7 @@ public class MultiLineLabel extends Canvas {
     }
 
     public MultiLineLabel(String label, int margin_width, int margin_height, int alignment) {
-        history = new ArrayList();
+        history = new ArrayList<>();
         newLabel(label);
         this.margin_width = margin_width;
         this.margin_height = margin_height;
@@ -200,7 +204,7 @@ public class MultiLineLabel extends Canvas {
     public String getHistoryAsString() {
         StringBuilder sb = new StringBuilder("");
         for(int i=0; i<history.size(); i++) {
-            String[] historyStrings = (String[]) history.get(i);
+            String[] historyStrings = history.get(i);
             for(int j=0; j<historyStrings.length; j++) {
                 sb.append(historyStrings[j]).append(" ");
             }

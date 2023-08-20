@@ -46,9 +46,12 @@ import javax.swing.JPanel;
  * @author akivela
  */
 public class JPanelWithBackground extends JPanel {
-    URL url;
-    File file;
-    BufferedImage image;
+    
+    private static final long serialVersionUID = 1L;
+    
+    private URL url;
+    private File file;
+    private BufferedImage image;
     
     public static final int TOP_LEFT_ALIGN = 100;
     public static final int BOTTOM_LEFT_ALIGN = 200;

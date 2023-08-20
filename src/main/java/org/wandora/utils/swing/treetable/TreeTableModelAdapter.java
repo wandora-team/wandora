@@ -14,6 +14,8 @@ import javax.swing.table.AbstractTableModel;
  */
 public class TreeTableModelAdapter extends AbstractTableModel {
 
+    private static final long serialVersionUID = 1L;
+    
     protected JTree tree;
     protected TreeTableModel treeTableModel;
     

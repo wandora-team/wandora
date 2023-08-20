@@ -41,7 +41,8 @@ import javax.swing.JViewport;
 public class GuiTools {
     
     /** Creates a new instance of GuiTools */
-    public GuiTools() {
+    private GuiTools() {
+        // Private
     }
  
     public static void centerWindow(Window wnd,Component parent){

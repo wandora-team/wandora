@@ -44,6 +44,8 @@ import org.wandora.utils.Textbox;
  */
 public class InputDialogWithHistory extends javax.swing.JDialog {
     
+    private static final long serialVersionUID = 1L;
+    
     public static int HISTORYMAXSIZE = 40;
     public java.awt.Frame parent = null;
     public boolean accepted = true;
