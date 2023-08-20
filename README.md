@@ -1,7 +1,7 @@
 Wandora
 =======
 
-[Wandora](http://wandora.org) is a tool for people who collect and process information, 
+[Wandora](http://wandora.org) is a tool application for people who collect and process information, 
 especially networked knowledge and knowledge about WWW resources. With Wandora you can 
 aggregate and combine information from various different sources. You can manipulate the 
 collected knowledge flexible and efficiently, and without programming skills. More 
@@ -28,14 +28,14 @@ or drop a line.
 
 ## Developer Introduction
 
-We develop Wandora with the [Netbeans IDE](https://netbeans.apache.org/). To start
-working with Wandora's source code, download and install Netbeans IDE, preferably version 9.
-Wandora's GitHub repository contains all required project files for the Netbeans IDE. 
-To open the project in Netbeans, select menu option File &gt; Open Project... in the Netbeans and 
-select Wandora's folder. Once you have successfully opened Wandora project, 
-you can compile Wandora project to test whether or not you have everything in order. GitHub
-repository needs to be compiled before Wandora can be ran.
+Wandora was originally developed with the [Netbeans IDE](https://netbeans.apache.org/).
+Since October 2018 we have started developing Wandora with Eclipse, preferably 
+Eclipse IDE for Java Developers version 4.27.0. Eclipse development has changed
+the library retrieval and build process. Wandora uses Gradle for dependency management and building application packages.
 
-To compile and run Wandora, a Java JDK 8 or later is required.
+To compile and run Wandora, a Java JDK 17 or later is required.
+
+Developers interested in Wandora project should note that our long term plans
+include using Eclipse as a primary development tool.
 
 ### 

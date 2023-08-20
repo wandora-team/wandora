@@ -132,8 +132,8 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
       <usessl>false</usessl>
       <username></username>
       <password></password>
-      <staticpath>resources/gui/server/</staticpath>
-      <templatepath>resources/gui/server/templates/</templatepath>
+      <staticpath>gui/server/</staticpath>
+      <templatepath>gui/server/templates/</templatepath>
       <templatefile>viewtopic.vhtml</templatefile>
    </httpserver>
    <dbconnections>
@@ -1616,7 +1616,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
       </set>
    </tool>
-   <basemap>resources/conf/wandora.xtm</basemap>
+   <basemap>conf/wandora.xtm</basemap>
    <shortcuts>
       <si>http://www.topicmaps.org/xtm/1.0/language.xtm</si>
       <si>http://wandora.org/si/core/schema-type</si>

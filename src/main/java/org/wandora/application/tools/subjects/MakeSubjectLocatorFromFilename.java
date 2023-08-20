@@ -1,0 +1,94 @@
+/*
+ * WANDORA
+ * Knowledge Extraction, Management, and Publishing Application
+ * http://wandora.org
+ * 
+ * Copyright (C) 2004-2023 Wandora Team
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 
+ * MakeSubjectLocatorFromFilename.java
+ *
+ */
+
+package org.wandora.application.tools.subjects;
+
+
+
+import java.io.File;
+import java.util.Iterator;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.contexts.Context;
+import org.wandora.application.gui.UIConstants;
+import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+
+/**
+ *
+ * @author akivela
+ */
+public class MakeSubjectLocatorFromFilename extends AbstractWandoraTool implements WandoraTool, Runnable {
+    
+
+	private static final long serialVersionUID = 1L;
+
+	public MakeSubjectLocatorFromFilename() {
+    }
+    public MakeSubjectLocatorFromFilename(Context proposedContext) {
+        setContext(proposedContext);
+    }
+    
+    @Override
+    public void execute(Wandora wandora, Context context) {
+        try {
+            Iterator contextTopics = getContext().getContextObjects();
+            if(contextTopics == null || !contextTopics.hasNext()) return;
+
+            SimpleFileChooser chooser=UIConstants.getFileChooser();
+            chooser.setDialogTitle("Select resource");
+
+            if(chooser.open(wandora, "Select")==SimpleFileChooser.APPROVE_OPTION) {
+                File f = chooser.getSelectedFile();
+                if(f == null) return;
+                String subject = f.toURI().toString();
+                while(contextTopics.hasNext() && !forceStop()) {
+                    Topic t = (Topic) (contextTopics.next());
+                    if(t != null && !t.isRemoved()) {
+                        t.setSubjectLocator(new Locator(subject));
+                    }
+                }
+            }
+        }
+        catch(Exception e) {
+            log(e);
+        }
+    }
+    
+    
+    @Override
+    public String getName() {
+        return "Copy filename to subject locator";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Pick a file and make a subject locator out of it's filename.";
+    }
+    
+}

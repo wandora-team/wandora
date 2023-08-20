@@ -1,9 +1,10 @@
 # java specific
 *.class
 build/*
+build-auto/*
 dist/*
+dist-old/*
 temp/*
-lib/wandora.jar
  
 # netbeans ignore personal stuff
 nbproject/private/
@@ -14,3 +15,14 @@ nbproject/private/
 *.DS_Store
 *.swp
 *.out
+/build/
+/build-auto/
+/dist/
+/dist-old/
+
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build

@@ -1,0 +1,457 @@
+/*
+ * WANDORA
+ * Knowledge Extraction, Management, and Publishing Application
+ * http://wandora.org
+ * 
+ * Copyright (C) 2004-2023 Wandora Team
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 
+ * MediawikiConfigurationUI.java
+ *
+ * Created on 2013-04-25
+ *
+ */
+
+package org.wandora.application.tools.mediawiki;
+
+import java.awt.event.KeyEvent;
+
+import javax.swing.JDialog;
+
+import org.wandora.application.Wandora;
+import org.wandora.application.WandoraTool;
+import org.wandora.application.gui.simple.SimpleButton;
+import org.wandora.application.gui.simple.SimpleCheckBox;
+import org.wandora.application.gui.simple.SimpleComboBox;
+import org.wandora.application.gui.simple.SimpleField;
+import org.wandora.application.gui.simple.SimpleLabel;
+import org.wandora.topicmap.Topic;
+
+/**
+ *
+ * @author nlaitine
+ */
+
+
+public class MediawikiUploaderConfigurationUI extends javax.swing.JPanel {
+
+
+	private static final long serialVersionUID = 1L;
+
+	private JDialog myDialog = null;
+    private boolean accepted = false;
+    
+    /**
+     * Creates new form MediawikiUploaderConfiguration
+     */
+    public MediawikiUploaderConfigurationUI() {
+        initComponents();
+    }
+    
+    public void open(Wandora wandora, WandoraTool t) {
+        myDialog = new JDialog(wandora, true);
+        myDialog.add(this);
+        myDialog.setTitle("Mediawiki uploader options");
+        myDialog.setSize(500, 240);
+        accepted = false;
+        if(wandora != null) wandora.centerWindow(myDialog);
+        myDialog.setVisible(true);
+    }
+    
+    
+    // -------------------------------------------------------------------------
+    
+    public boolean wasAccepted() {
+        return accepted;
+    }
+    
+    public String getWikiUrl() {
+        return wikiUrlTextField.getText();
+    }
+    
+    public String getUser() {
+        return usernameTextField.getText();
+    }
+    
+    public String getPasswd() {
+        return passwordTextField.getText();
+    }
+    
+    public String getFilename() {
+        return filenameTextField.getText();
+    }
+    
+    public boolean setFilename(String name) {
+        filenameTextField.setText(name);
+        return true;
+    }
+    
+    public boolean showFilename() {
+        filenameLabel.setVisible(true);
+        filenameTextField.setVisible(true);
+        return true;
+    }
+    
+    public boolean hideFilename() {
+        filenameLabel.setVisible(false);
+        filenameTextField.setVisible(false);
+        return true;
+    }
+    
+    public Object getDescriptionType() {
+        return descriptionComboBox.getSelectedItem();
+    }
+    
+    public boolean addDescriptionTypeItem(String item) {
+        descriptionComboBox.addItem(item);
+        return true;
+    }
+    
+    public boolean addDescriptionTypeItem(Topic item) {
+        descriptionComboBox.addItem(item);
+        return true;
+    }
+    
+    public boolean resetDescriptionTypeItems() {
+        descriptionComboBox.removeAllItems();
+        descriptionComboBox.setEnabled(false);
+        return true;
+    }
+    
+    public boolean enableDescriptionType() {
+        descriptionComboBox.setEnabled(true);
+        return true;
+    }
+    
+    public boolean showDescription() {
+        descriptionLabel.setVisible(true);
+        descriptionComboBox.setVisible(true);
+        return true;
+    }
+    
+    public boolean hideDescription() {
+        descriptionLabel.setVisible(false);
+        descriptionComboBox.setVisible(false);
+        return true;
+    }
+    
+    public String getFileExtension() {
+        return fileExtensionTextField.getText();
+    }
+    
+    public boolean showFileExtension() {
+        fileExtensionLabel.setVisible(true);
+        fileExtensionTextField.setVisible(true);
+        return true;
+    }
+    
+    public boolean hideFileExtension() {
+        fileExtensionLabel.setVisible(false);
+        fileExtensionTextField.setVisible(false);
+        return true;
+    }
+    
+    public boolean getStream() {
+        return streamCheckBox.isSelected();
+    }
+    
+    
+    // -------------------------------------------------------------------------
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        configPanel = new javax.swing.JPanel();
+        wikiUrlLabel = new SimpleLabel();
+        wikiUrlTextField = new SimpleField();
+        usernameLabel = new SimpleLabel();
+        usernameTextField = new SimpleField();
+        passwordLabel = new SimpleLabel();
+        passwordTextField = new SimpleField();
+        filenameLabel = new SimpleLabel();
+        filenameTextField = new SimpleField();
+        descriptionLabel = new SimpleLabel();
+        descriptionComboBox = new SimpleComboBox();
+        streamLabel = new SimpleLabel();
+        streamCheckBox = new SimpleCheckBox();
+        fileExtensionLabel = new SimpleLabel();
+        fileExtensionTextField = new SimpleField();
+        buttonPanel = new javax.swing.JPanel();
+        FillerjPanel = new javax.swing.JPanel();
+        okButton = new SimpleButton();
+        cancelButton = new SimpleButton();
+
+        setMaximumSize(new java.awt.Dimension(394, 220));
+        setMinimumSize(new java.awt.Dimension(394, 220));
+        setPreferredSize(new java.awt.Dimension(394, 220));
+        setLayout(new java.awt.GridBagLayout());
+
+        configPanel.setMaximumSize(new java.awt.Dimension(374, 150));
+        configPanel.setMinimumSize(new java.awt.Dimension(374, 150));
+        configPanel.setName(""); // NOI18N
+        configPanel.setPreferredSize(new java.awt.Dimension(374, 150));
+        configPanel.setLayout(new java.awt.GridBagLayout());
+
+        wikiUrlLabel.setText("Mediawiki URL");
+        wikiUrlLabel.setToolTipText("Mediawiki URL is a base address of the Mediawiki installation where resource will be uploaded.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 4);
+        configPanel.add(wikiUrlLabel, gridBagConstraints);
+
+        wikiUrlTextField.setMaximumSize(new java.awt.Dimension(290, 20000));
+        wikiUrlTextField.setMinimumSize(new java.awt.Dimension(290, 20));
+        wikiUrlTextField.setPreferredSize(new java.awt.Dimension(290, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        configPanel.add(wikiUrlTextField, gridBagConstraints);
+
+        usernameLabel.setText("Username");
+        usernameLabel.setToolTipText("Username is used to login the Mediawiki. Uploading resource to the Mediawiki requires a valid username.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        configPanel.add(usernameLabel, gridBagConstraints);
+
+        usernameTextField.setMaximumSize(new java.awt.Dimension(90, 20));
+        usernameTextField.setMinimumSize(new java.awt.Dimension(90, 20));
+        usernameTextField.setPreferredSize(new java.awt.Dimension(90, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        configPanel.add(usernameTextField, gridBagConstraints);
+
+        passwordLabel.setText("Password");
+        passwordLabel.setToolTipText("Password is used to login the Mediawiki.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        configPanel.add(passwordLabel, gridBagConstraints);
+
+        passwordTextField.setMaximumSize(new java.awt.Dimension(90, 20));
+        passwordTextField.setMinimumSize(new java.awt.Dimension(90, 20));
+        passwordTextField.setPreferredSize(new java.awt.Dimension(90, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        configPanel.add(passwordTextField, gridBagConstraints);
+
+        filenameLabel.setText("Filename");
+        filenameLabel.setToolTipText("Filename is a name of the resource in Mediawiki.");
+        filenameLabel.setMaximumSize(null);
+        filenameLabel.setMinimumSize(null);
+        filenameLabel.setPreferredSize(null);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        configPanel.add(filenameLabel, gridBagConstraints);
+
+        filenameTextField.setMaximumSize(new java.awt.Dimension(240, 20));
+        filenameTextField.setMinimumSize(new java.awt.Dimension(240, 20));
+        filenameTextField.setPreferredSize(new java.awt.Dimension(240, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        configPanel.add(filenameTextField, gridBagConstraints);
+
+        descriptionLabel.setText("Description");
+        descriptionLabel.setToolTipText("It is possible to add a description into a Mediawiki resource. This description is taken from another occurrence. Available occurrence types are listed in the select box.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        configPanel.add(descriptionLabel, gridBagConstraints);
+
+        descriptionComboBox.setMaximumSize(new java.awt.Dimension(180, 20));
+        descriptionComboBox.setMinimumSize(new java.awt.Dimension(180, 20));
+        descriptionComboBox.setName(""); // NOI18N
+        descriptionComboBox.setPreferredSize(new java.awt.Dimension(180, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        configPanel.add(descriptionComboBox, gridBagConstraints);
+
+        streamLabel.setText("Send as byte stream");
+        streamLabel.setToolTipText("If selected, Wandora downloads the resource and uploads it to the Mediawiki as a byte stream. If not selected, an URL is sent to Mediawiki and Mediawiki downloads the resource. Notice, local files can be uploaded only as a byte stream.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        configPanel.add(streamLabel, gridBagConstraints);
+
+        streamCheckBox.setSelected(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        configPanel.add(streamCheckBox, gridBagConstraints);
+
+        fileExtensionLabel.setText("Default file extension");
+        fileExtensionLabel.setToolTipText("Default file extension is used to specify type of uploaded resources if the type can't be detected any other way.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        configPanel.add(fileExtensionLabel, gridBagConstraints);
+
+        fileExtensionTextField.setMaximumSize(new java.awt.Dimension(240, 20));
+        fileExtensionTextField.setMinimumSize(new java.awt.Dimension(240, 20));
+        fileExtensionTextField.setPreferredSize(new java.awt.Dimension(240, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        configPanel.add(fileExtensionTextField, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 10);
+        add(configPanel, gridBagConstraints);
+
+        buttonPanel.setMaximumSize(new java.awt.Dimension(116, 25));
+        buttonPanel.setMinimumSize(new java.awt.Dimension(116, 25));
+        buttonPanel.setPreferredSize(new java.awt.Dimension(116, 25));
+        buttonPanel.setLayout(new java.awt.GridBagLayout());
+
+        FillerjPanel.setMaximumSize(new java.awt.Dimension(0, 0));
+
+        javax.swing.GroupLayout FillerjPanelLayout = new javax.swing.GroupLayout(FillerjPanel);
+        FillerjPanel.setLayout(FillerjPanelLayout);
+        FillerjPanelLayout.setHorizontalGroup(
+            FillerjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        FillerjPanelLayout.setVerticalGroup(
+            FillerjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        buttonPanel.add(FillerjPanel, gridBagConstraints);
+
+        okButton.setText("OK");
+        okButton.setMaximumSize(new java.awt.Dimension(70, 23));
+        okButton.setMinimumSize(new java.awt.Dimension(70, 23));
+        okButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        okButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                okButtonMouseReleased(evt);
+            }
+        });
+        okButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                okButtonKeyReleased(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        buttonPanel.add(okButton, gridBagConstraints);
+
+        cancelButton.setText("Cancel");
+        cancelButton.setMaximumSize(new java.awt.Dimension(70, 23));
+        cancelButton.setMinimumSize(new java.awt.Dimension(70, 23));
+        cancelButton.setPreferredSize(new java.awt.Dimension(70, 23));
+        cancelButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                cancelButtonMouseReleased(evt);
+            }
+        });
+        buttonPanel.add(cancelButton, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        add(buttonPanel, gridBagConstraints);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void okButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_okButtonKeyReleased
+        accepted = true;
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if(myDialog != null) {
+                myDialog.setVisible(false);
+            }
+        }
+    }//GEN-LAST:event_okButtonKeyReleased
+
+    private void okButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okButtonMouseReleased
+        accepted = true;
+        if(myDialog != null) myDialog.setVisible(false);
+    }//GEN-LAST:event_okButtonMouseReleased
+
+    private void cancelButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelButtonMouseReleased
+        accepted = false;
+        if(myDialog != null) myDialog.setVisible(false);
+    }//GEN-LAST:event_cancelButtonMouseReleased
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel FillerjPanel;
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JPanel configPanel;
+    private javax.swing.JComboBox descriptionComboBox;
+    private javax.swing.JLabel descriptionLabel;
+    private javax.swing.JLabel fileExtensionLabel;
+    private javax.swing.JTextField fileExtensionTextField;
+    private javax.swing.JLabel filenameLabel;
+    private javax.swing.JTextField filenameTextField;
+    private javax.swing.JButton okButton;
+    private javax.swing.JLabel passwordLabel;
+    private javax.swing.JTextField passwordTextField;
+    private javax.swing.JCheckBox streamCheckBox;
+    private javax.swing.JLabel streamLabel;
+    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JTextField usernameTextField;
+    private javax.swing.JLabel wikiUrlLabel;
+    private javax.swing.JTextField wikiUrlTextField;
+    // End of variables declaration//GEN-END:variables
+}

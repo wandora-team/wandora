@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>461</x>
-      <y>27</y>
-      <width>950</width>
-      <height>809</height>
+      <x>44</x>
+      <y>55</y>
+      <width>1047</width>
+      <height>687</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>650</verticalsplitter>
+      <verticalsplitter>528</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -31,7 +31,7 @@ new Union(
   .join(new Identity().as(XTMPSI.CLASS))
 );</script>
                <name>Instances</name>
-               <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
+               <engine>Graal.js ; ECMAScript</engine>
             </query>
             <query>
                <script>importPackage(org.wandora.query2);
@@ -49,7 +49,7 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
   ))
 );</script>
                <name>Super classes</name>
-               <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
+               <engine>Graal.js ; ECMAScript</engine>
             </query>
          </group>
       </customTopicPanel>
@@ -63,7 +63,6 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          <panel>org.wandora.application.gui.topicpanels.TreeMapTopicPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.SketchGridPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.RTopicPanel</panel>
-         <panel>org.wandora.application.gui.topicpanels.ProcessingTopicPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.WebViewTopicPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.SearchTopicPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.LayerInfoPanel</panel>
@@ -114,8 +113,7 @@ public class Sketch extends SketchTemplate {
 			} catch(TopicMapException tme){tme.printStackTrace();}
 		}
 	}
-}
-</currentSketch>
+}</currentSketch>
       </processingTopicPanel>
       <tabbedTopicPanel>
          <view>
@@ -181,8 +179,8 @@ public class Sketch extends SketchTemplate {
       <usessl>false</usessl>
       <username></username>
       <password></password>
-      <staticpath>resources/gui/server/</staticpath>
-      <templatepath>resources/gui/server/templates/</templatepath>
+      <staticpath>gui/server/</staticpath>
+      <templatepath>gui/server/templates/</templatepath>
       <templatefile>viewtopic.vhtml</templatefile>
    </httpserver>
    <dbconnections>
@@ -557,14 +555,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Search engines</name>
             <item>
-               <name>Bing extractor...</name>
-               <class>org.wandora.application.tools.extractors.bing.BingExtractor</class>
-            </item>
-            <item>
-               <name>Yahoo BOSS extractor...</name>
-               <class>org.wandora.application.tools.extractors.yahoo.boss.BossExtractor</class>
-            </item>
-            <item>
                <name>DuckDuckGo extractor...</name>
                <class>org.wandora.application.tools.extractors.duckduckgo.DuckDuckGoExtractor</class>
             </item>
@@ -607,42 +597,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier</class>
             </item>
             <item>
-               <name>--- ALCHEMY EXTRACTORS ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Alchemy entity extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyEntityExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy keyword extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyKeywordExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy category extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyCategoryExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy language extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyLanguageExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy sentiment extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemySentimentExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy relation extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyRelationExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy image keyword extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy face detection extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyFaceDetection</class>
-            </item>
-            <item>
                <name>--- WEB SERVICES ---</name>
                <class>org.wandora.application.tools.DummyTool</class>
             </item>
@@ -651,16 +605,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.uclassify.UClassifier</class>
             </item>
             <item>
-               <name>TextWise classifier...</name>
-               <class>org.wandora.application.tools.extractors.textwise.TextWiseClassifier</class>
-            </item>
-            <item>
                <name>Yahoo! YQL term extractor...</name>
                <class>org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract</class>
-            </item>
-            <item>
-               <name>Zemanta extractor...</name>
-               <class>org.wandora.application.tools.extractors.zemanta.ZemantaExtractor</class>
             </item>
             <item>
                <name>--- WORD ---</name>
@@ -716,10 +662,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Bibliographical</name>
             <item>
-               <name>Bibtex extractor...</name>
-               <class>org.wandora.application.tools.extractors.JavabibExtractor</class>
-            </item>
-            <item>
                <name>RIS extractor...</name>
                <class>org.wandora.application.tools.extractors.ris.RISExtractor</class>
             </item>
@@ -763,43 +705,8 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Social</name>
             <item>
-               <name>Twitter extractor...</name>
-               <class>org.wandora.application.tools.extractors.twitter.TwitterExtractor</class>
-            </item>
-            <item>
-               <name>Twitter JSON extractor...</name>
-               <class>org.wandora.application.tools.extractors.twitter.TwitterJSONExtractor</class>
-            </item>
-            <item>
-               <name>--- OTHER SOCIAL ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Facebook graph extractor v2...</name>
-               <class>org.wandora.application.tools.extractors.facebook.v2.FBGraphExtractor</class>
-            </item>
-            <item>
                <name>Reddit extractor...</name>
                <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
-            </item>
-         </item>
-         <item>
-            <name>Services</name>
-            <item>
-               <name>Oma kaupunki extractor...</name>
-               <class>org.wandora.application.tools.extractors.omakaupunki.OmaKaupunkiExtractor</class>
-            </item>
-            <item>
-               <name>--- PALVELUKARTTA ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>Palvelukartta extractor...</name>
-               <class>org.wandora.application.tools.extractors.palvelukartta.PalvelukarttaExtractor</class>
-            </item>
-            <item>
-               <name>Palvelukartta API version 2 extractor...</name>
-               <class>org.wandora.application.tools.extractors.palvelukartta_v2.PalvelukarttaExtractor</class>
             </item>
          </item>
          <item>
@@ -837,26 +744,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.FreeDBExtractor</class>
             </item>
             <item>
-               <name>Last.fm extractor...</name>
-               <class>org.wandora.application.tools.extractors.audioscrobbler.AudioScrobblerExtractor</class>
-            </item>
-            <item>
-               <name>MusicBrainz extractor...</name>
-               <class>org.wandora.application.tools.extractors.musicbrainz.MusicBrainzExtractor</class>
-            </item>
-            <item>
-               <name>--- YOUTUBE ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>YouTube video feed...</name>
-               <class>org.wandora.application.tools.extractors.youtube.YouTubeVideoFeedExtractor</class>
-            </item>
-            <item>
-               <name>YouTube video URL...</name>
-               <class>org.wandora.application.tools.extractors.youtube.YouTubeURLExtractor</class>
-            </item>
-            <item>
                <name>--- OTHER MEDIA ---</name>
                <class>org.wandora.application.tools.extractors.DummyExtractor</class>
             </item>
@@ -867,46 +754,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>OCR extractor...</name>
                <class>org.wandora.application.tools.extractors.ocr.OCRExtractor</class>
-            </item>
-            <item>
-               <name>--- IMAGE RECOGNITION ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>Alchemy face detection extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyFaceDetection</class>
-            </item>
-            <item>
-               <name>Alchemy image keyword extractor...</name>
-               <class>org.wandora.application.tools.extractors.alchemy.AlchemyImageKeywordExtractor</class>
-            </item>
-            <item>
-               <name>--- YLE Elava arkisto ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>YLE Elava arkisto terms...</name>
-               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.TermsExtractor</class>
-            </item>
-            <item>
-               <name>YLE Elava arkisto articles...</name>
-               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticlesExtractor</class>
-            </item>
-            <item>
-               <name>YLE Elava arkisto article additions...</name>
-               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticlesAdditionalFieldsExtractor</class>
-            </item>
-            <item>
-               <name>YLE Elava arkisto article tags...</name>
-               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.ArticleTagsExtractor</class>
-            </item>
-            <item>
-               <name>YLE Elava arkisto media...</name>
-               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.MediaExtractor</class>
-            </item>
-            <item>
-               <name>YLE Elava arkisto media of the article...</name>
-               <class>org.wandora.application.tools.extractors.yle.elavaarkisto.MediaArticleExtractor</class>
             </item>
          </item>
          <item>
@@ -926,10 +773,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>Simple CSV association extractor...</name>
                <class>org.wandora.application.tools.extractors.csv.SimpleCSVAssociationExtractor</class>
-            </item>
-            <item>
-               <name>JPEG PS3.0 metadata extractor...</name>
-               <class>org.wandora.application.tools.extractors.files.SimpleJPGExtractor</class>
             </item>
             <item>
                <name>Simple PDF extractor...</name>
@@ -957,10 +800,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>--- SIMPLE ---</name>
                <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>HTML link extractor...</name>
-               <class>org.wandora.application.tools.extractors.HTMLLinkStructureExtractor</class>
             </item>
             <item>
                <name>HTML property table extractor...</name>
@@ -1226,18 +1065,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.exporters.OBORoundTrip</class>
          </item>
          <item>
-            <name>--- SEARCH INDEX BUILDERS ---</name>
-            <class>org.wandora.application.tools.DummyTool</class>
-         </item>
-         <item>
-            <name>Solr index builder...</name>
-            <class>org.wandora.application.tools.solr.SolrIndexBuilder</class>
-         </item>
-         <item>
-            <name>Lucene index builder...</name>
-            <class>org.wandora.application.tools.exporters.LuceneIndexBuilder</class>
-         </item>
-         <item>
             <name>--- OTHER ---</name>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
@@ -1247,7 +1074,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
          <item>
             <name>Export topic map as series of HTML files...</name>
-            <class>org.wandora.application.tools.exporters.ExportSite</class>
+            <class>org.wandora.application.tools.exporters.site.ExportSite</class>
          </item>
          <item>
             <name>Topic map round trip...</name>
@@ -1260,37 +1087,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Export IIIF JSON-LD...</name>
             <class>org.wandora.application.tools.exporters.iiifexport.IIIFExport</class>
-         </item>
-         <item>
-            <name>--- FINNISH NATIONAL GALLERY ---</name>
-            <class>org.wandora.application.tools.DummyTool</class>
-         </item>
-         <item>
-            <name>Finnish National Gallery</name>
-            <item>
-               <name>FNG open data dublin core exporter...</name>
-               <class>org.wandora.application.tools.fng.opendata.v2b.FngOpenDataDublinCoreExporter</class>
-            </item>
-            <item>
-               <name>--- SIMBERG ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Simberg open data exporter...</name>
-               <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOpenDataExporter</class>
-            </item>
-            <item>
-               <name>Simberg OAI DC exporter...</name>
-               <class>org.wandora.application.tools.fng.opendata.simberg.SimbergOAIDCExporter</class>
-            </item>
-            <item>
-               <name>Simberg LIDO exporter...</name>
-               <class>org.wandora.application.tools.fng.opendata.simberg.SimbergLIDOExporter</class>
-            </item>
-            <item>
-               <name>Simberg JSON exporter....</name>
-               <class>org.wandora.application.tools.exporters.simberg.SimbergExport</class>
-            </item>
          </item>
       </set>
       <set>
@@ -1306,10 +1102,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Simple document extractor</name>
             <class>org.wandora.application.tools.extractors.files.SimpleDocumentExtractor</class>
-         </item>
-         <item>
-            <name>HTML link extractor</name>
-            <class>org.wandora.application.tools.extractors.HTMLLinkStructureExtractor</class>
          </item>
          <item>
             <name>HTML property table extractor</name>
@@ -1344,40 +1136,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier</class>
          </item>
          <item>
-            <name>OpenCalais classifier</name>
-            <class>org.wandora.application.tools.extractors.opencalais.OpenCalaisClassifier</class>
-         </item>
-         <item>
             <name>TextWise classifier</name>
             <class>org.wandora.application.tools.extractors.textwise.TextWiseClassifier</class>
          </item>
          <item>
             <name>Yahoo! YQL term extractor</name>
             <class>org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract</class>
-         </item>
-         <item>
-            <name>Zemanta extractor</name>
-            <class>org.wandora.application.tools.extractors.zemanta.ZemantaExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy entity extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemyEntityExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy keyword extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemyKeywordExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy category extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemyCategoryExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy language extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemyLanguageExtractor</class>
-         </item>
-         <item>
-            <name>Alchemy sentiment extractor</name>
-            <class>org.wandora.application.tools.extractors.alchemy.AlchemySentimentExtractor</class>
          </item>
          <item>
             <name>uClassify Text Language</name>
@@ -1402,10 +1166,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>MARCXML extractor</name>
             <class>org.wandora.application.tools.extractors.marcxml.MarcXMLExtractor</class>
-         </item>
-         <item>
-            <name>YouTube video URL</name>
-            <class>org.wandora.application.tools.extractors.youtube.YouTubeURLExtractor</class>
          </item>
          <item>
             <name>Simple PDF extractor</name>
@@ -1443,24 +1203,16 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <class>org.wandora.application.tools.DummyTool</class>
          </item>
          <item>
-            <name>Import TM</name>
-            <class>org.wandora.application.tools.importers.TopicMapImport</class>
-         </item>
-         <item>
-            <name>Import RDF</name>
-            <class>org.wandora.application.tools.importers.SimpleRDFImport</class>
-         </item>
-         <item>
-            <name>Import OBO</name>
-            <class>org.wandora.application.tools.importers.OBOImport</class>
-         </item>
-         <item>
-            <name>---</name>
-            <class>org.wandora.application.tools.DummyTool</class>
-         </item>
-         <item>
             <name>New topic</name>
             <class>org.wandora.application.tools.NewTopicExtended</class>
+         </item>
+         <item>
+            <name>New panel</name>
+            <class>org.wandora.application.tools.docking.add.AddTraditional</class>
+         </item>
+         <item>
+            <name>Copy</name>
+            <class>org.wandora.application.tools.SystemClipboardCopy</class>
          </item>
          <item>
             <name>Search</name>
@@ -1469,18 +1221,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>---</name>
             <class>org.wandora.application.tools.DummyTool</class>
-         </item>
-         <item>
-            <name>Server</name>
-            <class>org.wandora.application.tools.server.HTTPServerOpenPage</class>
-         </item>
-         <item>
-            <name>R console</name>
-            <class>org.wandora.application.tools.r.OpenRConsole</class>
-         </item>
-         <item>
-            <name>IoT pinger</name>
-            <class>org.wandora.application.tools.iot.Pinger</class>
          </item>
       </set>
       <set>
@@ -1508,10 +1248,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Wikipedia</name>
             <class>org.wandora.application.tools.extractors.WikipediaExtractor</class>
-         </item>
-         <item>
-            <name>YouTube</name>
-            <class>org.wandora.application.tools.extractors.youtube.YouTubeVideoFeedExtractor</class>
          </item>
          <item>
             <name>Flickr</name>
@@ -1557,7 +1293,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          </item>
       </set>
    </tool>
-   <basemap>resources/conf/wandora.xtm</basemap>
+   <basemap>conf/wandora.xtm</basemap>
    <shortcuts>
       <si>http://www.topicmaps.org/xtm/1.0/language.xtm</si>
       <si>http://wandora.org/si/core/schema-type</si>
@@ -1705,7 +1441,7 @@ k --> ekz</system>
    <scriptQueries>
       <query>
          <name>Instances recursively with subclasses</name>
-         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
+         <engine>Graal.js ; ECMAScript</engine>
          <script>importPackage(org.wandora.query2);
 importPackage(org.wandora.topicmap);
 new Unique(
@@ -1724,7 +1460,7 @@ new Unique(
       </query>
       <query>
          <name>Topics that have no type nor super class</name>
-         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
+         <engine>Graal.js ; ECMAScript</engine>
          <script>importPackage(org.wandora.query2);
 importPackage(org.wandora.topicmap);
 new Count(
@@ -1738,14 +1474,14 @@ new Count(
       </query>
       <query>
          <name>Topics that do not have a base name</name>
-         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
+         <engine>Graal.js ; ECMAScript</engine>
          <script>importPackage(org.wandora.query2);
 new BaseName().from(new AllTopics().as("#topic"))
 .where(new Of("#DEFAULT"),"=",null);</script>
       </query>
       <query>
          <name>Number of instances in topic map</name>
-         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
+         <engine>Graal.js ; ECMAScript</engine>
          <script>importPackage(org.wandora.query2);
 new Count(
    new Instances().from( new AllTopics() )
@@ -1754,7 +1490,7 @@ new Count(
       </query>
       <query>
          <name>Find topics that don't have a base name</name>
-         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
+         <engine>Graal.js ; ECMAScript</engine>
          <script>importPackage(org.wandora.query2);
 new BaseName().from(
    new AllTopics().as("#topic")
@@ -1763,7 +1499,7 @@ new BaseName().from(
       </query>
       <query>
          <name>Find topics with four character base names</name>
-         <engine>Oracle Nashhorn ; ECMAScript ; 1.0</engine>
+         <engine>Graal.js ; ECMAScript</engine>
          <script>importPackage(org.wandora.query2);
 new BaseName().from(
    new AllTopics()

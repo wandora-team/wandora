@@ -1,0 +1,38 @@
+
+package org.wandora.application.tools.extractors.ocr;
+
+/**
+ *http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html?page=4
+ */
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+class StreamGobbler extends Thread {
+
+    InputStream is;
+    StringBuilder outputMessage = new StringBuilder();
+
+    StreamGobbler(InputStream is) {
+        this.is = is;
+    }
+
+    String getMessage() {
+        return outputMessage.toString();
+    }
+
+    @Override
+    public void run() {
+        try {
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                outputMessage.append(line).append("\n");
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+}

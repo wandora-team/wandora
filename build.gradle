@@ -1,0 +1,173 @@
+/*
+ * WANDORA
+ * 
+ */
+
+plugins {
+  id 'java'
+  id 'distribution'
+  id 'application'
+  id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+repositories {
+  mavenCentral()
+  maven {
+    url 'https://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/'
+  }
+}
+
+group = 'org.wandora'
+version = '2023-08-26'
+
+
+dependencies {
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'org.reflections:reflections:0.10.2'
+    implementation 'commons-io:commons-io:2.13.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+	implementation 'uk.ac.shef.wit.simmetrics:simmetrics:1.6.2.20070207'
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+	implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
+	implementation 'org.apache.poi:poi-scratchpad:5.2.3'
+	implementation 'org.odftoolkit:odfdom-java:0.11.0'
+	implementation 'org.odftoolkit:simple-odf:0.9.0'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.29'
+    implementation 'org.apache-extras.beanshell:bsh:2.0b6'
+    implementation 'org.apache.commons:commons-dbcp2:2.9.0'
+    
+    implementation 'org.apache.tika:tika-core:2.8.0'
+    implementation 'org.apache.tika:tika-parsers:2.8.0'
+    implementation 'org.apache.tika:tika-parser-audiovideo-module:2.8.0'
+    
+    implementation 'eu.medsea.mimeutil:mime-util:2.1.3'
+    implementation 'com.github.jtidy:jtidy:1.0.4'
+    implementation 'org.jsoup:jsoup:1.16.1'
+    implementation 'org.mnode.ical4j:ical4j:3.2.12'
+    implementation 'org.apache.any23:apache-any23-core:2.7'
+    implementation 'org.openrdf:openrdf-model:1.2.7'
+    implementation 'org.apache.jena:jena:4.9.0@pom'
+    implementation 'org.apache.jena:jena-arq:4.9.0'
+
+    implementation 'uk.ac.gate:gate-core:9.0.1'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.4'
+    implementation 'com.mashape.unirest:unirest-java:1.4.9'
+    implementation 'org.mnode.mstor:mstor:1.0.3'
+    implementation 'org.apache.velocity:velocity-engine-core:2.3'
+
+    implementation 'de.quippy:javamod:2.2'
+    implementation 'javazoom:jlayer:1.0.1'
+    implementation 'com.kenai.nbpwr:com-sun-pdfview:1.0.5-201003191900'
+
+    implementation 'org.dockingframes:docking-frames-common:1.1.1'
+    implementation 'de.sciss:syntaxpane:1.3.0'
+    
+    implementation 'org.graalvm.js:js:23.0.1'
+    implementation 'org.graalvm.js:js-scriptengine:23.0.1'
+    
+    implementation 'javax.servlet:servlet-api:2.5'
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'xerces:xercesImpl:2.12.2'
+    
+    implementation 'net.ontopia.external.org.tmapi:tmapi:2.0.2'
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
+	implementation 'org.eclipse.jdt:ecj:3.34.0'
+	implementation 'org.eclipse.jetty:jetty-http:11.0.15'
+	implementation 'org.eclipse.jetty:jetty-server:11.0.15'
+	
+	implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
+    
+    // Embedded dependencies
+    implementation files('libs/local/JSwingC64-1.10.4.jar')
+    implementation files('libs/local/zmpp-wandora.jar')
+    implementation files('libs/local/JRI.jar')
+    implementation files('libs/local/JRIEngine.jar')
+    implementation files('libs/local/REngine.jar')
+    
+    testImplementation 'junit:junit:4.13.2'
+}
+
+
+configurations.all {
+  exclude group: 'xml-apis'
+  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
+
+javafx {
+  version = "20"
+  modules = [ 
+    'javafx.web', 
+    'javafx.base',
+    'javafx.graphics',
+    'javafx.media',
+    'javafx.swing'
+  ]
+}
+
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+jar {
+  processResources.exclude('*')
+}
+
+test {
+  classpath += files('resources')
+}
+
+run {
+  classpath += files('resources')
+}
+
+startScripts {
+  outputDir = file('build/bin')
+  classpath += files('resources')
+  doLast {
+    unixScript.text = unixScript.text.replace('$APP_HOME/lib/resources', '$APP_HOME/resources')
+    windowsScript.text = windowsScript.text.replace(/%APP_HOME%\lib\resources/, /%APP_HOME%\resources/)
+  }
+}
+
+
+
+application {
+  mainClass = 'org.wandora.application.Wandora'
+  executableDir = 'bin'
+}
+
+distributions {
+  main {
+    contents {
+      from {
+        'extras/dist-extras'
+      }
+      from('resources') {
+        into 'resources'
+      }
+    }
+  }
+}
+
+
+installDist {
+  into 'dist'
+}
+
