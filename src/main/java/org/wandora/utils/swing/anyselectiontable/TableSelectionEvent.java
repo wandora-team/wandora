@@ -32,13 +32,16 @@ import javax.swing.event.ListSelectionEvent;
   */
 public class TableSelectionEvent extends ListSelectionEvent {
 
+    private static final long serialVersionUID = 1L;
+    
+    
     /**
     * The index of the column whose selection has changed.
     */
     protected int columnIndex;
 
     public TableSelectionEvent(Object source, int firstRowIndex, int lastRowIndex, int columnIndex, boolean isAdjusting) {
-	super(source, firstRowIndex, lastRowIndex, isAdjusting);
+        super(source, firstRowIndex, lastRowIndex, isAdjusting);
         this.columnIndex = columnIndex;
     }
     

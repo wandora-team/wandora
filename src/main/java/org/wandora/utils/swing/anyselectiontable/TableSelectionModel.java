@@ -28,6 +28,7 @@ package org.wandora.utils.swing.anyselectiontable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 
 import javax.swing.DefaultListSelectionModel;
@@ -67,7 +68,7 @@ public class TableSelectionModel implements PropertyChangeListener, ListSelectio
     /** List of Listeners which will be notified when the selection value changes */
     protected EventListenerList listenerList = new EventListenerList();
     /** contains a ListSelectionModel for each column */
-    protected ArrayList listSelectionModels = new ArrayList();
+    protected List<ListSelectionModel> listSelectionModels = new ArrayList<>();
 
   
   
@@ -129,8 +130,8 @@ public class TableSelectionModel implements PropertyChangeListener, ListSelectio
     * Calls clearSelection() of all ListSelectionModels.
     */
     public void clearSelection() {
-        for(Iterator enu=listSelectionModels.iterator(); enu.hasNext();) {
-            ListSelectionModel lm = (ListSelectionModel)(enu.next());
+        for(Iterator<ListSelectionModel> enu=listSelectionModels.iterator(); enu.hasNext();) {
+            ListSelectionModel lm = enu.next();
             lm.clearSelection();
         }
     }
@@ -151,7 +152,7 @@ public class TableSelectionModel implements PropertyChangeListener, ListSelectio
     */
     public ListSelectionModel getListSelectionModelAt(int index) {
         if(index < listSelectionModels.size())
-            return (ListSelectionModel)(listSelectionModels.get(index));
+            return listSelectionModels.get(index);
         else
             return null;
     }
@@ -161,7 +162,7 @@ public class TableSelectionModel implements PropertyChangeListener, ListSelectio
     * @param count the number of columns
     */
     public void setColumns(int count) {
-        listSelectionModels = new ArrayList();
+        listSelectionModels = new ArrayList<>();
         for (int i=0; i<count; i++) {
             addColumn();
         }
@@ -181,7 +182,7 @@ public class TableSelectionModel implements PropertyChangeListener, ListSelectio
     */
     protected void removeColumn() {
         //get last element
-        DefaultListSelectionModel removedModel = (DefaultListSelectionModel)listSelectionModels.get(listSelectionModels.size()-1);
+        ListSelectionModel removedModel = listSelectionModels.get(listSelectionModels.size()-1);
         removedModel.removeListSelectionListener(this);
         listSelectionModels.remove(removedModel);
     }
