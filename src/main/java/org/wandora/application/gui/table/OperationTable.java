@@ -25,7 +25,7 @@
 
 package org.wandora.application.gui.table;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
@@ -52,7 +52,7 @@ public class OperationTable extends SimpleTable /*, DropTargetListener, DragGest
         initialize();
     }
     
-    public void initialize(ArrayList<UndoOperation> tableOperations) {
+    public void initialize(List<UndoOperation> tableOperations) {
         opsModel = new OperationTableModel(tableOperations.toArray(new UndoOperation[] {}));
         initialize();
     }

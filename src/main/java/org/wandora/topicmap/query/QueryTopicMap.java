@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.script.ScriptEngine;
 
@@ -58,8 +59,8 @@ public class QueryTopicMap extends ContainerTopicMap implements TopicMapListener
     protected Wandora admin;
     
     protected Collection<QueryInfo> originalQueries;
-    protected HashMap<Locator,Directive> queries;
-    protected HashMap<T2<Locator,Locator>,ArrayList<QueryAssociation>> associationCache;
+    protected Map<Locator,Directive> queries;
+    protected Map<T2<Locator,Locator>,List<QueryAssociation>> associationCache;
     
     
     public QueryTopicMap(Wandora admin){
@@ -248,18 +249,18 @@ public class QueryTopicMap extends ContainerTopicMap implements TopicMapListener
         return originalQueries;
     }
     
-    public ArrayList<QueryAssociation> getCachedAssociations(Locator topic,Locator type){
-        if(associationCache==null) associationCache=new HashMap<T2<Locator,Locator>,ArrayList<QueryAssociation>>();
+    public List<QueryAssociation> getCachedAssociations(Locator topic,Locator type){
+        if(associationCache==null) associationCache=new HashMap<T2<Locator,Locator>,List<QueryAssociation>>();
         return associationCache.get(t2(topic,type));
     }
-    public ArrayList<QueryAssociation> getCachedAssociations(QueryTopic topic,QueryTopic type){
+    public List<QueryAssociation> getCachedAssociations(QueryTopic topic,QueryTopic type){
         return getCachedAssociations(topic.si,type.si);
     }
-    public void cacheAssociations(Locator topic,Locator type,ArrayList<QueryAssociation> associations){
-        if(associationCache==null) associationCache=new HashMap<T2<Locator,Locator>,ArrayList<QueryAssociation>>();
+    public void cacheAssociations(Locator topic,Locator type,List<QueryAssociation> associations){
+        if(associationCache==null) associationCache=new HashMap<T2<Locator,Locator>,List<QueryAssociation>>();
         associationCache.put(t2(topic,type),associations);
     }
-    public void cacheAssociations(QueryTopic topic,QueryTopic type,ArrayList<QueryAssociation> associations){
+    public void cacheAssociations(QueryTopic topic,QueryTopic type,List<QueryAssociation> associations){
         cacheAssociations(topic.si,type.si,associations);
     }
     
@@ -281,7 +282,7 @@ public class QueryTopicMap extends ContainerTopicMap implements TopicMapListener
         return layerStack;
     }
     
-    public HashMap<Locator,Directive> getQueries(){
+    public Map<Locator,Directive> getQueries(){
         return queries;
     }
     

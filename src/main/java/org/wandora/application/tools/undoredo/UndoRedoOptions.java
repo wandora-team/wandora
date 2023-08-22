@@ -24,6 +24,7 @@
 package org.wandora.application.tools.undoredo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -75,7 +76,7 @@ public class UndoRedoOptions extends javax.swing.JPanel {
     private void initializeOperationTable() {
         if(wandora == null) return;
         LayerStack ltm = wandora.getTopicMap();
-        ArrayList<UndoOperation> ops = ltm.getUndoOperations();
+        List<UndoOperation> ops = ltm.getUndoOperations();
         ((OperationTable) operationTable).initialize(ops);
         if(ops == null || ops.isEmpty()) {
             tableScrollPane.setVisible(false);

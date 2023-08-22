@@ -75,21 +75,21 @@ public class QueryTopicMapType implements TopicMapType {
 
     
     @Override
-    public TopicMapConfigurationPanel getConfigurationPanel(Wandora admin, Options options) {
-        return new QueryTopicMapConfiguration(admin);
-        //return new QueryConfigPanel(admin);
+    public TopicMapConfigurationPanel getConfigurationPanel(Wandora wandora, Options options) {
+        return new QueryTopicMapConfiguration(wandora);
+        //return new QueryConfigPanel(wandora);
     }
 
     
     @Override
-    public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora admin, Options options, TopicMap tm) {
+    public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora wandora, Options options, TopicMap tm) {
         QueryTopicMap qtm=(QueryTopicMap)tm;
-        return new QueryTopicMapConfiguration(qtm.getOriginalQueries(),admin);
+        return new QueryTopicMapConfiguration(qtm.getOriginalQueries(),wandora);
     }
 
     
     @Override
-    public JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora admin) {
+    public JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora wandora) {
         return null;
     }
 

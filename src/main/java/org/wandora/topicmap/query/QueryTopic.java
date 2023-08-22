@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,7 +46,7 @@ import org.wandora.topicmap.TopicMapReadOnlyException;
 public class QueryTopic extends Topic {
 
     protected Locator si;
-    protected ArrayList<Locator> sis;
+    protected List<Locator> sis;
     protected QueryTopicMap tm;
     
     public QueryTopic(Locator l,QueryTopicMap tm){
@@ -55,7 +56,7 @@ public class QueryTopic extends Topic {
         this.tm=tm;
     }
     
-    protected ArrayList<QueryAssociation> makeAssociations(ArrayList<ResultRow> res,Locator type) throws TopicMapException {
+    protected List<QueryAssociation> makeAssociations(List<ResultRow> res,Locator type) throws TopicMapException {
         ArrayList<QueryAssociation> ret=new ArrayList<QueryAssociation>();
         if(res.size()==0) return ret;
         Topic typeTopic=new QueryTopic(type,tm);
@@ -92,8 +93,8 @@ public class QueryTopic extends Topic {
         return ret;
     }
     
-    private ArrayList<QueryAssociation> getQueryAssociations(Locator type) throws TopicMapException {
-        ArrayList<QueryAssociation> ret=tm.getCachedAssociations(si, type);
+    private List<QueryAssociation> getQueryAssociations(Locator type) throws TopicMapException {
+        List<QueryAssociation> ret=tm.getCachedAssociations(si, type);
 //        if(ret!=null) return ret;
         
         ret=new ArrayList<QueryAssociation>();
@@ -102,7 +103,7 @@ public class QueryTopic extends Topic {
         Directive query=tm.getQueries().get(type);
         if(query==null) return ret;
         try{
-            ArrayList<ResultRow> res=query.doQuery(new QueryContext(tm.getLayerStack(),null), new ResultRow(t));
+            List<ResultRow> res=query.doQuery(new QueryContext(tm.getLayerStack(),null), new ResultRow(t));
             ret.addAll(makeAssociations(res,type));
         
             tm.cacheAssociations(si, type, ret);
@@ -122,11 +123,11 @@ public class QueryTopic extends Topic {
             if(getAssociationsLocked) return new ArrayList<Association>();
             getAssociationsLocked=true;
             try{
-                HashMap<Locator,Directive> queries=tm.getQueries();
-                ArrayList<Association> ret=new ArrayList<Association>();
+                Map<Locator,Directive> queries=tm.getQueries();
+                List<Association> ret=new ArrayList<Association>();
                 for(Map.Entry<Locator,Directive> e : queries.entrySet()){
                     Locator type=e.getKey();
-                    ArrayList<QueryAssociation> res=getQueryAssociations(type);
+                    List<QueryAssociation> res=getQueryAssociations(type);
                     ret.addAll(res);
                 }
                 return ret;
@@ -143,9 +144,9 @@ public class QueryTopic extends Topic {
             if(getAssociationsLocked) return new ArrayList<Association>();
             getAssociationsLocked=true;
             try{
-                HashMap<Locator,Directive> queries=tm.getQueries();
-                ArrayList<Association> ret=new ArrayList<Association>();
-                ArrayList<QueryAssociation> res=getQueryAssociations(((QueryTopic)type).si);
+                Map<Locator,Directive> queries=tm.getQueries();
+                List<Association> ret=new ArrayList<Association>();
+                List<QueryAssociation> res=getQueryAssociations(((QueryTopic)type).si);
                 ret.addAll(res);
                 return ret;
             }
@@ -161,8 +162,8 @@ public class QueryTopic extends Topic {
             if(getAssociationsLocked) return new ArrayList<Association>();
             getAssociationsLocked=true;
             try{
-                ArrayList<QueryAssociation> res=getQueryAssociations(((QueryTopic)type).si);
-                ArrayList<Association> ret=new ArrayList<Association>();
+                List<QueryAssociation> res=getQueryAssociations(((QueryTopic)type).si);
+                List<Association> ret=new ArrayList<Association>();
                 for(QueryAssociation a : res){
                     Topic p=a.getPlayer(role);
                     if(p==null) continue;

@@ -27,10 +27,12 @@
  */
 
 package org.wandora.topicmap.layered;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import org.wandora.topicmap.Association;
@@ -74,13 +76,13 @@ public class LayeredAssociation implements Association {
     protected LayeredTopic type;
     protected LayerStack layerStack;
     //                  role        ,player
-    protected KeyedHashMap<LayeredTopic,LayeredTopic> players;
+    protected Map<LayeredTopic,LayeredTopic> players;
     
     /** Creates a new instance of LayeredAssociation */
     public LayeredAssociation(LayerStack layerStack, LayeredTopic type) {
         this.layerStack=layerStack;
         this.type=type;
-        players=new KeyedHashMap<LayeredTopic,LayeredTopic>(new LayeredTopic.TopicKeyMaker());
+        this.players=new KeyedHashMap<>(new LayeredTopic.TopicKeyMaker());
     }
     
     public boolean equals(Object o){
@@ -135,7 +137,7 @@ public class LayeredAssociation implements Association {
 //        if(a.getRoles().size()!=getRoles().size()) return false;
         Layer l=layerStack.getLayer(a.getTopicMap());
         Collection<Topic> typeTopics=type.getTopicsForLayer(l);
-        HashSet<LayeredTopic> usedRole=new LinkedHashSet<LayeredTopic>();
+        Set<LayeredTopic> usedRole=new LinkedHashSet<>();
         for( Topic role : a.getRoles() ){
             Topic player=a.getPlayer(role);
             boolean found=false;
@@ -182,7 +184,7 @@ public class LayeredAssociation implements Association {
      * Finds all associations in the given layer that match this LayeredAssociation.
      */ 
     public Collection<Association> findAssociationsForLayer(Layer l)  throws TopicMapException {
-        HashSet<Association> ret=new LinkedHashSet<Association>();
+        Set<Association> ret=new LinkedHashSet<>();
         for(Map.Entry<LayeredTopic,LayeredTopic> e : players.entrySet()){
             LayeredTopic p=e.getValue();
             LayeredTopic r=e.getKey();
@@ -338,7 +340,7 @@ public class LayeredAssociation implements Association {
     
     @Override
     public Collection<Topic> getRoles(){
-        Vector<Topic> v=new Vector<Topic>();
+        Vector<Topic> v=new Vector<>();
         v.addAll(players.keySet());
         return v;
     }

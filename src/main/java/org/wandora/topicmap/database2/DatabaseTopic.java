@@ -75,11 +75,11 @@ public class DatabaseTopic extends Topic {
     protected Set<Locator> subjectIdentifiers;
     protected Map<Topic,Map<Topic,String>> data;
     //                  scope                value ,variantid
-    protected HashMap<Set<Topic>,T2<String,String>> variants;
+    protected Map<Set<Topic>,T2<String,String>> variants;
     protected Set<Topic> types;
     //                  type ,          role of this topic
     //protected Hashtable<Topic,Hashtable<Topic,Collection<Association>>> associations;
-    protected WeakReference<HashMap<Topic,HashMap<Topic,Collection<Association>>>> storedAssociations;
+    protected WeakReference<Map<Topic,Map<Topic,Collection<Association>>>> storedAssociations;
     protected boolean removed=false;
     
     
@@ -354,9 +354,9 @@ public class DatabaseTopic extends Topic {
     }
     
     
-    protected HashMap<Topic,HashMap<Topic,Collection<Association>>> fetchAssociations() throws TopicMapException {
+    protected Map<Topic,Map<Topic,Collection<Association>>> fetchAssociations() throws TopicMapException {
         if(storedAssociations != null) {
-            HashMap<Topic,HashMap<Topic,Collection<Association>>> associations = storedAssociations.get();
+            Map<Topic,Map<Topic,Collection<Association>>> associations = storedAssociations.get();
             if(associations != null) return associations;
         }
         Collection<Map<String,Object>> res = topicMap.executeQuery(
@@ -367,13 +367,13 @@ public class DatabaseTopic extends Topic {
                 "ASSOCIATION.TYPE=T.TOPICID and MEMBER.PLAYER='"+escapeSQL(id)+"' "+
                 "order by R.TOPICID"
                 );
-        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations = new HashMap<Topic,HashMap<Topic,Collection<Association>>>();
-        HashMap<String,DatabaseTopic> collectedTopics = new LinkedHashMap<String,DatabaseTopic>();
-        HashMap<String,DatabaseAssociation> collectedAssociations = new LinkedHashMap<String,DatabaseAssociation>();
+        Map<Topic,Map<Topic,Collection<Association>>> associations = new HashMap<Topic,Map<Topic,Collection<Association>>>();
+        Map<String,DatabaseTopic> collectedTopics = new LinkedHashMap<String,DatabaseTopic>();
+        Map<String,DatabaseAssociation> collectedAssociations = new LinkedHashMap<String,DatabaseAssociation>();
         for(Map<String,Object> row : res) {
             DatabaseTopic type=topicMap.buildTopic(row.get("TYPEID"),row.get("TYPEBN"),row.get("TYPESL"));
             DatabaseTopic role=topicMap.buildTopic(row.get("ROLEID"),row.get("ROLEBN"),row.get("ROLESL"));
-            HashMap<Topic,Collection<Association>> as = associations.get(type);
+            Map<Topic,Collection<Association>> as = associations.get(type);
             if(as == null) {
                 as = new HashMap<Topic,Collection<Association>>();
                 associations.put(type,as);
@@ -868,13 +868,13 @@ public class DatabaseTopic extends Topic {
     public Hashtable<Topic,String> getData(Topic type) throws TopicMapException {
         if(!full) makeFull();
         if(data.containsKey(type)) {
-            Hashtable<Topic,String> ht = new Hashtable();
+            Hashtable<Topic,String> ht = new Hashtable<>();
             Map<Topic,String> m = data.get(type);
             ht.putAll(m);
             return ht;
         }
         else {
-            return new Hashtable();
+            return new Hashtable<>();
         }
     }
     
@@ -1009,9 +1009,9 @@ public class DatabaseTopic extends Topic {
     @Override
     public Collection<Association> getAssociations() throws TopicMapException {
 //        if(!full) makeFull();
-        Set<Association> ret=new LinkedHashSet();
-        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations=fetchAssociations();
-        for(Map.Entry<Topic,HashMap<Topic,Collection<Association>>> e : associations.entrySet()){
+        Set<Association> ret=new LinkedHashSet<>();
+        Map<Topic,Map<Topic,Collection<Association>>> associations=fetchAssociations();
+        for(Map.Entry<Topic,Map<Topic,Collection<Association>>> e : associations.entrySet()){
             for(Map.Entry<Topic,Collection<Association>> e2 : e.getValue().entrySet()){
                 for(Association a : e2.getValue()){
                     ret.add(a);
@@ -1026,8 +1026,8 @@ public class DatabaseTopic extends Topic {
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
         if(type == null) return null;
 //        if(!full) makeFull();
-        Set<Association> ret=new LinkedHashSet();
-        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations=fetchAssociations();
+        Set<Association> ret=new LinkedHashSet<>();
+        Map<Topic,Map<Topic,Collection<Association>>> associations=fetchAssociations();
         if(associations.get(type)==null) {
             return new ArrayList<Association>();
         }
@@ -1044,8 +1044,8 @@ public class DatabaseTopic extends Topic {
     public Collection<Association> getAssociations(Topic type,Topic role) throws TopicMapException {
         if(type == null || role == null) return null;
 //        if(!full) makeFull();
-        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations=fetchAssociations();
-        HashMap<Topic,Collection<Association>> as=associations.get(type);
+        Map<Topic,Map<Topic,Collection<Association>>> associations=fetchAssociations();
+        Map<Topic,Collection<Association>> as=associations.get(type);
         if(as==null) {
             return new ArrayList<Association>();
         }
@@ -1186,13 +1186,13 @@ public class DatabaseTopic extends Topic {
     
     
     void associationChanged(DatabaseAssociation a,Topic type,Topic oldType,Topic role,Topic oldRole){
-        HashMap<Topic,HashMap<Topic,Collection<Association>>> associations=null;
+        Map<Topic,Map<Topic,Collection<Association>>> associations=null;
         if(storedAssociations!=null){
             associations=storedAssociations.get();
             if(associations==null) return;
         }
         else return;
-        HashMap<Topic,Collection<Association>> t=null;
+        Map<Topic,Collection<Association>> t=null;
         Collection<Association> c=null;
         if(oldType!=null){
             t=associations.get(oldType);
@@ -1214,7 +1214,7 @@ public class DatabaseTopic extends Topic {
             }
             c.add(a);
         }
-        storedAssociations=new WeakReference(associations);
+        storedAssociations=new WeakReference<>(associations);
     }
     
     

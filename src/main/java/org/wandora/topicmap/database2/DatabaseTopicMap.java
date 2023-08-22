@@ -74,8 +74,8 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
      */
     protected WeakTopicIndex topicIndex;
     
-    protected ArrayList<TopicMapListener> topicMapListeners;
-    protected ArrayList<TopicMapListener> disabledListeners;
+    protected List<TopicMapListener> topicMapListeners;
+    protected List<TopicMapListener> disabledListeners;
     
 
     

@@ -44,6 +44,8 @@ import org.wandora.topicmap.TopicMapConfigurationPanel;
  */
 public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
     
+    private static final long serialVersionUID = 1L;
+    
     private QueryTopicMap.QueryInfo currentItem;
     private Wandora wandora;
     private javax.swing.DefaultListModel listModel;

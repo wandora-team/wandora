@@ -142,7 +142,7 @@ public class Sketch extends SketchTemplate {
          <namePanelOrientation>vertical</namePanelOrientation>
       </traditionalTopicPanel>
       <graphTopicPanel>
-         <labelEdges>true</labelEdges>
+         <labelEdges>false</labelEdges>
          <antialized>true</antialized>
          <animated>true</animated>
          <filterSets>

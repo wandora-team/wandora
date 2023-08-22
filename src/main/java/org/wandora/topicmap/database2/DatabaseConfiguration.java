@@ -43,6 +43,8 @@ import org.wandora.utils.Options;
  */
 public class DatabaseConfiguration extends TopicMapConfigurationPanel {
     
+    private static final long serialVersionUID = 1L;
+    
     private DatabaseConfigurationPanel confPanel;
     private Options options;
 

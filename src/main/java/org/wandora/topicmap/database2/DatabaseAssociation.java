@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
@@ -103,7 +104,7 @@ public class DatabaseAssociation implements Association {
         topicMap.executeUpdate("insert into ASSOCIATION (ASSOCIATIONID,TYPE) values ('"+escapeSQL(id)+"','"+escapeSQL(type.getID())+"')");
     }
 
-    static HashMap<String,DatabaseTopic> makeFullAll(Collection<Map<String,Object>> res,HashMap<String,DatabaseAssociation> associations,DatabaseTopicMap topicMap) throws TopicMapException {
+    static Map<String,DatabaseTopic> makeFullAll(Collection<Map<String,Object>> res,Map<String,DatabaseAssociation> associations,DatabaseTopicMap topicMap) throws TopicMapException {
         HashMap<String,DatabaseTopic> collected = new LinkedHashMap<String,DatabaseTopic>();
         String associationID = null;
         Map<Topic,Topic> players = null;
@@ -283,7 +284,7 @@ public class DatabaseAssociation implements Association {
             // getAssociations may be a timeconsuming method so don't check everything if not necessary
             if(smallest!=null && smallest.size()<50) break; 
         }
-        HashSet<Association> delete=new HashSet();
+        Set<Association> delete=new HashSet<>();
         for(Association a : smallest){
             if(a==this) continue;
             if(((DatabaseAssociation)a)._equals(this)){
