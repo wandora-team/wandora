@@ -69,17 +69,6 @@ public class SchemaBox {
     public static final String ASSOCIATIONTYPE_SI=TMBox.ASSOCIATIONTYPE_SI;
     public static final String OCCURRENCETYPE_SI=TMBox.OCCURRENCETYPE_SI;
     public static final String ROLE_SI=TMBox.ROLE_SI;
-/*    public static final String COUNT_SI="http://wandora.org/si/core/count";
-    public static final String ENUM_SI="http://wandora.org/si/core/enum";
-    public static final String COUNTMULTIPLE_SI="http://wandora.org/si/core/contentmultiple";
-    public static final String COUNTSINGLE_SI="http://wandora.org/si/core/contentsingle";
-    public static final String COUNTATMOSTONE_SI="http://wandora.org/si/core/contentatmostone";
-    public static final String COUNTATLEASTONE_SI="http://wandora.org/si/core/contentatleastone";
-    public static final String BOOLEANTRUE_SI="http://wandora.org/si/core/booleantrue";
-    public static final String BOOLEANFALSE_SI="http://wandora.org/si/core/booleanfalse";
-    public static final String ASSOCIATIONDEFAULT_SI="http://wandora.org/si/core/associationdefault";
-    public static final String BOOLEAN_SI="http://wandora.org/si/core/boolean";
-    public static final String DEFAULTPLAYER_SI="http://wandora.org/si/core/defaultplayer";*/
 
     public static final String DEFAULT_OCCURRENCE_SI = "http://wandora.org/si/core/default-occurrence";
 
@@ -158,12 +147,10 @@ public class SchemaBox {
         TopicMap tm=role.getTopicMap();
         Topic roleClassType=tm.getTopic(ROLECLASS_SI);
         Topic roleType=tm.getTopic(ROLE_SI);
-        Topic contentType=tm.getTopic(CONTENTTYPE_SI);
         if(roleClassType==null || roleType==null) return role;
         Collection<Association> as=role.getAssociations(roleClassType,roleType);
         if(as.isEmpty()) return role;
         Association a=(Association)as.iterator().next();
-        // WAS: Topic p=a.getPlayer(contentType);
         Topic p=a.getPlayer(roleClassType);
         return p;
     }
@@ -262,17 +249,6 @@ public class SchemaBox {
      * is a subclass (possibly through many associations) of the content type.
      */
     public static Collection<Topic> getContentTypesOf(Topic topic) throws TopicMapException {
-/*        HashSet topics=new HashSet();
-        Topic contenttype=topic.getTopicMap().getTopic(CONTENTTYPE_SI);
-        if(contenttype==null) return topics;
-        
-        Iterator iter=topic.getTypes().iterator();
-        while(iter.hasNext()){
-            Topic type=(Topic)iter.next();
-            if(type.isOfType(contenttype)) topics.add(type);
-        }
-        return topics;*/
-        
         Set<Topic> topics=new LinkedHashSet<>();
         Set<Topic> processed=new LinkedHashSet<>();
         Topic contenttype=topic.getTopicMap().getTopic(CONTENTTYPE_SI);
@@ -375,64 +351,7 @@ public class SchemaBox {
         a.addPlayer(subclass, subc);
         a.addPlayer(superclass, superc);
     }
-    /*
-    public static int getAssociationTypeCount(Topic associationType){
-        TopicMap tm=associationType.getTopicMap();
-        Topic count=tm.getTopic(COUNT_SI);
-        if(count==null) return COUNT_MULTIPLE;
-        Topic atype=tm.getTopic(ASSOCIATIONTYPE_SI);
-        if(atype==null) return COUNT_MULTIPLE;
-        Iterator iter=associationType.getAssociations(count,atype).iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
-            Topic t=a.getPlayer(count);
-            if(t!=null){
-                if(t.getSubjectIdentifiers().contains(tm.createLocator(COUNTSINGLE_SI))) return COUNT_SINGLE;
-                else if(t.getSubjectIdentifiers().contains(tm.createLocator(COUNTATMOSTONE_SI))) return COUNT_ATMOSTONE;
-                else if(t.getSubjectIdentifiers().contains(tm.createLocator(COUNTATLEASTONE_SI))) return COUNT_ATLEASTONE;
-                else if(t.getSubjectIdentifiers().contains(tm.createLocator(COUNTMULTIPLE_SI))) return COUNT_MULTIPLE;
-            }
-        }
-        return COUNT_MULTIPLE;
-    }
     
-    public static int getOccurrenceTypeCount(Topic occurrenceType){
-        TopicMap tm=occurrenceType.getTopicMap();
-        Topic count=tm.getTopic(COUNT_SI);
-        if(count==null) return COUNT_MULTIPLE;
-        Topic otype=tm.getTopic(OCCURRENCETYPE_SI);
-        if(otype==null) return COUNT_MULTIPLE;
-        Iterator iter=occurrenceType.getAssociations(count,otype).iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
-            Topic t=a.getPlayer(count);
-            if(t!=null){
-                if(t.getSubjectIdentifiers().contains(tm.createLocator(COUNTSINGLE_SI))) return COUNT_SINGLE;
-                else if(t.getSubjectIdentifiers().contains(tm.createLocator(COUNTATMOSTONE_SI))) return COUNT_ATMOSTONE;
-                else if(t.getSubjectIdentifiers().contains(tm.createLocator(COUNTATLEASTONE_SI))) return COUNT_ATLEASTONE;
-                else if(t.getSubjectIdentifiers().contains(tm.createLocator(COUNTMULTIPLE_SI))) return COUNT_MULTIPLE;
-            }
-        }
-        return COUNT_MULTIPLE;
-    }
-    
-    public static boolean isAssociationTypeEnum(Topic associationType){
-        TopicMap tm=associationType.getTopicMap();
-        Topic enu=tm.getTopic(ENUM_SI);
-        if(enu==null) return false;
-        Topic atype=tm.getTopic(ASSOCIATIONTYPE_SI);
-        if(atype==null) return false;
-        Iterator iter=associationType.getAssociations(enu,atype).iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
-            Topic t=a.getPlayer(enu);
-            if(t!=null){
-                if(t.getSubjectIdentifiers().contains(tm.createLocator(BOOLEANTRUE_SI))) return true;
-                else if(t.getSubjectIdentifiers().contains(tm.createLocator(BOOLEANFALSE_SI))) return false;
-            }
-        }
-        return false;        
-    }*/
     
     /**
      * Gets all roles that can be used with the specified association type.

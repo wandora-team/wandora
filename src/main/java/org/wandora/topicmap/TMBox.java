@@ -41,6 +41,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -86,7 +88,7 @@ public class TMBox {
     public static String[] getLanguageSIs(TopicMap tm) throws TopicMapException {
         Collection<Topic> languageTopics = TMBox.sortTopics(tm.getTopicsOfType(LANGUAGE_SI), "en");       
         if(languageTopics != null && languageTopics.size() > 0) {
-            ArrayList languageSIs = new ArrayList();
+            List<String> languageSIs = new ArrayList<>();
             for(Topic languageTopic : languageTopics) {
                 try {
                     languageSIs.add( languageTopic.getOneSubjectIdentifier().toExternalForm() );
@@ -99,7 +101,6 @@ public class TMBox {
         }
         else {
             return new String[] {};
-            //return new String[] { org.wandora.piccolo.WandoraManager.LANGINDEPENDENT_SI };
         }
     }
     
@@ -124,7 +125,7 @@ public class TMBox {
     public static String[] getNameVersionSIs(TopicMap tm) throws TopicMapException {
         Collection<Topic> variantNameVersionTopics = TMBox.sortTopics(tm.getTopicsOfType(VARIANT_NAME_VERSION_SI), "en");       
         if(variantNameVersionTopics != null && variantNameVersionTopics.size() > 0) {
-            ArrayList variantNameVersionSIs = new ArrayList();
+            List<String> variantNameVersionSIs = new ArrayList<>();
             for( Topic variantNameVersionTopic : variantNameVersionTopics ) {
                 try {
                     variantNameVersionSIs.add( variantNameVersionTopic.getOneSubjectIdentifier().toExternalForm() );
@@ -162,8 +163,8 @@ public class TMBox {
      * the English language topic and display name topic, if they exist in
      * the topic map.
      */
-    public static HashSet<Topic> getGUINameScope(TopicMap tm) throws TopicMapException {
-        HashSet<Topic> nameScope = new LinkedHashSet<Topic>();
+    public static Set<Topic> getGUINameScope(TopicMap tm) throws TopicMapException {
+        Set<Topic> nameScope = new LinkedHashSet<>();
         Topic t = tm.getTopic(XTMPSI.getLang("en"));
         if(t != null && !t.isRemoved()) nameScope.add(t);
         t = tm.getTopic(XTMPSI.DISPLAY);
@@ -334,9 +335,9 @@ public class TMBox {
     
     
     
-    private static int layerSplit(HashSet<T2<Topic,Topic>> links,Collection<Topic> topics){
-        Stack<Topic> stack=new Stack<Topic>();
-        HashSet<Topic> included=new HashSet<Topic>();
+    private static int layerSplit(Set<T2<Topic,Topic>> links,Collection<Topic> topics){
+        Stack<Topic> stack=new Stack<>();
+        Set<Topic> included=new HashSet<>();
         if(topics.isEmpty()) return 0;
         stack.add(topics.iterator().next());
         included.add(stack.peek());
@@ -406,7 +407,7 @@ public class TMBox {
 //                Collection<Topic> topics=lt.getTopicsForAllLayers();
                 Collection<Topic> topics=tm.getTopicsForAllLeafLayers(lt);
                 
-                HashSet<T2<Topic,Topic>> links=new HashSet<T2<Topic,Topic>>();
+                Set<T2<Topic,Topic>> links=new HashSet<>();
                 for(Topic i : topics){
                     Collection<Locator> isi=i.getSubjectIdentifiers();
                     Locator isl=i.getSubjectLocator();
@@ -482,7 +483,7 @@ public class TMBox {
             }
             {
                 Collection<Topic> topics=tm.getTopicsForAllLeafLayers(lt);
-                HashSet<T2<Topic,Topic>> links=new HashSet<T2<Topic,Topic>>();
+                Set<T2<Topic,Topic>> links=new HashSet<>();
                 for(Topic i : topics){
                     Collection<Locator> isi=i.getSubjectIdentifiers();
                     Locator isl=i.getSubjectLocator();
@@ -555,13 +556,13 @@ public class TMBox {
             }
             if(!add){
                 Collection<Topic> topics=tm.getTopicsForAllLeafLayers(lt);
-                HashSet<T2<Topic,Topic>> links=new HashSet<T2<Topic,Topic>>();
+                Set<T2<Topic,Topic>> links=new HashSet<>();
                 for(Topic i : topics){
                     Collection<Locator> isi=i.getSubjectIdentifiers();
                     Locator isl=i.getSubjectLocator();
                     String ibn=i.getBaseName();
                     if(et==i){
-                        Collection<Locator> temp=new ArrayList<Locator>();
+                        Collection<Locator> temp=new ArrayList<>();
                         temp.addAll(isi);
                         temp.remove(subjectIdentifier);
                         isi=temp;
@@ -615,7 +616,7 @@ public class TMBox {
             LayerStack tm=lt.getLayerStack();
             Topic et=lt.getTopicForSelectedLayer();
             if(et==null) return false;
-            HashSet<T2<Topic,Topic>> links=new HashSet<T2<Topic,Topic>>();
+            Set<T2<Topic,Topic>> links=new HashSet<>();
             Collection<Topic> topics=lt.getTopicsForAllLayers();
             for(Topic i : topics){
                 if(tm.getLayer(i)==tm.getSelectedLayer()){
@@ -690,9 +691,9 @@ public class TMBox {
      * topic map instead of destination topic map whenever topics merge.
      */
     public static void mergeTopicMapInOverwriting(TopicMap dest, TopicMap src) throws TopicMapException {
-        Iterator iter=src.getTopics();
+        Iterator<Topic> iter=src.getTopics();
         while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
+            Topic t=iter.next();
             Topic c=dest.copyTopicIn(t, false);
             dest.copyTopicAssociationsIn(t);
             if(t.getBaseName()!=null) c.setBaseName(t.getBaseName());
@@ -738,9 +739,9 @@ public class TMBox {
      */
     public static boolean associationVisible(Association a, int level) throws TopicMapException {
         if(!topicVisible(a.getType(),level)) return false;
-        Iterator roles=a.getRoles().iterator();
+        Iterator<Topic> roles=a.getRoles().iterator();
         while(roles.hasNext()){
-            Topic role=(Topic)roles.next();
+            Topic role=roles.next();
             if(!topicVisible(role,level)) return false;
             if(!topicVisible(a.getPlayer(role),level)) return false;
         }
@@ -749,43 +750,43 @@ public class TMBox {
     
     
     public static int countAssociationsInCategories(Topic root,Topic assocType,Topic role) throws TopicMapException {
-        return countAssociationsInCategories(root,assocType,role,new HashSet()).size();
+        return countAssociationsInCategories(root,assocType,role,new HashSet<>()).size();
     }
     
     
-    public static HashSet countAssociationsInCategories(Topic root,Topic assocType,Topic role,HashSet topics) throws TopicMapException {
-        Iterator iter=root.getAssociations(assocType,role).iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
-            Iterator iter2=a.getRoles().iterator();
-            while(iter2.hasNext()){
-                Topic arole=(Topic)iter2.next();
+    public static Set<Topic> countAssociationsInCategories(Topic root,Topic assocType,Topic role,Set<Topic> topics) throws TopicMapException {
+        Iterator<Association> associationIter=root.getAssociations(assocType,role).iterator();
+        while(associationIter.hasNext()){
+            Association a=associationIter.next();
+            Iterator<Topic> roleIter=a.getRoles().iterator();
+            while(roleIter.hasNext()){
+                Topic arole=roleIter.next();
                 if(arole!=role) topics.add(a.getPlayer(arole));
             }
         }
-        iter=getSubCategories(root).iterator();
-        while(iter.hasNext()){
-            countAssociationsInCategories((Topic)iter.next(),assocType,role,topics);
+        Iterator<Topic> subCategoriesIter = getSubCategories(root).iterator();
+        while(subCategoriesIter.hasNext()){
+            countAssociationsInCategories(subCategoriesIter.next(),assocType,role,topics);
         }
         return topics;        
     }
     
-    public static Iterator treeIterator(Topic root,String lang){
+    public static Iterator<TreeIteratorNode> treeIterator(Topic root,String lang){
         return new TreeIterator(root,lang);
     }
-    public static class TreeIterator implements Iterator {
-        private Stack stack;
-        private Iterator current;
+    public static class TreeIterator implements Iterator<TreeIteratorNode> {
+        private Stack<Iterator<Topic>> stack;
+        private Iterator<Topic> current;
         private TreeIteratorNode lastReturned;
-        private Collection children;
+        private Collection<Topic> children;
         private String lang;
         
         public TreeIterator(Topic root,String lang){
             this.lang=lang;
-            ArrayList al=new ArrayList();
+            List<Topic> al=new ArrayList<>();
             al.add(root);
             current=al.iterator();
-            stack=new Stack();
+            stack=new Stack<>();
         }
         
         public boolean hasNext() {
@@ -795,7 +796,7 @@ public class TMBox {
             return true;
         }
         
-        public Object next() {
+        public TreeIteratorNode next() {
             boolean opened=false;
             boolean closed=false;
             if(lastReturned!=null && lastReturned.doChildren && children.size()>0){
@@ -805,12 +806,12 @@ public class TMBox {
             }
             if(!current.hasNext()){
                 if(stack.isEmpty()) throw new NoSuchElementException();
-                current=(Iterator)stack.pop();
+                current=stack.pop();
                 closed=true;
             }
             if(!current.hasNext()){
                 lastReturned=new TreeIteratorNode(null,false,true);
-                children=new ArrayList();
+                children=new ArrayList<>();
                 return lastReturned;
             }
             Topic t=(Topic)current.next();
@@ -818,7 +819,7 @@ public class TMBox {
                 children=getSubCategories(t);
             }catch(TopicMapException tme){
                 tme.printStackTrace(); // TODO EXCEPTION
-                children=new ArrayList();
+                children=new ArrayList<>();
             }
             children=sortTopics(children,lang);
             lastReturned=new TreeIteratorNode(t,opened,closed);
@@ -858,10 +859,10 @@ public class TMBox {
         }
     }
     
-    public static Stack getCategoryPath(Topic t) throws TopicMapException {
-        Stack path=new Stack();
+    public static Stack<Topic> getCategoryPath(Topic t) throws TopicMapException {
+        Stack<Topic> path=new Stack<>();
         Topic walker=t;
-        Collection parents=getSuperCategories(walker);
+        Collection<Topic> parents=getSuperCategories(walker);
         while(parents.size()>0){
             path.push(walker);
             walker=(Topic)parents.iterator().next();
@@ -869,19 +870,19 @@ public class TMBox {
         }
         path.push(walker);
         return path;
-    }    
-    public static Collection getSubCategoriesRecursive(Topic t) throws TopicMapException {
-        return _getSubCategoriesRecursive(t,new HashSet());
     }
-    private static Collection _getSubCategoriesRecursive(Topic t,Set c) throws TopicMapException {
+    public static Collection<Topic> getSubCategoriesRecursive(Topic t) throws TopicMapException {
+        return _getSubCategoriesRecursive(t,new HashSet<>());
+    }
+    private static Collection<Topic> _getSubCategoriesRecursive(Topic t,Set<Topic> c) throws TopicMapException {
         Topic hierarchy=t.getTopicMap().getTopic(CATEGORYHIERARCHY_SI);
         Topic supercat=t.getTopicMap().getTopic(SUPERCATEGORY_SI);
         Topic subcat=t.getTopicMap().getTopic(SUBCATEGORY_SI);
-        if(hierarchy==null || supercat==null || subcat==null) return new ArrayList();
-        Collection as=t.getAssociations(hierarchy,supercat);
-        Iterator iter=as.iterator();
+        if(hierarchy==null || supercat==null || subcat==null) return new ArrayList<>();
+        Collection<Association> as=t.getAssociations(hierarchy,supercat);
+        Iterator<Association> iter=as.iterator();
         while(iter.hasNext()){
-            Association a=(Association)iter.next();
+            Association a=iter.next();
             Topic s=a.getPlayer(subcat);
             if(!c.contains(s)){
                 c.add(s);
@@ -890,33 +891,33 @@ public class TMBox {
         }        
         return c;
     }
-    public static Collection getSubCategories(Topic t,Set c) throws TopicMapException {
+    public static Collection<Topic> getSubCategories(Topic t,Set<Topic> c) throws TopicMapException {
         Topic hierarchy=t.getTopicMap().getTopic(CATEGORYHIERARCHY_SI);
         Topic supercat=t.getTopicMap().getTopic(SUPERCATEGORY_SI);
         Topic subcat=t.getTopicMap().getTopic(SUBCATEGORY_SI);
-        if(hierarchy==null || supercat==null || subcat==null) return new ArrayList();
-        Collection as=t.getAssociations(hierarchy,supercat);
-        Iterator iter=as.iterator();
+        if(hierarchy==null || supercat==null || subcat==null) return new ArrayList<>();
+        Collection<Association> as=t.getAssociations(hierarchy,supercat);
+        Iterator<Association> iter=as.iterator();
         while(iter.hasNext()){
-            Association a=(Association)iter.next();
+            Association a=iter.next();
             Topic s=a.getPlayer(subcat);
             c.add(s);
         }        
         return c;
     }
-    public static Collection getSubCategories(Topic t) throws TopicMapException {
-        return getSubCategories(t,new HashSet());
+    public static Collection<Topic> getSubCategories(Topic t) throws TopicMapException {
+        return getSubCategories(t,new HashSet<>());
     }
-    public static Collection getSuperCategories(Topic t) throws TopicMapException {
-        HashSet c=new HashSet();
+    public static Collection<Topic> getSuperCategories(Topic t) throws TopicMapException {
+        Set<Topic> c=new HashSet<>();
         Topic hierarchy=t.getTopicMap().getTopic(CATEGORYHIERARCHY_SI);
         Topic supercat=t.getTopicMap().getTopic(SUPERCATEGORY_SI);
         Topic subcat=t.getTopicMap().getTopic(SUBCATEGORY_SI);
-        if(hierarchy==null || supercat==null || subcat==null) return new ArrayList();
-        Collection as=t.getAssociations(hierarchy,subcat);
-        Iterator iter=as.iterator();
+        if(hierarchy==null || supercat==null || subcat==null) return new ArrayList<>();
+        Collection<Association> as=t.getAssociations(hierarchy,subcat);
+        Iterator<Association> iter=as.iterator();
         while(iter.hasNext()){
-            Association a=(Association)iter.next();
+            Association a=iter.next();
             Topic s=a.getPlayer(supercat);
             c.add(s);
         }        
@@ -932,7 +933,7 @@ public class TMBox {
         return getTopicName(topic,getDisplayNameTopic(topic),getLangTopic(topic,lang),true);
     }
     public static String getTopicName(Topic topic,Topic s1,Topic s2,boolean forceSomething) throws TopicMapException {
-        HashSet scope=new HashSet();
+        Set<Topic> scope=new HashSet<>();
         if(s1!=null) scope.add(s1);
         if(s2!=null) scope.add(s2);
         return getTopicName(topic,scope,forceSomething);
@@ -942,14 +943,14 @@ public class TMBox {
         String tempName = null;
         if(name==null && forceSomething){
             int maxcount=0;
-            Set scopes=topic.getVariantScopes();
-            Iterator iter=scopes.iterator();
+            Set<Set<Topic>> scopes=topic.getVariantScopes();
+            Iterator<Set<Topic>> iter=scopes.iterator();
             while(iter.hasNext()){
-                Set s=(Set)iter.next();
+                Set<Topic> s=iter.next();
                 int count=0;
-                Iterator iter2=scope.iterator();
+                Iterator<Topic> iter2=scope.iterator();
                 while(iter2.hasNext()){
-                    Topic t=(Topic)iter2.next();
+                    Topic t=iter2.next();
                     if(s.contains(t)) count++;
                 }
                 if(count>maxcount){
@@ -962,8 +963,8 @@ public class TMBox {
             }
             if(name==null) name=topic.getBaseName();
             if(name==null){
-                Collection sis=topic.getSubjectIdentifiers();
-                if(!sis.isEmpty()) name=((Locator)sis.iterator().next()).toExternalForm();
+                Collection<Locator> sis=topic.getSubjectIdentifiers();
+                if(!sis.isEmpty()) name=(sis.iterator().next()).toExternalForm();
             }
             if(name==null) name="[unnamed]";
         }
@@ -981,11 +982,11 @@ public class TMBox {
     }
     
     
-    public static Collection getAssociatedTopics(Topic topic,Topic associationType,Topic topicRole,Topic associatedRole,String sortLang) throws TopicMapException {
-        Iterator iter=topic.getAssociations(associationType,topicRole).iterator();
-        HashSet set=new HashSet();
+    public static Collection<Topic> getAssociatedTopics(Topic topic,Topic associationType,Topic topicRole,Topic associatedRole,String sortLang) throws TopicMapException {
+        Iterator<Association> iter=topic.getAssociations(associationType,topicRole).iterator();
+        Set<Topic> set=new LinkedHashSet<>();
         while(iter.hasNext()){
-            Association a=(Association)iter.next();
+            Association a=iter.next();
             Topic p=a.getPlayer(associatedRole);
             if(p!=null) set.add(p);
         }
@@ -1008,7 +1009,7 @@ public class TMBox {
      * Sorts a collection of topics by occurrence values.
      */
     public static Collection<Topic> sortTopicsByData(Collection<Topic> topics, Topic dataType, String lang,boolean desc) throws TopicMapException {
-        ArrayList<Topic> al=new ArrayList(topics.size());
+        List<Topic> al=new ArrayList<>(topics.size());
         al.addAll(topics);
         Collections.sort(al,new DataValueComparator(dataType,lang,desc));
         return al;        
@@ -1029,7 +1030,7 @@ public class TMBox {
             ts[i]=a[i].topic;
         }
         return ts;        */
-        ArrayList<Topic> al=new ArrayList();
+        List<Topic> al=new ArrayList<>();
         al.addAll(Arrays.asList(topics));
         Collections.sort(al,new TopicNameComparator(lang));
         Topic[] ts=new Topic[topics.length];
@@ -1056,7 +1057,7 @@ public class TMBox {
             al.add(a[i].topic);
         }
         return al;*/
-        ArrayList<Topic> al=new ArrayList();
+        List<Topic> al=new ArrayList<>();
         if(topics != null) {
             try {
                 al.addAll(topics);
@@ -1069,7 +1070,7 @@ public class TMBox {
     }
     
     public static Collection<Association> sortAssociations(Collection<Association> associations, String lang, Topic role) {
-        ArrayList<Association> al=new ArrayList();
+        List<Association> al=new ArrayList<>();
         if(associations != null) {
             al.addAll(associations);
             Collections.sort(al,new AssociationTypeComparator(lang, role));
@@ -1077,7 +1078,7 @@ public class TMBox {
         return al;
     }
     public static Collection<Association> sortAssociations(Collection<Association> associations, String lang) {
-        ArrayList<Association> al=new ArrayList();
+        List<Association> al=new ArrayList<>();
         if(associations != null) {
             al.addAll(associations);
             Collections.sort(al,new AssociationTypeComparator(lang));
@@ -1087,7 +1088,7 @@ public class TMBox {
     public static Collection<Association> sortAssociations(Collection<Association> associations, Collection<Topic> ignoreTopics, String lang){
         if(associations != null) {
             try {
-                ArrayList<Association> al=new ArrayList(associations.size());
+                List<Association> al=new ArrayList<>(associations.size());
                 al.addAll(associations);
                 Collections.sort(al,new AssociationTypeComparator(lang, ignoreTopics));
                 return al;   
@@ -1096,7 +1097,7 @@ public class TMBox {
                 return associations;
             }
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
     
     
@@ -1106,16 +1107,16 @@ public class TMBox {
     public static Collection<Association> removeDuplicateAssociations(Collection<Association> associations, Collection<Topic> ignoreTopics) throws TopicMapException {
         Iterator<Association> iter=associations.iterator();
         Association last=null;
-        if(iter.hasNext()) last=(Association)iter.next();
+        if(iter.hasNext()) last=iter.next();
         else return associations;
         while(iter.hasNext()){
             Association a=iter.next();
             boolean duplicate=false;
             if(a.getType()==last.getType()){
-                Iterator iter2=last.getRoles().iterator();
+                Iterator<Topic> iter2=last.getRoles().iterator();
                 duplicate=true;
                 while(iter2.hasNext()){
-                    Topic role=(Topic)iter2.next();
+                    Topic role=iter2.next();
                     Topic player1=last.getPlayer(role);
                     Topic player2=a.getPlayer(role);
                     boolean ignore1=ignoreTopics.contains(player1);
@@ -1138,61 +1139,61 @@ public class TMBox {
     
     
     public static void clearTopicMap(TopicMap topicMap) throws TopicMapException {
-        Iterator iter=topicMap.getAssociations();
-        ArrayList tobeDeleted=new ArrayList();
-        while(iter.hasNext()){
-            tobeDeleted.add(iter.next());
+        Iterator<Association> associationIter=topicMap.getAssociations();
+        List<Association> tobeDeletedAssociations=new ArrayList<>();
+        while(associationIter.hasNext()){
+            tobeDeletedAssociations.add(associationIter.next());
         }
-        iter=tobeDeleted.iterator();
-        while(iter.hasNext()){
-            Association a=(Association)iter.next();
+        associationIter=tobeDeletedAssociations.iterator();
+        while(associationIter.hasNext()){
+            Association a=associationIter.next();
             a.remove();
         }
         
         
         // we must do several passes because some topics are in use in other topics and can't be deleted right away
         // collect all topics in a new list to avoid ConcurrentModificationException
-        iter=topicMap.getTopics();
-        tobeDeleted=new ArrayList();
-        while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
-            tobeDeleted.add(t);
+        Iterator<Topic> topicIter=topicMap.getTopics();
+        List<Topic> tobeDeletedTopics=new ArrayList<>();
+        while(topicIter.hasNext()){
+            Topic t=topicIter.next();
+            tobeDeletedTopics.add(t);
         }
-        iter=tobeDeleted.iterator();
-        while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
+        topicIter=tobeDeletedTopics.iterator();
+        while(topicIter.hasNext()){
+            Topic t=topicIter.next();
             if(t.isDeleteAllowed()){
                 try{
                     t.remove();
                 }catch(TopicInUseException e){}
             }
             else{
-                Iterator iter2=new ArrayList(t.getVariantScopes()).iterator();
-                while(iter2.hasNext()){
-                    Set c=(Set)iter2.next();
+                Iterator<Set<Topic>> scopeIter=new ArrayList<>(t.getVariantScopes()).iterator();
+                while(scopeIter.hasNext()){
+                    Set<Topic> c=scopeIter.next();
                     t.removeVariant(c);
                 }
-                iter2=new ArrayList(t.getTypes()).iterator();
-                while(iter2.hasNext()){
-                    Topic ty=(Topic)iter2.next();
+                Iterator<Topic> typeIter=new ArrayList<>(t.getTypes()).iterator();
+                while(typeIter.hasNext()){
+                    Topic ty=typeIter.next();
                     t.removeType(ty);
                 }
-                iter2=new ArrayList(t.getDataTypes()).iterator();
-                while(iter2.hasNext()){
-                    Topic ty=(Topic)iter2.next();
+                Iterator<Topic> dataTypeIter=new ArrayList<>(t.getDataTypes()).iterator();
+                while(dataTypeIter.hasNext()){
+                    Topic ty=dataTypeIter.next();
                     t.removeData(ty);
                 }
             }
         }
-        iter=topicMap.getTopics();
-        tobeDeleted=new ArrayList();
-        while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
-            tobeDeleted.add(t);
+        topicIter=topicMap.getTopics();
+        tobeDeletedTopics=new ArrayList<>();
+        while(topicIter.hasNext()){
+            Topic t=topicIter.next();
+            tobeDeletedTopics.add(t);
         }
-        iter=tobeDeleted.iterator();
-        while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
+        topicIter=tobeDeletedTopics.iterator();
+        while(topicIter.hasNext()){
+            Topic t=topicIter.next();
             if(t.isDeleteAllowed()){
                 try{
                     t.remove();
@@ -1232,7 +1233,7 @@ public class TMBox {
      * A topic comparator that orders topics by the lexicographical ordering of
      * specified data values. Constructor needs the data type and version to use.
      */
-    public static class DataValueComparator implements Comparator {
+    public static class DataValueComparator implements Comparator<Topic> {
         private Topic dataType;
         private Topic lang;
         private Topic langIndep;
@@ -1247,9 +1248,7 @@ public class TMBox {
             langIndep=dataType.getTopicMap().getTopic(TMBox.LANGINDEPENDENT_SI);
 
         }
-        public int compare(Object o1, Object o2) {
-            Topic t1=(Topic)o1;
-            Topic t2=(Topic)o2;
+        public int compare(Topic t1, Topic t2) {
             String d1=null;
             String d2=null;
             try{
@@ -1277,9 +1276,9 @@ public class TMBox {
      * used. If no suitable variant names are present base names are used. You can also
      * force the use of base names by specifying null language.
      */
-    public static class TopicNameComparator implements Comparator {
+    public static class TopicNameComparator implements Comparator<Topic> {
 
-        private HashMap nameCache;
+        private Map<Topic,String> nameCache;
         private String lang;
         private boolean desc;
 
@@ -1287,7 +1286,7 @@ public class TMBox {
             this(lang,false);
         }
         public TopicNameComparator(String lang,boolean desc){
-            nameCache=new HashMap();
+            nameCache=new HashMap<>();
             this.lang=lang;
             this.desc=desc;
         }
@@ -1303,9 +1302,7 @@ public class TMBox {
             return name;
         }
 
-        public int compare(Object o1, Object o2) {
-            Topic t1=(Topic)o1;
-            Topic t2=(Topic)o2;
+        public int compare(Topic t1, Topic t2) {
             String n1="";
             String n2="";
             try{
@@ -1323,7 +1320,7 @@ public class TMBox {
     
     
     
-    public static class TopicBNAndSIComparator implements Comparator {
+    public static class TopicBNAndSIComparator implements Comparator<Topic> {
 
         private static Locator findLeastLocator(Collection<Locator> c){
             Locator least=null;
@@ -1334,10 +1331,8 @@ public class TMBox {
         }
         
         @Override
-        public int compare(Object o1, Object o2) {
+        public int compare(Topic t1, Topic t2) {
             try{
-                Topic t1=(Topic)o1;
-                Topic t2=(Topic)o2;
                 String bn1=t1.getBaseName();
                 String bn2=t2.getBaseName();
                 if(bn2==null && bn1!=null) return -1;
@@ -1363,14 +1358,11 @@ public class TMBox {
     
 
     
-    public static class TopicSIComparator implements Comparator {
+    public static class TopicSIComparator implements Comparator<Topic> {
 
         @Override
-        public int compare(Object o1, Object o2) {
+        public int compare(Topic t1, Topic t2) {
             try{
-                Topic t1=(Topic)o1;
-                Topic t2=(Topic)o2;
-
                 Locator l1=t1.getFirstSubjectIdentifier();
                 Locator l2=t2.getFirstSubjectIdentifier();
                 if(l2==null && l1!=null) return -1;
@@ -1398,23 +1390,23 @@ public class TMBox {
      * </ul>
      * Topic comparisons and player ordering is done with the specified topicComparator.
      */
-    public static class AssociationTypeComparator implements Comparator {
+    public static class AssociationTypeComparator implements Comparator<Association> {
 
-        private Collection ignoreTopics;
-        private Comparator topicComparator;
+        private Collection<Topic> ignoreTopics;
+        private Comparator<Topic> topicComparator;
         private Topic compareRole;
         private boolean fullCompare=false; // full compare can be a very heavy operation, only do it if specifically asked to
 
         public AssociationTypeComparator(String lang){
             this(new TopicNameComparator(lang));
         }
-        public AssociationTypeComparator(String lang,Collection ignoreTopics){
+        public AssociationTypeComparator(String lang,Collection<Topic> ignoreTopics){
             this(new TopicNameComparator(lang),ignoreTopics);
         }
-        public AssociationTypeComparator(Comparator topicComparator){
+        public AssociationTypeComparator(Comparator<Topic> topicComparator){
             this.topicComparator=topicComparator;
         }
-        public AssociationTypeComparator(Comparator topicComparator, Collection ignoreTopics){
+        public AssociationTypeComparator(Comparator<Topic> topicComparator, Collection<Topic> ignoreTopics){
             this.topicComparator=topicComparator;
             this.ignoreTopics=ignoreTopics;
             this.compareRole=null;
@@ -1422,7 +1414,7 @@ public class TMBox {
         public AssociationTypeComparator(String lang, Topic roleTopic){
             this(new TopicNameComparator(lang),roleTopic);
         }
-        public AssociationTypeComparator(Comparator topicComparator, Topic roleTopic){
+        public AssociationTypeComparator(Comparator<Topic> topicComparator, Topic roleTopic){
             this.topicComparator=topicComparator;
             this.ignoreTopics=null;
             this.compareRole=roleTopic;
@@ -1432,10 +1424,7 @@ public class TMBox {
             this.fullCompare=full;
         }
         
-        public int compare(Object o1, Object o2) {
-            Association a1=(Association)o1;
-            Association a2=(Association)o2;
-            
+        public int compare(Association a1, Association a2) {
             if(compareRole != null) {
                 try {
                     Topic p1=a1.getPlayer(compareRole);
@@ -1461,9 +1450,9 @@ public class TMBox {
                         if(ignoreTopics!=null){
                             Topic p1=null,p2=null;
                             Topic minRole=null;
-                            Iterator iter=a1.getRoles().iterator();
+                            Iterator<Topic> iter=a1.getRoles().iterator();
                             while(iter.hasNext()){
-                                Topic role=(Topic)iter.next();
+                                Topic role=iter.next();
                                 Topic p=a1.getPlayer(role);
                                 if(!ignoreTopics.contains(p) && (minRole==null || topicComparator.compare(role,minRole)<0)) {
                                     minRole=role;
@@ -1473,7 +1462,7 @@ public class TMBox {
                             minRole=null;
                             iter=a2.getRoles().iterator();
                             while(iter.hasNext()){
-                                Topic role=(Topic)iter.next();
+                                Topic role=iter.next();
                                 Topic p=a2.getPlayer(role);
                                 if(!ignoreTopics.contains(p) && (minRole==null || topicComparator.compare(role,minRole)<0)) {
                                     minRole=role;
@@ -1491,8 +1480,8 @@ public class TMBox {
                             
                             if(!this.fullCompare) return 0;
                             
-                            ArrayList<Topic> r1=new ArrayList<Topic>(a1.getRoles());
-                            ArrayList<Topic> r2=new ArrayList<Topic>(a2.getRoles());
+                            List<Topic> r1=new ArrayList<>(a1.getRoles());
+                            List<Topic> r2=new ArrayList<>(a2.getRoles());
                             Collections.sort(r1,topicComparator);
                             Collections.sort(r2,topicComparator);
                             for(int i=0;i<r1.size();i++){
@@ -1525,16 +1514,16 @@ public class TMBox {
      * ordering if there are multiple associations with suitable players (first player
      * when comparing players by their names).
      */
-    public static class TopicAssociationPlayerComparator implements Comparator {
+    public static class TopicAssociationPlayerComparator implements Comparator<Topic> {
         private Topic associationType;
         private Topic playerRole;
-        private HashMap<Topic,String> nameMap;
+        private Map<Topic,String> nameMap;
         private String lang;
         public TopicAssociationPlayerComparator(Topic associationType,Topic playerRole,String lang){
             this.associationType=associationType;
             this.playerRole=playerRole;
             this.lang=lang;
-            nameMap=new HashMap<Topic,String>();
+            nameMap=new HashMap<>();
         }
         
         public String getNameFor(Topic t){
@@ -1565,9 +1554,7 @@ public class TMBox {
             return ret;
         }
         
-        public int compare(Object o1,Object o2){
-            Topic t1=(Topic)o1;
-            Topic t2=(Topic)o2;
+        public int compare(Topic t1,Topic t2){
             return getNameFor(t1).compareTo(getNameFor(t2));
         }
     }
@@ -1578,14 +1565,14 @@ public class TMBox {
      * names or base names if language is not specified or no suitable variant
      * name is found.
      */
-    public static class AssociationPlayerComparator implements Comparator {
+    public static class AssociationPlayerComparator implements Comparator<Association> {
         private Topic playerRole;
-        private HashMap<Association,String> nameMap;
+        private Map<Association,String> nameMap;
         private String lang;
         public AssociationPlayerComparator(Topic playerRole,String lang){
             this.playerRole=playerRole;
             this.lang=lang;
-            nameMap=new HashMap<Association,String>();
+            nameMap=new HashMap<>();
         }
         
         public String getNameFor(Association a){
@@ -1612,9 +1599,7 @@ public class TMBox {
             return ret;
         }
         
-        public int compare(Object o1,Object o2){
-            Association a1=(Association)o1;
-            Association a2=(Association)o2;
+        public int compare(Association a1,Association a2){
             return getNameFor(a1).compareTo(getNameFor(a2));
         }
     }

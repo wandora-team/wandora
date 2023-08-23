@@ -28,6 +28,7 @@
  */
 
 package org.wandora.topicmap;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -37,11 +38,11 @@ import java.util.Set;
  */
 public class TopicHashSet implements Set<Topic> {
     
-    private TopicHashMap map;
+    private TopicHashMap<TopicHashSet> map;
     
     /** Creates a new instance of TopicHashSet */
     public TopicHashSet() {
-        map=new TopicHashMap();
+        map=new TopicHashMap<>();
     }
 
     public TopicHashSet(Collection<? extends Topic> c){

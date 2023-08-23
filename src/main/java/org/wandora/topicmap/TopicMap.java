@@ -43,6 +43,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -415,9 +416,9 @@ public abstract class TopicMap implements TopicMapLogger {
      */
     // TODO: Equals check used in HashSet. May cause some topics to be included
     //       several times in the returned collection.
-    public Collection<Topic> getTopics(Collection sis) throws TopicMapException {
-        HashSet ret=new LinkedHashSet();
-        Iterator iter=sis.iterator();
+    public Collection<Topic> getTopics(Collection<?> sis) throws TopicMapException {
+        Set<Topic> ret=new LinkedHashSet<>();
+        Iterator<?> iter=sis.iterator();
         while(iter.hasNext()){
             Object o=iter.next();
             Topic t=null;
@@ -440,17 +441,17 @@ public abstract class TopicMap implements TopicMapLogger {
     public Collection<Topic> getTopicsOfType(String si) throws TopicMapException {
         Topic t=getTopic(si);
         if(t!=null) return getTopicsOfType(t);
-        else return new ArrayList();
+        else return new ArrayList<>();
     }
     
     /**
      * Like copyTopicIn but does it for a collection of topics.
      */ 
-    public Collection<Topic> copyTopicCollectionIn(Collection topics,boolean deep) throws TopicMapException {
-        HashSet copied=new LinkedHashSet();
-        Iterator iter=topics.iterator();
+    public Collection<Topic> copyTopicCollectionIn(Collection<Topic> topics,boolean deep) throws TopicMapException {
+        Set<Topic> copied=new LinkedHashSet<>();
+        Iterator<Topic> iter=topics.iterator();
         while(iter.hasNext()){
-            Topic t=(Topic)iter.next();
+            Topic t=iter.next();
             Topic nt=copyTopicIn(t,deep);
             copied.add(nt);
         }
@@ -464,12 +465,12 @@ public abstract class TopicMap implements TopicMapLogger {
      * containing only the topic you gave as a parameter.
      */
     public Collection<Topic> getMergingTopics(Topic t) throws TopicMapException {
-        HashSet set=new LinkedHashSet();
+        Set<Topic> set=new LinkedHashSet<>();
         Collection<Locator> ls=t.getSubjectIdentifiers();
         if(ls!=null) {
-            Iterator iter=ls.iterator();
+            Iterator<Locator> iter=ls.iterator();
             while(iter.hasNext()){
-                Locator l=(Locator)iter.next();
+                Locator l=iter.next();
                 Topic to=getTopic(l);
                 if(to!=null) set.add(to);
             }
@@ -612,17 +613,17 @@ public abstract class TopicMap implements TopicMapLogger {
         int totalCount = this.getNumTopics() + this.getNumAssociations();
         logger.setProgressMax(totalCount);
         int count = 0;
-        Iterator iter=getTopics();
+        Iterator<Topic> iter=getTopics();
         while(iter.hasNext() && !logger.forceStop()) {
-            Topic t=(Topic)iter.next();
+            Topic t=iter.next();
             if(t == null || t.isRemoved()) continue;
             logger.setProgress(count++);
             writer.print("[ "+makeLTMTopicId(t));
             if(t.getTypes().size()>0){
-                Iterator iter2=t.getTypes().iterator();
+                Iterator<Topic> iter2=t.getTypes().iterator();
                 if(iter2.hasNext()) writer.print(" :");
                 while(iter2.hasNext()){
-                    Topic t2=(Topic)iter2.next();
+                    Topic t2=iter2.next();
                     writer.print(" "+makeLTMTopicId(t2));
                 }
             }
@@ -632,19 +633,19 @@ public abstract class TopicMap implements TopicMapLogger {
                     writer.print("");
                 else
                     writer.print("\"" + makeLTMString(t.getBaseName()) + "\"");
-                Iterator iter2=t.getVariantScopes().iterator();
+                Iterator<Set<Topic>> iter2=t.getVariantScopes().iterator();
                 while(iter2.hasNext()) {
-                    Set c=(Set)iter2.next();
+                    Set<Topic> c=iter2.next();
                     String name=t.getVariant(c);
                     if(c.size()>0) {
                         writer.print(" (");
-                        Iterator iter3=c.iterator();
+                        Iterator<Topic> iter3=c.iterator();
                         writer.print(" \""+makeLTMString(name)+"\"");
                         if(iter3.hasNext()) {
                             writer.print(" /");
                         }
                         while(iter3.hasNext()) {
-                            Topic st=(Topic)iter3.next();
+                            Topic st=iter3.next();
                             writer.print(" "+makeLTMTopicId(st));
                         }
                         writer.print(" )");
@@ -655,9 +656,9 @@ public abstract class TopicMap implements TopicMapLogger {
                 if(t.getSubjectLocator()!=null) {
                     writer.print(" %\"" + t.getSubjectLocator().toExternalForm() + "\"");
                 }
-                Iterator iter2=t.getSubjectIdentifiers().iterator();
+                Iterator<Locator> iter2=t.getSubjectIdentifiers().iterator();
                 while(iter2.hasNext()) {
-                    Locator l=(Locator)iter2.next();
+                    Locator l=iter2.next();
                     if(l != null) {
                         writer.print(" @\"" + l.toExternalForm() + "\"");
                     }
@@ -666,16 +667,16 @@ public abstract class TopicMap implements TopicMapLogger {
             writer.println(" ]");
 
             if(t.getDataTypes().size()>0) {
-                Collection types=t.getDataTypes();
-                Iterator iter2=types.iterator();
+                Collection<Topic> types=t.getDataTypes();
+                Iterator<Topic> iter2=types.iterator();
                 while(iter2.hasNext()){
-                    Topic type=(Topic)iter2.next();
-                    Hashtable ht=(Hashtable)t.getData(type);
-                    Iterator iter3=ht.entrySet().iterator();
+                    Topic type=iter2.next();
+                    Hashtable<Topic,String> ht=t.getData(type);
+                    Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()){
-                        Map.Entry e=(Map.Entry)iter3.next();
-                        Topic version=(Topic)e.getKey();
-                        String data=(String)e.getValue();
+                        Map.Entry<Topic,String> e=iter3.next();
+                        Topic version=e.getKey();
+                        String data=e.getValue();
                         writer.print("{ "+makeLTMTopicId(t) );
                         writer.print(", "+makeLTMTopicId(type));
                         writer.print(", [[" + makeLTMString(data) +"]]");
@@ -685,17 +686,17 @@ public abstract class TopicMap implements TopicMapLogger {
             }
         }
         if(!logger.forceStop()) {
-            iter=getAssociations();
-            while(iter.hasNext() && !logger.forceStop()) {
+            Iterator<Association> aiter=getAssociations();
+            while(aiter.hasNext() && !logger.forceStop()) {
                 logger.setProgress(count++);
-                Association a=(Association)iter.next();
+                Association a=aiter.next();
                 if(a.getType()!=null) {
                     writer.print( makeLTMTopicId(a.getType()) + " " );
                 }
                 writer.print("( ");            
-                Iterator iter2=a.getRoles().iterator();
+                Iterator<Topic> iter2=a.getRoles().iterator();
                 while(iter2.hasNext()) {
-                    Topic role=(Topic)iter2.next();
+                    Topic role=iter2.next();
                     writer.print(makeLTMTopicId( a.getPlayer(role) ) + " : " + makeLTMTopicId( role ));
                     if(iter2.hasNext()) writer.print(", ");
                 }
@@ -810,7 +811,7 @@ public abstract class TopicMap implements TopicMapLogger {
         if(logger == null) logger = this;
 
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(out,"UTF-8"));
-        ArrayList<T2<Topic,Topic>> typeAssociations = new ArrayList<T2<Topic,Topic>>();
+        List<T2<Topic,Topic>> typeAssociations = new ArrayList<T2<Topic,Topic>>();
         int numberOfTopics = this.getNumTopics();
         int numberOfAssociations = this.getNumAssociations();
         int totalCount = numberOfTopics + numberOfAssociations;
@@ -830,9 +831,9 @@ public abstract class TopicMap implements TopicMapLogger {
             writer.println("  {");
             if(t.getSubjectIdentifiers().size()>0) {
                 writer.println("   \"subject_identifiers\":[");
-                Iterator iter2=t.getSubjectIdentifiers().iterator();
+                Iterator<Locator> iter2=t.getSubjectIdentifiers().iterator();
                 while(iter2.hasNext()) {
-                    Locator l=(Locator)iter2.next();
+                    Locator l=iter2.next();
                     if(l != null) {
                         writer.print("    \"" + l.toExternalForm() + "\"");
                         if(iter2.hasNext()) {
@@ -862,24 +863,24 @@ public abstract class TopicMap implements TopicMapLogger {
                 else
                     writer.print("     \"value\":\"" + makeJTMString(t.getBaseName()) + "\"");
                 boolean hasVariants = false;
-                Iterator variants=t.getVariantScopes().iterator();
+                Iterator<Set<Topic>> variants=t.getVariantScopes().iterator();
                 if(variants.hasNext()) {
                     writer.println(",\n     \"variants\":[");
                     hasVariants = true;
                 }
                 else writer.println();
                 while(variants.hasNext()) {
-                    Set c=(Set)variants.next();
+                    Set<Topic> c=variants.next();
                     String name=t.getVariant(c);
                     if(c.size()>0) {
                         writer.println("      {");
                         writer.println("       \"value\":\""+makeJTMString(name)+"\",");
-                        Iterator variantScopes=c.iterator();
+                        Iterator<Topic> variantScopes=c.iterator();
                         if(variantScopes.hasNext()) {
                             writer.println("       \"scope\":[");
                         }
                         while(variantScopes.hasNext()) {
-                            Topic st=(Topic)variantScopes.next();
+                            Topic st=variantScopes.next();
                             writer.print("        \"si:"+st.getOneSubjectIdentifier().toExternalForm()+"\"");
                             if(variantScopes.hasNext()) {
                                 writer.println(", ");
@@ -908,19 +909,19 @@ public abstract class TopicMap implements TopicMapLogger {
             if(t.getDataTypes().size()>0) {
                 writer.println(",");
                 writer.println("   \"occurrences\":[");
-                Collection types=t.getDataTypes();
-                Iterator iter2=types.iterator();
+                Collection<Topic> types=t.getDataTypes();
+                Iterator<Topic> iter2=types.iterator();
                 boolean colonRequired = false;
                 while(iter2.hasNext()){
-                    Topic type=(Topic)iter2.next();
-                    Hashtable ht=(Hashtable)t.getData(type);
-                    Iterator iter3=ht.entrySet().iterator();
+                    Topic type=iter2.next();
+                    Hashtable<Topic,String> ht=t.getData(type);
+                    Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()) {
                         if(colonRequired) writer.println(",");
                         writer.println("    {");
-                        Map.Entry e=(Map.Entry)iter3.next();
-                        Topic version=(Topic)e.getKey();
-                        String data=(String)e.getValue();
+                        Map.Entry<Topic,String> e=iter3.next();
+                        Topic version=e.getKey();
+                        String data=e.getValue();
                         writer.println("     \"value\":\""+makeJTMString(data)+"\",");
                         writer.println("     \"type\":\"si:"+type.getOneSubjectIdentifier().toExternalForm()+"\",");
                         writer.println("     \"scope\": [ \"si:"+version.getOneSubjectIdentifier().toExternalForm()+"\" ]");
@@ -941,7 +942,7 @@ public abstract class TopicMap implements TopicMapLogger {
                 while(iter2.hasNext()) {
                     Topic t2=iter2.next();
                     if(t2 != null && !t2.isRemoved()) {
-                        typeAssociations.add(new T2(t2, t));
+                        typeAssociations.add(new T2<>(t2, t));
                     }                
                 }
             }
@@ -966,7 +967,7 @@ public abstract class TopicMap implements TopicMapLogger {
             else {
                 writer.println();
             }
-            Iterator associations=getAssociations();
+            Iterator<Association> associations=getAssociations();
             
             T2<Topic,Topic> typeAssociation = null;
             for(Iterator<T2<Topic,Topic>> types = typeAssociations.iterator(); types.hasNext() && !logger.forceStop(); ) {
@@ -1002,7 +1003,7 @@ public abstract class TopicMap implements TopicMapLogger {
                 if(a.getType()!=null) {
                     writer.println("   \"type\":\"si:"+a.getType().getOneSubjectIdentifier().toExternalForm()+"\",");
                 }
-                Iterator roles=a.getRoles().iterator();
+                Iterator<Topic> roles=a.getRoles().iterator();
                 if(roles.hasNext()) {
                     writer.println("   \"roles\":[");
                 }
@@ -1142,16 +1143,16 @@ public abstract class TopicMap implements TopicMapLogger {
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(out,"UTF-8"));
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         writer.println("<topicMap xmlns=\"http://www.topicmaps.org/xtm/1.0/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
-        Iterator iter=getTopics();
+        Iterator<Topic> iter=getTopics();
         while(iter.hasNext() && !logger.forceStop()) {
-            Topic t=(Topic)iter.next();
+            Topic t=iter.next();
             if(t.isRemoved()) continue;
             logger.setProgress(count++);
             writer.println("\t<topic id=\""+t.getID()+"\">");
             if(t.getTypes().size()>0){
-                Iterator iter2=t.getTypes().iterator();
+                Iterator<Topic> iter2=t.getTypes().iterator();
                 while(iter2.hasNext()){
-                    Topic t2=(Topic)iter2.next();
+                    Topic t2=iter2.next();
                     writer.println("\t\t<instanceOf>");
                     writer.println("\t\t\t<topicRef xlink:href=\"#"+t2.getID()+"\"/>");
                     writer.println("\t\t</instanceOf>");
@@ -1159,9 +1160,9 @@ public abstract class TopicMap implements TopicMapLogger {
             }
             if(t.getSubjectIdentifiers().size()>0 || t.getSubjectLocator()!=null){
                 writer.println("\t\t<subjectIdentity>");
-                Iterator iter2=t.getSubjectIdentifiers().iterator();
+                Iterator<Locator> iter2=t.getSubjectIdentifiers().iterator();
                 while(iter2.hasNext()){
-                    Locator l=(Locator)iter2.next();
+                    Locator l=iter2.next();
                     writer.println("\t\t\t<subjectIndicatorRef xlink:href=\""+escapeXML(l.toExternalForm())+"\"/>");
                 }
                 if(t.getSubjectLocator()!=null) writer.println("\t\t\t<resourceRef xlink:href=\""+escapeXML(t.getSubjectLocator().toExternalForm())+"\"/>");
@@ -1173,16 +1174,16 @@ public abstract class TopicMap implements TopicMapLogger {
                     writer.println("\t\t\t<baseNameString></baseNameString>");
                 else
                     writer.println("\t\t\t<baseNameString>"+escapeXML(t.getBaseName())+"</baseNameString>");
-                Iterator iter2=t.getVariantScopes().iterator();
+                Iterator<Set<Topic>> iter2=t.getVariantScopes().iterator();
                 while(iter2.hasNext()){
-                    Set c=(Set)iter2.next();
+                    Set<Topic> c=iter2.next();
                     String name=t.getVariant(c);
                     if(c.size()>0){
                         writer.println("\t\t\t<variant>");
                         writer.println("\t\t\t\t<parameters>");
-                        Iterator iter3=c.iterator();
+                        Iterator<Topic> iter3=c.iterator();
                         while(iter3.hasNext()){
-                            Topic st=(Topic)iter3.next();
+                            Topic st=iter3.next();
                             writer.println("\t\t\t\t\t<topicRef xlink:href=\"#"+st.getID()+"\"/>");
                         }
                         writer.println("\t\t\t\t</parameters>");
@@ -1195,16 +1196,16 @@ public abstract class TopicMap implements TopicMapLogger {
                 writer.println("\t\t</baseName>");
             }
             if(t.getDataTypes().size()>0){
-                Collection types=t.getDataTypes();
-                Iterator iter2=types.iterator();
+                Collection<Topic> types=t.getDataTypes();
+                Iterator<Topic> iter2=types.iterator();
                 while(iter2.hasNext()){
-                    Topic type=(Topic)iter2.next();
-                    Hashtable ht=(Hashtable)t.getData(type);
-                    Iterator iter3=ht.entrySet().iterator();
+                    Topic type=iter2.next();
+                    Hashtable<Topic,String> ht=t.getData(type);
+                    Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()){
-                        Map.Entry e=(Map.Entry)iter3.next();
-                        Topic version=(Topic)e.getKey();
-                        String data=(String)e.getValue();
+                        Map.Entry<Topic,String> e=iter3.next();
+                        Topic version=e.getKey();
+                        String data=e.getValue();
                         writer.println("\t\t<occurrence>");
                         writer.println("\t\t\t<instanceOf>");
                         writer.println("\t\t\t\t<topicRef xlink:href=\"#"+type.getID()+"\"/>");
@@ -1220,17 +1221,17 @@ public abstract class TopicMap implements TopicMapLogger {
             writer.println("\t</topic>");
         }
         if(!logger.forceStop()) {
-            iter=getAssociations();
-            while(iter.hasNext() && !logger.forceStop()) {
+            Iterator<Association> aiter=getAssociations();
+            while(aiter.hasNext() && !logger.forceStop()) {
                 logger.setProgress(count++);
-                Association a=(Association)iter.next();
+                Association a=aiter.next();
                 writer.println("\t<association>");
                 if(a.getType()!=null){
                     writer.println("\t\t<instanceOf>");
                     writer.println("\t\t\t<topicRef xlink:href=\"#"+a.getType().getID()+"\"/>");
                     writer.println("\t\t</instanceOf>");
                 }
-                Iterator iter2=a.getRoles().iterator();
+                Iterator<Topic> iter2=a.getRoles().iterator();
                 while(iter2.hasNext()){
                     Topic role=(Topic)iter2.next();
                     writer.println("\t\t<member>");
@@ -1257,27 +1258,27 @@ public abstract class TopicMap implements TopicMapLogger {
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(out,"UTF-8"));
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         writer.println("<topicMap xmlns=\"http://www.topicmaps.org/xtm/\" version=\"2.0\">");
-        Iterator iter=getTopics();
+        Iterator<Topic> iter=getTopics();
         while(iter.hasNext() && !logger.forceStop()) {
-            Topic t=(Topic)iter.next();
+            Topic t=iter.next();
             if(t.isRemoved()) continue;
             logger.setProgress(count++);
             writer.println("\t<topic id=\""+t.getID()+"\">");
             
             if(t.getSubjectLocator()!=null) writer.println("\t\t<subjectLocator href=\""+escapeXML(t.getSubjectLocator().toExternalForm())+"\"/>");
             if(t.getSubjectIdentifiers().size()>0 || t.getSubjectLocator()!=null){
-                Iterator iter2=t.getSubjectIdentifiers().iterator();
+                Iterator<Locator> iter2=t.getSubjectIdentifiers().iterator();
                 while(iter2.hasNext()){
-                    Locator l=(Locator)iter2.next();
+                    Locator l=iter2.next();
                     writer.println("\t\t<subjectIdentifier href=\""+escapeXML(l.toExternalForm())+"\"/>");
                 }
             }
             
             if(t.getTypes().size()>0){
-                Iterator iter2=t.getTypes().iterator();
+                Iterator<Topic> iter2=t.getTypes().iterator();
                 writer.println("\t\t<instanceOf>");
                 while(iter2.hasNext()){
-                    Topic t2=(Topic)iter2.next();
+                    Topic t2=iter2.next();
                     writer.println("\t\t\t<topicRef href=\"#"+t2.getID()+"\"/>");
                 }
                 writer.println("\t\t</instanceOf>");
@@ -1289,16 +1290,16 @@ public abstract class TopicMap implements TopicMapLogger {
                     writer.println("\t\t\t<value></value>");
                 else 
                     writer.println("\t\t\t<value>"+escapeXML(t.getBaseName())+"</value>");
-                Iterator iter2=t.getVariantScopes().iterator();
+                Iterator<Set<Topic>> iter2=t.getVariantScopes().iterator();
                 while(iter2.hasNext()){
-                    Set c=(Set)iter2.next();
+                    Set<Topic> c=iter2.next();
                     String name=t.getVariant(c);
                     if(c.size()>0){
                         writer.println("\t\t\t<variant>");
                         writer.println("\t\t\t\t<scope>");
-                        Iterator iter3=c.iterator();
+                        Iterator<Topic> iter3=c.iterator();
                         while(iter3.hasNext()){
-                            Topic st=(Topic)iter3.next();
+                            Topic st=iter3.next();
                             writer.println("\t\t\t\t\t<topicRef href=\"#"+st.getID()+"\"/>");
                         }
                         writer.println("\t\t\t\t</scope>");
@@ -1309,16 +1310,16 @@ public abstract class TopicMap implements TopicMapLogger {
                 writer.println("\t\t</name>");
             }
             if(t.getDataTypes().size()>0){
-                Collection types=t.getDataTypes();
-                Iterator iter2=types.iterator();
+                Collection<Topic> types=t.getDataTypes();
+                Iterator<Topic> iter2=types.iterator();
                 while(iter2.hasNext()){
-                    Topic type=(Topic)iter2.next();
-                    Hashtable ht=(Hashtable)t.getData(type);
-                    Iterator iter3=ht.entrySet().iterator();
+                    Topic type=iter2.next();
+                    Hashtable<Topic,String> ht=t.getData(type);
+                    Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()){
-                        Map.Entry e=(Map.Entry)iter3.next();
-                        Topic version=(Topic)e.getKey();
-                        String data=(String)e.getValue();
+                        Map.Entry<Topic,String> e=iter3.next();
+                        Topic version=e.getKey();
+                        String data=e.getValue();
                         writer.println("\t\t<occurrence>");
                         writer.println("\t\t\t<type>");
                         writer.println("\t\t\t\t<topicRef href=\"#"+type.getID()+"\"/>");
@@ -1334,19 +1335,19 @@ public abstract class TopicMap implements TopicMapLogger {
             writer.println("\t</topic>");
         }
         if(!logger.forceStop()) {
-            iter=getAssociations();
-            while(iter.hasNext() && !logger.forceStop()) {
+            Iterator<Association> aiter=getAssociations();
+            while(aiter.hasNext() && !logger.forceStop()) {
                 logger.setProgress(count++);
-                Association a=(Association)iter.next();
+                Association a=aiter.next();
                 writer.println("\t<association>");
                 if(a.getType()!=null){
                     writer.println("\t\t<type>");
                     writer.println("\t\t\t<topicRef href=\"#"+a.getType().getID()+"\"/>");
                     writer.println("\t\t</type>");
                 }
-                Iterator iter2=a.getRoles().iterator();
+                Iterator<Topic> iter2=a.getRoles().iterator();
                 while(iter2.hasNext()){
-                    Topic role=(Topic)iter2.next();
+                    Topic role=iter2.next();
                     writer.println("\t\t<role>");
                     writer.println("\t\t\t<type>");
                     writer.println("\t\t\t\t<topicRef href=\"#"+role.getID()+"\"/>");
@@ -1567,7 +1568,7 @@ public abstract class TopicMap implements TopicMapLogger {
         private IntegerStack stateStack;
         private int state;
         
-        private Hashtable idmapping;
+        private Map<String,Topic> idmapping;
         
         private Hashtable mergemap;
         
@@ -1585,7 +1586,7 @@ public abstract class TopicMap implements TopicMapLogger {
             topicCount = 0;
             associationCount = 0;
             occurrenceCount = 0;
-            idmapping=new Hashtable();
+            idmapping=new LinkedHashMap<>();
             mergemap=new Hashtable();
             state=STATE_START;
             stateStack=new IntegerStack();
@@ -1964,11 +1965,11 @@ public abstract class TopicMap implements TopicMapLogger {
                             }
                             
                             // this is for debugging
-                            iter=idmapping.entrySet().iterator();
-                            while(iter.hasNext()){
-                                Map.Entry e=(Map.Entry)iter.next();
-                                Object key=e.getKey();
-                                Topic t=(Topic)e.getValue();
+                            Iterator<Map.Entry<String,Topic>> diter=idmapping.entrySet().iterator();
+                            while(diter.hasNext()){
+                                Map.Entry<String,Topic> e=diter.next();
+                                String key=e.getKey();
+                                Topic t=e.getValue();
                                 if(t.isRemoved()){
                                     logger.log("Topic was removed, XTM file was probably inconsistent, id was \""+key+"\".");
                                 }
@@ -2243,14 +2244,14 @@ public abstract class TopicMap implements TopicMapLogger {
         public class VariantName {
             public String name;
             public Set<Topic> scope;
-            public VariantName(String name, Collection c){
+            public VariantName(String name, Collection<Topic> c){
                 this.name=name;
                 scope = new LinkedHashSet<Topic>();
                 for(Iterator<Topic> i = c.iterator(); i.hasNext();) {
                     scope.add(i.next());
                 }
             }
-            public VariantName(String name, Set scope){
+            public VariantName(String name, Set<Topic> scope){
                 this.name=name;
                 this.scope=scope;
             }
@@ -2276,18 +2277,18 @@ public abstract class TopicMap implements TopicMapLogger {
         }
         
         public class IntegerStack {
-            private Stack stack;
+            private Stack<Integer> stack;
             public IntegerStack(){
-                this.stack=new Stack();
+                this.stack=new Stack<>();
             }
             public int pop(){
-                return ((Integer)stack.pop()).intValue();
+                return stack.pop().intValue();
             }
             public void push(int i){
                 stack.push(Integer.valueOf(i));
             }
             public int peek(){
-                return ((Integer)stack.peek()).intValue();
+                return stack.peek().intValue();
             }
         }
     }

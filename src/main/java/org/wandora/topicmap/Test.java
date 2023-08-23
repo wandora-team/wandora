@@ -27,6 +27,7 @@
  */
 
 package org.wandora.topicmap;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;

@@ -36,6 +36,9 @@ package org.wandora.topicmap;
  * @author  olli
  */
 public class TopicInUseException extends TopicMapException {
+    private static final long serialVersionUID = 1L;
+    
+    
     public static final int NOREASON=-1;
     public static final int USEDIN_ASSOCIATIONTYPE=0;
     public static final int USEDIN_ASSOCIATIONROLE=1;

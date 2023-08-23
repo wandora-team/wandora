@@ -28,8 +28,8 @@
  */
 
 package org.wandora.topicmap;
+
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -39,10 +39,10 @@ import java.util.Set;
  */
 public class TopicHashMap<K> implements Map<Topic,K> {
     
-    public HashMap<Locator,Topic> siMap;
-    public HashMap<String,Topic> bnMap;
-    public HashMap<Locator,Topic> slMap;
-    public HashMap<Topic,K> valueMap;
+    public Map<Locator,Topic> siMap;
+    public Map<String,Topic> bnMap;
+    public Map<Locator,Topic> slMap;
+    public Map<Topic,K> valueMap;
     
     
     /** Creates a new instance of TopicHashMap */

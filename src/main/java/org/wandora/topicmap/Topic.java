@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 /**
  * <p>
@@ -164,7 +165,7 @@ public abstract class Topic {
      * data with specified type and version or null if it does not exist.
      */
     public String getData(Topic type,String lang) throws TopicMapException {
-        String langsi=langsi=XTMPSI.getLang(lang);
+        String langsi=XTMPSI.getLang(lang);
         Topic langT=getTopicMap().getTopic(langsi);
         String data=null;
         if(langT!=null) {
@@ -176,10 +177,10 @@ public abstract class Topic {
                 data=getData(type,langT);
             }
             if(data==null){
-                Hashtable ht=getData(type);
+                Hashtable<Topic,String> ht=getData(type);
                 if(ht==null || ht.isEmpty()) return null;
-                Iterator iter=ht.values().iterator();
-                if(iter.hasNext()) data=(String)iter.next();
+                Iterator<String> iter=ht.values().iterator();
+                if(iter.hasNext()) data=iter.next();
             }
         }
         return data;
@@ -195,7 +196,7 @@ public abstract class Topic {
         Topic langT=getTopicMap().getTopic(langsi);
         String dispsi=XTMPSI.DISPLAY;
         Topic dispT=getTopicMap().getTopic(dispsi);
-        HashSet scope=new HashSet();
+        Set<Topic> scope=new HashSet<>();
         if(langT==null) {
             langT=getTopicMap().createTopic();
             langT.addSubjectIdentifier(getTopicMap().createLocator(langsi));
@@ -229,7 +230,7 @@ public abstract class Topic {
         Topic langT=getTopicMap().getTopic(langsi);
         String dispsi=XTMPSI.DISPLAY;
         Topic dispT=getTopicMap().getTopic(dispsi);
-        HashSet scope=new HashSet();
+        Set<Topic> scope=new HashSet<>();
         if(langT!=null) scope.add(langT);
         if(dispT!=null) scope.add(dispT);
         return getName(scope);
@@ -245,7 +246,7 @@ public abstract class Topic {
         Topic langT=getTopicMap().getTopic(langsi);
         String sortsi=XTMPSI.SORT;
         Topic sortT=getTopicMap().getTopic(sortsi);
-        HashSet scope=new HashSet();
+        Set<Topic> scope=new HashSet<>();
         if(langT!=null) scope.add(langT);
         if(sortT!=null) scope.add(sortT);
         return getName(scope);
@@ -256,7 +257,7 @@ public abstract class Topic {
      * If a suitable name is not found in variants, returns the base name, if it is null returns
      * one of the subject identifiers, if there is none returns "[unnamed]".
      */
-    public String getName(Set scope) throws TopicMapException {
+    public String getName(Set<Topic> scope) throws TopicMapException {
         String name=null;
         try {
             if(scope != null) name=getVariant(scope);
@@ -264,20 +265,20 @@ public abstract class Topic {
                 int maxcount=0;
                 Set<Set<Topic>> scopes=getVariantScopes();
                 if(scopes != null) {
-                    Iterator iter=scopes.iterator();
+                    Iterator<Set<Topic>> iter=scopes.iterator();
                     while(iter.hasNext()){
-                        Set s=(Set)iter.next();
+                        Set<Topic> s= iter.next();
                         String vname=getVariant(s);
                         if(vname==null || vname.trim().length()==0) continue;
                         int count=0;
                         if(scope != null) {
-                            Iterator iter2=scope.iterator();
+                            Iterator<Topic> iter2=scope.iterator();
                             while(iter2.hasNext()){
-                                Topic t=(Topic)iter2.next();
+                                Topic t=iter2.next();
 //                                if(s.contains(t)) count++;
-                                Iterator iter3=s.iterator();
+                                Iterator<Topic> iter3=s.iterator();
                                 while(iter3.hasNext()){
-                                    Topic st=(Topic)iter3.next();
+                                    Topic st=iter3.next();
                                     if(st.mergesWithTopic(t)){
                                         count++;
                                         break;
@@ -293,8 +294,8 @@ public abstract class Topic {
                 }
                 if(name==null || name.trim().length()==0) name=getBaseName();
                 if(name==null || name.trim().length()==0){
-                    Collection sis=getSubjectIdentifiers();
-                    if(!sis.isEmpty()) name=((Locator)sis.iterator().next()).toExternalForm();
+                    Collection<Locator> sis=getSubjectIdentifiers();
+                    if(!sis.isEmpty()) name=(sis.iterator().next()).toExternalForm();
                 }
             }
         }
@@ -307,8 +308,8 @@ public abstract class Topic {
     
     /** Returns one of the subject identifiers of this topic or null if none exists. */
     public Locator getOneSubjectIdentifier() throws TopicMapException {
-        Collection c=getSubjectIdentifiers();
-        if(c.size()>0) return (Locator)c.iterator().next();
+        Collection<Locator> c=getSubjectIdentifiers();
+        if(c.size()>0) return c.iterator().next();
         else return null;
     }
     
@@ -321,7 +322,7 @@ public abstract class Topic {
      * opposed to getOneSubjectIdentifier.
      */
     public Locator getFirstSubjectIdentifier() throws TopicMapException {
-        ArrayList<Locator> ls=new ArrayList<Locator>(getSubjectIdentifiers());
+        List<Locator> ls=new ArrayList<>(getSubjectIdentifiers());
         if(ls.isEmpty()) return null;
         if(ls.size()==1) return ls.get(0);
         Locator least=null;
