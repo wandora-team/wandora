@@ -98,14 +98,14 @@ public class DatabaseAssociation implements Association {
     }
     
     void create() throws TopicMapException {
-        players=new LinkedHashMap<Topic,Topic>();
+        players=new LinkedHashMap<>();
         full=true;
         id=makeID();
         topicMap.executeUpdate("insert into ASSOCIATION (ASSOCIATIONID,TYPE) values ('"+escapeSQL(id)+"','"+escapeSQL(type.getID())+"')");
     }
 
     static Map<String,DatabaseTopic> makeFullAll(Collection<Map<String,Object>> res,Map<String,DatabaseAssociation> associations,DatabaseTopicMap topicMap) throws TopicMapException {
-        HashMap<String,DatabaseTopic> collected = new LinkedHashMap<String,DatabaseTopic>();
+        HashMap<String,DatabaseTopic> collected = new LinkedHashMap<>();
         String associationID = null;
         Map<Topic,Topic> players = null;
         for(Map<String,Object> row : res) {
@@ -117,7 +117,7 @@ public class DatabaseAssociation implements Association {
                         dba.players=players;
                     }
                 }
-                players = new LinkedHashMap<Topic,Topic>();
+                players = new LinkedHashMap<>();
                 if(row.get("ASSOCIATION") != null) {
                     associationID = row.get("ASSOCIATION").toString();
                 }
@@ -145,7 +145,7 @@ public class DatabaseAssociation implements Association {
                               "R.TOPICID as ROLEID, R.BASENAME as ROLENAME, R.SUBJECTLOCATOR as ROLESL from "+
                               "TOPIC as P,TOPIC as R, MEMBER as M where P.TOPICID=M.PLAYER and "+
                               "R.TOPICID=M.ROLE and M.ASSOCIATION='"+escapeSQL(id)+"'");
-        players=new LinkedHashMap<Topic,Topic>();
+        players=new LinkedHashMap<>();
         for(Map<String,Object> row : res){
             Topic role=topicMap.buildTopic(row.get("ROLEID"),row.get("ROLENAME"),row.get("ROLESL"));
             Topic player=topicMap.buildTopic(row.get("PLAYERID"),row.get("PLAYERNAME"),row.get("PLAYERSL"));

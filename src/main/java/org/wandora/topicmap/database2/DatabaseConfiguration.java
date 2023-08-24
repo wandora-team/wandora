@@ -60,8 +60,7 @@ public class DatabaseConfiguration extends TopicMapConfigurationPanel {
     
     
     public static Collection<DatabaseConfigurationPanel.StoredConnection> parseConnections(Options options){
-        Collection<DatabaseConfigurationPanel.StoredConnection> connections=
-                new ArrayList<DatabaseConfigurationPanel.StoredConnection>();
+        Collection<DatabaseConfigurationPanel.StoredConnection> connections=new ArrayList<>();
         String prefix="options.dbconnections.connection";
         int counter=0;
         while(true){

@@ -423,9 +423,9 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                     columnNames[i]=metaData.getColumnName(i+1);
                 }
 
-                ArrayList<Map<String,Object>> rows=new ArrayList<Map<String,Object>>();
+                List<Map<String,Object>> rows=new ArrayList<>();
                 while(rs.next()) {
-                    Map<String,Object> row = new LinkedHashMap<String,Object>();
+                    Map<String,Object> row = new LinkedHashMap<>();
                     for(int i=0;i<columns;i++) {
                         // Column names are transformed to uppercase.
                         row.put(columnNames[i].toUpperCase(), rs.getObject(i+1));
@@ -516,7 +516,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     public Iterator<Map<String,Object>> getRowIterator(final String query, final String orderby) {
 
         if(unconnected) {
-            return new Iterator<Map<String,Object>>() {
+            return new Iterator<>() {
                 @Override
                 public boolean hasNext() {
                     return false;
@@ -533,7 +533,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
         }
         else {
 
-            return new Iterator<Map<String,Object>>() {
+            return new Iterator<>() {
                 boolean hasNext = false;
                 int offset = 0;
                 int limit = 1000;

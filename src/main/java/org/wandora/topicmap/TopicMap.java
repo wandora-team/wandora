@@ -1535,20 +1535,20 @@ public abstract class TopicMap implements TopicMapLogger {
         private static final int STATE_OCCURRENCEINSTANCEOF = 16;
         private static final int STATE_RESOURCEDATA = 17;
         
-        private Collection parsedType;
+        private Collection<Topic> parsedType;
         private Topic parsedRole;
-        private Collection parsedTopicCollection;
+        private Collection<Topic> parsedTopicCollection;
         private Topic parsedTopicRef;
         private Locator parsedSubjectLocator;
-        private Collection parsedSubjectIdentifiers;
+        private Collection<Locator> parsedSubjectIdentifiers;
         private String parsedBaseName;
-        private Collection parsedScope;
-        private Collection parsedParameters;
-        private Collection parsedVariants;
-        private Collection parsedBaseNameVariants;
-        private Collection parsedOccurrences;
-        private Collection parsedPlayers;
-        private Collection parsedMembers;
+        private Collection<Topic> parsedScope;
+        private Collection<Topic> parsedParameters;
+        private Collection<VariantName> parsedVariants;
+        private Collection<VariantName> parsedBaseNameVariants;
+        private Collection<Occurrence> parsedOccurrences;
+        private Collection<Topic> parsedPlayers;
+        private Collection<Member> parsedMembers;
         private String parsedVariantName;
         private String topicID;
         private Topic parsedOccurrenceType;
@@ -1563,7 +1563,7 @@ public abstract class TopicMap implements TopicMapLogger {
          * have their subject identifiers set, so we collect all parsed occurrence data in allOccurrences
          * and add them when the topicmap element ends (that is at </topicmap>).
          */
-        private Hashtable allOccurrences;
+        private Hashtable<Topic,Collection<Occurrence>> allOccurrences;
         
         private IntegerStack stateStack;
         private int state;
@@ -1587,7 +1587,7 @@ public abstract class TopicMap implements TopicMapLogger {
             associationCount = 0;
             occurrenceCount = 0;
             idmapping=new LinkedHashMap<>();
-            mergemap=new Hashtable();
+            mergemap=new Hashtable<>();
             state=STATE_START;
             stateStack=new IntegerStack();
         }
@@ -1618,7 +1618,7 @@ public abstract class TopicMap implements TopicMapLogger {
                         if(qName.equals(TAG_TOPIC_MAP)){
                             stateStack.push(state);
                             state=STATE_TOPICMAP;
-                            allOccurrences=new Hashtable();
+                            allOccurrences=new Hashtable<>();
                         }
                         else logger.log("Parse exception: Expecting "+TAG_TOPIC_MAP); // TODO: throw exception
                         break;
@@ -1627,12 +1627,12 @@ public abstract class TopicMap implements TopicMapLogger {
                             topicID=attributes.getValue("id");
                             stateStack.push(state);
                             state=STATE_TOPIC;
-                            parsedType=new LinkedHashSet();
+                            parsedType=new LinkedHashSet<>();
                             parsedBaseName=null;
-                            parsedSubjectIdentifiers=new LinkedHashSet();
+                            parsedSubjectIdentifiers=new LinkedHashSet<>();
                             parsedSubjectLocator=null;
-                            parsedOccurrences=new LinkedHashSet();
-                            parsedVariants=new LinkedHashSet();
+                            parsedOccurrences=new LinkedHashSet<>();
+                            parsedVariants=new LinkedHashSet<>();
                             parsedEdittime=0;
                             topicCount++;
                         }
@@ -1640,8 +1640,8 @@ public abstract class TopicMap implements TopicMapLogger {
                             associationID=attributes.getValue("id");
                             stateStack.push(state);
                             state=STATE_ASSOCIATION;                        
-                            parsedType=new LinkedHashSet();
-                            parsedMembers=new LinkedHashSet();
+                            parsedType=new LinkedHashSet<>();
+                            parsedMembers=new LinkedHashSet<>();
                             associationCount++;
                         }
                         else logger.log("Parse exception: Expecting "+TAG_TOPIC+" or "+TAG_ASSOCIATION+" got "+qName);
@@ -1659,13 +1659,13 @@ public abstract class TopicMap implements TopicMapLogger {
                             stateStack.push(state);
                             state=STATE_BASENAME;
                             parsedBaseName=null;
-                            parsedScope=new LinkedHashSet();
-                            parsedBaseNameVariants=new LinkedHashSet();
+                            parsedScope=new LinkedHashSet<>();
+                            parsedBaseNameVariants=new LinkedHashSet<>();
                         }
                         else if(qName.equals(TAG_OCCURRENCE)){
                             stateStack.push(state);
                             state=STATE_OCCURRENCE;
-                            parsedScope=new LinkedHashSet();
+                            parsedScope=new LinkedHashSet<>();
                             parsedOccurrenceType=null;
                             parsedOccurrenceData=null;
                             parsedOccurrenceRef=null;
@@ -1710,7 +1710,7 @@ public abstract class TopicMap implements TopicMapLogger {
                         else if(qName.equals(TAG_VARIANT)){
                             stateStack.push(state);
                             state=STATE_VARIANT;
-                            parsedParameters=new LinkedHashSet();
+                            parsedParameters=new LinkedHashSet<>();
                             parsedVariantName=null;
                         }
                         else if(qName.equals(TAG_SCOPE)){
@@ -1830,7 +1830,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             stateStack.push(state);
                             state=STATE_MEMBER;
                             parsedRole=null;
-                            parsedPlayers=new LinkedHashSet();
+                            parsedPlayers=new LinkedHashSet<>();
                         }
                         else logger.log("Parse exception: Expecting "+TAG_INSTANCEOF+", "+TAG_SCOPE+" or "+TAG_MEMBER+" got "+qName);
                         break;
@@ -1888,7 +1888,7 @@ public abstract class TopicMap implements TopicMapLogger {
             if(logger.forceStop()) {
                 throw new org.xml.sax.SAXException("user_interrupt");
             }
-            Iterator iter;
+
             Topic topic;
             try {
                 switch(state){
@@ -1897,9 +1897,9 @@ public abstract class TopicMap implements TopicMapLogger {
                             state=stateStack.pop();
 
                             Locator eloc=createLocator(EDITTIME_SI);
-                            iter=allOccurrences.entrySet().iterator();
+                            Iterator<Map.Entry<Topic,Collection<Occurrence>>> iter=allOccurrences.entrySet().iterator();
                             while(iter.hasNext()){
-                                Map.Entry e=(Map.Entry)iter.next();
+                                Map.Entry<Topic,Collection<Occurrence>> e=iter.next();
                                 topic=(Topic)e.getKey();
                                 if(topic.isRemoved()){
                                     logger.log("Warning: Occurrence topic is removed (probably merged), topic map was inconsistent!");
@@ -1909,10 +1909,10 @@ public abstract class TopicMap implements TopicMapLogger {
                                         break;
                                     }
                                 }
-                                Collection c=(Collection)e.getValue();
-                                Iterator iter2=c.iterator();
+                                Collection<Occurrence> c=e.getValue();
+                                Iterator<Occurrence> iter2=c.iterator();
                                 while(iter2.hasNext()){
-                                    Occurrence o=(Occurrence)iter2.next();
+                                    Occurrence o=iter2.next();
                                     if(o.type==null) logger.log("Warning: Occurrence has no type!");
                                     if(o.type.getSubjectIdentifiers().contains(eloc)){
                                         topic.setEditTime(Long.parseLong(o.data));
@@ -1984,24 +1984,24 @@ public abstract class TopicMap implements TopicMapLogger {
                         if(qName.equalsIgnoreCase(TAG_TOPIC)){
                             if(topicID==null) topic=createTopic();
                             else topic=getOrCreateTopic("#"+topicID);
-                            iter=parsedType.iterator();
-                            while(iter.hasNext()){
-                                Topic t=(Topic)iter.next();
+                            Iterator<Topic> titer=parsedType.iterator();
+                            while(titer.hasNext()){
+                                Topic t=titer.next();
                                 topic.addType(t);
                             }
 //                            if(parsedSubjectIdentifiers.size()==0) logger.log("Warning, couldn't find any subject identifiers for topic "+parsedBaseName);
-                            iter=parsedSubjectIdentifiers.iterator();
-                            while(iter.hasNext()){
-                                Locator l=(Locator)iter.next();
+                            Iterator<Locator> liter=parsedSubjectIdentifiers.iterator();
+                            while(liter.hasNext()){
+                                Locator l=liter.next();
                                 topic.addSubjectIdentifier(l);
                             }
                             if(parsedSubjectIdentifiers.isEmpty()){
 //                                logger.log("Warning topic has no subject identifiers, creating one.");
                                 topic.addSubjectIdentifier(createLocator(makeSubjectIndicator()));
                             }
-                            iter=parsedVariants.iterator();
-                            while(iter.hasNext()){
-                                VariantName v=(VariantName)iter.next();
+                            Iterator<VariantName> viter=parsedVariants.iterator();
+                            while(viter.hasNext()){
+                                VariantName v=viter.next();
                                 topic.setVariant(v.scope,v.name);
                             }
                             if(parsedSubjectLocator!=null) topic.setSubjectLocator(parsedSubjectLocator);
@@ -2016,12 +2016,12 @@ public abstract class TopicMap implements TopicMapLogger {
                             if(parsedType.isEmpty()) logger.log("No association type");
                             else{
                                 if(parsedType.size()>1) logger.log("Multiple types for association, using first!");
-                                topic = (Topic)parsedType.iterator().next();
+                                topic = parsedType.iterator().next();
                                 Association a=createAssociation(topic);
-                                iter=parsedMembers.iterator();
+                                Iterator<Member> miter=parsedMembers.iterator();
                                 // TODO: check that no multiple members with same role
-                                while(iter.hasNext()){
-                                    Member m=(Member)iter.next();
+                                while(miter.hasNext()){
+                                    Member m=miter.next();
                                     a.addPlayer(m.player,m.role);
                                 }
                             }
@@ -2048,9 +2048,9 @@ public abstract class TopicMap implements TopicMapLogger {
                     case STATE_BASENAME:
                         if(qName.equals(TAG_BASENAME)){
 
-                            iter=parsedBaseNameVariants.iterator();
-                            while(iter.hasNext()){
-                                VariantName v=(VariantName)iter.next();
+                            Iterator<VariantName> viter=parsedBaseNameVariants.iterator();
+                            while(viter.hasNext()){
+                                VariantName v=viter.next();
                                 v.scope.addAll(parsedScope);
                             }
                             parsedVariants.addAll(parsedBaseNameVariants);
@@ -2164,7 +2164,7 @@ public abstract class TopicMap implements TopicMapLogger {
         }
         
         public Topic getOrCreateTopic(String href) throws TopicMapException {
-            Topic t=(Topic)idmapping.get(href);
+            Topic t=idmapping.get(href);
             if(t!=null) {
                 if(t.isRemoved()) {
                     logger.log("ID mapping found for \""+href+"\" but topic has been deleted (or merged). XTM is probably inconsistent. Getting new version of the topic.");

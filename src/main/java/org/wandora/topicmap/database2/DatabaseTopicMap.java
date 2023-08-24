@@ -219,14 +219,14 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         Collection<Map<String,Object>> res=executeQuery("select distinct PLAYER from MEMBER");
         for(Map<String,Object> row : res){
             String player=row.get("PLAYER").toString();
-            HashSet<ArrayList<String>> associations=new LinkedHashSet<ArrayList<String>>(500);
+            HashSet<ArrayList<String>> associations=new LinkedHashSet<>(500);
             Collection<Map<String,Object>> res2=executeQuery(
                     "select ASSOCIATION.*,M2.* from ASSOCIATION,MEMBER as M1, MEMBER as M2 "+
                     "where M1.PLAYER='"+escapeSQL(player)+"' and M1.ASSOCIATION=ASSOCIATIONID and "+
                     "M2.ASSOCIATION=ASSOCIATION.ASSOCIATIONID order by ASSOCIATION.ASSOCIATIONID,M2.ROLE"
                     );
             String associationid="";
-            ArrayList<String> v=new ArrayList<String>(9);
+            ArrayList<String> v=new ArrayList<>(9);
             for(Map<String,Object> row2 : res2) {
                 String id=row2.get("ASSOCIATIONID").toString();
                 if(!associationid.equals(id)){
@@ -237,7 +237,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                             executeUpdate("delete from ASSOCIATION where ASSOCIATIONID='"+escapeSQL(associationid)+"'");
                             deleted++;
                         }
-                        v=new ArrayList<String>(9);
+                        v=new ArrayList<>(9);
                         String type=row2.get("TYPE").toString();
                         v.add(type);
                     }
@@ -359,7 +359,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
      */
     public Collection<Topic> queryTopic(String query)  throws TopicMapException {
         Collection<Map<String,Object>> res = executeQuery(query);
-        Collection<Topic> ret = new ArrayList<Topic>();
+        Collection<Topic> ret = new ArrayList<>();
         for(Map<String,Object> row : res){
             ret.add(buildTopic(row));
         }
@@ -384,7 +384,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
      */
     public Collection<Association> queryAssociation(String query) throws TopicMapException {
         Collection<Map<String,Object>> res = executeQuery(query);
-        ArrayList<Association> ret = new ArrayList<Association>();
+        ArrayList<Association> ret = new ArrayList<>();
         for(Map<String,Object>row : res){
             ret.add(buildAssociation(row));
         }
@@ -485,7 +485,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                 +"from TOPIC,TOPICTYPE "
                 +"where TOPIC=TOPICID "
                 +"and TYPE='"+escapeSQL(type.getID())+"'");
-        Map<String,DatabaseTopic> collected=new LinkedHashMap<String,DatabaseTopic>();
+        Map<String,DatabaseTopic> collected=new LinkedHashMap<>();
         for(Topic t : res){
             collected.put(t.getID(),(DatabaseTopic)t);
         }
@@ -523,7 +523,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     public Iterator<Topic> getTopics() {
         final Iterator<Map<String,Object>> rowIterator = getRowIterator("select * from TOPIC", "TOPICID");
 
-        return new Iterator<Topic>() {
+        return new Iterator<>() {
             
             @Override
             public boolean hasNext() {
@@ -576,7 +576,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
 
         final Iterator<Map<String,Object>> rowIterator = getRowIterator("select * from ASSOCIATION,TOPIC where TOPICID=TYPE", "TOPIC.TOPICID");
 
-        return new Iterator<Association>() {
+        return new Iterator<>() {
             
             @Override
             public boolean hasNext() {
@@ -609,7 +609,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     @Override
     public Collection<Association> getAssociationsOfType(Topic type) throws TopicMapException {
         if(unconnected) {
-            return new ArrayList<Association>();
+            return new ArrayList<>();
         }
         return queryAssociation("select * "
                 + "from ASSOCIATION,TOPIC "
@@ -643,12 +643,12 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     
     
     
-    private Topic _copyTopicIn(Topic t, boolean deep, HashMap<Topic,Locator> copied) throws TopicMapException {
+    private Topic _copyTopicIn(Topic t, boolean deep, Map<Topic,Locator> copied) throws TopicMapException {
         return _copyTopicIn(t,deep,false,copied);
     }
     
     
-    private Topic _copyTopicIn(Topic t, boolean deep, boolean stub, HashMap<Topic,Locator> copied) throws TopicMapException {
+    private Topic _copyTopicIn(Topic t, boolean deep, boolean stub, Map<Topic,Locator> copied) throws TopicMapException {
         
         if(copied.containsKey(t)) {
             // Don't return the topic that was created when t was copied because it might have been merged with something
@@ -693,7 +693,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
             }
 
             for(Set<Topic> scope : t.getVariantScopes()) {
-                Set<Topic> nscope=new LinkedHashSet();
+                Set<Topic> nscope=new LinkedHashSet<>();
                 for(Topic st : scope){
                     Topic nst=_copyTopicIn(st,deep,true,copied);
                     nscope.add(nst);
@@ -724,7 +724,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
             System.out.println("Warning, topic has no subject identifiers.");
         }
         else {
-            ntype=getTopic((Locator)type.getSubjectIdentifiers().iterator().next()); 
+            ntype=getTopic(type.getSubjectIdentifiers().iterator().next()); 
         }
         if(ntype==null) ntype=copyTopicIn(type,false);
         
@@ -782,7 +782,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     public Topic copyTopicIn(Topic t, boolean deep)  throws TopicMapException {
         if(unconnected) return null;
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        return _copyTopicIn(t, deep, false, new LinkedHashMap());
+        return _copyTopicIn(t, deep, false, new LinkedHashMap<>());
     }
     
     
@@ -908,7 +908,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         int targetNumAssociations=tm.getNumAssociations();
         
         int tcount=0;
-        HashMap copied=new LinkedHashMap();
+        Map<Topic,Locator> copied=new LinkedHashMap<>();
         {
             // note that in some topic map implementations (DatabaseTopicMap specifically)
             // you must always iterate through all topics to close the result set thus
@@ -930,7 +930,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
             }
         }
         if(!tmLogger.forceStop()){
-            HashSet<Topic> endpoints=new LinkedHashSet<Topic>();
+            Set<Topic> endpoints=new LinkedHashSet<>();
             int acount=0;
             Iterator<Association> iter=tm.getAssociations();
             while(iter.hasNext()) {
@@ -940,9 +940,9 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                         Association na=_copyAssociationIn(a);
                         Topic minTopic=null;
                         int minCount=Integer.MAX_VALUE;
-                        Iterator iter2=na.getRoles().iterator();
+                        Iterator<Topic> iter2=na.getRoles().iterator();
                         while(iter2.hasNext()){
-                            Topic role=(Topic)iter2.next();
+                            Topic role=iter2.next();
                             Topic t=na.getPlayer(role);
                             if(t.getAssociations().size()<minCount){
                                 minCount=t.getAssociations().size();
