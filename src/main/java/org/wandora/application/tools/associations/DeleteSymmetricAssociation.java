@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -159,10 +160,10 @@ public class DeleteSymmetricAssociation extends AbstractWandoraTool implements W
                         associationTable = (AssociationTable) context.getContextSource();
                     }
                     if(associationTable != null) {
-                        Map<Association,ArrayList<Topic>> associationsWithSelectedRoles = associationTable.getSelectedAssociationsWithSelectedRoles();
+                        Map<Association,List<Topic>> associationsWithSelectedRoles = associationTable.getSelectedAssociationsWithSelectedRoles();
                         Set<Association> associationKeys = associationsWithSelectedRoles.keySet();
                         Iterator<Association> associationKeyIterator = associationKeys.iterator();
-                        ArrayList<Topic> symmetricRoleArrayList = null;
+                        List<Topic> symmetricRoleArrayList = null;
                         while(associationKeyIterator.hasNext() && !forceStop()) {
                             association = (Association) associationKeyIterator.next();
                             if(association != null && !association.isRemoved()) {

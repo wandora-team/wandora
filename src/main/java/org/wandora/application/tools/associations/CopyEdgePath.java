@@ -110,7 +110,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) {      
         try {
-            Map<Association,ArrayList<Topic>> associationsWithRoles = null;
+            Map<Association,List<Topic>> associationsWithRoles = null;
             Topic role = null;
             Association a = null;
             StringBuilder pathString = new StringBuilder("");
@@ -134,7 +134,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
                     while(associationIterator.hasNext() && !forceStop()) {
                         a = (Association) associationIterator.next();
                         if(a != null) {
-                            ArrayList<Topic> roles = associationsWithRoles.get(a);
+                            List<Topic> roles = associationsWithRoles.get(a);
                             Iterator<Topic> roleIterator = roles.iterator();
                             if(roleIterator.hasNext() && !forceStop()) {
                                 role = roleIterator.next();

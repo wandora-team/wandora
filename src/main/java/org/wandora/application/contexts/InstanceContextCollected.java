@@ -64,7 +64,7 @@ public class InstanceContextCollected extends LayeredTopicContext implements Con
     
     public Iterator collectInstancesOf(Iterator topics) {
         if(topics == null) return null;
-        List contextTopics = new ArrayList();
+        List<Topic> contextTopics = new ArrayList<>();
         Collection<Topic> instanceTopics = null;
         Topic topic = null;
         Topic instance = null;

@@ -271,7 +271,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         Icon viewIcon = UIBox.getIcon("gui/icons/view2.png");
         Icon hideIcon = UIBox.getIcon("gui/icons/view2_no.png");
 
-        List menuVector = new ArrayList();
+        List<Object> menuVector = new ArrayList<>();
         for(int i=0; i<panelStruct.length; i++) {
             Object[] panelData = panelStruct[i];
             String panelName = ((JPanel) panelData[0]).getName();

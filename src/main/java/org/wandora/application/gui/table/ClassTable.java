@@ -31,7 +31,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
@@ -93,7 +93,7 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
         super(w);
         
         this.topic = topic;
-        Collection unsorted = topic.getTypes();
+        Collection<Topic> unsorted = topic.getTypes();
         this.types = (Topic[]) TMBox.sortTopics(unsorted,null).toArray(new Topic[0]);
         
         initialize(types, null);
@@ -284,6 +284,8 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
     
     private class ClassTableTransferHandler extends TransferHandler {
 
+        private static final long serialVersionUID = 1L;
+
         @Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
@@ -306,7 +308,7 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
             if(!support.isDrop()) return false;
             try{
                 TopicMap tm=Wandora.getWandora().getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
+                List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                 if(topics==null) return false;
                 Topic base=Wandora.getWandora().getOpenTopic();
                 if(base==null) return false;

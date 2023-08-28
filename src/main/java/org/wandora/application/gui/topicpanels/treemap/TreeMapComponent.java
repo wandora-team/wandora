@@ -51,11 +51,14 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import org.wandora.application.contexts.PreContext;
 import org.wandora.application.gui.UIBox;
@@ -134,12 +137,12 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
         new Color(0xce6dbd),
         new Color(0xde9ed6),
     };
-    private static HashMap<String,Color> topicColors = new HashMap();
-    private static HashMap<Topic, HashMap<Topic, Collection<Topic>>> associationTopicsCache = new HashMap();
-    private static HashMap<Topic, Integer> associationTopicsSizeCache = new HashMap();
+    private static Map<String,Color> topicColors = new HashMap<>();
+    private static Map<Topic, HashMap<Topic, Collection<Topic>>> associationTopicsCache = new HashMap<>();
+    private static Map<Topic, Integer> associationTopicsSizeCache = new HashMap<>();
 
-    private HashSet<Topic> knownAssociationTypes = new LinkedHashSet();
-    private HashSet<Topic> filteredAssociationTypes = new LinkedHashSet();
+    private Set<Topic> knownAssociationTypes = new LinkedHashSet<>();
+    private Set<Topic> filteredAssociationTypes = new LinkedHashSet<>();
     private boolean filterClasses = false;
     private boolean filterInstances = false;
     
@@ -376,7 +379,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
         setColor(Color.BLACK);
         drawRect(x,y,width,height);
 
-        Enumeration children = node.children();
+        Enumeration<TreeNode> children = node.children();
         if(children != null)  {
             while (children.hasMoreElements()) {
                 drawNodeTree((DefaultMutableTreeNode) children.nextElement());
@@ -680,8 +683,8 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     
     
     public void clearCaches() {
-        associationTopicsCache = new HashMap();
-        associationTopicsSizeCache = new HashMap();
+        associationTopicsCache = new HashMap<>();
+        associationTopicsSizeCache = new HashMap<>();
         //topicColors = new HashMap();
     }
     

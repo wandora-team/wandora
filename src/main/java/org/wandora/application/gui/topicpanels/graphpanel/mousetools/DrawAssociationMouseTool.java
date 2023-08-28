@@ -71,7 +71,7 @@ public class DrawAssociationMouseTool extends MouseTool {
                 Node sn=startNode.getNode();
                 Node en=endNode.getNode();
                 if(sn instanceof TopicNode && en instanceof TopicNode){
-                    Vector<Topic> v=new Vector<Topic>();
+                    Vector<Topic> v=new Vector<>();
                     v.add(((TopicNode)sn).getTopic());
                     v.add(((TopicNode)en).getTopic());
                     try{

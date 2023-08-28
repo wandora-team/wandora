@@ -29,6 +29,7 @@ package org.wandora.application.tools.associations;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
@@ -88,7 +89,7 @@ public class ChangeAssociationRoles extends AbstractWandoraTool implements Wando
     @Override
     public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
-        Map<Association, ArrayList<Topic>> associationsWithOldRoles = null;
+        Map<Association, List<Topic>> associationsWithOldRoles = null;
         
         try {
             Object contextSource = context.getContextSource();
@@ -121,7 +122,7 @@ public class ChangeAssociationRoles extends AbstractWandoraTool implements Wando
             for(Association association : associationsWithOldRoles.keySet()) {
                 if(forceStop()) break;
                 if(association != null && !association.isRemoved()) {
-                    ArrayList<Topic> oldRoles = associationsWithOldRoles.get(association);
+                    List<Topic> oldRoles = associationsWithOldRoles.get(association);
                     for(Topic oldRole : oldRoles) {
                         System.out.println("oldrole == "+oldRole);
                         player = association.getPlayer(oldRole);

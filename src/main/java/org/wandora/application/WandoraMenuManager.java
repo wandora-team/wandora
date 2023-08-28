@@ -452,7 +452,7 @@ public class WandoraMenuManager {
         layerTreeMenuStructure = null;
         logoMenuStructure = null;
         
-        SLExtractorMenus = new LinkedHashMap();
+        SLExtractorMenus = new LinkedHashMap<>();
         refreshFileMenu();
         refreshEditMenu();
         refreshViewMenu();
@@ -627,7 +627,7 @@ public class WandoraMenuManager {
     
     
     public void refreshServerMenu() {
-        ArrayList menuStructure = new ArrayList();
+        List<Object> menuStructure = new ArrayList<>();
         WandoraModulesServer httpServer = wandora.getHTTPServer();
        
         if(httpServer != null) {
@@ -644,15 +644,15 @@ public class WandoraMenuManager {
                 menuStructure.add(new HTTPServerTool(HTTPServerTool.START_AND_MENU));
             }
 
-            ArrayList<ModulesWebApp> webApps=httpServer.getWebApps();
-            HashMap<String,ModulesWebApp> webAppsMap=new HashMap<String,ModulesWebApp>();
+            List<ModulesWebApp> webApps=httpServer.getWebApps();
+            Map<String,ModulesWebApp> webAppsMap=new HashMap<>();
             for(ModulesWebApp wa : webApps) {
                 webAppsMap.put(wa.getAppName(), wa);
             }
-            ArrayList<String> sorted = new ArrayList<String>(webAppsMap.keySet());
+            List<String> sorted = new ArrayList<>(webAppsMap.keySet());
             Collections.sort(sorted);
 
-            ArrayList browseServices = new ArrayList();
+            List<Object> browseServices = new ArrayList<>();
             JMenu browseServicesMenu =  new SimpleMenu("Browse services", UIBox.getIcon("gui/icons/server_open.png"));
 
             for(String appName : sorted) {
@@ -2229,7 +2229,7 @@ public class WandoraMenuManager {
     
     public static Object[] getOpenInMenu() {
         Wandora wandora = Wandora.getWandora();
-        List struct = new ArrayList();
+        List<Object> struct = new ArrayList<>();
         
         if(wandora != null) {
             Map<Dockable,TopicPanel> dockedTopicPanels = wandora.topicPanelManager.getDockedTopicPanels();
@@ -2248,8 +2248,8 @@ public class WandoraMenuManager {
             }
             struct.add("---");
 
-            java.util.List<java.util.List> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanelsSupportingOpenTopic();
-            for(java.util.List panelData : availableTopicPanels) {
+            java.util.List<java.util.List<Object>> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanelsSupportingOpenTopic();
+            for(java.util.List<Object> panelData : availableTopicPanels) {
                 try {
                     Class panelClass = Class.forName((String) panelData.get(0));
                     if(!DockingFramePanel.class.equals(panelClass)) {

@@ -180,7 +180,7 @@ public class OccurrenceTextEditor extends TextEditor {
             
             else if("Insert variant name".equalsIgnoreCase(c)) {
                 if(occurrenceTopic != null && !occurrenceTopic.isRemoved()) {
-                    Set<Topic> scope = new HashSet<Topic>();
+                    Set<Topic> scope = new HashSet<>();
                     scope.add(this.occurrenceVersion);
                     scope.add(TMBox.getDisplayNameTopic(occurrenceType));
                     String variantName = occurrenceTopic.getVariant(scope);

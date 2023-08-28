@@ -36,8 +36,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.LinkedHashSet;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -173,12 +176,12 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
 
     @Override
     public void sorterChanged(RowSorterEvent e) {
-        ArrayList<int[]> modelCells = new ArrayList();
+        List<int[]> modelCells = new ArrayList<>();
         
         if(e.getType().equals(RowSorterEvent.Type.SORTED)) {
-            ArrayList<int[]> selectedCells = getSelectedCells();
+            List<int[]> selectedCells = getSelectedCells();
             if(selectedCells != null && !selectedCells.isEmpty()) {
-                modelCells = new ArrayList();
+                modelCells = new ArrayList<>();
                 for(int[] cell : selectedCells) {
                     int i = e.convertPreviousRowIndexToModel(cell[0]);
                     cell[0] = (i != -1 ? i : cell[0]);
@@ -192,7 +195,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
         if(e.getType().equals(RowSorterEvent.Type.SORTED)) {
             if(modelCells != null && !modelCells.isEmpty()) {
                 clearSelection();
-                ArrayList<int[]> viewCells = new ArrayList();
+                List<int[]> viewCells = new ArrayList<>();
                 for(int[] cell : modelCells) {
                     cell[0] = convertRowIndexToView(cell[0]);
                     cell[1] = convertColumnIndexToView(cell[1]);
@@ -281,7 +284,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
     public void selectTopics(Topic[] topics) {
         if(topics == null || topics.length == 0) return;
 
-        HashSet topicHash = new HashSet();
+        Set<Topic> topicHash = new LinkedHashSet<>();
         for(int i=0; i<topics.length; i++) {
             topicHash.add(topics[i]);
         }
@@ -430,8 +433,8 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
     
     
     
-    public ArrayList<int[]> getSelectedCells() {
-        ArrayList<int[]> selected = new ArrayList();
+    public List<int[]> getSelectedCells() {
+        List<int[]> selected = new ArrayList<>();
         
         TableSelectionModel selection = getTableSelectionModel();
         int colCount = this.getColumnCount();
@@ -455,7 +458,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
     
     
     public Object[][] getSelectedValues() {
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         int rlen = 0;
         int clen = 0;
         for(int[] cell : selectedCells) {
@@ -473,8 +476,8 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
     
     
     public Topic[] getSelectedTopics() {
-        ArrayList<Topic> topics = new ArrayList<Topic>();
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<Topic> topics = new ArrayList<>();
+        List<int[]> selectedCells = getSelectedCells();
         for(int[] cell : selectedCells) {
             Topic t = getTopicAt(cell[0], cell[1]);
             try {

@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -190,7 +191,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
             new SimpleButton(UIBox.getIcon("gui/icons/graphpanel/center_view.png")), new CenterCurrentTopic(getGraphPanel()),
         };
         
-        toolButtons=new HashMap<Integer,SimpleToggleButton>();
+        toolButtons=new HashMap<>();
         SimpleToggleButton lastButton=null;
         for(int i=0;i<struct.length;i++){
             if(struct[i] instanceof SimpleToggleButton){
@@ -226,7 +227,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
 
     public Collection<Association> getContextAssociations() {
         Collection<VEdge> edges=graphPanel.getSelectedEdges();
-        Collection<Association> ret = new ArrayList<Association>();
+        Collection<Association> ret = new ArrayList<>();
         if(edges != null) {
             VEdge vedge = null;
             Edge edge = null;
@@ -249,7 +250,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
     public Collection<Topic> getContextTopics(){
         Collection<Topic> ret=graphPanel.getSelectedTopics();
         if(ret.isEmpty()) {
-            ArrayList<Topic> al=new ArrayList<Topic>();
+            List<Topic> al=new ArrayList<>();
             al.add(graphPanel.getRootTopic());
             return al;
         }
@@ -258,9 +259,9 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
     
     
     public Collection getContext(){
-        Collection ret=graphPanel.getSelectedNodes();
+        Set<VNode> ret=graphPanel.getSelectedNodes();
         if(ret.isEmpty()) {
-            ArrayList al=new ArrayList();
+            List al=new ArrayList();
             al.add(graphPanel.getRootNode());
             return al;
         }
@@ -320,7 +321,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
     }
     @Override
     public JMenu getViewMenu() {
-        ArrayList menuStructure = new ArrayList();
+        List<Object> menuStructure = new ArrayList<>();
         menuStructure.add("---");
         Object[] a = graphPanel.getOptionsMenuStruct();
         for(Object o : a) {

@@ -260,7 +260,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 }
                 else {
                     // We are going to ask the user where the topic will be opened.
-                    ArrayList<TopicPanel> availableTopicPanels = new ArrayList();
+                    List<TopicPanel> availableTopicPanels = new ArrayList<>();
                     for(Dockable dockable : dockedTopicPanels.keySet()) {
                         TopicPanel availableTopicPanel = dockedTopicPanels.get(dockable);
                         if(availableTopicPanel != null && availableTopicPanel.supportsOpenTopic()) {
@@ -468,9 +468,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     @Override
     public Object[] getViewMenuStruct() {
         JMenu addMenu =  new SimpleMenu("New panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
-        List<List> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
-        ArrayList addTopicPanelMenuStruct = new ArrayList();
-        for(List panelData : availableTopicPanels) {
+        List<List<Object>> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
+        List<Object> addTopicPanelMenuStruct = new ArrayList<>();
+        for(List<Object> panelData : availableTopicPanels) {
             try {
                 Class panelClass = Class.forName((String) panelData.get(0));
                 if(!this.getClass().equals(panelClass)) {
@@ -494,7 +494,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         //JMenu optionsMenu =  new SimpleMenu("Options", UIBox.getIcon("gui/icons/topic_panel_options.png"));
         //UIBox.attachMenu(optionsMenu, getOptionsMenuStruct(), wandora);
 
-        ArrayList struct = new ArrayList();
+        List<Object> struct = new ArrayList<>();
         
         struct.add(addMenu);
                
@@ -507,7 +507,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                     label = label + getAdditionalLabel(tp);
                     JMenu topicPanelMenu =  new SimpleMenu(label, tp.getIcon());
                     
-                    ArrayList subStruct = new ArrayList();
+                    List<Object> subStruct = new ArrayList<>();
                     
                     Object[] subMenuStruct = tp.getViewMenuStruct();
                     if(subMenuStruct != null) {
@@ -564,7 +564,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     
     private Object[] getCloseMenuStruct() {
-        ArrayList struct = new ArrayList();
+        List<Object> struct = new ArrayList<>();
         if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
             for(Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
@@ -585,7 +585,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     
     private Object[] getSelectMenuStruct() {
-        ArrayList struct = new ArrayList();
+        List<Object> struct = new ArrayList<>();
         if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
             for(Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
@@ -608,7 +608,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     
     private Object[] getOptionsMenuStruct() {
-        ArrayList struct = new ArrayList();
+        List<Object> struct = new ArrayList<>();
         if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
             for(Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);

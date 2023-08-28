@@ -29,6 +29,7 @@ package org.wandora.application.tools.associations;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -120,7 +121,7 @@ public class StealAssociations extends AbstractWandoraTool implements WandoraToo
             int counter = 0;
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
-                ArrayList<Topic> victims = null;
+                List<Topic> victims = null;
                 Iterator<Topic> victimIterator = null;
                 associations = context.getContextObjects();
                 Iterator<Topic> roles = null;

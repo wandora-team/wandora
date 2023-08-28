@@ -147,14 +147,14 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
     protected OccurrenceTableAll occurrenceTable;
     protected Collection<OccurrenceTableSingleType> occurrenceTables;
-    protected HashMap<Set<Topic>,SimpleField> nameTable;
-    protected HashMap<SimpleField,Set<Topic>> invNameTable;
-    protected IteratedMap<Collection<Topic>,String> originalNameTable;
+    protected Map<Set<Topic>,SimpleField> nameTable;
+    protected Map<SimpleField,Set<Topic>> invNameTable;
+    protected Map<Collection<Topic>,String> originalNameTable;
 
     // this is never cleared so in some cases may collect topics that aren't anymore visible,
     // this might result in some unnecessary refreshing
-    protected HashSet<Locator> visibleTopics;
-    protected HashSet<Locator> openTopic;
+    protected Set<Locator> visibleTopics;
+    protected Set<Locator> openTopic;
 
     protected boolean needsRefresh;
 
@@ -163,8 +163,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
     /** Creates a new instance of AbstractTraditionalTopicPanel **/
     public AbstractTraditionalTopicPanel() {
-        visibleTopics=new HashSet<Locator>();
-        openTopic=new HashSet<Locator>();
+        visibleTopics=new HashSet<>();
+        openTopic=new HashSet<>();
         needsRefresh=false;
     }
 
@@ -228,9 +228,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
     public void buildAssociationsPanel(JPanel associationPanel, JLabel numberLabel, Topic topic, int option, Options options, Wandora wandora) {
         java.awt.GridBagConstraints gbc;
         try {
-            Map<Association,ArrayList<Topic>> selectedAssociationWithRoles = new HashMap<Association,ArrayList<Topic>>();
-            Map<Topic,java.util.List<? extends RowSorter.SortKey>> sortKeys = new HashMap<>();
-            Map<Topic,ArrayList<Integer>> columnProperties = new HashMap<>();
+            Map<Association,List<Topic>> selectedAssociationWithRoles = new HashMap<>();
+            Map<Topic,List<? extends RowSorter.SortKey>> sortKeys = new HashMap<>();
+            Map<Topic,List<Integer>> columnProperties = new HashMap<>();
             if(associationPanel.getComponentCount() > 0) {
                 for(int i=0; i<associationPanel.getComponentCount(); i++) {
                     Component associationTableComponent = associationPanel.getComponent(i);
@@ -239,7 +239,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                         selectedAssociationWithRoles.putAll(associationTable.getSelectedAssociationsWithSelectedRoles());
                         Topic associationTypeTopic = associationTable.getAssociationTypeTopic();
                         sortKeys.put(associationTypeTopic, associationTable.getRowSorter().getSortKeys());
-                        ArrayList<Integer> columnProps = new ArrayList<Integer>();
+                        List<Integer> columnProps = new ArrayList<>();
                         TableColumnModel tcm = associationTable.getColumnModel();
                         for(int j=0; j<associationTable.getColumnCount(); j++) {
                             TableColumn tc = tcm.getColumn(j);
@@ -263,7 +263,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             Iterator<Association> iter=associations.iterator();
             int acounter=0;
             while(iter.hasNext()){
-                Association a=(Association)iter.next();
+                Association a=iter.next();
                 if(lastType==null || a.getType()==lastType) {
                     if(lastType==null) lastType=a.getType();
                     sameTypes.add(a);
@@ -358,12 +358,12 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 if(associationTableComponent != null && associationTableComponent instanceof AssociationTable) {
                     AssociationTable associationTable = (AssociationTable) associationTableComponent;
                     Topic associationTypeTopic = associationTable.getAssociationTypeTopic();
-                    java.util.List<? extends RowSorter.SortKey> sortKeysForAssociationType = sortKeys.get(associationTypeTopic);
+                    List<? extends RowSorter.SortKey> sortKeysForAssociationType = sortKeys.get(associationTypeTopic);
                     if(sortKeysForAssociationType != null) {
                         associationTable.getRowSorter().setSortKeys(sortKeysForAssociationType);
                     }
                     TableColumnModel tcm = associationTable.getColumnModel();
-                    ArrayList<Integer> columnProps = columnProperties.get(associationTypeTopic);
+                    List<Integer> columnProps = columnProperties.get(associationTypeTopic);
                     if(columnProps != null && !columnProps.isEmpty()) {
                         TableColumn[] sortedTableColumns = new TableColumn[columnProps.size()];
                         for(int j=0; j<columnProps.size(); j++) {
@@ -649,9 +649,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
         try {
             TopicMap tm = wandora.getTopicMap();
             GridBagConstraints gbc = new java.awt.GridBagConstraints();
-            nameTable=new LinkedHashMap<Set<Topic>,SimpleField>();
-            invNameTable=new LinkedHashMap<SimpleField,Set<Topic>>();
-            originalNameTable=new IteratedMap<Collection<Topic>,String>();
+            nameTable=new LinkedHashMap<>();
+            invNameTable=new LinkedHashMap<>();
+            originalNameTable=new IteratedMap<>();
             variantPanel.removeAll();
 
             Topic[] langTopics = null;
@@ -781,9 +781,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             Insets noGapsInsets = new Insets(0,0,0,0);
             Dimension defaultFieldSize = new java.awt.Dimension(100,27);
             
-            nameTable = new HashMap<Set<Topic>,SimpleField>();
-            invNameTable = new HashMap<SimpleField,Set<Topic>>();
-            originalNameTable = new IteratedMap<Collection<Topic>,String>();
+            nameTable = new HashMap<>();
+            invNameTable = new HashMap<>();
+            originalNameTable = new IteratedMap<>();
             variantPanel.removeAll();
 
             Topic[] langTopics = null;
@@ -906,9 +906,9 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
     public void buildAllNamesPanel(JPanel variantPanel, JLabel numberLabel, final Topic topic, final TopicPanel topicPanel, Options options, final Wandora wandora) {
         if(topic != null) {
             try {
-                nameTable=new LinkedHashMap<Set<Topic>,SimpleField>();
-                invNameTable=new LinkedHashMap<SimpleField,Set<Topic>>();
-                originalNameTable=new IteratedMap<Collection<Topic>,String>();
+                nameTable=new LinkedHashMap<>();
+                invNameTable=new LinkedHashMap<>();
+                originalNameTable=new IteratedMap<>();
                 variantPanel.removeAll();
 
                 JPanel myVariantPanel = variantPanel;
@@ -1007,7 +1007,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                         scopeTopicLabel.setText(scopeTopic);
                         scopeTopicLabel.setToolTipText(scopeTopic.getOneSubjectIdentifier().toExternalForm());
 
-                        ArrayList<Object> addScopeSubmenu = new ArrayList<>();
+                        List<Object> addScopeSubmenu = new ArrayList<>();
                         addScopeSubmenu.add("Add scope topic...");
                         addScopeSubmenu.add(new AddScopeTopicToVariantName(topic, scope));
                         addScopeSubmenu.add("---");
@@ -1369,7 +1369,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             if(!support.isDrop()) return false;
             try {
                 TopicMap tm = wandora.getTopicMap();
-                ArrayList<Topic> sourceTopics=DnDHelper.getTopicList(support, tm, true);
+                List<Topic> sourceTopics=DnDHelper.getTopicList(support, tm, true);
                 if(sourceTopics==null || sourceTopics.isEmpty()) return false;
 
                 Topic schemaContentTypeTopic = tm.getTopic(SchemaBox.CONTENTTYPE_SI);
@@ -1505,7 +1505,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             if(!support.isDrop()) return false;
             try{
                 TopicMap tm = wandora.getTopicMap();
-                ArrayList<Topic> topics = DnDHelper.getTopicList(support, tm, true);
+                List<Topic> topics = DnDHelper.getTopicList(support, tm, true);
                 if(topics==null) return false;
                 Topic base = topicPanel.getTopic();
                 if(base==null) return false;
@@ -1566,7 +1566,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             if(!support.isDrop()) return false;
             try{
                 TopicMap tm = wandora.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
+                List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                 if(topics==null) return false;
                 Topic base = topicPanel.getTopic();
                 if(base==null) return false;

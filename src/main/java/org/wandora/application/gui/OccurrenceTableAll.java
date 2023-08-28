@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.AbstractCellEditor;
@@ -1156,7 +1157,7 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, 
                 if(realRow >= 0 && realCol >= 0 && realRow < types.length && realCol < langs.length+1) {
                     if(transferable.isDataFlavorSupported(DnDHelper.topicDataFlavor)) {
                         TopicMap tm=wandora.getTopicMap();
-                        ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
+                        List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                         if(topics==null) return false;
                         
                         // DROP ON TYPE COLUMN ==> DUPLICATE/CHANGE TYPE

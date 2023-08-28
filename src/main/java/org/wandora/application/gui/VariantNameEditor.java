@@ -31,6 +31,7 @@ package org.wandora.application.gui;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,9 +64,9 @@ public class VariantNameEditor extends javax.swing.JPanel {
 	
 	private JDialog myDialog = null;
     private boolean wasAccepted = false;
-    private ArrayList<Topic> scopeTopics = new ArrayList<Topic>();
+    private List<Topic> scopeTopics = new ArrayList<>();
     private Wandora wandora = null;
-    private static ArrayList<Locator> lastScopeSubjects = new ArrayList<Locator>();
+    private static List<Locator> lastScopeSubjects = new ArrayList<>();
 
 
     /** Creates new form VariantNameEditor */
@@ -108,7 +109,7 @@ public class VariantNameEditor extends javax.swing.JPanel {
     }
 
     public Set<Topic> getVariantScope() {
-        LinkedHashSet<Topic> set =  new LinkedHashSet();
+        Set<Topic> set =  new LinkedHashSet<>();
         set.addAll(scopeTopics);
         return set;
     }

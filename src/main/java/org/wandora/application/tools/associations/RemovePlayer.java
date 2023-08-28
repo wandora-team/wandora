@@ -28,6 +28,7 @@ package org.wandora.application.tools.associations;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -86,7 +87,7 @@ public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
     public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
-            Map<Association,ArrayList<Topic>> associationsWithRoles = null;
+            Map<Association,List<Topic>> associationsWithRoles = null;
             Topic role = null;
             Association a = null;
             int aCounter = 0;
@@ -113,10 +114,10 @@ public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
                     Iterator<Association> associationIterator = associationSet.iterator();
                     
                     while(associationIterator.hasNext() && !forceStop() && shouldContinue) {
-                        a = (Association) associationIterator.next();
+                        a = associationIterator.next();
                         if(a != null) {
                             aCounter++;
-                            ArrayList<Topic> roles = associationsWithRoles.get(a);
+                            List<Topic> roles = associationsWithRoles.get(a);
                             Iterator<Topic> roleIterator = roles.iterator();
                             while(roleIterator.hasNext() && !forceStop() && shouldContinue) {
                                 role = roleIterator.next();

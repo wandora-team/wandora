@@ -184,7 +184,7 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
         DefaultSyntaxKit.initKit();
         rEditor.setContentType("text/plain");
         
-        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
+        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
         rEditor.getInputMap().put(key, "saveOperation");
         Action saveOperation = new AbstractAction() {
             @Override
@@ -680,12 +680,12 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
     
     @Override
     public void open(Topic topic) throws TopicMapException {
-	rootTopic = topic;
+        rootTopic = topic;
         
         if(autoloadFromOccurrence) {
             rEditor.setText(getROccurrence());
         }
-	autorun();
+        autorun();
     }
 
     
@@ -693,7 +693,7 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
         autoloadFromOccurrence = options.getBoolean(optionsPrefix+".autoload", autoloadFromOccurrence);
         autoloadCheckBox.setSelected(autoloadFromOccurrence);
         
-	autorun = options.getInt(optionsPrefix+".autorun", 0);
+        autorun = options.getInt(optionsPrefix+".autorun", 0);
         autorunScriptFile = options.get(optionsPrefix+".autorunScriptFile");
         autoRunFileTextField.setText(autorunScriptFile);
         

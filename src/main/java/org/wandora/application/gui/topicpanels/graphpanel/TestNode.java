@@ -43,7 +43,7 @@ public class TestNode extends AbstractNode {
     
     /** Creates a new instance of TestNode */
     public TestNode() {
-        this.edges=new ArrayList<Edge>();
+        this.edges=new ArrayList<>();
     }
     public TestNode(String label) {
         this();

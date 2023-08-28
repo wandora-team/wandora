@@ -135,7 +135,7 @@ public class RotateMouseTool extends MouseTool {
                 }
             }
         }
-        return new T2(centerX, centerY);
+        return new T2<>(centerX, centerY);
     }
     
     

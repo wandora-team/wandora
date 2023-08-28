@@ -32,7 +32,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -246,7 +246,7 @@ public class MixedTopicTable extends TopicTable implements MouseListener, Action
     
     @Override
     public Object[][] getSelectedValues() {
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<int[]> selectedCells = getSelectedCells();
         int rlen = 0;
         int clen = 0;
         for(int[] cell : selectedCells) {
@@ -287,6 +287,8 @@ public class MixedTopicTable extends TopicTable implements MouseListener, Action
 
 
     private class MixedTopicTableTransferHandler extends TransferHandler {
+
+        private static final long serialVersionUID = 1L;
 
         @Override
         public boolean canImport(TransferSupport support) {

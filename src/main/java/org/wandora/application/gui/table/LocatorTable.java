@@ -42,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -290,8 +291,8 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
     
     
     
-    public ArrayList<int[]> getSelectedCells() {
-        ArrayList<int[]> selected = new ArrayList();
+    public List<int[]> getSelectedCells() {
+        List<int[]> selected = new ArrayList<>();
         
         TableSelectionModel selection = getTableSelectionModel();
         int colCount = this.getColumnCount();
@@ -316,8 +317,8 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
     
     
     public Locator[] getSelectedLocators() {
-        ArrayList<Locator> locators = new ArrayList<Locator>();
-        ArrayList<int[]> selectedCells = getSelectedCells();
+        List<Locator> locators = new ArrayList<Locator>();
+        List<int[]> selectedCells = getSelectedCells();
         for(int[] cell : selectedCells) {
             locators.add( getLocatorAt(cell[0], cell[1]) );
         }

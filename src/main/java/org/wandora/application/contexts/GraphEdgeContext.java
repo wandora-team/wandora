@@ -55,7 +55,7 @@ public class GraphEdgeContext implements Context {
     protected Wandora wandora = null;
     
     
-    /** Creates a new instance of NodeContext */
+    /** Creates a new instance of GraphEdgeContext */
     public GraphEdgeContext() {
     }
     

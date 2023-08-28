@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>44</x>
-      <y>55</y>
-      <width>1047</width>
-      <height>687</height>
+      <x>104</x>
+      <y>66</y>
+      <width>1225</width>
+      <height>717</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>528</verticalsplitter>
+      <verticalsplitter>558</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -1301,7 +1301,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    </shortcuts>
    <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
    <current>
-      <directory></directory>
+      <directory>/Users/akikivela</directory>
       <port></port>
       <user></user>
       <host></host>

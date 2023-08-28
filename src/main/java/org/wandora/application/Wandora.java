@@ -50,7 +50,7 @@ import java.io.File;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -239,7 +239,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     private JPopupMenu forwardPopup = new JPopupMenu();
     
 
-    private Set animationCallers = new HashSet();
+    private Set<Object> animationCallers = new LinkedHashSet<>();
     
 
 
@@ -299,7 +299,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     
     public Wandora(CMDParamParser cmdparams) {
-        this.wandora = this;
+        Wandora.wandora = this;
         if(cmdparams != null && cmdparams.isSet("options")) {
             this.options = new Options(cmdparams.get("options"));
         }
@@ -320,8 +320,8 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         }
 
         try {
-            topicMapListeners=new HashSet<TopicMapListener>();
-            refreshListeners=new HashSet<RefreshListener>();
+            topicMapListeners=new LinkedHashSet<>();
+            refreshListeners=new LinkedHashSet<>();
 	    
 	    //JPopupMenu.setDefaultLightWeightPopupEnabled(false);
             initComponents();
@@ -407,7 +407,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             catch(Exception e) {
                 // IGNORE
             }
-            Collection<RefreshListener> duplicate=new ArrayList<RefreshListener>();
+            Collection<RefreshListener> duplicate=new ArrayList<>();
             duplicate.addAll(refreshListeners); // refresh may result in closeTopic which modifies refreshListeners
             for(RefreshListener l : duplicate){
                 try {
@@ -1693,7 +1693,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         synchronized(errorHandlerLock){
             /*debug*/ throwable.printStackTrace();
             if(!handleErrors) return;
-            ErrorDialog ed = new ErrorDialog(this, throwable);
+            new ErrorDialog(this, throwable);
         }
     }
     
@@ -1813,12 +1813,10 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             LayerStack ls = topicMap;
             Layer layer = null;
             TopicMap tm = null;
-            String layerName = null;
             int c=10;
             while(ls != null && c-- > 0) {
                 layer = ls.getSelectedLayer();
                 tm = layer.getTopicMap();
-                layerName = layer.getName();
                 if(tm != null && tm instanceof LayerStack) {
                     ls = (LayerStack) tm;
                 }
@@ -1941,10 +1939,10 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         d.setVisible(true);
         T2<Topic,Boolean> ret=null;
         if(finder.wasCancelled()) {
-            ret=new T2((Topic) null, true);
+            ret=new T2<>((Topic) null, true);
         }
         else {
-            ret=new T2(finder.getSelectedTopic(), false);
+            ret=new T2<>(finder.getSelectedTopic(), false);
         }
         finder.cleanup();
         return ret;

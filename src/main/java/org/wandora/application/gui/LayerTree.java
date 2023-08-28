@@ -822,7 +822,7 @@ public class LayerTree extends DragJTree {
                 TopicMap target = l.getTopicMap();
                 
                 if(source != null && target != null) {
-                    ArrayList<Topic> topics=DnDHelper.getTopicList(dtde.getTransferable(), source, true);
+                    List<Topic> topics=DnDHelper.getTopicList(dtde.getTransferable(), source, true);
                     if(topics==null) return;
                     for(Topic t : topics) {
                         if(t != null && !t.isRemoved()) {

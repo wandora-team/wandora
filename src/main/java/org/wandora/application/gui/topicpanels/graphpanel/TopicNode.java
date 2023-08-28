@@ -80,7 +80,7 @@ public class TopicNode extends AbstractNode {
     @Override
     public Collection<Edge> getEdges() {
         if(edges==null) {
-            edges=new ArrayList<Edge>();
+            edges=new ArrayList<>();
             try{
                 for(Association a : topic.getAssociations()) {
                     if(a.getRoles().size()==2) edges.add(model.getEdgeFor(a));

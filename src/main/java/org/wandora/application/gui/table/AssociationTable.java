@@ -35,7 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -168,7 +168,7 @@ public class AssociationTable extends TopicTable {
     
     
     
-    public void selectAssociations(Map<Association,ArrayList<Topic>> selection) {
+    public void selectAssociations(Map<Association,List<Topic>> selection) {
         if(selection == null || selection.isEmpty()) return;
         Set<Association> as = selection.keySet();
         for(Association a : as) {
@@ -177,7 +177,7 @@ public class AssociationTable extends TopicTable {
     }
     
     
-    public void selectAssociation(Association association, ArrayList<Topic> roles) {
+    public void selectAssociation(Association association, List<Topic> roles) {
         int r = associations.length;
         int c = columnTopics.length;
         Association tableAssociation = null;
@@ -233,9 +233,9 @@ public class AssociationTable extends TopicTable {
     }
     
     
-    public Map<Association,ArrayList<Topic>> getSelectedAssociationsWithSelectedPlayers() {
-        HashMap<Association,ArrayList<Topic>> selection = new HashMap<Association,ArrayList<Topic>>();
-        ArrayList<Topic> players = null;
+    public Map<Association,List<Topic>> getSelectedAssociationsWithSelectedPlayers() {
+        Map<Association,List<Topic>> selection = new LinkedHashMap<>();
+        List<Topic> players = null;
         Collection<int[]> selectedCells = getSelectedCells();
         
         for(int[] cell : selectedCells) {
@@ -243,7 +243,7 @@ public class AssociationTable extends TopicTable {
             Topic player = getTopicAt(cell[0], cell[1]);
             
             players = selection.get(a);
-            if(players == null) players = new ArrayList<Topic>();
+            if(players == null) players = new ArrayList<>();
             players.add(player);
             
             selection.put(a, players);
@@ -253,9 +253,9 @@ public class AssociationTable extends TopicTable {
     
     
     
-    public Map<Association,ArrayList<Topic>> getSelectedAssociationsWithSelectedRoles() {
-        HashMap<Association,ArrayList<Topic>> selection = new HashMap<Association,ArrayList<Topic>>();
-        ArrayList<Topic> roles = null;
+    public Map<Association,List<Topic>> getSelectedAssociationsWithSelectedRoles() {
+        Map<Association,List<Topic>> selection = new LinkedHashMap<>();
+        List<Topic> roles = null;
         Collection<int[]> selectedCells = getSelectedCells();
         
         for(int[] cell : selectedCells) {
@@ -263,7 +263,7 @@ public class AssociationTable extends TopicTable {
             Topic role = columnTopics[cell[1]];
             
             roles = selection.get(a);
-            if(roles == null) roles = new ArrayList<Topic>();
+            if(roles == null) roles = new ArrayList<>();
             roles.add(role);
             
             selection.put(a, roles);
@@ -284,7 +284,7 @@ public class AssociationTable extends TopicTable {
     @Override
     public void paste() {
         TopicMap tm = Wandora.getWandora().getTopicMap();
-        Map<Association,ArrayList<Topic>> selectedAssociationsAndRoles = getSelectedAssociationsWithSelectedRoles();
+        Map<Association,List<Topic>> selectedAssociationsAndRoles = getSelectedAssociationsWithSelectedRoles();
         String tabText = ClipboardBox.getClipboard();
         StringTokenizer tabLines = new StringTokenizer(tabText, "\n");
         autoCreateTopicsInPaste = false;
@@ -384,7 +384,7 @@ public class AssociationTable extends TopicTable {
         protected Transferable createTransferable(JComponent c) {
             int[] rows=getSelectedRows();
             DnDHelper.WandoraTransferable ret=DnDHelper.makeTopicTableTransferable(AssociationTable.this);
-            ArrayList<Association> selectedAssociations=new ArrayList<Association>();
+            List<Association> selectedAssociations=new ArrayList<>();
             for(int i=0;i<rows.length;i++){
                 selectedAssociations.add(associations[rows[i]]);
             }
@@ -402,7 +402,7 @@ public class AssociationTable extends TopicTable {
             if(!support.isDrop()) return false;
             try{
                 TopicMap tm=AssociationTable.this.wandora.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
+                List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                 if(topics==null) return false;
                 
                 JTable.DropLocation location=(JTable.DropLocation)support.getDropLocation();

@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -1232,10 +1233,10 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     
     
-    public void selectNodesWithPath(ArrayList<T2<Double,Double>> path){
+    public void selectNodesWithPath(List<T2<Double,Double>> path){
         if(!path.get(0).equals(path.get(path.size()-1))) path.add(path.get(0));
         
-        ArrayList<VNode> nodes=model.getNodes();
+        List<VNode> nodes=model.getNodes();
         int[] counters=new int[nodes.size()];
         
         for(int i=0;i<path.size()-1;i++){
@@ -1330,16 +1331,16 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                     wandora.applyChangesAndOpen(t);                    
                 }
             }
-            else if(mouseTool==TOOL_SELECT || (e.getModifiers()&e.SHIFT_MASK)!=0) {
+            else if(mouseTool==TOOL_SELECT || (e.getModifiersEx()&e.SHIFT_MASK)!=0) {
                 if(mouseOverNode!=null){
-                    if((e.getModifiers()&e.SHIFT_MASK)==0) model.setSelection(mouseOverNode);
+                    if((e.getModifiersEx()&e.SHIFT_MASK)==0) model.setSelection(mouseOverNode);
                     else{
                         if(mouseOverNode.isSelected()) model.deselectNode(mouseOverNode);
                         else model.addSelection(mouseOverNode);
                     }
                 }
                 else{
-                    if((e.getModifiers()&e.SHIFT_MASK)==0) model.deselectAll();
+                    if((e.getModifiersEx()&e.SHIFT_MASK)==0) model.deselectAll();
                 }
             }
             else if(mouseTool==TOOL_OPEN && mouseOverNode!=null) model.openNode(mouseOverNode);
@@ -1354,7 +1355,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     @Override
     public void mousePressed(MouseEvent e) {
         requestFocus();
-/*        if(mouseTool==TOOL_SELECT || (e.getModifiers()&e.SHIFT_MASK)!=0){
+/*        if(mouseTool==TOOL_SELECT || (e.getModifiersEx()&e.SHIFT_MASK)!=0){
             drawingSelection=true;
             selectPath=new ArrayList<T2<Double,Double>>();
             selectPath.add(t2(mouseX,mouseY));
@@ -1386,12 +1387,12 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         if(drawingSelection){
             drawingSelection=false;
             if(selectPath.size()>10){
-                if((e.getModifiers()&e.SHIFT_MASK)==0) model.deselectAll();
+                if((e.getModifiersEx()&e.SHIFT_MASK)==0) model.deselectAll();
                 selectNodesWithPath(selectPath);
             }
         }*/
         mouseToolManager.mouseReleased(e);
-        mouseToolManager.updateCursor(e.getModifiers(),e.getX(),e.getY());
+        mouseToolManager.updateCursor(e.getModifiersEx(),e.getX(),e.getY());
     }
 
     @Override
@@ -1402,15 +1403,15 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             mouseY=p.e2;
         }
         mouseToolManager.mouseMoved(e);
-        mouseToolManager.updateCursor(e.getModifiers(),e.getX(),e.getY());
+        mouseToolManager.updateCursor(e.getModifiersEx(),e.getX(),e.getY());
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         int notches=e.getWheelRotation();
         double multiplier=1.5;
-        if((e.getModifiers()&MouseWheelEvent.ALT_MASK)!=0) multiplier=1.1;
-        if((e.getModifiers()&MouseWheelEvent.SHIFT_MASK)!=0){
+        if((e.getModifiersEx()&MouseWheelEvent.ALT_DOWN_MASK)!=0) multiplier=1.1;
+        if((e.getModifiersEx()&MouseWheelEvent.SHIFT_DOWN_MASK)!=0){
             projection.modify(Projection.MOUSEWHEEL2, notches, multiplier);
         }
         else {
@@ -1695,8 +1696,8 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             VModel oldModel=model;
             TopicMapModel oldTMModel=tmModel;
             Topic oldRoot=rootTopic;
-            ArrayList<VNode> oldNodes=oldModel.getNodes();
-            ArrayList<VEdge> oldEdges=oldModel.getEdges();
+            List<VNode> oldNodes=oldModel.getNodes();
+            List<VEdge> oldEdges=oldModel.getEdges();
             
             remakeModels(tm);
             
@@ -1909,12 +1910,12 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         else if(e.getKeyCode() == KeyEvent.VK_MINUS) {
             projection.modify(Projection.MOUSEWHEEL1, +0.5, 1.5);
         }
-        mouseToolManager.updateCursor(e.getModifiers(),-1,-1);
+        mouseToolManager.updateCursor(e.getModifiersEx(),-1,-1);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        mouseToolManager.updateCursor(e.getModifiers(),-1,-1);
+        mouseToolManager.updateCursor(e.getModifiersEx(),-1,-1);
     }
     
     
@@ -1966,7 +1967,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             if(!support.isDrop()) return false;
             try {
                 TopicMap tm=wandora.getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
+                List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                 if(topics==null) return false;
 
                 for(Topic t : topics) {

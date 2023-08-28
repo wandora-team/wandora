@@ -36,6 +36,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.TransferHandler;
 
@@ -135,7 +136,7 @@ public class DnDHelper {
     
 
     public static WandoraTransferable makeTopicTransferable(TopicTable table, int[] rows, int[] columns){
-        ArrayList<Topic> selected=new ArrayList<Topic>();
+        List<Topic> selected=new ArrayList<>();
         StringBuilder sb=new StringBuilder();
         Topic t = null;
         try {
@@ -162,28 +163,28 @@ public class DnDHelper {
     }
 
 
-    public static ArrayList<Topic> getTopicList(TransferHandler.TransferSupport support,TopicMap tm,boolean create) throws TopicMapException {
+    public static List<Topic> getTopicList(TransferHandler.TransferSupport support,TopicMap tm,boolean create) throws TopicMapException {
         return getTopicList(support.getTransferable(), tm, create);
     }
 
 
-    public static ArrayList<Topic> getTopicList(Transferable transferable,TopicMap tm,boolean create) throws TopicMapException {
+    public static List<Topic> getTopicList(Transferable transferable,TopicMap tm,boolean create) throws TopicMapException {
         try{
-            ArrayList<Topic> topics=null;
+            List<Topic> topics=null;
             if(transferable.isDataFlavorSupported(DnDHelper.topicArrayDataFlavor)){
                 Topic[] ts=(Topic[])transferable.getTransferData(DnDHelper.topicArrayDataFlavor);
-                topics=new ArrayList<Topic>();
+                topics=new ArrayList<>();
                 for(int i=0;i<ts.length;i++) topics.add(ts[i]);
             }
             else if(transferable.isDataFlavorSupported(DnDHelper.topicDataFlavor)){
                 Topic t=(Topic)transferable.getTransferData(DnDHelper.topicDataFlavor);
-                topics=new ArrayList<Topic>();
+                topics=new ArrayList<>();
                 topics.add(t);
             }
             else if(transferable.isDataFlavorSupported(DataFlavor.stringFlavor)){
                 String data=(String)transferable.getTransferData(DataFlavor.stringFlavor);
                 String[] split=data.split("\n");
-                topics=new ArrayList<Topic>();
+                topics=new ArrayList<>();
                 for(int i=0;i<split.length;i++){
                     split[i]=split[i].trim();
                     if(split[i].length()==0) continue;
@@ -216,12 +217,12 @@ public class DnDHelper {
            
     public static class GenericTransferable implements Transferable {
         protected DataFlavor[] flavorsA;
-        protected ArrayList<DataFlavor> flavors;
-        protected ArrayList<Object> data;
+        protected List<DataFlavor> flavors;
+        protected List<Object> data;
         
         public GenericTransferable(){
-            this.flavors=new ArrayList<DataFlavor>();
-            this.data=new ArrayList<Object>();
+            this.flavors=new ArrayList<>();
+            this.data=new ArrayList<>();
         }
 
         public void addData(DataFlavor flavor,Object data){
@@ -308,7 +309,7 @@ public class DnDHelper {
         }
         public void setTopics(Topic[][] t){
             grid=t;
-            ArrayList<Topic> tt = new ArrayList<Topic>();
+            List<Topic> tt = new ArrayList<>();
             for(int i=0; i<t.length; i++) {
                 for(int j=0; j<t[i].length; j++) {
                     tt.add(t[i][j]);
@@ -359,7 +360,7 @@ public class DnDHelper {
                 }
                 if(topics==null){
                     if(associations!=null){
-                        ArrayList<Topic> ts=new ArrayList<Topic>();
+                        List<Topic> ts=new ArrayList<>();
                         for(Association a : associations){
                             for(Topic role : a.getRoles()){
                                 ts.add(a.getPlayer(role));
@@ -412,7 +413,7 @@ public class DnDHelper {
         }
         
         public void updateFlavors(){
-            ArrayList<DataFlavor> dfs=new ArrayList<DataFlavor>();
+            List<DataFlavor> dfs=new ArrayList<>();
             if(associations!=null) dfs.add(associationArrayDataFlavor);
             if(association!=null) dfs.add(associationDataFlavor);
             if(grid!=null) dfs.add(topicGridDataFlavor);

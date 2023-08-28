@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -441,10 +442,10 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
         if(wandora != null) {
             WandoraModulesServer httpServer = wandora.httpServer;
             
-            ArrayList<ModulesWebApp> webApps=httpServer.getWebApps();
-            HashMap<String,ModulesWebApp> webAppsMap=new HashMap<>();
+            List<ModulesWebApp> webApps=httpServer.getWebApps();
+            Map<String,ModulesWebApp> webAppsMap=new HashMap<>();
             for(ModulesWebApp wa : webApps) webAppsMap.put(wa.getAppName(), wa);
-            ArrayList<String> sorted = new ArrayList<>(webAppsMap.keySet());
+            List<String> sorted = new ArrayList<>(webAppsMap.keySet());
             Collections.sort(sorted);
 
             for(String appName : sorted) {
@@ -1106,7 +1107,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
         catch(Exception e) {
             e.printStackTrace();
         }
-        return new T3(content, Integer.valueOf(start), Integer.valueOf(end));
+        return new T3<>(content, Integer.valueOf(start), Integer.valueOf(end));
     }
     
     

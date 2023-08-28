@@ -178,7 +178,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         Icon hideIcon = UIBox.getIcon("gui/icons/view2_no.png");
         Icon configureIcon = UIBox.getIcon("gui/icons/topic_panel_custom_configure.png");
 
-        ArrayList menuVector = new ArrayList();
+        List<Object> menuVector = new ArrayList<>();
         for(int i=0;i<queryGroups.size();i++){
             QueryGroupInfo groupInfo=queryGroups.get(i);
             menuVector.add(groupInfo.name);
@@ -439,15 +439,15 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         
         try {
             TopicMap tm=wandora.getTopicMap();
-            ArrayList<ResultRow> res=query.doQuery(new QueryContext(tm,wandora.getLang()),new ResultRow(context));
-            ArrayList<String> columns=new ArrayList<String>();
+            List<ResultRow> res=query.doQuery(new QueryContext(tm,wandora.getLang()),new ResultRow(context));
+            List<String> columns=new ArrayList<>();
             for(ResultRow row : res){
                 for(int i=0;i<row.getNumValues();i++){
                     String r=row.getRole(i);
                     if(!columns.contains(r)) columns.add(r);
                 }
             }
-            ArrayList<Object> columnLabelsA = new ArrayList<Object>();
+            List<Object> columnLabelsA = new ArrayList<>();
             for(int i=0;i<columns.size();i++){
                 String r=columns.get(i);
                 if(r.startsWith("~")) {

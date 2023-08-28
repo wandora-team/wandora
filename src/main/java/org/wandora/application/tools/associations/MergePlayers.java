@@ -29,6 +29,7 @@ package org.wandora.application.tools.associations;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -98,13 +99,13 @@ public class MergePlayers extends AbstractWandoraTool implements WandoraTool {
                     associationTable = (AssociationTable) context.getContextSource();
                 }
                 if(associationTable != null) {
-                    Map<Association,ArrayList<Topic>> associationsWithSelectedRoles = associationTable.getSelectedAssociationsWithSelectedRoles();
+                    Map<Association,List<Topic>> associationsWithSelectedRoles = associationTable.getSelectedAssociationsWithSelectedRoles();
                     Set<Association> associationKeys = associationsWithSelectedRoles.keySet();
                     Iterator<Association> associationKeyIterator = associationKeys.iterator();
                     while(associationKeyIterator.hasNext() && !forceStop()) {
                         association = (Association) associationKeyIterator.next();
                         if(association != null && !association.isRemoved()) {
-                            ArrayList<Topic> mergeRoles = associationsWithSelectedRoles.get(association);
+                            List<Topic> mergeRoles = associationsWithSelectedRoles.get(association);
                             Topic mergedTopic = null;
                             for(Topic mergeRole : mergeRoles) {
                                 Topic t = association.getPlayer(mergeRole);

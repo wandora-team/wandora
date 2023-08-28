@@ -256,10 +256,10 @@ public class TopicPanelManager implements ActionListener {
     
     
     
-    public List<List> getAvailableTopicPanels() {
-        List<List> availablePanels = new ArrayList<>();
+    public List<List<Object>> getAvailableTopicPanels() {
+        List<List<Object>> availablePanels = new ArrayList<>();
         for(String panelName : sortedTopicPanels()) {
-            List panelData = new ArrayList();
+            List<Object> panelData = new ArrayList<>();
             String panelClass = topicPanelMap.get(panelName);
             panelData.add(panelClass);
             panelData.add(panelName);
@@ -273,10 +273,10 @@ public class TopicPanelManager implements ActionListener {
     
     
     
-    public List<List> getAvailableTopicPanelsSupportingOpenTopic() {
-        List<List> availablePanels = new ArrayList<>();
+    public List<List<Object>> getAvailableTopicPanelsSupportingOpenTopic() {
+        List<List<Object>> availablePanels = new ArrayList<>();
         for(String panelName : sortedTopicPanels()) {
-            ArrayList panelData = new ArrayList();
+            List<Object> panelData = new ArrayList<>();
             String panelClass = topicPanelMap.get(panelName);
             if(topicPanelsSupportingOpenTopic.contains(panelClass)) {
                 panelData.add(panelClass);

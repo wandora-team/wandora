@@ -26,7 +26,7 @@ package org.wandora.utils.swing.anyselectiontable;
 
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -272,7 +272,7 @@ public class AnySelectionTable extends JTable {
     
     
     
-    public void selectCells(ArrayList<int[]> cells) {
+    public void selectCells(List<int[]> cells) {
         if(cells != null && !cells.isEmpty()) {
             for(int[] cell : cells) {
                 if(cell != null && cell.length == 2) {

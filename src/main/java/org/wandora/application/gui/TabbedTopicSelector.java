@@ -31,6 +31,7 @@ package org.wandora.application.gui;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.wandora.application.gui.search.SearchPanel;
 import org.wandora.application.gui.search.SelectTopicPanel;
@@ -51,14 +52,14 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
 
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<TopicSelector> selectors;
+	private List<TopicSelector> selectors;
     private boolean wasCancelled=true;
     private boolean cleared=false;
     
     
     /** Creates new form TabbedTopicSelector */
     public TabbedTopicSelector() {
-        selectors=new ArrayList<TopicSelector>();
+        selectors=new ArrayList<>();
         initComponents();
         clearButton.setVisible(false);
     }

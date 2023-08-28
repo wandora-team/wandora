@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -905,7 +906,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                 else {
                     try{
                         TopicMap tm=TopicTree.this.wandora.getTopicMap();
-                        ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
+                        List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                         if(topics==null) return false;
                         
                         JTree.DropLocation location=(JTree.DropLocation)support.getDropLocation();

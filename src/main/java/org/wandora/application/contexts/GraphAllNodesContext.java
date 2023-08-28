@@ -53,7 +53,7 @@ public class GraphAllNodesContext implements Context {
     protected Wandora wandora = null;
     
     
-    /** Creates a new instance of NodeContext */
+    /** Creates a new instance of GraphAllNodesContext */
     public GraphAllNodesContext() {
     }
     

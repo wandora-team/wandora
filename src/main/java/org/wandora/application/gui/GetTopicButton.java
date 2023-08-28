@@ -43,6 +43,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -393,7 +394,7 @@ public class GetTopicButton extends SimpleButton {
             if(!support.isDrop()) return false;
             try {
                 TopicMap tm=Wandora.getWandora().getTopicMap();
-                ArrayList<Topic> topics=DnDHelper.getTopicList(support, tm, true);
+                List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
                 if(topics==null || topics.isEmpty()) return false;
                 setTopic(topics.get(0));
                 

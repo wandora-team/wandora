@@ -23,7 +23,8 @@
 
 package org.wandora.application.gui.topicpanels.dockingpanel;
 
-import java.util.ArrayList;
+
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
@@ -43,7 +44,7 @@ public class SelectTopicPanelPanel extends javax.swing.JPanel {
     private static final long serialVersionUID = 1L;
     
     private JDialog myDialog = null;
-    private ArrayList<TopicPanel> topicPanels = null;
+    private List<TopicPanel> topicPanels = null;
     private Wandora wandora = null;
     private boolean wasAccepted = false;
     
@@ -61,7 +62,7 @@ public class SelectTopicPanelPanel extends javax.swing.JPanel {
     
     
     
-    public void openInDialog(ArrayList<TopicPanel> topicPanels, Wandora wandora) {
+    public void openInDialog(List<TopicPanel> topicPanels, Wandora wandora) {
         this.topicPanels = topicPanels;
         this.wandora = wandora;
         

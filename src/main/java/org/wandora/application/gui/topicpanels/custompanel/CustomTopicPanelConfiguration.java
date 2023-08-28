@@ -26,6 +26,7 @@
  */
 
 package org.wandora.application.gui.topicpanels.custompanel;
+
 import static java.awt.event.KeyEvent.VK_F5;
 
 import java.awt.BorderLayout;
@@ -99,7 +100,7 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
     
     public void readQueryGroups(List<QueryGroupInfo> oldGroups){
         rootNode="Custom panel";
-        this.groups=new ArrayList<QueryGroupInfo>();
+        this.groups=new ArrayList<>();
         for(QueryGroupInfo g : oldGroups){
             this.groups.add(g.deepCopy());
         }

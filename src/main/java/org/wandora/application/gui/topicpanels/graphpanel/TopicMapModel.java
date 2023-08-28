@@ -31,6 +31,7 @@ import static org.wandora.utils.Tuples.t2;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
@@ -47,13 +48,13 @@ import org.wandora.utils.Tuples.T2;
 public class TopicMapModel {
     
     private TopicHashMap<TopicNode> topicIndex;
-    private HashMap<AssociationWrapper, AssociationEdge> associationEdgeIndex;
-    private HashMap<AssociationWrapper, AssociationNode> associationNodeIndex;
+    private Map<AssociationWrapper, AssociationEdge> associationEdgeIndex;
+    private Map<AssociationWrapper, AssociationNode> associationNodeIndex;
     //                 type,instance
-    private HashMap<T2<Node,Node>,InstanceEdge> instanceEdgeIndex;
+    private Map<T2<Node,Node>,InstanceEdge> instanceEdgeIndex;
     
-    private HashMap<OccurrenceWrapper, OccurrenceEdge> occurrenceEdgeIndex;
-    private HashMap<OccurrenceWrapper, OccurrenceNode> occurrenceNodeIndex;
+    private Map<OccurrenceWrapper, OccurrenceEdge> occurrenceEdgeIndex;
+    private Map<OccurrenceWrapper, OccurrenceNode> occurrenceNodeIndex;
     
     private VModel vModel;
     
@@ -67,12 +68,12 @@ public class TopicMapModel {
     public TopicMapModel(VModel vModel,TopicMap topicMap) {
         this.vModel=vModel;
         this.topicMap=topicMap;
-        topicIndex=new TopicHashMap<TopicNode>();
-        associationEdgeIndex=new HashMap<AssociationWrapper,AssociationEdge>();
-        associationNodeIndex=new HashMap<AssociationWrapper,AssociationNode>();
-        occurrenceEdgeIndex=new HashMap<OccurrenceWrapper,OccurrenceEdge>();
-        occurrenceNodeIndex=new HashMap<OccurrenceWrapper,OccurrenceNode>();
-        instanceEdgeIndex=new HashMap<T2<Node,Node>,InstanceEdge>();
+        topicIndex=new TopicHashMap<>();
+        associationEdgeIndex=new HashMap<>();
+        associationNodeIndex=new HashMap<>();
+        occurrenceEdgeIndex=new HashMap<>();
+        occurrenceNodeIndex=new HashMap<>();
+        instanceEdgeIndex=new HashMap<>();
     }
     
     

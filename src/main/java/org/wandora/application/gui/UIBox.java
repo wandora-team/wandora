@@ -63,6 +63,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
@@ -976,7 +978,7 @@ public class UIBox {
     
     
     public static Object[] fillMenuTemplate(String key, Object[] items, Object[] menuTemplate){
-        ArrayList<Object> menu=new ArrayList<Object>();
+        List<Object> menu=new ArrayList<>();
         
         Object lastItem="DUMMY";
         for(int i=0;i<menuTemplate.length;i++){
@@ -1022,15 +1024,16 @@ public class UIBox {
     
     
     
-    private static HashMap iconCache = null;
+    private static Map<String,Icon> iconCache = null;
     private static Font iconFont = null;
     
     
     
     public static Icon getIcon(int iconCharacter) {
+        String iconCharacterString = "" + Character.forDigit(iconCharacter, 10);
         if(iconCache != null) {
             try {
-                Icon icon = (Icon) iconCache.get(iconCharacter);
+                Icon icon = (Icon) iconCache.get(iconCharacterString);
                 if(icon != null) return icon;
             }
             catch (Exception e) {
@@ -1038,13 +1041,13 @@ public class UIBox {
             }
         }
         else {
-            iconCache = new HashMap();
+            iconCache = new HashMap<>();
         }
         Image image = getImage(iconCharacter);
         if(image != null) {
             try {
                 Icon icon = new ImageIcon(image);
-                iconCache.put(iconCharacter, icon);
+                iconCache.put(iconCharacterString, icon);
                 return icon;
             }
             catch (Exception e) {
@@ -1067,7 +1070,7 @@ public class UIBox {
             }
         }
         else {
-            iconCache = new HashMap();
+            iconCache = new HashMap<>();
         }
         Image image = getImage(iconName);
         if(image != null) {
@@ -1268,7 +1271,7 @@ public class UIBox {
     
     // -------------------------------------------------------------------------
     
-    private static HashMap iconThumbCache = new HashMap();
+    private static Map<String,Icon> iconThumbCache = new HashMap<>();
     
     
     public static Icon getCachedIconThumbForLocator(String l, int width, int height) {

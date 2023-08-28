@@ -27,6 +27,7 @@ package org.wandora.application.tools.associations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -89,7 +90,7 @@ public class OpenEdgeTopic extends AbstractWandoraTool implements WandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) {      
         try {
-            Map<Association,ArrayList<Topic>> associationsWithRoles = null;
+            Map<Association,List<Topic>> associationsWithRoles = null;
             Topic role = null;
             Association a = null;
             
@@ -110,7 +111,7 @@ public class OpenEdgeTopic extends AbstractWandoraTool implements WandoraTool {
                     if(associationIterator.hasNext() && !forceStop()) {
                         a = (Association) associationIterator.next();
                         if(a != null) {
-                            ArrayList<Topic> roles = associationsWithRoles.get(a);
+                            List<Topic> roles = associationsWithRoles.get(a);
                             Iterator<Topic> roleIterator = roles.iterator();
                             if(roleIterator.hasNext() && !forceStop()) {
                                 role = roleIterator.next();

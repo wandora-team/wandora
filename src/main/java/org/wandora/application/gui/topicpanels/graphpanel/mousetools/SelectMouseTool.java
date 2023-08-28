@@ -34,6 +34,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.wandora.application.gui.topicpanels.graphpanel.MouseTool;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
@@ -51,7 +52,7 @@ import org.wandora.utils.Tuples.T2;
 public class SelectMouseTool extends MouseTool {
     
     private boolean drawingSelection=false;
-    private ArrayList<T2<Double,Double>> selectPath;
+    private List<T2<Double,Double>> selectPath;
     private boolean clearSelection;
     
     private boolean selectNodes;

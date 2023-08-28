@@ -417,16 +417,14 @@ public class Shortcuts implements ActionListener {
         
         JList list = null;
         Wandora wandora = null;
-        Shortcuts parent = null;
-        
+
         
         
         public ManageDialog(Wandora w, boolean modal, Shortcuts parent) {
             super((JFrame) w, modal);
             this.setTitle("Manage shortcuts");
             this.wandora = w;
-            this.parent = parent;
-            
+
             JMenuBar menuBar = new JMenuBar();
             menuBar.add(UIBox.makeMenu(fileMenuStructure, this));
             menuBar.add(UIBox.makeMenu(editMenuStructure, this));

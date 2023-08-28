@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -161,12 +162,12 @@ public class SwapPlayers extends AbstractWandoraTool implements WandoraTool {
                         associationTable = (AssociationTable) context.getContextSource();
                     }
                     if(associationTable != null) {
-                        Map<Association,ArrayList<Topic>> associationsWithSelectedRoles = associationTable.getSelectedAssociationsWithSelectedRoles();
+                        Map<Association,List<Topic>> associationsWithSelectedRoles = associationTable.getSelectedAssociationsWithSelectedRoles();
                         Set<Association> associationKeys = associationsWithSelectedRoles.keySet();
                         Iterator<Association> associationKeyIterator = associationKeys.iterator();
-                        ArrayList<Topic> swapRoleArrayList = null;
+                        List<Topic> swapRoleArrayList = null;
                         while(associationKeyIterator.hasNext() && !forceStop()) {
-                            association = (Association) associationKeyIterator.next();
+                            association = associationKeyIterator.next();
                             if(association != null && !association.isRemoved()) {
                                 swapRoleArrayList = associationsWithSelectedRoles.get(association);
                                 if(swapRoleArrayList != null && swapRoleArrayList.size() == 2) {
