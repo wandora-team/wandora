@@ -24,7 +24,6 @@
 
 package org.wandora.application.tools.extractors.excel;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -56,7 +55,7 @@ public class ExcelAdjacencyListExtractor extends AbstractExcelExtractor {
 	public static boolean FIRST_ROW_CONTAINS_ROLES = true;
     
     
-    private HashMap<String,String> rolesPerColumn = new LinkedHashMap<>();
+    private Map<String,String> rolesPerColumn = new LinkedHashMap<>();
     
     @Override
     public String getName(){
@@ -109,7 +108,7 @@ public class ExcelAdjacencyListExtractor extends AbstractExcelExtractor {
     public void processSheet(XSSFSheet sheet, TopicMap tm) {
         Iterator<Row> rowIterator = sheet.iterator();
         boolean isFirst = true;
-        rolesPerColumn = new HashMap();
+        rolesPerColumn = new LinkedHashMap<>();
         while(rowIterator.hasNext() && !forceStop()) {
             Row row = rowIterator.next();
             if(isFirst && FIRST_ROW_CONTAINS_ROLES) {

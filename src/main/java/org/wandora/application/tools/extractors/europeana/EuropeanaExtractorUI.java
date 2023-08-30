@@ -24,6 +24,7 @@ package org.wandora.application.tools.extractors.europeana;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -89,7 +90,7 @@ public class EuropeanaExtractorUI extends javax.swing.JPanel {
     
     public WandoraTool[] getExtractors(EuropeanaExtractor tool) throws TopicMapException {
         WandoraTool wt = null;
-        ArrayList<WandoraTool> wts = new ArrayList<>();
+        List<WandoraTool> wts = new ArrayList<>();
 
         // ***** SEARCH *****
         String query = searchTextField.getText();

@@ -63,7 +63,7 @@ public class ExcelTopicNameExtractor extends AbstractExcelExtractor {
     public static boolean ADD_DISPLAY_TO_SCOPE = true;
     public static boolean ADD_SORT_TO_SCOPE = false;
     
-    private HashMap<String,String> languagesPerColumn = new HashMap<>();
+    private Map<String,String> languagesPerColumn = new HashMap<>();
     
     
     
@@ -121,7 +121,7 @@ public class ExcelTopicNameExtractor extends AbstractExcelExtractor {
     public void processSheet(XSSFSheet sheet, TopicMap tm) {
         Iterator<Row> rowIterator = sheet.iterator();
         boolean isFirst = true;
-        languagesPerColumn = new HashMap();
+        languagesPerColumn = new HashMap<>();
         while(rowIterator.hasNext() && !forceStop()) {
             Row row = rowIterator.next();
             if(isFirst && FIRST_ROW_CONTAINS_LANGUAGES) {

@@ -36,9 +36,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractCellEditor;
@@ -78,10 +79,10 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private DefaultTableModel tableModel;
-    private Vector<BufferedImage> fullImages;
-    private Vector<String> uids;
-    private Vector<String> senders;
-    private HashMap<String,Integer> uidMap;
+    private List<BufferedImage> fullImages;
+    private List<String> uids;
+    private List<String> senders;
+    private Map<String,Integer> uidMap;
     private java.awt.Frame parent;
     
     private String protocol="pop3";
@@ -277,10 +278,10 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
     
     public void getMessages() throws Exception {
         tableModel.setRowCount(0);
-        fullImages=new Vector<BufferedImage>();
-        uids=new Vector<String>();
-        uidMap=new HashMap<String,Integer>();
-        senders=new Vector<String>();
+        fullImages=new ArrayList<>();
+        uids=new ArrayList<>();
+        uidMap=new HashMap<>();
+        senders=new ArrayList<>();
         
         java.awt.EventQueue.invokeLater(new Runnable(){
             public void run(){
@@ -343,7 +344,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                         }
                     }
                     if(row[3]!=null){
-                        Hashtable table=null;
+                        Map table=null;
                         if(tryXMLExtract){
                             try{
                                 org.w3c.dom.Document doc=XMLbox.getDocument(message);
@@ -380,16 +381,16 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
     }
     
     public Collection<Map<String,Object>> getSelectedData() {
-        Collection<Map<String,Object>> selectedData=new Vector<Map<String,Object>>();
+        Collection<Map<String,Object>> selectedData=new ArrayList<>();
         for(int i=0;i<tableModel.getRowCount();i++){
             if(((Boolean)tableModel.getValueAt(i, 0)).booleanValue()){
                 Object sent=tableModel.getValueAt(i,2);
-                Object image=fullImages.elementAt(i);
-                Map<String,Object> map=new HashMap<String,Object>();
-                map.put("id",uids.elementAt(i));
+                Object image=fullImages.get(i);
+                Map<String,Object> map=new HashMap<>();
+                map.put("id",uids.get(i));
                 map.put("sent",sent);
                 map.put("image",image);
-                map.put("sender",senders.elementAt(i));
+                map.put("sender",senders.get(i));
                 for(int j=4;j<columnNames.length;j++){
                     map.put(columnNames[j],tableModel.getValueAt(i,j));
                 }
@@ -400,8 +401,8 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
     }
     
     public void deleteSelected() throws Exception {
-        fullImages=new Vector<BufferedImage>();
-        uids=new Vector<String>();
+        fullImages=new ArrayList<>();
+        uids=new ArrayList<>();
         EmailSession session=openEmailSession();
         Message[] msgs=session.getMessages();
         FetchProfile prof=new FetchProfile();
@@ -655,12 +656,12 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
 
     private void menuItemRotLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRotLeftActionPerformed
         if(popupRow!=-1){
-            BufferedImage oldImg=fullImages.elementAt(popupRow);
+            BufferedImage oldImg=fullImages.get(popupRow);
             BufferedImage newImg=new BufferedImage(oldImg.getHeight(),oldImg.getWidth(),BufferedImage.TYPE_INT_RGB);
             java.awt.Graphics2D g2=(java.awt.Graphics2D)newImg.getGraphics();
             java.awt.geom.AffineTransform t=new java.awt.geom.AffineTransform(0,-1,1,0,0,oldImg.getWidth());
             g2.drawImage(oldImg,t,null);
-            fullImages.setElementAt(newImg,popupRow);
+            fullImages.add(popupRow,newImg);
             
             int height=50;
             int width=(int)(newImg.getWidth()*(double)height/(double)newImg.getHeight());
@@ -672,12 +673,12 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
 
     private void menuItemRotRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRotRightActionPerformed
         if(popupRow!=-1){
-            BufferedImage oldImg=fullImages.elementAt(popupRow);
+            BufferedImage oldImg=fullImages.get(popupRow);
             BufferedImage newImg=new BufferedImage(oldImg.getHeight(),oldImg.getWidth(),BufferedImage.TYPE_INT_RGB);
             java.awt.Graphics2D g2=(java.awt.Graphics2D)newImg.getGraphics();
             java.awt.geom.AffineTransform t=new java.awt.geom.AffineTransform(0,1,-1,0,oldImg.getHeight(),0);
             g2.drawImage(oldImg,t,null);
-            fullImages.setElementAt(newImg,popupRow);
+            fullImages.add(popupRow,newImg);
             
             int height=50;
             int width=(int)(newImg.getWidth()*(double)height/(double)newImg.getHeight());

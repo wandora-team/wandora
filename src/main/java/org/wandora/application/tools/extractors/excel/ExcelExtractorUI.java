@@ -29,6 +29,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -54,7 +55,7 @@ public class ExcelExtractorUI extends javax.swing.JPanel {
 	
 	private JDialog myDialog = null;
     private boolean accepted = false;
-    private ArrayList<JComboBox> comboboxes = null;
+    private List<JComboBox> comboboxes = null;
             
     
     /**
@@ -104,7 +105,7 @@ public class ExcelExtractorUI extends javax.swing.JPanel {
 
     
     public String[] getExtractors() {
-        ArrayList<String> extractors = new ArrayList<>();
+        List<String> extractors = new ArrayList<>();
         for(JComboBox combobox : comboboxes) {
             if(combobox != null) {
                 Object extractor = combobox.getSelectedItem();

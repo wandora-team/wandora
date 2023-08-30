@@ -1030,7 +1030,7 @@ public class UIBox {
     
     
     public static Icon getIcon(int iconCharacter) {
-        String iconCharacterString = "" + Character.forDigit(iconCharacter, 10);
+        String iconCharacterString = "0x" + iconCharacter;
         if(iconCache != null) {
             try {
                 Icon icon = (Icon) iconCache.get(iconCharacterString);

@@ -56,7 +56,7 @@ public class ExcelTopicOccurrenceExtractor extends AbstractExcelExtractor {
 	public static boolean FIRST_ROW_CONTAINS_OCCURRENCE_TYPES = true;
     
     
-    private HashMap<String,String> occurrenceTypes = new LinkedHashMap<>();
+    private Map<String,String> occurrenceTypes = new LinkedHashMap<>();
     
     
     @Override

@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -224,7 +225,7 @@ public class ExcelExtractor extends AbstractExtractor {
     
     
     public Collection<String> getSheets(HSSFWorkbook workbook) {
-        ArrayList<String> sheets = new ArrayList<>();
+        List<String> sheets = new ArrayList<>();
         int numberOfSheets = workbook.getNumberOfSheets();
         for(int i=0; i<numberOfSheets && !forceStop(); i++) {
             sheets.add(workbook.getSheetName(i));
@@ -235,8 +236,8 @@ public class ExcelExtractor extends AbstractExtractor {
     
     
     
-    public Collection getSheets(XSSFWorkbook workbook) {
-        ArrayList<String> sheets = new ArrayList();
+    public Collection<String> getSheets(XSSFWorkbook workbook) {
+        List<String> sheets = new ArrayList<>();
         int numberOfSheets = workbook.getNumberOfSheets();
         for(int i=0; i<numberOfSheets && !forceStop(); i++) {
             sheets.add(workbook.getSheetName(i));
@@ -248,7 +249,7 @@ public class ExcelExtractor extends AbstractExtractor {
     
     
     public Collection<String> getExtractors() {
-        ArrayList<String> extractors = new ArrayList();
+        List<String> extractors = new ArrayList<>();
         extractors.add("-- Don't extract --");
         extractors.add("Extract topics");
         extractors.add("Extract adjacency list");

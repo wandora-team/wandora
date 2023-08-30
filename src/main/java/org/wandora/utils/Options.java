@@ -36,10 +36,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 
 
@@ -56,7 +54,7 @@ import java.util.Set;
  */
 public class Options {
     
-    private LinkedHashMap<String, String> options;
+    private Map<String, String> options;
     private String resource;
     
     
@@ -99,12 +97,12 @@ public class Options {
     
     
     public Options() {
-        options=new LinkedHashMap<String,String>();
+        options=new LinkedHashMap<>();
     }
     
     
     public Options(Options opts) {
-        options=new LinkedHashMap<String,String>();
+        options=new LinkedHashMap<>();
         options.putAll(opts.asMap());
     }
     
@@ -316,10 +314,7 @@ public class Options {
      */
     public String findKeyFor(String value) {
         if(value != null && options.containsValue(value)) {
-            Set<String> keys = options.keySet();
-            String key = null;
-            for(Iterator<String> i=keys.iterator();i.hasNext();) {
-                key=i.next();
+            for(String key : options.keySet()) {
                 if(value.equalsIgnoreCase(get(key))) return key;
             }
         }
@@ -367,17 +362,12 @@ public class Options {
      * @param path String representing options path.
      */
     public void removeAll(String path) {
-        ArrayList<String> toBeDeletedKeys = new ArrayList<String>();
+        List<String> toBeDeletedKeys = new ArrayList<>();
         if(!path.startsWith("options.")) path = "options."+path;
         path = this.fixIndexes(path, false);
-        Set<String> keys = options.keySet();
-        for(Iterator<String> i=keys.iterator(); i.hasNext(); ) {
-            String key=i.next();
-            if(key instanceof String) {
-                String stringKey = (String) key;
-                if(stringKey.startsWith(path)) {
-                    toBeDeletedKeys.add(key);
-                }
+        for(String key : options.keySet() ) {
+            if(key.startsWith(path)) {
+                toBeDeletedKeys.add(key);
             }
         }
         for( String key : toBeDeletedKeys ) {
@@ -419,7 +409,7 @@ public class Options {
      * @param encoding String representing content encoding.
      */
     public synchronized void parseOptions(String content, String encoding) {
-        options = XMLbox.getAsHashMapTree(content, encoding);
+        options = XMLbox.getAsMapTree(content, encoding);
     }
     
     
@@ -434,14 +424,11 @@ public class Options {
    
 
     public void print() {
-        Object key;
         Object value;
-        if(options.size() == 0) {
+        if(options.isEmpty()) {
             System.out.println("  no options available (size == 0)!");
         }
-        Set<String> keys = options.keySet();
-        for(Iterator<String> i=keys.iterator();i.hasNext();) {
-            key = i.next();
+        for(String key : options.keySet()) {
             value = options.get(key.toString());
             System.out.println("  " + key + " == " + value);
         }
@@ -449,7 +436,7 @@ public class Options {
 
     
     public void save(Writer out) throws IOException{
-        String optionsXML = XMLbox.wrapHashMap2XML(options);
+        String optionsXML = XMLbox.wrapMap2XML(options);
         out.write(optionsXML);
         out.flush();
     }
@@ -462,7 +449,7 @@ public class Options {
                 String filename=IObox.getFileFromURL(resource);
 //                String filename = resource.substring(7);
                 try { IObox.moveFile(filename, filename + ".bak"); } catch (Exception e) { e.printStackTrace(); }
-                String optionsXML = XMLbox.wrapHashMap2XML(options);
+                String optionsXML = XMLbox.wrapMap2XML(options);
                 IObox.saveFile(filename, optionsXML);
             }
             catch (Exception e) { e.printStackTrace(); }
@@ -470,7 +457,7 @@ public class Options {
         else {
             String path = "./resources/";
             String resourcePath = path + resource;
-            String optionsXML = XMLbox.wrapHashMap2XML(options);
+            String optionsXML = XMLbox.wrapMap2XML(options);
             try { IObox.moveFile(resourcePath, resourcePath + ".bak"); } catch (Exception e) { e.printStackTrace(); }
             try { IObox.saveFile(resourcePath, optionsXML); } catch (Exception e) { e.printStackTrace(); }
         }
@@ -478,7 +465,7 @@ public class Options {
 
     
     public Collection<String> keySet(){
-        List<String> copy=new ArrayList<String>();
+        List<String> copy=new ArrayList<>();
         copy.addAll(options.keySet());
         return copy;
     }
