@@ -2440,7 +2440,7 @@ public class MarcSubfield {
 
     public static String getSubfieldName(String field, String subfield) {
         if(subfieldNameHash == null) {
-            subfieldNameHash = new HashMap<String,String>();
+            subfieldNameHash = new HashMap<>();
             for(int i=0; i<subfieldNames.length; i=i+2) {
                 String[] subfields = (String[]) subfieldNames[i+1];
                 for(int j=0; j<subfields.length; j=j+2) {

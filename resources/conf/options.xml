@@ -169,7 +169,7 @@ public class Sketch extends SketchTemplate {
          <currentToolSet>Default buttons</currentToolSet>
       </toolPanel>
       <imagePreviewPanel>
-         <imageSize>1.0</imageSize>
+         <imageSize>0.7513148009015777</imageSize>
       </imagePreviewPanel>
    </gui>
    <httpserver>

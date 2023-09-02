@@ -1011,7 +1011,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "R�pertoire de vedettes-mati�re",
+                    "6", "Répertoire de vedettes-matière",
                     "7", "Source specified in subfield $2"
                 },
         "610",
@@ -1029,7 +1029,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "R�pertoire de vedettes-mati�re",
+                    "6", "Répertoire de vedettes-matière",
                     "7", "Source specified in subfield $2"
                 },
         "611",
@@ -1047,7 +1047,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "R�pertoire de vedettes-mati�re",
+                    "6", "Répertoire de vedettes-matière",
                     "7", "Source specified in subfield $2"
                 },
         "630",
@@ -1062,7 +1062,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "R�pertoire de vedettes-mati�re",
+                    "6", "Répertoire de vedettes-matière",
                     "7", "Source specified in subfield $2"
                 },
         "648",
@@ -1077,7 +1077,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "R�pertoire de vedettes-mati�re",
+                    "6", "Répertoire de vedettes-matière",
                     "7", "Source specified in subfield $2"
                 },
         "650",
@@ -1095,7 +1095,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "R�pertoire de vedettes-mati�re",
+                    "6", "Répertoire de vedettes-matière",
                     "7", "Source specified in subfield $2"
                 },
         "651",
@@ -1110,7 +1110,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "R�pertoire de vedettes-mati�re",
+                    "6", "Répertoire de vedettes-matière",
                     "7", "Source specified in subfield $2"
                 },
         "653",
@@ -1153,7 +1153,7 @@ public class MarcField {
                     "3", "National Agricultural Library subject authority file",
                     "4", "Source not specified",
                     "5", "Canadian Subject Headings",
-                    "6", "R�pertoire de vedettes-mati�re",
+                    "6", "Répertoire de vedettes-matière",
                     "7", "Source specified in subfield $2"
                 },
         "656",
@@ -1504,8 +1504,8 @@ public class MarcField {
 
 
     private static void fillIndicatorHashMaps() {
-        indicatorNameHash = new HashMap<String,String>();
-        indicatorValueHash = new HashMap<String,String>();
+        indicatorNameHash = new HashMap<>();
+        indicatorValueHash = new HashMap<>();
         String fn = null;
         String in = null;
         String iva[] = null;

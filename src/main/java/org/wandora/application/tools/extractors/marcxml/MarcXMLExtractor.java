@@ -317,7 +317,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
 
     public void parseSIPatterns(String patterns) {
         RECORD_SI_PATTERN = patterns;
-        recordSIPatterns = new ArrayList<String>();
+        recordSIPatterns = new ArrayList<>();
         if(RECORD_SI_PATTERN != null) {
             String[] siPatterns = RECORD_SI_PATTERN.split(",");
             String siPattern = null;
@@ -334,7 +334,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
 
     public void parseBasenamePatterns(String patterns) {
         BASENAME_PATTERN = patterns;
-        basenamePatterns = new ArrayList<String>();
+        basenamePatterns = new ArrayList<>();
         if(BASENAME_PATTERN != null) {
             String[] namePatterns = BASENAME_PATTERN.split(",");
             String namePattern = null;
@@ -527,10 +527,10 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         data_datafield = "";
                         data_subfield = "";
 
-                        data_controlfields = new LinkedHashMap<String,String>();
-                        data_datafields = new ArrayList<MarcField>();
+                        data_controlfields = new LinkedHashMap<>();
+                        data_datafields = new ArrayList<>();
 
-                        subjectIdentifiers = new ArrayList<String>();
+                        subjectIdentifiers = new ArrayList<>();
                         if(recordSIPatterns != null && !recordSIPatterns.isEmpty()) {
                             for(String recordSIPattern : recordSIPatterns) {
                                 if(recordSIPattern != null && recordSIPattern.length() > 0) {
@@ -626,7 +626,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         // BUILD BASENAMEs
                         if(basenames != null && basenames.size() > 0) {
                             try {
-                                List<String> updatedBasenames = new ArrayList<String>();
+                                List<String> updatedBasenames = new ArrayList<>();
                                 for(String n : basenames) {
                                     if(n != null) {
                                         if( n.indexOf( "___"+subfieldCode+"@"+fieldCode+"___" ) > -1) {
