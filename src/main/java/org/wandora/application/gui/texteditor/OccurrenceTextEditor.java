@@ -44,12 +44,10 @@ import org.wandora.application.tools.associations.FindAssociationsInOccurrenceSi
 import org.wandora.application.tools.extractors.gate.AnnieExtractor;
 import org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier;
 import org.wandora.application.tools.extractors.tagthe.TagtheExtractor;
-import org.wandora.application.tools.extractors.textwise.TextWiseClassifier;
 import org.wandora.application.tools.extractors.uclassify.SentimentUClassifier;
 import org.wandora.application.tools.extractors.uclassify.TextLanguageUClassifier;
 import org.wandora.application.tools.extractors.uclassify.TopicsUClassifier;
 import org.wandora.application.tools.extractors.uclassify.UClassifier;
-import org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract;
 import org.wandora.application.tools.occurrences.CreateTopicWithOccurrenceSelection;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
@@ -107,8 +105,6 @@ public class OccurrenceTextEditor extends TextEditor {
             "Classify", new Object[] {
                 "Classify with GATE Annie", new AnnieExtractor(), UIBox.getIcon("gui/icons/extract_gate.png"),
                 "Classify with Stanford NER", new StanfordNERClassifier(), UIBox.getIcon("gui/icons/extract_stanford_ner.png"),
-                "Classify with TextWise", new TextWiseClassifier(), UIBox.getIcon("gui/icons/extract_textwise.png"),
-                "Classify with Yahoo YQL term extractor", new SearchTermExtract(), UIBox.getIcon("gui/icons/extract_yahoo.png"),
                 "Classify with Tagthe", new TagtheExtractor(), UIBox.getIcon("gui/icons/extract_tagthe.png"),
             },
             "uClassify", new Object[] {

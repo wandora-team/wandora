@@ -169,7 +169,7 @@ public class Sketch extends SketchTemplate {
          <currentToolSet>Default buttons</currentToolSet>
       </toolPanel>
       <imagePreviewPanel>
-         <imageSize>1.0</imageSize>
+         <imageSize>0.7513148009015777</imageSize>
       </imagePreviewPanel>
    </gui>
    <httpserver>
@@ -605,10 +605,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <class>org.wandora.application.tools.extractors.uclassify.UClassifier</class>
             </item>
             <item>
-               <name>Yahoo! YQL term extractor...</name>
-               <class>org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract</class>
-            </item>
-            <item>
                <name>--- WORD ---</name>
                <class>org.wandora.application.tools.extractors.DummyExtractor</class>
             </item>
@@ -984,10 +980,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>iCal extractor...</name>
                <class>org.wandora.application.tools.extractors.ICalExtractor</class>
             </item>
-            <item>
-               <name>Mashape extractor...</name>
-               <class>org.wandora.application.tools.extractors.mashape.MashapeExtractor</class>
-            </item>
          </item>
       </set>
       <set>
@@ -1134,14 +1126,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Stanford Named Entity Recognizer</name>
             <class>org.wandora.application.tools.extractors.stanfordner.StanfordNERClassifier</class>
-         </item>
-         <item>
-            <name>TextWise classifier</name>
-            <class>org.wandora.application.tools.extractors.textwise.TextWiseClassifier</class>
-         </item>
-         <item>
-            <name>Yahoo! YQL term extractor</name>
-            <class>org.wandora.application.tools.extractors.yahoo.yql.SearchTermExtract</class>
          </item>
          <item>
             <name>uClassify Text Language</name>

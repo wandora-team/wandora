@@ -248,7 +248,6 @@ import org.wandora.application.tools.occurrences.refine.AnnieOccurrenceExtractor
 import org.wandora.application.tools.occurrences.refine.FindNearByGeoNamesOccurrence;
 import org.wandora.application.tools.occurrences.refine.StanfordNEROccurrenceExtractor;
 import org.wandora.application.tools.occurrences.refine.UClassifyOccurrenceExtractor;
-import org.wandora.application.tools.occurrences.refine.YahooTermOccurrenceExtractor;
 import org.wandora.application.tools.occurrences.run.RunOccurrenceAsQuery;
 import org.wandora.application.tools.project.LoadWandoraProject;
 import org.wandora.application.tools.project.MergeWandoraProject;
@@ -1672,7 +1671,6 @@ public class WandoraMenuManager {
                             "With uClassify mood classifier...", new UClassifyOccurrenceExtractor("Mood", "prfekt", 0.001), UIBox.getIcon("gui/icons/extract_uclassify.png"),
                             "With uClassify news classifier...", new UClassifyOccurrenceExtractor("News Classifier", "mvazquez", 0.001), UIBox.getIcon("gui/icons/extract_uclassify.png"),
                             "---",
-                            "With Yahoo! YQL term extractor...", new YahooTermOccurrenceExtractor(), UIBox.getIcon("gui/icons/extract_yahoo.png"),
                             "With GeoNames near by extractor...", new FindNearByGeoNamesOccurrence(), UIBox.getIcon("gui/icons/extract_geonames.png"),
                             "---",
                             "Find associations in occurrences....", new FindAssociationsInOccurrenceSimple(),
