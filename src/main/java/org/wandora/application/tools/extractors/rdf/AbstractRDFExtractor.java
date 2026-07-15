@@ -142,6 +142,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         setBaseUrl(url.toExternalForm());
         URLConnection uc = url.openConnection();
+        uc.setRequestProperty("Accept", "application/rdf+xml");
         uc.setUseCaches(false);
         boolean r = _extractTopicsFrom(uc.getInputStream(), topicMap);
         return r;

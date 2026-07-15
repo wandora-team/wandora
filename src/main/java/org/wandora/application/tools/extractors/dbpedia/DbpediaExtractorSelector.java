@@ -55,7 +55,7 @@ public class DbpediaExtractorSelector extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
 	
-	public static String webServiceBase = "http://www.dbpedia.org/";
+	public static String webServiceBase = "https://dbpedia.org/data/";
     public static String sparqlServiceBase = "http://dbpedia.org/sparql/";
 
     private Wandora wandora = null;
@@ -63,7 +63,7 @@ public class DbpediaExtractorSelector extends JDialog {
     private boolean accepted = false;
 
 
-    /** Creates new form OpenCycExtractorSelector */
+    /** Creates new form DbpediaExtractorSelector */
     public DbpediaExtractorSelector(Wandora wandora) {
         super(wandora, true);
         initComponents();
@@ -107,8 +107,8 @@ public class DbpediaExtractorSelector extends JDialog {
             String termsAll = termsTextArea.getText();
             String[] terms = urlEncode(space2Underline(newlineSplitter(termsAll)));
 
-            // Example URL: http://dbpedia.org/data/Berlin.rdf
-            String[] termUrls = completeString(webServiceBase+"data/__1__.rdf", terms);
+            // Example URL: http://dbpedia.org/resource/Berlin
+            String[] termUrls = completeString(webServiceBase+"__1__.rdf", terms);
 
             DbpediaRDFExtractor ex = new DbpediaRDFExtractor();
             ex.setForceUrls( termUrls );

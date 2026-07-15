@@ -6,7 +6,7 @@
       <width>1225</width>
       <height>717</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>558</verticalsplitter>
+      <verticalsplitter>511</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -15,6 +15,11 @@
          <x>50</x>
          <y>50</y>
       </window>
+      <font>
+         <face>Sans Serif</face>
+         <size>12</size>
+      </font>
+      <inverseColors>0</inverseColors>
    </textEditor>
    <gui>
       <customTopicPanel>
@@ -67,54 +72,9 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          <panel>org.wandora.application.gui.topicpanels.SearchTopicPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.LayerInfoPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.DropExtractor</panel>
+         <panel>org.wandora.application.gui.topicpanels.LlamacppPanel</panel>
          <defaultPanel>org.wandora.application.gui.topicpanels.TraditionalTopicPanel</defaultPanel>
       </topicPanels>
-      <processingTopicPanel>
-         <useOccurrenceProcessingCode>false</useOccurrenceProcessingCode>
-         <autorun>false</autorun>
-         <currentSketch>/* 
- * Welcome to Wandora's Processing topic panel!
- * 
- * Processing topic panel is used to write and run Processing scripts.
- * Processing script can access the topic map in Wandora via Wandora's Java API.
- * Topic panel suits best for topic and topic map visualizations.
- * Writing a Processing script requires programming skills.
- * 
- * You might want to begin by trying one of our demo sketches. We have
- * prepared three example scripts to inspire you. These sketces, titled as
- * AssociationArches, TopicBoxes and TopicRing can be opened by clicking
- * the Open button and selecting option Open sketch from file...
- * To run a script press Run button down under.
- * 
- * Learn Processing and Wandora API here
- *    http://processing.org/
- *    http://wandora.org/api/ 
- */
-
-package processing;
-
-import org.wandora.application.gui.topicpanels.processing.SketchTemplate;
-import org.wandora.topicmap.*;
-
-public class Sketch extends SketchTemplate {
-
-	public void setup() {
-		size(920,640);
-		frameRate(10);
-	}
-
-	public void draw() {
-		background(255);
-		Topic t = getCurrentTopic();
-		if( t != null ) {
-			try{
-				fill(0xff000000);
-				text(t.getBaseName(),100,100);
-			} catch(TopicMapException tme){tme.printStackTrace();}
-		}
-	}
-}</currentSketch>
-      </processingTopicPanel>
       <tabbedTopicPanel>
          <view>
             <dataPanelContainer>true</dataPanelContainer>
@@ -1659,4 +1619,21 @@ MERGE test:testctype, test:testatype</query>
          <logLevel>6</logLevel>
       </loggerRule>
    </loggerRules>
+   <rpanel>
+      <currentScript># 
+# Welcome to Wandora's R topic panel!
+# 
+# R topic panel is used to write and execute R language scripts.
+# R script can access the topic map in Wandora via Wandora's Java API.
+# 
+# Learn R language and Wandora API here
+#    http://www.r-project.org/ 
+#    http://wandora.org/api/ 
+#</currentScript>
+   </rpanel>
+   <llamacpppanel>
+      <currentPrompt># 
+# Welcome to Wandora's LLaMa.cpp topic panel!
+#</currentPrompt>
+   </llamacpppanel>
 </options>

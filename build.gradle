@@ -7,7 +7,7 @@ plugins {
   id 'java'
   id 'distribution'
   id 'application'
-  id 'org.openjfx.javafxplugin' version '0.0.13'
+  id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 repositories {
@@ -18,7 +18,7 @@ repositories {
 }
 
 group = 'org.wandora'
-version = '2023-08-26'
+version = '2026-07-15'
 
 
 dependencies {
@@ -28,13 +28,13 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-	implementation 'uk.ac.shef.wit.simmetrics:simmetrics:1.6.2.20070207'
+    implementation 'uk.ac.shef.wit.simmetrics:simmetrics:1.6.2.20070207'
     implementation 'org.apache.poi:poi:5.2.3'
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
-	implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
-	implementation 'org.apache.poi:poi-scratchpad:5.2.3'
-	implementation 'org.odftoolkit:odfdom-java:0.11.0'
-	implementation 'org.odftoolkit:simple-odf:0.9.0'
+    implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
+    implementation 'org.apache.poi:poi-scratchpad:5.2.3'
+    implementation 'org.odftoolkit:odfdom-java:0.11.0'
+    implementation 'org.odftoolkit:simple-odf:0.9.0'
     implementation 'org.apache.pdfbox:pdfbox:2.0.29'
     implementation 'org.apache-extras.beanshell:bsh:2.0b6'
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
@@ -76,11 +76,11 @@ dependencies {
     
     implementation 'net.ontopia.external.org.tmapi:tmapi:2.0.2'
     implementation 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
-	implementation 'org.eclipse.jdt:ecj:3.34.0'
-	implementation 'org.eclipse.jetty:jetty-http:11.0.15'
-	implementation 'org.eclipse.jetty:jetty-server:11.0.15'
+    implementation 'org.eclipse.jdt:ecj:3.34.0'
+    implementation 'org.eclipse.jetty:jetty-http:11.0.15'
+    implementation 'org.eclipse.jetty:jetty-server:11.0.15'
 	
-	implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
