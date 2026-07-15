@@ -1634,7 +1634,6 @@ MERGE test:testctype, test:testatype</query>
    <llamacpppanel>
       <currentPrompt># 
 # Welcome to Wandora's LLaMa.cpp topic panel!
-#
-</currentPrompt>
+#</currentPrompt>
    </llamacpppanel>
 </options>

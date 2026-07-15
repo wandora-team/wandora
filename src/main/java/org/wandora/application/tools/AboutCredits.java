@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
             aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
 
             String text =
-                    "Copyright (C) 2004-2023 Wandora Team\n"+
+                    "Copyright (C) 2004-2026 Wandora Team\n"+
                     " \n"+
                     "Wandora Team would like to thank Olli Lyytinen, \n" +
                     "Eero Lehtonen, Elias Tertsunen, Niko Laitinen, \n"+
