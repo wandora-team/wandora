@@ -76,10 +76,10 @@ public class SimpleFileChooser extends JFileChooser {
     
     
     public int open(Component parent, String buttonLabel) {
-        return open(parent, this.OPEN_DIALOG, buttonLabel);
+        return open(parent, JFileChooser.OPEN_DIALOG, buttonLabel);
     }
     public int open(Component parent) {
-        return open(parent, this.OPEN_DIALOG, null);
+        return open(parent, JFileChooser.OPEN_DIALOG, null);
     }
     public int open(Component parent, int type) {
         return open(parent, type, null);
@@ -125,7 +125,7 @@ public class SimpleFileChooser extends JFileChooser {
         }
         int answer = JFileChooser.CANCEL_OPTION;
         if(buttonLabel == null) {
-            if(type == this.OPEN_DIALOG) {
+            if(type == JFileChooser.OPEN_DIALOG) {
                 answer = this.showOpenDialog(parent);
             }
             else {
@@ -137,8 +137,8 @@ public class SimpleFileChooser extends JFileChooser {
         }
          // ***** SAVE CURRENT DIRECTORY ******
         if(answer == JFileChooser.APPROVE_OPTION) {
-            if(parent instanceof Wandora && parent != null) {
-                ((Wandora) parent).options.put("current.directory", this.getCurrentDirectory().getPath());
+            if(parent instanceof Wandora wandora && parent != null) {
+                wandora.options.put("current.directory", this.getCurrentDirectory().getPath());
             }
         }
         

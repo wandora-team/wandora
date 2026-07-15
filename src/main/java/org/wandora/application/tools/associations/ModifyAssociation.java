@@ -48,6 +48,7 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  * @deprecated 
  */
+@Deprecated
 public class ModifyAssociation extends AbstractWandoraTool implements WandoraTool {
     
 

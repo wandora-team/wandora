@@ -33,6 +33,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author olli
  */
+@Deprecated
 public class TypesOfDirective implements Directive {
     private Locator role;
     

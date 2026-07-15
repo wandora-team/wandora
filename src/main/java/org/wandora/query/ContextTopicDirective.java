@@ -29,6 +29,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class ContextTopicDirective implements Directive {
 
     private Locator resultType;

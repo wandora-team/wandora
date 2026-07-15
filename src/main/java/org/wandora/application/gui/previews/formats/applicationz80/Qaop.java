@@ -267,7 +267,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         try {
             Spectrum s = spectrum;
             v = s.pause(0) >>> 2 & 1;
-            if (s.muted) {
+            if (Spectrum.muted) {
                 v |= 4;
             }
         } catch (InterruptedException x) {
@@ -436,16 +436,16 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         int c = e.getKeyCode();
         boolean m;
         int v;
-        if (c == e.VK_DELETE && e.isControlDown()) {
+        if (c == KeyEvent.VK_DELETE && e.isControlDown()) {
             spectrum.reset();
             return;
-        } else if (c == e.VK_F11) {
+        } else if (c == KeyEvent.VK_F11) {
             spectrum.mute(m = !spectrum.muted);
             v = spectrum.volumeChg(0);
-        } else if (c == e.VK_PAGE_UP || c == e.VK_PAGE_DOWN) {
+        } else if (c == KeyEvent.VK_PAGE_UP || c == KeyEvent.VK_PAGE_DOWN) {
             m = spectrum.muted;
-            v = spectrum.volumeChg(c == e.VK_PAGE_UP ? +5 : -5);
-        } else if (c == e.VK_PAUSE) {
+            v = spectrum.volumeChg(c == KeyEvent.VK_PAGE_UP ? +5 : -5);
+        } else if (c == KeyEvent.VK_PAUSE) {
             try {
                 spectrum.pause(4);
             } catch (InterruptedException x) {

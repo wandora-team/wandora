@@ -38,6 +38,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author olli
  */
+@Deprecated
 public class TopicsDirective implements Directive {
     
     private ArrayList<ResultRow> result;

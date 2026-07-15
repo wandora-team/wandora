@@ -118,8 +118,8 @@ public class KeyedHashMap<K,V> implements Map<K,V> {
         return (V)map.put(wrapper,value);
     }
     public void putAll(Map<? extends K,? extends V> t){
-        for(Map.Entry e : t.entrySet()){
-            put((K)e.getKey(),(V)e.getValue());
+        for(Map.Entry<? extends K,? extends V> e : t.entrySet()){
+            put(e.getKey(),e.getValue());
         }
     }
     public V remove(Object key){
@@ -145,8 +145,8 @@ class Wrapper<K> {
         return key.hashCode();
     }
     public boolean equals(Object o){
-        if(o != null && o instanceof Wrapper && key != null) {
-            return key.equals(((Wrapper)o).key);
+        if(o instanceof Wrapper wrapper && key != null) {
+            return key.equals(wrapper.key);
         }
         else return false;
     }

@@ -49,7 +49,7 @@ import org.wandora.application.WandoraMenuManager;
  *
  * @author akivela
  */
-public class LogoAnimation extends JPanel implements Runnable, MouseListener, ImageObserver {
+public class LogoAnimation extends JPanel implements Runnable, MouseListener {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -123,7 +123,7 @@ public class LogoAnimation extends JPanel implements Runnable, MouseListener, Im
         while(true) {
             while(animate) {
                 try {
-                    imageThread.sleep(ACTIVE_SLEEP_TIME);
+                    Thread.sleep(ACTIVE_SLEEP_TIME);
                 }
                 catch(Exception e) {
                     // WAKE UP
@@ -133,7 +133,7 @@ public class LogoAnimation extends JPanel implements Runnable, MouseListener, Im
                 repaint(10);
             }
             try {
-                imageThread.sleep(PASSIVE_SLEEP_TIME);
+                Thread.sleep(PASSIVE_SLEEP_TIME);
             }
             catch(Exception e) {
                 // WAKE UP
@@ -203,6 +203,5 @@ public class LogoAnimation extends JPanel implements Runnable, MouseListener, Im
     
     
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-        String c = actionEvent.getActionCommand();
     }
 }

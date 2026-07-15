@@ -42,6 +42,7 @@ import org.wandora.utils.GripCollections;
  *
  * @author olli
  */
+@Deprecated
 public class SelectDirective implements Directive {
     
     private Locator type;

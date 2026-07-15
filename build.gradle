@@ -1,6 +1,8 @@
 /*
  * WANDORA
- * 
+ * Knowledge Extraction, Management, and Publishing Application
+ *
+ * https://wandora.org
  */
 
 plugins {
@@ -22,10 +24,10 @@ version = '2026-07-15'
 
 
 dependencies {
-    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'com.google.guava:guava:33.6.0-jre'
     implementation 'org.reflections:reflections:0.10.2'
-    implementation 'commons-io:commons-io:2.13.0'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'commons-io:commons-io:2.22.0'
+    implementation 'org.apache.commons:commons-lang3:3.20.0'
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
     implementation 'uk.ac.shef.wit.simmetrics:simmetrics:1.6.2.20070207'

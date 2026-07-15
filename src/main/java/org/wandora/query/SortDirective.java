@@ -42,6 +42,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class SortDirective implements Directive {
     
     private Directive query;

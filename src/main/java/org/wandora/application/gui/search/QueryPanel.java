@@ -135,7 +135,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
                 while(queryName != null && queryName.length() > 0) {
                     queryScript = options.get(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].script");
                     queryEngine = options.get(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].engine");
-                    storedQueryScripts.add( new Tuples.T3(queryName, queryEngine, queryScript) );
+                    storedQueryScripts.add( new Tuples.T3<>(queryName, queryEngine, queryScript) );
                     queryCount++;
                     queryName = options.get(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].name");
                 }
@@ -188,7 +188,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         if(queryName != null && queryName.length() > 0) {
             String queryEngine = engineComboBox.getSelectedItem().toString();
             String queryScript = scriptTextPane.getText();
-            storedQueryScripts.add( new Tuples.T3(queryName, queryEngine, queryScript) );
+            storedQueryScripts.add( new Tuples.T3<>(queryName, queryEngine, queryScript) );
             writeScriptQueries();
             updateQueryComboBox();
         }

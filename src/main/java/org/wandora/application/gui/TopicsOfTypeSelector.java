@@ -26,6 +26,7 @@
 
 package org.wandora.application.gui;
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
 
 import javax.swing.DefaultListModel;
@@ -219,26 +220,26 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
     }// </editor-fold>//GEN-END:initComponents
 
     private void listKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listKeyReleased
-        if(evt.getKeyCode()==evt.VK_ENTER){
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             // select topic and close dialog
             // current topic selector doesn't have a mechanism to close the dialog
         }
     }//GEN-LAST:event_listKeyReleased
 
     private void textFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldKeyReleased
-        if(evt.getKeyCode()==evt.VK_DOWN){
+        if(evt.getKeyCode()==KeyEvent.VK_DOWN){
             if(listModel.size()>0){
                 list.setSelectedIndex(0);
                 list.requestFocus();
             }
         }
-        else if(evt.getKeyCode()==evt.VK_UP){
+        else if(evt.getKeyCode()==KeyEvent.VK_UP){
             if(listModel.size()>0){
                 list.setSelectedIndex(listModel.size()-1);
                 list.requestFocus();
             }
         }
-        else if(evt.getKeyCode()==evt.VK_TAB){
+        else if(evt.getKeyCode()==KeyEvent.VK_TAB){
             forcePopulate=true;
             synchronized(this){
                 this.notifyAll();

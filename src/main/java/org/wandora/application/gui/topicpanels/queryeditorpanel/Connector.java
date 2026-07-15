@@ -154,6 +154,7 @@ public class Connector {
                 if(in) drawIcon(g2,rotateIcon(arrowIcon,Math.PI/2),p);
                 break;
             case DOWN:
+            default:
                 exitPoint=new Point(p.x,p.y+20);
                 if(in) drawIcon(g2,rotateIcon(arrowIcon,-Math.PI/2),p);
                 break;

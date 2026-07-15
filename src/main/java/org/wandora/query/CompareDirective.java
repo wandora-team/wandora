@@ -35,6 +35,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class CompareDirective extends FilterDirective {
 
     public static final int EQ=0;

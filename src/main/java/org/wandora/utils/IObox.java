@@ -1220,12 +1220,11 @@ public class IObox extends java.lang.Object {
         if( null==url ) {
             return "No url!";
         }
-        try {
-            int port = url.getPort();
-            if( port==-1 ) 
-                port = 80;
-            
-            Socket s = new Socket( url.getHost(), port );
+        int port = url.getPort();
+        if( port==-1 ) 
+            port = 80;
+
+        try (Socket s = new Socket( url.getHost(), port )) {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
             
             String host = url.getProtocol()+"://"+url.getHost()+":"+port;

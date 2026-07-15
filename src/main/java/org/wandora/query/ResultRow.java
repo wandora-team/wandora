@@ -38,6 +38,7 @@ import org.wandora.topicmap.Locator;
  *
  * @author olli
  */
+@Deprecated
 public class ResultRow {
     
     private Locator type;

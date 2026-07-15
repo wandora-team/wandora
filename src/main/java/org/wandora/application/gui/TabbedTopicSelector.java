@@ -141,7 +141,7 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
         gridBagConstraints.weightx = 1.0;
         buttonPanel.add(jPanel1, gridBagConstraints);
 
-        clearButton.setLabel("Select none");
+        clearButton.setText("Select none");
         clearButton.setMargin(new java.awt.Insets(2, 1, 2, 1));
         clearButton.setMaximumSize(new java.awt.Dimension(80, 23));
         clearButton.setMinimumSize(new java.awt.Dimension(80, 23));

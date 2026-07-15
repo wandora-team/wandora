@@ -42,6 +42,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author  olli
  */
+@Deprecated
 public class SchemaOccurrencePrompt extends javax.swing.JDialog {
     
     private Topic topic;

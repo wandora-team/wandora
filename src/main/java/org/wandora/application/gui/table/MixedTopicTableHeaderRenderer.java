@@ -39,7 +39,7 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author olli,akivela
  */
-public class MixedTopicTableHeaderRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+public class MixedTopicTableHeaderRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 1L;
 

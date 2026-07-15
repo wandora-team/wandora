@@ -41,6 +41,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author olli
  */
+@Deprecated
 public class InstancesDirective implements Directive {
 
     private Locator role;

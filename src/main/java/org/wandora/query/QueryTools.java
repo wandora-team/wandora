@@ -38,6 +38,7 @@ import org.wandora.topicmap.Locator;
  *
  * @author olli
  */
+@Deprecated
 public class QueryTools {
     
     public static ArrayList<Locator> makeLocatorArray(Collection<String> a){

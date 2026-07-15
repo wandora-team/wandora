@@ -39,6 +39,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class OccurrenceDirective implements Directive {
     private Locator occurrenceRole;
     private Locator occurrenceType;

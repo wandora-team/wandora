@@ -45,6 +45,7 @@ import org.wandora.topicmap.TopicMapException;
  * @see AddSchemalessAssociation
  * @author akivela
  */
+@Deprecated
 public class AddAssociations extends AbstractWandoraTool implements WandoraTool {
     
 

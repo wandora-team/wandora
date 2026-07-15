@@ -38,6 +38,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class RolesDirective implements Directive {
     
     private ArrayList<Locator> roles;

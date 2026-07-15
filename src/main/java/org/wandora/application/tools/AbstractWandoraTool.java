@@ -92,8 +92,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     private Wandora runAdmin = null;
     private Context runContext = null;
     
-    private static final Set<Class> toolLocks = new LinkedHashSet<Class>();
-    private static final Map<Thread,T2<Class,Long>> toolThreads = new HashMap<Thread,T2<Class,Long>>();
+    private static final Set<Class<? extends AbstractWandoraTool>> toolLocks = new LinkedHashSet<>();
+    private static final Map<Thread,T2<Class<? extends AbstractWandoraTool>,Long>> toolThreads = new HashMap<>();
 
     
     
@@ -204,7 +204,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         if(runInOwnThread()) {
             Thread worker = new Thread(this, getName());
             synchronized(toolThreads) {
-                toolThreads.put(worker, new T2(this.getClass(), Long.valueOf(System.currentTimeMillis())));
+                toolThreads.put(worker, new T2<>(this.getClass(), Long.valueOf(System.currentTimeMillis())));
             }
             //SwingUtilities.invokeLater(worker);
             worker.start();
@@ -314,7 +314,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * 
      * @return boolean true if the tool is running.
      */
-    public boolean isRunning(Class c) {
+    public boolean isRunning(Class<? extends AbstractWandoraTool> c) {
         synchronized(toolLocks){
             if(toolLocks.contains(c)){
                 return true;
@@ -340,7 +340,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * @param c Tool class to be released.
      * @return boolean true if a lock was released.
      */
-    public static boolean clearToolLock(Class c) {
+    public static boolean clearToolLock(Class<? extends AbstractWandoraTool> c) {
         if(c != null) {
             synchronized(toolLocks){
                 if(toolLocks.contains(c)) {
@@ -378,11 +378,11 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         interruptThreads(this.getClass());
     }
     
-    public static void interruptThreads(Class c) {
+    public static void interruptThreads(Class<? extends AbstractWandoraTool> c) {
         if(c == null) return;
         synchronized(toolThreads) {
             try {
-                T2<Class, Long> timedClass = null;
+                T2<Class<? extends AbstractWandoraTool>, Long> timedClass = null;
                 for( Thread toolThread : toolThreads.keySet() ) {
                     timedClass = toolThreads.get(toolThread);
                     if(c.equals(timedClass.e1)) {
@@ -417,12 +417,12 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     }
     
     
-    public static void clearThreads(Class c) {
+    public static void clearThreads(Class<? extends AbstractWandoraTool> c) {
         if(c == null) return;
         synchronized(toolThreads) {
             ArrayList<Thread> threadList = new ArrayList<Thread>();
             try {
-                T2<Class, Long> timedClass = null;
+                T2<Class<? extends AbstractWandoraTool>, Long> timedClass = null;
                 for( Thread toolThread : toolThreads.keySet() ) {
                     timedClass = toolThreads.get(toolThread);
                     if(c.equals(timedClass.e1)) {
@@ -461,16 +461,16 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         return getThreads(this.getClass());
     }
             
-    public static ArrayList<T2<Thread,Long>> getThreads(Class c) {
+    public static ArrayList<T2<Thread,Long>> getThreads(Class<? extends AbstractWandoraTool> c) {
         ArrayList<T2<Thread, Long>> threadList = new ArrayList<T2<Thread, Long>>();
         if(c != null) {
             synchronized(toolThreads) {
                 try {
-                    T2<Class, Long> timedClass = null;
+                    T2<Class<? extends AbstractWandoraTool>, Long> timedClass = null;
                     for( Thread toolThread : toolThreads.keySet() ) {
                         timedClass = toolThreads.get(toolThread);
                         if(c.equals(timedClass.e1)) {
-                            threadList.add( new T2(toolThread, timedClass.e2) );
+                            threadList.add( new T2<>(toolThread, timedClass.e2) );
                         }
                     }
                 }
@@ -637,7 +637,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * to this tool should be saved with keys starting with the given prefix.
      */
     @Override
-    public void configure(Wandora wandora ,org.wandora.utils.Options options, String prefix) throws TopicMapException {
+    public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
     }
     /**
      * If the tool is configurable, saves all current tool options. Options specific

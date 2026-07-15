@@ -28,7 +28,6 @@
 package org.wandora.application.tools.associations;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -202,7 +201,7 @@ public class DeleteSymmetricAssociation extends AbstractWandoraTool implements W
         int deleteCount = 0;
         try {
             if(association == null || association.isRemoved()) return 0;
-            if(role1 == null && role2 == null) return 0;
+            if(role1 == null || role2 == null) return 0;
             if(role1.isRemoved() || role2.isRemoved()) return 0;
             if(allAssociations == null || allAssociations.isEmpty()) return 0;
             

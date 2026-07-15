@@ -35,6 +35,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class TransitiveDirective implements Directive {
 
     private Locator associationType;

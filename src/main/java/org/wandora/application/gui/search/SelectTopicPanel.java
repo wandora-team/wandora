@@ -191,7 +191,7 @@ public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelecto
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyReleased
-        if(evt.getKeyCode()==evt.VK_ENTER){
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             doSearch();
         }
     }//GEN-LAST:event_searchTextFieldKeyReleased

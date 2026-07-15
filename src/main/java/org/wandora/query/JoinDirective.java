@@ -40,6 +40,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class JoinDirective implements Directive {
     
     private Directive query;

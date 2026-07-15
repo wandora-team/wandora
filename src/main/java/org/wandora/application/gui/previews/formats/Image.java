@@ -30,7 +30,7 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-import static java.awt.event.InputEvent.CTRL_MASK;
+import static java.awt.event.InputEvent.CTRL_DOWN_MASK;
 import static java.awt.event.KeyEvent.VK_C;
 import static java.awt.event.KeyEvent.VK_MINUS;
 import static java.awt.event.KeyEvent.VK_PLUS;
@@ -345,7 +345,7 @@ public class Image extends JPanel implements Runnable, MouseListener, KeyListene
             },
             */
             "---",
-            "Copy image", KeyStroke.getKeyStroke(VK_C, CTRL_MASK),
+            "Copy image", KeyStroke.getKeyStroke(VK_C, CTRL_DOWN_MASK),
             "Copy image location",
             "---",
             "Save image as...",

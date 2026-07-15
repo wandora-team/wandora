@@ -44,6 +44,7 @@ import org.wandora.topicmap.Topic;
  * @see AddSchemalessOccurrence
  * @author akivela
  */
+@Deprecated
 public class AddOccurrences extends AbstractWandoraTool implements WandoraTool {
 
 	private static final long serialVersionUID = 1L;

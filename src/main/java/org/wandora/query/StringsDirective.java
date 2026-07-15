@@ -34,6 +34,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class StringsDirective implements Directive {
 
     private ArrayList<ResultRow> result;

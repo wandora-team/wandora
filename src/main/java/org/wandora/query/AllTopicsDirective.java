@@ -42,6 +42,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author olli
  */
+@Deprecated
 public class AllTopicsDirective implements Directive {
     
     private Locator resultType;

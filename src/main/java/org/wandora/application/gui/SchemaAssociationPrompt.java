@@ -27,6 +27,7 @@
 package org.wandora.application.gui;
 
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,6 +53,7 @@ import org.wandora.topicmap.layered.LayeredTopic;
  *
  * @author  olli, ak
  */
+@Deprecated
 public class SchemaAssociationPrompt extends javax.swing.JDialog implements Runnable {
 
     private Topic topic;
@@ -704,7 +706,7 @@ public class SchemaAssociationPrompt extends javax.swing.JDialog implements Runn
                     java.awt.GridBagConstraints gbc=new java.awt.GridBagConstraints();
                     gbc.gridx=counter;
                     gbc.gridy=0;
-                    gbc.fill=gbc.HORIZONTAL;
+                    gbc.fill=java.awt.GridBagConstraints.HORIZONTAL;
                     gbc.weightx=1.0;
                     String name="";
                     try{
@@ -716,13 +718,13 @@ public class SchemaAssociationPrompt extends javax.swing.JDialog implements Runn
                     javax.swing.JLabel label=new SimpleLabel(name);
                     label.setFont(UIConstants.smallButtonLabelFont);
                     label.setPreferredSize(new Dimension(300, 23));
-                    label.setAlignmentX(label.LEFT_ALIGNMENT);
+                    label.setAlignmentX(Component.LEFT_ALIGNMENT);
                     otherPanel.add(label,gbc);
 
                     gbc=new java.awt.GridBagConstraints();
                     gbc.gridx=counter;
                     gbc.gridy=1;
-                    gbc.fill=gbc.HORIZONTAL;
+                    gbc.fill=java.awt.GridBagConstraints.HORIZONTAL;
                     gbc.weightx=1.0;
 //                    javax.swing.JComboBox cbox=new javax.swing.JComboBox();
 

@@ -36,6 +36,7 @@ import org.wandora.topicmap.TopicMapException;
  * @deprecated 
  * @author olli
  */
+@Deprecated
 public class ApplyChanges extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;

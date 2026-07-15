@@ -67,6 +67,7 @@ import org.wandora.utils.sqlproxy.SQLProxyClient;
  * @author olli
  * @deprecated
  */
+@Deprecated
 public class DatabaseTopicMap extends TopicMap {
     
     protected boolean changed;

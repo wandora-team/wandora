@@ -125,8 +125,6 @@ public interface TopicPanel extends TopicMapListener {
      * to sort topic panel sets. Order number is not used anymore as available
      * panels are read from options.xml and the order in options is the order
      * Wandora views the panels.
-     * 
-     * @deprecated
      */
     public int getOrder();
     

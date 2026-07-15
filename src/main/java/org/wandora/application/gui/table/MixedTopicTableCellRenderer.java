@@ -35,7 +35,6 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.MixedTopicGuiWrapper;
@@ -52,7 +51,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer {
     
     private static final long serialVersionUID = 1L;
     

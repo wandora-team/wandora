@@ -38,6 +38,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class IsOfTypeDirective extends FilterDirective {
     
     private Locator typeContext;

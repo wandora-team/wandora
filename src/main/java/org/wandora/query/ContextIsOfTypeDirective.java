@@ -40,6 +40,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class ContextIsOfTypeDirective implements Directive {
     
     private Locator type;

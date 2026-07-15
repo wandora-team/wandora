@@ -37,6 +37,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class AndDirective extends FilterDirective {
     
     private FilterDirective[] filters;

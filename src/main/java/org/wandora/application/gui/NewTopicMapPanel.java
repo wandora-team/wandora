@@ -75,7 +75,7 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
                         if(layerTypeClassName.length() > 0) {
                             Class layerTypeClass = Class.forName(layerTypeClassName);
                             if(layerTypeClass != null) {
-                                Object layerType = layerTypeClass.newInstance();
+                                Object layerType = layerTypeClass.getDeclaredConstructor().newInstance();
                                 if(layerType instanceof TopicMapType) {
                                     typeComboBox.addItem(layerType);
                                 }

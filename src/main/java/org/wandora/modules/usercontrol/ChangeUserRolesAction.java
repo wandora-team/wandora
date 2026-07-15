@@ -30,6 +30,6 @@ package org.wandora.modules.usercontrol;
  * @deprecated 
  * @author olli
  */
-
+@Deprecated
 public class ChangeUserRolesAction extends ChangeUserAction {
 }

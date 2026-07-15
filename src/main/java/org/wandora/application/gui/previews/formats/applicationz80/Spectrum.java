@@ -1396,7 +1396,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             if (tape.length < p) {
                 if (ready) {
                     cpu.pc(cpu.pop());
-                    cpu.f(cpu.FZ);
+                    cpu.f(Z80.FZ);
                 }
                 return !ready;
             }
@@ -1406,12 +1406,12 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
 
         for (;;) {
             if (p == tape_blk) {
-                rf = cpu.FZ;
+                rf = Z80.FZ;
                 break;
             }
             if (p == tape.length) {
                 if (ready) {
-                    rf = cpu.FZ;
+                    rf = Z80.FZ;
                 }
                 break;
             }
@@ -1421,20 +1421,20 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 a = h;
                 rf = 0;
                 if (a < 1) {
-                    rf = cpu.FC;
+                    rf = Z80.FC;
                 }
                 break;
             }
-            if ((f & cpu.FZ) == 0) {
+            if ((f & Z80.FZ) == 0) {
                 a ^= l;
                 if (a != 0) {
                     rf = 0;
                     break;
                 }
-                f |= cpu.FZ;
+                f |= Z80.FZ;
                 continue;
             }
-            if ((f & cpu.FC) != 0) {
+            if ((f & Z80.FC) != 0) {
                 mem(ix, l);
             } else {
                 a = mem(ix) ^ l;

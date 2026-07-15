@@ -40,6 +40,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class RegexDirective implements Directive {
 
     public static final int MODE_MATCH=1;

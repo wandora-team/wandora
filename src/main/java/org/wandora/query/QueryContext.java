@@ -37,6 +37,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author olli
  */
+@Deprecated
 public class QueryContext {
     
     private Topic topic;

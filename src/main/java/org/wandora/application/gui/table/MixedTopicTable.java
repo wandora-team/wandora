@@ -31,7 +31,6 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -57,7 +56,7 @@ import org.wandora.utils.swing.TableSorter;
  *
  * @author olli, akivela
  */
-public class MixedTopicTable extends TopicTable implements MouseListener, ActionListener, Clipboardable /*, DragSourceListener , DragGestureListener*/  {
+public class MixedTopicTable extends TopicTable implements ActionListener, Clipboardable /*, DragSourceListener , DragGestureListener*/  {
 
     private static final long serialVersionUID = 1L;
 

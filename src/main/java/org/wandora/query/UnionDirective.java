@@ -39,6 +39,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class UnionDirective implements Directive {
     
     private Directive[] directives;

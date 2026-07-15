@@ -39,6 +39,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public abstract class FilterDirective implements Directive {
     
     public static final int RES_INCLUDE=1; // include unless not

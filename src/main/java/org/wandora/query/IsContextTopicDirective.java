@@ -37,6 +37,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
+@Deprecated
 public class IsContextTopicDirective extends FilterDirective {
     
     private Locator topicContext;
