@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2013 Wandora Team
  * 
@@ -68,7 +68,7 @@ import org.wandora.topicmap.undowrapper.UndoException;
 
 public class W2TTopicMap implements TopicMap {
     
-    public static final String DEFAULT_TM_LOCATOR="http://wandora.org/si/tmapi/defaultTMLocator";
+    public static final String DEFAULT_TM_LOCATOR="https://wandora.org/si/tmapi/defaultTMLocator";
 
     protected org.wandora.topicmap.TopicMap original;
     protected org.wandora.topicmap.layered.LayerStack tm;

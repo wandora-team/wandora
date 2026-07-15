@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -1696,14 +1696,14 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     Association a = null;
                     try {
                         Topic defaultAssociationType = tm.createTopic();
-                        defaultAssociationType.addSubjectIdentifier(new Locator("http://wandora.org/si/core/default-association"));
+                        defaultAssociationType.addSubjectIdentifier(new Locator("https://wandora.org/si/core/default-association"));
                         a = tm.createAssociation(defaultAssociationType);
                         associationCount++;
                         for(int j=0; j<associationData.length; j++) {
                             Topic player = associationData[j];
                             if(player != null) {
                                 Topic role = tm.createTopic();
-                                role.addSubjectIdentifier(new Locator("http://wandora.org/si/core/default-role-"+(j+1)));
+                                role.addSubjectIdentifier(new Locator("https://wandora.org/si/core/default-role-"+(j+1)));
                                 a.addPlayer(player, role);
                             }
                         }

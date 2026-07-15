@@ -509,7 +509,7 @@
         <Component class="javax.swing.JButton" name="infoButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Info"/>
-            <Property name="toolTipText" type="java.lang.String" value="Get more information about L-system generator. Opens web browser at  http://wandora.org/wiki/L-system_generator"/>
+            <Property name="toolTipText" type="java.lang.String" value="Get more information about L-system generator. Opens web browser at  https://wandora.org/wiki/L-system_generator"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="infoButtonActionPerformed"/>

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -86,7 +86,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 setProgress(0);
                 setProgressMax(numberOfTestTopics);
                 for(int i=0; i<numberOfTestTopics; i++) {
-                    String si = "http://wandora.org/si/test-topic/"+System.currentTimeMillis()+"/"+i;
+                    String si = "https://wandora.org/si/test-topic/"+System.currentTimeMillis()+"/"+i;
                     Topic t = tm.createTopic();
                     t.addSubjectIdentifier(new Locator(si));
                     sis.add(si);
@@ -159,7 +159,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 String si = sis.get(0);
                 Topic t = tm.getTopic(si);
                 
-                Locator testsi = new Locator("http://wandora.org/si/test-subject-identifiers/"+System.currentTimeMillis());
+                Locator testsi = new Locator("https://wandora.org/si/test-subject-identifiers/"+System.currentTimeMillis());
                 t.addSubjectIdentifier(testsi);
                 
                 Collection<Locator> tsis = t.getSubjectIdentifiers();
@@ -631,7 +631,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 t1.setBaseName(bn1);
                 t0.setBaseName(bn0);
                 
-                Locator sl = new Locator("http://wandora.org/si/test-subject-locator-merging/"+System.currentTimeMillis());
+                Locator sl = new Locator("https://wandora.org/si/test-subject-locator-merging/"+System.currentTimeMillis());
                 
                 t1.setSubjectLocator(sl);
                 t0.setSubjectLocator(sl); // Merges t1 into t0.

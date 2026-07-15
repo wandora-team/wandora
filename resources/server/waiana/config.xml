@@ -3,7 +3,7 @@
     <!--
         This file is meant to be imported by the Wandora Modules Servlet. In general
         this file is like all other configuration files of the Wandora modules 
-        framework, described at http://wandora.org/wiki/Wandora_modules_framework .
+        framework, described at https://wandora.org/wiki/Wandora_modules_framework .
         There are a few additions however. Wandora automatically adds some modules
         and variables when it loads bundle configurations like this.
     -->

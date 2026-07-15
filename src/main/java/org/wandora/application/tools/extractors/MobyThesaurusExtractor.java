@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -78,7 +78,7 @@ public class MobyThesaurusExtractor extends AbstractExtractor implements Wandora
 
 	private static final long serialVersionUID = 1L;
 	
-	public String locatorPrefix = "http://wandora.org/si/moby/";
+	public String locatorPrefix = "https://wandora.org/si/moby/";
     public boolean ANTISYMMETRIC_ASSOCIATIONS = true;
     public boolean REMOVE_RARE_WORDS = false;
     

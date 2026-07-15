@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -70,7 +70,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
     
     public static boolean CASE_INSENSITIVE = true;
     
-    public static String BASE_SI = "http://wandora.org/si/schema/";
+    public static String BASE_SI = "https://wandora.org/si/schema/";
     
     
     

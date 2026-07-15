@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -34,7 +34,7 @@ package org.wandora.application.tools.extractors.rdf.rdfmappings;
  */
 public class OWLMapping extends RDF2TopicMapsMapping {
     public static final String OWL_NS = "http://www.w3.org/2002/07/owl#";
-    public static final String OWL_ROLE_NS = "http://wandora.org/si/owl/role/";
+    public static final String OWL_ROLE_NS = "https://wandora.org/si/owl/role/";
     
     
     public static final String[] SI_BASENAME_MAPPING = new String[] {

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -92,7 +92,7 @@ public abstract class TopicMap implements TopicMapLogger {
     protected boolean consistencyCheckWhenXTMImport = false;
     protected boolean isReadOnly = false;
     
-    public static final String EDITTIME_SI="http://wandora.org/si/core/edittime";
+    public static final String EDITTIME_SI="https://wandora.org/si/core/edittime";
 
     protected TopicMap parentTopicMap;
         
@@ -1468,7 +1468,7 @@ public abstract class TopicMap implements TopicMapLogger {
      * in this topic map.
      */
     public String makeSubjectIndicator() {
-        String si="http://wandora.org/si/temp/";
+        String si="https://wandora.org/si/temp/";
         si += System.currentTimeMillis();
         si += "-" + SICounter;
         if( SICounter++ > 10000000 ) SICounter = 0;
@@ -1939,16 +1939,16 @@ public abstract class TopicMap implements TopicMapLogger {
                                                 t.addSubjectIdentifier(createLocator(makeSubjectIndicator()));
                                                 t.setBaseName("Occurrence file: "+o.ref);
                                                 t.setSubjectLocator(createLocator(o.ref));
-                                                Topic orole=getTopic("http://wandora.org/si/compatibility/occurrence-role-reference");
+                                                Topic orole=getTopic("https://wandora.org/si/compatibility/occurrence-role-reference");
                                                 if(orole==null){
                                                     orole=createTopic();
-                                                    orole.addSubjectIdentifier(createLocator("http://wandora.org/si/compatibility/occurrence-role-reference"));
+                                                    orole.addSubjectIdentifier(createLocator("https://wandora.org/si/compatibility/occurrence-role-reference"));
                                                     orole.setBaseName("Occurrence role reference");
                                                 }
-                                                Topic trole=getTopic("http://wandora.org/si/compatibility/occurrence-role-topic");
+                                                Topic trole=getTopic("https://wandora.org/si/compatibility/occurrence-role-topic");
                                                 if(trole==null){
                                                     trole=createTopic();
-                                                    trole.addSubjectIdentifier(createLocator("http://wandora.org/si/compatibility/occurrence-role-topic"));
+                                                    trole.addSubjectIdentifier(createLocator("https://wandora.org/si/compatibility/occurrence-role-topic"));
                                                     trole.setBaseName("Occurrence role topic");
                                                 }
                                                 Association a=createAssociation(o.type);

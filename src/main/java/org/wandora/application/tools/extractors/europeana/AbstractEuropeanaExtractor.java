@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -102,21 +102,21 @@ public abstract class AbstractEuropeanaExtractor extends AbstractExtractor {
     
     public static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     public static final String EUROPEANA_SI = "http://pro.europeana.eu";
-    public static final String ITEM_SI = "http://wandora.org/si/europeana/item";
-    public static final String PROVIDER_SI = "http://wandora.org/si/europeana/item/provider";
-    public static final String LANGUAGE_SI = "http://wandora.org/si/europeana/item/language";
-    public static final String YEAR_SI = "http://wandora.org/si/europeana/item/year";
-    public static final String RIGHTS_LINK_SI = "http://wandora.org/si/europeana/item/rightsLink";
-    public static final String TITLE_SI = "http://wandora.org/si/europeana/item/title";
-    public static final String DC_CREATOR_SI = "http://wandora.org/si/europeana/item/dcCreator";
-    public static final String COUNTRY_SI = "http://wandora.org/si/europeana/item/country";
-    public static final String COLLECTION_NAME_SI = "http://wandora.org/si/europeana/item/collectionName";
-    public static final String CONCEPT_LABEL_SI = "http://wandora.org/si/europeana/item/conceptLabel";
-    public static final String TYPE_SI = "http://wandora.org/si/europeana/item/type";
-    public static final String DATA_PROVIDER_SI = "http://wandora.org/si/europeana/item/dataProvider";
-    public static final String PLACE_LABEL_SI = "http://wandora.org/si/europeana/item/placeLabel";
-    public static final String PREVIEW_LINK_SI = "http://wandora.org/si/europeana/item/previewLink";
-    public static final String GUID_LINK_SI = "http://wandora.org/si/europeana/item/guidLink";
+    public static final String ITEM_SI = "https://wandora.org/si/europeana/item";
+    public static final String PROVIDER_SI = "https://wandora.org/si/europeana/item/provider";
+    public static final String LANGUAGE_SI = "https://wandora.org/si/europeana/item/language";
+    public static final String YEAR_SI = "https://wandora.org/si/europeana/item/year";
+    public static final String RIGHTS_LINK_SI = "https://wandora.org/si/europeana/item/rightsLink";
+    public static final String TITLE_SI = "https://wandora.org/si/europeana/item/title";
+    public static final String DC_CREATOR_SI = "https://wandora.org/si/europeana/item/dcCreator";
+    public static final String COUNTRY_SI = "https://wandora.org/si/europeana/item/country";
+    public static final String COLLECTION_NAME_SI = "https://wandora.org/si/europeana/item/collectionName";
+    public static final String CONCEPT_LABEL_SI = "https://wandora.org/si/europeana/item/conceptLabel";
+    public static final String TYPE_SI = "https://wandora.org/si/europeana/item/type";
+    public static final String DATA_PROVIDER_SI = "https://wandora.org/si/europeana/item/dataProvider";
+    public static final String PLACE_LABEL_SI = "https://wandora.org/si/europeana/item/placeLabel";
+    public static final String PREVIEW_LINK_SI = "https://wandora.org/si/europeana/item/previewLink";
+    public static final String GUID_LINK_SI = "https://wandora.org/si/europeana/item/guidLink";
    
 
 

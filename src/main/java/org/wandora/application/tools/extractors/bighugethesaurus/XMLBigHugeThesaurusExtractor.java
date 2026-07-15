@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -77,7 +77,7 @@ public class XMLBigHugeThesaurusExtractor  extends AbstractExtractor {
     protected String SIMILAR_TYPE_SI = SI_BASE+"similar";
     protected String USERSUGGESTION_TYPE_SI = SI_BASE+"user-suggested";
 
-    protected String SOURCE_SI = "http://wandora.org/si/source";
+    protected String SOURCE_SI = "https://wandora.org/si/source";
 
     private String defaultEncoding = "ISO-8859-1";
 

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -58,9 +58,9 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
 	private boolean requiresRefresh = false;
     private Context preferredContext = null;
 
-    public static final String INCLUSION_TYPE = "http://wandora.org/si/find-point-in-polygon/inclusion";
-    public static final String POINT_TYPE = "http://wandora.org/si/find-point-in-polygon/point";
-    public static final String POLYGON_TYPE = "http://wandora.org/si/find-point-in-polygon/polygon";
+    public static final String INCLUSION_TYPE = "https://wandora.org/si/find-point-in-polygon/inclusion";
+    public static final String POINT_TYPE = "https://wandora.org/si/find-point-in-polygon/point";
+    public static final String POLYGON_TYPE = "https://wandora.org/si/find-point-in-polygon/polygon";
     
     private boolean reversePointCoordinates = false;
     

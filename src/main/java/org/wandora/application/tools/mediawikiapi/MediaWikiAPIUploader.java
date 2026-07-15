@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -47,7 +47,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler implements Wandora
 	private static final long serialVersionUID = 1L;
 
 	private static final String DEFAULT_TYPE_SI  
-            = "http://wandora.org/si/mediawiki/api/content/";
+            = "https://wandora.org/si/mediawiki/api/content/";
     private static final String DEFAULT_SCOPE_SI  
             = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     

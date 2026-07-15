@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -71,7 +71,7 @@ public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
 
 	public static final String DEFAULT_LANG = "en";
 
-	public String SI_PREFIX = "http://wandora.org/si/gedcom/";
+	public String SI_PREFIX = "https://wandora.org/si/gedcom/";
 	public String SCHEMA_PREFIX = "schema/";
 
 	/** Creates a new instance of GedcomExtractor */

@@ -1,6 +1,6 @@
 /*
  * WANDORA Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -350,7 +350,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
 
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/cylinder/square/";
+            return "https://wandora.org/si/cylinder/square/";
         }
 
         @Override
@@ -415,7 +415,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
 
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/cylinder/triangular/";
+            return "https://wandora.org/si/cylinder/triangular/";
         }
 
         @Override
@@ -488,7 +488,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
 
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/cylinder/hexagonal/";
+            return "https://wandora.org/si/cylinder/hexagonal/";
         }
 
         @Override

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -54,7 +54,7 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool imp
 
 	private static int MAXLEN = 256;
     private String replacement = "";
-    private String SITemplate = "http://wandora.org/si/%OCCURRENCE%";
+    private String SITemplate = "https://wandora.org/si/%OCCURRENCE%";
     
     private boolean askTemplate = true;
     
@@ -94,7 +94,7 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool imp
             Locator occurrenceScopeLocator = occurrenceScope.getSubjectIdentifiers().iterator().next();
 
             if(SITemplate == null || SITemplate.length() == 0) {
-                SITemplate = "http://wandora.org/si/%OCCURRENCE%";
+                SITemplate = "https://wandora.org/si/%OCCURRENCE%";
             }
             if(askTemplate) {
                 SITemplate = WandoraOptionPane.showInputDialog(admin, "Make subject identifier using following template. String '%OCCURRENCE%' is replaced with topic's occurrence.", SITemplate);

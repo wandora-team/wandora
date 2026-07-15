@@ -1,4 +1,4 @@
-#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $wandoraClass = $topic.getTopicMap().getTopic("https://wandora.org/si/core/wandora-class") )##
 #set( $ctopic = $topic )##
 <!DOCTYPE HTML>
 <html>
@@ -26,7 +26,7 @@
               There are five optional parameters the tree visualization takes:
               <ul>
                 <li>depth: The maximum depth from the root topic. Default: 5</li>
- * http://wandora.orgcore/wandoraclass</li>
+ * https://wandora.orgcore/wandoraclass</li>
                 <li>assocTypeSI: The subject identifier of the association type used to construct the parent-child relation. Default: http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass</li>
                 <li>parentRoleSI: The subject identifier of the parent role. default: http://www.topicmaps.org/xtm/1.0/core.xtm#superclass</li>
                 <li>childRoleSI: The subject identifier of the child role. default: http://www.topicmaps.org/xtm/1.0/core.xtm#subclass</li>
@@ -42,7 +42,7 @@
 #* *##set( $depth = $request.getParameter("depth"))
 #end
 #if(! $request.getParameter("rootSI") )
-#* *##set( $rootSI = "http://wandora.org/si/core/wandora-class" )
+#* *##set( $rootSI = "https://wandora.org/si/core/wandora-class" )
 #else
 #* *##set( $rootSI = $request.getParameter("rootSI"))
 #end

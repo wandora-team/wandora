@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -51,9 +51,9 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
 
 	private static final long serialVersionUID = 1L;
 
-	public static String RANDOM_GRAPH_SI = "http://wandora.org/si/random-graph";
+	public static String RANDOM_GRAPH_SI = "https://wandora.org/si/random-graph";
 
-    public static String siPattern = "http://wandora.org/si/random-graph/node/__n__";
+    public static String siPattern = "https://wandora.org/si/random-graph/node/__n__";
     public static String basenamePattern = "Random graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static boolean ensureNumberOfAssociations = true;

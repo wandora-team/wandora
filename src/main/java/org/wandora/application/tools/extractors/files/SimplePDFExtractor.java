@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -449,7 +449,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
         if(siend.startsWith("http://")) return new Locator(siend);
         if(siend.startsWith("file:/")) return new Locator(siend);
         if(siend.startsWith("/")) siend = siend.substring(1);
-        return new Locator("http://wandora.org/si/pdf/" + urlEncode(siend));
+        return new Locator("https://wandora.org/si/pdf/" + urlEncode(siend));
     }
 
 

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -65,13 +65,13 @@ public class OCRExtractor extends AbstractExtractor {
     
 	private static final long serialVersionUID = 1L;
 	
-	protected String SOURCE_SI         = "http://wandora.org/si/source";
-    protected String DOCUMENT_SI       = "http://wandora.org/si/document";
+	protected String SOURCE_SI         = "https://wandora.org/si/source";
+    protected String DOCUMENT_SI       = "https://wandora.org/si/document";
     
-    protected String TEXT_CONTENT_SI   = "http://wandora.org/si/text_content";
-    protected String DATE_EXTRACTED_SI = "http://wandora.org/si/time_extracted";
-    protected String DATE_MODIFIED_SI  = "http://wandora.org/si/date_modified";
-    protected String FILE_SIZE_SI      = "http://wandora.org/si/file_size";
+    protected String TEXT_CONTENT_SI   = "https://wandora.org/si/text_content";
+    protected String DATE_EXTRACTED_SI = "https://wandora.org/si/time_extracted";
+    protected String DATE_MODIFIED_SI  = "https://wandora.org/si/date_modified";
+    protected String FILE_SIZE_SI      = "https://wandora.org/si/file_size";
 
 
 

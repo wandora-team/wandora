@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -85,25 +85,25 @@ public abstract class AbstractNYTExtractor extends AbstractExtractor {
     
     
     
-    public static final String DBPEDIA_RESOURCE_SI = "http://wandora.org/si/nytimes/dbpedia";
-    public static final String BYLINE_SI = "http://wandora.org/si/nytimes/byline";    
+    public static final String DBPEDIA_RESOURCE_SI = "https://wandora.org/si/nytimes/dbpedia";
+    public static final String BYLINE_SI = "https://wandora.org/si/nytimes/byline";    
     public static final String ARTICLE_SI = "http://api.nytimes.com/svc/search/v1/article";
-    public static final String BODY_SI = "http://wandora.org/si/nytimes/body";
-    public static final String TEXT_SI = "http://wandora.org/si/nytimes/text";
-    public static final String ABSTRACT_SI = "http://wandora.org/si/nytimes/abstract";
-    public static final String LEAD_PARAGRAPH_SI = "http://wandora.org/si/nytimes/lead-paragraph";
-    public static final String DATE_SI = "http://wandora.org/si/nytimes/date";
+    public static final String BODY_SI = "https://wandora.org/si/nytimes/body";
+    public static final String TEXT_SI = "https://wandora.org/si/nytimes/text";
+    public static final String ABSTRACT_SI = "https://wandora.org/si/nytimes/abstract";
+    public static final String LEAD_PARAGRAPH_SI = "https://wandora.org/si/nytimes/lead-paragraph";
+    public static final String DATE_SI = "https://wandora.org/si/nytimes/date";
     public static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
-    public static final String FACET_SI = "http://wandora.org/si/nytimes/facet";
-    public static final String KEYWORD_SI = "http://wandora.org/si/nytimes/keyword";
-    public static final String DES_FACET_SI = "http://wandora.org/si/nytimes/facet/des";
-    public static final String GEO_FACET_SI = "http://wandora.org/si/nytimes/facet/geo";
-    public static final String ORG_FACET_SI = "http://wandora.org/si/nytimes/facet/org";
-    public static final String PER_FACET_SI = "http://wandora.org/si/nytimes/facet/per";
-    public static final String SOURCE_FACET_SI = "http://wandora.org/si/nytimes/facet/source";
-    public static final String CLASSIFIER_FACET_SI = "http://wandora.org/si/nytimes/facet/classifier";
-    public static final String COLUMN_FACET_SI = "http://wandora.org/si/nytimes/facet/column";
-    public static final String MATERIAL_TYPE_FACET_SI = "http://wandora.org/si/nytimes/facet/material-type";
+    public static final String FACET_SI = "https://wandora.org/si/nytimes/facet";
+    public static final String KEYWORD_SI = "https://wandora.org/si/nytimes/keyword";
+    public static final String DES_FACET_SI = "https://wandora.org/si/nytimes/facet/des";
+    public static final String GEO_FACET_SI = "https://wandora.org/si/nytimes/facet/geo";
+    public static final String ORG_FACET_SI = "https://wandora.org/si/nytimes/facet/org";
+    public static final String PER_FACET_SI = "https://wandora.org/si/nytimes/facet/per";
+    public static final String SOURCE_FACET_SI = "https://wandora.org/si/nytimes/facet/source";
+    public static final String CLASSIFIER_FACET_SI = "https://wandora.org/si/nytimes/facet/classifier";
+    public static final String COLUMN_FACET_SI = "https://wandora.org/si/nytimes/facet/column";
+    public static final String MATERIAL_TYPE_FACET_SI = "https://wandora.org/si/nytimes/facet/material-type";
     public static final String NYT_SI = "http://www.nytimes.com";
     
     
@@ -255,18 +255,18 @@ public abstract class AbstractNYTExtractor extends AbstractExtractor {
     // Also uses getNYTTypeTopic from above
     
     public static final String EVENT_SI = "http://api.nytimes.com/svc/events/v2";
-    public static final String EVENT_DETAIL_URL_SI = "http://wandora.org/si/nytimes/event/url";
-    public static final String EVENT_NAME_SI = "http://wandora.org/si/nytimes/event/name";
-    public static final String EVENT_DESCRIPTION_SI = "http://wandora.org/si/nytimes/event/description";
-    public static final String EVENT_VENUE_SI = "http://wandora.org/si/nytimes/event/venue";
-    public static final String EVENT_CATEGORY_SI = "http://wandora.org/si/nytimes/event/category";
-    public static final String EVENT_LATITUDE_SI = "http://wandora.org/si/nytimes/event/latitude";
-    public static final String EVENT_LONGITUDE_SI = "http://wandora.org/si/nytimes/event/longitude";
-    public static final String EVENT_DATE_SI = "http://wandora.org/si/nytimes/eventDate";
-    public static final String START_DATE_SI = "http://wandora.org/si/nytimes/startDate";
-    public static final String END_DATE_SI = "http://wandora.org/si/nytimes/endDate";
-    public static final String WEEKDAY_SI = "http://wandora.org/si/nytimes/dayOfWeek/";
-    public static final String RECURRING_DAY_SI = "http://wandora.org/si/nytimes/recurringDay/";
+    public static final String EVENT_DETAIL_URL_SI = "https://wandora.org/si/nytimes/event/url";
+    public static final String EVENT_NAME_SI = "https://wandora.org/si/nytimes/event/name";
+    public static final String EVENT_DESCRIPTION_SI = "https://wandora.org/si/nytimes/event/description";
+    public static final String EVENT_VENUE_SI = "https://wandora.org/si/nytimes/event/venue";
+    public static final String EVENT_CATEGORY_SI = "https://wandora.org/si/nytimes/event/category";
+    public static final String EVENT_LATITUDE_SI = "https://wandora.org/si/nytimes/event/latitude";
+    public static final String EVENT_LONGITUDE_SI = "https://wandora.org/si/nytimes/event/longitude";
+    public static final String EVENT_DATE_SI = "https://wandora.org/si/nytimes/eventDate";
+    public static final String START_DATE_SI = "https://wandora.org/si/nytimes/startDate";
+    public static final String END_DATE_SI = "https://wandora.org/si/nytimes/endDate";
+    public static final String WEEKDAY_SI = "https://wandora.org/si/nytimes/dayOfWeek/";
+    public static final String RECURRING_DAY_SI = "https://wandora.org/si/nytimes/recurringDay/";
     
     public static Topic getEventTypeTopic(TopicMap tm) throws TopicMapException {
         Topic type=getOrCreateTopic(tm, EVENT_SI, "Event (New York Times API)");

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -172,10 +172,10 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
                 iconclassType.addSubjectIdentifier(new Locator("http://www.iconclass.nl/"));
                 iconclassType.setBaseName("Keyword (iconclass)");
             }
-            Topic muusaIconclassBridgeType=topicMap.getTopic("http://wandora.org/si/muusa_iconclass_bridge");
+            Topic muusaIconclassBridgeType=topicMap.getTopic("https://wandora.org/si/muusa_iconclass_bridge");
             if(muusaIconclassBridgeType == null) {
                 muusaIconclassBridgeType = topicMap.createTopic();
-                muusaIconclassBridgeType.addSubjectIdentifier(new Locator("http://wandora.org/si/muusa_iconclass_bridge"));
+                muusaIconclassBridgeType.addSubjectIdentifier(new Locator("https://wandora.org/si/muusa_iconclass_bridge"));
                 muusaIconclassBridgeType.setBaseName("Keyword bridge (muusa - iconclass)");
             }
 
@@ -342,7 +342,7 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
     
     public Locator getLocatorForIconclass(String iconclassCode) {
         try {
-            return new Locator( TopicTools.cleanDirtyLocator("http://wandora.org/si/iconclass/" + iconclassCode) );
+            return new Locator( TopicTools.cleanDirtyLocator("https://wandora.org/si/iconclass/" + iconclassCode) );
         }
         catch(Exception e) {
             log(e);

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -60,12 +60,12 @@ public class Sentences2Associations  extends AbstractExtractor implements Wandor
     
     
 
-    public static String SOURCE_SI = "http://wandora.org/si/sentence-source";
-    public static String WORD_SI_BASE = "http://wandora.org/si/word/";
-    public static String ROLE_SI_BASE = "http://wandora.org/si/word-slot/";
-    public static String SENTENCE_SI_BASE = "http://wandora.org/si/sentence";
-    public static String ORDER_SI_BASE = "http://wandora.org/si/sentence/";
-    public static String SENTENCES_TO_ASSOCIATIONS = "http://wandora.org/si/sentences2associations";
+    public static String SOURCE_SI = "https://wandora.org/si/sentence-source";
+    public static String WORD_SI_BASE = "https://wandora.org/si/word/";
+    public static String ROLE_SI_BASE = "https://wandora.org/si/word-slot/";
+    public static String SENTENCE_SI_BASE = "https://wandora.org/si/sentence";
+    public static String ORDER_SI_BASE = "https://wandora.org/si/sentence/";
+    public static String SENTENCES_TO_ASSOCIATIONS = "https://wandora.org/si/sentences2associations";
 
 
     private URL basePath = null;
@@ -185,7 +185,7 @@ public class Sentences2Associations  extends AbstractExtractor implements Wandor
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
-        String stringLocator = "http://wandora.org/si/sentences2associations/";
+        String stringLocator = "https://wandora.org/si/sentences2associations/";
         try {
             _extractTopicsFromStream(stringLocator, new ByteArrayInputStream(str.getBytes()), tm);
             return true;

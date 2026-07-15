@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -105,10 +105,10 @@ public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool impl
                             if(ASSOCIATE_TO_OCCURRENCE_CARRIER) {
                                 Topic ocarrier = (Topic) context.getContextObjects().next();
                                 if(ocarrier != null) {
-                                    Topic atype = getOrCreateTopic(tm, "http://wandora.org/si/occurrence-distilled-association", "Occurrence distilled association");
+                                    Topic atype = getOrCreateTopic(tm, "https://wandora.org/si/occurrence-distilled-association", "Occurrence distilled association");
                                     Association a = tm.createAssociation(atype);
-                                    a.addPlayer(ocarrier, getOrCreateTopic(tm, "http://wandora.org/si/occurrence-carrier", "Occurrence carrier"));
-                                    a.addPlayer(topic, getOrCreateTopic(tm, "http://wandora.org/si/occurrence-distilled-topic", "Occurrence distilled topic"));
+                                    a.addPlayer(ocarrier, getOrCreateTopic(tm, "https://wandora.org/si/occurrence-carrier", "Occurrence carrier"));
+                                    a.addPlayer(topic, getOrCreateTopic(tm, "https://wandora.org/si/occurrence-distilled-topic", "Occurrence distilled topic"));
                                     requiresRefresh = true;
                                 }
                             }

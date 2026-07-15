@@ -59,7 +59,7 @@ public class RandomTest implements Test {
         
         for(int i=0;i<numTopics;i++){
             Topic t=tm.createTopic();
-            t.addSubjectIdentifier(new Locator("http://wandora.org/si/test/"+i));
+            t.addSubjectIdentifier(new Locator("https://wandora.org/si/test/"+i));
             t.setBaseName(""+i);
             topics[i]=t;
         }
@@ -88,11 +88,11 @@ public class RandomTest implements Test {
             
             int numSubjectIdentifiers=random.nextInt(5);
             for(int j=0;j<numSubjectIdentifiers;j++){
-                topics[i].addSubjectIdentifier(new Locator("http://wandora.org/si/test/"+i+"/si"+random.nextInt(1000000)));
+                topics[i].addSubjectIdentifier(new Locator("https://wandora.org/si/test/"+i+"/si"+random.nextInt(1000000)));
             }
             
             if(random.nextBoolean()){
-                topics[i].setSubjectLocator(new Locator("http://wandora.org/si/test/"+i+"/sl"+random.nextInt(1000000)));
+                topics[i].setSubjectLocator(new Locator("https://wandora.org/si/test/"+i+"/sl"+random.nextInt(1000000)));
             }
             
             int numOccurrences=random.nextInt(5);
@@ -207,7 +207,7 @@ public class RandomTest implements Test {
                 t.addSubjectIdentifier(l);
             }
             else {
-                t.addSubjectIdentifier(new Locator("http://wandora.org/si/test/random/"+random.nextInt(1000000)));
+                t.addSubjectIdentifier(new Locator("https://wandora.org/si/test/random/"+random.nextInt(1000000)));
             }
         }
         else if(r==1){ // add type
@@ -235,7 +235,7 @@ public class RandomTest implements Test {
         }
         else if(r==3){ // create topic
             Topic t=tm.createTopic();
-            t.addSubjectIdentifier(new Locator("http://wandora.org/si/test/random/"+random.nextInt(1000000)));
+            t.addSubjectIdentifier(new Locator("https://wandora.org/si/test/random/"+random.nextInt(1000000)));
         }
         else if(r==4){ // merge
             if(tm.getNumTopics()<2) return;
@@ -324,7 +324,7 @@ public class RandomTest implements Test {
                     }
                 }
 
-                t.setSubjectLocator(new Locator("http://wandora.org/si/test/random"+random.nextInt(1000000)));
+                t.setSubjectLocator(new Locator("https://wandora.org/si/test/random"+random.nextInt(1000000)));
             }
             else {
                 t.setSubjectLocator(null);

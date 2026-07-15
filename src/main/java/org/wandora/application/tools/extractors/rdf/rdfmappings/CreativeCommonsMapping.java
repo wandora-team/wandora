@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -36,7 +36,7 @@ public class CreativeCommonsMapping extends RDF2TopicMapsMapping {
 
     
     public static final String CC_NS = "http://creativecommons.org/ns#";
-    public static final String CC_ROLE_NS = "http://wandora.org/si/cc/role/";
+    public static final String CC_ROLE_NS = "https://wandora.org/si/cc/role/";
     
     public static final String[] SI_BASENAME_MAPPING = new String[] {
         CC_NS+"Work",

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -51,9 +51,9 @@ public class LatticeGenerator extends AbstractGenerator implements WandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
-	public static String LATTICE_GRAPH_SI = "http://wandora.org/si/lattice/";
+	public static String LATTICE_GRAPH_SI = "https://wandora.org/si/lattice/";
     
-    public static String siPattern = "http://wandora.org/si/lattice/vertex/__n__";
+    public static String siPattern = "https://wandora.org/si/lattice/vertex/__n__";
     public static String basenamePattern = "Lattice vertex __n__";
     public static boolean connectWithWandoraClass = true;
     

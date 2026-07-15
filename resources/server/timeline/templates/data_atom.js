@@ -24,7 +24,7 @@
     #elseif($helper.getFirstPlayer( $entry, $atomEntryUpdatedTypeSI, $atomEntryUpdatedTypeSI ) )
       #set( $entryDate = $helper.getFirstPlayer( $entry, $atomEntryUpdatedTypeSI, $atomEntryUpdatedTypeSI ))##
     #end
-    #set( $entryLink = $helper.getFirstPlayer( $entry, "http://wandora.org/si/link", $atomEntryLinkTypeSI ) )##
+    #set( $entryLink = $helper.getFirstPlayer( $entry, "https://wandora.org/si/link", $atomEntryLinkTypeSI ) )##
     #set( $entryTitle = $entry.getDisplayName( $lang ) )##
     #if($entry.getData( $atomEntrySummaryType,"en"))
       #set ($entryDescription = $entry.getData( $atomEntrySummaryType,"en"))##

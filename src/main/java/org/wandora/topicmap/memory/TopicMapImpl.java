@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -416,7 +416,7 @@ public class TopicMapImpl extends TopicMap {
         if(nt.getSubjectIdentifiers().isEmpty()) {
             System.out.println("Warning! No subject indicators in topic. Creating default SI.");
             String randomNumber = System.currentTimeMillis()+"-"+getIDCounter();
-            nt.addSubjectIdentifier(new Locator("http://wandora.org/si/temp/" + randomNumber));
+            nt.addSubjectIdentifier(new Locator("https://wandora.org/si/temp/" + randomNumber));
         }
         copied.put(t,(Locator)nt.getSubjectIdentifiers().iterator().next());
         
@@ -490,7 +490,7 @@ public class TopicMapImpl extends TopicMap {
             Topic nrole = null;
             if(role.getSubjectIdentifiers().isEmpty()) {
                 System.out.println("Warning, topic has no subject identifiers. Creating default SI!");
-                //role.addSubjectIdentifier(new Locator("http://wandora.org/si/temp/" + System.currentTimeMillis()));
+                //role.addSubjectIdentifier(new Locator("https://wandora.org/si/temp/" + System.currentTimeMillis()));
             }
             else {
                 nrole=getTopic((Locator)role.getSubjectIdentifiers().iterator().next());
@@ -502,7 +502,7 @@ public class TopicMapImpl extends TopicMap {
             Topic nplayer = null;
             if(player.getSubjectIdentifiers().isEmpty()) {
                 System.out.println("Warning, topic has no subject identifiers. Creating default SI!");
-                //player.addSubjectIdentifier(new Locator("http://wandora.org/si/temp/" + System.currentTimeMillis()));
+                //player.addSubjectIdentifier(new Locator("https://wandora.org/si/temp/" + System.currentTimeMillis()));
             }
             else {
                 nplayer=getTopic((Locator)player.getSubjectIdentifiers().iterator().next());

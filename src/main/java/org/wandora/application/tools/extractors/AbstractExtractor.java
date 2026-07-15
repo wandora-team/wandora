@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -712,7 +712,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         if(siend.startsWith("ftps:")) return new Locator(siend);
         if(siend.startsWith("mailto:")) return new Locator(siend);
         if(siend.startsWith("/")) siend = siend.substring(1);
-        return new Locator("http://wandora.org/si/default/" + urlEncode(siend));
+        return new Locator("https://wandora.org/si/default/" + urlEncode(siend));
     }
 
     public Topic createTopic(TopicMap topicMap, String baseString) throws TopicMapException {

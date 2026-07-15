@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -53,9 +53,9 @@ public class FiniteGroupGenerator extends AbstractGenerator implements WandoraTo
 
 	private static final long serialVersionUID = 1L;
 
-	public static String FINITE_GROUP_SI = "http://wandora.org/si/finite-group";
+	public static String FINITE_GROUP_SI = "https://wandora.org/si/finite-group";
 
-    public static String siPattern = "http://wandora.org/si/finite-group/node/__n__";
+    public static String siPattern = "https://wandora.org/si/finite-group/node/__n__";
     public static String basenamePattern = "Topic __n__";
     public static boolean connectWithWandoraClass = true;
     public static int topicCounterOffset = 0;

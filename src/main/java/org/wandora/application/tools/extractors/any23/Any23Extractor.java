@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -74,11 +74,11 @@ public class Any23Extractor extends AbstractExtractor {
 	private static final long serialVersionUID = 1L;
 
 	
-	public static final String SOURCE_TYPE = "http://wandora.org/si/any23/source"; // Used also as a role-topic.
+	public static final String SOURCE_TYPE = "https://wandora.org/si/any23/source"; // Used also as a role-topic.
 
-    public static final String ANY23_PREDICATE_TYPE = "http://wandora.org/si/any23/predicate";
-    public static final String ANY23_SUBJECT_TYPE = "http://wandora.org/si/any23/subject";
-    public static final String ANY23_OBJECT_TYPE = "http://wandora.org/si/any23/object";
+    public static final String ANY23_PREDICATE_TYPE = "https://wandora.org/si/any23/predicate";
+    public static final String ANY23_SUBJECT_TYPE = "https://wandora.org/si/any23/subject";
+    public static final String ANY23_OBJECT_TYPE = "https://wandora.org/si/any23/object";
     public static final String ANY23_BASE = "http://any23.org/";
     
     public static boolean SIGN_ALL_TRIPLETS = true;
@@ -422,7 +422,7 @@ public class Any23Extractor extends AbstractExtractor {
         if(namespace != null)
             return namespace;
         else
-            return "http://wandora.org/si/default";
+            return "https://wandora.org/si/default";
     }
 
 

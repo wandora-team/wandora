@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -381,7 +381,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
         
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/tiling/square/";
+            return "https://wandora.org/si/tiling/square/";
         }
         
         @Override
@@ -447,7 +447,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
         
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/tiling/triangular/";
+            return "https://wandora.org/si/tiling/triangular/";
         }
         
         @Override
@@ -509,7 +509,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
         
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/tiling/hexagonal/";
+            return "https://wandora.org/si/tiling/hexagonal/";
         }
         
         @Override

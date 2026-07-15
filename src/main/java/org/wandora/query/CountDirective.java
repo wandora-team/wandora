@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -44,8 +44,8 @@ public class CountDirective implements Directive {
     private Locator type;
     private Locator role;
 
-    public static final String TYPE_SI="http://wandora.org/si/query/counttype";
-    public static final String ROLE_SI="http://wandora.org/si/query/countrole";
+    public static final String TYPE_SI="https://wandora.org/si/query/counttype";
+    public static final String ROLE_SI="https://wandora.org/si/query/countrole";
     
     /** Creates a new instance of CountDirective */
     public CountDirective(Directive query) {

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -136,7 +136,7 @@ import org.w3c.dom.NodeList;
  * As another example, the following is pretty much equal to <code>System.out.println("Hello World");</code> (note the use of
  * name space).
  * <code><pre>
- * &lt;root xmlns:xp="http://wandora.org/xmlparamprocessor">
+ * &lt;root xmlns:xp="https://wandora.org/xmlparamprocessor">
  *  &lt;object xp:id="out" xp:static="java.lang.System" xp:field="out"/>
  *  &lt;method xp:idref="out" xp:method="println">
  *   &lt;param xp:class="java.lang.String" xp:literal="true">Hello World!&lt;/param>
@@ -160,7 +160,7 @@ import org.w3c.dom.NodeList;
  * You can use getObjectType to get the element name used to create the object. This way you can easily
  * group your objects into different categories.</p>
  * <p>
- * Note that by default <code>XMLParamProcessor</code> uses a namespace "http://wandora.org/xmlparamprocessor" for
+ * Note that by default <code>XMLParamProcessor</code> uses a namespace "https://wandora.org/xmlparamprocessor" for
  * all the attributes. So either use setNameSpace method to set the name space to null to disable this or take
  * care that your xml has proper name spaces setup and that the xml implementation supports name spaces.
  * You should use  javax.xml.parsers.DocumentBuilderFactory.setNamespaceAware(true) before creating the

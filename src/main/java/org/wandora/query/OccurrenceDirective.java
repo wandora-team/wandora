@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -44,7 +44,7 @@ public class OccurrenceDirective implements Directive {
     private Locator occurrenceType;
     private Locator occurrenceVersion;
 
-    public static final String OCCURRENCE_SI="http://wandora.org/si/query/occurrence";
+    public static final String OCCURRENCE_SI="https://wandora.org/si/query/occurrence";
 
     public OccurrenceDirective(Locator occurrenceType,Locator occurrenceVersion,Locator occurrenceRole) {
         this.occurrenceType=occurrenceType;

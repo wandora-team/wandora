@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -750,7 +750,7 @@ public abstract class AbstractGeoNamesExtractor extends AbstractExtractor {
     }
 
     public static Topic getGenericTopic(TopicMap tm) throws TopicMapException {
-        return getOrCreateTopic(tm, "http://wandora.org/si/topic", "Topic");
+        return getOrCreateTopic(tm, "https://wandora.org/si/topic", "Topic");
     }
 
 

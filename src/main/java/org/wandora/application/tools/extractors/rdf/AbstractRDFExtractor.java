@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -225,7 +225,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     }
 
     
-    public static final String RDF_LIST_ORDER="http://wandora.org/si/rdf/list_order";
+    public static final String RDF_LIST_ORDER="https://wandora.org/si/rdf/list_order";
 
     public void handleStatement(Statement stmt, TopicMap map) throws TopicMapException {
         Resource subject   = stmt.getSubject();     // get the subject

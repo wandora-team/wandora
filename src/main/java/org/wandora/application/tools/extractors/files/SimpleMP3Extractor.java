@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -64,7 +64,7 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
 
 	private String tempFilename = "temp/wandora_temp.tmp";
 
-    private String baseLocator = "http://wandora.org/si/mp3";
+    private String baseLocator = "https://wandora.org/si/mp3";
 
     private int extractionCounter = 0;
     private int foundCounter = 0;

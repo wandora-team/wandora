@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -354,11 +354,11 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
             typeButton.setTopic(SchemaBox.DEFAULT_ASSOCIATION_SI);
             int i=1;
             for(T2<GetTopicButton,Topic> player : fixedPlayers) {
-                player.e1.setTopic("http://wandora.org/si/core/default-role-"+i);
+                player.e1.setTopic("https://wandora.org/si/core/default-role-"+i);
                 i++;
             }
             for(T2<GetTopicButton,GetTopicButton> member : players) {
-                member.e1.setTopic("http://wandora.org/si/core/default-role-"+i);
+                member.e1.setTopic("https://wandora.org/si/core/default-role-"+i);
                 i++;
             }
         }

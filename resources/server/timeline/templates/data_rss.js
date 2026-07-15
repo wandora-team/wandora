@@ -4,20 +4,20 @@
 			"events":[
 
 #set( $count = 0 )##
-#set( $rssChannelTypeSI = "http://wandora.org/si/rss/2.0/channel" )##
+#set( $rssChannelTypeSI = "https://wandora.org/si/rss/2.0/channel" )##
 #set( $rssChannelType = $topicmap.getTopic( $rssChannelTypeSI ) )##
-#set( $rssChannelItemSI = "http://wandora.org/si/rss/2.0/channel/item" )##
+#set( $rssChannelItemSI = "https://wandora.org/si/rss/2.0/channel/item" )##
 #set( $rssChannelItem = $topicmap.getTopic( $rssChannelItemSI ) )##
-#set( $rssChannelItemDateSI = "http://wandora.org/si/rss/2.0/channel/item/pubdate" )##
+#set( $rssChannelItemDateSI = "https://wandora.org/si/rss/2.0/channel/item/pubdate" )##
 #set( $rssChannelItemDate = $topicmap.getTopic( $rssChannelItemDateSI ) )##
 #set( $channels = $topicmap.getTopicsOfType( $rssChannelType ) )##
-#set( $rssChannelItemLinkType = $topicmap.getTopic( "http://wandora.org/si/rss/2.0/channel/item/link" ) )##
+#set( $rssChannelItemLinkType = $topicmap.getTopic( "https://wandora.org/si/rss/2.0/channel/item/link" ) )##
 #if( $channels.size()!=0 )##
  #foreach( $channel in $channels )##
   #set( $items = $helper.getPlayers( $channel, $rssChannelItem, $rssChannelItem ) )##
   #if( $items.size()!=0 )##
    #foreach( $item in $items )##
-    #set( $itemDate = $helper.getFirstPlayer( $item, $rssChannelItemDateSI, "http://wandora.org/si/date" ) )##
+    #set( $itemDate = $helper.getFirstPlayer( $item, $rssChannelItemDateSI, "https://wandora.org/si/date" ) )##
     #set( $itemLink = $item.getData( $rssChannelItemLinkType, "en" ) )##
     #set( $itemTitle = $item.getDisplayName( $lang ) )##
     #set( $itemTitle = $itemTitle.replaceAll('\"', '\\\"' ) )##

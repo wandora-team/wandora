@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -62,21 +62,21 @@ import org.wandora.utils.Tuples.T2;
  */
 public class TMBox {
     
-    public static final String WANDORACLASS_SI = "http://wandora.org/si/core/wandora-class";
-    public static final String ASSOCIATIONTYPE_SI = "http://wandora.org/si/core/association-type";
-    public static final String ASSOCIATIONROLE_SI = "http://wandora.org/si/core/associationrole";
-    public static final String ROLE_SI = "http://wandora.org/si/core/role";
-    public static final String LANGINDEPENDENT_SI = "http://wandora.org/si/core/lang-independent";
-    public static final String ASSOCIATIONROLECATEGORIES_SI = "http://wandora.org/si/core/associationrolecategories";
-    public static final String OCCURRENCETYPE_SI = "http://wandora.org/si/core/occurrence-type";
-    public static final String HIDELEVEL_SI = "http://wandora.org/si/core/hidelevel";
-    public static final String CATEGORYHIERARCHY_SI = "http://wandora.org/si/common/categoryhierarchy";
-    public static final String SUPERCATEGORY_SI = "http://wandora.org/si/common/supercategory";
-    public static final String SUBCATEGORY_SI = "http://wandora.org/si/common/subcategory";
-    public static final String ENTRYTIME_SI = "http://wandora.org/si/common/entrytime";
+    public static final String WANDORACLASS_SI = "https://wandora.org/si/core/wandora-class";
+    public static final String ASSOCIATIONTYPE_SI = "https://wandora.org/si/core/association-type";
+    public static final String ASSOCIATIONROLE_SI = "https://wandora.org/si/core/associationrole";
+    public static final String ROLE_SI = "https://wandora.org/si/core/role";
+    public static final String LANGINDEPENDENT_SI = "https://wandora.org/si/core/lang-independent";
+    public static final String ASSOCIATIONROLECATEGORIES_SI = "https://wandora.org/si/core/associationrolecategories";
+    public static final String OCCURRENCETYPE_SI = "https://wandora.org/si/core/occurrence-type";
+    public static final String HIDELEVEL_SI = "https://wandora.org/si/core/hidelevel";
+    public static final String CATEGORYHIERARCHY_SI = "https://wandora.org/si/common/categoryhierarchy";
+    public static final String SUPERCATEGORY_SI = "https://wandora.org/si/common/supercategory";
+    public static final String SUBCATEGORY_SI = "https://wandora.org/si/common/subcategory";
+    public static final String ENTRYTIME_SI = "https://wandora.org/si/common/entrytime";
 
-    public static final String VARIANT_NAME_VERSION_SI = "http://wandora.org/si/core/variant-name-version";
-    public static final String LANGUAGE_SI = "http://wandora.org/si/core/language";
+    public static final String VARIANT_NAME_VERSION_SI = "https://wandora.org/si/core/variant-name-version";
+    public static final String LANGUAGE_SI = "https://wandora.org/si/core/language";
 
     // Language topics, data versions and display scope (moved from WandoraAdminManager)
     

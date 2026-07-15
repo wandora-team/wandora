@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -173,7 +173,7 @@ public class VerbOceanExtractor extends AbstractExtractor implements WandoraTool
 
 
     public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
-        String stringLocator = "http://wandora.org/si/verb-ocean-extractor/";
+        String stringLocator = "https://wandora.org/si/verb-ocean-extractor/";
         try {
             _extractTopicsFromStream(stringLocator, new ByteArrayInputStream(str.getBytes()), tm);
             return true;
@@ -242,7 +242,7 @@ public class VerbOceanExtractor extends AbstractExtractor implements WandoraTool
     
     
     
-    String SI_BASE = "http://wandora.org/si/verbocean/";
+    String SI_BASE = "https://wandora.org/si/verbocean/";
     public Topic getOrCreateTopic(String name, String path, TopicMap topicMap) {
         try {
             if(topicMap != null) {

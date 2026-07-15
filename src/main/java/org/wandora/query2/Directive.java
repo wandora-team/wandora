@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -41,7 +41,7 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
  */
 public abstract class Directive {
 
-    public static final String DEFAULT_NS="http://wandora.org/si/query/";
+    public static final String DEFAULT_NS="https://wandora.org/si/query/";
     public static final String DEFAULT_COL="#DEFAULT";
 
     public static Addon[] getStandardAddonHints(){
@@ -268,7 +268,7 @@ public abstract class Directive {
     public static void main(String[] args) throws Exception {
 /*        String debug=
             new BaseName().of("#in").as("#bn").from(
-              new Instances().from("http://wandora.org/si/core/schema-type").as("#in"),
+              new Instances().from("https://wandora.org/si/core/schema-type").as("#in"),
               new Literals("Content type").as("#literals")
             ).where("#bn","=","#literals").debugString();*/
 /*        String debug=

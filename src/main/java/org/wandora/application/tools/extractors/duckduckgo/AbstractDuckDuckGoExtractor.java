@@ -1,7 +1,7 @@
  /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -49,13 +49,13 @@ public abstract class AbstractDuckDuckGoExtractor extends AbstractExtractor{
 	private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     private static final String LAMBDA_SI = "https://lambda-face-detection-and-recognition.p.mashape.com";
     
-    private static final String TAG_SI = "http://wandora.org/si/mashape/lambda/tag";
-    private static final String FACE_SI = "http://wandora.org/si/mashape/lambda/face";
-    private static final String PHOTO_SI = "http://wandora.org/si/mashape/lambda/photo";
-    private static final String SMILE_SI = "http://wandora.org/si/mashape/lambda/smiling";
+    private static final String TAG_SI = "https://wandora.org/si/mashape/lambda/tag";
+    private static final String FACE_SI = "https://wandora.org/si/mashape/lambda/face";
+    private static final String PHOTO_SI = "https://wandora.org/si/mashape/lambda/photo";
+    private static final String SMILE_SI = "https://wandora.org/si/mashape/lambda/smiling";
     
-    private static final String WIDTH_SI = "http://wandora.org/si/mashape/lambda/width";
-    private static final String HEIGHT_SI = "http://wandora.org/si/mashape/lambda/height";
+    private static final String WIDTH_SI = "https://wandora.org/si/mashape/lambda/width";
+    private static final String HEIGHT_SI = "https://wandora.org/si/mashape/lambda/height";
     
     @Override
     public String getName() {

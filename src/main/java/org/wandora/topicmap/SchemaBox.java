@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -64,19 +64,19 @@ import java.util.Set;
  */
 public class SchemaBox {
 
-    public static final String ROLECLASS_SI="http://wandora.org/si/core/role-class";
-    public static final String CONTENTTYPE_SI="http://wandora.org/si/core/content-type";
+    public static final String ROLECLASS_SI="https://wandora.org/si/core/role-class";
+    public static final String CONTENTTYPE_SI="https://wandora.org/si/core/content-type";
     public static final String ASSOCIATIONTYPE_SI=TMBox.ASSOCIATIONTYPE_SI;
     public static final String OCCURRENCETYPE_SI=TMBox.OCCURRENCETYPE_SI;
     public static final String ROLE_SI=TMBox.ROLE_SI;
 
-    public static final String DEFAULT_OCCURRENCE_SI = "http://wandora.org/si/core/default-occurrence";
+    public static final String DEFAULT_OCCURRENCE_SI = "https://wandora.org/si/core/default-occurrence";
 
-    public static final String DEFAULT_ASSOCIATION_SI = "http://wandora.org/si/core/default-association";
-    public static final String DEFAULT_ROLE_1_SI = "http://wandora.org/si/core/default-role-1";
-    public static final String DEFAULT_ROLE_2_SI = "http://wandora.org/si/core/default-role-2";
+    public static final String DEFAULT_ASSOCIATION_SI = "https://wandora.org/si/core/default-association";
+    public static final String DEFAULT_ROLE_1_SI = "https://wandora.org/si/core/default-role-1";
+    public static final String DEFAULT_ROLE_2_SI = "https://wandora.org/si/core/default-role-2";
 
-    public static final String ANY_SI="http://wandora.org/si/core/any";
+    public static final String ANY_SI="https://wandora.org/si/core/any";
     
     public static final int COUNT_SINGLE=1;
     public static final int COUNT_ATMOSTONE=2;

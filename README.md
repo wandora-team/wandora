@@ -1,7 +1,7 @@
 Wandora
 =======
 
-[Wandora](http://wandora.org) is a general purpose information extraction, management 
+[Wandora](https://wandora.org) is a general purpose information extraction, management 
 and publishing application based on [Topic Maps](http://en.wikipedia.org/wiki/Topic_Maps) 
 and [Java](http://en.wikipedia.org/wiki/Java_%28programming_language%29). Wandora suits well for 
 constructing and maintaining vocabularies, taxonomies and ontologies. 
@@ -39,15 +39,15 @@ or
 
 ## Old way of installing and using Wandora
 
-[Download](http://wandora.org/www/download), 
-[install](http://wandora.org/wiki/How_to_install_Wandora) and 
-[run](http://wandora.org/wiki/Running_Wandora) Wandora on your computer.
+[Download](https://wandora.org/www/download), 
+[install](https://wandora.org/wiki/How_to_install_Wandora) and 
+[run](https://wandora.org/wiki/Running_Wandora) Wandora on your computer.
 
-Read the [quick start](http://wandora.org/wiki/Quickstart) and 
-browse the [documentation](http://wandora.org/wiki/Main_Page). We also provide 
-[screen cast videos](http://wandora.org/tv/) that may help new users.
+Read the [quick start](https://wandora.org/wiki/Quickstart) and 
+browse the [documentation](https://wandora.org/wiki/Main_Page). We also provide 
+[screen cast videos](https://wandora.org/tv/) that may help new users.
 
-If you run into any trouble or have questions consult our [forum](http://wandora.org/forum/)
+If you run into any trouble or have questions consult our [forum](https://wandora.org/forum/)
 or drop a line.
 
 These instructions will be updated when (new) Wandora is released for the first time.

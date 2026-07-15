@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -64,7 +64,7 @@ public class FreeDBExtractor extends AbstractExtractor implements WandoraTool {
 	private static final long serialVersionUID = 1L;
 
 	
-	public String locatorPrefix = "http://wandora.org/si/freedb/";
+	public String locatorPrefix = "https://wandora.org/si/freedb/";
    
     
     /** Creates a new instance of ExtractIconclassKeywords */

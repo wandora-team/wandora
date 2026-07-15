@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -49,8 +49,8 @@ public class JsoupHTMLLinkStructureExtractor extends AbstractJsoupExtractor impl
 	private TopicMap tm;
     private Topic wandoraClass;
     
-    private static final String LINK_TYPE = "http://wandora.org/si/link";
-    private static final String DOC_TYPE = "http://wandora.org/si/document";
+    private static final String LINK_TYPE = "https://wandora.org/si/link";
+    private static final String DOC_TYPE = "https://wandora.org/si/document";
 
     
     

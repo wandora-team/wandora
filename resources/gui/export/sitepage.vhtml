@@ -1,4 +1,4 @@
-#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $wandoraClass = $topic.getTopicMap().getTopic("https://wandora.org/si/core/wandora-class") )##
 #set( $ctopic = $topic )##
 ##set( $lang = "en" )##
 ##
@@ -186,8 +186,8 @@ a:active 		{
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
  <tr>
   <td valign="middle" align="right" class="topmenu">
-   #set( $wc = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
-   #set( $wcs = $helper.getPlayers($wc,"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass", "http://wandora.org/si/core/wandora-class") )##
+   #set( $wc = $topic.getTopicMap().getTopic("https://wandora.org/si/core/wandora-class") )##
+   #set( $wcs = $helper.getPlayers($wc,"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass", "https://wandora.org/si/core/wandora-class") )##
    #if( $wcs && $wcs.size() > 0)##
     #set( $dummy = $wcs.addAll( $topic.getTopicMap().getTopicsOfType($wc) ) )##
    #else##

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -225,7 +225,7 @@ public class RISExtractor extends AbstractExtractor {
             wandoraClass.setBaseName("Wandora class");
 
             Topic RISClass = map.createTopic();
-            RISClass.addSubjectIdentifier(new Locator("http://wandora.org/si/ris/"));
+            RISClass.addSubjectIdentifier(new Locator("https://wandora.org/si/ris/"));
             RISClass.setBaseName("RIS");
             RISClass.addType(wandoraClass);
 

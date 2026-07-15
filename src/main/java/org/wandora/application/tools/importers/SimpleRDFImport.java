@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -70,7 +70,7 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String anonSIPrefix="http://wandora.org/si/rdf/anon/";
+	public static final String anonSIPrefix="https://wandora.org/si/rdf/anon/";
 
     /**
      * Creates a new instance of SimpleRDFLocalImport
@@ -189,11 +189,11 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
     
     
     public static final String occurrenceScopeSI = TMBox.LANGINDEPENDENT_SI;
-    public static final String subjectTypeSI = "http://wandora.org/si/core/rdf-subject";
-    public static final String objectTypeSI = "http://wandora.org/si/core/rdf-object";
-    public static final String predicateTypeSI = "http://wandora.org/si/core/rdf-predicate";
+    public static final String subjectTypeSI = "https://wandora.org/si/core/rdf-subject";
+    public static final String objectTypeSI = "https://wandora.org/si/core/rdf-object";
+    public static final String predicateTypeSI = "https://wandora.org/si/core/rdf-predicate";
     
-    public static final String RDF_LIST_ORDER="http://wandora.org/si/rdf/list_order";
+    public static final String RDF_LIST_ORDER="https://wandora.org/si/rdf/list_order";
     
     
     public void handleStatement(Statement stmt,TopicMap map,Topic subjectType,Topic predicateType,Topic objectType) throws TopicMapException {

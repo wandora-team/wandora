@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -57,7 +57,7 @@ import org.xml.sax.XMLReader;
  * Extracts text and metadata from exported MediaWiki pages. Exported MediaWiki
  * pages are XML dumps. Example of exported MediaWiki page can be found at
  *
- * http://wandora.orgwiki/Special:Export/Wandora
+ * https://wandora.orgwiki/Special:Export/Wandora
  *
  * @author olli
  */
@@ -113,7 +113,7 @@ public class MediaWikiExtractor extends AbstractExtractor {
     }
 
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
-        boolean answer = _extractTopicsFrom(new ByteArrayInputStream(str.getBytes()), "http://wandora.org/si/mediawiki-extractor/"+System.currentTimeMillis(), topicMap);
+        boolean answer = _extractTopicsFrom(new ByteArrayInputStream(str.getBytes()), "https://wandora.org/si/mediawiki-extractor/"+System.currentTimeMillis(), topicMap);
         return answer;
     }
 
@@ -203,7 +203,7 @@ public class MediaWikiExtractor extends AbstractExtractor {
         
         private int state=STATE_START;
         
-        public static String SIPREFIX="http://wandora.org/si/mediawiki/";
+        public static String SIPREFIX="https://wandora.org/si/mediawiki/";
         public static String CONTRIBUTOR_SI=SIPREFIX+"contributor";
         public static String PAGE_SI=SIPREFIX+"page";
         public static String TIMESTAMP_SI=SIPREFIX+"timestamp";

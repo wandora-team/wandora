@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -54,7 +54,7 @@ public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool imple
 
 	private static int MAXLEN = 256;
     private String replacement = "";
-    private String SITemplate = "http://wandora.org/si/%BASENAME%";
+    private String SITemplate = "https://wandora.org/si/%BASENAME%";
     
     private boolean askTemplate = true;
     
@@ -87,7 +87,7 @@ public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool imple
             if(topics == null || !topics.hasNext()) return;
 
             if(SITemplate == null || SITemplate.length() == 0) {
-                SITemplate = "http://wandora.org/si/%BASENAME%";
+                SITemplate = "https://wandora.org/si/%BASENAME%";
             }
             if(askTemplate) {
                 SITemplate = WandoraOptionPane.showInputDialog(admin, "Make subject identifier using following template. String '%BASENAME%' is replaced with topic's base name.", SITemplate);

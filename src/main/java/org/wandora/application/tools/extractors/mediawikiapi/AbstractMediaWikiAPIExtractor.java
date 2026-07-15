@@ -1,7 +1,7 @@
  /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -41,7 +41,7 @@ abstract class AbstractMediaWikiAPIExtractor extends AbstractExtractor {
 	private static final long serialVersionUID = 1L;
 	
 	protected static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
-    protected static final String SI_ROOT = "http://wandora.org/si/mediawiki/api/";
+    protected static final String SI_ROOT = "https://wandora.org/si/mediawiki/api/";
     protected static final String PAGE_SI = SI_ROOT + "page/";
     protected static final String CONTENT_TYPE_SI = SI_ROOT + "content/";
     

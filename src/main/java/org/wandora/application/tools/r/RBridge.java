@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -66,7 +66,7 @@ public class RBridge {
     private static final String rWelcomeMessage=
             "To read more about Wandora's R console, it's limitations and \n"+
             "possibilities read documentation at \n"+
-            "http://wandora.org/wiki/R_in_Wandora\n"+
+            "https://wandora.org/wiki/R_in_Wandora\n"+
             "\n";
     
     
@@ -80,7 +80,7 @@ public class RBridge {
             "\n"+
             "To setup R do the following steps. These instructions are also\n"+
             "explained in more detail in the Wandora wiki at\n"+
-            "http://wandora.org/wiki/R_in_Wandora\n"+
+            "https://wandora.org/wiki/R_in_Wandora\n"+
             "\n"+
             "1. Download R from http://www.r-project.org and install it.\n"+
             "\n"+

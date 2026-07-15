@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -294,9 +294,9 @@ public class RSSExtractor extends AbstractExtractor {
                
         private int state=STATE_START;
         
-        public static String RSS_SI = "http://wandora.org/si/rss/2.0/";
+        public static String RSS_SI = "https://wandora.org/si/rss/2.0/";
 
-        public static String SIPREFIX="http://wandora.org/si/rss/2.0/";
+        public static String SIPREFIX="https://wandora.org/si/rss/2.0/";
         public static String CHANNEL_SI=SIPREFIX+"channel";
         public static String CHANNEL_LINK_SI=CHANNEL_SI+"/link";
         public static String CHANNEL_DESCRIPTION_SI=CHANNEL_SI+"/description";
@@ -326,7 +326,7 @@ public class RSSExtractor extends AbstractExtractor {
         public static String CHANNEL_IMAGE_LINK_SI=CHANNEL_IMAGE_SI+"/link";
         public static String CHANNEL_IMAGE_DESCRIPTION_SI=CHANNEL_IMAGE_SI+"/description";
         
-        public static String DATE_SI="http://wandora.org/si/date"; 
+        public static String DATE_SI="https://wandora.org/si/date"; 
         
         private String data_channel_title;
         private String data_channel_link;

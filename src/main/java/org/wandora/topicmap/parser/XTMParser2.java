@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -212,7 +212,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                     if(si.toExternalForm().startsWith(temporarySI)) {
                         if(sisSize < 2) {
                             // create permanent subject identifier before temporary can be removed.
-                            String permanentSI = "http://wandora.org/si/xtm2/permanent/" + System.currentTimeMillis() + "-" + Math.round(Math.random()*999999);
+                            String permanentSI = "https://wandora.org/si/xtm2/permanent/" + System.currentTimeMillis() + "-" + Math.round(Math.random()*999999);
                             // System.out.println("adding si "+permanentSI);
                             t.addSubjectIdentifier(new Locator( permanentSI ));
                         }
@@ -365,8 +365,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
 
                         t2.setBaseName("Occurrence file: "+o.ref);
                         t2.setSubjectLocator(tm.createLocator(o.ref));
-                        Topic orole=getOrCreateTopic("http://wandora.org/si/compatibility/occurrencerolereference");
-                        Topic trole=getOrCreateTopic("http://wandora.org/si/compatibility/occurrenceroletopic");
+                        Topic orole=getOrCreateTopic("https://wandora.org/si/compatibility/occurrencerolereference");
+                        Topic trole=getOrCreateTopic("https://wandora.org/si/compatibility/occurrenceroletopic");
     //                    Association a=tm.createAssociation(o.type);
                         Association a=tm.createAssociation(getOrCreateTopicRef(o.type));
                         a.addPlayer(t,trole);
@@ -857,7 +857,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
      * after parse. Wandora removes temporary subject identifiers after parse.
      * Look at the method postProcessTopicMap above.
      */
-    protected String temporarySI="http://wandora.org/si/xtm2/temp/";
+    protected String temporarySI="https://wandora.org/si/xtm2/temp/";
     
     protected Topic getOrCreateTopicID(String id) throws TopicMapException {
         String si=idmapping.get(id);

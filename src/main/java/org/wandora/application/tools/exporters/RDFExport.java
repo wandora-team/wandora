@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -271,7 +271,7 @@ public class RDFExport extends AbstractExportTool {
                             getTopicLocator(object).toExternalForm()+"> .");
         }
         else{
-            String about="http://wandora.org/si/rdfexport/association/"+(associationCounter++);
+            String about="https://wandora.org/si/rdfexport/association/"+(associationCounter++);
             for(Topic t : a.getRoles()){
 /*                out.println("  <rdf:Statement> ");
                 out.println("      <rdf:subject rdf:resource=\""+attribute(about)+"\"/>");

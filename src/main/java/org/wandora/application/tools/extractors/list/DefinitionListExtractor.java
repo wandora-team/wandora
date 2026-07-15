@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -215,7 +215,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
     private class DefinitionListParseListener extends HTMLEditorKit.ParserCallback {
         public int progress = 0;
         
-        public static final String SI_PREFIX = "http://wandora.org/si/list/";
+        public static final String SI_PREFIX = "https://wandora.org/si/list/";
         
         private TopicMap tm;
         private DefinitionListExtractor parent;

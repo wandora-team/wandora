@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -545,7 +545,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     private void scriptLabelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scriptLabelMouseReleased
         try {
             Desktop desktop = Desktop.getDesktop();
-            desktop.browse(new URI("http://wandora.org/wiki/Query_language"));
+            desktop.browse(new URI("https://wandora.org/wiki/Query_language"));
         }
         catch(Exception e) {
             e.printStackTrace();

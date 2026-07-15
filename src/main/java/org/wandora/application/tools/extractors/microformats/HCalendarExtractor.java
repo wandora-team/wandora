@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -186,7 +186,7 @@ public class HCalendarExtractor extends AbstractExtractor implements WandoraTool
         private TopicMap tm = null;
         private HCalendarExtractor parent = null;
 
-        public static final String SI_PREFIX = "http://wandora.org/si/hcalendar/";
+        public static final String SI_PREFIX = "https://wandora.org/si/hcalendar/";
 
         public int progress = 0;
         public int eventcount = 0;

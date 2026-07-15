@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -53,7 +53,7 @@ public class DuckDuckGoZeroClickExtractor  extends AbstractDuckDuckGoExtractor {
         = "http://api.duckduckgo.com";
     
     private static final String API_NAME = "DuckDuckGo API";    
-    private static final String SI_ROOT  = "http://wandora.org/si/duckduckgo";
+    private static final String SI_ROOT  = "https://wandora.org/si/duckduckgo";
     
     private static final String DUCK_T_SI       = SI_ROOT + "/topic";
     private static final String DEFINITON_SI    = SI_ROOT + "/defintion";

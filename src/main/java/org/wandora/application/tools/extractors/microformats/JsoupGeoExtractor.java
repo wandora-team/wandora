@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -43,7 +43,7 @@ public class JsoupGeoExtractor extends AbstractJsoupMicroformatExtractor{
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String SI_PREFIX = "http://wandora.org/si/adr/";
+	private static final String SI_PREFIX = "https://wandora.org/si/adr/";
     
     private HashMap<String,Topic> typeTopics;
     private TopicMap tm;

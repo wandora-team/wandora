@@ -2,8 +2,8 @@
 			"dateTimeFormat": "ISO8601",
 			"events": [
 
-#set( $articleTimeType = $topicmap.getTopic( "http://wandora.org/si/yle/elava-arkisto/article-published" ) )##
-#set( $articleTopic = $topicmap.getTopic( "http://wandora.org/si/yle/elava-arkisto/article" ) )##
+#set( $articleTimeType = $topicmap.getTopic( "https://wandora.org/si/yle/elava-arkisto/article-published" ) )##
+#set( $articleTopic = $topicmap.getTopic( "https://wandora.org/si/yle/elava-arkisto/article" ) )##
 #set( $articles = $topicmap.getTopicsOfType( $articleTopic ) )##
 #set( $count = 0 )##
 #if( $articles.size()!=0 )##

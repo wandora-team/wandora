@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -192,7 +192,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
         private TopicMap tm = null;
         private HCardExtractor parent = null;
 
-        public static final String SI_PREFIX = "http://wandora.org/si/hcard/";
+        public static final String SI_PREFIX = "https://wandora.org/si/hcard/";
 
         public static final String ABBR = "abbr";
         

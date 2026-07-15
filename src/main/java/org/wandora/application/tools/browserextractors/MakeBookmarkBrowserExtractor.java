@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -49,7 +49,7 @@ public class MakeBookmarkBrowserExtractor extends AbstractExtractor implements B
 	private static final long serialVersionUID = 1L;
 	
 	
-	public static final String bookmarkSI = "http://wandora.org/si/bookmark";
+	public static final String bookmarkSI = "https://wandora.org/si/bookmark";
     
     public MakeBookmarkBrowserExtractor() {
         

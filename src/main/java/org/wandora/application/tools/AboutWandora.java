@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -91,7 +91,7 @@ public class AboutWandora extends AbstractWandoraTool implements WandoraTool {
                     "of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"+
                     "PURPOSE. See the GNU General Public License for\n"+
                     "more details.\n \n"+
-                    "For more information see http://wandora.org\n";
+                    "For more information see https://wandora.org\n";
             
             textLabel=new MultiLineLabel(text);
             textLabel.setVisible(true);

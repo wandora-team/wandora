@@ -1,7 +1,7 @@
  /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -74,7 +74,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     private static final String THING_TYPE_PROMO = "t8";
     private static final String THING_TYPE_MORE = "more";
     private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
-    private static final String SI_ROOT = "http://wandora.org/si/reddit/";
+    private static final String SI_ROOT = "https://wandora.org/si/reddit/";
     private static final String COMMENT_SI = SI_ROOT + "comment";
     private static final String LINK_SI = SI_ROOT + "link";
     private static final String ACCOUNT_SI = SI_ROOT + "account";

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -243,31 +243,31 @@ public class FoafRDFExtractor extends AbstractExtractor {
     
     String[] roles = new String[] {
         "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-                "http://wandora.org/si/core/rdf-type-carrier", "rdf-type-carrier",
-                "http://wandora.org/si/core/rdf-type", "rdf-type",
+                "https://wandora.org/si/core/rdf-type-carrier", "rdf-type-carrier",
+                "https://wandora.org/si/core/rdf-type", "rdf-type",
                 
         "http://www.w3.org/2000/01/rdf-schema#seeAlso",
-                "http://wandora.org/si/core/subject", "subject",
-                "http://wandora.org/si/core/rdf-schema/see-also", "rdf-see-also",
+                "https://wandora.org/si/core/subject", "subject",
+                "https://wandora.org/si/core/rdf-schema/see-also", "rdf-see-also",
                 
         "http://xmlns.com/foaf/0.1/nick",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/nick", "nick",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/nick", "nick",
                 
         "http://xmlns.com/foaf/0.1/weblog",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/weblog", "weblog",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/weblog", "weblog",
                 
         "http://xmlns.com/foaf/0.1/homepage",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/homepage", "homepage",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/homepage", "homepage",
 
         "http://xmlns.com/foaf/0.1/member",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/group", "group",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/group", "group",
         "http://xmlns.com/foaf/0.1/knows",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/known-person", "known-person",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/known-person", "known-person",
     };
     
     
@@ -276,7 +276,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
     public Topic solveSubjectRoleFor(Property predicate, Resource subject, TopicMap map) {
         if(map == null) return null;
         String predicateString = predicate.toString();
-        String si = "http://wandora.org/si/core/rdf-subject";
+        String si = "https://wandora.org/si/core/rdf-subject";
         String bn = "subject-role";
         for(int i=0; i<roles.length; i=i+5) {
             if(predicateString.equals(roles[i])) {
@@ -291,7 +291,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
     public Topic solveObjectRoleFor(Property predicate, RDFNode object, TopicMap map) {
         if(map == null) return null;
         String predicateString = predicate.toString();
-        String si = "http://wandora.org/si/core/rdf-object";
+        String si = "https://wandora.org/si/core/rdf-object";
         String bn = "object-role";
         for(int i=0; i<roles.length; i=i+5) {
             if(predicateString.equals(roles[i])) {

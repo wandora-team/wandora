@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -78,7 +78,7 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
 	
 	public static int MAXLEN = 256;
     public String replacement = "";
-    public String SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
+    public String SITemplate = "https://wandora.org/si/occurrence/%OCCURRENCE%";
     
     
     private boolean deleteOccurrence = false;
@@ -112,7 +112,7 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
     @Override
     public void execute(Wandora wandora, Context context) {   
         try {
-            SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
+            SITemplate = "https://wandora.org/si/occurrence/%OCCURRENCE%";
             Iterator topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
                         

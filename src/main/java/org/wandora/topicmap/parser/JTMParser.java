@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -69,7 +69,7 @@ import org.wandora.utils.Tuples.T2;
 
 public class JTMParser {
 
-    private static final String STATIC_SI_BODY = "http://wandora.org/si/jtm-parser/generated/"; 
+    private static final String STATIC_SI_BODY = "https://wandora.org/si/jtm-parser/generated/"; 
     
     
     private static boolean ASSOCIATION_TO_TYPE = true;

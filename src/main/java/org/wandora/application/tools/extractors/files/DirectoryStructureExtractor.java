@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -72,7 +72,7 @@ public class DirectoryStructureExtractor extends AbstractExtractor implements Wa
     
     
 
-    private String baseLocator = "http://wandora.org/si/directory-structure-extractor/";
+    private String baseLocator = "https://wandora.org/si/directory-structure-extractor/";
 
 
     

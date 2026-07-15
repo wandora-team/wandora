@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -55,9 +55,9 @@ public class FullyConnectedGraphGenerator extends AbstractGenerator implements W
 
 	private static final long serialVersionUID = 1L;
 
-	public static String CONNECTED_GRAPH_SI = "http://wandora.org/si/connected-graph";
+	public static String CONNECTED_GRAPH_SI = "https://wandora.org/si/connected-graph";
 
-    public static String siPattern = "http://wandora.org/si/connected-graph/node/__n__";
+    public static String siPattern = "https://wandora.org/si/connected-graph/node/__n__";
     public static String basenamePattern = "Connected graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static int topicCounterOffset = 0;

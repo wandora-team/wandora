@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -126,16 +126,16 @@ public class SimpleCSVAssociationExtractor extends AbstractCSVExtractor {
     
     public Topic getCSVAssociationType(TopicMap tm) throws Exception {
         long stamp = System.currentTimeMillis();
-        return ExtractHelper.getOrCreateTopic("http://wandora.org/si/csv/association/"+stamp, "CSV association "+stamp, tm);
+        return ExtractHelper.getOrCreateTopic("https://wandora.org/si/csv/association/"+stamp, "CSV association "+stamp, tm);
     }
     
     public Topic getCSVRole(int i, TopicMap tm) throws Exception {
-        return ExtractHelper.getOrCreateTopic("http://wandora.org/si/csv/role/"+i, "CSV role "+i, tm);
+        return ExtractHelper.getOrCreateTopic("https://wandora.org/si/csv/role/"+i, "CSV role "+i, tm);
     }
     
     public Topic getCSVTopic(Object o, TopicMap tm) throws Exception {
         String str = urlEncode(o.toString());
-        return ExtractHelper.getOrCreateTopic("http://wandora.org/si/csv/"+str, str, tm);
+        return ExtractHelper.getOrCreateTopic("https://wandora.org/si/csv/"+str, str, tm);
     }
     
     

@@ -10,9 +10,9 @@
 #set( $nytEventSI = "http://api.nytimes.com/svc/events/v2" )##
 #set( $nytEventItem = $topicmap.getTopic( $nytEventSI ) )##
 
-#set( $nytLatitudeSi = "http://wandora.org/si/nytimes/event/latitude" )##
+#set( $nytLatitudeSi = "https://wandora.org/si/nytimes/event/latitude" )##
 #set( $nytLatitudeItem = $topicmap.getTopic( $nytLatitudeSi ) )##
-#set( $nytLongitudeSi = "http://wandora.org/si/nytimes/event/longitude" )##
+#set( $nytLongitudeSi = "https://wandora.org/si/nytimes/event/longitude" )##
 #set( $nytLongitudeItem = $topicmap.getTopic( $nytLongitudeSi ) )##
 #if( $nytEventItem )##
     #set( $nyt_events = $topicmap.getTopicsOfType( $nytEventItem ) )##

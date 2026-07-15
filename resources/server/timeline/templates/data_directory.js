@@ -2,10 +2,10 @@
         "dateTimeFormat": "Gregorian",
 	"events":[
 #set( $count = 0 )##
-#set( $fileTypeSI = "http://wandora.org/si/directory-structure-extractor/file" )##
+#set( $fileTypeSI = "https://wandora.org/si/directory-structure-extractor/file" )##
 #set( $fileType = $topicmap.getTopic( $fileTypeSI ) )##
 ##
-#set( $fileModifiedSI = "http://wandora.org/si/directory-structure-extractor/file-modified" )##
+#set( $fileModifiedSI = "https://wandora.org/si/directory-structure-extractor/file-modified" )##
 #set( $fileModifiedType = $topicmap.getTopic( $fileModifiedSI ) )##
 ##
 #set( $files = $topicmap.getTopicsOfType( $fileType ) )##

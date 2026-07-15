@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -78,7 +78,7 @@ public class AssociationTest extends AbstractWandoraTool implements WandoraTool 
                 setProgress(0);
                 setProgressMax(numberOfTestTopics);
                 for(int i=0; i<numberOfTestTopics; i++) {
-                    String si = "http://wandora.org/si/test-topic/"+System.currentTimeMillis()+"/"+i;
+                    String si = "https://wandora.org/si/test-topic/"+System.currentTimeMillis()+"/"+i;
                     Topic t = tm.createTopic();
                     t.addSubjectIdentifier(new Locator(si));
                     t.setBaseName("t"+(i<10 ? "0" : "")+i);

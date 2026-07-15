@@ -1,7 +1,7 @@
 /*
 * WANDORA
 * Knowledge Extraction, Management, and Publishing Application
-* http://wandora.org
+* https://wandora.org
 *
 * Copyright (C) 2004-2026 Wandora Team
 *
@@ -58,9 +58,9 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     protected static final String FLATTENING_DELIMETER = ".";
     
     //Face detection data is language independent
-    private static final String LANG_SI = "http://wandora.org/si/core/lang-independent";
+    private static final String LANG_SI = "https://wandora.org/si/core/lang-independent";
     
-    protected static final String SI_ROOT = "http://wandora.org/si/rekognition/";
+    protected static final String SI_ROOT = "https://wandora.org/si/rekognition/";
     
     protected static final String IMAGE_SI = SI_ROOT + "image/";
     protected static final String DETECTION_SI = SI_ROOT + "detection/";

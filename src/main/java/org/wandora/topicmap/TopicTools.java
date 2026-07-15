@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -1014,14 +1014,14 @@ public class TopicTools {
      * Returns a default locator that can be given to a topic and it
      * is very likely (but not sure) that the subject identifier doesn't
      * cause accidental merge. Default locator is created with a prefix
-     * "http://wandora.org/si/temp/", timestamp and locator counter.
+     * "https://wandora.org/si/temp/", timestamp and locator counter.
      * 
      * @return 
      */
     public static Locator createDefaultLocator() {
         locatorCounter++;
         long stamp = System.currentTimeMillis();
-        String defaultSIprefix = "http://wandora.org/si/temp/";
+        String defaultSIprefix = "https://wandora.org/si/temp/";
         Locator newLocator = new Locator(defaultSIprefix + stamp + "-" + locatorCounter);
         // System.out.println("Creating default SI '"+newLocator.toExternalForm());
         return newLocator;

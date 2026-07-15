@@ -142,7 +142,7 @@ public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener,
             "# \n"+
             "# Learn R language and Wandora API here\n"+
             "#    http://www.r-project.org/ \n"+
-            "#    http://wandora.org/api/ \n"+
+            "#    https://wandora.org/api/ \n"+
             "#\n";
     
     

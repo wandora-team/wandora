@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -397,7 +397,7 @@ public class ExportSite extends AbstractExportTool implements WandoraTool, Actio
         localParams.put("tmbox", new org.wandora.topicmap.TMBox());
         localParams.put("textbox", new TextBox());
         localParams.put("intparser", Integer.valueOf(0));
-//        localParams.put("filter", new com.gripstudios.applications.assembly.AssemblyTopicFilter(new String[] { "http://wandora.org/si/common/picture", "http://wandora.org/si/common/video" }, "http://wandora.org/si/common/unmoderatedpicture" ));
+//        localParams.put("filter", new com.gripstudios.applications.assembly.AssemblyTopicFilter(new String[] { "https://wandora.org/si/common/picture", "https://wandora.org/si/common/video" }, "https://wandora.org/si/common/unmoderatedpicture" ));
         localParams.put("vhelper", new org.wandora.utils.velocity.VelocityMediaHelper());
         localParams.put("helper", new org.wandora.topicmap.TopicTools());
         localParams.put("topicmap", topicMap);

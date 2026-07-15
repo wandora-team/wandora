@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -64,7 +64,7 @@ public class BibtexExtractor extends AbstractExtractor implements WandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String baseLocator = "http://wandora.org/si/bibtex/";
+	private String baseLocator = "https://wandora.org/si/bibtex/";
     private String defaultEncoding = "ISO-8859-1";
 
     /** Creates a new instance of BibtexExtractor */

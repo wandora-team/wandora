@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -189,7 +189,7 @@ public class HSFeedExtractor extends AbstractExtractor {
         public static String ARTICLE_CREATEDDATE_SI=ARTICLE_SI+"/CREATEDDATE";
         public static String ARTICLE_LASTBUILDDATE_SI=ARTICLE_SI+"/lastbuilddate";
         
-        public static String DATE_SI="http://wandora.org/si/date"; 
+        public static String DATE_SI="https://wandora.org/si/date"; 
         
         private String data_article_title;
         private String data_article_link;

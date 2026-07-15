@@ -2,8 +2,8 @@
 			"dateTimeFormat": "ISO8601",
 			"events": [
 
-#set( $tweetTimeType = $topicmap.getTopic( "http://wandora.org/si/twitter/date" ) )##
-#set( $tweetTopic = $topicmap.getTopic( "http://wandora.org/si/twitter/tweet" ) )##
+#set( $tweetTimeType = $topicmap.getTopic( "https://wandora.org/si/twitter/date" ) )##
+#set( $tweetTopic = $topicmap.getTopic( "https://wandora.org/si/twitter/tweet" ) )##
 #set( $tweets = $topicmap.getTopicsOfType( $tweetTopic ) )##
 #set( $count = 0 )##
 #if( $tweets.size()!=0 )##

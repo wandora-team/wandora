@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -64,9 +64,9 @@ public class SQLExtractor extends AbstractExtractor {
 	public static String DEFAULT_SI_ENCODING = "UTF-8";
     public static String DEFAULT_LANG = "en";
 
-    public static String RESULTSET_SI = "http://wandora.org/si/sql/resultset";
-    public static String COLUMN_SI = "http://wandora.org/si/sql/resultset/column";
-    public static String VALUE_SI = "http://wandora.org/si/sql/resultset/value";
+    public static String RESULTSET_SI = "https://wandora.org/si/sql/resultset";
+    public static String COLUMN_SI = "https://wandora.org/si/sql/resultset/column";
+    public static String VALUE_SI = "https://wandora.org/si/sql/resultset/value";
 
     private SQLExtractorUI ui = null;
     public static final String defaultOccurrenceScopeSI = TMBox.LANGINDEPENDENT_SI;

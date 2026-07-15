@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -696,9 +696,9 @@ public class WandoraMenuManager {
         Object[] menuStructure = new Object[] {
             "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, DEF_MASK), new ExecBrowser("http://www.wandora.org"),
             "---",
-            "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/wiki/Documentation"),
-            "Forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/forum/index.php"),
-            "YouTube channel", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/tv/"),
+            "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://wandora.org/wiki/Documentation"),
+            "Forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://wandora.org/forum/index.php"),
+            "YouTube channel", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://wandora.org/tv/"),
             "Github repository", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://github.com/wandora-team/wandora"),
             "Twitter", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://twitter.com/wandora_app"),
             "---",
@@ -2086,9 +2086,9 @@ public class WandoraMenuManager {
             logoMenuStructure = new Object[] {
                "Wandora home", UIBox.getIcon("gui/icons/open_browser.png"), KeyStroke.getKeyStroke(VK_H, DEF_MASK), new ExecBrowser("http://www.wandora.org"),
                "---",
-               "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/wiki/Documentation"),
-               "Discussion forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/forum/"),
-               "WandoraTV", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("http://wandora.org/tv/"),
+               "Documentation", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://wandora.org/wiki/Documentation"),
+               "Discussion forum", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://wandora.org/forum/"),
+               "WandoraTV", UIBox.getIcon("gui/icons/open_browser.png"), new ExecBrowser("https://wandora.org/tv/"),
                "---",
                "About Wandora...", UIBox.getIcon("gui/icons/info.png"),new AboutWandora(),
                "Wandora credits...", UIBox.getIcon("gui/icons/info.png"),new AboutCredits(),

@@ -1,6 +1,6 @@
 /*
  * WANDORA - Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -386,9 +386,9 @@ public class AtomExtractor extends AbstractExtractor {
         public String LINK_TYPE_SI=SIPREFIX+"link/type";
         public String LINK_HREF_LANG_SI=SIPREFIX+"link/href-lang"; 
         
-        public String DATE_SI="http://wandora.org/si/date"; 
-        public String RIGHTS_SI="http://wandora.org/si/rights"; 
-        public String LINK_SI="http://wandora.org/si/link";
+        public String DATE_SI="https://wandora.org/si/date"; 
+        public String RIGHTS_SI="https://wandora.org/si/rights"; 
+        public String LINK_SI="https://wandora.org/si/link";
         
         
         

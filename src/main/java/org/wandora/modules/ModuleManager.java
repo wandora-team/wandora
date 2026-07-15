@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -88,7 +88,7 @@ import org.wandora.utils.Tuples.T3;
  * dependencies haven't been started yet whereas the other method simply starts
  * them too.
  * </p>
- * http://wandora.orgwiki/Wandora_modules_framework for additional
+ * https://wandora.orgwiki/Wandora_modules_framework for additional
  * documentation about the modules framework.</p>
  *
  * @author olli

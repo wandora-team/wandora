@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -54,9 +54,9 @@ public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool imple
 	private boolean requiresRefresh = false;
     private Context preferredContext = null;
 
-    public static final String NEARBY_TYPE = "http://wandora.org/si/nearby-points/";
-    public static final String POINT_A_TYPE = "http://wandora.org/si/nearby-points/point-1";
-    public static final String POINT_B_TYPE = "http://wandora.org/si/nearby-points/point-2";
+    public static final String NEARBY_TYPE = "https://wandora.org/si/nearby-points/";
+    public static final String POINT_A_TYPE = "https://wandora.org/si/nearby-points/point-1";
+    public static final String POINT_B_TYPE = "https://wandora.org/si/nearby-points/point-2";
     
 
     public AssociateNearByOccurrenceCarriers() {

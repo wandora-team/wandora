@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -34,7 +34,7 @@ package org.wandora.application.tools.extractors.rdf.rdfmappings;
  */
 public class RDFMapping extends RDF2TopicMapsMapping {
     public static final String RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-    public static final String RDF_ROLE_NS = "http://wandora.org/si/rdf/role/";
+    public static final String RDF_ROLE_NS = "https://wandora.org/si/rdf/role/";
     
     
     public static final String[] SI_BASENAME_MAPPING = new String[] {

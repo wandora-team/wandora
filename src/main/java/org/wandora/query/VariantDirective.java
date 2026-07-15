@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -44,7 +44,7 @@ public class VariantDirective implements Directive {
     private Locator variantType;
     private Locator variantVersion;
 
-    public static final String NAME_SI="http://wandora.org/si/query/variantname";
+    public static final String NAME_SI="https://wandora.org/si/query/variantname";
 
     public VariantDirective(Locator variantType,Locator variantVersion,Locator nameRole) {
         this.variantType=variantType;

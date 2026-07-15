@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -367,10 +367,10 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
                             if(isBasename) {
                                 t = topicMap.createTopic();
                                 t.setBaseName(identifier);
-                                String si = "http://wandora.org/si/" + System.currentTimeMillis();
+                                String si = "https://wandora.org/si/" + System.currentTimeMillis();
                                 int counter = 1000;
                                 while(topicMap.getTopic(si) != null && --counter > 0) {
-                                    si = "http://wandora.org/si/" + System.currentTimeMillis() + Math.floor(Math.random() * 10000);
+                                    si = "https://wandora.org/si/" + System.currentTimeMillis() + Math.floor(Math.random() * 10000);
                                 }
                                 t.addSubjectIdentifier(new Locator(si));
                             }

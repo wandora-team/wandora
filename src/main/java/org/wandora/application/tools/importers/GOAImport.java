@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -169,9 +169,9 @@ public class GOAImport extends AbstractImportTool implements WandoraTool {
      */
     public class GOAParser {
         
-        public static final String SCHEMA_SI  = "http://wandora.org/si/goa/schema";
+        public static final String SCHEMA_SI  = "https://wandora.org/si/goa/schema";
         
-        public static final String GOA_SI = "http://wandora.org/si/goa/";
+        public static final String GOA_SI = "https://wandora.org/si/goa/";
         public static final String GOA_OBJECT_SI = GOA_SI + "object";
         public static final String GOA_DATABASE_SI = GOA_SI + "db";
         public static final String GOA_SYMBOL_SI = GOA_SI + "symbol";

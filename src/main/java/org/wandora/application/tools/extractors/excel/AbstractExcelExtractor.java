@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -358,7 +358,7 @@ public abstract class AbstractExcelExtractor extends AbstractExtractor implement
     public static int CELL_TOPIC_IS_BASED_ON = CELL_VALUE;
     
 
-    public static String EXCEL_SI_PREFIX = "http://wandora.org/si/excel";
+    public static String EXCEL_SI_PREFIX = "https://wandora.org/si/excel";
     public static String EXCEL_COLUMN_SI_PREFIX = EXCEL_SI_PREFIX + "/column";
     public static String EXCEL_ROW_SI_PREFIX = EXCEL_SI_PREFIX + "/row";
     public static String EXCEL_SHEET_SI_PREFIX = EXCEL_SI_PREFIX + "/sheet";

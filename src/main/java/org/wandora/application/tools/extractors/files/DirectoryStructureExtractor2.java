@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -59,7 +59,7 @@ public class DirectoryStructureExtractor2 extends AbstractExtractor implements W
 	private String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     
     private String defaultLang = "en";
-    private String baseLocator = "http://wandora.org/si/file/";
+    private String baseLocator = "https://wandora.org/si/file/";
     private int progress = 0;
 
 

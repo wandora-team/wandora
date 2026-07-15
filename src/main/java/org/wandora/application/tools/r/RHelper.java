@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -51,7 +51,7 @@ public class RHelper {
     
     
     
-    private static final String IGRAPH_SI = "http://wandora.org/si/R/igraph";
+    private static final String IGRAPH_SI = "https://wandora.org/si/R/igraph";
     private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     
     public static class Graph {

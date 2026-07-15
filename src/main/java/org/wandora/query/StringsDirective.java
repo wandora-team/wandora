@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -37,7 +37,7 @@ import org.wandora.topicmap.TopicMapException;
 public class StringsDirective implements Directive {
 
     private ArrayList<ResultRow> result;
-    public static final String STRING_SI="http://wandora.org/si/query/string";
+    public static final String STRING_SI="https://wandora.org/si/query/string";
 
     public StringsDirective(Locator resultType,Locator resultRole,String ... strings) {
         if(resultType==null) resultType=new Locator(STRING_SI);

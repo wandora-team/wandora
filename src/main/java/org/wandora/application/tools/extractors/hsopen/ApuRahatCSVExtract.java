@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -52,7 +52,7 @@ public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool
 	protected String defaultEncoding = "UTF-8";
     public static String LANG = "fi";
 
-    public static final String APURAHAT_SI = "http://wandora.org/si/hsopen/apurahat";
+    public static final String APURAHAT_SI = "https://wandora.org/si/hsopen/apurahat";
 
     public static final String KOONTI_SI = APURAHAT_SI+"/koonti";
     public static final String HENKILO_SI = APURAHAT_SI+"/henkilo";

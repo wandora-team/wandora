@@ -7,19 +7,19 @@
 #set( $eventTypeSI = "http://api.nytimes.com/svc/events/v2" )##
 #set( $eventType = $topicmap.getTopic( $eventTypeSI ) )##
 ##
-#set( $eventDateTypeSI = "http://wandora.org/si/nytimes/eventDate" )##
+#set( $eventDateTypeSI = "https://wandora.org/si/nytimes/eventDate" )##
 #set( $eventDateType = $topicmap.getTopic( $eventDateTypeSI ) )##
 ##
-#set( $eventStartDateTypeSI = "http://wandora.org/si/nytimes/startDate" )##
+#set( $eventStartDateTypeSI = "https://wandora.org/si/nytimes/startDate" )##
 #set( $eventStartDateType = $topicmap.getTopic( $eventStartDateTypeSI ) )##
 ##
-#set( $eventEndDateTypeSI = "http://wandora.org/si/nytimes/endDate" )##
+#set( $eventEndDateTypeSI = "https://wandora.org/si/nytimes/endDate" )##
 #set( $eventEndDateType = $topicmap.getTopic( $eventEndDateTypeSI ) )##
 ##
-#set( $eventDescriptionTypeSI = "http://wandora.org/si/nytimes/event/description" )##
+#set( $eventDescriptionTypeSI = "https://wandora.org/si/nytimes/event/description" )##
 #set( $eventDescriptionType = $topicmap.getTopic( $eventDescriptionTypeSI ) )##
 ##
-#set( $eventVenueTypeSI = "http://wandora.org/si/nytimes/event/venue" )##
+#set( $eventVenueTypeSI = "https://wandora.org/si/nytimes/event/venue" )##
 #set( $eventVenueType = $topicmap.getTopic( $eventVenueTypeSI ) )##
 ##
 #set( $events = $topicmap.getTopicsOfType( $eventType ) )##

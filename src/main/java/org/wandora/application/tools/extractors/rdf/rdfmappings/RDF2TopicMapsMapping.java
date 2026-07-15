@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -45,9 +45,9 @@ public abstract class RDF2TopicMapsMapping {
     
     
     
-    public static final String DEFAULT_SUBJECT_ROLE_SI = "http://wandora.org/si/core/rdf-subject";
+    public static final String DEFAULT_SUBJECT_ROLE_SI = "https://wandora.org/si/core/rdf-subject";
     public static final String DEFAULT_SUBJECT_ROLE_BASENAME = "subject-role";
-    public static final String DEFAULT_OBJECT_ROLE_SI = "http://wandora.org/si/core/rdf-object";
+    public static final String DEFAULT_OBJECT_ROLE_SI = "https://wandora.org/si/core/rdf-object";
     public static final String DEFAULT_OBJECT_ROLE_BASENAME = "object-role";
     
     

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -81,7 +81,7 @@ public abstract class AbstractGuardianExtractor extends AbstractExtractor {
 
     // -------------------------------------------------------------------------
     
-    public static final String GUARDIAN_BASE_SI = "http://wandora.org/si/theguardian/";
+    public static final String GUARDIAN_BASE_SI = "https://wandora.org/si/theguardian/";
     public static final String FIELD_BASE_SI = GUARDIAN_BASE_SI + "field/";
     public static final String TAG_BASE_SI = GUARDIAN_BASE_SI + "tag/";
     public static final String CONTENT_SI = GUARDIAN_BASE_SI + "content";

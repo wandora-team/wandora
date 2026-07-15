@@ -48,7 +48,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String SI_PREFIX = "http://wandora.org/si/som/";
+	public static final String SI_PREFIX = "https://wandora.org/si/som/";
     
     public static final String ASSOCIATE_TOPICS_IN_EVERY_CELL_TO_A_CELL_SPECIFIC_GROUP = "Group topics in every cell";
     public static final String ASSOCIATE_TOPICS_IN_SELECTED_CELLS_TO_A_GROUP = "Group topics in selected cells";

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -1784,29 +1784,29 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         ls.addLayer(l3);
         ls.selectLayer(l1);
         t=ls.createTopic();
-        t.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testi1"));
+        t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi1"));
         t=ls.createTopic();
-        t.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testi3"));
+        t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi3"));
         ls.selectLayer(l2);
         t=ls.createTopic();
-        t.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testi2"));
+        t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi2"));
         t=ls.createTopic();
-        t.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testi3"));
+        t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi3"));
         t.setBaseName("basename");
         
         ls.selectLayer(l3);
         t3=ls.createTopic();
-        t3.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testi3"));
+        t3.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi3"));
         t=ls.createTopic();
-        t.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testi1"));
+        t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi1"));
         t.addType(t3);
         t2=ls.createTopic();
-        t2.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testi2"));
+        t2.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi2"));
         t2.addType(t3);
         a=ls.createTopic();
-        a.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testia"));
+        a.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testia"));
         b=ls.createTopic();
-        b.addSubjectIdentifier(new Locator("http://wandora.org/si/testi/testib"));
+        b.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testib"));
         Association a1=ls.createAssociation(t3);
         a1.addPlayer(t, a);
         a1.addPlayer(t2,b);
@@ -1822,53 +1822,53 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         Collection<Association> d;
         
         l3.setVisible(false);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi1"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
         System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
         c=test.getTypes();
         System.out.println("Test "+(counter++)+" "+(c.size()!=0?"failed":"passed"));
         d=test.getAssociations();
         System.out.println("Test "+(counter++)+" "+(d.size()!=0?"failed":"passed"));
         l1.setVisible(false);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi1"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
         System.out.println("Test "+(counter++)+" "+(test!=null?"failed":"passed"));
         l1.setVisible(true);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi1"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
         System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
         l1.setVisible(false);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi2"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi2"));
         System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
         c=test.getTypes();
         System.out.println("Test "+(counter++)+" "+(!c.isEmpty()?"failed":"passed"));
         l2.setVisible(false);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi2"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi2"));
         System.out.println("Test "+(counter++)+" "+(test!=null?"failed":"passed"));
         l1.setVisible(true);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi3"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
         System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
         s=test.getBaseName();
         System.out.println("Test "+(counter++)+" "+(s!=null?"failed":"passed"));
         l1.setVisible(false);
         l2.setVisible(true);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi3"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
         System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
         s=test.getBaseName();
         System.out.println("Test "+(counter++)+" "+(s==null || !s.equals("basename")?"failed":"passed"));
         l1.setVisible(false);
         l2.setVisible(false);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi3"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
         System.out.println("Test "+(counter++)+" "+(test!=null?"failed":"passed"));
         l3.setVisible(true);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi1"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
         System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
         c=test.getTypes();
         System.out.println("Test "+(counter++)+" "+(c.size()!=1?"failed":"passed"));        
         d=test.getAssociations();
         System.out.println("Test "+(counter++)+" "+(d.size()!=1?"failed":"passed"));
-        t3=ls.getTopic(new Locator("http://wandora.org/si/testi/testi3"));
+        t3=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
         d=test.getAssociations(t3);
         System.out.println("Test "+(counter++)+" "+(d.size()!=1?"failed":"passed"));
-        a=ls.getTopic(new Locator("http://wandora.org/si/testi/testia"));
-        b=ls.getTopic(new Locator("http://wandora.org/si/testi/testib"));
+        a=ls.getTopic(new Locator("https://wandora.org/si/testi/testia"));
+        b=ls.getTopic(new Locator("https://wandora.org/si/testi/testib"));
         d=test.getAssociations(t3,a);
         System.out.println("Test "+(counter++)+" "+(d.size()!=1?"failed":"passed"));
         a1=d.iterator().next();
@@ -1883,7 +1883,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         System.out.println("Test "+(counter++)+" "+(s==null?"failed":"passed"));
         l1.setVisible(true);
         l2.setVisible(true);
-        test=ls.getTopic(new Locator("http://wandora.org/si/testi/testi3"));
+        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
         c=ls.getTopicsOfType(test);
         System.out.println("Test "+(counter++)+" "+(c.size()!=2?"failed":"passed"));                
         

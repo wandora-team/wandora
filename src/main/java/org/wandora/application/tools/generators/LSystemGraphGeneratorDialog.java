@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -751,7 +751,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
         infoButton.setText("Info");
-        infoButton.setToolTipText("Get more information about L-system generator. Opens web browser at  http://wandora.org/wiki/L-system_generator");
+        infoButton.setToolTipText("Get more information about L-system generator. Opens web browser at  https://wandora.org/wiki/L-system_generator");
         infoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 infoButtonActionPerformed(evt);
@@ -855,7 +855,7 @@ private void lSystemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//G
         Desktop desktop = Desktop.getDesktop();
         if(desktop != null) {
             try {
-                desktop.browse(new URI("http://wandora.org/wiki/L-system_generator"));
+                desktop.browse(new URI("https://wandora.org/wiki/L-system_generator"));
             }
             catch(Exception e){
                 e.printStackTrace();

@@ -111,7 +111,7 @@ public class LlamacppPanel extends javax.swing.JPanel implements TopicMapListene
     public static final int AUTORUN_PROMPT_IN_EDITOR = 2;
     public static final int AUTORUN_FILE = 4;
     
-    public static final String PROMPT_OCCURRENCE_TYPE = "http://wandora.org/prompt";
+    public static final String PROMPT_OCCURRENCE_TYPE = "https://wandora.org/prompt";
     
     private static int autorun = 0;
     private static String autorunPromptFile = "";

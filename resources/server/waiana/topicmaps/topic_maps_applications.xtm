@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.0">
 	<topic id="L2063089---core--role-class">
-		<subjectIdentifier href="http://wandora.org/si/core/role-class"/>
+		<subjectIdentifier href="https://wandora.org/si/core/role-class"/>
 		<subjectIdentifier href="http://www.wandora.org/core/roleclass"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--association-type"/>
@@ -29,7 +29,7 @@
 		</occurrence>
 	</topic>
 	<topic id="L2063089---core--association-type">
-		<subjectIdentifier href="http://wandora.org/si/core/association-type"/>
+		<subjectIdentifier href="https://wandora.org/si/core/association-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/associationtype"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--association-type"/>
@@ -58,7 +58,7 @@
 		</occurrence>
 	</topic>
 	<topic id="L2063089---core--role">
-		<subjectIdentifier href="http://wandora.org/si/core/role"/>
+		<subjectIdentifier href="https://wandora.org/si/core/role"/>
 		<subjectIdentifier href="http://www.wandora.org/core/role"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--association-type"/>
@@ -87,7 +87,7 @@
 		</occurrence>
 	</topic>
 	<topic id="L2063089---core--schema-type">
-		<subjectIdentifier href="http://wandora.org/si/core/schema-type"/>
+		<subjectIdentifier href="https://wandora.org/si/core/schema-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/schema-type"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--role-class"/>
@@ -182,7 +182,7 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core--lang-independent">
-		<subjectIdentifier href="http://wandora.org/si/core/lang-independent"/>
+		<subjectIdentifier href="https://wandora.org/si/core/lang-independent"/>
 		<subjectIdentifier href="http://www.wandora.org/core/langindependent"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--language"/>
@@ -199,8 +199,8 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core--hide-level">
-		<subjectIdentifier href="http://wandora.org/si/core/hidelevel"/>
-		<subjectIdentifier href="http://wandora.org/si/core/hide-level"/>
+		<subjectIdentifier href="https://wandora.org/si/core/hidelevel"/>
+		<subjectIdentifier href="https://wandora.org/si/core/hide-level"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core-occurrence-type"/>
 		</instanceOf>
@@ -225,7 +225,7 @@
 		</occurrence>
 	</topic>
 	<topic id="L2063089---core--content-type">
-		<subjectIdentifier href="http://wandora.org/si/core/content-type"/>
+		<subjectIdentifier href="https://wandora.org/si/core/content-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/contenttype"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--role"/>
@@ -253,7 +253,7 @@
 		</occurrence>
 	</topic>
 	<topic id="L2063089---core--variant-name-version">
-		<subjectIdentifier href="http://wandora.org/si/core/variant-name-version"/>
+		<subjectIdentifier href="https://wandora.org/si/core/variant-name-version"/>
 		<subjectIdentifier href="http://www.wandora.org/core/variant-name-version"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--schema-type"/>
@@ -270,7 +270,7 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core--wandora-class">
-		<subjectIdentifier href="http://wandora.org/si/core/wandora-class"/>
+		<subjectIdentifier href="https://wandora.org/si/core/wandora-class"/>
 		<subjectIdentifier href="http://www.wandora.org/core/wandoraclass"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--schema-type"/>
@@ -347,7 +347,7 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core--language">
-		<subjectIdentifier href="http://wandora.org/si/core/language"/>
+		<subjectIdentifier href="https://wandora.org/si/core/language"/>
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
 		<subjectIdentifier href="http://www.wandora.org/core/language"/>
 		<instanceOf>
@@ -569,7 +569,7 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core--default-occurrence">
-		<subjectIdentifier href="http://wandora.org/si/core/default-occurrence"/>
+		<subjectIdentifier href="https://wandora.org/si/core/default-occurrence"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-occurrence"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core-occurrence-type"/>
@@ -579,7 +579,7 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core-occurrence-type">
-		<subjectIdentifier href="http://wandora.org/si/core/occurrence-type"/>
+		<subjectIdentifier href="https://wandora.org/si/core/occurrence-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/occurrencetype"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--association-type"/>
@@ -669,7 +669,7 @@
 		</occurrence>
 	</topic>
 	<topic id="L2063089---core--default-role-2">
-		<subjectIdentifier href="http://wandora.org/si/core/default-role-2"/>
+		<subjectIdentifier href="https://wandora.org/si/core/default-role-2"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-role-2"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--role"/>
@@ -679,7 +679,7 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core--edittime">
-		<subjectIdentifier href="http://wandora.org/si/core/edittime"/>
+		<subjectIdentifier href="https://wandora.org/si/core/edittime"/>
 		<subjectIdentifier href="http://www.wandora.org/core/edittime"/>
 		<name>
 			<value>Topic edit time</value>
@@ -704,7 +704,7 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core--default-association">
-		<subjectIdentifier href="http://wandora.org/si/core/default-association"/>
+		<subjectIdentifier href="https://wandora.org/si/core/default-association"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-association"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--association-type"/>
@@ -714,7 +714,7 @@
 		</name>
 	</topic>
 	<topic id="L2063089---core--default-role-1">
-		<subjectIdentifier href="http://wandora.org/si/core/default-role-1"/>
+		<subjectIdentifier href="https://wandora.org/si/core/default-role-1"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-role-1"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--role"/>
@@ -742,7 +742,7 @@
 		</occurrence>
 	</topic>
 	<topic id="L-541832389---topic58">
-		<subjectIdentifier href="http://wandora.org/si/temp/1422273537740-0"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1422273537740-0"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--wandora-class"/>
 		</instanceOf>
@@ -783,7 +783,7 @@
 		</occurrence>
 	</topic>
 	<topic id="L-541832389---topic61">
-		<subjectIdentifier href="http://wandora.org/si/temp/1422273659474-1"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1422273659474-1"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--wandora-class"/>
 		</instanceOf>
@@ -792,7 +792,7 @@
 		</name>
 	</topic>
 	<topic id="L-541832389---topic60">
-		<subjectIdentifier href="http://wandora.org/si/temp/1422273809914-3"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1422273809914-3"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -801,7 +801,7 @@
 		</name>
 	</topic>
 	<topic id="L-541832389---topic62">
-		<subjectIdentifier href="http://wandora.org/si/temp/1422273795874-2"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1422273795874-2"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--wandora-class"/>
 		</instanceOf>
@@ -1065,7 +1065,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</occurrence>
 	</topic>
 	<topic id="L-541832389---topic72">
-		<subjectIdentifier href="http://wandora.org"/>
+		<subjectIdentifier href="https://wandora.org"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic58"/>
 		</instanceOf>
@@ -1129,7 +1129,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</occurrence>
 	</topic>
 	<topic id="L-541832389---topic74">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423249554349-1"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423249554349-1"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1138,7 +1138,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic76">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423249775386-3"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423249775386-3"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1211,7 +1211,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</occurrence>
 	</topic>
 	<topic id="L-541832389---topic80">
-		<subjectIdentifier href="http://wandora.org/si/temp/1422275317240-4"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1422275317240-4"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--schema-type"/>
 		</instanceOf>
@@ -1390,7 +1390,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</occurrence>
 	</topic>
 	<topic id="L-541832389---topic92">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423250401331-4"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423250401331-4"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--wandora-class"/>
 		</instanceOf>
@@ -1399,7 +1399,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic93">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423250464651-5"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423250464651-5"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1408,7 +1408,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic94">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423250475031-6"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423250475031-6"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1417,7 +1417,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic95">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423250484681-7"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423250484681-7"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1480,7 +1480,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</occurrence>
 	</topic>
 	<topic id="L-541832389---topic99">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423250917222-11"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423250917222-11"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--wandora-class"/>
 		</instanceOf>
@@ -1489,7 +1489,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic100">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423250994062-12"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423250994062-12"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1498,7 +1498,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic101">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423251022672-13"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423251022672-13"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1507,7 +1507,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic102">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423251046612-14"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423251046612-14"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1516,7 +1516,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic103">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423251422242-15"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423251422242-15"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic99"/>
 		</instanceOf>
@@ -1525,7 +1525,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic104">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423251452122-16"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423251452122-16"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic99"/>
 		</instanceOf>
@@ -1534,7 +1534,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic105">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423251604622-17"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423251604622-17"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1543,7 +1543,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic106">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423251625432-18"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423251625432-18"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1552,7 +1552,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic107">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429287070573-0"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429287070573-0"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1570,7 +1570,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</occurrence>
 	</topic>
 	<topic id="L-541832389---topic156">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423249532790-0"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423249532790-0"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1579,7 +1579,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic157">
-		<subjectIdentifier href="http://wandora.org/si/temp/1423249605892-2"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1423249605892-2"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1588,7 +1588,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic158">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429288611581-1"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429288611581-1"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1597,7 +1597,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic160">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429289639841-2"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429289639841-2"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1606,7 +1606,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic162">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429293626641-3"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429293626641-3"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--wandora-class"/>
 		</instanceOf>
@@ -1615,7 +1615,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic164">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429293639686-4"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429293639686-4"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic162"/>
 		</instanceOf>
@@ -1624,7 +1624,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic166">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429293820364-5"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429293820364-5"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1633,7 +1633,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic168">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429293852927-6"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429293852927-6"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic92"/>
 		</instanceOf>
@@ -1642,7 +1642,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic170">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429294051764-7"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429294051764-7"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1651,8 +1651,8 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic174">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429294107254-9"/>
-		<subjectIdentifier href="http://wandora.org/si/temp/1429294070652-8"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429294107254-9"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429294070652-8"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1661,7 +1661,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic176">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429294123109-10"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429294123109-10"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1670,7 +1670,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic178">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429294142428-11"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429294142428-11"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1679,7 +1679,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic180">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429294276640-12"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429294276640-12"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic62"/>
 		</instanceOf>
@@ -1688,7 +1688,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic182">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429294516745-13"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429294516745-13"/>
 		<instanceOf>
 			<topicRef href="#L2063089---core--wandora-class"/>
 		</instanceOf>
@@ -1697,7 +1697,7 @@ Another objective is compatibility with a wide range of plattforms like .NET 2.0
 		</name>
 	</topic>
 	<topic id="L-541832389---topic205">
-		<subjectIdentifier href="http://wandora.org/si/temp/1429295679157-14"/>
+		<subjectIdentifier href="https://wandora.org/si/temp/1429295679157-14"/>
 		<instanceOf>
 			<topicRef href="#L-541832389---topic162"/>
 		</instanceOf>

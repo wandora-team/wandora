@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -146,8 +146,8 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
                             }
                             if(subjectTopic != null && !subjectTopic.mergesWithTopic(topic)) {
                                 Topic sameAsType = getOrCreateTopic("http://sameas.org/", "sameas.org", tm);
-                                Topic sourceRole = getOrCreateTopic("http://wandora.org/si/core/rdf-source", "rdf-source", tm);
-                                Topic targetRole = getOrCreateTopic("http://wandora.org/si/core/rdf-target", "rdf-target", tm);
+                                Topic sourceRole = getOrCreateTopic("https://wandora.org/si/core/rdf-source", "rdf-source", tm);
+                                Topic targetRole = getOrCreateTopic("https://wandora.org/si/core/rdf-target", "rdf-target", tm);
                                 if(sameAsType != null && sourceRole != null && targetRole != null) {
                                     Association sameAsAssociation = topic.getTopicMap().createAssociation(sameAsType);
                                     sameAsAssociation.addPlayer(topic, sourceRole);

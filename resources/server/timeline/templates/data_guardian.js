@@ -4,16 +4,16 @@
 ##
 #set( $count = 0 )##
 ##
-#set( $articleTypeSI = "http://wandora.org/si/theguardian/content" )##
+#set( $articleTypeSI = "https://wandora.org/si/theguardian/content" )##
 #set( $articleType = $topicmap.getTopic( $articleTypeSI ) )##
 ##
-#set( $articleDateTypeSI = "http://wandora.org/si/theguardian/pubtime" )##
+#set( $articleDateTypeSI = "https://wandora.org/si/theguardian/pubtime" )##
 #set( $articleDateType = $topicmap.getTopic( $articleDateTypeSI ) )##
 ##
-#set( $articleContentTypeSI = "http://wandora.org/si/theguardian/field/body" )##
+#set( $articleContentTypeSI = "https://wandora.org/si/theguardian/field/body" )##
 #set( $articleContentType = $topicmap.getTopic( $articleContentTypeSI ) )##
 ##
-#set( $articleLinkTypeSI = "http://wandora.org/si/theguardian/field/shortUrl" )##
+#set( $articleLinkTypeSI = "https://wandora.org/si/theguardian/field/shortUrl" )##
 #set( $articleLinkType = $topicmap.getTopic( $articleLinkTypeSI ) )##
 ##
 

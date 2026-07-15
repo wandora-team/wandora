@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -226,7 +226,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
-        _extractTopicsFromStream("http://wandora.org/si/simple-email-extractor/"+System.currentTimeMillis(), new ByteArrayInputStream(str.getBytes()), topicMap);
+        _extractTopicsFromStream("https://wandora.org/si/simple-email-extractor/"+System.currentTimeMillis(), new ByteArrayInputStream(str.getBytes()), topicMap);
         return true;
     }
 
@@ -904,10 +904,10 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     @Override
     public Locator buildSI(String siend) {
         try {
-            return new Locator("http://wandora.org/si/email/" + URLEncoder.encode(siend, "utf-8"));
+            return new Locator("https://wandora.org/si/email/" + URLEncoder.encode(siend, "utf-8"));
         }
         catch(Exception e) {
-            return new Locator("http://wandora.org/si/email/" + siend);
+            return new Locator("https://wandora.org/si/email/" + siend);
         }
     }
     

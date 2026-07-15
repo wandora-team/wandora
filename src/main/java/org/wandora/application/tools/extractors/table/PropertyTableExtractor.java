@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -72,7 +72,7 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
 	private static final long serialVersionUID = 1L;
 	
 	private URL basePath = null;
-    public static String SI_PREFIX = "http://wandora.org/si/table";
+    public static String SI_PREFIX = "https://wandora.org/si/table";
     
     
     

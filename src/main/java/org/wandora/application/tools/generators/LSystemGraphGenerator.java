@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -53,7 +53,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
 
 	private static final long serialVersionUID = 1L;
 
-	public static String DEFAULT_SI_PREFIX = "http://wandora.org/si/l-system/";
+	public static String DEFAULT_SI_PREFIX = "https://wandora.org/si/l-system/";
     public static String DEFAULT_ASSOCIATION_TYPE_SI = DEFAULT_SI_PREFIX+"association-type";
     public static String DEFAULT_ROLE1_SI = DEFAULT_SI_PREFIX+"role-1";
     public static String DEFAULT_ROLE2_SI = DEFAULT_SI_PREFIX+"role-2";

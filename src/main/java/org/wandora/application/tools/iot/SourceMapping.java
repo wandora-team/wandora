@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 final class SourceMapping {
 
-    protected static final String BASE_URL = "http://wandora.org/si/iot/source/";
+    protected static final String BASE_URL = "https://wandora.org/si/iot/source/";
     
     private static final ArrayList<IoTSource> sources;
     

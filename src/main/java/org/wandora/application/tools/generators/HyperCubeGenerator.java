@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -56,9 +56,9 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
 
 	private static final long serialVersionUID = 1L;
 
-	public static String HYPERCUBE_GRAPH_SI = "http://wandora.org/si/hypercube/";
+	public static String HYPERCUBE_GRAPH_SI = "https://wandora.org/si/hypercube/";
     
-    public static String siPattern = "http://wandora.org/si/hypercube/vertex/__n__";
+    public static String siPattern = "https://wandora.org/si/hypercube/vertex/__n__";
     public static String basenamePattern = "Hypercube vertex __n__";
     public static boolean connectWithWandoraClass = true;
     public static int n = 4;

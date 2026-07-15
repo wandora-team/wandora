@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -53,9 +53,9 @@ public class TreeGraphGenerator extends AbstractGenerator implements WandoraTool
 
 	private static final long serialVersionUID = 1L;
 
-	public static String TREE_GRAPH_SI = "http://wandora.org/si/tree-graph/";
+	public static String TREE_GRAPH_SI = "https://wandora.org/si/tree-graph/";
     
-    public static String siPattern = "http://wandora.org/si/tree-graph/node/__n__";
+    public static String siPattern = "https://wandora.org/si/tree-graph/node/__n__";
     public static String basenamePattern = "Tree graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static int d = 5; // Tree depth

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -109,9 +109,9 @@ public class LTMParser {
     public static String DEFAULT_SCOPE_FOR_VARIANTS = TMBox.LANGINDEPENDENT_SI;
     public static String DEFAULT_TYPE_FOR_VARIANTS = "http://www.topicmaps.org/xtm/1.0/core.xtm#display";
 
-    public static String STATIC_BASE_URI = "http://wandora.org/si/ltm-import/generated/";
-    public static String DEFAULT_BASE_URI = "http://wandora.org/si/ltm-import/";
-    public static String TEMP_SI_PREFIX = "http://wandora.org/si/temp/ltm-import/";
+    public static String STATIC_BASE_URI = "https://wandora.org/si/ltm-import/generated/";
+    public static String DEFAULT_BASE_URI = "https://wandora.org/si/ltm-import/";
+    public static String TEMP_SI_PREFIX = "https://wandora.org/si/temp/ltm-import/";
     
     private Topic defaultRoleForAssociations = null;
     private Topic defaultScopeForOccurrences = null;

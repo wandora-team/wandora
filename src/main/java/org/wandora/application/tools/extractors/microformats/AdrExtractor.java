@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -195,7 +195,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
         private TopicMap tm = null;
         private AdrExtractor parent = null;
 
-        public static final String SI_PREFIX = "http://wandora.org/si/adr/";
+        public static final String SI_PREFIX = "https://wandora.org/si/adr/";
 
         public int progress = 0;
         public int adrcount = 0;

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -103,7 +103,7 @@ public class ViewTopicAction extends GenericTemplateAction {
     protected boolean noTopic=false;
     
     protected String defaultLang="en";
-    protected String defaultTopic="http://wandora.org/si/core/wandora-class";
+    protected String defaultTopic="https://wandora.org/si/core/wandora-class";
     
     protected TopicMapManager tmManager;
 

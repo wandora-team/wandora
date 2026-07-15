@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -61,7 +61,7 @@ public abstract class AbstractOpenCycExtractor extends AbstractExtractor {
     public static String termSIBase = "http://www.opencyc.org/";
     
     
-    public static String SIPREFIX="http://wandora.org/si/opencyc/";
+    public static String SIPREFIX="https://wandora.org/si/opencyc/";
 
     public static String COMMENT_SI = SIPREFIX+"comment";
     public static String SIBLING_SI = SIPREFIX+"sibling";
@@ -127,7 +127,7 @@ public abstract class AbstractOpenCycExtractor extends AbstractExtractor {
     
 
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
-        setMasterSubject( "http://wandora.org/si/opencyc/" );
+        setMasterSubject( "https://wandora.org/si/opencyc/" );
         return _extractTopicsFrom(new ByteArrayInputStream(str.getBytes()), topicMap);
     }
 

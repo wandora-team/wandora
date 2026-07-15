@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -81,7 +81,7 @@ public abstract class AbstractFreebaseExtractor extends AbstractExtractor {
 
     // -------------------------------------------------------------------------
     
-    public static final String FREEBASE_WANDORA_SI = "http://wandora.org/si/freebase";
+    public static final String FREEBASE_WANDORA_SI = "https://wandora.org/si/freebase";
     public static final String FREEBASE_BASE_SI = "http://www.freebase.com";
     public static final String OBJECT_SI = FREEBASE_WANDORA_SI + "/OBJECT";
     public static final String TYPE_SI = FREEBASE_WANDORA_SI + "/TYPE";

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -48,7 +48,7 @@ public class FlickrUtils {
     
     public static Locator buildSI(String siend) {
         if(siend == null) siend = "" + System.currentTimeMillis() + Math.random();
-        return new Locator("http://wandora.org/si/flickr/" + siend);
+        return new Locator("https://wandora.org/si/flickr/" + siend);
     }
     
     public static Topic createTopic(TopicMap topicMap, String baseString) throws TopicMapException {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.0">
 	<topic id="topic152">
-		<subjectIdentifier href="http://wandora.org/si/twitter-search/1423330876301"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter-search/1423330876301"/>
 		<instanceOf>
 			<topicRef href="#topic158"/>
 		</instanceOf>
@@ -31,7 +31,7 @@
 		<subjectIdentifier href="http://www.wandora.org/core/wandoraclass"/>
 	</topic>
 	<topic id="topic158">
-		<subjectIdentifier href="http://wandora.org/si/twitter-search"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter-search"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -40,7 +40,7 @@
 		</name>
 	</topic>
 	<topic id="topic160">
-		<subjectIdentifier href="http://wandora.org/si/twitter-search/date"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter-search/date"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -52,7 +52,7 @@
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm#en"/>
 	</topic>
 	<topic id="topic164">
-		<subjectIdentifier href="http://wandora.org/si/twitter-search/query"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter-search/query"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -90,7 +90,7 @@
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/core.xtm#display"/>
 	</topic>
 	<topic id="topic170">
-		<subjectIdentifier href="http://wandora.org/si/twitter/tweet"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter/tweet"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -115,7 +115,7 @@
 		</name>
 	</topic>
 	<topic id="topic174">
-		<subjectIdentifier href="http://wandora.org/si/twitter/user"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter/user"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -124,7 +124,7 @@
 		</name>
 	</topic>
 	<topic id="topic176">
-		<subjectIdentifier href="http://wandora.org/si/twitter/from-user"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter/from-user"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -133,7 +133,7 @@
 		</name>
 	</topic>
 	<topic id="topic178">
-		<subjectIdentifier href="http://wandora.org/si/twitter/date"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter/date"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -142,7 +142,7 @@
 		</name>
 	</topic>
 	<topic id="topic180">
-		<subjectIdentifier href="http://wandora.org/date/2015-02-07"/>
+		<subjectIdentifier href="https://wandora.org/date/2015-02-07"/>
 		<instanceOf>
 			<topicRef href="#topic178"/>
 		</instanceOf>
@@ -167,7 +167,7 @@
 		</name>
 	</topic>
 	<topic id="topic184">
-		<subjectIdentifier href="http://wandora.org/si/twitter/hashtag"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter/hashtag"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -198,7 +198,7 @@
 		</instanceOf>
 	</topic>
 	<topic id="topic190">
-		<subjectIdentifier href="http://wandora.org/si/twitter/url-entity"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter/url-entity"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -637,7 +637,7 @@
 		</occurrence>
 	</topic>
 	<topic id="topic242">
-		<subjectIdentifier href="http://wandora.org/date/2015-02-06"/>
+		<subjectIdentifier href="https://wandora.org/date/2015-02-06"/>
 		<instanceOf>
 			<topicRef href="#topic178"/>
 		</instanceOf>
@@ -1345,7 +1345,7 @@
 		</name>
 	</topic>
 	<topic id="topic324">
-		<subjectIdentifier href="http://wandora.org/si/twitter/geo-location"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter/geo-location"/>
 		<name>
 			<value>Tweet geo location</value>
 		</name>
@@ -1971,7 +1971,7 @@
 		</instanceOf>
 	</topic>
 	<topic id="topic396">
-		<subjectIdentifier href="http://wandora.org/si/twitter/media-entity"/>
+		<subjectIdentifier href="https://wandora.org/si/twitter/media-entity"/>
 		<instanceOf>
 			<topicRef href="#topic154"/>
 		</instanceOf>
@@ -2388,7 +2388,7 @@
 		</name>
 	</topic>
 	<topic id="topic444">
-		<subjectIdentifier href="http://wandora.org/date/2015-02-05"/>
+		<subjectIdentifier href="https://wandora.org/date/2015-02-05"/>
 		<instanceOf>
 			<topicRef href="#topic178"/>
 		</instanceOf>
@@ -4277,7 +4277,7 @@
 		</occurrence>
 	</topic>
 	<topic id="topic656">
-		<subjectIdentifier href="http://wandora.org/date/2015-02-04"/>
+		<subjectIdentifier href="https://wandora.org/date/2015-02-04"/>
 		<instanceOf>
 			<topicRef href="#topic178"/>
 		</instanceOf>
@@ -6043,7 +6043,7 @@
 		</name>
 	</topic>
 	<topic id="topic844">
-		<subjectIdentifier href="http://wandora.org/date/2015-02-03"/>
+		<subjectIdentifier href="https://wandora.org/date/2015-02-03"/>
 		<instanceOf>
 			<topicRef href="#topic178"/>
 		</instanceOf>
@@ -7780,7 +7780,7 @@ http://t.co/zCqKRocfxB
 		</occurrence>
 	</topic>
 	<topic id="topic1026">
-		<subjectIdentifier href="http://wandora.org/date/2015-02-02"/>
+		<subjectIdentifier href="https://wandora.org/date/2015-02-02"/>
 		<instanceOf>
 			<topicRef href="#topic178"/>
 		</instanceOf>
@@ -9274,7 +9274,7 @@ https://t.co/C0YNDNQIvi
 		</occurrence>
 	</topic>
 	<topic id="topic1190">
-		<subjectIdentifier href="http://wandora.org/date/2015-02-01"/>
+		<subjectIdentifier href="https://wandora.org/date/2015-02-01"/>
 		<instanceOf>
 			<topicRef href="#topic178"/>
 		</instanceOf>
@@ -9655,7 +9655,7 @@ https://t.co/C0YNDNQIvi
 		</occurrence>
 	</topic>
 	<topic id="topic1236">
-		<subjectIdentifier href="http://wandora.org/date/2015-01-31"/>
+		<subjectIdentifier href="https://wandora.org/date/2015-01-31"/>
 		<instanceOf>
 			<topicRef href="#topic178"/>
 		</instanceOf>

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -383,7 +383,7 @@ public class ExtractIconclassKeywords extends AbstractExtractor implements Wando
     
     public Locator getLocatorForIconclass(String iconclassCode) {
         try {
-            return new Locator( TopicTools.cleanDirtyLocator("http://wandora.org/si/iconclass/" + iconclassCode) );
+            return new Locator( TopicTools.cleanDirtyLocator("https://wandora.org/si/iconclass/" + iconclassCode) );
         }
         catch(Exception e) {
             log(e);

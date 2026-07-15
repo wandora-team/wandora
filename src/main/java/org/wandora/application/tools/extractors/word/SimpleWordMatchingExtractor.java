@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -36,7 +36,7 @@ public class SimpleWordMatchingExtractor extends AbstractWordExtractor {
 
 	private static final long serialVersionUID = 1L;
 
-	private final String SI_BASE = "http://wandora.org/si/simple-word/";
+	private final String SI_BASE = "https://wandora.org/si/simple-word/";
     private final String BN_SUFFIX = "(simple word extractor)";
     private SimpleWordConfiguration config;
     

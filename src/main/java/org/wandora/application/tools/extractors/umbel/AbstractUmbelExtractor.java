@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -91,36 +91,36 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
     public static final String UMBEL_TYPE_SI = "http://umbel.org";
     public static final String UMBEL_TYPE_NAME = "Umbel";
     
-    public static final String UMBEL_CONCEPT_TYPE_SI = "http://wandora.org/si/umbel/concept";
+    public static final String UMBEL_CONCEPT_TYPE_SI = "https://wandora.org/si/umbel/concept";
     public static final String UMBEL_CONCEPT_TYPE_NAME = "concept (umbel)";
     
     
-    public static final String UMBEL_BROADER_NARROWER_TYPE_SI = "http://wandora.org/si/umbel/broader-narrower";
+    public static final String UMBEL_BROADER_NARROWER_TYPE_SI = "https://wandora.org/si/umbel/broader-narrower";
     public static final String UMBEL_BROADER_NARROWER_TYPE_NAME = "broader-narrower (umbel)";
     
-    public static final String UMBEL_NARROWER_TYPE_SI = "http://wandora.org/si/umbel/narrower";
+    public static final String UMBEL_NARROWER_TYPE_SI = "https://wandora.org/si/umbel/narrower";
     public static final String UMBEL_NARROWER_TYPE_NAME = "narrower (umbel)";
     
-    public static final String UMBEL_BROADER_TYPE_SI = "http://wandora.org/si/umbel/broader";
+    public static final String UMBEL_BROADER_TYPE_SI = "https://wandora.org/si/umbel/broader";
     public static final String UMBEL_BROADER_TYPE_NAME = "broader (umbel)";
     
     
-    public static final String UMBEL_SUPERCLASS_SUBCLASS_TYPE_SI = "http://wandora.org/si/umbel/superclass-subclass";
+    public static final String UMBEL_SUPERCLASS_SUBCLASS_TYPE_SI = "https://wandora.org/si/umbel/superclass-subclass";
     public static final String UMBEL_SUPERCLASS_SUBCLASS_TYPE_NAME = "superclass-subclass (umbel)";
     
-    public static final String UMBEL_SUBCLASS_TYPE_SI = "http://wandora.org/si/umbel/subclass";
+    public static final String UMBEL_SUBCLASS_TYPE_SI = "https://wandora.org/si/umbel/subclass";
     public static final String UMBEL_SUBCLASS_TYPE_NAME = "subclass (umbel)";
     
-    public static final String UMBEL_SUPERCLASS_TYPE_SI = "http://wandora.org/si/umbel/superclass";
+    public static final String UMBEL_SUPERCLASS_TYPE_SI = "https://wandora.org/si/umbel/superclass";
     public static final String UMBEL_SUPERCLASS_TYPE_NAME = "superclass (umbel)";
     
-    public static final String UMBEL_TYPE_TYPE_SI = "http://wandora.org/si/umbel/type";
+    public static final String UMBEL_TYPE_TYPE_SI = "https://wandora.org/si/umbel/type";
     public static final String UMBEL_TYPE_TYPE_NAME = "type (umbel)";
     
-    public static final String UMBEL_DISTANCE_TYPE_SI = "http://wandora.org/si/umbel/distance";
+    public static final String UMBEL_DISTANCE_TYPE_SI = "https://wandora.org/si/umbel/distance";
     public static final String UMBEL_DISTANCE_TYPE_NAME = "distance (umbel)";
     
-    public static final String UMBEL_DISJOINT_TYPE_SI = "http://wandora.org/si/umbel/disjoint";
+    public static final String UMBEL_DISJOINT_TYPE_SI = "https://wandora.org/si/umbel/disjoint";
     public static final String UMBEL_DISJOINT_TYPE_NAME = "disjoint (umbel)";
     
     

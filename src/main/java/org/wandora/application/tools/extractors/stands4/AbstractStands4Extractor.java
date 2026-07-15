@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -73,9 +73,9 @@ public abstract class AbstractStands4Extractor extends AbstractExtractor {
     protected String SYNONYMTERM_SI = SYNONYMS_BASE+"synonym-term";
     protected String ANTONYMTERM_SI = SYNONYMS_BASE+"antonym-term";
 
-    protected String SOURCE_SI = "http://wandora.org/si/source";
+    protected String SOURCE_SI = "https://wandora.org/si/source";
 
-    protected String TERM_COMPLEX_BASE = "http://wandora.org/si/term-complex/";
+    protected String TERM_COMPLEX_BASE = "https://wandora.org/si/term-complex/";
     protected String defaultEncoding = "ISO-8859-1";
     protected String defaultLang = "en";
 

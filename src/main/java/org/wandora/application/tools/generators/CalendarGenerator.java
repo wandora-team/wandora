@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -51,7 +51,7 @@ public class CalendarGenerator extends AbstractGenerator implements WandoraTool 
     
 	private static final long serialVersionUID = 1L;
 	
-	public static String CALENDAR_SI_BODY = "http://wandora.org/si/calendar/";
+	public static String CALENDAR_SI_BODY = "https://wandora.org/si/calendar/";
     
     
     /** Creates a new instance of CalendarGenerator */

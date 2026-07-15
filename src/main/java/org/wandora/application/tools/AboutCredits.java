@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -90,7 +90,7 @@ public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
                     "talented people around the world. Wandora Team would like to\n"+
                     "express gratitude to all contributing open source projects.\n"+
                     " \n"+
-                    "For more information see http://wandora.org\n";
+                    "For more information see https://wandora.org\n";
             
             textLabel=new MultiLineLabel(text);
             textLabel.setVisible(true);

@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -106,9 +106,9 @@ public class SparqlExtractor extends AbstractExtractor {
     public static String DEFAULT_RESULTSET_FORMAT = "JSON";
     public static String DEFAULT_HANDLE_METHOD = "RESULTSET-TOPICMAP";
 
-    public static String RESULTSET_SI = "http://wandora.org/si/sparql/resultset";
-    public static String COLUMN_SI = "http://wandora.org/si/sparql/resultset/column";
-    public static String LITERAL_SI = "http://wandora.org/si/sparql/resultset/literal";
+    public static String RESULTSET_SI = "https://wandora.org/si/sparql/resultset";
+    public static String COLUMN_SI = "https://wandora.org/si/sparql/resultset/column";
+    public static String LITERAL_SI = "https://wandora.org/si/sparql/resultset/literal";
 
     private SparqlExtractorUI ui = null;
     public static final String defaultOccurrenceScopeSI = TMBox.LANGINDEPENDENT_SI;

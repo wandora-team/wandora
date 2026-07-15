@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -50,10 +50,10 @@ public class BrowserHistoryExtractor extends AbstractExtractor implements Browse
 	private static final long serialVersionUID = 1L;
 	
 	
-	public static final String historySI="http://wandora.org/si/browser-history";
-    public static final String entrySI="http://wandora.org/si/browser-history/entry";
-    public static final String dateSI="http://wandora.org/si/browser-history/date";
-    public static final String pageSI="http://wandora.org/si/browser-history/page";
+	public static final String historySI="https://wandora.org/si/browser-history";
+    public static final String entrySI="https://wandora.org/si/browser-history/entry";
+    public static final String dateSI="https://wandora.org/si/browser-history/date";
+    public static final String pageSI="https://wandora.org/si/browser-history/page";
 
 
 

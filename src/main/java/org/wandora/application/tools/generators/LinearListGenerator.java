@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -54,9 +54,9 @@ public class LinearListGenerator extends AbstractGenerator implements WandoraToo
 
 	private static final long serialVersionUID = 1L;
 
-	public static String LIST_GRAPH_SI = "http://wandora.org/si/linear-list/";
+	public static String LIST_GRAPH_SI = "https://wandora.org/si/linear-list/";
     
-    public static String siPattern = "http://wandora.org/si/linear-list/node/__n__";
+    public static String siPattern = "https://wandora.org/si/linear-list/node/__n__";
     public static String basenamePattern = "Linear list vertex __n__";
     public static boolean connectWithWandoraClass = true;
     public static int n = 10;

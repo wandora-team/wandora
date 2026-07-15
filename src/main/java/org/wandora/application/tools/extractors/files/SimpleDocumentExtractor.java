@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -85,9 +85,9 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
 	private static final long serialVersionUID = 1L;
 	
 	
-	protected static String TOPIC_SI = "http://wandora.org/si/topic";
-    protected static String SOURCE_SI = "http://wandora.org/si/source";
-    protected static String DOCUMENT_SI = "http://wandora.org/si/document";
+	protected static String TOPIC_SI = "https://wandora.org/si/topic";
+    protected static String SOURCE_SI = "https://wandora.org/si/source";
+    protected static String DOCUMENT_SI = "https://wandora.org/si/document";
 
     
     protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -244,7 +244,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Wandor
         try {
             int hash = str.hashCode();
             Topic documentType = this.getDocumentType(topicMap);
-            String locator = "http://wandora.org/si/simple-document-extractor/"+hash;
+            String locator = "https://wandora.org/si/simple-document-extractor/"+hash;
 
             String name = null;
             if(str.length() > 80) {

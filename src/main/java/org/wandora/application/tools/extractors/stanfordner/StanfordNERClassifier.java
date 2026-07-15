@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -61,12 +61,12 @@ public class StanfordNERClassifier extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String SOURCE_SI = "http://wandora.org/si/source";
-    public static final String DOCUMENT_SI = "http://wandora.org/si/document";
-    public static final String TOPIC_SI = "http://wandora.org/si/topic";
+	public static final String SOURCE_SI = "https://wandora.org/si/source";
+    public static final String DOCUMENT_SI = "https://wandora.org/si/document";
+    public static final String TOPIC_SI = "https://wandora.org/si/topic";
 
-    public static final String ENTITY_SI = "http://wandora.org/si/stanford-ner/entity";
-    public static final String ENTITY_TYPE_SI = "http://wandora.org/si/stanford-ner/type";
+    public static final String ENTITY_SI = "https://wandora.org/si/stanford-ner/entity";
+    public static final String ENTITY_TYPE_SI = "https://wandora.org/si/stanford-ner/type";
     public static final String STANFORD_NER_SI = "http://nlp.stanford.edu/software/CRF-NER.shtml";
 
     public static final String classifierPath = "lib/stanford-ner/classifiers/";

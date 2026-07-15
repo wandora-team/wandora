@@ -4,13 +4,13 @@
 ##
 #set( $count = 0 )##
 ##
-#set( $videoTypeSI = "http://wandora.org/si/youtube/schema/YouTube+video" )##
+#set( $videoTypeSI = "https://wandora.org/si/youtube/schema/YouTube+video" )##
 #set( $videoType = $topicmap.getTopic( $videoTypeSI ) )##
 ##
-#set( $videoDateTypeSI = "http://wandora.org/si/youtube/schema/video-published" )##
+#set( $videoDateTypeSI = "https://wandora.org/si/youtube/schema/video-published" )##
 #set( $videoDateType = $topicmap.getTopic( $videoDateTypeSI ) )##
 ##
-#set( $videoDescriptionTypeSI = "http://wandora.org/si/youtube/schema/video-description" )##
+#set( $videoDescriptionTypeSI = "https://wandora.org/si/youtube/schema/video-description" )##
 #set( $videoDescriptionType = $topicmap.getTopic( $videoDescriptionTypeSI ) )##
 ##
 #set( $videos = $topicmap.getTopicsOfType( $videoType ) )##

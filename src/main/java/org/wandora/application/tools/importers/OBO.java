@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -65,7 +65,7 @@ public class OBO {
     
     public static String LANG = "en";
     
-    public static final String SI = "http://wandora.org/si/obo/";
+    public static final String SI = "https://wandora.org/si/obo/";
     public static final String SCHEMA_SI = SI + "schema/";
     public static final String HEADER_SI = SI + "header/";
     public static final String DBXREF_SI = SI + "dbxref/";

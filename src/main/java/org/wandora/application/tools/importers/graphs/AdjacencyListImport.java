@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -56,7 +56,7 @@ public class AdjacencyListImport extends AbstractWandoraTool implements WandoraT
 
 	private static final long serialVersionUID = 1L;
 
-	public final static String SI_PREFIX = "http://wandora.org/si/topic/";
+	public final static String SI_PREFIX = "https://wandora.org/si/topic/";
     
     public static String nodeDelimiter = ",";
     public static String edgeDelimiter = "";

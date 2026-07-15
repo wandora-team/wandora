@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -75,9 +75,9 @@ public abstract class AbstractTagtheExtractor extends AbstractExtractor {
     public static final String WEB_SERVICE_URL = "http://tagthe.net/api/";
 
 
-    public static final String SOURCE_SI = "http://wandora.org/si/source";
-    public static final String DOCUMENT_SI = "http://wandora.org/si/document";
-    public static final String TOPIC_SI = "http://wandora.org/si/topic";
+    public static final String SOURCE_SI = "https://wandora.org/si/source";
+    public static final String DOCUMENT_SI = "https://wandora.org/si/document";
+    public static final String TOPIC_SI = "https://wandora.org/si/topic";
 
     public static final String TAGTHE_SI = "http://tagthe.net";
     public static final String TAGTHE_TERM_SI = "http://tagthe.net/term";

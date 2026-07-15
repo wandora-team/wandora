@@ -10,7 +10,7 @@
 #set( $pkUnitSI = "http://www.hel.fi/palvelukarttaws/rest/v1/unit" )##
 #set( $pkUnitItem = $topicmap.getTopic( $pkUnitSI ) )##
 
-#set( $pkLocationSi = "http://wandora.org/si/palvelukartta/geo-location" )##
+#set( $pkLocationSi = "https://wandora.org/si/palvelukartta/geo-location" )##
 #set( $pkLocationItem = $topicmap.getTopic( $pkLocationSi ) )##
 
 #if($pkUnitItem)##

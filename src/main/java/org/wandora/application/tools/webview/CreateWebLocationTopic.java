@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -110,15 +110,15 @@ public class CreateWebLocationTopic extends AbstractWebViewTool {
                         associationType = tm.createTopic();
                         associationType.addSubjectIdentifier(new Locator(SchemaBox.DEFAULT_ASSOCIATION_SI));
                     }
-                    Topic role1 = tm.getTopic("http://wandora.org/si/core/default-role-1");
+                    Topic role1 = tm.getTopic("https://wandora.org/si/core/default-role-1");
                     if(role1 == null) {
                         role1 = tm.createTopic();
-                        role1.addSubjectIdentifier(new Locator("http://wandora.org/si/core/default-role-1"));
+                        role1.addSubjectIdentifier(new Locator("https://wandora.org/si/core/default-role-1"));
                     }
-                    Topic role2 = tm.getTopic("http://wandora.org/si/core/default-role-2");
+                    Topic role2 = tm.getTopic("https://wandora.org/si/core/default-role-2");
                     if(role2 == null) {
                         role2 = tm.createTopic();
-                        role2.addSubjectIdentifier(new Locator("http://wandora.org/si/core/default-role-2"));
+                        role2.addSubjectIdentifier(new Locator("https://wandora.org/si/core/default-role-2"));
                     }
                     Topic currentTopic = getTopic(context);
                     if(currentTopic != null) {
@@ -138,7 +138,7 @@ public class CreateWebLocationTopic extends AbstractWebViewTool {
     }
     
     
-    private static final String DOCUMENT_SI = "http://wandora.org/si/document";
+    private static final String DOCUMENT_SI = "https://wandora.org/si/document";
     private Topic getDocumentTopic(TopicMap tm) {
         if(tm != null) {
             try {

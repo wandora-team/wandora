@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2004-2026 Wandora Team
  *
@@ -41,7 +41,7 @@ public class BaseNameDirective implements Directive {
 
     private Locator nameRole;
 
-    public static final String NAME_SI="http://wandora.org/si/query/basename";
+    public static final String NAME_SI="https://wandora.org/si/query/basename";
 
     public BaseNameDirective() {
         this(NAME_SI);

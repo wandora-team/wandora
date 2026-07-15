@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
  * Copyright (C) 2004-2026 Wandora Team
  * 
@@ -99,20 +99,20 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
     
     protected String defaultEncoding = "UTF-8";
     
-    public static final String SOURCE_SI = "http://wandora.org/si/source";
-    public static final String DOCUMENT_SI = "http://wandora.org/si/document";
-    public static final String TOPIC_SI = "http://wandora.org/si/topic";
+    public static final String SOURCE_SI = "https://wandora.org/si/source";
+    public static final String DOCUMENT_SI = "https://wandora.org/si/document";
+    public static final String TOPIC_SI = "https://wandora.org/si/topic";
 
     public static final String UCLASSIFY_SI = "http://www.uclassify.com";
 
-    public static final String UCLASSIFY_CLASSIFIER_SI = "http://wandora.org/si/uclassify/classifier";
-    public static final String UCLASSIFY_CLASSIFIER_TYPE_SI = "http://wandora.org/si/uclassify/classifier-type";
+    public static final String UCLASSIFY_CLASSIFIER_SI = "https://wandora.org/si/uclassify/classifier";
+    public static final String UCLASSIFY_CLASSIFIER_TYPE_SI = "https://wandora.org/si/uclassify/classifier-type";
     
-    public static final String UCLASSIFY_CLASS_SI = "http://wandora.org/si/uclassify/term";
-    public static final String UCLASSIFY_CLASS_TYPE_SI = "http://wandora.org/si/uclassify/term-type";
+    public static final String UCLASSIFY_CLASS_SI = "https://wandora.org/si/uclassify/term";
+    public static final String UCLASSIFY_CLASS_TYPE_SI = "https://wandora.org/si/uclassify/term-type";
     
-    public static final String UCLASSIFY_PROBABILITY_SI = "http://wandora.org/si/uclassify/probability";
-    public static final String UCLASSIFY_PROBABILITY_TYPE_SI = "http://wandora.org/si/uclassify/probability-type";
+    public static final String UCLASSIFY_PROBABILITY_SI = "https://wandora.org/si/uclassify/probability";
+    public static final String UCLASSIFY_PROBABILITY_TYPE_SI = "https://wandora.org/si/uclassify/probability-type";
     
     
 
