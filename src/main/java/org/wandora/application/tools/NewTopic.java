@@ -37,7 +37,6 @@ import javax.swing.Icon;
 import javax.swing.JDialog;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.NewTopicPanel;
@@ -61,7 +60,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class NewTopic extends AbstractWandoraTool implements WandoraTool {
+public class NewTopic extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

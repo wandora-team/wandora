@@ -31,7 +31,6 @@ package org.wandora.application.tools;
 
 
 
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
 
 
@@ -39,7 +38,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class DeleteTopicsWithoutAssociations extends DeleteTopics implements WandoraTool {
+public class DeleteTopicsWithoutAssociations extends DeleteTopics {
 
 	private static final long serialVersionUID = 1L;
 

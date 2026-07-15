@@ -25,7 +25,6 @@
 package org.wandora.application.tools.docking;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
 import org.wandora.application.gui.topicpanels.TopicPanel;
@@ -38,7 +37,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class AbstractDockingTool extends AbstractWandoraTool implements WandoraTool {
+public class AbstractDockingTool extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

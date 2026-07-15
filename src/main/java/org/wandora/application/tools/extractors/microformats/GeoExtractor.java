@@ -40,7 +40,6 @@ import java.util.Properties;
 import javax.swing.Icon;
 
 import org.w3c.tidy.Tidy;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
@@ -64,7 +63,7 @@ import org.xml.sax.XMLReader;
  * @author akivela
  */
 
-public class GeoExtractor extends AbstractExtractor implements WandoraTool {
+public class GeoExtractor extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;

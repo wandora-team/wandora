@@ -42,7 +42,7 @@ import org.wandora.topicmap.TopicMap;
  *
  * @author akivela
  */
-public class InstanceContextCollected extends LayeredTopicContext implements Context {
+public class InstanceContextCollected extends LayeredTopicContext {
 
     public static final int GATHER_TOPICS_FROM_LAYERSTACK = 1;
     public static final int GATHER_TOPICS_FROM_OWNER_TOPICMAP = 2;

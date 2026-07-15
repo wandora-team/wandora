@@ -35,7 +35,6 @@ import java.net.URI;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 
@@ -48,7 +47,7 @@ import org.wandora.application.gui.UIBox;
 
 
 
-public class ExecBrowser extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class ExecBrowser extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -62,7 +61,7 @@ import org.wandora.topicmap.Topic;
 
 
 
-public class MakeOccurrenceFromAssociation extends AbstractWandoraTool implements WandoraTool {
+public class MakeOccurrenceFromAssociation extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

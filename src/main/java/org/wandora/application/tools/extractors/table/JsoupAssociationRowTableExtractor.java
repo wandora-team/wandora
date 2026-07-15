@@ -29,7 +29,6 @@ import java.util.List;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Association;
@@ -43,8 +42,7 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-public class JsoupAssociationRowTableExtractor extends AbstractJsoupExtractor 
-implements WandoraTool, BrowserPluginExtractor {
+public class JsoupAssociationRowTableExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
 
 	
 	private static final long serialVersionUID = 1L;

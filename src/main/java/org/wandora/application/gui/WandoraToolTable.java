@@ -42,7 +42,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
@@ -409,7 +408,7 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
     // -------------------------------------------------------------------------
     
     
-    public class ToolTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+    public class ToolTableCellRenderer extends DefaultTableCellRenderer {
 
 
         @Override

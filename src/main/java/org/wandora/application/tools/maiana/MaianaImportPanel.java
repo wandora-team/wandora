@@ -41,7 +41,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.json.JSONArray;
@@ -516,7 +515,7 @@ public class MaianaImportPanel extends javax.swing.JPanel {
     
 
 
-    class TopicMapsTableModel extends DefaultTableModel implements TableModel {
+    class TopicMapsTableModel extends DefaultTableModel {
 
 		private static final long serialVersionUID = 1L;
 

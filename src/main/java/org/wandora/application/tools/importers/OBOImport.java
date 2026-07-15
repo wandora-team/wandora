@@ -45,7 +45,6 @@ import java.util.regex.Pattern;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -68,7 +67,7 @@ import org.wandora.utils.Tuples.T2;
 
 
 
-public class OBOImport extends AbstractImportTool implements WandoraTool {
+public class OBOImport extends AbstractImportTool {
 
 	private static final long serialVersionUID = 1L;
 

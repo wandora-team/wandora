@@ -40,7 +40,7 @@ import org.wandora.topicmap.Topic;
 /**
  * @author akivela
  */
-public class PlayerContextCollected extends AssociationContext implements Context {
+public class PlayerContextCollected extends AssociationContext {
     
     
     

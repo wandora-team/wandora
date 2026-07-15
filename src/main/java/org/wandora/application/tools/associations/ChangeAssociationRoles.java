@@ -28,12 +28,10 @@
 package org.wandora.application.tools.associations;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.table.AssociationTable;
@@ -55,7 +53,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class ChangeAssociationRoles extends AbstractWandoraTool implements WandoraTool {
+public class ChangeAssociationRoles extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	

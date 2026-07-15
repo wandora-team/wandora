@@ -43,7 +43,6 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
 import org.wandora.topicmap.Association;
@@ -66,7 +65,7 @@ import org.wandora.topicmap.XTMPSI;
  * 
  * @author akivela
  */
-public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
+public class SimpleRDFImport extends AbstractImportTool {
 
 	private static final long serialVersionUID = 1L;
 

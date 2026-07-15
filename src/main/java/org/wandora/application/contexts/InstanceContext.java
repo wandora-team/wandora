@@ -37,7 +37,7 @@ import org.wandora.application.contexts.iterators.InstanceIterator;
 /**
  * @author akivela
  */
-public class InstanceContext extends LayeredTopicContext implements Context {
+public class InstanceContext extends LayeredTopicContext {
 
     
     @Override

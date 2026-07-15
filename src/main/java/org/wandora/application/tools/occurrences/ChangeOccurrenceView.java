@@ -27,7 +27,6 @@
 package org.wandora.application.tools.occurrences;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -42,7 +41,7 @@ import org.wandora.utils.Options;
  * 
  * @author akivela
  */
-public class ChangeOccurrenceView extends AbstractWandoraTool implements WandoraTool {
+public class ChangeOccurrenceView extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	

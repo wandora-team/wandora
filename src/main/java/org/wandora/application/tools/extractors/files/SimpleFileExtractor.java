@@ -39,7 +39,6 @@ import java.util.Date;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
@@ -61,7 +60,7 @@ import org.wandora.utils.XMLbox;
  *
  * @author akivela
  */
-public class SimpleFileExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
+public class SimpleFileExtractor extends AbstractExtractor implements BrowserPluginExtractor {
 
 	private static final long serialVersionUID = 1L;
 	

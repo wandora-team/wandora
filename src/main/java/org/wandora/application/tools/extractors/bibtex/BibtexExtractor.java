@@ -41,7 +41,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -59,7 +58,7 @@ import org.wandora.utils.GripCollections;
  *
  * @author olli
  */
-public class BibtexExtractor extends AbstractExtractor implements WandoraTool {
+public class BibtexExtractor extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;

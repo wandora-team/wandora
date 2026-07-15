@@ -42,7 +42,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -52,7 +51,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -100,7 +98,7 @@ import org.wandora.utils.Textbox;
  *
  * @author  olli, akivela
  */
-public class OccurrenceTableSingleType extends SimpleTable implements OccurrenceTable, MouseListener, Clipboardable {
+public class OccurrenceTableSingleType extends SimpleTable implements OccurrenceTable{
 
 
 	private static final long serialVersionUID = 1L;

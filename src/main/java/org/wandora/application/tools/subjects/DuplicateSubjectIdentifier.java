@@ -29,11 +29,16 @@ package org.wandora.application.tools.subjects;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.SIContext;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
+
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+
 
 /**
  * <p>
@@ -51,14 +56,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
  * 
  * @author akivela
  */
-import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
-
-
-
-public class DuplicateSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
+public class DuplicateSubjectIdentifier extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

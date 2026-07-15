@@ -39,7 +39,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -94,7 +93,7 @@ import org.wandora.utils.swing.TableSorter;
  *
  * @author  olli, akivela
  */
-public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable, MouseListener, Clipboardable {
+public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable {
     
 
 	private static final long serialVersionUID = 1L;

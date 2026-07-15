@@ -32,7 +32,6 @@ package org.wandora.application.tools;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.RegularExpressionEditor;
 import org.wandora.topicmap.Locator;
@@ -44,7 +43,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteTopicsWithSIRegex extends DeleteTopics implements WandoraTool {
+public class DeleteTopicsWithSIRegex extends DeleteTopics {
     
      RegularExpressionEditor editor = null;
     

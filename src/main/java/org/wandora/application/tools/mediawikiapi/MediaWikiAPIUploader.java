@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -42,7 +41,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class MediaWikiAPIUploader extends MediaWikiAPIHandler implements WandoraTool{
+public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
 
 	private static final long serialVersionUID = 1L;
 

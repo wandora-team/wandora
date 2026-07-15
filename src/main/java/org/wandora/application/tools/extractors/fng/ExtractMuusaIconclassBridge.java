@@ -37,7 +37,6 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.Hashtable;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -73,7 +72,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class ExtractMuusaIconclassBridge extends AbstractExtractor implements WandoraTool {
+public class ExtractMuusaIconclassBridge extends AbstractExtractor {
     
 
 	private static final long serialVersionUID = 1L;

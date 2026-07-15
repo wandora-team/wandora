@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -45,7 +44,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteAssociationsInTopicWithType extends DeleteAssociationsInTopic implements WandoraTool {
+public class DeleteAssociationsInTopicWithType extends DeleteAssociationsInTopic {
     
 	private static final long serialVersionUID = 1L;
 	

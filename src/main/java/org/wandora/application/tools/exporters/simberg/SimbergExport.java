@@ -50,7 +50,6 @@ import javax.imageio.stream.ImageInputStream;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -85,7 +84,7 @@ import org.wandora.utils.Tuples.T2;
  */
 
 
-public class SimbergExport extends AbstractExportTool implements WandoraTool {
+public class SimbergExport extends AbstractExportTool {
 
 	private static final long serialVersionUID = 1L;
 

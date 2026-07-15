@@ -37,7 +37,7 @@ import org.wandora.application.contexts.iterators.RoleIterator;
  *
  * @author akivela
  */
-public class RoleContext extends LayeredTopicContext implements Context {
+public class RoleContext extends LayeredTopicContext {
 
     
     @Override

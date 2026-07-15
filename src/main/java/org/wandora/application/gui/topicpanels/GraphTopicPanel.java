@@ -91,7 +91,6 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.Options;
 
@@ -100,7 +99,7 @@ import org.wandora.utils.Options;
  *
  * @author olli, akivela
  */
-public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, SimpleComponent, Clipboardable, TopicMapListener, RefreshListener, ActionListener, ComponentListener {
+public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, SimpleComponent, Clipboardable, RefreshListener, ActionListener, ComponentListener {
     private static final long serialVersionUID = 1L;
     
     private String OPTIONS_PREFIX = "gui.graphTopicPanel.";

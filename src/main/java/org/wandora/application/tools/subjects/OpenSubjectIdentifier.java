@@ -37,7 +37,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.LayeredTopicContext;
 import org.wandora.application.contexts.SIContext;
@@ -54,7 +53,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */   
-public class OpenSubjectIdentifier extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class OpenSubjectIdentifier extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 

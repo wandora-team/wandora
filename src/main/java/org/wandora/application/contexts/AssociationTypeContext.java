@@ -36,7 +36,7 @@ import org.wandora.application.contexts.iterators.AssociationTypeIterator;
  *
  * @author akivela
  */
-public class AssociationTypeContext extends LayeredTopicContext implements Context {
+public class AssociationTypeContext extends LayeredTopicContext {
 
    
     @Override

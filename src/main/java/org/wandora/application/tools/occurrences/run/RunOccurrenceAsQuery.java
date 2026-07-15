@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.gui.table.MixedTopicTable;
@@ -44,7 +43,7 @@ import org.wandora.utils.DataURL;
  */
 
 
-public class RunOccurrenceAsQuery extends AbstractWandoraTool implements WandoraTool {
+public class RunOccurrenceAsQuery extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

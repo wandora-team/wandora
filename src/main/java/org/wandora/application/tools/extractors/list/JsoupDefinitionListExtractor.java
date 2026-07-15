@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.list;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Association;
@@ -40,8 +39,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class JsoupDefinitionListExtractor extends AbstractJsoupExtractor 
-implements WandoraTool, BrowserPluginExtractor {
+public class JsoupDefinitionListExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
 
 	
 	private static final long serialVersionUID = 1L;

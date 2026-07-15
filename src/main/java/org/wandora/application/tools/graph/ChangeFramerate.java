@@ -25,7 +25,6 @@
 package org.wandora.application.tools.graph;
 
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.GraphNodeContext;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 
@@ -37,7 +36,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
  */
 
 
-public class ChangeFramerate extends AbstractSliderTool implements WandoraTool {
+public class ChangeFramerate extends AbstractSliderTool {
 
 	
 	private static final long serialVersionUID = 1L;

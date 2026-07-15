@@ -52,7 +52,6 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.TopicMapListener;
 
 /**
  * 
@@ -60,7 +59,7 @@ import org.wandora.topicmap.TopicMapListener;
  */
 
 
-public class SketchGridPanel extends javax.swing.JPanel implements TopicMapListener, RefreshListener, TopicPanel, ActionListener, ComponentListener {
+public class SketchGridPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener {
 
     private static final long serialVersionUID = 1L;
     

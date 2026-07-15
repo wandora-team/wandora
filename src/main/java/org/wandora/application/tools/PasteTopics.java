@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.Association;
@@ -58,7 +57,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
+public class PasteTopics extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

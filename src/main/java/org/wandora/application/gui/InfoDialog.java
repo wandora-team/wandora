@@ -43,7 +43,6 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleTextPane;
-import org.wandora.topicmap.TopicMapLogger;
 import org.wandora.utils.ClipboardBox;
 
 
@@ -51,7 +50,7 @@ import org.wandora.utils.ClipboardBox;
  *
  * @author  akivela
  */
-public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLogger, ActionListener, MouseListener {
+public class InfoDialog extends JDialog implements WandoraToolLogger, ActionListener, MouseListener {
     
 	private static final long serialVersionUID = 1L;
 	

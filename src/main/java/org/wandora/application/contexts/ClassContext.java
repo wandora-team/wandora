@@ -36,7 +36,7 @@ import org.wandora.application.contexts.iterators.ClassIterator;
 /**
  * @author akivela
  */
-public class ClassContext extends LayeredTopicContext implements Context {
+public class ClassContext extends LayeredTopicContext {
 
    
     @Override

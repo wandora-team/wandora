@@ -36,7 +36,6 @@ import java.io.InputStreamReader;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -56,7 +55,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class GOAImport extends AbstractImportTool implements WandoraTool {
+public class GOAImport extends AbstractImportTool {
     
 
 	private static final long serialVersionUID = 1L;

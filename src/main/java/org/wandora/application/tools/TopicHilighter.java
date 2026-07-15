@@ -34,7 +34,6 @@ import java.awt.Color;
 import javax.swing.JColorChooser;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.table.TopicTable;
@@ -45,7 +44,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class TopicHilighter extends AbstractWandoraTool implements WandoraTool {
+public class TopicHilighter extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

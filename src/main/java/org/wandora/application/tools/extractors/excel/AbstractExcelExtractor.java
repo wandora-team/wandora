@@ -45,7 +45,6 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -63,7 +62,7 @@ import org.wandora.topicmap.XTMPSI;
  */
 
 
-public abstract class AbstractExcelExtractor extends AbstractExtractor implements WandoraTool {
+public abstract class AbstractExcelExtractor extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 	

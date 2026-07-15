@@ -32,7 +32,6 @@ import java.awt.Component;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 import org.wandora.application.gui.UIConstants;
 
@@ -43,7 +42,7 @@ import org.wandora.application.gui.UIConstants;
  */
 
 
-public class OperationTableRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+public class OperationTableRenderer extends DefaultTableCellRenderer {
     
     private static final long serialVersionUID = 1L;
     

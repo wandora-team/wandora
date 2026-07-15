@@ -36,7 +36,6 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.TopicGuiWrapper;
@@ -52,7 +51,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class TopicGridCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+public class TopicGridCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
     
     private Wandora wandora = null;

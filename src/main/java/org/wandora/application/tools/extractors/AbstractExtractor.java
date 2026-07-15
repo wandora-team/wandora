@@ -42,7 +42,6 @@ import java.util.regex.Pattern;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -65,7 +64,7 @@ import org.wandora.utils.XMLbox;
 /**
  * @author  akivela
  */
-public abstract class AbstractExtractor extends AbstractWandoraTool implements WandoraTool, Runnable, DropExtractor, BrowserPluginExtractor {
+public abstract class AbstractExtractor extends AbstractWandoraTool implements DropExtractor, BrowserPluginExtractor {
     
 
 	private static final long serialVersionUID = 1L;

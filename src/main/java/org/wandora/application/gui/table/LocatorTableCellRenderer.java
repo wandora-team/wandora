@@ -36,7 +36,6 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 import org.wandora.application.gui.UIConstants;
 import org.wandora.topicmap.Locator;
@@ -49,7 +48,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class LocatorTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+public class LocatorTableCellRenderer extends DefaultTableCellRenderer {
     
     private static final long serialVersionUID = 1L;
     

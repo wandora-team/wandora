@@ -50,7 +50,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
@@ -79,7 +78,7 @@ import eu.medsea.mimeutil.MimeUtil;
  *
  * @author akivela
  */
-public class SimpleDocumentExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
+public class SimpleDocumentExtractor extends AbstractExtractor implements BrowserPluginExtractor {
 
 
 	private static final long serialVersionUID = 1L;

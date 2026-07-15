@@ -31,7 +31,6 @@ package org.wandora.application.tools.layers;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.application.gui.UIBox;
@@ -58,7 +57,7 @@ import org.wandora.topicmap.layered.Layer;
  * @author akivela
  */
 
-public class ArrangeLayers extends AbstractLayerTool implements WandoraTool {
+public class ArrangeLayers extends AbstractLayerTool {
 
 
 	private static final long serialVersionUID = 1L;

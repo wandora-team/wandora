@@ -47,7 +47,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class AssociationContext extends LayeredTopicContext implements Context {
+public class AssociationContext extends LayeredTopicContext {
     
 
     public boolean removeDuplicates = true; 

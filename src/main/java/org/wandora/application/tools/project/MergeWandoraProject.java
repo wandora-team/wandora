@@ -32,7 +32,6 @@ import java.io.File;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -52,7 +51,7 @@ import org.wandora.topicmap.packageio.ZipPackageInput;
  *
  * @author akivela
  */
-public class MergeWandoraProject extends AbstractWandoraTool implements WandoraTool {
+public class MergeWandoraProject extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	

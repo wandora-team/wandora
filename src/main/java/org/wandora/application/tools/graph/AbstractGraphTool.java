@@ -28,7 +28,6 @@
 package org.wandora.application.tools.graph;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
 import org.wandora.application.gui.topicpanels.GraphTopicPanel;
@@ -46,7 +45,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
  *
  * @author akivela
  */
-public abstract class AbstractGraphTool extends AbstractWandoraTool implements WandoraTool {
+public abstract class AbstractGraphTool extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	

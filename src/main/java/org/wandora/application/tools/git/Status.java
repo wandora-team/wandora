@@ -24,14 +24,13 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 
 /**
  *
  * @author akikivela
  */
-public class Status extends AbstractGitTool implements WandoraTool {
+public class Status extends AbstractGitTool {
     
 
 	private static final long serialVersionUID = 1L;

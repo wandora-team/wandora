@@ -73,7 +73,7 @@ import org.wandora.utils.Options;
  *
  * @author akivela
  */
-public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraTool {
+public class WandoraToolManager2 extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

@@ -23,7 +23,6 @@
 
 package org.wandora.application.tools.undoredo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;

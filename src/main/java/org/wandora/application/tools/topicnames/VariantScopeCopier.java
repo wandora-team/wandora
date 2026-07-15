@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -50,7 +49,7 @@ import org.wandora.topicmap.TopicMap;
  * 
  * @author akivela
  */
-public class VariantScopeCopier extends AbstractWandoraTool implements WandoraTool {
+public class VariantScopeCopier extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

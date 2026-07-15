@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -48,7 +47,7 @@ import org.wandora.topicmap.TopicTools;
  * 
  * @author akivela
  */
-public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	

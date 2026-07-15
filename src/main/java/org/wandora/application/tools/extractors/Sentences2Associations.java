@@ -35,7 +35,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TMBox;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class Sentences2Associations  extends AbstractExtractor implements WandoraTool {
+public class Sentences2Associations  extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;

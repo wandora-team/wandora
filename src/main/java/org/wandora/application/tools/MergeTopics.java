@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.Locator;
@@ -51,7 +50,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class MergeTopics extends AbstractWandoraTool implements WandoraTool {
+public class MergeTopics extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

@@ -53,7 +53,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -606,7 +605,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
     // -------------------------------------------------------------------------
     
     
-    public class ToolTreeRenderer extends DefaultTreeCellRenderer implements TreeCellRenderer {
+    public class ToolTreeRenderer extends DefaultTreeCellRenderer {
         
         private Icon toolSetIcon = null;
         

@@ -30,7 +30,6 @@ package org.wandora.application.tools;
 
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.RegularExpressionEditor;
 import org.wandora.topicmap.Topic;
@@ -42,7 +41,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteTopicsWithBasenameRegex extends DeleteTopics implements WandoraTool {
+public class DeleteTopicsWithBasenameRegex extends DeleteTopics {
 
 	
 	private static final long serialVersionUID = 1L;

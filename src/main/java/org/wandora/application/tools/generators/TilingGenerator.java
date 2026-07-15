@@ -34,7 +34,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -53,7 +52,7 @@ import org.wandora.utils.swing.GuiTools;
  * 
  * @author akivela
  */
-public class TilingGenerator extends AbstractGenerator implements WandoraTool {
+public class TilingGenerator extends AbstractGenerator {
 
 	private static final long serialVersionUID = 1L;
 
@@ -367,7 +366,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     // -------------------------------------------------------------------------
     
     
-    private class SquareTiling extends AbstractTiling implements Tiling {
+    private class SquareTiling extends AbstractTiling {
         private int size = 0;
         private int width = 0;
         private int height = 0;
@@ -437,7 +436,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     
     
     
-    private class TriangularTiling extends AbstractTiling implements Tiling {
+    private class TriangularTiling extends AbstractTiling {
         private int depth = 0;
         
         
@@ -500,7 +499,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     
     
     
-    private class HexagonalTiling extends AbstractTiling implements Tiling {
+    private class HexagonalTiling extends AbstractTiling {
         private int depth = 0;
         
         public HexagonalTiling(int d) {

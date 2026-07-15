@@ -43,7 +43,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -61,7 +60,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements WandoraTool {
+public class PasteBinOccurrenceUploader extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 	

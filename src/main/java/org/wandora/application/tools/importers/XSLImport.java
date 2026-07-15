@@ -43,7 +43,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.TopicMap;
@@ -54,7 +53,7 @@ import org.wandora.topicmap.TopicMapReadOnlyException;
  *
  * @author  olli, akivela
  */
-public class XSLImport extends AbstractImportTool implements WandoraTool {
+public class XSLImport extends AbstractImportTool {
 
 
 

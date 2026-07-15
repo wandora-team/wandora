@@ -29,12 +29,10 @@ package org.wandora.application.gui.previews.formats;
 
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.event.ActionListener;
 
 import javax.swing.JComponent;
 import javax.swing.JTextPane;
 
-import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 
 
@@ -42,7 +40,7 @@ import org.wandora.application.gui.previews.PreviewUtils;
  *
  * @author akivela
  */
-public class ApplicationXML extends Text implements ActionListener, PreviewPanel {
+public class ApplicationXML extends Text {
 
     
     /** Creates a new instance of ApplicationXML */

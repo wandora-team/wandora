@@ -28,7 +28,6 @@
 package org.wandora.application.tools.layers;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.TopicMap;
@@ -46,7 +45,7 @@ import org.wandora.topicmap.layered.Layer;
  */
 
 
-public class MakeAssociationConsistentTool extends AbstractLayerTool implements WandoraTool {
+public class MakeAssociationConsistentTool extends AbstractLayerTool {
 
 	private static final long serialVersionUID = 1L;
 

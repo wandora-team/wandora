@@ -31,7 +31,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TMBox;
@@ -44,7 +43,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool implements WandoraTool {
+public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

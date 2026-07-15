@@ -41,7 +41,6 @@ import java.util.Hashtable;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -58,7 +57,7 @@ import org.wandora.topicmap.TopicTools;
  *
  * @author akivela
  */
-public class FreeDBExtractor extends AbstractExtractor implements WandoraTool {
+public class FreeDBExtractor extends AbstractExtractor {
     
 
 	private static final long serialVersionUID = 1L;

@@ -31,7 +31,6 @@ package org.wandora.application.tools.associations;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteUnaryAssociations extends DeleteAssociationsInTopic implements WandoraTool {
+public class DeleteUnaryAssociations extends DeleteAssociationsInTopic {
     
 	private static final long serialVersionUID = 1L;
 	

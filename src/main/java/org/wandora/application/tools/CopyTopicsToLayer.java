@@ -39,7 +39,6 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -59,7 +58,7 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 
 
-public class CopyTopicsToLayer extends AbstractWandoraTool implements WandoraTool {
+public class CopyTopicsToLayer extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

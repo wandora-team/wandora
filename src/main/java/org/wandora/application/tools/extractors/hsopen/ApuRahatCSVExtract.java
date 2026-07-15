@@ -30,7 +30,6 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
@@ -45,7 +44,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool {
+public class ApuRahatCSVExtract extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 	

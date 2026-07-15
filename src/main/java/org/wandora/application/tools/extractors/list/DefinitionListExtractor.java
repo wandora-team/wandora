@@ -48,7 +48,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import org.w3c.tidy.Tidy;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -80,7 +79,7 @@ import org.wandora.utils.IObox;
 
  * @author akivela
  */
-public class DefinitionListExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
+public class DefinitionListExtractor extends AbstractExtractor implements BrowserPluginExtractor {
 
 	private static final long serialVersionUID = 1L;
 

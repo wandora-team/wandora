@@ -35,7 +35,6 @@ import java.util.Vector;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.application.gui.UIBox;
@@ -52,7 +51,7 @@ import org.wandora.topicmap.linked.LinkedTopicMap;
  *
  * @author akivela
  */
-public class MergeLayers extends AbstractLayerTool implements WandoraTool {
+public class MergeLayers extends AbstractLayerTool {
 
 	private static final long serialVersionUID = 1L;
 

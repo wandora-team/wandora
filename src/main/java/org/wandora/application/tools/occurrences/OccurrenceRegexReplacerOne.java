@@ -36,7 +36,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.gui.RegularExpressionEditor;
@@ -50,7 +49,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class OccurrenceRegexReplacerOne extends AbstractWandoraTool implements WandoraTool {
+public class OccurrenceRegexReplacerOne extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

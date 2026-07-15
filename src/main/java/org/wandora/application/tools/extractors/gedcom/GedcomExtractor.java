@@ -37,7 +37,6 @@ import java.util.Iterator;
 
 import javax.swing.Icon;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
@@ -61,7 +60,7 @@ import org.wandora.topicmap.XTMPSI;
  * @author akivela
  */
 
-public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
+public class GedcomExtractor extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 

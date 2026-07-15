@@ -33,7 +33,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -51,7 +50,7 @@ import org.wandora.utils.swing.GuiTools;
  *
  * @author elehtonen
  */
-public class CylinderGenerator extends AbstractGenerator implements WandoraTool {
+public class CylinderGenerator extends AbstractGenerator {
 
 	private static final long serialVersionUID = 1L;
 
@@ -334,7 +333,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
     // -------------------------------------------------------------------------
     
     
-    public class SquareCylinder extends AbstractCylinder implements Cylinder {
+    public class SquareCylinder extends AbstractCylinder {
 
         private int size = 0;
         private int width = 0;
@@ -401,7 +400,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
     // -------------------------------------------------------------------------
     
     
-    public class TriangularCylinder extends AbstractCylinder implements Cylinder {
+    public class TriangularCylinder extends AbstractCylinder {
 
         private int depth = 0;
         private int width = 0;
@@ -474,7 +473,7 @@ public class CylinderGenerator extends AbstractGenerator implements WandoraTool 
     // -------------------------------------------------------------------------
     
     
-    public class HexagonalCylinder extends AbstractCylinder implements Cylinder {
+    public class HexagonalCylinder extends AbstractCylinder {
 
         private int depth = 0;
         private int width = 0;

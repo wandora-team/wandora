@@ -38,7 +38,6 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
@@ -50,7 +49,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class GellishExtractor extends AbstractExtractor implements WandoraTool {
+public class GellishExtractor extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;

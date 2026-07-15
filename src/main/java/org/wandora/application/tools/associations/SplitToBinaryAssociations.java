@@ -32,7 +32,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -61,7 +60,7 @@ import org.wandora.topicmap.TopicMap;
  *
  * @author akivela
  */
-public class SplitToBinaryAssociations extends AbstractWandoraTool implements WandoraTool {
+public class SplitToBinaryAssociations extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

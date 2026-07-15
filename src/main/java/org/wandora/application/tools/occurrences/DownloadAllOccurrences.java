@@ -38,7 +38,6 @@ import java.util.Iterator;
  * @author akivela
  */
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -57,7 +56,7 @@ import org.wandora.utils.IObox;
  * 
  * @author akivela
  */
-public class DownloadAllOccurrences extends AbstractWandoraTool implements  WandoraTool {
+public class DownloadAllOccurrences extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

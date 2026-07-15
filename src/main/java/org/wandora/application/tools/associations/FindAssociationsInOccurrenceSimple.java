@@ -36,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
@@ -53,7 +52,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool implements WandoraTool {
+public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool {
 
 	
 	private static final long serialVersionUID = 1L;

@@ -31,7 +31,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -47,7 +46,7 @@ import org.wandora.utils.swing.GuiTools;
  *
  * @author akivela
  */
-public class RandomGraphGenerator extends AbstractGenerator implements WandoraTool {
+public class RandomGraphGenerator extends AbstractGenerator {
 
 	private static final long serialVersionUID = 1L;
 

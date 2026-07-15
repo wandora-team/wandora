@@ -49,7 +49,7 @@ import org.wandora.utils.Tuples.T2;
  *
  * @author akivela
  */
-public class LSystemGraphGenerator extends AbstractGenerator implements WandoraTool {
+public class LSystemGraphGenerator extends AbstractGenerator {
 
 	private static final long serialVersionUID = 1L;
 

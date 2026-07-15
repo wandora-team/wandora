@@ -33,7 +33,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -52,7 +51,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
+public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

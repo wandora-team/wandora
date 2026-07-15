@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicstringify.TopicToString;
@@ -61,7 +60,7 @@ import org.wandora.utils.ClipboardBox;
  * 
  * @author  akivela
  */
-public class CopyAssociations extends AbstractWandoraTool implements WandoraTool {
+public class CopyAssociations extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

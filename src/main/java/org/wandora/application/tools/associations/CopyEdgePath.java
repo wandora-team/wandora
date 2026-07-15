@@ -25,7 +25,6 @@ package org.wandora.application.tools.associations;
 
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -75,7 +73,7 @@ import org.wandora.utils.ClipboardBox;
  */
 
 
-public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
+public class CopyEdgePath extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

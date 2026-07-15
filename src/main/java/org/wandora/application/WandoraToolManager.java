@@ -77,7 +77,7 @@ import org.wandora.utils.Tuples.T2;
  */
 
 
-public class WandoraToolManager extends AbstractWandoraTool implements WandoraTool {
+public class WandoraToolManager extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

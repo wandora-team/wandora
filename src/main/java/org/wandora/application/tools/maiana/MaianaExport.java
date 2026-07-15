@@ -33,7 +33,6 @@ import javax.swing.Icon;
 
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.exporters.AbstractExportTool;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class MaianaExport extends AbstractExportTool implements WandoraTool {
+public class MaianaExport extends AbstractExportTool {
 
 	private static final long serialVersionUID = 1L;
 

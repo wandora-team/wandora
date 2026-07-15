@@ -41,7 +41,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -57,7 +56,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class ExtractFNGTextEnrichment extends AbstractExtractor implements WandoraTool {
+public class ExtractFNGTextEnrichment extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 	

@@ -44,7 +44,7 @@ import org.wandora.application.gui.UIBox;
  *
  * @author akivela
  */
-public class ChainExecuter extends AbstractWandoraTool implements WandoraTool {
+public class ChainExecuter extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

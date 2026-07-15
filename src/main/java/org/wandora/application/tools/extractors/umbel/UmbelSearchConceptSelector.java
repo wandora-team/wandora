@@ -32,7 +32,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.json.JSONObject;
@@ -261,7 +260,7 @@ public class UmbelSearchConceptSelector extends javax.swing.JDialog {
     // -------------------------------------------------------------------------
     
     
-    public class UmbelConceptTableModel extends DefaultTableModel implements TableModel {
+    public class UmbelConceptTableModel extends DefaultTableModel {
         ArrayList<JSONObject> d = null;
 
         public UmbelConceptTableModel(ArrayList<JSONObject> m) {

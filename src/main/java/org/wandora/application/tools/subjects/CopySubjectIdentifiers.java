@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.SIContext;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -49,12 +48,12 @@ import org.wandora.utils.ClipboardBox;
  *
  * @author akivela
  */
-public class CopySubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
+public class CopySubjectIdentifiers extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 
 
-	/** Creates a new instance of CopySIs */
+	/** Creates a new instance of CopySubjectIdentifiers */
     public CopySubjectIdentifiers() {
     }
     public CopySubjectIdentifiers(Context context) {

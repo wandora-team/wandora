@@ -40,7 +40,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -71,7 +70,7 @@ import org.wandora.topicmap.TopicMapException;
  * 
  * @author akivela
  */
-public class VerbOceanExtractor extends AbstractExtractor implements WandoraTool {
+public class VerbOceanExtractor extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;

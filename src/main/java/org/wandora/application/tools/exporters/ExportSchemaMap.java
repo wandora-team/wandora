@@ -41,7 +41,6 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -60,7 +59,7 @@ import org.wandora.utils.IObox;
  *
  * @author  olli
  */
-public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
+public class ExportSchemaMap extends AbstractExportTool {
 
 	private static final long serialVersionUID = 1L;
 	

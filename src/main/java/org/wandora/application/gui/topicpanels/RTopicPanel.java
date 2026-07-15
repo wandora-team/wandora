@@ -79,11 +79,9 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
 
-//import jsyntaxpane.DefaultSyntaxKit;
 import de.sciss.syntaxpane.DefaultSyntaxKit;
 
 
@@ -96,7 +94,7 @@ import de.sciss.syntaxpane.DefaultSyntaxKit;
  */
 
 
-public class RTopicPanel extends javax.swing.JPanel implements TopicMapListener, RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener, RBridgeListener {
+public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener, RBridgeListener {
     private static final long serialVersionUID = 1L;
     
     public boolean USE_LOCAL_OPTIONS = true;

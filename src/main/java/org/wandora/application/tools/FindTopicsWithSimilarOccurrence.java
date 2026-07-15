@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.search.SearchTopicsResults;
 import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
@@ -46,7 +45,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
  *
  * @author akivela
  */
-public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
 
 	
 	private static final long serialVersionUID = 1L;

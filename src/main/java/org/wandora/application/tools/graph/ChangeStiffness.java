@@ -26,7 +26,6 @@ package org.wandora.application.tools.graph;
 
 
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.GraphNodeContext;
 import org.wandora.application.gui.topicpanels.graphpanel.AbstractEdge;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
@@ -39,7 +38,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
  */
 
 
-public class ChangeStiffness extends AbstractSliderTool implements WandoraTool {
+public class ChangeStiffness extends AbstractSliderTool {
     
 
 	private static final long serialVersionUID = 1L;

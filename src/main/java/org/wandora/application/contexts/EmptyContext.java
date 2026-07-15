@@ -34,7 +34,7 @@ import java.util.Iterator;
  *
  * @author olli
  */
-public class EmptyContext extends LayeredTopicContext implements Context {
+public class EmptyContext extends LayeredTopicContext {
     
     @Override
     public Iterator getContextObjects() {

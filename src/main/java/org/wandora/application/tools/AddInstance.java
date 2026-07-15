@@ -30,7 +30,6 @@ package org.wandora.application.tools;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
@@ -41,7 +40,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author  akivela
  */
-public class AddInstance extends AbstractWandoraTool implements WandoraTool {
+public class AddInstance extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

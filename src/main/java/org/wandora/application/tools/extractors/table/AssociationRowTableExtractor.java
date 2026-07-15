@@ -44,7 +44,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -64,7 +63,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class AssociationRowTableExtractor extends AbstractExtractor implements WandoraTool {
+public class AssociationRowTableExtractor extends AbstractExtractor {
    
 
 	private static final long serialVersionUID = 1L;

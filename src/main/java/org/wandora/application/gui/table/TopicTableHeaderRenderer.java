@@ -40,7 +40,7 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author akivela
  */
-public class TopicTableHeaderRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+public class TopicTableHeaderRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
 
     private Color[] columnColors = null;

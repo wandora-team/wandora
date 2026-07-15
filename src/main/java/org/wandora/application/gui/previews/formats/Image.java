@@ -77,7 +77,7 @@ import org.wandora.utils.Options;
  *
  * @author akivela
  */
-public class Image extends JPanel implements Runnable, MouseListener, KeyListener, ImageObserver, ActionListener, Printable, PreviewPanel {
+public class Image extends JPanel implements Runnable, MouseListener, KeyListener, ActionListener, Printable, PreviewPanel {
     private static final String OPTIONS_PREFIX = "gui.imagePreviewPanel.";
     private static final double ZOOMFACTOR = 1.1;
     

@@ -109,7 +109,7 @@ import bibliothek.gui.dock.title.DockTitle;
  */
 
 
-public class DockingFramePanel extends JPanel implements TopicPanel, ActionListener, RefreshListener, TopicMapListener, DockableFocusListener, ComponentListener, DockableListener, DropTargetListener, DragGestureListener {
+public class DockingFramePanel extends JPanel implements TopicPanel, ActionListener, RefreshListener, DockableFocusListener, ComponentListener, DockableListener, DropTargetListener, DragGestureListener {
 
 	private static final long serialVersionUID = 1L;
 

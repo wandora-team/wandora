@@ -41,7 +41,6 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.mp3.Mp3Parser;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Locator;
@@ -58,7 +57,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author  akivela
  */
 
-public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool {
+public class SimpleMP3Extractor extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 

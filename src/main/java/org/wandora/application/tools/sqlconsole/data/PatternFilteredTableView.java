@@ -34,7 +34,7 @@ import org.wandora.application.tools.sqlconsole.data.utils.SQLPattern;
  *
  * @author  akivela
  */
-public class PatternFilteredTableView extends MappedTableView implements TableView {
+public class PatternFilteredTableView extends MappedTableView {
     
     
     public static final int OR_MODE = 0;

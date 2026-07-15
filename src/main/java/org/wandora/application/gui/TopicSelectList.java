@@ -96,7 +96,7 @@ public class TopicSelectList extends javax.swing.JPanel  {
                         listWindow.l.dispatchEvent(e);
                     }
                     else */
-                    if(listWindow==null && e.getKeyCode()==e.VK_TAB){
+                    if(listWindow==null && e.getKeyCode()==KeyEvent.VK_TAB){
                         e.consume();
                         showList(); 
                     }

@@ -30,7 +30,6 @@ package org.wandora.application.tools;
 
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
@@ -42,7 +41,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class PasteClasses extends PasteTopics implements WandoraTool {
+public class PasteClasses extends PasteTopics {
     
     
 	private static final long serialVersionUID = 1L;

@@ -35,7 +35,6 @@ import java.util.Date;
 
 import javax.swing.Icon;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
@@ -51,7 +50,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DirectoryStructureExtractor2 extends AbstractExtractor implements WandoraTool {
+public class DirectoryStructureExtractor2 extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;

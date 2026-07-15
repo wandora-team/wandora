@@ -42,7 +42,6 @@ import java.util.Map;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -60,7 +59,7 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class AdjacencyMatrixExport extends AbstractExportTool implements WandoraTool {
+public class AdjacencyMatrixExport extends AbstractExportTool {
 	
 	private static final long serialVersionUID = 1L;
 	

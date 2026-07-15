@@ -58,7 +58,6 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.PasswordPrompt;
 import org.wandora.application.gui.UIBox;
@@ -83,7 +82,7 @@ import org.wandora.utils.velocity.TextBox;
  * 
  * @author  pasi, ak
  */
-public class ExportSite extends AbstractExportTool implements WandoraTool, ActionListener {
+public class ExportSite extends AbstractExportTool implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 

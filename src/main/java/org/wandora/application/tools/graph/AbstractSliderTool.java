@@ -42,7 +42,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleLabel;
@@ -56,7 +55,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
  */
 
 
-public abstract class AbstractSliderTool extends AbstractGraphTool implements WandoraTool, ChangeListener, MouseListener {
+public abstract class AbstractSliderTool extends AbstractGraphTool implements ChangeListener, MouseListener {
     
 
 	private static final long serialVersionUID = 1L;

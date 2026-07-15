@@ -30,7 +30,6 @@ package org.wandora.application.tools.generators;
 
 import javax.swing.Icon;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -45,7 +44,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public abstract class AbstractGenerator extends AbstractWandoraTool implements WandoraTool {
+public abstract class AbstractGenerator extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 	

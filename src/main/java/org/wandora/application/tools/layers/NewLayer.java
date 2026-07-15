@@ -32,7 +32,6 @@ package org.wandora.application.tools.layers;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.TopicMap;
@@ -51,7 +50,7 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
  *
  * @author akivela
  */
-public class NewLayer extends AbstractLayerTool implements WandoraTool {
+public class NewLayer extends AbstractLayerTool {
     
 
 	private static final long serialVersionUID = 1L;

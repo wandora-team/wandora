@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -73,7 +72,7 @@ import org.wandora.topicmap.TopicTools;
  * 
  * @author akivela
  */
-public class MobyThesaurusExtractor extends AbstractExtractor implements WandoraTool {
+public class MobyThesaurusExtractor extends AbstractExtractor {
     
 
 	private static final long serialVersionUID = 1L;

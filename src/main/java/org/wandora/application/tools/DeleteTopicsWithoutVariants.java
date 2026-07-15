@@ -29,7 +29,6 @@ package org.wandora.application.tools;
 
 import java.util.Set;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
@@ -39,7 +38,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteTopicsWithoutVariants extends DeleteTopics implements WandoraTool {
+public class DeleteTopicsWithoutVariants extends DeleteTopics {
 
 
 	private static final long serialVersionUID = 1L;

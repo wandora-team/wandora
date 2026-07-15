@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -79,7 +78,7 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-public class TransposeAssociations extends AbstractWandoraTool implements WandoraTool {
+public class TransposeAssociations extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

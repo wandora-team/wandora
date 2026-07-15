@@ -36,7 +36,6 @@ import java.util.StringTokenizer;
 
 import org.wandora.application.CancelledException;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.SIContext;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -57,7 +56,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class PasteSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
+public class PasteSubjectIdentifiers extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;

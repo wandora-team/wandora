@@ -28,7 +28,6 @@ import javax.swing.Icon;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMap;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.packageio.ZipPackageInput;
  *
  * @author akikivela
  */
-public abstract class AbstractGitTool extends AbstractWandoraTool implements WandoraTool {
+public abstract class AbstractGitTool extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

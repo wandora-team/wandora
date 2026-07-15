@@ -21,7 +21,6 @@
 package org.wandora.topicmap.query;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;

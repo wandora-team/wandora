@@ -28,7 +28,6 @@ import java.io.File;
 import java.net.URL;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
@@ -41,7 +40,7 @@ import org.wandora.utils.CSVParser.Table;
  */
 
 
-public abstract class AbstractCSVExtractor extends AbstractExtractor implements WandoraTool {
+public abstract class AbstractCSVExtractor extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;

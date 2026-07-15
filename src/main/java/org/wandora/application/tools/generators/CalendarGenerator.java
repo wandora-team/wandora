@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.topicmap.Association;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class CalendarGenerator extends AbstractGenerator implements WandoraTool {
+public class CalendarGenerator extends AbstractGenerator {
     
 	private static final long serialVersionUID = 1L;
 	

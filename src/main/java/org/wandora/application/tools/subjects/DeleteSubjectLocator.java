@@ -32,7 +32,6 @@ package org.wandora.application.tools.subjects;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.Topic;
  */
 
 
-public class DeleteSubjectLocator extends AbstractWandoraTool implements WandoraTool {
+public class DeleteSubjectLocator extends AbstractWandoraTool {
 
 
     /**

@@ -29,7 +29,6 @@ package org.wandora.application.gui.table;
 import java.awt.Dimension;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
@@ -39,7 +38,6 @@ import javax.swing.TransferHandler;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraMenuManager;
-import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicstringify.TopicToString;
@@ -56,7 +54,7 @@ import org.wandora.utils.swing.TableSorter;
  *
  * @author olli, akivela
  */
-public class MixedTopicTable extends TopicTable implements ActionListener, Clipboardable /*, DragSourceListener , DragGestureListener*/  {
+public class MixedTopicTable extends TopicTable {
 
     private static final long serialVersionUID = 1L;
 

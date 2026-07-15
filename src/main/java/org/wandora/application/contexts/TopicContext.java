@@ -36,7 +36,7 @@ import org.wandora.application.contexts.iterators.TopicIteratorForCurrentLayer;
  *
  * @author akivela
  */
-public class TopicContext extends LayeredTopicContext implements Context {
+public class TopicContext extends LayeredTopicContext {
 
     
     

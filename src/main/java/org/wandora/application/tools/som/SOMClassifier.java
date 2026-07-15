@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.LayeredTopicContext;
@@ -89,7 +88,7 @@ import org.wandora.topicmap.TopicMapException;
  * 
  * @author akivela
  */
-public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
+public class SOMClassifier extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

@@ -30,7 +30,6 @@ import java.io.File;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
@@ -43,7 +42,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class MakeSubjectLocatorFromFileContent extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class MakeSubjectLocatorFromFileContent extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 

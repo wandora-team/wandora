@@ -40,7 +40,7 @@ import org.wandora.topicmap.Topic;
 /**
  * @author akivela
  */
-public class RoleContextCollected extends AssociationContext implements Context {
+public class RoleContextCollected extends AssociationContext {
     
 
     

@@ -35,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -55,7 +54,7 @@ import org.wandora.topicmap.TopicTools;
  *
  * @author akivela
  */
-public class FindAssociationsInOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class FindAssociationsInOccurrence extends AbstractWandoraTool {
 	
 	
 	private static final long serialVersionUID = 1L;

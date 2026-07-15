@@ -36,7 +36,7 @@ import org.wandora.application.contexts.iterators.PlayerIterator;
  *
  * @author akivela
  */
-public class PlayerContext extends LayeredTopicContext implements Context {
+public class PlayerContext extends LayeredTopicContext {
 
     
     @Override

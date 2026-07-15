@@ -36,7 +36,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -52,7 +51,7 @@ import org.wandora.topicmap.layered.LayerStack;
  *
  * @author olli
  */
-public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
+public class IMDBExtractor extends AbstractExtractor {
     
 
 	private static final long serialVersionUID = 1L;

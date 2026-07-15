@@ -35,7 +35,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.utils.Options;
 
@@ -45,7 +44,7 @@ import org.wandora.utils.Options;
  *
  * @author akivela
  */
-public class SetOptions extends AbstractWandoraTool implements WandoraTool {
+public class SetOptions extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;

@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class BasenameNewlineRemover extends AbstractWandoraTool implements WandoraTool {
+public class BasenameNewlineRemover extends AbstractWandoraTool {
 
 
 

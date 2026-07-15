@@ -32,7 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -71,7 +70,7 @@ import org.wandora.topicmap.Topic;
  */
 
 
-public class StealAssociations extends AbstractWandoraTool implements WandoraTool {
+public class StealAssociations extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
