@@ -8,5 +8,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry kind="lib" path="/Users/akivela/.gradle/caches/modules-2/files-2.1/org.apache.jena/jena/4.9.0/8c87778a31db6775169d326cf41ff917be774f64/jena-4.9.0.pom"/>
+	<classpathentry kind="lib" path="/Users/akivela/.gradle/caches/modules-2/files-2.1/com.kenai.nbpwr/com-sun-pdfview/1.0.5-201003191900/d85350da45eb026a97e595406ec928577d2a5fb2/com-sun-pdfview-1.0.5-201003191900.nbm"/>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>
