@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -184,7 +185,7 @@ public class IObox extends java.lang.Object {
         boolean reading = true;
         int bytesRead = 0;
         int newBytes = 0;
-        ArrayList<byte []> byteChunks = new ArrayList();
+        List<byte []> byteChunks = new ArrayList<>();
         int chunkSize = 5000;
         
         while (reading) {
@@ -462,17 +463,17 @@ public class IObox extends java.lang.Object {
         Pattern p = null;
         try {
             p = Pattern.compile(fileMask);
-            return getFilesAsHash(fileName, p, new ArrayList(), depth, space);
+            return getFilesAsHash(fileName, p, new ArrayList<>(), depth, space);
         }
         catch(Exception e) {
             e.printStackTrace();
         }
-        return new LinkedHashSet();
+        return new LinkedHashSet<>();
     }
     
     
-    public static HashSet<String> getFilesAsHash(String fileName, Pattern fileMask, Collection visited, int depth, int space) {
-        HashSet files = new LinkedHashSet();
+    public static HashSet<String> getFilesAsHash(String fileName, Pattern fileMask, Collection<String> visited, int depth, int space) {
+        HashSet<String> files = new LinkedHashSet<>();
         if(depth >= 0) {
             if (space >= 0) {
                 File file = new File(fileName);
@@ -535,7 +536,7 @@ public class IObox extends java.lang.Object {
         Pattern p = null;
         try {
             p = Pattern.compile(fileMask);
-            return countFiles(fileName, p, new ArrayList(), depth, space);
+            return countFiles(fileName, p, new ArrayList<>(), depth, space);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -546,7 +547,7 @@ public class IObox extends java.lang.Object {
 
  
     
-    public static int countFiles(String fileName, Pattern fileMask, Collection visited, int depth, int space) {             
+    public static int countFiles(String fileName, Pattern fileMask, Collection<String> visited, int depth, int space) {             
         int fileCount = 0;
         if(depth >= 0) {
             if (space >= 0) {
@@ -603,7 +604,7 @@ public class IObox extends java.lang.Object {
         Pattern p = null;
         try {
             p = Pattern.compile(fileMask);
-            return findFile(fileName, p, new ArrayList(), depth);
+            return findFile(fileName, p, new ArrayList<>(), depth);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -612,7 +613,7 @@ public class IObox extends java.lang.Object {
     }
     
     
-    public static String findFile(String root, Pattern fileMask, Collection visited, int depth) {
+    public static String findFile(String root, Pattern fileMask, Collection<String> visited, int depth) {
         String foundFile = null;
 
         if(depth >= 0) {
@@ -668,7 +669,7 @@ public class IObox extends java.lang.Object {
         Pattern p = null;
         try {
             p = Pattern.compile(fileMask);
-            return findFile(fileName, p, new ArrayList(), depth);
+            return findFile(fileName, p, new ArrayList<>(), depth);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -677,7 +678,7 @@ public class IObox extends java.lang.Object {
     }
     
     
-    public static String findURI(String root, Pattern fileMask, Collection visited, int depth) {
+    public static String findURI(String root, Pattern fileMask, Collection<String> visited, int depth) {
         String foundFile = null;
 
         if(depth >= 0) {
@@ -985,7 +986,7 @@ public class IObox extends java.lang.Object {
                         Wandora.initUrlConnection(connection);
                     }
                     in = connection.getInputStream();
-                    int b = in.read();
+                    in.read();
                     in.close();
                     return true;
                 }
@@ -1103,8 +1104,8 @@ public class IObox extends java.lang.Object {
                 con.connect();
                 
                 DataInputStream inS = new DataInputStream(con.getInputStream());
-                Vector bufs = new Vector();
-                Vector lengths = new Vector();
+                Vector<byte[]> bufs = new Vector<>();
+                Vector<Integer> lengths = new Vector<>();
                 int length = 0;
                 for(;;) {
                     byte[] buf = new byte[BLOCK_LENGTH];
@@ -1115,13 +1116,13 @@ public class IObox extends java.lang.Object {
                     }
                     length += readBytes;
                     bufs.addElement(buf);
-                    lengths.addElement(Integer.valueOf(readBytes));
+                    lengths.addElement(readBytes);
                 }
                 inS.close();
                 byte[] data = new byte[length];
                 int pos = 0;
                 for( int el=0;el<bufs.size();el++ ) {
-                    int len = ((Integer)lengths.elementAt(el)).intValue();
+                    int len = lengths.elementAt(el);
                     System.arraycopy( bufs.elementAt(el),0,data,pos,len );
                     pos += len;
                 }
@@ -1137,7 +1138,6 @@ public class IObox extends java.lang.Object {
     
     
     public static void executeUrlCall( URL url ) {
-        StringBuffer sb = new StringBuffer(5000);
         if (url != null) {
             try {
                 System.out.println( url.toString() );
@@ -1148,10 +1148,6 @@ public class IObox extends java.lang.Object {
                 con.setUseCaches(false);
                 
                 con.connect();
-                
-                //        	BufferedWriter outS = new BufferedWriter( new OutputStreamWriter(con.getOutputStream()) );
-                //                outS.close();
-                
                 DataInputStream inS = new DataInputStream(con.getInputStream());
                 byte[] buf = new byte[1024];
                 while( inS.read(buf)!=-1 ) {}
@@ -1172,8 +1168,7 @@ public class IObox extends java.lang.Object {
     
     
     
-    public static String executeUrlPost( URL url, byte[] data, String ctype, boolean waitForResponse, java.util.Hashtable params ) {
-        StringBuilder sb = new StringBuilder(5000);
+    public static String executeUrlPost( URL url, byte[] data, String ctype, boolean waitForResponse, java.util.Hashtable<String,String> params ) {
         if (url != null) {
             try {
                 System.out.println( url.toString() );
@@ -1184,9 +1179,9 @@ public class IObox extends java.lang.Object {
                 con.setUseCaches(false);
                 con.setRequestProperty("Content-Type",ctype);
                 if (params!=null) {
-                    for (java.util.Enumeration e = params.keys(); e.hasMoreElements(); ) {
-                        String key = (String) e.nextElement();
-                        String value = (String) params.get(key);
+                    for (java.util.Enumeration<String> e = params.keys(); e.hasMoreElements(); ) {
+                        String key = e.nextElement();
+                        String value = params.get(key);
                         con.setRequestProperty(key, value);
                     }
                 }
@@ -1202,7 +1197,6 @@ public class IObox extends java.lang.Object {
                     byte[] buf = new byte[1024];
                     while( inS.read(buf)!=-1 ) {}
                     inS.close();
-                    // String reply = new String(buf);
                 }
                 
                 return "OK";
@@ -1260,15 +1254,15 @@ public class IObox extends java.lang.Object {
     
         
     
-    public static String[] hashSetToStringArray(HashSet s) {
+    public static String[] hashSetToStringArray(HashSet<String> s) {
         String[] strings = null;
         if(s != null) {
             if(s.size() > 0) {
                 strings = new String[s.size()];
                 int i = 0;
-                for(Object o : s) {
+                for(String o : s) {
                     try {
-                        strings[i] = (String) o;
+                        strings[i] = o;
                     }
                     catch (Exception e) {
                         System.out.println("Object not a String in hashSetToStringArray. Skipping!");
@@ -1286,15 +1280,15 @@ public class IObox extends java.lang.Object {
     
             
     
-    public static File[] hashSetToFileArray(HashSet s) {
+    public static File[] hashSetToFileArray(HashSet<String> s) {
         File[] files = null;
         if(s != null) {
             if(s.size() > 0) {
                 files = new File[s.size()];
                 int i = 0;
-                for(Object o : s) {
+                for(String o : s) {
                     try {
-                        files[i] = new File((String) o);
+                        files[i] = new File(o);
                     }
                     catch (Exception e) {
                         System.out.println("Object not a File in hashSetToFileArray. Skipping!");
