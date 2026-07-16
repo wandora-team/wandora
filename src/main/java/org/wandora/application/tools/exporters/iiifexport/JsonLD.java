@@ -53,11 +53,11 @@ public class JsonLD {
         return this;
     }
     
-    public JsonLD appendNotEmpty(String key, Collection val, boolean unwrapSingle){
+    public JsonLD appendNotEmpty(String key, Collection<? extends Object> val, boolean unwrapSingle){
         if(!val.isEmpty()) append(key,val,unwrapSingle);
         return this;
     }
-    public JsonLD append(String key, Collection val, boolean unwrapSingle){
+    public JsonLD append(String key, Collection<? extends Object> val, boolean unwrapSingle){
         if(unwrapSingle && val.size()==1) append(key,val.iterator().next());
         else append(key,val);
         return this;
@@ -70,9 +70,9 @@ public class JsonLD {
             return ((JsonLDOutput)o).toJsonLD();
         }
         else if(o instanceof Number) return o;
-        else if(o instanceof Iterable){
+        else if(o instanceof Iterable iterable){
             ArrayList<Object> list=new ArrayList<>();
-            for(Object o2 : (Iterable)o){
+            for(Object o2 : iterable){
                 list.add(toJsonLD(o2));
             }
             return list;
@@ -102,11 +102,10 @@ public class JsonLD {
         if(val==null){
             sb.append("null");
         }
-        else if(val instanceof JsonLD){
-            ((JsonLD)val).outputJson(sb, indent);
+        else if(val instanceof JsonLD jsonVal){
+        	jsonVal.outputJson(sb, indent);
         }
-        else if(val instanceof ArrayList){
-            ArrayList l=(ArrayList)val;
+        else if(val instanceof ArrayList l){
             if(l.isEmpty()) sb.append("[]");
             else if(l.size()==1){ 
                 sb.append("[");

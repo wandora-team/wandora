@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -41,6 +42,7 @@ import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.gui.RegularExpressionEditor;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.Tuples.T4;
 
 /**
  * Applies given regular expression to user addressed occurrences.
@@ -102,8 +104,8 @@ public class OccurrenceRegexReplacerOne extends AbstractWandoraTool {
                 String occurrence = null;
                 String newOccurrence = null;
                 
-                Iterator typeIterator = null;
-                ArrayList updatedOccurrences = new ArrayList();
+                Iterator<Topic> typeIterator = null;
+                List<T4<Topic,Topic,Topic,String>> updatedOccurrences = new ArrayList<>();
                 Collection<Topic> types = null;
                 Hashtable<Topic, String> occurrences = null;
 
@@ -126,16 +128,13 @@ public class OccurrenceRegexReplacerOne extends AbstractWandoraTool {
                                         if(type != null && type.mergesWithTopic(otype)) {
                                             occurrences = topic.getData(type);
                                             if(occurrences != null) {
-                                                for(Enumeration occurrenceScopes = occurrences.keys(); occurrenceScopes.hasMoreElements();) {
+                                                for(Enumeration<Topic> occurrenceScopes = occurrences.keys(); occurrenceScopes.hasMoreElements();) {
                                                     scope = (Topic) occurrenceScopes.nextElement();
                                                     if(scope != null && scope.mergesWithTopic(oscope)) {
                                                         occurrence = occurrences.get(scope);
                                                         newOccurrence = editor.replace(occurrence);
                                                         if(newOccurrence != null && !occurrence.equals(newOccurrence)) {
-                                                            updatedOccurrences.add(topic);
-                                                            updatedOccurrences.add(type);
-                                                            updatedOccurrences.add(scope);
-                                                            updatedOccurrences.add(newOccurrence);
+                                                            updatedOccurrences.add(new T4<>(topic, type, scope, newOccurrence));
                                                         }
                                                     }
                                                 }
@@ -159,13 +158,14 @@ public class OccurrenceRegexReplacerOne extends AbstractWandoraTool {
                 setProgressMax(updatedOccurrences.size());
                 progress = 0;
                 String newo = null;
-                for(Iterator i = updatedOccurrences.iterator(); i.hasNext() && !forceStop();) {
+                for(Iterator<T4<Topic,Topic,Topic,String>> i = updatedOccurrences.iterator(); i.hasNext() && !forceStop();) {
                     try {
                         setProgress(++progress);
-                        topic = (Topic) i.next();
-                        type = (Topic) i.next();
-                        scope = (Topic) i.next();
-                        newo = (String) i.next();
+                        T4<Topic,Topic,Topic,String> updatedOccurrence = i.next();
+                        topic = updatedOccurrence.e1;
+                        type = updatedOccurrence.e2;
+                        scope = updatedOccurrence.e3;
+                        newo = updatedOccurrence.e4;
                         if(topic != null && type != null && scope != null && newo != null) {
                             topic.setData(type, scope, newo);
                             count++;

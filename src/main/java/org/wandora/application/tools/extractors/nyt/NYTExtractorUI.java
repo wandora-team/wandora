@@ -476,10 +476,10 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         fieldsListScrollPane.setMinimumSize(new java.awt.Dimension(23, 150));
         fieldsListScrollPane.setPreferredSize(new java.awt.Dimension(125, 150));
 
-        fieldsList.setModel(new javax.swing.AbstractListModel() {
+        fieldsList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "abstract", "author", "body", "byline", "date", "dbpedia_resource_url", "lead_paragraph", "title" };
             public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+            public String getElementAt(int i) { return strings[i]; }
         });
         fieldsListScrollPane.setViewportView(fieldsList);
 

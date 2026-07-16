@@ -423,7 +423,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		fieldToReturnPanel.add(FieldsToReturnLabel, gridBagConstraints);
 
-		fieldsList.setModel(new javax.swing.AbstractListModel() {
+		fieldsList.setModel(new javax.swing.AbstractListModel<String>() {
 			String[] strings = { "headline", "byline", "body", "standfirst", "strap", "short-url", "thumbnail",
 					"publication" };
 
@@ -431,7 +431,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 				return strings.length;
 			}
 
-			public Object getElementAt(int i) {
+			public String getElementAt(int i) {
 				return strings[i];
 			}
 		});
@@ -457,14 +457,14 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		fieldToReturnPanel.add(tagsToReturnLabel, gridBagConstraints);
 
-		tagsList.setModel(new javax.swing.AbstractListModel() {
+		tagsList.setModel(new javax.swing.AbstractListModel<String>() {
 			String[] strings = { "keyword", "contributor", "tone", "type" };
 
 			public int getSize() {
 				return strings.length;
 			}
 
-			public Object getElementAt(int i) {
+			public String getElementAt(int i) {
 				return strings[i];
 			}
 		});
@@ -559,14 +559,14 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		optionaTagSearchFieldsPanel.add(TypesList, gridBagConstraints);
 
-		typesList.setModel(new javax.swing.AbstractListModel() {
+		typesList.setModel(new javax.swing.AbstractListModel<String>() {
 			String[] strings = { "keyword", "contributor", "tone", "series" };
 
 			public int getSize() {
 				return strings.length;
 			}
 
-			public Object getElementAt(int i) {
+			public String getElementAt(int i) {
 				return strings[i];
 			}
 		});

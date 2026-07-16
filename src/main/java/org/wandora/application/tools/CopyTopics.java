@@ -279,14 +279,13 @@ public class CopyTopics extends AbstractWandoraTool {
         if(OUTPUT_LOG) setDefaultLogger();
         
         try {
-            Collection countCollection = null;
             List<String> lines = new ArrayList<>();
             if(OUTPUT_LOG) log("Copying "+ getTopicTypeName() +" to clipboard...");
             Topic topic = null;
             if(topics == null) {
                 topics = getContext().getContextObjects();
             }
-            if(topics == null) topics = (new ArrayList()).iterator();
+            if(topics == null) topics = (new ArrayList<>()).iterator();
             int count = 0;
             
             
@@ -334,7 +333,7 @@ public class CopyTopics extends AbstractWandoraTool {
                                 break;
                             }
                             case INCLUDE_SI_COUNT: {
-                                countCollection = topic.getSubjectIdentifiers();
+                                Collection<Locator> countCollection = topic.getSubjectIdentifiers();
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -354,7 +353,7 @@ public class CopyTopics extends AbstractWandoraTool {
                                 break;
                             }
                             case INCLUDE_CLASS_COUNT: {
-                                countCollection = topic.getTypes();
+                                Collection<Topic> countCollection = topic.getTypes();
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -375,7 +374,7 @@ public class CopyTopics extends AbstractWandoraTool {
                             }
                             
                             case INCLUDE_INSTANCE_COUNT: {
-                                countCollection = topic.getTopicMap().getTopicsOfType(topic);
+                                Collection<Topic> countCollection = topic.getTopicMap().getTopicsOfType(topic);
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -466,7 +465,7 @@ public class CopyTopics extends AbstractWandoraTool {
                             }
                                 
                             case INCLUDE_OCCURRENCE_TYPES: {
-                                ArrayList<Topic> occurrenceTypes = new ArrayList(topic.getDataTypes());
+                                ArrayList<Topic> occurrenceTypes = new ArrayList<>(topic.getDataTypes());
                                 Collections.sort(occurrenceTypes, new TMBox.TopicBNAndSIComparator());
                                 for(Topic t : occurrenceTypes) {
                                     sb.append("\t").append(TopicToString.toString(t));
@@ -536,7 +535,7 @@ public class CopyTopics extends AbstractWandoraTool {
                             }
                             
                             case INCLUDE_ASSOCIATION_COUNT: {
-                                countCollection = topic.getAssociations();
+                                Collection<Association> countCollection = topic.getAssociations();
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -547,7 +546,7 @@ public class CopyTopics extends AbstractWandoraTool {
                             }
                             
                             case INCLUDE_TYPED_ASSOCIATION_COUNT: {
-                                countCollection = topic.getAssociations(associationType);
+                            	Collection<Association> countCollection = topic.getAssociations(associationType);
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -629,27 +628,6 @@ public class CopyTopics extends AbstractWandoraTool {
         return sb.toString();
     }
     
-    
-    
-    private String getDisplayName(Topic t, String lang)  throws TopicMapException {
-        String langsi=XTMPSI.getLang(lang);
-        Topic langT =t.getTopicMap().getTopic(langsi);
-        String dispsi=XTMPSI.DISPLAY;
-        Topic dispT=t.getTopicMap().getTopic(dispsi);
-        Set<Topic> scope=new LinkedHashSet<>();
-        if(langT!=null) scope.add(langT);
-        if(dispT!=null) scope.add(dispT);
-        String variantName = t.getVariant(scope);
-        return (variantName == null ? "" : variantName);
-    }
-    
-    
-    private String getTextData(Topic t, Topic type, String versions)  throws TopicMapException {
-        String langsi=XTMPSI.getLang(versions);
-        Topic version=t.getTopicMap().getTopic(langsi);
-        String textData = t.getData(type, version);
-        return (textData == null ? "" : textData);
-    }
     
     
     

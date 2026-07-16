@@ -335,7 +335,7 @@ public class Option<T> implements Iterable<T> {
      * @return The resulting Collection of non-null values
      */
     public static <T, C extends Collection<Option<T>>> Collection<T> somes(C col) {
-        Collection<T> ret = new ArrayList();
+        Collection<T> ret = new ArrayList<>();
         for(Option<? extends T> opt : col)
             for(T val : opt)
                 ret.add(val);

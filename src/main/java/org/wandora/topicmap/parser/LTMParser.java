@@ -42,10 +42,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -123,10 +124,10 @@ public class LTMParser {
     private String baseuri = null;
     private String encoding = null;
     private String version = null;
-    private HashMap<String,String> indicatorPrefixes = new HashMap();
-    private HashMap<String,String> locatorPrefixes = new HashMap();
+    private Map<String,String> indicatorPrefixes = new HashMap<>();
+    private Map<String,String> locatorPrefixes = new HashMap<>();
 
-    private ArrayList includes = new ArrayList();
+    private List<String> includes = new ArrayList<>();
     private Pattern prefixPattern = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*\\:.+");
 
     private int numberOfTopics = 0;
@@ -188,8 +189,8 @@ public class LTMParser {
 
 
     public void init() {
-        indicatorPrefixes = new HashMap();
-        locatorPrefixes = new HashMap();
+        indicatorPrefixes = new HashMap<>();
+        locatorPrefixes = new HashMap<>();
         lineCounter = 1;
     }
 
@@ -229,7 +230,9 @@ public class LTMParser {
         }
         long endTime = System.currentTimeMillis();
         long duration = endTime-startTime;
-        if(duration > 1000) log("LTM import of '"+file.getAbsolutePath()+"' took "+duration+" ms.");
+        if(duration > 1000 && file != null) {
+        	log("LTM import of '"+file.getAbsolutePath()+"' took "+duration+" ms.");
+        }
     }
 
 
@@ -436,7 +439,7 @@ public class LTMParser {
         if(topicMap != null) {
             try {
                 Iterator<Topic> topics = topicMap.getTopics();
-                Collection topicCollection = new ArrayList<Topic>();
+                Collection<Topic> topicCollection = new ArrayList<>();
                 while(topics.hasNext()) {
                     Topic t=topics.next();
                     topicCollection.add(t);
@@ -447,7 +450,7 @@ public class LTMParser {
                 while(topics.hasNext()) {
                     t = topics.next();
                     if(t != null && !t.isRemoved()) {
-                        ArrayList<Locator> subjects = new ArrayList();
+                        List<Locator> subjects = new ArrayList<>();
                         subjects.addAll(t.getSubjectIdentifiers());
                         for(Locator si : subjects) {
                             if(si != null) {
@@ -483,19 +486,19 @@ public class LTMParser {
             boolean foundWithQName = false;
 
             debug("Topic found: " + topicQName.qname);
-            ArrayList<Topic> topicTypes = null;
-            ArrayList<Locator> topicTypeSIs = null;
+            List<Topic> topicTypes = null;
+            List<Locator> topicTypeSIs = null;
             if(eat(':')) { 
                 topicTypes = parseQTopics();
-                topicTypeSIs = new ArrayList();
+                topicTypeSIs = new ArrayList<>();
                 for(Topic topicType : topicTypes) {
                     topicTypeSIs.add(topicType.getOneSubjectIdentifier());
                 }
             }
-            ArrayList baseNames = parseBasenames();
+            List<Basename> baseNames = parseBasenames();
 
             Locator subjectLocator = parseSubjectLocator();
-            ArrayList subjectIdentifiers = parseSubjectIdentifiers();
+            List<Locator> subjectIdentifiers = parseSubjectIdentifiers();
 
             topic = getOrCreateTopic(topicQName.qname);
             if(topic != null) foundWithQName = true;
@@ -518,7 +521,7 @@ public class LTMParser {
 
             if(topic == null && subjectIdentifiers != null) {
                 Locator identifier = null;
-                Iterator identifiers = subjectIdentifiers.iterator();
+                Iterator<Locator> identifiers = subjectIdentifiers.iterator();
                 while(topic == null && identifiers.hasNext()) {
                     identifier = (Locator) identifiers.next();
                     if(identifier != null) topic = topicMap.getTopic(identifier);
@@ -534,11 +537,11 @@ public class LTMParser {
 
             // ----- TOPIC SOLVED HERE | PROCESS NOW -----
 
-            if(!foundWithQName && MAKE_SUBJECT_IDENTIFIER_FROM_ID) {
+            if(!foundWithQName && topic != null && MAKE_SUBJECT_IDENTIFIER_FROM_ID) {
                 topic.addSubjectIdentifier(buildLocator(topicQName.qname));
             }
             
-            if(!foundWithSL && subjectLocator != null) {
+            if(!foundWithSL && topic != null && subjectLocator != null) {
                 if(topic.getSubjectLocator() == null || OVERWRITE_SUBJECT_LOCATORS) {
                     topic.setSubjectLocator(subjectLocator);
                 }
@@ -546,10 +549,10 @@ public class LTMParser {
 
             // PROCESS SUBJECT IDENTIFIERS...
             Locator newSI = null;
-            if(subjectIdentifiers != null && subjectIdentifiers.size() > 0) {
-                Iterator indicators = subjectIdentifiers.iterator();
+            if(subjectIdentifiers != null && subjectIdentifiers.size() > 0 && topic != null) {
+                Iterator<Locator> indicators = subjectIdentifiers.iterator();
                 while(indicators.hasNext()) {
-                    newSI = (Locator) indicators.next();
+                    newSI = indicators.next();
                     if(newSI!=null) {
                         topic.addSubjectIdentifier(newSI);
                     }
@@ -564,7 +567,7 @@ public class LTMParser {
 
 
             // PROCESS BASENAMES AND IT'S VARIANTS...
-            if(baseNames != null && baseNames.size() > 0) {
+            if(baseNames != null && baseNames.size() > 0 && topic != null) {
                 Basename basename = null;
                 basename = (Basename) baseNames.iterator().next();
 
@@ -582,15 +585,15 @@ public class LTMParser {
                         // logger.log("found displayname name '" + basename.sortname+"'");
                     }
                     if(basename.sortname != null) {
-                        HashSet nameScope=new LinkedHashSet();
+                        Set<Topic> nameScope=new LinkedHashSet<>();
                         nameScope.add(getOrCreateTopic(XTMPSI.getLang(null)));
                         nameScope.add(getOrCreateTopic(XTMPSI.SORT)); 
                         topic.setVariant(nameScope, basename.sortname);
                         // logger.log("found sort name '" + basename.sortname+"'");
                     }
                     if(basename.variantNames != null) {
-                        for(Iterator variants = basename.variantNames.iterator(); variants.hasNext(); ) {
-                            VariantName variant = (VariantName) variants.next();
+                        for(Iterator<VariantName> variants = basename.variantNames.iterator(); variants.hasNext(); ) {
+                            VariantName variant = variants.next();
                             if(variant != null) {
                                 //logger.log("found variant '" + variant.name+"' with scope '"+variant.scope+"'.");
                                 if(variant.name != null && variant.scope != null && variant.scope.size() > 0) {
@@ -604,7 +607,7 @@ public class LTMParser {
                 }
             }
             // PROCESS TOPIC TYPES...
-            if(topicTypes != null && topicTypeSIs != null) {
+            if(topicTypes != null && topicTypeSIs != null && topic != null) {
                 Topic topicType = null;
                 for( Locator topicTypeSI : topicTypeSIs ) {
                     try {
@@ -643,8 +646,8 @@ public class LTMParser {
 
 
 
-    private ArrayList parseSubjectIdentifiers() throws IOException {
-        ArrayList locators = new ArrayList();
+    private List<Locator> parseSubjectIdentifiers() throws IOException {
+        List<Locator> locators = new ArrayList<>();
         boolean ready = false;
 
         do {
@@ -667,13 +670,13 @@ public class LTMParser {
 
 
 
-    private ArrayList parseBasenames() throws IOException, TopicMapException {
+    private List<Basename> parseBasenames() throws IOException, TopicMapException {
         String basename = null;
         String sortname = null;
         String displayname = null;
-        ArrayList variantNames = new ArrayList();
+        List<VariantName> variantNames = new ArrayList<>();
         VariantName variantName = null;
-        ArrayList basenames = new ArrayList();
+        List<Basename> basenames = new ArrayList<>();
 
         while(eat('=')) {
             basename = parseString();
@@ -686,7 +689,7 @@ public class LTMParser {
                 }
             }
 
-            ArrayList scopes = parseScope();
+            List<Topic> scopes = parseScope();
             //if(scopes != null) logger.log("    Found scope for base name "+scopes);
 
             if(eat('~')) {
@@ -725,10 +728,10 @@ public class LTMParser {
 
     private VariantName parseVariantName() throws IOException, TopicMapException {
         String variantName = parseString();
-        ArrayList scope = parseScope();
+        List<Topic> scope = parseScope();
         LTMQName reifyId = parseQName();
 
-        if(scope == null) { scope = new ArrayList(); }
+        if(scope == null) { scope = new ArrayList<>(); }
 
         /*
         if(scope.size() == 0) {
@@ -765,7 +768,7 @@ public class LTMParser {
 
         if(associationTypeName != null) {
             LTMQName reifyId = null;
-            ArrayList members = new ArrayList();
+            List<Member> members = new ArrayList<>();
             Member member = null;
             Topic associationType = null;
 
@@ -781,7 +784,7 @@ public class LTMParser {
                 // System.out.println("found "+memberCounter+" members.");
                 eat(')');
             }
-            ArrayList scopes = parseScope();
+            List<Topic> scopes = parseScope();
             if(eat('~')) {
                 reifyId = parseQName();
                 // TODO: Handler for reifiers!
@@ -794,8 +797,8 @@ public class LTMParser {
                     association = topicMap.createAssociation(associationType);
                     if(association != null) {
                         HashMap<Topic,Topic> players=new LinkedHashMap<Topic,Topic>();
-                        for(Iterator memberIter = members.iterator(); memberIter.hasNext(); ) {
-                            member = (Member) memberIter.next();
+                        for(Iterator<Member> memberIter = members.iterator(); memberIter.hasNext(); ) {
+                            member = memberIter.next();
                             //if(member != null) association.addPlayer(member.role,member.player);
                             if(member != null && member.role != null && member.player != null) {
                                 players.put(member.role, member.player);
@@ -886,7 +889,7 @@ public class LTMParser {
         debug("Parsing occurrence");
         
         Topic occurrenceTopic = null;
-        ArrayList scope = null;
+        List<Topic> scope = null;
         Topic occurrenceType = null;
         LTMQName reifyId = null;
         boolean occurrenceSucceed = false;
@@ -906,7 +909,7 @@ public class LTMParser {
             // TODO: Handler for reifiers!
         }
 
-        if(scope == null) scope = new ArrayList();
+        if(scope == null) scope = new ArrayList<>();
         if(scope.isEmpty()) {
             defaultScopeForOccurrences = getOrCreateTopic(DEFAULT_SCOPE_FOR_OCCURRENCES);
             if(defaultScopeForOccurrences != null) {
@@ -920,8 +923,8 @@ public class LTMParser {
                     //logger.log("Occurrence found");
                     Topic scopeTopic = null;
                     if(NEW_OCCURRENCE_FOR_EACH_SCOPE) {
-                        for(Iterator iter = scope.iterator(); iter.hasNext(); ) {
-                            scopeTopic = (Topic) iter.next();
+                        for(Iterator<Topic> iter = scope.iterator(); iter.hasNext(); ) {
+                            scopeTopic = iter.next();
                             if(scopeTopic != null) {
                                 // System.out.println("CREATING OCCURRENCE: " +occurrenceType + " --- " + scopeTopic + " --- " + resource);
                                 occurrenceTopic.setData(occurrenceType, scopeTopic, resource);
@@ -996,7 +999,7 @@ public class LTMParser {
 
 
 
-    private ArrayList parseScope() throws IOException, TopicMapException {
+    private List<Topic> parseScope() throws IOException, TopicMapException {
         if(eat('/')) {
             return parseQTopics();
         }
@@ -1010,8 +1013,8 @@ public class LTMParser {
 
 
 
-    private ArrayList parseQTopics() throws IOException, TopicMapException {
-        ArrayList qtopics = new ArrayList();
+    private List<Topic> parseQTopics() throws IOException, TopicMapException {
+        List<Topic> qtopics = new ArrayList<>();
         Topic qtopic = null;
         boolean ready = false;
 
@@ -1026,8 +1029,8 @@ public class LTMParser {
 
 
 
-    private ArrayList parseQNames() throws IOException {
-        ArrayList qnames = new ArrayList();
+    private List<LTMQName> parseQNames() throws IOException {
+        List<LTMQName> qnames = new ArrayList<>();
         LTMQName qname = null;
         boolean ready = false;
 
@@ -1609,11 +1612,11 @@ public class LTMParser {
 
     public class Basename {
         public String basename;
-        public Collection variantNames;
+        public Collection<VariantName> variantNames;
         public String sortname;
         public String displayname;
 
-        public Basename(String basename, Collection variantNames, String displayName, String sortName){
+        public Basename(String basename, Collection<VariantName> variantNames, String displayName, String sortName){
             this.basename=basename;
             this.variantNames=variantNames;
             this.displayname=displayName;
@@ -1623,15 +1626,15 @@ public class LTMParser {
 
     public class VariantName {
         public String name;
-        public Set scope;
-        public VariantName(String name, Collection s){
+        public Set<Topic> scope;
+        public VariantName(String name, Collection<Topic> s){
             this.name=name;
-            this.scope=new LinkedHashSet();
-            for(Iterator i=s.iterator(); i.hasNext(); ) {
+            this.scope=new LinkedHashSet<>();
+            for(Iterator<Topic> i=s.iterator(); i.hasNext(); ) {
                 scope.add(i.next());
             }
         }
-        public VariantName(String name, Set scope){
+        public VariantName(String name, Set<Topic> scope){
             this.name=name;
             this.scope=scope;
         }
