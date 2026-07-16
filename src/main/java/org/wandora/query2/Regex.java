@@ -27,6 +27,7 @@
  */
 package org.wandora.query2;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,8 +108,8 @@ public class Regex extends WhereDirective implements DirectiveUIHints.Provider {
 
 
     private ResultRow makeRow(ResultRow original,String role,String replacement){
-        ArrayList<String> newRoles=new ArrayList<String>();
-        ArrayList<Object> newValues=new ArrayList<Object>();
+        List<String> newRoles=new ArrayList<>();
+        List<Object> newValues=new ArrayList<>();
         for(int i=0;i<original.getNumValues();i++){
             String r=original.getRole(i);
             Object v=original.getValue(i);

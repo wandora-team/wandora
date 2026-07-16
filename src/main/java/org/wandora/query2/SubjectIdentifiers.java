@@ -28,6 +28,7 @@
 package org.wandora.query2;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -66,7 +67,7 @@ public class SubjectIdentifiers extends Directive implements DirectiveUIHints.Pr
                 if(o==null) return new ResultIterator.EmptyIterator();
             }
             Collection<Locator> sis=((Topic)o).getSubjectIdentifiers();
-            ArrayList<ResultRow> ret=new ArrayList<ResultRow>();
+            List<ResultRow> ret=new ArrayList<>();
             for(Locator si : sis){
                 ret.add(input.addValue(Directive.DEFAULT_COL,si.toString()));
             }

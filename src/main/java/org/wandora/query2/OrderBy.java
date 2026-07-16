@@ -27,6 +27,7 @@ package org.wandora.query2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  *
@@ -93,7 +94,7 @@ public class OrderBy extends Directive implements DirectiveUIHints.Provider {
 
     @Override
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
-        ArrayList<ResultRow> res=directive.query(context, input);
+        List<ResultRow> res=directive.query(context, input);
         Collections.sort(res, new Comparator<ResultRow>(){
             public int compare(ResultRow o1, ResultRow o2) {
                 Object v1=o1.getActiveValue();

@@ -27,6 +27,7 @@ package org.wandora.application.tools.occurrences;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -103,7 +104,7 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool {
         else {
             Iterator<Topic> topics = null;
             if(masterTopic != null) {
-                ArrayList<Topic> topicArray = new ArrayList();
+                List<Topic> topicArray = new ArrayList<>();
                 topicArray.add(masterTopic);
                 topics = topicArray.iterator();
             }

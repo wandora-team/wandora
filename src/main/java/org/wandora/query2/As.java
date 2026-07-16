@@ -26,6 +26,7 @@
 package org.wandora.query2;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -73,7 +74,7 @@ public class As extends Directive implements DirectiveUIHints.Provider  {
     }
 
     @Override
-    public ArrayList<ResultRow> query(QueryContext context,ResultRow input) throws QueryException {
+    public List<ResultRow> query(QueryContext context,ResultRow input) throws QueryException {
         ArrayList<String> roles=new ArrayList<String>(input.getRoles());
         ArrayList<Object> values=new ArrayList<Object>(input.getValues());
         int i;

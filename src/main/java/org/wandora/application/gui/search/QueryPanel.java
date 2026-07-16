@@ -227,7 +227,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     }
         
     public static MixedTopicTable getTopicsByQuery(Wandora wandora,TopicMap tm,Directive query,Iterator<Topic> contextTopics) throws QueryException, TopicMapException {
-        ArrayList<ResultRow> res = new ArrayList<>();
+        List<ResultRow> res = new ArrayList<>();
         if(contextTopics!=null){
             while(contextTopics.hasNext()){
                 Topic t=contextTopics.next();
@@ -272,7 +272,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
             Object[][] data=new Object[res.size()][columns.size()];
             for(int i=0;i<res.size();i++){
                 ResultRow row=res.get(i);
-                ArrayList<String> roles=row.getRoles();
+                List<String> roles=row.getRoles();
                 for(int j=0;j<columns.size();j++){
                     String r=columns.get(j);
                     int ind=roles.indexOf(r);

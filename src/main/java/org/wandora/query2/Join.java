@@ -25,6 +25,7 @@
  */
 package org.wandora.query2;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -32,12 +33,12 @@ import java.util.NoSuchElementException;
  * @author olli
  */
 public class Join extends Directive implements DirectiveUIHints.Provider {
-    private ArrayList<Directive> directives;
+    private List<Directive> directives;
 
     public Join(){}
     
     public Join(Directive[] directives){
-        this.directives=new ArrayList<Directive>();
+        this.directives=new ArrayList<>();
         for(int i=0;i<directives.length;i++){
             this.directives.add(directives[i]);
         }
@@ -164,7 +165,7 @@ public class Join extends Directive implements DirectiveUIHints.Provider {
             this.context=context;
             this.input=input;
 
-            iterators=new ArrayList<ResultIterator>();
+            iterators=new ArrayList<>();
             
             for(int i=0;i<directives.size();i++){
                 ResultIterator iter=directives.get(i).queryIterator(context,input);

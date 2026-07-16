@@ -29,6 +29,7 @@ package org.wandora.query2;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -55,19 +56,19 @@ public class Instances extends Directive implements DirectiveUIHints.Provider {
     }      
         
     @Override
-    public ArrayList<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
+    public List<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
         Object o=input.getActiveValue();
-        if(o==null) return new ArrayList<ResultRow>();
+        if(o==null) return new ArrayList<>();
 
         try{
             if(!(o instanceof Topic)){
                 TopicMap tm=context.getTopicMap();
                 o=tm.getTopic(o.toString());
-                if(o==null) return new ArrayList<ResultRow>();
+                if(o==null) return new ArrayList<>();
             }
 
             Collection<Topic> instances=((Topic)o).getTopicMap().getTopicsOfType(((Topic)o));
-            ArrayList<ResultRow> ret=new ArrayList<ResultRow>();
+            List<ResultRow> ret=new ArrayList<>();
             for(Topic t : instances){
                 ret.add(input.addValue(Directive.DEFAULT_COL, t));
             }

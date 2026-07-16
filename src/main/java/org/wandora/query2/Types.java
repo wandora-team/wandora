@@ -27,6 +27,7 @@
  */
 package org.wandora.query2;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -61,7 +62,7 @@ public class Types extends Directive implements DirectiveUIHints.Provider {
                 o=tm.getTopic(o.toString());
                 if(o==null) return new ResultIterator.EmptyIterator();
             }
-            ArrayList<ResultRow> ret=new ArrayList<ResultRow>();
+            List<ResultRow> ret=new ArrayList<>();
             for(Topic t : ((Topic)o).getTypes()){
                 ret.add(input.addValue(DEFAULT_COL, t));
             }

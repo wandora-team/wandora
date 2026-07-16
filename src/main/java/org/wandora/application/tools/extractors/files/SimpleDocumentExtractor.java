@@ -95,8 +95,6 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Browse
     
     private Wandora wandora = null;
 
-    private ArrayList<String> visitedDirectories = new ArrayList<>();
-    
     
     /** Creates a new instance of SimpleDocumentExtractor */
     public SimpleDocumentExtractor() {
@@ -230,7 +228,6 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Browse
     
     @Override
     public void execute(Wandora wandora, Context context) {
-        visitedDirectories = new ArrayList<String>();
         super.execute(wandora, context);
     }
 
@@ -597,7 +594,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Browse
                 byte[] content = IObox.loadBFile(inputStream);
                 String mimeType = "";
                 MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
-                Collection<MimeType> mimeTypes = new ArrayList();
+                Collection<MimeType> mimeTypes = new ArrayList<>();
                 if(locator != null) {
                     if(MimeTypes.getMimeType(locator) != null) {
                         mimeTypes.add(new MimeType(MimeTypes.getMimeType(locator)));

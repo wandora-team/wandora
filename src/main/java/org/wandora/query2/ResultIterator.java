@@ -27,6 +27,7 @@
  */
 package org.wandora.query2;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -56,8 +57,9 @@ public abstract class ResultIterator {
 
     public static class ListIterator extends ResultIterator {
         public int pointer;
-        public ArrayList<ResultRow> res;
-        public ListIterator(ArrayList<ResultRow> res){
+        public List<ResultRow> res;
+        
+        public ListIterator(List<ResultRow> res){
             this.res=res;
             pointer=0;
         }
@@ -76,12 +78,12 @@ public abstract class ResultIterator {
     }
 
     public static class CachedIterator extends ResultIterator {
-        public ArrayList<ResultRow> cache;
+        public List<ResultRow> cache;
         public int maxCacheSize=1000;
         public ResultIterator iter;
         public int pointer=-1;
         public CachedIterator(ResultIterator iter){
-            cache=new ArrayList<ResultRow>();
+            cache=new ArrayList<>();
             this.iter=iter;
         }
         public boolean hasNext() throws QueryException {
@@ -134,7 +136,7 @@ public abstract class ResultIterator {
 
     public static class BufferedIterator extends ResultIterator {
         public ResultIterator iter;
-        public ArrayList<ResultRow> buffer;
+        public List<ResultRow> buffer;
         public int pointer;
         public int bufferSize=5000;
 
@@ -145,7 +147,7 @@ public abstract class ResultIterator {
 
         private boolean fillBuffer() throws QueryException {
             if(buffer!=null) buffer.clear();
-            else buffer=new ArrayList<ResultRow>(bufferSize/4);
+            else buffer=new ArrayList<>(bufferSize/4);
             while(iter.hasNext() && buffer.size()<bufferSize){
                 buffer.add(iter.next());
             }

@@ -84,8 +84,8 @@ public class TopicOperand extends Operand {
             if(o==null) {
                 ret=t2(null,null);
             }
-            else if(o instanceof Topic){
-                ret=t2((Topic)o,((Topic)o).getOneSubjectIdentifier().toExternalForm());
+            else if(o instanceof Topic to){
+                ret=t2(to, to.getOneSubjectIdentifier().toExternalForm());
             }
             else {
                 Topic t=context.getTopicMap().getTopic(o.toString());

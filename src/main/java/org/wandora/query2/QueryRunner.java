@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -75,8 +76,8 @@ public class QueryRunner {
         this(null);
     }
     
-    public ArrayList<ResultRow> runQuery(String query, Topic contextTopic) throws ScriptException, QueryException {
-        ArrayList<Topic> context=new ArrayList<Topic>();
+    public List<ResultRow> runQuery(String query, Topic contextTopic) throws ScriptException, QueryException {
+        List<Topic> context=new ArrayList<>();
         context.add(contextTopic);
         return runQuery(query,context);
     }
@@ -84,8 +85,8 @@ public class QueryRunner {
         try{ return new QueryResult(runQuery(query,contextTopic)); }
         catch(Exception e){ return new QueryResult(e); }
     }
-    public ArrayList<ResultRow> runQuery(Directive directive, Topic contextTopic) throws QueryException {
-        ArrayList<Topic> context=new ArrayList<Topic>();
+    public List<ResultRow> runQuery(Directive directive, Topic contextTopic) throws QueryException {
+        List<Topic> context=new ArrayList<Topic>();
         context.add(contextTopic);
         return runQuery(directive,context);
     }
@@ -93,7 +94,7 @@ public class QueryRunner {
         try{ return new QueryResult(runQuery(directive,contextTopic)); }
         catch(Exception e){ return new QueryResult(e); }
     }
-    public ArrayList<ResultRow> runQuery(String query, Collection<Topic> contextTopics) throws ScriptException, QueryException {
+    public List<ResultRow> runQuery(String query, Collection<Topic> contextTopics) throws ScriptException, QueryException {
         if(this.scriptEngine==null) throw new RuntimeException("No scripting engine initialised");
         
         Directive directive = null;
@@ -112,20 +113,20 @@ public class QueryRunner {
         catch(Exception e){ return new QueryResult(e); }
     }
     
-    public ArrayList<ResultRow> runQuery(Directive directive, Collection<Topic> contextTopics) throws QueryException {
+    public List<ResultRow> runQuery(Directive directive, Collection<Topic> contextTopics) throws QueryException {
         TopicMap tm=null;
-        ArrayList<ResultRow> context=new ArrayList<ResultRow>();
+        List<ResultRow> context=new ArrayList<>();
         for(Topic t : contextTopics){
             if(tm==null) tm=t.getTopicMap();
             context.add(new ResultRow(t));
         }
         
-        if(tm==null) return new ArrayList<ResultRow>(); // no topics in contextTopics
+        if(tm==null) return new ArrayList<>(); // no topics in contextTopics
         
         QueryContext queryContext=new QueryContext(tm, "en");
         
         if(context.isEmpty()){
-            return new ArrayList<ResultRow>();
+            return new ArrayList<>();
         }
         else if(context.size()==1){
             return directive.doQuery(queryContext, context.get(0));
@@ -133,7 +134,7 @@ public class QueryRunner {
         else{
             return directive.from(new Static(context)).doQuery(queryContext, context.get(0));
         }
-    }    
+    }
     public QueryResult runQueryCatchException(Directive directive,Collection<Topic> contextTopics) {
         try{ return new QueryResult(runQuery(directive,contextTopics)); }
         catch(Exception e){ return new QueryResult(e); }
@@ -143,10 +144,10 @@ public class QueryRunner {
     
     
     public static class QueryResult {
-        public ArrayList<ResultRow> rows;
+        public List<ResultRow> rows;
         public Throwable exception;
         
-        public QueryResult(ArrayList<ResultRow> rows){
+        public QueryResult(List<ResultRow> rows){
             this.rows=rows;
         }
         
@@ -154,7 +155,7 @@ public class QueryRunner {
             this.exception=exception;
         }
         
-        public ArrayList<ResultRow> getRows() {
+        public List<ResultRow> getRows() {
             return rows;
         }
         
@@ -178,7 +179,7 @@ public class QueryRunner {
             Object[][] data = new Object[rows.size()][columns.length];
             for(int i=0; i<rows.size(); i++){
                 ResultRow row=rows.get(i);
-                ArrayList<String> roles=row.getRoles();
+                List<String> roles=row.getRoles();
                 for(int j=0; j<columns.length; j++){
                     String r=columns[j];
                     int ind=roles.indexOf(r);
@@ -190,7 +191,7 @@ public class QueryRunner {
         }
         
         public String[] getColumns() {
-            ArrayList<String> columns=new ArrayList<>();
+            List<String> columns=new ArrayList<>();
             for(ResultRow row : rows) {
                 for(int i=0;i<row.getNumValues();i++){
                     String l=row.getRole(i);

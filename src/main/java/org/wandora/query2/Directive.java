@@ -100,9 +100,9 @@ public abstract class Directive {
      * the query is done. If this is the top level directive you may have to do
      * it manually. These call should propaget automaticall to all inner queries.
      */
-    public ArrayList<ResultRow> query(QueryContext context,ResultRow input) throws QueryException {
+    public List<ResultRow> query(QueryContext context,ResultRow input) throws QueryException {
         ResultIterator iter=queryIterator(context,input);
-        ArrayList<ResultRow> res=new ArrayList<ResultRow>();
+        ArrayList<ResultRow> res=new ArrayList<>();
         while(iter.hasNext()) {
             if(context.checkInterrupt()) throw new QueryException("Execution interrupted");
             res.add(iter.next());
@@ -117,9 +117,9 @@ public abstract class Directive {
      * to execute a query. You can interrupt the query through the context
      * object by calling interrupt in it.
      */
-    public ArrayList<ResultRow> doQuery(QueryContext context,ResultRow input) throws QueryException {
-        if(!startQuery(context)) return new ArrayList<ResultRow>();
-        ArrayList<ResultRow> ret=query(context,input);
+    public List<ResultRow> doQuery(QueryContext context,ResultRow input) throws QueryException {
+        if(!startQuery(context)) return new ArrayList<>();
+        List<ResultRow> ret=query(context,input);
         endQuery(context);
         return ret;
     }

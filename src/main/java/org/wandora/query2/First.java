@@ -95,6 +95,8 @@ public class First extends Directive implements DirectiveUIHints.Provider {
         return debugStringInner(directive,indent);
     }
 
+    
+    
     private class FirstIterator extends ResultIterator {
 
         public int counter;

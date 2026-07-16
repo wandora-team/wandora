@@ -68,7 +68,7 @@ public class SimpleLabelField extends JPanel implements MouseListener, KeyListen
     
     
     public SimpleLabelField(String name) {
-        changeListeners = new ArrayList();
+        changeListeners = new ArrayList<>();
         field = new SimpleField(name);
         label = new SimpleLabel(name);
         initialize();
@@ -77,7 +77,7 @@ public class SimpleLabelField extends JPanel implements MouseListener, KeyListen
     
     
     
-    /** Creates a new instance of WandoraTextField */
+    /** Creates a new instance of SimpleLabelField */
     public SimpleLabelField() {
         this("");
     }
@@ -148,7 +148,7 @@ public class SimpleLabelField extends JPanel implements MouseListener, KeyListen
     }
     
     public void removeAllChangeListeners() {
-        changeListeners = new ArrayList();
+        changeListeners = new ArrayList<>();
     }
     
     private void sendChangeEvent(ChangeEvent e) {

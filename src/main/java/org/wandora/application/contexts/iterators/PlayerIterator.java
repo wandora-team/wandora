@@ -47,11 +47,11 @@ public class PlayerIterator extends TopicIterator {
 
     @Override
     public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
-        Collection playerTopics = new ArrayList();
-        Collection associations = null;
+        Collection<Topic> playerTopics = new ArrayList<>();
+        Collection<Association> associations = null;
         Association association = null;
-        Iterator associationIterator = null;
-        Collection roleTopics = null;
+        Iterator<Association> associationIterator = null;
+        Collection<Topic> roleTopics = null;
         Topic roleTopic = null;
         Topic playerTopic = null;
         
@@ -61,11 +61,11 @@ public class PlayerIterator extends TopicIterator {
                 if(associations != null) {
                     associationIterator = associations.iterator();
                     while(associationIterator.hasNext()) {
-                        association = (Association) associationIterator.next();
+                        association = associationIterator.next();
                         if(association == null) continue;
                         roleTopics = association.getRoles();
                         if(roleTopics != null && roleTopics.size() > 0) {
-                            for(Iterator roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
+                            for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
                                 roleTopic = (Topic) roleIterator.next();
                                 playerTopic = association.getPlayer(roleTopic);
                                 if(playerTopic != null) {

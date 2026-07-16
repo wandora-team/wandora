@@ -74,7 +74,7 @@ public class Last extends Directive implements DirectiveUIHints.Provider {
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
         ResultIterator iter=directive.queryIterator(context, input);
         if(count>1){
-            LinkedList<ResultRow> history=new LinkedList<ResultRow>();
+            LinkedList<ResultRow> history=new LinkedList<>();
             while(iter.hasNext()){
                 history.add(iter.next());
                 while(history.size()>count) history.removeFirst();

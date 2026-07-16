@@ -27,7 +27,9 @@
  */
 
 package org.wandora.query2;
-import java.util.HashSet;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -90,7 +92,7 @@ public class Variant2 extends Directive implements DirectiveUIHints.Provider {
                 o=tm.getTopic(o.toString());
                 if(o==null) return new ResultIterator.EmptyIterator();
             }
-            HashSet<Topic> scope=new HashSet<Topic>();
+            Set<Topic> scope=new LinkedHashSet<>();
             for(int i=0;i<this.scope.length;i++){
                 scope.add(this.scope[i].getOperandTopic(context, input));
             }

@@ -26,7 +26,9 @@
  *
  */
 package org.wandora.query2;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -34,14 +36,14 @@ import java.util.ArrayList;
  */
 public class Literals extends Directive implements DirectiveUIHints.Provider {
 
-    private ArrayList<ResultRow> result;
+    private List<ResultRow> result;
 
     public Literals(){
-        result=new ArrayList<ResultRow>();
+        result=new ArrayList<>();
     }
     
     public Literals(String[] strings) {
-        result=new ArrayList<ResultRow>();
+        result=new ArrayList<>();
         for(int i=0;i<strings.length;i++){
             ResultRow r=new ResultRow(strings[i]);
             result.add(r);
@@ -68,7 +70,7 @@ public class Literals extends Directive implements DirectiveUIHints.Provider {
     } 
     
     @Override
-    public ArrayList<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
+    public List<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
         return result;
     }
 
@@ -85,7 +87,7 @@ public class Literals extends Directive implements DirectiveUIHints.Provider {
 
     @Override
     public String debugStringParams(){
-        StringBuffer ret=new StringBuffer();
+        StringBuilder ret=new StringBuilder();
         for(int i=0;i<result.size();i++){
             if(i>0) ret.append(",");
             ret.append("\""+result.get(i).getActiveValue()+"\"");

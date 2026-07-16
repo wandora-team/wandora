@@ -28,19 +28,20 @@
 package org.wandora.query2;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 /**
  *
  * @author olli
  */
 public class Static extends Directive implements DirectiveUIHints.Provider {
 
-    private ArrayList<ResultRow> result;
+    private List<ResultRow> result;
 
     public Static(){
         this.result=new ArrayList<ResultRow>();
     }
     
-    public Static(ArrayList<ResultRow> result){
+    public Static(List<ResultRow> result){
         this.result=result;
     }
     public Static(ResultRow result){
@@ -68,7 +69,7 @@ public class Static extends Directive implements DirectiveUIHints.Provider {
     }
 
     @Override
-    public ArrayList<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
+    public List<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
         return result;
     }
 

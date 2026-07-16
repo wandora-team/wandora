@@ -138,7 +138,7 @@ public class Recursive extends Directive implements DirectiveUIHints.Provider {
                     iter.dispose();
                     if(queue.isEmpty()){
                         queue=nextQueue;
-                        nextQueue=new LinkedList<ResultIterator>();
+                        nextQueue=new LinkedList<>();
                         depth++;
                         if(maxDepth!=-1 && depth>maxDepth) return false;
                         if(queue.isEmpty()) return false;
@@ -172,9 +172,9 @@ public class Recursive extends Directive implements DirectiveUIHints.Provider {
         @Override
         public void reset() throws QueryException {
             dispose();
-            processed=new HashSet<Object>();
-            queue=new LinkedList<ResultIterator>();
-            nextQueue=new LinkedList<ResultIterator>();
+            processed=new HashSet<>();
+            queue=new LinkedList<>();
+            nextQueue=new LinkedList<>();
             iter=recursion.queryIterator(context, input);
             nextRow=null;
             depth=0;

@@ -38,6 +38,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -327,7 +328,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         Icon viewIcon = UIBox.getIcon("gui/icons/view2.png");
         Icon hideIcon = UIBox.getIcon("gui/icons/view2_no.png");
         
-        ArrayList menuVector = new ArrayList();
+        List<Object> menuVector = new ArrayList<>();
         for(int i=0; i<tabStruct.length; i++) {
             Object[] tabData = tabStruct[i];
             String tabPanelName = ((JPanel) tabData[0]).getName();

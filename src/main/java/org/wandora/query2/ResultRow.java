@@ -33,25 +33,25 @@ import java.util.List;
  */
 public class ResultRow {
 
-    private ArrayList<String> roles;
-    private ArrayList<Object> values;
+    private List<String> roles;
+    private List<Object> values;
 
     private int activeColumn;
 
     private int hashCode=-1;
 
     public ResultRow(){
-        this(new ArrayList<String>(),new ArrayList<Object>(),-1,true);
+        this(new ArrayList<>(),new ArrayList<>(),-1,true);
     }
 
     public ResultRow(List<String> roles,List<Object> values,int activeColumn,boolean reuse) {
         if(reuse && roles instanceof ArrayList && values instanceof ArrayList){
-            this.roles=(ArrayList)roles;
-            this.values=(ArrayList)values;
+            this.roles=roles;
+            this.values=values;
         }
         else{
-            this.roles=new ArrayList<String>(roles);
-            this.values=new ArrayList<Object>(values);
+            this.roles=new ArrayList<>(roles);
+            this.values=new ArrayList<>(values);
         }
         this.activeColumn=activeColumn;
     }
@@ -64,8 +64,8 @@ public class ResultRow {
     }
 
     public ResultRow(Object value){
-        this.roles=new ArrayList<String>();
-        this.values=new ArrayList<Object>();
+        this.roles=new ArrayList<>();
+        this.values=new ArrayList<>();
         roles.add(Directive.DEFAULT_COL);
         values.add(value);
         activeColumn=0;
@@ -80,7 +80,7 @@ public class ResultRow {
     public Object getActiveValue(){return values.get(activeColumn);}
     public String getActiveRole(){return roles.get(activeColumn);}
 
-    public ArrayList<Object> getValues() {
+    public List<Object> getValues() {
         return values;
     }
 
@@ -96,13 +96,13 @@ public class ResultRow {
         return values.get(ind);
     }
 
-    public ArrayList<String> getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
     public ResultRow join(ResultRow row) throws QueryException {
-        ArrayList<String> newRoles=new ArrayList<String>(this.roles);
-        ArrayList<Object> newValues=new ArrayList<Object>(this.values);
+        List<String> newRoles=new ArrayList<>(this.roles);
+        List<Object> newValues=new ArrayList<>(this.values);
 
         for(int i=0;i<row.getNumValues();i++){
             String role=row.getRole(i);
@@ -134,8 +134,8 @@ public class ResultRow {
         return r.roles.equals(this.roles) && r.values.equals(this.values);
     }
 
-    public ArrayList<ResultRow> toList(){
-        ArrayList<ResultRow> ret=new ArrayList<ResultRow>();
+    public List<ResultRow> toList(){
+        List<ResultRow> ret=new ArrayList<>();
         ret.add(this);
         return ret;
     }
@@ -153,8 +153,8 @@ public class ResultRow {
     }
 
     public ResultRow addValues(String[] roles,Object[] values) throws QueryException {
-        ArrayList<String> newRoles=new ArrayList<String>(this.roles);
-        ArrayList<Object> newValues=new ArrayList<Object>(this.values);
+        List<String> newRoles=new ArrayList<>(this.roles);
+        List<Object> newValues=new ArrayList<>(this.values);
 
         int ind=0;
         for(int i=0;i<roles.length;i++){

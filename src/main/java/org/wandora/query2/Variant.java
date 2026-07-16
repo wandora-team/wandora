@@ -26,8 +26,10 @@
  *
  */
 package org.wandora.query2;
+
+
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.wandora.topicmap.TMBox;
@@ -102,7 +104,7 @@ public class Variant extends Directive implements DirectiveUIHints.Provider  {
                 Topic langT=lang.getOperandTopic(context, input);
                 if(typeT==null || langT==null) return input.addValue(DEFAULT_COL, null).toIterator();
 
-                HashSet<Topic> scope=new HashSet<Topic>();
+                Set<Topic> scope=new LinkedHashSet<Topic>();
                 scope.add(typeT);
                 scope.add(langT);
                 String name=((Topic)o).getVariant(scope);

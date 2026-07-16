@@ -31,7 +31,10 @@ package org.wandora.query2;
  * @author olli
  */
 public class QueryException extends Exception {
-    public QueryException(){
+    private static final long serialVersionUID = 1L;
+    
+    
+	public QueryException(){
         super();
     }
     public QueryException(String message){

@@ -28,6 +28,7 @@
 package org.wandora.query2;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.script.Bindings;
 import javax.script.Compilable;
@@ -45,7 +46,7 @@ public class Eval extends Directive {
     protected String script;
     protected ScriptEngine scriptEngine;
     protected CompiledScript compiled;
-    protected HashMap<String,Object> objects;
+    protected Map<String,Object> objects;
     protected Object constructorParam;
     protected boolean clearHashMapBetweenJoins=true;
 
@@ -68,7 +69,7 @@ public class Eval extends Directive {
 
     @Override
     public boolean startQuery(QueryContext context) throws QueryException {
-        objects=new HashMap<String,Object>();
+        objects=new HashMap<>();
         if(scriptEngine instanceof Compilable){
             try{
                 compiled=((Compilable)scriptEngine).compile(script);

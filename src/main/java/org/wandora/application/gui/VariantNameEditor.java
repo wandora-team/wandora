@@ -381,7 +381,7 @@ public class VariantNameEditor extends javax.swing.JPanel {
     private void removeScopeTopicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeScopeTopicButtonActionPerformed
         try {
             int[] selection = scopeTopicList.getSelectedIndices();
-            ArrayList<Topic> removeScopeTopics = new ArrayList();
+            List<Topic> removeScopeTopics = new ArrayList<>();
             for(int i=0; i<selection.length; i++) {
                 removeScopeTopics.add(scopeTopics.get(selection[i]));
             }

@@ -110,24 +110,24 @@ public class TopicImpl extends Topic {
     
     
     private void initializeTopicImpl() {
-        data=Collections.synchronizedMap(new LinkedHashMap());
-        types=Collections.synchronizedSet(new LinkedHashSet());
-        associations=Collections.synchronizedSet(new LinkedHashSet());
-        associationIndex=Collections.synchronizedMap(new LinkedHashMap());
+        data=Collections.synchronizedMap(new LinkedHashMap<>());
+        types=Collections.synchronizedSet(new LinkedHashSet<>());
+        associations=Collections.synchronizedSet(new LinkedHashSet<>());
+        associationIndex=Collections.synchronizedMap(new LinkedHashMap<>());
         baseName=null;
         subjectLocator=null;
-        subjectIdentifiers=Collections.synchronizedSet(new LinkedHashSet());
-        variants=Collections.synchronizedMap(new LinkedHashMap());
+        subjectIdentifiers=Collections.synchronizedSet(new LinkedHashSet<>());
+        variants=Collections.synchronizedMap(new LinkedHashMap<>());
         
-        dispNameCache=Collections.synchronizedMap(new LinkedHashMap());
-        sortNameCache=Collections.synchronizedMap(new LinkedHashMap());
+        dispNameCache=Collections.synchronizedMap(new LinkedHashMap<>());
+        sortNameCache=Collections.synchronizedMap(new LinkedHashMap<>());
         
-        dataTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
-        dataVersionIndex=Collections.synchronizedSet(new LinkedHashSet());
-        topicTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
-        associationTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
-        roleTypeIndex=Collections.synchronizedSet(new LinkedHashSet());
-        variantScopeIndex=Collections.synchronizedSet(new LinkedHashSet());
+        dataTypeIndex=Collections.synchronizedSet(new LinkedHashSet<>());
+        dataVersionIndex=Collections.synchronizedSet(new LinkedHashSet<>());
+        topicTypeIndex=Collections.synchronizedSet(new LinkedHashSet<>());
+        associationTypeIndex=Collections.synchronizedSet(new LinkedHashSet<>());
+        roleTypeIndex=Collections.synchronizedSet(new LinkedHashSet<>());
+        variantScopeIndex=Collections.synchronizedSet(new LinkedHashSet<>());
         
         removed=false;
     }
@@ -186,7 +186,7 @@ public class TopicImpl extends Topic {
         ((TopicImpl)version).addedAsDataVersion(this,type);
         Map<Topic,String> t=data.get(type);
         if(t==null){
-            t=new LinkedHashMap();
+            t=new LinkedHashMap<>();
             data.put(type,t);
         }
         Object o=t.put(version,value);
@@ -206,7 +206,7 @@ public class TopicImpl extends Topic {
         ((TopicImpl)type).addedAsDataType(this);
         Map<Topic,String> t=data.get(type);
         if(t==null){
-            t=new LinkedHashMap();
+            t=new LinkedHashMap<>();
             data.put(type,t);
         }
         Iterator iter=versionData.entrySet().iterator();
@@ -272,10 +272,10 @@ public class TopicImpl extends Topic {
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
         Map<Topic,Collection<Association>> s = associationIndex.get(type);
         if(s==null) {
-            return new HashSet();
+            return new HashSet<>();
         }
         else {
-            Set as = Collections.synchronizedSet(new LinkedHashSet());
+            Set<Association> as = Collections.synchronizedSet(new LinkedHashSet<>());
             for(Topic role : s.keySet()) {
                 as.addAll(s.get(role));
             }
@@ -288,12 +288,12 @@ public class TopicImpl extends Topic {
     public Collection<Association> getAssociations(Topic type, Topic role) throws TopicMapException {
         Map<Topic,Collection<Association>> s = associationIndex.get(type);
         if(s==null) {
-            return new HashSet();
+            return new HashSet<>();
         }
         else {
             Collection<Association> s2 = s.get(role);
             if(s2==null) {
-                return new HashSet();
+                return new HashSet<>();
             }
             else {
                 return s2;
@@ -320,10 +320,10 @@ public class TopicImpl extends Topic {
     public Hashtable getData(Topic type) throws TopicMapException {
         Map<Topic,String> t = data.get(type);
         if(t==null) {
-            return new Hashtable();
+            return new Hashtable<>();
         }
         else {
-            Hashtable<Topic,String> ht = new Hashtable();
+            Hashtable<Topic,String> ht = new Hashtable<>();
             ht.putAll(t);
             return ht;
         }
@@ -502,7 +502,7 @@ public class TopicImpl extends Topic {
 
         removed=true;
         
-        ArrayList<Association> tempAssociations=new ArrayList();
+        ArrayList<Association> tempAssociations=new ArrayList<>();
         tempAssociations.addAll(associations);
         for(Association a : tempAssociations) {
             a.remove();
@@ -520,19 +520,19 @@ public class TopicImpl extends Topic {
         if(subjectLocator!=null) this.setSubjectLocator(null);
         if(baseName!=null) this.setBaseName(null);
         
-        ArrayList<Topic> tempTypes = new ArrayList();
+        List<Topic> tempTypes = new ArrayList<>();
         tempTypes.addAll(types);
         for(Topic t : tempTypes) {
             this.removeType(t);
         }
         
-        ArrayList<Set<Topic>> tempVariantScopes = new ArrayList();
+        List<Set<Topic>> tempVariantScopes = new ArrayList<>();
         tempVariantScopes.addAll(getVariantScopes());
         for(Set<Topic> scope : tempVariantScopes) {
             this.removeVariant(scope);
         }
 
-        ArrayList<Topic> tempDataTypes = new ArrayList();
+        List<Topic> tempDataTypes = new ArrayList<>();
         tempDataTypes.addAll(getDataTypes());
         for(Topic dataType : tempDataTypes) {
             this.removeData(dataType);
@@ -549,8 +549,8 @@ public class TopicImpl extends Topic {
 
         Object o=variants.remove(scope);
         boolean changed=(o!=null);
-        HashSet allscopes=new HashSet();
-        for(Collection c : variants.keySet()) {
+        HashSet<Topic> allscopes=new HashSet<>();
+        for(Set<Topic> c : variants.keySet()) {
             allscopes.addAll(c);
         }
         for(Topic t : scope){
@@ -688,7 +688,7 @@ public class TopicImpl extends Topic {
     
     private void makeDependentTopicsSet() throws TopicMapException {
         // ### = might not be needed, depends on what should actually be called dependent
-        dependentTopics = new HashSet();
+        dependentTopics = new HashSet<>();
         
         dependentTopics.addAll(topicTypeIndex);
 
@@ -763,9 +763,9 @@ public class TopicImpl extends Topic {
         TopicImpl ti=(TopicImpl)t;
         topicMap.topicsMerged(this,ti);
         // ----- add data ----- 
-        for(Topic otype : new ArrayList<Topic>(ti.data.keySet())) {
+        for(Topic otype : new ArrayList<>(ti.data.keySet())) {
             Map<Topic,String> hm = ti.data.get(otype);
-            Hashtable ht = new Hashtable();
+            Hashtable<Topic,String> ht = new Hashtable<>();
             ht.putAll(hm);
             this.setData(otype, ht);
             ti.removeData(otype);
@@ -788,7 +788,7 @@ public class TopicImpl extends Topic {
             else this.addType(type);
         }
         // ----- set variant names ----- 
-        for(Set scope : ti.getVariantScopes()){
+        for(Set<Topic> scope : ti.getVariantScopes()){
             String name = ti.getVariant(scope);
             this.setVariant(scope,name);
         }
@@ -797,12 +797,12 @@ public class TopicImpl extends Topic {
         // data into a toBeMapped... ArrayLists first.
         
         // ----- change association players ----- 
-        ArrayList<T2<Association,Topic>> tobeMappedAssociationRoles = new ArrayList();
+        List<T2<Association,Topic>> tobeMappedAssociationRoles = new ArrayList<>();
         for(Map<Topic,Collection<Association>> roledAssociations : ti.associationIndex.values()) {
             for(Topic role : roledAssociations.keySet()) {
                 Collection<Association> as =  roledAssociations.get(role);
                 for(Association a : as) {
-                    tobeMappedAssociationRoles.add( new T2(a, role) );
+                    tobeMappedAssociationRoles.add( new T2<>(a, role) );
                 }
             }
         }
@@ -818,14 +818,14 @@ public class TopicImpl extends Topic {
         }
         
         // ----- change association types ----- 
-        ArrayList<Association> tobeMappedTypedAssociations = new ArrayList();
+        List<Association> tobeMappedTypedAssociations = new ArrayList<>();
         tobeMappedTypedAssociations.addAll(ti.associationTypeIndex);
         for(Association a : tobeMappedTypedAssociations) {
             a.setType(this);
         }
         
         // ----- change topic types ----- 
-        ArrayList<Topic> tobeMappedTopicTypes = new ArrayList();
+        List<Topic> tobeMappedTopicTypes = new ArrayList<>();
         tobeMappedTopicTypes.addAll(ti.topicTypeIndex);
         for(Topic type : tobeMappedTopicTypes){
             type.removeType(t);
@@ -833,7 +833,7 @@ public class TopicImpl extends Topic {
         }
         
         // ----- change data types ----- 
-        ArrayList<Topic> tobeMappedDataTypes = new ArrayList();
+        List<Topic> tobeMappedDataTypes = new ArrayList<>();
         tobeMappedDataTypes.addAll(ti.dataTypeIndex);
         
         final TopicComparator topicComparator=new TopicComparator();
@@ -846,13 +846,13 @@ public class TopicImpl extends Topic {
         Collections.sort(tobeMappedDataTypes,topicComparator);
         
         for(Topic dataType : tobeMappedDataTypes) {
-            Hashtable val = dataType.getData(t);
+            Hashtable<Topic,String> val = dataType.getData(t);
             dataType.removeData(t);
             dataType.setData(this, val);
         }
         
         // ----- change data versions ----- 
-        ArrayList<DataVersionIndexWrapper> tobeMappedDataVersions = new ArrayList();
+        List<DataVersionIndexWrapper> tobeMappedDataVersions = new ArrayList<>();
         tobeMappedDataVersions.addAll(ti.dataVersionIndex);      
         Collections.sort(tobeMappedDataVersions, new Comparator<DataVersionIndexWrapper>(){
             @Override
@@ -869,7 +869,7 @@ public class TopicImpl extends Topic {
         }
         
         // ----- change role types ----- 
-        ArrayList<Association> tobeMappedRoleTypes = new ArrayList();
+        List<Association> tobeMappedRoleTypes = new ArrayList<>();
         tobeMappedRoleTypes.addAll(ti.roleTypeIndex);
         for(Association a : tobeMappedRoleTypes) {
             Topic p = a.getPlayer(t);
@@ -886,7 +886,7 @@ public class TopicImpl extends Topic {
         }
         
         // ----- change variant scopes ----- 
-        ArrayList<T2<Topic,Set<Topic>>> tobeMappedVariantScopes = new ArrayList();
+        List<T2<Topic,Set<Topic>>> tobeMappedVariantScopes = new ArrayList<>();
         for(Topic topic : ti.variantScopeIndex) {
             Set<Set<Topic>> scopes = new LinkedHashSet();
             scopes.addAll(topic.getVariantScopes());
@@ -956,8 +956,8 @@ public class TopicImpl extends Topic {
         if(removed) throw new TopicMapException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         
-        HashMap<EqualAssociationWrapper,Association> as = new HashMap();
-        ArrayList<Association> tobeDeleted = new ArrayList();
+        Map<EqualAssociationWrapper,Association> as = new HashMap<>();
+        List<Association> tobeDeleted = new ArrayList<>();
         Association remaining = notThis;
         for(Association a : associations) {
             EqualAssociationWrapper eaw = new EqualAssociationWrapper((AssociationImpl) a);
@@ -990,12 +990,12 @@ public class TopicImpl extends Topic {
             t=associationIndex.get(type);
         }
         if(t==null){
-            t=new LinkedHashMap();
+            t=new LinkedHashMap<>();
             associationIndex.put(type,t);
         }
         Collection<Association> s = t.get(role);
         if(s==null){
-            s=new LinkedHashSet();
+            s=new LinkedHashSet<>();
             t.put(role,s);
         }
         s.add(a);

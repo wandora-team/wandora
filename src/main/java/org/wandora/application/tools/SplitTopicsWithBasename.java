@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.Icon;
@@ -235,7 +236,7 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool {
            
             // --- resolve new subject identifiers ---
             Collection<Locator> sis = split.getSubjectIdentifiers();
-            ArrayList<Locator> siv = new ArrayList();
+            List<Locator> siv = new ArrayList<>();
             siv.addAll(sis);
 
             Locator l = null;

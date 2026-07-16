@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -120,7 +121,7 @@ public class PropertyTableExtractor extends AbstractExtractor {
     @Override
     public String doBrowserExtract(BrowserExtractRequest request, Wandora wandora) throws TopicMapException {
         try {
-            basePath = new URL(request.getSource());
+            basePath = new URI(request.getSource()).toURL();
         }
         catch(Exception e) { e.printStackTrace(); }
         String s = super.doBrowserExtract(request, wandora);
@@ -213,7 +214,9 @@ public class PropertyTableExtractor extends AbstractExtractor {
     
 
     private static class HTMLParse extends HTMLEditorKit {
-        /**
+        private static final long serialVersionUID = 1L;
+
+		/**
         * Call to obtain a HTMLEditorKit.Parser object.
         * @return A new HTMLEditorKit.Parser object.
         */
@@ -259,7 +262,7 @@ public class PropertyTableExtractor extends AbstractExtractor {
             this.tm = tm;
             this.parent = parent;
             this.state = null;
-            this.stateStack = new ArrayList();
+            this.stateStack = new ArrayList<>();
         }
         
 
@@ -322,8 +325,8 @@ public class PropertyTableExtractor extends AbstractExtractor {
                             state.association.addPlayer(propertyValueTopic, propertyNameTopic);
                             playerCount++;
                             
-                            state.cells = new ArrayList();
-                            state.links = new ArrayList();
+                            state.cells = new ArrayList<>();
+                            state.links = new ArrayList<>();
                         }
                         catch(Exception e) {
                             parent.log(e);
@@ -332,8 +335,8 @@ public class PropertyTableExtractor extends AbstractExtractor {
                     else if(state.cells.size() == 1) {
                         state.associationType = state.cells.get(0);
                         state.associationTypeLink = state.links.get(0);
-                        state.cells = new ArrayList();
-                        state.links = new ArrayList();
+                        state.cells = new ArrayList<>();
+                        state.links = new ArrayList<>();
                     }
                     state.state = STATE_TABLE;
                 }
@@ -350,8 +353,8 @@ public class PropertyTableExtractor extends AbstractExtractor {
             else if(t == HTML.Tag.TABLE) {
                 if(state != null) {
                     state.association = null;
-                    state.cells = new ArrayList();
-                    state.links = new ArrayList();
+                    state.cells = new ArrayList<>();
+                    state.links = new ArrayList<>();
                     state.state = STATE_OTHER;
                     if(!stateStack.isEmpty()) {
                         state = stateStack.remove(stateStack.size()-1);
@@ -397,8 +400,8 @@ public class PropertyTableExtractor extends AbstractExtractor {
         
         
         private class TableState {  
-            public ArrayList<String> cells = new ArrayList();
-            public ArrayList<String> links = new ArrayList();
+            public ArrayList<String> cells = new ArrayList<>();
+            public ArrayList<String> links = new ArrayList<>();
             
             private String associationTypeSeed = System.currentTimeMillis() + "-" + Math.round(Math.random()*9999);
             public String associationType = "Table-"+associationTypeSeed;

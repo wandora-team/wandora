@@ -27,8 +27,11 @@
  */
 package org.wandora.query2;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 /**
  *
  * @author olli
@@ -36,7 +39,7 @@ import java.util.NoSuchElementException;
 public class Union extends Directive implements DirectiveUIHints.Provider {
     private Directive[] directives;
     
-    private ArrayList<String> staticRoles;
+    private List<String> staticRoles;
     private boolean useActive=false;
             
     public Union(){this(new Directive[0]);}
@@ -141,8 +144,8 @@ public class Union extends Directive implements DirectiveUIHints.Provider {
         private ResultRow makeRow(ResultRow row) throws QueryException {
             if(useActive) return new ResultRow(row.getActiveValue());
             else {
-                ArrayList<Object> values=new ArrayList<Object>(staticRoles.size());
-                ArrayList<String> rowRoles=row.getRoles();
+                List<Object> values=new ArrayList<>(staticRoles.size());
+                List<String> rowRoles=row.getRoles();
                 for(int i=0;i<staticRoles.size();i++){
                     int ind=rowRoles.indexOf(staticRoles.get(i));
                     Object v=null;
@@ -218,7 +221,7 @@ public class Union extends Directive implements DirectiveUIHints.Provider {
 
             currentDirective=-1;
 
-            LinkedHashSet<String> rolesHash=new LinkedHashSet<String>();
+            Set<String> rolesHash=new LinkedHashSet<>();
             firstRows=new ResultRow[directives.length];
             iterators=new ResultIterator[directives.length];
             for(int i=0;i<directives.length;i++){
@@ -234,8 +237,8 @@ public class Union extends Directive implements DirectiveUIHints.Provider {
         }
 
         private ResultRow makeRow(ResultRow row) throws QueryException {
-            ArrayList<Object> values=new ArrayList<Object>(roles.size());
-            ArrayList<String> rowRoles=row.getRoles();
+            List<Object> values=new ArrayList<>(roles.size());
+            List<String> rowRoles=row.getRoles();
             for(int i=0;i<roles.size();i++){
                 int ind=rowRoles.indexOf(roles.get(i));
                 Object v=null;
@@ -280,7 +283,7 @@ public class Union extends Directive implements DirectiveUIHints.Provider {
 
         @Override
         public void reset() throws QueryException {
-            LinkedHashSet<String> rolesHash=new LinkedHashSet<String>();
+            Set<String> rolesHash=new LinkedHashSet<String>();
             for(int i=0;i<iterators.length;i++){
                 iterators[i].reset();
                 if(iterators[i].hasNext()) {
