@@ -257,10 +257,10 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
     }
     
     
-    public Collection getContext(){
+    public Collection<VNode> getContext(){
         Set<VNode> ret=graphPanel.getSelectedNodes();
         if(ret.isEmpty()) {
-            List al=new ArrayList();
+            List<VNode> al=new ArrayList<>();
             al.add(graphPanel.getRootNode());
             return al;
         }

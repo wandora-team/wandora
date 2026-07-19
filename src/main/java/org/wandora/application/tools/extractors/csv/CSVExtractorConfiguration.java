@@ -231,7 +231,7 @@ public class CSVExtractorConfiguration extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         optionsPanel.add(encodingLabel, gridBagConstraints);
 
-        encodingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "UTF-8", "UTF-16", "ISO-8859-1", "US-ASCII", " " }));
+        encodingComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "UTF-8", "UTF-16", "ISO-8859-1", "US-ASCII", " " }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -297,7 +297,7 @@ public class CSVExtractorConfiguration extends javax.swing.JPanel {
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel confLabel;
-    private javax.swing.JComboBox encodingComboBox;
+    private javax.swing.JComboBox<String> encodingComboBox;
     private javax.swing.JLabel encodingLabel;
     private javax.swing.JPanel fillerPanel;
     private javax.swing.JLabel lineSeparatorLabel;

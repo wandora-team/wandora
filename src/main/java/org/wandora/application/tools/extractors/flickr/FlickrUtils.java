@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -166,7 +167,7 @@ public class FlickrUtils {
     
     
     public static void setDisplayName(Topic t, String lang, String name)  throws TopicMapException {
-        if(t != null & lang != null && name != null) {
+        if(t != null && lang != null && name != null) {
             String langsi=XTMPSI.getLang(lang);
             Topic langT=t.getTopicMap().getTopic(langsi);
             if(langT == null) {
@@ -186,7 +187,7 @@ public class FlickrUtils {
                 dispT.addSubjectIdentifier(new Locator(dispsi));
                 dispT.setBaseName("Scope Display");
             }
-            HashSet scope=new HashSet();
+            HashSet<Topic> scope=new LinkedHashSet<>();
             if(langT!=null) scope.add(langT);
             if(dispT!=null) scope.add(dispT);
             t.setVariant(scope, name);
@@ -195,7 +196,7 @@ public class FlickrUtils {
 
 
     public static void setData(Topic t, Topic type, String lang, String text) throws TopicMapException {
-        if(t != null & type != null && lang != null && text != null) {
+        if(t != null && type != null && lang != null && text != null) {
             String langsi=XTMPSI.getLang(lang);
             Topic langT=t.getTopicMap().getTopic(langsi);
             if(langT == null) {
@@ -217,12 +218,12 @@ public class FlickrUtils {
         Association a = topicMap.createAssociation(aType);
         Topic player;
         Topic role;
-        Collection playerTypes;
+        Collection<Topic> playerTypes;
         for(int i=0; i<players.length; i++) {
             player = players[i];
             playerTypes = player.getTypes();
             if(playerTypes.size() > 0) {
-                role = (Topic) playerTypes.iterator().next();
+                role = playerTypes.iterator().next();
                 a.addPlayer(player, role);
             }
         }

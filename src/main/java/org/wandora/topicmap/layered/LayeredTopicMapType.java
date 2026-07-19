@@ -161,8 +161,8 @@ public class LayeredTopicMapType implements TopicMapType {
             String typeClass=options.get("layer"+counter+".type");
             
             try {
-                Class c = Class.forName(typeClass);
-                TopicMapType type = TopicMapTypeManager.getType((Class<? extends TopicMap>)c);
+                Class<?> c = Class.forName(typeClass);
+                TopicMapType type = TopicMapTypeManager.getType(c);
                 logger.log("Preparing layer '" + layerName + "'.");
                 TopicMap tm = type.unpackageTopicMap(in, in.joinPath(path, "layer"+counter), logger, wandora);
                 Layer l = new Layer(tm,layerName,ls); 
@@ -217,8 +217,8 @@ public class LayeredTopicMapType implements TopicMapType {
             if(layerName == null) break;
             String typeClass = options.get("layer"+counter+".type");
             try {
-                Class c = Class.forName(typeClass);
-                TopicMapType type = TopicMapTypeManager.getType((Class<? extends TopicMap>)c);
+                Class<?> c = Class.forName(typeClass);
+                TopicMapType type = TopicMapTypeManager.getType(c);
                 logger.log("Loading layer '" + layerName + "'.");
                 TopicMap tm = type.unpackageTopicMap(in, in.joinPath(path, "layer"+counter), logger, wandora);
                 

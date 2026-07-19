@@ -167,7 +167,7 @@ public class BrowserExtractorManager {
                                 String className = classPath + "." + classFile.getName().replaceFirst("\\.class", "");
                                 if(className.indexOf("$")>-1) continue;
                                 BrowserPluginExtractor extractor=null;
-                                Class cls=Class.forName(className);
+                                Class<?> cls=Class.forName(className);
                                 if(strictlyBrowserPlugins && WandoraTool.class.isAssignableFrom(cls)) {
                                     continue;
                                 }

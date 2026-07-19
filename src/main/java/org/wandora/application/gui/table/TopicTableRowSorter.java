@@ -65,7 +65,7 @@ public class TopicTableRowSorter extends TableRowSorter {
     
     @Override
     public Comparator<?> getComparator(int column) {
-        return new Comparator() {
+        return new Comparator<>() {
             public int compare(Object o1, Object o2) {
                 if(o1 == null || o2 == null) return 0;
                 if(o1 instanceof TopicGuiWrapper) {

@@ -76,7 +76,7 @@ public class MultiContextCollected implements Context {
         }
     }
     public void clearContext() {
-        multiContext = new ArrayList();
+        multiContext = new ArrayList<>();
     }
 
     

@@ -175,7 +175,7 @@ public class MultipleParameterPanel extends AbstractTypePanel {
     public synchronized void addParameter(){
         final AbstractTypePanel paramPanel;
         try{
-            Constructor c=typeCls.getConstructor(Parameter.class,DirectivePanel.class);
+            Constructor<?> c=typeCls.getConstructor(Parameter.class,DirectivePanel.class);
             paramPanel=(AbstractTypePanel)c.newInstance(this.parameter,this.directivePanel);
         }catch(IllegalAccessException | InstantiationException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException | SecurityException e){
             Wandora.getWandora().handleError(e);

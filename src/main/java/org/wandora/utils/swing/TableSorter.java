@@ -103,12 +103,21 @@ public class TableSorter extends AbstractTableModel {
 
     private static Directive EMPTY_DIRECTIVE = new Directive(-1, NOT_SORTED);
 
-    public static final Comparator COMPARABLE_COMAPRATOR = new Comparator() {
+    public static final Comparator<Object> COMPARABLE_COMAPRATOR = new Comparator<>() {
         public int compare(Object o1, Object o2) {
-            return ((Comparable) o1).compareTo(o2);
+            if(o1==null && o2!=null) return -1;
+            else if(o1!=null && o2==null) return 1;
+            else if(o1==null && o2==null) return 0;
+            
+            if(o1 instanceof Comparable o1c && o2 instanceof Comparable o2c) {
+            	return o1c.compareTo(o2c);
+            }
+            else {
+            	return o1.toString().compareTo(o2.toString());
+            }
         }
     };
-    public static final Comparator LEXICAL_COMPARATOR = new Comparator() {
+    public static final Comparator<Object> LEXICAL_COMPARATOR = new Comparator<>() {
         public int compare(Object o1, Object o2) {
             if(o1==null && o2!=null) return -1;
             else if(o1!=null && o2==null) return 1;
@@ -123,15 +132,15 @@ public class TableSorter extends AbstractTableModel {
     private JTableHeader tableHeader;
     private MouseListener mouseListener;
     private TableModelListener tableModelListener;
-    private Map columnComparators = new HashMap();
-    private List sortingColumns = new ArrayList();
+    private Map<Class<?>,Comparator<Object>> columnComparators = new HashMap<>();
+    private List<Directive> sortingColumns = new ArrayList<>();
     
-    private Vector mouseListeners;
+    private Vector<MouseListener> mouseListeners;
 
     public TableSorter() {
         this.mouseListener = new MouseHandler();
         this.tableModelListener = new TableModelHandler();
-        mouseListeners=new Vector();
+        mouseListeners=new Vector<>();
     }
     
     public TableSorter(TableModel tableModel) {
@@ -249,7 +258,7 @@ public class TableSorter extends AbstractTableModel {
         sortingStatusChanged();
     }
 
-    public void setColumnComparator(Class type, Comparator comparator) {
+    public void setColumnComparator(Class<?> type, Comparator<Object> comparator) {
         if (comparator == null) {
             columnComparators.remove(type);
         } else {
@@ -257,9 +266,9 @@ public class TableSorter extends AbstractTableModel {
         }
     }
 
-    protected Comparator getComparator(int column) {
-        Class columnType = tableModel.getColumnClass(column);
-        Comparator comparator = (Comparator) columnComparators.get(columnType);
+    protected Comparator<Object> getComparator(int column) {
+        Class<?> columnType = tableModel.getColumnClass(column);
+        Comparator<Object> comparator = columnComparators.get(columnType);
         if (comparator != null) {
             return comparator;
         }
@@ -319,7 +328,7 @@ public class TableSorter extends AbstractTableModel {
         return tableModel.getColumnName(column);
     }
 
-    public Class getColumnClass(int column) {
+    public Class<?> getColumnClass(int column) {
         return tableModel.getColumnClass(column);
     }
 
@@ -337,7 +346,7 @@ public class TableSorter extends AbstractTableModel {
 
     // Helper classes
     
-    private class Row implements Comparable {
+    private class Row implements Comparable<Object> {
         private int modelIndex;
 
         public Row(int index) {
@@ -348,7 +357,7 @@ public class TableSorter extends AbstractTableModel {
             int row1 = modelIndex;
             int row2 = ((Row) o).modelIndex;
 
-            for (Iterator it = sortingColumns.iterator(); it.hasNext();) {
+            for (Iterator<Directive> it = sortingColumns.iterator(); it.hasNext();) {
                 Directive directive = (Directive) it.next();
                 int column = directive.column;
                 Object o1 = tableModel.getValueAt(row1, column);
@@ -431,9 +440,9 @@ public class TableSorter extends AbstractTableModel {
     private class MouseHandler extends MouseAdapter {
         public void mouseClicked(MouseEvent e) {
             synchronized(mouseListeners){
-                Iterator iter=mouseListeners.iterator();
+                Iterator<MouseListener> iter=mouseListeners.iterator();
                 while(iter.hasNext()){
-                    MouseListener l=(MouseListener)iter.next();
+                    MouseListener l=iter.next();
                     l.mouseClicked(e);
                 }
             }
@@ -457,18 +466,18 @@ public class TableSorter extends AbstractTableModel {
         }
         public void mouseExited(MouseEvent e) {
             synchronized(mouseListeners){
-                Iterator iter=mouseListeners.iterator();
+                Iterator<MouseListener> iter=mouseListeners.iterator();
                 while(iter.hasNext()){
-                    MouseListener l=(MouseListener)iter.next();
+                    MouseListener l=iter.next();
                     l.mouseExited(e);
                 }
             }
         }
         public void mousePressed(MouseEvent e) {
             synchronized(mouseListeners){
-                Iterator iter=mouseListeners.iterator();
+                Iterator<MouseListener> iter=mouseListeners.iterator();
                 while(iter.hasNext()){
-                    MouseListener l=(MouseListener)iter.next();
+                    MouseListener l=iter.next();
                     l.mousePressed(e);
                 }
             }

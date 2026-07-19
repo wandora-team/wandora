@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Stack;
 
 import org.wandora.application.Wandora;
@@ -197,7 +198,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         try {
             // remove temporary subject identifiers
             Iterator<Topic> topics=tm.getTopics();
-            Collection topicCollection = new ArrayList<Topic>();
+            Collection<Topic> topicCollection = new ArrayList<>();
             while(topics.hasNext()) {
                 Topic t=topics.next();
                 topicCollection.add(t);
@@ -206,7 +207,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
             topics = topicCollection.iterator();
             while(topics.hasNext()) {
                 Topic t=topics.next();
-                ArrayList<Locator> sis = new ArrayList<Locator>(t.getSubjectIdentifiers());
+                List<Locator> sis = new ArrayList<>(t.getSubjectIdentifiers());
                 int sisSize = sis.size();
                 for(Locator si : sis) {
                     if(si.toExternalForm().startsWith(temporarySI)) {

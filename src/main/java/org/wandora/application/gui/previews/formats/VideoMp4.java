@@ -60,7 +60,9 @@ import javafx.util.Duration;
  * @author akivela
  */
 public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, ComponentListener {
-    private String mediaUrlString = null;
+    private static final long serialVersionUID = 1L;
+    
+	private String mediaUrlString = null;
     private JFXPanel fxPanel;
     private MediaPlayer player;
     private boolean playerReady = false;
@@ -69,8 +71,6 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
     private SimpleTimeSlider progressBar;
     private Media media;
 
-    private JPanel errorPanel = null;
-    
 
     public VideoMp4(String mediaUrlString) {
         Platform.setImplicitExit(false);
@@ -100,8 +100,6 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
         this.add(fxPanelContainer, BorderLayout.NORTH);
         this.add(progressBarContainer, BorderLayout.CENTER);
         this.add(controllerPanel, BorderLayout.SOUTH);
-        
-        errorPanel = null;
         
         Platform.runLater(new Runnable() {
             @Override 
@@ -170,11 +168,10 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
             final MediaPlayer mediaPlayer = new MediaPlayer(media);
             if(mediaPlayer.getError() == null) {
                 mediaPlayer.setAutoPlay(false);
-                mediaPlayer.currentTimeProperty().addListener(new ChangeListener() {
+                mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
                     @Override
-                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                        Duration newDuration = (Duration) newValue;
-                        progressBar.setValue((int) Math.round(newDuration.toSeconds()));
+                    public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                        progressBar.setValue((int) Math.round(newValue.toSeconds()));
                         updateTimeLabel();
                     }
                 });

@@ -426,8 +426,6 @@ public class DirectivePanel extends javax.swing.JPanel {
         sb.append("(");
 
         if(directiveParameters!=null){
-            Constructor c=directiveParameters.constructor;
-
             BoundParameter[] parameters=directiveParameters.parameters;
             for(int i=0;i<parameters.length;i++){
                 BoundParameter p=parameters[i];
@@ -490,7 +488,7 @@ public class DirectivePanel extends javax.swing.JPanel {
     public Directive buildDirective(){
 
         Object[] params=null;
-        java.lang.reflect.Constructor constr=null;
+        java.lang.reflect.Constructor<?> constr=null;
         try{
             if(directiveParameters!=null) {
                 constr=directiveParameters.constructor.getReflectConstructor(hints.getDirectiveClass());

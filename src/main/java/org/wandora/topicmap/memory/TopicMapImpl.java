@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -296,17 +295,17 @@ public class TopicMapImpl extends TopicMap {
     }
     
     @Override
-    public Collection getTopicsOfType(Topic type)  throws TopicMapException{
-        if(type == null) return new ArrayList();
-        Collection s=typeIndex.get(type);
-        if(s==null) return new HashSet();
+    public Collection<Topic> getTopicsOfType(Topic type)  throws TopicMapException{
+        if(type == null) return new ArrayList<>();
+        Collection<Topic> s=typeIndex.get(type);
+        if(s==null) return new LinkedHashSet<>();
         else return s;
     }
     
     // Note that this isn't part of the Wandora topic map API, it's used
     // in the tmapi wrapper 
-    public Collection getTypeTopics() throws TopicMapException {
-        return new ArrayList(typeIndex.keySet());
+    public Collection<Topic> getTypeTopics() throws TopicMapException {
+        return new ArrayList<>(typeIndex.keySet());
     }
     
     @Override
@@ -316,7 +315,7 @@ public class TopicMapImpl extends TopicMap {
     }
     
     @Override
-    public Iterator getTopics() throws TopicMapException {
+    public Iterator<Topic> getTopics() throws TopicMapException {
         // TODO: synchronization of iterator?
         final Iterator<Topic> iter=topics.iterator();
         return new TopicIterator(){
@@ -355,22 +354,22 @@ public class TopicMapImpl extends TopicMap {
     
     
     @Override
-    public Iterator getAssociations() throws TopicMapException {
+    public Iterator<Association> getAssociations() throws TopicMapException {
         return associations.iterator();
     }
     
     @Override
-    public Collection getAssociationsOfType(Topic type) throws TopicMapException {
-        if(type == null) return new ArrayList();
+    public Collection<Association> getAssociationsOfType(Topic type) throws TopicMapException {
+        if(type == null) return new ArrayList<>();
         Collection<Association> s=associationTypeIndex.get(type);
-        if(s==null) return new HashSet();
+        if(s==null) return new LinkedHashSet<>();
         else return s;
     }    
     
-    public Topic getTopic(Collection SIs) throws TopicMapException{
-        Iterator iter=SIs.iterator();
+    public Topic getTopic(Collection<Locator> SIs) throws TopicMapException{
+        Iterator<Locator> iter=SIs.iterator();
         while(iter.hasNext()){
-            Locator l=(Locator)iter.next();
+            Locator l=iter.next();
             Topic t=getTopic(l);
             if(t!=null) return t;
         }
@@ -383,11 +382,11 @@ public class TopicMapImpl extends TopicMap {
         return idCounter++;
     }
     
-    private Topic _copyTopicIn(Topic t,boolean deep,Hashtable copied) throws TopicMapException{
+    private Topic _copyTopicIn(Topic t,boolean deep,Map<Topic,Locator> copied) throws TopicMapException{
         return _copyTopicIn(t,deep,false,copied);
     }
     
-    private Topic _copyTopicIn(Topic t,boolean deep,boolean stub,Hashtable copied) throws TopicMapException{
+    private Topic _copyTopicIn(Topic t,boolean deep,boolean stub,Map<Topic,Locator> copied) throws TopicMapException{
         
         if(copied.containsKey(t)) {
             // Don't return the topic that was created when t was copied because it might have been merged with something
@@ -407,9 +406,9 @@ public class TopicMapImpl extends TopicMap {
 
         boolean newer=(t.getEditTime()>=nt.getEditTime());
         
-        Iterator iter=t.getSubjectIdentifiers().iterator();
-        while(iter.hasNext()){
-            Locator l=(Locator)iter.next();
+        Iterator<Locator> subjectIdentifierIter=t.getSubjectIdentifiers().iterator();
+        while(subjectIdentifierIter.hasNext()){
+            Locator l=subjectIdentifierIter.next();
             nt.addSubjectIdentifier(l);
         }
         
@@ -418,7 +417,7 @@ public class TopicMapImpl extends TopicMap {
             String randomNumber = System.currentTimeMillis()+"-"+getIDCounter();
             nt.addSubjectIdentifier(new Locator("https://wandora.org/si/temp/" + randomNumber));
         }
-        copied.put(t,(Locator)nt.getSubjectIdentifiers().iterator().next());
+        copied.put(t, nt.getSubjectIdentifiers().iterator().next());
         
         
         if(nt.getSubjectLocator()==null && t.getSubjectLocator()!=null){
@@ -431,36 +430,36 @@ public class TopicMapImpl extends TopicMap {
         
         if( (!stub) || deep) {
 
-            iter=t.getTypes().iterator();
-            while(iter.hasNext()){
-                Topic type=(Topic)iter.next();
+            Iterator<Topic> typeIter=t.getTypes().iterator();
+            while(typeIter.hasNext()){
+                Topic type=typeIter.next();
                 Topic ntype=_copyTopicIn(type,deep,true,copied);
                 nt.addType(ntype);
             }
 
-            iter=t.getVariantScopes().iterator();
-            while(iter.hasNext()){
-                Set scope=(Set)iter.next();
-                Set nscope=new LinkedHashSet();
-                Iterator iter2=scope.iterator();
-                while(iter2.hasNext()){
-                    Topic st=(Topic)iter2.next();
+            Iterator<Set<Topic>> variantScopeIter=t.getVariantScopes().iterator();
+            while(variantScopeIter.hasNext()){
+                Set<Topic> scope=variantScopeIter.next();
+                Set<Topic> nscope=new LinkedHashSet<>();
+                Iterator<Topic> variantScopeIter2=scope.iterator();
+                while(variantScopeIter2.hasNext()){
+                    Topic st=variantScopeIter2.next();
                     Topic nst=_copyTopicIn(st,deep,true,copied);
                     nscope.add(nst);
                 }
                 nt.setVariant(nscope, t.getVariant(scope));
             }
 
-            iter=t.getDataTypes().iterator();
-            while(iter.hasNext()){
-                Topic type=(Topic)iter.next();
+            Iterator<Topic> datatypeIter=t.getDataTypes().iterator();
+            while(datatypeIter.hasNext()){
+                Topic type=datatypeIter.next();
                 Topic ntype=_copyTopicIn(type,deep,true,copied);
-                Hashtable versiondata=t.getData(type);
-                Iterator iter2=versiondata.entrySet().iterator();
-                while(iter2.hasNext()){
-                    Map.Entry e=(Map.Entry)iter2.next();
-                    Topic version=(Topic)e.getKey();
-                    String data=(String)e.getValue();
+                Hashtable<Topic,String> versiondata=t.getData(type);
+                Iterator<Map.Entry<Topic,String>> versiondataIter=versiondata.entrySet().iterator();
+                while(versiondataIter.hasNext()){
+                    Map.Entry<Topic,String> e=versiondataIter.next();
+                    Topic version=e.getKey();
+                    String data=e.getValue();
                     Topic nversion=_copyTopicIn(version,deep,true,copied);
                     nt.setData(ntype,nversion,data);
                 }
@@ -523,9 +522,9 @@ public class TopicMapImpl extends TopicMap {
         Association n=_copyAssociationIn(a);
         Topic minTopic=null;
         int minCount=Integer.MAX_VALUE;
-        Iterator iter2=n.getRoles().iterator();
+        Iterator<Topic> iter2=n.getRoles().iterator();
         while(iter2.hasNext()){
-            Topic role=(Topic)iter2.next();
+            Topic role=iter2.next();
             Topic t=n.getPlayer(role);
             if(t.getAssociations().size()<minCount){
                 minCount=t.getAssociations().size();
@@ -539,20 +538,20 @@ public class TopicMapImpl extends TopicMap {
     @Override
     public Topic copyTopicIn(Topic t, boolean deep)  throws TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        return _copyTopicIn(t,deep,false,new Hashtable());
+        return _copyTopicIn(t,deep,false,new HashMap<>());
     }
     
     
     @Override
     public void mergeIn(TopicMap tm)  throws TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        Iterator iter=tm.getTopics();
-        Hashtable copied=new Hashtable();
+        Iterator<Topic> topicIter=tm.getTopics();
+        Map<Topic,Locator> copied=new HashMap<>();
         int tcount=0;
-        while(iter.hasNext()){
+        while(topicIter.hasNext()){
             Topic t = null;
             try {
-                t=(Topic)iter.next();
+                t=topicIter.next();
                 _copyTopicIn(t,true,false,copied);
                 tcount++;
             }
@@ -561,18 +560,18 @@ public class TopicMapImpl extends TopicMap {
                 e.printStackTrace();
             }
         }
-        HashSet endpoints=new LinkedHashSet();
-        iter=tm.getAssociations();
+        Set<Topic> endpoints=new LinkedHashSet<>();
+        Iterator<Association> associationIter=tm.getAssociations();
         int acount=0;
-        while(iter.hasNext()) {
+        while(associationIter.hasNext()) {
             try {
-                Association a=(Association)iter.next();
+                Association a=associationIter.next();
                 Association na=_copyAssociationIn(a);
                 Topic minTopic=null;
                 int minCount=Integer.MAX_VALUE;
-                Iterator iter2=na.getRoles().iterator();
-                while(iter2.hasNext()){
-                    Topic role=(Topic)iter2.next();
+                Iterator<Topic> roleIter=na.getRoles().iterator();
+                while(roleIter.hasNext()){
+                    Topic role=roleIter.next();
                     Topic t=na.getPlayer(role);
                     if(t.getAssociations().size()<minCount){
                         minCount=t.getAssociations().size();
@@ -588,10 +587,10 @@ public class TopicMapImpl extends TopicMap {
             }
         }
         // System.out.println("merged "+tcount+" topics and "+acount+" associations");
-        iter=endpoints.iterator();
-        while(iter.hasNext()){
-            TopicImpl t=(TopicImpl)iter.next();
-            if(t != null) t.removeDuplicateAssociations();
+        Iterator<Topic> endpointIter=endpoints.iterator();
+        while(endpointIter.hasNext()){
+            Topic t=endpointIter.next();
+            if(t instanceof TopicImpl topicImpl) topicImpl.removeDuplicateAssociations();
         }
     }
     
@@ -601,9 +600,9 @@ public class TopicMapImpl extends TopicMap {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         Topic nt=getTopic((Locator)t.getSubjectIdentifiers().iterator().next());
         if(nt==null) nt=copyTopicIn(t,false);
-        Iterator iter=t.getAssociations().iterator();
+        Iterator<Association> iter=t.getAssociations().iterator();
         while(iter.hasNext()){
-            _copyAssociationIn((Association)iter.next());
+            _copyAssociationIn(iter.next());
         }
         ((TopicImpl)nt).removeDuplicateAssociations();
     }
@@ -631,9 +630,9 @@ public class TopicMapImpl extends TopicMap {
     
     public void addTopicType(Topic t,Topic type) throws TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        Collection s=typeIndex.get(type);
+        Collection<Topic> s=typeIndex.get(type);
         if(s==null) {
-            s=new LinkedHashSet();
+            s=new LinkedHashSet<>();
             typeIndex.put(type,s);
         }
         s.add(t);
@@ -641,7 +640,7 @@ public class TopicMapImpl extends TopicMap {
     
     public void removeTopicType(Topic t,Topic type) throws TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        Collection s=typeIndex.get(type);
+        Collection<Topic> s=typeIndex.get(type);
         if(s==null) return;
         s.remove(t);
     }
@@ -663,7 +662,7 @@ public class TopicMapImpl extends TopicMap {
         if(type!=null){ // note: type can be null only when destroying association
             Collection<Association> s=associationTypeIndex.get(type);
             if(s==null) {
-                s=new LinkedHashSet();
+                s=new LinkedHashSet<>();
                 associationTypeIndex.put(type,s);
             }
             s.add(a);
@@ -797,8 +796,8 @@ public class TopicMapImpl extends TopicMap {
     
     @Override
     public Collection<Topic> search(String query, TopicMapSearchOptions options)  throws TopicMapException{
-        ArrayList<Topic> searchResult = new ArrayList<Topic>();
-        Iterator topicIterator = getTopics();
+        List<Topic> searchResult = new ArrayList<Topic>();
+        Iterator<Topic> topicIterator = getTopics();
         Topic t = null;
         Pattern p = Pattern.compile(query, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
         
@@ -819,11 +818,11 @@ public class TopicMapImpl extends TopicMap {
                 
                 // --- Variant names ---
                 if(options.searchVariants) {
-                    Set varcol = t.getVariantScopes();
-                    Iterator variants = varcol.iterator();
+                    Set<Set<Topic>> varcol = t.getVariantScopes();
+                    Iterator<Set<Topic>> variants = varcol.iterator();
                     boolean matches = false;
                     while(!matches && variants.hasNext()) {
-                        Set scope = (Set)variants.next();
+                        Set<Topic> scope = variants.next();
                         String name = t.getVariant(scope);
                         if(searchMatch(name, p)) {
                             searchResult.add(t);
@@ -838,15 +837,15 @@ public class TopicMapImpl extends TopicMap {
                 // --- text occurrences ---
                 if(options.searchOccurrences) {
                     boolean matches = false;
-                    Iterator iter = t.getDataTypes().iterator();
+                    Iterator<Topic> iter = t.getDataTypes().iterator();
                     while(!matches && iter.hasNext()) {
                         Topic type=(Topic)iter.next();
-                        Hashtable versiondata=t.getData(type);
-                        Iterator iter2=versiondata.entrySet().iterator();
+                        Hashtable<Topic,String> versiondata=t.getData(type);
+                        Iterator<Map.Entry<Topic,String>> iter2=versiondata.entrySet().iterator();
                         while(!matches && iter2.hasNext()){
-                            Map.Entry e=(Map.Entry) iter2.next();
-                            Topic version=(Topic)e.getKey();
-                            String data=(String)e.getValue();
+                            Map.Entry<Topic,String> e=iter2.next();
+                            Topic version=e.getKey();
+                            String data=e.getValue();
                             if(searchMatch(data, p)) {
                                 searchResult.add(t);
                                 matches = true;
@@ -872,12 +871,12 @@ public class TopicMapImpl extends TopicMap {
                 
                 // --- sis ---
                 if(options.searchSIs) {
-                    Collection sis = t.getSubjectIdentifiers();
-                    Iterator siiter = sis.iterator();
+                    Collection<Locator> sis = t.getSubjectIdentifiers();
+                    Iterator<Locator> siiter = sis.iterator();
                     Locator locator = null;
                     boolean matches = false;
                     while(!matches && siiter.hasNext()) {
-                        locator = (Locator) siiter.next();
+                        locator = siiter.next();
                         if(locator != null) {
                             if(searchMatch(locator.toExternalForm(), p)) {
                                 searchResult.add(t);
@@ -924,10 +923,10 @@ public class TopicMapImpl extends TopicMap {
             }
             case TopicMapStatOptions.NUMBER_OF_TOPIC_CLASSES: {
                 
-                // TODO: WHY typeIndex IS NOT GOOD HERE.
+                // WHY typeIndex IS NOT GOOD HERE?
                 // UNDO/REDO CAUSES THE typeIndex LEAK.
                 
-                HashSet typeTopics = new LinkedHashSet();
+                Set<Topic> typeTopics = new LinkedHashSet<>();
                 synchronized(topics) {
                     for(Topic t : topics) {
                         if(t != null && !t.isRemoved()) {
@@ -946,8 +945,8 @@ public class TopicMapImpl extends TopicMap {
                 return new TopicMapStatData(associations.size());
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_PLAYERS: {
-                HashSet associationPlayers = new LinkedHashSet();
-                Collection associationRoles = null;
+                Set<Topic> associationPlayers = new LinkedHashSet<>();
+                Collection<Topic> associationRoles = null;
                 Iterator<Association> associationIter = null;
                 Iterator<Topic> associationRoleIter = null;
                 Association association = null;
@@ -977,7 +976,7 @@ public class TopicMapImpl extends TopicMap {
                 return new TopicMapStatData(associationPlayers.size());
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_ROLES: {
-                HashSet associationRoles = new LinkedHashSet();
+                Set<Topic> associationRoles = new LinkedHashSet<>();
                 Association association = null;
                 synchronized(associations) {
                     Iterator<Association> associationIter = associations.iterator();
@@ -992,10 +991,10 @@ public class TopicMapImpl extends TopicMap {
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_TYPES: {
                 
-                // TODO: WHY associationTypeIndex IS NOT GOOD HERE.
+                // WHY associationTypeIndex IS NOT GOOD HERE?
                 // UNDO/REDO CAUSES THE associationTypeIndex LEAK.
                 
-                HashSet associationTypes = new LinkedHashSet();
+                Set<Topic> associationTypes = new LinkedHashSet<>();
                 Topic typeTopic = null;
                 synchronized(associations) {
                     Iterator<Association> associationsIterator = associations.iterator();
@@ -1017,9 +1016,9 @@ public class TopicMapImpl extends TopicMap {
                 Topic t = null;
                 Collection<Topic> dataTypes = null;
                 synchronized(topics) {
-                    Iterator topicIter=topics.iterator();
+                    Iterator<Topic> topicIter=topics.iterator();
                     while(topicIter.hasNext()) {
-                        t=(Topic) topicIter.next();
+                        t=topicIter.next();
                         if(t != null) {
                             dataTypes = t.getDataTypes();
                             if(dataTypes != null && !dataTypes.isEmpty()) {

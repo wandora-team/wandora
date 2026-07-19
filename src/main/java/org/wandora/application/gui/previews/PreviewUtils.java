@@ -291,10 +291,10 @@ public class PreviewUtils {
                     DataURL.saveToFile(locator, file);
                 }
                 else if(locator.startsWith("file:")) {
-                    Files.copy(new File(new URL(URLDecoder.decode(locator, "UTF-8")).getFile()).toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(new File(new URI(URLDecoder.decode(locator, "UTF-8")).toURL().getFile()).toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
                 else {
-                    IObox.moveUrl(new URL(locator), file);
+                    IObox.moveUrl(new URI(locator).toURL(), file);
                 }
             }
             catch(Exception e) {
@@ -444,7 +444,7 @@ public class PreviewUtils {
     
     
     
-    private static HashMap<String,String> mimetypeCache = new HashMap();
+    private static Map<String,String> mimetypeCache = new HashMap<>();
     private static int mimetypeCacheMaxSize = 9999;
     
     public static boolean isOfType(String url, String[] mimeTypes, String[] extensions) {
@@ -488,7 +488,7 @@ public class PreviewUtils {
                 if(mimeTypes != null && mimeTypes.length > 0) {
                     try {
                         String urlDecoded = URLDecoder.decode(url, "utf-8");
-                        URL realUrl = new URL(urlDecoded);
+                        URL realUrl = new URI(urlDecoded).toURL();
                         if(realUrl != null) {
                             String lowerCaseMimeType = null;
                             if(mimetypeCache.containsKey(url)) {
@@ -542,7 +542,7 @@ public class PreviewUtils {
     
     public static boolean hasJavaFX() {
         try {
-            Class jfxPanel = Class.forName("javafx.embed.swing.JFXPanel");
+            Class.forName("javafx.embed.swing.JFXPanel");
             return true;
         } 
         catch (ClassNotFoundException e) {

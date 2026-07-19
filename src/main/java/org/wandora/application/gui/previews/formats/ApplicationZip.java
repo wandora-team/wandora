@@ -29,7 +29,7 @@ import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URL;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -181,7 +181,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                 zipInputStream = new ZipInputStream(dataUrl.getDataStream());
             }
             else {
-                zipInputStream = new ZipInputStream(new URL(locator).openStream());
+                zipInputStream = new ZipInputStream(new URI(locator).toURL().openStream());
             }
             
             //create output directory is not exists
@@ -260,15 +260,16 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
     
     
     public class ZipTable extends JTable implements ActionListener {
-        private ZipTableModel model = null;
-        TableRowSorter rowSorter = null;
+        private static final long serialVersionUID = 1L;
+		private ZipTableModel model = null;
+        TableRowSorter<?> rowSorter = null;
         
 
         public ZipTable(String locator) {
             super();
             model = new ZipTableModel(locator);
             this.setModel(model);
-            rowSorter = new TableRowSorter(model);
+            rowSorter = new TableRowSorter<>(model);
             this.setRowSorter(rowSorter);
             rowSorter.setSortsOnUpdates(true);
             
@@ -467,7 +468,8 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
         
         
         public class ZipTableModel extends DefaultTableModel {
-            ArrayList<ZipTableRow> zipData;
+            private static final long serialVersionUID = 1L;
+			ArrayList<ZipTableRow> zipData;
             int numberOfFields = 6;
             DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String locator = null;
@@ -484,7 +486,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
             }
 
             @Override
-            public Class getColumnClass(int col) {
+            public Class<?> getColumnClass(int col) {
                 switch(col) {
                     case 0: return String.class;
                     case 1: return String.class;
@@ -561,7 +563,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                         zipInputStream = new ZipInputStream(dataUrl.getDataStream());
                     }
                     else {
-                        zipInputStream = new ZipInputStream(new URL(locator).openStream());
+                        zipInputStream = new ZipInputStream(new URI(locator).toURL().openStream());
                     }
                     ZipEntry zipEntry = zipInputStream.getNextEntry();
                     while(zipEntry != null) {
@@ -609,7 +611,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                         zipInputStream = new ZipInputStream(dataUrl.getDataStream());
                     }
                     else {
-                        zipInputStream = new ZipInputStream(new URL(locator).openStream());
+                        zipInputStream = new ZipInputStream(new URI(locator).toURL().openStream());
                     }
                     ZipEntry zipEntry = zipInputStream.getNextEntry();
                     while(zipEntry != null && entryData == null) {
@@ -632,7 +634,9 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                     e.printStackTrace();
                 }
                 try {
-                    zipInputStream.close();
+                	if(zipInputStream != null) {
+                		zipInputStream.close();
+                	}
                 }
                 catch(Exception e) {}
                 return entryData;

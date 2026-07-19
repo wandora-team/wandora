@@ -401,7 +401,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                             continue;
                         }
                         try{
-                            Constructor constructor=cls.getConstructor();
+                            Constructor<?> constructor=cls.getConstructor();
                             Object o=constructor.newInstance();
                             WandoraTool tool=(WandoraTool)o;
                             //allTools.add(tool);

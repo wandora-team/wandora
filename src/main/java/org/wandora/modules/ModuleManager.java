@@ -839,14 +839,14 @@ public class ModuleManager {
     public Object parseXMLParamElement(Element e) throws ReflectiveOperationException, IllegalArgumentException, ScriptException {
         String instance=e.getAttribute("instance");
         if(instance!=null && instance.length()>0){
-            Class cls=Class.forName(instance);
+            Class<?> cls=Class.forName(instance);
             Map<String,Object> params=parseXMLOptionsElement(e);
             if(!params.isEmpty()){
                 Collection<Object> constructorParams=params.values();
-                Constructor[] cs=cls.getConstructors();
+                Constructor<?>[] cs=cls.getConstructors();
                 ConstructorLoop: for(int i=0;i<cs.length;i++){
-                    Constructor c=cs[i];
-                    Class[] paramTypes=c.getParameterTypes();
+                    Constructor<?> c=cs[i];
+                    Class<?>[] paramTypes=c.getParameterTypes();
                     if(paramTypes.length!=constructorParams.size()) continue;
                     
                     int j=-1;
@@ -879,7 +879,7 @@ public class ModuleManager {
         
         String clas=e.getAttribute("class");
         if(clas!=null && clas.length()>0){
-            Class cls=Class.forName(clas);
+            Class<?> cls=Class.forName(clas);
             return cls;
         }
         
@@ -977,7 +977,7 @@ public class ModuleManager {
                 String service=e2.getAttribute("service");
                 String value=e2.getAttribute("value");
                 
-                Class serviceClass=Class.forName(service);
+                Class<?> serviceClass=Class.forName(service);
                 if(!Module.class.isAssignableFrom(serviceClass)){
                     throw new ClassCastException("The specified service is not a module");
                 }

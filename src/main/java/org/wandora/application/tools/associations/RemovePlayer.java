@@ -97,15 +97,14 @@ public class RemovePlayer extends AbstractWandoraTool {
             setDefaultLogger();
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
-                Iterator associations = context.getContextObjects();
+                Iterator<Association> associations = context.getContextObjects();
                 AssociationTable associationTable = null;
                 Object contextSource = context.getContextSource();
                 if(contextSource instanceof AssociationTable) {
                     associationTable = (AssociationTable) context.getContextSource();
                 }
                 if(associationTable != null) {
-                    associationsWithRoles = associationTable.getSelectedAssociationsWithSelectedRoles();
-                            
+                    associationsWithRoles = associationTable.getSelectedAssociationsWithSelectedRoles();    
                 }
                 
                 if(associationsWithRoles != null && associationsWithRoles.size() > 0) {

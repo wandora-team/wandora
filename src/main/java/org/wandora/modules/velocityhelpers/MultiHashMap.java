@@ -27,10 +27,11 @@
  */
 
 package org.wandora.modules.velocityhelpers;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 /**
  *
@@ -41,36 +42,36 @@ import java.util.Set;
  Do not implement Map interface or extend classes implementing it. This class is not a map!
  In Map specification it is specifically said that "each key can map to at most one value."
  */
-public class SetHashMap {
+public class MultiHashMap<K, V> {
     
-    private HashMap hm;
+    private Map<K,Collection<V>> hm;
     
     /** Creates a new instance of MultiHashMap */
-    public SetHashMap() {
-        hm=new HashMap();
+    public MultiHashMap() {
+        hm=new HashMap<>();
     }
     
-    public Collection get(Object key){
-        Collection c=(Collection)hm.get(key);
-        if(c==null) return new ArrayList();
+    public Collection<?> get(K key){
+        Collection<V> c=hm.get(key);
+        if(c==null) return new LinkedHashSet<>();
         else return c;
     }
     
-    public boolean add(Object key,Object value){
-        Collection c=(Collection)hm.get(key);
+    public boolean add(K key,V value){
+        Collection<V> c=hm.get(key);
         if(c==null){
-            c=new HashSet();
+            c=new LinkedHashSet<V>();
             hm.put(key,c);
         }
         return c.add(value);
     }
     
-    public boolean isKeyEmpty(Object key){
+    public boolean isKeyEmpty(K key){
         return hm.containsKey(key);
     }
     
-    public boolean containsAt(Object key,Object value){
-        Collection c=(Collection)hm.get(key);
+    public boolean containsAt(K key,V value){
+        Collection<V> c=hm.get(key);
         if(c==null) return false;
         else return c.contains(value);
     }
@@ -79,19 +80,19 @@ public class SetHashMap {
         return (hm.remove(key)!=null);
     }
     
-    public boolean remove(Object key,Object value){
-        Collection c=(Collection)hm.get(key);
+    public boolean remove(K key,V value){
+        Collection<V> c=hm.get(key);
         if(c==null) return false;
         boolean ret=c.remove(value);
         if(c.isEmpty()) hm.remove(c);
         return ret;
     }
     
-    public Set entrySet(){
+    public Set<Map.Entry<K,Collection<V>>> entrySet(){
         return hm.entrySet();
     }
     
-    public Set keySet(){
+    public Set<K> keySet(){
         return hm.keySet();
     }
     

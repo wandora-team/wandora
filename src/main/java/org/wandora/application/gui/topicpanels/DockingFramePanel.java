@@ -84,7 +84,6 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.DnDBox;
@@ -472,7 +471,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         List<Object> addTopicPanelMenuStruct = new ArrayList<>();
         for(List<Object> panelData : availableTopicPanels) {
             try {
-                Class panelClass = Class.forName((String) panelData.get(0));
+                Class<?> panelClass = Class.forName((String) panelData.get(0));
                 if(!this.getClass().equals(panelClass)) {
                     addTopicPanelMenuStruct.add( (String) panelData.get(1) );
                     addTopicPanelMenuStruct.add( (Icon) panelData.get(2) );
@@ -1235,11 +1234,11 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             Options options = wandora.getOptions();
             String defaultPanelClassName = options.get("gui.topicPanels.defaultPanel");
             if(defaultPanelClassName != null) {
-                Class topicPanelClass = Class.forName(defaultPanelClassName);
+                Class<?> topicPanelClass = Class.forName(defaultPanelClassName);
                 if(TopicPanel.class.isAssignableFrom(topicPanelClass) &&
                         !Modifier.isAbstract(topicPanelClass.getModifiers()) &&
                         !Modifier.isInterface(topicPanelClass.getModifiers()) ){
-                    return (TopicPanel) topicPanelClass.newInstance();
+                    return (TopicPanel) topicPanelClass.getDeclaredConstructor().newInstance();
                 }
             }
         }

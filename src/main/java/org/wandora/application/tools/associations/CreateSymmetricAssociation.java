@@ -99,7 +99,7 @@ public class CreateSymmetricAssociation extends AbstractWandoraTool {
         Iterator associations = context.getContextObjects();
         Association association = null;
         int count = 0;
-        Set<Topic> symmetricRoles = new HashSet<Topic>();
+        Set<Topic> symmetricRoles = new HashSet<>();
         Collection<Topic> roles = null;
         Topic role;
         Topic[] symmetricRoleArray = null;

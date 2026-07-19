@@ -50,7 +50,7 @@ public class RolesDirective implements Directive {
      */
     public RolesDirective(Directive query,ArrayList roles) {
         this.query=query;
-        this.roles=new ArrayList<Locator>();
+        this.roles=new ArrayList<>();
         for(Object o : roles){
             if(o instanceof Locator) this.roles.add((Locator)o);
             else this.roles.add(new Locator((String)o));
@@ -58,7 +58,7 @@ public class RolesDirective implements Directive {
     }
     public RolesDirective(Directive query,Object ... roles){
         this.query=query;
-        this.roles=new ArrayList<Locator>();
+        this.roles=new ArrayList<>();
         for(int i=0;i<roles.length;i++){
             if(roles[i] instanceof Locator) this.roles.add((Locator)roles[i]);
             else this.roles.add(new Locator((String)roles[i]));

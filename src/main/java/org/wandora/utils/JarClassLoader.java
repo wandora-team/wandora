@@ -13,6 +13,7 @@ import java.net.URLStreamHandlerFactory;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -54,7 +55,7 @@ public class JarClassLoader extends URLClassLoader {
     }
     
     public Collection<String> listClasses() throws IOException {
-        LinkedHashSet<String> ret=new LinkedHashSet<String>();
+        Set<String> ret=new LinkedHashSet<>();
         for(File f : files){
             JarFile jf=new JarFile(f);
             try {
@@ -78,11 +79,11 @@ public class JarClassLoader extends URLClassLoader {
         return ret;
     }
 
-    public Collection<String> findServices(Class cls) throws IOException {
+    public Collection<String> findServices(Class<?> cls) throws IOException {
         return findServices(cls.getName());
     }
     public Collection<String> findServices(String service) throws IOException {
-        LinkedHashSet<String> ret=new LinkedHashSet<String>();
+        Set<String> ret=new LinkedHashSet<>();
         for(File f : files){
             JarFile jf=new JarFile(f);
             try {

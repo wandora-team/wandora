@@ -45,7 +45,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DirectiveUIHints implements Serializable {
     
-    protected String label;
+    private static final long serialVersionUID = 1L;
+    
+	protected String label;
     protected String category;
     protected Constructor[] constructors;
     protected Addon[] addons;
@@ -161,7 +163,7 @@ public class DirectiveUIHints implements Serializable {
                     return (DirectiveUIHints)m.invoke(null);
                 }
                 else {
-                    return ((Provider)cls.newInstance()).getUIHints();
+                    return ((Provider)cls.getDeclaredConstructor().newInstance()).getUIHints();
                 }
             }catch( IllegalAccessException | InstantiationException | NoSuchMethodException| InvocationTargetException e){
                 Wandora.getWandora().handleError(e);
@@ -173,7 +175,9 @@ public class DirectiveUIHints implements Serializable {
     
     
     public static class Parameter implements Serializable {
-        /**
+        private static final long serialVersionUID = 1L;
+
+		/**
          * Type of the parameter. Use Directive, Operand, String, Integer or
          * whatever else is suitable. Do not make this an array type though,
          * use the multiple flag for that.
@@ -337,7 +341,9 @@ public class DirectiveUIHints implements Serializable {
     }
         
     public static class Constructor implements Serializable {
-        protected Parameter[] parameters;
+        private static final long serialVersionUID = 1L;
+        
+		protected Parameter[] parameters;
         protected String label;
         
         public Constructor(){}
@@ -393,7 +399,7 @@ public class DirectiveUIHints implements Serializable {
         
         @JsonIgnore
         public <D> java.lang.reflect.Constructor<D> resolveConstructor(Class<D> cls) throws NoSuchMethodException {
-            Class[] params=new Class[parameters.length];
+            Class<?>[] params=new Class<?>[parameters.length];
             for(int i=0;i<params.length;i++){
                 params[i]=parameters[i].getReflectType();
             }
@@ -404,7 +410,9 @@ public class DirectiveUIHints implements Serializable {
     }
     
     public static class Addon implements Serializable {
-        protected Parameter[] parameters;
+        private static final long serialVersionUID = 1L;
+        
+		protected Parameter[] parameters;
         protected String method;
         protected String label;
         
@@ -474,7 +482,7 @@ public class DirectiveUIHints implements Serializable {
         
         @JsonIgnore
         public java.lang.reflect.Method resolveMethod(Class<?> cls) throws NoSuchMethodException {
-            Class[] params=new Class[parameters.length];
+            Class<?>[] params=new Class<?>[parameters.length];
             for(int i=0;i<params.length;i++){
                 params[i]=parameters[i].getReflectType();
             }

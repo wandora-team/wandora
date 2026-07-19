@@ -29,6 +29,7 @@ package org.wandora.application.tools.generators;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -82,7 +83,7 @@ public class CalendarGenerator extends AbstractGenerator {
         Map<String,String> values=god.getValues();
         
         int[] yearNumbers = null;
-        ArrayList<String> yearNumberArray = new ArrayList<String>();
+        List<String> yearNumberArray = new ArrayList<>();
         try {
             String years = values.get("Years");
             StringTokenizer st = new StringTokenizer(years, ",");

@@ -113,38 +113,38 @@ public class CopyTopics extends AbstractWandoraTool {
     List<Topic> allOccurrenceTypes = null;
     Set<Topic> scopeMemory = null;
     Wandora wandora = null;
-    Iterator topics = null;
+    Iterator<Topic> topics = null;
     
     
     public CopyTopics() throws TopicMapException {
-        this((Collection) null, COPY_BASENAMES, INCLUDE_NOTHING);
+        this((Collection<Topic>) null, COPY_BASENAMES, INCLUDE_NOTHING);
     }
     
-    public CopyTopics(Wandora admin, Collection topics)  throws TopicMapException {
+    public CopyTopics(Wandora admin, Collection<Topic> topics)  throws TopicMapException {
         this(admin, topics, COPY_BASENAMES, INCLUDE_NOTHING);
     }
-    public CopyTopics(Wandora admin, Collection topics, int includeOrders)  throws TopicMapException {
+    public CopyTopics(Wandora admin, Collection<Topic> topics, int includeOrders)  throws TopicMapException {
         this(admin, topics, COPY_BASENAMES, includeOrders);
     }
-    public CopyTopics(Wandora admin, Collection topics, int copyOrders, int includeOrders) throws TopicMapException {
+    public CopyTopics(Wandora admin, Collection<Topic> topics, int copyOrders, int includeOrders) throws TopicMapException {
         this.topics = topics.iterator();
         initialize(copyOrders, includeOrders);
         execute(admin);
     }
     
     
-    public CopyTopics(Collection topics, int includeOrders) {
+    public CopyTopics(Collection<Topic> topics, int includeOrders) {
         this(topics, COPY_BASENAMES, includeOrders);
     }
-    public CopyTopics(Collection topics, int copyOrders, int includeOrders) {
+    public CopyTopics(Collection<Topic> topics, int copyOrders, int includeOrders) {
         if(topics != null) this.topics = topics.iterator();
         initialize(copyOrders, includeOrders);
     }
     public CopyTopics(int copyOrders, int includeOrders) {
-        this((Collection) null, copyOrders, includeOrders);
+        this((Collection<Topic>) null, copyOrders, includeOrders);
     }
     public CopyTopics(int includeOrders) {
-        this((Collection) null, COPY_BASENAMES, includeOrders);
+        this((Collection<Topic>) null, COPY_BASENAMES, includeOrders);
     }
     
     
@@ -215,7 +215,7 @@ public class CopyTopics extends AbstractWandoraTool {
     
     
 
-    public void setTopics(Collection topics) {
+    public void setTopics(Collection<Topic> topics) {
         this.topics = topics.iterator();
     }
     public void setTopics(Topic[] topicArray) {
@@ -285,7 +285,7 @@ public class CopyTopics extends AbstractWandoraTool {
             if(topics == null) {
                 topics = getContext().getContextObjects();
             }
-            if(topics == null) topics = (new ArrayList<>()).iterator();
+            if(topics == null) topics = (new ArrayList<Topic>()).iterator();
             int count = 0;
             
             

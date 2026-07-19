@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,8 +47,8 @@ import java.util.Map;
  */
 public class SimpleVirtualFileSystem implements VirtualFileSystem/*,XMLParamAware*/ {
     
-    private HashMap directories;
-    private HashMap urls;
+    private Map<String,String> directories;
+    private Map<String,String> urls;
     
     /** Creates a new instance of SimpleVirtualFileSystem */
     public SimpleVirtualFileSystem(String dir,String loc,String url) {
@@ -55,8 +56,8 @@ public class SimpleVirtualFileSystem implements VirtualFileSystem/*,XMLParamAwar
         addDirectory(dir,loc,url);
     }
     public SimpleVirtualFileSystem() {
-        directories=new HashMap();
-        urls=new HashMap();
+        directories=new HashMap<>();
+        urls=new HashMap<>();
     }
     
     public String cleanFileName(String f){
@@ -100,11 +101,11 @@ public class SimpleVirtualFileSystem implements VirtualFileSystem/*,XMLParamAwar
     
     public String[] listDirectories(String dir) {
         if(dir.equals("/")){
-            ArrayList v=new ArrayList();
-            Iterator iter=directories.entrySet().iterator();
+            List<String> v=new ArrayList<>();
+            Iterator<Map.Entry<String,String>> iter=directories.entrySet().iterator();
             while(iter.hasNext()){
-                Map.Entry e=(Map.Entry)iter.next();
-                String d=(String)e.getKey();
+                Map.Entry<String,String> e=iter.next();
+                String d=e.getKey();
                 if(!d.equals("/")){
                     v.add(d);
                 }
@@ -118,7 +119,7 @@ public class SimpleVirtualFileSystem implements VirtualFileSystem/*,XMLParamAwar
         File f=getRealFileFor(dir);
         if(f==null || !f.isDirectory()) return null;
         File[] files=f.listFiles();
-        ArrayList v=new ArrayList();
+        List<String> v=new ArrayList<>();
         for(int i=0;i<files.length;i++){
             if(!files[i].isDirectory()){
                 v.add(files[i].getName());

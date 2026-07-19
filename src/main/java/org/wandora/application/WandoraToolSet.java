@@ -57,7 +57,7 @@ public class WandoraToolSet implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int index = 0;
     private String name = null;
-    private List tools = new ArrayList();
+    private List<Object> tools = new ArrayList<>();
     private Wandora wandora = null;
     
     
@@ -118,17 +118,15 @@ public class WandoraToolSet implements Serializable {
     public String getNameForTool(WandoraTool tool) {
         return getNameForTool(tool, tools);
     }
-    public String getNameForTool(WandoraTool tool, List set) {
+    public String getNameForTool(WandoraTool tool, List<Object> set) {
         for(Object o : set) {
             if(o != null) {
-                if(o instanceof ToolItem) {
-                    ToolItem t = (ToolItem) o;
+                if(o instanceof ToolItem t) {
                     if(tool.equals(t.getTool())) {
                         return t.getName();
                     }
                 }
-                else if(o instanceof WandoraToolSet) {
-                    WandoraToolSet ts = (WandoraToolSet) o;
+                else if(o instanceof WandoraToolSet ts) {
                     String n = ts.getNameForTool(tool);
                     if(n != null) return n;
                 }
@@ -161,17 +159,15 @@ public class WandoraToolSet implements Serializable {
     public WandoraTool getToolForRealName(String name) {
         return getToolForRealName(name, tools);
     }
-    public WandoraTool getToolForRealName(String name, List set) {
+    public WandoraTool getToolForRealName(String name, List<Object> set) {
         for(Object o : set) {
             if(o != null) {
-                if(o instanceof ToolItem) {
-                    ToolItem t = (ToolItem) o;
+                if(o instanceof ToolItem t) {
                     if(name.equals(t.getTool().getName())) {
                         return t.getTool();
                     }
                 }
-                else if(o instanceof WandoraToolSet) {
-                    WandoraToolSet ts = (WandoraToolSet) o;
+                else if(o instanceof WandoraToolSet ts) {
                     WandoraTool t = ts.getToolForRealName(name);
                     if(t != null) return t;
                 }
@@ -185,17 +181,15 @@ public class WandoraToolSet implements Serializable {
     public WandoraTool getToolForName(String name) {
         return getToolForName(name, tools);
     }
-    public WandoraTool getToolForName(String name, List set) {
+    public WandoraTool getToolForName(String name, List<Object> set) {
         for(Object o : set) {
             if(o != null) {
-                if(o instanceof ToolItem) {
-                    ToolItem t = (ToolItem) o;
+                if(o instanceof ToolItem t) {
                     if(name.equals(t.getName())) {
                         return t.getTool();
                     }
                 }
-                else if(o instanceof WandoraToolSet) {
-                    WandoraToolSet ts = (WandoraToolSet) o;
+                else if(o instanceof WandoraToolSet ts) {
                     WandoraTool t = ts.getToolForName(name);
                     if(t != null) return t;
                 }
@@ -207,9 +201,9 @@ public class WandoraToolSet implements Serializable {
     
     
 
-    public List getTools() {
+    public List<Object> getTools() {
         if(tools == null) {
-            tools = new ArrayList();
+            tools = new ArrayList<>();
         }
         return tools;
     }
@@ -223,8 +217,7 @@ public class WandoraToolSet implements Serializable {
                     tools.remove(o);
                     return true;
                 }
-                else if(o instanceof WandoraToolSet) {
-                    WandoraToolSet ts = (WandoraToolSet) o;
+                else if(o instanceof WandoraToolSet ts) {
                     boolean removed = ts.remove(toolOrSet);
                     if(removed) return true;
                 }
@@ -243,16 +236,14 @@ public class WandoraToolSet implements Serializable {
         toolMenu.removeAll();
         if(toolSet == null) return toolMenu;
         for(Object o : toolSet.getTools()) {
-            if(o instanceof WandoraToolSet) {
-                WandoraToolSet subTools = (WandoraToolSet) o;
+            if(o instanceof WandoraToolSet subTools) {
                 if(subTools.size() > 0) {
                     JMenu subMenu = new SimpleMenu(subTools.getName());
                     getMenu(subMenu, subTools);
                     toolMenu.add(subMenu);
                 }
             }
-            else if(o instanceof ToolItem) {
-                ToolItem wrappedTool = (ToolItem) o;
+            else if(o instanceof ToolItem wrappedTool) {
                 String toolName = wrappedTool.getName();
                 if(toolName.startsWith("---")) {
                     toolMenu.add(new JSeparator());
@@ -281,12 +272,11 @@ public class WandoraToolSet implements Serializable {
     }
 
     public Object[] getAsObjectArray(WandoraToolSet toolSet, ToolFilter filter) {
-        List array = new ArrayList();
+        List<Object> array = new ArrayList<>();
         if(toolSet == null) return array.toArray();
         boolean previousWasSeparator = true;
         for(Object o : toolSet.getTools()) {
-            if(o instanceof WandoraToolSet) {
-                WandoraToolSet subTools = (WandoraToolSet) o;
+            if(o instanceof WandoraToolSet subTools) {
                 if(subTools.size() > 0) {
                     Object[] subArray = getAsObjectArray(subTools, filter);
                     if(subArray != null && subArray.length > 0) {
@@ -296,8 +286,7 @@ public class WandoraToolSet implements Serializable {
                     }
                 }
             }
-            else if(o instanceof ToolItem) {
-                ToolItem toolItem = (ToolItem) o;
+            else if(o instanceof ToolItem toolItem) {
                 String toolName = toolItem.getName();
                 if(toolName.startsWith("---")) {
                     if(!previousWasSeparator) {
@@ -343,20 +332,18 @@ public class WandoraToolSet implements Serializable {
     }
 
     public Map<String,WandoraTool> getAsMap(WandoraToolSet toolSet, ToolFilter filter) {
-        Map map = new LinkedHashMap();
+        Map<String,WandoraTool> map = new LinkedHashMap<>();
         if(toolSet == null) return map;
         for(Object o : toolSet.getTools()) {
-            if(o instanceof WandoraToolSet) {
-                WandoraToolSet subTools = (WandoraToolSet) o;
+            if(o instanceof WandoraToolSet subTools) {
                 if(subTools.size() > 0) {
-                    Map subMap = getAsMap(subTools, filter);
+                    Map<String,WandoraTool> subMap = getAsMap(subTools, filter);
                     if(subMap != null && !subMap.isEmpty()) {
                         map.putAll(subMap);
                     }
                 }
             }
-            else if(o instanceof ToolItem) {
-                ToolItem toolItem = (ToolItem) o;
+            else if(o instanceof ToolItem toolItem) {
                 WandoraTool tool = toolItem.getTool();
                 if(filter == null || filter.acceptTool(tool)) {
                     String toolName = toolItem.getName();
@@ -386,7 +373,9 @@ public class WandoraToolSet implements Serializable {
     
     
     public class ToolItem implements Serializable {
-        private String name = null;
+        private static final long serialVersionUID = 1L;
+        
+		private String name = null;
         private WandoraTool tool = null;
 
         public ToolItem(String n, WandoraTool t) {

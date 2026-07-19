@@ -25,6 +25,7 @@ package org.wandora.topicmap.undowrapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -300,7 +301,7 @@ public class UndoBuffer {
      * of Undo (and Redo) tools.
      */    
     public Collection<UndoOperation> getOperations() {
-        ArrayList<UndoOperation> ops = new ArrayList();
+        List<UndoOperation> ops = new ArrayList<>();
         ops.addAll(undobuffer);
         return ops;
     }

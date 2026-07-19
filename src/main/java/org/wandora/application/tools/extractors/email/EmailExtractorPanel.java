@@ -92,7 +92,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
     private String port="110";
     
     private String[] columnNames;
-    private Class[] columnClasses;
+    private Class<?>[] columnClasses;
     private boolean[] columnEditable;
     private String[] columnXMLKeys;    
     
@@ -137,7 +137,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         
         for(int i=0;i+3<additionalColumns.length;i+=4){
             this.columnNames[4+i/4]=(String)additionalColumns[i];
-            this.columnClasses[4+i/4]=(Class)additionalColumns[i+1];
+            this.columnClasses[4+i/4]=(Class<?>)additionalColumns[i+1];
             this.columnEditable[4+i/4]=((Boolean)additionalColumns[i+2]).booleanValue();
             this.columnXMLKeys[4+i/4]=(String)additionalColumns[i+3];
             if(columnXMLKeys[4+i/4]!=null) tryXMLExtract=true;
@@ -147,7 +147,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         
         this.tableModel=new DefaultTableModel( 
                 /*new Object[]{"Import","Delete","Sent","Image","Message"}*/objectNames,0){
-            public Class getColumnClass(int columnIndex){
+            public Class<?> getColumnClass(int columnIndex){
 /*                switch(columnIndex){
                     case 0: return Boolean.class;
                     case 1: return Boolean.class;

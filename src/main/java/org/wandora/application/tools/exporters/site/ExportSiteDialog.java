@@ -215,7 +215,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         pageTemplatePanel.add(pageTemplateField, gridBagConstraints);
 
-        browsePageTemplateButton.setLabel("Browse");
+        browsePageTemplateButton.setText("Browse");
         browsePageTemplateButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         browsePageTemplateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,7 +245,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         indexTemplatePanel.add(indexTemplateField, gridBagConstraints);
 
-        browseIndexTemplateButton.setLabel("Browse");
+        browseIndexTemplateButton.setText("Browse");
         browseIndexTemplateButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         browseIndexTemplateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -465,8 +465,8 @@ public class ExportSiteDialog extends javax.swing.JDialog {
     
     
     
-    public ComboBoxModel getEncodings() {
-        return new DefaultComboBoxModel(
+    public ComboBoxModel<String> getEncodings() {
+        return new DefaultComboBoxModel<>(
             new String[] {
                 "UTF-8",
                 "ISO-8859-1",
@@ -568,7 +568,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pageTemplatePanel;
     private javax.swing.JCheckBox resizeImagesCheckBox;
     private javax.swing.JPanel subjectLocatorPanel;
-    private javax.swing.JComboBox templateEncodingComboBox;
+    private javax.swing.JComboBox<String> templateEncodingComboBox;
     private javax.swing.JLabel templateEncodingLabel;
     private javax.swing.JPanel templateEncodingPanel;
     private javax.swing.JPanel templatePanel;

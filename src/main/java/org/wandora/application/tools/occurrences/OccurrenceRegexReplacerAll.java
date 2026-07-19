@@ -40,6 +40,7 @@ import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.gui.RegularExpressionEditor;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.Tuples.T4;
 
 
 
@@ -93,16 +94,14 @@ public class OccurrenceRegexReplacerAll extends AbstractWandoraTool {
                 String occurrence = null;
                 String newOccurrence = null;
 
-                Collection scopes = null;
-                Iterator typeIterator = null;
+                Iterator<Topic> typeIterator = null;
                 Collection<Topic> types = null;
                 Hashtable<Topic, String> occurrences = null;
-                //Iterator occurrenceIterator = null;
                 Topic type = null;
                 Topic scope = null;
                 int progress = 0;
                 int count = 0;
-                List updatedOccurrences = new ArrayList();
+                List<T4<Topic,Topic,Topic,String>> updatedOccurrences = new ArrayList<>();
 
                 while(topics.hasNext() && !forceStop()) {
                     try {
@@ -119,15 +118,12 @@ public class OccurrenceRegexReplacerAll extends AbstractWandoraTool {
                                         type = (Topic) typeIterator.next();
                                         occurrences = topic.getData(type);
                                         if(occurrences != null) {
-                                            for(Enumeration occurrenceScopes = occurrences.keys(); occurrenceScopes.hasMoreElements();) {
-                                                scope = (Topic) occurrenceScopes.nextElement();
+                                            for(Enumeration<Topic> occurrenceScopes = occurrences.keys(); occurrenceScopes.hasMoreElements();) {
+                                                scope = occurrenceScopes.nextElement();
                                                 occurrence = occurrences.get(scope);
                                                 newOccurrence = editor.replace(occurrence);
                                                 if(newOccurrence != null && !occurrence.equals(newOccurrence)) {
-                                                    updatedOccurrences.add(topic);
-                                                    updatedOccurrences.add(type);
-                                                    updatedOccurrences.add(scope);
-                                                    updatedOccurrences.add(newOccurrence);
+                                                    updatedOccurrences.add(new T4<>(topic, type, scope, newOccurrence));
                                                 }
                                             }
                                         }
@@ -149,13 +145,14 @@ public class OccurrenceRegexReplacerAll extends AbstractWandoraTool {
                 setProgressMax(updatedOccurrences.size());
                 progress = 0;
                 String newo = null;
-                for(Iterator i = updatedOccurrences.iterator(); i.hasNext() && !forceStop();) {
+                for(Iterator<T4<Topic,Topic,Topic,String>> i = updatedOccurrences.iterator(); i.hasNext() && !forceStop();) {
                     try {
                         setProgress(++progress);
-                        topic = (Topic) i.next();
-                        type = (Topic) i.next();
-                        scope = (Topic) i.next();
-                        newo = (String) i.next();
+                        T4<Topic,Topic,Topic,String> o = i.next();
+                        topic = o.e1;
+                        type = o.e2;
+                        scope = o.e3;
+                        newo = o.e4;
                         if(topic != null && type != null && scope != null && newo != null) {
                             topic.setData(type, scope, newo);
                             count++;

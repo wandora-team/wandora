@@ -58,8 +58,8 @@ public class TopicSelectList extends javax.swing.JPanel  {
     private boolean editable;
     private JDialog owner;
     
-    /** Creates new form TopicSelector */
-    public TopicSelectList(Collection ts,boolean editable,JDialog owner) {
+    /** Creates new form TopicSelectList */
+    public TopicSelectList(Collection<Topic> ts,boolean editable,JDialog owner) {
         this.owner=owner;
         this.topics=(Topic[])TMBox.sortTopics(ts,null).toArray(new Topic[0]);
         this.editable=editable;

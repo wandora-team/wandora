@@ -209,9 +209,9 @@ public class TopicImpl extends Topic {
             t=new LinkedHashMap<>();
             data.put(type,t);
         }
-        Iterator iter=versionData.entrySet().iterator();
+        Iterator<Map.Entry<Topic,String>> iter=versionData.entrySet().iterator();
         while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
+            Map.Entry<Topic,String> e=iter.next();
             Topic version=(Topic)e.getKey();
             String value=(String)e.getValue();
             if(value==null) throw new NullPointerException("Cannot set null data.");
@@ -317,7 +317,7 @@ public class TopicImpl extends Topic {
     
     
     @Override
-    public Hashtable getData(Topic type) throws TopicMapException {
+    public Hashtable<Topic,String> getData(Topic type) throws TopicMapException {
         Map<Topic,String> t = data.get(type);
         if(t==null) {
             return new Hashtable<>();
@@ -337,7 +337,7 @@ public class TopicImpl extends Topic {
     
     
     @Override
-    public Collection getSubjectIdentifiers() throws TopicMapException {
+    public Collection<Locator> getSubjectIdentifiers() throws TopicMapException {
         return subjectIdentifiers;
     }
     
@@ -888,7 +888,7 @@ public class TopicImpl extends Topic {
         // ----- change variant scopes ----- 
         List<T2<Topic,Set<Topic>>> tobeMappedVariantScopes = new ArrayList<>();
         for(Topic topic : ti.variantScopeIndex) {
-            Set<Set<Topic>> scopes = new LinkedHashSet();
+            Set<Set<Topic>> scopes = new LinkedHashSet<>();
             scopes.addAll(topic.getVariantScopes());
             for(Set<Topic> c : scopes) {
                 if(c.contains(t)) {
@@ -906,8 +906,8 @@ public class TopicImpl extends Topic {
         });
         for(T2<Topic,Set<Topic>> t2 : tobeMappedVariantScopes) {
             Topic topic = t2.e1;
-            Set c = t2.e2;
-            Set newscope = Collections.synchronizedSet(new LinkedHashSet());
+            Set<Topic> c = t2.e2;
+            Set<Topic> newscope = Collections.synchronizedSet(new LinkedHashSet<>());
             newscope.addAll(c);
             newscope.remove(t);
             newscope.add(this);
@@ -918,7 +918,7 @@ public class TopicImpl extends Topic {
         
         // set subject identifiers, do this last as some other things rely
         // on topics still having subject identifiers
-        HashSet<Locator> copied=new LinkedHashSet();
+        Set<Locator> copied=new LinkedHashSet<>();
         copied.addAll(ti.getSubjectIdentifiers());
         for(Locator l : copied) {
             ti.removeSubjectIdentifier(l);
@@ -1027,12 +1027,12 @@ public class TopicImpl extends Topic {
         if(type != null){
             t = associationIndex.get(type);
             if(t == null){
-                t = new LinkedHashMap();
+                t = new LinkedHashMap<>();
                 associationIndex.put(type,t);
             }
             s = t.get(role);
             if(s == null){
-                s = new LinkedHashSet();
+                s = new LinkedHashSet<>();
                 t.put(role,s);
             }
             s.add(a);

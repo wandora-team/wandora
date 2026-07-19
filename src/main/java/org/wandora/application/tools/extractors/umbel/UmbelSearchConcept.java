@@ -30,9 +30,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,7 +79,7 @@ public class UmbelSearchConcept extends UmbelGetConcept {
         String query = WandoraOptionPane.showInputDialog(wandora, "Search for Umbel concepts with query", "", "Search for Umbel concepts", WandoraOptionPane.QUESTION_MESSAGE);
         int pageIndex = 0;
         int numberOfPages = 1;
-        ArrayList<JSONObject> allResults = new ArrayList<>();
+        List<JSONObject> allResults = new ArrayList<>();
         if(query != null && query.length()>0) {
             do {
                 String requestUrl = getApiRequestUrlFor(query);
@@ -114,7 +116,7 @@ public class UmbelSearchConcept extends UmbelGetConcept {
                 selector.open(wandora);
 
                 if(selector.wasAccepted()) {
-                    ArrayList<JSONObject> selectedConcepts = selector.getSelection();
+                    List<JSONObject> selectedConcepts = selector.getSelection();
                     if(selectedConcepts != null && selectedConcepts.size() > 0) {
                         TopicMap tm = wandora.getTopicMap();
                         for(JSONObject conceptJSON : selectedConcepts) {
@@ -133,7 +135,7 @@ public class UmbelSearchConcept extends UmbelGetConcept {
                                 }
 
                                 if(conceptJSON.has("type")) {
-                                    ArrayList<String> typeUris = getAsStringArray(conceptJSON.get("type"));
+                                    List<String> typeUris = getAsStringList(conceptJSON.get("type"));
                                     for(String typeUri : typeUris) {
                                         if(typeUri != null) {
                                             Topic typeConceptTopic = conceptTopic;
@@ -149,7 +151,7 @@ public class UmbelSearchConcept extends UmbelGetConcept {
                                 }
 
                                 if(conceptJSON.has("alt-labels")) {
-                                    ArrayList<String> labels = getAsStringArray(conceptJSON.get("alt-labels"));
+                                    List<String> labels = getAsStringList(conceptJSON.get("alt-labels"));
                                     StringBuilder labelsBuilder = new StringBuilder("");
                                     boolean firstLabel = true;
                                     for(String label : labels) {
@@ -185,8 +187,8 @@ public class UmbelSearchConcept extends UmbelGetConcept {
     }
     
     
-    private ArrayList<String> getAsStringArray(Object o) throws JSONException {
-        ArrayList<String> array = new ArrayList();
+    private List<String> getAsStringList(Object o) throws JSONException {
+        List<String> array = new ArrayList<>();
         if(o != null) {
             if(o instanceof String) {
                 array.add(o.toString());
@@ -209,7 +211,7 @@ public class UmbelSearchConcept extends UmbelGetConcept {
         JSONObject response = null;
         if(urlStr != null) {
             try {
-                URL url = new URL(urlStr);
+                URL url = new URI(urlStr).toURL();
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.addRequestProperty("Accept", "application/json");
                 urlConnection.setDoInput(true);

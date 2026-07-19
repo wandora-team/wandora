@@ -559,7 +559,7 @@ public class ICalExtractor extends AbstractExtractor {
           }
         }
 
-        ComponentList alarms = event.getAlarms();
+        ComponentList<?> alarms = event.getAlarms();
         int i = 0;
         if (alarms != null) {
           for (Object o : alarms) {

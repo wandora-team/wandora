@@ -27,6 +27,7 @@ package org.wandora.application.tools.extractors.umbel;
 
 import java.awt.Cursor;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -46,9 +47,10 @@ import org.wandora.application.gui.simple.SimpleLabel;
 
 
 public class UmbelSearchConceptSelector extends javax.swing.JDialog {
-
-    private boolean wasAccepted = false;
-    private ArrayList<JSONObject> data = null;
+    private static final long serialVersionUID = 1L;
+    
+	private boolean wasAccepted = false;
+    private List<JSONObject> data = null;
     private JTable dataTable = null;
     private UmbelConceptTableModel dataModel = null;
     
@@ -56,7 +58,7 @@ public class UmbelSearchConceptSelector extends javax.swing.JDialog {
     /**
      * Creates new form UmbelSearchConceptSelector
      */
-    public UmbelSearchConceptSelector(ArrayList<JSONObject> data, Wandora wandora) {
+    public UmbelSearchConceptSelector(List<JSONObject> data, Wandora wandora) {
         super(wandora, true);
         this.data = data;
         initComponents();
@@ -261,9 +263,11 @@ public class UmbelSearchConceptSelector extends javax.swing.JDialog {
     
     
     public class UmbelConceptTableModel extends DefaultTableModel {
-        ArrayList<JSONObject> d = null;
+        private static final long serialVersionUID = 1L;
+        
+		List<JSONObject> d = null;
 
-        public UmbelConceptTableModel(ArrayList<JSONObject> m) {
+        public UmbelConceptTableModel(List<JSONObject> m) {
             d = m;
         }
 

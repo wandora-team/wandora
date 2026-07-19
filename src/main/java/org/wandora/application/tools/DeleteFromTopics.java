@@ -243,7 +243,7 @@ public class DeleteFromTopics extends AbstractWandoraTool {
                     setDefaultLogger();
                     while(topics.hasNext() && !forceStop()) {
                         Topic typeTopic = (Topic) topics.next();
-                        Iterator<Topic> iter=new ArrayList(tm.getTopicsOfType(typeTopic)).iterator();
+                        Iterator<Topic> iter=new ArrayList<>(tm.getTopicsOfType(typeTopic)).iterator();
                         Topic t = null;
                         List<Topic> deleteThese = new ArrayList<>();
                         while(iter.hasNext() && !forceStop()) {

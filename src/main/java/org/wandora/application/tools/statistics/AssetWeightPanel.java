@@ -1568,7 +1568,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
         @Override
         public Comparator<?> getComparator(int column) {
             if(column == 1) {
-                return new Comparator() {
+                return new Comparator<>() {
                     public int compare(Object o1, Object o2) {
                         if(o1 == null || o2 == null) return 0;
                         if(o1 instanceof Double && o2 instanceof Double) {

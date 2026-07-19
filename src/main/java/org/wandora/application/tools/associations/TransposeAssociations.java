@@ -121,8 +121,8 @@ public class TransposeAssociations extends AbstractWandoraTool {
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
                 AssociationTable associationTable = (AssociationTable) context.getContextSource();
-                Collection associations = associationTable.getSelectedAssociations();                
-                Topic associationType = ((Association) associations.iterator().next()).getType();
+                Collection<Association> associations = associationTable.getSelectedAssociations();                
+                Topic associationType = (associations.iterator().next()).getType();
                 Topic[][] newAssociations = new Topic[associationTable.getColumnCount()][associations.size()+1];
                 
                 int width = associationTable.getColumnCount();
@@ -171,10 +171,10 @@ public class TransposeAssociations extends AbstractWandoraTool {
                     int removeCount = 0;
                     log("Removing old associations...");
                     Association association = null;
-                    Iterator associationIterator = associations.iterator();
+                    Iterator<Association> associationIterator = associations.iterator();
                     while(associationIterator.hasNext() && !forceStop()) {
                         try {
-                            association = (Association) associationIterator.next();
+                            association = associationIterator.next();
                             association.remove();
                             removeCount++;
                         }

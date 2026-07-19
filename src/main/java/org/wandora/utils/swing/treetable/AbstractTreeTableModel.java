@@ -48,7 +48,7 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         listeners=new EventListenerList();
     }
 
-    public Class getColumnClass(int cloumn){
+    public Class<?> getColumnClass(int cloumn){
         return Object.class;
     }
     

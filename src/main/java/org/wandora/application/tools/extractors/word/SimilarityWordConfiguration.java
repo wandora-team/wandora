@@ -83,7 +83,7 @@ class SimilarityWordConfiguration extends WordConfiguration{
     }
     
     protected List<String> getSTringMetricNames(){
-        List<String> l = new ArrayList();
+        List<String> l = new ArrayList<>();
         l.addAll(STRING_METRICS.keySet());
         return l;
     }

@@ -42,6 +42,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -150,7 +152,7 @@ public class JTMParser {
 
     public void postProcess() throws Exception {
         Iterator<Topic> topics = topicMap.getTopics();
-        Collection topicCollection = new ArrayList<Topic>();
+        Collection<Topic> topicCollection = new ArrayList<>();
         while(topics.hasNext()) {
             Topic t=topics.next();
             topicCollection.add(t);
@@ -158,7 +160,7 @@ public class JTMParser {
 
         topics = topicCollection.iterator();
         Topic t;
-        HashMap<Topic,Locator> toBeRemoved = new HashMap();
+        Map<Topic,Locator> toBeRemoved = new HashMap<>();
         while(topics.hasNext()) {
             t = topics.next();
             if(t != null && !t.isRemoved()) {
@@ -187,7 +189,7 @@ public class JTMParser {
             log("Warning: JTM parser has no Topic Map object for topics and associations. Aborting.");
             return;
         }
-        Iterator keys = inputJSON.keys();
+        Iterator<String> keys = inputJSON.keys();
         Object key = null;
         Object value = null;
         logCount = 0;
@@ -248,7 +250,7 @@ public class JTMParser {
     
 
     public void parseTopic(JSONObject topicJSON) throws Exception {
-        Iterator keys = topicJSON.keys();
+        Iterator<String> keys = topicJSON.keys();
         Object key = null;
         Object value = null;
         Topic t = topicMap.createTopic();
@@ -354,7 +356,7 @@ public class JTMParser {
 
 
     public void parseTopicName(JSONObject topicNameJSON, Topic t) throws Exception {
-        Iterator keys = topicNameJSON.keys();
+        Iterator<String> keys = topicNameJSON.keys();
         Object key = null;
         Object value = null;
         boolean hasSetBasename = false; 
@@ -407,8 +409,8 @@ public class JTMParser {
 
     public void parseVariant(JSONObject variantJSON, Topic t) throws Exception {
         String variantName = null;
-        HashSet<Topic> scope = new LinkedHashSet();
-        Iterator keys = variantJSON.keys();
+        Set<Topic> scope = new LinkedHashSet<>();
+        Iterator<String> keys = variantJSON.keys();
         Object key = null;
         Object value = null;
         while(keys.hasNext()) {
@@ -459,7 +461,7 @@ public class JTMParser {
         String occurrenceText = null;
         Topic scope = null;
         Topic type = null;
-        Iterator keys = occurrenceJSON.keys();
+        Iterator<String> keys = occurrenceJSON.keys();
         Object key = null;
         Object value = null;
         while(keys.hasNext()) {
@@ -522,7 +524,7 @@ public class JTMParser {
         Association a = null;
         ArrayList<T2<String,String>> roles = new ArrayList<T2<String,String>>();
         String type = null;
-        Iterator keys = topicJSON.keys();
+        Iterator<String> keys = topicJSON.keys();
         Object key = null;
         Object value = null;
         while(keys.hasNext()) {
@@ -600,7 +602,7 @@ public class JTMParser {
 
 
     public T2<String,String> parseRoles(JSONObject rolesJSON) throws Exception {
-        Iterator keys = rolesJSON.keys();
+        Iterator<String> keys = rolesJSON.keys();
         String type = null;
         String player = null;
         Object key = null;
@@ -624,7 +626,7 @@ public class JTMParser {
             }
         }
         if(type != null && player != null) {
-            return new T2(player, type);
+            return new T2<>(player, type);
         }
         else {
             return null;

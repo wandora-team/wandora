@@ -69,7 +69,7 @@ public class TopicTest extends AbstractWandoraTool {
             setLogTitle("Various topic tests");
             
             TopicMap tm = wandora.getTopicMap();
-            ArrayList<String> sis = new ArrayList();
+            List<String> sis = new ArrayList<>();
             int numberOfTestTopics = 200;
             int numberOfFails = 0;
             int numberOfRepeats = 1;

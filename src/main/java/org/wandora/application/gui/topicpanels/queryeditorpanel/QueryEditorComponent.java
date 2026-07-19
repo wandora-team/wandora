@@ -237,14 +237,14 @@ public class QueryEditorComponent extends javax.swing.JPanel {
         
         for(DirectiveParameters params : query.directiveParameters){
             try{
-                Class cls=Class.forName(params.cls);
+                Class<?> cls=Class.forName(params.cls);
                 DirectivePanel panel=null;
                 if(!Directive.class.isAssignableFrom(cls)) throw new ClassCastException("Stored query class is not a Directive");
                 if(cls.equals(FinalResultDirective.class)){
                     panel=finalResultPanel;
                 }
                 else {
-                    DirectiveUIHints hints=DirectiveUIHints.getDirectiveUIHints(cls);
+                    DirectiveUIHints hints=DirectiveUIHints.getDirectiveUIHints((Class<Directive>) cls);
                     panel=addDirective(hints);
                 }
                                 

@@ -73,11 +73,11 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
                     if(layerTypeClassName != null) {
                         layerTypeClassName = layerTypeClassName.trim();
                         if(layerTypeClassName.length() > 0) {
-                            Class layerTypeClass = Class.forName(layerTypeClassName);
+                            Class<?> layerTypeClass = Class.forName(layerTypeClassName);
                             if(layerTypeClass != null) {
                                 Object layerType = layerTypeClass.getDeclaredConstructor().newInstance();
-                                if(layerType instanceof TopicMapType) {
-                                    typeComboBox.addItem(layerType);
+                                if(layerType instanceof TopicMapType layerTopicMapType) {
+                                    typeComboBox.addItem(layerTopicMapType);
                                 }
                             }
                         }
@@ -282,7 +282,7 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
     private javax.swing.JLabel layerTypeLabel;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JButton okButton;
-    private javax.swing.JComboBox typeComboBox;
+    private javax.swing.JComboBox<TopicMapType> typeComboBox;
     // End of variables declaration//GEN-END:variables
  
 }

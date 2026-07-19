@@ -42,7 +42,7 @@ public class HistoryList {
     
     private int currentIndex = -1;
     
-    private List list = new ArrayList();
+    private List<Object> list = new ArrayList<>();
     
     private int maxSize = 0;
     
@@ -60,9 +60,8 @@ public class HistoryList {
     }
     
     public void add(Object obj) {
-        List delList;
         if (list.size() >= maxSize){
-            Iterator listItr = list.iterator();
+            Iterator<Object> listItr = list.iterator();
             int ind = list.size() - maxSize;
             while ((ind > 0) && (listItr.hasNext())) {
                 listItr.remove();
@@ -86,7 +85,6 @@ public class HistoryList {
     }
     
     public void removeFrom(int index) {
-        List delList;
         if (list.size() > 0) {
             while (list.size()-1 >= index) {
                 list.remove(list.size()-1);
@@ -113,14 +111,13 @@ public class HistoryList {
         return(null);
     }
     
-    public List getNewest(int size) {
+    public List<Object> getNewest(int size) {
         if (size > list.size()) return(list);
         if (size > 0) return(list.subList(list.size()-size,list.size()));
         return(null);
     }
     
-    public List getRange(int start, int end) {
-        
+    public List<Object> getRange(int start, int end) {
         if (start < 0) start = 0;
         if (end > list.size()) end = list.size();
         return(list.subList(start,end));
@@ -128,7 +125,7 @@ public class HistoryList {
     
     
     public boolean isEmpty() {
-        return(list.isEmpty());
+        return list.isEmpty();
     }
     
     public void moveBack() {

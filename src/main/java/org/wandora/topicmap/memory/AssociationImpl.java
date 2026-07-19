@@ -58,7 +58,7 @@ public class AssociationImpl implements Association {
     /** Creates a new instance of AssociationImpl */
     public AssociationImpl(TopicMapImpl topicMap, Topic type)  throws TopicMapException {
         this.topicMap=topicMap;
-        players=Collections.synchronizedMap(new LinkedHashMap());
+        players=Collections.synchronizedMap(new LinkedHashMap<>());
         setType(type);
         removed=false;
     }
@@ -98,11 +98,12 @@ public class AssociationImpl implements Association {
         if(type!=null) ((TopicImpl)type).removedFromAssociationType(this);
         boolean changed=( (type!=null || t!=null) && ( type==null || t==null || !type.equals(t) ) );
         type=t;
-        if(t!=null)
+        if(t!=null) {
             ((TopicImpl)t).addedAsAssociationType(this);
-        Iterator iter=players.entrySet().iterator();
+        }
+        Iterator<Map.Entry<Topic,Topic>> iter=players.entrySet().iterator();
         while(iter.hasNext()) {
-            Map.Entry e=(Map.Entry)iter.next();
+            Map.Entry<Topic,Topic> e=iter.next();
             ((TopicImpl)e.getValue()).associationTypeChanged(this,t,oldType,(Topic)e.getKey());
         }
         if(changed) {
@@ -118,10 +119,6 @@ public class AssociationImpl implements Association {
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
         
         if(role == null || player == null) return;
-        
-//        if(players.containsKey(role)) return; // TODO: exception, note also that DatabaseAssociation replaces old
-//        ((TopicImpl)player).addInAssociation(this,role);
-//        ((TopicImpl)role).addedAsRoleType(this);
         TopicImpl oldPlayer=null;
         if(players.containsKey(role)) {
             oldPlayer=(TopicImpl)players.get(role);
@@ -150,15 +147,10 @@ public class AssociationImpl implements Association {
     public void addPlayers(Map<Topic,Topic> newPlayers) throws TopicMapException {
         if(removed) throw new TopicMapException();
         if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        
-        boolean changed=false;
+
         for(Map.Entry<Topic,Topic> e : newPlayers.entrySet()) {
             TopicImpl role=(TopicImpl)e.getKey();
             TopicImpl player=(TopicImpl)e.getValue();
-            
-//            if(players.containsKey(role)) continue; // TODO: same as above
-//            player.addInAssociation(this,role);
-//            role.addedAsRoleType(this);
             TopicImpl oldPlayer=null;
             if(players.containsKey(role)) {
                 oldPlayer=(TopicImpl)players.get(role);
@@ -175,11 +167,12 @@ public class AssociationImpl implements Association {
             
             players.put(role,player);
             if(oldPlayer==null || !oldPlayer.equals(player)) {
-                changed=true;
                 topicMap.associationPlayerChanged(this,role,player,oldPlayer);
             }
         }
-        if(topicMap.getConsistencyCheck()) checkRedundancy();
+        if(topicMap.getConsistencyCheck()) {
+        	checkRedundancy();
+        }
     }
     
     
@@ -195,7 +188,9 @@ public class AssociationImpl implements Association {
             ((TopicImpl)role).removedFromRoleType(this);
             topicMap.associationPlayerChanged(this,role,null,t);
             if(!removed) {
-                if(topicMap.getConsistencyCheck()) checkRedundancy();
+                if(topicMap.getConsistencyCheck()) {
+                	checkRedundancy();
+                }
             }
         }
     }
@@ -243,20 +238,24 @@ public class AssociationImpl implements Association {
         
         if(players.isEmpty()) return;
         if(type==null) return;
-        Collection<AssociationImpl> smallest=null;
+        Collection<Association> smallest=null;
         for(Topic role : players.keySet()) {
             Topic player = players.get(role);
-            Collection c = player.getAssociations(type,role);
+            Collection<Association> c = player.getAssociations(type,role);
             if(smallest==null || c.size()<smallest.size()) {
                 smallest=c;
             }
         }
         Set<Association> delete = new HashSet<Association>();
-        for(AssociationImpl a : smallest) {
-            if(a==this) continue;
-            if(a._equals(this)) {
-                delete.add(a);
-            }
+        if(smallest != null) {
+	        for(Association a : smallest) {
+	            if(a==this) continue;
+	            if(a instanceof AssociationImpl aImpl) {
+		            if(aImpl._equals(this)) {
+		                delete.add(a);
+		            }
+	            }
+	        }
         }
         for(Association a : delete) { 
             topicMap.duplicateAssociationRemoved(this,a);

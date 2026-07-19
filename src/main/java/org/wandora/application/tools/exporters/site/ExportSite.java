@@ -38,8 +38,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Comparator;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -133,7 +132,7 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
     
     /** Creates a new instance of ExportSite */
     public ExportSite() {
-        this(GripCollections.addArrayToMap(new LinkedHashMap(),new Object[]{
+        this(GripCollections.addArrayToMap(new LinkedHashMap<>(),new Object[]{
                             "pageTemplate","gui/export/sitepage.vhtml",
                             "indexTemplate","gui/export/siteindex.vhtml",
                             "templateEncoding","UTF-8",
@@ -162,9 +161,9 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
     }
     
     
-    public ExportSite(Map map) {
+    public ExportSite(Map<Object,Object> map) {
         if(map != null) {
-            for(Iterator i = map.keySet().iterator(); i.hasNext(); ) {
+            for(Iterator<Object> i = map.keySet().iterator(); i.hasNext(); ) {
                 Object key = i.next();
                 Object value = map.get(key);
                 if(key instanceof String && value instanceof String && value != null) {
@@ -426,7 +425,6 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
         
         String localFileName = null;
         String mappedFileName = null;
-        URL url = null;
         String fileName;
         
         log("Fetching external file\n" + surl);
@@ -438,7 +436,7 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
         File d = f.getParentFile();
         if (d.mkdirs()) { log.println("Created directory '"+d.getAbsolutePath()+"' for file retrieved from url '"+surl+"'!"); }
         try {
-            IObox.moveUrl(new URL(surl), f, authUser, authPassword, false);
+            IObox.moveUrl(new URI(surl).toURL(), f, authUser, authPassword, false);
         }
         catch (Exception e) {
             log(e);
@@ -456,7 +454,7 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
                         authPassword = new String(pp.getPassword());
                         try {
                             success = true;
-                            IObox.moveUrl(new URL(surl), f, authUser, authPassword, false);
+                            IObox.moveUrl(new URI(surl).toURL(), f, authUser, authPassword, false);
                         }
                         catch (Exception e1) {
                             if(IObox.isAuthException(e1)) success = false;
@@ -472,7 +470,7 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
             else {
                 if(useScondaryUrlSource) {
                     try {
-                        IObox.moveUrl(new URL(secondaryUrlSource + surl), f);
+                        IObox.moveUrl(new URI(secondaryUrlSource + surl).toURL(), f);
                     }
                     catch (Exception e1) {
                         e1.printStackTrace(log);
@@ -505,48 +503,46 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
         authPassword = null;
         TopicMap tm = null;
         
-        Comparator c = java.text.Collator.getInstance(loc); 
-        Map index = new TreeMap(c);
+        java.text.Collator c = java.text.Collator.getInstance(loc); 
+        Map<String,String> index = new TreeMap<String,String>(c);
         if (topicmap instanceof TopicMap) {
             tm = (TopicMap) topicmap;
         } else if (topicmap instanceof String) {
             tm = topicMapFromFile((String)topicmap);
+        } else {
+        	tm = Wandora.getWandora().getTopicMap();
         }
         Map<String,String> globalUrlMap = new HashMap<>();
         VelocityContext context = null;
         Template template = null;
-        //Template ntemplate = null;
         Template itemplate = null;
         FileWriter writer = null;
         File templateFile = null;
-        //File nameTemplateFile;
         File indexTemplateFile = null;
         String templatePath = null;
         VelocityEngine velocityEngine = null;
         Map<String,Object> localParams;
         try {
             templateFile = new File(templatefilename);
-
             templatePath = templateFile.getParent();
             velocityEngine = new VelocityEngine();
             velocityEngine.setProperty("file.resource.loader.path", templatePath );
-            //velocityEngine.setProperty("runtime.log.error.stacktrace", "false" );
-            //velocityEngine.setProperty("runtime.log.warn.stacktrace", "false" );
-            //velocityEngine.setProperty("runtime.log.info.stacktrace", "false" );
             velocityEngine.init();
-            if(templateEncoding != null && templateEncoding.length()>0) template = velocityEngine.getTemplate(templateFile.getName(), templateEncoding);
-            else template = velocityEngine.getTemplate(templateFile.getName());
-            /*
-            if (nametemplatefilename != null) {
-                nameTemplateFile = new File(nametemplatefilename);
-                if (templateEncoding != null && templateEncoding.length()>0) ntemplate = velocityEngine.getTemplate(nameTemplateFile.getName(), templateEncoding);
-                else ntemplate = velocityEngine.getTemplate(nameTemplateFile.getName());
+            if(templateEncoding != null && templateEncoding.length()>0) {
+            	template = velocityEngine.getTemplate(templateFile.getName(), templateEncoding);
             }
-            */
+            else {
+            	template = velocityEngine.getTemplate(templateFile.getName());
+            }
+
             if (indextemplatefilename != null) {
                 indexTemplateFile = new File(indextemplatefilename);
-                if (templateEncoding != null && templateEncoding.length()>0) itemplate = velocityEngine.getTemplate(indexTemplateFile.getName(), templateEncoding);
-                else itemplate = velocityEngine.getTemplate(indexTemplateFile.getName());
+                if (templateEncoding != null && templateEncoding.length()>0) {
+                	itemplate = velocityEngine.getTemplate(indexTemplateFile.getName(), templateEncoding);
+                }
+                else {
+                	itemplate = velocityEngine.getTemplate(indexTemplateFile.getName());
+                }
             }
             
             // --- Iterate topics ---
@@ -554,7 +550,6 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
                 Topic t = (Topic)ti.next();
                 if(t == null || t.isRemoved()) continue;
                 
-                boolean isIndexFile = false;
                 log("Exporting topic '" + getTopicName(t) + "'.");
                 
                 Map<String,String> urlMap = new LinkedHashMap<>();
@@ -625,7 +620,10 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
             }
             writer = new FileWriter(outputdir + File.separatorChar + "index.html");
             
-            itemplate.merge( context, writer );
+            if(itemplate != null) {
+            	itemplate.merge( context, writer );
+            }
+            
             writer.flush();
             writer.close();
             log.println("Generated page index file '"+outputdir + File.separatorChar + "index.html'");
@@ -670,7 +668,7 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
     
     
     
-     private void webPageIndexBuild(Map index, Topic t, String webfilename, Locale loc)  throws TopicMapException {
+     private void webPageIndexBuild(Map<String,String> index, Topic t, String webfilename, Locale loc)  throws TopicMapException {
         String dname = t.getBaseName();
         if (dname!=null) index.put(dname, webfilename);
      }

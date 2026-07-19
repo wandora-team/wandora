@@ -30,6 +30,7 @@ package org.wandora.application.tools.extractors.opencyc;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
@@ -180,7 +181,7 @@ public class OpenCycSpecsExtractor extends AbstractOpenCycExtractor {
         private String data_arg_name = "";
         private String data_arg_displayname = "";
         
-        private ArrayList args = new ArrayList();
+        private List<String> args = new ArrayList<>();
         
         private Topic theTopic;
         private Topic specsTopic;
@@ -231,7 +232,7 @@ public class OpenCycSpecsExtractor extends AbstractOpenCycExtractor {
                         data_arg_guid = "";
                         data_arg_name = "";
                         data_arg_displayname = "";
-                        args = new ArrayList();
+                        args = new ArrayList<>();
                         state = STATE_CYCLIFY_CONSTANT_SPECS_LIST_NAT;
                     }
                     break;

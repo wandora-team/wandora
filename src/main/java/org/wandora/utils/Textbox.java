@@ -64,11 +64,11 @@ public class Textbox {
      * @param map
      * @return 
      */
-    public static String mapToString(Map map){
+    public static String mapToString(Map<Object,Object> map){
         StringBuilder buf=new StringBuilder();
-        Iterator iter=map.entrySet().iterator();
+        Iterator<Map.Entry<Object,Object>> iter=map.entrySet().iterator();
         while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
+            Map.Entry<Object,Object> e=iter.next();
             buf.append(e.getKey().toString()).append(" => ").append(e.getValue().toString()).append(",\n");
         }
         return buf.toString();
@@ -179,7 +179,7 @@ public class Textbox {
     
     
     
-    public static java.util.List sliceWithRE(String text, String regularExpression) {
+    public static java.util.List<String> sliceWithRE(String text, String regularExpression) {
         java.util.List<String> sliceList = new ArrayList<String>();
 
         try {
@@ -260,7 +260,12 @@ public class Textbox {
                 }
             }
             else if(charset.equalsIgnoreCase("URL_ENCODE")) {
-                return java.net.URLEncoder.encode(string);
+            	try {
+            		return java.net.URLEncoder.encode(string, "UTF-8");
+            	}
+            	catch(Exception e) {
+            		// Ignore.
+            	}
             }
         }
         return string;        
@@ -393,7 +398,7 @@ public class Textbox {
     
     
     public static String[][] makeStringTable(String s) {
-        java.util.List<java.util.List<String>> lines = new ArrayList();
+        java.util.List<java.util.List<String>> lines = new ArrayList<>();
         java.util.List<String> linev;
         String line;
         StringTokenizer st = new StringTokenizer(s, "\n");
@@ -401,7 +406,7 @@ public class Textbox {
         int maxc = 0;
         while(st.hasMoreTokens()) {
             line = st.nextToken();
-            linev = new ArrayList();
+            linev = new ArrayList<>();
             st2 = new StringTokenizer(line, "\t");
             int c = 0;
             while(st2.hasMoreTokens()) {
@@ -426,7 +431,7 @@ public class Textbox {
     
     
 
-    public static String sortStringVector(Vector v) {
+    public static String sortStringVector(Vector<String> v) {
         String[] a = new String[v.size()];
         String t = null;
         v.toArray(a);
@@ -455,7 +460,7 @@ public class Textbox {
      * @return Method returns an array containing string picked out of given vector.
      * If vector contains no strings null is returned.
      */
-    public static String[] vectorToStringArray(Vector v) {
+    public static String[] vectorToStringArray(Vector<String> v) {
         String[] a = null;
         if (v != null && v.size() > 0) {
             a = new String[v.size()];

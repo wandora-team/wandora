@@ -56,13 +56,13 @@ public class AddDockable extends AbstractDockingTool {
 	private static final long serialVersionUID = 1L;
 
 
-    private Class dockableClass = null;
+    private Class<?> dockableClass = null;
     private Icon dockableIcon = null;
     
     
     
     /** Creates a new instance of AddDockable */
-    public AddDockable(Class dc) {
+    public AddDockable(Class<?> dc) {
         dockableClass = dc;
     }
     
@@ -129,10 +129,10 @@ public class AddDockable extends AbstractDockingTool {
         if(dockableClass != null && dockingPanel != null) {
             try {
                 Topic t = null;
-                Iterator i = context.getContextObjects();
+                Iterator<Topic> i = context.getContextObjects();
                 if(i.hasNext()) {
                     try {
-                        t = (Topic) i.next();
+                        t = i.next();
                     }
                     catch(Exception e) {}
                 }
