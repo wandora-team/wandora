@@ -54,7 +54,7 @@ public class InstanceContextCollected extends LayeredTopicContext {
     
     
     @Override
-    public Iterator<Topic> getContextObjects() {
+    public Iterator<?> getContextObjects() {
         return collectInstancesOf( super.getContextObjects() );
     }
     
@@ -62,7 +62,7 @@ public class InstanceContextCollected extends LayeredTopicContext {
     
     
     
-    public Iterator<Topic> collectInstancesOf(Iterator<Topic> topics) {
+    public Iterator<?> collectInstancesOf(Iterator<?> topics) {
         if(topics == null) return null;
         List<Topic> contextTopics = new ArrayList<>();
         Collection<Topic> instanceTopics = null;
