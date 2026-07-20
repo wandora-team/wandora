@@ -96,10 +96,10 @@ public class OccurrenceTextEditor extends TextEditor {
         Object[] menuStruct = new Object[] {
             "Make topics", new Object[] {
                 "Make topic with selection", new CreateTopicWithOccurrenceSelection(false),
-                "Make topic with selection and associate", new CreateTopicWithOccurrenceSelection(true), KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK)
+                "Make topic with selection and associate", new CreateTopicWithOccurrenceSelection(true), KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_DOWN_MASK)
             },
             "Find topics", new Object[] {
-                "Find topics in occurrences...", new FindAssociationsInOccurrenceSimple(), KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK),
+                "Find topics in occurrences...", new FindAssociationsInOccurrenceSimple(), KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK),
                 "Find topics with similar occurrences...", new FindTopicsWithSimilarOccurrence(),
             },
             "Classify", new Object[] {
@@ -116,10 +116,10 @@ public class OccurrenceTextEditor extends TextEditor {
                 "uClassify Ageanalyzer", new UClassifier("Ageanalyzer", "uClassify", 0.0001), UIBox.getIcon("gui/icons/extract_uclassify.png"),
             },
             "Insert", new Object[] {
-                "Insert base name", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK),
-                "Insert variant name", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK | java.awt.event.InputEvent.SHIFT_MASK),
-                "Insert subject identifier", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK | java.awt.event.InputEvent.ALT_MASK),
-                "Insert subject locator",KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK | java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.SHIFT_MASK),
+                "Insert base name", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_DOWN_MASK),
+                "Insert variant name", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.SHIFT_DOWN_MASK),
+                "Insert subject identifier", KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.ALT_DOWN_MASK),
+                "Insert subject locator",KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.SHIFT_DOWN_MASK),
             }
         };
         return new JMenu[] { UIBox.attachMenu(processMenu, menuStruct, this) };

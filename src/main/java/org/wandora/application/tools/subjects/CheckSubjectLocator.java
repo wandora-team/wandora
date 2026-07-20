@@ -28,7 +28,7 @@ package org.wandora.application.tools.subjects;
 
 
 
-import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
@@ -69,18 +69,17 @@ public class CheckSubjectLocator extends AbstractWandoraTool {
      */
     String reportType = "mid";
 
-    private File currentDirectory = null;
-    private Iterator topicsToCheck;
+    private Iterator<?> topicsToCheck;
     
     
     public CheckSubjectLocator() {}
     public CheckSubjectLocator(Context context) {
         setContext(context);
     }
-    public CheckSubjectLocator(Collection topics) {
+    public CheckSubjectLocator(Collection<Topic> topics) {
         topicsToCheck = topics.iterator();
     }
-    public CheckSubjectLocator(Iterator topics) {
+    public CheckSubjectLocator(Iterator<Topic> topics) {
         topicsToCheck = topics;
     }
     
@@ -186,7 +185,7 @@ public class CheckSubjectLocator extends AbstractWandoraTool {
                         return 2;
                     }
                     else {
-                        URL subjectUrl = new URL(locatorString);
+                        URL subjectUrl = new URI(locatorString).toURL();
                         if(IObox.urlExists(subjectUrl)) {
                             if(reportAbout('s')) {
                                 log("'"+topicName+"' - found subject locator resource "+locatorString);

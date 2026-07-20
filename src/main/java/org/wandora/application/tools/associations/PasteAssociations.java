@@ -122,7 +122,7 @@ public class PasteAssociations extends AbstractWandoraTool {
         requiresRefresh = false;
         TopicMap topicMap = wandora.getTopicMap();
         
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
 
         Topic topicOpen = null;
         

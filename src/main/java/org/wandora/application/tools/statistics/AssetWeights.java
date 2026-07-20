@@ -116,8 +116,8 @@ public class AssetWeights extends AbstractWandoraTool {
         else if(forcedContext == CONTEXT_IS_GIVEN) {
             tm = wandora.getTopicMap();
             int c = 0;
-            Iterator<Topic> i = context.getContextObjects();
-            while(i.hasNext()) { topics.add(i.next()); c++; }
+            Iterator<?> i = context.getContextObjects();
+            while(i.hasNext()) { topics.add((Topic) i.next()); c++; }
             topicMapName = "Selection of "+c+" topics";
         }
         if(!topics.isEmpty()) {

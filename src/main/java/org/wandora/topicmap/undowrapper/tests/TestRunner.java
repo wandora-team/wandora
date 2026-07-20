@@ -19,7 +19,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public class TestRunner extends AbstractWandoraTool {
     
-    private ArrayList<Test> tests;
+    private static final long serialVersionUID = 1L;
+    
+	private ArrayList<Test> tests;
     private Writer output;
     
     public TestRunner(){

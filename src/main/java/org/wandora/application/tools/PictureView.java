@@ -35,7 +35,9 @@ import java.awt.image.BufferedImage;
  * @author  olli
  */
 public class PictureView extends javax.swing.JDialog {
-    private BufferedImage image;
+    private static final long serialVersionUID = 1L;
+    
+	private BufferedImage image;
     /** Creates new form PictureView */
     public PictureView(java.awt.Dialog parent, boolean modal,BufferedImage image) {
         super(parent, modal);

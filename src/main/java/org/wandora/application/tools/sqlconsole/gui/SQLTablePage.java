@@ -237,7 +237,7 @@ public class SQLTablePage extends JPanel {
         // -------
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill=gridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill=java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx=1.0;
 
         gridBagConstraints.anchor=java.awt.GridBagConstraints.NORTHWEST;
@@ -250,7 +250,7 @@ public class SQLTablePage extends JPanel {
             }
         });*/
         gridBagConstraints.weighty=1.0;
-        gridBagConstraints.fill=gridBagConstraints.BOTH;
+        gridBagConstraints.fill=java.awt.GridBagConstraints.BOTH;
         add(scrollPane,gridBagConstraints);
 //        if(dataTable!=null){
 /*            guiTable = new KirjavaTablePanel(dataTable, kirjava,componentid);
@@ -263,7 +263,7 @@ public class SQLTablePage extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 7, 10);
         gridBagConstraints.weighty=0;
         gridBagConstraints.anchor=java.awt.GridBagConstraints.SOUTHEAST;
-        gridBagConstraints.fill=gridBagConstraints.BOTH;
+        gridBagConstraints.fill=java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.gridy = 5;
         final SQLTablePage thisf=this;
         /*

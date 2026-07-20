@@ -406,7 +406,7 @@ public class OpenCycExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         isaInnerPanel.add(isaField, gridBagConstraints);
 
-        isaGetButton.setLabel("Get context");
+        isaGetButton.setText("Get context");
         isaGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         isaGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
         isaGetButton.setMinimumSize(new java.awt.Dimension(90, 20));
@@ -445,7 +445,7 @@ public class OpenCycExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         instancesInnerPanel.add(instancesField, gridBagConstraints);
 
-        instancesGetButton.setLabel("Get context");
+        instancesGetButton.setText("Get context");
         instancesGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         instancesGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
         instancesGetButton.setMinimumSize(new java.awt.Dimension(90, 20));
@@ -484,7 +484,7 @@ public class OpenCycExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         genlsInnerPanel.add(genlsField, gridBagConstraints);
 
-        genlsGetButton.setLabel("Get context");
+        genlsGetButton.setText("Get context");
         genlsGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         genlsGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
         genlsGetButton.setMinimumSize(new java.awt.Dimension(90, 20));
@@ -523,7 +523,7 @@ public class OpenCycExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         specsInnerPanel.add(specsField, gridBagConstraints);
 
-        specsButton.setLabel("Get context");
+        specsButton.setText("Get context");
         specsButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         specsButton.setMaximumSize(new java.awt.Dimension(90, 20));
         specsButton.setMinimumSize(new java.awt.Dimension(90, 20));
@@ -563,7 +563,7 @@ public class OpenCycExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         siblingsInnerPanel.add(siblingsField, gridBagConstraints);
 
-        siblingsGetButton.setLabel("Get context");
+        siblingsGetButton.setText("Get context");
         siblingsGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         siblingsGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
         siblingsGetButton.setMinimumSize(new java.awt.Dimension(90, 20));
@@ -602,7 +602,7 @@ public class OpenCycExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         commentsInnerPanel.add(commentsField, gridBagConstraints);
 
-        commentsGetButton.setLabel("Get context");
+        commentsGetButton.setText("Get context");
         commentsGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         commentsGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
         commentsGetButton.setMinimumSize(new java.awt.Dimension(90, 20));
@@ -641,7 +641,7 @@ public class OpenCycExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         denotationsInnerPanel.add(denotationsField, gridBagConstraints);
 
-        denotationsGetButton.setLabel("Get context");
+        denotationsGetButton.setText("Get context");
         denotationsGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         denotationsGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
         denotationsGetButton.setMinimumSize(new java.awt.Dimension(90, 20));
@@ -682,7 +682,7 @@ public class OpenCycExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         swConceptInnerPanel.add(swConceptField, gridBagConstraints);
 
-        swConceptGetButton.setLabel("Get context");
+        swConceptGetButton.setText("Get context");
         swConceptGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         swConceptGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
         swConceptGetButton.setMinimumSize(new java.awt.Dimension(90, 20));

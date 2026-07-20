@@ -80,7 +80,7 @@ public class DeleteSubjectLocator extends AbstractWandoraTool {
     @Override
     public void execute(Wandora admin, Context context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

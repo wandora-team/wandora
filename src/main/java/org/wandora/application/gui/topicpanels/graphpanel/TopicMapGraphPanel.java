@@ -1943,8 +1943,9 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
 
     private class TopicPanelTransferHandler extends TransferHandler {
+        private static final long serialVersionUID = 1L;
 
-        @Override
+		@Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
             return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||

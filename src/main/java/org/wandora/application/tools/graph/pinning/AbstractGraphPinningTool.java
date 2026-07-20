@@ -52,7 +52,7 @@ public abstract class AbstractGraphPinningTool extends AbstractGraphTool {
         super(gp);
     }
  
-    public void setPinning(Iterator nodes, int mode) {
+    public void setPinning(Iterator<?> nodes, int mode) {
         if(nodes == null) return;
         VNode vn = null;
         while(nodes.hasNext()) {

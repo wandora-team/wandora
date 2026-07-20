@@ -77,14 +77,13 @@ public class AddImplicitSortScopeToVariants extends AbstractWandoraTool {
             log("Iterates through selected topics and adds sort scope to variants that have neither display nor sort scope.");
             TopicMap tm = wandora.getTopicMap();
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
             String variant = null;
 
             Topic displayScope = tm.getTopic(XTMPSI.DISPLAY);
-
 
             Topic sortScope = tm.getTopic(XTMPSI.SORT);
             if(sortScope == null) return;

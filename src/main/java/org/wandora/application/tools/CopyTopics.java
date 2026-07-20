@@ -53,7 +53,6 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.XTMPSI;
 import org.wandora.topicmap.layered.ContainerTopicMap;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.layered.LayeredTopic;
@@ -113,7 +112,7 @@ public class CopyTopics extends AbstractWandoraTool {
     List<Topic> allOccurrenceTypes = null;
     Set<Topic> scopeMemory = null;
     Wandora wandora = null;
-    Iterator<Topic> topics = null;
+    Iterator<?> topics = null;
     
     
     public CopyTopics() throws TopicMapException {

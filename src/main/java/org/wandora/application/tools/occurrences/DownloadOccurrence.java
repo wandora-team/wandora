@@ -26,6 +26,7 @@ package org.wandora.application.tools.occurrences;
 
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
@@ -135,7 +136,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
                 }
             }
             else {
-                Iterator topics = context.getContextObjects();
+                Iterator<?> topics = context.getContextObjects();
                 File targetPath = null;
                 TopicMap tm = wandora.getTopicMap();
 
@@ -205,7 +206,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
         occurrence = occurrence.trim();
         if(occurrence.length() == 0) return null;
         try {
-            URL u = new URL(occurrence);
+            URL u = new URI(occurrence).toURL();
             return occurrence;
         }
         catch(Exception e) {

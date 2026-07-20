@@ -69,7 +69,7 @@ public class GenericDatabaseExtractorConfigurationDialog extends javax.swing.JDi
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridx=0;
         gbc.gridy=0;
-        gbc.fill=gbc.BOTH;
+        gbc.fill=GridBagConstraints.BOTH;
         gbc.weightx=1.0;
         gbc.weighty=0.0;
         for(String table : schema.tables){

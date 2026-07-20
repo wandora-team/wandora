@@ -31,6 +31,7 @@ package org.wandora.application.tools.associations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.AssociationContext;
@@ -86,7 +87,7 @@ public class ChangeAssociationRole extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
-        Iterator<Association> associations = context.getContextObjects();
+        Iterator<?> associations = context.getContextObjects();
         Association association = null;
         int count = 0;
         Collection<Topic> oldRoles = new ArrayList<Topic>();
@@ -114,7 +115,7 @@ public class ChangeAssociationRole extends AbstractWandoraTool {
                 }
             
                 // Then solve names of the roles. Notice duplicate removal....
-                ArrayList<String> oldRoleNames = new ArrayList<String>();
+                List<String> oldRoleNames = new ArrayList<>();
                 role = null;
                 String roleName = null;
                 for(Iterator<Topic> it=oldRoles.iterator(); it.hasNext(); ) {

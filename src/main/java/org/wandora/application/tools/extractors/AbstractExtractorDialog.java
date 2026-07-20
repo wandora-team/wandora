@@ -250,7 +250,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
             return;
         }
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
         Locator locator = null;
@@ -291,7 +291,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
     private void selectContextSLs() {
         if(parentTool == null) return;
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
         Locator locator = null;
@@ -330,7 +330,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
     private void selectContextSIs() {
         if(parentTool == null) return;
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
         Locator locator = null;
@@ -428,7 +428,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         crawlerPanel.add(crawlerLabel, gridBagConstraints);
 
-        crawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "exactly given urls", "given urls and directly linked documents", "given urls and urls below", "given urls and crawled documents in url domain", "given urls and all crawled documents" }));
+        crawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "exactly given urls", "given urls and directly linked documents", "given urls and urls below", "given urls and crawled documents in url domain", "given urls and all crawled documents" }));
         crawlerComboBox.setPreferredSize(new java.awt.Dimension(200, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.Icon;
 
@@ -882,7 +883,7 @@ public class OBOExport extends AbstractExportTool {
                         }
 
                         for(Iterator<String> groupKeys = groupedSynonyms.keySet().iterator(); groupKeys.hasNext(); ) {
-                            HashSet usedOrigins = new HashSet();
+                            Set<String> usedOrigins = new HashSet<>();
                             String groupKey = groupKeys.next();
                             ArrayList<Association> synonymGroup = groupedSynonyms.get(groupKey);
                             boolean isFirst = true;
@@ -893,7 +894,7 @@ public class OBOExport extends AbstractExportTool {
                                 Topic synonymType = (synonymTypeRole != null ? synonymAssociation.getPlayer(synonymTypeRole) : null);
                                 Topic synonymScope = (synonymScopeRole != null ? synonymAssociation.getPlayer(synonymScopeRole) : null);
                                 Topic synonymOrigin = (synonymOriginRole != null ? synonymAssociation.getPlayer(synonymOriginRole) : null);
-                                if(isFirst) {
+                                if(isFirst && synonymText != null) {
                                     out.print("synonym: \""+OBO.Java2OBO(synonymText.getDisplayName(OBO.LANG))+"\"");
                                     isFirst = false;
                                 }

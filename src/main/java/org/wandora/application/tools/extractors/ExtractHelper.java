@@ -26,6 +26,7 @@
 
 package org.wandora.application.tools.extractors;
 
+import java.net.URI;
 import java.net.URL;
 
 import org.wandora.application.Wandora;
@@ -224,11 +225,11 @@ public class ExtractHelper {
             }
             else if(url.endsWith(".doc") || url.endsWith(".DOC") || url.endsWith(".ppt") || url.endsWith(".PPT")) {
                 System.out.println("Found no content. Reading the url content as a MS Office file.");
-                content = MSOfficeBox.getText(new URL(url));
+                content = MSOfficeBox.getText(new URI(url).toURL());
             }
             else {
                 System.out.println("Found no content. Reading the url content.");
-                content = IObox.doUrl(new URL(url));
+                content = IObox.doUrl(new URI(url).toURL());
             }
         }
         catch(Exception e) {
@@ -255,7 +256,7 @@ public class ExtractHelper {
                 }
                 else if(lurl.endsWith(".doc") || lurl.endsWith(".ppt") || lurl.endsWith(".xsl")) {
                     System.out.println("Found no content. Reading the url content as a MS Office file.");
-                    content = MSOfficeBox.getText(new URL(url));
+                    content = MSOfficeBox.getText(new URI(url).toURL());
                 }
                 else if(lurl.endsWith(".xml")) {
                     System.out.println("Found no content. Reading the url content as an XML file.");

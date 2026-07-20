@@ -39,6 +39,8 @@ import org.wandora.topicmap.TopicMapException;
  */
 public abstract class ResourceEditor extends javax.swing.JPanel {   
 
+	private static final long serialVersionUID = 1L;
+	
 	public abstract void initializeAssociation(Topic t,Association a,Wandora parent) throws TopicMapException ;
     public abstract void initializeOccurrence(Topic t,Topic otype,Wandora parent) throws TopicMapException ;
     public abstract boolean applyChanges(Topic t,Wandora parent) throws TopicMapException ;

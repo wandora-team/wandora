@@ -248,8 +248,13 @@ public class CSVParser {
         }
     }
 
-    public static class Row extends ArrayList<Object>{}
-    public static class Table extends ArrayList<Row>{}
+    public static class Row extends ArrayList<Object>{
+		private static final long serialVersionUID = 1L;
+    }
+    
+    public static class Table extends ArrayList<Row>{
+		private static final long serialVersionUID = 1L;
+    }
 
 /*
     public static void main(String[] args) throws Exception {

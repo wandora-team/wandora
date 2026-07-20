@@ -88,7 +88,7 @@ public class CollapseTool extends AbstractGraphTool {
     public void executeSynchronized(Wandora wandora, Context context) {
         if(context != null) {
             VNode vn = null;
-            for(Iterator iter=context.getContextObjects(); iter.hasNext(); ) {
+            for(Iterator<?> iter=context.getContextObjects(); iter.hasNext(); ) {
                 try {
                     vn = (VNode) iter.next();
                     //TopicMapGraphPanel panel = vn.getPanel();

@@ -53,8 +53,8 @@ public class MouseToolManager implements MouseListener, MouseMotionListener {
     public static final int EVENTS_LEFTDRAG=EVENT_LEFTPRESS|EVENT_DRAG|EVENT_LEFTRELEASE;
     public static final int EVENTS_RIGHTDRAG=EVENT_RIGHTPRESS|EVENT_DRAG|EVENT_RIGHTRELEASE;
     
-    public static final int MASK_SHIFT=MouseEvent.SHIFT_MASK;
-    public static final int MASK_CONTROL=MouseEvent.CTRL_MASK;
+    public static final int MASK_SHIFT=MouseEvent.SHIFT_DOWN_MASK;
+    public static final int MASK_CONTROL=MouseEvent.CTRL_DOWN_MASK;
     
     private ArrayList<StackEntry> toolStack;
     
@@ -164,13 +164,13 @@ public class MouseToolManager implements MouseListener, MouseMotionListener {
     }
     
     public void mouseReleased(MouseEvent e) {
-        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_MASK)!=0);
+        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_DOWN_MASK)!=0);
         if(e.getButton()==1 && !ctrl) processEvent(e,EVENT_LEFTRELEASE);
         else if(e.getButton()==3 || ctrl) processEvent(e,EVENT_RIGHTRELEASE);
     }
 
     public void mousePressed(MouseEvent e) {
-        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_MASK)!=0);
+        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_DOWN_MASK)!=0);
         if(e.getButton()==1 && !ctrl) processEvent(e,EVENT_LEFTPRESS);
         else if(e.getButton()==3 || ctrl) processEvent(e,EVENT_RIGHTPRESS);
     }
@@ -182,7 +182,7 @@ public class MouseToolManager implements MouseListener, MouseMotionListener {
     }
 
     public void mouseClicked(MouseEvent e) {
-        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_MASK)!=0);
+        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_DOWN_MASK)!=0);
         if(e.getClickCount()>=2){
             if(e.getButton()==1 && !ctrl) processEvent(e,EVENT_LEFTDOUBLECLICK);
             else if(e.getButton()==3 || ctrl) processEvent(e,EVENT_RIGHTDOUBLECLICK);

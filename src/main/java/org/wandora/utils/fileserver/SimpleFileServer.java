@@ -330,8 +330,7 @@ public class SimpleFileServer extends Thread {
                                         out.write(size+lf);
                                         out.flush();
                                         byte[] buf=new byte[4096];
-                                        try{
-                                            InputStream fin=new FileInputStream(f);
+                                        try(InputStream fin=new FileInputStream(f)) {
                                             int read=0;
                                             while( (read=fin.read(buf))!=-1 ){
                                                 outStream.write(buf,0,read);

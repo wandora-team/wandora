@@ -403,7 +403,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 		gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
 		optionalSearchFieldsPanel.add(orderByLabel, gridBagConstraints);
 
-		rankComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "newest", "oldest", "relevance" }));
+		rankComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "newest", "oldest", "relevance" }));
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 6;

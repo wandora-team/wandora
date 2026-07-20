@@ -99,7 +99,7 @@ public class SIContext implements Context {
     
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<?> getContextObjects() {
         return getContextObjects( getContextSource() );
     }
     
@@ -123,7 +123,7 @@ public class SIContext implements Context {
         }
     }
     
-    public Iterator getContextObjects(Object contextSource) {
+    public Iterator<?> getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
         List<Locator> contextLocators = new ArrayList<>();

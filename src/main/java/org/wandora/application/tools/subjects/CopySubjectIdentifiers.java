@@ -75,7 +75,7 @@ public class CopySubjectIdentifiers extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) {
         StringBuilder sis = new StringBuilder("");
         Collection<Locator> topicSIs = null;
-        Iterator<Locator> SIIterator = null;
+        Iterator<?> SIIterator = null;
         Locator SI = null;
         int progress = 0;
 
@@ -93,7 +93,7 @@ public class CopySubjectIdentifiers extends AbstractWandoraTool {
         
         
         else {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics != null && topics.hasNext()) {
                 Topic topic = null;
                 while(topics.hasNext()) {

@@ -66,7 +66,7 @@ public class AddVariantName extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) {
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             VariantNameEditor editor = new VariantNameEditor(wandora);

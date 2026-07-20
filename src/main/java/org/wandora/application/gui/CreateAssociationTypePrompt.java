@@ -270,7 +270,7 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.insets=new java.awt.Insets(5,5,5,5);
         gbc.weightx=1.0;
-        gbc.anchor=gbc.CENTER;
+        gbc.anchor=GridBagConstraints.CENTER;
         gbc.gridx=1;
         gbc.gridy=1;
         playersPanel.add(new SimpleLabel("Role"),gbc);
@@ -279,7 +279,7 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
         for(T2<GetTopicButton,GetTopicButton> t : roles){            
             gbc.gridx=1;
             gbc.gridy=counter+2;
-            gbc.fill=gbc.HORIZONTAL;
+            gbc.fill=GridBagConstraints.HORIZONTAL;
             playersPanel.add(t.e1,gbc);
             gbc.gridx=2;
             playersPanel.add(t.e2,gbc);
@@ -293,7 +293,7 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
             });
             gbc.gridx=3;
             gbc.weightx=0.0;
-            gbc.fill=gbc.NONE;
+            gbc.fill=GridBagConstraints.NONE;
             playersPanel.add(deleteButton,gbc);
             counter++;
         }

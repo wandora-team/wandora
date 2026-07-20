@@ -231,7 +231,7 @@ public class EuropeanaExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         bottomPanel.add(fillerPanel, gridBagConstraints);
 
-        okButton.setLabel("Extract");
+        okButton.setText("Extract");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);

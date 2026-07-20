@@ -31,6 +31,7 @@ package org.wandora.application.gui.table;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -315,7 +316,7 @@ public class AssociationTable extends TopicTable {
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        new URL(topicIdentifier);
+                                        new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}

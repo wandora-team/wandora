@@ -122,9 +122,9 @@ public class ReleaseEdges extends AbstractGraphTool  {
     
     
     
-    public static List<AbstractGraphTool> makeTools(Collection c, GraphFilter graphFilter, List<AbstractGraphTool> tools){
-        if(tools==null) tools=new ArrayList<AbstractGraphTool>();
-        ArrayList<Topic> types = new ArrayList<Topic>();
+    public static List<AbstractGraphTool> makeTools(Collection<?> c, GraphFilter graphFilter, List<AbstractGraphTool> tools){
+        if(tools==null) tools=new ArrayList<>();
+        List<Topic> types = new ArrayList<>();
 
         for(Object o : graphFilter.getFilteredEdgeTypes()) {
             if(o != null) {
@@ -148,11 +148,9 @@ public class ReleaseEdges extends AbstractGraphTool  {
         if(graphFilter.getFilterOccurrences()) {
             tools.add(new ReleaseEdges(FILTER_OCCURRENCE_EDGES, null, graphFilter));
         }
-        
         if(tools.isEmpty()) {
             tools.add(new ReleaseEdges(FILTER_EDGES_WITH_TYPE, null, graphFilter));
         }
-        
         
         return tools;
     }

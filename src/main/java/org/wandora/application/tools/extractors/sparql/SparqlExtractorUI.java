@@ -32,7 +32,7 @@ package org.wandora.application.tools.extractors.sparql;
 
 import java.awt.Component;
 import java.awt.Desktop;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLEncoder;
 
 import javax.swing.JDialog;
@@ -663,7 +663,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 2);
         genericButtonPanel.add(encodingLabel, gridBagConstraints);
 
-        genericEncodingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "UTF-8", "ISO-8859-1", "No encoding" }));
+        genericEncodingComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "UTF-8", "ISO-8859-1", "No encoding" }));
         genericEncodingComboBox.setPreferredSize(new java.awt.Dimension(80, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
@@ -674,7 +674,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
         genericButtonPanel.add(resultFormatLabel, gridBagConstraints);
 
-        resultFormatComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "JSON", "XML", "RDF/XML" }));
+        resultFormatComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JSON", "XML", "RDF/XML" }));
         resultFormatComboBox.setPreferredSize(new java.awt.Dimension(80, 23));
         genericButtonPanel.add(resultFormatComboBox, new java.awt.GridBagConstraints());
 
@@ -1077,7 +1077,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
             String query = prepareQuery(genericQueryTextPane.getText());
             String queryURL = genericURLTextField.getText();
             queryURL = queryURL.replace(QUERY_MACRO, query);
-            Desktop.getDesktop().browse(new URL(queryURL).toURI());
+            Desktop.getDesktop().browse(new URI(queryURL));
         }
         catch(Exception e) {
             WandoraOptionPane.showMessageDialog(wandora, "Error: "+e.getMessage(), "Error occurred");
@@ -1157,7 +1157,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
     private void openUrl(String url) {
         try {
             Desktop desktop = Desktop.getDesktop();
-            desktop.browse(new URL(url).toURI());
+            desktop.browse(new URI(url));
         }
         catch(Exception e) {
             e.printStackTrace();

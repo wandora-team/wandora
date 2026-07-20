@@ -255,7 +255,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         searchPanel.setMinimumSize(new java.awt.Dimension(70, 140));
         searchPanel.setLayout(new java.awt.GridBagLayout());
 
-        searchTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "release", "master", "artist", "label" }));
+        searchTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "release", "master", "artist", "label" }));
         searchTypeComboBox.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

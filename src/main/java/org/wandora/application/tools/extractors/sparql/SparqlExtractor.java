@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -164,7 +165,7 @@ public class SparqlExtractor extends AbstractExtractor {
                 if(urls != null && urls.length > 0) {
                     for(int i=0; i<urls.length; i++) {
                         try {
-                            URL u = new URL(urls[i]);
+                            URL u = new URI(urls[i]).toURL();
                             log("Extracting result set from '"+u.toExternalForm()+"'");
                             URLConnection uc = u.openConnection();
                             uc.setUseCaches(false);

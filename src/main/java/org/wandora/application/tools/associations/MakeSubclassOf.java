@@ -79,7 +79,7 @@ public class MakeSubclassOf extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         int count = 0;
         boolean shouldContinue = true;
         

@@ -67,7 +67,7 @@ public class AddClass extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
         shouldRefresh = false;
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         if(topics != null && topics.hasNext()) {
             Topic classTopic=wandora.showTopicFinder();
             

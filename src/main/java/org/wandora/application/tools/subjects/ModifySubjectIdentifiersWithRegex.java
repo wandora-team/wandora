@@ -74,7 +74,7 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool {
     
   
     public void execute(Wandora admin, Context context) {   
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
             editor = RegularExpressionEditor.getReplaceExpressionEditor(admin);

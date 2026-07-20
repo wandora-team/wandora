@@ -35,7 +35,8 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
@@ -201,7 +202,7 @@ public class ExtractIconclassKeywords extends AbstractExtractor {
             Topic iconclassTopic = null;
             String iconclassDisplayName = null;
             Association iconclassAssociation = null;
-            HashMap players = null;
+            Map<Topic,Topic> players = null;
             
             line = breader.readLine();
             while(line != null && !forceStop()) {
@@ -330,7 +331,7 @@ public class ExtractIconclassKeywords extends AbstractExtractor {
                     superClass.setBaseName(sup + " (iconclass)");
                 }
                 
-                HashMap players = new HashMap();
+                Map<Topic,Topic> players = new LinkedHashMap<>();
                 players.put(superclassType, superClass);
                 players.put(subclassType, subClass);
                 Association supeclassAssociation = topicMap.createAssociation(supersubclassType);

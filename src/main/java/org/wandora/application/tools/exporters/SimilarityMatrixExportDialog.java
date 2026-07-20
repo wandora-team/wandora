@@ -25,7 +25,8 @@
 
 package org.wandora.application.tools.exporters;
 
-import java.util.ArrayList;
+
+import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -51,7 +52,7 @@ public class SimilarityMatrixExportDialog extends javax.swing.JPanel {
 	
 	private boolean wasAccepted = false;
     private JDialog myDialog = null;
-    private ArrayList<TopicSimilarity> similarityMeasures = null;
+    private List<TopicSimilarity> similarityMeasures = null;
     
     
     /** Creates new form SimilarityMatrixExportDialog */

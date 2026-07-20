@@ -32,7 +32,7 @@ package org.wandora.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
@@ -74,7 +74,7 @@ public class Options {
         String optionsString = null;
         if(optionsResource.startsWith("http")) {
             //System.out.println("Reading options from URL '" + resource + "'.");
-            try { optionsString = IObox.doUrl(new URL(resource)); }
+            try { optionsString = IObox.doUrl(new URI(resource).toURL()); }
             catch (Exception e) { e.printStackTrace(); }
         }
         else if(optionsResource.startsWith("file")) {

@@ -92,7 +92,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
             setLogTitle("Transform variants to topcs and associations");
             log("Transforming variants to topcs and associations");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             TopicMap tm = wandora.getTopicMap();

@@ -118,7 +118,7 @@ public class SOMClassifier extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) {
         if(context instanceof AssociationContext) {
             try {
-                Iterator<Association> associations = context.getContextObjects();
+                Iterator<Association> associations = (Iterator<Association>) context.getContextObjects();
                 Set<Topic> roles = getRolesFrom(associations);
                 if(roles.size() > 0) { 
                     Topic groupingRole = (Topic) WandoraOptionPane.showOptionDialog(wandora, "Select grouping role topic", "Select grouping role topic", WandoraOptionPane.OK_CANCEL_OPTION, roles.toArray( new Topic[]{} ), roles.iterator().next());
@@ -127,7 +127,7 @@ public class SOMClassifier extends AbstractWandoraTool {
                     setLogTitle("SOM of associations");
                     if(groupingRole != null) {
                         log("Building input vectors");
-                        Map<Topic,Set<Topic>> inputSets = buildInputSets(wandora, groupingRole, context.getContextObjects());
+                        Map<Topic,Set<Topic>> inputSets = buildInputSets(wandora, groupingRole, (Iterator<Association>) context.getContextObjects());
                         Map<Topic,SOMVector> inputVectors = buildInputVectors(inputSets);
                         log("Training SOM");
                         SOMMap map = new SOMMap(inputVectors, this);

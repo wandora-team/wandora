@@ -30,6 +30,7 @@ package org.wandora.application.tools;
 
 
 
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -101,7 +102,7 @@ public class NewTopic extends AbstractWandoraTool {
         // --- Now we are going to post process the created topic.
         switch(orders) {
             case MAKE_INSTANCE_OF_CONTEXT: {
-                Iterator contextTopics = getContext().getContextObjects();
+                Iterator<?> contextTopics = getContext().getContextObjects();
                 if(contextTopics != null && contextTopics.hasNext()) {
                     while(contextTopics.hasNext()) {
                         contextTopic = (Topic) contextTopics.next();
@@ -131,7 +132,7 @@ public class NewTopic extends AbstractWandoraTool {
                 break;
             }
             case MAKE_SUBCLASS_OF_CONTEXT: {
-                Iterator contextTopics = getContext().getContextObjects();
+                Iterator<?> contextTopics = getContext().getContextObjects();
                 if(contextTopics != null && contextTopics.hasNext()) {
                     while(contextTopics.hasNext()) {
                         contextTopic = (Topic) contextTopics.next();
@@ -227,7 +228,7 @@ public class NewTopic extends AbstractWandoraTool {
                 }
                 if(si != null && si.length() > 0) {
                     try {
-                        URL siUrl = new URL(si);
+                        URL siUrl = new URI(si).toURL();
                         newTopic.addSubjectIdentifier(topicMap.createLocator(siUrl.toExternalForm()));
                     }
                     catch(Exception e) {

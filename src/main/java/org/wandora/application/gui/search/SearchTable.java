@@ -97,7 +97,9 @@ public class SearchTable extends JTable {
     }
         
     private class TopicCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
-        private int topic;
+        private static final long serialVersionUID = 1L;
+        
+		private int topic;
         private JLabel label;
         
         public TopicCellEditor(){

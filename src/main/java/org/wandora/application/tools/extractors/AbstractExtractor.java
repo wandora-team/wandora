@@ -30,6 +30,7 @@ package org.wandora.application.tools.extractors;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -430,7 +431,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
         int counter = 0;
         for(int i=0; i<urls.length && !forceStop(); i++) {
             try {
-                extractTopicsFrom(new URL(urls[i]), tm);
+                extractTopicsFrom(new URI(urls[i]).toURL(), tm);
                 counter++;
             }
             catch(FileNotFoundException fmfe) {

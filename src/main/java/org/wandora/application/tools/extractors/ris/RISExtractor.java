@@ -524,6 +524,8 @@ public class RISExtractor extends AbstractExtractor {
                         case N2:
                             titleT.setData(tyAbstract, enLangT, note.e2);
                             break;
+                        default:
+                        	break;
                     }
                 }
                 
@@ -578,15 +580,12 @@ public class RISExtractor extends AbstractExtractor {
             
         CharBuffer cb = null;
         {
-            FileInputStream fis = null;
             MappedByteBuffer mbb = null;
-
             Charset cs = Charset.forName(mEncoding);
             CharsetDecoder decoder = cs.newDecoder();
 
-            try
+            try(FileInputStream fis = new FileInputStream(f))
             {
-                fis = new FileInputStream(f);
                 FileChannel fc = fis.getChannel();
                 int fs = (int)fc.size(); 
                 mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fs);
@@ -641,24 +640,25 @@ public class RISExtractor extends AbstractExtractor {
     public static void main(String[] args) throws Exception {
         Charset cs = Charset.forName("UTF-8");
         CharsetDecoder decoder = cs.newDecoder();
-        FileInputStream fis = new FileInputStream("C:\\test.ris");
-        FileChannel fc = fis.getChannel();
-        int fs = (int)fc.size();
-        MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fs);
-        CharBuffer cb = decoder.decode(mbb);
-
-        try
-        {
-            for(;;)
-            {
-                RISReference ref = new RISReference(cb, null);
-                String refName = ref.titleTag;
-                String bar = refName + ".";
-            }
-        }
-        catch(IllegalArgumentException e)
-        {
-            System.out.println("foobar");
+        try(FileInputStream fis = new FileInputStream("C:\\test.ris")) {
+	        FileChannel fc = fis.getChannel();
+	        int fs = (int)fc.size();
+	        MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fs);
+	        CharBuffer cb = decoder.decode(mbb);
+	
+	        try
+	        {
+	            for(;;)
+	            {
+	                RISReference ref = new RISReference(cb, null);
+	                String refName = ref.titleTag;
+	                String bar = refName + ".";
+	            }
+	        }
+	        catch(IllegalArgumentException e)
+	        {
+	            System.out.println("foobar");
+	        }
         }
     }
 

@@ -23,6 +23,7 @@
 package org.wandora.application.tools.iot;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
@@ -60,7 +61,7 @@ final class SourceMapping {
                     return source;
                 }
             } 
-            catch (MalformedURLException e) {
+            catch (MalformedURLException | URISyntaxException e) {
             }
             
         }

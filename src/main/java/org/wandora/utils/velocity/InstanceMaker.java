@@ -36,7 +36,7 @@ package org.wandora.utils.velocity;
  */
 public class InstanceMaker {
     
-    private Class c;
+    private Class<?> c;
     
     /** Creates a new instance of InstanceMaker */
     public InstanceMaker(String cls) throws Exception {
@@ -45,6 +45,6 @@ public class InstanceMaker {
     
     
     public Object make() throws Exception {
-        return c.newInstance();
+        return c.getDeclaredConstructor().newInstance();
     }
 }

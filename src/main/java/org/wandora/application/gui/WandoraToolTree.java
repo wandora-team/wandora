@@ -607,7 +607,9 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
     
     public class ToolTreeRenderer extends DefaultTreeCellRenderer {
         
-        private Icon toolSetIcon = null;
+        private static final long serialVersionUID = 1L;
+        
+		private Icon toolSetIcon = null;
         
         
         public ToolTreeRenderer() {
@@ -690,7 +692,9 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
     
     public class ToolTreeTransferHandler extends TransferHandler {
 
-        @Override
+        private static final long serialVersionUID = 1L;
+
+		@Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
             return support.isDataFlavorSupported(ToolTreeTransferable.toolTreeNodeFlavor);

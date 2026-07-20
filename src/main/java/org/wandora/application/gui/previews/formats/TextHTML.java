@@ -44,6 +44,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -349,7 +350,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                     if(t != null) {
                         Topic type = wandora.showTopicFinder("Select display name language");
                         if(type == null) return;
-                        HashSet scope = new HashSet();
+                        Set<Topic> scope = new HashSet<>();
                         scope.add(type);
                         scope.add(t.getTopicMap().getTopic(XTMPSI.DISPLAY));
                         t.setVariant(scope, s);
@@ -520,7 +521,9 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
     
     public class FXHTML extends JFXPanel {
         
-        private final String locator;
+        private static final long serialVersionUID = 1L;
+
+		private final String locator;
         
         public WebView webView = null;
         private WebEngine webEngine = null;

@@ -27,6 +27,7 @@
 package org.wandora.application.tools.occurrences;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -89,7 +90,7 @@ public class DownloadAllOccurrences extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora admin, Context context) {
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         File targetPath = null;
         TopicMap tm = admin.getTopicMap();
 
@@ -163,7 +164,7 @@ public class DownloadAllOccurrences extends AbstractWandoraTool {
 
     public boolean download(Wandora admin, Topic topic, String url, File target) {
         try {
-            URL subjectUrl = new URL(url);
+            URL subjectUrl = new URI(url).toURL();
             String filename = subjectUrl.getPath();
             String filenameWithoutExtension = filename;
             String filenameExtension = "";

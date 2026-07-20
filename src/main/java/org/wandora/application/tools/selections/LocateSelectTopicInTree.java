@@ -56,7 +56,7 @@ public class LocateSelectTopicInTree extends AbstractWandoraTool {
     
     @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
-        Iterator contextTopics = context.getContextObjects();
+        Iterator<?> contextTopics = context.getContextObjects();
         TopicTree tree = wandora.getCurrentTopicTree();
         if(tree != null && contextTopics != null && contextTopics.hasNext()) {
             try {

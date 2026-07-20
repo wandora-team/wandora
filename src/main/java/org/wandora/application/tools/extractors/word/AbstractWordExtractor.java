@@ -152,7 +152,7 @@ abstract class AbstractWordExtractor extends AbstractExtractor{
     private HashMap<Topic, Float> solveTopics(String word, TopicMap tm) {
 
         Context c = getContext();
-        Iterator contextIterator = c.getContextObjects();
+        Iterator<?> contextIterator = c.getContextObjects();
 
         HashMap<Topic, Float> scores = new HashMap<>();
         
@@ -225,9 +225,6 @@ abstract class AbstractWordExtractor extends AbstractExtractor{
             } catch (TopicMapException tme) {
                 log(tme.getMessage());
             }
-
-
-
         }
 
         return scores;

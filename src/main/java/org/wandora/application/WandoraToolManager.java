@@ -180,10 +180,10 @@ public class WandoraToolManager extends AbstractWandoraTool {
                 if(paths.contains(toolResourcePath)) continue;
                 paths.add(toolResourcePath);
                 String classPath = toolResourcePath.replace('/', '.');
-                Enumeration toolResources = ClassLoader.getSystemResources(toolResourcePath);
+                Enumeration<URL> toolResources = ClassLoader.getSystemResources(toolResourcePath);
 
                 while(toolResources.hasMoreElements()) {
-                    URL toolBaseUrl = (URL) toolResources.nextElement();
+                    URL toolBaseUrl = toolResources.nextElement();
                     if(toolBaseUrl.toExternalForm().startsWith("file:")) {
                         String baseDir = IObox.getFileFromURL(toolBaseUrl);
 //                        String baseDir = URLDecoder.decode(toolBaseUrl.toExternalForm().substring(6), "UTF-8");
@@ -199,7 +199,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
                                 WandoraTool tool=null;
                                 if(className.equals(this.getClass().getName())) tool=this;
                                 else {
-                                    Class cls=Class.forName(className);
+                                    Class<?> cls=Class.forName(className);
                                     if(!WandoraTool.class.isAssignableFrom(cls)) {
                                         System.out.println("Rejecting '" + className + "'. Does not implement AdminTool interface!");
                                         continue;
@@ -215,7 +215,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
                                         System.out.println("Rejecting '" + className + "'. No constructor!");
                                         continue;
                                     }
-                                    tool=(WandoraTool)Class.forName(className).newInstance();
+                                    tool=(WandoraTool)Class.forName(className).getDeclaredConstructor().newInstance();
                                 }
                                 if(tool.getType().isOfType(type)) {
                                     tools.add(tool);
@@ -266,9 +266,9 @@ public class WandoraToolManager extends AbstractWandoraTool {
     public JMenu getToolMenu(JMenu toolMenu){
         toolMenu = getMenu(toolMenu, WandoraToolType.GENERIC_TYPE, accelerators);
         if(toolMenu.getMenuComponentCount() > 0) toolMenu.add(new JSeparator());
-        toolMenu.add(this.getToolMenuItem(admin, getName(), KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_MASK)));
+        toolMenu.add(this.getToolMenuItem(admin, getName(), KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK)));
         ClearToolLocks clearToolLocks = new ClearToolLocks();
-        toolMenu.add(clearToolLocks.getToolMenuItem(admin, clearToolLocks.getName(), KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK)));
+        toolMenu.add(clearToolLocks.getToolMenuItem(admin, clearToolLocks.getName(), KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK)));
         return toolMenu;
     }
     
@@ -395,7 +395,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
                 try {
                     WandoraTool tool=null;
                     if(cls.equals(this.getClass().getName())) tool=this;
-                    else tool=(WandoraTool)Class.forName(cls).newInstance();
+                    else tool=(WandoraTool)Class.forName(cls).getDeclaredConstructor().newInstance();
                     tool.initialize(admin,options,"tools."+type+".item["+counter+"].options.");
 //                    String type=tool.getType();
                     Vector<T2<WandoraTool,String>> ts=tools.get(type);

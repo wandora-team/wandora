@@ -258,10 +258,10 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                 Reflections reflections = new Reflections(classPath);
 
                 Set<Class<? extends WandoraTool>> toolClasses = reflections.getSubTypesOf(WandoraTool.class);
-                for(Class toolClass : toolClasses) {
+                for(Class<? extends WandoraTool> toolClass : toolClasses) {
                     try {
                         if(isValidWandoraToolClass(toolClass)) {
-                            WandoraTool tool = (WandoraTool) toolClass.newInstance();
+                            WandoraTool tool = (WandoraTool) toolClass.getDeclaredConstructor().newInstance();
                             if(tool != null) {
                                 addTool(tool, "path", path);
                             }
@@ -285,7 +285,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     }
     
     
-    private boolean isValidWandoraToolClass(Class c) {
+    private boolean isValidWandoraToolClass(Class<?> c) {
         try {
             if(!c.isInterface() && !Modifier.isAbstract( c.getModifiers() )) {
                 // throws exception if class has no argumentless constructor.
@@ -386,12 +386,11 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
             }
         }
         else {            
-            try{
-                JarClassLoader jc=new JarClassLoader(f);    
+            try(JarClassLoader jc=new JarClassLoader(f)) { 
                 Collection<String> clsNames=jc.listClasses();
                 for(String clsName : clsNames){
                     try{
-                        Class cls=jc.loadClass(clsName);
+                        Class<?> cls=jc.loadClass(clsName);
                         if(!WandoraTool.class.isAssignableFrom(cls)){
                             if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Does not implement Tool interface!");
                             continue;
@@ -807,11 +806,11 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
         toolMenu = getMenu(toolMenu, getToolSet(WandoraToolType.GENERIC_TYPE), accelerators, 0);
 
         ClearToolLocks clearToolLocks = new ClearToolLocks();
-        toolMenu.insert(clearToolLocks.getToolMenuItem(wandora, clearToolLocks.getName(), KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK)), 0);
+        toolMenu.insert(clearToolLocks.getToolMenuItem(wandora, clearToolLocks.getName(), KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK)), 0);
 
         JMenu buttonSelectorSubmenus = this.getToolButtonSelectMenu();
         toolMenu.insert(buttonSelectorSubmenus, 1);
-        toolMenu.insert(this.getToolMenuItem(wandora, getName(), KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_MASK)), 0);
+        toolMenu.insert(this.getToolMenuItem(wandora, getName(), KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK)), 0);
 
         toolMenu.insertSeparator(2);
         toolMenu.insertSeparator(4);

@@ -23,6 +23,8 @@
 package org.wandora.application.tools.exporters.iiifexport;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -63,7 +65,7 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
         if(f instanceof URL) f=((URL)f).openStream();
         ImageInputStream in = ImageIO.createImageInputStream(f);
         try{
-            final Iterator readers = ImageIO.getImageReaders(in);
+            final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
             if(readers.hasNext()){
                     ImageReader reader=(ImageReader)readers.next();
                     try{
@@ -151,9 +153,9 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
         
         int[] dimensions=null;
         try{
-            dimensions=getImageDimensions(new URL(urlAndFormat.e1));
-        }catch(IOException ioe){
-            tool.log("Unable to get image dimensions for "+urlAndFormat.e1,ioe);
+            dimensions=getImageDimensions(new URI(urlAndFormat.e1).toURL());
+        }catch(IOException | URISyntaxException e){
+            tool.log("Unable to get image dimensions for "+urlAndFormat.e1,e);
             return null;
         }
         

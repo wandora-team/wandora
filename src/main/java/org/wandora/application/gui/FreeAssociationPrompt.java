@@ -778,7 +778,9 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     
     private static class PlayersPanel extends JPanel implements Scrollable {
-        public boolean getScrollableTracksViewportWidth() {
+        private static final long serialVersionUID = 1L;
+
+		public boolean getScrollableTracksViewportWidth() {
             return true;
         }
 

@@ -31,6 +31,7 @@ package org.wandora.application.tools.extractors.files;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
@@ -133,7 +134,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
             String url = request.getSource();
             TopicMap tm = wandora.getTopicMap();
             if(url != null && url.endsWith(".pdf")) {
-                _extractTopicsFrom(new URL(url), tm);
+                _extractTopicsFrom(new URI(url).toURL(), tm);
                 wandora.doRefresh();
                 return null;
             }
@@ -145,7 +146,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
                 if(content == null && url != null) {
                     try {
                         System.out.println("Found no content. Reading the url content.");
-                        content = IObox.doUrl(new URL(url));
+                        content = IObox.doUrl(new URI(url).toURL());
                     }
                     catch(Exception e) {
                         e.printStackTrace();
@@ -170,7 +171,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
 
                     for( String u : pdfUrls ) {
                         System.out.println("Extracting pdf url: " + u);
-                        _extractTopicsFrom(new URL(u), tm);
+                        _extractTopicsFrom(new URI(u).toURL(), tm);
                     }
                     wandora.doRefresh();
                     return null;
@@ -304,7 +305,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
         PDDocument doc = null;
         try {
             if(locator.startsWith("http://")) {
-                doc = PDDocument.load(new URL(locator).openStream());
+                doc = PDDocument.load(new URI(locator).toURL().openStream());
             }
             else {
                 doc = PDDocument.load(new File(locator));

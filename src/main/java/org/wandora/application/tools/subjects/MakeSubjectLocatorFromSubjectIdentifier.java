@@ -79,7 +79,7 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
         
         
         if(context instanceof SIContext) {
-            Iterator sis = context.getContextObjects();
+            Iterator<?> sis = context.getContextObjects();
             if(sis.hasNext()) {
                 try {
                     Locator si = (Locator) sis.next();
@@ -101,12 +101,12 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
         }
         
         else if(context instanceof ApplicationContext) {
-            Iterator<Topic> topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             try {
                 while(topics.hasNext()) {
-                    Topic topic = topics.next();
+                    Topic topic = (Topic) topics.next();
                     Locator subjectIdentifier = topic.getFirstSubjectIdentifier();
                     topic.setSubjectLocator(subjectIdentifier);
                 }
@@ -118,7 +118,7 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
         }
         
         else if(context instanceof LayeredTopicContext) {
-            Iterator<Topic> topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             setDefaultLogger();
             try {
@@ -134,7 +134,7 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
 
                 while(topics.hasNext() && !forceStop(result)) {
                     try {
-                        topic = topics.next();
+                        topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             setProgress(progress++);
 

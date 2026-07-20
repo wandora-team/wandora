@@ -45,7 +45,9 @@ import org.wandora.topicmap.TopicMapException;
 @Deprecated
 public class SchemaOccurrencePrompt extends javax.swing.JDialog {
     
-    private Topic topic;
+    private static final long serialVersionUID = 1L;
+    
+	private Topic topic;
     private Wandora parent;
     private boolean cancelled;
     private ResourceEditor editor;
@@ -59,7 +61,7 @@ public class SchemaOccurrencePrompt extends javax.swing.JDialog {
         typeComboBox.setEditable(false);
 
         try{
-            Iterator iter=SchemaBox.getOccurrenceTypesFor(topic).iterator();
+            Iterator<Topic> iter=SchemaBox.getOccurrenceTypesFor(topic).iterator();
             while(iter.hasNext()){
                 Topic t=(Topic)iter.next();
                 typeComboBox.addItem(new ComboBoxTopicWrapper(t));

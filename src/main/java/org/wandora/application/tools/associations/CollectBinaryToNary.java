@@ -120,7 +120,7 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
-            Iterator<Association> associations = null;
+            Iterator<?> associations = null;
             Topic baseTopic = null;
             Association association = null;
             int counter = 0;
@@ -165,10 +165,10 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
                     if(newAssociationType == null) return;
                 }
                 
-                Iterator<Topic> baseTopics = context.getContextObjects();
+                Iterator<?> baseTopics = context.getContextObjects();
                 baseTopic = null;
                 associations = null;
-                Collection associationCollection = null;
+                Collection<Association> associationCollection = null;
                 setDefaultLogger();
                 long startTime = System.currentTimeMillis();
 

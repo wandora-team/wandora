@@ -55,7 +55,7 @@ public class MakeSubjectLocatorFromFileContent extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) {
         try {
-            Iterator contextTopics = getContext().getContextObjects();
+            Iterator<?> contextTopics = getContext().getContextObjects();
             if(contextTopics == null || !contextTopics.hasNext()) return;
 
             SimpleFileChooser chooser=UIConstants.getFileChooser();

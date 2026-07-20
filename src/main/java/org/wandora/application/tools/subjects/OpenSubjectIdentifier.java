@@ -76,7 +76,7 @@ public class OpenSubjectIdentifier extends AbstractWandoraTool {
                 }
                 else if(context instanceof LayeredTopicContext) {
                     HashSet<Locator> siSet = new LinkedHashSet<>();
-                    Iterator contextTopics = getContext().getContextObjects();
+                    Iterator<?> contextTopics = getContext().getContextObjects();
                     if(contextTopics == null) return;
                     while(contextTopics.hasNext() && !forceStop()) {
                         Topic t = (Topic) (contextTopics.next());

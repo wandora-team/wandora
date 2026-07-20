@@ -78,7 +78,9 @@ import org.wandora.utils.Options;
  * @author akivela
  */
 public class Image extends JPanel implements Runnable, MouseListener, KeyListener, ActionListener, Printable, PreviewPanel {
-    private static final String OPTIONS_PREFIX = "gui.imagePreviewPanel.";
+    private static final long serialVersionUID = 1L;
+    
+	private static final String OPTIONS_PREFIX = "gui.imagePreviewPanel.";
     private static final double ZOOMFACTOR = 1.1;
     
     private String imageLocator;

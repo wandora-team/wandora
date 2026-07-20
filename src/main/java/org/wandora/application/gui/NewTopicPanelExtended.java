@@ -29,6 +29,7 @@ package org.wandora.application.gui;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -193,7 +194,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
             );
         }
         try {
-            URL siUrl = new URL(si);
+            URL siUrl = new URI(si).toURL();
         }
         catch(Exception e) {
             si = topicmap.makeSubjectIndicator();
@@ -212,7 +213,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         String sl = SLTextField.getText().trim();
         if(sl.length() == 0) return null;
         try {
-            URL slUrl = new URL(sl);
+            URL slUrl = new URI(sl).toURL();
         }
         catch(Exception e) {
             WandoraOptionPane.showMessageDialog(

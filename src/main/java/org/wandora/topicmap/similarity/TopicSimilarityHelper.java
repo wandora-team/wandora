@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 
 import org.wandora.utils.IObox;
 
@@ -48,7 +49,7 @@ public class TopicSimilarityHelper {
     private static boolean ADDITIONAL_DEBUG = true;
     
     
-    private static ArrayList<String> similarityPaths = new ArrayList<String>();
+    private static List<String> similarityPaths = new ArrayList<>();
     
     
     public static void addSimilarityMeasuresPath(String path) {
@@ -56,17 +57,17 @@ public class TopicSimilarityHelper {
             similarityPaths.add(path);
         }
     }
-    public static ArrayList<String> getSimilarityMeasuresPath() {
+    public static List<String> getSimilarityMeasuresPath() {
         return similarityPaths;
     }
     public static void resetSimilarityMeasuresPath() {
-        similarityPaths = new ArrayList<String>();
+        similarityPaths = new ArrayList<>();
     }
     
     
     
-    public static ArrayList<TopicSimilarity> getTopicSimilarityMeasures() {
-        ArrayList<TopicSimilarity> measures=new ArrayList<TopicSimilarity>();
+    public static List<TopicSimilarity> getTopicSimilarityMeasures() {
+        List<TopicSimilarity> measures=new ArrayList<>();
 
         if(!similarityPaths.contains(DEFAULT_SIMILARITY_PATH)) {
             similarityPaths.add(DEFAULT_SIMILARITY_PATH);
@@ -74,10 +75,10 @@ public class TopicSimilarityHelper {
         for(String path : similarityPaths) {
             try {
                 String classPath = path.replace('/', '.');
-                Enumeration measureResources = ClassLoader.getSystemResources(path);
+                Enumeration<URL> measureResources = ClassLoader.getSystemResources(path);
 
                 while(measureResources.hasMoreElements()) {
-                    URL measureResourceBaseUrl = (URL) measureResources.nextElement();
+                    URL measureResourceBaseUrl = measureResources.nextElement();
                     if(measureResourceBaseUrl.toExternalForm().startsWith("file:")) {
                         String baseDir = IObox.getFileFromURL(measureResourceBaseUrl);
                         // String baseDir = URLDecoder.decode(toolBaseUrl.toExternalForm().substring(6), "UTF-8");
@@ -92,7 +93,7 @@ public class TopicSimilarityHelper {
                                 if(className.indexOf("$")>-1) continue;
                                 TopicSimilarity measureResource=null;
 
-                                Class measureResourceClass=Class.forName(className);
+                                Class<?> measureResourceClass=Class.forName(className);
                                 if(!TopicSimilarity.class.isAssignableFrom(measureResourceClass)) {
                                     if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. Does not implement TopicSimilarity interface!");
                                     continue;
@@ -108,7 +109,7 @@ public class TopicSimilarityHelper {
                                     if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. No constructor!");
                                     continue;
                                 }
-                                measureResource=(TopicSimilarity)Class.forName(className).newInstance();
+                                measureResource=(TopicSimilarity)Class.forName(className).getDeclaredConstructor().newInstance();
 
                                 if(measureResource != null) {
                                     measures.add(measureResource);

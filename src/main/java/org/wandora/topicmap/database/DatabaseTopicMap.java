@@ -79,8 +79,8 @@ public class DatabaseTopicMap extends TopicMap {
      */
     protected WeakTopicIndex topicIndex;
     
-    protected ArrayList<TopicMapListener> topicMapListeners;
-    protected ArrayList<TopicMapListener> disabledListeners;
+    protected List<TopicMapListener> topicMapListeners;
+    protected List<TopicMapListener> disabledListeners;
     
     // connection info about current database
     protected String dbDriver;

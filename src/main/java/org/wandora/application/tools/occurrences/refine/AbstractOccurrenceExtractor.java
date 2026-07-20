@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
@@ -71,7 +72,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora wandora, Context context) {
-        Iterator topics = null;
+        Iterator<?> topics = null;
         if(preferredContext != null) topics = preferredContext.getContextObjects();
         else topics = context.getContextObjects();
 
@@ -102,7 +103,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool {
                 setDefaultLogger();
                 setLogTitle("Extracting from occurrences...");
 
-                ArrayList<Topic> dtopics = new ArrayList<Topic>();
+                List<Topic> dtopics = new ArrayList<>();
                 while(topics.hasNext() && !forceStop()) {
                     dtopics.add((Topic) topics.next());
                 }

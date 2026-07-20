@@ -54,7 +54,7 @@ public class TopicTableModel extends DefaultTableModel {
     }
 
     @Override
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
         return Topic.class;
     }
 

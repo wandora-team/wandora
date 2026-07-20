@@ -101,7 +101,7 @@ public class MixedTopicTableModel extends DefaultTableModel {
 
     
     @Override
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
         if(data != null && data[0][c] instanceof Topic) {
             return Topic.class;
         }

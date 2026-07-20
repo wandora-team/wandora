@@ -75,7 +75,7 @@ public class BasenameRegexReplacer extends AbstractWandoraTool {
     
   
     public void execute(Wandora wandora, Context context) {
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
             editor = RegularExpressionEditor.getReplaceExpressionEditor(wandora);

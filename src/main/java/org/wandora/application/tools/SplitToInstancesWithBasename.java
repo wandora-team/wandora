@@ -108,7 +108,7 @@ public class SplitToInstancesWithBasename extends AbstractWandoraTool {
     
     @Override
     public void execute(Wandora w, Context context) {
-        Iterator topics = getContext().getContextObjects();
+        Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         
         splitString = WandoraOptionPane.showInputDialog(w, "Enter regular expression string used to split base name:", splitString);

@@ -27,6 +27,7 @@ package org.wandora.application.tools.extractors.helmet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 
 import javax.swing.Icon;
@@ -102,7 +103,7 @@ public class HelmetJSONExtractor extends AbstractExtractor {
                 if(urls != null && urls.length > 0) {
                     for(int i=0; i<urls.length; i++) {
                         try {
-                            URL u = new URL(urls[i]);
+                            URL u = new URI(urls[i]).toURL();
                             log("Extracting feed '"+u.toExternalForm()+"'");
                             _extractTopicsFrom(u, tm);
                         }

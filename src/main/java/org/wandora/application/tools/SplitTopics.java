@@ -98,7 +98,7 @@ public class SplitTopics extends AbstractWandoraTool {
         copyInstances = true;
         askName=false;
         
-        Iterator topics = getContext().getContextObjects();
+        Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         
         TopicMap tm = w.getTopicMap();

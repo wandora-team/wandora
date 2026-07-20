@@ -55,15 +55,15 @@ public class OpenTopicInNew extends AbstractWandoraTool {
 
     
     /** Creates a new instance of OpenTopicAt */
-    public OpenTopicInNew(Class<Component> c) {
-        dockableClass = c;
+    public OpenTopicInNew(Class<?> c) {
+        dockableClass = (Class<Component>) c;
     }
-    public OpenTopicInNew(Class<Component> c, Context preferredContext) {
-        dockableClass = c;
+    public OpenTopicInNew(Class<?> c, Context preferredContext) {
+        dockableClass = (Class<Component>) c;
         setContext(preferredContext);
     }
-    public OpenTopicInNew(Class<Component> c, int preferredOptions) {
-        dockableClass = c;
+    public OpenTopicInNew(Class<?> c, int preferredOptions) {
+        dockableClass = (Class<Component>) c;
         this.options = preferredOptions;
     }
             
@@ -73,7 +73,7 @@ public class OpenTopicInNew extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) throws TopicMapException {
         try {
             DockingFramePanel dockingPanel = (DockingFramePanel) wandora.topicPanelManager.getTopicPanel();
-            Iterator contextTopics = context.getContextObjects();
+            Iterator<?> contextTopics = context.getContextObjects();
             if(options == SOLVE_USING_CONTEXT && contextTopics != null && contextTopics.hasNext()) {
                 int count = 0;
                 while(contextTopics.hasNext()) {

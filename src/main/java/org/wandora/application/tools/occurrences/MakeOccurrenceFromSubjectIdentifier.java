@@ -88,7 +88,7 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool {
             setLogTitle("Copying subject identifier to topic occurrence");
             log("Copying subject identifier to topic occurrence");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

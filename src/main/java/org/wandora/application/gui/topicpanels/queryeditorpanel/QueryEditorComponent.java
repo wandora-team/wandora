@@ -476,7 +476,9 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     }
     
     protected static class FinalResultPanel extends DirectivePanel {
-        public FinalResultPanel(){
+        private static final long serialVersionUID = 1L;
+
+		public FinalResultPanel(){
             super(new DirectiveUIHints(FinalResultDirective.class, new Constructor[]{}, new Addon[]{}, "Final result", null));
             fromDirectiveAnchor.setVisible(false);
         }
@@ -491,7 +493,9 @@ public class QueryEditorComponent extends javax.swing.JPanel {
     
     
     private class GraphPanel extends JPanel {
-        public GraphPanel(){
+        private static final long serialVersionUID = 1L;
+
+		public GraphPanel(){
             super();
         }
 

@@ -62,7 +62,9 @@ import org.wandora.application.gui.UIBox;
 
 public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener, ComponentListener, MouseListener {
 
-    protected Spectrum spectrum;
+    private static final long serialVersionUID = 1L;
+    
+	protected Spectrum spectrum;
     protected Map params;
     private int screenScaler = 1;
     

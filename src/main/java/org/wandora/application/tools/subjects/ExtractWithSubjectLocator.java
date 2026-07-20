@@ -66,7 +66,7 @@ public class ExtractWithSubjectLocator extends AbstractWandoraTool {
             setDefaultLogger();
             log("Extracting with subject locator urls!");
             if(wandora != null) {
-                Iterator contextTopics = getContext().getContextObjects();
+                Iterator<?> contextTopics = getContext().getContextObjects();
                 int openCount = 0;
                 boolean openAll = false;
                 boolean openNext = true;

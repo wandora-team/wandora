@@ -91,7 +91,7 @@ public class MakeDisplayVariantsFromBasename extends AbstractWandoraTool {
             setLogTitle("Copying base name to topic variant names");
             log("Copying base name to topic variant names");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

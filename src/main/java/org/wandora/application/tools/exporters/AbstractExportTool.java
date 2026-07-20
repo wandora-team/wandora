@@ -80,7 +80,7 @@ public abstract class AbstractExportTool extends AbstractWandoraTool {
     protected TopicMap makeTopicMapWith(Context context, boolean deepCopy) {
         TopicMap tm = new TopicMapImpl();
         try {
-            Iterator contextObjects = context.getContextObjects();
+            Iterator<?> contextObjects = context.getContextObjects();
             Object contextObject = null;
             Topic contextTopic = null;
             while(contextObjects.hasNext()) {

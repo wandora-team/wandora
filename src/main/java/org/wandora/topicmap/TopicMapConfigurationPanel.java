@@ -34,7 +34,9 @@ package org.wandora.topicmap;
  */
 public abstract class TopicMapConfigurationPanel extends javax.swing.JPanel {
 
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * Get the parameters user entered. The returned object may be of any type,
      * usually determined by the TopicMapType used to create the configuration
      * panel. The TopicMapType is used to construct a new topic map with the

@@ -42,13 +42,13 @@ import org.wandora.topicmap.TopicMap;
  */
 public abstract class TopicIterator implements Iterator {
 
-    Iterator source = null;
+    Iterator<?> source = null;
     TopicMap topicmap = null;
     Topic topic = null;       
     Object next = null;
-    Iterator iterator = null;
-    Collection collection = null;
-    Collection cache = null;
+    Iterator<?> iterator = null;
+    Collection<?> collection = null;
+    Collection<Object> cache = null;
 
     boolean removeDuplicates = true;
             
@@ -58,12 +58,12 @@ public abstract class TopicIterator implements Iterator {
     }
 
     
-    public void initialize(Iterator source, Wandora wandora) {
+    public void initialize(Iterator<?> source, Wandora wandora) {
         this.source = source;
         this.topicmap = wandora.getTopicMap();
 
         if(removeDuplicates) {
-            cache = new ArrayList();
+            cache = new ArrayList<>();
             next = solveNextUncached();
         }
         else {
@@ -121,14 +121,14 @@ public abstract class TopicIterator implements Iterator {
 
 
     private Object solveNext() {
-        Iterator iterator = solveIterator();
+        Iterator<?> iterator = solveIterator();
         if(iterator != null && iterator.hasNext()) return iterator.next();
         else return null;
     }
 
 
 
-    private Iterator solveIterator() {
+    private Iterator<?> solveIterator() {
         while(iterator == null || !iterator.hasNext()) {
             if(source != null && source.hasNext()) {
                 topic = (Topic) source.next();
@@ -149,8 +149,8 @@ public abstract class TopicIterator implements Iterator {
     // -------------------------------------------------------------------------
     
     
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
-        Iterator it = oldIterator;
+    public Iterator<?> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<?> oldIterator) {
+        Iterator<?> it = oldIterator;
         return it;
     }
 

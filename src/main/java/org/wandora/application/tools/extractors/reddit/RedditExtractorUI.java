@@ -368,7 +368,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
     
     private void addContextSLs() {
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o;
         Topic t;
         Locator locator;

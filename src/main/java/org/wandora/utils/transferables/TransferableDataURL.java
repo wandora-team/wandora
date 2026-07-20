@@ -111,9 +111,9 @@ public class TransferableDataURL implements Transferable {
 
         
         @Override
-        public Class getRepresentationClass() {
+        public Class<?> getRepresentationClass() {
             try {
-                Class c = Class.forName("[B"); // byte array i.e. byte[]
+                Class<?> c = Class.forName("[B"); // byte array i.e. byte[]
                 return c;
             }
             catch(Exception e) {

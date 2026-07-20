@@ -136,7 +136,7 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
     
     private void setMetricByClassName(String metric) throws Exception {
         if(metric != null){
-            Class metricClass = Class.forName(metric);
+            Class<?> metricClass = Class.forName(metric);
             if(metricClass != null) {
                 stringMetric = (InterfaceStringMetric) metricClass.getConstructor().newInstance();
             }
@@ -158,7 +158,7 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora wandora, Context context) {
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         String o1 = null;
         Topic o1Type = null;

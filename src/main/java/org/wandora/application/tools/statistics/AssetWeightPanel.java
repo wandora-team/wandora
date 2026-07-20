@@ -1414,7 +1414,9 @@ public class AssetWeightPanel extends javax.swing.JPanel {
 
 
     class TopicWeightTableModel extends DefaultTableModel {
-        private ArrayList<Topic> topics = null;
+        private static final long serialVersionUID = 1L;
+        
+		private ArrayList<Topic> topics = null;
         private ArrayList<Double> weights = null;
         private HashMap<Topic,Double> topicWeights = null;
 

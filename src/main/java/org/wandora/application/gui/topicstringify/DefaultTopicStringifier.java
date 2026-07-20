@@ -25,6 +25,7 @@ package org.wandora.application.gui.topicstringify;
 
 
 
+import java.net.URI;
 import java.net.URL;
 
 import javax.swing.Icon;
@@ -145,7 +146,7 @@ public class DefaultTopicStringifier implements TopicStringifier {
                     }
                     case TOPIC_RENDERS_SI_WITHOUT_DOMAIN: {
                         String urlString = t.getOneSubjectIdentifier().toExternalForm();
-                        URL url = new URL(urlString);
+                        URL url = new URI(urlString).toURL();
                         urlString = url.getFile();
                         if(url.getRef() != null) urlString += "#" + url.getRef();
                         return urlString;

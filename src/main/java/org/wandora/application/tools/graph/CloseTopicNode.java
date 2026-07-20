@@ -75,7 +75,7 @@ public class CloseTopicNode extends AbstractGraphTool {
         VModel model = null;
         VNode node = null;
         if(!allButCurrent){
-            for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {
+            for(Iterator<?> iter = context.getContextObjects(); iter.hasNext(); ) {
                 try {
                     node = (VNode) iter.next();
                     if(node != null) {
@@ -92,7 +92,7 @@ public class CloseTopicNode extends AbstractGraphTool {
         }
         else{
             HashSet<VNode> selected=new HashSet<VNode>();
-            for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {
+            for(Iterator<?> iter = context.getContextObjects(); iter.hasNext(); ) {
                 try {
                     node = (VNode) iter.next();
                     if(node != null) selected.add(node);

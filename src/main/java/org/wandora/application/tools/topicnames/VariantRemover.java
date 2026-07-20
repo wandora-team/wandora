@@ -77,7 +77,7 @@ public class VariantRemover extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) {
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             Topic typeTopic = wandora.showTopicFinder("Select type of variants to be removed...");

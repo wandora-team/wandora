@@ -102,7 +102,7 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool {
             ot.changeType();
         }
         else {
-            Iterator<Topic> topics = null;
+            Iterator<?> topics = null;
             if(masterTopic != null) {
                 List<Topic> topicArray = new ArrayList<>();
                 topicArray.add(masterTopic);
@@ -121,7 +121,7 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool {
                     Topic newType = wandora.showTopicFinder("Select new occurrence type");
                     if(newType != null && !newType.isRemoved()) {
                         while(topics.hasNext()) {
-                            Topic topic = topics.next();
+                            Topic topic = (Topic) topics.next();
                             if(topic != null && !topic.isRemoved()) {
                                 Hashtable<Topic,String> os = topic.getData(type);
                                 if(os != null && !os.isEmpty()) {

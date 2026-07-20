@@ -79,7 +79,7 @@ public class MakeOccurrenceFromVariant extends AbstractWandoraTool {
             setLogTitle("Copying variant name to topic occurrence");
             log("Copying variant name to topic occurrence");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

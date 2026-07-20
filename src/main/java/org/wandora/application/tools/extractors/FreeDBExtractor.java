@@ -181,7 +181,7 @@ public class FreeDBExtractor extends AbstractExtractor {
             String artistName = null;
             Topic artistTopic = null;
             Association association = null;
-            Hashtable players = null;
+            Hashtable<Topic,Topic> players = null;
             int dtitleCount = 0;
             String discLength = null;
             Topic lengthTopic = null;
@@ -212,7 +212,7 @@ public class FreeDBExtractor extends AbstractExtractor {
                         if(discLength != null) {
                             lengthTopic = getOrCreateTopic(topicMap, makeSI("length/" + discLength), discLength+" (length)", discLength, lengthType);
                             if(lengthTopic != null) {       
-                                players = new Hashtable();
+                                players = new Hashtable<>();
                                 players.put(discType, discTopic);
                                 players.put(lengthType, lengthTopic);
                                 association = topicMap.createAssociation(lengthType);
@@ -223,7 +223,7 @@ public class FreeDBExtractor extends AbstractExtractor {
                         if(processedBy != null) {
                             processedByTopic = getOrCreateTopic(topicMap, makeSI("processedby/" + processedBy), processedBy+" (processedby)", processedBy, processedType);
                             if(processedByTopic != null) {       
-                                players = new Hashtable();
+                                players = new Hashtable<>();
                                 players.put(discType, discTopic);
                                 players.put(processedType, processedByTopic);
                                 association = topicMap.createAssociation(processedType);
@@ -234,7 +234,7 @@ public class FreeDBExtractor extends AbstractExtractor {
                         if(submittedVia != null) {
                             submittedViaTopic = getOrCreateTopic(topicMap, makeSI("submittedvia/" + submittedVia), submittedVia+" (processedby)", submittedVia, submittedType);
                             if(submittedViaTopic != null) {       
-                                players = new Hashtable();
+                                players = new Hashtable<>();
                                 players.put(discType, discTopic);
                                 players.put(submittedType, submittedViaTopic);
                                 association = topicMap.createAssociation(submittedType);
@@ -261,7 +261,7 @@ public class FreeDBExtractor extends AbstractExtractor {
                                         if(artistName != null && artistName.length() > 0) {
                                             artistTopic = getOrCreateTopic(topicMap, makeSI( "artist/" + artistName ), artistName + " (artist)", artistName, artistType);
                                             if(artistTopic != null) {
-                                                players = new Hashtable();
+                                                players = new Hashtable<>();
                                                 players.put(discType, discTopic);
                                                 players.put(artistType, artistTopic);
                                                 association = topicMap.createAssociation(artistType);
@@ -296,7 +296,7 @@ public class FreeDBExtractor extends AbstractExtractor {
                             if(discYear != null && discYear.length() > 0) {
                                 discYearTopic = getOrCreateTopic(topicMap, makeSI("year/"+discYear), discYear+" (year)", discYear, yearType);
                                 if(discYearTopic != null) {
-                                    players = new Hashtable();
+                                    players = new Hashtable<>();
                                     players.put(yearType, discYearTopic);
                                     players.put(discType, discTopic);
                                     association = topicMap.createAssociation(yearType);
@@ -316,7 +316,7 @@ public class FreeDBExtractor extends AbstractExtractor {
                             if(discGenre != null && discGenre.length() > 0) {
                                 discGenreTopic = getOrCreateTopic(topicMap, makeSI("genre/"+discGenre), discGenre+" (genre)", discGenre, genreType);
                                 if(discGenreTopic != null) {
-                                    players = new Hashtable();
+                                    players = new Hashtable<>();
                                     players.put(genreType, discGenreTopic);
                                     players.put(discType, discTopic);
                                     association = topicMap.createAssociation(genreType);
@@ -359,7 +359,7 @@ public class FreeDBExtractor extends AbstractExtractor {
                                 }
 
                                 if(trackTopic != null && orderTopic != null && discTopic != null && artistTopic != null) {
-                                    players = new Hashtable();
+                                    players = new Hashtable<>();
                                     players.put(trackType, trackTopic);
                                     players.put(discType, discTopic);
                                     players.put(orderType, orderTopic);

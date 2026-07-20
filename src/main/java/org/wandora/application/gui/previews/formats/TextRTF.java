@@ -28,7 +28,8 @@ import java.awt.Cursor;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
+import java.nio.file.Path;
 
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -58,7 +59,7 @@ public class TextRTF extends Text {
         textComponent.setBackground(Color.WHITE);
         
         if(locator.startsWith("file:")) {
-            FileInputStream in = new FileInputStream(new URL(locator).getFile());
+            FileInputStream in = new FileInputStream(Path.of(new URI(locator)).toFile());
             rtf.read(in, textComponent.getDocument(), 0);
         }
         else if(DataURL.isDataURL(locator)) {
@@ -67,7 +68,7 @@ public class TextRTF extends Text {
             rtf.read(in, textComponent.getDocument(), 0);
         }
         else {
-            InputStream in = new URL(locator).openStream();
+            InputStream in = new URI(locator).toURL().openStream();
             rtf.read(in, textComponent.getDocument(), 0);
         }
 

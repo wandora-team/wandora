@@ -65,7 +65,7 @@ public class GenericDatabaseExtractorConfigurationPanel extends javax.swing.JPan
         jTableHeader=new JTableHeader(jTable.getColumnModel());
         jTable.setTableHeader(jTableHeader);
         GridBagConstraints gbc=new GridBagConstraints();
-        gbc.gridx=0; gbc.gridy=1; gbc.fill=gbc.HORIZONTAL; gbc.anchor=gbc.SOUTH;
+        gbc.gridx=0; gbc.gridy=1; gbc.fill=GridBagConstraints.HORIZONTAL; gbc.anchor=GridBagConstraints.SOUTH;
         gbc.insets=new java.awt.Insets(5,5,0,5);
         this.add(jTableHeader,gbc);
         
@@ -169,14 +169,14 @@ public class GenericDatabaseExtractorConfigurationPanel extends javax.swing.JPan
                 "Column", "Foreign key", "Include column", "Basename", "Make topics"
             }
         ) {
-            Class[] types = new Class [] {
+            Class<?>[] types = new Class[] {
                 java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, true, true, true, true
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 

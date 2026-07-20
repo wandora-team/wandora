@@ -105,7 +105,7 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
                 gbc.gridx=0;
                 gbc.weightx=0.5;
                 gbc.gridwidth=1;
-                gbc.fill=gbc.HORIZONTAL;
+                gbc.fill=GridBagConstraints.HORIZONTAL;
 
                 statDescriptionString = TopicMapStatOptions.describeStatOption(statOptions[i]);
                 stats.append(statDescriptionString);

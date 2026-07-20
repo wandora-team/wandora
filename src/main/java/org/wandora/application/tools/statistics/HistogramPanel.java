@@ -128,7 +128,7 @@ public class HistogramPanel extends javax.swing.JPanel {
         jd.getContentPane().setLayout(new GridBagLayout());
         HistogramPanel p=new HistogramPanel(data,jd,infoPattern,mousePattern);
         GridBagConstraints gbc=new GridBagConstraints();
-        gbc.fill=gbc.BOTH;
+        gbc.fill=GridBagConstraints.BOTH;
         gbc.gridx=0;
         gbc.gridy=0;
         gbc.weightx=1.0;

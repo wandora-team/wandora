@@ -23,6 +23,8 @@
 package org.wandora.application.tools.iot;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,7 +47,7 @@ class TimeSource extends AbstractIoTSource implements IoTSource {
         Map<String,String> params;
         
         try {
-            URL u = new URL(url);
+            URL u = new URI(url).toURL();
             params = parseParams(u);
             if(params != null && params.containsKey("format")) {
                 String formatString = params.get("format");
@@ -64,8 +66,8 @@ class TimeSource extends AbstractIoTSource implements IoTSource {
 
     
     @Override
-    public boolean matches(String url) throws MalformedURLException{
-        URL u = new URL(url);
+    public boolean matches(String url) throws MalformedURLException, URISyntaxException{
+        URL u = new URI(url).toURL();
         return u.getHost().equals(HOST) && u.getPath().equals(PATH);
     }
     

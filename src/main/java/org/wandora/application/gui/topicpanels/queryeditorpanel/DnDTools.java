@@ -162,7 +162,7 @@ public class DnDTools {
         public Class<K> getDataClass(){return cls;}
     }
     
-    public static <K> WrapperDataFlavor makeDataFlavor(Class<K> cls){
+    public static <K> WrapperDataFlavor<K> makeDataFlavor(Class<K> cls){
         try{
             return new WrapperDataFlavor<>(DataFlavor.javaJVMLocalObjectMimeType+";class="+cls.getName(),cls);
         }catch(ClassNotFoundException cnfe){

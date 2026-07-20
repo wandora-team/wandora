@@ -49,7 +49,7 @@ public class SearchTopicsResults extends javax.swing.JDialog {
     
     
     /** Creates new form SearchTopicsResults */
-    public SearchTopicsResults(Wandora wandora, Collection results) {
+    public SearchTopicsResults(Wandora wandora, Collection<?> results) {
         super(wandora, true);
         initComponents();
         

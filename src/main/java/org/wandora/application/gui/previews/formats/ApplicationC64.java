@@ -37,7 +37,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.Properties;
 
 import javax.swing.Icon;
@@ -557,10 +558,10 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
                 imageData = data;
                 File imageFile = null;
                 if(data.startsWith("file")) {
-                    imageFile = new File(new URL(data).toURI());
+                    imageFile = Path.of(data).toFile();
                 }
                 else {
-                    DataURL dataUrl = new DataURL(new URL(data));
+                    DataURL dataUrl = new DataURL(new URI(data).toURL());
                     imageFile = dataUrl.createTempFile();
                 }
                 String imageFilename = imageFile.getAbsolutePath();

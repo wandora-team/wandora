@@ -610,10 +610,10 @@ public class LSystemGraphGenerator extends AbstractGenerator {
     
     
     private class LSystem {
-        private ArrayList<Rule> rules = new ArrayList<Rule>();
+        private List<Rule> rules = new ArrayList<>();
         private Word state = new Word();
         
-        public LSystem(Word initial, ArrayList<Rule> ruleArray, int n) {
+        public LSystem(Word initial, List<Rule> ruleArray, int n) {
             initialize(initial, ruleArray.toArray( new Rule[] {} ), n);
         }
         public LSystem(Word initial, Rule[] ruleArray, int n) {
@@ -686,7 +686,7 @@ public class LSystemGraphGenerator extends AbstractGenerator {
     
     
     private class Word {
-        List<Alphabet> alphabets = new ArrayList<Alphabet>();
+        List<Alphabet> alphabets = new ArrayList<>();
         
         public Word() {
             
@@ -695,7 +695,7 @@ public class LSystemGraphGenerator extends AbstractGenerator {
             this.alphabets = w;
         }
         public Word(String[] str) {
-            this.alphabets = new ArrayList<Alphabet>();
+            this.alphabets = new ArrayList<>();
             for(int i=0; i<str.length; i++) {
                 alphabets.add(new Alphabet(str[i]));
             }

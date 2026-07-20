@@ -684,7 +684,9 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
     
     private class TopicTableTransferHandler extends TransferHandler {
 
-        @Override
+        private static final long serialVersionUID = 1L;
+
+		@Override
         public boolean canImport(TransferSupport support) {
             return false;
         }

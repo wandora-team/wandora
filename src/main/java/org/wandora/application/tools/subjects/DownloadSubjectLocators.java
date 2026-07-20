@@ -29,6 +29,7 @@ package org.wandora.application.tools.subjects;
 
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -83,7 +84,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) {
         this.wandora = wandora;
-        Iterator<Topic> topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         File targetPath = null;
         
         if(topics != null && topics.hasNext()) {
@@ -106,7 +107,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool {
                 while(topics.hasNext() && !isCancelled && !forceStop()) {
                     try {
                         total++;
-                        topic = topics.next();
+                        topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             Locator l = topic.getSubjectLocator();
                             if(l != null) {
@@ -158,7 +159,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool {
                 }
             }
             else {
-                URL subjectUrl = new URL(locatorString);
+                URL subjectUrl = new URI(locatorString).toURL();
                 String filename = subjectUrl.getPath();
                 if(filename.indexOf('/') > -1) {
                     filename = filename.substring(filename.lastIndexOf('/'));

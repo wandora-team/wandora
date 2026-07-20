@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -180,7 +180,20 @@ public class RequestForwarder extends CachedAction {
         if(path.indexOf("?")>0) path+="&"+paramString;
         else path+="?"+paramString;
             
-        connection=(HttpURLConnection)new URL(destinationProtocol,destinationHost,destinationPort,path).openConnection();
+        try {
+	        connection=(HttpURLConnection)new URI(
+	        		destinationProtocol,
+	        		"", // Userinfo
+	        		destinationHost,
+	        		destinationPort,
+	        		path,
+	        		"", // Query
+	        		"" // Fragment
+	        		).toURL().openConnection();
+        }
+        catch(Exception e) {
+        	return false;
+        }
 
         int response=connection.getResponseCode();
         if(response!=HttpURLConnection.HTTP_OK) {

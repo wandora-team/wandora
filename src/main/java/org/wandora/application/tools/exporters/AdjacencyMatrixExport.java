@@ -129,7 +129,7 @@ public class AdjacencyMatrixExport extends AbstractExportTool {
     @Override
     public void execute(Wandora wandora, Context context) {
 
-        Iterator<Topic> topics = null;
+        Iterator<?> topics = null;
         String exportInfo = "";
         try {
             if(EXPORT_SELECTION_INSTEAD_TOPIC_MAP) {
@@ -197,7 +197,7 @@ public class AdjacencyMatrixExport extends AbstractExportTool {
 
 
 
-    public void exportMatrix(OutputStream out, Iterator<Topic> topicIterator, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrix(OutputStream out, Iterator<?> topicIterator, WandoraToolLogger logger) throws TopicMapException {
         if(logger == null) logger = this;
         PrintWriter writer = null;
         try {
@@ -214,7 +214,7 @@ public class AdjacencyMatrixExport extends AbstractExportTool {
 
         log("Collecting topics...");
         while(topicIterator.hasNext() && !logger.forceStop()) {
-            t = topicIterator.next();
+            t = (Topic) topicIterator.next();
             if(t != null && !t.isRemoved()) {
                 topics.add(t);
                 totalCount++;

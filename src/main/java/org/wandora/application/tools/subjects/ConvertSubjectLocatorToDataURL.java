@@ -40,7 +40,7 @@ public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
-	private Iterator<Topic> topicsToProcess;
+	private Iterator<?> topicsToProcess;
     
     
     public ConvertSubjectLocatorToDataURL() {}

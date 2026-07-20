@@ -195,7 +195,7 @@ public abstract class DragJTree extends JTree implements Autoscroll {
         };
         
         DragGestureRecognizer dgr = dragSource.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE,  dragGestureListener);
-        dgr.setSourceActions(dgr.getSourceActions() & ~InputEvent.BUTTON3_MASK);
+        dgr.setSourceActions(dgr.getSourceActions() & ~InputEvent.BUTTON3_DOWN_MASK);
         
         DropTarget dropTarget = new DropTarget(this,new MyDropTargetListener());
         

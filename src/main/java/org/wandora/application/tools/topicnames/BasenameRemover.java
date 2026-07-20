@@ -78,7 +78,7 @@ public class BasenameRemover extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) {
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to remove all base names of selected topics?","Confirm base name remove", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){

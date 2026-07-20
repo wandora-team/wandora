@@ -64,7 +64,7 @@ public class CheckSubjectIdentifiers extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora admin, Context context) throws TopicMapException {
-        Iterator contextTopics = context.getContextObjects();
+        Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             setDefaultLogger();
             setLogTitle("Checking subject identifiers");

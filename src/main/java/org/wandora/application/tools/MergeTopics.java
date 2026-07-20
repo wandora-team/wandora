@@ -73,7 +73,7 @@ public class MergeTopics extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora wandora, Context context) {
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         
         int progress = 0;
 

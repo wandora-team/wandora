@@ -203,7 +203,7 @@ public class PasteBinConfiguration extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 4);
         optionsPanel.add(expireLabel, gridBagConstraints);
 
-        expireComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10 Minutes", "1 Hour", "1 Day", "1 Month", "Never" }));
+        expireComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10 Minutes", "1 Hour", "1 Day", "1 Month", "Never" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
@@ -293,7 +294,7 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
         JSONObject response = null;
         if(urlStr != null) {
             try {
-                URL url = new URL(urlStr);
+                URL url = new URI(urlStr).toURL();
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.addRequestProperty("Accept", "application/json");
                 urlConnection.setDoInput(true);
@@ -387,7 +388,7 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
     
     protected boolean isURL(String u) {
         try {
-            URL url = new URL(u);
+            new URI(u).toURL();
             return true;
         }
         catch(Exception e) {}

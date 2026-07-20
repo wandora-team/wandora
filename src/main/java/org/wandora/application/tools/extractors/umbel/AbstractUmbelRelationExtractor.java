@@ -58,25 +58,25 @@ public abstract class AbstractUmbelRelationExtractor extends AbstractUmbelExtrac
                             Topic baseConceptTopic = null; // getConceptTopic(getUmbelConceptURI(s), s, 0, topicMap);
                             ArrayList<Topic> conceptTopics = new ArrayList<>();
                             HashMap<Topic,Integer> distances = new HashMap<>();
-                            Iterator concepts = response.keys();
+                            Iterator<String> concepts = response.keys();
                             while(concepts.hasNext() && !forceStop()) {
-                                Object concept = concepts.next();
-                                JSONObject conceptDetails = response.getJSONObject(concept.toString());
+                                String concept = concepts.next();
+                                JSONObject conceptDetails = response.getJSONObject(concept);
                                 if(conceptDetails != null) {
                                     String label = robustGet(conceptDetails, "pref-label");
                                     int distance = robustGetInt(conceptDetails, "distance");
                                     if(distance == 1) {
-                                        baseConceptTopic = getConceptTopic(concept.toString(), label, topicMap);
+                                        baseConceptTopic = getConceptTopic(concept, label, topicMap);
                                     }
                                     if(getOnlyImmediateNeighbours) {
                                         if(distance == 2) {
-                                            Topic conceptTopic = getConceptTopic(concept.toString(), label, topicMap);
+                                            Topic conceptTopic = getConceptTopic(concept, label, topicMap);
                                             conceptTopics.add(conceptTopic);
                                             distances.put(conceptTopic, distance);
                                         }
                                     }
                                     else if(distance > filterDistancesBelow) {
-                                        Topic conceptTopic = getConceptTopic(concept.toString(), label, topicMap);
+                                        Topic conceptTopic = getConceptTopic(concept, label, topicMap);
                                         conceptTopics.add(conceptTopic);
                                         distances.put(conceptTopic, distance);
                                     }

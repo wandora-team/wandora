@@ -202,7 +202,7 @@ public class DOTExport extends AbstractExportTool {
         println(writer, "graph wandora_export {");
 
         if(LABEL_NODES) {
-            Iterator iter=topicMap.getTopics();
+            Iterator<?> iter=topicMap.getTopics();
             while(iter.hasNext() && !logger.forceStop()) {
                 Topic t=(Topic)iter.next();
                 if(t.isRemoved()) continue;
@@ -212,7 +212,7 @@ public class DOTExport extends AbstractExportTool {
         }
         
         if(EXPORT_OCCURRENCES && !logger.forceStop()) {
-            Iterator iter=topicMap.getTopics();
+            Iterator<?> iter=topicMap.getTopics();
             while(iter.hasNext() && !logger.forceStop()) {
                 Topic t=(Topic)iter.next();
                 if(t.isRemoved()) continue;
@@ -259,7 +259,7 @@ public class DOTExport extends AbstractExportTool {
 
         // Topic types....
         if(EXPORT_CLASSES && !logger.forceStop()) {
-            Iterator iter=topicMap.getTopics();
+            Iterator<?> iter=topicMap.getTopics();
             while(iter.hasNext() && !logger.forceStop()) {
                 Topic t=(Topic)iter.next();
                 if(t.isRemoved()) continue;
@@ -275,7 +275,7 @@ public class DOTExport extends AbstractExportTool {
 
         // Associations....
         if(!logger.forceStop()) {
-            Iterator iter=topicMap.getAssociations();
+            Iterator<?> iter=topicMap.getAssociations();
             int icount=0;
             while(iter.hasNext() && !logger.forceStop()) {
                 logger.setProgress(count++);

@@ -230,6 +230,8 @@ public abstract class AbstractExcelExtractor extends AbstractExtractor {
                 case STRING: {
                     return cell.getRichStringCellValue().getString();
                 }
+                default:
+                	break;
             }
         }
         return null;
@@ -476,7 +478,9 @@ public abstract class AbstractExcelExtractor extends AbstractExtractor {
             case STRING: {
                 typeStr = "string";
                 break;
-            }   
+            }
+            default:
+            	break;
         }
         Topic t = getOrCreateTopic(tm, EXCEL_CELL_TYPE_SI_PREFIX+"/"+typeStr, "Excel cell type "+typeStr);
         t.addType(getCellTypeTypeTopic(tm));

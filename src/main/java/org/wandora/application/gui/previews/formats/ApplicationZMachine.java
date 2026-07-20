@@ -32,7 +32,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.StringTokenizer;
 
 import javax.swing.JComponent;
@@ -90,7 +91,7 @@ public class ApplicationZMachine implements ActionListener, PreviewPanel {
                 }
             }
             else if(locator.startsWith("file:")) {
-                File storyFile = new File((new URL(locator)).toURI());
+                File storyFile = Path.of(new URI(locator)).toFile();
                 if(storyFile.isFile() && storyFile.exists()) {
                     String filename = storyFile.getName();
                     if(filename.endsWith("zblorb") || filename.endsWith("zlb")) {
@@ -104,10 +105,10 @@ public class ApplicationZMachine implements ActionListener, PreviewPanel {
             }
             else {
                 if(locator.endsWith("zblorb") || locator.endsWith("zlb")) {
-                    factory = new PanelMachineFactory(null, new URL(locator));
+                    factory = new PanelMachineFactory(null, new URI(locator).toURL());
                 }
                 else {
-                    factory = new PanelMachineFactory(new URL(locator), null);
+                    factory = new PanelMachineFactory(new URI(locator).toURL(), null);
                 }
             }
         }

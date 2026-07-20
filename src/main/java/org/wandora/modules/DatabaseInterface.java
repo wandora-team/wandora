@@ -99,7 +99,8 @@ public interface DatabaseInterface extends Module {
      * objects.
      */
     public static class Rows extends ArrayList<Row> {
-        public Rows(){
+        private static final long serialVersionUID = 1L;
+		public Rows(){
             super();
         }
     }
@@ -108,7 +109,8 @@ public interface DatabaseInterface extends Module {
      * A simple helper class for a single returned row, essentially just a HashMap.
      */
     public static class Row extends HashMap<String,Object>{
-        public Row(){
+        private static final long serialVersionUID = 1L;
+		public Row(){
             super();
         }
     }

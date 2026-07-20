@@ -70,11 +70,8 @@ public class DeleteAllOccurrences extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context)  throws TopicMapException {
         Object contextSource = context.getContextSource();
 
-        Iterator topics = getContext().getContextObjects();
+        Iterator<?> topics = getContext().getContextObjects();
         Topic topic = null;
-        int count = 0;
-
-        ArrayList<Topic> allOccurrenceTypes = new ArrayList<Topic>();
 
         if(topics!= null && topics.hasNext()) {
             while(topics.hasNext() && !forceStop()) {
@@ -87,9 +84,7 @@ public class DeleteAllOccurrences extends AbstractWandoraTool {
                             Collection<Topic> scopes = new ArrayList<>(topic.getData(type).keySet());
                             for(Topic scope : scopes) {
                                 topic.removeData(type, scope);
-                                count++;
                             }
-                            count++;
                         }
                         catch(Exception e) {
                             log(e);

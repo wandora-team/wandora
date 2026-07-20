@@ -160,7 +160,7 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 5);
         optionsPanel.add(typeLabel, gridBagConstraints);
 
-        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Single email file", "MBOX email repository" }));
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Single email file", "MBOX email repository" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;

@@ -81,7 +81,7 @@ public class MakeOccurrencesFromVariants extends AbstractWandoraTool {
             setLogTitle("Copying variant names to topic occurrences");
             log("Copying variant names to topic occurrences");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

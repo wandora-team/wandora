@@ -41,8 +41,8 @@ public class ClassIterator extends TopicIterator {
 
 
     @Override
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
-        Iterator it = oldIterator;
+    public Iterator<?> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<?> oldIterator) {
+        Iterator<?> it = oldIterator;
         if(topic != null) {
             try{
                 collection = topic.getTypes();

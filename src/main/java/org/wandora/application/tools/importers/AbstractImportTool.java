@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -202,7 +203,7 @@ public abstract class AbstractImportTool extends AbstractWandoraTool {
                     urlSource = urlSources[i];
                     if(urlSource != null && urlSource.length() > 0) {
                         try {
-                            importUrl(wandora, new URL(urlSource));
+                            importUrl(wandora, new URI(urlSource).toURL());
                         }
                         catch(Exception e) {
                             log(e);

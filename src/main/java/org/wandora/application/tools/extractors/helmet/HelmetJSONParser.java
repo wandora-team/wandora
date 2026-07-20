@@ -25,6 +25,7 @@ package org.wandora.application.tools.extractors.helmet;
 
 
 
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.LinkedHashSet;
@@ -212,7 +213,7 @@ public class HelmetJSONParser {
                     }
                     if(extractAllPages || extractNextPage) {
                         String newExtractUrl = extractUrl + "&page="+(cp+1);
-                        parse(new URL(newExtractUrl));
+                        parse(new URI(newExtractUrl).toURL());
                     }
                 }
             }

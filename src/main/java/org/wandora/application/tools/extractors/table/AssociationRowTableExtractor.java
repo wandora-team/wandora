@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -116,7 +117,7 @@ public class AssociationRowTableExtractor extends AbstractExtractor {
     @Override
     public String doBrowserExtract(BrowserExtractRequest request, Wandora wandora) throws TopicMapException {
         try {
-            basePath = new URL(request.getSource());
+            basePath = new URI(request.getSource()).toURL();
         }
         catch(Exception e) { e.printStackTrace(); }
         String s = super.doBrowserExtract(request, wandora);

@@ -123,7 +123,7 @@ public class AddSubjectIdentifierPanel extends javax.swing.JPanel {
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
-        pickFileButton.setLabel("Select file");
+        pickFileButton.setText("Select file");
         pickFileButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
         pickFileButton.setMinimumSize(new java.awt.Dimension(70, 23));
         pickFileButton.setPreferredSize(new java.awt.Dimension(70, 23));

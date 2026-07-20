@@ -32,6 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.wandora.application.CancelledException;
@@ -140,15 +141,15 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool {
 
 
     protected Collection<Topic> getTargetTopics(Context context) {
-        ArrayList<Topic> topics = new ArrayList<>();
+        List<Topic> topics = new ArrayList<>();
         if(context instanceof SIContext) {
-            Iterator<Locator> sis = context.getContextObjects();
+            Iterator<?> sis = context.getContextObjects();
             TopicMap topicmap = Wandora.getWandora().getTopicMap();
             Locator si = null;
             Topic t = null;
             while(sis.hasNext()) {
                 try {
-                    si = sis.next();
+                    si = (Locator) sis.next();
                     t = topicmap.getTopic(si);
                     if(!topics.contains(t)) {
                         topics.add(t);
@@ -160,9 +161,9 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool {
             }
         }
         else {
-            Iterator<Topic> topicIterator = context.getContextObjects();
+            Iterator<?> topicIterator = context.getContextObjects();
             while(topicIterator.hasNext()) {
-                topics.add(topicIterator.next());
+                topics.add((Topic) topicIterator.next());
             }
         }
         return topics;

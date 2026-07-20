@@ -80,7 +80,7 @@ public class OccurrenceRegexReplacerOne extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora wandora, Context context) {
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
             Topic otype = wandora.showTopicFinder("Select occurrence type...");

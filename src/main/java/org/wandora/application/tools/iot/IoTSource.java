@@ -23,6 +23,7 @@
 package org.wandora.application.tools.iot;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 /**
  * An IoTSource represents a simple virtual source of data for the IoT tool. It
@@ -43,6 +44,6 @@ public interface IoTSource {
      */
     String getData(String url);
     
-    boolean matches(String url) throws MalformedURLException;
+    boolean matches(String url) throws MalformedURLException, URISyntaxException;
     
 }

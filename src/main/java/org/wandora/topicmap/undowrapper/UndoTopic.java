@@ -212,7 +212,7 @@ public class UndoTopic extends Topic {
     @Override
     public void setData(Topic type, Hashtable<Topic, String> versionData) throws TopicMapException {
         Topic wtype=((UndoTopic)type).getWrapped();
-        Hashtable data=new Hashtable<Topic, String>();
+        Hashtable<Topic, String> data=new Hashtable<>();
         for(Map.Entry<Topic,String> e : versionData.entrySet()){
             Topic wversion=((UndoTopic)e.getKey()).getWrapped();
             String value=e.getValue();

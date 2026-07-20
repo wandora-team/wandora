@@ -33,6 +33,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.net.URI;
 import java.net.URL;
 
 import javax.swing.Icon;
@@ -210,7 +211,7 @@ public class XSLImport extends AbstractImportTool {
         if(streamSource == null) return null;
         if(streamSource.startsWith("http:/") || streamSource.startsWith("https:/") || streamSource.startsWith("ftp:/")  || streamSource.startsWith("ftps:/")) {
             try {
-                URL sourceURL = new URL(streamSource);
+                URL sourceURL = new URI(streamSource).toURL();
                 return sourceURL.openStream();
             }
             catch(Exception e) {

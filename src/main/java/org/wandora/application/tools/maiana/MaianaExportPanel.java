@@ -199,7 +199,7 @@ public class MaianaExportPanel extends javax.swing.JPanel {
         contentPanel.add(apiEndPointLabel, gridBagConstraints);
 
         apiEndPointField.setEditable(true);
-        apiEndPointField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "http://127.0.0.1:8898/waiana/", "http://maiana.topicmapslab.de/api" }));
+        apiEndPointField.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "http://127.0.0.1:8898/waiana/", "http://maiana.topicmapslab.de/api" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

@@ -112,7 +112,7 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool {
     
     @Override
     public void execute(Wandora wandora, Context context) {
-        Iterator topics = getContext().getContextObjects();
+        Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         
         splitString = WandoraOptionPane.showInputDialog(

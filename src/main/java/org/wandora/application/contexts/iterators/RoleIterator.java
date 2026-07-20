@@ -47,7 +47,7 @@ public class RoleIterator extends TopicIterator {
 
 
     @Override
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
+    public Iterator<?> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<?> oldIterator) {
         Collection<Topic> allRoleTopics = new ArrayList<>();
         Collection<Association> associations = null;
         Association association = null;

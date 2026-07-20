@@ -215,7 +215,7 @@ public class HelmetUI extends javax.swing.JPanel {
 
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
-            Iterator iterator = context.getContextObjects();
+            Iterator<?> iterator = context.getContextObjects();
             while(iterator.hasNext()) {
                 try {
                     Object o = iterator.next();

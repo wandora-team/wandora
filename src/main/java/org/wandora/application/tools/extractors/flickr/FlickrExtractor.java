@@ -28,7 +28,8 @@ package org.wandora.application.tools.extractors.flickr;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -209,7 +210,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
         args.put("api_sig", createSignature(args));
 
         try {
-            JSONObject obj = new JSONObject(IObox.doUrl(new URL(FlickrState.makeRESTURL(args))));
+            JSONObject obj = new JSONObject(IObox.doUrl(new URI(FlickrState.makeRESTURL(args)).toURL()));
 
             if(!obj.getString("stat").equals("ok"))
                 throw new RequestFailure(String.valueOf(obj.getInt("code")) + ": " + obj.getString("message"));
@@ -219,7 +220,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
         catch(JSONException e) {
             throw new RequestFailure("Invalid json in frob response", e);
         }
-        catch(MalformedURLException e) {
+        catch(MalformedURLException | URISyntaxException e) {
             throw new RequestFailure("Attempted to construct malformed URL", e);
         }
         catch(IOException e) {

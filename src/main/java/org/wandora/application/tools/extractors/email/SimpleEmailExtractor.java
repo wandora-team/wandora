@@ -302,6 +302,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     public boolean extractTopicsFromMBOX(File file, TopicMap topicMap) throws Exception {
         extractedEmails = 0;
+        MStorStore store = null;
         try {
             visitedEmailFolders = new ArrayList<>();
             Properties properties = new Properties();
@@ -311,7 +312,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             javax.mail.Session session = javax.mail.Session.getDefaultInstance(properties);
             //Provider mstorProvider = new Provider(Provider.Type.STORE, "mstor", "net.fortuna.mstor.MStorStore", null, null);
             //session.setProvider(mstorProvider);
-            MStorStore store = new MStorStore(session, new javax.mail.URLName("mstor:"+file.getAbsolutePath()));
+            store = new MStorStore(session, new javax.mail.URLName("mstor:"+file.getAbsolutePath()));
             store.connect();
             javax.mail.Folder folder = store.getDefaultFolder();
             extractTopicsFromFolder(topicMap, folder);
@@ -330,6 +331,11 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             log("Unable to read MBOX mail store! No suitable library available!");
             log("In order to read the MBOX store please download mstor's jars (http://mstor.sourceforge.net/)\ninto Wandora's lib directory and add jars to bin/Wandora.bat!");
             return false;
+        }
+        finally {
+        	if(store != null) {
+        		store.close();
+        	}
         }
         log("Total "+extractedEmails+" emails extracted.");
         return true;
@@ -764,7 +770,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     public void extractHeaders(TopicMap map, Topic emailTopic, Part part) {
         try {
-            Enumeration e = part.getAllHeaders();
+            Enumeration<Header> e = part.getAllHeaders();
             Header header = null;
             String name = null;
             String value = null;
@@ -775,7 +781,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             Topic headerName = null;
             Topic headerValue = null;
             while(e.hasMoreElements()) {
-                header = (Header) e.nextElement();
+                header = e.nextElement();
                 if(header != null) {
                     name = header.getName();
                     value = header.getValue();

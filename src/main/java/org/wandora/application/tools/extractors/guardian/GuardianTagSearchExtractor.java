@@ -23,6 +23,7 @@
 package org.wandora.application.tools.extractors.guardian;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import org.json.JSONArray;
@@ -95,7 +96,7 @@ public class GuardianTagSearchExtractor extends AbstractGuardianExtractor {
 					int didMean = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(),
 							"Did you mean \"" + dym + "\"", "Did you mean", WandoraOptionPane.YES_NO_OPTION);
 					if (didMean == 1100) {
-						URL newUrl = new URL(currentURL.replaceAll("&q=[^&]*", "&q=" + dym));
+						URL newUrl = new URI(currentURL.replaceAll("&q=[^&]*", "&q=" + dym)).toURL();
 						System.out.println(newUrl.toString());
 						this._extractTopicsFrom(newUrl, tm);
 					} else {
@@ -180,13 +181,13 @@ public class GuardianTagSearchExtractor extends AbstractGuardianExtractor {
 									System.out.println("Selected to extract only next page");
 									String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
 									shouldHandlePagination = false;
-									_extractTopicsFrom(new URL(newURL), tm);
+									_extractTopicsFrom(new URI(newURL).toURL(), tm);
 								}
 
 								else if (pagingOptions[2].equals(a)) {
 									System.out.println("Selected to extract next page");
 									String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
-									_extractTopicsFrom(new URL(newURL), tm);
+									_extractTopicsFrom(new URI(newURL).toURL(), tm);
 								}
 
 								else if (pagingOptions[3].equals(a)) {
@@ -199,7 +200,7 @@ public class GuardianTagSearchExtractor extends AbstractGuardianExtractor {
 										String newURL = originalURL.replace("page=" + page, "page=" + p);
 										if (p == page + 10)
 											shouldHandlePagination = true;
-										_extractTopicsFrom(new URL(newURL), tm);
+										_extractTopicsFrom(new URI(newURL).toURL(), tm);
 										setProgress(progress++);
 										nap();
 									}
@@ -213,7 +214,7 @@ public class GuardianTagSearchExtractor extends AbstractGuardianExtractor {
 									int progress = 1;
 									for (int p = page + 1; p <= total && !forceStop(); p++) {
 										String newURL = originalURL.replace("page=" + page, "page=" + p);
-										_extractTopicsFrom(new URL(newURL), tm);
+										_extractTopicsFrom(new URI(newURL).toURL(), tm);
 										setProgress(progress++);
 										nap();
 									}

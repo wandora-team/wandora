@@ -33,6 +33,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -500,7 +501,7 @@ public class OBOImport extends AbstractImportTool {
                                 try {
                                     BufferedReader reader = null;
                                     if(value.startsWith("http:")) {
-                                        URL url = new URL(value);
+                                        URL url = new URI(value).toURL();
                                         URLConnection urlConnection = url.openConnection();
                                         Wandora.initUrlConnection(urlConnection);
                                         reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

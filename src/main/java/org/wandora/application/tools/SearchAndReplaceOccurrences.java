@@ -58,7 +58,7 @@ public class SearchAndReplaceOccurrences extends AbstractWandoraTool {
         if(search==null || search.length()==0) return;
         String replace=WandoraOptionPane.showInputDialog(wandora,"Enter replace string","","Search and replace");
         if(replace==null) return;
-        Iterator iter=context.getContextObjects();
+        Iterator<?> iter=context.getContextObjects();
         Pattern pattern;
         try{
             pattern=Pattern.compile(search);

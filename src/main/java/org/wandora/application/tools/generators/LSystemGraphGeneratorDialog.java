@@ -343,7 +343,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
     private void selectContextSLFiles() {
         if(parentTool == null) return;
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
         Locator locator = null;
@@ -380,7 +380,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
     private void selectContextSLs() {
         if(parentTool == null) return;
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
         Locator locator = null;
@@ -415,7 +415,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
     private void selectContextSIs() {
         if(parentTool == null) return;
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
         Locator locator = null;

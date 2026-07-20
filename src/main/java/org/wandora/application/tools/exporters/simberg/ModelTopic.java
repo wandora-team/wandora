@@ -24,6 +24,8 @@ package org.wandora.application.tools.exporters.simberg;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.tools.exporters.simberg.ModelField.Type;
 
@@ -35,7 +37,7 @@ import org.wandora.application.tools.exporters.simberg.ModelField.Type;
 
 public class ModelTopic {
     private ModelClass cls;
-    private final HashMap<ModelField,Object> fields=new HashMap<ModelField,Object>();
+    private final Map<ModelField,Object> fields=new HashMap<>();
 
     public ModelTopic() {
     }
@@ -77,7 +79,7 @@ public class ModelTopic {
             }
             else if(type==Type.StringList) {
                 if(object instanceof Collection){
-                    ArrayList<String> l=new ArrayList<String>();
+                    List<String> l=new ArrayList<>();
                     for(Object o : (Collection)object){
                         if(o==null) l.add(null);
                         else l.add(o.toString());

@@ -749,7 +749,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
 
         findCloseButton.setFont(org.wandora.application.gui.UIConstants.smallButtonLabelFont);
         findCloseButton.setActionCommand("Close");
-        findCloseButton.setLabel("Hide");
+        findCloseButton.setText("Hide");
         findCloseButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
         findCloseButton.setMaximumSize(new java.awt.Dimension(50, 23));
         findCloseButton.setMinimumSize(new java.awt.Dimension(50, 20));

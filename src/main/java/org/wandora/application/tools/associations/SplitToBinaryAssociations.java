@@ -100,7 +100,7 @@ public class SplitToBinaryAssociations extends AbstractWandoraTool {
         try {
             requiresRefresh = false;
             TopicMap topicmap = wandora.getTopicMap();
-            Iterator associations = null;
+            Iterator<?> associations = null;
             Topic baseRole = null;
             Topic base = null;
             Topic player = null;

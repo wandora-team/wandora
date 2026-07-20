@@ -79,7 +79,7 @@ public class BasenameTrimmer extends AbstractWandoraTool {
             setLogTitle("Removing surrounding white space characters in basenames");
             log("Removing surrounding white space characters in basenames");
             
-            Iterator<Topic> topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

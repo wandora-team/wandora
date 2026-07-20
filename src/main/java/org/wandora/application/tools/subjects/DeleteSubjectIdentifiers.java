@@ -31,6 +31,7 @@ package org.wandora.application.tools.subjects;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -88,7 +89,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool {
         TopicMap topicmap = wandora.getTopicMap();
         
         if(context instanceof SIContext) {
-            Iterator<Locator> subjectIdentifiers = context.getContextObjects();
+            Iterator<?> subjectIdentifiers = context.getContextObjects();
             Collection<Locator> subjectIdentifiersToDelete = getSubjectIdentifiers(subjectIdentifiers);
             if(subjectIdentifiersToDelete != null && !subjectIdentifiersToDelete.isEmpty()) {
                 int deleteCount = 0;
@@ -128,7 +129,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool {
         
         // ***** HANDLE OTHER CONTEXTS *****
         else {
-            Iterator<Topic> topics = getContext().getContextObjects();
+            Iterator<?> topics = getContext().getContextObjects();
             Topic topic = null;
             Topic topicInSelectedLayer = null;
             int deleteCount = 0;
@@ -140,7 +141,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool {
 
             if(topics != null) {
                 do {
-                    topic = topics.next();
+                    topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
                         // First solve local topic in selected layer. If there is
                         // no local topic, ask user if she wishes to cancel to deletion.
@@ -238,7 +239,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool {
      * @throws TopicMapException 
      */
     protected Collection<Locator> getSubjectIdentifiers(Topic topic) throws TopicMapException {
-        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList<>();
+        List<Locator> subjectIdentifiersToDelete = new ArrayList<>();
         Iterator<Locator> subjectIdentifiersOfTopic = topic.getSubjectIdentifiers().iterator();
         subjectIdentifiersOfTopic.next(); // Hop over == save first locator
         while(subjectIdentifiersOfTopic.hasNext()) {
@@ -259,10 +260,10 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool {
      * @return
      * @throws TopicMapException 
      */
-    protected Collection<Locator> getSubjectIdentifiers(Iterator<Locator> subjectIdentifiers) throws TopicMapException {
-        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList<>();
+    protected Collection<Locator> getSubjectIdentifiers(Iterator<?> subjectIdentifiers) throws TopicMapException {
+        List<Locator> subjectIdentifiersToDelete = new ArrayList<>();
         while(subjectIdentifiers.hasNext()) {
-            subjectIdentifiersToDelete.add(subjectIdentifiers.next());
+            subjectIdentifiersToDelete.add((Locator) subjectIdentifiers.next());
         }
         return subjectIdentifiersToDelete;
     }

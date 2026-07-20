@@ -71,7 +71,7 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool {
             setLogTitle("Collapsing white space characters in base names");
             log("Collapsing white space characters in base names");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

@@ -119,7 +119,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool {
             String recognizePatternString=values.get("Link pattern");
             createNewTopics=Boolean.parseBoolean(values.get("Create topics"));
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Locator occurrenceTypeLocator = occurrenceType.getSubjectIdentifiers().iterator().next();

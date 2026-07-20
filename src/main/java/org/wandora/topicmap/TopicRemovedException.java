@@ -36,7 +36,9 @@ package org.wandora.topicmap;
  */
 public class TopicRemovedException extends TopicMapException {
     
-    /** Creates a new instance of TopicRemovedException */
+    private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of TopicRemovedException */
     public TopicRemovedException() {
     }
     

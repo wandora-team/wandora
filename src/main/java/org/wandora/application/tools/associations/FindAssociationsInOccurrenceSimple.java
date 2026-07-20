@@ -151,7 +151,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) {  
         try {
             int associationCount = 0;
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             String occurrence = null;
             Topic occurrenceType = null;

@@ -69,7 +69,7 @@ public class AddOccurrences extends AbstractWandoraTool {
     
     @Override
     public void execute(Wandora wandora, Context context) {
-        Iterator contextTopics = context.getContextObjects();
+        Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             Topic topic = (Topic) contextTopics.next();
             if( !contextTopics.hasNext() && !forceStop() ) {

@@ -129,10 +129,10 @@ public class AddDockable extends AbstractDockingTool {
         if(dockableClass != null && dockingPanel != null) {
             try {
                 Topic t = null;
-                Iterator<Topic> i = context.getContextObjects();
+                Iterator<?> i = context.getContextObjects();
                 if(i.hasNext()) {
                     try {
-                        t = i.next();
+                        t = (Topic) i.next();
                     }
                     catch(Exception e) {}
                 }

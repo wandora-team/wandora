@@ -68,7 +68,7 @@ public class CreateAssociationType extends AbstractWandoraTool {
     
     @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException  {
-        Iterator contextObjects = context.getContextObjects();
+        Iterator<?> contextObjects = context.getContextObjects();
         Vector<Topic> objects=new Vector<Topic>();
         Association a=null;
         if(contextObjects!=null && contextObjects.hasNext()){

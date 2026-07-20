@@ -99,7 +99,7 @@ public class CloseTopicNodesOfType extends AbstractGraphTool {
     public void executeSynchronized(Wandora wandora, Context context) {
         VModel model = null;
         VNode node = null;
-        for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {
+        for(Iterator<?> iter = context.getContextObjects(); iter.hasNext(); ) {
             try {
                 node = (VNode) iter.next();
                 if(node != null) {

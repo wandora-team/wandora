@@ -76,7 +76,7 @@ public class AddMissingLanguageScope extends AbstractWandoraTool {
             log("Iterates through selected topics and adds given scope topic to variants that have only display or sort scope.");
 
             TopicMap tm = wandora.getTopicMap();
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

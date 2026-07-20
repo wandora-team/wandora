@@ -123,13 +123,13 @@ public class LayeredTopicContext implements Context {
     
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<?> getContextObjects() {
         return getContextObjects( getContextSource() );
     }
     
     
     
-    public Iterator getContextObjects(Object contextSource) {
+    public Iterator<?> getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
         List<Topic> contextTopics = new ArrayList<>();

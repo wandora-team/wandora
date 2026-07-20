@@ -87,10 +87,10 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     
     
     @Override
-    protected Collection<Locator> getSubjectIdentifiers(Iterator<Locator> subjectIdentifiers) throws TopicMapException {
-        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList<>();
+    protected Collection<Locator> getSubjectIdentifiers(Iterator<?> subjectIdentifiers) throws TopicMapException {
+        List<Locator> subjectIdentifiersToDelete = new ArrayList<>();
         while(subjectIdentifiers.hasNext()) {
-            Locator subjectIdentifier = subjectIdentifiers.next();
+            Locator subjectIdentifier = (Locator) subjectIdentifiers.next();
             if(subjectIdentifier != null) {
                 String subjectIdetifierString = subjectIdentifier.toExternalForm();
                 if(editor.matches(subjectIdetifierString)) {

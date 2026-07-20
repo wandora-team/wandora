@@ -396,7 +396,7 @@ public class PasteTopics extends AbstractWandoraTool {
     
     public boolean isKnownTopic(Topic topic, Context context)  throws TopicMapException {
         if(topic == null || context == null) return false;
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         while(topics.hasNext()) {
             if(topic.mergesWithTopic((Topic) topics.next())) return true;
         }

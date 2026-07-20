@@ -77,10 +77,10 @@ public class MakeSubjectIdentifierFromSubjectLocator extends AbstractWandoraTool
     public void execute(Wandora wandora, Context context) {
         
         if(context instanceof ApplicationContext) {
-            Iterator<Topic> topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             try {
                 while(topics.hasNext()) {
-                    Topic topic = topics.next();
+                    Topic topic = (Topic) topics.next();
                     Locator subjectLocator = topic.getSubjectLocator();
                     if(subjectLocator != null) {
                         topic.addSubjectIdentifier(subjectLocator);
@@ -93,7 +93,7 @@ public class MakeSubjectIdentifierFromSubjectLocator extends AbstractWandoraTool
         }
         
         else {
-            Iterator<Topic> topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             setDefaultLogger();
             try {
@@ -109,7 +109,7 @@ public class MakeSubjectIdentifierFromSubjectLocator extends AbstractWandoraTool
 
                 while(topics.hasNext() && !forceStop(result)) {
                     try {
-                        topic = topics.next();
+                        topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             setProgress(progress++);
                             subjectLocator = topic.getSubjectLocator();

@@ -39,7 +39,7 @@ import java.awt.image.BufferedImage;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -539,9 +539,9 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     
     private static String toURL(String str) {
         try {
-            return new URL(str).toExternalForm();
+            return new URI(str).toURL().toExternalForm();
         } 
-        catch (MalformedURLException exception) {
+        catch (MalformedURLException | URISyntaxException exception) {
             if(!str.startsWith("http://")) {
                 return "http://"+str;
             }

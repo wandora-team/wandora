@@ -539,7 +539,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         optionalArticleSearchFieldsPanel.add(sortLabel, gridBagConstraints);
 
-        sortComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "newest", "oldest" }));
+        sortComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "newest", "oldest" }));
         sortComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sortComboBoxActionPerformed(evt);

@@ -847,7 +847,7 @@ public class GenericVelocityHelper {
         return ret;        
     }
 
-    public static Collection<Association> cropAssociationsByType(Topic topic, Collection v, String associationTypeSI) throws TopicMapException {
+    public static Collection<Association> cropAssociationsByType(Topic topic, Collection<Association> v, String associationTypeSI) throws TopicMapException {
         if(associationTypeSI==null) return new ArrayList<>();
         Topic type = topic.getTopicMap().getTopic(associationTypeSI);
         return cropAssociationsByType(v, type);

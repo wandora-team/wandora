@@ -2249,7 +2249,7 @@ public class WandoraMenuManager {
             java.util.List<java.util.List<Object>> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanelsSupportingOpenTopic();
             for(java.util.List<Object> panelData : availableTopicPanels) {
                 try {
-                    Class panelClass = Class.forName((String) panelData.get(0));
+                    Class<?> panelClass = Class.forName((String) panelData.get(0));
                     if(!DockingFramePanel.class.equals(panelClass)) {
                         struct.add( "New " + (String) panelData.get(1) );
                         struct.add( (Icon) panelData.get(2) );

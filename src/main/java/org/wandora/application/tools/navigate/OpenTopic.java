@@ -66,7 +66,7 @@ public class OpenTopic extends AbstractWandoraTool {
     
     @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
-        Iterator contextTopics = context.getContextObjects();
+        Iterator<?> contextTopics = context.getContextObjects();
         if(options == SOLVE_USING_CONTEXT && contextTopics != null && contextTopics.hasNext()) {
             Topic t = (Topic) (Topic) contextTopics.next();
             if(t != null && !t.isRemoved()) {

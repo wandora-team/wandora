@@ -79,9 +79,10 @@ public class SQLQueryResult {
         Collection<String> ss=new Vector<>();
         for(Object[] row : rows){
             StringWriter w=new StringWriter();
-            Formatter formatter=new Formatter(w);
-            formatter.format(formatString,row);
-            ss.add(w.toString());
+            try(Formatter formatter=new Formatter(w)) {
+	            formatter.format(formatString,row);
+	            ss.add(w.toString());
+            }
         }
         return ss;
     }

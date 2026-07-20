@@ -86,7 +86,7 @@ public class SpreadOccurrence extends AbstractWandoraTool {
 
         // But general branch allows also any occurrence spread...
         else {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(!topics.hasNext()) return;
 
             Topic otype = wandora.showTopicFinder("Select source occurrence type...");

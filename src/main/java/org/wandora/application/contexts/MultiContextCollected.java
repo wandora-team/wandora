@@ -83,9 +83,9 @@ public class MultiContextCollected implements Context {
     
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<?> getContextObjects() {
         Collection<Object> contextObjects = new ArrayList<>();
-        Iterator<Object> tempContextObjects;
+        Iterator<?> tempContextObjects;
         Object contextObject = null;
         Context context = null;
         for(Iterator<Context> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {

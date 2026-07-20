@@ -79,7 +79,7 @@ public class VariantNewlineRemover extends AbstractWandoraTool {
             setLogTitle("Removing new line characters in variant names");
             log("Removing new line characters in variant names");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

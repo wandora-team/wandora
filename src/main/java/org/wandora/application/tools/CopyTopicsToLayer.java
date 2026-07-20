@@ -109,7 +109,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool {
            mode == COPY_TOPIC_AS_A_STUB_WITH_VARIANTS ||
            mode == COPY_TOPIC_AS_A_STUB_WITH_OCCURRENCES) {
             setDefaultLogger();
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics != null && topics.hasNext()) {
                 Topic t = null;
                 log("Copying topics to topic map layer '"+layerName+"'.");
@@ -171,7 +171,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool {
         else if(mode == COPY_TOPIC_AS_A_SINGLE_SI_STUB ||
                 mode == COPY_TOPIC_AS_A_SI_STUB) {
             setDefaultLogger();
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics != null && topics.hasNext()) {
                 Topic t = null;
                 log("Copying topics to topic map layer '"+layerName+"'.");
@@ -246,7 +246,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool {
             myLogger = this;
             copyCount = 0;
             HashMap<Locator,Integer> copied = new HashMap<Locator,Integer>();
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics != null && topics.hasNext()) {
                 Topic t = null;
                 log("Copying topics to topic map layer '"+layerName+"'.");

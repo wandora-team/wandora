@@ -36,6 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -105,7 +106,7 @@ public class SimilarityMatrixExport extends AbstractExportTool {
     @Override
     public void execute(Wandora wandora, Context context) {
 
-        Iterator<Topic> topics = null;
+        Iterator<?> topics = null;
         String exportInfo = "";
         try {
             if(exportSelectionInsteadOfTopicMap) {
@@ -190,7 +191,7 @@ public class SimilarityMatrixExport extends AbstractExportTool {
 
 
 
-    public void exportMatrix(OutputStream out, Iterator<Topic> topicIterator, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrix(OutputStream out, Iterator<?> topicIterator, WandoraToolLogger logger) throws TopicMapException {
         if(logger == null) logger = this;
         PrintWriter writer = null;
         try {
@@ -202,12 +203,12 @@ public class SimilarityMatrixExport extends AbstractExportTool {
         }
 
         int totalCount = 0;
-        ArrayList<Topic> topics = new ArrayList<Topic>();
+        List<Topic> topics = new ArrayList<>();
         Topic t = null;
 
         log("Collecting topics...");
         while(topicIterator.hasNext() && !logger.forceStop()) {
-            t = topicIterator.next();
+            t = (Topic) topicIterator.next();
             if(t != null && !t.isRemoved()) {
                 topics.add(t);
                 totalCount++;
@@ -237,7 +238,7 @@ public class SimilarityMatrixExport extends AbstractExportTool {
 
 
 
-    public void exportMatrixAsTabText(PrintWriter writer, ArrayList<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrixAsTabText(PrintWriter writer, List<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
         int progress = 0;
         Topic t1 = null;
         Topic t2 = null;
@@ -269,7 +270,7 @@ public class SimilarityMatrixExport extends AbstractExportTool {
 
 
 
-    public void exportMatrixAsHTMLTable(PrintWriter writer, ArrayList<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrixAsHTMLTable(PrintWriter writer, List<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
         int progress = 0;
         Topic t1 = null;
         Topic t2 = null;

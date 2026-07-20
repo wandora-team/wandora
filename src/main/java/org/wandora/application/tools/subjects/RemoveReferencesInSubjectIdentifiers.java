@@ -78,7 +78,7 @@ public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool {
   
     public void execute(Wandora admin, Context context) {   
         setDefaultLogger();
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
             log("Removing references in SIs.");

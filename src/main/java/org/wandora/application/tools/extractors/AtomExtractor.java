@@ -33,6 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Matcher;
@@ -197,7 +198,7 @@ public class AtomExtractor extends AbstractExtractor {
                             if(m2.find()) {
                                 try {
                                     String atomfeed = m2.group(1);
-                                    _extractTopicsFrom(new URL(atomfeed), wandora.getTopicMap());
+                                    _extractTopicsFrom(new URI(atomfeed).toURL(), wandora.getTopicMap());
                                 }
                                 catch(Exception e) {
                                     e.printStackTrace();
@@ -1487,7 +1488,7 @@ public class AtomExtractor extends AbstractExtractor {
                         if(theEntry != null && (isValid(data_entry_content) || isValid(data_entry_content_src ))) {
                             try {
                                 if(!isValid(data_entry_content)) {
-                                    data_entry_content = IObox.doUrl(new URL(data_entry_content_src));
+                                    data_entry_content = IObox.doUrl(new URI(data_entry_content_src).toURL());
                                 }
                                 data_entry_content = this.postProcessFeedText(data_entry_content, data_entry_content_type);
                                 Topic contentType = getOrCreateTopic(FEED_ENTRY_CONTENT_SI,"Atom Entry Content");
@@ -1520,7 +1521,7 @@ public class AtomExtractor extends AbstractExtractor {
                         if(theEntry != null && (isValid(data_entry_summary) || isValid(data_entry_summary_src))) {
                             try {
                                 if(!isValid(data_entry_summary)) {
-                                    data_entry_summary = IObox.doUrl(new URL(data_entry_summary_src));
+                                    data_entry_summary = IObox.doUrl(new URI(data_entry_summary_src).toURL());
                                 }
                                 data_entry_summary = this.postProcessFeedText(data_entry_summary, data_entry_summary_type);
                                 Topic summaryType = getOrCreateTopic(FEED_ENTRY_SUMMARY_SI,"Atom Entry Summary");

@@ -25,7 +25,7 @@
 package org.wandora.utils;
 
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -45,7 +45,7 @@ public class PDFbox {
                 doc = PDDocument.load(new File(url));
             }
             else {
-                doc = PDDocument.load(new URL(url).openStream());
+                doc = PDDocument.load(new URI(url).toURL().openStream());
             }
             PDFTextStripper stripper = new PDFTextStripper();
             String content = stripper.getText(doc);

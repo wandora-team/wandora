@@ -31,7 +31,7 @@ package org.wandora.application.tools.importers.graphs;
 
 import java.awt.Component;
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -119,7 +119,7 @@ public class IncidenceMatrixImportDialog extends javax.swing.JDialog {
             StringBuilder sb = new StringBuilder("");
             for (String url : urls) {
                 try {
-                    sb.append(IObox.doUrl(new URL(url)));
+                    sb.append(IObox.doUrl(new URI(url).toURL()));
                 }
                 catch(Exception e) {
                     parentTool.log(e);
@@ -213,17 +213,15 @@ public class IncidenceMatrixImportDialog extends javax.swing.JDialog {
     private void selectContextSLFiles() {
         if(parentTool == null) return;
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
-        Topic t = null;
         Locator locator = null;
         StringBuilder sb = new StringBuilder("");
         while(iter.hasNext()) {
             try {
                 o = iter.next();
                 if(o == null) continue;
-                if(o instanceof Topic) {
-                    t = (Topic) o;
+                if(o instanceof Topic t) {
                     if(!t.isRemoved()) {
                         locator = t.getSubjectLocator();
                         if(locator != null) {
@@ -250,17 +248,15 @@ public class IncidenceMatrixImportDialog extends javax.swing.JDialog {
     private void selectContextSLs() {
         if(parentTool == null) return;
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
-        Topic t = null;
         Locator locator = null;
         StringBuilder sb = new StringBuilder("");
         while(iter.hasNext()) {
             try {
                 o = iter.next();
                 if(o == null) continue;
-                if(o instanceof Topic) {
-                    t = (Topic) o;
+                if(o instanceof Topic t) {
                     if(!t.isRemoved()) {
                         locator = t.getSubjectLocator();
                         if(locator != null) {
@@ -285,17 +281,15 @@ public class IncidenceMatrixImportDialog extends javax.swing.JDialog {
     private void selectContextSIs() {
         if(parentTool == null) return;
         Context context = parentTool.getContext();
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o = null;
-        Topic t = null;
         Locator locator = null;
         StringBuilder sb = new StringBuilder("");
         while(iter.hasNext()) {
             try {
                 o = iter.next();
                 if(o == null) continue;
-                if(o instanceof Topic) {
-                    t = (Topic) o;
+                if(o instanceof Topic t) {
                     if(!t.isRemoved()) {
                         Collection<Locator> ls = t.getSubjectIdentifiers();
                         Iterator<Locator> ils = ls.iterator();

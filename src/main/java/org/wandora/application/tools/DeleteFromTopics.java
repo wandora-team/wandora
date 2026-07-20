@@ -112,7 +112,7 @@ public class DeleteFromTopics extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context) throws TopicMapException {
         Topic topic = null;
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
 
         // Delete from topics.
         switch(whatToDelete) {

@@ -121,14 +121,14 @@ public class FilterNodesOfType extends AbstractGraphTool {
     
     
     
-    public static List<AbstractGraphTool> makeTools(Collection ns, NodeFilter nodeFilter, List<AbstractGraphTool> tools){
-        if(tools==null) tools=new ArrayList<AbstractGraphTool>();
-        ArrayList<Topic> oldTypes = new ArrayList<Topic>();
+    public static List<AbstractGraphTool> makeTools(Collection<?> ns, NodeFilter nodeFilter, List<AbstractGraphTool> tools){
+        if(tools==null) tools=new ArrayList<>();
+        List<Topic> oldTypes = new ArrayList<>();
         for(Object o : ns) {
-            if(o != null && o instanceof VNode) {
+            if(o instanceof VNode) {
                 o = ((VNode) o).getNode();
             }
-            if(o != null && o instanceof TopicNode) {
+            if(o instanceof TopicNode) {
                 TopicNode tn=(TopicNode)o;
                 try {
                     for(Topic type : tn.getTopic().getTypes()) {

@@ -96,7 +96,7 @@ public class MakeBasenameFromOccurrence extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) {
         try {
             template = "%OCCURRENCE%";
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             Topic occurrenceType=wandora.showTopicFinder("Select occurrence type...");

@@ -113,7 +113,7 @@ public class StealAssociations extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
-            Iterator associations = null;
+            Iterator<?> associations = null;
             Topic thief = null;
             Topic victim = null;
             Association a = null;
@@ -159,7 +159,7 @@ public class StealAssociations extends AbstractWandoraTool {
                 else thief = wandora.getOpenTopic();
                 if(thief == null) return;
                 
-                Iterator victims = context.getContextObjects();
+                Iterator<?> victims = context.getContextObjects();
                 long startTime = System.currentTimeMillis();
                 while(victims.hasNext() && !forceStop()) {
                     victim = (Topic) victims.next();

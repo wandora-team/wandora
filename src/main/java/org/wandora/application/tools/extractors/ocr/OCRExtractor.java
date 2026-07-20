@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -128,7 +129,7 @@ public class OCRExtractor extends AbstractExtractor {
             setWandora(wandora);
             String urlStr = request.getSource();
             
-            URL u = new URL(urlStr);
+            URL u = new URI(urlStr).toURL();
             String mime = u.openConnection().getContentType();
             
             if(mime != null && mime.indexOf("image") > -1){

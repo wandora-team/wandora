@@ -27,7 +27,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
-import java.net.URL;
+import java.net.URI;
 
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -43,6 +43,8 @@ import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.IObox;
 import org.wandora.utils.swing.TextLineNumber;
+
+import java.nio.file.Path;
 
 
 /**
@@ -131,7 +133,7 @@ public class Text implements ActionListener, PreviewPanel {
     protected String getContent(String locator) throws Exception {
         try {
             if(locator.startsWith("file:")) {
-                return IObox.loadFile(new URL(locator).getFile());
+                return IObox.loadFile(Path.of(new URI(locator)).toFile());
             }
             else if(DataURL.isDataURL(locator)) {
                 DataURL dataUrl = new DataURL(locator);
@@ -140,7 +142,7 @@ public class Text implements ActionListener, PreviewPanel {
                 return dataString;
             }
             else {
-                return IObox.doUrl(new URL(locator));
+                return IObox.doUrl(new URI(locator).toURL());
             }
         }
         catch(Exception e) {

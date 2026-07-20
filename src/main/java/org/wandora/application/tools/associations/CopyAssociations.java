@@ -156,7 +156,7 @@ public class CopyAssociations extends AbstractWandoraTool {
         Map<Topic,Set<Topic>> rolesByType = new LinkedHashMap<>();
 
         Iterator<Association> associations = null;
-        Iterator context = getContext().getContextObjects();
+        Iterator<?> context = getContext().getContextObjects();
         Association a = null;
         Topic t = null;
         Object aort = null;

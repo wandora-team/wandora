@@ -28,6 +28,7 @@
 package org.wandora.application.tools.subjects;
 
 
+import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
@@ -79,7 +80,7 @@ public class AddSubjectIdentifier extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context)  throws TopicMapException {
         shouldRefresh = false;
-        Iterator contextTopics = getContext().getContextObjects();
+        Iterator<?> contextTopics = getContext().getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             Topic topic = (Topic) contextTopics.next();
             
@@ -91,14 +92,14 @@ public class AddSubjectIdentifier extends AbstractWandoraTool {
                         newSubjectIdentifier = newSubjectIdentifier.trim();
                         try {
                             boolean isValid = DataURL.isDataURL(newSubjectIdentifier);
-                            if(!isValid) new java.net.URL(newSubjectIdentifier);
+                            if(!isValid) new java.net.URI(newSubjectIdentifier).toURL();
                             Locator l = topic.getTopicMap().createLocator(newSubjectIdentifier);
                             if(TMBox.checkSubjectIdentifierChange(wandora,topic,l,true) == ConfirmResult.yes) {
                                 shouldRefresh = true;
                                 topic.addSubjectIdentifier(l);
                             }
                         }
-                        catch(java.net.MalformedURLException mue) {
+                        catch(java.net.MalformedURLException | URISyntaxException ue) {
                             log("Malformed subject identifier given. Subject identifier should be a valid URL. Rejecting subject identifier!");
                         }
                     }

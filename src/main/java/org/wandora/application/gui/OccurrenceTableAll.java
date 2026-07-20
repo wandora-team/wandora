@@ -45,7 +45,6 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -587,7 +586,7 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable {
                     occurrence = occurrence.trim();
                     if(occurrence.length() > 0) {
                         try {
-                            String occurrenceContent = IObox.doUrl(new URL(occurrence));
+                            String occurrenceContent = IObox.doUrl(new URI(occurrence).toURL());
                             topic.setData(types[realRow], langs[realCol-1], occurrenceContent);
                         }
                         catch(Exception e) {

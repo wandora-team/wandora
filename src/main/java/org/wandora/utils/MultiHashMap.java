@@ -42,7 +42,9 @@ import java.util.HashMap;
  */
 public class MultiHashMap<K,V> extends HashMap<K,Collection<V>> {
 
-    /** Creates new MultiHashMap */
+    private static final long serialVersionUID = 1L;
+
+	/** Creates new MultiHashMap */
     public MultiHashMap() {
         super();
     }

@@ -80,7 +80,7 @@ public class ChangeAssociationType extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context context)  throws TopicMapException {
         requiresRefresh = false;
-        Iterator<Association> associations = context.getContextObjects();
+        Iterator<?> associations = context.getContextObjects();
         Association association = null;
         int count = 0;
         

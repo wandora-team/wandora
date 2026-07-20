@@ -118,7 +118,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool {
     @Override
     public void execute(Wandora wandora, Context context) {
 
-        Iterator<Topic> topics = null;
+        Iterator<?> topics = null;
         Iterator<Association> associations = null;
         String exportInfo = "";
         try {
@@ -126,7 +126,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool {
                 topics = context.getContextObjects();
                 HashSet<Association> as = new HashSet<Association>();
                 while(topics.hasNext()) {
-                    Topic t = topics.next();
+                    Topic t = (Topic) topics.next();
                     as.addAll( t.getAssociations() );
                 }
                 associations = as.iterator();
@@ -196,7 +196,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool {
 
 
 
-    public void exportMatrix(OutputStream out, Iterator<Association> associationIterator, Iterator<Topic> topicIterator, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrix(OutputStream out, Iterator<Association> associationIterator, Iterator<?> topicIterator, WandoraToolLogger logger) throws TopicMapException {
         if(logger == null) logger = this;
         PrintWriter writer = null;
         try {
@@ -224,7 +224,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool {
 
         log("Collecting topics...");
         while(topicIterator.hasNext() && !logger.forceStop()) {
-            t = topicIterator.next();
+            t = (Topic) topicIterator.next();
             if(t != null && !t.isRemoved()) {
                 topics.add(t);
                 totalCount++;

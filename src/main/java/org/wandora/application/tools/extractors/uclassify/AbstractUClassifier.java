@@ -34,6 +34,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -419,7 +420,7 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
 
                 System.out.println("Sending: "+requestData);
 
-                String result = sendRequest(new URL(API_URL), requestData, "text/xml; charset=utf-8", "POST");
+                String result = sendRequest(new URI(API_URL).toURL(), requestData, "text/xml; charset=utf-8", "POST");
 
                 System.out.println("uClassifier returned == "+result);
 

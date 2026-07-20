@@ -283,7 +283,7 @@ public class Stands4Selector extends JDialog {
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -321,7 +321,7 @@ public class Stands4Selector extends JDialog {
         StringBuffer sb = new StringBuffer("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -352,7 +352,7 @@ public class Stands4Selector extends JDialog {
     public String getContextAsSI() {
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -560,7 +560,7 @@ public class Stands4Selector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         urlInnerPanel.add(urlField, gridBagConstraints);
 
-        urlGetButton.setLabel("Get context");
+        urlGetButton.setText("Get context");
         urlGetButton.setMargin(new java.awt.Insets(0, 2, 1, 2));
         urlGetButton.setMaximumSize(new java.awt.Dimension(90, 20));
         urlGetButton.setMinimumSize(new java.awt.Dimension(90, 20));

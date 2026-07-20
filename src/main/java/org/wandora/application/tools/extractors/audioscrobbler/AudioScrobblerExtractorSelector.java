@@ -346,7 +346,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         StringBuffer sb = new StringBuffer("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -478,7 +478,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         topAlbumsWTagInnerPanel.add(topAlbumsWTagField, gridBagConstraints);
 
-        topAlbumsWTagGetButton.setLabel("Get context");
+        topAlbumsWTagGetButton.setText("Get context");
         topAlbumsWTagGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
         topAlbumsWTagGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
         topAlbumsWTagGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
@@ -519,7 +519,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         topArtistWTagInnerPanel.add(topArtistWTagField, gridBagConstraints);
 
-        topArtistsWTagGetButton.setLabel("Get context");
+        topArtistsWTagGetButton.setText("Get context");
         topArtistsWTagGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
         topArtistsWTagGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
         topArtistsWTagGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
@@ -582,7 +582,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         albumInfoInnerPanel.add(albumInfoAlbumField, gridBagConstraints);
 
-        albumInfoGetButton.setLabel("Get context");
+        albumInfoGetButton.setText("Get context");
         albumInfoGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
         albumInfoGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
         albumInfoGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
@@ -626,7 +626,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         similarArtistsInnerPanel.add(similarArtistsField, gridBagConstraints);
 
-        similarArtistsGetButton.setLabel("Get context");
+        similarArtistsGetButton.setText("Get context");
         similarArtistsGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
         similarArtistsGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
         similarArtistsGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
@@ -667,7 +667,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         artistsTopAlbumsInnerPanel.add(artistsTopAlbumsField, gridBagConstraints);
 
-        artistsTopAlbumsGetButton.setLabel("Get context");
+        artistsTopAlbumsGetButton.setText("Get context");
         artistsTopAlbumsGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
         artistsTopAlbumsGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
         artistsTopAlbumsGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
@@ -708,7 +708,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         artistsTopTagsInnerPanel.add(artistsTopTagsField, gridBagConstraints);
 
-        artistsTopTagsGetButton.setLabel("Get context");
+        artistsTopTagsGetButton.setText("Get context");
         artistsTopTagsGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
         artistsTopTagsGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
         artistsTopTagsGetButton.setMinimumSize(new java.awt.Dimension(75, 20));
@@ -749,7 +749,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         gridBagConstraints.weightx = 1.0;
         artistsTopTracksInnerPanel.add(artistsTopTracksField, gridBagConstraints);
 
-        artistsTopTracksGetButton.setLabel("Get context");
+        artistsTopTracksGetButton.setText("Get context");
         artistsTopTracksGetButton.setMargin(new java.awt.Insets(0, 6, 1, 6));
         artistsTopTracksGetButton.setMaximumSize(new java.awt.Dimension(75, 20));
         artistsTopTracksGetButton.setMinimumSize(new java.awt.Dimension(75, 20));

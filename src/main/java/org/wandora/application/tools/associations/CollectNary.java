@@ -124,7 +124,7 @@ public class CollectNary extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) {      
         try {
             requiresRefresh = false;
-            Iterator associations = null;
+            Iterator<?> associations = null;
             
             Topic newAssociationType = null;
             Topic groupingRole = null;
@@ -221,7 +221,7 @@ public class CollectNary extends AbstractWandoraTool {
     
     public void collectAssociations(Collection<Association> associations, Topic groupingRole, Topic roleRole, Topic playerRole, Topic newAssociationType, boolean deleteSourceAssociations, TopicMap tm) throws Exception {
         // ***** Collect association groups
-        HashMap<Topic, Collection<Association>> collectedAssociations = new HashMap();
+        Map<Topic, Collection<Association>> collectedAssociations = new HashMap<>();
         for(Association a : associations) {
             if(a != null && !a.isRemoved()) {
                 Topic groupingPlayer = a.getPlayer(groupingRole);

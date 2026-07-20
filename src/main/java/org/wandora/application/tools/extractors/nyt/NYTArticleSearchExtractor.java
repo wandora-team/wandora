@@ -22,6 +22,7 @@
 package org.wandora.application.tools.extractors.nyt;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import org.json.JSONArray;
@@ -196,7 +197,7 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
                 int progress = 1;
                 for (int p = page + 1; p <= totalPages && !forceStop(); p++) {
                     String newURL = originalURL.replace("page=" + page, "page=" + p);
-                    _extractTopicsFrom(new URL(newURL), tm);
+                    _extractTopicsFrom(new URI(newURL).toURL(), tm);
                     setProgress(progress++);
                     nap();
                 }

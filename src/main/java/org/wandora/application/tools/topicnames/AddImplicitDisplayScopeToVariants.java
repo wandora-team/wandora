@@ -78,7 +78,7 @@ public class AddImplicitDisplayScopeToVariants extends AbstractWandoraTool {
             log("Iterates through selected topics and adds display scope to variants that have neither display nor sort scope.");
             TopicMap tm = wandora.getTopicMap();
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

@@ -46,6 +46,7 @@ import java.awt.event.MouseListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 
@@ -76,7 +77,9 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class AudioWav extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
-    private static final String OPTIONS_PREFIX = "gui.audioSamplePreviewPanel.";
+    private static final long serialVersionUID = 1L;
+
+	private static final String OPTIONS_PREFIX = "gui.audioSamplePreviewPanel.";
 
     private Map<String, String> options;
     private String audioLocator;
@@ -174,7 +177,7 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
             audioStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(dataURL.getData()));
         }
         else {
-            URL audioURL = new URL(audioLocator);
+            URL audioURL = new URI(audioLocator).toURL();
             audioStream = AudioSystem.getAudioInputStream(audioURL);
         }
         AudioFormat format = audioStream.getFormat();
@@ -347,7 +350,9 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
     
     
     public class WaveformPanel extends JPanel implements Runnable, LineListener, ComponentListener {    
-        private int[][] waveformData = null;
+        private static final long serialVersionUID = 1L;
+        
+		private int[][] waveformData = null;
         private int[][][] waveformView = null;
         private String audioLocator = null;
         private Font infoFont = new Font(Font.SANS_SERIF, Font.PLAIN, 15);

@@ -34,6 +34,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 //import com.sun.image.codec.jpeg.*;
@@ -61,7 +62,7 @@ public class ImageBox {
         // load image from INFILE
         BufferedImage image = null;
         try {
-            URL url = new URL(ins);
+            URL url = new URI(ins).toURL();
             image = ImageIO.read(url);
         }
         catch (Exception e1) {

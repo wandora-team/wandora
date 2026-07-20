@@ -171,7 +171,9 @@ public class QueryTopicMapType implements TopicMapType {
     
     
     public static class QueryConfigPanel extends TopicMapConfigurationPanel {
-        public Object param;
+        private static final long serialVersionUID = 1L;
+        
+		public Object param;
         public QueryConfigPanel() { }
         public QueryConfigPanel(Object param) { 
             super();

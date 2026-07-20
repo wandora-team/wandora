@@ -79,32 +79,34 @@ public class TreeTable extends JTable {
     }
     
     public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
-
-	protected int visibleRow;
-   
-	public TreeTableCellRenderer(TreeModel model) { 
-	    super(model); 
-	}
-
-        @Override
-	public void setBounds(int x, int y, int w, int h) {
-	    super.setBounds(x, 0, w, TreeTable.this.getHeight());
-	}
-
-        @Override
-	public void paint(Graphics g) {
-	    g.translate(0, -visibleRow * getRowHeight());
-	    super.paint(g);
-	}
-
-	public Component getTableCellRendererComponent(JTable table,Object value,
-                                boolean isSelected,boolean hasFocus,int row, int column) {
-	    if(isSelected) setBackground(table.getSelectionBackground());
-	    else setBackground(table.getBackground());
-       
-	    visibleRow = row;
-	    return this;
-	}
+	
+		private static final long serialVersionUID = 1L;
+		
+		protected int visibleRow;
+	   
+		public TreeTableCellRenderer(TreeModel model) { 
+		    super(model); 
+		}
+	
+	        @Override
+		public void setBounds(int x, int y, int w, int h) {
+		    super.setBounds(x, 0, w, TreeTable.this.getHeight());
+		}
+	
+	        @Override
+		public void paint(Graphics g) {
+		    g.translate(0, -visibleRow * getRowHeight());
+		    super.paint(g);
+		}
+	
+		public Component getTableCellRendererComponent(JTable table,Object value,
+	                                boolean isSelected,boolean hasFocus,int row, int column) {
+		    if(isSelected) setBackground(table.getSelectionBackground());
+		    else setBackground(table.getBackground());
+	       
+		    visibleRow = row;
+		    return this;
+		}
     }
 
     

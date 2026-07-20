@@ -570,7 +570,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     occurrence = occurrence.trim();
                     if(occurrence.length() > 0) {
                         try {
-                            URL url = new URL(occurrence);
+                            URL url = new URI(occurrence).toURL();
                             int a = WandoraOptionPane.showConfirmDialog(wandora, "Make data-url instead of text occurrence?", "Make data-url", WandoraOptionPane.INFORMATION_MESSAGE);
                             if(a == WandoraOptionPane.YES_OPTION) {
                                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();

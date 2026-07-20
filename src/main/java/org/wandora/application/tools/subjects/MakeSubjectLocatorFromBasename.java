@@ -83,7 +83,7 @@ public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool {
     @Override
     public void execute(Wandora admin, Context context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             if(SLTemplate == null || SLTemplate.length() == 0) {

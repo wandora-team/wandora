@@ -27,8 +27,8 @@
 
 package org.wandora.application.gui.previews.formats;
 
-import static java.awt.event.InputEvent.CTRL_MASK;
-import static java.awt.event.InputEvent.SHIFT_MASK;
+import static java.awt.event.InputEvent.CTRL_DOWN_MASK;
+import static java.awt.event.InputEvent.SHIFT_DOWN_MASK;
 import static java.awt.event.KeyEvent.VK_C;
 import static java.awt.event.KeyEvent.VK_END;
 import static java.awt.event.KeyEvent.VK_HOME;
@@ -51,6 +51,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -120,7 +121,7 @@ public class ApplicationPDF implements PreviewPanel {
             pdfBytes = new DataURL(source).getData();
         }
         else {
-            URL sourceURL = new URL(source);
+            URL sourceURL = new URI(source).toURL();
             if("file".equalsIgnoreCase(sourceURL.getProtocol())) {
                 pdfBytes = Files.readAllBytes(new File(sourceURL.toURI()).toPath());
             }
@@ -453,10 +454,10 @@ public class ApplicationPDF implements PreviewPanel {
             JUMP_HOME, KeyStroke.getKeyStroke(VK_HOME, 0),
             JUMP_END, KeyStroke.getKeyStroke(VK_END, 0),
             "---",
-            JUMP_100_FWD, KeyStroke.getKeyStroke(VK_PAGE_DOWN, CTRL_MASK),
-            JUMP_10_FWD, KeyStroke.getKeyStroke(VK_PAGE_DOWN, SHIFT_MASK),
-            JUMP_10_REV, KeyStroke.getKeyStroke(VK_PAGE_UP, SHIFT_MASK),
-            JUMP_100_REV, KeyStroke.getKeyStroke(VK_PAGE_UP, CTRL_MASK),
+            JUMP_100_FWD, KeyStroke.getKeyStroke(VK_PAGE_DOWN, CTRL_DOWN_MASK),
+            JUMP_10_FWD, KeyStroke.getKeyStroke(VK_PAGE_DOWN, SHIFT_DOWN_MASK),
+            JUMP_10_REV, KeyStroke.getKeyStroke(VK_PAGE_UP, SHIFT_DOWN_MASK),
+            JUMP_100_REV, KeyStroke.getKeyStroke(VK_PAGE_UP, CTRL_DOWN_MASK),
         },
         "---",
         // OFFSET_DEFAULT,
@@ -472,7 +473,7 @@ public class ApplicationPDF implements PreviewPanel {
         "---",
         OPEN_EXTERNAL,
         COPY_LOCATION,
-        COPY_IMAGE, KeyStroke.getKeyStroke(VK_C, CTRL_MASK),
+        COPY_IMAGE, KeyStroke.getKeyStroke(VK_C, CTRL_DOWN_MASK),
         "---",
         SAVE_AS,
     };

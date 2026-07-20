@@ -63,7 +63,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     
     
     
-    /** Creates new form ConfigurationPanel */
+    /** Creates new form DatabaseConfigurationPanel */
     public DatabaseConfigurationPanel(Wandora wandora) {
         this.wandora = wandora;
         listModel = new DefaultListModel();

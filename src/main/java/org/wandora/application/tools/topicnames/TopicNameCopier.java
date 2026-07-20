@@ -77,7 +77,7 @@ public class TopicNameCopier extends AbstractWandoraTool {
             setLogTitle("Copying variant names of topic");
             log("Copying variant names of topic");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

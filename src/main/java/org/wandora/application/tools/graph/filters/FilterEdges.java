@@ -188,9 +188,9 @@ public class FilterEdges extends AbstractGraphTool  {
     
     
     
-    public static List<AbstractGraphTool> makeTools(Collection c,GraphFilter graphFilter,List<AbstractGraphTool> tools){
-        if(tools==null) tools=new ArrayList<AbstractGraphTool>();
-        ArrayList<Topic> types = new ArrayList<Topic>();
+    public static List<AbstractGraphTool> makeTools(Collection<?> c,GraphFilter graphFilter,List<AbstractGraphTool> tools){
+        if(tools==null) tools=new ArrayList<>();
+        List<Topic> types = new ArrayList<>();
         boolean instanceAdded = false;
         boolean occurrenceAdded = false;
         for(Object o : c) {

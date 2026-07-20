@@ -117,7 +117,7 @@ public class TopicPanelManager implements ActionListener {
     
     public void reset() {
         deactivateTopicPanel();
-        TopicPanel tp = getTopicPanel();
+        getTopicPanel();
         activateTopicPanel();
         wandora.topicPanelsChanged();
     }
@@ -200,11 +200,11 @@ public class TopicPanelManager implements ActionListener {
         try {
             if(topicPanelClassName != null) {
                 if(!topicPanelClassName.contains("$")) { // Skip inner classes!
-                    Class topicPanelClass = Class.forName(topicPanelClassName);
+                    Class<?> topicPanelClass = Class.forName(topicPanelClassName);
                     if(TopicPanel.class.isAssignableFrom(topicPanelClass) &&
                             !Modifier.isAbstract(topicPanelClass.getModifiers()) &&
                             !Modifier.isInterface(topicPanelClass.getModifiers()) ){
-                        topicPanel = (TopicPanel) topicPanelClass.newInstance();
+                        topicPanel = (TopicPanel) topicPanelClass.getDeclaredConstructor().newInstance();
                     }
                 }
             }
@@ -389,9 +389,9 @@ public class TopicPanelManager implements ActionListener {
             try {
                 DockingFramePanel dockingPanel = (DockingFramePanel) baseTopicPanel;
                 String dockableClassName = topicPanelMap.get(actionCommand);
-                Class dockableClass = Class.forName(dockableClassName);
+                Class<?> dockableClass = Class.forName(dockableClassName);
                 if(dockableClass != null && dockingPanel != null) {
-                    TopicPanel topicPanel = (TopicPanel) dockableClass.newInstance();
+                    TopicPanel topicPanel = (TopicPanel) dockableClass.getDeclaredConstructor().newInstance();
                     topicPanel.init();
                     dockingPanel.changeTopicPanelInCurrentDockable(topicPanel, getOpenTopic());
                 }

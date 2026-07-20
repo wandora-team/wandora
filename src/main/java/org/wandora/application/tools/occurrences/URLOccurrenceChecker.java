@@ -69,7 +69,7 @@ public class URLOccurrenceChecker extends AbstractWandoraTool {
     String reportType = "sm";
 
     File currentDirectory = null;
-    Iterator<Topic> topicsToCheck;
+    Iterator<?> topicsToCheck;
 
 
     public URLOccurrenceChecker() {}

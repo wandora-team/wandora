@@ -76,7 +76,7 @@ public class VariantWhiteSpaceCollapser extends AbstractWandoraTool {
             setLogTitle("Collapsing white space characters in variant names");
             log("Collapsing white space characters in variant names");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

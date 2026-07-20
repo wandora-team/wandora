@@ -88,7 +88,7 @@ public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool {
             setLogTitle("Copying SI to base name");
             log("Copying subject identifier file name to topic base name");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

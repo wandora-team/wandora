@@ -91,7 +91,7 @@ public class DeleteTopics extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context context) throws TopicMapException  {
         this.wandora = wandora;
         ArrayList<Topic> topicsToDelete = new ArrayList<Topic>();
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         Topic topic = null;
         Topic ltopic = null;
         int count = 0;

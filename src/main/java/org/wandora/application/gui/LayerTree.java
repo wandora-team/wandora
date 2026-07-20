@@ -1289,7 +1289,9 @@ public class LayerTree extends DragJTree {
     
     
     private class LayerCellEditor extends AbstractCellEditor implements TreeCellEditor {
-        private CellRenderComponent c;
+        private static final long serialVersionUID = 1L;
+        
+		private CellRenderComponent c;
         
         public LayerCellEditor(){
             c=new CellRenderComponent();

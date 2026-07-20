@@ -65,7 +65,7 @@ public interface Context {
      *
      * @return <tt>Iterator</tt> containing all the context objects.
      */
-    public Iterator getContextObjects();
+    public Iterator<?> getContextObjects();
 
     /**
      * Sets the origin of context. Normally context origin is a GUI element

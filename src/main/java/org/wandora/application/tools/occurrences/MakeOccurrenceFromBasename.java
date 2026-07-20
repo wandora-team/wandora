@@ -77,7 +77,7 @@ public class MakeOccurrenceFromBasename extends AbstractWandoraTool {
             setLogTitle("Copying base name to topic occurrence");
             log("Copying base name to topic occurrence");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

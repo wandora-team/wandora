@@ -209,22 +209,23 @@ public class GephiExport extends AbstractExportTool {
             // Lets read and archive the file we just created
             try {
                 FileInputStream fi = new FileInputStream(fileXML);
-                BufferedInputStream origin = new BufferedInputStream(fi, BUFFER);
-                FileOutputStream dest = new FileOutputStream(file);
-                ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(dest));
-
-                byte data[] = new byte[BUFFER];
-
-                zout.putNextEntry(new ZipEntry(file.getName()));
-
-                int count;
-
-                while((count = origin.read(data, 0, BUFFER)) != -1) {
-                   zout.write(data, 0, count);
+                try(BufferedInputStream origin = new BufferedInputStream(fi, BUFFER)) {
+	                FileOutputStream dest = new FileOutputStream(file);
+	                ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(dest));
+	
+	                byte data[] = new byte[BUFFER];
+	
+	                zout.putNextEntry(new ZipEntry(file.getName()));
+	
+	                int count;
+	
+	                while((count = origin.read(data, 0, BUFFER)) != -1) {
+	                   zout.write(data, 0, count);
+	                }
+	
+	                zout.flush();
+	                zout.close();
                 }
-
-                zout.flush();
-                zout.close();
 
             } 
             catch(Exception e) {

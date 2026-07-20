@@ -65,7 +65,7 @@ public class LocatorTableModel extends DefaultTableModel {
 
     
     @Override
-    public Class getColumnClass(int col) {
+    public Class<?> getColumnClass(int col) {
         return Locator.class;
     }
     

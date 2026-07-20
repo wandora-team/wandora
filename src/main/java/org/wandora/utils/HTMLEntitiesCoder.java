@@ -50,7 +50,7 @@ public class HTMLEntitiesCoder {
      * For example there is a mapping from the String "nbsp" to Character with
      * char code 160.
      */
-    public static final Map entitiesTable = new EasyHash(new Object[]{
+    public static final Map<String,Character> entitiesTable = new EasyHash<>(new Object[]{
         "nbsp",Character.valueOf((char)160), /* no-break space = non-breaking space,
                                                   U+00A0 ISOnum */
         "iexcl",Character.valueOf((char)161), /* inverted exclamation mark, U+00A1 ISOnum */
@@ -515,11 +515,11 @@ public class HTMLEntitiesCoder {
     /**
      * The inverse of table entitiesTable.
      */
-    public static final Map inverseTable=new HashMap();
+    public static final Map<Character,String> inverseTable=new HashMap<>();
     static{
-        Iterator iter=entitiesTable.entrySet().iterator();
+        Iterator<Map.Entry<String, Character>> iter=entitiesTable.entrySet().iterator();
         while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
+            Map.Entry<String,Character> e=iter.next();
             inverseTable.put(e.getValue(),e.getKey());
         }
     }

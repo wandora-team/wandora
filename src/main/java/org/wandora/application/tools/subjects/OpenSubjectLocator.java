@@ -62,7 +62,7 @@ public class OpenSubjectLocator extends AbstractWandoraTool {
         try {
             // setDefaultLogger();
             if(admin != null) {
-                Iterator contextTopics = getContext().getContextObjects();
+                Iterator<?> contextTopics = getContext().getContextObjects();
                 int openCount = 0;
                 int tryCount = 0;
                 boolean openAll = false;

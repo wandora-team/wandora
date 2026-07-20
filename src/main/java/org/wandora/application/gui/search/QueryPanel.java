@@ -361,7 +361,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
         selectQueryPanel.setLayout(new java.awt.GridBagLayout());
 
-        queryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        queryComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         queryComboBox.setPreferredSize(new java.awt.Dimension(56, 25));
         queryComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -418,7 +418,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 4);
         scriptQueryPanel.add(engineLabel, gridBagConstraints);
 
-        engineComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        engineComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -640,7 +640,9 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     
     private class QueryTextPane extends SimpleTextPaneResizeable {
     
-        private int scriptQueryPanelWidth = 100;
+        private static final long serialVersionUID = 1L;
+        
+		private int scriptQueryPanelWidth = 100;
         private int scriptQueryPanelHeight = scriptQueryPanel.getHeight();
         
         

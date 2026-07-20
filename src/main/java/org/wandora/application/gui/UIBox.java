@@ -1436,7 +1436,7 @@ public class UIBox {
     
     
     
-    public static Component getParentComponentByClass(Class componentClass, Component root, int maxDepth) {
+    public static Component getParentComponentByClass(Class<?> componentClass, Component root, int maxDepth) {
         if(componentClass == null) return null;
         while(root != null && !componentClass.equals(root.getClass()) && maxDepth > 0) {
             maxDepth--;

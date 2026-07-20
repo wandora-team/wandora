@@ -112,7 +112,7 @@ public class MakeOccurrenceFromAssociation extends AbstractWandoraTool {
                 associations = context.getContextObjects();
             }
             else {
-                Iterator topics = context.getContextObjects();                
+                Iterator<?> topics = context.getContextObjects();                
                 if(topics == null || !topics.hasNext()) return;
                 ArrayList<Association> associationArray = new ArrayList<>();
                 

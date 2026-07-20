@@ -75,7 +75,7 @@ public class MakeOccurrenceFromSubjectLocator extends AbstractWandoraTool {
             setLogTitle("Copying subject locator to topic occurrence");
             log("Copying subject locator to topic occurrence");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

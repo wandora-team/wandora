@@ -845,7 +845,7 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
 
         optionOptionsPanel.setLayout(new java.awt.GridBagLayout());
 
-        optionsComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        optionsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         optionsComboBox.setMinimumSize(new java.awt.Dimension(51, 21));
         optionsComboBox.setPreferredSize(new java.awt.Dimension(55, 21));
         optionsComboBox.addKeyListener(new java.awt.event.KeyAdapter() {

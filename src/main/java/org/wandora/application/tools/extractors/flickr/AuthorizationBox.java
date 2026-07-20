@@ -107,7 +107,7 @@ public class AuthorizationBox extends javax.swing.JPanel {
             }
         });
 
-        cmbAuthRequest.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "read", "write", "delete" }));
+        cmbAuthRequest.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none", "read", "write", "delete" }));
 
         jLabel3.setText("Authorization level:");
 

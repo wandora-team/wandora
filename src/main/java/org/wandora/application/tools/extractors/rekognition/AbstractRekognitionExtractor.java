@@ -364,10 +364,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
             Topic detectionTypeTopic = getDetectionClass(tm);
             
             JSONObject numericValues = (JSONObject)values;
-            Iterator keys = numericValues.keys();
+            Iterator<String> keys = numericValues.keys();
             
             while(keys.hasNext()) {
-                String key = (String)keys.next();
+                String key = keys.next();
                 Topic keyTopic = getOrCreateTopic(tm, TYPE_SI + "/" + key, key);
                 keyTopic.addType(typeTopic);
                 

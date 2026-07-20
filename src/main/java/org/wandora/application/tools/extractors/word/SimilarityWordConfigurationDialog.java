@@ -127,7 +127,7 @@ class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
         
         List<String> MetricNameList = newConfig.getSTringMetricNames();
         String[] metricNameArray = new String[MetricNameList.size()];
-        metrics.setModel(new DefaultComboBoxModel(MetricNameList.toArray(metricNameArray)));
+        metrics.setModel(new DefaultComboBoxModel<>(MetricNameList.toArray(metricNameArray)));
         
         myDialog.setVisible(true);
     }
@@ -278,7 +278,7 @@ class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         container.add(toggleInstanceData, gridBagConstraints);
 
-        metrics.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        metrics.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;

@@ -80,7 +80,7 @@ public class BasenameNewlineRemover extends AbstractWandoraTool {
             setLogTitle("Removing newline characters in base names");
             log("Removing newline characters in base names");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

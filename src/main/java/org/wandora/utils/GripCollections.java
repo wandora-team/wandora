@@ -110,9 +110,9 @@ public class GripCollections {
      * Checks if there is at least one common element in the two specified
      * collections.
      */
-    public static boolean collectionsOverlap(Collection a,Collection b){
+    public static boolean collectionsOverlap(Collection<?> a, Collection<?> b){
         if(a.size()>b.size()){
-            Collection c=a;
+            Collection<?> c=a;
             a=b;
             b=c;
         }

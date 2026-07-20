@@ -49,7 +49,9 @@ import org.wandora.utils.Options;
 
 public class IIIFExport extends AbstractExportTool {
     
-    protected HashMap<String,String> options;
+    private static final long serialVersionUID = 1L;
+    
+	protected HashMap<String,String> options;
     protected IIIFBuilder selectedBuilder;
     protected boolean prettyPrint=true;
 
