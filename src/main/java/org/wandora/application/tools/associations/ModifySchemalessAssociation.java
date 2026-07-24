@@ -52,7 +52,7 @@ public class ModifySchemalessAssociation extends AbstractWandoraTool {
     public ModifySchemalessAssociation() {
         setContext(new AssociationContext());
     }
-    public ModifySchemalessAssociation(Context preferredContext) {
+    public ModifySchemalessAssociation(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -68,8 +68,8 @@ public class ModifySchemalessAssociation extends AbstractWandoraTool {
     }
 
 
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
-        Iterator contextAssociations = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
+        Iterator<?> contextAssociations = context.getContextObjects();
         if(contextAssociations == null || !contextAssociations.hasNext()) return;
         
         Association association = (Association) contextAssociations.next();

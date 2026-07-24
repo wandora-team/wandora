@@ -57,10 +57,10 @@ public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool {
     public CreateTopicWithOccurrenceSelection(boolean associate) {
         ASSOCIATE_TO_OCCURRENCE_CARRIER = associate;
     }
-    public CreateTopicWithOccurrenceSelection(Context proposedContext) {
+    public CreateTopicWithOccurrenceSelection(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
-    public CreateTopicWithOccurrenceSelection(boolean associate, Context proposedContext) {
+    public CreateTopicWithOccurrenceSelection(boolean associate, Context<?> proposedContext) {
         ASSOCIATE_TO_OCCURRENCE_CARRIER = associate;
         this.setContext(proposedContext);
     }
@@ -77,7 +77,7 @@ public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object source = getContext().getContextSource();
         requiresRefresh = false;
         if(source instanceof OccurrenceTextEditor) {
@@ -148,8 +148,7 @@ public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool {
             if(t==null){
                 t=tm.createTopic();
                 if(bn!=null) t.setBaseName(bn);
-                if(si!=null) t.addSubjectIdentifier(tm.createLocator(si));
-                else t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
+                t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
             }
             return t;
         }

@@ -61,7 +61,7 @@ public class Redo extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         if(wandora != null) {
             try {
                 wandora.redo();

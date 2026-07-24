@@ -76,7 +76,7 @@ public class ExportTopicMap extends AbstractExportTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         TopicMap tm = null;
         String topicMapName = null;
         String exportInfo = "";

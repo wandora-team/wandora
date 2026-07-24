@@ -59,7 +59,7 @@ public class ClearUndoBuffers extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         if(wandora != null) {
             wandora.clearUndoBuffers();
         }

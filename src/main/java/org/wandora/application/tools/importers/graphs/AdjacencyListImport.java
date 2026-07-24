@@ -81,7 +81,7 @@ public class AdjacencyListImport extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(admin, context);
         
         AdjacencyListImportDialog edgeSourceDialog = new AdjacencyListImportDialog(admin, this, true);

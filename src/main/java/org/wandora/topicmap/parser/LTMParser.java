@@ -99,6 +99,7 @@ public class LTMParser {
     public static boolean OVERWRITE_SUBJECT_LOCATORS = false;
     public static boolean MAKE_TOPIC_ID_FROM_ID = true;
     
+    public static boolean QNAME_MAY_CONTAIN_PREFIXES = false;
     
 
     public static int MAX_SI_LEN = 99999;
@@ -1051,7 +1052,7 @@ public class LTMParser {
         String locatorPrefix = null;
         String indicatorPrefix = null;
         if(qname != null && qname.length() > 0) {
-            if(false && eatOnly(':')) {
+            if(QNAME_MAY_CONTAIN_PREFIXES && eatOnly(':')) {
                 locatorPrefix = locatorPrefixes.get(qname);
                 indicatorPrefix = indicatorPrefixes.get(qname);
                 qname = parseName();

@@ -56,7 +56,7 @@ public class ApplyChanges extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         // Deprecated tool.
         // Apply changes is actually done by default in AbstractWandoraTool.
     }    

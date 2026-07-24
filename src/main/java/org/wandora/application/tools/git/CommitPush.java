@@ -45,7 +45,7 @@ public class CommitPush extends AbstractGitTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
 
         try {
             Git git = getGit();    

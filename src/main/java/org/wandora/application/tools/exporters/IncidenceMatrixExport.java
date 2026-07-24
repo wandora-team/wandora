@@ -116,7 +116,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
 
         Iterator<?> topics = null;
         Iterator<Association> associations = null;

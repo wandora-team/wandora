@@ -67,7 +67,9 @@ import java.util.HashMap;
 
 public class EasyHash<K,V> extends HashMap<K,V> {
 
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * Creates new EasyHash from an array of objects.
      *
      * @param a The objects to be fed to <code>setArray</code>.

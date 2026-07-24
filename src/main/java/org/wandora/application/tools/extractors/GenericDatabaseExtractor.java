@@ -97,7 +97,7 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
     }
 
     
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         setDefaultLogger();        
         DatabaseConfigurationDialog d=new DatabaseConfigurationDialog(wandora,true);
         d.setTitle("Select extracted database");

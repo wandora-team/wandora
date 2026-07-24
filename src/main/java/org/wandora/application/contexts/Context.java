@@ -42,13 +42,13 @@ import org.wandora.application.WandoraTool;
  * Context contains the execution environment of a tool.
  * </p>
  * <p>
- * Context must always initialized before usage.
+ * Context must be initialized before usage.
  * </p>
  * 
  * @author akivela
  */
 
-public interface Context {
+public interface Context<T> {
     
     /**
      * Initializes context with
@@ -65,7 +65,7 @@ public interface Context {
      *
      * @return <tt>Iterator</tt> containing all the context objects.
      */
-    public Iterator<?> getContextObjects();
+    public Iterator<T> getContextObjects();
 
     /**
      * Sets the origin of context. Normally context origin is a GUI element

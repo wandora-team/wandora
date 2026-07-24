@@ -62,7 +62,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
 	
 	public static String BASE_URL = "http://api.geonames.org/";
     private Wandora wandora = null;
-    private Context context = null;
+    private Context<?> context = null;
     private boolean accepted = false;
     
     
@@ -132,7 +132,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         this.wandora = w;
     }
     
-    public void setContext(Context context) {
+    public void setContext(Context<?> context) {
         this.context = context;
     }
     
@@ -497,7 +497,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -536,7 +536,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
     public Tuples.T2<String,String> solveGPSLocation() {
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 Object o = null;
                 boolean found = false;
                 while(contextObjects.hasNext() && !found) {
@@ -577,7 +577,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
     public Tuples.T4<String,String,String,String> solveGPSBoundingBox() {
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 Object o = null;
                 boolean found = false;
                 while(contextObjects.hasNext() && !found) {
@@ -623,7 +623,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 String lstr = null;
                 Object o = null;
@@ -707,11 +707,11 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         searchTextField = new org.wandora.application.gui.simple.SimpleField();
         searchFilterPanel = new javax.swing.JPanel();
         searchContinentLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        searchContinentComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        searchContinentComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         searchCountryLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        searchCountryComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        searchCountryComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         searchFeatureLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        searchFeatureClassComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        searchFeatureClassComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         searchIsNameRequiredLabel = new org.wandora.application.gui.simple.SimpleLabel();
         searchIsNameRequiredCheckBox = new javax.swing.JCheckBox();
         findNearByPanel = new javax.swing.JPanel();
@@ -727,11 +727,11 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         findNearByradiusLabel = new SimpleLabel();
         findNearByRadiusTextField = new javax.swing.JTextField();
         findNearByFeatureLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        findNearByFeatureComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        findNearByFeatureComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         countryInfoPanel = new javax.swing.JPanel();
         countryInfoPanelInner = new javax.swing.JPanel();
         countryInfoLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        countryInfoComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        countryInfoComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         countryInfoButton = new org.wandora.application.gui.simple.SimpleButton();
         citiesPanel = new javax.swing.JPanel();
         citiesPanelInner = new javax.swing.JPanel();

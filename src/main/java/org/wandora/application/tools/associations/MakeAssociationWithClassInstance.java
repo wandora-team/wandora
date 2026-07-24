@@ -31,6 +31,7 @@ package org.wandora.application.tools.associations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -64,7 +65,7 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool {
     public MakeAssociationWithClassInstance() {
     }
     
-    public MakeAssociationWithClassInstance(Context preferredContext) {
+    public MakeAssociationWithClassInstance(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -85,7 +86,7 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {   
+    public void execute(Wandora wandora, Context<?> context) {   
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
@@ -108,7 +109,7 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool {
             TopicMap map = wandora.getTopicMap();
             Association a = null;
 
-            ArrayList<Topic> dtopics = new ArrayList<Topic>();
+            List<Topic> dtopics = new ArrayList<>();
             while(topics.hasNext() && !forceStop()) {
                 dtopics.add((Topic) topics.next());
             }
@@ -122,7 +123,7 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool {
                         progress++;
                         hlog("Inspecting topic '"+getTopicName(topic)+"'");
                         
-                        Collection<Topic> types = new ArrayList<Topic>(topic.getTypes());
+                        Collection<Topic> types = new ArrayList<>(topic.getTypes());
 
                         // Ok, if topic has types...
                         if(!types.isEmpty()) {

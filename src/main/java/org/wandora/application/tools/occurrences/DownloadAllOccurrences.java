@@ -68,14 +68,14 @@ public class DownloadAllOccurrences extends AbstractWandoraTool {
 
     public DownloadAllOccurrences() {
     }
-    public DownloadAllOccurrences(Context preferredContext) {
+    public DownloadAllOccurrences(Context<?> preferredContext) {
         this(preferredContext, false);
     }
 
     public DownloadAllOccurrences(boolean changeOccurrence) {
         this.changeOccurrence = changeOccurrence;
     }
-    public DownloadAllOccurrences(Context preferredContext, boolean changeOccurrence) {
+    public DownloadAllOccurrences(Context<?> preferredContext, boolean changeOccurrence) {
         setContext(preferredContext);
         this.changeOccurrence = changeOccurrence;
     }
@@ -89,7 +89,7 @@ public class DownloadAllOccurrences extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         Iterator<?> topics = context.getContextObjects();
         File targetPath = null;
         TopicMap tm = admin.getTopicMap();

@@ -57,14 +57,14 @@ public class PasteClasses extends PasteTopics {
     public PasteClasses(int includeOrders, int pasteOrders) {
         super(includeOrders, pasteOrders);
     }
-    public PasteClasses(Context preferredContext) {
+    public PasteClasses(Context<?> preferredContext) {
         setContext(preferredContext);        
     }
-    public PasteClasses(Context preferredContext, int includeOrders) {
+    public PasteClasses(Context<?> preferredContext, int includeOrders) {
         super(includeOrders);
         setContext(preferredContext);        
     }
-    public PasteClasses(Context preferredContext, int includeOrders, int pasteOrders) {
+    public PasteClasses(Context<?> preferredContext, int includeOrders, int pasteOrders) {
         super(includeOrders, pasteOrders);
         setContext(preferredContext);        
     }

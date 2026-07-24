@@ -81,7 +81,7 @@ public class AdjacencyMatrixImport extends AbstractWandoraTool {
     }
 
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(admin, context);
 
         AdjacencyMatrixImportDialog matrixSourceDialog = new AdjacencyMatrixImportDialog(admin, this, true);

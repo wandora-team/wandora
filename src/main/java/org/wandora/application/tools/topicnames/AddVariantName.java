@@ -46,7 +46,7 @@ public class AddVariantName extends AbstractWandoraTool {
 
 	public AddVariantName() {
     }
-    public AddVariantName(Context preferredContext) {
+    public AddVariantName(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -64,7 +64,7 @@ public class AddVariantName extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

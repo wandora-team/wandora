@@ -58,7 +58,7 @@ public class DeleteVariantName extends AbstractWandoraTool {
 
     
 
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(t != null && !t.isRemoved()) {
                 if(scope != null) {

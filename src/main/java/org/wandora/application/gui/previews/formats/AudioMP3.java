@@ -38,6 +38,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 
@@ -61,7 +62,9 @@ import javazoom.jl.player.Player;
  * @author akivela
  */
 public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
-    private static final String OPTIONS_PREFIX = "gui.audioMP3PreviewPanel.";
+    private static final long serialVersionUID = 1L;
+
+	private static final String OPTIONS_PREFIX = "gui.audioMP3PreviewPanel.";
 
     Map<String, String> options;
     String audioLocator;
@@ -151,7 +154,7 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
             player = new Player(new ByteArrayInputStream(dataURL.getData()));
         }
         else {
-            URL audioURL = new URL(audioLocator);
+            URL audioURL = new URI(audioLocator).toURL();
             player = new Player(audioURL.openStream());
         }
         player.play();

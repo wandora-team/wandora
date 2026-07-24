@@ -51,14 +51,14 @@ public class BeanShellXMLParam implements XMLParamAware {
         getID="returnValue";
     }
     
-    public BeanShellXMLParam(String src,Map params) throws Exception {
+    public BeanShellXMLParam(String src,Map<String,Object> params) throws Exception {
         this(src,params,"returnValue");
     }
-    public BeanShellXMLParam(String src,Map params,String id) throws Exception {
+    public BeanShellXMLParam(String src,Map<String,Object> params,String id) throws Exception {
         this();
-        Iterator iter=params.entrySet().iterator();
+        Iterator<Map.Entry<String,Object>> iter=params.entrySet().iterator();
         while(iter.hasNext()){
-            Map.Entry en=(Map.Entry)iter.next();
+            Map.Entry<String,Object> en=iter.next();
             interpreter.set((String)en.getKey(),en.getValue());
         }
         interpreter.source(src);
@@ -90,10 +90,10 @@ public class BeanShellXMLParam implements XMLParamAware {
                 if(n instanceof Element){
                     Element e=(Element)n;
                     if(e.getNodeName().equals("objects")){
-                        Map m=(Map)processor.createObject(e);
-                        Iterator iter=m.entrySet().iterator();
+                        Map<String,Object> m = (Map<String,Object>) processor.createObject(e);
+                        Iterator<Map.Entry<String,Object>> iter=m.entrySet().iterator();
                         while(iter.hasNext()){
-                            Map.Entry en=(Map.Entry)iter.next();
+                            Map.Entry<String,Object> en=iter.next();
                             interpreter.set((String)en.getKey(),en.getValue());
                         }
                     }

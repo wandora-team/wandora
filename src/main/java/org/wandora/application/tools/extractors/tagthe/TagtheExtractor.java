@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -106,7 +107,7 @@ public class TagtheExtractor extends AbstractTagtheExtractor {
             }
 
             String extractURL = WEB_SERVICE_URL+"?text="+URLEncoder.encode(content, "utf-8");
-            String result = IObox.doUrl(new URL(extractURL));
+            String result = IObox.doUrl(new URI(extractURL).toURL());
 
             //System.out.println("Tagthe returned == "+result);
 

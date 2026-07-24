@@ -32,7 +32,6 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.io.File;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -253,7 +252,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
             StringBuilder sb = new StringBuilder("");
             for(int i=0; i<urls.length; i++) {
                 try {
-                    sb.append(IObox.doUrl(new URL(urls[i])));
+                    sb.append(IObox.doUrl(new URI(urls[i]).toURL()));
                 }
                 catch(Exception e) {
                     parentTool.log(e);
@@ -342,7 +341,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
     
     private void selectContextSLFiles() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -379,7 +378,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
     
     private void selectContextSLs() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -414,7 +413,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
 
     private void selectContextSIs() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -482,7 +481,7 @@ public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
         lSystemPanel = new javax.swing.JPanel();
         lSystemLabel = new org.wandora.application.gui.simple.SimpleLabel();
         selectLSystemPanel = new javax.swing.JPanel();
-        lSystemComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        lSystemComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         saveLSystemButton = new org.wandora.application.gui.simple.SimpleButton();
         lSystemScrollPane = new javax.swing.JScrollPane();
         lSystemTextPane = new org.wandora.application.gui.simple.SimpleTextPane();
@@ -882,7 +881,7 @@ private void lSystemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//G
     private javax.swing.JPanel fillerPanel;
     private javax.swing.JButton generateButton;
     private javax.swing.JButton infoButton;
-    private javax.swing.JComboBox lSystemComboBox;
+    private javax.swing.JComboBox<String> lSystemComboBox;
     private javax.swing.JLabel lSystemLabel;
     private javax.swing.JPanel lSystemPanel;
     private javax.swing.JScrollPane lSystemScrollPane;

@@ -39,7 +39,6 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.application.gui.OccurrenceTable;
-import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.TopicLinkBasename;
 import org.wandora.application.gui.table.MixedTopicTable;
 import org.wandora.application.gui.table.SITable;
@@ -64,14 +63,9 @@ import org.wandora.topicmap.layered.Layer;
  * @author akivela
  */
 
-public class LayeredTopicContext implements Context {
+public class LayeredTopicContext extends AbstractContext implements Context<Topic> {
     
-    private Object contextSource;
-    protected WandoraTool contextOwner = null;
-    protected ActionEvent actionEvent = null;
-    protected Wandora wandora = null;
-    
-    
+
     
     /**
      * Creates a new instance of LayeredTopicContext
@@ -86,50 +80,15 @@ public class LayeredTopicContext implements Context {
     
     
     
-    @Override
-    public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
-        this.wandora = wandora;
-        this.actionEvent = actionEvent;
-        this.contextOwner = contextOwner;
-        
-        Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
-        if( !isContextSource(proposedContextSource) ) {
-            proposedContextSource = wandora.getFocusOwner();
-            if( !isContextSource(proposedContextSource) ) {
-                proposedContextSource = wandora;
-            }
-        }
-        
-        // *** IF CONTEXT WAS WANDORA THEN TRY TO SOLVE WANDORA'S FOCUS OWNER ***
-        else {
-            if( proposedContextSource instanceof Wandora ) {
-                Object wandoraRegisteredContext = ((Wandora) proposedContextSource).getFocusOwner();
-                if( isContextSource(wandoraRegisteredContext) ) {
-                    proposedContextSource = wandoraRegisteredContext;
-                }
-            }
-        }
-        
-        setContextSource( proposedContextSource );
-    }
-    
-    
     
     @Override
-    public ActionEvent getContextEvent() {
-        return actionEvent;
-    }
-    
-    
-    
-    @Override
-    public Iterator<?> getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         return getContextObjects( getContextSource() );
     }
     
     
     
-    public Iterator<?> getContextObjects(Object contextSource) {
+    public Iterator<Topic> getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
         List<Topic> contextTopics = new ArrayList<>();
@@ -223,12 +182,12 @@ public class LayeredTopicContext implements Context {
         
         // ***** LayerTree *****
         else if(contextSource instanceof LayerTree) {
-            TopicMap atm = wandora.getTopicMap();
+            TopicMap atm = getWandora().getTopicMap();
             LayerTree layerTree=(LayerTree)contextSource;
             Layer l=layerTree.getLastClickedLayer();
             TopicMap tm = null;
             if(l==null) {
-                tm = wandora.getTopicMap();
+                tm = getWandora().getTopicMap();
             }
             else {
                 tm = l.getTopicMap();
@@ -255,7 +214,7 @@ public class LayeredTopicContext implements Context {
         else if(contextSource instanceof Layer){
             TopicMap topicmap = ((Layer)contextSource).getTopicMap();
             try {
-                TopicMap tm = wandora.getTopicMap();
+                TopicMap tm = getWandora().getTopicMap();
                 Iterator<Topic> topics = topicmap.getTopics();
                 Topic t = null;
                 while(topics.hasNext()) {
@@ -277,7 +236,7 @@ public class LayeredTopicContext implements Context {
         // ***** SITable *****
         else if(contextSource instanceof SITable) {
             Locator[] locators = ((SITable) contextSource).getSelectedLocators();
-            TopicMap topicmap = wandora.getTopicMap();           
+            TopicMap topicmap = getWandora().getTopicMap();           
             Topic t = null;
             for(int i=0; i<locators.length; i++) {
                 try {
@@ -296,7 +255,7 @@ public class LayeredTopicContext implements Context {
         else if(contextSource instanceof TopicMap) {
             TopicMap topicmap = (TopicMap) contextSource;
             try {
-                TopicMap tm = wandora.getTopicMap();
+                TopicMap tm = getWandora().getTopicMap();
                 Iterator<Topic> topics = topicmap.getTopics();
                 Topic t = null;
                 while(topics.hasNext()) {
@@ -326,60 +285,6 @@ public class LayeredTopicContext implements Context {
             contextTopics.add(editor.getOccurrenceTopic());
         }
         return contextTopics.iterator();
-    }
-    
-    
-
-    @Override
-    public void setContextSource(Object proposedContextSource) {
-        if(isContextSource(proposedContextSource)) {
-            contextSource = proposedContextSource;
-        }
-        else {
-            contextSource = null;
-        }
-    }
-    
-    
-    public boolean isContextSource(Object contextSource) {
-        if(contextSource != null && (
-                contextSource instanceof Wandora ||
-                contextSource instanceof TopicLinkBasename ||
-                contextSource instanceof Topic ||
-                contextSource instanceof Topic[] ||
-                contextSource instanceof GraphTopicPanel ||
-                contextSource instanceof WebViewPanel ||
-                contextSource instanceof TopicTable ||
-                contextSource instanceof TopicGrid ||
-                contextSource instanceof MixedTopicTable ||
-                contextSource instanceof OccurrenceTable ||
-                contextSource instanceof OccurrenceTextEditor ||
-                contextSource instanceof TopicTreePanel ||
-                contextSource instanceof TopicTree ||
-                contextSource instanceof SITable ||
-                contextSource instanceof LayerTree ||
-                contextSource instanceof Layer ||
-                contextSource instanceof JTableHeader && ((JTableHeader) contextSource).getTable() instanceof TopicTable)) {
-                    return true;
-        }
-        return false;
-    }
-    
-    
-    
-    @Override
-    public Object getContextSource() {
-        return contextSource;
-    }
-    
-    
-    
-    // -------------------------------------------------------------------------
-    
-    
-    public void log(Exception e) {
-        if(contextOwner != null) contextOwner.log(e);
-        else e.printStackTrace();
     }
 
     

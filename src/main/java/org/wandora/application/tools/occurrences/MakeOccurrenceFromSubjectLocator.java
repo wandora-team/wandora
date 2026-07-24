@@ -51,7 +51,7 @@ public class MakeOccurrenceFromSubjectLocator extends AbstractWandoraTool {
      */
     public MakeOccurrenceFromSubjectLocator() {
     }
-    public MakeOccurrenceFromSubjectLocator(Context preferredContext) {
+    public MakeOccurrenceFromSubjectLocator(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -69,7 +69,7 @@ public class MakeOccurrenceFromSubjectLocator extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying subject locator to topic occurrence");

@@ -61,7 +61,7 @@ public class OccurrenceRegexReplacerOne extends AbstractWandoraTool {
     public OccurrenceRegexReplacerOne() {
         setContext(new TopicContext());
     }
-    public OccurrenceRegexReplacerOne(Context preferredContext) {
+    public OccurrenceRegexReplacerOne(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -79,7 +79,7 @@ public class OccurrenceRegexReplacerOne extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {

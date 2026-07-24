@@ -60,18 +60,18 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool {
     public ChangeOccurrenceType() {
         this.occurrenceType=null;
     }
-    public ChangeOccurrenceType(Context proposedContext) {
+    public ChangeOccurrenceType(Context<?> proposedContext) {
         this.setContext(proposedContext);
         this.occurrenceType=null;
     }
-    public ChangeOccurrenceType(Context proposedContext, Topic occurrenceType) {
+    public ChangeOccurrenceType(Context<?> proposedContext, Topic occurrenceType) {
         this.setContext(proposedContext);
         this.occurrenceType = occurrenceType;
     }
     public ChangeOccurrenceType(Topic occurrenceType) {
         this.occurrenceType = occurrenceType;
     }
-    public ChangeOccurrenceType(Context proposedContext, Topic occurrenceType, Topic masterTopic) {
+    public ChangeOccurrenceType(Context<?> proposedContext, Topic occurrenceType, Topic masterTopic) {
         this.setContext(proposedContext);
         this.occurrenceType = occurrenceType;
         this.masterTopic = masterTopic;
@@ -94,7 +94,7 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object contextSource = context.getContextSource();
         
         if(contextSource instanceof OccurrenceTable) {

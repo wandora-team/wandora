@@ -62,7 +62,7 @@ public class MergePlayers extends AbstractWandoraTool {
     public MergePlayers() {
         setContext(new AssociationContext());
     }
-    public MergePlayers(Context preferredContext) {
+    public MergePlayers(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -82,9 +82,9 @@ public class MergePlayers extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         requiresRefresh = false;
-        Iterator associations = context.getContextObjects();
+        Iterator<?> associations = context.getContextObjects();
         Association association = null;
         int count = 0;
 

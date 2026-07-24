@@ -27,6 +27,7 @@
  */
 
 package org.wandora.utils;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,15 +60,15 @@ public class KeyedHashMap<K,V> implements Map<K,V> {
     
     protected Delegate<? extends Object,K> keyMaker;
     
-    /** Creates a new instance of TopicMapMap */
+    /** Creates a new instance of KeyedHashMap */
     public KeyedHashMap(Delegate<? extends Object,K> keyMaker) {
         this.keyMaker=keyMaker;
         map=new HashMap<Wrapper<K>,V>();
     }
     
     
-    public Wrapper getWrapper(K k){
-        return new Wrapper(k,keyMaker.invoke(k));
+    public Wrapper<K> getWrapper(K k){
+        return new Wrapper<>(k,keyMaker.invoke(k));
     }
     
     public void clear(){

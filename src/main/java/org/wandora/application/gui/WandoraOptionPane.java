@@ -514,7 +514,7 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         optionMessagePanel = new javax.swing.JPanel();
         optionMessageLabel = new org.wandora.application.gui.simple.SimpleLabel();
         optionOptionsPanel = new javax.swing.JPanel();
-        optionsComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        optionsComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         optionButtonPanel = new javax.swing.JPanel();
         optionEmptyPanel = new javax.swing.JPanel();
         optionsOkButton = new org.wandora.application.gui.simple.SimpleButton();

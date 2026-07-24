@@ -53,7 +53,7 @@ public class Clone extends AbstractGitTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(cloneUI == null) {
             cloneUI = new CloneUI();
         }

@@ -55,7 +55,7 @@ public class ExcelExtractorUI extends javax.swing.JPanel {
 	
 	private JDialog myDialog = null;
     private boolean accepted = false;
-    private List<JComboBox> comboboxes = null;
+    private List<JComboBox<?>> comboboxes = null;
             
     
     /**
@@ -82,7 +82,7 @@ public class ExcelExtractorUI extends javax.swing.JPanel {
             gridBagConstraints.weightx = 0.0;
             gridBagConstraints.insets = new Insets(6,6,6,6);
             sheetSelectors.add(label, gridBagConstraints);
-            JComboBox combobox = new SimpleComboBox(extractors);
+            JComboBox<?> combobox = new SimpleComboBox<>(extractors);
             combobox.setEditable(false);
             gridBagConstraints.gridx = 1;
             gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -106,7 +106,7 @@ public class ExcelExtractorUI extends javax.swing.JPanel {
     
     public String[] getExtractors() {
         List<String> extractors = new ArrayList<>();
-        for(JComboBox combobox : comboboxes) {
+        for(JComboBox<?> combobox : comboboxes) {
             if(combobox != null) {
                 Object extractor = combobox.getSelectedItem();
                 extractors.add(extractor.toString());

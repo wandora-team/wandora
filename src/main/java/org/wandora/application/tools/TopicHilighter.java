@@ -62,7 +62,7 @@ public class TopicHilighter extends AbstractWandoraTool {
     }
     
     
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             TopicTable table = (TopicTable) getContext().getContextSource();
             switch(hilightOrders) {

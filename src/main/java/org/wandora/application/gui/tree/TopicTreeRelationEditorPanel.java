@@ -60,8 +60,6 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
 	private TopicTreeRelationsEditor parent;
     private static List<IconWrapper> icons;
     private Map<String,Integer> iconIndex;
-    private Wandora wandora;
-
 
 
 
@@ -91,10 +89,9 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
         }
     }
     
-    /** Creates new form TreeAssociationTypePanel */
+    
+    /** Creates new form TopicTreeRelationEditorPanel */
     public TopicTreeRelationEditorPanel(String name,String subRole,String assocType,String superRole,String icon,TopicTreeRelationsEditor parent,Wandora wandora) throws TopicMapException {
-        this.wandora=wandora;
-
         subButton = new GetTopicButton(wandora);
         assocTypeButton = new GetTopicButton(wandora);
         superButton = new GetTopicButton(wandora);        
@@ -145,7 +142,8 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
         superRoleTextField = new org.wandora.application.gui.simple.SimpleField();
         associationTypeTextField = new org.wandora.application.gui.simple.SimpleField();
         subRoleTextField = new org.wandora.application.gui.simple.SimpleField();
-        iconComboBox = new org.wandora.application.gui.simple.SimpleComboBox();iconComboBox.setEditable(false);
+        iconComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
+        iconComboBox.setEditable(false);
         deleteButton = new org.wandora.application.gui.simple.SimpleButton();
         nameTextField = new SimpleField();
         subButton = subButton; // These buttons initialized in constructor because of possible TopicMapException;
@@ -243,7 +241,7 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
     private javax.swing.JButton assocTypeButton;
     private javax.swing.JTextField associationTypeTextField;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JComboBox iconComboBox;
+    private javax.swing.JComboBox<IconWrapper> iconComboBox;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JButton subButton;
     private javax.swing.JTextField subRoleTextField;

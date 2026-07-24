@@ -73,7 +73,7 @@ public class DeleteSymmetricAssociation extends AbstractWandoraTool {
     public DeleteSymmetricAssociation() {
         setContext(new AssociationContext());
     }
-    public DeleteSymmetricAssociation(Context preferredContext) {
+    public DeleteSymmetricAssociation(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -94,9 +94,9 @@ public class DeleteSymmetricAssociation extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         requiresRefresh = false;
-        Iterator associations = context.getContextObjects();
+        Iterator<?> associations = context.getContextObjects();
         Association association = null;
         int count = 0;
         Set<Topic> symmetricRoles = new HashSet<Topic>();

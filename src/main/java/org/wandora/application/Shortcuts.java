@@ -204,7 +204,7 @@ public class Shortcuts implements ActionListener {
                 Collection<Locator> tsis=null;
                 try {
                     tsis=t.getSubjectIdentifiers();
-                    if(tsis!=null && tsis.size() > 1) {
+                    if(tsis != null && tsis.size() > 1) {
                         Object[] tsisArray = tsis.toArray();
                         Object answer = WandoraOptionPane.showOptionDialog(wandora, "Topic contains multiple subject identifiers. Select subject identifier for the shortcut.", "Select subject identifier", WandoraOptionPane.QUESTION_MESSAGE, tsisArray, tsisArray[0]);
                         if(answer == null) return;
@@ -213,7 +213,7 @@ public class Shortcuts implements ActionListener {
                             addShortcut(si);
                         }
                     }
-                    else {
+                    else if(tsis != null) {
                         Locator si = (Locator) (tsis.iterator().next());
                         addShortcut(si.toExternalForm());
                     }
@@ -431,7 +431,7 @@ public class Shortcuts implements ActionListener {
             setJMenuBar(menuBar);
             
             this.getContentPane().setLayout(new java.awt.BorderLayout());
-            list=new SimpleList(shortcuts.toArray());
+            list=new SimpleList<>(shortcuts.toArray());
             list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
             list.setFont(UIConstants.plainFont);
             list.setComponentPopupMenu(getPopupMenu(this));

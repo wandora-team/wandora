@@ -139,7 +139,7 @@ public class GephiExport extends AbstractExportTool {
     static final int BUFFER = 2048;
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
        String topicMapName = null;
        String exportInfo = null;
 

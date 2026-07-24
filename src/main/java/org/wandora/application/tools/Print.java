@@ -50,7 +50,7 @@ public class Print extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicPanel topicPanel = wandora.getTopicPanel();
         Component printable = null;
         if(topicPanel != null) {

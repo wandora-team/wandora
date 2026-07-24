@@ -55,7 +55,7 @@ public class OpenTopic extends AbstractWandoraTool {
     /** Creates a new instance of OpenTopic */
     public OpenTopic() {
     }
-    public OpenTopic(Context preferredContext) {
+    public OpenTopic(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     public OpenTopic(int preferredOptions) {
@@ -65,7 +65,7 @@ public class OpenTopic extends AbstractWandoraTool {
             
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         Iterator<?> contextTopics = context.getContextObjects();
         if(options == SOLVE_USING_CONTEXT && contextTopics != null && contextTopics.hasNext()) {
             Topic t = (Topic) (Topic) contextTopics.next();

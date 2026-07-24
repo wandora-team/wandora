@@ -89,7 +89,7 @@ public class InvertSelection extends DoSelection {
             VModel model = graph.getModel();
             if(model != null) {
                 VNode vnode = null;
-                for(Iterator vnodes = model.getNodes().iterator(); vnodes.hasNext(); ) {
+                for(Iterator<VNode> vnodes = model.getNodes().iterator(); vnodes.hasNext(); ) {
                     vnode = (VNode) vnodes.next();
                     if(vnode != null) {
                         if( vnode.isSelected() ) {

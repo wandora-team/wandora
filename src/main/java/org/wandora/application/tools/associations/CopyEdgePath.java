@@ -84,7 +84,7 @@ public class CopyEdgePath extends AbstractWandoraTool {
     }
     
     
-    public CopyEdgePath(Context preferredContext) {
+    public CopyEdgePath(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -106,7 +106,7 @@ public class CopyEdgePath extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             Map<Association,List<Topic>> associationsWithRoles = null;
             Topic role = null;

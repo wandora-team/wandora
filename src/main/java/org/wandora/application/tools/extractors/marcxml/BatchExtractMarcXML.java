@@ -71,7 +71,7 @@ public class BatchExtractMarcXML extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setMultiSelectionEnabled(true);

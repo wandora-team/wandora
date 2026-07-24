@@ -145,7 +145,7 @@ public class AnnieExtractor extends AbstractGate {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(configuration == null && wandora != null) {
             configuration = new AnnieConfiguration(wandora, this);
         }

@@ -59,7 +59,7 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
 
 
     private Wandora wandora = null;
-    private Context context = null;
+    private Context<?> context = null;
     private boolean accepted = false;
 
 
@@ -82,7 +82,7 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
         this.wandora = wandora;
     }
 
-    public void setContext(Context context) {
+    public void setContext(Context<?> context) {
         this.context = context;
     }
 
@@ -237,10 +237,10 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
 
 
     public String getContextAsString() {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -278,7 +278,7 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
         StringBuffer sb = new StringBuffer("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -309,7 +309,7 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
     public String getContextAsSI() {
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {

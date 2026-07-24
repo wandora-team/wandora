@@ -37,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -105,7 +106,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(staticState == null)
             staticState = new FlickrState();
         
@@ -388,12 +389,12 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
     }
 
     
-    protected abstract boolean extract(Wandora admin, Context context) throws ExtractionFailure;
+    protected abstract boolean extract(Wandora admin, Context<?> context) throws ExtractionFailure;
     
     
-    public final Collection<Topic> getWithType( Context context, Topic type) {
-        Iterator objs = context.getContextObjects();
-        ArrayList<Topic> topicList = new ArrayList<>();
+    public final Collection<Topic> getWithType( Context<?> context, Topic type) {
+        Iterator<?> objs = context.getContextObjects();
+        List<Topic> topicList = new ArrayList<>();
         if(type == null) return topicList;
             
         try {

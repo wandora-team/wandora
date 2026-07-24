@@ -50,13 +50,13 @@ public class ContextToolWrapper implements WandoraTool {
 	private static final long serialVersionUID = 1L;
 	
 	private WandoraTool wrapped;
-    private Context context;
+    private Context<?> context;
     
     /** Creates a new instance of ContextToolWrapper */
     public ContextToolWrapper(WandoraTool wrapped) {
         this(wrapped,new LayeredTopicContext());
     }
-    public ContextToolWrapper(WandoraTool wrapped,Context context) {
+    public ContextToolWrapper(WandoraTool wrapped,Context<?> context) {
         this.wrapped=wrapped;
         this.context=context;
     }
@@ -67,11 +67,11 @@ public class ContextToolWrapper implements WandoraTool {
     }
 
     @Override
-    public Context getContext(){
+    public Context<?> getContext(){
         return context;
     }
     @Override
-    public void setContext(Context context){
+    public void setContext(Context<?> context){
         this.context=context;
     }
     
@@ -169,7 +169,7 @@ public class ContextToolWrapper implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         wrapped.execute(wandora,context);
     }
     

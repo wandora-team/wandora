@@ -150,7 +150,10 @@ public class SearchTable extends JTable {
     private class SearchTableModel extends AbstractTableModel {
         
         
-        @Override
+        private static final long serialVersionUID = 1L;
+
+
+		@Override
         public int getColumnCount() {
             return 2;
         }

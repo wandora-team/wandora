@@ -136,7 +136,7 @@ public class GraphMLExport extends AbstractExportTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -239,7 +239,7 @@ public class GraphMLExport extends AbstractExportTool {
                 Iterator<Topic> typeTopicIter=types.iterator();
                 while(typeTopicIter.hasNext()){
                     Topic type=(Topic)typeTopicIter.next();
-                    Hashtable<Topic,String> ht=(Hashtable)t.getData(type);
+                    Hashtable<Topic,String> ht=t.getData(type);
                     Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()){
                         Map.Entry<Topic,String> e=iter3.next();

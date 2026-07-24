@@ -69,7 +69,7 @@ public class SplitTopics extends AbstractWandoraTool {
     public SplitTopics() {
     }
     
-    public SplitTopics(Context preferredContext) {
+    public SplitTopics(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -93,7 +93,7 @@ public class SplitTopics extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         duplicateAssociations = true;
         copyInstances = true;
         askName=false;

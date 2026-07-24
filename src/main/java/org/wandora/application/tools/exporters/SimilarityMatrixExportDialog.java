@@ -169,8 +169,8 @@ public class SimilarityMatrixExportDialog extends javax.swing.JPanel {
 
         optionsPanel = new javax.swing.JPanel();
         infoLabel = new SimpleLabel();
-        similarityTypeComboBox = new SimpleComboBox();
-        outputFormatComboBox = new SimpleComboBox();
+        similarityTypeComboBox = new SimpleComboBox<>();
+        outputFormatComboBox = new SimpleComboBox<>();
         additionsPanel = new javax.swing.JPanel();
         noDecimalsLabel = new SimpleLabel();
         noDecimalsTextField = new SimpleField();
@@ -337,8 +337,8 @@ private void cancelButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIR
     private javax.swing.JLabel noDecimalsLabel;
     private javax.swing.JTextField noDecimalsTextField;
     private javax.swing.JPanel optionsPanel;
-    private javax.swing.JComboBox outputFormatComboBox;
+    private javax.swing.JComboBox<String> outputFormatComboBox;
     private javax.swing.JCheckBox outputZerosCheckBox;
-    private javax.swing.JComboBox similarityTypeComboBox;
+    private javax.swing.JComboBox<String> similarityTypeComboBox;
     // End of variables declaration//GEN-END:variables
 }

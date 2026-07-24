@@ -30,6 +30,7 @@ package org.wandora.application.contexts;
 import java.util.Iterator;
 
 import org.wandora.application.contexts.iterators.PlayerIterator;
+import org.wandora.topicmap.Topic;
 
 
 /**
@@ -40,9 +41,9 @@ public class PlayerContext extends LayeredTopicContext {
 
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         PlayerIterator iterator = new PlayerIterator();
-        iterator.initialize(super.getContextObjects(), wandora);
+        iterator.initialize(super.getContextObjects(), getWandora());
         return iterator;
     }
 

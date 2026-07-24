@@ -61,7 +61,7 @@ public class ToggleAntialiasTool extends AbstractGraphTool {
                "graph is draw smooth. Drawing smooth graphics requires more computing power.";
     }
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         //System.out.println("GRAPHPANEL: "+graphPanel);
         if(graphPanel != null) {

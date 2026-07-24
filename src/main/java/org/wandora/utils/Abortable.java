@@ -86,7 +86,7 @@ public class Abortable implements Runnable {
         
         impl = fac.create(this);
         this.dialogParent = dialogParent;
-        this.status = status.InProgress;
+        this.status = Abortable.Status.InProgress;
     }
     
     public void progress(final double ratio, final Status status, final String message) {

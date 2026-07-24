@@ -44,7 +44,7 @@ public abstract class ExecuteJavascript extends AbstractWebViewTool {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         try {
             Object r = executeJavascript(context, getJavascript());
         }

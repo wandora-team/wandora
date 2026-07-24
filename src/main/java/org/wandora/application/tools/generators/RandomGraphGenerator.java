@@ -29,6 +29,7 @@ package org.wandora.application.tools.generators;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -74,7 +75,7 @@ public class RandomGraphGenerator extends AbstractGenerator {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -204,7 +205,7 @@ public class RandomGraphGenerator extends AbstractGenerator {
         // Creating exact number of random associations!
         if(useAssociationNumber) {
             setProgressMax(an);
-            HashSet createdAssociations = new HashSet(an);
+            Set<String> createdAssociations = new HashSet<>(an);
             for(int j=0; j<an && !forceStop(); j++) {
                 int n1 = (int) Math.floor( Math.random() * n );
                 int n2 = (int) Math.floor( Math.random() * n );

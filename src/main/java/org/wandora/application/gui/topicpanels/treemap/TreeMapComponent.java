@@ -59,12 +59,13 @@ import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import org.wandora.application.contexts.PreContext;
+import org.wandora.application.contexts.PresetContext;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.TreeMapTopicPanel;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
@@ -597,7 +598,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                         int index = j*2;
                         struct[index] = t2.name;
                         try {
-                            struct[index+1] = new OpenTopic(new PreContext( t2.t.getOneSubjectIdentifier() ));
+                            struct[index+1] = new OpenTopic(new PresetContext<Locator>( t2.t.getOneSubjectIdentifier() ));
                         } 
                         catch(Exception e){};
                     }

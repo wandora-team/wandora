@@ -58,7 +58,7 @@ public class ToggleProjectionSettings extends AbstractGraphTool {
     
     
     @Override
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             try {

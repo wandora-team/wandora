@@ -89,7 +89,7 @@ public class LoadWandoraProject extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(forceFile == null) {
             SimpleFileChooser chooser=UIConstants.getWandoraProjectFileChooser();
             chooser.setDialogTitle("Open Wandora project");

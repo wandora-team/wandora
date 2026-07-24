@@ -51,10 +51,8 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private Wandora wandora = null;
 	private boolean accepted = false;
 	private JDialog dialog = null;
-	private Context context = null;
 	private static final String GUARDIAN_CONTENT_API_BASE = "http://content.guardianapis.com/search?format=json";
 	private static final String GUARDIAN_TAG_API_BASE = "http://content.guardianapis.com/tags?format=json";
 
@@ -73,8 +71,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 		accepted = b;
 	}
 
-	public void open(Wandora w, Context c) {
-		context = c;
+	public void open(Wandora w, Context<?> c) {
 		accepted = false;
 		dialog = new JDialog(w, true);
 		dialog.setSize(550, 500);
@@ -107,7 +104,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 				extractUrl += "&show-fields=all";
 			} else {
 				int[] fieldIndexes = fieldsList.getSelectedIndices();
-				ListModel listModel = fieldsList.getModel();
+				ListModel<String> listModel = fieldsList.getModel();
 				StringBuilder fieldValues = new StringBuilder("");
 				for (int i = 0; i < fieldIndexes.length; i++) {
 					if (i > 0) {
@@ -125,7 +122,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 			} 
 			else {
 				int[] tagIndexes = tagsList.getSelectedIndices();
-				ListModel tagListModel = tagsList.getModel();
+				ListModel<String> tagListModel = tagsList.getModel();
 				StringBuilder tagValues = new StringBuilder("");
 				for (int i = 0; i < tagIndexes.length; i++) {
 					if (i > 0) {
@@ -185,7 +182,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 			} 
 			else {
 				int[] typeIndexes = typesList.getSelectedIndices();
-				ListModel listModel = typesList.getModel();
+				ListModel<String> listModel = typesList.getModel();
 				StringBuilder typeValues = new StringBuilder("");
 				for (int i = 0; i < typeIndexes.length; i++) {
 					if (i > 0) {
@@ -275,14 +272,14 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 		endDateLabel = new SimpleLabel();
 		endDateTextField = new SimpleField();
 		orderByLabel = new SimpleLabel();
-		rankComboBox = new javax.swing.JComboBox();
+		rankComboBox = new javax.swing.JComboBox<>();
 		fieldToReturnPanel = new javax.swing.JPanel();
 		FieldsToReturnLabel = new SimpleLabel();
 		fieldsScrollPanel = new javax.swing.JScrollPane();
-		fieldsList = new SimpleList();
+		fieldsList = new SimpleList<>();
 		tagsToReturnLabel = new SimpleLabel();
 		tagsScrollPanel = new javax.swing.JScrollPane();
-		tagsList = new SimpleList();
+		tagsList = new SimpleList<>();
 		allFieldsCheckBox = new javax.swing.JCheckBox();
 		allTagsCheckBox = new javax.swing.JCheckBox();
 		tagSearchPanel = new javax.swing.JPanel();
@@ -290,9 +287,9 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 		tagSearchLabel = new SimpleLabel();
 		tagSearchQueryTextField = new SimpleField();
 		optionaTagSearchFieldsPanel = new javax.swing.JPanel();
-		TypesList = new SimpleLabel();
+		typesListLabel = new SimpleLabel();
 		typesScrollPanel = new javax.swing.JScrollPane();
-		typesList = new SimpleList();
+		typesList = new SimpleList<>();
 		allTypesCheckBox = new javax.swing.JCheckBox();
 		buttonPanel = new javax.swing.JPanel();
 		forgetButton = new SimpleButton();
@@ -550,14 +547,14 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 		optionaTagSearchFieldsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Optional params"));
 		optionaTagSearchFieldsPanel.setLayout(new java.awt.GridBagLayout());
 
-		TypesList.setText("Filter types");
+		typesListLabel.setText("Filter types");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-		optionaTagSearchFieldsPanel.add(TypesList, gridBagConstraints);
+		optionaTagSearchFieldsPanel.add(typesListLabel, gridBagConstraints);
 
 		typesList.setModel(new javax.swing.AbstractListModel<String>() {
 			String[] strings = { "keyword", "contributor", "tone", "series" };
@@ -704,7 +701,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JLabel FieldsToReturnLabel;
-	private javax.swing.JLabel TypesList;
+	private javax.swing.JLabel typesListLabel;
 	private javax.swing.JCheckBox allFieldsCheckBox;
 	private javax.swing.JCheckBox allTagsCheckBox;
 	private javax.swing.JCheckBox allTypesCheckBox;
@@ -718,7 +715,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 	private javax.swing.JLabel endDateLabel;
 	private javax.swing.JTextField endDateTextField;
 	private javax.swing.JPanel fieldToReturnPanel;
-	private javax.swing.JList fieldsList;
+	private javax.swing.JList<String> fieldsList;
 	private javax.swing.JScrollPane fieldsScrollPanel;
 	private javax.swing.JButton forgetButton;
 	private javax.swing.JTabbedPane guardianTabbedPane;
@@ -726,7 +723,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 	private javax.swing.JPanel optionaTagSearchFieldsPanel;
 	private javax.swing.JPanel optionalSearchFieldsPanel;
 	private javax.swing.JLabel orderByLabel;
-	private javax.swing.JComboBox rankComboBox;
+	private javax.swing.JComboBox<String> rankComboBox;
 	private javax.swing.JLabel searchLabel;
 	private javax.swing.JTextField searchQueryTextField;
 	private javax.swing.JLabel sectionLabel;
@@ -737,10 +734,10 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 	private javax.swing.JLabel tagSearchLabel;
 	private javax.swing.JPanel tagSearchPanel;
 	private javax.swing.JTextField tagSearchQueryTextField;
-	private javax.swing.JList tagsList;
+	private javax.swing.JList<String> tagsList;
 	private javax.swing.JScrollPane tagsScrollPanel;
 	private javax.swing.JLabel tagsToReturnLabel;
-	private javax.swing.JList typesList;
+	private javax.swing.JList<String> typesList;
 	private javax.swing.JScrollPane typesScrollPanel;
 	// End of variables declaration//GEN-END:variables
 }

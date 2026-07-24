@@ -56,7 +56,7 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -131,13 +131,15 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
     /** Creates a new instance of SimpleTextPane */
     public SimpleTextPane(JPanel parent) {
         wandora = Wandora.getWandora();
-        if(parent != null && parent instanceof MouseListener) this.addMouseListener((MouseListener) parent);
+        if(parent != null && parent instanceof MouseListener) {
+        	this.addMouseListener((MouseListener) parent);
+        }
         //this.addFocusListener(this);
         this.addMouseListener(this);
         this.setFocusable(true);
         this.setFocusTraversalKeysEnabled(true);
-        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)})));
-        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)})));
+        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)));
+        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)));
     
         getDocument().addUndoableEditListener(this);
         document = getDocument();

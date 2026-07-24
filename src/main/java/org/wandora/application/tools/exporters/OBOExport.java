@@ -132,7 +132,7 @@ public class OBOExport extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         String namespace = WandoraOptionPane.showInputDialog(wandora, "Give OBO namespace to export", "", "OBO namespace");
         if(namespace == null || namespace.trim().length() == 0) return;
         

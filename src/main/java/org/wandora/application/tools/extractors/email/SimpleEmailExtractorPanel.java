@@ -130,7 +130,7 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
         descriptionLabel = new SimpleLabel();
         optionsPanel = new javax.swing.JPanel();
         typeLabel = new SimpleLabel();
-        typeComboBox = new SimpleComboBox();
+        typeComboBox = new SimpleComboBox<>();
         resourceLabel = new SimpleLabel();
         resourceTextField = new SimpleField();
         fileButton = new SimpleButton();
@@ -300,7 +300,7 @@ public class SimpleEmailExtractorPanel extends javax.swing.JPanel {
     private javax.swing.JPanel optionsPanel;
     private javax.swing.JLabel resourceLabel;
     private javax.swing.JTextField resourceTextField;
-    private javax.swing.JComboBox typeComboBox;
+    private javax.swing.JComboBox<String> typeComboBox;
     private javax.swing.JLabel typeLabel;
     // End of variables declaration//GEN-END:variables
 

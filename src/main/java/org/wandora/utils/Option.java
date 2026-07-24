@@ -326,7 +326,9 @@ public class Option<T> implements Iterable<T> {
      * is used on an empty Option.
      */
     public static class EmptyOptionException extends Exception {
-        public EmptyOptionException() { super(); }
+        private static final long serialVersionUID = 1L;
+
+		public EmptyOptionException() { super(); }
     }
     
     /**

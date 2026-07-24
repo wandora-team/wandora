@@ -57,13 +57,13 @@ public class CopyAsImage extends AbstractWandoraTool {
 	/** Creates a new instance of CopyAsImage */
     public CopyAsImage() {
     }
-    public CopyAsImage(Context proposedContext) {
+    public CopyAsImage(Context<?> proposedContext) {
         setContext(proposedContext);
     }
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Object o = context.getContextSource();
         if(o instanceof Component) {
             try {

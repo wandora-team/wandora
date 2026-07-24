@@ -25,6 +25,7 @@
 package org.wandora.application.tools.extractors.hsopen;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class AsuntojenHintaTiedotExtractor {
                 u = u.replace("__z__", ""+z);
 
                 try {
-                    URL url = new URL(u);
+                    URL url = new URI(u).toURL();
                     String c = IObox.doUrl(url);
                     IObox.saveFile(saveFolder+"/"+i+"_"+z+".html", c);
                     

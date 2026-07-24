@@ -62,7 +62,7 @@ public class Stands4Selector extends JDialog {
     private static final String definitionsAPIURL = "http://www.abbreviations.com/services/v1/defs.aspx?tokenid=__2__&word=__1__";
     
     private Wandora wandora = null;
-    private Context context = null;
+    private Context<?> context = null;
     private boolean accepted = false;
     
     
@@ -85,7 +85,7 @@ public class Stands4Selector extends JDialog {
         this.wandora = wandora;
     }
     
-    public void setContext(Context context) {
+    public void setContext(Context<?> context) {
         this.context = context;
     }
     

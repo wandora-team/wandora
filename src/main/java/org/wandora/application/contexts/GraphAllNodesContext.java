@@ -45,7 +45,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.VNode;
  *
  * @author akivela
  */
-public class GraphAllNodesContext implements Context {
+public class GraphAllNodesContext implements Context<VNode> {
     
     private Object contextSource;
     protected WandoraTool contextOwner = null;
@@ -84,13 +84,13 @@ public class GraphAllNodesContext implements Context {
     
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<VNode> getContextObjects() {
         return getContextObjects( getContextSource() );
     }
     
     
     
-    public Iterator getContextObjects(Object contextSource) {
+    public Iterator<VNode> getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
         List<VNode> contextNodes = new ArrayList<>();

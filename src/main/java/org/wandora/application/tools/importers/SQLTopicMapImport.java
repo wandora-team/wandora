@@ -37,7 +37,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.database.DatabaseTopicMap;
+import org.wandora.topicmap.database2.DatabaseTopicMap;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 
@@ -73,12 +73,9 @@ public class SQLTopicMapImport extends AbstractImportTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         TopicMap topicMap = solveContextTopicMap(admin, context);
-        if(topicMap instanceof DatabaseTopicMap) {
-            super.execute(admin, context);
-        }
-        else if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
+        if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
             super.execute(admin, context);
         }
         else {
@@ -95,36 +92,7 @@ public class SQLTopicMapImport extends AbstractImportTool {
         BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream) );
         
         TopicMap topicMap = solveContextTopicMap(wandora, getContext());
-        if(topicMap instanceof DatabaseTopicMap) {
-            setDefaultLogger();
-            int count = 0;
-            int errorCount = 0;
-            DatabaseTopicMap dbTopicMap = (DatabaseTopicMap) topicMap;
-            try {
-                Connection connection = dbTopicMap.getConnection();
-                String query = reader.readLine();
-                while(query != null && query.length() > 0 && !forceStop()) {
-                    try {
-                        dbTopicMap.executeUpdate(query, connection);
-                        query = reader.readLine();
-                        count++;
-                    }
-                    catch(Exception e) {
-                        log(e);
-                        errorCount++;
-                    }
-                }
-            }
-            catch(Exception e) {
-                log(e);
-            }
-            dbTopicMap.clearTopicMapIndexes();
-            wandora.getTopicMap().clearTopicIndex();
-            log("Injected " + count + " SQL lines into the database topic map.");
-            if(errorCount > 0) log("Encountered " + errorCount + " errors during inject.");
-            setState(WAIT);
-        }
-        else if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
+        if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
             setDefaultLogger();
             int count = 0;
             int errorCount = 0;
@@ -176,7 +144,7 @@ public class SQLTopicMapImport extends AbstractImportTool {
     
     
     @Override
-    public TopicMap solveContextTopicMap(Wandora wandora, Context context) {
+    public TopicMap solveContextTopicMap(Wandora wandora, Context<?> context) {
         LayerTree layerTree = wandora.layerTree;
         TopicMap topicMap = layerTree.getSelectedLayer().getTopicMap();
         if(topicMap instanceof UndoTopicMap) {

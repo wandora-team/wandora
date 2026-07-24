@@ -215,9 +215,10 @@ public class OBOImport extends AbstractImportTool {
      */
     public class OBOParser {
        
-
-        
         public boolean debug = true;
+        public boolean printExtraDebug = false;
+        
+        
         public int deprecationMsgLimit = 1000;
         private TopicMap tm;
         private OBOImport parent;
@@ -473,7 +474,7 @@ public class OBOImport extends AbstractImportTool {
                         modifiers = tagValue.getModifiers();
                         comment = tagValue.getComment();
                         
-                        if(false && debug) {
+                        if(printExtraDebug) {
                             System.out.println("---------------------------------");
                             System.out.println("header");
                             System.out.println("tag: "+ tag);
@@ -583,7 +584,7 @@ public class OBOImport extends AbstractImportTool {
                         modifiers = tagValue.getModifiers();
                         comment = tagValue.getComment();
                         
-                        if(false && debug) {
+                        if(printExtraDebug) {
                             System.out.println("---------------------------------");
                             System.out.println("id: "+ id);
                             System.out.println("tag: "+ tag);
@@ -828,7 +829,7 @@ public class OBOImport extends AbstractImportTool {
                         modifiers = tagValue.getModifiers();
                         comment = tagValue.getComment();
                         
-                        if(false && debug) {
+                        if(printExtraDebug) {
                             System.out.println("---------------------------------");
                             System.out.println("id: "+ id);
                             System.out.println("tag: "+ tag);
@@ -1186,7 +1187,7 @@ public class OBOImport extends AbstractImportTool {
                         modifiers = tagValue.getModifiers();
                         comment = tagValue.getComment();
                         
-                        if(false && debug) {
+                        if(printExtraDebug) {
                             System.out.println("---------------------------------");
                             System.out.println("id: "+ id);
                             System.out.println("tag: "+ tag);
@@ -1649,7 +1650,7 @@ public class OBOImport extends AbstractImportTool {
         
         
         private void setData(Topic t, Topic type, String lang, String text) throws TopicMapException {
-            if(t != null & type != null && lang != null && text != null) {
+            if(t != null && type != null && lang != null && text != null) {
                 String langsi=XTMPSI.getLang("en");
                 Topic langT=t.getTopicMap().getTopic(langsi);
                 if(langT == null) {

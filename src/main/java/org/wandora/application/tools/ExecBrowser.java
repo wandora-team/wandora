@@ -64,7 +64,7 @@ public class ExecBrowser extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(uri != null) {
             try {
                 Desktop desktop = Desktop.getDesktop();

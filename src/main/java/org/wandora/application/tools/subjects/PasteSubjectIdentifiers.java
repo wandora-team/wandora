@@ -28,7 +28,8 @@ package org.wandora.application.tools.subjects;
 
 
 
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -66,7 +67,7 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool {
     
     
     public PasteSubjectIdentifiers() {}
-    public PasteSubjectIdentifiers(Context context) {
+    public PasteSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
     
@@ -87,7 +88,7 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         
         try {
             Collection<Topic> targetTopics = getTargetTopics(context);
@@ -140,7 +141,7 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool {
     
 
 
-    protected Collection<Topic> getTargetTopics(Context context) {
+    protected Collection<Topic> getTargetTopics(Context<?> context) {
         List<Topic> topics = new ArrayList<>();
         if(context instanceof SIContext) {
             Iterator<?> sis = context.getContextObjects();
@@ -198,10 +199,10 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool {
                     }
                     else {
                         try {
-                            new URL(str);
+                            new URI(str).toURL();
                             isValid = true;
                         }
-                        catch(java.net.MalformedURLException mue) {
+                        catch(java.net.MalformedURLException | URISyntaxException e) {
                             
                         }
                     }

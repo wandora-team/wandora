@@ -91,7 +91,7 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
     }
 
     @Override
-    public Manifest buildIIIF(Wandora wandora, Context context,IIIFExport tool) throws TopicMapException {
+    public Manifest buildIIIF(Wandora wandora, Context<?> context,IIIFExport tool) throws TopicMapException {
         startBuild(wandora,context);
         
         Manifest manifest=prepareManifest(wandora, context, tool);
@@ -104,10 +104,10 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
         return manifest;
     }    
     
-    protected void startBuild(Wandora wandora, Context context) throws TopicMapException {
+    protected void startBuild(Wandora wandora, Context<?> context) throws TopicMapException {
     }
         
-    protected Manifest prepareManifest(Wandora wandora,Context context,IIIFExport tool) throws TopicMapException {
+    protected Manifest prepareManifest(Wandora wandora,Context<?> context,IIIFExport tool) throws TopicMapException {
         Manifest manifest=new Manifest();
         manifest.addLabel(new LanguageString("Wandora IIIF Export"));
         // ID is required, create something
@@ -115,15 +115,15 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
         return manifest;
     }
     
-    protected Sequence prepareSequence(Wandora wandora,Context context,Manifest manifest,IIIFExport tool) throws TopicMapException {
+    protected Sequence prepareSequence(Wandora wandora,Context<?> context,Manifest manifest,IIIFExport tool) throws TopicMapException {
         Sequence sequence=new Sequence();
         sequence.addLabel(new LanguageString("Default sequence"));
         manifest.addSequence(sequence);
         return sequence;
     }
     
-    protected void processTopics(Wandora wandora,Context context, Sequence sequence,IIIFExport tool) throws TopicMapException {
-        Iterator iter=context.getContextObjects();
+    protected void processTopics(Wandora wandora,Context<?> context, Sequence sequence,IIIFExport tool) throws TopicMapException {
+        Iterator<?> iter=context.getContextObjects();
         while(iter.hasNext()){
             Object o=iter.next();
             if(!(o instanceof Topic)) continue;

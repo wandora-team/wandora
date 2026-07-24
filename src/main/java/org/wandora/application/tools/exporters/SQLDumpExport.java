@@ -94,7 +94,7 @@ public class SQLDumpExport extends AbstractExportTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("Topic map SQL dump export");
         if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){

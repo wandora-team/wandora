@@ -82,7 +82,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool {
         this.uploadAll = upAll;
     }
     
-    public PasteBinOccurrenceUploader(Context proposedContext) {
+    public PasteBinOccurrenceUploader(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
 
@@ -100,7 +100,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         requiresRefresh = false;
         isConfigured = false;
         cancelled = false;
@@ -123,7 +123,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool {
                 }
             }
             else {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 if(!contextObjects.hasNext()) return;
                 
                 boolean wasUploaded = false;

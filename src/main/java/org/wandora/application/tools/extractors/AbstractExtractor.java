@@ -276,7 +276,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         setWandora(wandora);
         if(wandora != null) topicMap = wandora.getTopicMap();
         Object contextSource = context.getContextSource();

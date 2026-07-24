@@ -34,7 +34,7 @@ package org.wandora.application.tools.maiana;
 
 
 import java.awt.Cursor;
-import java.net.URL;
+import java.net.URI;
 
 import javax.swing.JDialog;
 import javax.swing.JTable;
@@ -213,7 +213,7 @@ public class MaianaImportPanel extends javax.swing.JPanel {
                         JSONArray datas = list.getJSONArray("data");
                         TopicMapsTableModel myModel = new TopicMapsTableModel(datas);
                         mapTable.setModel(myModel);
-                        mapTable.setRowSorter(new TableRowSorter(myModel));
+                        mapTable.setRowSorter(new TableRowSorter<>(myModel));
 
                         mapTable.setColumnSelectionAllowed(false);
                         mapTable.setRowSelectionAllowed(true);
@@ -264,7 +264,7 @@ public class MaianaImportPanel extends javax.swing.JPanel {
         infoLabel = new SimpleLabel();
         namePanel = new javax.swing.JPanel();
         apiEndPointLabel = new javax.swing.JLabel();
-        apiEndPointField = new javax.swing.JComboBox();
+        apiEndPointField = new javax.swing.JComboBox<>();
         apiKeyLabel = new javax.swing.JLabel();
         apiKeyTextField = new SimpleField();
         refreshListButton = new SimpleButton();
@@ -482,7 +482,7 @@ public class MaianaImportPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox apiEndPointField;
+    private javax.swing.JComboBox<String> apiEndPointField;
     private javax.swing.JLabel apiEndPointLabel;
     private javax.swing.JLabel apiKeyLabel;
     private javax.swing.JTextField apiKeyTextField;
@@ -637,7 +637,7 @@ public class MaianaImportPanel extends javax.swing.JPanel {
                 MaianaUtils.checkForLocalService(apiEndPoint);
 
                 requiresListRefresh = true;
-                String reply = IObox.doUrl(new URL(apiEndPoint), request, "application/json");
+                String reply = IObox.doUrl(new URI(apiEndPoint).toURL(), request, "application/json");
 
                 //System.out.println("reply:\n"+reply);
 

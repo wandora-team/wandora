@@ -64,7 +64,7 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool {
      */
     public MakeOccurrenceFromSubjectIdentifier() {
     }
-    public MakeOccurrenceFromSubjectIdentifier(Context preferredContext) {
+    public MakeOccurrenceFromSubjectIdentifier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -82,7 +82,7 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying subject identifier to topic occurrence");

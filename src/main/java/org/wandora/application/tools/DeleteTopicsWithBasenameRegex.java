@@ -53,13 +53,13 @@ public class DeleteTopicsWithBasenameRegex extends DeleteTopics {
     /** Creates a new instance of DeleteTopicsWithBasenameRegex */
     public DeleteTopicsWithBasenameRegex() {
     }
-    public DeleteTopicsWithBasenameRegex(Context preferredContext) {
+    public DeleteTopicsWithBasenameRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
         
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException  {
         editor = RegularExpressionEditor.getMatchExpressionEditor(admin);
         editor.approve = false;
         editor.setVisible(true);

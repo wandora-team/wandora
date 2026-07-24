@@ -90,7 +90,7 @@ public class UmbelGetConcept extends AbstractUmbelExtractor {
                                                 JSONArray predicates = subject.getJSONArray("predicate");
                                                 for(int j=0; j<predicates.length(); j++) {
                                                     JSONObject predicate = predicates.getJSONObject(j);
-                                                    Iterator keys = predicate.keys();
+                                                    Iterator<String> keys = predicate.keys();
                                                     while(keys.hasNext()) {
                                                         Object key = keys.next();
                                                         if(key != null) {

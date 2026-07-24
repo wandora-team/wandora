@@ -73,7 +73,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool {
     public FindAssociationsInOccurrence() {
     }
     
-    public FindAssociationsInOccurrence(Context preferredContext) {
+    public FindAssociationsInOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -94,7 +94,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {   
+    public void execute(Wandora wandora, Context<?> context) {   
         try {
             requiresRefresh = false;
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Find associations options","Find associations options",true,new String[][]{

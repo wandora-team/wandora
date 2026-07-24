@@ -66,7 +66,7 @@ public class DummyExtractor extends AbstractWandoraTool {
     }
 
 
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         /* NOTHING HERE */
     }
     

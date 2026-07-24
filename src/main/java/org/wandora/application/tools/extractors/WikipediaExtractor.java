@@ -76,7 +76,7 @@ public class WikipediaExtractor extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(selector == null) {
                 selector = new WikipediaExtractorSelector(wandora);

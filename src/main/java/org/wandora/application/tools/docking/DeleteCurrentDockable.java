@@ -51,7 +51,7 @@ public class DeleteCurrentDockable extends AbstractDockingTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         DockingFramePanel dockingPanel = this.solveDockingFramePanel(w, context);
         if(dockingPanel != null) {
             try {

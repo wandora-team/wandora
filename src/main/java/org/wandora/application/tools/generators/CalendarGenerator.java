@@ -69,7 +69,7 @@ public class CalendarGenerator extends AbstractGenerator {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -125,7 +125,7 @@ public class CalendarGenerator extends AbstractGenerator {
             return;
         }
 
-        if(yearNumbers == null) {
+        if(yearNumbers.length == 0) {
             singleLog("Invalid years given!");
             return;
         }

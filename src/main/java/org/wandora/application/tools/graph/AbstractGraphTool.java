@@ -64,7 +64,7 @@ public abstract class AbstractGraphTool extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context){
+    public void execute(Wandora wandora, Context<?> context){
         try {
             synchronized(solveGraphPanel(wandora,context)){
                 executeSynchronized(wandora,context);
@@ -76,9 +76,9 @@ public abstract class AbstractGraphTool extends AbstractWandoraTool {
         }
     }
     
-    public abstract void executeSynchronized(Wandora wandora, Context context);
+    public abstract void executeSynchronized(Wandora wandora, Context<?> context);
     
-    public TopicMapGraphPanel solveGraphPanel(Wandora wandora, Context context) {
+    public TopicMapGraphPanel solveGraphPanel(Wandora wandora, Context<?> context) {
         if(graphPanel != null) {
             return graphPanel;
         }
@@ -100,7 +100,7 @@ public abstract class AbstractGraphTool extends AbstractWandoraTool {
         return null;
     }
     
-    public VModel solveModel(Wandora wandora, Context context){
+    public VModel solveModel(Wandora wandora, Context<?> context){
         TopicMapGraphPanel panel=solveGraphPanel(wandora,context);
         if(panel==null) return null;
         else return panel.getModel();

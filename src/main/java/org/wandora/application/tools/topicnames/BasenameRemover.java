@@ -58,7 +58,7 @@ public class BasenameRemover extends AbstractWandoraTool {
 
 	public BasenameRemover() {
     }
-    public BasenameRemover(Context preferredContext) {
+    public BasenameRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -76,7 +76,7 @@ public class BasenameRemover extends AbstractWandoraTool {
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

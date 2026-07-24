@@ -66,7 +66,7 @@ public class ChangeOccurrenceTableRowHeight extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         if(localOptions != null) {
             localOptions.put(OccurrenceTable.ROW_HEIGHT_OPTIONS_KEY, ""+rowHeight);
         }

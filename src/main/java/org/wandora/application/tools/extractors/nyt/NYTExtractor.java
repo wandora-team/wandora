@@ -83,7 +83,7 @@ public class NYTExtractor extends AbstractExtractor {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new NYTExtractorUI();

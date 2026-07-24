@@ -56,7 +56,7 @@ public class DeleteUnaryAssociations extends DeleteAssociationsInTopic {
 
     public DeleteUnaryAssociations() {
     }
-    public DeleteUnaryAssociations(Context preferredContext) {
+    public DeleteUnaryAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

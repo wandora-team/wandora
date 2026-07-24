@@ -79,7 +79,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
     };
     
     private Wandora wandora;
-    private Context context;
+    private Context<?> context;
     
     private WandoraToolLogger logger;
     
@@ -92,7 +92,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
         this.conf = null;
     }
     
-    public MediaWikiAPIUploader(Context c){
+    public MediaWikiAPIUploader(Context<?> c){
         super();
         this.setContext(c);
         this.conf = null;
@@ -264,7 +264,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
      */
     
     @Override
-    public void execute(Wandora w, Context c) throws TopicMapException {
+    public void execute(Wandora w, Context<?> c) throws TopicMapException {
         
         this.wandora = w;
         this.context = c;
@@ -275,7 +275,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
         Topic contentScope;
         
         //Get the context Objects (Topics)
-        Iterator contextObjects = context.getContextObjects();
+        Iterator<?> contextObjects = context.getContextObjects();
         
         //Log and early return on context selection failure
         if(!contextObjects.hasNext()){

@@ -102,7 +102,7 @@ public class ReleaseEdges extends AbstractGraphTool  {
 
     
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model = solveModel(wandora,context);
         switch(filterType) {
             case FILTER_OCCURRENCE_EDGES: { filter.setFilterOccurrences(false); break; }

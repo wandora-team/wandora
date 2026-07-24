@@ -537,25 +537,25 @@ public abstract class AbstractUmbelExtractor extends AbstractExtractor {
         if(predicate == null) return null;
         try {
             if(equalsAny(predicate, UMBEL_SUBCLASS_URI)) {
-                return new T3( getSuperclassSubclassTypeTopic(tm), getSuperclassTypeTopic(tm), getSubclassTypeTopic(tm) );
+                return new T3<>( getSuperclassSubclassTypeTopic(tm), getSuperclassTypeTopic(tm), getSubclassTypeTopic(tm) );
             }
             else if(equalsAny(predicate, UMBEL_SUPERCLASS_URI)) {
-                return new T3( getSuperclassSubclassTypeTopic(tm), getSubclassTypeTopic(tm), getSuperclassTypeTopic(tm) );
+                return new T3<>( getSuperclassSubclassTypeTopic(tm), getSubclassTypeTopic(tm), getSuperclassTypeTopic(tm) );
             }
             else if(equalsAny(predicate, UMBEL_BROADER_URI)) {
-                return new T3( getBroaderNarrowerTypeTopic(tm), getBroaderTypeTopic(tm), getNarrowerTypeTopic(tm) );
+                return new T3<>( getBroaderNarrowerTypeTopic(tm), getBroaderTypeTopic(tm), getNarrowerTypeTopic(tm) );
             }
             else if(equalsAny(predicate, UMBEL_NARROWER_URI)) {
-                return new T3( getBroaderNarrowerTypeTopic(tm), getNarrowerTypeTopic(tm), getBroaderTypeTopic(tm) );
+                return new T3<>( getBroaderNarrowerTypeTopic(tm), getNarrowerTypeTopic(tm), getBroaderTypeTopic(tm) );
             }
             else if(equalsAny(predicate, UMBEL_TYPE_URI)) {
-                return new T3( getTypeTypeTopic(tm), getTypeTypeTopic(tm), getConceptTypeTopic(tm) );
+                return new T3<>( getTypeTypeTopic(tm), getTypeTypeTopic(tm), getConceptTypeTopic(tm) );
             }
             else if(equalsAny(predicate, UMBEL_DISJOINT_URI)) {
-                return new T3( getDisjointTypeTopic(tm), getDisjointTypeTopic(tm), getConceptTypeTopic(tm) );
+                return new T3<>( getDisjointTypeTopic(tm), getDisjointTypeTopic(tm), getConceptTypeTopic(tm) );
             }
             else {
-                return new T3( getTopic(predicate, tm), getTopic(predicate, tm), getConceptTypeTopic(tm) );
+                return new T3<>( getTopic(predicate, tm), getTopic(predicate, tm), getConceptTypeTopic(tm) );
             }
         }
         catch(Exception e) {

@@ -72,7 +72,7 @@ public class AssociationCounterTool extends AbstractWandoraTool {
     }
 
     
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         TopicMap tm = solveContextTopicMap(admin, context);
         String tmTitle = solveNameForTopicMap(admin, tm);
 

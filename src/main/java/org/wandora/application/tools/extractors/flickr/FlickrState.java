@@ -3,7 +3,8 @@ package org.wandora.application.tools.extractors.flickr;
 import java.awt.Frame;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -97,8 +98,8 @@ public class FlickrState {
         args.put("format", "json");
         args.put("nojsoncallback", "1");
         try {
-            return new JSONObject(IObox.doUrl(new URL(makeRESTURL(args))));
-        } catch (MalformedURLException e) {
+            return new JSONObject(IObox.doUrl(new URI(makeRESTURL(args)).toURL()));
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RequestFailure("", e);
         } catch (JSONException e) {
             throw new RequestFailure("", e);
@@ -135,8 +136,8 @@ public class FlickrState {
         args.put("api_sig", FlickrExtractor.createSignature(args));
         String url = makeRESTURL(args);
         try {
-            return new JSONObject(IObox.doUrl(new URL(url)));
-        } catch (MalformedURLException e) {
+            return new JSONObject(IObox.doUrl(new URI(url).toURL()));
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RequestFailure("Malformed url:\n" + url, e);
         } catch (JSONException e) {
             throw new RequestFailure("Invalid response JSON, url:\n" + url, e);
@@ -161,7 +162,7 @@ public class FlickrState {
         args.put("nojsoncallback", "1");
         args.put("api_sig", FlickrExtractor.createSignature(args));
         try {
-            String response = IObox.doUrl(new URL(makeRESTURL(args)));
+            String response = IObox.doUrl(new URI(makeRESTURL(args)).toURL());
             JSONObject obj = new JSONObject(response);
             if (!obj.getString("stat").equals("ok")) {
                 if (obj.getInt("code") == 98) {
@@ -175,7 +176,7 @@ public class FlickrState {
             return getAuthLevel(tokenPerms) >= getAuthLevel(neededPerms);
         } catch (JSONException e) {
             throw new RequestFailure("Received malformed json", e);
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RequestFailure("Attempted to construct malformed URL", e);
         } catch (IOException e) {
             throw new RequestFailure("IOException while requesting token check", e);
@@ -192,7 +193,7 @@ public class FlickrState {
         args.put("format", "json");
         args.put("api_sig", FlickrExtractor.createSignature(args));
         try {
-            JSONObject obj = new JSONObject(IObox.doUrl(new URL(makeRESTURL(args))));
+            JSONObject obj = new JSONObject(IObox.doUrl(new URI(makeRESTURL(args)).toURL()));
             if (!obj.getString("stat").equals("ok")) {
                 throw new RequestFailure("Error while trying to request authorization token.\nDid you follow the url and authorize Wandora?\n\n" + String.valueOf(obj.getInt("code")) + ": " + obj.getString("message"));
             }
@@ -201,7 +202,7 @@ public class FlickrState {
             LastUserName = FlickrUtils.searchString(obj, "auth.user.username");
             PermissionLevel = FlickrUtils.searchString(obj, "auth.perms._content");
             return FlickrUtils.searchString(obj, "auth.token._content");
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RequestFailure("Attempted to create malformed URL", e);
         } catch (JSONException e) {
             throw new RequestFailure("Received invalid json data", e);

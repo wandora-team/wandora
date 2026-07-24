@@ -64,7 +64,7 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool {
 
     public FixSubjectIdentifiers2() {
     }
-    public FixSubjectIdentifiers2(Context context) {
+    public FixSubjectIdentifiers2(Context<?> context) {
         setContext(context);
     }
 
@@ -81,7 +81,7 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool {
     }
 
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         Iterator<?> contextTopics = context.getContextObjects();
         TopicMap tm = admin.getTopicMap();
         if(contextTopics != null && contextTopics.hasNext()) {

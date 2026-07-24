@@ -34,7 +34,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.contexts.ApplicationTopicContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.LayeredTopicContext;
 import org.wandora.application.contexts.SIContext;
@@ -58,7 +58,7 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
 
 	public MakeSubjectLocatorFromSubjectIdentifier() {
     }
-    public MakeSubjectLocatorFromSubjectIdentifier(Context preferredContext) {
+    public MakeSubjectLocatorFromSubjectIdentifier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -75,7 +75,7 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         
         
         if(context instanceof SIContext) {
@@ -100,7 +100,7 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
             }
         }
         
-        else if(context instanceof ApplicationContext) {
+        else if(context instanceof ApplicationTopicContext) {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             

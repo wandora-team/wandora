@@ -55,7 +55,7 @@ public class MakeOccurrenceFromVariant extends AbstractWandoraTool {
      */
     public MakeOccurrenceFromVariant() {
     }
-    public MakeOccurrenceFromVariant(Context preferredContext) {
+    public MakeOccurrenceFromVariant(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -73,7 +73,7 @@ public class MakeOccurrenceFromVariant extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying variant name to topic occurrence");

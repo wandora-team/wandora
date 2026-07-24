@@ -1357,7 +1357,9 @@ public class LayerTree extends DragJTree {
     
     
     private class CellRenderComponent extends JPanel {
-        public Object layer;
+        private static final long serialVersionUID = 1L;
+
+		public Object layer;
         
         public javax.swing.JPanel dragPanel;
         public javax.swing.JPanel indentPanel;

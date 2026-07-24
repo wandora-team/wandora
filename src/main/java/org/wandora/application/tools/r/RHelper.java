@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.AssociationContext;
@@ -134,8 +136,8 @@ public class RHelper {
     public static Association[] getContextAssociations(){
         AssociationContext context=new AssociationContext();
         context.initialize(Wandora.getWandora(), null, null);
-        ArrayList<Association> ret=new ArrayList<Association>();
-        Iterator iter=context.getContextObjects();
+        List<Association> ret=new ArrayList<>();
+        Iterator<?> iter=context.getContextObjects();
         if(iter!=null){
             while(iter.hasNext()){
                 Object o=iter.next();
@@ -147,8 +149,8 @@ public class RHelper {
 
     public static Topic[] getContextTopics(){
         LayeredTopicContext context=new LayeredTopicContext(Wandora.getWandora(),null,null);
-        ArrayList<Topic> ret=new ArrayList<Topic>();
-        Iterator iter=context.getContextObjects();
+        List<Topic> ret=new ArrayList<>();
+        Iterator<?> iter=context.getContextObjects();
         if(iter!=null){
             while(iter.hasNext()){
                 Object o=iter.next();
@@ -160,8 +162,8 @@ public class RHelper {
     }
 
     // "next" is a reserved word in R which makes this tricky
-    public static Object[] unwrapIterator(Iterator iter){
-        ArrayList<Object> ret=new ArrayList<Object>();
+    public static Object[] unwrapIterator(Iterator<Object> iter){
+        List<Object> ret=new ArrayList<>();
         while(iter.hasNext()){
             ret.add(iter.next());
         }
@@ -189,8 +191,8 @@ public class RHelper {
         Topic role2           = getRole2Topic(tm);
         
         
-        HashMap<Integer,Topic> edgeMap = new HashMap<Integer, Topic>();
-        HashMap<String,Topic> occTypeMap = new HashMap<String,Topic>();
+        Map<Integer,Topic> edgeMap = new HashMap<Integer, Topic>();
+        Map<String,Topic> occTypeMap = new HashMap<String,Topic>();
         Topic[][] toAssoc = new Topic[edges.length][edges[0].length];
         
         /*

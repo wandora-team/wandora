@@ -149,7 +149,7 @@ public class MouseToolManager implements MouseListener, MouseMotionListener {
     }
     
     public void processEvent(MouseEvent e,int event){
-        int modifiers=e.getModifiers();
+        int modifiers=e.getModifiersEx();
         if(lockedTool!=null){
             dispatchEvent(e,event,lockedTool);
             return;
@@ -164,13 +164,13 @@ public class MouseToolManager implements MouseListener, MouseMotionListener {
     }
     
     public void mouseReleased(MouseEvent e) {
-        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_DOWN_MASK)!=0);
+        boolean ctrl=((e.getModifiersEx()&MouseEvent.CTRL_DOWN_MASK)!=0);
         if(e.getButton()==1 && !ctrl) processEvent(e,EVENT_LEFTRELEASE);
         else if(e.getButton()==3 || ctrl) processEvent(e,EVENT_RIGHTRELEASE);
     }
 
     public void mousePressed(MouseEvent e) {
-        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_DOWN_MASK)!=0);
+        boolean ctrl=((e.getModifiersEx()&MouseEvent.CTRL_DOWN_MASK)!=0);
         if(e.getButton()==1 && !ctrl) processEvent(e,EVENT_LEFTPRESS);
         else if(e.getButton()==3 || ctrl) processEvent(e,EVENT_RIGHTPRESS);
     }
@@ -182,7 +182,7 @@ public class MouseToolManager implements MouseListener, MouseMotionListener {
     }
 
     public void mouseClicked(MouseEvent e) {
-        boolean ctrl=((e.getModifiers()&MouseEvent.CTRL_DOWN_MASK)!=0);
+        boolean ctrl=((e.getModifiersEx()&MouseEvent.CTRL_DOWN_MASK)!=0);
         if(e.getClickCount()>=2){
             if(e.getButton()==1 && !ctrl) processEvent(e,EVENT_LEFTDOUBLECLICK);
             else if(e.getButton()==3 || ctrl) processEvent(e,EVENT_RIGHTDOUBLECLICK);

@@ -73,7 +73,7 @@ public class CheckSubjectLocator extends AbstractWandoraTool {
     
     
     public CheckSubjectLocator() {}
-    public CheckSubjectLocator(Context context) {
+    public CheckSubjectLocator(Context<?> context) {
         setContext(context);
     }
     public CheckSubjectLocator(Collection<Topic> topics) {
@@ -86,7 +86,7 @@ public class CheckSubjectLocator extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         setDefaultLogger();
         
         if(topicsToCheck == null) {
@@ -175,8 +175,8 @@ public class CheckSubjectLocator extends AbstractWandoraTool {
         if(t != null) {
             String topicName = TopicToString.toString(t);
             Locator l = t.getSubjectLocator();
-            String locatorString = l.toExternalForm();
             if(l != null) {
+            	String locatorString = l.toExternalForm();
                 try {
                     if(DataURL.isDataURL(locatorString)) {
                         if(reportAbout('d')) {

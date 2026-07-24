@@ -32,6 +32,6 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public interface IIIFBuilder {
-    public Manifest buildIIIF(Wandora wandora, Context context,IIIFExport tool) throws TopicMapException;
+    public Manifest buildIIIF(Wandora wandora, Context<?> context,IIIFExport tool) throws TopicMapException;
     public String getBuilderName();
 }

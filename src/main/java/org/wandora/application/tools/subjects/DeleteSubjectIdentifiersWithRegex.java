@@ -58,7 +58,7 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     
     public DeleteSubjectIdentifiersWithRegex() {
     }
-    public DeleteSubjectIdentifiersWithRegex(Context context) {
+    public DeleteSubjectIdentifiersWithRegex(Context<?> context) {
         setContext(context);
     }
     
@@ -75,7 +75,7 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         editor = RegularExpressionEditor.getMatchExpressionEditor(wandora);
         editor.approve = false;
         editor.setVisible(true);

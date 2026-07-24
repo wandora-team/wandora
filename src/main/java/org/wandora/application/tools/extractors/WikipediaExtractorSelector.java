@@ -50,7 +50,7 @@ public class WikipediaExtractorSelector extends javax.swing.JDialog {
 	
 	private boolean accepted = false;
     private Wandora wandora = null;
-    private Context context = null;
+    private Context<?> context = null;
     
     
     
@@ -71,7 +71,7 @@ public class WikipediaExtractorSelector extends javax.swing.JDialog {
         this.wandora = wandora;
     }
     
-    public void setContext(Context context) {
+    public void setContext(Context<?> context) {
         this.context = context;
     }
     
@@ -202,7 +202,7 @@ public class WikipediaExtractorSelector extends javax.swing.JDialog {
         StringBuffer sb = new StringBuffer("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {

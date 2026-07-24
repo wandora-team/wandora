@@ -130,7 +130,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         browseIndexTemplateButton = new SimpleButton();
         templateEncodingPanel = new javax.swing.JPanel();
         templateEncodingLabel = new SimpleLabel();
-        templateEncodingComboBox = new SimpleComboBox();
+        templateEncodingComboBox = new SimpleComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         imagePanel = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();

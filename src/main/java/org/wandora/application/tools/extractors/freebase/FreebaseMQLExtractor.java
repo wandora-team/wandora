@@ -25,6 +25,7 @@ package org.wandora.application.tools.extractors.freebase;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -159,7 +160,7 @@ public class FreebaseMQLExtractor  extends AbstractFreebaseExtractor {
             }
             extractedIDs.add(cid);
             String query = getQuery(cid);
-            URL newURL = new URL(FreebaseExtractorUI.FREEBASE_MQL_API_BASE + "?query=" + query);
+            URL newURL = new URI(FreebaseExtractorUI.FREEBASE_MQL_API_BASE + "?query=" + query).toURL();
             try{
                 _extractTopicsFrom(newURL, tm, depth + 1, cid); 
             } catch (Exception e) {

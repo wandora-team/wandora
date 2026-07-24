@@ -32,9 +32,9 @@ package org.wandora.application.tools.subjects;
 import java.awt.Desktop;
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -60,22 +60,22 @@ public class OpenSubjectIdentifier extends AbstractWandoraTool {
 
 	public OpenSubjectIdentifier() {
     }
-    public OpenSubjectIdentifier(Context proposedContext) {
+    public OpenSubjectIdentifier(Context<?> proposedContext) {
         setContext(proposedContext);
     }
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         boolean errors = false;
         // setDefaultLogger();
         try {
             if(admin != null) {
-                Iterator contextSIs = null;
+                Iterator<?> contextSIs = null;
                 if(context instanceof SIContext) {
                     contextSIs = getContext().getContextObjects();
                 }
                 else if(context instanceof LayeredTopicContext) {
-                    HashSet<Locator> siSet = new LinkedHashSet<>();
+                    Set<Locator> siSet = new LinkedHashSet<>();
                     Iterator<?> contextTopics = getContext().getContextObjects();
                     if(contextTopics == null) return;
                     while(contextTopics.hasNext() && !forceStop()) {

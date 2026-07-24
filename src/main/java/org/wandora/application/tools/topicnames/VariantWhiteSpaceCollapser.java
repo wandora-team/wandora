@@ -53,7 +53,7 @@ public class VariantWhiteSpaceCollapser extends AbstractWandoraTool {
      */
     public VariantWhiteSpaceCollapser() {
     }
-    public VariantWhiteSpaceCollapser(Context preferredContext) {
+    public VariantWhiteSpaceCollapser(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -70,7 +70,7 @@ public class VariantWhiteSpaceCollapser extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Collapsing white space characters in variant names");

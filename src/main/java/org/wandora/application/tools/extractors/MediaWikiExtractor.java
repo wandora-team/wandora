@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Vector;
@@ -380,7 +381,7 @@ public class MediaWikiExtractor extends AbstractExtractor {
                             try{
                                 Topic wikiTopic=tm.createTopic();
                                 try {
-                                    URL si = new URL(url);
+                                    URL si = new URI(url).toURL();
                                     String protocol = si.getProtocol();
                                     String host = si.getHost();
                                     wikiTopic.addSubjectIdentifier(new org.wandora.topicmap.Locator(protocol+"://"+host));

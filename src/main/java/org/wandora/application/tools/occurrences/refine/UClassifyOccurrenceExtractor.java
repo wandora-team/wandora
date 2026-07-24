@@ -51,7 +51,7 @@ public class UClassifyOccurrenceExtractor extends AbstractOccurrenceExtractor {
         forceOwner = owner;
         forceProbability = probability;
     }
-    public UClassifyOccurrenceExtractor(Context preferredContext) {
+    public UClassifyOccurrenceExtractor(Context<?> preferredContext) {
         super(preferredContext);
     }
 

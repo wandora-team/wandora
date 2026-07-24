@@ -159,7 +159,7 @@ public class MaianaExportPanel extends javax.swing.JPanel {
         contentPanel = new javax.swing.JPanel();
         infoLabel = new SimpleLabel();
         apiEndPointLabel = new javax.swing.JLabel();
-        apiEndPointField = new javax.swing.JComboBox();
+        apiEndPointField = new javax.swing.JComboBox<String>();
         apiKeyLabel = new SimpleLabel();
         apiKeyTextField = new SimpleField();
         nameLabel = new SimpleLabel();
@@ -397,7 +397,7 @@ public class MaianaExportPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addDateStampButton;
-    private javax.swing.JComboBox apiEndPointField;
+    private javax.swing.JComboBox<String> apiEndPointField;
     private javax.swing.JLabel apiEndPointLabel;
     private javax.swing.JLabel apiKeyLabel;
     private javax.swing.JTextField apiKeyTextField;

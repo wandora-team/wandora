@@ -30,7 +30,6 @@ package org.wandora.application.gui;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URI;
-import java.net.URL;
 import java.util.Iterator;
 
 import javax.swing.JDialog;
@@ -60,14 +59,14 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
     
     private boolean accepted = false;
     private JDialog newTopicDialog = null;
-    private Context currentContext = null;
+    private Context<?> currentContext = null;
     private Wandora wandora = null;
     private TopicMap topicmap = null;
     
     
     
     /** Creates new form NewTopicPanelExtended */
-    public NewTopicPanelExtended(Context context) {
+    public NewTopicPanelExtended(Context<?> context) {
         this.wandora = Wandora.getWandora();
         this.topicmap = wandora.getTopicMap();
         this.currentContext = context;
@@ -115,7 +114,6 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
                     "Basename is missing. No topic created.", 
                     "No topic created", 
                     WandoraOptionPane.WARNING_MESSAGE);
-            if(newTopic != null) newTopic.remove();
             return null;
         }
         
@@ -194,7 +192,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
             );
         }
         try {
-            URL siUrl = new URI(si).toURL();
+            new URI(si).toURL();
         }
         catch(Exception e) {
             si = topicmap.makeSubjectIndicator();
@@ -213,7 +211,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         String sl = SLTextField.getText().trim();
         if(sl.length() == 0) return null;
         try {
-            URL slUrl = new URI(sl).toURL();
+            new URI(sl).toURL();
         }
         catch(Exception e) {
             WandoraOptionPane.showMessageDialog(
@@ -548,11 +546,10 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
 
     private void selectCurrentTopicAsTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCurrentTopicAsTypeActionPerformed
         if(currentContext != null) {
-            Iterator i = currentContext.getContextObjects();
+            Iterator<?> i = currentContext.getContextObjects();
             if(i.hasNext()) {
                 Object o = i.next();
-                if(o instanceof Topic) {
-                    Topic t = (Topic) o;
+                if(o instanceof Topic t) {
                     try {
                         ((GetTopicButton) typeTopicButton).setTopic(t.getOneSubjectIdentifier().toExternalForm());
                     }
@@ -581,7 +578,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
 
     private void selectCurrentTopicAsSuperclasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCurrentTopicAsSuperclasActionPerformed
         if(currentContext != null) {
-            Iterator i = currentContext.getContextObjects();
+            Iterator<?> i = currentContext.getContextObjects();
             if(i.hasNext()) {
                 Object o = i.next();
                 if(o instanceof Topic) {

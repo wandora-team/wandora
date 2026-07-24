@@ -60,7 +60,7 @@ public class RefreshTopicTrees extends AbstractWandoraTool {
     
    
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {      
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {      
         wandora.refreshTopicTrees();
     }
 

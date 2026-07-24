@@ -53,8 +53,8 @@ import org.wandora.topicmap.TopicMapException;
 public class FullIIIFBuilder implements IIIFBuilder {
 
     @Override
-    public Manifest buildIIIF(Wandora wandora, Context context, IIIFExport tool) throws TopicMapException {
-        Iterator iter=context.getContextObjects();
+    public Manifest buildIIIF(Wandora wandora, Context<?> context, IIIFExport tool) throws TopicMapException {
+        Iterator<?> iter=context.getContextObjects();
         if(!iter.hasNext()) return null;
         Topic topic=(Topic)iter.next();
         

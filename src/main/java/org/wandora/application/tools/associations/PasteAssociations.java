@@ -93,7 +93,7 @@ public class PasteAssociations extends AbstractWandoraTool {
     
     public PasteAssociations(){
     }
-    public PasteAssociations(Context preferredContext){
+    public PasteAssociations(Context<?> preferredContext){
         setContext(preferredContext);        
     }
 
@@ -118,7 +118,7 @@ public class PasteAssociations extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         requiresRefresh = false;
         TopicMap topicMap = wandora.getTopicMap();
         

@@ -40,7 +40,7 @@ public class SameAs270aStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAs270aStoreSubjectExpander() {}
-    public SameAs270aStoreSubjectExpander(Context preferredContext) {
+    public SameAs270aStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

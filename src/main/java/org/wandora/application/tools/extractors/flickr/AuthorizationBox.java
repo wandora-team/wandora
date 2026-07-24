@@ -64,7 +64,7 @@ public class AuthorizationBox extends javax.swing.JPanel {
         authDisplay = new AuthDisplay(this.flickrState, this.authRequirements);
         jPanel2 = new javax.swing.JPanel();
         authBtn = new javax.swing.JButton();
-        cmbAuthRequest = new javax.swing.JComboBox();
+        cmbAuthRequest = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -169,7 +169,7 @@ public class AuthorizationBox extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton authBtn;
     private org.wandora.application.tools.extractors.flickr.AuthDisplay authDisplay;
-    private javax.swing.JComboBox cmbAuthRequest;
+    private javax.swing.JComboBox<String> cmbAuthRequest;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

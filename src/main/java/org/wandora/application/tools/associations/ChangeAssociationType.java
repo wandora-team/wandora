@@ -59,7 +59,7 @@ public class ChangeAssociationType extends AbstractWandoraTool {
     public ChangeAssociationType() {
         setContext(new AssociationContext());
     }
-    public ChangeAssociationType(Context preferredContext) {
+    public ChangeAssociationType(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -78,7 +78,7 @@ public class ChangeAssociationType extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         requiresRefresh = false;
         Iterator<?> associations = context.getContextObjects();
         Association association = null;

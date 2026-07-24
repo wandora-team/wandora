@@ -144,6 +144,10 @@ public class FlickrPhoto {
         
         String baseStr = "http://www.flickr.com/photos/" + OwnerID + "/" + ID + "/";
         Topic photoTopic = FlickrUtils.createRaw(extractor.getCurrentMap(), baseStr, " (flickr photo " + ID + ")", Title, extractor.getTopic(FlickrTopic.Photo));
+        
+        if(photoTopic == null)
+            throw new TopicMapException("Null photoTopic");
+        
         photoTopic.setData(extractor.getOccurrence(FlickrOccur.PhotoID), extractor.getLanguage(null), ID);
         
         if(FarmID != null && ServerID != null && Secret != null) {
@@ -176,8 +180,7 @@ public class FlickrPhoto {
 
             String tagBaseStr = "http://www.flickr.com/photos/tags/" + tag + "/";
             Topic tagTopic = FlickrUtils.createRaw(extractor.getCurrentMap(), tagBaseStr, " (flickr tag)", tag, extractor.getTopic(FlickrTopic.Tag));
-            if(photoTopic == null)
-                throw new TopicMapException("Null photoTopic");
+
             if(tagTopic == null)
                 throw new TopicMapException("Null tagTopic");
             FlickrUtils.createAssociation(extractor.getCurrentMap(), extractor.getAssociation(FlickrAssoc.Description), new Topic[] { photoTopic, tagTopic });
@@ -189,8 +192,6 @@ public class FlickrPhoto {
             p.ID = OwnerID;
             Topic personTopic = p.makeTopic(extractor);
             
-            if(photoTopic == null)
-                throw new TopicMapException("Null photoTopic");
             if(personTopic == null)
                 throw new TopicMapException("Null personTopic");
             

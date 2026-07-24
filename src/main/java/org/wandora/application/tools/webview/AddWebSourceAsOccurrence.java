@@ -62,7 +62,7 @@ public class AddWebSourceAsOccurrence extends AbstractWebViewTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         try {
             String source = null;
             if(USE_SELECTION_SOURCE) {

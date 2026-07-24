@@ -124,7 +124,7 @@ public class AddDockable extends AbstractDockingTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         DockingFramePanel dockingPanel = this.solveDockingFramePanel(w, context);
         if(dockableClass != null && dockingPanel != null) {
             try {

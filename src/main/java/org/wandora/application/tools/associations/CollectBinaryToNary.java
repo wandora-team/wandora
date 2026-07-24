@@ -97,7 +97,7 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
     
     
     
-    public CollectBinaryToNary(Context preferredContext) {
+    public CollectBinaryToNary(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -117,7 +117,7 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
             Iterator<?> associations = null;
@@ -162,7 +162,6 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
                 Topic newAssociationType = addressedAssociationType;
                 if(askNewAssociationType) {
                 	wandora.showTopicFinder("Select new type of associations...");
-                    if(newAssociationType == null) return;
                 }
                 
                 Iterator<?> baseTopics = context.getContextObjects();

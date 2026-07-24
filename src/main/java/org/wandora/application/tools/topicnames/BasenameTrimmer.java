@@ -55,7 +55,7 @@ public class BasenameTrimmer extends AbstractWandoraTool {
 
 	public BasenameTrimmer() {
     }
-    public BasenameTrimmer(Context preferredContext) {
+    public BasenameTrimmer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -73,7 +73,7 @@ public class BasenameTrimmer extends AbstractWandoraTool {
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Removing surrounding white space characters in basenames");

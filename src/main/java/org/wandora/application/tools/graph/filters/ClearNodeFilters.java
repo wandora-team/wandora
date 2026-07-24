@@ -62,7 +62,7 @@ public class ClearNodeFilters extends AbstractGraphTool {
         this.filter = filter;
     }
 
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora admin, Context<?> context) {
         try {
             filter.clearNodeFilters();
             filter.clearNodeTypeFilters();

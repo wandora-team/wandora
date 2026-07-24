@@ -73,7 +73,7 @@ public class DeleteLayer extends AbstractLayerTool {
     }
    
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         LayerTree layerTree = wandora.layerTree;
         Layer contextLayer =  solveContextLayer(wandora, context);
         

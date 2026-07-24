@@ -81,7 +81,7 @@ public class DuplicateAssociations extends AbstractWandoraTool {
     
     
     public void makeRoleMap(Wandora wandora)  throws TopicMapException {
-        Iterator contextAssociations = getContext().getContextObjects();
+        Iterator<?> contextAssociations = getContext().getContextObjects();
         if(contextAssociations == null || !contextAssociations.hasNext()) return;
         if(roleMap == null) roleMap = new LinkedHashMap<>();
 
@@ -132,7 +132,7 @@ public class DuplicateAssociations extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         wasCancelled = false;
 /*        BaseNamePrompt prompt=new BaseNamePrompt(wandora.getManager(), wandora, true);
         prompt.setTitle("Select new association type...");

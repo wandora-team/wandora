@@ -49,7 +49,7 @@ public class RunOccurrenceAsQuery extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
 
 	public RunOccurrenceAsQuery() {}
-    public RunOccurrenceAsQuery(Context preferredContext) {
+    public RunOccurrenceAsQuery(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -65,7 +65,7 @@ public class RunOccurrenceAsQuery extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Object contextSource = context.getContextSource();
         
         // ***** OCCURRENCE TABLE ***** 

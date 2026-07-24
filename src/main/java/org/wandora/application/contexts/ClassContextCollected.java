@@ -55,13 +55,13 @@ public class ClassContextCollected extends LayeredTopicContext {
     
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         return getClassesOf( super.getContextObjects() );
     }
     
     
     
-    public Iterator getClassesOf(Iterator topics) {
+    public Iterator<Topic> getClassesOf(Iterator<Topic> topics) {
         if(topics == null) return null;
         List<Topic> contextTopics = new ArrayList<>();
         Collection<Topic> classTopics = null;

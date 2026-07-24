@@ -31,7 +31,9 @@ import org.wandora.modules.usercontrol.User;
 
 public class ActionAuthenticationException extends ActionException {
 
-    protected User user;
+    private static final long serialVersionUID = 1L;
+    
+	protected User user;
     
     public ActionAuthenticationException(ActionHandler action) {
         super(action);

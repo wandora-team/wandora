@@ -62,7 +62,7 @@ public class ToggleFreezeForMouseOverTool extends AbstractGraphTool {
     }
     
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         //System.out.println("GRAPHPANEL: "+graphPanel);
         if(graphPanel != null) {

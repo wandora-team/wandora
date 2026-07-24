@@ -31,6 +31,7 @@ package org.wandora.application.contexts;
 import java.util.Iterator;
 
 import org.wandora.application.contexts.iterators.InstanceIterator;
+import org.wandora.topicmap.Topic;
 
 
 
@@ -41,9 +42,9 @@ public class InstanceContext extends LayeredTopicContext {
 
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         InstanceIterator instanceIterator = new InstanceIterator();
-        instanceIterator.initialize(super.getContextObjects(), wandora);
+        instanceIterator.initialize(super.getContextObjects(), getWandora());
         return instanceIterator;
     }
 

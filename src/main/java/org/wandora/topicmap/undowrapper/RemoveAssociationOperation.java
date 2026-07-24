@@ -251,7 +251,9 @@ public class RemoveAssociationOperation  extends UndoOperation  {
     }
 
     public static class AssociationNotFoundException extends UndoException {
-        public AssociationNotFoundException(){
+        private static final long serialVersionUID = 1L;
+        
+		public AssociationNotFoundException(){
             super();
         }
         public AssociationNotFoundException(String message){

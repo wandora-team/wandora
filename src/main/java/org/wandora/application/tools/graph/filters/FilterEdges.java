@@ -144,7 +144,7 @@ public class FilterEdges extends AbstractGraphTool  {
     }
     
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model = solveModel(wandora,context);
         hideNodesOfType(filterType, edgeType, model);
         switch(filterType) {

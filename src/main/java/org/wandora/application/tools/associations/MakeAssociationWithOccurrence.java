@@ -88,7 +88,7 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool {
     public MakeAssociationWithOccurrence() {
     }
     
-    public MakeAssociationWithOccurrence(Context preferredContext) {
+    public MakeAssociationWithOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -109,7 +109,7 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {   
+    public void execute(Wandora wandora, Context<?> context) {   
         try {
             SITemplate = "https://wandora.org/si/occurrence/%OCCURRENCE%";
             Iterator<?> topics = context.getContextObjects();

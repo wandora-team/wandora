@@ -82,7 +82,7 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
         map1FileButton = new org.wandora.application.gui.simple.SimpleRadioButton();
         map1LayerButton = new org.wandora.application.gui.simple.SimpleRadioButton();
         map1ProjectButton = new org.wandora.application.gui.simple.SimpleRadioButton();
-        layerComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox();
+        layerComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox<>();
         layerComboBox1.setEditable(false);
         fileTextField1 = new org.wandora.application.gui.simple.SimpleField();
         fileButton1 = new org.wandora.application.gui.simple.SimpleButton();
@@ -90,11 +90,11 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
         map2FileButton = new org.wandora.application.gui.simple.SimpleRadioButton();
         map2LayerButton = new org.wandora.application.gui.simple.SimpleRadioButton();
         map2ProjectButton = new org.wandora.application.gui.simple.SimpleRadioButton();
-        layerComboBox2 = new org.wandora.application.gui.simple.SimpleComboBox();
+        layerComboBox2 = new org.wandora.application.gui.simple.SimpleComboBox<>();
         layerComboBox2.setEditable(false);
         fileTextField2 = new org.wandora.application.gui.simple.SimpleField();
         fileButton2 = new org.wandora.application.gui.simple.SimpleButton();
-        formatComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        formatComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         formatComboBox.setEditable(false);
         jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
         buttonsPanel = new javax.swing.JPanel();
@@ -424,12 +424,12 @@ public class DiffToolConfigPanel extends javax.swing.JPanel {
     private javax.swing.JButton fileButton2;
     private javax.swing.JTextField fileTextField1;
     private javax.swing.JTextField fileTextField2;
-    private javax.swing.JComboBox formatComboBox;
+    private javax.swing.JComboBox<String> formatComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JComboBox layerComboBox1;
-    private javax.swing.JComboBox layerComboBox2;
+    private javax.swing.JComboBox<String> layerComboBox1;
+    private javax.swing.JComboBox<String> layerComboBox2;
     private javax.swing.JRadioButton map1FileButton;
     private javax.swing.ButtonGroup map1Group;
     private javax.swing.JRadioButton map1LayerButton;

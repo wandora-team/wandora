@@ -49,7 +49,7 @@ public class CreateAssociationType extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
 
 	/** Creates a new instance of CreateAssociationType */
-    public CreateAssociationType(Context preferredContext) {
+    public CreateAssociationType(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     public CreateAssociationType() {
@@ -67,7 +67,7 @@ public class CreateAssociationType extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         Iterator<?> contextObjects = context.getContextObjects();
         Vector<Topic> objects=new Vector<Topic>();
         Association a=null;

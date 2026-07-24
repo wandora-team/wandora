@@ -96,7 +96,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(wandora == null) return;
         Layer l = wandora.getTopicMap().getSelectedLayer();
         TopicMap target = l.getTopicMap();

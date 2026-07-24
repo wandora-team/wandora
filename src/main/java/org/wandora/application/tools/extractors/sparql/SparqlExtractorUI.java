@@ -362,9 +362,9 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
         genericQueryTextPane = new SimpleTextPane();
         genericButtonPanel = new javax.swing.JPanel();
         encodingLabel = new SimpleLabel();
-        genericEncodingComboBox = new SimpleComboBox();
+        genericEncodingComboBox = new SimpleComboBox<>();
         resultFormatLabel = new SimpleLabel();
-        resultFormatComboBox = new SimpleComboBox();
+        resultFormatComboBox = new SimpleComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         showGenericButton = new SimpleButton();
         checkGenericButton = new SimpleButton();

@@ -56,7 +56,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
 
 	public VariantsToTopicsAndAssociations() {
     }
-    public VariantsToTopicsAndAssociations(Context preferredContext) {
+    public VariantsToTopicsAndAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -73,7 +73,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
     }
 
 
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
 
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Transform variants to topics and associations","Transform variants to topics and associations",true,new String[][]{

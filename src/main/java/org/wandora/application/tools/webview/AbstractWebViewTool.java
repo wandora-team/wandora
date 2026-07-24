@@ -74,14 +74,15 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
     
     // -------------------------------------------------------- WebViewPanel ---
     
-    protected WebViewPanel getWebViewPanel(Context context) {
+    protected WebViewPanel getWebViewPanel(Context<?> context) {
         if(context != null) {
             Object source = context.getContextSource();
             if(source != null && source instanceof WebViewPanel) {
                 return (WebViewPanel) source;
             }
             else {
-                System.out.println("Invalid context source. Expecting WebViewPanel but found "+source.getClass());
+                System.out.println("Invalid context source. Expecting WebViewPanel but found "
+                		+(source != null ? source.getClass() : "null"));
             }
         }
         return null;
@@ -89,7 +90,7 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
     
     
     
-    protected WebEngine getWebEngine(Context context) {
+    protected WebEngine getWebEngine(Context<?> context) {
         WebViewPanel webViewPanel = getWebViewPanel(context);
         if(webViewPanel != null) {
             return webViewPanel.getWebEngine();
@@ -98,7 +99,7 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
     }
     
     
-    protected String getWebLocation(Context context) {
+    protected String getWebLocation(Context<?> context) {
         WebViewPanel webViewPanel = getWebViewPanel(context);
         if(webViewPanel != null) {
             return webViewPanel.getWebLocation();
@@ -107,7 +108,7 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
     }
     
     
-    protected String getSource(Context context) {
+    protected String getSource(Context<?> context) {
         WebViewPanel webViewPanel = getWebViewPanel(context);
         if(webViewPanel != null) {
             return webViewPanel.getSource();
@@ -116,7 +117,7 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
     }
     
     
-    protected String getSelectedSource(Context context) {
+    protected String getSelectedSource(Context<?> context) {
         WebViewPanel webViewPanel = getWebViewPanel(context);
         if(webViewPanel != null) {
             return webViewPanel.getSelectedSource();
@@ -125,7 +126,7 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
     }
     
     
-    protected String getSelectedText(Context context) {
+    protected String getSelectedText(Context<?> context) {
         WebViewPanel webViewPanel = getWebViewPanel(context);
         if(webViewPanel != null) {
             return webViewPanel.getSelectedText();
@@ -134,7 +135,7 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
     }
     
     
-    protected Topic getTopic(Context context) {
+    protected Topic getTopic(Context<?> context) {
         WebViewPanel webViewPanel = getWebViewPanel(context);
         if(webViewPanel != null) {
             try {
@@ -149,7 +150,7 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
     
     
     
-    protected Object executeJavascript(Context context, String script) {
+    protected Object executeJavascript(Context<?> context, String script) {
         WebViewPanel webViewPanel = getWebViewPanel(context);
         if(webViewPanel != null) {
             return webViewPanel.executeSynchronizedScript(script);

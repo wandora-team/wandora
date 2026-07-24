@@ -59,7 +59,7 @@ public class SelectDockable extends AbstractDockingTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         DockingFramePanel dockingPanel = this.solveDockingFramePanel(w, context);
         if(dockingPanel != null && dockable != null) {
             try {

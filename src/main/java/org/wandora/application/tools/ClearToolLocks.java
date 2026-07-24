@@ -54,7 +54,7 @@ public class ClearToolLocks extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         int n = clearToolLocks();
         if(n > 0) {
             log("There exists "+n+" tool(s) locked. All tool locks released. "+

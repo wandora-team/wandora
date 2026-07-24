@@ -52,7 +52,7 @@ import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraMenuManager;
-import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.contexts.ApplicationTopicContext;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.NewTopicPanelExtended;
 import org.wandora.application.gui.UIBox;
@@ -1061,10 +1061,10 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     @Override
     public JPopupMenu getNamesMenu() {
         Object[] menuStructure = new Object[] {
-            "Add variant name", new AddVariantName(new ApplicationContext()),
+            "Add variant name", new AddVariantName(new ApplicationTopicContext()),
             "---",
-            "Copy all variant names", new TopicNameCopier(new ApplicationContext()),
-            "Remove all empty variant names...", new AllEmptyVariantRemover(new ApplicationContext()),
+            "Copy all variant names", new TopicNameCopier(new ApplicationTopicContext()),
+            "Remove all empty variant names...", new AllEmptyVariantRemover(new ApplicationTopicContext()),
         };
         return UIBox.makePopupMenu(menuStructure, wandora);
     }
@@ -1111,14 +1111,14 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     @Override
     public JPopupMenu getSubjectMenu() {
         Object[] menuStructure = new Object[] {
-            "Check subject locator...", new CheckSubjectLocator(new ApplicationContext()),
-            "Download subject locator...", new DownloadSubjectLocators(new ApplicationContext()),
-            "Remove subject locator...", new DeleteSubjectLocator(new ApplicationContext()),
+            "Check subject locator...", new CheckSubjectLocator(new ApplicationTopicContext()),
+            "Download subject locator...", new DownloadSubjectLocators(new ApplicationTopicContext()),
+            "Remove subject locator...", new DeleteSubjectLocator(new ApplicationTopicContext()),
             "---",
-            "Add subject identifier...", new AddSubjectIdentifier(new ApplicationContext()),
-            "Copy subject identifiers", new CopySubjectIdentifiers(new ApplicationContext()),
-            "Paste subject identifiers", new PasteSubjectIdentifiers(new ApplicationContext()),
-            "Flatten identity...", new FlattenSubjectIdentifiers(new ApplicationContext()),
+            "Add subject identifier...", new AddSubjectIdentifier(new ApplicationTopicContext()),
+            "Copy subject identifiers", new CopySubjectIdentifiers(new ApplicationTopicContext()),
+            "Paste subject identifiers", new PasteSubjectIdentifiers(new ApplicationTopicContext()),
+            "Flatten identity...", new FlattenSubjectIdentifiers(new ApplicationTopicContext()),
         };
         return UIBox.makePopupMenu(menuStructure, wandora);
     }

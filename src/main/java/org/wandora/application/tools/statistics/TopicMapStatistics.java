@@ -48,13 +48,13 @@ public class TopicMapStatistics extends AbstractWandoraTool {
 
 	public TopicMapStatistics() {
     }
-    public TopicMapStatistics(Context preferredContext) {
+    public TopicMapStatistics(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             TopicMap map = solveContextTopicMap(wandora, context);
             String name = solveNameForTopicMap(wandora, map);

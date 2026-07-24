@@ -37,6 +37,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -394,7 +395,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                                 TopicMap tm = wandora.getTopicMap();
                                 boolean identifierIsURL = false;
                                 try {
-                                    URL u = new URL(topicIdentifier);
+                                    URL u = new URI(topicIdentifier).toURL();
                                     identifierIsURL = true;
                                 }
                                 catch(Exception e) {}

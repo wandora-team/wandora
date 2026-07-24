@@ -107,7 +107,7 @@ public class OperandParameterPanel extends AbstractTypePanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         parameterLabel = new javax.swing.JLabel();
-        operandTypeComboBox = new javax.swing.JComboBox();
+        operandTypeComboBox = new javax.swing.JComboBox<>();
         operandPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
@@ -190,7 +190,7 @@ public class OperandParameterPanel extends AbstractTypePanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JPanel operandPanel;
-    protected javax.swing.JComboBox operandTypeComboBox;
+    protected javax.swing.JComboBox<String> operandTypeComboBox;
     private javax.swing.JLabel parameterLabel;
     // End of variables declaration//GEN-END:variables
 }

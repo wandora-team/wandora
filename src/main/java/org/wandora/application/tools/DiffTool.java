@@ -125,7 +125,7 @@ public class DiffTool extends AbstractWandoraTool  {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         
         JDialog dialog=new JDialog(wandora,"Compare topic maps",true);
         DiffToolConfigPanel configPanel=new DiffToolConfigPanel(wandora,dialog);

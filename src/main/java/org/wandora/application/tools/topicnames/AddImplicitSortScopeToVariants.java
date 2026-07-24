@@ -53,7 +53,7 @@ public class AddImplicitSortScopeToVariants extends AbstractWandoraTool {
      */
     public AddImplicitSortScopeToVariants() {
     }
-    public AddImplicitSortScopeToVariants(Context preferredContext) {
+    public AddImplicitSortScopeToVariants(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -70,7 +70,7 @@ public class AddImplicitSortScopeToVariants extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Add implicit sort scope to variants");

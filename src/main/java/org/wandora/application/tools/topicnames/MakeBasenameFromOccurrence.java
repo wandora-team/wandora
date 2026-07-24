@@ -76,7 +76,7 @@ public class MakeBasenameFromOccurrence extends AbstractWandoraTool {
     public MakeBasenameFromOccurrence() {
     }
     
-    public MakeBasenameFromOccurrence(Context preferredContext) {
+    public MakeBasenameFromOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -93,7 +93,7 @@ public class MakeBasenameFromOccurrence extends AbstractWandoraTool {
     }
 
     
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             template = "%OCCURRENCE%";
             Iterator<?> topics = context.getContextObjects();

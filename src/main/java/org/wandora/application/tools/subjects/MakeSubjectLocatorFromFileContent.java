@@ -48,12 +48,12 @@ public class MakeSubjectLocatorFromFileContent extends AbstractWandoraTool {
 
 	public MakeSubjectLocatorFromFileContent() {
     }
-    public MakeSubjectLocatorFromFileContent(Context proposedContext) {
+    public MakeSubjectLocatorFromFileContent(Context<?> proposedContext) {
         setContext(proposedContext);
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Iterator<?> contextTopics = getContext().getContextObjects();
             if(contextTopics == null || !contextTopics.hasNext()) return;

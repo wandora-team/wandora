@@ -41,6 +41,8 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
@@ -65,11 +67,11 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
     private static final long serialVersionUID = 1L;
     
 	protected Spectrum spectrum;
-    protected Map params;
+    protected Map<String,String> params;
     private int screenScaler = 1;
     
     
-    public Qaop(Map params) {
+    public Qaop(Map<String,String> params) {
         super();
         this.params = params;
         this.setBackground(new Color(0x222222));
@@ -97,7 +99,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
          */
         Spectrum s = new Spectrum(this);
         spectrum = s;
-        queue = new LinkedList();
+        queue = new LinkedList<>();
 
         addKeyListener(this);
         addFocusListener(this);
@@ -442,10 +444,10 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
             spectrum.reset();
             return;
         } else if (c == KeyEvent.VK_F11) {
-            spectrum.mute(m = !spectrum.muted);
+            spectrum.mute(m = !Spectrum.muted);
             v = spectrum.volumeChg(0);
         } else if (c == KeyEvent.VK_PAGE_UP || c == KeyEvent.VK_PAGE_DOWN) {
-            m = spectrum.muted;
+            m = Spectrum.muted;
             v = spectrum.volumeChg(c == KeyEvent.VK_PAGE_UP ? +5 : -5);
         } else if (c == KeyEvent.VK_PAUSE) {
             try {
@@ -604,7 +606,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
 
     /* download */
-    protected java.util.List queue;
+    protected java.util.List<Loader> queue;
     private Thread th;
 
     @Override
@@ -687,7 +689,7 @@ class Loader extends Thread {
         l.qaop = a;
         l.file = f;
         l.kind = k;
-        List q = a.queue;
+        List<Loader> q = a.queue;
         synchronized (q) {
             clear(q, k);
             q.add(l);
@@ -696,7 +698,7 @@ class Loader extends Thread {
         return l;
     }
 
-    protected static void clear(List q, int k) {
+    protected static void clear(List<Loader> q, int k) {
         int i = q.size();
         while (--i >= 0) {
             Loader l = (Loader) q.get(i);
@@ -826,12 +828,12 @@ class Loader extends Thread {
         }
     }
 
-    private InputStream start_download(String f) throws IOException {
+    private InputStream start_download(String f) throws IOException, URISyntaxException {
         Qaop a = qaop;
         a.dl_length = a.dl_loaded = 0;
         a.dl_text = f;
 
-        URL u = new URL(f);
+        URL u = new URI(f).toURL();
 
         f = u.getFile();
         int i = f.lastIndexOf('/');
@@ -1032,7 +1034,7 @@ class Loader extends Thread {
     /* file handlers */
     private void load_rom(int kind) throws Exception {
         int m[] = new int[0x8000];
-        if (qaop.tomem(m, 0, kind & 0xF000, in) != 0) {
+        if (Qaop.tomem(m, 0, kind & 0xF000, in) != 0) {
             throw new Exception("Rom image truncated");
         }
         Spectrum spec = qaop.spectrum;

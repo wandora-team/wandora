@@ -32,10 +32,12 @@ import java.util.Vector;
  *
  * @author  olli
  */
-public class EasyVector extends Vector {
+public class EasyVector<K> extends Vector<K> {
 
-    /** Creates new EasyVector */
-    public EasyVector(Object[] o) {
+    private static final long serialVersionUID = 1L;
+
+	/** Creates new EasyVector */
+    public EasyVector(K[] o) {
         for(int i=0;i<o.length;i++){
             this.add(o[i]);
         }

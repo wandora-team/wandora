@@ -100,7 +100,7 @@ public class RDFExport extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("RDF N3 Export");
         if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){

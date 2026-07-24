@@ -47,7 +47,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,7 +61,7 @@ import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.utils.ClipboardBox;
-import org.wandora.utils.EasyVector;
+
 
 
 /**
@@ -113,8 +113,8 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
         this.setFocusable(true);
         this.addFocusListener(this);
         this.setFocusTraversalKeysEnabled(true);
-        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)})));
-        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)})));
+        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)));
+        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)));
         this.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
         
         // undoManager = new UndoManager();

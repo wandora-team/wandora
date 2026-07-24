@@ -40,7 +40,7 @@ public class SameAsLibrisStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsLibrisStoreSubjectExpander() {}
-    public SameAsLibrisStoreSubjectExpander(Context preferredContext) {
+    public SameAsLibrisStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

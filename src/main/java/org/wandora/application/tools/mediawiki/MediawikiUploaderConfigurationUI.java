@@ -192,7 +192,7 @@ public class MediawikiUploaderConfigurationUI extends javax.swing.JPanel {
         filenameLabel = new SimpleLabel();
         filenameTextField = new SimpleField();
         descriptionLabel = new SimpleLabel();
-        descriptionComboBox = new SimpleComboBox();
+        descriptionComboBox = new SimpleComboBox<>();
         streamLabel = new SimpleLabel();
         streamCheckBox = new SimpleCheckBox();
         fileExtensionLabel = new SimpleLabel();
@@ -438,7 +438,7 @@ public class MediawikiUploaderConfigurationUI extends javax.swing.JPanel {
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel configPanel;
-    private javax.swing.JComboBox descriptionComboBox;
+    private javax.swing.JComboBox<Object> descriptionComboBox;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JLabel fileExtensionLabel;
     private javax.swing.JTextField fileExtensionTextField;

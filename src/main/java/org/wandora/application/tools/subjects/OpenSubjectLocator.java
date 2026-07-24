@@ -53,12 +53,12 @@ public class OpenSubjectLocator extends AbstractWandoraTool {
 
 	public OpenSubjectLocator() {
     }
-    public OpenSubjectLocator(Context proposedContext) {
+    public OpenSubjectLocator(Context<?> proposedContext) {
         setContext(proposedContext);
     }
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         try {
             // setDefaultLogger();
             if(admin != null) {

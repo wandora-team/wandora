@@ -27,8 +27,8 @@
  */
 
 package org.wandora.topicmap;
-import org.wandora.topicmap.database.DatabaseTopicMap;
-import org.wandora.topicmap.database.DatabaseTopicMapType;
+import org.wandora.topicmap.database2.DatabaseTopicMap;
+import org.wandora.topicmap.database2.DatabaseTopicMapType;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.topicmap.layered.LayeredTopicMapType;
 import org.wandora.topicmap.linked.LinkedTopicMap;
@@ -77,7 +77,6 @@ public class TopicMapTypeManager {
     public static TopicMapType getType(Class<?> c){
         if(c==LayerStack.class) return new LayeredTopicMapType();
         else if(c==DatabaseTopicMap.class) return new DatabaseTopicMapType();
-        else if(c==org.wandora.topicmap.database2.DatabaseTopicMap.class) return new org.wandora.topicmap.database2.DatabaseTopicMapType();
         else if(c==TopicMapImpl.class) return new MemoryTopicMapType();
         else if(c==QueryTopicMap.class) return new QueryTopicMapType();
         else if(c==LinkedTopicMap.class) return new LinkedTopicMapType();

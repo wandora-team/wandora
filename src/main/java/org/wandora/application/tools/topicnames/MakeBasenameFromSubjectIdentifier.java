@@ -65,7 +65,7 @@ public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool {
     public MakeBasenameFromSubjectIdentifier() {
     }
     
-    public MakeBasenameFromSubjectIdentifier(Context preferredContext) {
+    public MakeBasenameFromSubjectIdentifier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -82,7 +82,7 @@ public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool {
     }
 
     
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying SI to base name");
@@ -96,7 +96,7 @@ public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool {
             Collection<Locator> sis = null;
             int progress = 0;
 
-            List<Object> dt = new ArrayList<Object>();
+            List<Object> dt = new ArrayList<>();
             while(topics.hasNext() && !forceStop()) {
                 dt.add(topics.next());
             }

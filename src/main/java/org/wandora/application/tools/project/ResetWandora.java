@@ -68,7 +68,7 @@ public class ResetWandora extends AbstractWandoraTool {
     }
     
     
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         int a = WandoraOptionPane.showConfirmDialog(wandora, "Starting new Wandora project restarts Wandora. Restarting Wandora application you'll loose all changes you have made. Do you really want to restart Wandora?", "Restarting Wandora");
         if(a == WandoraOptionPane.YES_OPTION) {
             wandora.resetWandora();

@@ -30,6 +30,8 @@ package org.wandora.application.contexts;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.wandora.topicmap.Topic;
+
 /**
  *
  * @author olli
@@ -37,8 +39,8 @@ import java.util.Iterator;
 public class EmptyContext extends LayeredTopicContext {
     
     @Override
-    public Iterator getContextObjects() {
-        return new ArrayList().iterator();
+    public Iterator<Topic> getContextObjects() {
+        return new ArrayList<Topic>().iterator();
     }
     
 }

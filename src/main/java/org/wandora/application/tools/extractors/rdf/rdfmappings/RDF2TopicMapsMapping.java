@@ -66,7 +66,7 @@ public abstract class RDF2TopicMapsMapping {
                 }
             }
         }
-        return new T2(si, bn);
+        return new T2<>(si, bn);
     }
     
     
@@ -83,7 +83,7 @@ public abstract class RDF2TopicMapsMapping {
                 }
             }
         }
-        return new T2(si, bn);
+        return new T2<>(si, bn);
     }
     
     

@@ -40,7 +40,7 @@ public class SameAsAnywhereSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsAnywhereSubjectExpander() {}
-    public SameAsAnywhereSubjectExpander(Context preferredContext) {
+    public SameAsAnywhereSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

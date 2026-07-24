@@ -68,7 +68,7 @@ public class MakeDisplayVariantsFromBasename extends AbstractWandoraTool {
      */
     public MakeDisplayVariantsFromBasename() {
     }
-    public MakeDisplayVariantsFromBasename(Context preferredContext) {
+    public MakeDisplayVariantsFromBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -85,7 +85,7 @@ public class MakeDisplayVariantsFromBasename extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying base name to topic variant names");

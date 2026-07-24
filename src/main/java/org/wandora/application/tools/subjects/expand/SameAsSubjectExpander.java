@@ -23,6 +23,7 @@
 package org.wandora.application.tools.subjects.expand;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Collection;
@@ -62,7 +63,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool {
     private boolean shouldRefresh = false;
     
     public SameAsSubjectExpander() {}
-    public SameAsSubjectExpander(Context preferredContext) {
+    public SameAsSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -79,9 +80,9 @@ public class SameAsSubjectExpander extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         shouldRefresh = false;
-        Iterator contextObjects = getContext().getContextObjects();
+        Iterator<?> contextObjects = getContext().getContextObjects();
         TopicMap tm = wandora.getTopicMap();
         
         if(contextObjects != null && contextObjects.hasNext()) {
@@ -206,7 +207,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool {
             catch(Exception e) {}
             
             try {
-                url = new URL(expanderRequestString);
+                url = new URI(expanderRequestString).toURL();
             }
             catch(Exception e) {
                 log("Exception '"+e.getMessage()+"' occurred while building sameas request URL with base '"+base+"'.");
@@ -231,7 +232,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool {
                     if(json.has("uri")) {
                         String uri = json.getString("uri");
                         if(!subject.equals(uri)) {
-                            additionalSubjects.add(new URL(uri));
+                            additionalSubjects.add(new URI(uri).toURL());
                         }
                     }
                     if(json.has("duplicates")) {
@@ -239,7 +240,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool {
                         for(int j=0; j<duplicates.length(); j++) {
                             String duplicate = duplicates.getString(j);
                             if(duplicate != null) {
-                                additionalSubjects.add(new URL(duplicate));
+                                additionalSubjects.add(new URI(duplicate).toURL());
                             }
                         }
                     }

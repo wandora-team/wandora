@@ -65,8 +65,8 @@ public class DeleteTopicsExceptSelected extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
-        Iterator selectedTopics = getContext().getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
+        Iterator<?> selectedTopics = getContext().getContextObjects();
         Topic selectedTopic = null;
         int count = 0;
 

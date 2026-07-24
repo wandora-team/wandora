@@ -30,6 +30,7 @@ package org.wandora.application.tools.subjects;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -61,7 +62,7 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool {
     public MakeSubjectIdentifierFromOccurrence() {
     }
     
-    public MakeSubjectIdentifierFromOccurrence(Context preferredContext) {
+    public MakeSubjectIdentifierFromOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -79,7 +80,7 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
@@ -114,7 +115,7 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool {
             int progress = 0;
             int progressMax = 0;
 
-            ArrayList<Object> dt = new ArrayList<Object>();
+            List<Object> dt = new ArrayList<>();
             while(topics.hasNext() && !forceStop()) {
                 dt.add(topics.next());
                 progressMax++;

@@ -47,7 +47,7 @@ public class AnnieOccurrenceExtractor extends AbstractOccurrenceExtractor {
 
 	public AnnieOccurrenceExtractor() {
     }
-    public AnnieOccurrenceExtractor(Context preferredContext) {
+    public AnnieOccurrenceExtractor(Context<?> preferredContext) {
         super(preferredContext);
     }
 

@@ -21,6 +21,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,8 +72,8 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
     
     private int shouldStop = -1;
     private SOMMap map = null;
-    private ArrayList<T3<Topic, Integer, Integer>> topicLocations = new ArrayList<T3<Topic, Integer, Integer>>();
-    private ArrayList<String>[][] cellLabels = null;
+    private List<T3<Topic, Integer, Integer>> topicLocations = new ArrayList<>();
+    private List<String>[][] cellLabels = null;
     private boolean[][] selectedCells = null; 
     
     private int cellSize = 50;
@@ -106,16 +107,10 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
         PERMUTATE_TOPICS_WITHIN_EVERY_CELL,
     };
     
-    private RenderingHints qualityHints = new RenderingHints(
-                RenderingHints.KEY_RENDERING,
-                RenderingHints.VALUE_RENDER_QUALITY);
     private RenderingHints antialiasHints = new RenderingHints(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-    private RenderingHints metricsHints = new RenderingHints(
-                RenderingHints.KEY_FRACTIONALMETRICS,
-                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-    
+
     
     public SOMTopicVisualizationPanel() {
         defaultFont = new Font("SansSerif", Font.PLAIN, 12);
@@ -135,7 +130,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
         mapSize = map.getSize();
         selectedCells = new boolean[mapSize][mapSize];
         clearCellSelection();
-        cellLabels = new ArrayList[mapSize][mapSize];
+        cellLabels = (List<String>[][]) new List[mapSize][mapSize];
         if(shouldStop == -1) shouldStop = 0;
         new Thread(this).start();
     }
@@ -225,7 +220,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
             int cellLeft = 0;
             Rectangle2D cellBounds = null;
             synchronized(cellLabels) {
-                ArrayList<String> labels = null;
+                List<String> labels = null;
                 for(int i=0; i<mapSize; i++) {
                     for(int j=0; j<mapSize; j++) {
                         labels = cellLabels[i][j];
@@ -574,7 +569,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
     
     public void getCellTopicsAsString(StringBuilder sb, int x, int y) {
         synchronized(cellLabels) {
-            ArrayList<String> labels = cellLabels[x][y];
+            List<String> labels = cellLabels[x][y];
             sb.append(x+"\t");
             sb.append(y+"\t");
             if(labels != null && labels.size() > 0) {

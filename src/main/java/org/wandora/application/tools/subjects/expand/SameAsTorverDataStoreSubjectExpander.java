@@ -37,7 +37,7 @@ public class SameAsTorverDataStoreSubjectExpander extends SameAsSubjectExpander 
 
 
 	public SameAsTorverDataStoreSubjectExpander() {}
-    public SameAsTorverDataStoreSubjectExpander(Context preferredContext) {
+    public SameAsTorverDataStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

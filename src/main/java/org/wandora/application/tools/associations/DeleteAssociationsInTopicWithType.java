@@ -54,13 +54,13 @@ public class DeleteAssociationsInTopicWithType extends DeleteAssociationsInTopic
 
     public DeleteAssociationsInTopicWithType() {
     }
-    public DeleteAssociationsInTopicWithType(Context preferredContext) {
+    public DeleteAssociationsInTopicWithType(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         associationType=null;
         associationType=wandora.showTopicFinder("Select type of association to be removed from topics...");                
         if(associationType != null) {

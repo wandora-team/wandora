@@ -96,7 +96,7 @@ public class SOMClassifier extends AbstractWandoraTool {
 
 
 
-	public SOMClassifier(Context preferredContext) {
+	public SOMClassifier(Context<?> preferredContext) {
         this.setContext(preferredContext);
     }
     
@@ -115,7 +115,7 @@ public class SOMClassifier extends AbstractWandoraTool {
                "Tool is able to group similar topics.";
     }
     
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(context instanceof AssociationContext) {
             try {
                 Iterator<Association> associations = (Iterator<Association>) context.getContextObjects();

@@ -68,7 +68,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler {
         this.uploadAll = upAll;
     }
     
-    public MediawikiOccurrenceUploader(Context proposedContext) {
+    public MediawikiOccurrenceUploader(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
     
@@ -83,7 +83,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         requiresRefresh = false;
         isConfigured = false;
         cancelled = false;
@@ -129,7 +129,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler {
             }
             else {
                 
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 if(!contextObjects.hasNext()) return;
                 
                 int uploadCounter = 0;
@@ -153,7 +153,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler {
                 if(uploadLang == null) return;
                 setDefaultLogger();
                 
-                Iterator objects = context.getContextObjects();
+                Iterator<?> objects = context.getContextObjects();
                 Object cx = null;
                 Topic topic = null;
                 Collection<Topic> occurranceTypes = null;

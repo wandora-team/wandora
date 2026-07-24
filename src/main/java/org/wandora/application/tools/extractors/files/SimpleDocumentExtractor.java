@@ -227,7 +227,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Browse
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         super.execute(wandora, context);
     }
 

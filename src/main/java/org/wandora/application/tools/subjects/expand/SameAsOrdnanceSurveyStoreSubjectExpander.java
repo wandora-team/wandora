@@ -41,7 +41,7 @@ public class SameAsOrdnanceSurveyStoreSubjectExpander extends SameAsSubjectExpan
 
 
 	public SameAsOrdnanceSurveyStoreSubjectExpander() {}
-    public SameAsOrdnanceSurveyStoreSubjectExpander(Context preferredContext) {
+    public SameAsOrdnanceSurveyStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

@@ -58,7 +58,7 @@ public class Exec extends AbstractWandoraTool {
     
     
    @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         Process process=null;
         try {
             if(command != null) {

@@ -272,7 +272,7 @@ public class UClassifierDialog extends javax.swing.JDialog {
     
     private void selectContextSLFiles() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -309,7 +309,7 @@ public class UClassifierDialog extends javax.swing.JDialog {
     
     private void selectContextSLs() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -344,7 +344,7 @@ public class UClassifierDialog extends javax.swing.JDialog {
 
     private void selectContextSIs() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -397,7 +397,7 @@ public class UClassifierDialog extends javax.swing.JDialog {
         urlLabel = new org.wandora.application.gui.simple.SimpleLabel();
         crawlerPanel = new javax.swing.JPanel();
         crawlerLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        crawlerComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        crawlerComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         crawlerComboBox.setEditable(false);
         urlScrollPane = new javax.swing.JScrollPane();
         urlTextPane = new org.wandora.application.gui.simple.SimpleTextPane();
@@ -421,7 +421,7 @@ public class UClassifierDialog extends javax.swing.JDialog {
         buttonPanel = new javax.swing.JPanel();
         classifierPanel = new javax.swing.JPanel();
         classifierLabel = new SimpleLabel();
-        classifierComboBox = new SimpleComboBox();
+        classifierComboBox = new SimpleComboBox<>();
         thresholdLabel = new SimpleLabel();
         thresholdTextField = new SimpleField();
         fillerPanel = new javax.swing.JPanel();
@@ -739,10 +739,10 @@ private void forgetApiKeyButtonMouseReleased(java.awt.event.MouseEvent evt) {//G
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JComboBox classifierComboBox;
+    private javax.swing.JComboBox<UClassifierOption> classifierComboBox;
     private javax.swing.JLabel classifierLabel;
     private javax.swing.JPanel classifierPanel;
-    private javax.swing.JComboBox crawlerComboBox;
+    private javax.swing.JComboBox<String> crawlerComboBox;
     private javax.swing.JLabel crawlerLabel;
     private javax.swing.JPanel crawlerPanel;
     private javax.swing.JButton extractButton;

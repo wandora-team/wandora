@@ -30,10 +30,10 @@ package org.wandora.application.tools.extractors.rdf;
 
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -115,7 +115,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         baseUrl = null;
         super.execute(wandora, context);
     }
@@ -169,7 +169,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     
     public boolean _extractTopicsFrom(String in, TopicMap tm) throws Exception {        
         try {           
-            importRDF(new StringBufferInputStream(in), tm);
+            importRDF(new ByteArrayInputStream(in.getBytes(defaultEncoding)), tm);
         }
         catch(Exception e){
             log("Exception when handling request",e);

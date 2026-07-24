@@ -50,7 +50,7 @@ public class SetUnpinnedTool extends AbstractGraphPinningTool {
         super(gp);
         this.setContext(new GraphNodeContext());
     }
-    public SetUnpinnedTool(TopicMapGraphPanel gp, Context proposedContext) {
+    public SetUnpinnedTool(TopicMapGraphPanel gp, Context<?> proposedContext) {
         super(gp);
         this.setContext(proposedContext);
     }
@@ -63,7 +63,7 @@ public class SetUnpinnedTool extends AbstractGraphPinningTool {
     
     
 
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         if(context != null) {
             setPinning(context.getContextObjects(), SET_UNPINNED);
         }

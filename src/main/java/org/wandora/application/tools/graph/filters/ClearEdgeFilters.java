@@ -54,7 +54,7 @@ public class ClearEdgeFilters extends AbstractGraphTool {
         this.filter = filter;
     }
 
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         try {
             filter.clearEdgeFilters();
         }

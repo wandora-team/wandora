@@ -32,6 +32,7 @@ package org.wandora.application.gui.table;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Collection;
@@ -42,7 +43,7 @@ import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.contexts.ApplicationTopicContext;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AddInstance;
@@ -73,18 +74,18 @@ public class InstanceTable extends TopicTable /*implements DropTargetListener*/ 
     
     private Object[] instancePopupStruct = new Object[] {
         "---",
-        "Add instance...", new AddInstance(new ApplicationContext()),
+        "Add instance...", new AddInstance(new ApplicationTopicContext()),
         "Paste instances", new Object[] {
-            "Paste instances as basenames...", new PasteInstances(new ApplicationContext()),
-            "Paste instances as SIs...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_NOTHING, PasteInstances.PASTE_SIS),
+            "Paste instances as basenames...", new PasteInstances(new ApplicationTopicContext()),
+            "Paste instances as SIs...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_NOTHING, PasteInstances.PASTE_SIS),
             "---",
-            "Paste instances with names...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_NAMES),
-            "Paste instances with SLs...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_SLS),
-            "Paste instances with SIs...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_SIS),
-            "Paste instances with classes...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_CLASSES),
-            "Paste instances with instances...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_INSTANCES),
-            "Paste instances with players...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_PLAYERS),
-            "Paste instances with occurrences...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_TEXTDATAS),
+            "Paste instances with names...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_NAMES),
+            "Paste instances with SLs...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_SLS),
+            "Paste instances with SIs...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_SIS),
+            "Paste instances with classes...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_CLASSES),
+            "Paste instances with instances...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_INSTANCES),
+            "Paste instances with players...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_PLAYERS),
+            "Paste instances with occurrences...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_TEXTDATAS),
         },
         "Delete instances...", new DeleteFromTopics(DeleteFromTopics.LOOSE_INSTANCES_IN_CONTEXT),
          
@@ -149,7 +150,7 @@ public class InstanceTable extends TopicTable /*implements DropTargetListener*/ 
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        URL u = new URL(topicIdentifier);
+                                        URL u = new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}

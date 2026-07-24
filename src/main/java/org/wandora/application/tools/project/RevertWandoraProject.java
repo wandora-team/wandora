@@ -65,7 +65,7 @@ public class RevertWandoraProject extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         String recentProject = wandora.getCurrentProjectFileName();
         if(recentProject != null && recentProject.length() > 0) {
             File recentProjectFile = new File(recentProject);

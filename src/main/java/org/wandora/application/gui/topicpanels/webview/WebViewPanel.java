@@ -170,7 +170,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
         protected void processMouseWheelEvent(MouseWheelEvent e) {
             MouseWheelEvent ee = new MouseWheelEvent(
                     (Component) e.getSource(), e.getID(), e.getWhen(),
-                    e.getModifiers(), e.getX(), e.getY(), e.getXOnScreen(),
+                    e.getModifiersEx(), e.getX(), e.getY(), e.getXOnScreen(),
                     e.getYOnScreen(), e.getClickCount(),
                     e.isPopupTrigger(), e.getScrollType(), e.getScrollAmount(),
                     e.getWheelRotation(), e.getPreciseWheelRotation());

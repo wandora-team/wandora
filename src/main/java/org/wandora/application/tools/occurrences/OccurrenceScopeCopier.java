@@ -59,14 +59,14 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool {
     public OccurrenceScopeCopier() {
         REMOVE_AFTER_COPY = false;
     }
-    public OccurrenceScopeCopier(Context preferredContext) {
+    public OccurrenceScopeCopier(Context<?> preferredContext) {
         REMOVE_AFTER_COPY = false;
         setContext(preferredContext);
     }
     public OccurrenceScopeCopier(boolean removeAfterCopy) {
         REMOVE_AFTER_COPY = false;
     }
-    public OccurrenceScopeCopier(boolean removeAfterCopy, Context preferredContext) {
+    public OccurrenceScopeCopier(boolean removeAfterCopy, Context<?> preferredContext) {
         REMOVE_AFTER_COPY = removeAfterCopy;
         setContext(preferredContext);
     }
@@ -84,7 +84,7 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {   
+    public void execute(Wandora wandora, Context<?> context) {   
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

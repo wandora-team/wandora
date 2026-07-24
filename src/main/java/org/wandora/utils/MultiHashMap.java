@@ -58,7 +58,7 @@ public class MultiHashMap<K,V> extends HashMap<K,Collection<V>> {
     public void add(K key, V value){
         Collection<V> c = super.get(key);
         if(c==null){
-            c=new ArrayList();
+            c=new ArrayList<>();
             c.add(value);
             super.put(key,c);
         }

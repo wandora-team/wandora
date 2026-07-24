@@ -351,7 +351,10 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
         
         
         
-        @Override
+        private static final long serialVersionUID = 1L;
+
+
+		@Override
         public int getColumnCount() {
             if(cols != null) return cols.length;
             return 0;
@@ -411,7 +414,9 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
     public class ToolTableCellRenderer extends DefaultTableCellRenderer {
 
 
-        @Override
+        private static final long serialVersionUID = 1L;
+
+		@Override
         public Component getTableCellRendererComponent(
                             JTable table, Object value,
                             boolean isSelected, boolean hasFocus,
@@ -436,8 +441,9 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
     
     public class ToolTableSorter extends TableSorter {
 
+        private static final long serialVersionUID = 1L;
 
-        public ToolTableSorter() {
+		public ToolTableSorter() {
             super();
         }
 

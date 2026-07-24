@@ -65,14 +65,14 @@ public class DownloadSubjectLocators extends AbstractWandoraTool {
     
     public DownloadSubjectLocators() {
     }
-    public DownloadSubjectLocators(Context preferredContext) {
+    public DownloadSubjectLocators(Context<?> preferredContext) {
         this(preferredContext, false);
     }
 
     public DownloadSubjectLocators(boolean changeSubjectLocator) {
         this.changeSubjectLocator = changeSubjectLocator;
     }
-    public DownloadSubjectLocators(Context preferredContext, boolean changeSubjectLocator) {
+    public DownloadSubjectLocators(Context<?> preferredContext, boolean changeSubjectLocator) {
         setContext(preferredContext);
         this.changeSubjectLocator = changeSubjectLocator;
     }
@@ -82,7 +82,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         this.wandora = wandora;
         Iterator<?> topics = context.getContextObjects();
         File targetPath = null;

@@ -41,7 +41,7 @@ public class SameAsPleiadesStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsPleiadesStoreSubjectExpander() {}
-    public SameAsPleiadesStoreSubjectExpander(Context preferredContext) {
+    public SameAsPleiadesStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

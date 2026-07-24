@@ -38,14 +38,14 @@ import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
 
 /**
- * ApplicationContext uses application ie. the Wandora as a context source.
+ * ApplicationTopicContext uses application ie. the Wandora as a context source.
  * Context object is a topic opened in topic panel.
  *
  * @author akivela
  */
 
 
-public class ApplicationContext implements Context {
+public class ApplicationTopicContext implements Context<Topic> {
     
     private Object contextSource;
     protected WandoraTool contextOwner = null;
@@ -54,14 +54,14 @@ public class ApplicationContext implements Context {
 
     
     /** Creates a new instance of ApplicationContext */
-    public ApplicationContext() {
+    public ApplicationTopicContext() {
     }
 
     
     
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         List<Topic> contextTopics = new ArrayList<>();
         try {
             Wandora w = (Wandora) contextSource;

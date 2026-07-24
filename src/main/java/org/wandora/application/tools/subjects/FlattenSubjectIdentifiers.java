@@ -66,7 +66,7 @@ public class FlattenSubjectIdentifiers extends AbstractWandoraTool {
 	public FlattenSubjectIdentifiers() {
         setContext(new TopicContext());
     }
-    public FlattenSubjectIdentifiers(Context context) {
+    public FlattenSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
     
@@ -83,7 +83,7 @@ public class FlattenSubjectIdentifiers extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         Iterator<?> contextTopics = getContext().getContextObjects();
         if(contextTopics == null || !contextTopics.hasNext()) return;
         

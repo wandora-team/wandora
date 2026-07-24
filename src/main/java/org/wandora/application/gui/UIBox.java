@@ -58,6 +58,7 @@ import java.awt.image.ImageObserver;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -1194,7 +1195,7 @@ public class UIBox {
             catch (Exception e) {
                 try {
 
-                    URL url = new URL(imageName);
+                    URL url = new URI(imageName).toURL();
                     URLConnection urlConnection = null;
                     if(httpAuthorizer != null) {
                          urlConnection = httpAuthorizer.getAuthorizedAccess(url);

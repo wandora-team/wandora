@@ -58,7 +58,7 @@ public class SpreadOccurrence extends AbstractWandoraTool {
 
 	public SpreadOccurrence() {
     }
-    public SpreadOccurrence(Context proposedContext) {
+    public SpreadOccurrence(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
 
@@ -75,7 +75,7 @@ public class SpreadOccurrence extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object source = getContext().getContextSource();
 
         // This tool is used mainly in context of occurrence table

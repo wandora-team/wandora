@@ -116,13 +116,12 @@ public abstract class AbstractSliderTool extends AbstractGraphTool implements Ch
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         // graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             ActionEvent ae = context.getContextEvent();
             Object o = ae.getSource();
-            if(o instanceof Component) {
-                referenceComponent = (Component) o;
+            if(o instanceof Component referenceComponent) {
                 if(sliderPopup == null) initializeSlider(graphPanel);
                 if(!getSliderVisible()) {
                     setSliderRange(getMinValue(graphPanel),getMaxValue(graphPanel));
@@ -140,8 +139,8 @@ public abstract class AbstractSliderTool extends AbstractGraphTool implements Ch
     
     
     @Override
-    public void executeSynchronized(Wandora wandora, Context context) {
-        // NOTHING HERE!
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
+        // NOTHING HERE! See subclasses for use cases.
     }
     
     

@@ -50,7 +50,7 @@ public class AddInstance extends AbstractWandoraTool {
     
     public AddInstance() {
     }
-    public AddInstance(Context preferredContext) {
+    public AddInstance(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -65,7 +65,7 @@ public class AddInstance extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         shouldRefresh = false;
         Iterator<?> topics = context.getContextObjects();
         if(topics != null && topics.hasNext()) {

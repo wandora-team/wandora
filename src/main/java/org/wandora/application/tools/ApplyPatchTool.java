@@ -79,7 +79,7 @@ public class ApplyPatchTool extends AbstractWandoraTool {
     }
         
     @Override
-    public void execute(final Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(final Wandora wandora, Context<?> context) throws TopicMapException  {
         JDialog dialog=new JDialog(wandora,"Apply topic map patch",true);
         ApplyPatchToolConfigPanel configPanel=new ApplyPatchToolConfigPanel(wandora,dialog);
         dialog.getContentPane().add(configPanel);

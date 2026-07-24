@@ -37,6 +37,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
@@ -165,7 +167,7 @@ public class AudioMidi implements ActionListener, MetaEventListener, PreviewPane
                         sequence = MidiSystem.getSequence(new ByteArrayInputStream(dataURL.getData()));
                     }
                     else {
-                        URL audioURL = new URL(audioLocator);
+                        URL audioURL = new URI(audioLocator).toURL();
                         sequence = MidiSystem.getSequence(audioURL);
                     }
                     if(sequence != null) {
@@ -178,7 +180,7 @@ public class AudioMidi implements ActionListener, MetaEventListener, PreviewPane
                 catch (MidiUnavailableException e) { 
                     PreviewUtils.previewError(ui, "Midi is unavailable.", e);
                 }
-                catch (MalformedURLException e) {
+                catch (MalformedURLException | URISyntaxException e) {
                     PreviewUtils.previewError(ui, "Midi locator is malformed.", e);
                 } 
                 catch (IOException e) {  

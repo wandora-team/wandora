@@ -60,7 +60,7 @@ public class AddSubjectIdentifier extends AbstractWandoraTool {
 	private boolean shouldRefresh = false;
     
     public AddSubjectIdentifier() {}
-    public AddSubjectIdentifier(Context preferredContext) {
+    public AddSubjectIdentifier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -78,7 +78,7 @@ public class AddSubjectIdentifier extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         shouldRefresh = false;
         Iterator<?> contextTopics = getContext().getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {

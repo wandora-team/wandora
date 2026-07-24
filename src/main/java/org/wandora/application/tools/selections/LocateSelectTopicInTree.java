@@ -49,13 +49,13 @@ public class LocateSelectTopicInTree extends AbstractWandoraTool {
 	/** Creates a new instance of LocateSelectTopicInTree */
     public LocateSelectTopicInTree() {
     }
-    public LocateSelectTopicInTree(Context preferredContext) {
+    public LocateSelectTopicInTree(Context<?> preferredContext) {
         setContext(preferredContext);
     }
  
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         Iterator<?> contextTopics = context.getContextObjects();
         TopicTree tree = wandora.getCurrentTopicTree();
         if(tree != null && contextTopics != null && contextTopics.hasNext()) {

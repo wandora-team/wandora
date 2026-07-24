@@ -31,6 +31,7 @@ package org.wandora.application.contexts;
 import java.util.Iterator;
 
 import org.wandora.application.contexts.iterators.AssociationTypeIterator;
+import org.wandora.topicmap.Topic;
 
 /**
  *
@@ -40,9 +41,9 @@ public class AssociationTypeContext extends LayeredTopicContext {
 
    
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         AssociationTypeIterator iterator = new AssociationTypeIterator();
-        iterator.initialize(super.getContextObjects(), wandora);
+        iterator.initialize(super.getContextObjects(), getWandora());
         return iterator;
     }
     

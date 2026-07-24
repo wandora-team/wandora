@@ -40,7 +40,7 @@ public class SameAsDataSouthamptonStoreSubjectExpander extends SameAsSubjectExpa
 
 
 	public SameAsDataSouthamptonStoreSubjectExpander() {}
-    public SameAsDataSouthamptonStoreSubjectExpander(Context preferredContext) {
+    public SameAsDataSouthamptonStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

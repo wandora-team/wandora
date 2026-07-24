@@ -88,7 +88,7 @@ public class NewTopic extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Topic newTopic = null;
         String confirmMessage = null;
         String basename = null;
@@ -192,7 +192,7 @@ public class NewTopic extends AbstractWandoraTool {
     
     
     
-    public Topic createNewTopic(Wandora wandora, String windowTitle, Context context)  throws TopicMapException {
+    public Topic createNewTopic(Wandora wandora, String windowTitle, Context<?> context)  throws TopicMapException {
         Topic newTopic = null;
         TopicMap topicMap = wandora.getTopicMap();
 

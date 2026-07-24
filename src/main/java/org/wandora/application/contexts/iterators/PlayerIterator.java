@@ -46,7 +46,7 @@ public class PlayerIterator extends TopicIterator {
 
 
     @Override
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
+    public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
         Collection<Topic> playerTopics = new ArrayList<>();
         Collection<Association> associations = null;
         Association association = null;

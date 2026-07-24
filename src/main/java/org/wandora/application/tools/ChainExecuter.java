@@ -74,7 +74,7 @@ public class ChainExecuter extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         for(WandoraTool tool : tools) {
             try {
                 if(tool != null) {

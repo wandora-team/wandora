@@ -56,7 +56,7 @@ public class OpenOccurrenceInWebView extends AbstractWebViewTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         try {
             if(otopic != null && otype != null && oscope != null) {
                 String o = otopic.getData(otype, oscope);

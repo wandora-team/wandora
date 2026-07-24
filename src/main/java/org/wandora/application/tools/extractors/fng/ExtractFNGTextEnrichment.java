@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
@@ -146,7 +147,7 @@ public class ExtractFNGTextEnrichment extends AbstractExtractor {
         try {
             Topic textType = createTopic(topicMap, "tekstidokumentti");
             Topic textTopic = createTopic(topicMap, file.getName(), " (tekstidokumentti)", file.getName(), textType);
-            textTopic.addSubjectIdentifier(new Locator(TopicTools.cleanDirtyLocator(file.toURL().toExternalForm())));
+            textTopic.addSubjectIdentifier(new Locator(TopicTools.cleanDirtyLocator(file.toURI().toURL().toExternalForm())));
             
             // --- ADD LAST MODIFICATION TIME AS OCCURRENCE ---
             try {
@@ -179,7 +180,7 @@ public class ExtractFNGTextEnrichment extends AbstractExtractor {
             // --- HANDLE PDF ENRICHMENT TEXT ---
             if(lowerCaseLocator.endsWith("pdf")) {
 
-                PDDocument doc = PDDocument.load(new URL(locator).openStream());
+                PDDocument doc = PDDocument.load(new URI(locator).toURL().openStream());
                 PDDocumentInformation info = doc.getDocumentInformation();
 
                 // --- PDF SUBJECT ---

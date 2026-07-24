@@ -80,7 +80,7 @@ public class ReleaseNodesOfType extends AbstractGraphTool {
     
 
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         if(type != null && filter != null) {
             filter.releaseNodesOfType(type);
         }

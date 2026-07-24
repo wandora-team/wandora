@@ -1152,8 +1152,7 @@ public class MadsExtractor extends AbstractExtractor {
             if(t==null){
                 t=tm.createTopic();
                 if(bn!=null) t.setBaseName(bn);
-                if(si!=null) t.addSubjectIdentifier(tm.createLocator(si));
-                else t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
+                t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
                 if(type != null) t.addType(type);
             }
             return t;

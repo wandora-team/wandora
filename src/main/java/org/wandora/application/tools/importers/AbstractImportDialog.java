@@ -210,7 +210,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
     
     private void selectContextSLFiles() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -247,7 +247,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
     
     private void selectContextSLs() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -282,7 +282,7 @@ public class AbstractImportDialog extends javax.swing.JDialog {
 
     private void selectContextSIs() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;

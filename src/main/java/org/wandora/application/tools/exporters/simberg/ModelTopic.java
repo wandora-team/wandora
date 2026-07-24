@@ -78,9 +78,9 @@ public class ModelTopic {
                 fields.put(field,object.toString());
             }
             else if(type==Type.StringList) {
-                if(object instanceof Collection){
+                if(object instanceof Collection co){
                     List<String> l=new ArrayList<>();
-                    for(Object o : (Collection)object){
+                    for(Object o : co){
                         if(o==null) l.add(null);
                         else l.add(o.toString());
                     }
@@ -95,13 +95,13 @@ public class ModelTopic {
                 else throw new ClassCastException("Field requires a ModelTopic but value is of type "+object.getClass().getName());
             }
             else if(type==Type.TopicList){
-                if(object instanceof Collection){
-                    for(Object o : (Collection)object){
+                if(object instanceof Collection co){
+                    for(Object o : co){
                         if(!(o instanceof ModelTopic)){
                             throw new ClassCastException("Field requires a ModelTopic list but value list element is of type "+o.getClass().getName());
                         }
                     }
-                    fields.put(field,new ArrayList<ModelTopic>((Collection)object));
+                    fields.put(field,new ArrayList<ModelTopic>(co));
                 }
                 else throw new ClassCastException("Field requires a ModelTopic list but value is of type "+object.getClass().getName());
             }

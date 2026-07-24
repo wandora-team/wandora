@@ -55,7 +55,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
 	
 	public static String BASE_URL = "http://ws.audioscrobbler.com/1.0/";
     private Wandora wandora = null;
-    private Context context = null;
+    private Context<?> context = null;
     private boolean accepted = false;
     
     
@@ -76,7 +76,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
         this.wandora = wandora;
     }
     
-    public void setContext(Context context) {
+    public void setContext(Context<?> context) {
         this.context = context;
     }
     
@@ -297,15 +297,13 @@ public class AudioScrobblerExtractorSelector extends JDialog {
 
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
                     str = null;
                     o = contextObjects.next();
-                    if(o instanceof Topic) {
-                        Topic t = (Topic) o;
-
+                    if(o instanceof Topic t) {
                         if(albumType==null || artistType==null){
                             albumType=t.getTopicMap().getTopic(AbstractAudioScrobblerExtractor.ALBUM_SI);
                             artistType=t.getTopicMap().getTopic(AbstractAudioScrobblerExtractor.ARTIST_SI);

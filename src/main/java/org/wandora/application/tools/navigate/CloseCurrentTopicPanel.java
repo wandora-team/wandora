@@ -62,7 +62,7 @@ public class CloseCurrentTopicPanel extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         TopicPanel tp = wandora.getTopicPanel();
         if(tp != null && tp instanceof DockingFramePanel) {
             DockingFramePanel dfp = (DockingFramePanel) tp;

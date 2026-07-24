@@ -70,7 +70,7 @@ public class ExitWandora extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         wandora.tryExit();
     }
 

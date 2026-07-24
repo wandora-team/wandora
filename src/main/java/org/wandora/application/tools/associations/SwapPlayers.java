@@ -81,7 +81,7 @@ public class SwapPlayers extends AbstractWandoraTool {
     public SwapPlayers() {
         setContext(new AssociationContext());
     }
-    public SwapPlayers(Context preferredContext) {
+    public SwapPlayers(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -102,7 +102,7 @@ public class SwapPlayers extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         requiresRefresh = false;
         Iterator<?> associations = context.getContextObjects();
         Association association = null;

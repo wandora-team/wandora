@@ -69,7 +69,7 @@ public class OpenEdgeTopic extends AbstractWandoraTool {
     }
     
     
-    public OpenEdgeTopic(Context preferredContext) {
+    public OpenEdgeTopic(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -86,7 +86,7 @@ public class OpenEdgeTopic extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             Map<Association,List<Topic>> associationsWithRoles = null;
             Topic role = null;

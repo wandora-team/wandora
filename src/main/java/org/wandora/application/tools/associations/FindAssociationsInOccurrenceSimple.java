@@ -78,7 +78,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool {
     public FindAssociationsInOccurrenceSimple() {
     }
     
-    public FindAssociationsInOccurrenceSimple(Context preferredContext) {
+    public FindAssociationsInOccurrenceSimple(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -148,7 +148,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {  
+    public void execute(Wandora wandora, Context<?> context) {  
         try {
             int associationCount = 0;
             Iterator<?> topics = context.getContextObjects();

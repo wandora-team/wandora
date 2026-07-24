@@ -64,7 +64,7 @@ public class HelmetUI extends javax.swing.JPanel {
     private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
+    private Context<?> context = null;
 
 
     /** Creates new form HelmetUI */
@@ -82,7 +82,7 @@ public class HelmetUI extends javax.swing.JPanel {
         accepted = b;
     }
 
-    public void open(Wandora w, Context c) {
+    public void open(Wandora w, Context<?> c) {
         context = c;
         accepted = false;
         dialog = new JDialog(w, true);

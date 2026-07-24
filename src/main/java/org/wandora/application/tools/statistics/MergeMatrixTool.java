@@ -61,7 +61,7 @@ public class MergeMatrixTool extends AbstractWandoraTool{
 
 	protected HashMap<String, Integer> processedPairs;
     public MergeMatrixTool() {
-        processedPairs = new HashMap<String, Integer>();
+        processedPairs = new HashMap<>();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class MergeMatrixTool extends AbstractWandoraTool{
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         TopicMap tm = solveContextTopicMap(admin, context);
         String tmTitle = solveNameForTopicMap(admin,tm);
         
@@ -116,7 +116,7 @@ public class MergeMatrixTool extends AbstractWandoraTool{
         int prog = 0;
         for(Layer l : allLayers){
             if (forceStop()) break;
-            currentRow = new ArrayList<String>();
+            currentRow = new ArrayList<>();
             currentRow.add(l.getName());
             for (Layer ll : allLayers) {
                 log("now processing " + l.getName() + " - " + ll.getName());
@@ -164,12 +164,11 @@ public class MergeMatrixTool extends AbstractWandoraTool{
     }
     
     private List<Layer> getChildLayers(List<Layer> ll){
-        List<Layer> returnedLayers = new ArrayList<Layer>();
+        List<Layer> returnedLayers = new ArrayList<>();
         returnedLayers.addAll(ll);
         for (Layer layer : ll) {
             TopicMap ltm = layer.getTopicMap();
-            if(ltm instanceof ContainerTopicMap) {
-                ContainerTopicMap ctm = (ContainerTopicMap)ltm;
+            if(ltm instanceof ContainerTopicMap ctm) {
                 returnedLayers.addAll(getChildLayers(ctm.getLayers()));
             } 
         }

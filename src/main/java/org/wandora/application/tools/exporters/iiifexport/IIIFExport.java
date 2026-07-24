@@ -137,11 +137,11 @@ public class IIIFExport extends AbstractExportTool {
         
         god.setVisible(true);
         if(!god.wasCancelled()){
-            Map values=god.getValues();
-            String builderStr=values.get("IIIF Builder").toString();
+            Map<String,String> values=god.getValues();
+            String builderStr=values.get("IIIF Builder");
             selectedBuilder=resolveBuilder(builderStr);
             options.put(prefix+"builder", builderStr);
-            prettyPrint=Boolean.parseBoolean(values.get("Pretty print").toString());
+            prettyPrint=Boolean.parseBoolean(values.get("Pretty print"));
             options.put(prefix+"prettyprint", ""+prettyPrint);
         }
     }
@@ -167,7 +167,7 @@ public class IIIFExport extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("IIIF Export");
         if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){

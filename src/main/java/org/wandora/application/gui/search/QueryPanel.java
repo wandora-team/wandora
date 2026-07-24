@@ -220,17 +220,17 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         }
     }
     
-    public MixedTopicTable getTopicsByQuery(Iterator<Topic> contextTopics) throws ScriptException, TopicMapException, Exception {
+    public MixedTopicTable getTopicsByQuery(Iterator<?> contextTopics) throws ScriptException, TopicMapException, Exception {
         String engineName = engineComboBox.getSelectedItem().toString();
         String scriptStr =  scriptTextPane.getText();
         return getTopicsByQuery(wandora,engineName,scriptStr,contextTopics);
     }
         
-    public static MixedTopicTable getTopicsByQuery(Wandora wandora,TopicMap tm,Directive query,Iterator<Topic> contextTopics) throws QueryException, TopicMapException {
+    public static MixedTopicTable getTopicsByQuery(Wandora wandora,TopicMap tm,Directive query,Iterator<?> contextTopics) throws QueryException, TopicMapException {
         List<ResultRow> res = new ArrayList<>();
         if(contextTopics!=null){
             while(contextTopics.hasNext()){
-                Topic t=contextTopics.next();
+                Topic t=(Topic) contextTopics.next();
                 if(t!=null && !t.isRemoved()) res.add( new ResultRow(t));
             }
         }
@@ -288,7 +288,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         return null;        
     }
     
-    public static MixedTopicTable getTopicsByQuery(Wandora wandora,String engineName,String scriptStr,Iterator<Topic> contextTopics) throws ScriptException, TopicMapException, Exception {
+    public static MixedTopicTable getTopicsByQuery(Wandora wandora,String engineName,String scriptStr,Iterator<?> contextTopics) throws ScriptException, TopicMapException, Exception {
         TopicMap tm = wandora.getTopicMap();
         WandoraScriptManager sm = new WandoraScriptManager();
         ScriptEngine engine = sm.getScriptEngine(engineName);
@@ -337,12 +337,12 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         queryPanel = new javax.swing.JPanel();
         queryPanelInner = new javax.swing.JPanel();
         selectQueryPanel = new javax.swing.JPanel();
-        queryComboBox = new SimpleComboBox();
+        queryComboBox = new SimpleComboBox<>();
         addQueryButton = new SimpleButton();
         delQueryButton = new SimpleButton();
         scriptQueryPanel = new javax.swing.JPanel();
         engineLabel = new SimpleLabel();
-        engineComboBox = new SimpleComboBox();
+        engineComboBox = new SimpleComboBox<>();
         scriptLabel = new SimpleLabel();
         scriptScrollPane = new javax.swing.JScrollPane();
         scriptTextPane = new QueryTextPane();
@@ -560,9 +560,9 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         // TODO: Get global context objects and pass them into the getTopicsByQuery.
         // if(context != null) contextObjects = context.getContextObjects();
         
-        Context context = new LayeredTopicContext();
+        Context<Topic> context = new LayeredTopicContext();
         context.initialize(wandora, null, null);
-        Iterator contextObjects = context.getContextObjects();
+        Iterator<Topic> contextObjects = context.getContextObjects();
         
         try {
             resultPanel.removeAll();
@@ -615,9 +615,9 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     private javax.swing.JButton addQueryButton;
     private javax.swing.JButton clearResultsButton;
     private javax.swing.JButton delQueryButton;
-    private javax.swing.JComboBox engineComboBox;
+    private javax.swing.JComboBox<String> engineComboBox;
     private javax.swing.JLabel engineLabel;
-    private javax.swing.JComboBox queryComboBox;
+    private javax.swing.JComboBox<String> queryComboBox;
     private javax.swing.JPanel queryPanel;
     private javax.swing.JPanel queryPanelInner;
     private javax.swing.JPanel resultContainerPanel;

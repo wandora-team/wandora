@@ -86,7 +86,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
     
 
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model=solveModel(wandora,context);
         CloseTopicNodesOfType.hideTopicsOfType(type,model);
         filter.filterNodesOfType(type);

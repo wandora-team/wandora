@@ -37,7 +37,7 @@ import java.util.List;
 
 import javax.swing.Icon;
 
-import org.wandora.application.contexts.PreContext;
+import org.wandora.application.contexts.PresetContext;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.Locator;
@@ -200,7 +200,7 @@ public class LocatorHistory {
                         else {
                             struct.add(l.toExternalForm());
                         }
-                        struct.add(new OpenTopic(new PreContext(l)));
+                        struct.add(new OpenTopic(new PresetContext<Locator>(l)));
                         struct.add(icon);
                     }
                 }
@@ -235,7 +235,7 @@ public class LocatorHistory {
                         else {
                             struct.add(l.toExternalForm());
                         }
-                        struct.add(new OpenTopic(new PreContext(l)));
+                        struct.add(new OpenTopic(new PresetContext<Locator>(l)));
                         struct.add(icon);
                     }
                 }

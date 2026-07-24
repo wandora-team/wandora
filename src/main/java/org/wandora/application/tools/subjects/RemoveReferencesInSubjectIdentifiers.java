@@ -60,7 +60,7 @@ public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool {
 	public RemoveReferencesInSubjectIdentifiers() {
         setContext(new TopicContext());
     }
-    public RemoveReferencesInSubjectIdentifiers(Context preferredContext) {
+    public RemoveReferencesInSubjectIdentifiers(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -76,7 +76,7 @@ public class RemoveReferencesInSubjectIdentifiers extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         setDefaultLogger();
         Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;

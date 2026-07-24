@@ -85,7 +85,7 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool {
     
     public SplitTopicsWithBasename() {
     }
-    public SplitTopicsWithBasename(Context preferredContext) {
+    public SplitTopicsWithBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -110,7 +110,7 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) {       
+    public void execute(Wandora w, Context<?> context) {       
         Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         TopicMap tm = w.getTopicMap();

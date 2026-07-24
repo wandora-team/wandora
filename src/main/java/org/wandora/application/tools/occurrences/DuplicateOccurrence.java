@@ -57,18 +57,18 @@ public class DuplicateOccurrence  extends AbstractWandoraTool {
     public DuplicateOccurrence() {
         this.occurrenceType=null;
     }
-    public DuplicateOccurrence(Context proposedContext) {
+    public DuplicateOccurrence(Context<?> proposedContext) {
         this.setContext(proposedContext);
         this.occurrenceType=null;
     }
-    public DuplicateOccurrence(Context proposedContext, Topic occurrenceType) {
+    public DuplicateOccurrence(Context<?> proposedContext, Topic occurrenceType) {
         this.setContext(proposedContext);
         this.occurrenceType=occurrenceType;
     }
     public DuplicateOccurrence(Topic occurrenceType) {
         this.occurrenceType=occurrenceType;
     }
-    public DuplicateOccurrence(Context proposedContext, Topic occurrenceType, Topic masterTopic) {
+    public DuplicateOccurrence(Context<?> proposedContext, Topic occurrenceType, Topic masterTopic) {
         this.setContext(proposedContext);
         this.occurrenceType=occurrenceType;
         this.masterTopic=masterTopic;
@@ -92,7 +92,7 @@ public class DuplicateOccurrence  extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object contextSource = context.getContextSource();
         
         if(contextSource instanceof OccurrenceTable) {

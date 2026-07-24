@@ -45,7 +45,6 @@ public class SelectTopicPanelPanel extends javax.swing.JPanel {
     
     private JDialog myDialog = null;
     private List<TopicPanel> topicPanels = null;
-    private Wandora wandora = null;
     private boolean wasAccepted = false;
     
     private static TopicPanel lastSelectedTopicPanel = null;
@@ -64,11 +63,9 @@ public class SelectTopicPanelPanel extends javax.swing.JPanel {
     
     public void openInDialog(List<TopicPanel> topicPanels, Wandora wandora) {
         this.topicPanels = topicPanels;
-        this.wandora = wandora;
-        
         int index = 0;
         int defaultIndex = -1;
-        DefaultListModel topicPanelListModel = new DefaultListModel();
+        DefaultListModel<String> topicPanelListModel = new DefaultListModel<>();
         for(TopicPanel tp : topicPanels) {
             topicPanelListModel.addElement(tp.getName()+" w "+tp.getTitle());
             if(lastSelectedTopicPanel != null && tp.equals(lastSelectedTopicPanel)) {
@@ -130,7 +127,7 @@ public class SelectTopicPanelPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         selectorsPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        topicPanelList = new javax.swing.JList();
+        topicPanelList = new javax.swing.JList<>();
         buttonPanel = new javax.swing.JPanel();
         rememberCheckBox = new SimpleCheckBox();
         fillerPanel = new javax.swing.JPanel();
@@ -231,7 +228,7 @@ public class SelectTopicPanelPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox rememberCheckBox;
     private javax.swing.JButton selectButton;
     private javax.swing.JPanel selectorsPanel;
-    private javax.swing.JList topicPanelList;
+    private javax.swing.JList<String> topicPanelList;
     // End of variables declaration//GEN-END:variables
 
 

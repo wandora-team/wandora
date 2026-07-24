@@ -61,7 +61,7 @@ public class TopicStringifierToVariant implements TopicStringifier {
     
     
     @Override
-    public boolean initialize(Wandora wandora, Context context) {
+    public boolean initialize(Wandora wandora, Context<?> context) {
         try {
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,
                 "Select variant name scope to be viewed",

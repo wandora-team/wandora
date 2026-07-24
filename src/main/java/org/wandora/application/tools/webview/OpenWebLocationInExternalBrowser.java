@@ -48,7 +48,7 @@ public class OpenWebLocationInExternalBrowser extends AbstractWebViewTool {
 
 
 	@Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         try {
             String location = getWebLocation(context);
             if(location != null && location.length() > 0) {

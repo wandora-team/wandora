@@ -25,6 +25,7 @@ package org.wandora.modules.velocityhelpers;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -47,7 +48,7 @@ public class JSONBox {
         JSONObject json = null;
         try {
             if(urlStr != null) {
-                URL url = new URL(urlStr);
+                URL url = new URI(urlStr).toURL();
                 URLConnection urlConnection = url.openConnection();
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

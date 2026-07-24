@@ -76,7 +76,7 @@ public class IncidenceMatrixImport extends AbstractWandoraTool {
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
 
         IncidenceMatrixImportDialog matrixSourceDialog = new IncidenceMatrixImportDialog(wandora, this, true);

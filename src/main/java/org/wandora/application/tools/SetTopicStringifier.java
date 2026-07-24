@@ -83,7 +83,7 @@ public class SetTopicStringifier extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         boolean success = topicStringifier.initialize(wandora, context);
         if(success) {
             TopicToString.setStringifier(topicStringifier);

@@ -140,7 +140,7 @@ public class GraphXMLExport extends AbstractExportTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
        String topicMapName = null;
        String exportInfo = null;
 

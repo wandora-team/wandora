@@ -41,7 +41,7 @@ public class SameAsKelleStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsKelleStoreSubjectExpander() {}
-    public SameAsKelleStoreSubjectExpander(Context preferredContext) {
+    public SameAsKelleStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

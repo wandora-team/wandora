@@ -27,7 +27,7 @@ package org.wandora.application.tools.maiana;
 
 
 import java.io.ByteArrayInputStream;
-import java.net.URL;
+import java.net.URI;
 
 import javax.swing.Icon;
 
@@ -94,7 +94,7 @@ public class MaianaImport extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         String topicMapName = "";
         String topicMapOwner = "";
         
@@ -141,7 +141,7 @@ public class MaianaImport extends AbstractWandoraTool {
                     String apiEndPoint = maianaPanel.getApiEndPoint();
                     MaianaUtils.checkForLocalService(apiEndPoint);
                         
-                    String reply = MaianaUtils.doUrl(new URL(apiEndPoint), request, "application/json");
+                    String reply = MaianaUtils.doUrl(new URI(apiEndPoint).toURL(), request, "application/json");
 
                     //System.out.println("reply:\n"+reply);
 

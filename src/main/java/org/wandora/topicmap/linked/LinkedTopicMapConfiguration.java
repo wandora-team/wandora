@@ -38,7 +38,9 @@ import org.wandora.topicmap.layered.Layer;
  */
 public class LinkedTopicMapConfiguration extends TopicMapConfigurationPanel {
 
-    protected Wandora wandora;
+    private static final long serialVersionUID = 1L;
+    
+	protected Wandora wandora;
     protected TopicMap tm;
     /** Creates new form LinketTopicMapConfiguration */
     public LinkedTopicMapConfiguration(Wandora wandora) {
@@ -98,7 +100,7 @@ public class LinkedTopicMapConfiguration extends TopicMapConfigurationPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
-        linkedMapComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        linkedMapComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         linkedMapComboBox.setEditable(false);
         jPanel1 = new javax.swing.JPanel();
 
@@ -141,7 +143,7 @@ public class LinkedTopicMapConfiguration extends TopicMapConfigurationPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JComboBox linkedMapComboBox;
+    private javax.swing.JComboBox<String> linkedMapComboBox;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -26,7 +26,7 @@
 package org.wandora.application.tools.maiana;
 
 import java.io.ByteArrayOutputStream;
-import java.net.URL;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 
 import javax.swing.Icon;
@@ -100,7 +100,7 @@ public class MaianaExport extends AbstractExportTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
        String topicMapName = null;
        String shortName = null;
        String exportInfo = null;
@@ -155,7 +155,7 @@ public class MaianaExport extends AbstractExportTool {
                 String apiEndPoint = maianaPanel.getApiEndPoint();
                 MaianaUtils.checkForLocalService(apiEndPoint);
 
-                String reply = MaianaUtils.doUrl(new URL(apiEndPoint), json, "application/json");
+                String reply = MaianaUtils.doUrl(new URI(apiEndPoint).toURL(), json, "application/json");
 
                 //System.out.println("reply:\n"+reply);
 

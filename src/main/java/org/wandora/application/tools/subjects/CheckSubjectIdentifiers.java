@@ -47,7 +47,7 @@ public class CheckSubjectIdentifiers extends AbstractWandoraTool {
 	public CheckSubjectIdentifiers() {
         super();
     }
-    public CheckSubjectIdentifiers(Context context) {
+    public CheckSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
 
@@ -63,7 +63,7 @@ public class CheckSubjectIdentifiers extends AbstractWandoraTool {
     }
 
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
         Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             setDefaultLogger();

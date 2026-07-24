@@ -66,7 +66,7 @@ public class InsertPlayer extends AbstractWandoraTool {
     }
     
     
-    public InsertPlayer(Context preferredContext) {
+    public InsertPlayer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -87,7 +87,7 @@ public class InsertPlayer extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
             Topic player = null;
@@ -98,7 +98,7 @@ public class InsertPlayer extends AbstractWandoraTool {
             setDefaultLogger();
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
-                Iterator associations = context.getContextObjects();
+                Iterator<?> associations = context.getContextObjects();
                 if(associations.hasNext()) {
                     //System.out.println("wandora == "+wandora);
                     GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Select player and role","Select player and it's role in associations. Selecting existing role overrides old player.",true,new String[][]{

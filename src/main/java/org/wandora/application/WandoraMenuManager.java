@@ -79,7 +79,7 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import org.wandora.application.contexts.ApplicationAssociationContext;
-import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.contexts.ApplicationTopicContext;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.EmptyContext;
@@ -387,7 +387,7 @@ public class WandoraMenuManager {
     public JMenu extractMenu = new SimpleMenu("Extract", UIBox.getIcon("gui/icons/extract.png"));
     public JMenu generatorMenu = new SimpleMenu("Generate", UIBox.getIcon("gui/icons/generate.png"));
 
-    public static Map SLExtractorMenus = new LinkedHashMap();
+    public static Map<Object,JMenu> SLExtractorMenus = new LinkedHashMap<>();
     //public static JMenu extractWithSLTableMenu = new SimpleMenu("Extract with SL"); // Here the context is default topic context.
     //public static JMenu extractWithSLTreeMenu = new SimpleMenu("Extract with SL"); // Here the context is default topic context.
     public JMenu extractWithSLTopicMenu = new SimpleMenu("Extract with subject locator"); // Here the context is application.
@@ -511,11 +511,11 @@ public class WandoraMenuManager {
     public void refreshExtractMenu() {
         toolManager.getExtractMenu( extractMenu );
         
-        for(Iterator i=SLExtractorMenus.values().iterator(); i.hasNext();) {
+        for(Iterator<?> i=SLExtractorMenus.values().iterator(); i.hasNext();) {
             refreshExtractWithSLMenu( (JMenu) i.next(), null, wandora);
         }
         
-        refreshExtractWithSLMenu( extractWithSLTopicMenu, new ApplicationContext() , wandora);
+        refreshExtractWithSLMenu( extractWithSLTopicMenu, new ApplicationTopicContext() , wandora);
     }
     
     
@@ -740,14 +740,14 @@ public class WandoraMenuManager {
     public void refreshTopicsMenu() {
         
         Object[] splitTopicStructure = new Object[] {
-            "Split topic with subject identifiers", KeyStroke.getKeyStroke(VK_S, DEF_MASK | SHIFT_DOWN_MASK), new SplitTopics(new ApplicationContext()), 
-            "Split topic with a base name regex...", new SplitTopicsWithBasename(new ApplicationContext()),
+            "Split topic with subject identifiers", KeyStroke.getKeyStroke(VK_S, DEF_MASK | SHIFT_DOWN_MASK), new SplitTopics(new ApplicationTopicContext()), 
+            "Split topic with a base name regex...", new SplitTopicsWithBasename(new ApplicationTopicContext()),
             "---",
-            "Split to descending instances with a base name regex...", new SplitToInstancesWithBasename(new ApplicationContext(), true),
-            "Split to ascending instances with a base name regex...", new SplitToInstancesWithBasename(new ApplicationContext(), false),
+            "Split to descending instances with a base name regex...", new SplitToInstancesWithBasename(new ApplicationTopicContext(), true),
+            "Split to ascending instances with a base name regex...", new SplitToInstancesWithBasename(new ApplicationTopicContext(), false),
             "---",
-            "Split to descending superclasses with a base name regex...", new SplitToSuperclassesWithBasename(new ApplicationContext(), true),
-            "Split to ascending superclasses with a base name regex...", new SplitToSuperclassesWithBasename(new ApplicationContext(), false),
+            "Split to descending superclasses with a base name regex...", new SplitToSuperclassesWithBasename(new ApplicationTopicContext(), true),
+            "Split to ascending superclasses with a base name regex...", new SplitToSuperclassesWithBasename(new ApplicationTopicContext(), false),
         };
         JMenu splitTopicMenu = new SimpleMenu("Split topic", UIBox.getIcon("gui/icons/topic_split.png"));
         splitTopicMenu.removeAll();
@@ -759,143 +759,143 @@ public class WandoraMenuManager {
             "Close panel", UIBox.getIcon("gui/icons/topic_close.png"), KeyStroke.getKeyStroke(VK_W, DEF_MASK), new CloseCurrentTopicPanel(),
             "---",
             "New topic...", UIBox.getIcon("gui/icons/new_topic.png"), KeyStroke.getKeyStroke(VK_N, DEF_MASK), new NewTopicExtended(),
-            "Delete topic...", UIBox.getIcon("gui/icons/topic_delete.png"), KeyStroke.getKeyStroke(VK_DELETE, DEF_MASK), new DeleteTopics(new ApplicationContext()),
-            "Duplicate topic...", UIBox.getIcon("gui/icons/topic_duplicate.png"), KeyStroke.getKeyStroke(VK_D, DEF_MASK), new DuplicateTopics(new ApplicationContext()),
+            "Delete topic...", UIBox.getIcon("gui/icons/topic_delete.png"), KeyStroke.getKeyStroke(VK_DELETE, DEF_MASK), new DeleteTopics(new ApplicationTopicContext()),
+            "Duplicate topic...", UIBox.getIcon("gui/icons/topic_duplicate.png"), KeyStroke.getKeyStroke(VK_D, DEF_MASK), new DuplicateTopics(new ApplicationTopicContext()),
             splitTopicMenu,
             
             "---",
             "Add to topic", new Object[] {
-                "Add class...", new AddClass(new ApplicationContext()),
-                "Add instance...",new AddInstance(new ApplicationContext()),
+                "Add class...", new AddClass(new ApplicationTopicContext()),
+                "Add instance...",new AddInstance(new ApplicationTopicContext()),
 //                "Add associations...", new AddAssociations(new ApplicationContext()),
-                "Add association...", new AddSchemalessAssociation(new ApplicationContext()),
+                "Add association...", new AddSchemalessAssociation(new ApplicationTopicContext()),
                 //"Add occurrence...", new AddOccurrences(new ApplicationContext()),
-                "Add variant name...", new AddVariantName(new ApplicationContext()),
-                "Add occurrence...", new AddSchemalessOccurrence(new ApplicationContext()),
-                "Add subject identifier...", new AddSubjectIdentifier(new ApplicationContext()),
+                "Add variant name...", new AddVariantName(new ApplicationTopicContext()),
+                "Add occurrence...", new AddSchemalessOccurrence(new ApplicationTopicContext()),
+                "Add subject identifier...", new AddSubjectIdentifier(new ApplicationTopicContext()),
             },
             "Delete from topic", new Object[] {
-                "Delete associations with type...",new DeleteAssociationsInTopicWithType(new ApplicationContext()),
-                "Delete empty and unary associations...", new DeleteUnaryAssociations(new ApplicationContext()),
-                "Delete all associations...",new DeleteAssociationsInTopic(new ApplicationContext()),
+                "Delete associations with type...",new DeleteAssociationsInTopicWithType(new ApplicationTopicContext()),
+                "Delete empty and unary associations...", new DeleteUnaryAssociations(new ApplicationTopicContext()),
+                "Delete all associations...",new DeleteAssociationsInTopic(new ApplicationTopicContext()),
                 "---",
-                "Delete base name...", new BasenameRemover(new ApplicationContext()),
-                "Delete all variant names...", new AllVariantRemover(new ApplicationContext()),
+                "Delete base name...", new BasenameRemover(new ApplicationTopicContext()),
+                "Delete all variant names...", new AllVariantRemover(new ApplicationTopicContext()),
                 "---",
-                "Delete instances...",new DeleteFromTopics(new ApplicationContext(), DeleteFromTopics.LOOSE_INSTANCES),
-                "Delete classes...",new DeleteFromTopics(new ApplicationContext(), DeleteFromTopics.LOOSE_CLASSES),
+                "Delete instances...",new DeleteFromTopics(new ApplicationTopicContext(), DeleteFromTopics.LOOSE_INSTANCES),
+                "Delete classes...",new DeleteFromTopics(new ApplicationTopicContext(), DeleteFromTopics.LOOSE_CLASSES),
                 "---",
-                "Delete all but one subject identifier...", new FlattenSubjectIdentifiers(new ApplicationContext()),
-                "Delete subject locator...", new DeleteSubjectLocator(new ApplicationContext()),
+                "Delete all but one subject identifier...", new FlattenSubjectIdentifiers(new ApplicationTopicContext()),
+                "Delete subject locator...", new DeleteSubjectLocator(new ApplicationTopicContext()),
             },
             "---",
             
             "Subject locator", new Object[] {
-                "Open subject locator...", new OpenSubjectLocator(new ApplicationContext()),
-                "Check subject locator...", new CheckSubjectLocator(new ApplicationContext()),
+                "Open subject locator...", new OpenSubjectLocator(new ApplicationTopicContext()),
+                "Check subject locator...", new CheckSubjectLocator(new ApplicationTopicContext()),
                 "---",
-                "Make subject locator from a filename...", new MakeSubjectLocatorFromFilename(new ApplicationContext()),
-                "Make subject locator from file content...", new MakeSubjectLocatorFromFileContent(new ApplicationContext()),
-                "Make subject locator from a subject identifier...", new MakeSubjectLocatorFromSubjectIdentifier(new ApplicationContext()),
-                "Make subject locator from a base name...", new MakeSubjectLocatorFromBasename(new ApplicationContext()),
-                "Make subject locator from an occurrence...", new MakeSubjectLocatorFromOccurrence(new ApplicationContext()),
+                "Make subject locator from a filename...", new MakeSubjectLocatorFromFilename(new ApplicationTopicContext()),
+                "Make subject locator from file content...", new MakeSubjectLocatorFromFileContent(new ApplicationTopicContext()),
+                "Make subject locator from a subject identifier...", new MakeSubjectLocatorFromSubjectIdentifier(new ApplicationTopicContext()),
+                "Make subject locator from a base name...", new MakeSubjectLocatorFromBasename(new ApplicationTopicContext()),
+                "Make subject locator from an occurrence...", new MakeSubjectLocatorFromOccurrence(new ApplicationTopicContext()),
                 "---",
-                "Download subject locator...", new DownloadSubjectLocators(new ApplicationContext()),
-                "Download and change subject locator...", new DownloadSubjectLocators(new ApplicationContext(), true),
-                "Convert to data url", new ConvertSubjectLocatorToDataURL(new ApplicationContext()),
-                "Upload subject locator resource to Mediawiki...", new MediawikiSubjectLocatorUploader(new ApplicationContext()),
+                "Download subject locator...", new DownloadSubjectLocators(new ApplicationTopicContext()),
+                "Download and change subject locator...", new DownloadSubjectLocators(new ApplicationTopicContext(), true),
+                "Convert to data url", new ConvertSubjectLocatorToDataURL(new ApplicationTopicContext()),
+                "Upload subject locator resource to Mediawiki...", new MediawikiSubjectLocatorUploader(new ApplicationTopicContext()),
                 "---",
-                "Modify subject locator with a regex...", new ModifySubjectLocatorWithRegex(new ApplicationContext()),
+                "Modify subject locator with a regex...", new ModifySubjectLocatorWithRegex(new ApplicationTopicContext()),
                 "---",
-                "Remove subject locator...", new DeleteSubjectLocator(new ApplicationContext()),
+                "Remove subject locator...", new DeleteSubjectLocator(new ApplicationTopicContext()),
                 "---",
                 extractWithSLTopicMenu,
             },
             "Subject identifiers", new Object[] {
-                "Open subject identifiers...", new OpenSubjectIdentifier(new ApplicationContext()),
-                "Check subject identifiers...", new CheckSubjectIdentifiers(new ApplicationContext()),
+                "Open subject identifiers...", new OpenSubjectIdentifier(new ApplicationTopicContext()),
+                "Check subject identifiers...", new CheckSubjectIdentifiers(new ApplicationTopicContext()),
                 "---",
-                "Make subject identifier from a filename...", new MakeSubjectIdentifierFromFilename(new ApplicationContext()),
-                "Make subject identifier from a subject locator", new MakeSubjectIdentifierFromSubjectLocator(new ApplicationContext()),
-                "Make subject identifier from a base name...", new MakeSubjectIdentifierFromBasename(new ApplicationContext()),
-                "Make subject identifier from an occurrence...", new MakeSubjectIdentifierFromOccurrence(new ApplicationContext()),
+                "Make subject identifier from a filename...", new MakeSubjectIdentifierFromFilename(new ApplicationTopicContext()),
+                "Make subject identifier from a subject locator", new MakeSubjectIdentifierFromSubjectLocator(new ApplicationTopicContext()),
+                "Make subject identifier from a base name...", new MakeSubjectIdentifierFromBasename(new ApplicationTopicContext()),
+                "Make subject identifier from an occurrence...", new MakeSubjectIdentifierFromOccurrence(new ApplicationTopicContext()),
                 "---",
-                "Copy subject identifiers", new CopySubjectIdentifiers(new ApplicationContext()),
-                "Paste subject identifiers", new PasteSubjectIdentifiers(new ApplicationContext()),
-                "Duplicate subject identifiers...", new DuplicateSubjectIdentifier(new ApplicationContext()),
+                "Copy subject identifiers", new CopySubjectIdentifiers(new ApplicationTopicContext()),
+                "Paste subject identifiers", new PasteSubjectIdentifiers(new ApplicationTopicContext()),
+                "Duplicate subject identifiers...", new DuplicateSubjectIdentifier(new ApplicationTopicContext()),
                 "---",
-                "Flatten identity...", new FlattenSubjectIdentifiers(new ApplicationContext()),
-                "Remove subject identifiers with a regex...", new DeleteSubjectIdentifiersWithRegex(new ApplicationContext()),
+                "Flatten identity...", new FlattenSubjectIdentifiers(new ApplicationTopicContext()),
+                "Remove subject identifiers with a regex...", new DeleteSubjectIdentifiersWithRegex(new ApplicationTopicContext()),
                 "---",
-                "Remove references in subject identifiers", new RemoveReferencesInSubjectIdentifiers(new ApplicationContext()),
-                "Modify subject identifiers with a regex...", new ModifySubjectIdentifiersWithRegex(new ApplicationContext()),
+                "Remove references in subject identifiers", new RemoveReferencesInSubjectIdentifiers(new ApplicationTopicContext()),
+                "Modify subject identifiers with a regex...", new ModifySubjectIdentifiersWithRegex(new ApplicationTopicContext()),
                 // "Fix SIs", new SIFixer(new ApplicationContext()),
-                "Fix subject identifiers", new FixSubjectIdentifiers2(new ApplicationContext()),
+                "Fix subject identifiers", new FixSubjectIdentifiers2(new ApplicationTopicContext()),
             },
             "Base name", new Object[] {
-                "Make base name from a subject identifier", new MakeBasenameFromSubjectIdentifier(new ApplicationContext()),
-                "Make base name from an occurrence...", new MakeBasenameFromOccurrence(new ApplicationContext()),
+                "Make base name from a subject identifier", new MakeBasenameFromSubjectIdentifier(new ApplicationTopicContext()),
+                "Make base name from an occurrence...", new MakeBasenameFromOccurrence(new ApplicationTopicContext()),
                 "---",
-                "Modify base name with a regex...", new BasenameRegexReplacer(new ApplicationContext()),
-                "Remove new line characters", new BasenameNewlineRemover(new ApplicationContext()),
-                "Collapse white spaces", new BasenameWhiteSpaceCollapser(new ApplicationContext()),
-                "Trim base name", new BasenameTrimmer(new ApplicationContext()),
+                "Modify base name with a regex...", new BasenameRegexReplacer(new ApplicationTopicContext()),
+                "Remove new line characters", new BasenameNewlineRemover(new ApplicationTopicContext()),
+                "Collapse white spaces", new BasenameWhiteSpaceCollapser(new ApplicationTopicContext()),
+                "Trim base name", new BasenameTrimmer(new ApplicationTopicContext()),
                 "---",
-                "Remove base name...", new BasenameRemover(new ApplicationContext()),
+                "Remove base name...", new BasenameRemover(new ApplicationTopicContext()),
             },
             "Variant names", new Object[] {
-                "Make display variants from occurrences", new MakeDisplayVariantsFromOccurrences(new ApplicationContext()), 
-                "Make display variants from base names", new MakeDisplayVariantsFromBasename(new ApplicationContext()),
-                "Make sort variants from base names", new MakeSortVariantsFromBasename(new ApplicationContext()),
+                "Make display variants from occurrences", new MakeDisplayVariantsFromOccurrences(new ApplicationTopicContext()), 
+                "Make display variants from base names", new MakeDisplayVariantsFromBasename(new ApplicationTopicContext()),
+                "Make sort variants from base names", new MakeSortVariantsFromBasename(new ApplicationTopicContext()),
                 "---",
-                "Copy all variant names to clipboard", new TopicNameCopier(new ApplicationContext()),
+                "Copy all variant names to clipboard", new TopicNameCopier(new ApplicationTopicContext()),
                 "---",
-                "Copy variant names to other scope...", new VariantScopeCopier(new ApplicationContext()),
-                "Move variant names to other scope...", new VariantScopeCopier(true, new ApplicationContext()),
+                "Copy variant names to other scope...", new VariantScopeCopier(new ApplicationTopicContext()),
+                "Move variant names to other scope...", new VariantScopeCopier(true, new ApplicationTopicContext()),
                 "---",
-                "Transform variants to topics...", new VariantsToTopicsAndAssociations(new ApplicationContext()),
+                "Transform variants to topics...", new VariantsToTopicsAndAssociations(new ApplicationTopicContext()),
                 "---",
-                "Modify variant names with a regex...", new VariantRegexReplacer(new ApplicationContext()),
-                "Remove new line characters", new VariantNewlineRemover(new ApplicationContext()),
-                "Collapse white spaces", new VariantWhiteSpaceCollapser(new ApplicationContext()),
+                "Modify variant names with a regex...", new VariantRegexReplacer(new ApplicationTopicContext()),
+                "Remove new line characters", new VariantNewlineRemover(new ApplicationTopicContext()),
+                "Collapse white spaces", new VariantWhiteSpaceCollapser(new ApplicationTopicContext()),
                 "---",
-                "Add missing display scope", new AddImplicitDisplayScopeToVariants(new ApplicationContext()),
-                "Add missing sort scope", new AddImplicitSortScopeToVariants(new ApplicationContext()),
-                "Add missing language...", new AddMissingLanguageScope(new ApplicationContext()),
+                "Add missing display scope", new AddImplicitDisplayScopeToVariants(new ApplicationTopicContext()),
+                "Add missing sort scope", new AddImplicitSortScopeToVariants(new ApplicationTopicContext()),
+                "Add missing language...", new AddMissingLanguageScope(new ApplicationTopicContext()),
 
                 "---",
-                "Remove variant names...", new VariantRemover(new ApplicationContext()),
-                "Remove all empty variant names...", new AllEmptyVariantRemover(new ApplicationContext()),
-                "Remove all variant names...", new AllVariantRemover(new ApplicationContext()),
+                "Remove variant names...", new VariantRemover(new ApplicationTopicContext()),
+                "Remove all empty variant names...", new AllEmptyVariantRemover(new ApplicationTopicContext()),
+                "Remove all variant names...", new AllVariantRemover(new ApplicationTopicContext()),
 
 
             },
             "Occurrences", new Object[] {
-                "Make occurrence from a subject locator...", new MakeOccurrenceFromSubjectLocator(new ApplicationContext()),
-                "Make occurrence from a subject identifier...", new MakeOccurrenceFromSubjectIdentifier(new ApplicationContext()),
-                "Make occurrence from a base name...", new MakeOccurrenceFromBasename(new ApplicationContext()),
-                "Make occurrence from a variant name...", new MakeOccurrenceFromVariant(new ApplicationContext()),
-                "Make occurrences from all variant name languages...", new MakeOccurrencesFromVariants(new ApplicationContext()),
-                "Make occurrence from an association...", new MakeOccurrenceFromAssociation(new ApplicationContext()),
+                "Make occurrence from a subject locator...", new MakeOccurrenceFromSubjectLocator(new ApplicationTopicContext()),
+                "Make occurrence from a subject identifier...", new MakeOccurrenceFromSubjectIdentifier(new ApplicationTopicContext()),
+                "Make occurrence from a base name...", new MakeOccurrenceFromBasename(new ApplicationTopicContext()),
+                "Make occurrence from a variant name...", new MakeOccurrenceFromVariant(new ApplicationTopicContext()),
+                "Make occurrences from all variant name languages...", new MakeOccurrencesFromVariants(new ApplicationTopicContext()),
+                "Make occurrence from an association...", new MakeOccurrenceFromAssociation(new ApplicationTopicContext()),
                 "---",
-                "Modify occurrences with a regex...", new OccurrenceRegexReplacerOne(new ApplicationContext()),
-                "Modify all occurrences with a regex...", new OccurrenceRegexReplacerAll(new ApplicationContext()),
+                "Modify occurrences with a regex...", new OccurrenceRegexReplacerOne(new ApplicationTopicContext()),
+                "Modify all occurrences with a regex...", new OccurrenceRegexReplacerAll(new ApplicationTopicContext()),
                 "---",
-                "Copy occurrence to all other scopes...", new SpreadOccurrence(new ApplicationContext()),
-                "Copy occurrence to other scope...", new OccurrenceScopeCopier(new ApplicationContext()),
-                "Move occurrence to other scope...", new OccurrenceScopeCopier(true, new ApplicationContext()),
+                "Copy occurrence to all other scopes...", new SpreadOccurrence(new ApplicationTopicContext()),
+                "Copy occurrence to other scope...", new OccurrenceScopeCopier(new ApplicationTopicContext()),
+                "Move occurrence to other scope...", new OccurrenceScopeCopier(true, new ApplicationTopicContext()),
                 "---",
-                "Check URL occurrences...", new URLOccurrenceChecker(new ApplicationContext()),
-                "Download URL occurrences...", new DownloadOccurrence(new ApplicationContext()),
-                "Download all URL occurrences...", new DownloadAllOccurrences(new ApplicationContext()),
+                "Check URL occurrences...", new URLOccurrenceChecker(new ApplicationTopicContext()),
+                "Download URL occurrences...", new DownloadOccurrence(new ApplicationTopicContext()),
+                "Download all URL occurrences...", new DownloadAllOccurrences(new ApplicationTopicContext()),
                 "---",
-                "Upload to Pastebin...", new PasteBinOccurrenceUploader(new ApplicationContext()),
-                "Download from Pastebin", new PasteBinOccurrenceDownloader(new ApplicationContext()),
+                "Upload to Pastebin...", new PasteBinOccurrenceUploader(new ApplicationTopicContext()),
+                "Download from Pastebin", new PasteBinOccurrenceDownloader(new ApplicationTopicContext()),
                 "---",
-                "Upload URL resource to MediaWiki", new MediawikiOccurrenceUploader(new ApplicationContext()),
-                "Upload content to MediaWiki...", new MediaWikiAPIUploader(new ApplicationContext()),
+                "Upload URL resource to MediaWiki", new MediawikiOccurrenceUploader(new ApplicationTopicContext()),
+                "Upload content to MediaWiki...", new MediaWikiAPIUploader(new ApplicationTopicContext()),
                 "---",
-                "Delete occurrence with type...", new DeleteOccurrence(new ApplicationContext()),
+                "Delete occurrence with type...", new DeleteOccurrence(new ApplicationTopicContext()),
             },
             "---",
             "Schema", new Object[] {
@@ -1435,45 +1435,43 @@ public class WandoraMenuManager {
     
     private static Object[] defaultSLMenuStruct = null; 
     public static Object[] getDefaultSLMenuStruct(Wandora admin, Object source) {
-        if(true || defaultSLMenuStruct == null) {
-            //System.out.println("Creating extractor menus for " + source.hashCode());
-            //System.out.println("SLExtractor menu number " + SLExtractorMenus.size());
-            JMenu extractMenu = (JMenu) SLExtractorMenus.get(source);
-            if(source == null || extractMenu == null) {
-                extractMenu = new SimpleMenu("Extract with subject locator");
-                //refreshExtractWithSLMenu(extractMenu, null, admin);
-                refreshExtractWithSLMenu(extractMenu, null, admin);
-                SLExtractorMenus.put(source, extractMenu);
-            }
-            try {
-                defaultSLMenuStruct = new Object[] {
-                    "Open subject locator...", new OpenSubjectLocator(),
-                    "Check subject locator...", new CheckSubjectLocator(),
-                    "---",
-                    "Make subject locator from a filename...", new MakeSubjectLocatorFromFilename(),
-                    "Make subject locator from file content...", new MakeSubjectLocatorFromFileContent(),
-                    "Make subject locator from a subject identifier...", new MakeSubjectLocatorFromSubjectIdentifier(),
-                    "Make subject locator from a base name...", new MakeSubjectLocatorFromBasename(),
-                    "Make subject locator from an occurrence...", new MakeSubjectLocatorFromOccurrence(),
-                    "---",
-                    // "Find SLs...", new FindSubjectLocator(),
-                    // "Find SLs with base names...", new FindSubjectLocatorWithBasename(),
-                    // "---",
-                    "Modify subject locator with a regex...", new ModifySubjectLocatorWithRegex(),
-                    "Remove subject locator...", new DeleteSubjectLocator(),
-                    "---",
-                    "Download subject locator...", new DownloadSubjectLocators(),
-                    "Download and change subject locator...", new DownloadSubjectLocators(true),
-                    "Convert to data url", new ConvertSubjectLocatorToDataURL(),
-                    "Upload subject locator resource to Mediawiki", new MediawikiSubjectLocatorUploader(new ApplicationContext()),
-                    "---",
-                    extractMenu,
-                };
-            }
-            catch(Exception e) {
-                if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
-            }
+        //System.out.println("Creating extractor menus for " + source.hashCode());
+        //System.out.println("SLExtractor menu number " + SLExtractorMenus.size());
+        JMenu extractMenu = (JMenu) SLExtractorMenus.get(source);
+        if(source == null || extractMenu == null) {
+            extractMenu = new SimpleMenu("Extract with subject locator");
+            //refreshExtractWithSLMenu(extractMenu, null, admin);
+            refreshExtractWithSLMenu(extractMenu, null, admin);
+            SLExtractorMenus.put(source, extractMenu);
+        }
+        try {
+            defaultSLMenuStruct = new Object[] {
+                "Open subject locator...", new OpenSubjectLocator(),
+                "Check subject locator...", new CheckSubjectLocator(),
+                "---",
+                "Make subject locator from a filename...", new MakeSubjectLocatorFromFilename(),
+                "Make subject locator from file content...", new MakeSubjectLocatorFromFileContent(),
+                "Make subject locator from a subject identifier...", new MakeSubjectLocatorFromSubjectIdentifier(),
+                "Make subject locator from a base name...", new MakeSubjectLocatorFromBasename(),
+                "Make subject locator from an occurrence...", new MakeSubjectLocatorFromOccurrence(),
+                "---",
+                // "Find SLs...", new FindSubjectLocator(),
+                // "Find SLs with base names...", new FindSubjectLocatorWithBasename(),
+                // "---",
+                "Modify subject locator with a regex...", new ModifySubjectLocatorWithRegex(),
+                "Remove subject locator...", new DeleteSubjectLocator(),
+                "---",
+                "Download subject locator...", new DownloadSubjectLocators(),
+                "Download and change subject locator...", new DownloadSubjectLocators(true),
+                "Convert to data url", new ConvertSubjectLocatorToDataURL(),
+                "Upload subject locator resource to Mediawiki", new MediawikiSubjectLocatorUploader(new ApplicationTopicContext()),
+                "---",
+                extractMenu,
+            };
+        }
+        catch(Exception e) {
+            if(admin != null) admin.handleError(e);
+            else e.printStackTrace();
         }
         return defaultSLMenuStruct;
     }
@@ -1775,7 +1773,7 @@ public class WandoraMenuManager {
     
     
     
-    public static void refreshExtractWithSLMenu(JMenu m, Context proposedContext, Wandora admin) {
+    public static void refreshExtractWithSLMenu(JMenu m, Context<?> proposedContext, Wandora admin) {
         m.removeAll();
         UIBox.attachMenu(m, getSubjectLocatorExtractorMenu(admin, proposedContext), admin);
     }
@@ -1784,12 +1782,12 @@ public class WandoraMenuManager {
     public static Object[] getSubjectLocatorExtractorMenu(Wandora admin) {
         return getSubjectLocatorExtractorMenu(admin, null);
     }
-    public static Object[] getSubjectLocatorExtractorMenu(Wandora admin, Context proposedContext) {
+    public static Object[] getSubjectLocatorExtractorMenu(Wandora admin, Context<?> proposedContext) {
         return getSubjectLocatorExtractorMenu(admin, proposedContext, admin.toolManager.getToolSet("extract"));
     }
     
-    public static Object[] getSubjectLocatorExtractorMenu(Wandora admin, Context proposedContext, WandoraToolSet extractTools) {
-        final Context context = proposedContext;
+    public static Object[] getSubjectLocatorExtractorMenu(Wandora admin, Context<?> proposedContext, WandoraToolSet extractTools) {
+        final Context<?> context = proposedContext;
         if(extractTools == null) {
             return new Object[] {};
         } 
@@ -2249,7 +2247,7 @@ public class WandoraMenuManager {
             java.util.List<java.util.List<Object>> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanelsSupportingOpenTopic();
             for(java.util.List<Object> panelData : availableTopicPanels) {
                 try {
-                    Class<?> panelClass = Class.forName((String) panelData.get(0));
+                    Class<Component> panelClass = (Class<Component>) Class.forName((String) panelData.get(0));
                     if(!DockingFramePanel.class.equals(panelClass)) {
                         struct.add( "New " + (String) panelData.get(1) );
                         struct.add( (Icon) panelData.get(2) );
@@ -2318,63 +2316,63 @@ public class WandoraMenuManager {
     
     public static Object[] getSubjectIdentifierLabelPopupStruct() {
         return new Object[] {
-            "Add...", new AddSubjectIdentifier(new ApplicationContext()),
-            "Copy", new CopySubjectIdentifiers(new ApplicationContext()),
-            "Paste", new PasteSubjectIdentifiers(new ApplicationContext()),
+            "Add...", new AddSubjectIdentifier(new ApplicationTopicContext()),
+            "Copy", new CopySubjectIdentifiers(new ApplicationTopicContext()),
+            "Paste", new PasteSubjectIdentifiers(new ApplicationTopicContext()),
             "---",
-            "Flatten...", new FlattenSubjectIdentifiers(new ApplicationContext()),
+            "Flatten...", new FlattenSubjectIdentifiers(new ApplicationTopicContext()),
             "Expand", new Object[] {
-                "Expand with sameAs.org", new SameAsSubjectExpander(new ApplicationContext()),
+                "Expand with sameAs.org", new SameAsSubjectExpander(new ApplicationTopicContext()),
                 "Expand with sameAs.org store", new Object[] {
-                    "Expand with 270a store", new SameAs270aStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with British Library store", new SameAsBritishLibraryStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Data Southampton store", new SameAsDataSouthamptonStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Disaster 20 store", new SameAsDisaster20StoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Email store", new SameAsEmailStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Freebase store", new SameAsFreebaseStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Kelle store", new SameAsKelleStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with LATC store", new SameAsLATCStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Libris store", new SameAsLibrisStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with MusicNet store", new SameAsMusicNetStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with NoTube store", new SameAsNoTubeStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Ordnance Survey store", new SameAsOrdnanceSurveyStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Pleiades store", new SameAsPleiadesStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Schema.org store", new SameAsSchemaOrgStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Torver Data store", new SameAsTorverDataStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with VIAF store", new SameAsVIAFStoreSubjectExpander(new ApplicationContext()),
-                    "Expand with Web Index store", new SameAsWebIndexStoreSubjectExpander(new ApplicationContext()),
+                    "Expand with 270a store", new SameAs270aStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with British Library store", new SameAsBritishLibraryStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Data Southampton store", new SameAsDataSouthamptonStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Disaster 20 store", new SameAsDisaster20StoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Email store", new SameAsEmailStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Freebase store", new SameAsFreebaseStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Kelle store", new SameAsKelleStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with LATC store", new SameAsLATCStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Libris store", new SameAsLibrisStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with MusicNet store", new SameAsMusicNetStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with NoTube store", new SameAsNoTubeStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Ordnance Survey store", new SameAsOrdnanceSurveyStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Pleiades store", new SameAsPleiadesStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Schema.org store", new SameAsSchemaOrgStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Torver Data store", new SameAsTorverDataStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with VIAF store", new SameAsVIAFStoreSubjectExpander(new ApplicationTopicContext()),
+                    "Expand with Web Index store", new SameAsWebIndexStoreSubjectExpander(new ApplicationTopicContext()),
                 },
-                "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(new ApplicationContext()),
+                "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(new ApplicationTopicContext()),
             }  
         };
     }
     
     public static Object[] getSubjectLocatorLabelPopupStruct() {
         return new Object[] {
-            "Open...", new OpenSubjectLocator(new ApplicationContext()),
+            "Open...", new OpenSubjectLocator(new ApplicationTopicContext()),
             "---",
-            "Copy from filename...", new MakeSubjectLocatorFromFilename(new ApplicationContext()),
-            "Copy from file content...", new MakeSubjectLocatorFromFileContent(new ApplicationContext()),
-            "Copy from subject identifier", new MakeSubjectLocatorFromSubjectIdentifier(new ApplicationContext()),
-            "Copy from basename...", new MakeSubjectLocatorFromBasename(new ApplicationContext()),
-            "Copy from occurrence...", new MakeSubjectLocatorFromOccurrence(new ApplicationContext()),
+            "Copy from filename...", new MakeSubjectLocatorFromFilename(new ApplicationTopicContext()),
+            "Copy from file content...", new MakeSubjectLocatorFromFileContent(new ApplicationTopicContext()),
+            "Copy from subject identifier", new MakeSubjectLocatorFromSubjectIdentifier(new ApplicationTopicContext()),
+            "Copy from basename...", new MakeSubjectLocatorFromBasename(new ApplicationTopicContext()),
+            "Copy from occurrence...", new MakeSubjectLocatorFromOccurrence(new ApplicationTopicContext()),
             "---",
-            "Copy to subject identifier", new MakeSubjectIdentifierFromSubjectLocator(new ApplicationContext()),
-            "Copy to occurrence", new MakeOccurrenceFromSubjectLocator(new ApplicationContext()),
+            "Copy to subject identifier", new MakeSubjectIdentifierFromSubjectLocator(new ApplicationTopicContext()),
+            "Copy to occurrence", new MakeOccurrenceFromSubjectLocator(new ApplicationTopicContext()),
             "---", 
-            "Remove...", new DeleteSubjectLocator(new ApplicationContext()),
+            "Remove...", new DeleteSubjectLocator(new ApplicationTopicContext()),
             "---",
-            "Check...", new CheckSubjectLocator(new ApplicationContext()),
-            "Download...", new DownloadSubjectLocators(new ApplicationContext()),
-            "Download and change...", new DownloadSubjectLocators(new ApplicationContext(), true),
+            "Check...", new CheckSubjectLocator(new ApplicationTopicContext()),
+            "Download...", new DownloadSubjectLocators(new ApplicationTopicContext()),
+            "Download and change...", new DownloadSubjectLocators(new ApplicationTopicContext(), true),
             //"Move to fileserver", new MoveSubjectLocators(new ApplicationContext()),
                     // new ContextToolWrapper(
                     // parent.getToolManager().getConfigurableTool(MoveSubjectLocators.class,"movesl","Move SL to fileserver"),
                     // new ApplicationContext()),
-            "Convert as data url", new ConvertSubjectLocatorToDataURL(new ApplicationContext()),
-            "Upload to Mediawiki...", new MediawikiSubjectLocatorUploader(new ApplicationContext()),
+            "Convert as data url", new ConvertSubjectLocatorToDataURL(new ApplicationTopicContext()),
+            "Upload to Mediawiki...", new MediawikiSubjectLocatorUploader(new ApplicationTopicContext()),
             "---",
-            "Extract", WandoraMenuManager.getSubjectLocatorExtractorMenu(Wandora.getWandora(), new ApplicationContext()),
+            "Extract", WandoraMenuManager.getSubjectLocatorExtractorMenu(Wandora.getWandora(), new ApplicationTopicContext()),
         };
     }
     
@@ -2383,18 +2381,18 @@ public class WandoraMenuManager {
     
     public static Object[] getInstancesTablePopupStruct() {
         return new Object[] {
-            "Add instance...", new AddInstance(new ApplicationContext()),
+            "Add instance...", new AddInstance(new ApplicationTopicContext()),
             "Paste instances", new Object[] {
-                "Paste instances as base names...", new PasteInstances(new ApplicationContext()),
-                "Paste instances as subject identifiers...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_NOTHING, PasteInstances.PASTE_SIS),
+                "Paste instances as base names...", new PasteInstances(new ApplicationTopicContext()),
+                "Paste instances as subject identifiers...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_NOTHING, PasteInstances.PASTE_SIS),
                 "---",
-                "Paste instances with names...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_NAMES),
-                "Paste instances with subject locators...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_SLS),
-                "Paste instances with subject identifiers...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_SIS),
-                "Paste instances with classes...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_CLASSES),
-                "Paste instances with instances...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_INSTANCES),
-                "Paste instances with players...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_PLAYERS),
-                "Paste instances with occurrences...", new PasteInstances(new ApplicationContext(), PasteInstances.INCLUDE_TEXTDATAS),
+                "Paste instances with names...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_NAMES),
+                "Paste instances with subject locators...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_SLS),
+                "Paste instances with subject identifiers...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_SIS),
+                "Paste instances with classes...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_CLASSES),
+                "Paste instances with instances...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_INSTANCES),
+                "Paste instances with players...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_PLAYERS),
+                "Paste instances with occurrences...", new PasteInstances(new ApplicationTopicContext(), PasteInstances.INCLUDE_TEXTDATAS),
             },
         };
     }
@@ -2403,18 +2401,18 @@ public class WandoraMenuManager {
     
     public static Object[] getClassesTablePopupStruct() {
         return new Object[] {
-            "Add class...", new AddClass(new ApplicationContext()),
+            "Add class...", new AddClass(new ApplicationTopicContext()),
             "Paste classes", new Object[] {
-                "Paste classes as base names...", new PasteClasses(new ApplicationContext()),
-                "Paste classes as subject identifiers...", new PasteClasses(new ApplicationContext(), PasteClasses.INCLUDE_NOTHING, PasteInstances.PASTE_SIS),
+                "Paste classes as base names...", new PasteClasses(new ApplicationTopicContext()),
+                "Paste classes as subject identifiers...", new PasteClasses(new ApplicationTopicContext(), PasteClasses.INCLUDE_NOTHING, PasteInstances.PASTE_SIS),
                 "---",
-                "Paste classes with names...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_NAMES),
-                "Paste classes with subject lcoators...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_SLS),
-                "Paste classes with subject identifiers...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_SIS),
-                "Paste classes with classes...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_CLASSES),
-                "Paste classes with instances...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_INSTANCES),
-                "Paste classes with players...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_PLAYERS),
-                "Paste classes with occurrences...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_TEXTDATAS),
+                "Paste classes with names...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_NAMES),
+                "Paste classes with subject lcoators...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_SLS),
+                "Paste classes with subject identifiers...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_SIS),
+                "Paste classes with classes...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_CLASSES),
+                "Paste classes with instances...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_INSTANCES),
+                "Paste classes with players...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_PLAYERS),
+                "Paste classes with occurrences...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_TEXTDATAS),
             },
         };
     }
@@ -2427,16 +2425,16 @@ public class WandoraMenuManager {
         }
         catch(Exception e) {}
         return new Object[] {
-            "Add variant name...", new AddVariantName(new ApplicationContext()),
+            "Add variant name...", new AddVariantName(new ApplicationTopicContext()),
             "---",
-            "Add missing display scope", new AddImplicitDisplayScopeToVariants(new ApplicationContext()),
-            "Add missing sort scope", new AddImplicitSortScopeToVariants(new ApplicationContext()),
-            "Add missing language...", new AddMissingLanguageScope(new ApplicationContext()),
+            "Add missing display scope", new AddImplicitDisplayScopeToVariants(new ApplicationTopicContext()),
+            "Add missing sort scope", new AddImplicitSortScopeToVariants(new ApplicationTopicContext()),
+            "Add missing language...", new AddMissingLanguageScope(new ApplicationTopicContext()),
             "---",
-            "Copy all variant names", new TopicNameCopier(new ApplicationContext()),
+            "Copy all variant names", new TopicNameCopier(new ApplicationTopicContext()),
             "---",
-            "Remove variant name...", new VariantRemover(new ApplicationContext()),
-            "Remove all empty variant names...", new AllEmptyVariantRemover(new ApplicationContext()),
+            "Remove variant name...", new VariantRemover(new ApplicationTopicContext()),
+            "Remove all empty variant names...", new AllEmptyVariantRemover(new ApplicationTopicContext()),
             "---",
             "View", new Object[] {
                 "View schema scopes", new ChangeVariantView(VARIANT_GUITYPE_SCHEMA, options), (VARIANT_GUITYPE_SCHEMA.equals(variantGUIType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
@@ -2460,8 +2458,8 @@ public class WandoraMenuManager {
         catch(Exception e) {}
         
         return new Object[] {
-            "Add occurrence...", new AddSchemalessOccurrence(new ApplicationContext()),
-            "Delete all occurrences...", new DeleteAllOccurrences(new ApplicationContext()),
+            "Add occurrence...", new AddSchemalessOccurrence(new ApplicationTopicContext()),
+            "Delete all occurrences...", new DeleteAllOccurrences(new ApplicationTopicContext()),
             "---",
             "View", new Object[] {
                 "View schema scopes", new ChangeOccurrenceView(OccurrenceTable.VIEW_SCHEMA, options), (OccurrenceTable.VIEW_SCHEMA.equals(viewType) ? UIBox.getIcon("gui/icons/checkbox_selected.png") : UIBox.getIcon("gui/icons/checkbox.png")),
@@ -2483,7 +2481,7 @@ public class WandoraMenuManager {
     public static Object[] getAssociationTableLabelPopupStruct() {
         return new Object[] {
 //            "Add association...", new AddAssociations(new ApplicationContext()),
-            "Add association...", new AddSchemalessAssociation(new ApplicationContext()),
+            "Add association...", new AddSchemalessAssociation(new ApplicationTopicContext()),
             "---",
             /*
             "Count associations...", new CountAssociations(),
@@ -2497,11 +2495,11 @@ public class WandoraMenuManager {
                 "Copy associations as LTM layout HTML", new CopyAssociations(new ApplicationAssociationContext(), CopyAssociations.HTML_OUTPUT, CopyAssociations.LTM_LAYOUT),
             },
             "Paste", new Object[] {
-                "Paste associations...", new PasteAssociations(new ApplicationContext()),
+                "Paste associations...", new PasteAssociations(new ApplicationTopicContext()),
             },
             "Delete", new Object[] {
-                "Delete associations...", new DeleteAssociationsInTopic(new ApplicationContext()),
-                "Delete associated topics...", new DeleteFromTopics(new ApplicationContext(), DeleteFromTopics.DELETE_ASSOCIATED_TOPICS),
+                "Delete associations...", new DeleteAssociationsInTopic(new ApplicationTopicContext()),
+                "Delete associated topics...", new DeleteFromTopics(new ApplicationTopicContext(), DeleteFromTopics.DELETE_ASSOCIATED_TOPICS),
             }
         };
     }

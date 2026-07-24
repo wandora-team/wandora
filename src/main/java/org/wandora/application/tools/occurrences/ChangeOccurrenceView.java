@@ -77,7 +77,7 @@ public class ChangeOccurrenceView extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         if(localOptions != null) {
             localOptions.put(OccurrenceTable.VIEW_OPTIONS_KEY, newView);
         }

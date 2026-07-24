@@ -70,7 +70,7 @@ public class RenameLayer extends AbstractLayerTool {
     
    
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             LayerTree layerTree = wandora.layerTree;           
             Layer selected = solveContextLayer(wandora, context);

@@ -60,7 +60,7 @@ public class DeleteSubjectLocator extends AbstractWandoraTool {
 	public DeleteSubjectLocator() {
         setContext(new TopicContext());
     }
-    public DeleteSubjectLocator(Context preferredContext) {
+    public DeleteSubjectLocator(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -78,7 +78,7 @@ public class DeleteSubjectLocator extends AbstractWandoraTool {
     
   
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

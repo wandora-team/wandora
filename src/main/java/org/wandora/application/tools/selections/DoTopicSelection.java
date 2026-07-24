@@ -98,8 +98,8 @@ public abstract class DoTopicSelection extends DoSelection {
                 model.deselectAll();
                 VNode vnode = null;
                 Topic t = null;
-                for(Iterator vnodes = model.getNodes().iterator(); vnodes.hasNext(); ) {
-                    vnode = (VNode) vnodes.next();
+                for(Iterator<VNode> vnodes = model.getNodes().iterator(); vnodes.hasNext(); ) {
+                    vnode = vnodes.next();
                     if(vnode != null) {
                         Node n = vnode.getNode();
                         if(n instanceof TopicNode) {

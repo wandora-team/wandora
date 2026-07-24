@@ -34,7 +34,9 @@ package org.wandora.modules.servlet;
 
 public class ActionException extends Exception {
 
-    protected ActionHandler action;
+    private static final long serialVersionUID = 1L;
+    
+	protected ActionHandler action;
 
     public ActionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);

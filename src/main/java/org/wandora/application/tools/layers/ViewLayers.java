@@ -118,7 +118,7 @@ public class ViewLayers extends AbstractLayerTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Layer selected = solveContextLayer(wandora, context);
             if(selected == null) {

@@ -64,14 +64,14 @@ public class VariantScopeCopier extends AbstractWandoraTool {
     public VariantScopeCopier() {
         REMOVE_AFTER_COPY = false;
     }
-    public VariantScopeCopier(Context preferredContext) {
+    public VariantScopeCopier(Context<?> preferredContext) {
         REMOVE_AFTER_COPY = false;
         setContext(preferredContext);
     }
     public VariantScopeCopier(boolean removeAfterCopy) {
         REMOVE_AFTER_COPY = false;
     }
-    public VariantScopeCopier(boolean removeAfterCopy, Context preferredContext) {
+    public VariantScopeCopier(boolean removeAfterCopy, Context<?> preferredContext) {
         REMOVE_AFTER_COPY = removeAfterCopy;
         setContext(preferredContext);
     }
@@ -90,7 +90,7 @@ public class VariantScopeCopier extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

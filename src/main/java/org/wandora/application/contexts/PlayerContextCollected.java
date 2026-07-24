@@ -40,9 +40,10 @@ import org.wandora.topicmap.Topic;
 /**
  * @author akivela
  */
-public class PlayerContextCollected extends AssociationContext {
-    
-    
+public class PlayerContextCollected extends AbstractContext implements Context<Topic> {
+
+	public boolean removeDuplicates = true;
+
     
     /**
      * Creates a new instance of PlayerContextCollected
@@ -53,13 +54,15 @@ public class PlayerContextCollected extends AssociationContext {
     
     
     @Override
-    public Iterator getContextObjects() {
-        return getPlayersOf( super.getContextObjects() );
+    public Iterator<Topic> getContextObjects() {
+    	AssociationContext associationContext = new AssociationContext();
+    	associationContext.initialize(getWandora(), getContextEvent(), getContextOwner());
+        return getPlayersOf( associationContext.getContextObjects() );
     }
     
     
     
-    public Iterator getPlayersOf(Iterator associations) {
+    public Iterator<Topic> getPlayersOf(Iterator<Association> associations) {
         if(associations == null) return null;
         List<Topic> contextTopics = new ArrayList<>();
         

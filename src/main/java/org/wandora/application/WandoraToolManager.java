@@ -238,7 +238,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
         return null;
     }
 
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         JDialog d=new JDialog(admin,"Tool Manager",true);
         WandoraToolManagerPanel panel=new WandoraToolManagerPanel(this, d, admin);
         d.getContentPane().add(panel);

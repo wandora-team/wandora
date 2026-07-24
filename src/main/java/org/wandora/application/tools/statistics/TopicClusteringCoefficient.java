@@ -121,8 +121,8 @@ public class TopicClusteringCoefficient extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
-        Iterator iter=context.getContextObjects();
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
+        Iterator<?> iter=context.getContextObjects();
         TopicNeighborhood n=new DefaultNeighborhood();
         double average=0.0;
         int counter=0;

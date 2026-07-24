@@ -34,7 +34,7 @@ import static org.wandora.application.gui.ConfirmResult.yestoall;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.contexts.ApplicationTopicContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -57,7 +57,7 @@ public class MakeSubjectIdentifierFromSubjectLocator extends AbstractWandoraTool
 
 	public MakeSubjectIdentifierFromSubjectLocator() {
     }
-    public MakeSubjectIdentifierFromSubjectLocator(Context preferredContext) {
+    public MakeSubjectIdentifierFromSubjectLocator(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -74,9 +74,9 @@ public class MakeSubjectIdentifierFromSubjectLocator extends AbstractWandoraTool
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         
-        if(context instanceof ApplicationContext) {
+        if(context instanceof ApplicationTopicContext) {
             Iterator<?> topics = context.getContextObjects();
             try {
                 while(topics.hasNext()) {

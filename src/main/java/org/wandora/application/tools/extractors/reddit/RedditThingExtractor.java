@@ -25,6 +25,8 @@ package org.wandora.application.tools.extractors.reddit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -145,10 +147,10 @@ public class RedditThingExtractor extends AbstractRedditExtractor {
             urlString = urlString.trim();
             if(urlString.length() > 1) {
                 try {
-                    URL url = new URL(urlString);
+                    URL url = new URI(urlString).toURL();
                     _extractTopicsFrom(url, tm);
                 }
-                catch(MalformedURLException mfue) {
+                catch(MalformedURLException | URISyntaxException mfue) {
                     log("Found malformed URL '"+urlString+"' in text processed by RedditThingExtractor.");
                 }
             }

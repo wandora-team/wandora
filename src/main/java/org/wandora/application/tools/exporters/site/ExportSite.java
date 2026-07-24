@@ -201,7 +201,7 @@ public class ExportSite extends AbstractExportTool implements ActionListener {
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         forceStop = false;
         this.wandora = wandora;      
         if(wandora!=null) {

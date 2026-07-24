@@ -69,7 +69,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraMenuManager;
-import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.contexts.ApplicationTopicContext;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleTable;
 import org.wandora.application.gui.simple.SimpleTextPane;
@@ -852,7 +852,7 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable {
         public void actionPerformed(java.awt.event.ActionEvent e) {
             try {
                 DeleteOccurrence tool=new DeleteOccurrence(type);
-                tool.setContext(new ApplicationContext());
+                tool.setContext(new ApplicationTopicContext());
                 tool.execute(wandora);
             }
             catch(TopicMapException tme) {

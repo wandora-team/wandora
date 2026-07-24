@@ -31,7 +31,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.database.DatabaseTopicMap;
+import org.wandora.topicmap.database2.DatabaseTopicMap;
 import org.wandora.topicmap.layered.Layer;
 
 
@@ -69,7 +69,7 @@ public class MakeSIConsistentTool extends AbstractLayerTool {
     }
    
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         requiresRefresh = false;
         Layer contextLayer =  solveContextLayer(admin, context);
         

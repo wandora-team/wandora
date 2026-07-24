@@ -33,7 +33,7 @@ public class ManualFileCopy implements Abortable.Impl {
     }
 
     public void run() {
-        final boolean overWrite = false;
+        boolean overWrite = false;
         try {
             File source = new File(new URI(inPath));
             File target = new File(new URI(outPath));

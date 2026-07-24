@@ -39,7 +39,9 @@ import org.wandora.topicmap.TopicMapConfigurationPanel;
  * @author  olli
  */
 public class MemoryConfiguration extends TopicMapConfigurationPanel {
-    public static final String LOAD_MINI_SCHEMA_PARAM = "LOAD_MINI_SCHEMA_PARAM";
+    private static final long serialVersionUID = 1L;
+
+	public static final String LOAD_MINI_SCHEMA_PARAM = "LOAD_MINI_SCHEMA_PARAM";
     
     Wandora admin = null;
     

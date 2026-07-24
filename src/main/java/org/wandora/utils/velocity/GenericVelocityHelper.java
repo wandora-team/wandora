@@ -30,7 +30,7 @@ package org.wandora.utils.velocity;
 
 
 
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -1344,7 +1344,7 @@ public class GenericVelocityHelper {
     public static boolean urlExists(String urlString) {
         if(urlString != null) {
             try {
-                if(IObox.urlExists(new URL(urlString))) return true;
+                if(IObox.urlExists(new URI(urlString).toURL())) return true;
             }
             catch (Exception e) {}
         }
@@ -1661,7 +1661,7 @@ public class GenericVelocityHelper {
     
     
     
-    public static <T extends Comparable> List<T> sort(List<T> list) {
+    public static <T extends Comparable<T>> List<T> sort(List<T> list) {
         Collections.sort(list);
         return list;
     }

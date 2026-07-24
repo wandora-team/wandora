@@ -59,11 +59,11 @@ public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool {
     private boolean overWrite = true;
     
     
-    /** Creates a new instance of CopyTextdataToSL */
+    /** Creates a new instance of MakeSubjectLocatorFromBasename */
     public MakeSubjectLocatorFromBasename() {
     }
     
-    public MakeSubjectLocatorFromBasename(Context preferredContext) {
+    public MakeSubjectLocatorFromBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -81,7 +81,7 @@ public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

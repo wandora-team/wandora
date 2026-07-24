@@ -40,7 +40,7 @@ public class SameAsMusicNetStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsMusicNetStoreSubjectExpander() {}
-    public SameAsMusicNetStoreSubjectExpander(Context preferredContext) {
+    public SameAsMusicNetStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

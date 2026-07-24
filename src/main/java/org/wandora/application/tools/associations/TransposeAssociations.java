@@ -90,7 +90,7 @@ public class TransposeAssociations extends AbstractWandoraTool {
     }
     
     
-    public TransposeAssociations(Context preferredContext) {
+    public TransposeAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -110,7 +110,7 @@ public class TransposeAssociations extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             TopicMap topicmap = wandora.getTopicMap();
             

@@ -161,12 +161,12 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         similarityTypeComboBox.removeAllItems();
         similarityTypeComboBox.setEditable(false);
         for(int i=0; i<similarityTypes.length; i++) {
-            similarityTypeComboBox.addItem(similarityTypes[i].e1);
+            similarityTypeComboBox.addItem(similarityTypes[i].e1.toString());
         }
         similarityTokenizerComboBox.removeAllItems();
         similarityTokenizerComboBox.setEditable(false);
         for(int i=0; i<similarityTokenizers.length; i++) {
-            similarityTokenizerComboBox.addItem(similarityTokenizers[i].e1);
+            similarityTokenizerComboBox.addItem(similarityTokenizers[i].e1.toString());
         }
         updateSimilarityOptions();
         
@@ -203,7 +203,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         Object type = similarityTypeComboBox.getSelectedItem();
         if(type != null) {
             Object t = null;
-            for(Tuples.T2 similarityType : similarityTypes) {
+            for(Tuples.T2<?,?> similarityType : similarityTypes) {
                 if(type.equals(similarityType.e1)) {
                     t = similarityType.e2;
                     if(t instanceof Integer) {
@@ -221,7 +221,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         Object tokenizer = similarityTokenizerComboBox.getSelectedItem();
         if(tokenizer != null) {
             Object t = null;
-            for(Tuples.T2 similarityTokenizer : similarityTokenizers) {
+            for(Tuples.T2<?,?> similarityTokenizer : similarityTokenizers) {
                 if(tokenizer.equals(similarityTokenizer.e1)) {
                     t = similarityTokenizer.e2;
                     if(t instanceof InterfaceTokeniser) {
@@ -494,7 +494,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         similarityPanel = new javax.swing.JPanel();
         similarityPanelInner = new javax.swing.JPanel();
         similarityTypePanel = new javax.swing.JPanel();
-        similarityTypeComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        similarityTypeComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         similarityTextPanel = new javax.swing.JPanel();
         similarityTextField = new SimpleField();
         optionsTabbedPane = new SimpleTabbedPane();
@@ -506,7 +506,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         similarityTokenizerPanel = new javax.swing.JPanel();
         tokenizerPanel = new javax.swing.JPanel();
         similarityTokenizerLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        similarityTokenizerComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        similarityTokenizerComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         similaritygapCostPanel = new javax.swing.JPanel();
         gapCostLabel = new org.wandora.application.gui.simple.SimpleLabel();
         gapCostTextField = new org.wandora.application.gui.simple.SimpleField();
@@ -844,10 +844,10 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
     private javax.swing.JPanel similarityTextPanel;
     private javax.swing.JSlider similarityThresholdSlider;
     private javax.swing.JTextField similarityThresholdTextField;
-    private javax.swing.JComboBox similarityTokenizerComboBox;
+    private javax.swing.JComboBox<String> similarityTokenizerComboBox;
     private javax.swing.JLabel similarityTokenizerLabel;
     private javax.swing.JPanel similarityTokenizerPanel;
-    private javax.swing.JComboBox similarityTypeComboBox;
+    private javax.swing.JComboBox<String> similarityTypeComboBox;
     private javax.swing.JPanel similarityTypePanel;
     private javax.swing.JCheckBox similarityVariantCheckBox;
     private javax.swing.JPanel similaritygapCostPanel;

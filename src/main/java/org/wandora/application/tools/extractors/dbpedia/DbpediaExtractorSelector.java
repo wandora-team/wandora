@@ -59,7 +59,7 @@ public class DbpediaExtractorSelector extends JDialog {
     public static String sparqlServiceBase = "http://dbpedia.org/sparql/";
 
     private Wandora wandora = null;
-    private Context context = null;
+    private Context<?> context = null;
     private boolean accepted = false;
 
 
@@ -81,7 +81,7 @@ public class DbpediaExtractorSelector extends JDialog {
         this.wandora = wandora;
     }
 
-    public void setContext(Context context) {
+    public void setContext(Context<?> context) {
         this.context = context;
     }
 
@@ -227,7 +227,7 @@ public class DbpediaExtractorSelector extends JDialog {
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {

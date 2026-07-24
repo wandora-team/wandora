@@ -69,7 +69,7 @@ public class AddScopeTopicToVariantName extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Topic scopeTopic = null;
             if(predefinedScopeTopic == null) {

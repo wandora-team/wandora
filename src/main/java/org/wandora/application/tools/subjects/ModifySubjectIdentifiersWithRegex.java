@@ -57,7 +57,7 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool {
     public ModifySubjectIdentifiersWithRegex() {
         setContext(new TopicContext());
     }
-    public ModifySubjectIdentifiersWithRegex(Context preferredContext) {
+    public ModifySubjectIdentifiersWithRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -73,7 +73,7 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {

@@ -52,7 +52,7 @@ public class AddMissingLanguageScope extends AbstractWandoraTool {
      */
     public AddMissingLanguageScope() {
     }
-    public AddMissingLanguageScope(Context preferredContext) {
+    public AddMissingLanguageScope(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -69,7 +69,7 @@ public class AddMissingLanguageScope extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Add implicit language scope to variants");

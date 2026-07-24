@@ -207,7 +207,7 @@ public class SimpleFileExtractor extends AbstractExtractor implements BrowserPlu
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         visitedDirectories = new ArrayList<String>();
         super.execute(wandora, context);
     }

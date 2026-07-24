@@ -178,7 +178,7 @@ public class AtomExtractor extends AbstractExtractor {
 
             // System.out.println("FOUND URL: "+urlstr);
 
-            URL url = new URL(urlstr);
+            URL url = new URI(urlstr).toURL();
             URLConnection uc = url.openConnection();
             String type = uc.getContentType();
             // System.out.println("FOUND TYPE: "+type);
@@ -483,8 +483,7 @@ public class AtomExtractor extends AbstractExtractor {
                 if(t==null){
                     t=tm.createTopic();
                     t.setBaseName(bn);
-                    if(si!=null) t.addSubjectIdentifier(tm.createLocator(si));
-                    else t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
+                    t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
                 }
                 return t;
             }

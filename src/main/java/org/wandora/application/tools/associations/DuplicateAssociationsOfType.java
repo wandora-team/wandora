@@ -139,7 +139,7 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         theTopic = wandora.getOpenTopic();
         oldAssociationType = (Topic) context.getContextObjects().next();
         wasCancelled = false;

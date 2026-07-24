@@ -35,7 +35,9 @@ package org.wandora.topicmap;
  */
 public class TopicMapReadOnlyException extends TopicMapException {
     
-    /** Creates a new instance of TopicMapReadOnlyException */
+    private static final long serialVersionUID = 1L;
+
+	/** Creates a new instance of TopicMapReadOnlyException */
     public TopicMapReadOnlyException() {
     }
     

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -57,7 +58,7 @@ public class BasenameNewlineRemover extends AbstractWandoraTool {
 
 	public BasenameNewlineRemover() {
     }
-    public BasenameNewlineRemover(Context preferredContext) {
+    public BasenameNewlineRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -74,7 +75,7 @@ public class BasenameNewlineRemover extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Removing newline characters in base names");
@@ -89,7 +90,7 @@ public class BasenameNewlineRemover extends AbstractWandoraTool {
             int c = 0;
             int changed = 0;
             int progress = 0;
-            HashMap<Topic,String> changeTopics = new HashMap<Topic,String>();
+            Map<Topic,String> changeTopics = new HashMap<>();
             
             while(topics.hasNext() && !forceStop()) {
                 try {

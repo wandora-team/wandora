@@ -70,7 +70,7 @@ public class TopicMapDiameter extends AbstractWandoraTool {
         return "Calculates diameter of a topic map, that is maximum shortest path between two topics. Also calculates average shortest path between all topic pairs. Not usable for topic maps of approximately more than 10000 topics.";
     }
 
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         TopicMap tm = solveContextTopicMap(admin, context);
         String tmTitle = solveNameForTopicMap(admin, tm);
         boolean useHash = false;

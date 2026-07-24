@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -174,11 +176,11 @@ public class MaianaUtils {
 
 
 
-    public static JSONObject listAvailableTopicMaps(String endpoint, String apikey) throws IOException, JSONException {
+    public static JSONObject listAvailableTopicMaps(String endpoint, String apikey) throws IOException, JSONException, URISyntaxException {
         String in = getListTemplate(apikey);
         checkForLocalService(endpoint);
 
-        String reply = IObox.doUrl(new URL(endpoint), in, "application/json");
+        String reply = IObox.doUrl(new URI(endpoint).toURL(), in, "application/json");
 
         //System.out.println("reply:\n"+reply);
 

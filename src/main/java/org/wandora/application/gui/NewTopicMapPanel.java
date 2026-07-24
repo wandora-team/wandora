@@ -124,7 +124,7 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
         layerNameLabel = new org.wandora.application.gui.simple.SimpleLabel();
         nameTextField = new SimpleField();
         layerTypeLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        typeComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        typeComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         confContainerPanel = new javax.swing.JPanel();
         jSeparator2 = new javax.swing.JSeparator();

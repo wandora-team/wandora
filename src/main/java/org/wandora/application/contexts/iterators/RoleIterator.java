@@ -47,15 +47,14 @@ public class RoleIterator extends TopicIterator {
 
 
     @Override
-    public Iterator<?> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<?> oldIterator) {
+    public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
         Collection<Topic> allRoleTopics = new ArrayList<>();
         Collection<Association> associations = null;
         Association association = null;
         Iterator<Association> associationIterator = null;
         Collection<Topic> roleTopics = null;
         Topic roleTopic = null;
-        Topic playerTopic = null;
-        
+
         if(topic != null) {
             try{
                 associations = topic.getAssociations();

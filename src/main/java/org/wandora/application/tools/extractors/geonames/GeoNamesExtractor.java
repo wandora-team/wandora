@@ -64,7 +64,7 @@ public class GeoNamesExtractor extends AbstractWandoraTool {
     
     
     
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         try {
             if(selector == null) {
                 selector = new GeoNamesExtractorSelector(admin);

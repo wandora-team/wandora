@@ -28,6 +28,8 @@ package org.wandora.application.gui;
 
 
 
+import java.awt.event.KeyEvent;
+
 import javax.swing.Icon;
 
 import org.wandora.application.gui.simple.SimpleButton;
@@ -226,7 +228,7 @@ public class PasswordPrompt extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed
-        if(evt.getKeyCode()==evt.VK_ENTER){
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             cancelled=false;
             this.setVisible(false);
         }

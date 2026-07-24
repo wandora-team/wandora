@@ -51,7 +51,7 @@ public class SetPinnedTool extends AbstractGraphPinningTool {
         super(gp);
         this.setContext(new GraphNodeContext());
     }
-    public SetPinnedTool(TopicMapGraphPanel gp, Context proposedContext) {
+    public SetPinnedTool(TopicMapGraphPanel gp, Context<?> proposedContext) {
         super(gp);
         this.setContext(proposedContext);
     }
@@ -65,7 +65,7 @@ public class SetPinnedTool extends AbstractGraphPinningTool {
     
     
 
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         if(context != null) {
             setPinning(context.getContextObjects(), SET_PINNED);
         }

@@ -33,6 +33,7 @@ package org.wandora.application.tools.occurrences;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.AssociationContext;
@@ -72,7 +73,7 @@ public class MakeOccurrenceFromAssociation extends AbstractWandoraTool {
     public MakeOccurrenceFromAssociation() {
     }
     
-    public MakeOccurrenceFromAssociation(Context preferredContext) {
+    public MakeOccurrenceFromAssociation(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -90,11 +91,10 @@ public class MakeOccurrenceFromAssociation extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
-            Iterator associations = null;
-            
-            
+            Iterator<?> associations = null;
+
             Topic associationType = null;
             Locator associationTypeLocator = null;
             
@@ -114,7 +114,7 @@ public class MakeOccurrenceFromAssociation extends AbstractWandoraTool {
             else {
                 Iterator<?> topics = context.getContextObjects();                
                 if(topics == null || !topics.hasNext()) return;
-                ArrayList<Association> associationArray = new ArrayList<>();
+                List<Association> associationArray = new ArrayList<>();
                 
                 associationType = admin.showTopicFinder("Select association type...");                
                 if(associationType == null) return;

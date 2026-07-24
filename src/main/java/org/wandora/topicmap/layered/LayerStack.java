@@ -349,12 +349,13 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                     ops.addAll(buf.getOperations());
                 }
             }
-            Collections.sort(ops, new Comparator() {
-                public int compare(Object o1, Object o2) {
-                    UndoOperation oo1 = (UndoOperation) o1;
-                    UndoOperation oo2 = (UndoOperation) o2;
-                    int oo1i = oo1.getOperationNumber();
-                    int oo2i = oo2.getOperationNumber();
+            Collections.sort(ops, new Comparator<UndoOperation>() {
+                public int compare(UndoOperation o1, UndoOperation o2) {
+                	if(o1 == null || o2 == null) {
+                		return 0;
+                	}
+                    int oo1i = o1.getOperationNumber();
+                    int oo2i = o2.getOperationNumber();
                     return (oo1i>oo2i ? -1 : (oo1i==oo2i ? 0 : 1));
                 }
             });
@@ -1176,7 +1177,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             throw new NoSuchElementException();
         }
 
-        public Iterator<Topic> solveCurrentIterator(Iterator iterator) {
+        public Iterator<Topic> solveCurrentIterator(Iterator<Topic> iterator) {
             while(true){
                 if(iterator!=null && iterator.hasNext()) return iterator;
 

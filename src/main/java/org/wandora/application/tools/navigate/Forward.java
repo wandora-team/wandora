@@ -26,6 +26,7 @@
  */
 
 package org.wandora.application.tools.navigate;
+
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
@@ -47,7 +48,7 @@ public class Forward extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         wandora.forward();
     }
 

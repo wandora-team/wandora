@@ -57,7 +57,7 @@ public class OpenTopicWithSX extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         if(dialog == null) {
             dialog = new InputDialogWithHistory((java.awt.Frame) wandora, true, "Enter subject indentifier or subject locator", "Go to topic...");
         }

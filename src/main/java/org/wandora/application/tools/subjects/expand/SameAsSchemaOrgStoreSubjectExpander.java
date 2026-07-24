@@ -38,7 +38,7 @@ public class SameAsSchemaOrgStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsSchemaOrgStoreSubjectExpander() {}
-    public SameAsSchemaOrgStoreSubjectExpander(Context preferredContext) {
+    public SameAsSchemaOrgStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

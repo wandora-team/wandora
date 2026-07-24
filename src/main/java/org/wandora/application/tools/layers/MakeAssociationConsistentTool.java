@@ -75,7 +75,7 @@ public class MakeAssociationConsistentTool extends AbstractLayerTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         requiresRefresh = false;
         Layer contextLayer =  solveContextLayer(wandora, context);
         

@@ -61,7 +61,7 @@ public class VariantRegexReplacer extends AbstractWandoraTool {
     public VariantRegexReplacer() {
         setContext(new TopicContext());
     }
-    public VariantRegexReplacer(Context preferredContext) {
+    public VariantRegexReplacer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -77,7 +77,7 @@ public class VariantRegexReplacer extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {

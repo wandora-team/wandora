@@ -33,6 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Matcher;
@@ -108,7 +109,7 @@ public class RSSExtractor extends AbstractExtractor {
 
             //System.out.println("FOUND URL: "+urlstr);
 
-            URL url = new URL(urlstr);
+            URL url = new URI(urlstr).toURL();
             URLConnection uc = url.openConnection();
             String type = uc.getContentType();
             
@@ -129,7 +130,7 @@ public class RSSExtractor extends AbstractExtractor {
                             if(m2.find()) {
                                 try {
                                     String rssfeed = m2.group(1);
-                                    _extractTopicsFrom(new URL(rssfeed), wandora.getTopicMap());
+                                    _extractTopicsFrom(new URI(rssfeed).toURL(), wandora.getTopicMap());
                                 }
                                 catch(Exception e) {
                                     e.printStackTrace();
@@ -218,6 +219,8 @@ public class RSSExtractor extends AbstractExtractor {
         public static boolean MAKE_LINK_SUBJECT_IDENTIFIER = true;
         public static boolean MAKE_LINK_SUBJECT_LOCATOR = false;
         public static boolean MAKE_SUBCLASS_OF_WANDORA_CLASS = true;
+        
+        public static boolean STORE_COPYRIGHT_AS_ASSOCIATION = true;
         
         public RSSParser(TopicMap tm, RSSExtractor parent){
             this.tm=tm;
@@ -676,7 +679,7 @@ public class RSSExtractor extends AbstractExtractor {
                         state = STATE_CHANNEL;
                         if(theChannel != null && data_channel_copyright.length() > 0) {
                             try {
-                                if(true) {
+                                if(STORE_COPYRIGHT_AS_ASSOCIATION) {
                                     Topic channelType = getOrCreateTopic(CHANNEL_SI,"RSS Channel");
                                     Topic copyrightType = getOrCreateTopic(CHANNEL_COPYRIGHT_SI,"RSS Channel Copyright");
                                     Topic theCopyright = getOrCreateTopic(CHANNEL_COPYRIGHT_SI + "/" + data_channel_copyright, data_channel_copyright);

@@ -34,6 +34,7 @@ import java.util.Iterator;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
+import org.wandora.topicmap.Topic;
 
 /**
  *
@@ -52,9 +53,7 @@ public class ApplicationlessContext extends LayeredTopicContext {
     
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
-        this.wandora = wandora;
-        this.actionEvent = actionEvent;
-        this.contextOwner = contextOwner;
+        super.initialize(wandora, actionEvent, contextOwner);
         
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
         setContextSource( proposedContextSource );
@@ -62,7 +61,7 @@ public class ApplicationlessContext extends LayeredTopicContext {
     
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         Object contextSource = getContextSource();
         if(contextSource != null && !(contextSource instanceof Wandora)) {
             return getContextObjects( getContextSource() );

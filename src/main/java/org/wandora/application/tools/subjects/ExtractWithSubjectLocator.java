@@ -54,14 +54,14 @@ public class ExtractWithSubjectLocator extends AbstractWandoraTool {
     public ExtractWithSubjectLocator(AbstractExtractor extractor) {
         enclosedExtractor = extractor;
     }
-    public ExtractWithSubjectLocator(AbstractExtractor extractor, Context proposedContext) {
+    public ExtractWithSubjectLocator(AbstractExtractor extractor, Context<?> proposedContext) {
         enclosedExtractor = extractor;
         setContext(proposedContext);
     }
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             log("Extracting with subject locator urls!");

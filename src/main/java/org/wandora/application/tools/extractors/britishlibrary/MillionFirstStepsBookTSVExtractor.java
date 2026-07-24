@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
@@ -184,7 +185,7 @@ public class MillionFirstStepsBookTSVExtractor extends AbstractMillionFirstSteps
     
     public void parse(String str, TopicMap tm) {
         if(str != null && str.length() > 0) {
-            HashMap<String,Integer> columnIndexes = new HashMap();
+            Map<String,Integer> columnIndexes = new HashMap<>();
             String[] lines = str.split("\n");
             if(lines.length > 1) {
                 log("Parsing data.");
@@ -206,7 +207,7 @@ public class MillionFirstStepsBookTSVExtractor extends AbstractMillionFirstSteps
     
     
     
-    public void parseColumnNames(String columns, HashMap<String,Integer> columnIndexes) {
+    public void parseColumnNames(String columns, Map<String,Integer> columnIndexes) {
         String[] columnNames = columns.split("\t");
         for(int i=0; i<columnNames.length; i++) {
             columnIndexes.put(columnNames[i], i);
@@ -217,7 +218,7 @@ public class MillionFirstStepsBookTSVExtractor extends AbstractMillionFirstSteps
     
     
     
-    public void parseLine(String str, HashMap<String,Integer> columnIndexes, TopicMap tm) {
+    public void parseLine(String str, Map<String,Integer> columnIndexes, TopicMap tm) {
         if(str != null && str.length()>0) {
             String[] tokens = str.split("\t");
             if(tokens.length > 4) {
@@ -353,7 +354,7 @@ public class MillionFirstStepsBookTSVExtractor extends AbstractMillionFirstSteps
     
     
     
-    private String getIndex(String indexName, String[] array, HashMap<String,Integer> columnIndexes) {
+    private String getIndex(String indexName, String[] array, Map<String,Integer> columnIndexes) {
         if(array != null && indexName != null && columnIndexes != null) {
             try {
                 return array[columnIndexes.get(indexName)];

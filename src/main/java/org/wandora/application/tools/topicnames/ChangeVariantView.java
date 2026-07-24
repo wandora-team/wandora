@@ -73,7 +73,7 @@ public class ChangeVariantView extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         if(localOptions != null) {
             localOptions.put(TraditionalTopicPanel.VARIANT_GUITYPE_OPTIONS_KEY, viewType);
         }

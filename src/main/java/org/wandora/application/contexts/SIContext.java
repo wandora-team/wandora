@@ -53,15 +53,9 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class SIContext implements Context {
+public class SIContext extends AbstractContext implements Context<Locator> {
     
-    
-    private Object contextSource;
-    protected WandoraTool contextOwner = null;
-    protected ActionEvent actionEvent = null;
-    protected Wandora wandora = null;
-    
-    
+
     
     /** Creates a new instance of SIContext */
     public SIContext() {
@@ -75,9 +69,7 @@ public class SIContext implements Context {
     
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
-        this.wandora = wandora;
-        this.actionEvent = actionEvent;
-        this.contextOwner = contextOwner;
+        super.initialize(wandora, actionEvent, contextOwner);
         
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
         if( !isContextSource(proposedContextSource) ) {
@@ -91,17 +83,13 @@ public class SIContext implements Context {
     
     
     
-    @Override
-    public ActionEvent getContextEvent() {
-        return actionEvent;
-    }
-    
-    
     
     @Override
-    public Iterator<?> getContextObjects() {
+    public Iterator<Locator> getContextObjects() {
         return getContextObjects( getContextSource() );
     }
+    
+    
     
     
     public void digSIs(List<Locator> locators, Topic topic) {
@@ -116,6 +104,9 @@ public class SIContext implements Context {
             e.printStackTrace();
         }
     }
+    
+    
+    
     public void digSIs(List<Locator> locators, Collection<Topic> topics) {
         if(topics == null) return;
         for(Iterator<Topic> i=topics.iterator(); i.hasNext(); ) {
@@ -123,7 +114,10 @@ public class SIContext implements Context {
         }
     }
     
-    public Iterator<?> getContextObjects(Object contextSource) {
+    
+    
+    
+    public Iterator<Locator> getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
         List<Locator> contextLocators = new ArrayList<>();
@@ -215,17 +209,9 @@ public class SIContext implements Context {
     
     
 
+
+    
     @Override
-    public void setContextSource(Object proposedContextSource) {
-        if(isContextSource(proposedContextSource)) {
-            contextSource = proposedContextSource;
-        }
-        else {
-            contextSource = null;
-        }
-    }
-    
-    
     public boolean isContextSource(Object contextSource) {
         if(contextSource != null && (
                 contextSource instanceof LocatorTable ||
@@ -245,20 +231,6 @@ public class SIContext implements Context {
     }
     
     
-    
-    @Override
-    public Object getContextSource() {
-        return contextSource;
-    }
-    
-    
-    
-    // -------------------------------------------------------------------------
-    
-    
-    public void log(Exception e) {
-        if(contextOwner != null) contextOwner.log(e);
-        else e.printStackTrace();
-    }
+
 
 }

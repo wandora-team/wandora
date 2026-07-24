@@ -440,13 +440,13 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     
     private void printWarnings(JSONObject body) throws JSONException{
         JSONObject warnings = body.getJSONObject("warnings");
-        Iterator warningCategoryKeys = warnings.keys();
+        Iterator<String> warningCategoryKeys = warnings.keys();
         String categoryKey;
         JSONObject category;
         while(warningCategoryKeys.hasNext()){
             categoryKey = (String)warningCategoryKeys.next();
             category = warnings.getJSONObject(categoryKey);
-            Iterator warningKeys = category.keys();
+            Iterator<String> warningKeys = category.keys();
             String warningKey;
             String warning;
             while(warningKeys.hasNext()){

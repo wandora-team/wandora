@@ -54,7 +54,7 @@ public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool {
      */
     public MakeDisplayVariantsFromOccurrences() {
     }
-    public MakeDisplayVariantsFromOccurrences(Context preferredContext) {
+    public MakeDisplayVariantsFromOccurrences(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -71,7 +71,7 @@ public class MakeDisplayVariantsFromOccurrences extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {           
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

@@ -114,11 +114,11 @@ public class OccurrencePanel extends ResourceEditor {
     
     @Override
     public boolean hasChanged() throws TopicMapException {
-        Iterator iter=dataTable.entrySet().iterator();
+        Iterator<Map.Entry<Topic,SimpleTextPane>> iter=dataTable.entrySet().iterator();
         while(iter.hasNext()) {
-            Map.Entry e=(Map.Entry)iter.next();
-            Topic version=(Topic)e.getKey();
-            SimpleTextPane comp=(SimpleTextPane)e.getValue();
+        	Map.Entry<Topic,SimpleTextPane> e=iter.next();
+            Topic version=e.getKey();
+            SimpleTextPane comp=e.getValue();
             String orig=topic.getData(occurrenceType,version);
             if(orig==null) orig="";
             if(!orig.equals(comp.getText())) return true;

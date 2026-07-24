@@ -51,9 +51,7 @@ public class TestRunner extends AbstractWandoraTool {
         int failed=0;
         
         for(Test t : tests){
-//        while(true){
-//            Test t=new RandomTest();
-            try{
+            try {
                 t.run();
                 if(!t.isPassed()){
                     failed++;
@@ -63,36 +61,30 @@ public class TestRunner extends AbstractWandoraTool {
                     this.output.write("PASSED ");
                     passed++;
                 }
-//                if(!t.isPassed()) {
-                    this.output.write(t.getLabel()+"\n");
-                    t.getMessages(output);
-                    this.output.flush();
-//                    break;
-//                }
-                
-//                if((passed%100)==0) { this.output.write("PASSED "+passed+" tests\n"); this.output.flush(); }
-//                if(!t.isPassed()) break;
-                if(false) break;
-                
-            } catch(Exception e){
-                try{
+                this.output.write(t.getLabel()+"\n");
+                t.getMessages(output);
+                this.output.flush();
+            } 
+            catch(Exception e){
+                try {
                     this.output.write("FAILED "+t.getLabel()+"\n");
                     PrintWriter pwriter=new PrintWriter(this.output);
                     e.printStackTrace(pwriter);
                     pwriter.flush();
-                }catch(IOException ioe){
+                } catch(IOException ioe){
                     ioe.printStackTrace();
                 }
             }
         }
 
-        try{
+        try {
             if(failed==0) this.output.write("PASSED ALL "+passed+" tests\n");
             else {
                 this.output.write("PASSED "+passed+" tests\nFAILED "+failed+" tests\n");
             }
             this.output.flush();
-        }catch(IOException ioe){
+        }
+        catch(IOException ioe){
             ioe.printStackTrace();
         }
     }
@@ -110,7 +102,7 @@ public class TestRunner extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         this.setupTests(200);
         this.runTests();
     }

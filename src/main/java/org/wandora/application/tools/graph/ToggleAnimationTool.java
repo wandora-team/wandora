@@ -58,7 +58,7 @@ public class ToggleAnimationTool extends AbstractGraphTool {
                "graph is animated.";
     }
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
 
         if(graphPanel != null) {

@@ -41,7 +41,7 @@ public class OpenRConsole extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
-	public void execute(Wandora wandora, Context context) throws TopicMapException {
+	public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         JDialog dialog=RConsole2.getConsoleDialog();
         if(!dialog.isVisible()) dialog.setVisible(true);
     }

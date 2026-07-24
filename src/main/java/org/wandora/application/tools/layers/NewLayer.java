@@ -77,7 +77,7 @@ public class NewLayer extends AbstractLayerTool {
     
    
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             Layer selected = solveContextLayer(wandora, context);
             ContainerTopicMap container=null;

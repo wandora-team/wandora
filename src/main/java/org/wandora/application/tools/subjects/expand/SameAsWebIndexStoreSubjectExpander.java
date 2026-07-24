@@ -38,7 +38,7 @@ public class SameAsWebIndexStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsWebIndexStoreSubjectExpander() {}
-    public SameAsWebIndexStoreSubjectExpander(Context preferredContext) {
+    public SameAsWebIndexStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

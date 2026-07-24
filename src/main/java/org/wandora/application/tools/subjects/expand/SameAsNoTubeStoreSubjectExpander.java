@@ -40,7 +40,7 @@ public class SameAsNoTubeStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsNoTubeStoreSubjectExpander() {}
-    public SameAsNoTubeStoreSubjectExpander(Context preferredContext) {
+    public SameAsNoTubeStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

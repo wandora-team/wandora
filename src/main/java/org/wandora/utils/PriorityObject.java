@@ -28,7 +28,7 @@ package org.wandora.utils;
 
 
 
-public class PriorityObject extends Object implements Comparable, java.io.Serializable {
+public class PriorityObject extends Object implements Comparable<PriorityObject>, java.io.Serializable {
     private static final long serialVersionUID = 1L;
     
     
@@ -76,11 +76,11 @@ public class PriorityObject extends Object implements Comparable, java.io.Serial
         return false;
     }
    
-    public int compareTo(Object o) {
-        if (o != null && o instanceof PriorityObject) {
-            if (priority > ((PriorityObject)o).getPriority())
+    public int compareTo(PriorityObject o) {
+        if (o != null) {
+            if (priority > o.getPriority())
                 return 1;
-            if (priority < ((PriorityObject)o).getPriority())
+            if (priority < o.getPriority())
                 return -1;
             return 0;
         }

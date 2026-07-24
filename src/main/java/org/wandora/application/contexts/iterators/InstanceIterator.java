@@ -44,8 +44,8 @@ public class InstanceIterator extends TopicIterator {
 
 
     @Override
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
-        Iterator it = oldIterator;
+    public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
+        Iterator<Topic> it = oldIterator;
         if(topic != null && topicmap != null) {
             try{
                 collection = topicmap.getTopicsOfType(topic);

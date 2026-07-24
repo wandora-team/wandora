@@ -46,7 +46,7 @@ public class AddWebSelectionAsBasename extends AbstractWebViewTool {
 
 
 	@Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         try {
             String selection = getSelectedText(context);
             if(selection != null && selection.length() > 0) {

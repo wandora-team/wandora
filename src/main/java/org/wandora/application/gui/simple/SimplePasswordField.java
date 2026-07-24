@@ -25,11 +25,9 @@ import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JPasswordField;
-
-import org.wandora.utils.EasyVector;
 
 /**
  *
@@ -50,8 +48,8 @@ public class SimplePasswordField extends JPasswordField {
     public void initialize() {
 
         this.setFocusTraversalKeysEnabled(true);
-        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)})));
-        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,new HashSet(new EasyVector(new Object[]{AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)})));
+        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)));
+        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)));
 
         this.setMargin(defaultMargins);
         

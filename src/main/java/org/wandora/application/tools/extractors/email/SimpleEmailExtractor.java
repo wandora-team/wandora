@@ -164,7 +164,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         TopicMap tm = wandora.getTopicMap();
         visitedDirectories = new ArrayList<>();
         visitedEmailFolders = new ArrayList<>();

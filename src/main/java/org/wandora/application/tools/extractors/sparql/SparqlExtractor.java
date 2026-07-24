@@ -146,7 +146,7 @@ public class SparqlExtractor extends AbstractExtractor {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new SparqlExtractorUI(wandora);

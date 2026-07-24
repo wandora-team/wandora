@@ -30,6 +30,7 @@ package org.wandora.application.tools;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.Icon;
@@ -68,7 +69,7 @@ public class DeleteTopics extends AbstractWandoraTool {
     public DeleteTopics() {
         //setContext(new TopicContext());
     }
-    public DeleteTopics(Context preferredContext) {
+    public DeleteTopics(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -88,9 +89,9 @@ public class DeleteTopics extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         this.wandora = wandora;
-        ArrayList<Topic> topicsToDelete = new ArrayList<Topic>();
+        List<Topic> topicsToDelete = new ArrayList<>();
         Iterator<?> topics = context.getContextObjects();
         Topic topic = null;
         Topic ltopic = null;

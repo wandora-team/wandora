@@ -50,7 +50,7 @@ import org.wandora.application.gui.UIConstants;
  *
  * @author  akivela
  */
-public class SimpleComboBox extends JComboBox implements MouseListener, SimpleComponent {
+public class SimpleComboBox<T> extends JComboBox<T> implements MouseListener, SimpleComponent {
     
     private static final long serialVersionUID = 1L;
    
@@ -61,27 +61,27 @@ public class SimpleComboBox extends JComboBox implements MouseListener, SimpleCo
     }
     
     
-    public SimpleComboBox(Vector v) {
+    public SimpleComboBox(Vector<T> v) {
         super(v);
         initialize();
     }
     
     
-    public SimpleComboBox(String[] content) {
+    public SimpleComboBox(T[] content) {
         super();
         initialize();
         setOptions(content);
     }
     
     
-    public SimpleComboBox(Set content) {
+    public SimpleComboBox(Set<T> content) {
         super();
         initialize();
         setOptions(content);
     }
     
     
-    public SimpleComboBox(Collection content) {
+    public SimpleComboBox(Collection<T> content) {
         super();
         initialize();
         setOptions(content);
@@ -122,15 +122,15 @@ public class SimpleComboBox extends JComboBox implements MouseListener, SimpleCo
     
     
     
-    public void setOptions(String[] content) {
+    public void setOptions(T[] content) {
         removeAllItems();
-        for (String item : content) {
+        for (T item : content) {
             addItem(item);
         }
     }
     
         
-    public void setOptions(Enumeration content) {
+    public void setOptions(Enumeration<T> content) {
         removeAllItems();
         while(content.hasMoreElements()) {
             try {
@@ -140,9 +140,9 @@ public class SimpleComboBox extends JComboBox implements MouseListener, SimpleCo
         }
     }
     
-    public void setOptions(Set content) {
+    public void setOptions(Set<T> content) {
         removeAllItems();
-        for(Object o : content) {
+        for(T o : content) {
             try {
                 addItem(o);
             }
@@ -150,9 +150,9 @@ public class SimpleComboBox extends JComboBox implements MouseListener, SimpleCo
         }
     }
     
-    public void setOptions(Collection content) {
+    public void setOptions(Collection<T> content) {
         removeAllItems();
-        for(Object o : content) {
+        for(T o : content) {
             try {
                 addItem(o);
             }

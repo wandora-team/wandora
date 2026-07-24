@@ -31,6 +31,7 @@ package org.wandora.application.contexts;
 import java.util.Iterator;
 
 import org.wandora.application.contexts.iterators.RoleIterator;
+import org.wandora.topicmap.Topic;
 
 
 /**
@@ -41,9 +42,9 @@ public class RoleContext extends LayeredTopicContext {
 
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         RoleIterator iterator = new RoleIterator();
-        iterator.initialize(super.getContextObjects(), wandora);
+        iterator.initialize(super.getContextObjects(), getWandora());
         return iterator;
     }
     

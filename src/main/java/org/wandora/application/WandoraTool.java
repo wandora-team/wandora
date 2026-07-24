@@ -87,7 +87,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
      * @param context
      * @throws TopicMapException 
      */
-    public void execute(Wandora wandora, Context context) throws TopicMapException;
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException;
     
     
     /**
@@ -116,7 +116,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
      * 
      * @param context Tool's new context.
      */
-    public void setContext(Context context);
+    public void setContext(Context<?> context);
     
     
     /**
@@ -124,7 +124,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
      * 
      * @return Context object.
      */
-    public Context getContext();
+    public Context<?> getContext();
 
     
     

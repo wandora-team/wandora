@@ -31,6 +31,7 @@ package org.wandora.application.tools.graph;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -96,7 +97,7 @@ public class CloseTopicNodesOfType extends AbstractGraphTool {
     }
 
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model = null;
         VNode node = null;
         for(Iterator<?> iter = context.getContextObjects(); iter.hasNext(); ) {
@@ -121,8 +122,8 @@ public class CloseTopicNodesOfType extends AbstractGraphTool {
     
     
     
-    public static ArrayList<AbstractGraphTool> makeTools(TopicMapGraphPanel gp, Node n, NodeFilter nodeFilter, ArrayList<AbstractGraphTool> tools){
-        if(tools==null) tools=new ArrayList<AbstractGraphTool>();
+    public static List<AbstractGraphTool> makeTools(TopicMapGraphPanel gp, Node n, NodeFilter nodeFilter, ArrayList<AbstractGraphTool> tools){
+        if(tools==null) tools=new ArrayList<>();
         if(n instanceof TopicNode){
             TopicNode tn=(TopicNode)n;
             try{

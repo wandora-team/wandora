@@ -57,7 +57,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class ModulesServlet extends HttpServlet{
 
-    protected final ParallelListenerList<RequestListener> requestListeners=new ParallelListenerList<RequestListener>(RequestListener.class);
+    private static final long serialVersionUID = 1L;
+    
+	protected final ParallelListenerList<RequestListener> requestListeners=new ParallelListenerList<RequestListener>(RequestListener.class);
     protected ModuleManager moduleManager;
     protected ServletModule servletModule=new _ServletModule();
     

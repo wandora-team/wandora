@@ -84,7 +84,7 @@ public class PasteTopics extends AbstractWandoraTool {
     public boolean ACCEPT_UNKNOWN_TOPICS = false;
     public boolean USER_HAS_BEEN_ASKED = false;
     
-    public Iterator contextTopics = null;
+    public Iterator<?> contextTopics = null;
     public Topic currentTopic = null;
     public TopicMap topicMap = null;
     
@@ -100,15 +100,15 @@ public class PasteTopics extends AbstractWandoraTool {
         this.pasteOrders = pasteOrders;
         this.includeOrders = includeOrders;
     }
-    public PasteTopics(Context context) {
+    public PasteTopics(Context<?> context) {
         this(INCLUDE_NOTHING);
         setContext(context);
     }
-    public PasteTopics(Context context, int includeOrders) {
+    public PasteTopics(Context<?> context, int includeOrders) {
         this(includeOrders);
         setContext(context);
     }
-    public PasteTopics(Context context, int includeOrders, int pasteOrders) {
+    public PasteTopics(Context<?> context, int includeOrders, int pasteOrders) {
         this(includeOrders, pasteOrders);
         setContext(context);
     }
@@ -127,7 +127,7 @@ public class PasteTopics extends AbstractWandoraTool {
   
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         initialize(wandora);
 
         try {
@@ -394,7 +394,7 @@ public class PasteTopics extends AbstractWandoraTool {
     
     
     
-    public boolean isKnownTopic(Topic topic, Context context)  throws TopicMapException {
+    public boolean isKnownTopic(Topic topic, Context<?> context)  throws TopicMapException {
         if(topic == null || context == null) return false;
         Iterator<?> topics = context.getContextObjects();
         while(topics.hasNext()) {

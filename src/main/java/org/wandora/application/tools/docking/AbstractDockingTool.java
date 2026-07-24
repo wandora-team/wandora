@@ -45,13 +45,13 @@ public class AbstractDockingTool extends AbstractWandoraTool {
 
 
 	@Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         System.out.println("Warning: Docking tool is not overriding execute method.");
     }
     
     
 
-    public DockingFramePanel solveDockingFramePanel(Wandora wandora, Context context) {
+    public DockingFramePanel solveDockingFramePanel(Wandora wandora, Context<?> context) {
         if(context != null) {
             Object contextSource = context.getContextSource();
             if(contextSource != null && contextSource instanceof DockingFramePanel) {

@@ -47,7 +47,7 @@ public class StanfordNEROccurrenceExtractor extends AbstractOccurrenceExtractor 
 
 	public StanfordNEROccurrenceExtractor() {
     }
-    public StanfordNEROccurrenceExtractor(Context preferredContext) {
+    public StanfordNEROccurrenceExtractor(Context<?> preferredContext) {
         super(preferredContext);
     }
 

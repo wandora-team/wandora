@@ -51,7 +51,7 @@ public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	private boolean requiresRefresh = false;
-    private Context preferredContext = null;
+    private Context<?> preferredContext = null;
 
     public static final String NEARBY_TYPE = "https://wandora.org/si/nearby-points/";
     public static final String POINT_A_TYPE = "https://wandora.org/si/nearby-points/point-1";
@@ -61,7 +61,7 @@ public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool {
     public AssociateNearByOccurrenceCarriers() {
         
     }
-    public AssociateNearByOccurrenceCarriers(Context context) {
+    public AssociateNearByOccurrenceCarriers(Context<?> context) {
         this.preferredContext = context;
     }
 
@@ -82,7 +82,7 @@ public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         requiresRefresh = false;
 
         // This tool doesn't use context!

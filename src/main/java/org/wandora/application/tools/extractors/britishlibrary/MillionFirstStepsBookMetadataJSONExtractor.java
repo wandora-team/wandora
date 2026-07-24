@@ -141,7 +141,7 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
     
     
     public void parse(JSONObject json, TopicMap tm) throws TopicMapException {
-        Iterator keys = json.keys();
+        Iterator<String> keys = json.keys();
         int i=0;
         while(keys.hasNext() && !forceStop()) {
             try {
@@ -273,7 +273,7 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
             }
             else if(data instanceof JSONObject) {
                 JSONObject dataObject = (JSONObject) data;
-                Iterator keys = dataObject.keys();
+                Iterator<String> keys = dataObject.keys();
                 
                 while( keys.hasNext() ) {
                     try {
@@ -332,7 +332,7 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
             }
             else if(data instanceof JSONObject) {
                 JSONObject dataObject = (JSONObject) data;
-                Iterator keys = dataObject.keys();
+                Iterator<String> keys = dataObject.keys();
                 
                 while( keys.hasNext() ) {
                     try {
@@ -380,11 +380,11 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
             }
             else if(data instanceof JSONObject) {
                 JSONObject dataObject = (JSONObject) data;
-                Iterator keys = dataObject.keys();
+                Iterator<String> keys = dataObject.keys();
                 
                 while( keys.hasNext() ) {
                     try {
-                        String key = (String) keys.next();
+                        String key = keys.next();
                         Object innerData = dataObject.get(key);
                         if(innerData != null) {
                             parseN(bookTopic, innerData, id, tm);

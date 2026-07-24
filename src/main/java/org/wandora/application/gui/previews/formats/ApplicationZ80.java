@@ -107,7 +107,7 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
             try {
                 qaopWrapper = new JPanel();
                 if(qaop == null) {
-                    HashMap params = new HashMap();
+                    HashMap<String,String> params = new HashMap<>();
                     if(DataURL.isDataURL(locator)) {
                         params.put("load", new DataURL(locator).toExternalForm(Base64.DONT_BREAK_LINES));
                     }

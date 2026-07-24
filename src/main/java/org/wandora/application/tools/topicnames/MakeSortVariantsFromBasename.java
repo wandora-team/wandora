@@ -68,7 +68,7 @@ public class MakeSortVariantsFromBasename extends AbstractWandoraTool {
      */
     public MakeSortVariantsFromBasename() {
     }
-    public MakeSortVariantsFromBasename(Context preferredContext) {
+    public MakeSortVariantsFromBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -85,7 +85,7 @@ public class MakeSortVariantsFromBasename extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying base name to topic variant names");

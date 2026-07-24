@@ -55,7 +55,7 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
 
 	private boolean requiresRefresh = false;
-    private Context preferredContext = null;
+    private Context<?> preferredContext = null;
 
     public static final String INCLUSION_TYPE = "https://wandora.org/si/find-point-in-polygon/inclusion";
     public static final String POINT_TYPE = "https://wandora.org/si/find-point-in-polygon/point";
@@ -67,7 +67,7 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool {
     public FindPointInPolygonOccurrence() {
         
     }
-    public FindPointInPolygonOccurrence(Context context) {
+    public FindPointInPolygonOccurrence(Context<?> context) {
         this.preferredContext = context;
     }
 
@@ -90,9 +90,9 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool {
     
 
 
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         requiresRefresh = false;
-        Iterator topics = null;
+        Iterator<?> topics = null;
         if(preferredContext != null) topics = preferredContext.getContextObjects();
         else topics = context.getContextObjects();
 

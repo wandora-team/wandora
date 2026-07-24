@@ -84,7 +84,7 @@ public class SetOptions extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Options globalOptions = wandora.getOptions();
         if(globalOptions != null) {
             String key = null;

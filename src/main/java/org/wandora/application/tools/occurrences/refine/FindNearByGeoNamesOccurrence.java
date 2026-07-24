@@ -25,7 +25,7 @@ package org.wandora.application.tools.occurrences.refine;
 
 
 
-import java.net.URL;
+import java.net.URI;
 import java.net.URLEncoder;
 
 import org.wandora.application.Wandora;
@@ -54,7 +54,7 @@ public class FindNearByGeoNamesOccurrence extends AbstractOccurrenceExtractor {
 
     public FindNearByGeoNamesOccurrence() {
     }
-    public FindNearByGeoNamesOccurrence(Context preferredContext) {
+    public FindNearByGeoNamesOccurrence(Context<?> preferredContext) {
         super(preferredContext);
     }
 
@@ -100,7 +100,7 @@ public class FindNearByGeoNamesOccurrence extends AbstractOccurrenceExtractor {
 
                         e.setForceUrls( new String[] { urlStr } );
                         e.setToolLogger(getDefaultLogger());
-                        e._extractTopicsFrom(new URL(urlStr), topicMap);
+                        e._extractTopicsFrom(new URI(urlStr).toURL(), topicMap);
 
                     }
                     catch (Exception e) {

@@ -144,7 +144,7 @@ public class PasteBinConfiguration extends javax.swing.JPanel {
         uidLabel = new SimpleLabel();
         uidTextField = new SimpleField();
         expireLabel = new SimpleLabel();
-        expireComboBox = new SimpleComboBox();
+        expireComboBox = new SimpleComboBox<String>();
         buttonPanel = new javax.swing.JPanel();
         buttonFillerPanel = new javax.swing.JPanel();
         okButton = new SimpleButton();
@@ -300,7 +300,7 @@ public class PasteBinConfiguration extends javax.swing.JPanel {
     private javax.swing.JPanel buttonFillerPanel;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JComboBox expireComboBox;
+    private javax.swing.JComboBox<String> expireComboBox;
     private javax.swing.JLabel expireLabel;
     private javax.swing.JLabel infoLabel;
     private javax.swing.JButton okButton;

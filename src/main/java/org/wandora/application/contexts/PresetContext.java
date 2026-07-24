@@ -38,45 +38,33 @@ import java.util.Iterator;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
-import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.Topic;
 
 
 /**
  *
  * @author akivela
  */
-public class PreContext implements Context {
+public class PresetContext<T> implements Context<T> {
     
     
-    private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
     protected Wandora wandora = null;
     
-    private Collection<Object> contextObjects;
+    private Collection<T> contextObjects;
     
     
-    /** Creates a new instance of PreContext */
-    public PreContext(Locator locator) {
+    /** Creates a new instance of PresetContext */
+    public PresetContext(T o) {
         contextObjects = new ArrayList<>();
-        contextObjects.add(locator);
+        contextObjects.add(o);
     }
     
-    public PreContext(Locator[] locators) {
+    public PresetContext(T[] objects) {
         contextObjects = new ArrayList<>();
-        contextObjects.addAll(Arrays.asList(locators));
+        contextObjects.addAll(Arrays.asList(objects));
     }
-    public PreContext(Topic locator) {
-        contextObjects = new ArrayList<>();
-        contextObjects.add(locator);
-    }
-    
-    public PreContext(Topic[] locators) {
-        contextObjects = new ArrayList<>();
-        contextObjects.addAll(Arrays.asList(locators));
-    }
-    
+
     
     
     // -------------------------------------------------------------------------
@@ -101,11 +89,11 @@ public class PreContext implements Context {
      * @return <tt>Iterator</tt> containing all the context objects.
      */
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<T> getContextObjects() {
         
-        return new Iterator() {
-            Iterator iterator = contextObjects.iterator();
-            Object next = solveNext();
+        return new Iterator<T>() {
+            Iterator<T> iterator = contextObjects.iterator();
+            T next = solveNext();
             
             @Override
             public boolean hasNext() {
@@ -114,8 +102,8 @@ public class PreContext implements Context {
             }
 
             @Override
-            public Object next() {
-                Object current = next;
+            public T next() {
+                T current = next;
                 next = solveNext();
                 return current;
             }
@@ -125,16 +113,10 @@ public class PreContext implements Context {
                 throw new UnsupportedOperationException();            
             }
             
-            private Object solveNext() {
+            private T solveNext() {
                 if(iterator != null && iterator.hasNext()) {
                     try {
-                        Object o = iterator.next();
-                        if(o instanceof Topic) {
-                            return o;
-                        }
-                        if(o instanceof Locator) {
-                            return wandora.getTopicMap().getTopic((Locator) o);
-                        }
+                        return iterator.next();
                     }
                     catch(Exception e) {
                         e.printStackTrace();

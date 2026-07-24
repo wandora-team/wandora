@@ -90,7 +90,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     private boolean internalForceStop;
     
     private Wandora runAdmin = null;
-    private Context runContext = null;
+    private Context<?> runContext = null;
     
     private static final Set<Class<? extends AbstractWandoraTool>> toolLocks = new LinkedHashSet<>();
     private static final Map<Thread,T2<Class<? extends AbstractWandoraTool>,Long>> toolThreads = new HashMap<>();
@@ -116,6 +116,10 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public void execute(Wandora wandora) throws TopicMapException {
         execute(wandora, (ActionEvent) null);
     }
+    
+    @Override
+    public abstract void execute(Wandora wandora, Context<?> context) throws TopicMapException;
+
     
     
     /**
@@ -666,7 +670,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * no explicitly set context <code>AbstractWandoraTool</code> uses <code>LayeredTopicContext</code>.
      */
     @Override
-    public void setContext(Context context) { runContext = context; }
+    public void setContext(Context<?> context) { runContext = context; }
     
     
     /**
@@ -678,7 +682,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * execution, not before.
      */
     @Override
-    public Context getContext() { return runContext; }
+    public Context<?> getContext() { return runContext; }
     
    
     
@@ -907,7 +911,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     
     
-    public TopicMap solveContextTopicMap(Wandora wandora, Context context) {
+    public TopicMap solveContextTopicMap(Wandora wandora, Context<?> context) {
         if(context != null) {
             //System.out.println("context-source: " + context.getContextSource());
             Object contextSource = context.getContextSource();
@@ -1002,7 +1006,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
             }
         }
     }
-    
+
     
     
 }

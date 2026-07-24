@@ -50,7 +50,7 @@ public class AddOccurrences extends AbstractWandoraTool {
 
 
 	public AddOccurrences() {}
-    public AddOccurrences(Context preferredContext) {
+    public AddOccurrences(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -68,7 +68,7 @@ public class AddOccurrences extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             Topic topic = (Topic) contextTopics.next();

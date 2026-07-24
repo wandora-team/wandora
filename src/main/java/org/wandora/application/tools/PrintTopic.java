@@ -58,7 +58,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -119,8 +118,8 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     SimpleButton printBtn;
     SimpleButton copyBtn;
     SimpleButton saveBtn;
-    SimpleComboBox templateSelector;
-    SimpleComboBox pageSelector;
+    SimpleComboBox<String> templateSelector;
+    SimpleComboBox<String> pageSelector;
     JPanel previewPanel;
     Preview preview;
     JScrollPane scrollArea;
@@ -168,7 +167,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         this.parent = admin;
         if(frame == null) {
             initializeGui();
@@ -220,8 +219,8 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         printBtn = new SimpleButton("Print");
         copyBtn = new SimpleButton("Copy");
         saveBtn = new SimpleButton("Save");
-        templateSelector = new SimpleComboBox();
-        pageSelector = new SimpleComboBox();
+        templateSelector = new SimpleComboBox<>();
+        pageSelector = new SimpleComboBox<>();
         pageSelector.setEditable(false);
         pageSelector.setPreferredSize(new Dimension(50,21));
               
@@ -659,28 +658,20 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     
-    public String getVelocityString(Wandora wandora, Map hash, String templateFile) {
+    public String getVelocityString(Wandora wandora, Map<String, Object> hash, String templateFile) {
         VelocityContext context;
         Template template;
         StringWriter writer;
         VelocityEngine velocityEngine;
         String templateEncoding = "UTF-8";
-        Object codec = null;
 
         try {           
-            //templateFile = new File(templateName);
-            //templatePath = templateFile.getParent();
             writer = new StringWriter();
             velocityEngine = new VelocityEngine();
-            //velocityEngine.setProperty("file.resource.loader.path", templatePath );
-            //velocityEngine.setProperty("runtime.log.error.stacktrace", "false" );
-            //velocityEngine.setProperty("runtime.log.warn.stacktrace", "false" );
-            //velocityEngine.setProperty("runtime.log.info.stacktrace", "false" );
             velocityEngine.init();
             context = new VelocityContext();
             context.put("topic", hash);
             context.put("date" , DateFormat.getDateTimeInstance().format(new Date()));
-            if(codec != null) context.put("codec", codec);
             if(templateEncoding != null && templateEncoding.length()>0) template = velocityEngine.getTemplate(templateFile, templateEncoding);
             else template = velocityEngine.getTemplate(templateFile);
             template.merge( context, writer );
@@ -747,7 +738,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     public void solveTemplates() {
         try {
-            HashSet<String> templateFiles = IObox.getFilesAsHash("gui/printtemplates", ".+\\.vhtml", 1, 999);
+            Set<String> templateFiles = IObox.getFilesAsHash("gui/printtemplates", ".+\\.vhtml", 1, 999);
             for(String templateFilename : templateFiles) {
                 if(templateFilename != null) {
                     try {
@@ -825,18 +816,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         }
         
         
-        /*
-        public Dimension getPreferredSize() {
-            if(pageFormat != null) {
-                return new Dimension((int) pageFormat.getWidth(), (int) pageFormat.getHeight());
-            }
-            else {
-                return new Dimension((int) (72*8.27), (int) (72*11.69));
-            }
-        }
-         * */
-        
-        
         @Override
         public void setText(String newText) {
             setEditorKit(new HTMLEditorKit() );
@@ -912,7 +891,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
             g.setColor(new Color(245,245,245));
             g.drawRect((int) iX-1, (int) iY-1, (int) iWidth+1, (int) iHeight+1);
             
-            if(g instanceof Graphics2D) {
+            if(g instanceof Graphics2D g2d) {
                 RenderingHints qualityHints = new RenderingHints(
                     RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY);
@@ -923,16 +902,12 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
                     RenderingHints.KEY_FRACTIONALMETRICS,
                     RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 
-                ((Graphics2D) g).addRenderingHints(qualityHints);
-                ((Graphics2D) g).addRenderingHints(antialiasHints);
-                ((Graphics2D) g).addRenderingHints(metricsHints);
+                g2d.addRenderingHints(qualityHints);
+                g2d.addRenderingHints(antialiasHints);
+                g2d.addRenderingHints(metricsHints);
                 
-                ((Graphics2D) g).translate(pageFormat.getImageableX(), pageFormat.getImageableY()-(page*iHeight));
-                ((Graphics2D) g).clipRect(0, (int) (page*iHeight), (int) iWidth, (int) (iHeight));
-                //System.out.println("printing=="+(page*iHeight)+"-"+((page+1)*iHeight));
-                //System.out.println("((page+1)*iHeight)=="+((page+1)*iHeight));
-                //g.setColor(Color.WHITE);
-                //g.fillRect(0, (int) (page*iHeight), (int) iWidth, (int) iHeight);
+                g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY()-(page*iHeight));
+                g2d.clipRect(0, (int) (page*iHeight), (int) iWidth, (int) (iHeight));
             }
             
             super.paint(g);
@@ -998,12 +973,10 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
 
         public void save(File textFile) {
             if(textFile != null) {
-                String newText = "";
                 try {
                     FileWriter writer=new FileWriter(textFile);
                     write(writer);
                     writer.close();
-                    //IObox.saveFile(textFile, textPane.getText());
                 }
                 catch(Exception e) {
                     System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + textFile.getPath() + "'.");

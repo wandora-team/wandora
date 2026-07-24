@@ -57,7 +57,7 @@ public class VariantNewlineRemover extends AbstractWandoraTool {
      */
     public VariantNewlineRemover() {
     }
-    public VariantNewlineRemover(Context preferredContext) {
+    public VariantNewlineRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -73,7 +73,7 @@ public class VariantNewlineRemover extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Removing new line characters in variant names");

@@ -133,7 +133,7 @@ public class HTTPServerTool extends AbstractWandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         
         if((mode&CONFIGURE) != 0) {
 

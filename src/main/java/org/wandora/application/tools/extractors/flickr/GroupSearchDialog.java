@@ -35,7 +35,7 @@ public class GroupSearchDialog extends javax.swing.JDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private FlickrState flickrState;
-    private DefaultListModel listModel;
+    private DefaultListModel<String> listModel;
     private Frame parentFrame;
     private HashMap<String, Topic> allGroups;
     private ArrayList<Topic> selectedGroups;
@@ -54,7 +54,7 @@ public class GroupSearchDialog extends javax.swing.JDialog {
         flickrState = state;
         flickrExtractor = extractor;
         parentFrame = parent;
-        listModel = new DefaultListModel();
+        listModel = new DefaultListModel<>();
         groupList.setModel(listModel);
         allGroups = new HashMap<String, Topic>();
         if(parent instanceof Wandora)
@@ -78,7 +78,7 @@ public class GroupSearchDialog extends javax.swing.JDialog {
         wandoraLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
         searchText = new org.wandora.application.gui.simple.SimpleField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        groupList = new javax.swing.JList();
+        groupList = new javax.swing.JList<>();
         btnOk = new org.wandora.application.gui.simple.SimpleButton();
         btnCancel = new org.wandora.application.gui.simple.SimpleButton();
         wandoraLabel2 = new org.wandora.application.gui.simple.SimpleLabel();
@@ -181,7 +181,7 @@ public class GroupSearchDialog extends javax.swing.JDialog {
     private class GroupRequestThread implements Runnable {
         public void run() {
             try {
-                SortedMap<String, String> args = new TreeMap();
+                SortedMap<String, String> args = new TreeMap<>();
                 args.put("text", URLEncoder.encode(searchText.getText(), "UTF-8"));
                 JSONObject result;
 
@@ -248,7 +248,7 @@ public class GroupSearchDialog extends javax.swing.JDialog {
         cancelled = false;
         selectedGroups = new ArrayList<Topic>();
         
-        for(Object elem : groupList.getSelectedValues()) {
+        for(Object elem : groupList.getSelectedValuesList()) {
             selectedGroups.add(allGroups.get(elem));
         }
         setVisible(false);
@@ -291,7 +291,7 @@ public class GroupSearchDialog extends javax.swing.JDialog {
     private org.wandora.application.gui.simple.SimpleButton btnCancel;
     private org.wandora.application.gui.simple.SimpleButton btnOk;
     private org.wandora.application.gui.simple.SimpleButton btnSearch;
-    private javax.swing.JList groupList;
+    private javax.swing.JList<String> groupList;
     private javax.swing.JScrollPane jScrollPane1;
     private org.wandora.application.gui.simple.SimpleField searchText;
     private org.wandora.application.gui.simple.SimpleLabel wandoraLabel1;

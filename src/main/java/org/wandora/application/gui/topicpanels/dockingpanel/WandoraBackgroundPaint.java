@@ -31,6 +31,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -77,7 +78,7 @@ public class WandoraBackgroundPaint implements BackgroundPaint {
         if(imageLocator != null) {
             baseImage = null;
             try {
-                URL url = new URL(imageLocator);
+                URL url = new URI(imageLocator).toURL();
                 this.baseImage = ImageIO.read(url);
             }
             catch (Exception e) {

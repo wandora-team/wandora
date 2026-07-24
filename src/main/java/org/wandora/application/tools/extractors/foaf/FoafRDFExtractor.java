@@ -111,7 +111,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         super.execute(wandora, context);
     }
     

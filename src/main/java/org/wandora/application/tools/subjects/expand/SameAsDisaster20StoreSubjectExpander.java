@@ -40,7 +40,7 @@ public class SameAsDisaster20StoreSubjectExpander extends SameAsSubjectExpander 
 
 
 	public SameAsDisaster20StoreSubjectExpander() {}
-    public SameAsDisaster20StoreSubjectExpander(Context preferredContext) {
+    public SameAsDisaster20StoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

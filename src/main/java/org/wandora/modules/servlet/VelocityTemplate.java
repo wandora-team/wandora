@@ -135,9 +135,9 @@ public class VelocityTemplate extends AbstractTemplate {
             this.vTemplate=vTemplate;
         }
         VelocityContext context=new VelocityContext();
-        Iterator iter=params.entrySet().iterator();
+        Iterator<Map.Entry<String,Object>> iter=params.entrySet().iterator();
         while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
+            Map.Entry<String,Object> e=iter.next();
             context.put(e.getKey().toString(),e.getValue());
         }
 

@@ -64,7 +64,7 @@ public class DeleteScopeTopicInVariantName extends AbstractWandoraTool {
 
 
 
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(t != null && !t.isRemoved() && scopeTopic != null && !scopeTopic.isRemoved()) {
                 if(scope != null) {

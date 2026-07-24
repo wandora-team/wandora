@@ -27,6 +27,7 @@
 package org.wandora.application.tools.occurrences;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -73,7 +74,7 @@ public class URLOccurrenceChecker extends AbstractWandoraTool {
 
 
     public URLOccurrenceChecker() {}
-    public URLOccurrenceChecker(Context context) {
+    public URLOccurrenceChecker(Context<?> context) {
         setContext(context);
     }
     public URLOccurrenceChecker(Collection<Topic> topics) {
@@ -86,7 +87,7 @@ public class URLOccurrenceChecker extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         setDefaultLogger();
 
         if(topicsToCheck == null) {
@@ -211,7 +212,7 @@ public class URLOccurrenceChecker extends AbstractWandoraTool {
             urlString = urlString.trim();
             if(urlString.startsWith("http://") || urlString.startsWith("https://") || urlString.startsWith("file://") || urlString.startsWith("ftp://") || urlString.startsWith("ftps://")) {
                 try {
-                    URL url = new URL(urlString);
+                    URL url = new URI(urlString).toURL();
                     return url;
                 }
                 catch(Exception e) {

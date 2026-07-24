@@ -44,10 +44,10 @@ public class SelectionInstancesIIIFBuilder extends SimpleSelectionIIIFBuilder {
     
  
     @Override
-    protected void processTopics(Wandora wandora,Context context, Sequence sequence,IIIFExport tool) throws TopicMapException {
+    protected void processTopics(Wandora wandora,Context<?> context, Sequence sequence,IIIFExport tool) throws TopicMapException {
         TopicHashSet processed=new TopicHashSet();
         
-        Iterator iter=context.getContextObjects();
+        Iterator<?> iter=context.getContextObjects();
         while(iter.hasNext()){
             Object o=iter.next();
             if(!(o instanceof Topic)) continue;

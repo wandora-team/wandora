@@ -55,7 +55,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
 	
 	private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
+    private Context<?> context = null;
     private static final String DISCOGS_API_BASE = "http://api.discogs.com/database/search";
 
     /**
@@ -73,7 +73,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         accepted = b;
     }
 
-    public void open(Wandora w, Context c) {
+    public void open(Wandora w, Context<?> c) {
         context = c;
         accepted = false;
         dialog = new JDialog(w, true);
@@ -175,7 +175,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -217,7 +217,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         MainPanel = new javax.swing.JPanel();
         TabsPane = new SimpleTabbedPane();
         searchPanel = new javax.swing.JPanel();
-        searchTypeComboBox = new SimpleComboBox();
+        searchTypeComboBox = new SimpleComboBox<>();
         headlineLabel = new SimpleLabel();
         searchTextField = new SimpleField();
         releaseSearchPanel = new javax.swing.JPanel();
@@ -580,6 +580,6 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
     private javax.swing.JTextField releaseTextField;
     private javax.swing.JPanel searchPanel;
     private javax.swing.JTextField searchTextField;
-    private javax.swing.JComboBox searchTypeComboBox;
+    private javax.swing.JComboBox<String> searchTypeComboBox;
     // End of variables declaration//GEN-END:variables
 }

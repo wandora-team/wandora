@@ -64,7 +64,7 @@ public class ChangeAssociationRole extends AbstractWandoraTool {
     public ChangeAssociationRole() {
         setContext(new AssociationContext());
     }
-    public ChangeAssociationRole(Context preferredContext) {
+    public ChangeAssociationRole(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -85,7 +85,7 @@ public class ChangeAssociationRole extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         requiresRefresh = false;
         Iterator<?> associations = context.getContextObjects();
         Association association = null;

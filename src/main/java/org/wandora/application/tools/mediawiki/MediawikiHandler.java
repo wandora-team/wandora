@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -188,7 +189,7 @@ public abstract class MediawikiHandler extends AbstractWandoraTool {
         //log(tokenUrl + "?" + data.toString());
         
         try {
-            reply = sendRequest(new URL(tokenUrl), data.toString(), "application/x-www-form-urlencoded", "POST");
+            reply = sendRequest(new URI(tokenUrl).toURL(), data.toString(), "application/x-www-form-urlencoded", "POST");
             token = getResponseMessage(reply, "logintoken");
         } catch (Exception e) {
             log("Login token error: " + e.getMessage());
@@ -206,7 +207,7 @@ public abstract class MediawikiHandler extends AbstractWandoraTool {
         //log(tokenUrl);
         
         try {
-            reply = sendRequest(new URL(tokenUrl), null, "application/x-www-form-urlencoded", "POST");
+            reply = sendRequest(new URI(tokenUrl).toURL(), null, "application/x-www-form-urlencoded", "POST");
             token = getResponseMessage(reply, "edittoken");
         } catch (Exception e) {
             log("Edit token error: " + e.getMessage());
@@ -237,7 +238,7 @@ public abstract class MediawikiHandler extends AbstractWandoraTool {
             log(apiBase + "?" + data.toString());
 
             try {
-                String reply = sendRequest(new URL(apiBase), data.toString(), "application/x-www-form-urlencoded", "POST");
+                String reply = sendRequest(new URI(apiBase).toURL(), data.toString(), "application/x-www-form-urlencoded", "POST");
                 if(reply.contains("result=\"Success\"")) {
                     logged = true;
                 } else {
@@ -258,7 +259,7 @@ public abstract class MediawikiHandler extends AbstractWandoraTool {
             String logoutUrl = wikiUrl + "/api.php?action=logout";
 
             try {
-                sendRequest(new URL(logoutUrl), null, "text/html", "GET");
+                sendRequest(new URI(logoutUrl).toURL(), null, "text/html", "GET");
                 cookies.clear();
                 logged = false;
                 log("Logged out.");
@@ -344,7 +345,7 @@ public abstract class MediawikiHandler extends AbstractWandoraTool {
         log(apiBaseUrl + "?" + data.toString());
         
         try {
-            reply = sendRequest(new URL(apiBaseUrl), data.toString(), "application/x-www-form-urlencoded", "POST");
+            reply = sendRequest(new URI(apiBaseUrl).toURL(), data.toString(), "application/x-www-form-urlencoded", "POST");
         }
         catch(Exception e) {
             log("Uploading error: " + e.getMessage());
@@ -396,7 +397,7 @@ public abstract class MediawikiHandler extends AbstractWandoraTool {
             
             //Set up connection
             URLConnection connection = null;
-            connection = new URL(apiBaseUrl).openConnection();
+            connection = new URI(apiBaseUrl).toURL().openConnection();
             
             String boundary = "----------NEXT PART----------";
             connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -544,7 +545,7 @@ public abstract class MediawikiHandler extends AbstractWandoraTool {
         if(str.length() == 0) return false;
         
         try {
-            URL u = new URL(str);
+            URL u = new URI(str).toURL();
             if(u != null) return true;
         }
         catch(Exception e) {}

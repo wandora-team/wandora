@@ -36,6 +36,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JTable;
@@ -1316,7 +1318,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
 
 		private static final long serialVersionUID = 1L;
 
-		private HashMap<Topic,Double> modelData = null;
+		private Map<Topic,Double> modelData = null;
         private TopicWeightTableModel dm = null;
         private String name1 = "Type";
         private String name2 = "Weight";
@@ -1416,18 +1418,18 @@ public class AssetWeightPanel extends javax.swing.JPanel {
     class TopicWeightTableModel extends DefaultTableModel {
         private static final long serialVersionUID = 1L;
         
-		private ArrayList<Topic> topics = null;
-        private ArrayList<Double> weights = null;
-        private HashMap<Topic,Double> topicWeights = null;
+		private List<Topic> topics = null;
+        private List<Double> weights = null;
+        private Map<Topic,Double> topicWeights = null;
 
         private String columnName0 = "Type";
         private String columnName1 = "Weight";
 
 
 
-        public TopicWeightTableModel(HashMap<Topic,Double> typeWeights) {
-            topics = new ArrayList<Topic>();
-            weights = new ArrayList<Double>();
+        public TopicWeightTableModel(Map<Topic,Double> typeWeights) {
+            topics = new ArrayList<>();
+            weights = new ArrayList<>();
             topicWeights = typeWeights;
             for(Topic topic : typeWeights.keySet()) {
                 topics.add(topic);
@@ -1441,6 +1443,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             else
                 return null;
         }
+        
         public double getWeightAt(int row) {
             if(row >= 0 && row < weights.size())
                 return weights.get(row);
@@ -1560,7 +1563,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
 
 
 
-    class TopicWeightTableRowSorter extends TableRowSorter {
+    class TopicWeightTableRowSorter extends TableRowSorter<TopicWeightTableModel> {
 
 
         public TopicWeightTableRowSorter(TopicWeightTableModel dm) {

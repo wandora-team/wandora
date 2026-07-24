@@ -53,7 +53,7 @@ public class TopicNameCopier extends AbstractWandoraTool {
      */
     public TopicNameCopier() {
     }
-    public TopicNameCopier(Context preferredContext) {
+    public TopicNameCopier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -71,7 +71,7 @@ public class TopicNameCopier extends AbstractWandoraTool {
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying variant names of topic");

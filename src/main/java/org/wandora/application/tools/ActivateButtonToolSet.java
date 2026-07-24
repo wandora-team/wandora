@@ -75,7 +75,7 @@ public class ActivateButtonToolSet extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Options options = wandora.getOptions();
             if(options != null) {

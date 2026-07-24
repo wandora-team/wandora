@@ -49,7 +49,7 @@ public class ConnectNodesTool extends AbstractGraphTool {
         return "Connect visible nodes";
     }
     
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora admin, Context<?> context) {
         solveModel(admin,context).connectAllNodes();
     }    
 }

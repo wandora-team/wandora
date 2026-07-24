@@ -47,7 +47,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.VEdge;
  *
  * @author akivela
  */
-public class GraphEdgeContext implements Context {
+public class GraphEdgeContext implements Context<VEdge> {
     
     private Object contextSource;
     protected WandoraTool contextOwner = null;
@@ -86,13 +86,13 @@ public class GraphEdgeContext implements Context {
     
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<VEdge> getContextObjects() {
         return getContextObjects( getContextSource() );
     }
     
     
     
-    public Iterator getContextObjects(Object contextSource) {
+    public Iterator<VEdge> getContextObjects(Object contextSource) {
         if(contextSource == null) return null;
         
         List<VEdge> contextEdges = new ArrayList<>();

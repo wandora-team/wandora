@@ -54,7 +54,7 @@ public class MakeInstancesWithAssociations extends AbstractWandoraTool {
     public MakeInstancesWithAssociations() {
         this(new AssociationContext());
     }
-    public MakeInstancesWithAssociations(Context preferredContext) {
+    public MakeInstancesWithAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -71,8 +71,8 @@ public class MakeInstancesWithAssociations extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {
-        Iterator associations=null;
+    public void execute(Wandora wandora, Context<?> context) {
+        Iterator<?> associations=null;
         if(context instanceof AssociationContext) {
             associations = context.getContextObjects();
         }

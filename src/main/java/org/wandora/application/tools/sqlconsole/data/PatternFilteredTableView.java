@@ -194,7 +194,7 @@ public class PatternFilteredTableView extends MappedTableView {
                         if(!ps[j].matches(row[j])) return false;
                     }
                 }
-                return true || noPatterns;
+                return true && noPatterns;
             }
         }
         return false;

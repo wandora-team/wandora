@@ -147,11 +147,11 @@ public class CopyTopics extends AbstractWandoraTool {
     }
     
     
-    public CopyTopics(Context context, int copyOrders, int includeOrders) {
+    public CopyTopics(Context<?> context, int copyOrders, int includeOrders) {
         if(context != null) setContext(context);
         initialize(copyOrders, includeOrders);
     }
-    public CopyTopics(Context context, int includeOrders) {
+    public CopyTopics(Context<?> context, int includeOrders) {
         if(context != null) setContext(context);
         initialize(COPY_BASENAMES, includeOrders);
     }
@@ -231,7 +231,7 @@ public class CopyTopics extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         this.wandora = wandora;
         try {
             if(wandora != null) {

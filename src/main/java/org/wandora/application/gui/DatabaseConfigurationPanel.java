@@ -40,7 +40,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleList;
 import org.wandora.application.gui.simple.SimpleTextArea;
 import org.wandora.topicmap.TopicMapConfigurationPanel;
-import org.wandora.topicmap.database.DatabaseConfiguration;
+import org.wandora.topicmap.database2.DatabaseConfiguration;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.swing.GuiTools;
@@ -58,7 +58,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     
     private Wandora wandora;
     protected JDialog newConDialog;
-    protected DefaultListModel listModel;
+    protected DefaultListModel<StoredConnection> listModel;
     protected int editingIndex=-1;
     
     
@@ -66,7 +66,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     /** Creates new form DatabaseConfigurationPanel */
     public DatabaseConfigurationPanel(Wandora wandora) {
         this.wandora = wandora;
-        listModel = new DefaultListModel();
+        listModel = new DefaultListModel<>();
         initComponents();
         connectionsList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loadSaveButtonPanel.setVisible(false);
@@ -114,7 +114,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         passwordGenTextField = new org.wandora.application.gui.simple.SimpleField();
         newConPanel = new javax.swing.JPanel();
         jLabel11 = new org.wandora.application.gui.simple.SimpleLabel();
-        dbtypeComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        dbtypeComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         dbConfContainerPanel = new javax.swing.JPanel();
         newConButtonsPanel = new javax.swing.JPanel();
@@ -129,7 +129,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
         loadButton = new org.wandora.application.gui.simple.SimpleButton();
         saveButton = new org.wandora.application.gui.simple.SimpleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        connectionsList = new SimpleList(listModel);
+        connectionsList = new SimpleList<StoredConnection>(listModel);
         jPanel3 = new javax.swing.JPanel();
         newConnectionButton = new org.wandora.application.gui.simple.SimpleButton();
         editButton = new org.wandora.application.gui.simple.SimpleButton();
@@ -815,7 +815,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     
     
     public Collection<StoredConnection> getAllConnections(){
-        Vector<StoredConnection> ret=new Vector<StoredConnection>();
+        Vector<StoredConnection> ret=new Vector<>();
         for(int i=0;i<listModel.getSize();i++){
             ret.add((StoredConnection)listModel.getElementAt(i));
         }
@@ -833,10 +833,10 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField conTextField;
-    private javax.swing.JList connectionsList;
+    private javax.swing.JList<StoredConnection> connectionsList;
     private javax.swing.JTextField databaseTextField;
     private javax.swing.JPanel dbConfContainerPanel;
-    private javax.swing.JComboBox dbtypeComboBox;
+    private javax.swing.JComboBox<String> dbtypeComboBox;
     private javax.swing.JButton deleteConnectionButton;
     private javax.swing.JTextField driverTextField;
     private javax.swing.JButton editButton;

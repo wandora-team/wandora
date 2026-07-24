@@ -81,7 +81,7 @@ public class ConfigureLayer extends AbstractLayerTool {
     }
     
     
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             Layer contextLayer =  solveContextLayer(wandora, context);
             

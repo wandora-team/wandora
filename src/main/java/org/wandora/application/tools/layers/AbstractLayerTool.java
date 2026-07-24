@@ -45,11 +45,11 @@ public abstract class AbstractLayerTool extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
 
 	
-	protected Layer solveContextLayer(Wandora wandora, Context context) {
+	protected Layer solveContextLayer(Wandora wandora, Context<?> context) {
         LayerTree layerTree = wandora.layerTree;
         Layer layer=null;
-        if(context.getContextSource() instanceof LayerTree){
-            layer = ((LayerTree)context.getContextSource()).getLastClickedLayer();
+        if(context.getContextSource() instanceof LayerTree layerTreeInContext){
+            layer = layerTreeInContext.getLastClickedLayer();
         }
         if(layer == null) layer = layerTree.getSelectedLayer();
         return layer;

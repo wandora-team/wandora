@@ -51,7 +51,7 @@ public class EuropeanaExtractorUI extends javax.swing.JPanel {
 	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
+    private Context<?> context = null;
     private static final String EUROPEANA_API_BASE = "http://www.europeana.eu/api/v2/search.json";
 
 
@@ -70,7 +70,7 @@ public class EuropeanaExtractorUI extends javax.swing.JPanel {
         accepted = b;
     }
 
-    public void open(Wandora w, Context c) {
+    public void open(Wandora w, Context<?> c) {
         context = c;
         accepted = false;
         dialog = new JDialog(w, true);

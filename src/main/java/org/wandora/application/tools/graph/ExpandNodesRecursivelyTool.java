@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -89,14 +90,14 @@ public class ExpandNodesRecursivelyTool extends AbstractGraphTool {
         }
     }
 
-    public void executeSynchronized(Wandora wandora, Context context) {}
+    public void executeSynchronized(Wandora wandora, Context<?> context) {}
     
     @Override
-    public void execute(Wandora wandora, Context context){
+    public void execute(Wandora wandora, Context<?> context){
         if(context != null) {
-            Iterator contextObjects = context.getContextObjects();
+            Iterator<?> contextObjects = context.getContextObjects();
             if(!contextObjects.hasNext()) {
-                ArrayList<Topic> adhocContext = new ArrayList<>();
+                List<Topic> adhocContext = new ArrayList<>();
                 adhocContext.add( wandora.getOpenTopic() );
                 contextObjects = adhocContext.iterator();
             }

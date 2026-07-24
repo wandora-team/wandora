@@ -69,7 +69,7 @@ public class AboutCredits extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             aboutDialog=new javax.swing.JDialog(wandora,"Wandora credits",true);
             aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20,0));

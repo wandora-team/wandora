@@ -73,11 +73,11 @@ public abstract class AbstractExportTool extends AbstractWandoraTool {
     // -------------------------------------------------------------------------
 
 
-    protected TopicMap makeTopicMapWith(Context context) {
+    protected TopicMap makeTopicMapWith(Context<?> context) {
         return makeTopicMapWith(context, false);
     }
 
-    protected TopicMap makeTopicMapWith(Context context, boolean deepCopy) {
+    protected TopicMap makeTopicMapWith(Context<?> context, boolean deepCopy) {
         TopicMap tm = new TopicMapImpl();
         try {
             Iterator<?> contextObjects = context.getContextObjects();

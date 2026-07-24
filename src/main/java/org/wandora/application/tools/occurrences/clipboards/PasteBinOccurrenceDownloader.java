@@ -25,6 +25,7 @@ package org.wandora.application.tools.occurrences.clipboards;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
@@ -65,7 +66,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool {
     }
     
     
-    public PasteBinOccurrenceDownloader(Context proposedContext) {
+    public PasteBinOccurrenceDownloader(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
     
@@ -82,7 +83,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool {
     }
 
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         Object source = context.getContextSource();
         cancelled = false;
         String o = null;
@@ -105,7 +106,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool {
             }
         }
         else {
-            Iterator contextObjects = context.getContextObjects();
+            Iterator<?> contextObjects = context.getContextObjects();
             setDefaultLogger();
             int counter = 0;
             while(contextObjects.hasNext() && !forceStop() && !cancelled) {
@@ -160,7 +161,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool {
     
     public boolean restorePastebinData(Topic carrier, Topic type, Topic scope, String purl, Wandora w) {
         try {
-            String pastebinContent = getUrl(new URL(purl));
+            String pastebinContent = getUrl(new URI(purl).toURL());
             boolean storeToOccurrence = true;
             if(pastebinContent == null || pastebinContent.length() == 0) {
                 storeToOccurrence = false;

@@ -50,7 +50,7 @@ public class Pull extends AbstractGitTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
 
         try {
             Git git = getGit();

@@ -87,7 +87,7 @@ public class DeleteFromTopics extends AbstractWandoraTool {
     public DeleteFromTopics(int orders) {
         whatToDelete = orders;
     }
-    public DeleteFromTopics(Context preferredContext, int orders) {
+    public DeleteFromTopics(Context<?> preferredContext, int orders) {
         setContext(preferredContext);
         whatToDelete = orders;
     }
@@ -110,7 +110,7 @@ public class DeleteFromTopics extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         Topic topic = null;
         Iterator<?> topics = context.getContextObjects();
 

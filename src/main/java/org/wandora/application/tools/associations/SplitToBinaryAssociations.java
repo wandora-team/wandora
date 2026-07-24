@@ -73,7 +73,7 @@ public class SplitToBinaryAssociations extends AbstractWandoraTool {
     }
     
     
-    public SplitToBinaryAssociations(Context preferredContext) {
+    public SplitToBinaryAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -96,7 +96,7 @@ public class SplitToBinaryAssociations extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
             TopicMap topicmap = wandora.getTopicMap();

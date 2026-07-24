@@ -96,7 +96,7 @@ public class PersonInfoExtractor extends FlickrExtractor {
 
 
     @Override
-    protected boolean extract(Wandora wandora, Context context) throws ExtractionFailure {
+    protected boolean extract(Wandora wandora, Context<?> context) throws ExtractionFailure {
         Collection<T2<FlickrPerson, Topic>> people = null;
         Topic profileT = null;
         Topic nsidT = null;

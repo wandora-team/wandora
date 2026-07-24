@@ -1569,8 +1569,6 @@ public abstract class TopicMap implements TopicMapLogger {
         
         private Map<String,Topic> idmapping;
         
-        private Hashtable mergemap;
-        
         private TopicMapLogger logger;
         private int count;
         private int topicCount;
@@ -1586,7 +1584,6 @@ public abstract class TopicMap implements TopicMapLogger {
             associationCount = 0;
             occurrenceCount = 0;
             idmapping=new LinkedHashMap<>();
-            mergemap=new Hashtable<>();
             state=STATE_START;
             stateStack=new IntegerStack();
         }

@@ -63,7 +63,7 @@ public class OpenCycExtractorSelector extends JDialog {
    
 
     private Wandora wandora = null;
-    private Context context = null;
+    private Context<?> context = null;
     private boolean accepted = false;
     
     
@@ -85,7 +85,7 @@ public class OpenCycExtractorSelector extends JDialog {
         this.wandora = wandora;
     }
     
-    public void setContext(Context context) {
+    public void setContext(Context<?> context) {
         this.context = context;
     }
     
@@ -292,7 +292,7 @@ public class OpenCycExtractorSelector extends JDialog {
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {

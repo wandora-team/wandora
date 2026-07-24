@@ -58,7 +58,7 @@ public class Pinger extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(final Wandora wandora, Context context) throws TopicMapException {
+    public void execute(final Wandora wandora, Context<?> context) throws TopicMapException {
         PingerPanel panel = new PingerPanel(wandora.getTopicMap());
         panel.openInOwnWindow(wandora);
     }

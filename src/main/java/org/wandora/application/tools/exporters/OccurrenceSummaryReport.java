@@ -106,7 +106,7 @@ public class OccurrenceSummaryReport extends AbstractExportTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         String topicMapName = null;
         String exportInfo = null;
         

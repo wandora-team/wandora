@@ -25,6 +25,7 @@
  */
 
 package org.wandora.application.gui;
+
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.Vector;
@@ -51,9 +52,8 @@ public class TopicSelectList extends javax.swing.JPanel  {
 
 	
 	private Topic[] topics;
-    private JComboBox cbox;
+    private JComboBox<ComboBoxTopicWrapper> cbox;
     private JTextField field;
-    private boolean running;
     private ListWindow listWindow;
     private boolean editable;
     private JDialog owner;
@@ -66,7 +66,7 @@ public class TopicSelectList extends javax.swing.JPanel  {
         initComponents();
         this.setLayout(new java.awt.BorderLayout());
         if(topics.length<0){
-            cbox=new JComboBox();
+            cbox=new JComboBox<>();
             for(int i=0;i<topics.length;i++){
                 Topic t=topics[i];
                 cbox.addItem(new ComboBoxTopicWrapper(t));
@@ -90,12 +90,6 @@ public class TopicSelectList extends javax.swing.JPanel  {
             });*/
             field.addKeyListener(new java.awt.event.KeyAdapter(){
                 public void keyReleased(java.awt.event.KeyEvent e){
-                    /*if(listWindow!=null){
-                        e.consume();
-                        e.setSource(listWindow.l);
-                        listWindow.l.dispatchEvent(e);
-                    }
-                    else */
                     if(listWindow==null && e.getKeyCode()==KeyEvent.VK_TAB){
                         e.consume();
                         showList(); 
@@ -215,17 +209,18 @@ public class TopicSelectList extends javax.swing.JPanel  {
 
 
 class ListWindow extends JDialog {
-    public JList l;
-    public Vector data;
+    private static final long serialVersionUID = 1L;
+    
+	public JList<ComboBoxTopicWrapper> l;
+    public Vector<ComboBoxTopicWrapper> data;
     public ListWindow(Topic[] topics,final String written,TopicSelectList selector,JDialog owner) {
         super(owner,"",false);
-        final JDialog wnd=this;
         final TopicSelectList s=selector;
-        final JList list=new JList();
+        final JList<ComboBoxTopicWrapper> list=new JList<>();
         JScrollPane scroller=new JScrollPane();
         scroller.setViewportView(list);
         l=list;
-        data=new Vector();
+        data=new Vector<>();
         String prefix=null;
         for(int i=0;i<topics.length;i++){
             try{
@@ -302,7 +297,7 @@ class ListWindow extends JDialog {
                     default:
                         char c=e.getKeyChar();
                         s.hideList();
-                        if(c!=e.CHAR_UNDEFINED && !Character.isISOControl(c)){
+                        if(c!=KeyEvent.CHAR_UNDEFINED && !Character.isISOControl(c)){
                             s.setText(written+c);
                         }
                         break;
@@ -315,7 +310,7 @@ class ListWindow extends JDialog {
         this.getContentPane().add(scroller);
         this.pack();
         this.setLocation(selector.getLocationOnScreen().x,selector.getLocationOnScreen().y+selector.getHeight());
-        this.show();
+        this.setVisible(true);
 ///        this.toFront();
     }
 }

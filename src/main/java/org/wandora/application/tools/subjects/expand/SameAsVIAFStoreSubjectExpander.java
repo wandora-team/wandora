@@ -39,7 +39,7 @@ public class SameAsVIAFStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsVIAFStoreSubjectExpander() {}
-    public SameAsVIAFStoreSubjectExpander(Context preferredContext) {
+    public SameAsVIAFStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

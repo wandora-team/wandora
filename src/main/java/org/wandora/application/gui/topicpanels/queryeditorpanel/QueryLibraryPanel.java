@@ -160,7 +160,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         nameField = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        queryList = new javax.swing.JList();
+        queryList = new javax.swing.JList<>();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -198,7 +198,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(jPanel1, gridBagConstraints);
 
-        queryList.setModel(new DefaultListModel());
+        queryList.setModel(new DefaultListModel<>());
         jScrollPane2.setViewportView(queryList);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -238,7 +238,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                 storedQueries.clear();
                 storedQueries.addAll(Arrays.asList(queries));
 
-                DefaultListModel model=(DefaultListModel)queryList.getModel();            
+                DefaultListModel<StoredQuery> model=(DefaultListModel<StoredQuery>)queryList.getModel();            
                 model.clear();
                 for(StoredQuery q : storedQueries){
                     model.addElement(q);
@@ -288,7 +288,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
             }
             if(!saved){
                 storedQueries.add(query);
-                DefaultListModel model=(DefaultListModel)queryList.getModel();            
+                DefaultListModel<StoredQuery> model=(DefaultListModel<StoredQuery>)queryList.getModel();            
                 model.addElement(query);
             }
         }
@@ -333,7 +333,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
                     if(q.name.equals(openName)){
                         storedQueries.remove(q);
                         
-                        DefaultListModel model=(DefaultListModel)queryList.getModel();            
+                        DefaultListModel<StoredQuery> model=(DefaultListModel<StoredQuery>) queryList.getModel();            
                         model.removeElement(o);
                         
                         writeQueries(Wandora.getWandora().getOptions());
@@ -351,7 +351,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
             return;
         }
         else {
-            ListModel listModel=queryList.getModel();
+            ListModel<StoredQuery> listModel=queryList.getModel();
             for(int i=0;i<listModel.getSize();i++){
                 Object o=listModel.getElementAt(i);
                 if(name.equals(o)){
@@ -388,7 +388,7 @@ public class QueryLibraryPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField nameField;
-    private javax.swing.JList queryList;
+    private javax.swing.JList<StoredQuery> queryList;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }

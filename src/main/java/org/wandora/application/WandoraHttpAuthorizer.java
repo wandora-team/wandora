@@ -30,6 +30,7 @@ package org.wandora.application;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -75,7 +76,7 @@ public class WandoraHttpAuthorizer extends HttpAuthorizer {
         if(url.toExternalForm().startsWith("https://")) {
             IObox.disableHTTPSCertificateValidation();
             try {
-                url = new URL(url.toExternalForm());
+                url = new URI(url.toExternalForm()).toURL();
             }
             catch (MalformedURLException e) {
             }

@@ -75,7 +75,7 @@ public class UmbelSearchConcept extends UmbelGetConcept {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         String query = WandoraOptionPane.showInputDialog(wandora, "Search for Umbel concepts with query", "", "Search for Umbel concepts", WandoraOptionPane.QUESTION_MESSAGE);
         int pageIndex = 0;
         int numberOfPages = 1;

@@ -84,11 +84,11 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool {
     }
     public SplitToSuperclassesWithBasename() {
     }
-    public SplitToSuperclassesWithBasename(Context preferredContext, boolean desc) {
+    public SplitToSuperclassesWithBasename(Context<?> preferredContext, boolean desc) {
         this.descending = desc;
         setContext(preferredContext);
     }
-    public SplitToSuperclassesWithBasename(Context preferredContext) {
+    public SplitToSuperclassesWithBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -111,7 +111,7 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         

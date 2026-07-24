@@ -87,7 +87,7 @@ public class StealAssociations extends AbstractWandoraTool {
     
     
     
-    public StealAssociations(Context preferredContext) {
+    public StealAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -110,7 +110,7 @@ public class StealAssociations extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
             Iterator<?> associations = null;

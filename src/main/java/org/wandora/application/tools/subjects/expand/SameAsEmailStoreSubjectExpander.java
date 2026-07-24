@@ -41,7 +41,7 @@ public class SameAsEmailStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsEmailStoreSubjectExpander() {}
-    public SameAsEmailStoreSubjectExpander(Context preferredContext) {
+    public SameAsEmailStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

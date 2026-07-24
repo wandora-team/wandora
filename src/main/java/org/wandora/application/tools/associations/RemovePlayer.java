@@ -62,7 +62,7 @@ public class RemovePlayer extends AbstractWandoraTool {
     }
     
     
-    public RemovePlayer(Context preferredContext) {
+    public RemovePlayer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -83,7 +83,7 @@ public class RemovePlayer extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
             Map<Association,List<Topic>> associationsWithRoles = null;

@@ -56,7 +56,7 @@ public class CopySubjectIdentifiers extends AbstractWandoraTool {
 	/** Creates a new instance of CopySubjectIdentifiers */
     public CopySubjectIdentifiers() {
     }
-    public CopySubjectIdentifiers(Context context) {
+    public CopySubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
 
@@ -72,7 +72,7 @@ public class CopySubjectIdentifiers extends AbstractWandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         StringBuilder sis = new StringBuilder("");
         Collection<Locator> topicSIs = null;
         Iterator<?> SIIterator = null;

@@ -55,7 +55,7 @@ public class EditOccurrences extends AbstractWandoraTool {
         setContext(new LayeredTopicContext());
     }
 
-    public EditOccurrences(Context preferredContext,  Topic occurrenceType, Topic topic ) {
+    public EditOccurrences(Context<?> preferredContext,  Topic occurrenceType, Topic topic ) {
         this.masterTopic = topic;
         this.occurrenceType = occurrenceType;
         setContext(preferredContext);
@@ -72,7 +72,7 @@ public class EditOccurrences extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         if(masterTopic != null && !masterTopic.isRemoved() && occurrenceType != null && !occurrenceType.isRemoved()) {
             FreeOccurrencePrompt d=new FreeOccurrencePrompt(wandora, masterTopic, occurrenceType);
             d.setVisible(true);

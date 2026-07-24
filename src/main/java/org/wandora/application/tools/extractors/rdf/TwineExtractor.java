@@ -29,6 +29,7 @@
 package org.wandora.application.tools.extractors.rdf;
 
 
+import java.net.URI;
 import java.net.URL;
 
 import javax.swing.Icon;
@@ -108,7 +109,7 @@ public class TwineExtractor extends AbstractRDFExtractor {
                     try {
                         String fixedUrlStr = twineUrlBody+twineId+"?rdf";
                         log("Fixed Twine url: "+fixedUrlStr);
-                        url = new URL(fixedUrlStr);
+                        url = new URI(fixedUrlStr).toURL();
                     }
                     catch(Exception e) {
                         log(e);

@@ -59,7 +59,7 @@ public class DetectCycles extends AbstractWandoraTool {
     }
 
 
-    public DetectCycles(Context preferredContext) {
+    public DetectCycles(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -79,7 +79,7 @@ public class DetectCycles extends AbstractWandoraTool {
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Map<Association,List<Topic>> associationsWithRoles = null;
             Topic role = null;

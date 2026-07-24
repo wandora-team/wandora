@@ -169,11 +169,11 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
                 System.out.println("Selected to extract only next page");
                 String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
                 shouldHandlePagination = false;
-                _extractTopicsFrom(new URL(newURL), tm);
+                _extractTopicsFrom(new URI(newURL).toURL(), tm);
             } else if (pagingOptions[2].equals(a)) {
                 System.out.println("Selected to extract next page");
                 String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
-                _extractTopicsFrom(new URL(newURL), tm);
+                _extractTopicsFrom(new URI(newURL).toURL(), tm);
             } else if (pagingOptions[3].equals(a)) {
                 System.out.println("Selected to extract 10 next pages");
                 shouldHandlePagination = false;
@@ -185,7 +185,7 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
                     if (p == page + 10) {
                         shouldHandlePagination = true;
                     }
-                    _extractTopicsFrom(new URL(newURL), tm);
+                    _extractTopicsFrom(new URI(newURL).toURL(), tm);
                     setProgress(progress++);
                     nap();
                 }

@@ -49,12 +49,12 @@ public class MakeSubjectIdentifierFromFilename extends AbstractWandoraTool {
 
 	public MakeSubjectIdentifierFromFilename() {
     }
-    public MakeSubjectIdentifierFromFilename(Context proposedContext) {
+    public MakeSubjectIdentifierFromFilename(Context<?> proposedContext) {
         setContext(proposedContext);
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Iterator<?> contextTopics = getContext().getContextObjects();
             if(contextTopics == null || !contextTopics.hasNext()) return;

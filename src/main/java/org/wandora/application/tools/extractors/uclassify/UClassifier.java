@@ -170,7 +170,7 @@ public class UClassifier extends AbstractUClassifier {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         setWandora(wandora);
         readOptions(wandora.getOptions());
         Object contextSource = context.getContextSource();

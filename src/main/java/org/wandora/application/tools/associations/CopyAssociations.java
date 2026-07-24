@@ -76,16 +76,16 @@ public class CopyAssociations extends AbstractWandoraTool {
     private int layout = WANDORA_LAYOUT;
 
     
-    public CopyAssociations(Wandora wandora, Context context)  throws TopicMapException {
+    public CopyAssociations(Wandora wandora, Context<?> context)  throws TopicMapException {
         this(wandora, context, TABTEXT_OUTPUT);
     }
     
-    public CopyAssociations(Wandora wandora, Context context, int outputFormat)  throws TopicMapException {
+    public CopyAssociations(Wandora wandora, Context<?> context, int outputFormat)  throws TopicMapException {
         this.outputFormat = outputFormat;
         setContext(context);
     }
     
-    public CopyAssociations(Wandora wandora, Context context, int outputFormat, int outputLayout)  throws TopicMapException {
+    public CopyAssociations(Wandora wandora, Context<?> context, int outputFormat, int outputLayout)  throws TopicMapException {
         this.outputFormat = outputFormat;
         this.layout = outputLayout;
         setContext(context);
@@ -93,18 +93,18 @@ public class CopyAssociations extends AbstractWandoraTool {
     
     
     
-    public CopyAssociations(Context context) {
+    public CopyAssociations(Context<?> context) {
         this(context, TABTEXT_OUTPUT);
     }
     
     
-    public CopyAssociations(Context context, int outputFormat) {
+    public CopyAssociations(Context<?> context, int outputFormat) {
         setContext(context);
         this.outputFormat = outputFormat;
     }
     
     
-    public CopyAssociations(Context context, int outputFormat, int outputLayout) {
+    public CopyAssociations(Context<?> context, int outputFormat, int outputLayout) {
         setContext(context);
         this.outputFormat = outputFormat;
         this.layout = outputLayout;
@@ -139,7 +139,7 @@ public class CopyAssociations extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         String associationText = makeString(wandora);
         if(associationText != null && associationText.length() > 0) {
             ClipboardBox.setClipboard(associationText);

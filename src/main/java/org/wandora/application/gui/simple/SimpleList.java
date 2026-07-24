@@ -37,7 +37,7 @@ import org.wandora.application.gui.UIConstants;
  *
  * @author akivela
  */
-public class SimpleList extends JList {
+public class SimpleList<T> extends JList<T> {
     
     private static final long serialVersionUID = 1L;
     
@@ -45,11 +45,11 @@ public class SimpleList extends JList {
         super();
     }
     
-    public SimpleList(ListModel m) {
+    public SimpleList(ListModel<T> m) {
         super(m);
     }
     
-    public SimpleList(Object[] a) {
+    public SimpleList(T[] a) {
         super(a);
     }
     

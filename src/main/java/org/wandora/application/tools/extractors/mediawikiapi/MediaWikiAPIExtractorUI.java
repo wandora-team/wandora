@@ -55,7 +55,7 @@ public class MediaWikiAPIExtractorUI extends javax.swing.JPanel {
     
     private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
+    private Context<?> context = null;
     private Wandora wandora = null;
     
     /**
@@ -74,7 +74,7 @@ public class MediaWikiAPIExtractorUI extends javax.swing.JPanel {
         accepted = b;
     }
 
-    public void open(Wandora w, Context c) {
+    public void open(Wandora w, Context<?> c) {
         context = c;
         wandora = w;
         accepted = false;

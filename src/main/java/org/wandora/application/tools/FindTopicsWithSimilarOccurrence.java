@@ -62,11 +62,11 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
     public FindTopicsWithSimilarOccurrence() {
         stringMetric = new Levenshtein();
     }
-    public FindTopicsWithSimilarOccurrence(Context preferredContext) {
+    public FindTopicsWithSimilarOccurrence(Context<?> preferredContext) {
         stringMetric = new Levenshtein();
         this.setContext(preferredContext);
     }
-    public FindTopicsWithSimilarOccurrence(Context preferredContext, InterfaceStringMetric stringMetric, float threshold) {
+    public FindTopicsWithSimilarOccurrence(Context<?> preferredContext, InterfaceStringMetric stringMetric, float threshold) {
         this.setContext(preferredContext);
         this.stringMetric = stringMetric;
         this.similarityThreshold = threshold;
@@ -157,7 +157,7 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         String o1 = null;

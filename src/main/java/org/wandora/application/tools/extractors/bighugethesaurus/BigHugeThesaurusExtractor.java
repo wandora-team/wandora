@@ -70,7 +70,7 @@ public class BigHugeThesaurusExtractor extends AbstractWandoraTool {
 
 
 
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         int counter = 0;
         try {
             if(selector == null) {

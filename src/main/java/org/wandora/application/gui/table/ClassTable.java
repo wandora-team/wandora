@@ -30,6 +30,7 @@ package org.wandora.application.gui.table;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Collection;
@@ -40,7 +41,7 @@ import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.contexts.ApplicationTopicContext;
 import org.wandora.application.gui.DnDHelper;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AddClass;
@@ -69,19 +70,19 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
     
     private Object[] classPopupStruct = new Object[] {
         "---",
-        "Add class...", new AddClass(new ApplicationContext()),
+        "Add class...", new AddClass(new ApplicationTopicContext()),
         "Paste classes", new Object[] {
-            "Paste classes as basenames...", new PasteClasses(new ApplicationContext()),
-            "Paste classes as SIs...", new PasteClasses(new ApplicationContext(), PasteClasses.INCLUDE_NOTHING, PasteClasses.PASTE_SIS),
+            "Paste classes as basenames...", new PasteClasses(new ApplicationTopicContext()),
+            "Paste classes as SIs...", new PasteClasses(new ApplicationTopicContext(), PasteClasses.INCLUDE_NOTHING, PasteClasses.PASTE_SIS),
 
             "---",
-            "Paste classes with names...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_NAMES),
-            "Paste classes with SLs...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_SLS),
-            "Paste classes with SIs...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_SIS),
-            "Paste classes with classes...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_CLASSES),
-            "Paste classes with instances...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_INSTANCES),
-            "Paste classes with players...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_PLAYERS),
-            "Paste classes with occurrences...", new PasteClasses(new ApplicationContext(), PasteInstances.INCLUDE_TEXTDATAS),
+            "Paste classes with names...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_NAMES),
+            "Paste classes with SLs...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_SLS),
+            "Paste classes with SIs...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_SIS),
+            "Paste classes with classes...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_CLASSES),
+            "Paste classes with instances...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_INSTANCES),
+            "Paste classes with players...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_PLAYERS),
+            "Paste classes with occurrences...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_TEXTDATAS),
         },
         "Delete classes...", new DeleteFromTopics(DeleteFromTopics.LOOSE_CLASSES_OF_CURRENT),
     };
@@ -147,7 +148,7 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        URL u = new URL(topicIdentifier);
+                                        URL u = new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}

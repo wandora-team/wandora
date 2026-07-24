@@ -30,6 +30,7 @@ package org.wandora.application.tools.statistics;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.Icon;
 
@@ -80,7 +81,7 @@ public class AverageClusteringCoefficient extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         TopicMap tm = solveContextTopicMap(admin, context);
         String tmTitle = solveNameForTopicMap(admin, tm);
         if(tm==null) return;
@@ -96,7 +97,7 @@ public class AverageClusteringCoefficient extends AbstractWandoraTool {
         log("Preparing topics 1/3");
         
         Iterator<Topic> iter=tm.getTopics();
-        TopicHashMap<Integer> ids=new TopicHashMap<Integer>();
+        TopicHashMap<Integer> ids=new TopicHashMap<>();
         int counter=0;
         while(iter.hasNext() && !forceStop()){
             if((counter%100)==0) setProgress(counter);
@@ -106,7 +107,7 @@ public class AverageClusteringCoefficient extends AbstractWandoraTool {
         }
         
         log("Preparing connections 2/3");
-        HashMap<Integer,HashSet<Integer>> connections=new HashMap<Integer,HashSet<Integer>>();
+        Map<Integer,HashSet<Integer>> connections=new HashMap<>();
         iter=tm.getTopics();
         counter=0;
         while(iter.hasNext() && !forceStop()){

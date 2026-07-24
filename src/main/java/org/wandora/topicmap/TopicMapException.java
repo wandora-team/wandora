@@ -35,7 +35,9 @@ package org.wandora.topicmap;
  */
 public class TopicMapException extends org.wandora.exceptions.WandoraException {
     
-    /** Creates a new instance of TopicMapException */
+    private static final long serialVersionUID = 1L;
+    
+	/** Creates a new instance of TopicMapException */
     public TopicMapException() {
     }
     public TopicMapException(String s){

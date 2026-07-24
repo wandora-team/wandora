@@ -50,14 +50,14 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
-	private Context preferredContext = null;
+	private Context<?> preferredContext = null;
 
 
 
     public AbstractOccurrenceExtractor() {
         
     }
-    public AbstractOccurrenceExtractor(Context context) {
+    public AbstractOccurrenceExtractor(Context<?> context) {
         this.preferredContext = context;
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> topics = null;
         if(preferredContext != null) topics = preferredContext.getContextObjects();
         else topics = context.getContextObjects();

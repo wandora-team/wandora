@@ -56,7 +56,7 @@ public class AssociationTest extends AbstractWandoraTool {
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Various association tests");

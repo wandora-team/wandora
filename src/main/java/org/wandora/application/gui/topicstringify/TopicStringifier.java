@@ -47,7 +47,7 @@ public interface TopicStringifier {
      * Initialization method is called before a TopicStringifier is actually used.
      * If initialization returns false, the TopicStringifier should not be used.
      */
-    public boolean initialize(Wandora wandora, Context context);
+    public boolean initialize(Wandora wandora, Context<?> context);
     
     /**
      * toString method is the actual endpoint used to create a string out of a

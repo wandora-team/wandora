@@ -39,6 +39,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -582,7 +583,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        URL u = new URL(topicIdentifier);
+                                        URL u = new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}

@@ -101,7 +101,7 @@ public class CollectNary extends AbstractWandoraTool {
     
     
     
-    public CollectNary(Context preferredContext) {
+    public CollectNary(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -121,7 +121,7 @@ public class CollectNary extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
             Iterator<?> associations = null;

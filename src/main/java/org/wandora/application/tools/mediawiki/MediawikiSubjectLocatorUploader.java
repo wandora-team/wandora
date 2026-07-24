@@ -28,6 +28,7 @@
 package org.wandora.application.tools.mediawiki;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -57,7 +58,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler {
     public MediawikiSubjectLocatorUploader() {
     }
     
-    public MediawikiSubjectLocatorUploader(Context proposedContext) {
+    public MediawikiSubjectLocatorUploader(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
     
@@ -72,7 +73,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         requiresRefresh = false;
         isConfigured = false;
         cancelled = false;
@@ -81,7 +82,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler {
         Locator lo = null;
         
         try {    
-            Iterator contextObjects = context.getContextObjects();
+            Iterator<?> contextObjects = context.getContextObjects();
             if (!contextObjects.hasNext()) {
                 return;
             }
@@ -218,7 +219,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler {
                 url = file.toURI().toURL();
             } else {
                 try {
-                    url = new URL(fileString);
+                    url = new URI(fileString).toURL();
                 } catch (Exception e) {
                     log(e.getMessage());                
                 }

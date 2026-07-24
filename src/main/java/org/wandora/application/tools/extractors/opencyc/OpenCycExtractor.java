@@ -73,7 +73,7 @@ public class OpenCycExtractor extends AbstractWandoraTool {
     
     
     
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         int counter = 0;   
         try {
             if(selector == null) {

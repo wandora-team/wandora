@@ -20,8 +20,8 @@
  */
 package org.wandora.application.tools.subjects;
 
-import java.io.File;
-import java.net.URL;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -44,7 +44,7 @@ public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool {
     
     
     public ConvertSubjectLocatorToDataURL() {}
-    public ConvertSubjectLocatorToDataURL(Context context) {
+    public ConvertSubjectLocatorToDataURL(Context<?> context) {
         setContext(context);
     }
     public ConvertSubjectLocatorToDataURL(Collection<Topic> topics) {
@@ -57,7 +57,7 @@ public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         setDefaultLogger();
         
         if(topicsToProcess == null) {
@@ -77,12 +77,12 @@ public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool {
                             if(subjectLocator != null) {
                                 String subjectLocatorString = subjectLocator.toExternalForm();
                                 if(subjectLocatorString.startsWith("file")) {
-                                    DataURL dataUrl = new DataURL(new File(new URL(subjectLocatorString).toURI()));
+                                    DataURL dataUrl = new DataURL(Path.of(new URI(subjectLocatorString)).toFile());
                                     topic.setSubjectLocator(new Locator(dataUrl.toExternalForm()));
                                     convertCount++;
                                 }
                                 else if(subjectLocatorString.startsWith("http")) {
-                                    DataURL dataUrl = new DataURL(new URL(subjectLocatorString));
+                                    DataURL dataUrl = new DataURL(new URI(subjectLocatorString).toURL());
                                     topic.setSubjectLocator(new Locator(dataUrl.toExternalForm()));
                                     convertCount++;
                                 }

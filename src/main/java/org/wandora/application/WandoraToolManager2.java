@@ -685,7 +685,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     
     
     
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         scanAllTools();
         readToolSets();
         

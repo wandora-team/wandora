@@ -58,7 +58,7 @@ public class OpenTopicIn extends AbstractWandoraTool {
     public OpenTopicIn(TopicPanel tp) {
         topicPanel = tp;
     }
-    public OpenTopicIn(TopicPanel tp, Context preferredContext) {
+    public OpenTopicIn(TopicPanel tp, Context<?> preferredContext) {
         topicPanel = tp;
         setContext(preferredContext);
     }
@@ -70,7 +70,7 @@ public class OpenTopicIn extends AbstractWandoraTool {
             
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         Iterator<?> contextTopics = context.getContextObjects();
         if(options == SOLVE_USING_CONTEXT && contextTopics != null && contextTopics.hasNext()) {
             Topic t = (Topic) contextTopics.next();

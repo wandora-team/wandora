@@ -54,7 +54,7 @@ public class AddImplicitDisplayScopeToVariants extends AbstractWandoraTool {
      */
     public AddImplicitDisplayScopeToVariants() {
     }
-    public AddImplicitDisplayScopeToVariants(Context preferredContext) {
+    public AddImplicitDisplayScopeToVariants(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -71,7 +71,7 @@ public class AddImplicitDisplayScopeToVariants extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Add implicit display scope to variants");

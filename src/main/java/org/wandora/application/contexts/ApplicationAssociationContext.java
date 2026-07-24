@@ -42,7 +42,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class ApplicationAssociationContext implements Context {
+public class ApplicationAssociationContext implements Context<Association> {
     
     private Object contextSource;
     protected WandoraTool contextOwner = null;
@@ -57,7 +57,7 @@ public class ApplicationAssociationContext implements Context {
 
     
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Association> getContextObjects() {
         List<Association> contextAssociations = new ArrayList<>();
         try {
             Wandora w = (Wandora) contextSource;

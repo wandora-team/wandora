@@ -64,7 +64,7 @@ public class FilterNode extends AbstractGraphTool {
     
 
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model = null;
         VNode node = null;
         for(Iterator<?> iter = context.getContextObjects(); iter.hasNext(); ) {

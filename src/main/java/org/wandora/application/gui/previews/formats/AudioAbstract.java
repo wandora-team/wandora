@@ -37,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
 
@@ -298,11 +299,11 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
                     }
                 }
                 else if(locator.startsWith("file:")) {
-                    MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(new URL(locator));
+                    MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(new URI(locator).toURL());
                     currentMixer = multimediaContainer.createNewMixer();
                 }
                 else {
-                    File tempfile = createTempFile(new URL(locator));
+                    File tempfile = createTempFile(new URI(locator).toURL());
                     MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(tempfile.toURI().toURL());
                     currentMixer = multimediaContainer.createNewMixer();
                 }

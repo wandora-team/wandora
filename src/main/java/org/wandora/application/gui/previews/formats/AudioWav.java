@@ -389,7 +389,7 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
                     audioStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(dataURL.getData()));
                 }
                 else {
-                    URL audioURL = new URL(audioLocator);
+                    URL audioURL = new URI(audioLocator).toURL();
                     audioStream = AudioSystem.getAudioInputStream(audioURL);
                 }
                 format = audioStream.getFormat();

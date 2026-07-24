@@ -1105,7 +1105,9 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     
     private class TopicPanelTransferHandler extends TransferHandler {
 
-        @Override
+        private static final long serialVersionUID = 1L;
+
+		@Override
         public boolean canImport(TransferSupport support) {
             return false;
             //if(!support.isDrop()) return false;

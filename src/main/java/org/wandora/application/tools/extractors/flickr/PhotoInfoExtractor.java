@@ -69,7 +69,7 @@ public class PhotoInfoExtractor extends FlickrExtractor {
     
     
     @Override
-    protected boolean extract(Wandora wandora, Context context) throws ExtractionFailure {
+    protected boolean extract(Wandora wandora, Context<?> context) throws ExtractionFailure {
         currentAdmin = wandora;
         Collection<Topic> photoTopics = null;
         Topic photoT = null;

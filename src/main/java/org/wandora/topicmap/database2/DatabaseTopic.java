@@ -439,7 +439,7 @@ public class DatabaseTopic extends Topic {
             
         }
 //        associationsFetched=true;
-        storedAssociations=new WeakReference(associations);
+        storedAssociations=new WeakReference<>(associations);
         return associations;
     }
     

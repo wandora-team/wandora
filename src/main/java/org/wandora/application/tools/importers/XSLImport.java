@@ -79,7 +79,7 @@ public class XSLImport extends AbstractImportTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         String xmlIn = null;
         String xslIn = null;
         XSLImportDialog d = null;

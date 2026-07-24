@@ -40,15 +40,15 @@ import org.wandora.topicmap.TopicMap;
  *
  * @author akivela
  */
-public abstract class TopicIterator implements Iterator {
+public abstract class TopicIterator implements Iterator<Topic> {
 
-    Iterator<?> source = null;
+    Iterator<Topic> source = null;
     TopicMap topicmap = null;
     Topic topic = null;       
-    Object next = null;
-    Iterator<?> iterator = null;
-    Collection<?> collection = null;
-    Collection<Object> cache = null;
+    Topic next = null;
+    Iterator<Topic> iterator = null;
+    Collection<Topic> collection = null;
+    Collection<Topic> cache = null;
 
     boolean removeDuplicates = true;
             
@@ -58,7 +58,7 @@ public abstract class TopicIterator implements Iterator {
     }
 
     
-    public void initialize(Iterator<?> source, Wandora wandora) {
+    public void initialize(Iterator<Topic> source, Wandora wandora) {
         this.source = source;
         this.topicmap = wandora.getTopicMap();
 
@@ -82,8 +82,8 @@ public abstract class TopicIterator implements Iterator {
     }
 
     @Override
-    public Object next() {
-        Object current = next;
+    public Topic next() {
+    	Topic current = next;
         next = removeDuplicates ? solveNextUncached() : solveNext();
         return current;
     }
@@ -109,8 +109,8 @@ public abstract class TopicIterator implements Iterator {
 
 
 
-    private Object solveNextUncached() {
-        Object nextUncached = null;
+    private Topic solveNextUncached() {
+    	Topic nextUncached = null;
         do {
             nextUncached = solveNext();
         }
@@ -120,15 +120,15 @@ public abstract class TopicIterator implements Iterator {
     }
 
 
-    private Object solveNext() {
-        Iterator<?> iterator = solveIterator();
+    private Topic solveNext() {
+        Iterator<Topic> iterator = solveIterator();
         if(iterator != null && iterator.hasNext()) return iterator.next();
         else return null;
     }
 
 
 
-    private Iterator<?> solveIterator() {
+    private Iterator<Topic> solveIterator() {
         while(iterator == null || !iterator.hasNext()) {
             if(source != null && source.hasNext()) {
                 topic = (Topic) source.next();
@@ -149,8 +149,8 @@ public abstract class TopicIterator implements Iterator {
     // -------------------------------------------------------------------------
     
     
-    public Iterator<?> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<?> oldIterator) {
-        Iterator<?> it = oldIterator;
+    public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
+        Iterator<Topic> it = oldIterator;
         return it;
     }
 

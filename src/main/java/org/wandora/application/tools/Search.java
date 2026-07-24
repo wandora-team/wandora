@@ -51,7 +51,7 @@ public class Search extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(searchFrame == null) {
             searchFrame = new SearchTopicsFrame();
         }

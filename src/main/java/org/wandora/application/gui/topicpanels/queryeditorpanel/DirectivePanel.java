@@ -141,7 +141,7 @@ public class DirectivePanel extends javax.swing.JPanel {
         });
     }
     
-    protected static class ParamAnchorInfo implements Comparable {
+    protected static class ParamAnchorInfo implements Comparable<ParamAnchorInfo> {
         public ConnectorAnchor anchor;
         public JPanel component;
         public String order;
@@ -157,10 +157,8 @@ public class DirectivePanel extends javax.swing.JPanel {
         
         
         @Override
-        public int compareTo(Object o) {
-            if(o==null) return 1;
-            if(!o.getClass().equals(this.getClass())) return 1;
-            ParamAnchorInfo p=(ParamAnchorInfo)o;
+        public int compareTo(ParamAnchorInfo p) {
+            if(p==null) return 1;
             
             if(this.order==null && p.order==null) return 0;
             else if(this.order==null && p.order!=null) return -1;

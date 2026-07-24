@@ -173,7 +173,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         }
 
         dataModel = new DataTableModel();
-        sorter = new TableRowSorter(dataModel);
+        sorter = new TableRowSorter<>(dataModel);
 
         final TableCellRenderer oldRenderer=this.getTableHeader().getDefaultRenderer();
         

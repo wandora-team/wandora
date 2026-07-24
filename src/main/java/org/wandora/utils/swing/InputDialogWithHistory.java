@@ -110,7 +110,7 @@ public class InputDialogWithHistory extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         label = new SimpleLabel();
-        options = new SimpleComboBox();
+        options = new SimpleComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         okButton = new SimpleButton();
@@ -201,7 +201,7 @@ public class InputDialogWithHistory extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel label;
     private javax.swing.JButton okButton;
-    private javax.swing.JComboBox options;
+    private javax.swing.JComboBox<String> options;
     // End of variables declaration//GEN-END:variables
     
 }

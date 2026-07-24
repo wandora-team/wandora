@@ -40,8 +40,10 @@ import org.wandora.topicmap.Topic;
 /**
  * @author akivela
  */
-public class RoleContextCollected extends AssociationContext {
+public class RoleContextCollected extends AbstractContext implements Context<Topic> {
     
+	public boolean removeDuplicates = true;
+	
 
     
     /**
@@ -52,13 +54,15 @@ public class RoleContextCollected extends AssociationContext {
 
     
     @Override
-    public Iterator getContextObjects() {
-        return getRolesOf( super.getContextObjects() );
+    public Iterator<Topic> getContextObjects() {
+    	AssociationContext associationContext = new AssociationContext();
+    	associationContext.initialize(getWandora(), getContextEvent(), getContextOwner());
+        return getRolesOf( associationContext.getContextObjects() );
     }
     
 
     
-    public Iterator getRolesOf(Iterator associations) {
+    public Iterator<Topic> getRolesOf(Iterator<Association> associations) {
         if(associations == null) return null;
         List<Topic> contextTopics = new ArrayList<>();
         
@@ -72,7 +76,7 @@ public class RoleContextCollected extends AssociationContext {
                 if(association == null) continue;
                 roleTopics = association.getRoles();
                 if(roleTopics != null && roleTopics.size() > 0) {
-                    for(Iterator roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
+                    for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
                         try {
                             roleTopic = (Topic) roleIterator.next();
                             if(removeDuplicates) {

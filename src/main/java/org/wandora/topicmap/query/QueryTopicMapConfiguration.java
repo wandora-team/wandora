@@ -20,6 +20,8 @@
  */
 
 package org.wandora.topicmap.query;
+
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +50,7 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
     
     private QueryTopicMap.QueryInfo currentItem;
     private Wandora wandora;
-    private javax.swing.DefaultListModel listModel;
+    private javax.swing.DefaultListModel<QueryTopicMap.QueryInfo> listModel;
     private javax.swing.JDialog editDialog;
     
     /** Creates new form QueryTopicMapConfiguration */
@@ -59,7 +61,7 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
     
     public QueryTopicMapConfiguration(Wandora wandora) {
         this.wandora=wandora;
-        this.listModel=new javax.swing.DefaultListModel();
+        this.listModel=new javax.swing.DefaultListModel<>();
         initComponents();
     }
     
@@ -126,7 +128,7 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         scriptTextPane = new SimpleTextPane();
         jLabel1 = new SimpleLabel();
-        engineComboBox = new SimpleComboBox();
+        engineComboBox = new SimpleComboBox<>();
         jLabel4 = new SimpleLabel();
         nameTextField = new SimpleField();
         jLabel5 = new SimpleLabel();
@@ -140,7 +142,7 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
         deleteButton = new SimpleButton();
         editButton = new SimpleButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        queryList = new javax.swing.JList();
+        queryList = new javax.swing.JList<>();
 
         editPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -394,7 +396,7 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JPanel editPanel;
-    private javax.swing.JComboBox engineComboBox;
+    private javax.swing.JComboBox<String> engineComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -404,7 +406,7 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JButton okButton;
-    private javax.swing.JList queryList;
+    private javax.swing.JList<QueryTopicMap.QueryInfo> queryList;
     private javax.swing.JTextPane scriptTextPane;
     private javax.swing.JTextField typeTextField;
     // End of variables declaration//GEN-END:variables

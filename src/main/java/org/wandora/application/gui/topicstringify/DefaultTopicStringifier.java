@@ -74,7 +74,7 @@ public class DefaultTopicStringifier implements TopicStringifier {
 
     
     @Override
-    public boolean initialize(Wandora wandora, Context context) {
+    public boolean initialize(Wandora wandora, Context<?> context) {
         this.wandora = wandora;
         return true;
     }

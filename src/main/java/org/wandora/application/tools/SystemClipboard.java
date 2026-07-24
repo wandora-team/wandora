@@ -66,7 +66,7 @@ public class SystemClipboard extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Object focusOwner = wandora.getFocusOwner();
         if(focusOwner != null) {
             if(focusOwner instanceof Clipboardable) {

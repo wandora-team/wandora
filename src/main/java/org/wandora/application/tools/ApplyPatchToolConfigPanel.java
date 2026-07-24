@@ -78,7 +78,7 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         map1FileButton = new org.wandora.application.gui.simple.SimpleRadioButton();
         map1LayerButton = new org.wandora.application.gui.simple.SimpleRadioButton();
-        layerComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox();
+        layerComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox<>();
         layerComboBox1.setEditable(false);
         fileTextField1 = new org.wandora.application.gui.simple.SimpleField();
         fileButton1 = new org.wandora.application.gui.simple.SimpleButton();
@@ -341,7 +341,7 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JComboBox layerComboBox1;
+    private javax.swing.JComboBox<String> layerComboBox1;
     private javax.swing.JRadioButton map1FileButton;
     private javax.swing.JRadioButton map1LayerButton;
     private javax.swing.JRadioButton map1ProjectButton;

@@ -83,12 +83,12 @@ public class GraphGMLExport extends AbstractGraphTool {
     
     
     @Override
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora admin, Context<?> context) {
         // NOTHING HERE!
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             VModel model = graphPanel.getModel();

@@ -249,7 +249,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         if(parentTool == null) {
             return;
         }
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -290,7 +290,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
     
     private void selectContextSLs() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -329,7 +329,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
 
     private void selectContextSIs() {
         if(parentTool == null) return;
-        Context context = parentTool.getContext();
+        Context<?> context = parentTool.getContext();
         Iterator<?> iter = context.getContextObjects();
         Object o = null;
         Topic t = null;
@@ -385,7 +385,7 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         urlLabel = new org.wandora.application.gui.simple.SimpleLabel();
         crawlerPanel = new javax.swing.JPanel();
         crawlerLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        crawlerComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        crawlerComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         crawlerComboBox.setEditable(false);
         urlScrollPane = new javax.swing.JScrollPane();
         urlTextPane = new org.wandora.application.gui.simple.SimpleTextPane();
@@ -682,7 +682,7 @@ private void urlGetSIButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-F
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JComboBox crawlerComboBox;
+    private javax.swing.JComboBox<String> crawlerComboBox;
     private javax.swing.JLabel crawlerLabel;
     private javax.swing.JPanel crawlerPanel;
     private javax.swing.JButton extractButton;

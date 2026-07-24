@@ -26,6 +26,7 @@ package org.wandora.application.tools.statistics;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -73,7 +74,7 @@ public class AssetWeights extends AbstractWandoraTool {
     public AssetWeights(int context) {
         forcedContext = context;
     }
-    public AssetWeights(Context preferredContext) {
+    public AssetWeights(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -102,8 +103,8 @@ public class AssetWeights extends AbstractWandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
-        ArrayList<Topic> topics = new ArrayList<Topic>();
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
+        List<Topic> topics = new ArrayList<>();
         String topicMapName = null;
         TopicMap tm = null;
         if(forcedContext == CONTEXT_IS_TOPICMAP) {

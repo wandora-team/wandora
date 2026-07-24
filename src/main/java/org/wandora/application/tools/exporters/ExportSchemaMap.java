@@ -112,7 +112,7 @@ public class ExportSchemaMap extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         SimpleFileChooser chooser = UIConstants.getFileChooser();
         chooser.setDialogTitle("Export Wandora schema...");
         

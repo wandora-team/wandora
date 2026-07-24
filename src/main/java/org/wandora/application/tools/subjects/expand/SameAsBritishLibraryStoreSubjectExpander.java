@@ -40,7 +40,7 @@ public class SameAsBritishLibraryStoreSubjectExpander extends SameAsSubjectExpan
 
 
 	public SameAsBritishLibraryStoreSubjectExpander() {}
-    public SameAsBritishLibraryStoreSubjectExpander(Context preferredContext) {
+    public SameAsBritishLibraryStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

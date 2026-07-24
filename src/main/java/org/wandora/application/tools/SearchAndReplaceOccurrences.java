@@ -53,7 +53,7 @@ public class SearchAndReplaceOccurrences extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(final Wandora wandora, Context context) {
+    public void execute(final Wandora wandora, Context<?> context) {
         String search=WandoraOptionPane.showInputDialog(wandora,"Enter search string","","Search and replace");
         if(search==null || search.length()==0) return;
         String replace=WandoraOptionPane.showInputDialog(wandora,"Enter replace string","","Search and replace");

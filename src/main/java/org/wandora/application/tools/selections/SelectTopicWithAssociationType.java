@@ -53,7 +53,7 @@ public class SelectTopicWithAssociationType extends DoTopicSelection {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             type = wandora.showTopicFinder("Select association type...");
             if(type != null) {

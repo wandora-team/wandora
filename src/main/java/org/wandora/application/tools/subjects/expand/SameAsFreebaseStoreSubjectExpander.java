@@ -39,7 +39,7 @@ public class SameAsFreebaseStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsFreebaseStoreSubjectExpander() {}
-    public SameAsFreebaseStoreSubjectExpander(Context preferredContext) {
+    public SameAsFreebaseStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

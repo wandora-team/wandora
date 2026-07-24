@@ -805,11 +805,11 @@ public class DirectiveEditor extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         directiveLabel = new javax.swing.JLabel();
         deleteButton = new javax.swing.JButton();
-        constructorComboBox = new javax.swing.JComboBox();
+        constructorComboBox = new javax.swing.JComboBox<>();
         constructorParameters = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         addAddonButton = new javax.swing.JButton();
-        addonComboBox = new javax.swing.JComboBox();
+        addonComboBox = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         addonPanelContainer = new javax.swing.JPanel();
         fillerPanel = new javax.swing.JPanel();
@@ -982,9 +982,9 @@ public class DirectiveEditor extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAddonButton;
-    private javax.swing.JComboBox addonComboBox;
+    private javax.swing.JComboBox<AddonComboItem> addonComboBox;
     private javax.swing.JPanel addonPanelContainer;
-    private javax.swing.JComboBox constructorComboBox;
+    private javax.swing.JComboBox<ConstructorComboItem> constructorComboBox;
     private javax.swing.JPanel constructorParameters;
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel directiveLabel;

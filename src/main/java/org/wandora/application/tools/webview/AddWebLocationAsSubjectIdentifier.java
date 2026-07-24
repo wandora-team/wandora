@@ -47,7 +47,7 @@ public class AddWebLocationAsSubjectIdentifier extends AbstractWebViewTool {
 
 
 	@Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         String location = getWebLocation(context);
         Topic topic = getTopic(context);
         if(topic != null && !topic.isRemoved()) {

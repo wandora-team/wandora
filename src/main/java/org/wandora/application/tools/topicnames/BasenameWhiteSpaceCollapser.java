@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -47,7 +48,7 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool {
 
 	public BasenameWhiteSpaceCollapser() {
     }
-    public BasenameWhiteSpaceCollapser(Context preferredContext) {
+    public BasenameWhiteSpaceCollapser(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -65,7 +66,7 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool {
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Collapsing white space characters in base names");
@@ -80,7 +81,7 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool {
             int c = 0;
             int changed = 0;
             int progress = 0;
-            HashMap<Topic,String> changeTopics = new HashMap<Topic,String>();
+            Map<Topic,String> changeTopics = new HashMap<>();
             
             while(topics.hasNext() && !forceStop()) {
                 try {

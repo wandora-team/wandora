@@ -66,7 +66,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -58,7 +59,7 @@ public class BasenameRegexReplacer extends AbstractWandoraTool {
 
     public BasenameRegexReplacer() {
     }
-    public BasenameRegexReplacer(Context preferredContext) {
+    public BasenameRegexReplacer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -74,7 +75,7 @@ public class BasenameRegexReplacer extends AbstractWandoraTool {
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
@@ -93,7 +94,7 @@ public class BasenameRegexReplacer extends AbstractWandoraTool {
                 int progress = 0;
                 int count = 0;
 
-                HashMap<Topic,String> changeTopics = new HashMap<Topic,String>();
+                Map<Topic,String> changeTopics = new HashMap<>();
 
                 while(topics.hasNext() && !forceStop()) {
                     try {

@@ -35,7 +35,9 @@ package org.wandora.utils.sqlproxy;
  */
 public class SQLProxyException extends Exception {
     
-    /** Creates a new instance of SQLProxyException */
+    private static final long serialVersionUID = 1L;
+    
+	/** Creates a new instance of SQLProxyException */
     public SQLProxyException() {
     }
     public SQLProxyException(String message){

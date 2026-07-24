@@ -88,7 +88,7 @@ public class ClearTopicMapIndexes extends AbstractLayerTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         Layer l = solveContextLayer(wandora, context);
         
         if(l == null) {

@@ -81,11 +81,11 @@ public class SplitToInstancesWithBasename extends AbstractWandoraTool {
     }
     public SplitToInstancesWithBasename() {
     }
-    public SplitToInstancesWithBasename(Context preferredContext, boolean desc) {
+    public SplitToInstancesWithBasename(Context<?> preferredContext, boolean desc) {
         this.descending = desc;
         setContext(preferredContext);
     }
-    public SplitToInstancesWithBasename(Context preferredContext) {
+    public SplitToInstancesWithBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -107,7 +107,7 @@ public class SplitToInstancesWithBasename extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         

@@ -387,12 +387,6 @@ public abstract class DragJTree extends JTree implements Autoscroll {
             
             Graphics2D g2 = (Graphics2D)getGraphics();
             
-            // Drag image support has been disabled as the image flickers.
-            if(false && !DragSource.isDragImageSupported()) {
-                paintImmediately(ghostRect.getBounds());
-                ghostRect.setRect(pt.x-offsetPoint.x,pt.y-offsetPoint.y, ghostImage.getWidth(), ghostImage.getHeight());
-                g2.drawImage(ghostImage, AffineTransform.getTranslateInstance(ghostRect.getX(),ghostRect.getY()),null);
-            }
             int row=getClosestRowForLocation(pt.x,pt.y);
             TreePath path=getPathForRow(row);
             if(path!=lastPath) {

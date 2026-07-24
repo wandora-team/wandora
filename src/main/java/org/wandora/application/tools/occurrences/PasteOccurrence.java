@@ -45,7 +45,7 @@ public class PasteOccurrence  extends AbstractWandoraTool {
 
 	public PasteOccurrence() {
     }
-    public PasteOccurrence(Context proposedContext) {
+    public PasteOccurrence(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
 
@@ -62,7 +62,7 @@ public class PasteOccurrence  extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object source = getContext().getContextSource();
         if(source instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) source;

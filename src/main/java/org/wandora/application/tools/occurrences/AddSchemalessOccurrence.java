@@ -50,7 +50,7 @@ public class AddSchemalessOccurrence extends AbstractWandoraTool {
         setContext(new LayeredTopicContext());
     }
 
-    public AddSchemalessOccurrence(Context preferredContext) {
+    public AddSchemalessOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -66,7 +66,7 @@ public class AddSchemalessOccurrence extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics == null || !contextTopics.hasNext()) return;
 

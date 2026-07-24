@@ -561,7 +561,9 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
     
     
     public class ToolTreeNode extends DefaultMutableTreeNode {
-        private WandoraToolSet toolSet = null;
+        private static final long serialVersionUID = 1L;
+        
+		private WandoraToolSet toolSet = null;
         private WandoraToolSet.ToolItem toolItem = null;
         private ToolTreeNode parentNode = null;
         

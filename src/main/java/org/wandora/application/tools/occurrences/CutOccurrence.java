@@ -47,7 +47,7 @@ public class CutOccurrence  extends AbstractWandoraTool {
 	/** Creates a new instance of CutOccurrence */
     public CutOccurrence() {
     }
-    public CutOccurrence(Context proposedContext) {
+    public CutOccurrence(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
 
@@ -64,7 +64,7 @@ public class CutOccurrence  extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object source = getContext().getContextSource();
         if(source instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) source;

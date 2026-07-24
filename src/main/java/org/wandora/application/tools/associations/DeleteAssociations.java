@@ -62,7 +62,7 @@ public class DeleteAssociations extends AbstractWandoraTool {
     public DeleteAssociations() {
         setContext(new AssociationContext());
     }
-    public DeleteAssociations(Context preferredContext) {
+    public DeleteAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -77,7 +77,7 @@ public class DeleteAssociations extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         this.wandora = wandora;
         Iterator<?> associations = context.getContextObjects();
         Association association = null;

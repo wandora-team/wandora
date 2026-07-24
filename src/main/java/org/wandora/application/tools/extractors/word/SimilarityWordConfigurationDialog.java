@@ -125,9 +125,9 @@ class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
             
         });
         
-        List<String> MetricNameList = newConfig.getSTringMetricNames();
-        String[] metricNameArray = new String[MetricNameList.size()];
-        metrics.setModel(new DefaultComboBoxModel<>(MetricNameList.toArray(metricNameArray)));
+        List<String> metricNameList = newConfig.getSTringMetricNames();
+        String[] metricNameArray = new String[metricNameList.size()];
+        metrics.setModel(new DefaultComboBoxModel<>(metricNameList.toArray(metricNameArray)));
         
         myDialog.setVisible(true);
     }
@@ -234,7 +234,7 @@ class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
         toggleBaseName = new SimpleCheckBox();
         toggleVariantName = new SimpleCheckBox();
         toggleInstanceData = new SimpleCheckBox();
-        metrics = new javax.swing.JComboBox();
+        metrics = new javax.swing.JComboBox<>();
         metricsLabel = new javax.swing.JLabel();
         thresholdSlider = new javax.swing.JSlider();
         thresholdLabel = new javax.swing.JLabel();
@@ -374,7 +374,7 @@ class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JPanel container;
-    private javax.swing.JComboBox metrics;
+    private javax.swing.JComboBox<String> metrics;
     private javax.swing.JLabel metricsLabel;
     private javax.swing.JButton submit;
     private javax.swing.JFormattedTextField thresholdDisplay;

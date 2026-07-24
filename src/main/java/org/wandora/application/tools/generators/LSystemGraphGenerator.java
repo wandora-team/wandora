@@ -85,7 +85,7 @@ public class LSystemGraphGenerator extends AbstractGenerator {
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
         TopicMap tm = solveContextTopicMap(admin, context);
         topicCounter = 0;
         associationCounter = 0;
@@ -111,7 +111,7 @@ public class LSystemGraphGenerator extends AbstractGenerator {
 
             String[] systemArray = systemStr.split("\n");
             if(systemArray.length > 1) {
-                ArrayList<Rule> rules = new ArrayList<Rule>();
+                List<Rule> rules = new ArrayList<>();
                 String str = null;
                 Word initiator = null;
                 

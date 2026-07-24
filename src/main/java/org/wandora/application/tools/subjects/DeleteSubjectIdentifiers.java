@@ -67,7 +67,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool {
 
 	public DeleteSubjectIdentifiers() {
     }
-    public DeleteSubjectIdentifiers(Context context) {
+    public DeleteSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
     
@@ -85,7 +85,7 @@ public class DeleteSubjectIdentifiers extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = wandora.getTopicMap();
         
         if(context instanceof SIContext) {

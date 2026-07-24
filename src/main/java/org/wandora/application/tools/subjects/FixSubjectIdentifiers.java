@@ -58,7 +58,7 @@ public class FixSubjectIdentifiers extends AbstractWandoraTool {
 
 	public FixSubjectIdentifiers() {
     }
-    public FixSubjectIdentifiers(Context context) {
+    public FixSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
     
@@ -74,7 +74,7 @@ public class FixSubjectIdentifiers extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to fix subject identifiers?","Fix subject identifiers?", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){

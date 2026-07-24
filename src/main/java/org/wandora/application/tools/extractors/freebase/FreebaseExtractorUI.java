@@ -25,10 +25,13 @@ package org.wandora.application.tools.extractors.freebase;
 import java.awt.Component;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
@@ -62,10 +65,9 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
+    private Context<?> context = null;
     public static final String FREEBASE_MQL_API_BASE = "https://www.googleapis.com/freebase/v1/mqlread";
     public static int maxDepth = 1;
     public static int maxExtractCount = 1500;
@@ -87,7 +89,7 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
         accepted = b;
     }
     
-    public void open(Wandora w, Context c) {
+    public void open(Wandora w, Context<?> c) {
         context = c;
         accepted = false;
         dialog = new JDialog(w, true);
@@ -101,7 +103,7 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
     public WandoraTool[] getExtractors(FreebaseExtractor tool) throws TopicMapException {
         Component component = freebaseTabbedPane.getSelectedComponent();
         WandoraTool wt = null;
-        ArrayList<WandoraTool> wts = new ArrayList<>();
+        List<WandoraTool> wts = new ArrayList<>();
         
         try{
             maxDepth = Integer.parseInt(mqlDepthTextField.getText());
@@ -128,16 +130,18 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
             try{
                 String urlText = urlQueryTextField.getText();
                 if ( urlText.indexOf("freebase.com") == -1) throw new MalformedURLException();
-                URL url = new URL(urlText);
+                URL url = new URI(urlText).toURL();
                 String id = url.getPath().replace("/view", "").trim();
                 idarray = new String[1];
                 idarray[0] = id; 
             } catch (MalformedURLException ex) {
                 throw new TopicMapException("Invalid URL!");
-            }
+            } catch (URISyntaxException e) {
+            	throw new TopicMapException("Invalid URL!");
+			}
         }
         
-        ArrayList<String> urls = new ArrayList<String>();
+        List<String> urls = new ArrayList<>();
         for ( String id : idarray) {
             id = id.trim();
             String query = AbstractFreebaseExtractor.getQuery(id);
@@ -165,12 +169,12 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
         try {
             String urlQuery = "https://www.googleapis.com/freebase/v1/search?query=" + urlEncode(queryText);
             String in;
-            URL u = new URL(urlQuery);
+            URL u = new URI(urlQuery).toURL();
             in = IObox.doUrl(u);
             
             JSONObject json = new JSONObject(in);
             JSONArray results = json.getJSONArray("result");
-            DefaultListModel model = new DefaultListModel();
+            DefaultListModel<String> model = new DefaultListModel<>();
             searchQueryResultList.setModel(model);
             searchListIds = new ArrayList<String>();
             
@@ -189,14 +193,16 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        } catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
     }
     
     public String getContextAsString() {
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
@@ -205,7 +211,7 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
                     if(o instanceof Topic) {
                         Topic t = (Topic) o;
                         str = t.getOneSubjectIdentifier().toString();
-                        URL url = new URL(str);
+                        URL url = new URI(str).toURL();
                         str = url.getPath();
                         if(str != null) {
                             str = str.trim();
@@ -245,7 +251,7 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
         searchQueryLabel = new SimpleLabel();
         searchQueryTextField = new SimpleField();
         searchQueryScrollPane = new javax.swing.JScrollPane();
-        searchQueryResultList = new javax.swing.JList();
+        searchQueryResultList = new javax.swing.JList<>();
         searchQuerySubmitButton = new SimpleButton();
         mqlIDQueryPanel = new javax.swing.JPanel();
         mqlQueryLabel = new SimpleLabel();
@@ -504,7 +510,7 @@ public class FreebaseExtractorUI extends javax.swing.JPanel {
     private javax.swing.JPanel mqlURLQueryPanel;
     private javax.swing.JButton okButton;
     private javax.swing.JLabel searchQueryLabel;
-    private javax.swing.JList searchQueryResultList;
+    private javax.swing.JList<String> searchQueryResultList;
     private javax.swing.JScrollPane searchQueryScrollPane;
     private javax.swing.JButton searchQuerySubmitButton;
     private javax.swing.JTextField searchQueryTextField;

@@ -48,7 +48,9 @@ import com.sun.pdfview.PDFPage;
  * @author akivela, anttirt
  */
 public class ApplicationPDFPanel extends JPanel {
-    private Image currentImage;
+    private static final long serialVersionUID = 1L;
+    
+	private Image currentImage;
     private BufferedImage currentBufferedImage;
     private PDFPage currentPage;
     private double zoom;

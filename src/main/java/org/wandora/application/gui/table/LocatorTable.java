@@ -489,7 +489,9 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
   
     private class LocatorTableTransferHandler extends TransferHandler {
 
-        @Override
+        private static final long serialVersionUID = 1L;
+
+		@Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
             return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor) ||

@@ -34,7 +34,7 @@ import org.wandora.topicmap.Locator;
  */
 
 
-public class LocatorTableRowSorter extends TableRowSorter {
+public class LocatorTableRowSorter extends TableRowSorter<LocatorTableModel> {
 
 
     public LocatorTableRowSorter(LocatorTableModel dm) {
@@ -45,7 +45,7 @@ public class LocatorTableRowSorter extends TableRowSorter {
     
     @Override
     public Comparator<?> getComparator(int column) {
-        return new Comparator() {
+        return new Comparator<>() {
             public int compare(Object o1, Object o2) {
                 if(o1 == null || o2 == null) return 0;
                 if(o1 instanceof Locator && o2 instanceof Locator) {

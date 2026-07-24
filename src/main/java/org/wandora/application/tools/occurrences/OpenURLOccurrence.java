@@ -47,7 +47,7 @@ public class OpenURLOccurrence  extends AbstractWandoraTool {
 	/** Creates a new instance of OpenURLOccurrence */
     public OpenURLOccurrence() {
     }
-    public OpenURLOccurrence(Context proposedContext) {
+    public OpenURLOccurrence(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
 
@@ -65,7 +65,7 @@ public class OpenURLOccurrence  extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         Object contextSource = context.getContextSource();
         
         if(contextSource instanceof OccurrenceTable) {

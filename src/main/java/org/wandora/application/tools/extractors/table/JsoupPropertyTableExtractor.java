@@ -91,7 +91,11 @@ public class JsoupPropertyTableExtractor extends AbstractJsoupExtractor implemen
     private void handleAssoc(Association assoc, Element playerRow) throws Exception {
         
         Elements playerCells = playerRow.select("td");
-        if(playerCells.size() != 2) throw new Exception("Invalid player row");
+        if(playerCells.size() != 2
+        		|| playerCells.first() == null
+        		|| playerCells.last() == null) {
+        	throw new Exception("Invalid player row");
+        }
         
         String roleValue = playerCells.first().text();
         String playerValue = playerCells.last().text();

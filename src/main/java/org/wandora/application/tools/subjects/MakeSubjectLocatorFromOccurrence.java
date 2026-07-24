@@ -64,7 +64,7 @@ public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool {
     public MakeSubjectLocatorFromOccurrence() {
     }
     
-    public MakeSubjectLocatorFromOccurrence(Context preferredContext) {
+    public MakeSubjectLocatorFromOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -81,7 +81,7 @@ public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

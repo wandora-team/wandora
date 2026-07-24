@@ -104,12 +104,12 @@ public class MergeLayers extends AbstractLayerTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         mergeLayers(wandora, options, context);
     }
     
     
-    public void mergeLayers(Wandora wandora, int options, Context context) {
+    public void mergeLayers(Wandora wandora, int options, Context<?> context) {
         Layer targetLayer = solveContextLayer(wandora, context);
         
         if(targetLayer == null) {

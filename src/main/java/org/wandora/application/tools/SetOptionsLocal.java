@@ -87,7 +87,7 @@ public class SetOptionsLocal extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(localOptions != null) {
             String key = null;
             String value = null;

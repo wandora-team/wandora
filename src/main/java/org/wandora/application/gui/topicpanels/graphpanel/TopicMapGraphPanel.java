@@ -175,7 +175,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     private double minX=-1.0,maxX=1.0,minY=-1.0,maxY=1.0;
 
-    private Map renderingHints;
+    private Map<Object,Object> renderingHints;
     
     private Topic rootTopic;
     
@@ -1019,7 +1019,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         paint(g);
     }
     
-    public Map getRenderingHints(){
+    public Map<Object,Object> getRenderingHints(){
         return renderingHints;
     }
     
@@ -1592,7 +1592,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     
     public Object[] getOptionsMenuStruct() {
-        Map hints=this.getRenderingHints();
+        Map<Object,Object> hints=this.getRenderingHints();
         Object antialized=hints.get(RenderingHints.KEY_ANTIALIASING);
         return new Object[] {
             "Antialised", (antialized==null || antialized==RenderingHints.VALUE_ANTIALIAS_OFF ? UIBox.getIcon("gui/icons/checkbox.png") : UIBox.getIcon("gui/icons/checkbox_selected.png")), new ToggleAntialiasTool(this),

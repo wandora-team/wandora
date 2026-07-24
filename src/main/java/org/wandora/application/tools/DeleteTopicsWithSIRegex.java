@@ -45,18 +45,20 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class DeleteTopicsWithSIRegex extends DeleteTopics {
     
-     RegularExpressionEditor editor = null;
+     private static final long serialVersionUID = 1L;
+     
+	 RegularExpressionEditor editor = null;
     
     
     /** Creates a new instance of DeleteTopicsWithSIRegex */
     public DeleteTopicsWithSIRegex() {
     }
-    public DeleteTopicsWithSIRegex(Context preferredContext) {
+    public DeleteTopicsWithSIRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException  {
         editor = RegularExpressionEditor.getMatchExpressionEditor(admin);
         editor.approve = false;
         editor.setVisible(true);

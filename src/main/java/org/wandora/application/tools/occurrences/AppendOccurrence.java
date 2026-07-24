@@ -46,7 +46,7 @@ public class AppendOccurrence extends AbstractWandoraTool {
 
 	public AppendOccurrence() {
     }
-    public AppendOccurrence(Context proposedContext) {
+    public AppendOccurrence(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
 
@@ -62,7 +62,7 @@ public class AppendOccurrence extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object source = getContext().getContextSource();
         if(source instanceof OccurrenceTable) {
             OccurrenceTable ot = (OccurrenceTable) source;

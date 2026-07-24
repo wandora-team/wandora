@@ -55,7 +55,7 @@ public class NewTopicExtended extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         NewTopicPanelExtended newTopicPanel = new NewTopicPanelExtended(context);
         if(newTopicPanel.getAccepted()) {
             Topic newTopic = newTopicPanel.createTopic();
@@ -65,7 +65,7 @@ public class NewTopicExtended extends AbstractWandoraTool {
     
     
     
-    private void postExecute(Topic newTopic, Context context) {
+    private void postExecute(Topic newTopic, Context<?> context) {
         try {
             if(newTopic != null) {
                 Object contextSource = context.getContextSource();

@@ -67,7 +67,7 @@ public class DuplicateSubjectIdentifier extends AbstractWandoraTool {
     
     public DuplicateSubjectIdentifier() {
     }
-    public DuplicateSubjectIdentifier(Context context) {
+    public DuplicateSubjectIdentifier(Context<?> context) {
         setContext(context);
     }
     
@@ -86,7 +86,7 @@ public class DuplicateSubjectIdentifier extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) throws TopicMapException {
+    public void execute(Wandora w, Context<?> context) throws TopicMapException {
         this.wandora = w;
         if(context.getContextObjects() == null || !context.getContextObjects().hasNext()) {
             return;
@@ -94,7 +94,7 @@ public class DuplicateSubjectIdentifier extends AbstractWandoraTool {
         
         if(context instanceof SIContext) {
             setDefaultLogger();
-            Iterator sii = context.getContextObjects();
+            Iterator<?> sii = context.getContextObjects();
             int count = 0;
             while(sii.hasNext() && !forceStop()) {
                 Locator si = (Locator) sii.next();
@@ -127,7 +127,7 @@ public class DuplicateSubjectIdentifier extends AbstractWandoraTool {
 
             setDefaultLogger();
             
-            Iterator topics = getContext().getContextObjects();
+            Iterator<?> topics = getContext().getContextObjects();
             Topic topic = null;
             int count = 0;
             int tcount = 0;

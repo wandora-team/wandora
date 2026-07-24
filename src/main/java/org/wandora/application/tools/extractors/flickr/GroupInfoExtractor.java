@@ -61,7 +61,7 @@ public class GroupInfoExtractor extends FlickrExtractor {
     
     
     @Override
-    protected boolean extract(Wandora wandora, Context context) throws ExtractionFailure {
+    protected boolean extract(Wandora wandora, Context<?> context) throws ExtractionFailure {
         Collection<Topic> groupTopics = null;
         Topic groupT = null;
         

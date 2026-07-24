@@ -249,7 +249,7 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         messagePanel = new javax.swing.JPanel();
         messageField = new org.wandora.application.gui.simple.SimpleLabel();
         searchFieldPanel = new javax.swing.JPanel();
-        searchWords = new SimpleComboBox();
+        searchWords = new SimpleComboBox<>();
         startSearchButton = new org.wandora.application.gui.simple.SimpleButton();
         searchOptionsPanel = new javax.swing.JPanel();
         searchAllCheckBox = new org.wandora.application.gui.simple.SimpleCheckBox();
@@ -450,7 +450,7 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
     private javax.swing.JCheckBox searchSLsCheckBox;
     private javax.swing.JCheckBox searchTextdatasCheckBox;
     private javax.swing.JCheckBox searchVariantnamesCheckBox;
-    private javax.swing.JComboBox searchWords;
+    private javax.swing.JComboBox<String> searchWords;
     private javax.swing.JButton startSearchButton;
     // End of variables declaration//GEN-END:variables
     

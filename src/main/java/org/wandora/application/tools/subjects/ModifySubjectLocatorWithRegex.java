@@ -57,7 +57,7 @@ public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool {
     /** Creates a new instance of SubjectLocatorRegexReplacer */
     public ModifySubjectLocatorWithRegex() {
     }
-    public ModifySubjectLocatorWithRegex(Context preferredContext) {
+    public ModifySubjectLocatorWithRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -75,7 +75,7 @@ public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool {
     
   
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {

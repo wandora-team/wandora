@@ -41,7 +41,7 @@ public class SameAsLATCStoreSubjectExpander extends SameAsSubjectExpander {
 
 
 	public SameAsLATCStoreSubjectExpander() {}
-    public SameAsLATCStoreSubjectExpander(Context preferredContext) {
+    public SameAsLATCStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

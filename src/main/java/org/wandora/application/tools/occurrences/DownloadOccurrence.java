@@ -67,7 +67,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
 
     public DownloadOccurrence() {
     }
-    public DownloadOccurrence(Context preferredContext) {
+    public DownloadOccurrence(Context<?> preferredContext) {
         this(preferredContext, false);
     }
 
@@ -79,7 +79,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
         this.target = t;
         this.changeOccurrence = changeOccurrence;
     }
-    public DownloadOccurrence(Context preferredContext, boolean changeOccurrence) {
+    public DownloadOccurrence(Context<?> preferredContext, boolean changeOccurrence) {
         setContext(preferredContext);
         this.changeOccurrence = changeOccurrence;
     }
@@ -91,7 +91,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Object contextSource = context.getContextSource();
         
         // ***** TARGET OCCURRENCE ***** 
@@ -206,7 +206,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
         occurrence = occurrence.trim();
         if(occurrence.length() == 0) return null;
         try {
-            URL u = new URI(occurrence).toURL();
+            new URI(occurrence).toURL();
             return occurrence;
         }
         catch(Exception e) {
@@ -219,7 +219,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
 
     public boolean download(Wandora admin, Topic topic, String url, File target) {
         try {
-            URL subjectUrl = new URL(url);
+            URL subjectUrl = new URI(url).toURL();
             String filename = subjectUrl.getPath();
             String filenameWithoutExtension = filename;
             String filenameExtension = "";

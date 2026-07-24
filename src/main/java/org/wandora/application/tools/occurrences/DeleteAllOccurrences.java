@@ -46,7 +46,7 @@ public class DeleteAllOccurrences extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
 	
     
-    public DeleteAllOccurrences(Context proposedContext) {
+    public DeleteAllOccurrences(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
     
@@ -67,9 +67,7 @@ public class DeleteAllOccurrences extends AbstractWandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
-        Object contextSource = context.getContextSource();
-
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Iterator<?> topics = getContext().getContextObjects();
         Topic topic = null;
 

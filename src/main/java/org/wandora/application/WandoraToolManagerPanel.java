@@ -51,9 +51,9 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
 	private static final long serialVersionUID = 1L;
 
 	
-	public static class ListWrapper {
+	public static class WandoraToolListWrapper {
         public T2<WandoraTool,String> tool;
-        public ListWrapper(T2<WandoraTool,String> tool){
+        public WandoraToolListWrapper(T2<WandoraTool,String> tool){
             this.tool=tool;
         }
         public String toString(){
@@ -72,7 +72,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
     
     private Wandora admin;
     private WandoraToolManager manager;
-    private DefaultListModel listModel;
+    private DefaultListModel<WandoraToolListWrapper> listModel;
     private JDialog newDialog;
     private JDialog parent;
     private JDialog renameDialog;
@@ -83,7 +83,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         this.admin = admin;
         this.manager = manager;
         this.parent = parent;
-        listModel = new DefaultListModel();
+        listModel = new DefaultListModel<>();
         initComponents();
         refreshTools();
         
@@ -101,7 +101,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         listModel.removeAllElements();
         Vector<T2<WandoraTool,String>> tools=manager.getTools(typeComboBox.getSelectedItem().toString());
         for(T2<WandoraTool,String> tool : tools){
-            listModel.addElement(new ListWrapper(tool));
+            listModel.addElement(new WandoraToolListWrapper(tool));
         }        
         toolList.repaint();
     }
@@ -123,7 +123,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
 
         newToolPanel = new javax.swing.JPanel();
         toolLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        toolComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        toolComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         nameLabel = new org.wandora.application.gui.simple.SimpleLabel();
         nameTextField = new org.wandora.application.gui.simple.SimpleField();
         jSeparator2 = new javax.swing.JSeparator();
@@ -140,7 +140,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         renameOKButton = new org.wandora.application.gui.simple.SimpleButton();
         renameCancelButton = new org.wandora.application.gui.simple.SimpleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        toolList = new javax.swing.JList(listModel);
+        toolList = new javax.swing.JList<WandoraToolListWrapper>(listModel);
         buttonPanel = new javax.swing.JPanel();
         newButton = new org.wandora.application.gui.simple.SimpleButton();
         removeButton = new org.wandora.application.gui.simple.SimpleButton();
@@ -151,7 +151,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         okButton = new org.wandora.application.gui.simple.SimpleButton();
         typePanel = new javax.swing.JPanel();
         jLabel4 = new org.wandora.application.gui.simple.SimpleLabel();
-        typeComboBox = new org.wandora.application.gui.simple.SimpleComboBox(org.wandora.application.WandoraToolManager.toolTypes);
+        typeComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>(org.wandora.application.WandoraToolManager.toolTypes);
         jSeparator1 = new javax.swing.JSeparator();
 
         newToolPanel.setLayout(new java.awt.GridBagLayout());
@@ -531,7 +531,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_newOKButtonActionPerformed
 
     private void toolListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_toolListValueChanged
-        ListWrapper wrapper=(ListWrapper)toolList.getSelectedValue();
+    	WandoraToolListWrapper wrapper=(WandoraToolListWrapper)toolList.getSelectedValue();
         if(wrapper==null) {
             configureButton.setEnabled(false);
             return;
@@ -567,7 +567,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_upButtonActionPerformed
 
     private void configureButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureButtonActionPerformed
-        ListWrapper wrapper=(ListWrapper)toolList.getSelectedValue();
+    	WandoraToolListWrapper wrapper=(WandoraToolListWrapper)toolList.getSelectedValue();
         if(wrapper==null){
             configureButton.setEnabled(false);
             return;
@@ -672,10 +672,10 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
     private javax.swing.JButton renameOKButton;
     private javax.swing.JPanel renamePanel;
     private javax.swing.JTextField renameTextField;
-    private javax.swing.JComboBox toolComboBox;
+    private javax.swing.JComboBox<ComboboxWrapper> toolComboBox;
     private javax.swing.JLabel toolLabel;
-    private javax.swing.JList toolList;
-    private javax.swing.JComboBox typeComboBox;
+    private javax.swing.JList<WandoraToolListWrapper> toolList;
+    private javax.swing.JComboBox<String> typeComboBox;
     private javax.swing.JPanel typePanel;
     private javax.swing.JButton upButton;
     // End of variables declaration//GEN-END:variables

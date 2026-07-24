@@ -91,7 +91,7 @@ public class SQLExtractor extends AbstractExtractor {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new SQLExtractorUI(wandora);

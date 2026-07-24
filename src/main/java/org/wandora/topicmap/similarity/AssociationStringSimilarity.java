@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
@@ -98,7 +99,7 @@ public class AssociationStringSimilarity implements TopicSimilarity {
             sb.append(getAsString(a.getType()));
             sb.append(TOPIC_DELIMITER);
             Collection<Topic> roles = a.getRoles();
-            ArrayList<Topic> sortedRoles = new ArrayList<>();
+            List<Topic> sortedRoles = new ArrayList<>();
             sortedRoles.addAll(roles);
             Collections.sort(sortedRoles, new TopicStringComparator());
             
@@ -134,24 +135,15 @@ public class AssociationStringSimilarity implements TopicSimilarity {
     
     
     
-    private class TopicStringComparator implements Comparator<Object> {
+    private class TopicStringComparator implements Comparator<Topic> {
 
         @Override
-        public int compare(Object o1, Object o2) {
+        public int compare(Topic t1, Topic t2) {
             try {
-                if(o1 != null && o2 != null) {
-                    if(o1 instanceof Topic && o2 instanceof Topic) {
-                        Topic t1 = (Topic) o1;
-                        Topic t2 = (Topic) o2;
-                        String s1 = getAsString(t1);
-                        String s2 = getAsString(t2);
-                        return s1.compareTo(s2);
-                    }
-                    else if(o1 instanceof Comparable && o2 instanceof Comparable) {
-                        Comparable c1 = (Comparable) o1;
-                        Comparable c2 = (Comparable) o2;
-                        return c1.compareTo(c2);
-                    }
+                if(t1 != null && t2 != null) {
+                    String s1 = getAsString(t1);
+                    String s2 = getAsString(t2);
+                    return s1.compareTo(s2);
                 }
             }
             catch(Exception e) {
@@ -159,8 +151,6 @@ public class AssociationStringSimilarity implements TopicSimilarity {
             }
             return 0;
         }
-        
-        
     }
     
     

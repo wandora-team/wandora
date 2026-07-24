@@ -23,6 +23,7 @@
 package org.wandora.application.tools.extractors.duckduckgo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -48,7 +49,7 @@ public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
 	
 	private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
+    private Context<?> context = null;
     private Wandora wandora = null;
     
     private static final String ddgEndpoint = "http://api.duckduckgo.com/";
@@ -68,7 +69,7 @@ public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
         accepted = b;
     }
 
-    public void open(Wandora w, Context c) {
+    public void open(Wandora w, Context<?> c) {
         context = c;
         wandora = w;
         accepted = false;
@@ -86,7 +87,7 @@ public class DuckDuckGoExtractorUI extends javax.swing.JPanel {
     public WandoraTool[] getExtractors(DuckDuckGoExtractor tool) throws TopicMapException {
         
         WandoraTool wt;
-        ArrayList<WandoraTool> wts = new ArrayList<>();
+        List<WandoraTool> wts = new ArrayList<>();
         
         String query = ddgInput.getText();
         String extractUrl = ddgEndpoint + "?q=" + query + "&format=json";

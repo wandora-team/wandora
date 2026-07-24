@@ -157,7 +157,7 @@ public class UploadFile extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException  {
         setDefaultLogger();        
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setMultiSelectionEnabled(true);

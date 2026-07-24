@@ -62,7 +62,7 @@ public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool {
     public MakeSubjectIdentifierFromBasename() {
     }
     
-    public MakeSubjectIdentifierFromBasename(Context preferredContext) {
+    public MakeSubjectIdentifierFromBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -80,7 +80,7 @@ public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool {
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

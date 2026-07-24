@@ -53,8 +53,6 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
 
 	private static final long serialVersionUID = 1L;
 	
-	
-	private Wandora wandora = null;
     private DefaultListModel<TopicNode> filteredTopicsModel;
     private DefaultListModel<TopicNode> filteredTopicTypesModel;
     private DefaultListModel<Object> filteredAssociationTypesModel; // NEAR <TopicNode>
@@ -154,17 +152,17 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
         okButton = new org.wandora.application.gui.simple.SimpleButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox();
+        jComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        filteredTopicList = new javax.swing.JList();
+        filteredTopicList = new javax.swing.JList<>();
         removeFilteredTopicButton = new SimpleButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new org.wandora.application.gui.simple.SimpleLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        filteredAssociationTypesList = new javax.swing.JList();
+        filteredAssociationTypesList = new javax.swing.JList<>();
         removeFilteredAssociationTypeButton = new SimpleButton();
 
         footerPanel.setLayout(new java.awt.GridBagLayout());

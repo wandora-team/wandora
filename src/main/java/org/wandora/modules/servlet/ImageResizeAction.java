@@ -28,7 +28,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -303,9 +304,10 @@ public class ImageResizeAction extends CachedAction {
      * @param url The URL pointing to the image.
      * @return The image as a BufferedImage.
      * @throws IOException 
+     * @throws URISyntaxException 
      */
-    protected BufferedImage readImage(String url) throws IOException {
-        return ImageIO.read(new URL(url));
+    protected BufferedImage readImage(String url) throws IOException, URISyntaxException {
+        return ImageIO.read(new URI(url).toURL());
     }
     
     /**
@@ -381,8 +383,8 @@ public class ImageResizeAction extends CachedAction {
                     return true;
                     
                 }
-                catch(IOException ioe){
-                    logging.debug("Couldn't read image "+s,ioe);
+                catch(Exception e){
+                    logging.debug("Couldn't read image "+s,e);
                 }
             }
         }
@@ -487,9 +489,9 @@ public class ImageResizeAction extends CachedAction {
             if(error!=null){
                 if(errorImage==null){
                     try{
-                        errorImage=ImageIO.read(new URL(error));
+                        errorImage=ImageIO.read(new URI(error).toURL());
                     }
-                    catch(IOException ioe) {
+                    catch(Exception ioe) {
                         ioe.printStackTrace();
                     }
                 }
@@ -615,10 +617,10 @@ public class ImageResizeAction extends CachedAction {
             if(watermark!=null){
                 if(watermarkImage==null){
                     try{
-                        watermarkImage=ImageIO.read(new URL(watermark));
+                        watermarkImage=ImageIO.read(new URI(watermark).toURL());
                     }
-                    catch(IOException ioe) {
-                        ioe.printStackTrace();
+                    catch(Exception e) {
+                        e.printStackTrace();
                     }
                 }
                 if(watermarkMode.equals("lowerright")){

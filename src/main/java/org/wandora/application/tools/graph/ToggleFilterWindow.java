@@ -57,7 +57,7 @@ public class ToggleFilterWindow extends AbstractGraphTool {
     }
     
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
         if(graphPanel != null) {
             graphPanel.openFilterManager();

@@ -48,7 +48,7 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
 	private static final long serialVersionUID = 1L;
 
 	
-	private DefaultListModel listModel;
+	private DefaultListModel<ListWrapper> listModel;
     private Topic typeTopic;
     private Thread thread;
     private boolean running;
@@ -76,14 +76,14 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
         }
         else this.name=name;
         this.useSchema=useSchema;
-        listModel=new DefaultListModel();
+        listModel=new DefaultListModel<>();
         initComponents();
         textField.setFocusTraversalKeysEnabled(false);
     }
     
     private void populateList(){
 //        listModel.clear();
-        DefaultListModel newModel=new DefaultListModel();
+        DefaultListModel<ListWrapper> newModel=new DefaultListModel<>();
         String written=textField.getText().toLowerCase();
         try{
             for(Topic t : topicsOfType){
@@ -166,7 +166,7 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
 
         textField = new javax.swing.JTextField();
         scrollPane = new javax.swing.JScrollPane();
-        list = new javax.swing.JList();
+        list = new javax.swing.JList<ListWrapper>();
         findButton = new org.wandora.application.gui.simple.SimpleButton();
 
         setLayout(new java.awt.GridBagLayout());
@@ -264,7 +264,7 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton findButton;
-    private javax.swing.JList list;
+    private javax.swing.JList<ListWrapper> list;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTextField textField;
     // End of variables declaration//GEN-END:variables

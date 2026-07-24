@@ -57,7 +57,7 @@ public class AllVariantRemover extends AbstractWandoraTool {
 
 	public AllVariantRemover() {
     }
-    public AllVariantRemover(Context preferredContext) {
+    public AllVariantRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -75,7 +75,7 @@ public class AllVariantRemover extends AbstractWandoraTool {
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;

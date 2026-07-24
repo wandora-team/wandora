@@ -41,8 +41,8 @@ import org.wandora.application.WandoraTool;
  *
  * @author akivela
  */
-public class MultiContextCollected implements Context {
-    private List<Context> multiContext = new ArrayList<>();
+public class MultiContextCollected implements Context<Object> {
+    private List<Context<?>> multiContext = new ArrayList<>();
     public boolean removeDuplicates = true;
     private Object contextSource;
     private ActionEvent contextEvent;
@@ -54,10 +54,10 @@ public class MultiContextCollected implements Context {
      */
     public MultiContextCollected() {
     }
-    public MultiContextCollected(Context context) {
+    public MultiContextCollected(Context<?> context) {
         addContext(context);
     }
-    public MultiContextCollected(ArrayList<Context> contexts) {
+    public MultiContextCollected(ArrayList<Context<?>> contexts) {
         addContexts(contexts);
     }
     
@@ -67,11 +67,11 @@ public class MultiContextCollected implements Context {
     
     
     
-    public void addContext(Context context) {
+    public void addContext(Context<?> context) {
         multiContext.add(context);
     }
-    public void addContexts(ArrayList<Context> contexts) {
-        for(Iterator<Context> contextIterator=contexts.iterator(); contextIterator.hasNext(); ) {
+    public void addContexts(ArrayList<Context<?>> contexts) {
+        for(Iterator<Context<?>> contextIterator=contexts.iterator(); contextIterator.hasNext(); ) {
             multiContext.add(contextIterator.next());
         }
     }
@@ -83,12 +83,12 @@ public class MultiContextCollected implements Context {
     
     
     @Override
-    public Iterator<?> getContextObjects() {
+    public Iterator<Object> getContextObjects() {
         Collection<Object> contextObjects = new ArrayList<>();
         Iterator<?> tempContextObjects;
         Object contextObject = null;
-        Context context = null;
-        for(Iterator<Context> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {
+        Context<?> context = null;
+        for(Iterator<Context<?>> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {
             context = contextIterator.next();
             if(context != null) {
                 if(removeDuplicates) {
@@ -121,8 +121,8 @@ public class MultiContextCollected implements Context {
     @Override
     public void setContextSource(Object proposedContextSource) {
         contextSource = proposedContextSource;
-        Context context = null;
-        for(Iterator<Context> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {
+        Context<?> context = null;
+        for(Iterator<Context<?>> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {
             context = contextIterator.next();
             if(context != null) {
                 context.setContextSource(proposedContextSource);
@@ -140,8 +140,8 @@ public class MultiContextCollected implements Context {
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         contextEvent = actionEvent;
-        Context context = null;
-        for(Iterator<Context> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {
+        Context<?> context = null;
+        for(Iterator<Context<?>> contextIterator=multiContext.iterator(); contextIterator.hasNext(); ) {
             context = contextIterator.next();
             if(context != null) {
                 context.initialize(wandora, actionEvent, contextOwner);

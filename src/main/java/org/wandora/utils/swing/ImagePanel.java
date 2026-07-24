@@ -34,6 +34,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -69,7 +70,7 @@ public class ImagePanel extends JPanel {
         if(imageLocator != null) {
             image = null;
             try {
-                this.url = new URL(imageLocator);
+                this.url = new URI(imageLocator).toURL();
                 this.image = ImageIO.read(url);
                 //System.out.println("ImagePanel initialized with URL "+ imageLocator);
             }

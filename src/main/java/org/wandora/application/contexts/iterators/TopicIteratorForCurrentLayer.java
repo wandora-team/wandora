@@ -29,6 +29,7 @@ package org.wandora.application.contexts.iterators;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -44,15 +45,15 @@ public class TopicIteratorForCurrentLayer extends TopicIterator {
     
 
     @Override
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
-        Iterator it = oldIterator;
+    public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
+        Iterator<Topic> it = oldIterator;
         if(topic != null && topicmap != null) {
             try {
-                if(topic instanceof LayeredTopic) {
-                    collection = ((LayeredTopic) topic).getTopicsForSelectedLayer();
+                if(topic instanceof LayeredTopic layeredTopic) {
+                    collection = layeredTopic.getTopicsForSelectedLayer();
                 }
                 else {
-                    ArrayList list = new ArrayList();
+                    List<Topic> list = new ArrayList<>();
                     list.add(topic);
                     collection = list;
                     //collection = null;
