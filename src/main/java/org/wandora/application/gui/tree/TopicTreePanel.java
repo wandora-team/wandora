@@ -173,7 +173,6 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
         jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
         newRootButton = new org.wandora.application.gui.simple.SimpleButton();
         scrollPane = new javax.swing.JScrollPane();
-        jTree = jTree;
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 

@@ -192,9 +192,7 @@ public class GOAImport extends AbstractImportTool {
         private BufferedReader in;
         
         
-        private Topic root = null;
-        private Topic wandoraClass = null;
-        
+
         
         
         /**
@@ -220,7 +218,6 @@ public class GOAImport extends AbstractImportTool {
          * @param tm is the Topic Map where initialization is targeted.
          */
         public void initializeTopicMap(TopicMap tm) {
-            wandoraClass = getOrCreateTopic(TMBox.WANDORACLASS_SI, "Wandora class");
             getOrCreateTopic(XTMPSI.getLang(OBO.LANG));
             getOrCreateTopic(XTMPSI.DISPLAY, "Scope Display");
         }
@@ -429,7 +426,7 @@ public class GOAImport extends AbstractImportTool {
                     // ***** TAXONS *****
                     if(taxons != null && taxons.trim().length() > 0) {
                         String[] ts = null;
-                        if(objectSynonyms.indexOf("|") != -1) {
+                        if(objectSynonyms != null && objectSynonyms.indexOf("|") != -1) {
                             ts = taxons.split("|");
                         }
                         else {

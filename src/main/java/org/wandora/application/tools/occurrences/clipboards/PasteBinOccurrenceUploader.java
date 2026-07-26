@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -252,7 +253,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool {
         
         String reply = null;
         try {
-            reply = sendRequest(new URL(apibase), data.toString(), "application/x-www-form-urlencoded", "POST");
+            reply = sendRequest(new URI(apibase).toURL(), data.toString(), "application/x-www-form-urlencoded", "POST");
         }
         catch(Exception e) {
             reply = e.getMessage();

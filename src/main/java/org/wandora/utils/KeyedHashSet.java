@@ -69,9 +69,9 @@ public class KeyedHashSet<E> implements Set<E> {
         return true;
     }
     public boolean equals(Object o){
-        if(o instanceof Set){
-            if(((Set)o).size()!=this.size()) return false;
-            return this.containsAll((Set)o);
+        if(o instanceof Set set){
+            if(set.size()!=this.size()) return false;
+            return this.containsAll(set);
         }
         else return false;
     }

@@ -81,7 +81,8 @@ dependencies {
     implementation 'org.eclipse.jetty:jetty-http:11.0.6'
     implementation 'org.eclipse.jetty:jetty-server:11.0.6'
 	
-    implementation 'org.slf4j:slf4j-api:2.0.18'
+    //implementation 'org.slf4j:slf4j-api:2.0.18'
+    implementation 'org.slf4j:slf4j-nop:2.0.18'
     implementation 'org.apache.logging.log4j:log4j-api:2.26.1'
     implementation 'org.apache.logging.log4j:log4j-core:2.26.1'
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.26.1'
@@ -108,6 +109,8 @@ java {
   toolchain {
     languageVersion = JavaLanguageVersion.of(21)
   }
+  sourceCompatibility JavaVersion.VERSION_21
+  targetCompatibility JavaVersion.VERSION_21
 }
 
 javafx {

@@ -191,7 +191,7 @@ public class SimpleLabelField extends JPanel implements MouseListener, KeyListen
     }
     
     public void keyReleased(java.awt.event.KeyEvent e) {
-        if(e.getKeyCode() == e.VK_ENTER) {
+        if(e.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             setUpGui(LABEL);
             e.consume();
             if(! this.getText().equals(previousText)) {

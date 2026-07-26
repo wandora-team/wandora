@@ -94,7 +94,6 @@ public class RedditExtractor extends AbstractWandoraTool{
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
-                    int c = 0;
                     if(extrs.length > 1) {
                         log("Requested operation requires "+extrs.length+" Reddit extractions.");
                     }
@@ -107,7 +106,6 @@ public class RedditExtractor extends AbstractWandoraTool{
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora,context);
                             log("Finished extraction "+(i+1)+".");
-                            c++;
                         }
                         catch(Exception e) {
                             log(e);

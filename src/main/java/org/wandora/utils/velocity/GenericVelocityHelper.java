@@ -39,6 +39,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,15 +66,11 @@ public class GenericVelocityHelper {
     }
     
 
-    public static Hashtable getBinaryAssociations(Topic topic) {
-        return null;
-    }
-    
 
     
     public static Topic getFirstPlayerWithRole(Topic topic, String roleSI) {
         try {
-            ArrayList<Topic> players = getPlayersWithRole(topic, roleSI);
+            List<Topic> players = getPlayersWithRole(topic, roleSI);
             if(players.size() > 0) return players.get(0);
         }
         catch (Exception e) {
@@ -85,8 +82,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getPlayersWithRole(Topic topic, String roleSI) throws TopicMapException  {
-        ArrayList<Topic> players = new ArrayList<>();
+    public static List<Topic> getPlayersWithRole(Topic topic, String roleSI) throws TopicMapException  {
+        List<Topic> players = new ArrayList<>();
         if(topic != null && roleSI != null) {
             Topic role = topic.getTopicMap().getTopic(roleSI);
 
@@ -106,8 +103,8 @@ public class GenericVelocityHelper {
     }
     
     
-    public static ArrayList<Topic> getPlayersWithRole(Collection<Topic> topics, String roleSI) {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRole(Collection<Topic> topics, String roleSI) {
+        List<Topic> players = new ArrayList<>();
         
         for(Topic topic : topics){
             try {
@@ -122,8 +119,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getPlayersWithRoles(Topic topic, String[] roleSIs) {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRoles(Topic topic, String[] roleSIs) {
+        List<Topic> players = new ArrayList<>();
         if(topic != null) {
             String roleSI = null;
             for(int i=0; i<roleSIs.length; i++) {
@@ -141,8 +138,8 @@ public class GenericVelocityHelper {
     
     
 
-    public static ArrayList<Topic> getPlayersWithRoles(Topic topic, Collection<String> roleSIs) {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRoles(Topic topic, Collection<String> roleSIs) {
+        List<Topic> players = new ArrayList<>();
         if(topic != null) {
             for(String roleSI : roleSIs){
                 try {
@@ -158,8 +155,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getPlayersWithRoles(Collection<Topic> topics, Collection<String> roleSIs) {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRoles(Collection<Topic> topics, Collection<String> roleSIs) {
+        List<Topic> players = new ArrayList<>();
         
         for(Topic topic : topics){
             try {
@@ -174,8 +171,8 @@ public class GenericVelocityHelper {
     
 
     
-    public static ArrayList<Topic> getPlayersWithRoles(Collection<Topic> topics, String[] roleSIs) {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRoles(Collection<Topic> topics, String[] roleSIs) {
+        List<Topic> players = new ArrayList<>();
         
         for(Topic topic : topics){
             try {
@@ -191,8 +188,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getAllPlayers(Topic topic) throws TopicMapException {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getAllPlayers(Topic topic) throws TopicMapException {
+        List<Topic> players = new ArrayList<>();
         if(topic != null) {
             Collection<Association> associations = topic.getAssociations();
             for(Association a : associations){
@@ -211,8 +208,8 @@ public class GenericVelocityHelper {
     }
     
     
-    public static ArrayList<Topic> getPlayers(Topic topic, String associationTypeSI) throws TopicMapException {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayers(Topic topic, String associationTypeSI) throws TopicMapException {
+        List<Topic> players = new ArrayList<>();
         if(topic != null && associationTypeSI != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
 
@@ -238,7 +235,7 @@ public class GenericVelocityHelper {
     
     public static Topic getFirstPlayer(Topic topic, String associationTypeSI, String roleSI) {
         try {
-            ArrayList<Topic> players = getPlayers(topic, associationTypeSI, roleSI);
+            List<Topic> players = getPlayers(topic, associationTypeSI, roleSI);
             if(players.size() > 0) return  players.get(0);
         }
         catch (Exception e) {
@@ -249,8 +246,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI) throws TopicMapException {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI) throws TopicMapException {
+        List<Topic> players = new ArrayList<>();
         if(topic != null && associationTypeSI != null && roleSI != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
@@ -272,8 +269,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getPlayers(Topic topic, Topic type, Topic role) throws TopicMapException {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayers(Topic topic, Topic type, Topic role) throws TopicMapException {
+        List<Topic> players = new ArrayList<>();
 
         if(topic != null && type != null && role != null) {
             Collection<Association> associations = topic.getAssociations(type);
@@ -292,8 +289,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getPlayers(Collection<Topic> topics, String associationTypeSI, String roleSI) {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayers(Collection<Topic> topics, String associationTypeSI, String roleSI) {
+        List<Topic> players = new ArrayList<>();
         
         for(Topic topic : topics){
             try {
@@ -308,8 +305,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI, String hasRole, String hasPlayer) throws TopicMapException {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI, String hasRole, String hasPlayer) throws TopicMapException {
+        List<Topic> players = new ArrayList<>();
         if(topic != null && associationTypeSI != null && roleSI != null && hasRole != null && hasPlayer != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
@@ -339,8 +336,8 @@ public class GenericVelocityHelper {
     
 
     
-    public static ArrayList<Topic> getPlayers(Collection<Topic> topics, String associationTypeSI, String roleSI, String hasRole, String hasPlayer) {
-        ArrayList<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayers(Collection<Topic> topics, String associationTypeSI, String roleSI, String hasRole, String hasPlayer) {
+        List<Topic> players = new ArrayList<>();
         
         for(Topic topic : topics){
             try {
@@ -355,9 +352,9 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getSortedPlayers(Topic topic, String associationTypeSI, String roleSI, String sortRole, String lang) throws TopicMapException {
-        ArrayList<Topic[]> players = new ArrayList<>();
-        ArrayList<Topic> sortedPlayers = new ArrayList<Topic>();
+    public static List<Topic> getSortedPlayers(Topic topic, String associationTypeSI, String roleSI, String sortRole, String lang) throws TopicMapException {
+        List<Topic[]> players = new ArrayList<>();
+        List<Topic> sortedPlayers = new ArrayList<>();
         if(topic != null && associationTypeSI != null && roleSI != null && sortRole != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
@@ -414,9 +411,9 @@ public class GenericVelocityHelper {
     }
     
     
-    public static ArrayList<Topic> getSortedPlayers(Topic topic, Collection<String> associationTypesSI, Collection<String> rolesSI, String sortRole, String lang) throws TopicMapException {
-        ArrayList<Topic[]> players = new ArrayList<>();
-        ArrayList<Topic> sortedPlayers = new ArrayList<Topic>();
+    public static List<Topic> getSortedPlayers(Topic topic, Collection<String> associationTypesSI, Collection<String> rolesSI, String sortRole, String lang) throws TopicMapException {
+        List<Topic[]> players = new ArrayList<>();
+        List<Topic> sortedPlayers = new ArrayList<>();
         
         Iterator<String> ai = associationTypesSI.iterator();
         Iterator<String> ri = rolesSI.iterator();
@@ -482,8 +479,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getTypesOfRequiredType(Topic topic, String requiredTypeSI) {
-        ArrayList<Topic> selectedTypes = new ArrayList<Topic>();
+    public static List<Topic> getTypesOfRequiredType(Topic topic, String requiredTypeSI) {
+        List<Topic> selectedTypes = new ArrayList<>();
         if(topic != null && requiredTypeSI != null) {
             try {
                 Collection<Topic> types = topic.getTypes();
@@ -505,9 +502,9 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<String> getSLsOfPlayers(Topic topic, String associationTypeSI, String roleSI) throws TopicMapException {
-        ArrayList<Topic> players = getPlayers(topic, associationTypeSI, roleSI);
-        ArrayList<String> locators = new ArrayList<String>();
+    public static List<String> getSLsOfPlayers(Topic topic, String associationTypeSI, String roleSI) throws TopicMapException {
+        List<Topic> players = getPlayers(topic, associationTypeSI, roleSI);
+        List<String> locators = new ArrayList<>();
         
         for(int i=0; i<players.size(); i++) {
             if(players.get(i) != null) {
@@ -523,8 +520,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<String> getSLsOfTopics(Collection<Topic> topics) {
-        ArrayList<String> locators = new ArrayList<String>();
+    public static List<String> getSLsOfTopics(Collection<Topic> topics) {
+        List<String> locators = new ArrayList<>();
         for(Topic topic : topics) {
             try {
                 Locator sl = topic.getSubjectLocator();
@@ -555,7 +552,7 @@ public class GenericVelocityHelper {
     
     
     public static Collection<String> replaceInStrings(Collection<String> ss, String regex, String replacement) {
-        ArrayList<String> newss = new ArrayList<String>();
+        List<String> newss = new ArrayList<>();
         for(String s : ss) {
             try {
                 newss.add(s.replaceAll(regex, replacement));
@@ -569,7 +566,7 @@ public class GenericVelocityHelper {
     
     
     public static Collection<String> addDirToStringPaths(Collection<String> ss, String dir) {
-        ArrayList<String> newss = new ArrayList<String>();
+        List<String> newss = new ArrayList<>();
         for(String s : ss) {
             try {
                 s = addDirToStringPath(s, dir);
@@ -600,8 +597,8 @@ public class GenericVelocityHelper {
     
 
     
-    public static <K> ArrayList<K> crop(Collection<K> collection, int start, int end) {
-        ArrayList<K> cropped = new ArrayList<>();
+    public static <K> List<K> crop(Collection<K> collection, int start, int end) {
+        List<K> cropped = new ArrayList<>();
         if(collection != null) {
             int s = collection.size();
             Iterator<K> iterator = collection.iterator();
@@ -618,8 +615,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static <K> ArrayList<K> cropPage(Collection<K> collection, int page, int pageSize) {
-        ArrayList<K> cropped = new ArrayList<K>();
+    public static <K> List<K> cropPage(Collection<K> collection, int page, int pageSize) {
+        List<K> cropped = new ArrayList<>();
         if(collection != null) {
             int start = Math.max(0, (page-1)*pageSize);
             int end = page * pageSize;
@@ -638,8 +635,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static <K> ArrayList<K> makeIntersection(Collection<? extends K> a, Collection<? extends K> b) {
-        ArrayList<K> intersection = new ArrayList<K>();
+    public static <K> List<K> makeIntersection(Collection<? extends K> a, Collection<? extends K> b) {
+        List<K> intersection = new ArrayList<>();
         if(a != null && b != null && b.size() > 0) {
             K o = null;
             for(Iterator<? extends K> iter = a.iterator(); iter.hasNext(); ) {
@@ -652,19 +649,8 @@ public class GenericVelocityHelper {
     
     
     public static <K> Collection<K> removeDuplicates(Collection<K> objects) {
-        LinkedHashSet<K> newCollection = new LinkedHashSet<K>();
-        K object = null;
+        Set<K> newCollection = new LinkedHashSet<K>();
         newCollection.addAll(objects); // LinkedHashSet only allows each element once
-/*        
-        for(Iterator<K> i = objects.iterator(); i.hasNext(); ) {
-            try {
-                object = i.next();
-                if(!newCollection.contains(object)) newCollection.add(object);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
         return newCollection;
     }
     
@@ -675,8 +661,8 @@ public class GenericVelocityHelper {
     }
     
     
-    public static ArrayList<Topic> collectTopicsOfType(TopicMap topicmap, Topic typeTopic, int depth) {
-        LinkedHashSet<Topic> results = new LinkedHashSet<>();
+    public static List<Topic> collectTopicsOfType(TopicMap topicmap, Topic typeTopic, int depth) {
+        Set<Topic> results = new LinkedHashSet<>();
 
         List<Topic> temp = null; // new topics of previous iteration
         List<Topic> temp2 = new ArrayList<>(); // new topics of current iteration
@@ -716,8 +702,8 @@ public class GenericVelocityHelper {
     
     
     
-     public static ArrayList<Topic> collectPlayers(TopicMap topicmap, Topic topic, String associationTypeSI, String roleSI, String hasRole, String hasPlayer, int depth) {
-        LinkedHashSet<Topic> results = new LinkedHashSet<>();
+     public static List<Topic> collectPlayers(TopicMap topicmap, Topic topic, String associationTypeSI, String roleSI, String hasRole, String hasPlayer, int depth) {
+        Set<Topic> results = new LinkedHashSet<>();
 
         List<Topic> temp = null; // new topics of previous iteration
         List<Topic> temp2 = new ArrayList<>(); // new topics of current iteration
@@ -784,7 +770,7 @@ public class GenericVelocityHelper {
     }
     
     public static <K> List<K> extractRandomList(Collection<K> c, int newSize) {
-        ArrayList<K> cropped = new ArrayList<>();
+        List<K> cropped = new ArrayList<>();
         if( c == null || c.size() < 1 || newSize < 1) return cropped;
         int s = c.size();
         int randomStep = 0;
@@ -800,8 +786,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<Topic> getRoles(Topic topic, String associationTypeSI) throws TopicMapException {
-        ArrayList<Topic> roleList = new ArrayList<>();
+    public static List<Topic> getRoles(Topic topic, String associationTypeSI) throws TopicMapException {
+        List<Topic> roleList = new ArrayList<>();
         if(topic != null && associationTypeSI != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             if(type != null) {
@@ -824,8 +810,8 @@ public class GenericVelocityHelper {
     
 
     
-    public static ArrayList<Association> getVisibleAssociations(Topic topic) throws TopicMapException {
-        ArrayList<Association> associationVector = new ArrayList<>();
+    public static List<Association> getVisibleAssociations(Topic topic) throws TopicMapException {
+        List<Association> associationVector = new ArrayList<>();
         if(topic != null) {
             Collection<Association> associations = topic.getAssociations();
             for(Association a : associations) {
@@ -836,7 +822,7 @@ public class GenericVelocityHelper {
     }
     
     public static Collection<Association> removeAssociationsByType(Collection<Association> v, Topic type) throws TopicMapException {
-        ArrayList<Association> ret= new ArrayList<>();
+        List<Association> ret= new ArrayList<>();
         if(v != null && type != null) {
             for(Association a : v) {
                 if(a!=null && !a.getType().equals(type)) {
@@ -865,7 +851,7 @@ public class GenericVelocityHelper {
     }
     
     public static Collection<Topic> cropTopicsByVisibility(Collection<Topic> v) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<>();
+        List<Topic> ret = new ArrayList<>();
         if(v != null && v.size() > 0) {
             for(Topic t : v){
                 if(t!=null && TMBox.topicVisible(t)) ret.add(t);
@@ -877,8 +863,8 @@ public class GenericVelocityHelper {
     
 
     
-    public static ArrayList<Association> cropAssociationsByVisibility(Collection<Association> v) {
-        ArrayList<Association> ret = new ArrayList<>();
+    public static List<Association> cropAssociationsByVisibility(Collection<Association> v) {
+        List<Association> ret = new ArrayList<>();
         if(v != null) {
             for(Association a : v){
                 try{
@@ -894,7 +880,7 @@ public class GenericVelocityHelper {
     
 
     public static Collection<Topic> cropTopicsByClass(Collection<Topic> v, Topic typeTopic) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<>();
+        List<Topic> ret = new ArrayList<>();
         if(v != null && v.size() > 0 && typeTopic != null) {
             for(Topic t : v) {
                 if(t!=null && t.isOfType(typeTopic)) ret.add(t);
@@ -906,7 +892,7 @@ public class GenericVelocityHelper {
     
     
     public static Collection<Topic> removeTopicsByClass(Collection<Topic> v, Topic typeTopic) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<>();
+        List<Topic> ret = new ArrayList<>();
         if(v != null && v.size() > 0 && typeTopic != null) {
             for(Topic t : v) {
                 if(t!=null && !t.isOfType(typeTopic)) ret.add(t);
@@ -917,7 +903,7 @@ public class GenericVelocityHelper {
     
 
     public static Collection<Topic> cropTopicsIfHasAssociations(Collection<Topic> v, Topic associationTypeTopic) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<>();
+        List<Topic> ret = new ArrayList<>();
         Collection<Association> typedAssociations = null;
         if(v != null && v.size() > 0 && associationTypeTopic != null) {
             for(Topic t : v) {
@@ -933,7 +919,7 @@ public class GenericVelocityHelper {
     
     
     public static Collection<Topic> cropTopicsIfHasPlayer(Collection<Topic> v, Topic associationTypeTopic, Topic role, Topic player) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<>();
+        List<Topic> ret = new ArrayList<>();
         Topic aplayer = null;
         Collection<Association> typedAssociations = null;
         if(v != null && v.size() > 0 && associationTypeTopic != null && role != null && player != null) {
@@ -961,7 +947,7 @@ public class GenericVelocityHelper {
     }
 
     public static Collection<Topic> cropTopicsIfHasPlayerRegex(Collection<Topic> v, Topic associationTypeTopic, Topic role, String playerRegex, boolean find) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<>();
+        List<Topic> ret = new ArrayList<>();
         Topic aplayer = null;
         String aplayerBasename = null;
         Collection<Association> associations = null;
@@ -1011,7 +997,7 @@ public class GenericVelocityHelper {
     
     
     public static Collection<Topic> cropTopicsIfHasAssociationWithInPlayer(Collection<Topic> v, Topic associationTypeTopic, Topic role, Topic associationTypeTopic2) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<>();
+        List<Topic> ret = new ArrayList<>();
         Topic player = null;
         Collection<Association> typedAssociations = null;
         Collection<Association> typedAssociations2 = null;
@@ -1041,7 +1027,7 @@ public class GenericVelocityHelper {
     
     
     public static Collection<Topic> cropTopicsIfHasPlayerWithInPlayer(Collection<Topic> v, Topic associationTypeTopic, Topic role, Topic associationTypeTopic2, Topic role2, Topic player2) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<>();
+        List<Topic> ret = new ArrayList<>();
         Topic player = null;
         Topic playerInPlayer = null;
         Collection<Association> typedAssociations = null;
@@ -1081,7 +1067,7 @@ public class GenericVelocityHelper {
     }
     
     public static Collection<Topic> cropTopicsByRegex(Collection<Topic> v, String lang, String regex, boolean strictMatch, boolean caseSensitive) throws TopicMapException {
-        ArrayList<Topic> ret = new ArrayList<Topic>();
+        List<Topic> ret = new ArrayList<>();
         String topicName = null;
         if(v != null && v.size() > 0 && lang != null && regex != null && regex.length() > 0) {
             Pattern pattern = (caseSensitive ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
@@ -1119,7 +1105,6 @@ public class GenericVelocityHelper {
         Hashtable<Topic, ArrayList<Topic>> groupedTopics = new Hashtable<>();
         if(topics != null) {
             Collection<Topic> types = null;
-            Iterator<Topic> typeIter = null;
             ArrayList<Topic> typeGroup = null;
             for(Topic t : topics) {
                 try {
@@ -1147,7 +1132,7 @@ public class GenericVelocityHelper {
     public static Collection<Topic> basenamePrefixSearch(TopicMap topicmap, String lang, String prefix, Topic typeTopic) {
         try {
             if(typeTopic != null && topicmap != null && lang != null && prefix != null) {
-                ArrayList<Topic> searchResults = new ArrayList<>();
+                List<Topic> searchResults = new ArrayList<>();
                 Collection<Topic> topics = topicmap.getTopicsOfType(typeTopic);
                 Topic t = null;
                 String bn = null;
@@ -1224,7 +1209,6 @@ public class GenericVelocityHelper {
             String substring;
             int index=0;
             int wordStart;
-            int wordEnd;
             while(index < text.length()) {
                 while(index < text.length() && DELIMITERS.indexOf(text.charAt(index)) != -1) {
                     newText.append(text.charAt(index));
@@ -1287,8 +1271,8 @@ public class GenericVelocityHelper {
     
     
     
-    public static ArrayList<String> capitalizeFirst(List<String> words) {
-        ArrayList<String> newWords = new ArrayList<String>();
+    public static List<String> capitalizeFirst(List<String> words) {
+        List<String> newWords = new ArrayList<String>();
         if (words != null) {
             for (int i=0; i<words.size(); i++) {
                 newWords.add(capitalizeFirst(words.get(i)));
@@ -1360,77 +1344,6 @@ public class GenericVelocityHelper {
         ArrayList<Association> al = new ArrayList<Association>(associations);
         Collections.sort(al, new TMBox.AssociationPlayerComparator(sortRole,lang));
         return al;
-        
-/*        Vector<Association> sortedAssociations = new Vector();
-        
-        if(associations == null || sortRole == null || lang == null ) return sortedAssociations;
-        
-        Vector<Topic> playersCleaned = new Vector();
-        Collection players = null;
-        
-        Iterator<Association> iter = associations.iterator();
-        Iterator<Topic> playerIter = null;
-        Association association = null;
-        Topic player = null;
-
-        // First collects all players
-        while(iter.hasNext()) {
-            try {
-                association = iter.next();
-                if(association != null && !association.isRemoved()) {
-                    player = association.getPlayer(sortRole);
-                    if(!playersCleaned.contains(player)) playersCleaned.add(player);
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        Vector<Topic> tempPlayers = new Vector();
-        tempPlayers.addAll( TMBox.sortTopics(playersCleaned, lang) );
-        
-        // Then iterate through sorted players and pick topics that have the player topic
-        // as a player...
-        Topic cleanPlayer = null;
-        int s = tempPlayers.size();
-        
-        for(int i=0; i<s; i++) {
-            cleanPlayer = tempPlayers.elementAt(i);
-            iter = associations.iterator();
-            while(iter.hasNext()) {
-                try {
-                    association = iter.next();
-                    if(association != null && !association.isRemoved()) {
-                        player = association.getPlayer(sortRole);
-                        if(player.mergesWithTopic(cleanPlayer)) {
-                            sortedAssociations.add(association);
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        // Finally add all remainding topics to sorted array....
-        iter = associations.iterator();
-        while(iter.hasNext()) {
-            try {
-                association = iter.next();
-                if(association != null && !association.isRemoved()) {
-                    if(!sortedAssociations.contains(association)) {
-                        sortedAssociations.add(association);
-                    }
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return sortedAssociations;*/
     }
     
     
@@ -1444,7 +1357,7 @@ public class GenericVelocityHelper {
                 return TMBox.sortTopicsByData(topics, occurrenceType, lang, (desc.equalsIgnoreCase("true") ? true : false));
             }
             catch(Exception e) {
-                // 
+                // Ignore
             }
         }
         return topics;
@@ -1461,79 +1374,6 @@ public class GenericVelocityHelper {
         List<Topic> al=new ArrayList<Topic>(topics);
         Collections.sort(al,new TMBox.TopicAssociationPlayerComparator(associationType,role,lang));
         return al;
-/*        Vector<Topic> sortedTopics = new Vector();
-        
-        if(topics == null || associationType == null || role == null || lang == null ) return sortedTopics;
-        
-        Vector<Topic> playersCleaned = new Vector();
-        Collection players = null;
-        
-        Iterator<Topic> iter = topics.iterator();
-        Iterator<Topic> playerIter = null;
-        Topic topic = null;
-        Topic player = null;
-
-        // First collects all players
-        while(iter.hasNext()) {
-            try {
-                topic = iter.next();
-                if(topic != null && !topic.isRemoved()) {
-                    players = getPlayers(topic, associationType, role);
-                    playerIter = players.iterator();
-                    while(playerIter.hasNext()) {
-                        player = playerIter.next();
-                        if(!playersCleaned.contains(player)) playersCleaned.add(player);
-                    }
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        Vector<Topic> tempPlayers = new Vector();
-        tempPlayers.addAll( TMBox.sortTopics(playersCleaned, lang) );
-        
-        // Then iterate through sorted players and pick topics that have the player topic
-        // as a player...
-        Topic cleanPlayer = null;
-        int s = tempPlayers.size();
-        
-        for(int i=0; i<s; i++) {
-            cleanPlayer = tempPlayers.elementAt(i);
-            iter = topics.iterator();
-            while(iter.hasNext()) {
-                try {
-                    topic = iter.next();
-                    if(topic != null && !topic.isRemoved()) {
-                        players = getPlayers(topic, associationType, role);
-                        if(players.contains(cleanPlayer) && !sortedTopics.contains(topic)) {
-                            sortedTopics.add(topic);
-                        }
-                    }
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        // Finally add all remainding topics to sorted array....
-        iter = topics.iterator();
-        while(iter.hasNext()) {
-            try {
-                topic = iter.next();
-                if(topic != null && !topic.isRemoved()) {
-                    if(!sortedTopics.contains(topic)) {
-                        sortedTopics.add(topic);
-                    }
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return sortedTopics;*/
     }
     
     
@@ -1561,7 +1401,7 @@ public class GenericVelocityHelper {
     }
     
     public static String composeLinearTopicNameString(Collection<Topic> topics, String lang, String delimiter, String extraSettings) {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         if(delimiter == null) delimiter = "";
         if(lang == null) lang = "en";
         if(topics != null && topics.size() > 0) {

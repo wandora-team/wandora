@@ -85,19 +85,14 @@ public class BasenameTrimmer extends AbstractWandoraTool {
             Topic topic = null;
             String basename = null;
             String newBasename = null;
-            int c = 0;
-            int changed = 0;
-            int progress = 0;
             Map<Topic,String> changeTopics = new HashMap<Topic,String>();
             
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
-                    c++;
                     if(topic != null) {
                         basename = topic.getBaseName();
                         if(basename != null) {
-                            progress++;
                             hlog("Investigating topic '" + basename + "'.");
                             newBasename = basename.trim();
                             if(!basename.equals(newBasename)) {
@@ -120,7 +115,6 @@ public class BasenameTrimmer extends AbstractWandoraTool {
                     newBasename = changeTopics.get(t);
                     t.setBaseName(newBasename);
                     log("Changed base name to '"+newBasename + "'.");
-                    changed++;
                 }
                 catch(Exception e) {
                     log(e);

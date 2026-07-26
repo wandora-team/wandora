@@ -25,6 +25,7 @@
 package org.wandora.application.gui.simple;
 
 import java.awt.Graphics;
+import java.util.Collection;
 
 import javax.swing.JList;
 import javax.swing.ListModel;
@@ -51,6 +52,10 @@ public class SimpleList<T> extends JList<T> {
     
     public SimpleList(T[] a) {
         super(a);
+    }
+    
+    public SimpleList(Collection<T> c) {
+        super((T[]) c.toArray());
     }
     
     @Override

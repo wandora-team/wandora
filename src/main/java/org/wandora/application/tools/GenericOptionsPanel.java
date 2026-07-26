@@ -31,6 +31,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.Icon;
@@ -149,9 +150,10 @@ public class GenericOptionsPanel extends JPanel {
             }
             else if(type.toLowerCase().startsWith("combo:")) {
                 String[] options=type.substring("combo:".length()).split(";");
-                c=new SimpleComboBox(options);
-                ((SimpleComboBox)c).setEditable(false);
-                ((SimpleComboBox)c).setSelectedItem(value);
+                SimpleComboBox<String> combo =new SimpleComboBox<>(options);
+                combo.setEditable(false);
+                combo.setSelectedItem(value);
+                c = combo;
             }
             if(type.equalsIgnoreCase("separator")){
                 gbc.gridx=0;
@@ -204,29 +206,37 @@ public class GenericOptionsPanel extends JPanel {
      * "true" or "false".
      */
     public Map<String,String> getValues(){
-        HashMap<String,String> ret=new HashMap<String,String>();
+        Map<String,String> ret=new LinkedHashMap<>();
         for(Map.Entry<String,Component> e : components.entrySet()){
             String id=e.getKey();
             Component c=e.getValue();
-            if(c instanceof SimpleField){
-                ret.put(id,((SimpleField)c).getText());
+            if(c instanceof SimpleField field){
+                ret.put(id,field.getText());
             }
-            else if(c instanceof SimpleCheckBox){
-                if(((SimpleCheckBox)c).isSelected()) ret.put(id,"true");
-                else ret.put(id,"false");
+            else if(c instanceof SimpleCheckBox checkbox){
+                if(checkbox.isSelected()) {
+                	ret.put(id,"true");
+                }
+                else {
+                	ret.put(id,"false");
+                }
             }
-            else if(c instanceof GetTopicButton){
+            else if(c instanceof GetTopicButton topicbutton){
                 try{
-                    String si=((GetTopicButton)c).getTopicSI();
-                    if(si==null) ret.put(id,"");
-                    else ret.put(id,si);
+                    String si=topicbutton.getTopicSI();
+                    if(si==null) {
+                    	ret.put(id,"");
+                    }
+                    else {
+                    	ret.put(id,si);
+                    }
                 }catch(TopicMapException tme){
                     admin.handleError(tme);
                     ret.put(id,"");
                 }
             }
-            else if(c instanceof SimpleComboBox){
-                ret.put(id,((SimpleComboBox)c).getSelectedItem().toString());
+            else if(c instanceof SimpleComboBox combo){
+                ret.put(id,combo.getSelectedItem().toString());
             }
             else{
                 ret.put(id,"");

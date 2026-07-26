@@ -189,7 +189,6 @@ public class MergeMatrixToolPanel extends javax.swing.JPanel {
      * Form
      * Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;

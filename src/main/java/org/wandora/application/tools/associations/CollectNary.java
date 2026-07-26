@@ -134,7 +134,6 @@ public class CollectNary extends AbstractWandoraTool {
             
             TopicMap tm = wandora.getTopicMap();
             Association association = null;
-            int counter = 0;
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
                 associations = context.getContextObjects();

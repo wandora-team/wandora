@@ -139,7 +139,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     
     
     public void initPatternsComboBox() {
-        ((SimpleComboBox) nameComboBox).setOptions(patterns.keySet()); 
+        ((SimpleComboBox<String>) nameComboBox).setOptions(patterns.keySet()); 
     }
 
     
@@ -184,7 +184,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
         caseSensitivityCheckBox = new SimpleCheckBox();
         jPanel4 = new javax.swing.JPanel();
         nameLabel = new SimpleLabel();
-        nameComboBox = new SimpleComboBox();
+        nameComboBox = new SimpleComboBox<>();
         patternLabel = new SimpleLabel();
         regexScrollPane = new javax.swing.JScrollPane();
         regexPane = new SimpleTextPane();
@@ -545,7 +545,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             if(name == null) name = DEFAULT_PATTERN_NAME;
             if(patterns.isEmpty() || !patterns.containsKey(name)) {
                 patterns.put(name, pattern);
-                ((SimpleComboBox) nameComboBox).setOptions(patterns.keySet()); 
+                ((SimpleComboBox<String>) nameComboBox).setOptions(patterns.keySet()); 
             }
             nameComboBox.setSelectedItem(name);
             caseSensitivityCheckBox.setSelected(!pattern.isCaseInsensitive());
@@ -631,7 +631,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     public EasyReplaceExpression getCurrentPattern() {
         if(approve == true) {
             try { 
-                Pattern p = Pattern.compile(regexPane.getText()); // TRYING
+                Pattern.compile(regexPane.getText()); // TRYING
                 String name = (String) nameComboBox.getSelectedItem();
                 if(name == null) name = DEFAULT_PATTERN_NAME;
                 return new EasyReplaceExpression((String) nameComboBox.getSelectedItem(), regexPane.getText(), replacementPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected()); }
@@ -679,7 +679,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
         if(patternNameString != null && patternNameString.length() > 0) {
             if(patternString != null && patternString.length() > 0) {
                 try {
-                    Pattern p = Pattern.compile(regexPane.getText()); // TESTING!
+                    Pattern.compile(regexPane.getText()); // TESTING!
                     EasyReplaceExpression kp = new EasyReplaceExpression(patternNameString, regexPane.getText(), replacementPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected());
                     patterns.put(patternNameString, kp);
                     initPatternsComboBox();
@@ -958,7 +958,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JMenuItem loadMenuItem;
     private javax.swing.JCheckBox matchCheckBox;
-    private javax.swing.JComboBox nameComboBox;
+    private javax.swing.JComboBox<String> nameComboBox;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JMenuItem newMenuItem;
     private javax.swing.JLabel patternLabel;

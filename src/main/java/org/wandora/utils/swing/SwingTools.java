@@ -101,7 +101,7 @@ public class SwingTools {
                 container.setValue(r);
                 semaphore.release();
             }});
-            return new SwingReturn(semaphore,container);
+            return new SwingReturn<>(semaphore,container);
         }
         else return new SwingReturn<R>(new Semaphore(1),new ValueContainer<R>(run.run()));
     }

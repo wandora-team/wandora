@@ -71,7 +71,7 @@ public class GenericDatabaseExtractorConfigurationPanel extends javax.swing.JPan
         
         tableLabel.setText(table);
 
-        JComboBox refCombo=new JComboBox();
+        JComboBox<Object> refCombo=new JComboBox<>();
         refCombo.addItem("<None>");
         for(ArrayList<GenericDatabaseExtractor.DBColumn> cs : schema.columns.values()){
             for(GenericDatabaseExtractor.DBColumn c : cs){

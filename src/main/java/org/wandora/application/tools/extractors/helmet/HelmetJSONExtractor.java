@@ -99,7 +99,6 @@ public class HelmetJSONExtractor extends AbstractExtractor {
                 setDefaultLogger();
                 TopicMap tm = wandora.getTopicMap();
                 String[] urls = ui.getQueryURLs(this);
-                int c = 0;
                 if(urls != null && urls.length > 0) {
                     for(int i=0; i<urls.length; i++) {
                         try {

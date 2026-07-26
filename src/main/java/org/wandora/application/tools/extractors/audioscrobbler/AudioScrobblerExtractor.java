@@ -67,8 +67,7 @@ public class AudioScrobblerExtractor extends AbstractWandoraTool {
     
     
     
-    public void execute(Wandora wandora, Context<?> context) {
-        int counter = 0;   
+    public void execute(Wandora wandora, Context<?> context) { 
         try {
             if(selector == null) {
                 selector = new AudioScrobblerExtractorSelector(wandora);

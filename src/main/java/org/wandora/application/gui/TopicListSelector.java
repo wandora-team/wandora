@@ -45,7 +45,7 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
 	private static final long serialVersionUID = 1L;
 	
 	
-	private DefaultListModel listModel;
+	private DefaultListModel<TopicListWrapper> listModel;
     private String name;
     
     /** Creates new form TopicListSelector */
@@ -54,9 +54,9 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
     }
     public TopicListSelector(Vector<Topic> topics,String name) {
         this.name=name;
-        listModel=new DefaultListModel();
+        listModel=new DefaultListModel<>();
         for(Topic t : topics){
-            listModel.addElement(new ListWrapper(t));
+            listModel.addElement(new TopicListWrapper(t));
         }
         initComponents();
         if(listModel.size()>0) list.setSelectedIndex(0);
@@ -80,7 +80,7 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
 
     @Override
     public Topic getSelectedTopic() {
-        return ((ListWrapper)list.getSelectedValue()).t;
+        return ((TopicListWrapper)list.getSelectedValue()).t;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
         java.awt.GridBagConstraints gridBagConstraints;
 
         scrollPane = new javax.swing.JScrollPane();
-        list = new javax.swing.JList();
+        list = new javax.swing.JList<TopicListWrapper>();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -121,13 +121,13 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList list;
+    private javax.swing.JList<TopicListWrapper> list;
     private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 
-    private static class ListWrapper{
+    private static class TopicListWrapper{
         public Topic t;
-        public ListWrapper(Topic t){this.t=t;};
+        public TopicListWrapper(Topic t){this.t=t;};
         @Override
         public String toString(){
             try{

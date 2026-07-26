@@ -495,14 +495,14 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             palcolor(pal2, 32, 0), palcolor(pal2, 32, 1), palcolor(pal2, 32, 2));
 
     private ColorModel cm;
-    private Vector consumers = new Vector(1);
+    private Vector<ImageConsumer> consumers = new Vector<>(1);
 
     public synchronized void addConsumer(ImageConsumer ic) {
         try {
             update_buf = new byte[8 * W * scale * scale];
             ic.setDimensions(width, height);
             consumers.addElement(ic); // XXX it may have been just removed
-            ic.setHints(ic.RANDOMPIXELORDER | ic.SINGLEPASS);
+            ic.setHints(ImageConsumer.RANDOMPIXELORDER | ImageConsumer.SINGLEPASS);
             if (isConsumer(ic)) {
                 ic.setColorModel(cm);
             }

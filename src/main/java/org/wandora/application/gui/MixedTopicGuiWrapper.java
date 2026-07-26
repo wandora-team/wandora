@@ -26,6 +26,7 @@
 package org.wandora.application.gui;
 
 
+import java.net.URI;
 import java.net.URL;
 
 import javax.swing.tree.TreePath;
@@ -132,7 +133,7 @@ public class MixedTopicGuiWrapper {
                         }
                         case TOPIC_RENDERS_SI_WITHOUT_DOMAIN: {
                             String urlString = topic.getOneSubjectIdentifier().toExternalForm();
-                            URL url = new URL(urlString);
+                            URL url = new URI(urlString).toURL();
                             urlString = url.getFile();
                             if(url.getRef() != null) urlString += "#" + url.getRef();
                             return urlString;

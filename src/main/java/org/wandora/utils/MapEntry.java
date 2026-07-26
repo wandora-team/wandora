@@ -53,8 +53,7 @@ public class MapEntry<K,V> implements Map.Entry<K,V> {
                (value==null ? 0 : value.hashCode()) ; // by api definition
     }
     public boolean equals(Object o){
-        if(o instanceof Map.Entry){
-            Map.Entry e=(Map.Entry)o;
+        if(o instanceof Map.Entry e){
             return (getKey()==null ?
                     e.getKey()==null : getKey().equals(e.getKey()))  &&
                    (getValue()==null ?

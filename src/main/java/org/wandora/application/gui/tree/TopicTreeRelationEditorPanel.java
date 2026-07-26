@@ -146,9 +146,6 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
         iconComboBox.setEditable(false);
         deleteButton = new org.wandora.application.gui.simple.SimpleButton();
         nameTextField = new SimpleField();
-        subButton = subButton; // These buttons initialized in constructor because of possible TopicMapException;
-        assocTypeButton = assocTypeButton;
-        superButton = superButton;
 
         superRoleTextField.setPreferredSize(new java.awt.Dimension(100, 20));
 

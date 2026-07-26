@@ -41,7 +41,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class SubjectIdentifiers extends Directive implements DirectiveUIHints.Provider {
 
-    public void SubjectIdentifiers(){
+    public SubjectIdentifiers(){
 
     }
 

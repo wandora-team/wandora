@@ -33,7 +33,6 @@ package org.wandora.topicmap.database2;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -213,19 +212,18 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
 //        if(true) return; // consistency disabled
         if(logger != null) logger.log("Checking association consistency!");
-        int counter=0;
         int deleted=0;
         Collection<Map<String,Object>> res=executeQuery("select distinct PLAYER from MEMBER");
         for(Map<String,Object> row : res){
             String player=row.get("PLAYER").toString();
-            HashSet<ArrayList<String>> associations=new LinkedHashSet<>(500);
+            Set<List<String>> associations=new LinkedHashSet<>(500);
             Collection<Map<String,Object>> res2=executeQuery(
                     "select ASSOCIATION.*,M2.* from ASSOCIATION,MEMBER as M1, MEMBER as M2 "+
                     "where M1.PLAYER='"+escapeSQL(player)+"' and M1.ASSOCIATION=ASSOCIATIONID and "+
                     "M2.ASSOCIATION=ASSOCIATION.ASSOCIATIONID order by ASSOCIATION.ASSOCIATIONID,M2.ROLE"
                     );
             String associationid="";
-            ArrayList<String> v=new ArrayList<>(9);
+            List<String> v=new ArrayList<>(9);
             for(Map<String,Object> row2 : res2) {
                 String id=row2.get("ASSOCIATIONID").toString();
                 if(!associationid.equals(id)){
@@ -247,14 +245,11 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                 v.add(r); v.add(p);
             }
             if(!associations.add(v)) {
-                logger.hlog("Deleting association with id "+associationid);
+            	if(logger != null) logger.hlog("Deleting association with id "+associationid);
                 executeUpdate("delete from MEMBER where ASSOCIATION='"+escapeSQL(associationid)+"'");
                 executeUpdate("delete from ASSOCIATION where ASSOCIATIONID='"+escapeSQL(associationid)+"'");
                 deleted++;
             }
-                    
-            counter++;
-//            System.out.println("Counter "+counter);
         }
         if(logger != null) logger.log("Association consistency deleted "+deleted+" associations!");
     }

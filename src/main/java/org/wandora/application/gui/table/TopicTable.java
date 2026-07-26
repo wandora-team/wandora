@@ -347,7 +347,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
     
     
     public void toggleSortOrder(int s) {
-        RowSorter sorter = getRowSorter();
+        RowSorter<?> sorter = getRowSorter();
         if(sorter != null) {
             sorter.toggleSortOrder(s);
         }

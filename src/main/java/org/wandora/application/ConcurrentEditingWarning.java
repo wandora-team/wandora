@@ -104,7 +104,7 @@ public class ConcurrentEditingWarning extends javax.swing.JDialog {
     // </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.hide();
+        this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
     
     

@@ -344,12 +344,10 @@ public class Shortcuts implements ActionListener {
                 String c = actionEvent.getActionCommand();
                 Topic t = null;
                 TopicMap topicMap = wandora.getTopicMap();
-                boolean updateMenu = false;
-                
+
                 t = topicMap.getTopicWithBaseName(c);   // base name
                 if(t == null) {
                     t = topicMap.getTopic(c); // subject identifier
-                    updateMenu = true;
                 }
                 if(t == null) {
                     wandora.applyChangesAndOpen(new Locator(c));
@@ -415,7 +413,7 @@ public class Shortcuts implements ActionListener {
         };
         
         
-        JList list = null;
+        JList<String> list = null;
         Wandora wandora = null;
 
         
@@ -431,7 +429,7 @@ public class Shortcuts implements ActionListener {
             setJMenuBar(menuBar);
             
             this.getContentPane().setLayout(new java.awt.BorderLayout());
-            list=new SimpleList<>(shortcuts.toArray());
+            list=new SimpleList<>(shortcuts);
             list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
             list.setFont(UIConstants.plainFont);
             list.setComponentPopupMenu(getPopupMenu(this));
@@ -486,7 +484,7 @@ public class Shortcuts implements ActionListener {
         
         
         public void update() {
-            list.setListData(shortcuts.toArray());
+            list.setListData((String[]) shortcuts.toArray());
             list.clearSelection();
             repaint();
             if(wandora != null) saveShortcuts(wandora.options);

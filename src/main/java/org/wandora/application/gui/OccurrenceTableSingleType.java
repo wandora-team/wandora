@@ -143,7 +143,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         
         this.type = type;
 
-        Set<Topic> langSet = new LinkedHashSet();
+        Set<Topic> langSet = new LinkedHashSet<>();
         if(VIEW_USED.equalsIgnoreCase(tableType) || VIEW_USED_AND_SCHEMA.equalsIgnoreCase(tableType)) {
             Hashtable<Topic,String> occs = null;
             Topic langTopic = null;

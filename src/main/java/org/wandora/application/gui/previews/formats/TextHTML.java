@@ -255,7 +255,6 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 ActionListener toolListener = new ActionListener() {
                     DropExtractor myTool = (DropExtractor) tool;
                     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-                        String c = actionEvent.getActionCommand();
                         try {
                             String s = getSelection();
                             ((DropExtractor) myTool).dropExtract(s);
@@ -429,7 +428,6 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 ActionListener toolListener = new ActionListener() {
                     DropExtractor myTool = (DropExtractor) tool;
                     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-                        String c = actionEvent.getActionCommand();
                         try {
                             String url = currentHyperLink.toExternalForm();
                             ((DropExtractor) myTool).dropExtract(new String[] { url });

@@ -23,6 +23,7 @@
 package org.wandora.application.tools.extractors.duckduckgo;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Icon;
 
@@ -145,9 +146,9 @@ public abstract class AbstractDuckDuckGoExtractor extends AbstractExtractor{
         return t;
     }
     
-    protected static HashMap<String, Topic> getTypes(TopicMap tm, String[][] typeStrings, Topic api)
+    protected static Map<String, Topic> getTypes(TopicMap tm, String[][] typeStrings, Topic api)
     throws TopicMapException{
-        HashMap<String, Topic> ts = new HashMap<String,Topic>();
+        Map<String, Topic> ts = new HashMap<>();
         for (int i = 0; i < typeStrings.length; i++) {
             Topic t = getTypeClass(tm, api, typeStrings[i][1], typeStrings[i][2]);
             ts.put(typeStrings[i][0], t);

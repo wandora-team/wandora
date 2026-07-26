@@ -935,8 +935,6 @@ public class Base64
             this.options      = options;
             this.breakLines   = (options & DONT_BREAK_LINES) != DONT_BREAK_LINES;
             this.encode       = (options & ENCODE) == ENCODE;
-            this.breakLines = breakLines;
-            this.encode = encode;
             this.bufferLength = encode ? 4 : 3;
             this.buffer   = new byte[ bufferLength ];
             this.position = -1;

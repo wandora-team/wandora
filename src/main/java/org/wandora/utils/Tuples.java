@@ -83,8 +83,8 @@ public class Tuples {
         }
         @Override
         public boolean equals(Object obj){
-            if(obj instanceof T2){
-                return e(e1,((T2)obj).e1) && e(e2,((T2)obj).e2);
+            if(obj instanceof T2 t2){
+                return e(e1,t2.e1) && e(e2,t2.e2);
             }
             else return false;
         }
@@ -106,8 +106,8 @@ public class Tuples {
         }
         @Override
         public boolean equals(Object obj){
-            if(obj instanceof T3){
-                return e(e1,((T3)obj).e1) && e(e2,((T3)obj).e2) && e(e3,((T3)obj).e3);
+            if(obj instanceof T3 t3){
+                return e(e1,t3.e1) && e(e2,t3.e2) && e(e3,t3.e3);
             }
             else return false;
         }
@@ -130,8 +130,8 @@ public class Tuples {
         }
         @Override
         public boolean equals(Object obj){
-            if(obj instanceof T4){
-                return e(e1,((T4)obj).e1) && e(e2,((T4)obj).e2) && e(e3,((T4)obj).e3) && e(e4,((T4)obj).e4);
+            if(obj instanceof T4 t4){
+                return e(e1,t4.e1) && e(e2,t4.e2) && e(e3,t4.e3) && e(e4,t4.e4);
             }
             else return false;
         }
@@ -155,8 +155,8 @@ public class Tuples {
         }
         @Override
         public boolean equals(Object obj){
-            if(obj instanceof T5){
-                return e(e1,((T5)obj).e1) && e(e2,((T5)obj).e2) && e(e3,((T5)obj).e3) && e(e4,((T5)obj).e4) && e(e5,((T5)obj).e5);
+            if(obj instanceof T5 t5){
+                return e(e1,t5.e1) && e(e2,t5.e2) && e(e3,t5.e3) && e(e4,t5.e4) && e(e5,t5.e5);
             }
             else return false;
         }
@@ -181,8 +181,8 @@ public class Tuples {
         }
         @Override
         public boolean equals(Object obj){
-            if(obj instanceof T6){
-                return e(e1,((T6)obj).e1) && e(e2,((T6)obj).e2) && e(e3,((T6)obj).e3) && e(e4,((T6)obj).e4) && e(e5,((T6)obj).e5) && e(e6,((T6)obj).e6);
+            if(obj instanceof T6 t6){
+                return e(e1,t6.e1) && e(e2,t6.e2) && e(e3,t6.e3) && e(e4,t6.e4) && e(e5,t6.e5) && e(e6,t6.e6);
             }
             else return false;
         }

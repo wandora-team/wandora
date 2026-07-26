@@ -98,7 +98,7 @@ public class ModelTools {
             out.write("[");
             out.write(""+classIndex.get(topic.getCls()));
             for(ModelField field : topic.getCls().getFields()){
-                out.write(","); // the class index is always first, no need for the flag varliable
+                out.write(","); // the class index is always first, no need for the flag variable
                 Type type=field.getType();
                 Object o=topic.getField(field);
                 if(o==null){

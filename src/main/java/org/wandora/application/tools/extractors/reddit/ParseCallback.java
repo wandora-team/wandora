@@ -22,7 +22,7 @@
 
 package org.wandora.application.tools.extractors.reddit;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
@@ -39,9 +39,9 @@ import com.mashape.unirest.http.JsonNode;
 abstract class ParseCallback<Object> {
   
     TopicMap tm;
-    HashMap<String, Topic> thingTypes;
+    Map<String, Topic> thingTypes;
     
-    public ParseCallback(TopicMap tm, HashMap<String, Topic> thingTypes) {
+    public ParseCallback(TopicMap tm, Map<String, Topic> thingTypes) {
         this.tm = tm;
         this.thingTypes = thingTypes;
     }

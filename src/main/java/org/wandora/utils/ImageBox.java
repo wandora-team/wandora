@@ -101,7 +101,7 @@ public class ImageBox {
             ImageWriter writer=ImageIO.getImageWritersByFormatName("jpeg").next();
             IIOImage iioi=new IIOImage(thumbImage,null,null);
             ImageWriteParam param=writer.getDefaultWriteParam();
-            param.setCompressionMode(param.MODE_EXPLICIT);
+            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
             param.setCompressionQuality((float)quality / 100.0f);
             FileImageOutputStream output=new FileImageOutputStream(new File(outs));
             writer.setOutput(output);

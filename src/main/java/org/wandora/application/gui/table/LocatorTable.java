@@ -575,7 +575,7 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        String c = e.getActionCommand();
+        // Nothing here yet
     }
     
 

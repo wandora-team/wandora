@@ -24,6 +24,7 @@ package org.wandora.application.tools.extractors.mediawikiapi;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -206,7 +207,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         
         System.out.println(this.queryURL + cont);
         
-        URL u = new URL(this.queryURL + cont);
+        URL u = new URI(this.queryURL + cont).toURL();
         extractTopicsFromURL(u,t);
         
     }

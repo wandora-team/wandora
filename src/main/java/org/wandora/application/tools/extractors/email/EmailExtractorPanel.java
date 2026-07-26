@@ -347,7 +347,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                         if(tryXMLExtract){
                             try{
                                 org.w3c.dom.Document doc=XMLbox.getDocument(message);
-                                table=XMLbox.xml2Hash(doc);
+                                table=XMLbox.xml2MapTree(doc);
                             }catch(Exception e){}
                         }
                         for(int j=4;j<columnNames.length;j++){
@@ -409,7 +409,6 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         session.folder.fetch(msgs,prof);
         int count=0;
         for(int i=0;i<msgs.length;i++){
-            Object c=msgs[i].getContent();
             String uid=msgs[i].getHeader("message-ID")[0];            
             Integer index=uidMap.get(uid);
             if(index==null) continue;

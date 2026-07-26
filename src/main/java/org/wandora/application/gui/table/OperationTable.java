@@ -62,7 +62,7 @@ public class OperationTable extends SimpleTable /*, DropTargetListener, DragGest
         setDefaultRenderer(Object.class, new OperationTableRenderer(this));
         
         this.setModel(opsModel);
-        setRowSorter(new TableRowSorter(opsModel));
+        setRowSorter(new TableRowSorter<>(opsModel));
         
         this.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         this.setRowSelectionAllowed(false);

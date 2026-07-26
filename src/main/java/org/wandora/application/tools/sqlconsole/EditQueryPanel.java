@@ -27,6 +27,9 @@
 package org.wandora.application.tools.sqlconsole;
 
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.text.JTextComponent;
 /**
  *
  * @author  olli
@@ -36,7 +39,8 @@ public class EditQueryPanel extends javax.swing.JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private SQLConsolePanel parent;
-    private HashMap paramMap=new HashMap();
+    private Map<String,JTextComponent> paramMap=new HashMap<>();
+    
     
     /** Creates new form EditQueryPanel */
     public EditQueryPanel(SQLConsolePanel parent,StoredQuery query) {

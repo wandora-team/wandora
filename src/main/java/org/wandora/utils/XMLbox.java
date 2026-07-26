@@ -28,8 +28,6 @@ package org.wandora.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -80,7 +78,7 @@ public class XMLbox {
         return null;
     }
 
-    
+    /*
     public static Hashtable getAsHashtable(String content) {
         return getAsHashtable(content, null);
     }
@@ -104,18 +102,6 @@ public class XMLbox {
         Hashtable xmlHash = new Hashtable();
         parse2Hashtable(doc.getDocumentElement(), "", xmlHash);
         return xmlHash;
-    }
-    
-    public static String cleanForAttribute(String value){
-        value=value.replace("&","&amp;");
-        value=value.replace("\"","&quot;");
-        return value;
-    }
-    
-    public static String cleanForXML(String value){
-        value=value.replace("&","&amp;");
-        value=value.replace("<","&lt;");
-        return value;
     }
 
     
@@ -186,27 +172,40 @@ public class XMLbox {
         }
         return s;
     }
+    */
     
     
+    public static String cleanForAttribute(String value){
+        value=value.replace("&","&amp;");
+        value=value.replace("\"","&quot;");
+        return value;
+    }
+    
+    public static String cleanForXML(String value){
+        value=value.replace("&","&amp;");
+        value=value.replace("<","&lt;");
+        return value;
+    }
+
     
     // -------------------------------------------------------------------------
     
     
 
-    public static String wrapMap2XML(Map h) {
-        return map2XML(wrapMap(h, "."));
+    public static String wrapMap2XML(Map<String,? extends Object> map) {
+        return map2XML(wrapMap(map, "."));
     }
     
     
     
     
-    public static String map2XML(Map hash) {
+    public static String map2XML(Map<String,Object> map) {
         String prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + System.getProperty("line.separator");
-        return prefix + map2XML(hash, 0);
+        return prefix + map2XML(map, 0);
     }
 
     
-    private static String map2XML(Map hash, int depth) {
+    private static String map2XML(Map<String,Object> map, int depth) {
         String br = System.getProperty("line.separator");
         if(br == null) br = "";
         String s = "";
@@ -214,13 +213,13 @@ public class XMLbox {
         for(int i=0; i<depth; i++) {
             tab = tab + "   ";
         }
-        for(Object key : hash.keySet() ) {
-            Object value = hash.get(key);
+        for(Object key : map.keySet() ) {
+            Object value = map.get(key);
             String keyStr = key.toString();
             int index = keyStr.indexOf("[");
             if(index > 0) keyStr = keyStr.substring(0, index);
-            if(value instanceof Map) {
-                s = s + tab + "<" + keyStr + ">" + br + map2XML((Map) value, depth+1) + tab + "</" + keyStr + ">" + br;
+            if(value instanceof Map valueAsMap) {
+                s = s + tab + "<" + keyStr + ">" + br + map2XML(valueAsMap, depth+1) + tab + "</" + keyStr + ">" + br;
             }
             else {
                 s = s + tab + "<" + keyStr + ">" + cleanForXML(value.toString()) + "</" + keyStr + ">" + br;
@@ -233,7 +232,7 @@ public class XMLbox {
     // -------------------------------------------------------------------------
     
     
-    
+    /*
     public static Hashtable wrapHash(Hashtable hash, String delimiters) {
         Hashtable wrapped = new Hashtable();
         
@@ -262,7 +261,6 @@ public class XMLbox {
     
     
     
-    
     public static Hashtable getAsHashTree(String content) {
         return getAsHashTree(content, null);
     }    
@@ -277,41 +275,46 @@ public class XMLbox {
         }
         return xmlHash;
     }
+    */
     
     
     // -------------
     
     
-    public static Map wrapMap(Map hash, String delimiters) {
-        Map wrapped = new LinkedHashMap();
+    public static Map<String,Object> wrapMap(Map<String,? extends Object> map, String delimiters) {
+        Map<String,Object> wrapped = new LinkedHashMap<>();
         
-        for(Object key : hash.keySet()) {
+        for(Object key : map.keySet()) {
             if(key instanceof String) {
                 StringTokenizer address = new StringTokenizer((String) key, delimiters);
-                Map subhash = wrapped;
+                Map<String,Object> subhash = wrapped;
                 String path = null;
                 while(address.hasMoreTokens()) {
                     path = address.nextToken();
                     if(address.hasMoreTokens()) {
                         if(subhash.get(path) == null || !(subhash.get(path) instanceof Map)) {
-                            subhash.put(path, new LinkedHashMap());
+                            subhash.put(path, new LinkedHashMap<String,Object>());
                         }
-                        subhash = (Map) subhash.get(path);
+                        subhash = (Map<String,Object>) subhash.get(path);
                     }
                 }
-                if(hash.get(key) != null) {
-                    subhash.put(path, hash.get(key));
+                if(map.get(key) != null) {
+                    subhash.put(path, map.get(key));
                 }
             }
         }
         return wrapped;
     }
     
-    public static Map getAsMapTree(String content) {
+    
+    public static Map<String,? extends Object> getAsMapTree(String content) {
         return getAsMapTree(content, null);
     }    
-    public static Map getAsMapTree(String content, String encoding) {
-        Map xmlMap = new LinkedHashMap();
+    
+    
+    
+    public static Map<String,String> getAsMapTree(String content, String encoding) {
+        Map<String,String> xmlMap = new LinkedHashMap<>();
         try {
             Document doc = getDocument(content, encoding);
             xmlMap = xml2MapTree(doc);
@@ -324,7 +327,7 @@ public class XMLbox {
     
     
     
-    
+    /*
     public static Hashtable xml2HashTree(org.w3c.dom.Document doc) {
         Hashtable xmlHash = new Hashtable();
         Node rootNode = doc.getDocumentElement();
@@ -362,12 +365,12 @@ public class XMLbox {
             }
         }
     }
+    */
     
     
     
-    
-    public static Map xml2MapTree(org.w3c.dom.Document doc) {
-        Map xmlMap = new LinkedHashMap();
+    public static Map<String,String> xml2MapTree(org.w3c.dom.Document doc) {
+        Map<String,String> xmlMap = new LinkedHashMap<>();
         Node rootNode = doc.getDocumentElement();
         parseXML(rootNode, rootNode.getNodeName()+"[0]", xmlMap);
         return xmlMap;
@@ -376,7 +379,7 @@ public class XMLbox {
     
     
     
-    private static void parseXML(Node node, String key, Map xmlMap) {
+    private static void parseXML(Node node, String key, Map<String,String> map) {
         NodeList nodes = node.getChildNodes();
         int numOfNodes = nodes.getLength();
         for( int nnum=0; nnum<numOfNodes; nnum++ ) {
@@ -388,14 +391,14 @@ public class XMLbox {
                 do {
                     i++;
                     currentKey = key + "." + n.getNodeName() + "["+i+"]";
-                } while(xmlMap.get(currentKey) != null);
+                } while(map.get(currentKey) != null);
                 if(null == value) {
-                    xmlMap.put(currentKey, "");
-                    parseXML( n, currentKey, xmlMap );
+                	map.put(currentKey, "");
+                    parseXML( n, currentKey, map );
                 }
                 else {
                     //System.out.println("parsed: "+currentKey+" == "+value);
-                    xmlMap.put(currentKey, value);
+                	map.put(currentKey, value);
                 }
             }
             else {

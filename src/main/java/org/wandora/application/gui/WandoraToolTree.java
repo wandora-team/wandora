@@ -54,6 +54,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -249,7 +250,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         if(hash == node.hashCode()) return node;
         else {
             ToolTreeNode child = null;
-            for(Enumeration children = node.children() ; children.hasMoreElements(); ) {
+            for(Enumeration<TreeNode> children = node.children() ; children.hasMoreElements(); ) {
                 child = (ToolTreeNode) children.nextElement();
                 ToolTreeNode childnode = solveNode(hash, child);
                 if(childnode != null) return childnode;

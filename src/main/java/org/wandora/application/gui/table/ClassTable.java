@@ -148,7 +148,7 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        URL u = new URI(topicIdentifier).toURL();
+                                        new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}

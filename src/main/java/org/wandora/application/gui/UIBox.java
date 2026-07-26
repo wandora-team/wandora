@@ -175,8 +175,12 @@ public class UIBox {
                             submenu.setName(menuName);
                             //submenu.setIcon(UIBox.getIcon("gui/icons/empty.png"));
                             Object[] subStructure;
-                            if(struct[i+1] instanceof Collection) subStructure=((Collection)struct[i+1]).toArray();
-                            else subStructure=(Object[]) struct[i+1];
+                            if(struct[i+1] instanceof Collection structCollection) {
+                            	subStructure=structCollection.toArray();
+                            }
+                            else {
+                            	subStructure=(Object[]) struct[i+1];
+                            }
                             makeAWTMenu(submenu, subStructure, defaultListener); 
                             if(menu == null) { menu = new PopupMenu(); }
                             menu.add(submenu);
@@ -308,8 +312,12 @@ public class UIBox {
                             submenu.setName(menuName);
                             //submenu.setIcon(UIBox.getIcon("gui/icons/empty.png"));
                             Object[] subStructure;
-                            if(struct[i+1] instanceof Collection) subStructure=((Collection)struct[i+1]).toArray();
-                            else subStructure=(Object[]) struct[i+1];
+                            if(struct[i+1] instanceof Collection structCollection) {
+                            	subStructure=structCollection.toArray();
+                            }
+                            else {
+                            	subStructure=(Object[]) struct[i+1];
+                            }
                             makeMenu(submenu, subStructure, defaultListener); 
                             if(menu == null) { menu = new JPopupMenu(); }
                             menu.add(submenu);
@@ -443,8 +451,12 @@ public class UIBox {
                         if(struct.length > i+1 && (struct[i+1] instanceof Object[] || struct[i+1] instanceof Collection) ) {
                             Menu submenu = new SimpleAWTMenu(menuName);
                             Object[] subStruct;
-                            if(struct[i+1] instanceof Collection) subStruct=((Collection)struct[i+1]).toArray();
-                            else subStruct=(Object[])struct[i+1];
+                            if(struct[i+1] instanceof Collection structCollection) {
+                            	subStruct=structCollection.toArray();
+                            }
+                            else {
+                            	subStruct=(Object[])struct[i+1];
+                            }
                             makeAWTMenu(submenu, subStruct, defaultListener); 
                             if(menu != null) { 
                                 menu.add(submenu); 
@@ -569,8 +581,12 @@ public class UIBox {
                         if(struct.length > i+1 && (struct[i+1] instanceof Object[] || struct[i+1] instanceof Collection) ) {
                             JMenu submenu = new SimpleMenu(menuName);
                             Object[] subStruct;
-                            if(struct[i+1] instanceof Collection) subStruct=((Collection)struct[i+1]).toArray();
-                            else subStruct=(Object[])struct[i+1];
+                            if(struct[i+1] instanceof Collection structCollection) {
+                            	subStruct=structCollection.toArray();
+                            }
+                            else {
+                            	subStruct=(Object[])struct[i+1];
+                            }
                             makeMenu(submenu, subStruct, defaultListener); 
                             if(menu != null) { 
                                 menu.add(submenu); 

@@ -141,7 +141,7 @@ public class MediaWikiExtractor extends AbstractExtractor {
     public String extractTopicsFromWiki(String page, TopicMap topicMap) throws Exception {
         if(wikiBaseURL!=null){
             String url=wikiBaseURL.replace("__1__", page.replace(" ", "_"));
-            if(_extractTopicsFrom(new URL(url),topicMap)) return url;
+            if(_extractTopicsFrom(new URI(url).toURL(),topicMap)) return url;
             else return null;
         }
         else return null;

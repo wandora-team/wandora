@@ -29,6 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -81,7 +82,7 @@ public class RedditThingExtractor extends AbstractRedditExtractor {
                 try {
                     TopicMap tm = getWandora().getTopicMap();
                     JSONArray respArray = response.getBody().getArray();
-                    final HashMap<String, Topic> thingTypes = getThingTypes(tm);
+                    final Map<String, Topic> thingTypes = getThingTypes(tm);
                     for(int i=0; i<respArray.length(); i++) {
                         parseThing(respArray.getJSONObject(i),tm,thingTypes, crawlSettings);
                     }

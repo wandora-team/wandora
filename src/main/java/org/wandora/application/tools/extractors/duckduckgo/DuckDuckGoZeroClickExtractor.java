@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -139,7 +140,7 @@ public class DuckDuckGoZeroClickExtractor  extends AbstractDuckDuckGoExtractor {
                         
             Topic lang = getLangTopic(tm);
             Topic api = getAPIClass(tm, API_SI, API_NAME);
-            HashMap<String, Topic> types = getTypes(tm,typeStrings, api);
+            Map<String, Topic> types = getTypes(tm,typeStrings, api);
             
             String bn = body.getString("Heading");
             

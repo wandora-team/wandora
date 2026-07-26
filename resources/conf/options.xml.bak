@@ -2,7 +2,7 @@
 <options>
    <window>
       <x>104</x>
-      <y>66</y>
+      <y>65</y>
       <width>1225</width>
       <height>717</height>
       <horizontalsplitter>250</horizontalsplitter>
@@ -351,6 +351,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Add your tools here with Tool manager</name>
             <class>org.wandora.application.WandoraToolManager2</class>
+         </item>
+         <item>
+            <name>Topic base name remover</name>
+            <class>org.wandora.application.tools.topicnames.BasenameRemover</class>
          </item>
       </set>
       <set>

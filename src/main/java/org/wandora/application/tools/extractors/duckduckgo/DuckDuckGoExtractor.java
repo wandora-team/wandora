@@ -84,15 +84,12 @@ public class DuckDuckGoExtractor extends AbstractWandoraTool {
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
-                    int c = 0;
-                    
                     log("Performing the API query...");
                     for(int i=0; i<extrs.length && !forceStop(); i++) {
                         try {
                             WandoraTool e = extrs[i];
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora);
-                            c++;
                         }
                         catch(Exception e) {
                             log(e);

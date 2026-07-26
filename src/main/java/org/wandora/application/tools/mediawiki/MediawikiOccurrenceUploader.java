@@ -28,6 +28,7 @@
 package org.wandora.application.tools.mediawiki;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -337,7 +338,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler {
                 url = file.toURI().toURL();
             } else {
                 try {
-                    url = new URL(fileString);
+                    url = new URI(fileString).toURL();
                 } catch (Exception e) {
                     log(e.getMessage());                
                 }

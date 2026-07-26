@@ -93,14 +93,12 @@ public class AddMissingLanguageScope extends AbstractWandoraTool {
             Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
             Topic scopeTopic = null;
-            int progress = 0;
             int count = 0;
 
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         topic = tm.getTopic(topic.getOneSubjectIdentifier()); // Change topic to layer stack topic instead of layer topic!
                         scopes = topic.getVariantScopes();
                         if(scopes != null) {

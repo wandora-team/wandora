@@ -59,7 +59,6 @@ public class EuropeanaExtractor extends AbstractEuropeanaExtractor {
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
-                    int c = 0;
                     log("Performing Europeana API query...");
                     for(int i=0; i<extrs.length && !forceStop(); i++) {
                         try {
@@ -67,7 +66,6 @@ public class EuropeanaExtractor extends AbstractEuropeanaExtractor {
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora);
                             setState(EXECUTE);
-                            c++;
                         }
                         catch(Exception e) {
                             log(e);

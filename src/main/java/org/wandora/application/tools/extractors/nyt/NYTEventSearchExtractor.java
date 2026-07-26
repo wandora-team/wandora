@@ -202,7 +202,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
             if (result.has("event_date_list")){
               String dates = "";
               JSONArray resultJSONArray = result.getJSONArray("event_date_list");
-              Locale locale = new Locale("ENGLISH");
+              Locale locale = Locale.of("en");
               SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd",locale);
               SimpleDateFormat output = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss '-0500'",locale);
               for( int i = 0; i < resultJSONArray.length(); i++ ){
@@ -224,7 +224,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                 eventTopic.setData(dateTypeTopic, langTopic, dates);
               }
             } else if (result.has("recurring_start_date")) {
-              Locale locale = new Locale("ENGLISH");
+              Locale locale = Locale.of("en");
               SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",locale);
               SimpleDateFormat output = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss '-0500'",locale);
               String startDateString = result.getString("recurring_start_date");

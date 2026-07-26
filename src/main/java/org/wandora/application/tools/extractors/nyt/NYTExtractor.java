@@ -101,14 +101,12 @@ public class NYTExtractor extends AbstractExtractor {
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
-                    int c = 0;
                     log("Performing New York Times API query...");
                     for(int i=0; i<extrs.length && !forceStop(); i++) {
                         try {
                             WandoraTool e = extrs[i];
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora);
-                            c++;
                         }
                         catch(Exception e) {
                             log(e);

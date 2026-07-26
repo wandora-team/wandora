@@ -88,8 +88,8 @@ public class KeyedHashMap<K,V> implements Map<K,V> {
         return ret;
     }
     public boolean equals(Object o){
-        if(o instanceof Map){
-            return entrySet().equals(((Map)o).entrySet());
+        if(o instanceof Map map){
+            return entrySet().equals(map.entrySet());
         }
         else return false;
     }

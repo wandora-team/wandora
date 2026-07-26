@@ -93,14 +93,11 @@ public class AllVariantRemover extends AbstractWandoraTool {
                 Collection<Set<Topic>> scopes = null;
                 Iterator<Set<Topic>> scopeIterator = null;
                 Set<Topic> scope = null;
-                int progress = 0;
-                int deleted = 0;
 
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
                             scopes = topic.getVariantScopes();
                             if(scopes != null) {
                                 deleteScopes = new ArrayList<>();
@@ -122,7 +119,6 @@ public class AllVariantRemover extends AbstractWandoraTool {
                                     try {
                                         scope = scopeIterator.next();
                                         topic.removeVariant(scope);
-                                        deleted++;
                                     }
                                     catch(Exception e) {
                                         log(e);

@@ -124,7 +124,7 @@ public class GroupInfoExtractor extends FlickrExtractor {
         int totalPhotos = 0;
         int photosReceived = 0;
   
-        TreeMap<String, String> args = new TreeMap();
+        TreeMap<String, String> args = new TreeMap<>();
         args.put("group_id", curGroup.ID);
         args.put("extras", "date_taken,date_upload,o_dims,geo,last_update,license,media,owner_name,tags,views");
         args.put("per_page", "" + photosPerPage);
