@@ -102,7 +102,7 @@ public class ComponentThumbnail extends JPanel implements Runnable {
             }
             
             try {
-                Thread.currentThread().sleep(1000);
+                Thread.sleep(1000);
             }
             catch(Exception e) {}
         }

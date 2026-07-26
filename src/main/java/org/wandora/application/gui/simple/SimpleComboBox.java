@@ -35,7 +35,6 @@ import java.util.Enumeration;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.ComboBoxEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -93,9 +92,7 @@ public class SimpleComboBox<T> extends JComboBox<T> implements MouseListener, Si
         this.setFont(UIConstants.comboBoxFont);
         UIConstants.setFancyFont(this);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        ComboBoxEditor e = this.getEditor();
-        Component ec = e.getEditorComponent();
-        this.setRenderer(new BorderListCellRenderer());
+        this.setRenderer(new BorderListCellRenderer<T>());
         this.setEditable(true);
     }
     
@@ -186,7 +183,7 @@ public class SimpleComboBox<T> extends JComboBox<T> implements MouseListener, Si
     
     
     
-    public class BorderListCellRenderer implements ListCellRenderer {
+    public class BorderListCellRenderer<E> implements ListCellRenderer<E> {
 
         private Border insetBorder;
         private DefaultListCellRenderer defaultRenderer;
@@ -197,7 +194,7 @@ public class SimpleComboBox<T> extends JComboBox<T> implements MouseListener, Si
         }
 
         @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends E> list, E value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(
                     list, 
                     value, 

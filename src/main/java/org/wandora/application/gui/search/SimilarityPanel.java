@@ -111,7 +111,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
 
     
     
-    public Tuples.T2[] similarityTypes = {
+    @SuppressWarnings("unchecked")
+    public Tuples.T2<String, Integer>[] similarityTypes = new Tuples.T2[] {
         new Tuples.T2<>("Levenshtein distance",                  Integer.valueOf(SIMILARITY_LEVENSHTEIN_DISTANCE)),
         new Tuples.T2<>("Needleman-Wunch distance (Sellers Algorithm)", Integer.valueOf(SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE)),
         new Tuples.T2<>("Smith-Waterman distance",               Integer.valueOf(SIMILARITY_SMITH_WATERMAN_DISTANCE)),
@@ -130,7 +131,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
     };
     
     
-    public Tuples.T2[] similarityTokenizers = {
+    @SuppressWarnings("unchecked")
+    public Tuples.T2<String, InterfaceTokeniser>[] similarityTokenizers = new Tuples.T2[] {
         new Tuples.T2<>("Whitespace", new TokeniserWhitespace()),
         new Tuples.T2<>("CSVBasic", new TokeniserCSVBasic()),
         new Tuples.T2<>("QGram2", new TokeniserQGram2()),

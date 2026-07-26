@@ -75,7 +75,6 @@ import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
-import org.wandora.utils.EasyVector;
 import org.wandora.utils.MSOfficeBox;
 import org.wandora.utils.Textbox;
 
