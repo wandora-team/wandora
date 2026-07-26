@@ -812,7 +812,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
     
     
     public void setDisplayName(Topic t, String lang, String name)  throws TopicMapException {
-        if(t != null & lang != null && name != null) {
+        if(t != null && lang != null && name != null) {
             String langsi=XTMPSI.getLang(lang);
             Topic langT=t.getTopicMap().getTopic(langsi);
             if(langT == null) {

@@ -882,7 +882,7 @@ public class OBO {
     
     
     private static void setData(Topic t, Topic type, String lang, String text) throws TopicMapException {
-        if(t != null & type != null && lang != null && text != null) {
+        if(t != null && type != null && lang != null && text != null) {
             String langsi=XTMPSI.getLang(LANG);
             Topic langT=t.getTopicMap().getTopic(langsi);
             if(langT == null) {
