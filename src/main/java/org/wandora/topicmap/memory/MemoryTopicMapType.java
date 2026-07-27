@@ -28,6 +28,8 @@
 
 package org.wandora.topicmap.memory;
 
+import java.io.InputStream;
+
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
@@ -39,6 +41,7 @@ import org.wandora.topicmap.TopicMapLogger;
 import org.wandora.topicmap.TopicMapType;
 import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.packageio.PackageOutput;
+import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
 
 /**
@@ -67,14 +70,19 @@ public class MemoryTopicMapType implements TopicMapType {
         if(params instanceof String && params != null) {
             String load = (String) params;
             if(MemoryConfiguration.LOAD_MINI_SCHEMA_PARAM.equals(params)) {
-                load="conf/wandora_mini.xtm";
+            	try(InputStream minimapStream = this.getClass().getResourceAsStream("/conf/wandora_mini.xtm")) {
+	                tm.importXTM(minimapStream);
+            	}
+            	catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
-            if(load!=null && load.length()>0) {
+            else if(load!=null && load.length()>0) {
                 try {
                     tm.importXTM(load);
                 }
-                catch(java.io.IOException ioe){
-                    ioe.printStackTrace(); // TODO
+                catch(Exception ioe) {
+                    ioe.printStackTrace();
                 }
             }
         }

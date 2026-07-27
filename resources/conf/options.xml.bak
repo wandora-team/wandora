@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>104</x>
+      <x>453</x>
       <y>65</y>
       <width>1225</width>
       <height>717</height>
@@ -145,20 +145,14 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
    </httpserver>
    <dbconnections>
       <connection>
-         <name>MySQL generic</name>
          <type>Generic</type>
+         <name>MySQL generic</name>
          <user>wandora</user>
          <pass>wandora</pass>
-         <constring>jdbc:mysql://localhost:3306/wandora?useOldAliasMetadataBehavior=true</constring>
          <driver>com.mysql.jdbc.Driver</driver>
+         <constring>jdbc:mysql://localhost:3306/wandora?useOldAliasMetadataBehavior=true</constring>
       </connection>
       <connection>
-         <name>HSQL memory</name>
-         <type>Generic</type>
-         <user>sa</user>
-         <pass></pass>
-         <constring>jdbc:hsqldb:mem:wandora</constring>
-         <driver>org.hsqldb.jdbcDriver</driver>
          <script>create cached table TOPIC(
 TOPICID varchar(255) primary key,
 BASENAME longvarchar,
@@ -231,34 +225,40 @@ create index VARIANTTOPIC_INDEX on VARIANT(TOPIC);
 create index DATATOPIC_INDEX on DATA(TOPIC);
 create index DATATYPE_INDEX on DATA(TYPE);
 create index DATAVERSION_INDEX on DATA(VERSION);</script>
+         <type>Generic</type>
+         <name>HSQL memory</name>
+         <user>sa</user>
+         <pass></pass>
+         <driver>org.hsqldb.jdbcDriver</driver>
+         <constring>jdbc:hsqldb:mem:wandora</constring>
       </connection>
       <connection>
-         <name>HSQL file</name>
          <type>Generic</type>
+         <name>HSQL file</name>
          <user>sa</user>
          <pass></pass>
          <driver>org.hsqldb.jdbcDriver</driver>
          <constring>jdbc:hsqldb:file:C:\wandora\testdb</constring>
       </connection>
       <connection>
-         <name>SQLite file</name>
          <type>Generic</type>
+         <name>SQLite file</name>
          <user>sa</user>
          <pass></pass>
          <driver>org.sqlite.JDBC</driver>
          <constring>jdbc:sqlite:C:\\wandora\testdb</constring>
       </connection>
       <connection>
-         <name>Mariadb generic</name>
          <type>Generic</type>
+         <name>Mariadb generic</name>
          <user>user</user>
          <pass>password</pass>
          <driver>org.mariadb.jdbc.Driver</driver>
          <constring>jdbc:mariadb://localhost:3306/wandora</constring>
       </connection>
       <connection>
-         <name>PostgreSQL generic</name>
          <type>Generic</type>
+         <name>PostgreSQL generic</name>
          <user>postgres</user>
          <pass>password</pass>
          <driver>org.postgresql.Driver</driver>
@@ -279,7 +279,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <layers>
       <layer>org.wandora.topicmap.memory.MemoryTopicMapType</layer>
       <layer>org.wandora.topicmap.database2.DatabaseTopicMapType</layer>
-      <layer>org.wandora.topicmap.database.DatabaseTopicMapType</layer>
       <layer>org.wandora.topicmap.query.QueryTopicMapType</layer>
       <layer>org.wandora.topicmap.linked.LinkedTopicMapType</layer>
       <layer>org.wandora.topicmap.layered.LayeredTopicMapType</layer>

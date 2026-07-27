@@ -37,12 +37,14 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -110,16 +112,16 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     protected Wandora wandora;
     protected Options options;
 
-    protected ArrayList<String> toolPaths;
+    protected List<String> toolPaths;
     
-    protected ArrayList<String> jarPaths;
+    protected List<String> jarPaths;
     
-    protected ArrayList<WandoraToolSet> toolSets;
+    protected List<WandoraToolSet> toolSets;
 
-    protected HashMap<WandoraTool, String> optionsPrefixes;
+    protected Map<WandoraTool, String> optionsPrefixes;
     
-    protected ArrayList<WandoraTool> allTools;
-    protected HashMap<WandoraTool,ToolInfo> toolInfos;
+    protected List<WandoraTool> allTools;
+    protected Map<WandoraTool,ToolInfo> toolInfos;
     
 
 
@@ -134,7 +136,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     }
     
     
-    public ArrayList<WandoraToolSet> getToolSets() {
+    public List<WandoraToolSet> getToolSets() {
         return toolSets;
     }
     
@@ -157,9 +159,9 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
         return null;
     }
     
-    public WandoraTool newToolInstance(WandoraTool tool) throws InstantiationException, IllegalAccessException {
+    public WandoraTool newToolInstance(WandoraTool tool) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
         if(tool==null) return null;
-        return tool.getClass().newInstance();
+        return tool.getClass().getDeclaredConstructor().newInstance();
     }
     
     
@@ -169,16 +171,16 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
         return toolInfos.get(tool);
     }
     
-    public ArrayList<String> getToolPaths() {
+    public List<String> getToolPaths() {
         return toolPaths;
     }
     
-    public ArrayList<String> getJarPaths(){
+    public List<String> getJarPaths(){
         return jarPaths;
     }
     
     public void readJarPaths(){
-        jarPaths = new ArrayList<String>();
+        jarPaths = new ArrayList<>();
         if(options == null) return;
         int pathCounter=0;
         boolean continueRefresh = true;
@@ -194,7 +196,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     }
     
     public void readToolPaths() {
-        toolPaths = new ArrayList<String>();
+        toolPaths = new ArrayList<>();
         if(options == null) return;
         int pathCounter=0;
         boolean continueRefresh = true;
@@ -223,7 +225,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
         }        
     }
     
-    public void writeToolPaths(ArrayList<String> newToolPaths) {
+    public void writeToolPaths(List<String> newToolPaths) {
         int c = toolPaths.size();
         int i = 0;
         for( String path : newToolPaths ) {
@@ -239,7 +241,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     // ----------------------------------------------------- AVAILABLE TOOLS ---
     
     
-    public ArrayList<WandoraTool> getAllTools() {
+    public List<WandoraTool> getAllTools() {
         return allTools;
     }
     
@@ -249,8 +251,8 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
         readToolPaths();
         readJarPaths();
     
-        allTools=new ArrayList<WandoraTool>();
-        toolInfos=new HashMap<WandoraTool,ToolInfo>();
+        allTools=new ArrayList<>();
+        toolInfos=new HashMap<>();
 
         for(String path : toolPaths) {
             try {
@@ -729,7 +731,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
 
     public Object[] getToolButtonSelectMenuStruct() {
         String[] set = getToolButtonSetNames();
-        ArrayList<Object> menuStruct = new ArrayList<Object>();
+        List<Object> menuStruct = new ArrayList<>();
         for(int i=0; i<set.length; i++) {
             menuStruct.add( set[i] );
             menuStruct.add( new ActivateButtonToolSet( set[i] ) );
@@ -755,7 +757,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
 
 
     public String[] getToolButtonSetNames() {
-        ArrayList<String> buttonSets = new ArrayList<String>();
+        List<String> buttonSets = new ArrayList<>();
         if(toolSets != null) {
             String name = null;
             for(WandoraToolSet set : toolSets) {
@@ -889,9 +891,9 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     
     
 
-    public static ArrayList<WandoraTool> getImportTools(java.util.List<File> files, int orders){
+    public static List<WandoraTool> getImportTools(java.util.List<File> files, int orders){
         String fileName = null;
-        ArrayList<WandoraTool> importTools = new ArrayList<WandoraTool>();
+        List<WandoraTool> importTools = new ArrayList<>();
         for( File file : files ) {
             fileName = file.getName().toLowerCase();
             if(fileName.endsWith(".xtm20") || fileName.endsWith(".xtm2") || fileName.endsWith(".xtm10") || fileName.endsWith(".xtm1") || fileName.endsWith(".xtm") || fileName.endsWith(".ltm") || fileName.endsWith(".jtm")) {

@@ -81,7 +81,7 @@ public class UmbelSearchConceptSelector extends javax.swing.JDialog {
         if(data != null) {
             dataModel = new UmbelConceptTableModel(data);
             dataTable.setModel(dataModel);
-            dataTable.setRowSorter(new TableRowSorter(dataModel));
+            dataTable.setRowSorter(new TableRowSorter<>(dataModel));
 
             dataTable.setColumnSelectionAllowed(false);
             dataTable.setRowSelectionAllowed(true);

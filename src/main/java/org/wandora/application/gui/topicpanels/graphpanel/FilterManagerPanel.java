@@ -342,10 +342,10 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList filteredAssociationTypesList;
-    private javax.swing.JList filteredTopicList;
+    private javax.swing.JList<Object> filteredAssociationTypesList;
+    private javax.swing.JList<TopicNode> filteredTopicList;
     private javax.swing.JPanel footerPanel;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox<Object> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;

@@ -744,7 +744,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         if(useUndo) l.wrapInUndo();
         
         Layer old=layers.elementAt(pos);
-        layerIndex.remove(old);
+        layerIndex.remove(old.topicMap);
         layerIndex.put(l.getTopicMap(),l);
         old.getTopicMap().removeTopicMapListener(this);
         if(old.getTopicMap() instanceof ContainerTopicMap)

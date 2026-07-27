@@ -602,12 +602,9 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
         this.c64.pause();
 
         DataURL snapshot = null;
-        DataOutputStream out = null;
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 
-        try {
-            out = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
-
+        try(DataOutputStream out = new DataOutputStream(new BufferedOutputStream(byteOutputStream))) {
             // save attached image
             out.writeInt(1);
             out.writeInt(c64.getActiveDrive());
@@ -624,12 +621,8 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
             snapshot = new DataURL(byteOutputStream.toByteArray());
             snapshot.setMimetype("application/x-c64-snaphot");
         }
-        catch (Throwable t) {
-            t.printStackTrace();
-            try {
-                out.close();
-            } catch (Exception e) {
-            }
+        catch (Exception e) {
+            e.printStackTrace();
         }
         c64.resume();
         return snapshot;

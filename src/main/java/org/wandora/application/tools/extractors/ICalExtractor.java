@@ -29,10 +29,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.time.temporal.TemporalUnit;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -49,7 +50,6 @@ import org.wandora.topicmap.XTMPSI;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VAlarm;
@@ -205,15 +205,15 @@ public class ICalExtractor extends AbstractExtractor {
     try {
       String prodId = calendar.getProductId().getValue();
       if (prodId != null) {
-        Property versionP = calendar.getProperty("VERSION");
+    	  Property versionP = calendar.getProperty("VERSION").get();
         String version = versionP != null ? versionP.getValue() : "";
-        Property calScaleP = calendar.getProperty("CALSCALE");
+        Property calScaleP = calendar.getProperty("CALSCALE").get();
         String calScale = calScaleP != null ? calScaleP.getValue() : "";
-        Property calTZP = calendar.getProperty("X-WR-TIMEZONE");
+        Property calTZP = calendar.getProperty("X-WR-TIMEZONE").get();
         String calTZ = calTZP != null ? calTZP.getValue() : "";
-        Property calDescP = calendar.getProperty("X-WR-CALDESC");
+        Property calDescP = calendar.getProperty("X-WR-CALDESC").get();
         String calDesc = calDescP != null ? calDescP.getValue() : "";
-        Property calNameP = calendar.getProperty("X-WR-CALNAME");
+        Property calNameP = calendar.getProperty("X-WR-CALNAME").get();
         String calName = calNameP != null ? calNameP.getValue() : "";
         //Use the required prodID if  the optional (extension) calname is not specified
         String calendarName = !calName.isEmpty() ? calName : prodId;
@@ -243,7 +243,7 @@ public class ICalExtractor extends AbstractExtractor {
         List<CalendarComponent> venues = calendar.getComponents("VVENUE");
         if (venues != null) {
           for (CalendarComponent component : venues) {
-            VVenue venue = (VVenue) component;
+        	VVenue venue = (VVenue) component;
             venue.validate();
             Topic venueTopic = parseVenue(venue, topicMap);
             Topic venueType = getVenueType(topicMap);
@@ -302,33 +302,33 @@ public class ICalExtractor extends AbstractExtractor {
   public Topic parseVenue(VVenue venue, TopicMap topicMap) {
     try {
 
-      Property nameP = venue.getProperty("NAME");
+      Property nameP = venue.getProperty("NAME").get();
       String name = nameP != null ? nameP.getValue() : "";
-      Property descriptionP = venue.getProperty("DESCRIPTION");
+      Property descriptionP = venue.getProperty("DESCRIPTION").get();
       String description = descriptionP != null ? descriptionP.getValue() : "";
-      Property addressP = venue.getProperty("STREET-ADDRESS");
+      Property addressP = venue.getProperty("STREET-ADDRESS").get();
       String address = addressP != null ? addressP.getValue() : "";
-      Property extAddressP = venue.getProperty("EXTENDED-ADDRESS");
+      Property extAddressP = venue.getProperty("EXTENDED-ADDRESS").get();
       String extAddress = extAddressP != null ? extAddressP.getValue() : "";
-      Property localityP = venue.getProperty("LOCALITY");
+      Property localityP = venue.getProperty("LOCALITY").get();
       String locality = localityP != null ? localityP.getValue() : "";
-      Property regionP = venue.getProperty("REGION");
+      Property regionP = venue.getProperty("REGION").get();
       String region = regionP != null ? regionP.getValue() : "";
-      Property countryP = venue.getProperty("COUNTRY");
+      Property countryP = venue.getProperty("COUNTRY").get();
       String country = regionP != null ? countryP.getValue() : "";
-      Property postalCodeP = venue.getProperty("POSTAL-CODE");
+      Property postalCodeP = venue.getProperty("POSTAL-CODE").get();
       String postalCode = regionP != null ? postalCodeP.getValue() : "";
-      Property tzidP = venue.getProperty("TZID");
+      Property tzidP = venue.getProperty("TZID").get();
       String tzid = regionP != null ? tzidP.getValue() : "";
-      Property locTypeP = venue.getProperty("LOCATION-TYPE");
+      Property locTypeP = venue.getProperty("LOCATION-TYPE").get();
       String locType = locTypeP != null ? locTypeP.getValue() : "";
-      Property catP = venue.getProperty("CATEGORIES");
+      Property catP = venue.getProperty("CATEGORIES").get();
       String cat = catP != null ? catP.getValue() : "";
 
-      Property uidP = venue.getProperty("UID");
+      Property uidP = venue.getProperty("UID").get();
       if (uidP != null) {
 
-        String uid = venue.getProperty("UID").getValue();
+        String uid = uidP.getValue();
         String basename = name.isEmpty() ? uid + " (Venue)" : name + " (Venue)";
         String displayname = name.isEmpty() ? uid : name;
 
@@ -392,7 +392,7 @@ public class ICalExtractor extends AbstractExtractor {
 
       DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
-      java.util.Calendar cal = Calendar.getInstance();
+      // java.util.Calendar cal = Calendar.getInstance();
 
       //Possible occurrencess
 
@@ -408,21 +408,19 @@ public class ICalExtractor extends AbstractExtractor {
       Url url = event.getUrl();
       String urlString = url != null ? event.getUrl().getValue() : "";
 
-      DtStart dtstart = event.getStartDate();
-      DtEnd dtend = event.getEndDate(true); //Derive from DURATION if there's no DTEND
+      DtStart dtstart = event.getDateTimeStart();
+      DtEnd dtend = event.getEndDate(true).get(); //Derive from DURATION if there's no DTEND
       String startString = "";
       String endString = "";
       if (dtstart != null && !dtstart.getValue().isEmpty()) {
-        Date start = event.getStartDate().getDate();
-        Date end;
+    	Temporal start = event.getDateTimeStart().getDate();
+    	Temporal end;
         //Spec: if DTEND and DURATION aren't defined...
         if (dtend == null) {
           //... and DTSTART has a parameter VALUE=DATE ie DTSTART is of type DATE instead of DATE-TIME
           //the duration for the event is assumed to be one day.
-          if (dtstart.getParameter("VALUE") != null && dtstart.getParameter("VALUE").getValue().equals("DATE")) {
-            cal.setTime(start);
-            cal.add(Calendar.DAY_OF_MONTH, 1);
-            end = cal.getTime();
+          if (dtstart.getParameter("VALUE") != null && dtstart.getParameter("VALUE").get().getValue().equals("DATE")) {
+        	end = start.plus(java.time.Duration.ofDays(1));
             //... else DTSTART is assumed to be of type DATE-TIME and the event to end on the start time
           } else {
             end = start;
@@ -439,8 +437,8 @@ public class ICalExtractor extends AbstractExtractor {
 
 
       //Possible assocs
-      String dateString = event.getStartDate() != null ? dfDate.format(event.getStartDate().getDate()) : "";
-      Transp transparency = event.getTransparency();
+      String dateString = event.getStartDate() != null ? dfDate.format(event.getStartDate().get().getDate()) : "";
+      Transp transparency = event.getTransparency().get();
       String transp = transparency != null ? transparency.getValue() : "OPAQUE";
       Priority prio = event.getPriority();
       String priority = prio != null ? prio.getValue() : "";
@@ -448,7 +446,7 @@ public class ICalExtractor extends AbstractExtractor {
       String clazz = claz != null ? claz.getValue() : "";
       Location location = event.getLocation();
 
-      Property cats = event.getProperty("CATEGORIES");
+      Property cats = event.getProperty("CATEGORIES").get();
       String catString = cats != null && !cats.getValue().isEmpty() ? cats.getValue() : "";
       String[] catArray = catString.isEmpty() ? null : catString.split(",");
       Organizer org = event.getOrganizer();
@@ -459,7 +457,7 @@ public class ICalExtractor extends AbstractExtractor {
       RecurrenceId recur = event.getRecurrenceId();
       String recurrence = recur != null ? recur.getDate().toString() : "";
 
-      Uid uid = event.getUid();
+      Uid uid = event.getUid().get();
 
       if (uid != null) {
 
@@ -548,7 +546,7 @@ public class ICalExtractor extends AbstractExtractor {
         if (location != null && !location.getValue().isEmpty()) {
           Topic eventLocationTopic;
           if (location.getParameter("VVENUE") != null) { // Use VVenue if found
-            eventLocationTopic = topicMap.getTopic(ICAL_VENUE_SI + location.getParameter("VVENUE").getValue());
+            eventLocationTopic = topicMap.getTopic(ICAL_VENUE_SI + location.getParameter("VVENUE").get().getValue());
           } else {
             eventLocationTopic = getLocationTopic(urlEncode(location.getValue()), topicMap);
             eventLocationTopic.setBaseName(location.getValue());
@@ -559,7 +557,7 @@ public class ICalExtractor extends AbstractExtractor {
           }
         }
 
-        ComponentList<?> alarms = event.getAlarms();
+        List<VAlarm> alarms = event.getAlarms();
         int i = 0;
         if (alarms != null) {
           for (Object o : alarms) {
@@ -593,14 +591,14 @@ public class ICalExtractor extends AbstractExtractor {
    */
   public Topic parseAlarm(VAlarm alarm, TopicMap topicMap, String eventUid, String eventSummary, int i) {
     try {
-      Action action = alarm.getAction();
-      Trigger trigger = alarm.getTrigger();
+      Action action = alarm.getAction().get();
+      Trigger trigger = alarm.getTrigger().get();
 
       Description description = alarm.getDescription();
       String descString = description != null ? description.getValue() : "";
-      Duration duration = alarm.getDuration();
+      Duration duration = alarm.getDuration().get();
       String durString = duration != null ? duration.getValue() : "";
-      Repeat repeat = alarm.getRepeat();
+      Repeat repeat = alarm.getRepeat().get();
       String repString = repeat != null ? repeat.getValue() : "";
       Summary summary = alarm.getSummary();
       String summString = summary != null ? summary.getValue() : "";
@@ -608,8 +606,8 @@ public class ICalExtractor extends AbstractExtractor {
       if (action != null && trigger != null) {
 
         String trigString = "";
-        if (trigger.getParameter("VALUE") != null && trigger.getParameter("VALUE").getValue().equals("DATE-TIME")) {
-          Date trigDate = trigger.getDate();
+        if (trigger.getParameter("VALUE") != null && trigger.getParameter("VALUE").get().getValue().equals("DATE-TIME")) {
+          Instant trigDate = trigger.getDate();
           DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
           trigString = df.format(trigDate);
         } else {
@@ -671,8 +669,8 @@ public class ICalExtractor extends AbstractExtractor {
       java.util.Calendar cal = Calendar.getInstance();
 
       //Possible occurrences
-      Uid uid = todo.getUid();
-      DtStamp stamp = todo.getDateStamp();
+      Uid uid = todo.getUid().get();
+      DtStamp stamp = todo.getDateStamp().get();
       Summary summ = todo.getSummary();
       String summary = summ != null ? summ.getValue() : "";
 
@@ -684,29 +682,29 @@ public class ICalExtractor extends AbstractExtractor {
       Url url = todo.getUrl();
       String urlString = url != null ? todo.getUrl().getValue() : "";
       String percentCompleted = todo.getPercentComplete() != null ? todo.getPercentComplete().getValue() : "";
-      DtStart dtstart = todo.getStartDate();
+      DtStart dtstart = todo.getStartDate().get();
       Duration duration = todo.getDuration();
-      Due due = todo.getDue();
+      Due due = todo.getDue().get();
       String startString = "";
       String dueString = "";
       
       if (due != null && due.getDate() != null) {
-        Date dueDate = due.getDate();
+        Temporal dueDate = due.getDate();
         dueString = df.format(dueDate);
       }
 
       String modified = todo.getLastModified() != null ? df.format(todo.getLastModified().getDate()) : "";
       String created = todo.getCreated() != null ? df.format(todo.getCreated().getDate()) : "";
-      String completed = todo.getDateCompleted() != null ? df.format(todo.getDateCompleted().getDate()) : "";
+      String completed = todo.getDateCompleted() != null ? df.format(todo.getDateCompleted().get().getDate()) : "";
 
       //Possible assocs
-      String dateString = todo.getDue() != null ? dfDate.format(todo.getDue().getDate()) : "";
+      String dateString = todo.getDue() != null ? dfDate.format(todo.getDue().get().getDate()) : "";
       Priority prio = todo.getPriority();
       String priority = prio != null ? prio.getValue() : "";
       Clazz claz = todo.getClassification();
       String clazz = claz != null ? claz.getValue() : "";
       Location location = todo.getLocation();
-      Property cats = todo.getProperty("CATEGORIES");
+      Property cats = todo.getProperty("CATEGORIES").get();
       String catString = cats != null && !cats.getValue().isEmpty() ? cats.getValue() : "";
       String[] catArray = catString.isEmpty() ? null : catString.split(",");
       Organizer org = todo.getOrganizer();
@@ -788,7 +786,7 @@ public class ICalExtractor extends AbstractExtractor {
         if (location != null && !location.getValue().isEmpty()) {
           Topic eventLocationTopic;
           if (location.getParameter("VVENUE") != null) { // Use VVenue if found
-            eventLocationTopic = topicMap.getTopic(ICAL_VENUE_SI + location.getParameter("VVENUE").getValue());
+            eventLocationTopic = topicMap.getTopic(ICAL_VENUE_SI + location.getParameter("VVENUE").get().getValue());
           } else {
             eventLocationTopic = getLocationTopic(urlEncode(location.getValue()), topicMap);
             eventLocationTopic.setBaseName(location.getValue());

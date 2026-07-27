@@ -347,7 +347,7 @@ public class Option<T> implements Iterable<T> {
 
     private Option() { value_ = null; }
     private Option(T val) { value_ = val; }
-    private static final Option none_ = new Option();
+    private static final Option none_ = new Option<>();
     private final T value_;
     
     /**

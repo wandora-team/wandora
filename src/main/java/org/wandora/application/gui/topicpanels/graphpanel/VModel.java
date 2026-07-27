@@ -280,7 +280,7 @@ public class VModel {
             VNode other=null;
             if(ns.e1.equals(vn)) other=ns.e2;
             else if(ns.e2.equals(vn)) other=ns.e1;
-            if(other.edgeCount<=1) remove.add(other);
+            if(other != null && other.edgeCount<=1) remove.add(other);
         }        
         for(VNode n : remove) removeNode(n);
     }

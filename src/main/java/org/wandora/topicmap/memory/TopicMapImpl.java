@@ -531,7 +531,9 @@ public class TopicMapImpl extends TopicMap {
                 minTopic=t;
             }
         }
-        ((TopicImpl)minTopic).removeDuplicateAssociations(n);
+        if(minTopic != null) {
+        	((TopicImpl)minTopic).removeDuplicateAssociations(n);
+        }
         return n;
     }
     
