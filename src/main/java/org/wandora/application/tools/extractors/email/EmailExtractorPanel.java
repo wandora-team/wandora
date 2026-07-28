@@ -343,7 +343,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                         }
                     }
                     if(row[3]!=null){
-                        Map table=null;
+                        Map<String,String> table=null;
                         if(tryXMLExtract){
                             try{
                                 org.w3c.dom.Document doc=XMLbox.getDocument(message);

@@ -160,7 +160,7 @@ public class ListenerList <T> {
     }
     
     
-    public void forEach(EachDelegate delegate,Object ... params) {
+    public void forEach(EachDelegate<T> delegate,Object ... params) {
         synchronized(listeners){
             iterating=true;
 

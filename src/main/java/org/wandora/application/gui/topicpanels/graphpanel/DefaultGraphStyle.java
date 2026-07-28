@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.wandora.topicmap.Association;
@@ -58,19 +59,18 @@ public class DefaultGraphStyle implements GraphStyle {
     
     private static Stroke defaultNodeBorderStroke = new BasicStroke(1);
     private static Stroke defaultPinnedNodeBorderStroke = new BasicStroke(2);
-    private static HashMap<Integer,Font> nodeFonts=new HashMap<Integer,Font>();
-    private static HashMap<Integer,Font> edgeFonts=new HashMap<Integer,Font>();
+    private static Map<Integer,Font> nodeFonts=new HashMap<>();
+    private static Map<Integer,Font> edgeFonts=new HashMap<>();
     
     private static Stroke defaultEdgeLabelStroke = new BasicStroke(1);
     
-    private static HashMap<Integer,Stroke> edgeStrokes=new HashMap<Integer,Stroke>();
-    private static HashMap<Integer,Stroke> occurrenceEdgeStrokes=new HashMap<Integer,Stroke>();
+    private static Map<Integer,Stroke> edgeStrokes=new HashMap<>();
+    private static Map<Integer,Stroke> occurrenceEdgeStrokes=new HashMap<>();
     
     private static Color[] colors;
     static {
         int step=64;
-        ArrayList<Color> cs=new ArrayList<>();
-        int counter=0;
+        List<Color> cs=new ArrayList<>();
         for(int r=0;r<=256;r+=step){
             for(int g=0;g<=256;g+=step){
                 for(int b=0;b<=256;b+=step){
@@ -113,7 +113,9 @@ public class DefaultGraphStyle implements GraphStyle {
     @Override
     public Color getNodeColor(VNode vn) {
         Color c = defaultNodeColor;
-        if(vn.selected) c = this.selectedNodeColor;
+        if(vn.selected) {
+        	c = this.selectedNodeColor;
+        }
         else {
             c = getNodeColor(vn.getNode());
         }
@@ -122,6 +124,7 @@ public class DefaultGraphStyle implements GraphStyle {
         }
         return c;
     }
+    
     public Color getNodeColor(Node n) {
         if(n instanceof TopicNode) {
             return getNodeColor((TopicNode) n);

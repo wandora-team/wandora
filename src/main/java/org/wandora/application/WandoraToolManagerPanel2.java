@@ -32,6 +32,7 @@ package org.wandora.application;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -80,7 +81,7 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
     
     
     public void initAllTools() {
-        ArrayList<WandoraTool> allTools = manager.getAllTools();
+        List<WandoraTool> allTools = manager.getAllTools();
         WandoraToolTable toolTable = new WandoraToolTable(wandora);
         toolTable.initialize(allTools.toArray( new WandoraTool[] {} ));
 
@@ -96,7 +97,7 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
     
     
     public void initToolPaths() {
-        ArrayList<String> toolPaths = manager.getToolPaths();
+        List<String> toolPaths = manager.getToolPaths();
         StringBuilder pathString = new StringBuilder("");
         for( String path : toolPaths ) {
             if(path != null) {
@@ -107,7 +108,7 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
     }
     
     public void initJarPaths(){
-        ArrayList<String> jarPaths = manager.getJarPaths();
+        List<String> jarPaths = manager.getJarPaths();
         StringBuilder pathString = new StringBuilder("");
         for( String path : jarPaths ) {
             if(path != null) {
@@ -188,7 +189,7 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
         initToolSets(null);
     }
     public void initToolSets(WandoraToolSet selectedSet) {
-        ArrayList<WandoraToolSet> toolSets = manager.getToolSets();
+        List<WandoraToolSet> toolSets = manager.getToolSets();
         toolSetsComboBox.setEditable(false);
         toolSetsComboBox.removeAllItems();
         int selectedIndex = 0;
@@ -207,7 +208,7 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
     
     public void selectToolSet() {
         int setIndex = Math.max(0, toolSetsComboBox.getSelectedIndex());
-        ArrayList<WandoraToolSet> toolSets = manager.getToolSets();
+        List<WandoraToolSet> toolSets = manager.getToolSets();
         selectToolSet(toolSets.get(Math.min(setIndex, toolSets.size()-1)));
     }
     
@@ -736,7 +737,7 @@ private void renameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JPanel toolSetContainerPanel;
     private javax.swing.JPanel toolSetsButtonPanel;
-    private javax.swing.JComboBox toolSetsComboBox;
+    private javax.swing.JComboBox<String> toolSetsComboBox;
     private javax.swing.JLabel toolSetsLabel;
     private javax.swing.JPanel toolSetsPanel;
     private javax.swing.JScrollPane toolSetsScrollPane;

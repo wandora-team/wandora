@@ -142,7 +142,6 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool {
             String topicName = null;
             Topic newTopic = null;
             String SIString = null;
-            int progress = 0;
             TopicMap map = wandora.getTopicMap();
             Association a = null;
             String occurrence = null;
@@ -159,7 +158,6 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool {
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         hlog("Inspecting topic '"+getTopicName(topic)+"'");
                         
                         occurrenceType = topic.getTopicMap().getTopic(occurrenceTypeLocator);

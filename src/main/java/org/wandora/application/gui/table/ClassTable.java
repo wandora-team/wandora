@@ -31,7 +31,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.net.URI;
-import java.net.URL;
 import java.util.List;
 import java.util.Collection;
 import java.util.StringTokenizer;

@@ -53,7 +53,7 @@ public abstract class AbstractEuropeanaExtractor extends AbstractExtractor {
     
     @Override
     public String getDescription(){
-        return "Extracts data from The Europeana data API at http://pro.europeana.eu";
+        return "Extracts data from The Europeana data API at https://pro.europeana.eu";
     }
 
     @Override
@@ -101,7 +101,7 @@ public abstract class AbstractEuropeanaExtractor extends AbstractExtractor {
  
     
     public static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
-    public static final String EUROPEANA_SI = "http://pro.europeana.eu";
+    public static final String EUROPEANA_SI = "https://pro.europeana.eu";
     public static final String ITEM_SI = "https://wandora.org/si/europeana/item";
     public static final String PROVIDER_SI = "https://wandora.org/si/europeana/item/provider";
     public static final String LANGUAGE_SI = "https://wandora.org/si/europeana/item/language";

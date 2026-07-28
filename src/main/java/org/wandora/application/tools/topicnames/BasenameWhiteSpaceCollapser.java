@@ -78,19 +78,14 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool {
             Topic topic = null;
             String basename = null;
             StringBuffer newBasename = null;
-            int c = 0;
-            int changed = 0;
-            int progress = 0;
             Map<Topic,String> changeTopics = new HashMap<>();
             
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
-                    c++;
                     if(topic != null) {
                         basename = topic.getBaseName();
                         if(basename != null) {
-                            progress++;
                             log("Investigating topic '" + basename + "'.");
                             newBasename = new StringBuffer();
                             char ch = 0;
@@ -116,7 +111,6 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool {
                             if(hasChanged) {
                                 changeTopics.put(topic, newBasename.toString());
                                 log("Changing base name to '"+newBasename + "'.");
-                                changed++;
                             }
                         }
                     }
@@ -134,7 +128,6 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool {
                     if(forceStop()) break;
                     basename = changeTopics.get(t);
                     t.setBaseName(basename);
-                    changed++;
                 }
                 catch(Exception e) {
                     log(e);

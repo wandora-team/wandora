@@ -195,7 +195,6 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool {
 
             Topic occurrenceTopic = null;
             Topic oldTopic = null;
-            int progress = 0;
             TopicMap map = wandora.getTopicMap();
             Association a = null;
 
@@ -210,7 +209,6 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool {
                 try {
                     occurrenceTopic = (Topic) topics.next();
                     if(occurrenceTopic != null && !occurrenceTopic.isRemoved()) {
-                        progress++;
                         hlog("Inspecting topic's '"+getTopicName(occurrenceTopic)+"' occurrence");
 
                         occurrenceType = occurrenceTopic.getTopicMap().getTopic(occurrenceTypeLocator);

@@ -549,13 +549,11 @@ public class TopicMapImpl extends TopicMap {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         Iterator<Topic> topicIter=tm.getTopics();
         Map<Topic,Locator> copied=new HashMap<>();
-        int tcount=0;
         while(topicIter.hasNext()){
             Topic t = null;
             try {
                 t=topicIter.next();
                 _copyTopicIn(t,true,false,copied);
-                tcount++;
             }
             catch (Exception e) {
                 System.out.println("Unable to copy topic (" + t + ").");
@@ -564,7 +562,6 @@ public class TopicMapImpl extends TopicMap {
         }
         Set<Topic> endpoints=new LinkedHashSet<>();
         Iterator<Association> associationIter=tm.getAssociations();
-        int acount=0;
         while(associationIter.hasNext()) {
             try {
                 Association a=associationIter.next();
@@ -581,7 +578,6 @@ public class TopicMapImpl extends TopicMap {
                     }
                 }
                 endpoints.add(minTopic);
-                acount++;
             }
             catch (Exception e) {
                 System.out.println("Unable to copy association.");

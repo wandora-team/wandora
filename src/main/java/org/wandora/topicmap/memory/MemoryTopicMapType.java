@@ -41,7 +41,6 @@ import org.wandora.topicmap.TopicMapLogger;
 import org.wandora.topicmap.TopicMapType;
 import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.packageio.PackageOutput;
-import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
 
 /**

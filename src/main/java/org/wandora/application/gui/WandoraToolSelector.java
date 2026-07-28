@@ -29,7 +29,7 @@ package org.wandora.application.gui;
 
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -55,7 +55,7 @@ public class WandoraToolSelector extends javax.swing.JDialog {
         super(wandora, true);
         this.wandora = wandora;
         initComponents();
-        ArrayList<WandoraTool> allTools = wandora.getToolManager().getAllTools();
+        List<WandoraTool> allTools = wandora.getToolManager().getAllTools();
         toolTable = new WandoraToolTable(wandora);
         toolTable.initialize(allTools.toArray( new WandoraTool[] {} ));
         selectToolAccepted = false;

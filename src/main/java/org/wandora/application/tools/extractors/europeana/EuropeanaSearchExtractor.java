@@ -68,7 +68,7 @@ public class EuropeanaSearchExtractor extends AbstractEuropeanaExtractor {
     
     @Override
     public String getDescription(){
-        return "Extracts data from The Europeana data API at http://pro.europeana.eu";
+        return "Extracts data from The Europeana data API at https://pro.europeana.eu";
     }
 
     @Override

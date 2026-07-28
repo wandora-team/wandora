@@ -1037,7 +1037,7 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
     private javax.swing.JPanel optionMessagePanel;
     private javax.swing.JPanel optionOptionsPanel;
     private javax.swing.JPanel optionPanel;
-    private javax.swing.JComboBox optionsComboBox;
+    private javax.swing.JComboBox<Object> optionsComboBox;
     private javax.swing.JLabel optionsIconLabel;
     private javax.swing.JButton optionsOkButton;
     // End of variables declaration//GEN-END:variables

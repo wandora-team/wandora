@@ -74,7 +74,6 @@ public class DbpediaExtractor extends AbstractWandoraTool {
 
     @Override
     public void execute(Wandora wandora, Context<?> context) {
-        int counter = 0;
         try {
             if(selector == null) {
                 selector = new DbpediaExtractorSelector(wandora);

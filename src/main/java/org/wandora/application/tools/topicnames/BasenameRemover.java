@@ -88,13 +88,11 @@ public class BasenameRemover extends AbstractWandoraTool {
                 log("Removing all base names");
 
                 Topic topic = null;
-                int progress = 0;
 
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
                             topic.setBaseName(null);
                         }
                     }

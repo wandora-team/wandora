@@ -91,7 +91,6 @@ public class BasenameRegexReplacer extends AbstractWandoraTool {
                 Topic topic = null;
                 String basename = null;
                 String newBasename = null;
-                int progress = 0;
                 int count = 0;
 
                 Map<Topic,String> changeTopics = new HashMap<>();
@@ -102,7 +101,6 @@ public class BasenameRegexReplacer extends AbstractWandoraTool {
                         if(topic != null && !topic.isRemoved()) {
                             basename = topic.getBaseName();
                             if(basename != null) {
-                                progress++;
                                 hlog("Investigating base name '" + basename + "'.");
                                 newBasename = editor.replace(basename);
                                 if(newBasename != null && !basename.equalsIgnoreCase(newBasename)) {

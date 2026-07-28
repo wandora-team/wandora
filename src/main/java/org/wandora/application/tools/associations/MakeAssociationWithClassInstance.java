@@ -105,7 +105,6 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool {
             log("Making associations from default class-instance relations");
             
             Topic topic = null;
-            int progress = 0;
             TopicMap map = wandora.getTopicMap();
             Association a = null;
 
@@ -120,7 +119,6 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool {
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         hlog("Inspecting topic '"+getTopicName(topic)+"'");
                         
                         Collection<Topic> types = new ArrayList<>(topic.getTypes());
